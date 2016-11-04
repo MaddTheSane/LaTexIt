@@ -92,9 +92,9 @@
 {
   if ([keyPath isEqualToString:@"state"] && [self->buttons containsObject:object])
   {
-    if (self->isExclusive && ([object state] == NSOnState))
+    if (self->isExclusive && ([(NSButton*)object state] == NSOnState))
     {
-      unsigned int count = [self->buttons count];
+      NSUInteger count = [self->buttons count];
       while(count--)
       {
         NSButton* button = [self->buttons objectAtIndex:count];

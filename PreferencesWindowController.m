@@ -1140,7 +1140,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSImage* image = nil;
     if ([itemIdentifier isEqualToString:GeneralToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"generalToolbarItem"];
+      image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
       label = NSLocalizedString(@"General", @"General");
     }
     else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
@@ -1175,7 +1175,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     }
     else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"advancedToolbarItem"];
+      image = [NSImage imageNamed:NSImageNameAdvanced];
       label = NSLocalizedString(@"Advanced", @"Advanced");
     }
     else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])

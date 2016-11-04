@@ -56,7 +56,7 @@
     {
       SEL terminateSelector = NSSelectorFromString(@"terminate");
       [runningApplication performSelector:terminateSelector];
-      result |= YES;
+      result = YES;
     }
   }//end if (runningApplicationClass)
   else//if (!runningApplicationClass)
@@ -155,16 +155,5 @@
   return result;
 }
 //end getBestStandardPast:domain:defaultValue:
-
-@end
-
-@implementation NSWorkspace (Bridge10_5)
-
--(BOOL) filenameExtension:(NSString*)filenameExtension isValidForType:(NSString *)typeName
-{
-  BOOL result = YES;
-  return result;
-}
-//end filenameExtension:isValidForType:
 
 @end

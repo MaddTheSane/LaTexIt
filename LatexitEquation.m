@@ -396,9 +396,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
       [preambleString deleteCharactersInRange:range];
       NSString* unescapedPreamble =
-        (CHBRIDGE NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                           (CHBRIDGE CFStringRef)preambleString, CFSTR(""),
-                                                                           kCFStringEncodingUTF8);
+		(NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+																							 (CHBRIDGE CFStringRef)preambleString, CFSTR(""),
+																							 kCFStringEncodingUTF8));
       preambleString = [NSMutableString stringWithString:(NSString*)unescapedPreamble];
       #ifdef ARC_ENABLED
       #else
@@ -462,9 +462,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
       [sourceString deleteCharactersInRange:range];
       NSString* unescapedSource =
-        (CHBRIDGE NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                           (CHBRIDGE CFStringRef)sourceString, CFSTR(""),
-                                                                           kCFStringEncodingUTF8);
+		(NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+																							 (CHBRIDGE CFStringRef)sourceString, CFSTR(""),
+																							 kCFStringEncodingUTF8));
       [sourceString setString:unescapedSource];
       #ifdef ARC_ENABLED
       #else

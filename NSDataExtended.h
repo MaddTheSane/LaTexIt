@@ -11,8 +11,8 @@
 
 @interface NSData (Extended)
 
-+(id) dataWithBase64:(NSString*)base64;
-+(id) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines;
++(instancetype) dataWithBase64:(NSString*)base64;
++(instancetype) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines;
 -(NSString*) encodeBase64;
 -(NSString*) encodeBase64WithNewlines:(BOOL)encodeWithNewlines;
 -(NSString*) sha1Base64;

@@ -182,7 +182,11 @@
   [stringWithBackslash replaceOccurrencesOfRegex:yenString
                                       withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
                                            range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  return [[stringWithBackslash copy] autorelease];
+#ifdef ARC_ENABLED
+  return [stringWithBackslash copy];
+#else
+	return [[stringWithBackslash copy] autorelease];
+#endif
 }
 //end replaceYenSymbol
 

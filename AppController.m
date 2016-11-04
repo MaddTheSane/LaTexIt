@@ -479,7 +479,7 @@ static NSMutableDictionary* cachePaths = nil;
       CompositionConfigurationPsToPdfPathKey, @"path",
       [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil],
     [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey],
-    [NSDictionary dictionaryWithObjectsAndKeys:nil],
+    [NSDictionary dictionary],
     [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey],
     [NSDictionary dictionaryWithObjectsAndKeys:
       DragExportSvgPdfToSvgPathKey, @"path",
@@ -529,7 +529,7 @@ static NSMutableDictionary* cachePaths = nil;
                                    alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
                                        otherButton:NSLocalizedString(@"Replace the library", @"Replace the library")
                          informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"If you choose <Replace the library>, the current library will be lost")];
-    int confirm = [alert runModal];
+    NSInteger confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
       ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_MERGE parent:nil];
     else if (confirm == NSAlertOtherReturn)
@@ -548,7 +548,7 @@ static NSMutableDictionary* cachePaths = nil;
                                    alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
                                        otherButton:NSLocalizedString(@"Replace the history", @"Replace the history")
                          informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"If you choose <Replace the history>, the current history will be lost")];
-    int confirm = [alert runModal];
+    NSInteger confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
       ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_MERGE];
     else if (confirm == NSAlertOtherReturn)
@@ -1390,7 +1390,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSPopUpButton* openFilePopupButton = [sender dynamicCastToClass:[NSPopUpButton class]];
   if (self->openFileTypeOpenPanel && openFilePopupButton)
   {
-    int selectedIndex = [openFilePopupButton indexOfSelectedItem];
+    NSInteger selectedIndex = [openFilePopupButton indexOfSelectedItem];
     if (selectedIndex == 0)
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"com.adobe.pdf", nil]];
     else if (selectedIndex == 1)
@@ -1789,10 +1789,9 @@ static NSMutableDictionary* cachePaths = nil;
   if (!ok)
   {
     NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
-                                                                @"An error occured while trying to reach %@.\n You should check your network."),
-                                              [webSiteURL absoluteString]],
-                    @"OK", nil, nil);
+					NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
+					 @"An error occured while trying to reach %@.\n You should check your network."),
+                    @"OK", nil, nil, [webSiteURL absoluteString]);
   }
 }
 //end openWebSite:
@@ -2156,7 +2155,7 @@ static NSMutableDictionary* cachePaths = nil;
           [NSString stringWithFormat:@"\n%@",
             NSLocalizedString(@"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).",
                               @"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).")];
-        int returnCode =
+        NSInteger returnCode =
           NSRunAlertPanel(
             [NSString stringWithFormat:
               NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"), executableDisplayName],
@@ -2182,7 +2181,7 @@ static NSMutableDictionary* cachePaths = nil;
           NSFileManager* fileManager = [NSFileManager defaultManager];
           NSOpenPanel* openPanel = [NSOpenPanel openPanel];
           [openPanel setResolvesAliases:NO];
-          int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
+          NSInteger ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
           ok = (ret2 == NSOKButton) && ([[openPanel URLs] count]);
           if (ok)
           {
@@ -2513,7 +2512,7 @@ static NSMutableDictionary* cachePaths = nil;
     NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration",
                                           @"LaTeXiT cannot be run properly, please check its configuration");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), @"%@", @"OK", nil, nil, message);
   }
   else
   {
@@ -2597,7 +2596,7 @@ static NSMutableDictionary* cachePaths = nil;
           NSString* directory          = [[NSWorkspace sharedWorkspace] temporaryDirectory];
           NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-          export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+          export_format_t exportFormat = (export_format_t)[userDefaults integerForKey:DragExportTypeKey];
           NSString* extension = nil;
           switch(exportFormat)
           {

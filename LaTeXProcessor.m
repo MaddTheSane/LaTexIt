@@ -38,8 +38,8 @@ NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
 
 //In MacOS 10.4.0, 10.4.1 and 10.4.2, these constants are declared but not defined in the PDFKit.framework!
 //So I define them myself, but it is ugly. I expect next versions of MacOS to fix that
-NSString* PDFDocumentCreatorAttribute = @"Creator"; 
-NSString* PDFDocumentKeywordsAttribute = @"Keywords";
+//NSString* PDFDocumentCreatorAttribute = @"Creator";
+//NSString* PDFDocumentKeywordsAttribute = @"Keywords";
 
 @interface LaTeXProcessor (PrivateAPI)
 -(void) initializeEnvironment;
@@ -2154,7 +2154,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
-        data = [imageRep representationUsingType:NSPNGFileType properties:nil];
+		data = [imageRep representationUsingType:NSPNGFileType properties:@{}];
         #ifdef ARC_ENABLED
         #else
         [image release];
@@ -2424,7 +2424,7 @@ static LaTeXProcessor* sharedInstance = nil;
         if (imageSource && imageDestination)
         {
           #ifdef ARC_ENABLED
-          propertiesImmutable = (CHBRIDGE NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0);
+          propertiesImmutable = (NSDictionary*)CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
           properties = [propertiesImmutable deepMutableCopy];
           #else
           propertiesImmutable = NSMakeCollectable((CHBRIDGE NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));

@@ -364,7 +364,7 @@
   if (!sender)
     sender = detailsButton;
 
-  if ([sender state] == NSOnState)
+  if ([(NSButton*)sender state] == NSOnState)
   {
     unsigned int oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
     [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];

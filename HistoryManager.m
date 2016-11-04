@@ -337,7 +337,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSData* legacyHistoryData = [NSData dataWithContentsOfFile:oldFilePathDat options:NSUncachedRead error:&error];
       if (error) {DebugLog(0, @"error : %@", error);}
       NSPropertyListFormat format;
-      id plist = [NSPropertyListSerialization propertyListFromData:legacyHistoryData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      id plist = [NSPropertyListSerialization propertyListWithData:legacyHistoryData options:NSPropertyListImmutable format:&format error:nil];
       NSData* compressedData = nil;
       if (!plist)
         compressedData = legacyHistoryData;
@@ -355,7 +355,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           migrationError = YES;
           DebugLog(0, @"exception : %@", e);
         }
-        unsigned int count = [historyItems count];
+        NSUInteger count = [historyItems count];
         [migratingProgressIndicator setIndeterminate:NO];
         [migratingProgressIndicator setMinValue:0.];
         [migratingProgressIndicator setMaxValue:1.*count];
@@ -386,7 +386,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSError* error = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
       unsigned int progression = 0;
-      unsigned int count = [latexitEquations count];
+      NSUInteger count = [latexitEquations count];
       [migratingProgressIndicator setIndeterminate:NO];
       [migratingProgressIndicator setMaxValue:1.*count];
       [migratingProgressIndicator setDoubleValue:0.];
@@ -558,9 +558,9 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
           @"2.8.1", @"version",
           nil];
-        NSString* errorDescription = nil;
+        NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
+		  [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
@@ -642,10 +642,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   else if ([[path pathExtension] isEqualToString:@"plist"])
   {
     NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
-    NSString* errorDescription = nil;
+    NSError* errorDescription = nil;
     NSPropertyListFormat format = 0;
-    id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format
-      errorDescription:&errorDescription];
+    id plist = [NSPropertyListSerialization propertyListWithData:data options:NSPropertyListImmutable format:&format
+      error:&errorDescription];
     if (errorDescription)
     {
       DebugLog(0, @"error : %@", errorDescription);

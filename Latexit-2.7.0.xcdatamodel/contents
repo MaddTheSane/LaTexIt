@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="16B2657" minimumToolsVersion="Xcode 4.2" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="HistoryEquationWrapper" representedClassName="LatexitEquationWrapper" parentEntity="LatexitEquationWrapper" syncable="YES">
+        <relationship name="historyItem" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="HistoryItem" inverseName="equationWrapper" inverseEntity="HistoryItem" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="HistoryItem" representedClassName="HistoryItem" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="equationWrapper" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="HistoryEquationWrapper" inverseName="historyItem" inverseEntity="HistoryEquationWrapper" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="LatexitEquation" representedClassName="LatexitEquation" syncable="YES">
+        <attribute name="backgroundColor" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="backgroundColorAsData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="baseline" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="color" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="colorAsData" attributeType="Binary" syncable="YES"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="modeAsInteger" attributeType="Integer 32" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="pointSize" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="preamble" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="preambleAsData" attributeType="Binary" syncable="YES"/>
+        <attribute name="sourceText" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="sourceTextAsData" attributeType="Binary" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="equationData" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="LatexitEquationData" inverseName="equation" inverseEntity="LatexitEquationData" indexed="YES" syncable="YES"/>
+        <relationship name="wrapper" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="LatexitEquationWrapper" inverseName="equation" inverseEntity="LatexitEquationWrapper" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="LatexitEquationData" representedClassName="LatexitEquationData" syncable="YES">
+        <attribute name="pdfData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <relationship name="equation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="LatexitEquation" inverseName="equationData" inverseEntity="LatexitEquation" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="LatexitEquationWrapper" representedClassName="LatexitEquationWrapper" isAbstract="YES" syncable="YES">
+        <relationship name="equation" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="LatexitEquation" inverseName="wrapper" inverseEntity="LatexitEquation" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="LibraryEquation" representedClassName="LibraryEquation" parentEntity="LibraryItem" syncable="YES">
+        <relationship name="equationWrapper" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="LibraryEquationWrapper" inverseName="libraryEquation" inverseEntity="LibraryEquationWrapper" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="LibraryEquationWrapper" representedClassName="LatexitEquationWrapper" parentEntity="LatexitEquationWrapper" syncable="YES">
+        <relationship name="libraryEquation" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="LibraryEquation" inverseName="equationWrapper" inverseEntity="LibraryEquation" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="LibraryGroupItem" representedClassName="LibraryGroupItem" parentEntity="LibraryItem" syncable="YES">
+        <attribute name="expanded" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="LibraryItem" representedClassName="LibraryItem" isAbstract="YES" syncable="YES">
+        <attribute name="sortIndex" attributeType="Integer 32" minValueString="0" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LibraryItem" inverseName="parent" inverseEntity="LibraryItem" indexed="YES" syncable="YES"/>
+        <relationship name="parent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="LibraryItem" inverseName="children" inverseEntity="LibraryItem" indexed="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="LibraryItem" positionX="457" positionY="309" width="128" height="105"/>
+        <element name="LibraryEquationWrapper" positionX="198" positionY="309" width="128" height="60"/>
+        <element name="LatexitEquation" positionX="18" positionY="9" width="128" height="270"/>
+        <element name="LibraryEquation" positionX="396" positionY="463" width="128" height="60"/>
+        <element name="LatexitEquationWrapper" positionX="196" positionY="219" width="128" height="60"/>
+        <element name="HistoryEquationWrapper" positionX="367" positionY="217" width="128" height="60"/>
+        <element name="LatexitEquationData" positionX="198" positionY="114" width="128" height="75"/>
+        <element name="HistoryItem" positionX="556" positionY="202" width="128" height="75"/>
+        <element name="LibraryGroupItem" positionX="540" positionY="463" width="128" height="60"/>
+    </elements>
+</model>

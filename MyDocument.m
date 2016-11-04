@@ -1112,7 +1112,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                         otherButton:nil
           informativeTextWithFormat:NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.",
                                                       @"You did not type any text in the body. The result will certainly be empty.")];
-     int result = [alert runModal];
+     NSInteger result = [alert runModal];
      mustProcess = (result == NSAlertDefaultReturn);
   }//end if (runBegin && !mustProcess)
   
@@ -1123,7 +1123,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       [self->lowerBoxControlsBoxFontColorWell deactivate];
       [[[AppController appController] whiteColorWarningWindow] center];
-      int result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
+      NSInteger result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
       if (result == NSCancelButton)
         mustProcess = NO;
     }
@@ -1304,7 +1304,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
 -(IBAction) changeLatexModeAuto:(id)sender
 {
-  BOOL isAuto = ([sender state] == NSOnState);
+  BOOL isAuto = ([(NSButton*)sender state] == NSOnState);
   [self setLatexModeRequested:isAuto ? LATEX_MODE_AUTO : [self detectLatexMode]];
 }
 //end changeLatexModeAuto:(id)sender
@@ -2333,7 +2333,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   latex_mode_t result = LATEX_MODE_DISPLAY;
   NSString* body = [[self->lowerBoxSourceTextView textStorage] string];
   NSRange range = NSMakeRange(0, [body length]);
-  NSInteger options = RKLDotAll | RKLMultiline;
+  RKLRegexOptions options = RKLDotAll | RKLMultiline;
   if ([body isMatchedByRegex:@"\\$\\$(.+)\\$\\$" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\$(.+)\\$" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\[(.*)\\]" options:options inRange:range error:nil] ||

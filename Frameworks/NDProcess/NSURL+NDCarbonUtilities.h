@@ -47,7 +47,7 @@
 	@param fsRef A pointer to a <tt>FSRef</tt>.
 	@result A <tt>NSURL</tt> containing a file url.
  */
-+ (NSURL *)URLWithFSRef:(const FSRef *)fsRef;
++ (NSURL *)URLWithFSRef:(const FSRef *)fsRef DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method URLWithFileSystemPathHFSStyle:
@@ -56,7 +56,7 @@
 	@param hfsString A <tt>NSString</tt> containing a HFS style path.
 	@result A <tt>NSURL</tt> containing a file url.
  */
-+ (NSURL *)URLWithFileSystemPathHFSStyle:(NSString *)hfsString;
++ (NSURL *)URLWithFileSystemPathHFSStyle:(NSString *)hfsString DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 	/*!
 	@method getFSRef:
 	@abstract Get a <tt>FSRef</tt>.
@@ -64,7 +64,7 @@
 	@param fsRef A pointer to a <tt>FSRef</tt> struct, to be filled by the method.
 	@result Returns <tt>YES</tt> if successful, if the method returns <tt>NO</tt> then <tt>fsRef</tt> contains garbage.
  */
-- (BOOL)getFSRef:(FSRef *)fsRef;
+- (BOOL)getFSRef:(FSRef *)fsRef DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method getFSSpec:
@@ -74,15 +74,17 @@
 	@param fsSpec A pointer to a <tt>FSSpec</tt> struct, to be filled by the method.
 	@result Returns <tt>YES</tt> if successful, if the method returns <tt>NO</tt> then <tt>fsSpec</tt> contains garbage.
  */
-- (BOOL)getFSSpec:(FSSpec *)fsSpec AVAILABLE_MAC_OS_X_VERSION_10_2_AND_LATER_BUT_DEPRECATED;
+- (BOOL)getFSSpec:(FSSpec *)fsSpec DEPRECATED_IN_MAC_OS_X_VERSION_10_5_AND_LATER;
 
+#if 0
 /*!
 	@method URLByDeletingLastPathComponent
 	@abstract Delete last component of a url.
 	@discussion Returns a new <tt>NSURL</tt> equivelent to the receiver with the last component removed.
 	@result A new <tt>NSURL</tt>
  */
-- (NSURL *)URLByDeletingLastPathComponent;
+- (NSURL *)URLByDeletingLastPathComponent DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
+#endif
 
 /*!
 	@method fileSystemPathHFSStyle
@@ -90,7 +92,7 @@
 	@discussion Returns a <tt>NSString</tt> containg a HFS style path (e.g. <tt>Macitosh HD:Users:</tt>) useful for display purposes.
 	@result A new <tt>NSString</tt> containing a HFS style path for the same file or directory as the receiver.
  */
-- (NSString *)fileSystemPathHFSStyle;
+- (NSString *)fileSystemPathHFSStyle DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method resolveAliasFile
@@ -98,7 +100,7 @@
 	@discussion Returns an file url <tt>NSURL</tt> refered to by the receveive if the receveive refers to an alias file. If it does not refer to an alias file the a url identical to the receveive is returned.
 	@result An file url <tt>NSURL</tt>.
  */
-- (NSURL *)resolveAliasFile;
+- (NSURL *)resolveAliasFile DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method finderInfoFlags:type:creator:
@@ -165,7 +167,7 @@
 	@param aMask Mask for Finder flags
 	@param type The Finder file type
 	@param creator The application creator code
-	@result Returns <tt>YES</tt> if successful.
+	@result Returns \c YES if successful.
  */
 - (BOOL)setFinderInfoFlags:(UInt16)flags mask:(UInt16)aMask type:(OSType)type creator:(OSType)creator;
 
@@ -174,7 +176,7 @@
 	@abstract Sets the location a finder item.
 	@discussion Set the location of a finder item within in container.
 	@param location The location
-	@result Returns <tt>YES</tt> if successful.
+	@result Returns \c YES if successful.
  */
 - (BOOL)setFinderLocation:(NSPoint)location;
 

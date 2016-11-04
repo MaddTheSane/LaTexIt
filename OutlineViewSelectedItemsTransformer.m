@@ -53,7 +53,11 @@
 {
   if ((!(self = [super init])))
     return nil;
-  self->outlineView = [aOutlineView retain];
+#ifdef ARC_ENABLED
+	self->outlineView = aOutlineView;
+#else
+	self->outlineView = [aOutlineView retain];
+#endif
   return self;
 }
 //end initWithOutlineView:

@@ -10,12 +10,12 @@
 
 
 @interface OutlineViewSelectedItemsTransformer : NSValueTransformer {
-  NSOutlineView* outlineView;
+  __strong NSOutlineView* outlineView;
 }
 
 +(NSString*) name;
 
-+(id) transformerWithOutlineView:(NSOutlineView*)outlineView;
--(id) initWithOutlineView:(NSOutlineView*)outlineView;
++(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView;
+-(instancetype) initWithOutlineView:(NSOutlineView*)outlineView;
 
 @end

@@ -25,10 +25,8 @@
 -(id) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
 -(void) dispose;
--(BOOL) customKVOEnabled;
--(void) setCustomKVOEnabled:(BOOL)value;
--(BOOL) customKVOInhibited;
--(void) setCustomKVOInhibited:(BOOL)value;
+@property BOOL customKVOEnabled;
+@property BOOL customKVOInhibited;
 
 -(BOOL) dummyPropertyToForceUIRefresh;
 

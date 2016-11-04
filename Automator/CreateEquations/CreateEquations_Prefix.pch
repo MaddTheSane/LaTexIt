@@ -4,4 +4,7 @@
 
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
+	#if __has_feature(objc_arc)
+		#define ARC_ENABLED
+	#endif
 #endif

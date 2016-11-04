@@ -31,17 +31,15 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 
 -(void) awakeFromNib
 {
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
+  [self setDelegate:self];
+  [self setDataSource:self];
 }
 
 //updates contents thnaks to the array of error strings
 -(void) setErrors:(NSArray*)errors
 {
   [errorLines removeAllObjects];
-  NSEnumerator* lineEnumerator = [errors objectEnumerator];
-  NSString* line = [lineEnumerator nextObject];
-  while(line)
+  for(NSString *line in errors)
   {
     NSArray* components = [line componentsSeparatedByString:@":"];
     if ([components count] >= 3)
@@ -58,14 +56,13 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
       NSRange separator = [line rangeOfString:@"! LaTeX Error:"];
       if (separator.location != NSNotFound)
       {
-        NSNumber* lineNumber = [NSNumber numberWithInt:0]; //dummy line number error
+        NSNumber* lineNumber = @0; //dummy line number error
         NSString* message    = [line substringFromIndex:(separator.location+separator.length)];
         NSDictionary* dictionary =
           [NSDictionary dictionaryWithObjectsAndKeys:lineNumber, @"line", message, @"message", nil];
         [errorLines addObject:dictionary];
       }
     }
-    line = [lineEnumerator nextObject];
   }
   [self reloadData];
 }
@@ -77,7 +74,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 }
 //end numberOfRowsInTableView:
 
--(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+-(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
   id object = [[errorLines objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
   //if the line number is equal to 0, do not display it
@@ -90,7 +87,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 -(void) mouseDown:(NSEvent*) theEvent
 {
   [super mouseDown:theEvent];
-  int row = [self selectedRow];
+  NSInteger row = [self selectedRow];
   if (row >= 0)
   {
     NSNumber* lineError = [self tableView:self objectValueForTableColumn:[self tableColumnWithIdentifier:@"line"] row:row];

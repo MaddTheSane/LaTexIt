@@ -20,7 +20,7 @@ extern int DebugLogLevel;
 #define NSAppKitVersionNumber10_4 824
 #define NSAppKitVersionNumber10_5 949
 #define NSAppKitVersionNumber10_6 1038
-#define NSAppKitVersionNumber10_7 1110
+//#define NSAppKitVersionNumber10_7 1110
 #define NSAppKitVersionNumber10_8 1187
 
 BOOL isMacOS10_5OrAbove(void);

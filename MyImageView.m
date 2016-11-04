@@ -869,7 +869,7 @@ typedef NSInteger NSDraggingContext;
   self->transientDragData = nil;
   [self->transientDragEquation release];
   self->transientDragEquation = nil;
-  int tag = sender ? [sender tag] : -1;
+  NSInteger tag = sender ? [sender tag] : -1;
   export_format_t copyExportFormat = ((tag == -1) ? [[PreferencesController sharedController] exportFormatCurrentSession] : (export_format_t) tag);
   [self copyAsFormat:copyExportFormat];
 }
@@ -915,7 +915,7 @@ typedef NSInteger NSDraggingContext;
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
-    unsigned int count = [libraryItemsWrappedArray count];
+    NSUInteger count = [libraryItemsWrappedArray count];
     LibraryEquation* libraryEquation = nil;
     while(count-- && !libraryEquation)
     {
@@ -931,7 +931,7 @@ typedef NSInteger NSDraggingContext;
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-    unsigned int count = [libraryItemsArray count];
+    NSUInteger count = [libraryItemsArray count];
     LibraryEquation* libraryEquation = nil;
     while(count-- && !libraryEquation)
       libraryEquation = [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryEquation class]] ? [libraryItemsArray objectAtIndex:count] : nil;

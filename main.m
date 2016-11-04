@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         char* endPtr = 0;
         long level = strtol(argv[i+1], &endPtr, 10);
         int error = (endPtr && (*endPtr != '\0'));
-        DebugLogLevel = error ? DebugLogLevel : level;
+        DebugLogLevel = error ? DebugLogLevel : (int)level;
       }//end if -v something
     }//end if -v
   }//end for each arg

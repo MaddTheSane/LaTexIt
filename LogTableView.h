@@ -12,7 +12,7 @@
 //in another view of the document window. A notification suits well.
 extern NSString* ClickErrorLineNotification;
 
-@interface LogTableView : NSTableView {
+@interface LogTableView : NSTableView <NSTableViewDataSource, NSTableViewDelegate> {
   NSMutableArray* errorLines;//the lines where the errors are located
 }
 
@@ -20,6 +20,6 @@ extern NSString* ClickErrorLineNotification;
 -(void) setErrors:(NSArray*)errors;
 
 //NSTableViewDataSource
--(id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex;
+-(id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex;
 
 @end
