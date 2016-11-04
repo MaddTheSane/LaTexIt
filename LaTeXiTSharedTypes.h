@@ -9,8 +9,15 @@
 
 #include <CoreFoundation/CFBase.h>
 
-//useful to differenciate the different latex modes : EQNARRAY, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
-typedef CF_ENUM(int, latex_mode_t) {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE_EQNARRAY, LATEX_MODE_ALIGN, LATEX_MODE_AUTO};
+///useful to differenciate the different latex modes : EQNARRAY, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
+typedef CF_ENUM(int, latex_mode_t) {
+  LATEX_MODE_DISPLAY,
+  LATEX_MODE_INLINE,
+  LATEX_MODE_TEXT,
+  LATEX_MODE_EQNARRAY,
+  LATEX_MODE_ALIGN,
+  LATEX_MODE_AUTO
+};
 
 typedef CF_ENUM(int, export_format_t)
 {EXPORT_FORMAT_PDF, EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS,

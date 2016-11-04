@@ -46,8 +46,7 @@ extern NSString* ImageDidChangeNotification;
 -(IBAction) copy:(id)sender;//copy the data into clipboard
 -(void)     copyAsFormat:(export_format_t)exportFormat;//copy the data into clipboard
 
--(CGFloat) zoomLevel;
--(void)    setZoomLevel:(CGFloat)value;
+@property (nonatomic) CGFloat zoomLevel;
 -(void)    updateViewSize;
 
 //when you set the pdfData encapsulated by the imageView, it creates an NSImage with this data.

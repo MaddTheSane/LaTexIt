@@ -24,7 +24,7 @@
 @class MySplitView;
 @class PropertyStorage;
 
-@interface MyDocument : NSDocument
+@interface MyDocument : NSDocument <NSWindowDelegate, NSSplitViewDelegate>
 {
   IBOutlet NSBox*               upperBox;
   IBOutlet NSBox*               upperImageBox;
@@ -69,7 +69,7 @@
   
   NSMutableString* lastExecutionLog;
 
-  LinkBack*        linkBackLink;//linkBack link, may be nil (most of the time, in fact)
+  LinkBack*        linkBackLink;///< linkBack link, may be nil (most of the time, in fact)
   LibraryEquation* linkedLibraryEquation;
   BOOL             isObservingLibrary;
   BOOL             linkBackAllowed;
@@ -100,10 +100,8 @@
 }
 
 //interface changing
--(BOOL) isReducedTextArea;
--(void) setReducedTextArea:(BOOL)reduce;
--(document_style_t) documentStyle;
--(void) setDocumentStyle:(document_style_t)value;
+@property (nonatomic, getter=isReducedTextArea) BOOL reducedTextArea;
+@property (nonatomic) document_style_t documentStyle;
 -(void) toggleDocumentStyle;
 
 -(IBAction) changeLatexModeAuto:(id)sender;
@@ -127,41 +125,37 @@
 -(NSResponder*) preferredFirstResponder;
 -(NSResponder*) previousFirstResponder;
 
--(void) gotoLine:(int)row;
+-(void) gotoLine:(NSInteger)row;
 
--(void) setNullId;//useful for dummy document of AppController
+-(void) setNullId;///<useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;
 
--(LibraryEquation*) lastAppliedLibraryEquation;
--(void) setLastAppliedLibraryEquation:(LibraryEquation*)value;
+@property (retain) LibraryEquation *lastAppliedLibraryEquation;
 
 -(latex_mode_t) detectLatexMode;
--(latex_mode_t) latexModeApplied;
--(void) setLatexModeApplied:(latex_mode_t)value;
--(latex_mode_t) latexModeRequested;
--(void) setLatexModeRequested:(latex_mode_t)value;
+@property (nonatomic) latex_mode_t latexModeApplied;
+@property (nonatomic) latex_mode_t latexModeRequested;
 -(void) setColor:(NSColor*)color;
 -(void) setMagnification:(CGFloat)magnification;
 
-//updates interface according to whether the latexisation is possible or not
+///updates interface according to whether the latexisation is possible or not
 -(void) updateGUIfromSystemAvailabilities;
-//tells whether the document is currently performing a latexisation
--(BOOL) isBusy;
+///tells whether the document is currently performing a latexisation
+@property (readonly, getter=isBusy) BOOL busy;
 -(void) setBusyIdentifier:(NSString*)value;
 
--(void) setFont:(NSFont*)font;//changes the font of both preamble and sourceText views
--(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
--(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield
+-(void) setFont:(NSFont*)font;///<changes the font of both preamble and sourceText views
+-(void) setPreamble:(NSAttributedString*)aString;   ///<fills the preamble textfield
+-(void) setSourceText:(NSAttributedString*)aString; ///<fills the body     textfield
 
 -(void) setBodyTemplate:(NSDictionary*)bodyTemplate moveCursor:(BOOL)moveCursor;
 
 -(BOOL) canReexport;
 -(BOOL) hasImage;
--(BOOL) isPreambleVisible;
+@property (readonly, getter=isPreambleVisible) BOOL preambleVisible;
 -(void) setPreambleVisible:(BOOL)visible animate:(BOOL)animate;
 
--(BOOL) shouldApplyToPasteboardAfterLatexization;
--(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value;
+@property BOOL shouldApplyToPasteboardAfterLatexization;
 
 //text actions in the first responder
 -(NSString*) selectedText;
@@ -177,13 +171,10 @@
 -(void) triggerSmartHistoryFeature;
 
 //linkback live link management
--(LinkBack*) linkBackLink;
--(void) setLinkBackLink:(LinkBack*)link;
--(BOOL) linkBackAllowed;
--(void) setLinkBackAllowed:(BOOL)value;
+@property (nonatomic, retain) LinkBack *linkBackLink;
+@property (nonatomic) BOOL linkBackAllowed;
 
--(LibraryEquation*) linkedLibraryEquation;
--(void) setLinkedLibraryEquation:(LibraryEquation*)libraryEquation;
+@property (nonatomic, retain) LibraryEquation *linkedLibraryEquation;
 -(void) closeLinkedLibraryEquation:(LibraryEquation*)libraryEquation;
 
 //NSWindowDelegate

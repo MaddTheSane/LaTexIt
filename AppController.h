@@ -126,7 +126,7 @@
 
 -(IBAction) libraryOpenEquation:(id)sender;
 -(IBAction) libraryOpenLinkedEquation:(id)sender;
--(IBAction) libraryImportCurrent:(id)sender; //creates a library item with the current document state
+-(IBAction) libraryImportCurrent:(id)sender; ///<creates a library item with the current document state
 -(IBAction) libraryNewFolder:(id)sender;
 -(IBAction) libraryRemoveSelectedItems:(id)sender;
 -(IBAction) libraryRenameItem:(id)sender;
@@ -157,26 +157,26 @@
 //some "prefixes", that is to say an array of PATH in which the program could be
 -(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes environment:(NSDictionary*)environment useLoginShell:(BOOL)useLoginShell;
 
-//returns the default preamble. If color.sty is not available, it may add % in front of \usepackage{color}
+///returns the default preamble. If color.sty is not available, it may add % in front of \usepackage{color}
 -(NSAttributedString*) preambleLatexisationAttributedString;
 -(NSAttributedString*) preambleServiceAttributedString;
 
 //returns some configuration info
--(BOOL) isPdfLaTeXAvailable;
--(BOOL) isXeLaTeXAvailable;
--(BOOL) isLaTeXAvailable;
--(BOOL) isDviPdfAvailable;
--(BOOL) isGsAvailable;
--(BOOL) isPsToPdfAvailable;
--(BOOL) isColorStyAvailable;
--(BOOL) isPdfToSvgAvailable;
--(BOOL) isPerlWithLibXMLAvailable;
+@property (readonly, getter=isPdfLaTeXAvailable) BOOL pdfLaTeXAvailable;
+@property (readonly, getter=isXeLaTeXAvailable) BOOL xeLaTeXAvailable;
+@property (readonly, getter=isLaTeXAvailable) BOOL laTeXAvailable;
+@property (readonly, getter=isDviPdfAvailable) BOOL dviPdfAvailable;
+@property (readonly, getter=isGsAvailable) BOOL gsAvailable;
+@property (readonly, getter=isPsToPdfAvailable) BOOL psToPdfAvailable;
+@property (readonly, getter=isColorStyAvailable) BOOL colorStyAvailable;
+@property (readonly, getter=isPdfToSvgAvailable) BOOL pdfToSvgAvailable;
+@property (readonly, getter=isPerlWithLibXMLAvailable) BOOL perlWithLibXMLAvailable;
 
 //if the marginWindowController is not loaded, just use the user defaults values
--(CGFloat) marginsCurrentTopMargin;
--(CGFloat) marginsCurrentBottomMargin;
--(CGFloat) marginsCurrentLeftMargin;
--(CGFloat) marginsCurrentRightMargin;
+@property (readonly) CGFloat marginsCurrentTopMargin;
+@property (readonly) CGFloat marginsCurrentBottomMargin;
+@property (readonly) CGFloat marginsCurrentLeftMargin;
+@property (readonly) CGFloat marginsCurrentRightMargin;
 
 //if the additionalFilesWindowController is not loaded, just use the user defaults values
 -(NSArray*) additionalFilesPaths;

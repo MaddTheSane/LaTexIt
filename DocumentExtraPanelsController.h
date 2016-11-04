@@ -44,28 +44,18 @@
 
 -(NSWindow*)   logWindow;
 -(NSTextView*) logTextView;
--(NSString*)   log;
--(void)        setLog:(NSString*)value;
+@property (atomic, copy) NSString *log;
 
--(export_format_t) saveAccessoryViewExportFormat;
--(void)            setSaveAccessoryViewExportFormat:(export_format_t)value;
--(CGFloat)         saveAccessoryViewScalePercent;
--(void)            setSaveAccessoryViewScalePercent:(CGFloat)value;
--(CGFloat)         saveAccessoryViewOptionsJpegQualityPercent;
--(void)            setSaveAccessoryViewOptionsJpegQualityPercent:(CGFloat)value;
--(NSColor*)        saveAccessoryViewOptionsJpegBackgroundColor;
--(void)            setSaveAccessoryViewOptionsJpegBackgroundColor:(NSColor*)value;
--(NSString*)       saveAccessoryViewOptionsSvgPdfToSvgPath;
--(void)            setSaveAccessoryViewOptionsSvgPdfToSvgPath:(NSString*)value;
--(BOOL)            saveAccessoryViewOptionsTextExportPreamble;
--(void)            setSaveAccessoryViewOptionsTextExportPreamble:(BOOL)value;
--(BOOL)            saveAccessoryViewOptionsTextExportEnvironment;
--(void)            setSaveAccessoryViewOptionsTextExportEnvironment:(BOOL)value;
--(BOOL)            saveAccessoryViewOptionsTextExportBody;
--(void)            setSaveAccessoryViewOptionsTextExportBody:(BOOL)value;
+@property (nonatomic) export_format_t   saveAccessoryViewExportFormat;
+@property (nonatomic) CGFloat           saveAccessoryViewScalePercent;
+@property CGFloat           saveAccessoryViewOptionsJpegQualityPercent;
+@property (retain) NSColor* saveAccessoryViewOptionsJpegBackgroundColor;
+@property (nonatomic, copy) NSString*    saveAccessoryViewOptionsSvgPdfToSvgPath;
+@property BOOL              saveAccessoryViewOptionsTextExportPreamble;
+@property BOOL              saveAccessoryViewOptionsTextExportEnvironment;
+@property BOOL              saveAccessoryViewOptionsTextExportBody;
 
--(NSSavePanel*) currentSavePanel;
--(void) setCurrentSavePanel:(NSSavePanel*)value;
+@property (nonatomic, assign) NSSavePanel *currentSavePanel;
 
 -(IBAction) openSaveAccessoryViewOptions:(id)sender;
 -(void) exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok;

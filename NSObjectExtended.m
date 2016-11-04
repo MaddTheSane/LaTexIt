@@ -27,10 +27,10 @@
 }
 //end dynamicCastToClass:
 
--(void) forwardInvocation:(NSInvocation*)anInvocation
-{
-  DebugLog(1, @"anInvocation = %@", anInvocation);
-}
+//-(void) forwardInvocation:(NSInvocation*)anInvocation
+//{
+//  DebugLog(1, @"anInvocation = %@", anInvocation);
+//}
 //end forwardInvocation:
 
 -(id) managedObjectContext

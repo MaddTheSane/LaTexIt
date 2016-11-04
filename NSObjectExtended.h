@@ -11,9 +11,9 @@
 
 @interface NSObject (Extended)
 
-+(Class) dynamicCastToClass:(Class)aClass;
--(id)    dynamicCastToClass:(Class)aClass;
--(void)  forwardInvocation:(NSInvocation*)anInvocation;
++(nullable Class) dynamicCastToClass:(nonnull Class)aClass;
+-(nullable id)    dynamicCastToClass:(nonnull Class)aClass;
+//-(void)  forwardInvocation:(NSInvocation*)anInvocation;
 
 //Difficult method : returns a simplified array, to be sure that no item of the array has an ancestor
 //in this array. This is useful, when several items are selected, to factorize the work in a common

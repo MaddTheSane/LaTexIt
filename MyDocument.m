@@ -123,6 +123,12 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 @end
 
 @implementation MyDocument
+@synthesize documentStyle;
+@synthesize lastAppliedLibraryEquation;
+@synthesize linkBackLink;
+@synthesize linkBackAllowed;
+@synthesize reducedTextArea = isReducedTextArea;
+@synthesize shouldApplyToPasteboardAfterLatexization;
 
 +(void) initialize
 {
@@ -478,12 +484,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [[[self windowForSheet] windowController] synchronizeWindowTitleWithDocumentName];
 }
 //end setDocumentTitle:
-
--(document_style_t) documentStyle
-{
-  return self->documentStyle;
-}
-//end documentStyle
 
 -(void) setDocumentStyle:(document_style_t)value
 {
@@ -1013,7 +1013,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   NSError* error = nil;
   NSArray* result = ![self->poolOfObsoleteUniqueIds count] ? nil :
   [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:&error];
-  unsigned int count = [result count];
+  NSUInteger count = [result count];
   if (count)
   {
     NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
@@ -1386,16 +1386,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   
   [self->lowerBoxPreambleTextView clearErrors];
   [self->lowerBoxSourceTextView clearErrors];
-  int numberOfRows = [self->upperBoxLogTableView numberOfRows];
-  int i = 0;
+  NSInteger numberOfRows = [self->upperBoxLogTableView numberOfRows];
+  NSInteger i = 0;
   for(i = 0 ; i<numberOfRows ; ++i)
   {
     NSNumber* lineNumber = [self->upperBoxLogTableView tableView:self->upperBoxLogTableView
                             objectValueForTableColumn:[self->upperBoxLogTableView tableColumnWithIdentifier:@"line"] row:i];
     NSString* message = [self->upperBoxLogTableView tableView:self->upperBoxLogTableView
                       objectValueForTableColumn:[self->upperBoxLogTableView tableColumnWithIdentifier:@"message"] row:i];
-    int line = [lineNumber intValue];
-    int nbLinesInUserPreamble = [self->lowerBoxPreambleTextView nbLines];
+    NSInteger line = [lineNumber integerValue];
+    NSInteger nbLinesInUserPreamble = [self->lowerBoxPreambleTextView nbLines];
     if (line <= nbLinesInUserPreamble)
       [self->lowerBoxPreambleTextView setErrorAtLine:line message:message];
     else
@@ -1443,29 +1443,13 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self->lowerBoxSplitView displayIfNeeded];
       if (animate)
       {
-        if (isMacOS10_6OrAbove())
-          [NSThread sleepUntilDate:[[NSDate date] dateByAddingTimeInterval:1/100.0f]];
-        else
-          [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:1/100.0f]];
+        [NSThread sleepUntilDate:[[NSDate date] dateByAddingTimeInterval:1/100.0f]];
       }//end if (animate)
     }
     [self splitViewDidResizeSubviews:nil];
   }//end if there is something to change
 }
 //end setPreambleVisible:
-
--(BOOL) shouldApplyToPasteboardAfterLatexization
-{
-  BOOL result = self->shouldApplyToPasteboardAfterLatexization;
-  return result;
-}
-//end shouldApplyToPasteboardAfterLatexization
-
--(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value
-{
-  self->shouldApplyToPasteboardAfterLatexization = value;
-}
-//end setShouldApplyToPasteboardAfterLatexization:
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient
 {
@@ -1543,20 +1527,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
 }
 //end applyString:
-
--(LibraryEquation*) lastAppliedLibraryEquation
-{
-  return self->lastAppliedLibraryEquation;
-}
-//end lastAppliedLibraryEquation
-
--(void) setLastAppliedLibraryEquation:(LibraryEquation*)value
-{
-  [value retain];
-  [self->lastAppliedLibraryEquation release];
-  self->lastAppliedLibraryEquation = value;
-}
-//end setLastAppliedLibraryEquation:
 
 //updates the document according to the given library file
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation
@@ -1730,10 +1700,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     }
     [controller willChangeValueForKey:@"saveAccessoryViewExportFormat"];
     [controller didChangeValueForKey:@"saveAccessoryViewExportFormat"];
-    [currentSavePanel beginSheetForDirectory:directory file:file
-                              modalForWindow:[self windowForSheet] modalDelegate:self
-                              didEndSelector:@selector(exportChooseFileDidEnd:returnCode:contextInfo:)
-                                 contextInfo:NULL];
+    currentSavePanel.directoryURL = [NSURL fileURLWithPath:directory isDirectory:YES];
+    currentSavePanel.nameFieldStringValue = file;
+    [currentSavePanel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSInteger result) {
+      [self exportChooseFileDidEnd:currentSavePanel returnCode:result contextInfo:NULL];
+    }];
   }//end if(![controller currentSavePanel])//not already onscreen
 }
 //end exportImage:
@@ -1763,7 +1734,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end reexportImage:
 
--(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(int)code contextInfo:(void*)contextInfo
+-(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)code contextInfo:(void*)contextInfo
 {
   DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
   if ((code == NSOKButton) && [self->upperBoxImageView image])
@@ -1785,10 +1756,10 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:aJpegQuality], @"jpegQuality",
-                                 [NSNumber numberWithFloat:scaleAsPercent], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 @(scaleAsPercent), @"scaleAsPercent",
+                                 @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                 @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                 @([preferencesController exportTextExportBody]), @"textExportBody",
                                  aJpegColor, @"jpegColor",//at the end for the case it is null
                                  nil];
   
@@ -1798,7 +1769,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (data)
   {
     [data writeToFile:filePath atomically:YES];
-    [[NSFileManager defaultManager] bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt']
+    [[NSFileManager defaultManager] bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt']
                                                                                      forKey:NSFileHFSCreatorCode]
                                             ofItemAtPath:filePath error:0];    
     NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;
@@ -1918,11 +1889,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     }
   }
   else
-    [self gotoLine:[number intValue]];
+    [self gotoLine:[number integerValue]];
 }
 //end _clickErrorLine:
 
--(void) gotoLine:(int)row
+-(void) gotoLine:(NSInteger)row
 {
   if ([self->lowerBoxPreambleTextView gotoLine:row])
     [self setPreambleVisible:YES animate:YES];
@@ -1939,13 +1910,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [scrollView setNeedsDisplay:YES];
 }
 //end _setLogTableViewVisible:
-
-//returns the linkBack link
--(LinkBack*) linkBackLink
-{
-  return self->linkBackLink;
-}
-//end linkBackLink
 
 //sets up a new linkBack link
 -(void) setLinkBackLink:(LinkBack*)newLinkBackLink
@@ -1972,13 +1936,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   }//end if (newLinkBackLink != self->linkBackLink)
 }
 //end setLinkBackLink:
-
--(BOOL) linkBackAllowed
-{
-  BOOL result = self->linkBackAllowed;
-  return result;
-}
-//end linkBackAllowed
 
 -(void) setLinkBackAllowed:(BOOL)value
 {
@@ -2144,12 +2101,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   return description;
 }
 //end descriptionForScript:
-
--(BOOL) isReducedTextArea
-{
-  return isReducedTextArea;
-}
-//end isReducedTextArea
 
 -(void) setReducedTextArea:(BOOL)reduce
 {
@@ -2774,22 +2725,21 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [synchronizeEnabledCheckBox setFrameOrigin:NSMakePoint(8, CGRectGetMaxY(NSRectToCGRect([synchronizePreambleCheckBox frame]))+4)];
   [accessoryView sizeToFit];
   
-  id panel = [[NSSavePanel savePanel] retain];
+  NSSavePanel *panel = [[NSSavePanel savePanel] retain];
   [panel setCanCreateDirectories:YES];
   [panel setCanSelectHiddenExtension:YES];
   [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
   [panel setAllowsOtherFileTypes:YES];
   [panel setExtensionHidden:NO];
   [panel setAccessoryView:accessoryView];
-  [panel beginSheetForDirectory:nil
-                           file:[NSLocalizedString(@"Untitled", @"Untitled") stringByAppendingPathExtension:@"tex"]
-                 modalForWindow:[self windowForSheet] modalDelegate:self
-                 didEndSelector:@selector(saveAsDidEnd:returnCode:contextInfo:)
-                    contextInfo:panel];
+  panel.nameFieldStringValue = [NSLocalizedString(@"Untitled", @"Untitled") stringByAppendingPathExtension:@"tex"];
+  [panel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+    [self saveAsDidEnd:panel returnCode:returnCode contextInfo:panel];
+  }];
 }
 //end saveAsDidEnd:
 
--(void) saveAsDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) saveAsDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   NSSavePanel* panel = (NSSavePanel*)contextInfo;
   BOOL synchronizeEnabled =
@@ -2797,12 +2747,12 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (returnCode == NSFileHandlingPanelOKButton)
   {
     [self closeBackSyncFile];
-    NSString* filename = [panel filename];
-    [self setFileURL:[NSURL fileURLWithPath:filename]];
+    NSURL* filename = [panel URL];
+    [self setFileURL:filename];
     [self save:self];
     if (synchronizeEnabled)
     {
-      [self openBackSyncFile:filename options:[self->backSyncOptions dictionary]];
+      [self openBackSyncFile:[filename path] options:[self->backSyncOptions dictionary]];
       [self watcher:nil receivedNotification:UKFileWatcherWriteNotification forPath:self->backSyncFilePath];
     }//end if (synchronizeEnabled)
   }//end if (returnCode == NSFileHandlingPanelOKButton)
