@@ -1,0 +1,11 @@
+"groups-and-sets" = "Gruppen & Mengen";
+"subgroup"="Untergruppe";
+"supgroup"="Supergruppe";
+"supnormgroup"="Normale Supergruppe";
+"subnormgroup"="Normale Untergruppe";
+"supset"="Echte Obermenge";
+"supseteq"="Obermenge";
+"subset"="Echte Teilmenge";
+"subseteq"="Teilmenge";
+"emptyset"="Leere Menge 1";
+"varnothing"="Leere Menge 2";

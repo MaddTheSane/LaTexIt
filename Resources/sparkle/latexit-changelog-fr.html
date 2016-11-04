@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+  <title>LaTeXiT RSS (fr)</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<h2><a name="version-2.8.1">Version 2.8.1 (13 juillet 2016)</a></h2>
+<ul>
+<li>correction d'incompatibilités avec des mises à jour récentes de Ghostscript&nbsp;;<li>
+<li>sauvegarde de l'historique à chaque ajout&nbsp;;</li>
+<li>sauvegarde de la bibliothèque dès que posible&nbsp;;</li>
+<li>mise à jour de Linkback.</li>
+</ul>
+<h2><a name="version-2.8.0">Version 2.8.0 (7 septembre 2015)</a></h2>
+<ul>
+<li>ajout de la recherche dans l'historique&nbsp;;</li>
+<li>conservation de l'ordre des éléments lors de l'import d'une bibliothèque&nbsp;;</li>
+<li>ajout d'un export &quot;Source TeX&quot; de la bibliothèque&nbsp;;</li>
+<li>ajout de la possibilité d'attacher un commentaire aux équations de la bibliothèque&nbsp;;</li>
+<li>meilleure gestion du caractère &#x00A5; en japonais&nbsp;;</li>
+<li>correction de diverses localisations et traductions.</li>
+</ul>
+<h2><a name="version-2.7.5">Version 2.7.5 (29 novembre 2014)</a></h2>
+<ul>
+<li>Réparation de la 2.7.4 qui était complètement cassée juste avant la distribution. Complètement de ma faute. Complètement désolé.</li>
+<li>meilleur export MathML&nbsp;;</li>
+<li>correction de la compatibilité avec Ghostscript 9.15&nbsp;;</li>
+<li>amélioration de l'insertion des méta-données PDF&nbsp;;</li>
+<li>certaines personnes voulant faire un don mais n'utilisant pas Paypal m'ont demandé une wishlist Amazon. Du coup, la voici&nbsp;:
+<br/>
+<a href="http://www.amazon.fr/registry/wishlist/2Z6NRQPNSMOYA">Books</a><br/>
+<a href="http://www.amazon.fr/registry/wishlist/C8JNGJX0CI8H">Tools</a><br/>
+</li>
+</ul>
+<h2><a name="version-2.7.4">Version 2.7.4 (28 novembre 2014)</a></h2>
+<ul>
+<li>version complèment cassée juste pour me taper la honte.</li>
+</ul>
+<h2><a name="version-2.7.3">Version 2.7.3 (14 septembre 2014)</a></h2>
+<ul>
+<li>restauration du menu clic-droit sur l'image.</li>
+</ul>
+<h2><a name="version-2.7.2">Version 2.7.2 (12 septembre 2014)</a></h2>
+<ul>
+<li>correction de l'usage CPU dans certains cas&nbsp;;</li>
+<li>correction de bugs mineurs.</li>
+</ul>
+<h2><a name="version-2.7.1">Version 2.7.1 (10 septembre 2014)</a></h2>
+<ul>
+<li>correction de la fenêtre de dialogue d'export.</li>
+</ul>
+<h2><a name="version-2.7.0">Version 2.7.0 (2 septembre 2014)</a></h2>
+<ul>
+<li>nouvelle fonctionnalité &quot;synchronisation en arrière plan&quot; pour partager un fichier avec une application tierce&nbsp;;</li>
+<li>précalcul du PDF avec polices vectorisées pour un export plus rapide&nbsp;;</li>
+<li>correction de la gestion de la police de caractère lors d'un glisser/déposer sur la zone de texte&nbsp;;</li>
+<li>meilleur import de texte&nbsp;;</li>
+<li>la couleur de fond de l'équation est maintenant conservée lors de l'insertion dans la bibliothèque&nbsp;;</li>
+<li>correction de bugs mineurs.</li>
+</ul>
+<h2><a name="version-2.6.1">Version 2.6.1 (19 mai 2014)</a></h2>
+<ul>
+<li>Correction de la bounding box des &quot;PDF avec polices vectorisées&quot; pour les rendre compatibles avec Illustrator&nbsp;;</li>
+<li>Ajout du menu &quot;Format&gt;Commenter/Décommenter&quot;&nbsp;;</li>
+<li>Raccourcissement des noms des services LaTeXiT pour les rendre plus lisibles dans les préférences clavier de MacOS&nbsp;X.</li>
+</ul>
+<h2><a name="version-2.6.0">Version 2.6.0 (17 avril 2014)</a></h2>
+<ul>
+<li>Correction du glisser/déposer VERS l'horrible iWork'13 (et son lot de régressions)&nbsp;;</li>
+<li>Correction du glisser/déposer PROVENANT de (l'horrible) iWork'13 (et son lot de régressions), grâce à l'icône de proximité du panneau &quot;image&quot;&nbsp;;</li>
+<li>Ajout d'un filtre aux services basé sur les expressions régulières (voyez Préférences > Services)&nbsp;;</li>
+<li>Ajout du mode &quot;Auto&quot; de latexisation&nbsp;;</li>
+<li>Ajout des menus &quot;Format > Texte > Aligner…&quot;&nbsp;;</li>
+<li>Ajout du raccourci Ctrl+Command+T (⌃+⌘+T) pour latexiser ET mettre dans le presse-papier&nbsp;;</li>
+<li> Duplication de tous les services, avec des versions qui mettent dans le presse-papier&nbsp;;</li>
+<li>Correction d'un crash lié à NSFlippableView&nbsp;;</li>
+<li>Ajout de la variable d'environnement $OUTPUTPDFFILE2 pour les scripts de traitement&nbsp;;</li>
+<li>Correction d'une incompatibilité entre gs >= 9.09 et l'export &quot;avec polices vectorisées&quot;&nbsp;;</li>
+<li>Omission volontaire de la commande \color insérée aux préambules, lorsque la couleur demandée est noire, pour faciliter la personnalisation&nbsp;;</li>
+<li>Ajout de la préférence &quot;Ajuster l'aperçu à la fenêtre&quot;&nbsp;;</li>
+<li>Nouvelles méta-données embarquées dans les PDFs pour que iWork'13 ne l'enlève pas&nbsp;;</li>
+<li>Correction de la boîte de dialogue d'export JPEG&nbsp;;</li>
+<li>Correction d'un bug de gestion des couleurs en mode XeLaTeX&nbsp;;</li>
+<li>Correction de régressions avec l'action Automator&nbsp;;</li>
+<li>Correction du glisser/déposer vers OmniGraffle.</li>
+</ul>
+<h2><a name="version-2.5.4">Version 2.5.4 (7 septembre 2013)</a></h2>
+<ul>
+<li>Correction d'un bug dans les préférences.</li>
+</ul>
+<h2><a name="version-2.5.3">Version 2.5.3 (3 juillet 2013)</a></h2>
+<ul>
+<li>Correction de l'action Automator.</li>
+</ul>
+<h2><a name="version-2.5.2">Version 2.5.2 (1er février 2013)</a></h2>
+<ul>
+<li>correction d'un bug empêchant le fonctionnement de la couleur du fond&nbsp;;</li>
+<li>correction des icônes de fichiers Retina pour qu'elles fonctionnent aussi sous Mac&nbsp;OS&nbsp;10.5.</li>
+</ul>
+<h2><a name="version-2.5.1">Version 2.5.1 (16 janvier 2013)</a></h2>
+<ul>
+<li>correction d'un bug de migration de bibliothèque vers le format 2.5.0&nbsp;;</li>
+<li>possibilité de scrolling dans la zone image&nbsp;;</li>
+<li>utilisation de gs-noX11 de préférence à gs&nbsp;;</li>
+<li>adapté aux écrans rétina&nbsp;;</li>
+<li>possibilité de fermer, suspendre, reprendre un lien Linkback.</li>
+</ul>
+<h2><a name="version-2.5.0">Version 2.5.0 (16 juin 2012)</a></h2>
+<ul>
+<li>désactivation du mode 64 bits pour éviter des problèmes dûs à des bogues dans d'anciennes versions de MacOS X ; il reste compilable et utilisable pour ceux qui veulent l'activer&nbsp;;</li>
+<li>nouveau modèle de données permettant un chargement plus rapide de l'historique et de la bibliothèque, ainsi qu'une consommation de ressources diminuée&nbsp;;</li>
+<li>correction du service : l'alignement de l'équation sur la ligne de base ne fonctionnait plus&nbsp;;</li>
+<li>réinitaliser le préambule demande maintenant confirmation&nbsp;;</li>
+<li>pour minimiser les fausses manipulations, supprimer un élément de la bibliothèque se fait maintenant avec ⌘⌫ (Command+Backspace) au lieu d'un simple&nbsp;⌫&nbsp;;</li>
+<li>correction de bugs apparus avec MacOS 10.7&nbsp;;</li>
+<li>traduction en Italien.</li>
+</ul>
+<h2><a name="version-2.4.1">Version 2.4.1 (13 juin 2011)</a></h2>
+<ul>
+<li style="font-weight:bold">version 2.4.1&nbsp;: correction d'un bug avec certains PDFs se traduisant par un total dysfonctionnement sur certaines configurations&nbsp;;</li>
+<li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour&nbsp;</li>
+<li>export MathML (expérimental)&nbsp;;</li>
+<li>export SVG (nécessite pdf2svg)&nbsp;;</li>
+<li>action Automator réparée&nbsp;;</li>
+<li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*}&nbsp;;</li>
+<li>possibilité de remplacer les tabulations par des espaces&nbsp;;</li>
+<li>traductions améliorées&nbsp;;</li>
+<li>nombreuses améliorations internes.</li>
+</ul>
+<h2><a name="version-2.4.0">Version 2.4.0 (13 juin 2011)</a></h2>
+<ul>
+<li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour&nbsp;</li>
+<li>export MathML (expérimental)&nbsp;;</li>
+<li>export SVG (nécessite pdf2svg)&nbsp;;</li>
+<li>action Automator réparée&nbsp;;</li>
+<li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*}&nbsp;;</li>
+<li>possibilité de remplacer les tabulations par des espaces&nbsp;;</li>
+<li>traductions améliorées&nbsp;;</li>
+<li>nombreuses améliorations internes.</li>
+</ul>
+<h2><a name="version-2.3.0">Version 2.3.0 (1 septembre 2010)</a></h2>
+<ul>
+<li>correction d'un bug de glisser/Déposer vers PowerPoint&nbsp;;</li>
+<li>correction d'un bug d'affichage pouvant montrer un cadre noir en lieu et place de l'équation&nbsp;;</li>
+<li>amélioration des préférences&nbsp;;</li>
+<li>certaines erreurs du moteur LaTeX étaient ignorées&nbsp;;</li>
+<li>ajout expérimental de l'export MathML&nbsp;;</li>
+<li>mise à jour de Sparkle.</li>
+</ul>
+<h2><a name="version-2.2.0">Version 2.2.0 (25 mai 2010)</a></h2>
+<h3>Note exceptionnelle</h3>
+<p>Le développeur d'un logiciel parle rarement de lui, mais je voulais exceptionnellement le faire ici.</p>
+<p>Je pense que LaTeXiT est devenu un très bon outil au long des années, et je suis heureux de le distribuer totalement gratuitement. Cela ne va d'ailleurs pas changer.<br/>
+Cependant, j'en suis à un point de ma vie où l'argent est également important pour ma vie de famille, et il me serait plus confortable de bénéficier de quelque compensation pour tout le travail que j'ai effectué jusque là pour LaTeXiT.</p>
+<p><span style="font-weight:bold">Si vous êtes un particulier, ignorez cette demande</span>. Mais si vous représentez un laboratoire, ou une société, et pensez que LaTeXiT vous aide vraiment pour votre travail au jour le jour, pourriez-vous vous pencher sur la possibilité d'un don ? Je pense que je pourrais ajouter un lien dans LaTeXiT vers une liste de mécènes &quot;LaTeXiT est soutenu par…&quot;. Ce serait une bonne façon de vous remercier (en plus de continuer à travailler sur le logiciel, évidemment).</p>
+<p>Développement vôtre,<br/>Pierre Chatelier</p>
+<hr/>
+<ul>
+<li>les latexisations peuvent maintenant être interrompues;</li>
+<li>correction d'un cas où les préférences des scripts additionnels pouvaient ne pas être sauvegardées;</li>
+<li>ajout d'une barre de progression pour la migration de l'historique si nécessaire;</li>
+<li>ajout de préférences pour l'historique;</li>
+<li>l'historique peut maintenant être importée/exportée;</li>
+<li>le format d'export peut maintenant être changé à la volée pendant un glisser/déposer;</li>
+<li>gestion plus puissante des arguments de fonctions pour les éléments de la palette LaTeX;</li>
+<li>améliorations mineures de l'interface;</li>
+<li>quelques corrections de bugs.</li>
+</ul>
+<h2><a name="version-2.1.1">Version 2.1.1 (11 mars 2010)</a></h2>
+<ul>
+<li>correction d'un bug empêchant LaTeXiT d'informer l'utilisateur des nouvelles mises à jour;</li>
+<li>si vous voulez m'aider à acheter une maison, vous pouvez reconsidérer ce fameux don de plusieurs milliers d'euros que vous avez repoussé jusqu'alors.</li>
+</ul>
+<h2><a name="version-2.1.0">Version 2.1.0 (9 mars 2010)</a></h2>
+<ul>
+<li>abandon provisoire du 64 bits à cause de bugs du AppleTypeServer déjà cités dans la version 2.0.1;</li>
+<li>migration du mode EqnArray à Align, qui s'utilise de la même façon mais donne de meilleurs résultats;</li>
+<li>correction d'un bug d'export si l'échelle n'était pas 100%;</li>
+<li>meilleur rétro-compatibilité avec LinkBack;</li>
+<li>amélioration de la traduction en Japonais, grâce à Ryohei Seto;</li>
+<li>raffinements d'interface.</li>
+</ul>
+<h2><a name="version-2.0.1">Version 2.0.1 (15 novembre 2009)</a></h2>
+<ul>
+<li>contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-même);</li>
+<li>correction de problèmes de migration de la bibliothèque sous certains conditions;</li>
+<li>correction du support de Tiger;</li>
+<li>correction du support de LinkBack;</li>
+<li>correction des boutons inactifs pour appliquer les préambules à la bibliothèque;</li>
+<li>amélioration de quelques points d'interface et correction de bugs mineurs.</li>
+</ul>
+<h2><a name="version-2.0.0">Version 2.0.0 (4 novembre 2009)</a></h2>
+<ul>
+<li>revue du code avec de nombreux changements internes pour une meilleure flexibilité;</li>
+<li>ajout des &quot;modèles de corps&quot;;</li>
+<li>historique et bibliothèque sont maintenant gérées par CoreData, ce qui améliore la gestion des ressources (mémoire…);</li>
+<li>on peut maintenant donner des arguments supplémentaires aux programmes sous-jacents (pdlatex…);</li>
+<li>les fenêtres de documents de LaTeXiT ont maintenant un mode &quot;mini fenêtre&quot; comme iTunes;</li>
+<li>restauration de la compatibilité avec les processeurs G3;</li>
+<li>amélioration du temps de démarrage;</li>
+<li>correction de bugs dans les services;</li>
+<li>correction de bugs mineurs;</li>
+<li>traduction en Japonais;</li>
+<li>le développeur lui-même est passé en version 2.0 en épousant sa femme bien aimée. Les dons sont bienvenus pour participer au voyage de noces !</li>
+</ul>
+<h2><a name="version-1.16.1">Version 1.16.1</a></h2>
+<ul>
+<li>Meilleure compatibilité avec des versions anciennes de pdflatex/ghostscript;</li>
+<li>correction d'un bug dans l'action Automator, qui l'empêchait d'être sauvegardée;</li>
+<li>correction d'un bug dans la propagation des variables d'environnement pour les scripts personnalisés.</li>
+</ul>
+<h2><a name="version-1.16.0">Version 1.16.0</a></h2>
+<ul>
+<li>Ajout d'une action Automator;</li>
+<li>meilleure gestion de l'environnement Unix, qui corrige un bug rencontré avec certains configurations;</li>
+<li>gestion de plusieurs préambules;</li>
+<li>ajout de la palette &quot;Fichiers supplémentaires&quot;;</li>
+<li>amélioration du découpage automatique des équations;</li>
+<li>gestion de plusieurs préambules;</li>
+<li>pour la lisibilité, les icônes des fichiers créés n'ont plus un fond transparent;</li>
+<li>la détection automatique de la taille des polices par le service est maintenant dotée d'un facteur multiplicatif paramétrable;</li>
+<li>mise à jour de la traduction Allemande (Peter Dyballa);</li>
+<li>correction de bugs mineurs.</li>
+</ul>
+<h2><a name="version-1.15.0">Version 1.15.0</a></h2>
+<ul>
+<li>la version pour MacOS 10.3 (Panther) ne sera plus maintenue</li>
+<li>correction d'une incompatibilité avec le shell de Leopard</li>
+<li>les services fonctionnent à nouveau sous Leopard</li>
+<li>gestion plus robuste des raccourcis claviers pour les Services</li>
+<li>le service &quot;Détecter et créer les équations&quot; comprend maintenant \begin{eqnarray*}…\end{eqnarray*}</li>
+<li>on peut maintenant importer une bibliothèque provenant de LaTeX Equation Editor</li>
+<li>les tabulations ne sont plus arbitrairement limitées en nombre</li>
+<li>LaTeXiT utilise maintenant Sparkle pour les mises à jour</li>
+<li>la latexisation utilise maintenant le raccourci ⌘T comme TeXShop; ⌘L, ⇧⌘L, ⇧⌘T fonctionnent encore</li>
+<li>le préambule par défaut utilise maintenant \usepackage[usenames]{color} au lieu de \usepackage{color}</li>
+<li>nouvelle icône de Jacob Bandes-Storch</li>
+</ul>
+</body>
+</html>

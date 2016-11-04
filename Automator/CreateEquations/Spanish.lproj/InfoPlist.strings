@@ -1,0 +1,11 @@
+﻿AMName = "Crear ecuaciones con LaTeXiT";
+AMDInput = "Se leerán os archivos especificados por una URLs o ruta en busca de texto. Las carpetas de primer nivel se explorarán en busca de archivos. En la medida de lo posible, sólo los archivos considerados de texto se usaran como entrada.";
+AMDNote = "Se puede usar texto directamente como entrada. El motor de LaTeXiT procesa el texto para hacer una ecuación con él. El texto ha de estar escrito siguiendo la sitaxis de LaTeX. El preámbulo y el entorno \\begin{document} ... \\end{document} se añaden automáticamente alrededor del texto, de manera que el texto ha de centrarse sólo en el contenido. El parámetro <mode> dice si el texto a de rodearse también de $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray} o de nada. Si el archivo ya contiene un preámbulo, se usa éste. En caso contrario se utiliza el de las preferecias de LaTeXiT.";
+AMDOptions = "";
+AMDRelatedActions = "";
+AMDResult = "Archivos con las ecuaciones generadas";
+AMDRequires = "Debe haber ejecutado LaTeXiT una vez para inicializar sus preferencias, en particular las rutas a los ejecutables en el panel de Composición.";
+AMDSummary = "Esta acción crear ecuaciones en formato PDF apartir de la entrada usando LaTeX.";
+AMDWebsite = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"LaTeXiT" = "LaTeXiT";
+"equation" = "ecuación";

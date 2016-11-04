@@ -1,0 +1,1026 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
+\red196\green26\blue22;}
+\vieww9000\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0  {{\NeXTGraphic latexit_128.png \width2591 \height2591 \noorient
+}¬}
+\f1\fs26 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\b \cf0 LaTeXiT 2.8.1\
+
+\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\b\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\b0 \cf0 \ul \ulc0 Petit Sommaire
+\b \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\b0\fs22 \cf0 \
+-Informations G\'e9n\'e9rales\
+-Syst\'e8me requis\
+-Installation/D\'e9sinstallation\
+-Qu'est-ce que LaTeXiT ?\
+-Comment fonctionne LaTeXiT ?\
+-Modifier le pr\'e9ambule LaTeX\
+-Les "Fichiers suppl\'e9mentaires"\
+-Le "zoom"\
+-Utiliser l'historique\
+-Utiliser la biblioth\'e8que\
+-Utiliser le "Service LaTeXiT"\
+-Utiliser LinkBack\
+-Utiliser les scripts\
+-Palettes LaTeX\
+-FAQ (Foire aux questions = Questions fr\'e9quemment pos\'e9es)\
+-Bugs/incompatibilit\'e9s connus\
+-Installer LaTeX\
+-Historique des versions\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Informations G\'e9n\'e9rales\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Site web de LaTeXiT: {\field{\*\fldinst{HYPERLINK "http://pierre.chachatelier.fr/latexit"}}{\fldrslt \cf3 http://pierre.chachatelier.fr/latexit}}\
+Adresse e-mail (commentaires, suggestions, probl\'e8mes,...): \cf3 pierre@chachatelier.fr
+\fs26 \cf0 \ul \
+\
+Syst\'e8me Requis\
+
+\fs22 \ulnone \
+LaTeXiT 2.8.1 requiert Mac OS X version 10.4 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\b\fs26 \cf0 \
+
+\b0 \ul Installation/D\'e9sinstallation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Installation : D\'e9placez simplement l'application LaTeXiT depuis l'image disque vers le dossier "Applications", ou n'importe quel autre emplacement de votre disque dur.\
+D\'e9sinstallation : LaTeXiT cr\'e9e un dossier \'e0 l'emplacement ~/Biblioth\'e8que/Application Support/LaTeXiT de votre dossier utilisateur, pour stocker l'historique et la biblioth\'e8que. Si vous d\'e9cidez de supprimer LaTeXiT (en le glissant dans la corbeille), vous pouvez aussi supprimer ce dossier.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Qu'est-ce que LaTeXiT ?\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+LaTeXiT est un petit utilitaire destin\'e9 \'e0 taper rapidement des \'e9quations LaTeX pour pouvoir les glisser/d\'e9poser dans d'autres applications. Il dispose \'e9galement d'un service permettant de taper et transformer des \'e9quations directement dans la plupart des \'e9diteurs de texte.\
+\
+Avant toutes choses, il est bon de pr\'e9ciser que LaTeXiT est tr\'e8s fortement inspir\'e9 du v\'e9n\'e9rable LaTeX Equation Editor de J. McKenzie Alexander. Toutefois, ce programme ne me satisfaisait pas, et j'en ai donc recr\'e9\'e9 un de toutes pi\'e8ces. LaTeXiT n'est pas bas\'e9 sur LaTeX Equation Editor, il en est simplement inspir\'e9 tr\'e8s fortement pour le principe de base. En revanche, il est maintenant beaucoup plus avanc\'e9 et complet que LaTeX Equation Editor a pu l'\'eatre.\
+\
+Les fonctionnalit\'e9s principales de LaTeXiT sont:\
+\pard\pardeftab720\qj
+
+\b \cf0 	- r\'e9import possible (m\'eame par copier/coller) des PDFs g\'e9n\'e9r\'e9s, pour modifications
+\b0 \
+	- support de LinkBack\
+	- coloration syntaxique et auto-compl\'e9tion des mots-clefs LaTeX\
+	- gestionnaire d'erreurs LaTeX\
+	- palette LaTeX\
+	- historique automatique et gestion de biblioth\'e8ques\
+	- service d'application inclus\
+	- formats d'exports multiples (PDF, EPS, TIFF, PNG...)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Comment fonctionne LaTeXiT ?\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 \ulnone {{\NeXTGraphic keynote-fr.jpeg \width12800 \height8540 \noorient
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \
+Dans le cadre de texte principal, tapez votre code LaTeX, sans vous soucier du pr\'e9ambule, du \\begin\{document\} et du \\end\{document\} qui seront rajout\'e9s pour vous. Cliquez ensuite sur le bouton"LaTeXiser", et l'image est calcul\'e9e et affich\'e9e dans le cadre d'image. Vous pouvez alors sauvegarder cette image, ou surtout la glisser/d\'e9poser dans toute application o\'f9 elle pourra servir d'illustration. On peut r\'e9gler le format d'export dans les pr\'e9f\'e9rences. PDF est le choix de pr\'e9dilection puisque c'est un format "vectoriel" : on peut redimensionner l'image sans perte de qualit\'e9.\
+La taille de la police ainsi que la couleur utilis\'e9es lors de la g\'e9n\'e9ration de l'image sont personnalisables.\
+Une fois d\'e9pos\'e9e dans une autre application, une \'e9quation (en PDF) peut toujours \'eatre r\'e9ouverte dans LaTeXiT par un simple "Copier/Coller". Le code source LaTeX ainsi que les param\'e8tres de g\'e9n\'e9ration ont \'e9t\'e9 conserv\'e9s.\
+Les modes "Display", "Inline" et "Texte" correspondent aux trois modes de LaTeX du m\'eame nom; voyez une documentation LaTeX pour plus d'informations sur leur signification. Le mode "Eqnarray" est un raccourci pratique pour faire des \'e9quations multi-lignes, qui encapsule automatiquement le code LaTeX dans un \\begin\{eqnarray*\}...\\end\{eqnarray*\}\
+Le service inclus dans LaTeXiT lui permet aussi d'\'eatre utilis\'e9 "indirectement" pour taper et transformer des \'e9quations directement dans les \'e9diteur de texte (ou les programmes incluant de l'\'e9dition de texte. Voyez la section \ul Utiliser le "Service LaTeXiT"\ulnone  pour plus de d\'e9tails \'e0 ce sujet.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\pardirnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Modifier le pr\'e9ambule LaTeX\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Le pr\'e9ambule LaTeX n\'e9cessaire \'e0 la g\'e9n\'e9ration d'une image (\\documentclass\{...\}, \\usepackage\{...\}, ...) est rajout\'e9 pour vous. Vous pouvez cependant retoucher ce pr\'e9ambule automatique, juste au dessus du cadre de texte principal; d\'e9placez simplement la poign\'e9e pour le voir appara\'eetre. Notez \'e9galement que vous pouvez changer ce pr\'e9ambule dans les pr\'e9f\'e9rences de l'application, pour p\'e9renniser les modifications.\
+Remarque : les deux premi\'e8res lignes du pr\'e9ambule sont gris\'e9es et non modifiables, car le comportement du programme se base sur ces deux lignes. Vous ne devriez pas avoir \'e0 les modifier.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic poignee.png \width7740 \height10580 \noorient
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f1\fs22 \cf0 \
+Notez que depuis la version 1.16.0, LaTeXiT peut g\'e9rer plusieurs pr\'e9ambules, qui se d\'e9finissent dans les pr\'e9f\'e9rences. Il est possible de rapidement choisir lequel utiliser pour un document particulier, gr\'e2ce au petit menu d\'e9roulant cach\'e9 en haut \'e0 gauche du panneau de pr\'e9ambule. \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic preambule.png \width2420 \height1460 \noorient
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs22 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Les "Mod\'e8les de corps document"\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone Depuis la version 2.0.0, LaTeXiT, de la m\'eame fa\'e7on que pour les pr\'e9ambules, permet de d\'e9finir des mod\'e8les de corps de document. Ces mod\'e8les sont compos\'e9s de deux parties : un en-t\'eate et un pied-de-page. Il est ainsi possible :\
+- d'avoir un contenu par d\'e9faut pour les nouveaux documents, constitu\'e9 de l'en-t\'eate et du pied de page;\
+- "d'encadrer" rapidement un contenu existant avec ces morceaux.\
+Comme pour les pr\'e9ambules, il est possible d'acc\'e9der rapidement aux mod\'e8les de corps avec le petit bouton d\'e9roulant en haut \'e0 gauche de la zone de texte.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Les "Fichiers additionnels"\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Depuis la version 1.16.0, LaTeXiT propose le panneau "Fichiers additionnels".\
+Vous savez s\'fbrement que lors d'une compilation LaTeX classique, en ligne de commande, le moteur peut utiliser des fichiers pr\'e9sents dans le dossier courant : cela peut \'eatre utile pour r\'e9f\'e9rencer dans le document des images, des packages (sty) non standards, ou d'autres ressources. Auparavant, LaTeXiT ne permettait pas cela, car vous n'avez pas acc\'e8s, en tant qu'utilisateur de cette interface graphique, \'e0 ce fameux "r\'e9pertoire de travail" du moteur LaTeX. Pour LaTeXiT, il est en effet temporaire et susceptible de changer.\
+La palette "fichiers additionnels" vous permet d'y rem\'e9dier. D\'e9posez-y des fichiers/dossiers, et LaTeXiT fera comme s'ils \'e9taient pr\'e9sents dans son r\'e9pertoire de travail. Techniquement, il utilise des liens symboliques : vos fichiers ne sont ni d\'e9plac\'e9s, ni copi\'e9s.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+Utiliser le zoom\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone La petite glissi\'e8re permettant de zoomer n'a pas d'incidence sur la taille r\'e9elle de l'\'e9quation. Cela ne modifie que l'aper\'e7u du panneau, pour permettre de v\'e9rifier les \'e9quations de "petite taille", mais sans les alt\'e9rer.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Utiliser l'historique\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone L'historique (affich\'e9e par \uc0\u8984 R) sauvegarde automatiquement les \'e9quations g\'e9n\'e9r\'e9es, pour vous permettre de les retrouver, m\'eame si vous ne les avez pas sauvegard\'e9es dans la biblioth\'e8que (voir section suivante). On peut supprimer des \'e9l\'e9ments de l'historique en appuyant sur <Backspace>, ou d\'e9truire toute l'historique avec le bouton ad\'e9quat.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 .
+\f0\fs24 {{\NeXTGraphic historique.jpeg \width4260 \height8440 \noorient
+}¬}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+Utiliser la biblioth\'e8que\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone La biblioth\'e8que (affich\'e9e par \uc0\u8984 B) de LaTeXiT vous permet d'archiver et d'organiser des \'e9quations avec lesquelles vous travaillez souvent. Glissez/d\'e9posez des \'e9l\'e9ments pour les y entreposer.\
+Le bouton <+> ajoute \'e0 la biblioth\'e8que l'\'e9quation courante (que vous pourrez renommer en double-cliquant dessus)\
+Le bouton <action> propose plus d'actions\
+L'action <mettre \'e0 jour> met \'e0 jour l'\'e9l\'e9ment s\'e9lectionn\'e9 avec l'\'e9quation courante. On ne peut mettre \'e0 jour qu'un seul \'e9l\'e9ment \'e0 la fois; il clignote un instant pour montrer que la modification a \'e9t\'e9 prise en compte.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f0\fs24 \cf0 {{\NeXTGraphic bibliotheÌ€que.tiff \width4320 \height4060 \noorient
+}¬}\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Utiliser le "Service LaTeXiT"\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+LaTeXiT peut aussi \'eatre utilis\'e9 via les Services d'application. Dans le menu d'application, le service LaTeXiT peut \'eatre utilis\'e9 depuis n'importe quelle autre application adapt\'e9e. S\'e9lectionnez un texte, il peut alors \'eatre transform\'e9 en l'\'e9quation correspondante.\
+Le service "D\'e9tecter et cr\'e9er les \'e9quations" est un peu diff\'e9rent : il ne transforme pas l'int\'e9gralit\'e9 du texte. Il d\'e9tecte les blocs "\\[...\\]" (mode DISPLAY) "$$...$$" (mode DISPLAY) et "$...$" (mode INLINE) du texte pour les transformer en \'e9quations (respectivement en mode Display et Inline);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\b \cf0 Astuce: le mode "$...$" (inline) essaye quand c'est possible d'aligner l'\'e9quation sur la ligne de base du texte.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\b0 \cf0 Un nouveau service est disponible depuis la version 1.13.0, permettant d'effectuer la manipulation inverse, c'est-\'e0-dire revenir des \'e9quations au code LaTeX.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic latexit-screen-capture-service1-small-fr.jpg \width10000 \height7500 \noorient
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 {{\NeXTGraphic latexit-screen-capture-service2-small-fr.jpg \width10000 \height7500 \noorient
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Utiliser LinkBack\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+LinkBack est une technologie, incorpor\'e9e \'e0 LaTeXiT. Si vous d\'e9posez une \'e9quation depuis LaTeXiT dans une autre application supportant LinkBack, vous pourrez alors ult\'e9rieurement r\'e9ouvrir l'\'e9quation dans LaTeXiT, g\'e9n\'e9ralement en passant par le menu <\'c9dition>. Pour plus d'informations sur LinkBack, et savoir quelles applications supportent LinkBack, vous pouvez consulter l'adresse \cf3 http://www.linkbackproject.org\
+\cf0 Actuellement, Nisus Writer Express, OmniGraffle 4 et Keynote 1, 2, 3 (via un plug-in), supportent LinkBack.\cf3 \
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Utiliser les scripts\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+\'c0 partir de la version 1.8.0, LaTeXiT permet d'ins\'e9rer des scripts de pr\'e9-, interm\'e9diaire-, post-traitement. Une aide est disponible dans le panneau des pr\'e9f\'e9rences concern\'e9s (Composition). Pour comprendre o\'f9 se situent les scripts, il peut \'eatre n\'e9cessaire de connna\'eetre le fonctionnement interne de LaTeXiT, donc voici un organigramme :\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f0\fs24 \cf0 {{\NeXTGraphic latexit-workflow-fr.pdf \width9800 \height15020 \noorient
+}¬}\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+Synchronisation de fichiers et scripts additionnels\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Depuis la version 2.6.2, LaTeXiT g\'e8re la synchronisation d'un fichier texte sous-jacent. Soit ce fichier a \'e9t\'e9 ouvert avec le menu "Fichier > Ouvrir\'85 > Fichier texte" et l'option "Synchroniser en continu le contenu du fichier", soit ce fichier a \'e9t\'e9 cr\'e9\'e9 avec le menu "Fichier > Enregistrer sous\'85" et cette m\'eame option.\
+Dans les deux cas\'a0:\
+-\'e0 chaque LaTeXisation, le contenu du fichier est remplac\'e9 par la d\'e9finition de l'\'e9quation actuelle\
+-si le fichier est modifi\'e9 par un programme tiers, LaTeXiT met automatiquement \'e0 jour son affichage\
+Notez que la synchronisation se focalise sur le nom du fichier. Si le fichier est renomm\'e9, et qu'un nouveau fichier est cr\'e9\'e9 avec l'ancien nom, la synchronisation est faite avec le nouveau fichier.\
+\
+En outre, dans les "Pr\'e9f\'e9rences > Avanc\'e9 > Script additionnels de synchronisation", des traitements personnalis\'e9s peuvent \'eatre configur\'e9s, lors de la sauvegarde (initi\'e9e par LaTeXiT) ou du chargement (d\'fb \'e0 un changement externe) du fichier sous-jacent.\
+Dans ces scripts, la variable $INPUTFILE est ajout\'e9e \'e0 l'environnement et contient le nom du fichier.
+\fs26 \ul \
+\
+Palettes LaTeX\
+
+\fs22 \ulnone \
+Depuis la version 1.14.0, LaTeXiT g\'e8re les palettes LaTeX comme des plugins. Les palettes int\'e9gr\'e9es font partie de l'application, mais des palettes suppl\'e9mentaires peuvent \'eatre ajout\'e9es dans les r\'e9pertoires Biblioth\'e8que, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
+Exemples :\
+/Biblioth\'e8que/Application Support/LaTeXiT/Palettes\
+/Users/[votre nom]/Biblioth\'e8que/Application Support/LaTeXiT/Palettes\
+/R\'e9seau/Biblioth\'e8que/Application Support/LaTeXiT/Palettes\
+\
+Une palette est un dossier de la forme suivante:\
+nom.latexpalette\
+     |_Info.plist\
+     |_Resources\
+          |_English.lproj
+\fs26 \ul \
+
+\fs22 \ulnone                |_Localizable.strings\
+          |_French.lproj\
+               |_Localizable.strings\
+          |...fichiers images...\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 Le fichier Info.plist d\'e9crit la palette au format plist suivant:\
+[requis]		clef : "version"				type:cha\'eene\
+			valeur : version du format de palette, actuellement 1\
+[requis]		clef : "name"				type:cha\'eene\
+			valeur : le nom de la palette, \'e9ventuellement traduit dans les fichiers Localizable.strings des dossiers lproj\
+[optionnel] 	clef : "author"				type:cha\'eene (d\'e9faut : vide)\
+			valeur : l'auteur de la palette\
+[optionnel] 	clef : "numberOfItemsPerRow"	type:entier (d\'e9faut : 4)\
+			valeur : le nombre d'\'e9l\'e9ments par ligne dans la palette\
+[requis]		clef : "items"     			type:tableau\
+			valeur : un tableau de dictionnaires d\'e9crivant chacun un \'e9l\'e9ment de la palette\
+\
+Un \'e9l\'e9ment de palette (item) est form\'e9 ainsi (sous forme de dictionnaire) :\
+[requis]		clef : "name"						type:cha\'eene\
+			valeur : un nom pour l'\'e9l\'e9ment (exemple: looparrowleft), \'e9ventuellement traduit dans les Localizable.strings des dossiers lproj\
+[optionnel]	clef : "latexCode"					type:cha\'eene (d\'e9faut : \\"name")\
+			valeur : le code latex correspondant (exemple: \\looparrowleft), par d\'e9faut identique "name" (non traduit) pr\'e9c\'e9d\'e9 d'un antislash\
+[optionnel]	clef : "resourceName"				type:cha\'eene (d\'e9faut : "name")\
+			valeur : le nom du fichier image correspondant (extension optionnelle). Par d\'e9faut, identique au "name" (non traduit)\
+[optionnel]	clef : "requires"						type:cha\'eene (d\'e9faut : vide)\
+			valeur : nom des packages requis (exemple: amssymb)\
+[optionnel]	clef : "numberOfArguments"			type:entier (d\'e9faut : 0)\
+			valeur : indique le nombre de paires d'accolades \{\'85\} que doit avoir le code latex (utile pour les fonctions ayant des arguments)\
+[optionnel]	clef : "argumentToken"				type:cha\'eene (d\'e9faut : vide)\
+			valeur : les occurences de \{argumentToken\} sont remplac\'e9es par \{le texte actuellement s\'e9lectionn\'e9\} ou par \{argumentTokenDefaultReplace\} sinon\
+[optionnel]	clef : "argumentTokenDefaultReplace"	type:cha\'eene (d\'e9faut : vide)\
+			valeur : voir ci-dessus\
+[optionnel]	clef : "isEnvironment"				type:bool\'e9en (d\'e9faut:faux)\
+			valeur : indique si le mot-clef devrait s'\'e9crire \\begin\{name\}...\\end\{name\}\
+\
+Les fichiers images sont dispos\'e9s dans le sous-dossier Resources.\
+Les valeurs des "name" de la palette ou des \'e9l\'e9ments peuvent \'eatre traduits dans des fichiers Localizable.strings de sous-dossiers langue.lproj\
+Un fichier Localizable.strings est un fichier texte brut UTF-8 qui contient des lignes du type "clef" = "valeur", termin\'e9es par des points-virgules.\
+En voici un exemple :\
+"arrows" = "Fl\'e8ches";\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0                
+\fs26 \ul \
+FAQ (Foire aux questions)\
+
+\fs22 \ulnone \
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 (Q) : LaTeXiT ne marche pas sous MacOS 10.7 Lion.\
+(R) : LaTeXiT est parfaitement fonctionnel sous MacOS 10.7 Lion. Mais il peut arriver la chose suivante\'a0: sans le savoir, vous avez peut-\'eatre, il y a longtemps, configur\'e9 LaTeXiT pour utiliser une version PowerPC du moteur LaTeX. Or, Lion n'autorise plus l'ex\'e9cution de code PowerPC. V\'e9rifiez votre installation de LaTeX, et les chemins vers pdflatex dans les pr\'e9f\'e9rences de LaTeXiT (panneau "Composition").\
+\
+(Q) : LaTeXiT plante d\'e8s que je proc\'e8de \'e0 une latexisation.\
+(R) : LaTeXiT est th\'e9oriquement parfaitement fonctionnel en version 64 bits, mais certains composants 64 bits bugg\'e9s de MacOS 10.4, 10.5 et 10.6 sont parfois responsables de ces plantages. Dans le Finder, "Affichez les informations" (Command-i) de LaTeXiT et cochez "Ouvrir en mode 32 bits". Si cela ne resout rien, envoyez-moi le rapport de crash.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+(Q) : O\'f9 trouver pdflatex, dvipdf et Ghoscript pour les installer ?\
+(R) : Voyez la section "Installer LaTeX" de ce document.\
+\
+(Q) : J'ai install\'e9 LaTeX correctement mais LaTeXiT semble ne pas fonctionner malgr\'e9 tout.\
+(R) : Si vous avez install\'e9 TexShop, puis LaTeXiT, puis LaTeX, les chemins de LaTeXiT peuvent pointer vers un pdflatexc de TeXShop qui ne suffit pas. Essayez d'abord de supprimer les pr\'e9f\'e9rences de LaTeXiT (~/Biblioth\'e8que/Pr\'e9f\'e9rences/fr.chachatelier.pierre.LaTeXiT.plist). Essayez aussi de r\'e9gler les chemins \'e0 la main dans le panneau "Composition" des pr\'e9f\'e9rences de LaTeXiT.\
+\
+(Q) : Mon \'e9quation appara\'eet tronqu\'e9e.\
+(R) : Voyez la section "Bugs/incompatibilit\'e9s connues" ci-dessous.\
+\
+(Q): Comment d\'e9finir un arri\'e8re-plan color\'e9 ?\
+(R): Si vous voulez d\'e9finir un arri\'e8re-plan non transparent \'e0 vos \'e9quations, vous devez vous pencher sur les commandes LaTeX idoines. Avec les anciennes versions de Ghostscript (<= 8.63), utiliser \\pagecolor\{la couleur\} pouvait fonctionner, mais cela s'appuyait sur un bug de la d\'e9tection automatique des dimensions de l'\'e9quation. Il faut maintenant envisager d'autres solutions, comme\\colorbox\{...\}\{...\}.\
+\
+(Q) : Le service ne fonctionne pas avec Keynote\
+(R) : Le service ne marche pas avec Keynote 1, 2, 3, 4, 5, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement.\
+\
+(Q) : Le service "Revenir des \'e9quations au code LaTeX" ne fonctionne pas avec Pages'09\
+(R) : Pages'09 a la f\'e2cheuse particularit\'e9 de r\'e9\'e9crire les PDFs qui y sont ins\'e9r\'e9s, en enlevant la partie que LaTeXiT y rajoute pour contenir le code LaTeX... Esp\'e9rons que les versions ult\'e9rieures seront moins sectaires.\
+\
+(Q) : Quel format d'export devrais-je choisir ?\
+(R) : PDF est le choix de pr\'e9dilection puisque c'est un format "vectoriel" : on peut redimensionner l'image sans perte de qualit\'e9.\
+\
+(Q) : les modifications faites au pr\'e9ambule par d\'e9faut (dans les pr\'e9f\'e9rences) semblent ne pas prendre effet sans un red\'e9marrage de l'application.\
+(R) : Les modifications faites au pr\'e9ambule par d\'e9faut ne sont pas r\'e9percut\'e9es dans les documents d\'e9j\'e0 ouverts, car il y aurait un risque d'\'e9craser les modifications que l'utilisateur pourraient y avoir d\'e9j\'e0 fait. Cependant, il n'est pas n\'e9cessaire de red\'e9marrer LaTeXiT : ouvrir un nouveau document suffit (\uc0\u8984 N).\
+\
+(Q) : LinkBack ne marche pas quand j'utilise le service LaTeXiT.\
+(R) : Voyez la section "Bugs/incompatibilit\'e9s connues" pour plus de d\'e9tails. Pour r\'e9soudre ce probl\'e8me, essayez de d\'e9sactiver l'alignement de l'\'e9quation sur la ligne de texte, dans les pr\'e9f\'e9rences du service LaTeXiT.\
+\
+(Q) : Je ne comprends pas l'utilit\'e9 de la palette "encapsulation".\
+(R) : Cette palette r\'e9pond \'e0 un besoin tr\'e8s particulier. A priori, il est inutile de glisser/d\'e9poser une \'e9quation sous forme d'image vers un programme qui ne sait pas afficher les images. Pourtant, s'il s'agit d'un \'e9diteur de texte LaTeX, il est parfois souhaitable que ce glisser/d\'e9poser fasse appara\'eetre une 
+\b r\'e9f\'e9rence
+\b0  (au sens large) \'e0 cette \'e9quation. On peut ainsi souhaiter que cela copie le code de l'\'e9quation, ou un \\ref\{\} vers le nom qu'on lui aura donn\'e9... Cela est donc param\'e9trable dans la palette, et fonctionnera pour les glisser/d\'e9poser depuis la biblioth\'e8que.\
+\
+(Q) : Comment utiliser le package feynmf avec LaTeXiT ?\
+(R) : Il faut passer par le package feynmp, en mode "Texte", avec une composition "latex+dvipdf". Un script de traitement interm\'e9diaire est alors n\'e9cessaire pour g\'e9n\'e9rer les m\'e9tafontes des \'e9tiquettes. Vous pouvez d\'e9finir un script de traitement interm\'e9daire comme celui-l\'e0 :\
+				mpost le-nom-de-votre-graphe-feynmf\
+				#il faut maintenant recr\'e9er le pdf\
+				latex $\{INPUTTEXFILE\}\
+				dvipdf $\{OUTPUTDVIFILE\}\
+	Voyez la section pr\'e9c\'e9dente "Utiliser les scripts" pour de plus amples informations.\
+        Vous pouvez aussi consulter la page web {\field{\*\fldinst{HYPERLINK "http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html"}}{\fldrslt 
+\f0\fs24 \cf4 http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html}} (merci \'e0 T. Yamanaka)\
+        \
+(Q) : Comment choisir une police particuli\'e8re pour les \'e9quations g\'e9n\'e9r\'e9es ?\
+(R) : Je ne suis pas expert en fontes LaTeX, mais une manipulation m'a \'e9t\'e9 propos\'e9e. Il faut utiliser 
+\b xelatex
+\b0  et modifier le 
+\b pr\'e9ambule
+\b0 .\
+Ici pour la police Chalkboard :\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 					\\usepackage\{fontspec,xunicode\}\
+					\\fontspec\{Chalkboard\}\
+					\\setmainfont\{Chalkboard\}\
+					\\SetSymbolFont\{letters\}\{normal\}\{\\encodingdefault\}\{\\rmdefault\}\{m\}\{it\}\
+					\\SetSymbolFont\{letters\}\{bold\}\{\\encodingdefault\}\{\\rmdefault\}\{b\}\{it\}\
+ 	Voyez \'e9galement des informations sur cette page : {\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex/2009/fonts/"}}{\fldrslt http://www.tug.org/mactex/2009/fonts/}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Bugs/incompatibilit\'e9s connues\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+- si vous n'avez que TeXShop d'install\'e9, LaTeXiT ne peut fonctionner. Il vous faut une v\'e9ritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'e8s;\
+- certaines \'e9quation apparaissent l\'e9g\'e8rement tronqu\'e9es sur les bords. Il peut ne s'agir que d'une illusion, due \'e0 l'interpolation au niveau de zoom actuel. Changez le niveau de zoom ou affichez l'\'e9quation en plus grand dans une autre application pour vous en assurer. Si l'\'e9quation semble r\'e9ellement tronqu\'e9e, sachez que le d\'e9coupage des bo\'eetes englobantes dans un moteur LaTeX n'est pas extr\'eamement pr\'e9cis. J'ai constat\'e9 que la pr\'e9cision d\'e9pendait du moteur utilis\'e9, de la taille des polices et de la parit\'e9 de cette taille, du mode choisi (EQNARRAY, DISPLAY...). J'ai d\'fb ajouter de nombreuses corrections empiriques pour \'eatre aussi juste que possible, mais il est d\'e9sagr\'e9able que la pr\'e9cision des bo\'eetes englobantes soient aussi fluctuante. Heureusement, vous pouvez toujours agrandir les marges (Palettes > Marges) pour ajouter l'espace n\'e9cessaire \'e0 une \'e9quation donn\'e9e;\
+- quand la couleur de l'\'e9quation est r\'e9gl\'e9e sur blanc pur, elle semble mal d\'e9coup\'e9e (disparition \'e9ventuelle des parenth\'e8ses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'e9choue \'e0 d\'e9couper correctement avec une \'e9quation blanche sur fond blanc. Pour corriger cela, utilisez une couleur "presque blanche", ou bien utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
+- le service ne marche pas avec Keynote 1, 2, 3, 4, 5, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement;\
+- le service ne marche pas avec Mail 2.0.0, ..., 3.6 (derni\'e8re version disponible au moment o\'f9 ces lignes sont \'e9crites);\
+- LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'e9quations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'e9es par le service dans un flot RTFD. Or, il peut arriver que les \'e9diteurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'eame si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'e0 l'\'e9diteur de texte, mais c'est quelque chose de difficile. Pour r\'e9soudre le probl\'e8me, d\'e9sactivez simplement l'alignement de l'\'e9quation avec la ligne de base texte dans les pr\'e9f\'e9rences du service LaTeXiT; cela d\'e9sactive l'utilisation des flots RTFD;\
+- avec Pages 1.0.2 et 2.0.1, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'e9quation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'e8s bien avec TextEdit et Nisus Writer Express. Ce doit donc \'eatre un bug de Pages.\
+- Pages'09 a la f\'e2cheuse particularit\'e9 de r\'e9\'e9crire les PDFs qui y sont ins\'e9r\'e9s, en enlevant la partie que LaTeXiT y rajoute pour contenir le code LaTeX... Le service "revenir des \'e9quations au code LaTeX" ne peut donc pas fonctionner.;\
+- avec EazyDraw 1.7.1, les \'e9quations gliss\'e9es/d\'e9pos\'e9es se retrouvent invers\'e9es. C'est un bug de EazyDraw, qui a \'e9t\'e9 corrig\'e9 dans la version 1.8;\
+- avec Adobe Illustrator, si vous glissez/d\'e9posez une \'e9quation PDF de LaTeXiT vers Illustrator, les polices de caract\'e8res seront chang\'e9es, car Illustrator permet l'\'e9dition de chaque symbole du PDF g\'e9n\'e9r\'e9 par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'e9diaire : d\'e9posez l'\'e9quation LaTeXiT sur votre bureau, un fichier est cr\'e9\'e9, puis d\'e9placez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'e9diter cette \'e9quation dans Illustrator. Autre possibilit\'e9 : exporter avec un autre format (voyez les Pr\'e9f\'e9rences de LaTeXiT), comme EPS, ou PDF sans polices embarqu\'e9es;\
+- toujours avec Adobe Illustrator, y glisser/d\'e9poser un objet peut entra\'eener la cr\'e9ation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'e7on de g\'e9rer le glisser/d\'e9poser. OmniGraffle ne pose pas ce genre de probl\'e8mes;\
+- toujours avec Adobe Illustrator : de nombreux petits dysfonctionnement remarqu\'e9s par les utilisateurs sont r\'e9solus en mettant \'e0 jour Illustrator.\
+- la coloration syntaxique ne g\'e8re pas le "$$" correctement.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Installer LaTeX\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+LaTeXiT se base sur une installation fonctionnelle de LaTeX. Mais si vous ne savez pas ce qu'est LaTeX, vous risquez d'avoir du mal \'e0 l'installer. Voici donc quelques explications tr\'e8s informelles pour vous guider le cas \'e9ch\'e9ant.\
+\
+LaTeX n'est pas un simple programme, c'est un ensemble de programmes et de fichiers de donn\'e9es. De ce fait, tout comme Linux, on trouve LaTeX sous forme de *distributions*. Une distribution LaTeX, c'est un ensemble de ces fichiers que quelqu'un a rassembl\'e9s et organis\'e9s, de telle sorte qu'une fois install\'e9s, LaTeX soit fonctionnel.\
+Sur MacOS X, les deux distributions les plus connues sont celles de TexLive et MacTeX, la deuxi\'e8me incluant la premi\'e8re.\
+- TexLive\
+TexLive ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/texlive"}}{\fldrslt http://www.tug.org/texlive}}) est une distribution multi-plateforme de LaTeX.\
+- MacTeX\
+MacTeX ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex"}}{\fldrslt http://www.tug.org/mactex}}) est une distribution de TeXLive incluant des logiciels sp\'e9cifiques \'e0 MacOS X. Il est distribu\'e9 sous forme d'un fichier dmg t\'e9l\'e9charg\'e9 sur le site (fichier pesant tout de m\'eame plusieurs centaines de mega-octets)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\pardirnatural
+\cf0 \
+Une fois accomplie l'une de ces installations, LaTeX est install\'e9 sur votre ordinateur. Si vous n'\'e9tiez pas pr\'e9venu, vous ne le sauriez m\'eame pas. En fait, LaTeX n'a pas d'interface graphique, les programmes sont orient\'e9s "Unix", et ne peuvent \'eatre appel\'e9s que sur la ligne de commande (avec /Application/Utilitaires/Terminal).\
+Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utiliser LaTeX, mais ce sont des programmes de tierce partie, gratuits la plupart du temps. LaTeXiT est l'un d'eux : il permet de taper de petites \'e9quations. Pour des documents plus importants, vous pourriez par exemple utiliser TexShop ou iTexMac, qui sont faits pour cela.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Historique des versions\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+v 2.8.1 (13 juillet 2016)\
+-correction d'incompatibilit\'e9s avec des mises \'e0 jour r\'e9centes de Ghostscript\'a0;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -sauvegarde de l'historique \'e0 chaque ajout\'a0;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -sauvegarde de la biblioth\'e8que d\'e8s que possible\'a0;\
+-mise \'e0 jour de Linkback.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.8.0 (7 septembre 2015)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -ajout de la recherche dans l'historique\'a0;\
+-conservation de l'ordre des \'e9l\'e9ments lors de l'import d'une biblioth\'e8que\'a0;\
+-ajout d'un export "Source TeX" de la biblioth\'e8que\'a0;\
+-ajout de la possibilit\'e9 d'attacher un commentaire aux \'e9quations de la biblioth\'e8que\'a0;\
+-meilleure gestion du caract\'e8re \'a5 en japonais\'a0;\
+-correction de diverses traductions.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.7.5 (29 novembre 2014)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -R\'e9paration de la 2.7.4 qui a \'e9t\'e9 compl\'e8tement cass\'e9e juste avant la distribution. Compl\'e8tement de ma faute. Compl\'e8tement d\'e9sol\'e9.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 -meilleur export MathML\'a0;\
+-correction de la compatibilit\'e9 avec Ghostscript 9.15\'a0;\
+-am\'e9lioration de l'insertion des m\'e9ta-donn\'e9es PDF.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.7.4 (28 novembre 2014)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 -version compl\'e8ment cass\'e9e juste pour me taper la honte.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.7.3 (14 septembre 2014)\
+-restauration du menu clic-droit sur l'image.\
+\
+v 2.7.2 (12 septembre 2014)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 -correction de l'usage CPU dans certains cas\'a0;\
+-correction de bugs mineurs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.7.1 (10 septembre 2014)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 -correction de la fen\'eatre de dialogue d'export.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 2.7.0 (2 septembre 2014)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 -nouvelle fonctionnalit\'e9 "synchronisation en arri\'e8re plan" pour partager un fichier avec une application tierce\'a0;\
+-pr\'e9calcul du PDF avec polices vectoris\'e9es pour un export plus rapide\'a0;\
+-correction de la gestion de la police de caract\'e8re lors d'un glisser/d\'e9poser sur la zone de texte\'a0;\
+-meilleur import de texte\'a0;\
+-la couleur de fond de l'\'e9quation est maintenant conserv\'e9e lors de l'insertion dans la biblioth\'e8que\'a0;\
+-corretion de bugs mineurs.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.6.1 (19 mai 2014)\
+\pard\pardeftab720\ql\qnatural
+\cf0 -Correction de la bounding box des "PDF avec polices vectoris\'e9es" pour les rendre compatibles avec Illustrator\'a0;\
+-Ajout du menu "Format>Commenter/D\'e9commenter"\'a0;\
+-Raccourcissement des noms des services LaTeXiT pour les rendre plus lisibles dans les pr\'e9f\'e9rences clavier de MacOS\'a0X.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.6.0 (17 avril 2014)\
+- Correction du glisser/d\'e9poser VERS l'horrible iWork'13 (et son lot de r\'e9gressions)\'a0;\
+- Correction du glisser/d\'e9poser PROVENANT de (l'horrible) iWork'13 (et son lot de r\'e9gressions), gr\'e2ce \'e0 l'ic\'f4ne de proximit\'e9 du panneau "image"\'a0;\
+- Ajout d'un filtre aux services bas\'e9 sur les expressions r\'e9guli\'e8res (voyez Pr\'e9f\'e9rences > Services)\'a0;\
+- Ajout du mode "Auto" de latexisation\'a0;\
+- Ajout des menus "Format > Texte > Aligner\'85" \'a0;\
+- Ajout du raccourci Ctrl+Command+T (\uc0\u8963 +\u8984 +T) pour latexiser ET mettre dans le presse-papier\'a0;\
+- Duplication de tous les services, avec des versions qui mettent dans le presse-papier\'a0;\
+- Correction d'un crash li\'e9 \'e0 NSFlippableView\'a0;\
+- Ajout de la variable d'environnement $OUTPUTPDFFILE2 pour les scripts de traitement\'a0;\
+- Correction d'une incompatibilit\'e9 entre gs >= 9.09 et l'export "avec polices vectoris\'e9es"\'a0;\
+- Omission volontaire de la commande \\color ins\'e9r\'e9e aux pr\'e9ambules, lorsque la couleur demand\'e9e est noire, pour faciliter la personnalisation\'a0;\
+- Ajout de la pr\'e9f\'e9rence "Ne pas couper l'aper\'e7u"\'a0;\
+- Nouvelles m\'e9ta-donn\'e9es embarqu\'e9es dans les PDFs pour que iWork'13 ne l'enl\'e8ve pas\'a0;\
+- Correction de la bo\'eete de dialogue d'export JPEG\'a0;\
+- Correction d'un bug de gestion des couleurs en mode XeLaTeX\'a0;\
+- Correction de r\'e9gressions avec l'action Automator\'a0;\
+- Correction du glisser/d\'e9poser vers OmniGraffle\'a0;\
+- Fixed drag'n drop to OmniGraffle.\
+\pard\pardeftab720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.5.4 (7 septembre 2013)\
+-\'a0Correction d'un bug dans les pr\'e9f\'e9rences.\
+\
+v 2.5.3 (3 juillet 2013)\
+-\'a0Correction de l'action Automator.\
+\
+v 2.5.2 (1er f\'e9vrier 2013)\
+- Correction d'un bug emp\'eachant le fonctionnement de la couleur du fond\'a0;\
+- correction des ic\'f4nes de fichiers Retina pour qu'elles fonctionnent aussi sous Mac\'a0OS\'a010.5.\
+\
+v 2.5.1 (16 janvier 2013)\
+\pard\pardeftab720\ql\qnatural
+\cf0 - correction d'un bug de migration de biblioth\'e8que vers le format 2.5.0 ;\
+- possibilit\'e9 de scrolling dans la zone image ;\
+- utilisation de gs-noX11 de pr\'e9f\'e9rence \'e0 gs ;\
+- adapt\'e9 aux \'e9crans r\'e9tina\'a0;\
+- possibilit\'e9 de fermer, suspendre, reprendre un lien Linkback.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.5.0 (16 juin 2012)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - d\'e9sactivation du mode 64 bits pour \'e9viter des probl\'e8mes d\'fbs \'e0 des bogues dans d'anciennes versions de MacOS X ; il reste compilable et utilisable pour ceux qui veulent l'activer ;\
+-\'a0nouveau mod\'e8le de donn\'e9es permettant un chargement plus rapide de l'historique et de la biblioth\'e8que, ainsi qu'une consommation de ressources diminu\'e9e ;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab280\qj
+\cf0 -\'a0correction du service : l'alignement de l'\'e9quation sur la ligne de base ne fonctionnait plus ;\
+- r\'e9initaliser le pr\'e9ambule demande maintenant confirmation ;\
+- pour minimiser les fausses manipulations, supprimer un \'e9l\'e9ment de la biblioth\'e8que se fait maintenant avec \uc0\u8984 \u9003  (Command+Backspace) au lieu d'un simple\'a0\u9003 \
+- correction de bugs apparus avec MacOS 10.7\'a0;\
+- traduction en Italien.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.4.1 (13 juin 2011)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+
+\b \cf0 - version 2.4.1\'a0: correction d'un bug avec certains PDFs se traduisant par un total dysfonctionnement sur certaines configurations ;
+\b0 \
+-\'a0nouveau {\field{\*\fldinst{HYPERLINK "http://pierre.chachatelier.fr/latexit"}}{\fldrslt site web}}, m\'e9ritant le d\'e9tour\'a0;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 -\'a0export MathML (exp\'e9rimental)\'a0;\
+-\'a0export SVG (n\'e9cessite pdf2svg)\'a0;\
+-\'a0action Automator r\'e9par\'e9e\'a0;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -\'a0le service accepte maintenant \{eqnarray\} et \{align\} et les interpr\'e8te comme \{eqnarray*\} et \{align*\}\'a0;
+\f2 \cf5 \CocoaLigature0 \
+
+\f1 \cf0 \CocoaLigature1 -\'a0possibilit\'e9 de remplacer les tabulations par des espaces\'a0;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 -\'a0traductions am\'e9lior\'e9es\'a0;\
+-\'a0nombreuses am\'e9liorations internes.\
+\
+v 2.4.0 (13 juin 2011)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -\'a0nouveau {\field{\*\fldinst{HYPERLINK "http://pierre.chachatelier.fr/latexit"}}{\fldrslt site web}}, m\'e9ritant le d\'e9tour\'a0;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 -\'a0export MathML (exp\'e9rimental)\'a0;\
+-\'a0export SVG (n\'e9cessite pdf2svg)\'a0;\
+-\'a0action Automator r\'e9par\'e9e\'a0;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 -\'a0le service accepte maintenant \{eqnarray\} et \{align\} et les interpr\'e8te comme \{eqnarray*\} et \{align*\}\'a0;
+\f2 \cf5 \CocoaLigature0 \
+
+\f1 \cf0 \CocoaLigature1 -\'a0possibilit\'e9 de remplacer les tabulations par des espaces\'a0;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 -\'a0traductions am\'e9lior\'e9es\'a0;\
+-\'a0nombreuses am\'e9liorations internes.\
+\
+v 2.3.0 (1 septembre 2010)\
+- correction d'un bug de glisser/D\'e9poser vers PowerPoint\'a0;\
+- correction d'un bug d'affichage pouvant montrer un cadre noir en lieu et place de l'\'e9quation\'a0;\
+- am\'e9lioration des pr\'e9f\'e9rences\'a0;\
+- certaines erreurs du moteur LaTeX \'e9taient ignor\'e9es ;\
+- ajout exp\'e9rimental de l'export MathML ;\
+- mise \'e0 jour de Sparkle.\
+\
+v 2.2.0 (25 mai 2010)\
+- les latexisations peuvent maintenant \'eatre interrompues ;\
+- correction d'un cas o\'f9 les pr\'e9f\'e9rences des scripts additionnels pouvaient ne pas \'eatre sauvegard\'e9es ;\
+- ajout d'une barre de progression pour la migration de l'historique si n\'e9cessaire ;\
+- ajout de pr\'e9f\'e9rences pour l'historique ;\
+- l'historique peut maintenant \'eatre import\'e9e/export\'e9e\'a0;\
+- le format d'export peut maintenant \'eatre chang\'e9 \'e0 la vol\'e9e pendant un glisser/d\'e9poser\'a0;\
+\pard\pardeftab720\ql\qnatural
+\cf0 - gestion plus puissante des arguments de fonctions pour les \'e9l\'e9ments de la palette LaTeX\'a0;\
+- am\'e9liorations mineures de l'interface\'a0;\
+- quelques corrections de bugs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.1.1 (11 mars 2010)\
+- correction d'un bug emp\'eachant LaTeXiT d'informer l'utilisateur des nouvelles mises \'e0 jour;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - si vous voulez m'aider \'e0 acheter une maison, vous pouvez reconsid\'e9rer ce fameux don de plusieurs milliers d'euros que vous avez repouss\'e9 jusqu'alors.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.1.0 (9 mars 2010)\
+- abandon provisoire du 64 bits \'e0 cause de bugs du AppleTypeServer d\'e9j\'e0 cit\'e9s dans la version 2.0.1;\
+- migration du mode EqnArray \'e0 Align, qui s'utilise de la m\'eame fa\'e7on mais donne de meilleurs r\'e9sultats;\
+- correction d'un bug d'export si l'\'e9chelle n'\'e9tait pas 100%;\
+- meilleur r\'e9tro-compatibilit\'e9 avec LinkBack;\
+- am\'e9lioration de la traduction en Japonais, gr\'e2ce \'e0 Ryohei Seto;\
+- raffinements d'interface.\
+\
+v 2.0.1 (15 novembre 2009)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-m\'eame);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 - correction de probl\'e8mes de migration de la biblioth\'e8que sous certains conditions;\
+- correction du support de Tiger;\
+- correction du support de LinkBack;\
+- correction des boutons inactifs pour appliquer les pr\'e9ambules \'e0 la biblioth\'e8que;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - am\'e9lioration de quelques points d'interface et correction de bugs mineurs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.0.0 (4 novembre 2009)\
+- revue du code avec de nombreux changements internes pour une meilleure flexibilit\'e9;\
+- ajout des "mod\'e8les de corps de document";\
+- historique et biblioth\'e8que sont maintenant g\'e9r\'e9es par CoreData, ce qui am\'e9liore la gestion des ressources (m\'e9moire...);\
+- on peut maintenant donner des arguments suppl\'e9mentaires aux programmes sous-jacents (pdlatex...);\
+- les fen\'eatres de documents de LaTeXiT ont maintenant un mode "mini fen\'eatre" comme iTunes;\
+- restauration de la compatibilit\'e9 avec les processeurs G3;\
+- am\'e9lioration du temps de d\'e9marrage;\
+- correction de bugs dans les services;\
+- correction de bugs mineurs;\
+- traduction en Japonais;\
+- le d\'e9veloppeur lui-m\'eame est pass\'e9 en version 2.0 en \'e9pousant sa femme bien aim\'e9e. Les dons sont bienvenus pour participer au voyage de noces !\
+\
+v 1.16.1 (31 janvier 2009)\
+- Meilleure compatibilit\'e9 avec des versions anciennes de pdflatex/ghostscript;\
+- correction d'un bug dans l'action Automator, qui l'emp\'eachait d'\'eatre sauvegard\'e9e;\
+- correction d'un bug dans la propagation des variable d'environnement pour les scripts personnalis\'e9s.\
+\
+v 1.16.0 (6 novembre 2008)\
+- ajout d'une action Automator;\
+\pard\tx240\pardeftab240\ql\qnatural\pardirnatural
+\cf0 - meilleure gestion de l'environnement Unix, qui corrige un bug rencontr\'e9 avec certains configurations;\
+- possibilit\'e9 d'utiliser ou non la configuration du shell de login de l'utilisateur;\
+- gestion de plusieurs pr\'e9ambules;\
+- ajout de la palette "Fichiers additionnels";\
+- am\'e9lioration du d\'e9coupage automatique des \'e9quations;\
+- pour la lisibilit\'e9, les ic\'f4nes des fichiers cr\'e9\'e9s n'ont plus un fond transparent;\
+- la d\'e9tection automatique de la taille des polices par le service est maintenant dot\'e9e d'un facteur multiplicatif param\'e9trable;\
+- mise \'e0 jour de la traduction Allemande (Peter Dyballa);\
+- mise \'e0 jour de Sparkle;\
+- correction de bugs mineurs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 1.15.0 (16 avril 2008)\
+\pard\tx240\pardeftab240\ql\qnatural\pardirnatural
+\cf0 - la version pour MacOS 10.3 (Panther) ne sera plus maintenue;\
+- correction d'une incompatibilit\'e9 avec le shell de Leopard;\
+- les services fonctionnent \'e0 nouveau sous Leopard;\
+- gestion plus robuste des raccourcis claviers pour les Services;\
+- le service "D\'e9tecter et cr\'e9er les \'e9quations" comprend maintenant \\begin\{eqnarray*\}...\\end\{eqnarray*\};\
+- on peut maintenant importer une biblioth\'e8que provenant de LaTeX Equation Editor;\
+- les tabulations ne sont plus arbitrairement limit\'e9es en nombre;\
+- LaTeXiT utilise maintenant Sparkle pour les mises \'e0 jour;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 - la latexisation utilise maintenant le raccourci \uc0\u8984 T comme TeXShop; \u8984 L, \u8679 \u8984 L, \u8679 \u8984 T fonctionnent encore;\
+- le pr\'e9ambule par d\'e9faut utilise maintenant \\usepackage[usenames]\{color\} au lieu de \\usepackage\{color\}.\
+\pard\tx240\pardeftab240\ql\qnatural\pardirnatural
+\cf0 - nouvelle ic\'f4ne de Jacob Bandes-Storch.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 1.14.4 (24 ao\'fbt 2007)\
+- correction d'un conflit avec certaines variables shell;\
+- un caract\'e8re % en fin de texte provoquait une erreur;\
+- ic\'f4ne de l'application retravaill\'e9e par Mael Hill\'e9reau;\
+- l'export de la biblioth\'e8que peut maintenant \'eatre fait dans un format XML.\
+\
+v 1.14.3 (18 juin 2007)\
+- Il est maintenant possible de r\'e9duire la taille de la zone de texte (via les Pr\'e9f\'e9rences ou le menu Fen\'eatre);\
+- L'historique affiche maintenant directement le PDF au lieu d'une version bitmap de l'image. Il me semble que finalement, le gain en vitesse de d\'e9filement ne compense pas la consommation m\'e9moire induite;\
+- Correction d'un probl\'e8me de choix de la couleur d'arri\'e8re-plan lors de l'import de certaines \'e9quations.\
+\
+v 1.14.2 (6  juin 2007)\
+- LaTeXiT pouvait bloquer sur certaines configurations.\
+\
+v 1.14.1 (2 juin 2007)\
+- correction d'un bug (rare) d'acc\'e8s \'e0 Ghostscript lors de certains exports;\
+- correction d'un bug si l'utilisateur a activ\'e9 l'option noclobber dans son environnement shell;\
+- un clic permet maintenant comme sous Finder de renommer des \'e9l\'e9ments de la biblioth\'e8que;\
+- am\'e9lioration de certains messages d'erreur;\
+- meilleur test de pr\'e9sence d'un ps2pdf fonctionnel;\
+- ajout d'une palette LaTeX "d\'e9butants";\
+- am\'e9lioration du temps de d\'e9marrage.\
+\
+v 1.14.0 (29 mai 2007)\
+- correction d'une r\'e9gression emp\'eachant certains scripts de s'ex\'e9cuter;\
+- la couleur du texte \'e9dit\'e9 ne respectait pas toujours celle des pr\'e9f\'e9rences;\
+- les palettes LaTeX sont maintenant g\'e9r\'e9es comme des plug-ins; voyez la section "Palettes LaTeX" de la pr\'e9sente documentation (merci \'e0 Matthew Hutton).\
+\
+v 1.13.0 (25 mai 2007)\
+- traduction en espagnol (interface) par \'c1lvaro Lozano;\
+- ajout de $\{INPUTFILE\} et $\{CURRENTDIRECTORY\} comme variables de script;\
+- ajout d'une limite de temps d'ex\'e9cution aux scripts pour \'e9viter d'\'e9ventuels blocages de LaTeXiT lors de l'utilisation d'un script mal con\'e7u;\
+- rapport d'ex\'e9cution plus complet lors de l'utilisation de scripts;\
+- meilleur support des caract\'e8res sp\'e9ciaux lors de l'enregistrement du texte source dans le PDF (merci \'e0 Nobuo Suematsu);\
+- nouveau service "Revenir des \'e9quations au code LaTeX";\
+- correction d'un bug provoquant une erreur dans le pr\'e9ambule des syst\'e8mes ne disposant pas de color.sty;\
+- d\'e9placement du dossier de LaTeXiT de Biblioth\'e8que/LaTeXiT vers Biblioth\'e8que/Application Support/LaTeXiT;\
+- LaTeXiT h\'e9rite maintenant mieux de l'environnement du shell bash;\
+- ajout d'une pr\'e9f\'e9rence pour b\'e9n\'e9ficier d'une couleur d'arri\'e8re-plan automatiquement contrast\'e9e;\
+- la couleur de l'arri\'e8re-plan de l'aper\'e7u n'est plus d\'e9lav\'e9e comme auparavant;\
+- correction de l'export PNG pour la compatibilit\'e9 avec IgorPro.\
+\
+v 1.12.0 (13 f\'e9vrier 2007)\
+- l'import d'une biblioth\'e8que peut maintenant fusionner/remplacer/changer la biblioth\'e8que courante;\
+- correction d'un bug \'e0 l'ouverture de documents LaTeX ne contenant pas \\usepackage\{color\};\
+- correction du caract\'e8re omicron de la palette LaTeX.\
+\
+v 1.11.1 (9 janvier 2007)\
+- ajout d'une notification si l'utilisateur veut rafra\'eechir une \'e9quation de la biblioth\'e8que qui n'est pas celle qu'il avait pr\'e9alablement s\'e9lectionn\'e9e ;\
+- correction d'un bug dans la d\'e9tection des erreurs LaTeX ;\
+- mise \'e0 jour de la traduction allemande.\
+\
+v 1.11.0 (7 d\'e9cembre 2006)\
+- modification du format de fichier de l'historique et de la biblioth\'e8que pour le rendre plus robuste et extensible;\
+- possibilit\'e9 de d\'e9sactiver la correction orthographique dans les pr\'e9f\'e9rences;\
+- correction d'un bug rare et al\'e9atoire pouvant bloquer LaTeXiT au d\'e9marrage;\
+- ajout dans la documentation d'un bug connu sur un changement de police al\'e9atoire.\
+\
+v 1.10.1 (9 novembre 2006)\
+- tentative de correction d'un bug rare et al\'e9atoire pouvant bloquer LaTeXiT au d\'e9marrage;\
+- correction de quelques bugs de localisation par rapport au point d\'e9cimal;\
+- correction de quelques fautes de frappe dans la traduction allemande.
+\fs26 \ul \
+
+\fs22 \ulnone \
+v 1.10.0 (7 octobre 2006)\
+- traduction allemande par Simon L\'e4mmle;\
+- la biblioth\'e8que ne remplace maintenant le contenu du document qu'avec un double-clic;\
+- l'historique ne remplace maintenant le contenu du document qu'avec un double-clic;\
+- on peut maintenant glisser/d\'e9poser un fichier biblioth\'e8que sur la fen\'eatre de la biblioth\'e8que;\
+- on peut maintenant glisser/d\'e9poser des dossiers ou des fichiers PDF sur la fen\'eatre de la biblioth\'e8que;\
+- la biblioth\'e8que r\'e9alise maintenant des imports/exports plus intuitifs;\
+- l'historique a maintenant un panneau de pr\'e9visualisation comme la biblioth\'e8que;\
+- possibilit\'e9 de cr\'e9er des raccourcis pour faciliter la saisie de caract\'e8res sp\'e9ciaux;\
+- meilleure utilisation du v\'e9rificateur d'orthographe;\
+- correction de l'affichage des caract\'e8res accentu\'e9s dans le rapport d'ex\'e9cution;\
+- quelques corrections mineures d'interface.\
+\
+v 1.9.3 (28 ao\'fbt 2006)\
+- correction (encore) du service "D\'e9tecter et cr\'e9er les \'e9quations" pour qu'il ne supprime plus les images d\'e9j\'e0 ins\'e9r\'e9es dans un texte \'e0 convertir;\
+- LaTeXiT peut maintenant r\'e9ouvrir le PDF embarqu\'e9 dans du RTF; cela signifie que le copier/coller devrait maintenant fonctionner depuis les \'e9diteurs de texte pour r\'e9ouvrir les \'e9quations;\
+- correction d'un bug pouvant provoquer un crash de LaTeXiT au chargement d'une historique/biblioth\'e8que corrompue.\
+\
+v 1.9.2 (26 juillet 2006)\
+- correction d'un bug pouvant bloquer LaTeXiT en essayant d'ouvrir plusieurs fois le m\'eame item LinkBack;\
+- le format "PDF with outlined fonts" peut maintenant \'eatre r\'e9ouvert dans LaTeXiT;\
+- "Cr\'e9er \'e0 partir du press-papiers" n'oublie plus la taille, la couleur et le mode de l'\'e9quation;\
+- certains erreurs de LaTeX sont mieux g\'e9r\'e9es;\
+- correction de fautes de frappe.\
+\
+v 1.9.1 (12 juillet 2006)\
+- possibilit\'e9 de changer l'\'e9chelle des exports;\
+- correction d'un bug qui pouvait survenir (avec un crash) au chargement d'images corrompues;\
+- correction d'un bug qui emp\'eachait le service "D\'e9tecter et cr\'e9er les \'e9quations" de sauvegarder ses r\'e9sultats dans l'historique;\
+- le Service traduit maintenant le retour chariot forc\'e9 (Majuscule-Entr\'e9e) en un simple saut de ligne, et l'espace ins\'e9cable (Option-espace) en un espace, pour \'e9viter des probl\'e8mes avec LaTeX;\
+- une image g\'e9n\'e9r\'e9e par le service n'a plus par d\'e9faut un fond blanc dans l'historique;\
+- le service "D\'e9tecter et cr\'e9er les \'e9quations" peut maintenant ouvrir les essais infructueux dans une fen\'eatre de LaTeXiT, pour afficher les erreurs;\
+- le service "D\'e9tecter et cr\'e9er les \'e9quations" ne supprime plus les images d\'e9j\'e0 ins\'e9r\'e9es dans un texte \'e0 convertir.\
+\
+v 1.9.0 (4 juin 2006)\
+- ajout de mots-clefs LaTeX dans l'auto-compl\'e9tion disponible via l'habituel Option-Echap;\
+- ajout du menu contextuel "Copier l'image en tant que" sur la zone de l'\'e9quation;\
+- correction d'un bug \'e0 l'ouverture, sur MacIntel, des biblioth\'e8ques LaTeXiT g\'e9n\'e9r\'e9es sur PowerPC;\
+- correction d'un bug emp\'eachant parfois la sauvegarde automatique des biblioth\'e8ques charg\'e9es;\
+- correction d'un bug qui d\'e9clenchait des "sauts" des barres de d\'e9filement lors de l'utilisation de la palette LaTeX.\
+\
+v 1.8.9 (24 mai 2006)\
+- la biblioth\'e8que prend maintenant en compte les couleurs d'arri\'e8re plan "factices" des \'e9quations, qu'on pouvait d\'e9j\'e0 d\'e9finir par simple gliss\'e9/d\'e9pos\'e9 d'une couleur (utile pour les \'e9quations avec une police de couleur claire).\
+\
+v 1.8.8 (12 mai 2006)\
+- correction d'un bug li\'e9 \'e0 l'emploi du jeton "::". Cela g\'e9n\'e9rait une erreur ind\'e9sirable dans une latexisation.\
+\
+v 1.8.7 (11 mai 2006)\
+- le menu "Coller" ne marchait plus dans la version anglaise du programme (quelle am\'e9lioration!). Il s'agissait juste d'un bug de localisation.\
+\
+v 1.8.6 (10 mai 2006)\
+- am\'e9lioration du comportement du menu "Coller".\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.8.5 (29 avril 2006)\
+- ajout du menu "Fichier > Cr\'e9er \'e0 partir du presse-papiers";\
+- dans la version anglaise, le menu "Coller" pouvait \'eatre faussement indisponible dans certains cas.\
+\
+v 1.8.4 (26 avril 2006)\
+- correction d'un bug de traduction dans le menu des services LaTeXiT.\
+\
+v 1.8.3 (18 avril 2006)\
+- ajout du menu "\'c9dition > Copier l'image en tant que..."\
+\
+v 1.8.2 (8 avril 2006)\
+- il pouvait arriver que des modifications r\'e9centes de l'historique ne soient pas sauv\'e9es;\
+- quelques erreurs de pdflatex sont maintenant mieux g\'e9r\'e9es.\
+\
+v 1.8.1 (27 mars 2006)\
+- ajout d'un service capable de d\'e9tecter les blocs "$$...$$" et "$...$" dans un texte pour les transformer en \'e9quations (respectivement en mode Display et Inline);\
+- correction de divers bugs d'interface; certains boutons n'\'e9taient pas rafra\'eechis lors d'un changement de configuration de composition.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.8.0 (24 mars 2006)\
+- possibilit\'e9 d'ins\'e9rer des scripts de traitement interm\'e9diaire personnalis\'e9s;\
+- possibilit\'e9 de cr\'e9er diff\'e9rentes "configurations de composition";\
+- palette LaTeX l\'e9g\'e8rement am\'e9lior\'e9e;\
+- acc\'e9l\'e9ration du temps de lancement de l'application;\
+- d\'e9poser une couleur dans un champ de texte y d\'e9pose maintenant le code LaTeX "\\color[rgb]\{\}" de la couleur.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.7.1 (20 mars 2006)\
+- changement des raccourcis par d\'e9faut des items du menu Services, pour \'e9viter un conflit avec MathLab et une vieille habitude avec \uc0\u8984 +.;\
+- correction de bugs associ\'e9s \'e0 la gestion de ces raccourcis;\
+- correction d'un bug pouvant provoquer l'affichage des aper\'e7us des \'e9l\'e9ments de la biblioth\'e8que, alors que le pointeur de la souris ne se trouve pas sur la fen\'eatre;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.7.0 (16 mars 2006)\
+- ajout du mode "Eqnarray" en marge de "Display | Inline | Texte"; c'est un raccourci pratique pour faire des \'e9quations multi-lignes, en utilisant une encapsulation automatique dans "\\begin\{eqnarray*\}...\\end\{eqnarray*\}";\
+- ajout d'une loupe dans la biblioth\'e8que pour visualiser les \'e9quations en taille r\'e9elle;\
+- meilleur gestion des items du service d'application LaTeXiT.\
+\
+v 1.6.2 (23 f\'e9vrier 2006)\
+- meilleure organisation des fichiers temporaires cr\'e9\'e9s par LaTeXiT pour \'e9viter un probl\'e8me avec le package feynmf;\
+- un texte copi\'e9 dans LaTeXiT verra maintenant sa fonte chang\'e9e en celle d\'e9finie dans les pr\'e9f\'e9rences.\
+\
+v 1.6.1 (16 f\'e9vrier 2006)\
+- suite \'e0 de nombreuses demandes, je me suis cr\'e9\'e9 un compte Paypal si vous tenez absolument \'e0 faire un don. Mais LaTeXiT reste totalement gratuit !\
+- ajout du menu "\'c9dition > copier en PDF sans polices", qui permet de copier l'image en m\'e9moire avec l'option "PDF sans polices embarqu\'e9es", pratique pour coller dans Illustrator;\
+- sous Tiger, les dossiers de la biblioth\'e8que en mode "Aper\'e7u" restent petits pour am\'e9liorer la lisibilit\'e9;\
+- correction d'un bug cosm\'e9tique: un probl\'e8me de rafra\'eechissement pouvait emp\'eacher l'indicateur de chargement de dispara\'eetre.\
+\
+v 1.6.0 (13 f\'e9vrier 2006)\
+- ajout d'un export "PDF sans polices embarqu\'e9es", permettant d'exporter en PDF vers Illustrator sans remplacement des fontes (merci \'e0 Jens N\'f6ckel !);\
+- correction d'un bug de la version anglaise, dans les pr\'e9f\'e9rences de composition (choix non pris en compte);\
+- correction d'un bug graphique survenant apr\'e8s la mise \'e0 jour d'un \'e9l\'e9ment dans la biblioth\'e8que.\
+\
+v 1.5.6 (7 f\'e9vrier 2006)\
+- correction d'une r\'e9gression emp\'eachant "LaTeX > Afficher le pr\'e9ambule" de fonctionner correctement;\
+- ajout d'un indicateur de chargement/sauvegarde de l'historique/la biblioth\'e8que;\
+- la biblioth\'e8que et l'historique ne sont plus sauvegard\'e9es si elles n'ont pas \'e9t\'e9 modifi\'e9es.\
+\
+v 1.5.5 (7 f\'e9vrier 2006)\
+- acc\'e9l\'e9ration du r\'e9indexage de l'historique et de la biblioth\'e8que lors de la mise \'e0 jour depuis un  LaTeXiT ant\'e9rieur \'e0 1.5.4; le processus est assez long et peut donner l'impression que LaTeXiT buggue.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.5.4 (7 f\'e9vrier 2006)\
+- les caract\'e8res accentu\'e9s du code latex n'\'e9taient pas sauv\'e9s dans les m\'e9ta-donn\'e9es des fichiers PDF. Ils le sont maintenant.\
+\
+v 1.5.3 (4 f\'e9vrier 2006)\
+- correction d'un bug portant sur la v\'e9rification des mises \'e0 jour;\
+- correction d'un bug portant sur la d\'e9tection du chemin de pdflatex sur les Mac-Intel.
+\fs26 \ul \
+\
+
+\fs22 \ulnone v 1.5.2 (2 f\'e9vrier 2006)\
+- correction d'un bug affectant le lissage de certains symboles dans la palette LaTeX;\
+- correction d'un bug introduit dans la version 1.5.1 qui emp\'eachait le champ de texte de se redimensionner correctement;\
+- correction d'un bug qui ignorait parfois les marges droite et sup\'e9rieure;\
+- correction d'un bug dans la biblioth\'e8que, o\'f9 le bouton "+" se d\'e9sactivait parfois.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.5.1 (26 janvier 2006)\
+- gestion d'un bug de pdflatex qui retourne parfois une erreur m\'eame en cas de succ\'e8s;\
+- la biblioth\'e8que peut maintenant afficher des aper\'e7us des \'e9quations;\
+- correction de bugs cosm\'e9tiques :\
+	- les deux premi\'e8res lignes du pr\'e9ambule ne peuvent \'eatre modifi\'e9es : elles sont maintenant gris\'e9es dans la fen\'eatre principale;\
+	- affichage \'e9trange des num\'e9ros de lignes lors d'un d\'e9filement de la zone de preambule;\
+	- le d\'e9filement-molette ne marchait pas dans la zone de texte principale;\
+  	- les chemins d'acc\'e8s aux ex\'e9cutables n'\'e9taient pas recolori\'e9s lors d'un changement du mode de composition.
+\fs26 \ul \
+
+\fs22 \ulnone \
+v 1.5.0 (4 janvier 2006)\
+- quelques am\'e9liorations  de l'\'e9dition (coloration syntaxique...) gr\'e2ce \'e0 l'utilisation de portions du code source de Smultron, par Peter Borg (http://smultron.sourceforge.net); la coloration syntaxique n'est pas encore parfaite;\
+- correction d'un bug affectant la d\'e9tection d'erreurs lors d'une "latexisation";\
+- ajout de raccourcis claviers configurables pour le service d'application;\
+- embellissement de la palette LaTeX;\
+- embellissement des pr\'e9f\'e9rences;\
+- quelques raffinements mineurs.\
+\
+v 1.4.4 (10 octobre 2005)\
+- encore un ajustement de la bounding box.\
+\
+v 1.4.3 (7 octobre 2005)\
+- dans les pr\'e9f\'e9rences, l'utilisateur est maintenant autoris\'e9 \'e0 modifier les deux premi\'e8res lignes du pr\'e9ambule (pour ceux qui savent *vraiment* ce qu'ils font);\
+- meilleur comportement en mode "latex+dvipdf" (utilise maintenant r\'e9ellement "latex" au lieu de "pdflatex -progname latex");\
+- les \'e9quations r\'e9alis\'e9es par le service peuvent maintenant \'eatre sauv\'e9es dans l'historique;\
+- meilleur ajustement de la "bounding box" (qui essaye de couper l'\'e9quation \'e0 la bonne taille);\
+- documentation plus compl\'e8te.\
+\
+v 1.4.2 (9 septembre 2005)\
+- correction d'un bug provoquant un crash au d\'e9marrage de LaTeXiT sur les machines ne disposant pas de pdflatex ou dvipdf;\
+- correction de quelques fautes de frappe.\
+\
+v 1.4.1\
+- d\'e9but de support de xelatex;\
+- correction d'un bug dans le d\'e9compte des lignes;\
+- correction d'un bug o\'f9 les "chemins" des pr\'e9f\'e9rences de "composition" n'\'e9taient pas sauvegard\'e9s;\
+- sous Tiger, le service LaTeXiT peut maintenant fonctionner avec du texte PDF en entr\'e9e;\
+- nouveau raccourci clavier pour copier l'image dans le presse-papier;\
+- am\'e9lioration de la d\'e9tection de color.sty.\
+\
+v 1.4.0 (14 ao\'fbt 2005)\
+- modifications de l'interface (historique, biblioth\'e8que) pour la rendre plus logique et conforme aux canons;\
+- correction d'un bug sous Tiger, lors de l'import PDF d'\'e9quation contenant des virgules;\
+- on peut maintenant composer en pdflatex ou en latex+dvipdf; c'est utile pour utiliser certains packages;\
+- ajout d'une palette pour exporter les \'e9l\'e9ments de la biblioth\'e8que sous forme de texte "encapsul\'e9" (ou "d\'e9cor\'e9");\
+- ajout d'un inspecteur de couleurs, utiles pour glisser/d\'e9poser une couleur sur la zone d'aper\'e7u, l'historique, ou sur les zones de texte;\
+- quelques possibilit\'e9s suppl\'e9mentaires de copier/coller, dans la biblioth\'e8que, et depuis d'autres applications;\
+- on peut maintenant v\'e9rifier les mises \'e0 jour;\
+- la police par d\'e9faut est maintenant monaco (espacement constant);\
+- correction de bugs mineurs.\
+\
+v 1.3.1\
+- on peut maintenant sauvegarder/charger les biblioth\'e8ques \'e0 volont\'e9;\
+- on peut maintenant afficher/masquer le pr\'e9ambule depuis le menu Latex; pratique pour ceux qui ne lisent pas la documentation...;-)\
+- on peut r\'e9percuter les changements du pr\'e9ambule par d\'e9faut aux documents ouverts et \'e0 la biblioth\'e8que;\
+- les fichiers PDF et EPS cr\'e9\'e9s par LaTeXiT ont maintenant une ic\'f4ne correspondant \'e0 leur image;\
+- les fichiers PDF g\'e9n\'e9r\'e9s par LaTeXiT sont maintenant ouverts par LaTeXiT depuis le Finder;\
+- maintenant, il devrait \'eatre possible d'utiliser des fontes diff\'e9rentes des fontes par d\'e9faut de LaTeX;\
+- en mode texte, les \\newline et autres \\\\ sont maintenant autoris\'e9s;\
+- correction d'un bug lors de l'import d'un PDF g\'e9n\'e9r\'e9 par LaTeX Equation Editor;\
+- correction d'un bug pouvant provoquer un affichage flou dans la fen\'eatre d'aper\'e7u, lors du d\'e9p\'f4t d'un PDF sur l'ic\'f4ne du Dock de LaTeXiT;\
+- correction d'un bug lors duquel le menu ne "savait" plus si la biblioth\'e8que \'e9tait visible ou non;\
+- retrait de l'export "PDF (Illustrator)" qui n'existait qu'en phase de d\'e9veloppement de LaTeXiT (et ne fonctionnait d'ailleurs pas);\
+- correction d'un bug pouvant causer un crash de LaTeXiT sous Panther;\
+- correction d'un bug faussant la ligne de base dans le cas de l'ajout d'une marge sous l'\'e9quation;\
+- correction de bugs mineurs.\
+\
+v 1.3\
+- ajout de la compatibilit\'e9 des PDF avec ceux de LaTeX Equation Editor;\
+- le service d'application ne marchait pas correctement sous Panther.\
+\
+v 1.2\
+- le logiciel dispose maintenant d'une version Panther et d'une version Tiger, cette derni\'e8re int\'e9grant plus de fonctionnalit\'e9s;\
+- (version Tiger) pr\'eat pour Mac-Intel (compil\'e9 en Universal Binary); mais m\'eame si la version Intel ne devrait pas contenir de bugs sp\'e9cifiques, elle n'a pas pu \'eatre test\'e9e. Elle est donc consid\'e9r\'e9e comme exp\'e9rimentale et les rapports de bugs (pour ceux qui ont un Mac-Intel) sont bienvenus;\
+- (version Tiger) un fichier PDF cr\'e9\'e9 avec LaTeXiT peut maintenant \'eatre r\'e9ouvert avec LaTeXiT;\
+- (version Tiger) possibilit\'e9 de glisser/d\'e9poser sur le Finder les \'e9l\'e9ments de l'historique ou de la biblioth\'e8que;\
+- (version Tiger) encore plus de possibilit\'e9s de glisser/d\'e9pos\'e9er au sein m\'eame de LaTeXiT (entre l'historique et la biblioth\'e8que, par exemple);\
+- le logiciel est maintenant sous licence CeCILL (open source compatible GPL);\
+- vitesse accrue;\
+- meilleur support de LinkBack (on peut maintenant "rafra\'eechir" une \'e9quation d\'e9pos\'e9e dans une autre application);\
+- le format d'export par glisser/d\'e9poser, ou utilis\'e9 par le service, est maintenant configurable;\
+- meilleure configurabilit\'e9 du service d'application et des pr\'e9f\'e9rences en g\'e9n\'e9ral;\
+- le service LaTeXiT essaye maintenant d'aligner l'\'e9quation avec le texte environnant;\
+- le service LaTeXiT peut maintenant utiliser la couleur du texte source;\
+- on peut maintenant mettre \'e0 jour les \'e9l\'e9ments de la biblioth\'e8que sans avoir \'e0 les effacer/recr\'e9er;\
+- les utilisateurs japonais peuvent maintenant utiliser normalement le symbole " 
+\f0\fs24 \'a5 " (yen) \'e0 la place du " \\ "' (backslash);
+\f1\fs22 \
+- modification des palettes;\
+- correction des bulles d'aide dans la palette;\
+- la latexisation peut maintenant \'eatre d\'e9clench\'e9e avec \uc0\u8984 L, \u8679 \u8984 L ou \u8679 \u8984 T (pour combler les habitu\'e9s de TeXShop);\
+- ajout d'un zoom sur l'aper\'e7u de l'image;\
+- lors du drag'n drop d'une \'e9quation en provenance de la biblioth\'e8que, vers une destination ne pouvant pas afficher d'images, c'est le nom de l'\'e9quation (tel qu'il est d\'e9finit dans la biblioth\'e8que) qui va pouvoir \'eatre affich\'e9;\
+- ajout d'une petite palette pour agrandir un peu les marges;\
+- vous pouvez maintenant changer police et taille des zones de texte; cela n'a rien \'e0 voir avec le LaTeX g\'e9n\'e9r\'e9, c'est juste pour rendre l'interface plus agr\'e9able;\
+- correction de bugs mineurs.\
+\
+v 1.1.1\
+- d\'e9sactivation d'une fonctionnalit\'e9 permettant aux applications ne comprenant pas le PDF de recevoir le code LaTeX par drag'n drop; en fait, des applications comme Word ignorent le PDF et affichent b\'eatement le code source dans ce cas;\
+- correction d'un bug survenant parfois lors d'un ajout dans la biblioth\'e8que;\
+- tentative de correction du bug rendant le LaTeXiT service indisponible sous Tiger : ne poss\'e9dant pas Tiger, je ne peux pas v\'e9rifier.\
+\
+v 1.1\
+- Support de LinkBack : on peut maintenant, dans les applications supportant LinkBack, r\'e9ouvrir les \'e9quation dans LaTeXiT (g\'e9n\'e9ralement via le menu <\'c9dition>);\
+- ajout d'une biblioth\'e8que pour sauvegarder des \'e9quations;\
+- meilleure compatibilit\'e9 avec Microsoft Office;\
+- possibilit\'e9 de s\'e9lectionner plusieurs items \'e0 la fois dans l'historique.\
+\
+v 1.0\
+- Premi\'e8re distribution publique\
+}

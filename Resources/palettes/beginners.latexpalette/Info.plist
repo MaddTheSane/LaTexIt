@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>author</key>
+	<string>Pierre Chatelier</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>latexCode</key>
+			<string>x^2</string>
+			<key>name</key>
+			<string>power</string>
+		</dict>
+		<dict>
+			<key>latexCode</key>
+			<string>x_1</string>
+			<key>name</key>
+			<string>index</string>
+		</dict>
+		<dict>
+			<key>latexCode</key>
+			<string>\infty</string>
+			<key>name</key>
+			<string>infinity</string>
+		</dict>
+		<dict>
+			<key>latexCode</key>
+			<string>\frac{x}{y}</string>
+			<key>name</key>
+			<string>fraction</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>sqrt</string>
+			<key>numberOfArguments</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>sqrt3</string>
+			<key>latexCode</key>
+			<string>\sqrt[3]</string>
+			<key>numberOfArguments</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>sum</string>
+			<key>latexCode</key>
+			<string>\sum_{i=0}^n</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>product</string>
+			<key>latexCode</key>
+			<string>\prod_{i=0}^n</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>integral</string>
+			<key>latexCode</key>
+			<string>\int_0^\infty</string>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>beginners</string>
+        <key>numberOfItemsPerRow</key>
+        <integer>3</integer>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

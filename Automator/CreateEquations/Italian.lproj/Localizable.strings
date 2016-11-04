@@ -1,0 +1,40 @@
+"You must run LaTeXiT once, to init the configuration" = "You must run LaTeXiT once, to init the configuration";
+
+"Text" = "Text";
+"Font size :" = "Font size :";
+"Color :" = "Color :";
+"Create equations :" = "Create equations :";
+"alongside input files" = "alongside input files";
+"in a temporary folder" = "in a temporary folder";
+
+"Default format" = "Default format";
+"PDF with outlined fonts" = "PDF with outlined fonts";
+"PDF w.o.f." = "PDF w.o.f.";
+"PDF vector format" = "PDF vector format";
+"EPS vector format" = "EPS vector format";
+"SVG vector format" = "SVG vector format";
+"TIFF bitmap format" = "TIFF bitmap format";
+"PNG bitmap format" = "PNG bitmap format";
+"JPEG bitmap format" = "JPEG bitmap format";
+"MathML text format" = "MathML text format";
+"Text format" = "Text format";
+"Options" = "Options";
+"Warning : jpeg does not manage transparency" = "Warning : jpeg does not manage transparency";
+"Warning : pdf2svg path is invalid" = "Warning : pdf2svg path is invalid";
+"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
+
+"JPEG Quality" = "JPEG Quality";
+"least" = "least";
+"low" = "low";
+"medium" = "medium";
+"high" = "high";
+"maxi" = "maxi";
+"Quality" = "Quality";
+"Background color" = "Background color";
+"Path to pdf2svg" = "Path to pdf2svg";
+"Format" = "Format";
+"Change" = "Change";
+
+"No preamble found" = "No preamble found";
+"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.";

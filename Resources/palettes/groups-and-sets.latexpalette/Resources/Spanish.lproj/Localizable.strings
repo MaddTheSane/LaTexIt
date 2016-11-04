@@ -1,0 +1,11 @@
+"groups-and-sets" = "Grupo y Conjuntos";
+"subgroup"="Subgrupo";
+"supgroup"="Supergrupo";
+"supnormgroup"="Subgrupo normal";
+"subnormgroup"="Supergrupo normal";
+"supset"="Superconjunto propio";
+"supseteq"="Superconjunto";
+"subset"="Subconjunto propio";
+"subseteq"="Subconjunto";
+"emptyset"="Conjunto vacío 1";
+"varnothing"="Conjunto vacío 2";

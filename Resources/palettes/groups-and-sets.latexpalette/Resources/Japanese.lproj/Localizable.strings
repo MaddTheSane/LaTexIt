@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>groups-and-sets</key>
+	<string>群と集合</string>
+	<key>subgroup</key>
+	<string>Subgroup</string>
+	<key>subnormgroup</key>
+	<string>Normal Subgroup</string>
+	<key>subset</key>
+	<string>Strict subset</string>
+	<key>subseteq</key>
+	<string>Subset</string>
+	<key>supgroup</key>
+	<string>Supergroup</string>
+	<key>supnormgroup</key>
+	<string>Normal Supergroup</string>
+	<key>supset</key>
+	<string>Strict superset</string>
+	<key>supseteq</key>
+	<string>Superset</string>
+	<key>emptyset</key>
+	<string>空集合 1</string>
+	<key>varnothing</key>
+	<string>空集合 2</string>
+</dict>
+</plist>
