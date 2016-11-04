@@ -83,6 +83,11 @@
 /* Begin PBXBuildFile section */
 		555AA5671DCC329F007894B7 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 555AA5661DCC3241007894B7 /* Icons.xcassets */; };
 		55EC50921DCD3CF300096CC0 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		55EC50931DCD3F0E00096CC0 /* LinkBack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		55EC50951DCD3F6300096CC0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50941DCD3F6300096CC0 /* libz.tbd */; };
+		55EC50971DCD3F6A00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
+		55EC50981DCD3F8C00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
+		55EC50991DCD3F8C00096CC0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50941DCD3F6300096CC0 /* libz.tbd */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -386,10 +391,6 @@
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
 		93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C5D80A30D9130009FB59 /* latex-keywords.plist */; };
-		93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
-		93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
-		93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
-		93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */; };
 		93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.nib */; };
@@ -475,13 +476,15 @@
 			name = "Copy Files (Spotlight)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9344BBB50E8CF6DF00FE90A5 /* CopyFiles */ = {
+		9344BBB50E8CF6DF00FE90A5 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				55EC50931DCD3F0E00096CC0 /* LinkBack.framework in Copy Frameworks */,
 			);
+			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9349518410BDCEEE00931D51 /* Copy Files (LaTeXiT Helper) */ = {
@@ -541,6 +544,8 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
 		555AA5661DCC3241007894B7 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
+		55EC50941DCD3F6300096CC0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		55EC50961DCD3F6A00096CC0 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
@@ -957,8 +962,6 @@
 		93EFDB72088FEFA6000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB73088FEFA6000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; usesTabs = 0; };
 		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.plist.xml; path = "latex-keywords.plist"; sourceTree = "<group>"; };
-		93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; path = "Frameworks/libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; sourceTree = "<group>"; };
-		93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; path = "Frameworks/libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
@@ -990,6 +993,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				938E244B0889C392000626E6 /* AppKit.framework in Frameworks */,
+				55EC50991DCD3F8C00096CC0 /* libz.tbd in Frameworks */,
+				55EC50981DCD3F8C00096CC0 /* libicucore.tbd in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
 				938E23A60889C382000626E6 /* Quartz.framework in Frameworks */,
@@ -1001,8 +1006,6 @@
 				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
 				9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */,
 				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
-				93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
-				93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1010,6 +1013,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55EC50971DCD3F6A00096CC0 /* libicucore.tbd in Frameworks */,
+				55EC50951DCD3F6300096CC0 /* libz.tbd in Frameworks */,
 				9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */,
 				9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */,
 				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
@@ -1018,8 +1023,6 @@
 				55EC50921DCD3CF300096CC0 /* LinkBack.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
 				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
-				93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
-				93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,8 +1055,6 @@
 				931AD67508491A8E00E8EE8B /* Quartz.framework */,
 				93B8E92B19C0F99A00263C1F /* QuartzCore.framework */,
 				93C5318F0D9E2781003AF7FC /* Security.framework */,
-				93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
-				93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -1149,6 +1150,8 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55EC50961DCD3F6A00096CC0 /* libicucore.tbd */,
+				55EC50941DCD3F6300096CC0 /* libz.tbd */,
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
 			);
@@ -1945,7 +1948,7 @@
 				9344B98B0E8CF38700FE90A5 /* Resources */,
 				9344B98C0E8CF38700FE90A5 /* Sources */,
 				9344B98D0E8CF38700FE90A5 /* Frameworks */,
-				9344BBB50E8CF6DF00FE90A5 /* CopyFiles */,
+				9344BBB50E8CF6DF00FE90A5 /* Copy Frameworks */,
 				9344BBE00E8CF73E00FE90A5 /* Rez */,
 				9344BBBA0E8CF71600FE90A5 /* ShellScript */,
 			);
@@ -2656,10 +2659,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-licucore",
-				);
 				PREBINDING = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
@@ -2720,10 +2719,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-licucore",
-				);
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
@@ -2872,10 +2867,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-licucore",
-				);
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
@@ -2932,10 +2923,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
-				);
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-licucore",
 				);
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
