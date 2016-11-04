@@ -250,7 +250,7 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSArray*)           compositionConfigurations;
 -(void)               setCompositionConfigurations:(NSArray*)value;
 
--(int)                compositionConfigurationsDocumentIndex;
+-(NSInteger)          compositionConfigurationsDocumentIndex;
 -(void)               setCompositionConfigurationsDocumentIndex:(int)value;
 -(NSDictionary*)      compositionConfigurationDocument;
 -(void)               setCompositionConfigurationDocument:(NSDictionary*)value;

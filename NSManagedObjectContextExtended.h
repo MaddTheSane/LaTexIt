@@ -14,16 +14,16 @@
 -(void) disableUndoRegistration;
 -(void) enableUndoRegistration;
 -(void) safeInsertObject:(NSManagedObject*)object;
--(void) safeInsertObjects:(NSArray*)objects;
+-(void) safeInsertObjects:(NSArray<NSManagedObject*>*)objects;
 -(void) safeDeleteObject:(NSManagedObject*)object;
--(void) safeDeleteObjects:(NSArray*)objects;
--(unsigned int) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...;
+-(void) safeDeleteObjects:(NSArray<NSManagedObject*>*)objects;
+-(NSUInteger) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...;
 -(NSManagedObject*) managedObjectForURIRepresentation:(NSURL*)url;
--(unsigned int) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
+-(NSUInteger) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
 
 @end
 
 @interface NSObject (NSManagedObjectContextExtendedAvoidWarning)
--(unsigned int) countForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
+-(NSUInteger) countForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
 @end
 

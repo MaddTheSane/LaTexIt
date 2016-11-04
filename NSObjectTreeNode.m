@@ -39,7 +39,7 @@
   id result = nil;
   id parent = [self performSelector:parentSelector];
   NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
-  unsigned int index = [brothers indexOfObject:self];
+  NSUInteger index = [brothers indexOfObject:self];
   if (index+1 < [brothers count])
     result = [brothers objectAtIndex:index+1];
   return result;
@@ -51,7 +51,7 @@
   id result = nil;
   id parent = [self performSelector:parentSelector];
   NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
-  unsigned int index = [brothers indexOfObject:self];
+  NSUInteger index = [brothers indexOfObject:self];
   if (index > 0)
     result = [brothers objectAtIndex:index-1];
   return result;

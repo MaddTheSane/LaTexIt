@@ -9,8 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface NSMutableDictionary (Extended)
+@interface NSMutableDictionary<KeyType, ObjectType> (Extended)
 
--(void) replaceKey:(id)oldKey withKey:(id)newKey;
+-(void) replaceKey:(KeyType)oldKey withKey:(KeyType)newKey;
 
 @end

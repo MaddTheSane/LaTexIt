@@ -7,9 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "DeepCopying.h"
 
-
-@interface NSDictionary (Extended)
+@interface NSDictionary (Extended) <DeepCopying, DeepMutableCopying>
 
 -(NSDictionary*) dictionaryByAddingDictionary:(NSDictionary*)dictionary;
 -(NSDictionary*) dictionaryByAddingObjectsAndKeys:(id)firstObject, ...;

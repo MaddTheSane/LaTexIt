@@ -9,15 +9,14 @@
 #import <Cocoa/Cocoa.h>
 
 @interface LineCountRulerView : NSRulerView {
-  int lineShift;
+  NSInteger lineShift;
 }
 
 //the shift allows to start the numeratation at another number than 1
--(int)  lineShift;
--(void) setLineShift:(int)aShift;
+@property (nonatomic) NSInteger lineShift;
 
 //we can add/remove error markers
 -(void) clearErrors;
--(void) setErrorAtLine:(int)lineIndex message:(NSString*)message;
+-(void) setErrorAtLine:(NSInteger)lineIndex message:(NSString*)message;
 
 @end

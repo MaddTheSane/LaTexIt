@@ -5,7 +5,7 @@
 "_Refresh" = "Refresh" ;
 
 /* Strings used for the LinkBack App Not Found panel */
-"_AppNotFoundTitle" = "The creator application \"%@\" could not be found." ;
+"_AppNotFoundTitle" = "The creator application “%@” could not be found." ;
 
 "_AppNotFoundMessageWithURL" = "Make sure this application is installed in your Applications folder to use it.  If you do not have this software, you can choose \"Get Application\" to download it." ;
 

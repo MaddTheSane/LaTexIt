@@ -21,7 +21,7 @@
   NSSet* children;//seems to be needed on Tiger
   NSString* title;//seems to be needed on Tiger
   NSString* comment;//seems to be needed on Tiger
-  unsigned int sortIndex;//seems to be needed on Tiger
+  NSUInteger sortIndex;//seems to be needed on Tiger
 }
 
 +(NSEntityDescription*) entity;
@@ -31,15 +31,11 @@
 
 -(BOOL) dummyPropertyToForceUIRefresh;
 
--(NSString*)    title;
--(void)         setTitle:(NSString*)value;
+@property (copy) NSString *title;
 -(void)         setBestTitle;//computes best title in current context
--(LibraryItem*) parent;
--(void)         setParent:(LibraryItem*)parent;
--(unsigned int) sortIndex;
--(void)         setSortIndex:(unsigned int)value;
--(NSString*)    comment;
--(void)         setComment:(NSString*)value;
+@property (assign) LibraryItem *parent;
+@property NSUInteger sortIndex;
+@property (copy) NSString *comment;
 
 -(NSArray*) brothersIncludingMe:(BOOL)includingMe;
 -(NSArray*) titlePath;

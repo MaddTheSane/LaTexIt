@@ -10,9 +10,6 @@
 #define SUAPPCAST_H
 
 
-@protocol NSURLDownloadDelegate
-@end
-
 @class SUAppcastItem;
 @interface SUAppcast : NSObject
 {

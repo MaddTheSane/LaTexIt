@@ -10,12 +10,6 @@
 
 @implementation NSArray (Extended)
 
--(id) firstObject
-{
-  id result = [self count] ? [self objectAtIndex:0] : nil;
-  return result;
-}
-//end firstObject
 
 //checks if the array contains an object, based on adress comparison, not isEqual:
 -(BOOL) containsObjectIdenticalTo:(id)object
@@ -40,7 +34,7 @@
 }
 //end reversed
 
--(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index
+-(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index
 {
   #ifdef ARC_ENABLED
   NSMutableArray* result = [self mutableCopy];
@@ -52,7 +46,7 @@
 }
 //end arrayByAddingObject:atIndex:
 
--(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
+-(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
   #ifdef ARC_ENABLED
   NSMutableArray* result = [self mutableCopy];

@@ -82,6 +82,7 @@
 
 /* Begin PBXBuildFile section */
 		555AA5671DCC329F007894B7 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 555AA5661DCC3241007894B7 /* Icons.xcassets */; };
+		55EC50921DCD3CF300096CC0 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -242,8 +243,6 @@
 		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
 		9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
-		9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
-		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -482,7 +481,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,8 +737,8 @@
 		935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryExtended.m; sourceTree = "<group>"; };
 		935B8FDB0FB6E5CF00448B03 /* LibraryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryController.h; sourceTree = "<group>"; };
 		935B8FDC0FB6E5CF00448B03 /* LibraryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryController.m; sourceTree = "<group>"; };
-		936091A01087084200F4B39A /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = Frameworks/RegexKitLite/RegexKitLite.h; sourceTree = "<group>"; };
-		936091A11087084300F4B39A /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = Frameworks/RegexKitLite/RegexKitLite.m; sourceTree = "<group>"; };
+		936091A01087084200F4B39A /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		936091A11087084300F4B39A /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		936368C81194BA4900C5DE49 /* DragThroughButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragThroughButton.h; sourceTree = "<group>"; };
 		936368C91194BA4900C5DE49 /* DragThroughButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragThroughButton.m; sourceTree = "<group>"; };
 		936369DF1194C9BD00C5DE49 /* NSButtonPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSButtonPalette.h; sourceTree = "<group>"; };
@@ -748,7 +746,6 @@
 		93636AAB11957D5B00C5DE49 /* DragFilterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterView.h; sourceTree = "<group>"; };
 		93636AAC11957D5B00C5DE49 /* DragFilterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterView.m; sourceTree = "<group>"; };
 		9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/LinkBack.framework; sourceTree = "<group>"; };
-		9368A60C17737E9E00B2ACC1 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/GC/LinkBack.framework; sourceTree = "<group>"; };
 		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
 		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
 		9369017713ABEF32006B3BDD /* LatexitEquationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexitEquationData.h; sourceTree = "<group>"; };
@@ -1018,9 +1015,9 @@
 				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
 				9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */,
 				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
+				55EC50921DCD3CF300096CC0 /* LinkBack.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
 				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
-				9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */,
 				93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 				93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
@@ -1065,7 +1062,6 @@
 			isa = PBXGroup;
 			children = (
 				9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */,
-				9368A60C17737E9E00B2ACC1 /* LinkBack.framework */,
 				934AA8A60F3380CD0010E384 /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
@@ -1090,8 +1086,11 @@
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 				934AAB2E0F343DC20010E384 /* Project Helpers */,
 			);
+			indentWidth = 2;
 			name = LaTeXiT;
 			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
 		};
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
@@ -1691,7 +1690,8 @@
 				936091A11087084300F4B39A /* RegexKitLite.m */,
 			);
 			name = RegexKitLite;
-			sourceTree = "<group>";
+			path = Frameworks/RegexKitLite;
+			sourceTree = SOURCE_ROOT;
 		};
 		9372A1FA08781A0F00A3A645 /* Margins */ = {
 			isa = PBXGroup;
@@ -2476,6 +2476,7 @@
 				93F874F9108863D900995B12 /* Japanese */,
 			);
 			name = Credits.rtf;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		930255CF07F0C2A800011996 /* Localizable.strings */ = {
@@ -2532,6 +2533,7 @@
 				93F874FB1088647D00995B12 /* Japanese */,
 			);
 			name = defaultPreamble.rtf;
+			path = Resources;
 			sourceTree = SOURCE_ROOT;
 		};
 		9396B9C2194ED560003CD205 /* additional-files-help.rtfd */ = {
@@ -2545,6 +2547,7 @@
 				9396B9D7194ED684003CD205 /* Japanese */,
 			);
 			name = "additional-files-help.rtfd";
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		9396BA30194EE345003CD205 /* synchronization-scripts-help.rtfd */ = {
@@ -2558,6 +2561,7 @@
 				9396BA36194EE357003CD205 /* Japanese */,
 			);
 			name = "synchronization-scripts-help.rtfd";
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		939A64570800281900AE4486 /* ServicesMenu.strings */ = {
@@ -2830,6 +2834,7 @@
 					Frameworks,
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks/LinkBack/GC\"",
+					"$(PROJECT_DIR)/Frameworks/LinkBack",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
@@ -2889,6 +2894,7 @@
 					Frameworks,
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks/LinkBack/GC\"",
+					"$(PROJECT_DIR)/Frameworks/LinkBack",
 				);
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DYNAMIC_NO_PIC = NO;

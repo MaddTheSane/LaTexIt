@@ -31,14 +31,15 @@
 #import "OutlineViewSelectedItemsTransformer.h"
 #import "PreferencesController.h"
 #import "Utils.h"
+#import "ImagePopupButton.h"
 
 extern NSString* NSMenuDidBeginTrackingNotification;
 
-@interface LibraryWindowController (PrivateAPI)
+@interface LibraryWindowController ()
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
 -(void) _updateButtons:(NSNotification*)aNotification;
--(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
--(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
+-(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
+-(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 -(void) windowWillClose:(NSNotification*)notification;
 -(void) windowDidResignKey:(NSNotification*)notification;
 @end
@@ -248,7 +249,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   NSDocument* document = [AppController currentDocument];
   NSIndexSet* selectedRowIndexes = [self->libraryView selectedRowIndexes];
   BOOL onlyOneItemSelected = ([selectedRowIndexes count] == 1);
-  unsigned int firstIndex = [selectedRowIndexes firstIndex];
+  NSUInteger firstIndex = [selectedRowIndexes firstIndex];
   result = (document != nil) && onlyOneItemSelected &&
            [[self->libraryView itemAtRow:firstIndex] isKindOfClass:[LibraryEquation class]];
   return result;
@@ -309,7 +310,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   LatexitEquation* currentLatexitEquation = [document latexitEquationWithCurrentStateTransient:YES];
   [document triggerSmartHistoryFeature];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
-  unsigned int nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
+  NSUInteger nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
   [[[document undoManager] prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation isRecentLatexisation:NO];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
   LatexitEquation* latexitEquationToStore =
@@ -382,7 +383,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   NSUndoManager* undoManager = [libraryController undoManager];
   [undoManager beginUndoGrouping];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
-  unsigned int nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
+  NSUInteger nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
   LibraryGroupItem* newLibraryGroupItem =
     [[LibraryGroupItem alloc] initWithParent:parentOfSelection
               insertIntoManagedObjectContext:managedObjectContext];
@@ -416,7 +417,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   MyDocument*  document = (MyDocument*) [AppController currentDocument];
   if (document)
   {
-    unsigned int index = [[self->libraryView selectedRowIndexes] firstIndex];
+    NSUInteger   index = [[self->libraryView selectedRowIndexes] firstIndex];
     id           item  = [self->libraryView itemAtRow:index];
     LibraryItem* libraryItem  = item;
     
@@ -455,9 +456,9 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                                                         name:NSOutlineViewSelectionDidChangeNotification
                                                       object:self->libraryView];
         BOOL isSelected = YES;
-        unsigned int itemIndex   = index;
+        NSUInteger itemIndex   = index;
         NSIndexSet*  itemIndexes = [NSIndexSet indexSetWithIndex:itemIndex];
-        int i = 0;
+        NSInteger i = 0;
         for(i = 0 ; i<7 ; ++i)
         {
           if (isSelected)
@@ -467,7 +468,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
           isSelected = !isSelected;
           NSDate* now = [NSDate date];
           [self->libraryView display];
-          NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now addTimeInterval:1./30.];
+          NSDate* next = [now dateByAddingTimeInterval:1./30.];
           [NSThread sleepUntilDate:next];
         }
         [undoManager setActionName:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation")];
@@ -501,21 +502,24 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setDelegate:(id)self];
+  [openPanel setDelegate:self];
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
   [openPanel setAccessoryView:[importAccessoryView retain]];
-  if ([[self window] isVisible])
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"library", @"plist", nil] modalForWindow:[self window]
-                        modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else
-    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"plist", @"library", nil]] contextInfo:NULL];
+  openPanel.allowedFileTypes = @[@"latexlib", @"plist", @"library"];
+  if ([[self window] isVisible]) {
+    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+      [self _openPanelDidEnd:openPanel returnCode:result contextInfo:nil];
+    }];
+  } else {
+    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModal] contextInfo:NULL];
+  }
 }
 //end open:
 
--(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   library_import_option_t import_option = [importOptionPopUpButton selectedTag];
-  if (returnCode == NSOKButton)
+  if (returnCode == NSFileHandlingPanelOKButton)
   {
     BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
     if (!ok)
@@ -525,7 +529,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
    informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+     [alert runModal];
     }
     else
     {
@@ -541,7 +545,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 {
   NSString* selectedFileName = [[sender URL] path];
   BOOL isLaTeXiTLibrary = [[selectedFileName pathExtension] isEqualToString:@"latexlib"];
-  unsigned int selectedIndex = [self->importOptionPopUpButton indexOfSelectedItem];
+  NSUInteger selectedIndex = [self->importOptionPopUpButton indexOfSelectedItem];
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
   [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_MERGE];
@@ -574,14 +578,16 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
-  if ([[self window] isVisible])
-    [self->savePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled") modalForWindow:[self window] modalDelegate:self
-                       didEndSelector:@selector(_savePanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else
+  savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
+  if ([[self window] isVisible]) {
+    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+      [self _savePanelDidEnd:savePanel returnCode:result contextInfo:NULL];
+    }];
+  } else
     [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
 }
 
--(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   if (returnCode == NSFileHandlingPanelOKButton)
   {
@@ -601,8 +607,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
-   informativeTextWithFormat:nil];
-     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+   informativeTextWithFormat:@""];
+     [alert runModal];
     }//end if (ok)
   }
   [self->savePanel release];
@@ -712,7 +718,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       isSelected = !isSelected;
       NSDate* now = [NSDate date];
       [self->libraryView display];
-      NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now addTimeInterval:1./30.];
+      NSDate* next = [now dateByAddingTimeInterval:1./30.];
       [NSThread sleepUntilDate:next];
     }
     if (isInitiallySelected)

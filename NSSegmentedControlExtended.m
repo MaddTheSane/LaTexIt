@@ -10,10 +10,10 @@
 
 @implementation NSSegmentedControl (Extended)
 
--(int) selectedSegmentTag
+-(NSInteger) selectedSegmentTag
 {
-  int result = -1;
-  int selectedSegment = [self selectedSegment];
+  NSInteger result = -1;
+  NSInteger selectedSegment = [self selectedSegment];
   result = [[self cell] tagForSegment:selectedSegment];
   return result;
 }
@@ -21,8 +21,8 @@
 
 -(void) sizeToFitWithSegmentWidth:(CGFloat)segmentWidth useSameSize:(BOOL)useSameSize
 {
-  int nbSegments = [self segmentCount];
-  int i = 0;
+  NSInteger nbSegments = [self segmentCount];
+  NSInteger i = 0;
   CGFloat maxSize = 0;
   for(i = 0 ; i<nbSegments ; ++i)
   {

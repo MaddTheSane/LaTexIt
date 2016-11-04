@@ -75,9 +75,7 @@
 -(id) deepCopyWithZone:(NSZone*)zone
 {
   NSMutableDictionary* clone = [[NSMutableDictionary allocWithZone:zone] initWithCapacity:[self count]];
-  NSEnumerator* keyEnumerator = [self keyEnumerator];
-  id key = nil;
-  while((key = [keyEnumerator nextObject]))
+  for(id key in self)
   {
     id object = [self valueForKey:key];
     id copyOfObject =

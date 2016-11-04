@@ -14,7 +14,6 @@
   BOOL isDown;
 }
 
--(void) setImage:(NSImage*)image;
--(NSImage*) image;
+@property (retain) NSImage *image;
 
 @end

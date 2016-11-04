@@ -17,8 +17,8 @@
 
 -(NSString*) string;//useful for binding
 -(NSString*)trim;
--(BOOL) startsWith:(NSString*)substring options:(unsigned)mask;
--(BOOL) endsWith:(NSString*)substring options:(unsigned)mask;
+-(BOOL) startsWith:(NSString*)substring options:(NSStringCompareOptions)mask;
+-(BOOL) endsWith:(NSString*)substring options:(NSStringCompareOptions)mask;
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag;
 -(NSString*) filteredStringForLatex;
 -(NSString*) replaceYenSymbol;

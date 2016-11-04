@@ -1370,7 +1370,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end setCompositionConfigurations:
 
--(int) compositionConfigurationsDocumentIndex
+-(NSInteger) compositionConfigurationsDocumentIndex
 {
   NSInteger result = 0;
   NSArrayController* compositionsController = [self lazyCompositionConfigurationsControllerWithCreationIfNeeded:NO];
@@ -1419,7 +1419,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSDictionary* result = nil;
   NSArray* configurations = [self compositionConfigurations];
-  unsigned int selectedIndex = (unsigned)Clip_i(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
+  NSUInteger selectedIndex = (NSUInteger)Clip_N(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
   result = (selectedIndex < [configurations count]) ? [configurations objectAtIndex:selectedIndex] : nil;
   return result;
 }
@@ -1428,7 +1428,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 -(void) setCompositionConfigurationDocument:(NSDictionary*)value
 {
   NSMutableArray* configurations = [[self compositionConfigurations] mutableCopy];
-  unsigned int selectedIndex = (unsigned)Clip_i(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
+  NSUInteger selectedIndex = (NSUInteger)Clip_N(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
   if (selectedIndex < [configurations count])
   {
     [configurations replaceObjectAtIndex:selectedIndex withObject:value];
@@ -1769,7 +1769,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
 -(int) encapsulationsSelectedIndex
 {
-  int result = 0;
+  NSInteger result = 0;
   Boolean ok = NO;
   if (self->isLaTeXiT)
     result = [[NSUserDefaults standardUserDefaults] integerForKey:CurrentEncapsulationIndexKey];
@@ -1783,7 +1783,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSString* result = nil;
   NSArray* encapsulations = [self encapsulations];
-  unsigned int selectedIndex = (unsigned)Clip_i(0, [self encapsulationsSelectedIndex], [encapsulations count]);
+  NSUInteger selectedIndex = (NSUInteger)Clip_N(0, [self encapsulationsSelectedIndex], [encapsulations count]);
   result = (selectedIndex < [encapsulations count]) ? [encapsulations objectAtIndex:selectedIndex] : nil;
   return result;
 }

@@ -831,8 +831,8 @@ static LaTeXProcessor* sharedInstance = nil;
   NSRange firstCharLocation = [body rangeOfString:firstChar];
   NSRange rangeOfTrimmedHeader = NSMakeRange(0, (firstCharLocation.location != NSNotFound) ? firstCharLocation.location : 0);
   NSString* trimmedHeader = [body substringWithRange:rangeOfTrimmedHeader];
-  unsigned int nbNewLinesInTrimmedHeader = MAX(1U, [[trimmedHeader componentsSeparatedByString:@"\n"] count]);
-  int errorLineShift = MAX((int)0, (int)nbNewLinesInTrimmedHeader-1);
+  NSUInteger nbNewLinesInTrimmedHeader = MAX(1U, [[trimmedHeader componentsSeparatedByString:@"\n"] count]);
+  NSUInteger errorLineShift = MAX((int)0, (int)nbNewLinesInTrimmedHeader-1);
   
   NSDictionary* additionalProcessingScripts = [compositionConfiguration compositionConfigurationAdditionalProcessingScripts];
   
@@ -1496,7 +1496,7 @@ static LaTeXProcessor* sharedInstance = nil;
   }//end for each line
 
   NSMutableArray* filteredErrors = [NSMutableArray arrayWithCapacity:[errorLines count]];
-  const unsigned int errorLineIndexCount = [errorLines count];
+  const NSUInteger errorLineIndexCount = [errorLines count];
   errorLineIndex = 0;
   for(errorLineIndex = 0 ; errorLineIndex<errorLineIndexCount ; ++errorLineIndex)
   {
@@ -1839,7 +1839,7 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSDictionary* objects = [object dynamicCastToClass:[NSDictionary class]];
   NSString* informativeText1 = [[objects objectForKey:@"informativeText1"] dynamicCastToClass:[NSString class]];
-  int displayError =
+  NSInteger displayError =
     NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), informativeText1,
                     NSLocalizedString(@"OK", @"OK"),
                     NSLocalizedString(@"Display the error message", @"Display the error message"),

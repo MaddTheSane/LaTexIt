@@ -10,7 +10,7 @@
 
 @interface NSIndexSet (Extended)
 
-//returns a representation of the receiver as an array of unsigned NSNumbers
--(NSArray*) array;
+///returns a representation of the receiver as an array of unsigned NSNumbers
+-(NSArray<NSNumber*>*) array;
 
 @end

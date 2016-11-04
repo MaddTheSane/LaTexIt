@@ -18,12 +18,12 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 @class LineCountRulerView;
 @class SMLSyntaxColouring;
 
-@interface LineCountTextView : NSTextView {
+@interface LineCountTextView : NSTextView <NSTextDelegate> {
   SMLSyntaxColouring* syntaxColouring;
-  NSMutableArray*     lineRanges;      //contains the ranges of each line
-  NSMutableSet*       forbiddenLines;  //lines that cannot be edited
+  NSMutableArray*     lineRanges;      ///<contains the ranges of each line
+  NSMutableSet*       forbiddenLines;  ///<lines that cannot be edited
   LineCountRulerView* lineCountRulerView;
-  int                 lineShift; //the displayed numerotation of the lines may start at a value different from 1
+  NSInteger           lineShift; ///<the displayed numerotation of the lines may start at a value different from 1
   NSDragOperation     acceptDrag;
   BOOL                spellCheckerHasBeenInitialized;
   NSUInteger          previousSelectedRangeLocation;
@@ -35,14 +35,15 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
 
 -(LineCountRulerView*) lineCountRulerView;
--(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line
--(void) setLineShift:(int)aShift; //defines the shift in the displayed line numbers
--(int)  lineShift;
+-(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden; ///<change status (forbidden or not) of a line
+@property NSInteger lineShift;
+-(void) setLineShift:(NSInteger)aShift; ///<defines the shift in the displayed line numbers
+-(NSInteger)  lineShift;
 -(NSArray*) lineRanges;
--(unsigned int) nbLines; //the number of lines in the text
--(void) clearErrors; //remove error markers
--(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message; //set error markers
--(BOOL) gotoLine:(int)row;//scroll to visible line <row>
+-(NSInteger) nbLines; ///<the number of lines in the text
+-(void) clearErrors; ///<remove error markers
+-(void) setErrorAtLine:(NSUInteger)lineIndex message:(NSString*)message; ///<set error markers
+-(BOOL) gotoLine:(NSInteger)row;///<scroll to visible line <row>
 
 -(SMLSyntaxColouring*) syntaxColouring;
 

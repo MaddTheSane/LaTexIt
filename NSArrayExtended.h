@@ -6,10 +6,9 @@
 // This file is an extension of the NSArray class
 
 #import <Cocoa/Cocoa.h>
+#import "DeepCopying.h"
 
-@interface NSArray (Extended)
-
--(id) firstObject;
+@interface NSArray (Extended) <DeepCopying, DeepMutableCopying>
 
 //checks if the array contains an object, based on adress comparison, not isEqual:
 -(BOOL) containsObjectIdenticalTo:(id)object;
@@ -17,8 +16,8 @@
 //returns a copy of the receiver in the reversed order
 -(NSArray*) reversed;
 
--(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index;
--(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
+-(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index;
+-(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
 -(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 

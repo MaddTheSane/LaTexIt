@@ -6,6 +6,7 @@
 //  Copyright 2006 Pierre Chatelier. All rights reserved.
 //
 
+#include <tgmath.h>
 #import <Cocoa/Cocoa.h>
 
 #import "LaTeXiTSharedTypes.h"
@@ -50,6 +51,55 @@ FOUNDATION_STATIC_INLINE unsigned long  Clip_ul(unsigned long inf, unsigned long
 FOUNDATION_STATIC_INLINE          float Clip_f(float inf, float x, float sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE      CGFloat Clip_cgf(CGFloat inf, CGFloat x, CGFloat sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE         double Clip_d(double inf, double x, double sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
+
+#define _TG_ATTRS __attribute__((__overloadable__, __always_inline__))
+
+static inline char
+_TG_ATTRS
+__tg_Clip_N(char inf, char x, char sup) {return Clip_c(inf, x, sup);}
+
+static inline unsigned char
+_TG_ATTRS
+__tg_Clip_N(unsigned char inf, unsigned char x, unsigned char sup) {return Clip_uc(inf, x, sup);}
+
+static inline short
+_TG_ATTRS
+__tg_Clip_N(short inf, short x, short sup) {return Clip_s(inf, x, sup);}
+
+static inline unsigned short
+_TG_ATTRS
+__tg_Clip_N(unsigned short inf, unsigned short x, unsigned short sup) {return Clip_us(inf, x, sup);}
+
+static inline int
+_TG_ATTRS
+__tg_Clip_N(int inf, int x, int sup) {return Clip_i(inf, x, sup);}
+
+static inline unsigned int
+_TG_ATTRS
+__tg_Clip_N(unsigned int inf, unsigned int x, unsigned int sup) {return Clip_ui(inf, x, sup);}
+
+static inline long
+_TG_ATTRS
+__tg_Clip_N(long inf, long x, long sup) {return Clip_l(inf, x, sup);}
+
+static inline unsigned long
+_TG_ATTRS
+__tg_Clip_N(unsigned long inf, unsigned long x, unsigned long sup) {return Clip_ul(inf, x, sup);}
+
+static inline float
+_TG_ATTRS
+__tg_Clip_N(float inf, float x, float sup) {return Clip_f(inf, x, sup);}
+
+static inline double
+_TG_ATTRS
+__tg_Clip_N(double inf, double x, double sup) {return Clip_d(inf, x, sup);}
+
+
+#undef Clip_N
+#define Clip_N(__x, __y, __z)                                \
+		__tg_Clip_N(__tg_promote3((__x), (__y), (__z))(__x), \
+					__tg_promote3((__x), (__y), (__z))(__y), \
+					__tg_promote3((__x), (__y), (__z))(__z))
 
 NSString* GetMySVGPboardType(void);
 NSString* GetMyPNGPboardType(void);

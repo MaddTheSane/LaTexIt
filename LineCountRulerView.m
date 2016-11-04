@@ -13,6 +13,7 @@
 static NSImage* errorIcon = nil;
 
 @implementation LineCountRulerView
+@synthesize lineShift;
 
 +(void) initialize
 {
@@ -47,18 +48,12 @@ static NSImage* errorIcon = nil;
 //end textDidChange:
 
 //the shift allows to start the numeratation at another number than 1
--(void) setLineShift:(int)aShift
+-(void) setLineShift:(NSInteger)aShift
 {
   lineShift = aShift;
   [self setNeedsDisplay:YES];
 }
 //end setLineShift:
-
--(int) lineShift
-{
-  return lineShift;
-}
-//end lineShift:
 
 //draws error markers and line numbers
 -(void) drawHashMarksAndLabelsInRect:(NSRect)aRect
@@ -77,7 +72,7 @@ static NSImage* errorIcon = nil;
     rect.size.width = MAX(rect.size.width, 1);
     if (NSIntersectsRect(rect, visibleRect))
     {
-      NSString* numberString = [NSString stringWithFormat:@"%d", lineNumber+lineShift];
+      NSString* numberString = [NSString stringWithFormat:@"%ld", lineNumber+lineShift];
       NSAttributedString* attrNumberString = [[[NSAttributedString alloc] initWithString:numberString
                                                                           attributes:attributes] autorelease];
       NSPoint origin = NSMakePoint([self frame].size.width-[attrNumberString size].width-2,
@@ -89,7 +84,7 @@ static NSImage* errorIcon = nil;
 //end drawHashMarksAndLabelsInRect:
 
 //adds an error marker
--(void) setErrorAtLine:(int)lineIndex message:(NSString*)message
+-(void) setErrorAtLine:(NSInteger)lineIndex message:(NSString*)message
 {
   --lineIndex; //0 based-system
   lineIndex -= lineShift;

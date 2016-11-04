@@ -8,13 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NSMutableArray (Extended)
+@interface NSMutableArray<ObjectType> (Extended)
 
--(void) safeAddObject:(id)object;
+-(void) safeAddObject:(ObjectType)object;
 
 //inserts another array's content at a given index
--(void) insertObjectsFromArray:(NSArray *)array atIndex:(int)index;
+-(void) insertObjectsFromArray:(NSArray<ObjectType> *)array atIndex:(NSInteger)index;
 
--(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
 @end

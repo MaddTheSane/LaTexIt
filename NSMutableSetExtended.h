@@ -8,8 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NSMutableSet (Extended)
+@interface NSMutableSet<ObjectType> (Extended)
 
--(void) safeAddObject:(id)object;
+-(void) safeAddObject:(ObjectType)object;
 
 @end

@@ -10,7 +10,7 @@
 
 @interface NSSegmentedControl (Extended)
 
--(int) selectedSegmentTag;
+@property (readonly) NSInteger selectedSegmentTag;
 -(void) sizeToFitWithSegmentWidth:(CGFloat)segmentWidth useSameSize:(BOOL)useSameSize;
 
 @end

@@ -8,12 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@protocol DeepCopying
+@protocol DeepCopying <NSObject>
 -(id) deepCopy;
 -(id) deepCopyWithZone:(NSZone*)zone;
 @end
 
-@protocol DeepMutableCopying
+@protocol DeepMutableCopying <NSObject>
 -(id) deepMutableCopy;
 -(id) deepMutableCopyWithZone:(NSZone*)zone;
 @end

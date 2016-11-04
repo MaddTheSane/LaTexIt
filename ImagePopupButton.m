@@ -10,6 +10,7 @@
 
 
 @implementation ImagePopupButton
+@synthesize image;
 
 -(void) awakeFromNib
 {
@@ -21,18 +22,6 @@
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
-}
-
--(void) setImage:(NSImage*)anImage
-{
-  [anImage retain];
-  [image release];
-  image = anImage;
-}
-
--(NSImage*) image
-{
-  return image;
 }
 
 -(void) _menuDidEndTrackingNotification:(NSNotification*)notification

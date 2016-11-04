@@ -15,8 +15,8 @@
 extern NSString* LibraryItemsArchivedPboardType;
 extern NSString* LibraryItemsWrappedPboardType;
 
-typedef enum {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN} library_import_option_t;
-typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRARY_EXPORT_FORMAT_TEX_SOURCE} library_export_format_t;
+typedef NS_ENUM(NSInteger, library_import_option_t) {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN};
+typedef NS_ENUM(NSInteger, library_export_format_t) {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRARY_EXPORT_FORMAT_TEX_SOURCE};
 
 @class LibraryItem;
 @class LibraryGroupItem;

@@ -33,7 +33,7 @@
 
 #import "RegexKitLite.h"
 
-#import <Carbon/Carbon.h>
+#include <Carbon/Carbon.h>
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
@@ -48,7 +48,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 @implementation LineCountTextView
 
 static NSArray* WellKnownLatexKeywords = nil;
-static int SpellCheckerDocumentTag = 0;
+static NSInteger SpellCheckerDocumentTag = 0;
 
 +(void) initialize
 {
@@ -145,18 +145,18 @@ static int SpellCheckerDocumentTag = 0;
   if (!spellCheckerHasBeenInitialized)
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
       NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
       [keywordsToCheck addObject:[package objectForKey:@"name"]];
       NSArray* kw = [package objectForKey:@"keywords"];
-      unsigned int count = [kw count];
+      NSUInteger count = [kw count];
       while(count--)
         [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
     }
     [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
-    unsigned int count = [keywordsToCheck count];
+    NSUInteger count = [keywordsToCheck count];
     while(count--)
     {
       NSString* w = [keywordsToCheck objectAtIndex:count];
@@ -347,7 +347,7 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end lineRanges
 
--(unsigned int) nbLines
+-(NSInteger) nbLines
 {
   return lineRanges ? [lineRanges count] : 0;
 }
@@ -359,9 +359,9 @@ static int SpellCheckerDocumentTag = 0;
   
   NSString* string = [self string];
   NSArray* lines = [(string ? string : [NSString string]) componentsSeparatedByString:@"\n"];
-  const int count = [lines count];
-  int index = 0;
-  int location = 0;
+  const NSInteger count = [lines count];
+  NSInteger index = 0;
+  NSInteger location = 0;
   for(index = 0 ; index < count ; ++index)
   {
     NSString* line = [lines objectAtIndex:index];
@@ -380,14 +380,14 @@ static int SpellCheckerDocumentTag = 0;
 //end clearErrors
 
 //add error markers
--(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message
+-(void) setErrorAtLine:(NSUInteger)lineIndex message:(NSString*)message
 {
   [lineCountRulerView setErrorAtLine:lineIndex message:message];
 }
 //end setErrorAtLine:message:
 
 //change the shift in displayed numerotation
--(void) setLineShift:(int)aShift
+-(void) setLineShift:(NSInteger)aShift
 {
   lineShift = aShift;
   [lineCountRulerView setLineShift:aShift];
@@ -395,19 +395,19 @@ static int SpellCheckerDocumentTag = 0;
 //end setLineShift:
 
 //the shift in displayed numerotation
--(int) lineShift
+-(NSInteger) lineShift
 {
   return lineShift;
 }
 //end lineShift
 
 //change the status (forbidden or not) of a line (forbidden means : cannot be edited)
--(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden
+-(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden
 {
   if (forbidden)
-    [forbiddenLines addObject:[NSNumber numberWithUnsignedInt:index]];
+    [forbiddenLines addObject:[NSNumber numberWithUnsignedInteger:index]];
   else
-    [forbiddenLines removeObject:[NSNumber numberWithUnsignedInt:index]];
+    [forbiddenLines removeObject:[NSNumber numberWithUnsignedInteger:index]];
 }
 //end setForbiddenLine:forbidden
 
@@ -449,7 +449,7 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end rulerView:shouldAddMarker:
 
--(BOOL) gotoLine:(int)row
+-(BOOL) gotoLine:(NSInteger)row
 {
   BOOL ok = NO;
   --row; //the first line is at 0, but the user thinks it is 1
@@ -576,7 +576,7 @@ static int SpellCheckerDocumentTag = 0;
     if ([type isEqualToString:LibraryItemsWrappedPboardType])
     {
       NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
-      unsigned int count = [libraryItemsWrappedArray count];
+      NSUInteger count = [libraryItemsWrappedArray count];
       while(count-- && !equation)
       {
         NSString* objectIDAsString = [libraryItemsWrappedArray objectAtIndex:count];
@@ -589,7 +589,7 @@ static int SpellCheckerDocumentTag = 0;
     else if ([type isEqualToString:LibraryItemsArchivedPboardType])
     {
       NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-      unsigned int count = [libraryItemsArray count];
+      NSUInteger count = [libraryItemsArray count];
       while(count-- && !equation)
       {
         LibraryEquation* libraryEquation =
@@ -895,19 +895,19 @@ static int SpellCheckerDocumentTag = 0;
 	if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
 		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
 	
-	unsigned int location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
-	unsigned int originalLocation = location;
+	NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
+	NSUInteger originalLocation = location;
 
 	NSString *completeString = [self string];
 	unichar characterToCheck = [completeString characterAtIndex:location];
 	unsigned short skipMatchingBrace = 0;
-	unsigned int lengthOfString = [completeString length];
+	NSUInteger lengthOfString = [completeString length];
 	if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
 		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
 	
 	BOOL triedToMatchBrace = NO;
   static const unichar parenthesis[3][2] = {{'(', ')'}, {'[', ']'}, {'$', '$'}};
-  int parenthesisIndex = 0;
+  NSInteger parenthesisIndex = 0;
   for(parenthesisIndex = 0 ;
       (parenthesisIndex<3) && (characterToCheck != parenthesis[parenthesisIndex][1]) ;
       ++parenthesisIndex);
@@ -972,7 +972,7 @@ static int SpellCheckerDocumentTag = 0;
   if (isBackslashedWord)
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
       NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
@@ -984,7 +984,7 @@ static int SpellCheckerDocumentTag = 0;
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
-    unsigned int nbPropositions = [newPropositions count];
+    NSUInteger nbPropositions = [newPropositions count];
     while(nbPropositions--)
     {
       NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
@@ -1005,7 +1005,7 @@ static int SpellCheckerDocumentTag = 0;
     NSRange reducedRange = NSMakeRange(charRange.location+1, charRange.length-1);
     [newPropositions setArray:[super completionsForPartialWordRange:reducedRange indexOfSelectedItem:index]];
     //add the missing backslashes
-    unsigned int count = [newPropositions count];
+    NSUInteger count = [newPropositions count];
     while(count--)
     {
       NSString* proposition = [newPropositions objectAtIndex:count];
@@ -1017,7 +1017,7 @@ static int SpellCheckerDocumentTag = 0;
   if (!isBackslashedWord) //try a latex environment and add normal completions
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
       NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
@@ -1029,7 +1029,7 @@ static int SpellCheckerDocumentTag = 0;
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
-    unsigned int nbPropositions = [newPropositions count];
+    NSUInteger nbPropositions = [newPropositions count];
     while(nbPropositions--)
     {
       NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
@@ -1094,8 +1094,8 @@ static int SpellCheckerDocumentTag = 0;
 
 -(void) insertTextAtMousePosition:(id)object
 {
-  unsigned int index = [self characterIndexForPoint:[NSEvent mouseLocation]];
-  unsigned int length = [[self textStorage] length];
+  NSUInteger index = [self characterIndexForPoint:[NSEvent mouseLocation]];
+  NSUInteger length = [[self textStorage] length];
   if (index <= length)
   {
     NSDictionary* attributes =

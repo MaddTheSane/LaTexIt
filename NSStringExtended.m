@@ -109,11 +109,11 @@
 }
 //end trim
 
--(BOOL) startsWith:(NSString*)substring options:(unsigned)mask
+-(BOOL) startsWith:(NSString*)substring options:(NSStringCompareOptions)mask
 {
   BOOL ok = NO;
-  unsigned int selfLength = [self length];
-  unsigned int subLength = [substring length];
+  NSUInteger selfLength = [self length];
+  NSUInteger subLength = [substring length];
   if (selfLength >= subLength)
   {
     NSRange rangeOfBegin = NSMakeRange(0, subLength);
@@ -123,11 +123,11 @@
 }
 //end startsWith:options:
 
--(BOOL) endsWith:(NSString*)substring options:(unsigned)mask
+-(BOOL) endsWith:(NSString*)substring options:(NSStringCompareOptions)mask
 {
   BOOL ok = NO;
-  unsigned int selfLength = [self length];
-  unsigned int subLength = [substring length];
+  NSUInteger selfLength = [self length];
+  NSUInteger subLength = [substring length];
   if (selfLength >= subLength)
   {
     NSRange rangeOfEnd = NSMakeRange(selfLength-subLength, subLength);
@@ -164,22 +164,16 @@
 -(NSString*) replaceYenSymbol
 {
   NSMutableString* stringWithBackslash = [NSMutableString stringWithString:self];
-  static NSString* yenString = nil;
-  if (!yenString)
-  {
-    unichar yenChar = 0x00a5;
-    yenString = [[NSString alloc] initWithCharacters:&yenChar length:1]; //the yen symbol as a string
-  }
-  [stringWithBackslash replaceOccurrencesOfRegex:[NSString stringWithFormat:@"%@([[:space:]]+)", yenString]
+  [stringWithBackslash replaceOccurrencesOfRegex:@"¥([[:space:]]+)"
                                       withString:@"\\\\yen{}$1" options:RKLCaseless|RKLMultiline
                                            range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  [stringWithBackslash replaceOccurrencesOfRegex:[NSString stringWithFormat:@"%@%@", yenString, yenString]
+  [stringWithBackslash replaceOccurrencesOfRegex:@"¥¥"
                                       withString:@"\\\\\\\\" options:RKLCaseless|RKLMultiline
                                            range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  [stringWithBackslash replaceOccurrencesOfRegex:[NSString stringWithFormat:@"%@([^[[:space:]]0-9])", yenString]
+  [stringWithBackslash replaceOccurrencesOfRegex:@"¥([^[[:space:]]0-9])"
                                       withString:@"\\\\$1" options:RKLCaseless|RKLMultiline
                                            range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  [stringWithBackslash replaceOccurrencesOfRegex:yenString
+  [stringWithBackslash replaceOccurrencesOfRegex:@"¥"
                                       withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
                                            range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
 #ifdef ARC_ENABLED

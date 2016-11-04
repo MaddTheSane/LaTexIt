@@ -264,8 +264,6 @@ typedef NSInteger NSDraggingContext;
   if (image && ![image pdfImageRepresentation] && self->imageRep)
   {
     [image setCacheMode:NSImageCacheNever];
-    [image setDataRetained:YES];
-    [image setScalesWhenResized:YES];
     [image addRepresentation:self->imageRep];
     //[image recache];
   }//end if (image && ![image pdfImageRepresentation] && self->imageRep)
@@ -273,8 +271,6 @@ typedef NSInteger NSDraggingContext;
   {
     image = [[[NSImage alloc] initWithSize:[self->imageRep size]] autorelease];
     [image setCacheMode:NSImageCacheNever];
-    [image setDataRetained:YES];
-    [image setScalesWhenResized:YES];
     [image addRepresentation:self->imageRep];
     //[image recache];
   }//end if (!image && self->imageRep)
@@ -285,7 +281,6 @@ typedef NSInteger NSDraggingContext;
 
 -(void) setImage:(NSImage*)image
 {
-  [image setScalesWhenResized:YES];
   [super setImage:image];
   [[NSNotificationCenter defaultCenter] postNotificationName:ImageDidChangeNotification object:self];
 }
@@ -652,7 +647,7 @@ typedef NSInteger NSDraggingContext;
   [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
   if (self->isDragging && (lazyDataProvider == self))
   {
-    [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*//* NSFilenamesPboardType, NSURLPboardType,*/ nil]
+    [pasteboard addTypes:@[/*NSFileContentsPboardType,*//* NSFilenamesPboardType, NSURLPboardType,*/ ]
                    owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
   DebugLog(1, @"<");

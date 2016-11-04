@@ -36,14 +36,16 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSDate.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class NSPasteboard;
 
-// Use this pasteboard type to put LinkBack data to the pasteboard.  Use MakeLinkBackData() to create the data.
-extern NSString* LinkBackPboardType ;
+// Use this pasteboard type to put LinkBack data to the pasteboard.  Use +[NSDictionary linkBackDataWithServerName:appData:] to create the data.
+extern NSString*const LinkBackPboardType ;
 
 // Default Action Names.  These will be localized for you automatically.
-extern NSString* LinkBackEditActionName ;
-extern NSString* LinkBackRefreshActionName ;
+extern NSString*const LinkBackEditActionName ;
+extern NSString*const LinkBackRefreshActionName ;
 
 //
 // Support Functions
@@ -55,9 +57,9 @@ extern NSString* LinkBackEditNoneMenuTitle(void);
 // 
 // Deprecated Support Functions -- use LinkBack Data Category instead
 //
-id MakeLinkBackData(NSString* serverName, id appData) ;
-id LinkBackGetAppData(id linkBackData) ;
-BOOL LinkBackDataBelongsToActiveApplication(id data) ;
+id __null_unspecified MakeLinkBackData(NSString* __null_unspecified serverName, id __null_unspecified appData) DEPRECATED_ATTRIBUTE;
+id __null_unspecified LinkBackGetAppData(id __null_unspecified linkBackData) DEPRECATED_ATTRIBUTE;
+BOOL LinkBackDataBelongsToActiveApplication(id __null_unspecified data) DEPRECATED_ATTRIBUTE;
 
 //
 // LinkBack Data Category
@@ -67,21 +69,21 @@ BOOL LinkBackDataBelongsToActiveApplication(id data) ;
 
 @interface NSDictionary (LinkBackData)
 
-+ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(id)appData ;
++ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData ;
 
-+ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(id)appData suggestedRefreshRate:(NSTimeInterval)rate ;
++ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData suggestedRefreshRate:(NSTimeInterval)rate ;
 
-+ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(id)appData actionName:(NSString*)action suggestedRefreshRate:(NSTimeInterval)rate ;
++ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData actionName:(nullable NSString*)action suggestedRefreshRate:(NSTimeInterval)rate ;
 
-- (BOOL)linkBackDataBelongsToActiveApplication ;
+@property (readonly) BOOL linkBackDataBelongsToActiveApplication ;
 
-- (id)linkBackAppData ;
-- (NSString*)linkBackSourceApplicationName ;
-- (NSString*)linkBackActionName ;
-- (NSString*)linkBackVersion ;
-- (NSURL*)linkBackApplicationURL ;
+- (nullable id)linkBackAppData ;
+- (nullable NSString*)linkBackSourceApplicationName ;
+- (nullable NSString*)linkBackActionName ;
+- (nullable NSString*)linkBackVersion ;
+- (nullable NSURL*)linkBackApplicationURL ;
 
-- (NSTimeInterval)linkBackSuggestedRefreshRate ;
+@property (readonly) NSTimeInterval linkBackSuggestedRefreshRate ;
 
 - (NSString*)linkBackEditMenuTitle ;
 
@@ -93,27 +95,27 @@ BOOL LinkBackDataBelongsToActiveApplication(id data) ;
 
 @class LinkBack ;
 
-@protocol LinkBackServerDelegate
+@protocol LinkBackServerDelegate <NSObject>
 - (void)linkBackDidClose:(LinkBack*)link ;
 - (void)linkBackClientDidRequestEdit:(LinkBack*)link ;
 @end
 
-@protocol LinkBackClientDelegate
+@protocol LinkBackClientDelegate <NSObject>
 - (void)linkBackDidClose:(LinkBack*)link ;
 - (void)linkBackServerDidSendEdit:(LinkBack*)link ;
 @end
 
-// used for cross app communications
-@protocol LinkBack
+/// used for cross app communications
+@protocol LinkBack <NSObject>
 - (oneway void)remoteCloseLink ;
-- (void)requestEditWithPasteboardName:(bycopy NSString*)pboardName ; // from client
-- (void)refreshEditWithPasteboardName:(bycopy NSString*)pboardName ; // from server
+- (void)requestEditWithPasteboardName:(bycopy NSString*)pboardName ; ///< from client
+- (void)refreshEditWithPasteboardName:(bycopy NSString*)pboardName ; ///< from server
 @end
 
 @interface LinkBack : NSObject <LinkBack> {
-    LinkBack* peer ; // the client or server on the other side.
+    LinkBack* peer ; ///< the client or server on the other side.
     BOOL isServer ; 
-    id delegate ;
+    __unsafe_unretained id delegate ;
     NSPasteboard* pboard ;
     id repobj ; 
     NSString* sourceName ;
@@ -121,22 +123,21 @@ BOOL LinkBackDataBelongsToActiveApplication(id data) ;
     NSString* key ;
 }
 
-+ (LinkBack*)activeLinkBackForItemKey:(id)key ;
-// works for both the client and server side.  Valid only while a link is connected.
+/// works for both the client and server side.  Valid only while a link is connected.
++ (nullable LinkBack*)activeLinkBackForItemKey:(id)key ;
 
 // ...........................................................................
 // General Use methods
 //
-- (NSPasteboard*)pasteboard ;
+@property (readonly, retain) NSPasteboard *pasteboard ;
 - (void)closeLink ;
 
-- (id)representedObject ;
-- (void)setRepresentedObject:(id)obj ;
-// Applications can use this represented object to attach some meaning to the live link.  For example, a client application may set this to the object to be modified when the edit is refreshed.  This retains its value.
+/// Applications can use this represented object to attach some meaning to the live link.  For example, a client application may set this to the object to be modified when the edit is refreshed.  This retains its value.
+@property (readwrite, retain, nullable) id representedObject ;
 
-- (NSString*)sourceName ;
-- (NSString*)sourceApplicationName ;
-- (NSString*)itemKey ; // maybe this matters only on the client side.
+@property (readonly, copy) NSString *sourceName ;
+@property (readonly, copy) NSString *sourceApplicationName ;
+@property (readonly, copy) NSString *itemKey ; // maybe this matters only on the client side.
 
 // ...........................................................................
 // Server-side methods
@@ -152,7 +153,7 @@ BOOL LinkBackDataBelongsToActiveApplication(id data) ;
 // ...........................................................................
 // Client-Side Methods
 //
-+ (LinkBack*)editLinkBackData:(id)data sourceName:(NSString*)aName delegate:(id<LinkBackClientDelegate>)del itemKey:(NSString*)aKey ;
++ (nullable LinkBack*)editLinkBackData:(id)data sourceName:(NSString*)aName delegate:(id<LinkBackClientDelegate>)del itemKey:(NSString*)aKey ;
 
 @end
 
@@ -167,3 +168,5 @@ BOOL LinkBackDataBelongsToActiveApplication(id data) ;
 - (void)requestEdit ;
 
 @end
+
+NS_ASSUME_NONNULL_END

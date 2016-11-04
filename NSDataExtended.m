@@ -39,6 +39,7 @@
 {
   NSMutableData* result = [NSMutableData data];
   #if defined(__clang__)
+  result = [[self alloc] initWithBase64EncodedString:base64 options:0];
   #else
   BIO* mem = BIO_new_mem_buf((void*)[base64 UTF8String], [base64 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
   BIO* b64 = BIO_new(BIO_f_base64());
@@ -71,6 +72,7 @@
 {
   NSString* result = nil;
   #if defined(__clang__)
+  result = [self base64EncodedStringWithOptions:0];
   #else
   BIO* mem = BIO_new(BIO_s_mem());
   BIO* b64 = BIO_new(BIO_f_base64());
@@ -98,7 +100,7 @@
 {
   NSString* result = nil;
   unsigned char sha[CC_SHA1_DIGEST_LENGTH] = {0};
-  CC_SHA1([self bytes], [self length], sha);
+  CC_SHA1([self bytes], (CC_LONG)[self length], sha);
   NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:CC_SHA1_DIGEST_LENGTH freeWhenDone:NO];
   result = [wrapper encodeBase64WithNewlines:NO];
   #ifdef ARC_ENABLED

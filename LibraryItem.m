@@ -26,6 +26,10 @@
 static NSEntityDescription* cachedEntity = nil;
 
 @implementation LibraryItem
+@dynamic sortIndex;
+@dynamic title;
+@dynamic parent;
+@dynamic comment;
 
 +(NSEntityDescription*) entity
 {
@@ -93,22 +97,22 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end setTitle:
 
--(unsigned int) sortIndex
+-(NSUInteger) sortIndex
 {
-  unsigned int result = 0;
+  NSUInteger result = 0;
   [self willAccessValueForKey:@"sortIndex"];
-  result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntValue];
+  result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntegerValue];
   [self didAccessValueForKey:@"sortIndex"];
   return result;
 }
 //end sortIndex
 
--(void) setSortIndex:(unsigned int)value
+-(void) setSortIndex:(NSUInteger)value
 {
   if (value != [self sortIndex])
   {
     [self willChangeValueForKey:@"sortIndex"];
-    [self setPrimitiveValue:[NSNumber numberWithUnsignedInt:value] forKey:@"sortIndex"];
+    [self setPrimitiveValue:@(value) forKey:@"sortIndex"];
     [self didChangeValueForKey:@"sortIndex"];
   }//end if (value != [self sortIndex])
 }
@@ -218,7 +222,7 @@ static NSEntityDescription* cachedEntity = nil;
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   [self setTitle:[coder decodeObjectForKey:@"title"]];
-  [self setSortIndex:[coder decodeIntForKey:@"sortIndex"]];
+  [self setSortIndex:[coder decodeIntegerForKey:@"sortIndex"]];
   [self setComment:[coder decodeObjectForKey:@"comment"]];  
   return self;
 }
@@ -228,7 +232,7 @@ static NSEntityDescription* cachedEntity = nil;
 {
   [coder encodeObject:@"2.8.1" forKey:@"version"];
   [coder encodeObject:[self title] forKey:@"title"];
-  [coder encodeInt:[self sortIndex] forKey:@"sortIndex"];
+  [coder encodeInteger:[self sortIndex] forKey:@"sortIndex"];
   [coder encodeObject:[self comment] forKey:@"comment"];
 }
 //end encodeWithCoder:
@@ -238,7 +242,7 @@ static NSEntityDescription* cachedEntity = nil;
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
      @"2.8.1", @"version",
      [self title], @"title",
-     [NSNumber numberWithUnsignedInt:[self sortIndex]], @"sortIndex",
+     @(self.sortIndex), @"sortIndex",
      [self comment], @"comment",
      nil];
   return plist;
