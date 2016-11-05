@@ -436,7 +436,7 @@
   nextSelectedItem = nextSelectedItem ? nextSelectedItem :
     [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:[self->libraryController rootItems]];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem : [[selectedItems lastObject] parent];
-  unsigned int nbSelectedItems = [selectedItems count];
+  NSUInteger nbSelectedItems = [selectedItems count];
   NSMutableSet* parentOfSelectedItems = [NSMutableSet setWithCapacity:[selectedItems count]];
   NSEnumerator* enumerator = [selectedItems objectEnumerator];
   LibraryItem* libraryItem = nil;
@@ -593,13 +593,13 @@
   LibraryItem* selectedItem = [self selectedItem];
   LibraryGroupItem* parentOfSelectedItem = (LibraryGroupItem*)[selectedItem parent];
   NSArray* brothers = !parentOfSelectedItem ? [self->libraryController rootItems] : [parentOfSelectedItem childrenOrdered];
-  int childIndex = !selectedItem ? [[self dataSource] outlineView:self numberOfChildrenOfItem:nil] :
-                   ((int)[brothers indexOfObject:selectedItem]+1);
+  NSInteger childIndex = !selectedItem ? [[self dataSource] outlineView:self numberOfChildrenOfItem:nil] :
+                   ([brothers indexOfObject:selectedItem]+1);
   [self pasteContentOfPasteboard:pasteboard onItem:parentOfSelectedItem childIndex:childIndex];
 }
 //end paste:
 
--(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(int)index
+-(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(NSInteger)index
 {
   BOOL result = NO;
   

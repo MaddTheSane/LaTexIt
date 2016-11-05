@@ -57,28 +57,28 @@
 - (id)initWithProcessSerialNumber:(ProcessSerialNumber)processSerialNumber;
 
 /*!
-	@method processSerialNumber
+	@property processSerialNumber
 	@abstract Get the Process Serial Number
 	@discussion Returns the process serial number for the recevier
 	@result A process serial number.
  */
-- (ProcessSerialNumber)processSerialNumber;
+@property (readonly) ProcessSerialNumber processSerialNumber;
 
 /*!
-	@method isFrontProcess
+	@property frontProcess
 	@abstract Is the process the front process.
 	@discussion Determines if the recevier is for a process that is currently front.
 	@result Returns <tt>YES</tt> if the process is front.
  */
-- (BOOL)isFrontProcess;
+@property (readonly, getter=isFrontProcess) BOOL frontProcess;
 
 /*!
-	@method isCurrentProcess
+	@property currentProcess
 	@abstract Is the process the current process.
 	@discussion Determines if the recevier is for a process that is current.
-	@result Returns <tt>YES</tt> if the process is current.
+	@result Returns \c YES if the process is current.
  */
-- (BOOL)isCurrentProcess;
+@property (readonly, getter=isCurrentProcess) BOOL currentProcess;
 
 /*!
 	@method makeFrontProcessFrontWindowOnly:
@@ -121,7 +121,7 @@
 	@discussion Initialises the recevier for the current process.
 	@result A initialised <tt>NDProcess</tt>
  */
-- (id)initWithCurrentProcess;
+- (instancetype)initWithCurrentProcess;
 
 /*!
 	@method initWithFrontProcess
@@ -129,7 +129,7 @@
 	@discussion Initialises the recevier for the front process.
 	@result A initialised <tt>NDProcess</tt>
  */
-- (id)initWithFrontProcess;
+- (instancetype)initWithFrontProcess;
 
 	/*!
 	@method initWithProcessID:
@@ -138,15 +138,15 @@
 	@param pid The process ID.
 	@result A initialised <tt>NDProcess</tt>
 	 */
-- (id)initWithProcessID:(pid_t)pid;
+- (instancetype)initWithProcessID:(pid_t)pid;
 
 /*!
-	@method everyProcess
+	@property everyProcess
 	@abstract Get every process.
-	@discussion Returns a <tt>NSArray</tt> of <tt>NDProcess</tt>s for every process.
+	@discussion Returns a \c NSArray of <tt>NDProcess</tt>s for every process.
 	@result An <tt>NSArray</tt> of <tt>NDProcess</tt>s.
  */
-+ (NSArray *)everyProcess;
+@property (class, readonly, copy) NSArray<NDProcess*> *everyProcess;
 
 /*!
 	@method everyProcessNamed:
@@ -155,7 +155,7 @@
 	@param name The process name to find.
 	@result An <tt>NSArray</tt> of <tt>NDProcess</tt>s.
  */
-+ (NSArray *)everyProcessNamed:(NSString *)name;
++ (NSArray<NDProcess*> *)everyProcessNamed:(NSString *)name;
 
 
 /*!
@@ -168,20 +168,20 @@
 + (NDProcess *)processWithProcessSerialNumber:(ProcessSerialNumber)processSerialNumber;
 
 /*!
-	@method currentProcess
+	@property currentProcess
 	@abstract Returns a new <tt>NDProcess</tt>.
 	@discussion Returns a <tt>NDProcess</tt> for the current process.
 	@result A <tt>NDProcess</tt> object.
  */
-+ (NDProcess *)currentProcess;
+@property (class, readonly, retain) NDProcess *currentProcess;
 
 /*!
-	@method frontProcess
+	@property frontProcess
 	@abstract Returns a new <tt>NDProcess</tt>.
 	@discussion Returns a <tt>NDProcess</tt> for the front process.
 	@result A <tt>NDProcess</tt> object.
  */
-+ (NDProcess *)frontProcess;
+@property (class, readonly, retain) NDProcess *frontProcess;
 
 /*!
 	@method processWithProcessID
@@ -242,16 +242,16 @@
 	@param URL The url of the process to return.
 	@result A <tt>NDProcess</tt> object.
  */
-+ (NSArray *)everyProcessBeginingWithURL:(NSURL *)URL;
++ (NSArray<NDProcess*> *)everyProcessBeginingWithURL:(NSURL *)URL;
 
 /*!
 	@method everyProcessBeginingWithPath:
 	@abstract Returns a <tt>NSArray</tt> of <tt>NDProcess</tt>s contained within the given path..
 	@discussion Returns a <tt>NSArray</tt> of <tt>NDProcess</tt> for the processes with in the supplied path, the path can be to the executable file within an appication package or a package its self or even a folder.
 	@param path The path of the process to return.
-	@result A <tt>NDProcess</tt> object.
+	@result A \c NDProcess object.
  */
-+ (NSArray *)everyProcessBeginingWithPath:(NSString *)path;
++ (NSArray<NDProcess*> *)everyProcessBeginingWithPath:(NSString *)path;
 
 /*!
 	@method processesEnumerater
@@ -262,66 +262,66 @@
 + (NSEnumerator *)processesEnumerater;
 
 /*!
-	@method isNoProcess
+	@property noProcess
 	@abstract Get type of process.
 	@discussion Is the process serial number <tt>kNoProcess</tt>.
 	@result Returns <tt>YES</tt> if process serial number is <tt>kNoProcess</tt>
  */
-- (BOOL)isNoProcess;
+@property (readonly, getter=isNoProcess) BOOL noProcess;
 
 /*!
-	@method isSystemProcess
+	@Property systemProcess
 	@abstract Get type of process.
 	@discussion Is the process serial number <tt>kSystemProcess</tt>.
 	@result Returns <tt>YES</tt> if process serial number is <tt>kSystemProcess</tt>
  */
-- (BOOL)isSystemProcess;
+@property (readonly, getter=isSystemProcess) BOOL systemProcess;
 
 /*!
-	@method isValid
+	@property valid
 	@abstract Is the process valid.
-	@discussion Attempts to get <tt>ProcessInfoRec</tt> and return true if no error. The process may not be running any more.
+	@discussion Attempts to get \c ProcessInfoRec and return true if no error. The process may not be running any more.
 	@result Returns <tt>YES</tt> if the is process valid.
  */
-- (BOOL)isValid;
+@property (readonly, getter=isValid) BOOL valid;
 
 @end
 
 /*!
 	@category NDProcess(ProcessInfoRec)
 	@abstract Methods to get additional process info.
-	@discussion These methods return information from the <tt>ProcessInfoRec</tt> sttruct.
+	@discussion These methods return information from the \c ProcessInfoRec sttruct.
  */
 @interface NDProcess (ProcessInfoRec)
 
 /*!
-	@method name
+	@property name
 	@abstract Process name.
 	@discussion The name of the process. For applications, this field contains the name of the application as designated by the user at the time the application was opened. For example, for foreground applications, the name is the name as it appears in the Dock.
-	@result A <tt>NSString</tt> containing the name.
+	@result A \c NSString containing the name.
  */
-- (NSString *)name;
+@property (readonly, copy) NSString *name;
 
 /*!
-	@method type
+	@property type
 	@abstract Process type
-	@discussion The file type of the application, generally <tt>'APPL'</tt> for applications and <tt>'appe'</tt> for background-only applications launched at startup.
+	@discussion The file type of the application, generally \c 'APPL' for applications and \c 'appe' for background-only applications launched at startup.
 	@result A four char code.
  */
-- (OSType)type;
+@property (readonly) OSType type;
 
 /*!
-	@method signature
+	@property signature
 	@abstract Process signature
 	@discussion The signature of the file containing the process (for example, the signature of the TeachText application is <tt>'ttxt'</tt>).
 	@result A four char code.
  */
-- (OSType)signature;
+@property (readonly) OSType signature;
 
 /*!
-	@method mode
+	@property mode
 	@abstract Process mode
-	@discussion Process mode flags. These flags indicate whether the process is an application or desk accessory. For applications, this field also returns information specified in the application’s <tt>'SIZE'</tt> resource. This information is returned as flags that can be combined with a bitwise or, though they probable are not all relevent to Mac OS X
+	@discussion Process mode flags. These flags indicate whether the process is an application or desk accessory. For applications, this field also returns information specified in the application’s \c 'SIZE' resource. This information is returned as flags that can be combined with a bitwise or, though they probable are not all relevent to Mac OS X
 	<ul>
 		<li>modeReserved</li>
 		<li>modeControlPanel</li>
@@ -343,46 +343,46 @@
 	@result A combination of the previously list values.
  */
 
-- (UInt32)mode;
+@property (readonly) UInt32 mode;
 
 /*!
-	@method launcher
+	@property launcher
 	@abstract Process launcher
-	@discussion A <tt>NDProcess</tt> for the process that launched the application. If the original launcher of the process is no longer open, the <tt>NDProcess</tt> will have the process serial number <tt>kNoProcess</tt>.
-	@result A <tt>NDProcess</tt> for the receviers launching process.
+	@discussion A \c NDProcess for the process that launched the application. If the original launcher of the process is no longer open, the \c NDProcess will have the process serial number <tt>kNoProcess</tt>.
+	@result A \c NDProcess for the receviers launching process.
  */
-- (NDProcess *)launcher;
+@property (readonly, retain) NDProcess *launcher;
 
 /*!
-	@method launchTime
+	@property launchTime
 	@abstract Launch time in seconds
 	@discussion The value of the Ticks global variable in secods at the time that the process was launched.
 	@result The time in <tt>NSTimeInterval</tt> (seconds).
  */
-- (NSTimeInterval)launchTime;
+@property (readonly) NSTimeInterval launchTime;
 
 /*!
 	@method url
 	@abstract Process url.
 	@discussion The url for the receviers process, this may be within the contents of some application package.
-	@result A file url <tt>NSURL</tt> to a file containing the process.
+	@result A file url \c NSURL to a file containing the process.
  */
-- (NSURL *)url;
+@property (readonly, retain) NSURL *url;
 
 /*!
 	@method path
 	@abstract Process path.
 	@discussion The path for the receviers process, this may be within the contents of some application package.
-	@result A path <tt>NSString</tt> to a file containing the process.
+	@result A path \c NSString to a file containing the process.
  */
-- (NSString *)path;
+@property (readonly, copy) NSString *path;
 
 /*!
 	@method processID
 	@abstract Obtains the preocess ID
 	@discussion Returns the UNIX ocess ID for the reciever.
-	@result A <tt>pid_t</tt> for the reciever or -1 if an error occurs.
+	@result A \c pid_t for the reciever or \c -1 if an error occurs.
  */
-- (pid_t)processID;
+@property (readonly) pid_t processID;
 
 @end

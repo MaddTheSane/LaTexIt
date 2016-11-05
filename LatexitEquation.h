@@ -63,26 +63,16 @@ extern NSString* LatexitEquationsPboardType;
 -(void) dispose;
 
 //accessors
--(NSData*) pdfData;
--(void) setPdfData:(NSData*)value;
--(NSAttributedString*) preamble;
--(void) setPreamble:(NSAttributedString*)value;
--(NSAttributedString*) sourceText;
--(void) setSourceText:(NSAttributedString*)value;
--(NSColor*) color;
--(void) setColor:(NSColor*)value;
--(double) baseline;
--(void) setBaseline:(double)value;
--(double) pointSize;
--(void) setPointSize:(double)value;
--(NSDate*) date;
--(void) setDate:(NSDate*)value;
--(latex_mode_t) mode;
--(void) setMode:(latex_mode_t)value;
--(NSColor*) backgroundColor;
--(void) setBackgroundColor:(NSColor*)value;
--(NSString*) title;
--(void) setTitle:(NSString*)value;
+@property (retain) NSData *pdfData;
+@property (retain) NSAttributedString *preamble;
+@property (retain) NSAttributedString *sourceText;
+@property (retain) NSColor *color;
+@property double baseline;
+@property double pointSize;
+@property (retain) NSDate *date;
+@property latex_mode_t mode;
+@property (retain) NSColor *backgroundColor;
+@property (copy) NSString *title;
 
 //transient
 -(NSImage*) pdfCachedImage;

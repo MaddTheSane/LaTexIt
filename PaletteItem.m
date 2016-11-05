@@ -35,7 +35,7 @@
   NSString* bulletString = [NSString stringWithCharacters:&bulletChar length:1];
   NSUInteger presetArgsCount = [[self->latexCode componentsMatchedByRegex:@"\\{.*?(\\{.*\\})*\\}"] count];
   NSMutableString* stringOfArguments = [NSMutableString string];
-  unsigned int i = 0;
+  NSUInteger i = 0;
   for(i = presetArgsCount ; i<self->numberOfArguments ; ++i)
     [stringOfArguments appendFormat:@"{%@}", bulletString];
   if (self->type == LATEX_ITEM_TYPE_STANDARD)
@@ -53,7 +53,6 @@
   
   self->image = [[NSImage alloc] initWithContentsOfFile:aResourcePath];
   [self->image setCacheMode:NSImageCacheNever];
-  [self->image setDataRetained:YES];
   [self->image recache];
   return self;
 }
@@ -73,16 +72,16 @@
 }
 //end dealloc
 
--(NSString*)         name                        {return self->name;}
--(NSString*)         localizedName               {return self->localizedName;}
--(latex_item_type_t) type                        {return self->type;}
--(NSUInteger)        numberOfArguments           {return self->numberOfArguments;}
--(NSString*)         latexCode                   {return self->latexCode;}
--(NSString*)         requires                    {return self->requires;}
--(NSString*)         argumentToken               {return self->argumentToken;}
--(NSString*)         argumentTokenDefaultReplace {return self->argumentTokenDefaultReplace;}
--(NSString*)         resourcePath                {return self->resourcePath;}
--(NSImage*)          image                       {return self->image;}
+@synthesize name;
+@synthesize localizedName;
+@synthesize type;
+@synthesize numberOfArguments;
+@synthesize latexCode;
+@synthesize requires;
+@synthesize argumentToken;
+@synthesize argumentTokenDefaultReplace;
+@synthesize resourcePath;
+@synthesize image;
 
 -(NSString*) toolTip
 {

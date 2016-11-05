@@ -15,7 +15,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithReferences:(id)references;
--(id) initWithReferences:(id)references;
++(instancetype) transformerWithReferences:(id)references;
+-(instancetype) initWithReferences:(id)references;
 
 @end

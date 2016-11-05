@@ -14,7 +14,6 @@
   CGFloat thickness;
 }
 
--(CGFloat) dividerThickness;
--(void)    setDividerThickness:(CGFloat)value;
+@property CGFloat dividerThickness;
 
 @end

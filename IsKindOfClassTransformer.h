@@ -15,7 +15,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithClass:(Class)aClass;
--(id) initWithClass:(Class)aClass;
++(instancetype) transformerWithClass:(Class)aClass;
+-(instancetype) initWithClass:(Class)aClass;
 
 @end

@@ -9,6 +9,7 @@
 #import "Plugin.h"
 
 @implementation Plugin
+@synthesize bundle;
 
 -(id) initWithPath:(NSString*)path
 {
@@ -32,12 +33,6 @@
   [super dealloc];
 }
 //end dealloc
-
--(NSBundle*) bundle
-{
-  return self->bundle;
-}
-//end bundle
 
 -(NSString*) localizedName
 {

@@ -14,7 +14,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithDescriptors:(NSArray*)descriptors;
--(id) initWithDescriptors:(NSArray*)descriptors;
++(instancetype) transformerWithDescriptors:(NSArray*)descriptors;
+-(instancetype) initWithDescriptors:(NSArray*)descriptors;
 
 @end

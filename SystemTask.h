@@ -31,8 +31,8 @@
   NSString*     workingDirectory;
 }
 
--(id)   init;//NSTemporaryDirectory() as workingDirectory
--(id)   initWithWorkingDirectory:(NSString*)workingDirectory;
+-(instancetype)   init;///<NSTemporaryDirectory() as workingDirectory
+-(instancetype)   initWithWorkingDirectory:(NSString*)workingDirectory;
 -(void) setEnvironment:(NSDictionary*)environment;
 -(void) setLaunchPath:(NSString*)launchPath;
 -(void) setArguments:(NSArray*)arguments;
@@ -41,8 +41,7 @@
 -(NSString*)     launchPath;
 -(NSArray*)      arguments;
 -(NSString*)     currentDirectoryPath;
--(BOOL) isUsingLoginShell;
--(void) setUsingLoginShell:(BOOL)value;
+@property (getter=isUsingLoginShell) BOOL usingLoginShell;
 
 -(void) setTimeOut:(NSTimeInterval)timeOut;
 -(NSString*) equivalentLaunchCommand;
@@ -52,6 +51,6 @@
 -(void) setStdInputData:(NSData*)data;
 -(NSData*) dataForStdOutput;
 -(NSData*) dataForStdError;
--(BOOL) hasReachedTimeout;
+@property (readonly) BOOL hasReachedTimeout;
 
 @end

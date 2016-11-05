@@ -30,17 +30,17 @@ typedef enum {LATEX_ITEM_TYPE_STANDARD, LATEX_ITEM_TYPE_ENVIRONMENT} latex_item_
               argumentToken:(NSString*)argumentToken
               argumentTokenDefaultReplace:(NSString*)argumentTokenDefaultReplace;
 
--(NSString*)         name;
--(NSString*)         localizedName;
--(NSString*)         resourcePath;
--(latex_item_type_t) type;
--(NSUInteger)        numberOfArguments;
--(NSString*)         latexCode;
--(NSString*)         requires;
--(NSString*)         argumentToken;
--(NSString*)         argumentTokenDefaultReplace;
+@property (readonly, copy) NSString *name;
+@property (readonly, copy) NSString *localizedName;
+@property (readonly, copy) NSString *resourcePath;
+@property (readonly) latex_item_type_t type;
+@property (readonly) NSUInteger        numberOfArguments;
+@property (readonly, copy) NSString *latexCode;
+@property (readonly, copy) NSString *requires;
+@property (readonly, copy) NSString *argumentToken;
+@property (readonly, copy) NSString *argumentTokenDefaultReplace;
 
--(NSImage*)  image;
+@property (readonly, retain) NSImage *image;
 -(NSString*) toolTip;
 -(NSString*) stringWithTextInserted:(NSString*)text;
 

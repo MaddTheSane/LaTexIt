@@ -15,7 +15,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithShift:(NSNumber*)shift;
--(id) initWithShift:(NSNumber*)shift;
++(instancetype) transformerWithShift:(NSNumber*)shift;
+-(instancetype) initWithShift:(NSNumber*)shift;
 
 @end

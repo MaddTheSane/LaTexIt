@@ -17,9 +17,9 @@
 
 +(NSString*) name;
 
-+(id) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
-           additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
--(id) initWithValueTransformer:(NSValueTransformer*)valueTransformer
-    additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
++(instancetype) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
+                     additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
+-(instancetype) initWithValueTransformer:(NSValueTransformer*)valueTransformer
+              additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
 
 @end

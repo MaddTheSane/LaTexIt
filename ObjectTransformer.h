@@ -15,7 +15,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithDictionary:(NSDictionary*)dictionary;
--(id) initWithDictionary:(NSDictionary*)dictionary;
++(instancetype) transformerWithDictionary:(NSDictionary*)dictionary;
+-(instancetype) initWithDictionary:(NSDictionary*)dictionary;
 
 @end

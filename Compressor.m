@@ -67,7 +67,7 @@
     uLongf sourceLen = [data length];
     uLongf destLen   = compressBound(sourceLen);
     NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:sizeof(unsigned int)+destLen];
-    unsigned int bigSourceLen = EndianUI_NtoB(sourceLen);
+    unsigned int bigSourceLen = EndianUI_NtoB((unsigned int)sourceLen);
     [compData appendBytes:&bigSourceLen length:sizeof(unsigned int)];
     [compData increaseLengthBy:destLen];
     int error = compress2([compData mutableBytes]+sizeof(unsigned int), &destLen, [data bytes], sourceLen, level);
@@ -104,9 +104,9 @@
     //I must make ugly code to read data that is not know to be from PPC or x86
     uLongf unswappedDestLen = 0;
     [data getBytes:&unswappedDestLen length:sizeof(uLong)];
-    unswappedDestLen = CFSwapInt32BigToHost(unswappedDestLen);
+    unswappedDestLen = CFSwapInt32BigToHost((uint32_t)unswappedDestLen);
     
-    uLongf swappedDestLen = CFSwapInt32(unswappedDestLen);
+    uLongf swappedDestLen = CFSwapInt32((uint32_t)unswappedDestLen);
     uLongf destLen = MIN(swappedDestLen, unswappedDestLen);
     NSMutableData* decompData = [[NSMutableData alloc] initWithLength:destLen];
     int error = uncompress( [decompData mutableBytes], &destLen,

@@ -22,10 +22,9 @@
   BOOL               shouldRedrag;
 }
 
--(LibraryController*) libraryController;
+@property (readonly, retain) LibraryController *libraryController;
 
--(library_row_t) libraryRowType;
--(void) setLibraryRowType:(library_row_t)type;
+@property library_row_t libraryRowType;
 
 -(void) expandOutlineItems;
 
@@ -40,6 +39,6 @@
 -(void) edit:(id)sender;
 -(void) openEquation:(LibraryEquation*)equation inDocument:(MyDocument*)document makeLink:(BOOL)makeLink;
 
--(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(int)index;
+-(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(NSInteger)index;
 
 @end

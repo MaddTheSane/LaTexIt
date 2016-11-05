@@ -22,18 +22,15 @@
 +(NSEntityDescription*) entity;
 +(NSEntityDescription*) wrapperEntity;
 
--(id) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+-(instancetype) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
 -(void) dispose;
--(BOOL) customKVOEnabled;
--(void) setCustomKVOEnabled:(BOOL)value;
--(BOOL) customKVOInhibited;
--(void) setCustomKVOInhibited:(BOOL)value;
+@property BOOL customKVOEnabled;
+@property BOOL customKVOInhibited;
 
 -(void) setTitle:(NSString*)value;//redefined to set title of equation with the same value
 
--(LatexitEquation*) equation;
--(void) setEquation:(LatexitEquation*)equation;
+@property (retain) LatexitEquation *equation;
 
 -(id) plistDescription;
 

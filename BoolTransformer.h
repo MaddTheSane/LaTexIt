@@ -16,7 +16,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue;
--(id) initWithFalseValue:(id)falseValue trueValue:(id)trueValue;
++(instancetype) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue;
+-(instancetype) initWithFalseValue:(id)falseValue trueValue:(id)trueValue;
 
 @end

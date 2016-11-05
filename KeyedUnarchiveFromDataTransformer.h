@@ -13,6 +13,6 @@
 }
 
 +(NSString*) name;
-+(id) transformer;
++(instancetype) transformer;
 
 @end

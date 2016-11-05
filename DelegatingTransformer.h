@@ -21,8 +21,8 @@
 
 +(NSString*) name;
 
-+(id) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
--(id) initWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
++(instancetype) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
+-(instancetype) initWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
 
 
 @end

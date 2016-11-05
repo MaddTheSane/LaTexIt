@@ -18,18 +18,18 @@
   volatile unsigned int value;
 }
 
--(id) initWithValue:(unsigned int)initialValue; //designated initializer
--(id) init;//init with value 0
+-(instancetype) initWithValue:(unsigned int)initialValue NS_DESIGNATED_INITIALIZER; //designated initializer
+-(instancetype) init;///<init with value 0
 
 -(void) P:(unsigned int)n;
 -(void) V:(unsigned int)n;
--(void) P;//P with 1
--(void) V;//V with 1
+-(void) P;///<P with 1
+-(void) V;///<V with 1
 -(unsigned int) R;
 -(void)         Z;
 
 //NSCoding protocol
--(id)   initWithCoder:(NSCoder*)coder;
+-(instancetype)   initWithCoder:(NSCoder*)coder;
 -(void) encodeWithCoder:(NSCoder*)coder;
 
 @end

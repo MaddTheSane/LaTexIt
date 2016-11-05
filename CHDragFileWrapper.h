@@ -14,9 +14,9 @@
   NSString* uti;
 }
 
-+(id) dragFileWrapperWithFileName:(NSString*)filename uti:(NSString*)uti;
++(instancetype) dragFileWrapperWithFileName:(NSString*)filename uti:(NSString*)uti;
 
--(id) initWithFileName:(NSString*)filename uti:(NSString*)uti;
+-(instancetype) initWithFileName:(NSString*)filename uti:(NSString*)uti;
 -(NSString*) fileName;
 -(NSString*) uti;
 

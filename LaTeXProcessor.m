@@ -513,7 +513,7 @@ static LaTeXProcessor* sharedInstance = nil;
        "/Magnification (EEmag%fEEmagend)\n"
        "/Baseline (EEbas%fEEbasend)\n"
        ">>\nendobj\n",
-       !useAnnotationObjectIndex ? @"" : [NSString stringWithFormat:@"%u 0 ", annotationObjectIndex],
+       !useAnnotationObjectIndex ? @"" : [NSString stringWithFormat:@"%lu 0 ", (unsigned long)annotationObjectIndex],
        [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
        [escapedPreamble  cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
        [replacedSource  cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
@@ -550,9 +550,9 @@ static LaTeXProcessor* sharedInstance = nil;
         [buildData appendData:[annotation dataUsingEncoding:NSMacOSRomanStringEncoding]];
       if (r1.location != NSNotFound)
       {
-        [buildData appendData:[[NSString stringWithFormat:@"xref\n%u %u\n", 0, annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"xref\n%u %lu\n", 0, annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
         [buildData appendData:[afterObjCountString dataUsingEncoding:NSUTF8StringEncoding]];
-        [buildData appendData:[[NSString stringWithFormat:@"%010ld %05ld n \n", r1.location, 0U] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"%010ld %05u n \n", r1.location, 0U] dataUsingEncoding:NSUTF8StringEncoding]];
       }//end if (r1.location != NSNotFound)
       if (r2.location != NSNotFound)
       {

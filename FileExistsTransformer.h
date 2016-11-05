@@ -14,7 +14,7 @@
 
 +(NSString*) name;
 
-+(id) transformerWithDirectoryAllowed:(BOOL)directoryAllowed;
--(id) initWithDirectoryAllowed:(BOOL)directoryAllowed;
++(instancetype) transformerWithDirectoryAllowed:(BOOL)directoryAllowed;
+-(instancetype) initWithDirectoryAllowed:(BOOL)directoryAllowed;
 
 @end

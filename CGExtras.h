@@ -14,7 +14,7 @@ typedef CGFloat (*blendFunction_t)(CGFloat, CFNumberRef parameter);
 CG_INLINE CGFloat CGBlendLinear(CGFloat t, CFNumberRef parameter)
                   {return t;}
 CG_INLINE CGFloat CGBlendPow(CGFloat t, CFNumberRef parameter)
-                  {CGFloat value; CFNumberGetValue(parameter, kCFNumberFloatType, &value); return pow(t, value);}
+                  {double value; CFNumberGetValue(parameter, kCFNumberDoubleType, &value); return pow(t, value);}
 
 typedef void* CGBlendColorsRef;
 CGBlendColorsRef CGBlendColorsCreateCGF(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CGFloat blendFunctionParameter);

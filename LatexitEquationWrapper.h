@@ -15,7 +15,6 @@
   LatexitEquation* equation;//seems needed on Tiger
 }
 
--(LatexitEquation*) equation;
--(void) setEquation:(LatexitEquation*)value;
+@property (retain) LatexitEquation *equation;
 
 @end

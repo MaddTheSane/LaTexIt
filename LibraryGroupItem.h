@@ -21,8 +21,7 @@
 
 -(id) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
--(BOOL)     isExpanded;
--(void)     setExpanded:(BOOL)value;
+@property (getter=isExpanded) BOOL expanded;
 -(NSSet*)   children;
 -(NSArray*) childrenOrdered;
 -(void)     fixChildrenSortIndexesRecursively:(BOOL)recursively;

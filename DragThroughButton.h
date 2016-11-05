@@ -20,11 +20,9 @@ extern NSString* DragThroughButtonStateChangedNotification;
   TooltipWindow* tooltipWindow;
 }
 
--(BOOL) shouldBlink;
--(void) setShouldBlink:(BOOL)value;
--(CGFloat) delay;
--(void) setDelay:(CGFloat)value;
+@property BOOL shouldBlink;
+@property CGFloat delay;
 
--(BOOL) isBlinking;
+@property (readonly, getter=isBlinking) BOOL blinking;
 
 @end

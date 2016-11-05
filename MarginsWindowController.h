@@ -18,10 +18,10 @@
  IBOutlet NSNumberFormatter* pointSizeFormatter;
 }
 
--(CGFloat) topMargin;
--(CGFloat) leftMargin;
--(CGFloat) rightMargin;
--(CGFloat) bottomMargin;
+@property (readonly) CGFloat topMargin;
+@property (readonly) CGFloat leftMargin;
+@property (readonly) CGFloat rightMargin;
+@property (readonly) CGFloat bottomMargin;
 
 -(IBAction) makeDefaultsMargins:(id)sender;
 -(IBAction) showWindow:(id)sender;

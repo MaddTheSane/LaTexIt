@@ -16,11 +16,11 @@
   id<NSObject,LaTeXiTPluginProtocol> principalClassInstance;
 }
 
--(id) initWithPath:(NSString*)path;
+-(instancetype) initWithPath:(NSString*)path;
 
--(NSBundle*) bundle;
+@property (readonly, retain) NSBundle *bundle;
 -(void)      load;
--(NSString*) localizedName;
+@property (readonly, copy) NSString *localizedName;
 
 #pragma mark LaTeXiTPluginProtocol
 -(NSImage*) icon;

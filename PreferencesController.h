@@ -160,10 +160,8 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 
 -(NSString*)    latexitVersion;
 
--(export_format_t) exportFormatPersistent;
--(void)            setExportFormatPersistent:(export_format_t)value;
--(export_format_t) exportFormatCurrentSession;
--(void)            setExportFormatCurrentSession:(export_format_t)value;
+@property export_format_t exportFormatPersistent;
+@property export_format_t exportFormatCurrentSession;
 
 
 -(NSData*)         exportJpegBackgroundColorData;

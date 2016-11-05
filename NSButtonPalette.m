@@ -58,7 +58,7 @@
 }
 //end setDelegate:
 
--(NSButton*) buttonWithTag:(int)tag
+-(NSButton*) buttonWithTag:(NSInteger)tag
 {
   NSButton* result = nil;
   NSEnumerator* enumerator = [self->buttons objectEnumerator];
@@ -73,7 +73,7 @@
 }
 //end buttonWithTag:
 
--(NSButton*) buttonWithState:(int)state
+-(NSButton*) buttonWithState:(NSInteger)state
 {
   NSButton* result = nil;
   NSEnumerator* enumerator = [self->buttons objectEnumerator];

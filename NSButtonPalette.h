@@ -15,15 +15,13 @@
   id delegate;
 }
 
--(BOOL) isExclusive;
--(void) setExclusive:(BOOL)value;
+@property (getter=isExclusive) BOOL exclusive;
 -(void) add:(NSButton*)button;
 -(void) remove:(NSButton*)button;
--(NSButton*) buttonWithTag:(int)tag;
--(NSButton*) buttonWithState:(int)state;
+-(NSButton*) buttonWithTag:(NSInteger)tag;
+-(NSButton*) buttonWithState:(NSInteger)state;
 
--(id) delegate;
--(void) setDelegate:(id)delegate;
+@property (assign) id delegate;
 -(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;
 
 @end
