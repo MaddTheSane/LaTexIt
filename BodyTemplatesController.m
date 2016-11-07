@@ -158,9 +158,9 @@ static NSDictionary* noneBodyTemplate = nil;
   else if ([keyPath isEqualToString:LatexisationSelectedBodyTemplateIndexKey] ||
            [keyPath isEqualToString:ServiceSelectedBodyTemplateIndexKey])
   {
-    int curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] intValue];
-    int newIndex = curIndex;
-    int count = (signed)[[self arrangedObjects] count];
+    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+    NSInteger newIndex = curIndex;
+    NSInteger count = (NSInteger)[[self arrangedObjects] count];
     if ((curIndex<0) && count)
       newIndex = -1;
     else if (curIndex>=count)
@@ -215,13 +215,13 @@ static NSDictionary* noneBodyTemplate = nil;
 //end add:
 
 //redefined from NSArrayControllerExtended
--(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
   NSInteger bodyTemplateLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedBodyTemplateIndexKey];
   NSInteger bodyTemplateServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedBodyTemplateIndexKey];
-  id bodyTemplateLaTeXisation = !IsBetween_i(1, bodyTemplateLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
+  id bodyTemplateLaTeXisation = !IsBetween_N(1, bodyTemplateLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:bodyTemplateLaTeXisationIndex];
-  id bodyTemplateService = !IsBetween_i(1, bodyTemplateServiceIndex+1, [[self arrangedObjects] count]) ? nil :
+  id bodyTemplateService = !IsBetween_N(1, bodyTemplateServiceIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:bodyTemplateServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newBodyTemplateLaTeXisationIndex = [[self arrangedObjects] indexOfObject:bodyTemplateLaTeXisation];

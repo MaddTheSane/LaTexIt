@@ -20,6 +20,7 @@
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "Utils.h"
+#import "LibraryPreviewPanelImageView.h"
 
 @interface HistoryWindowController (PrivateAPI)
 -(void) clearAll:(BOOL)undoable;
@@ -112,7 +113,7 @@
     BOOL isKeyWindow = [[self window] isKeyWindow];
     NSUInteger nbItems = [self->historyView numberOfRows];
     [self->clearHistoryButton setEnabled:(isKeyWindow && nbItems)];
-    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%d)", NSLocalizedString(@"History", @"History"), nbItems]];
+    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"History", @"History"), (unsigned long)nbItems]];
   }//end if ([keyPath isEqualToString:@"arrangedObjects"])
   else if ([keyPath isEqualToString:HistoryDisplayPreviewPanelKey])
     [[self->historyPreviewPanelSegmentedControl cell] setSelected:
@@ -182,11 +183,14 @@
   [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
-  if ([[self window] isVisible])
-    [self->savePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled") modalForWindow:[self window] modalDelegate:self
-                       didEndSelector:@selector(_savePanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else
+  if ([[self window] isVisible]) {
+    savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
+    [savePanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+      [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:NULL];
+    }];
+  } else {
     [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
+  }
 }
 
 -(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
@@ -203,7 +207,7 @@
         alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
-   informativeTextWithFormat:nil];
+   informativeTextWithFormat:@""];
      [alert runModal];
     }//end if (ok)
   }
@@ -217,10 +221,10 @@
   switch((history_export_format_t)[sender selectedTag])
   {
     case HISTORY_EXPORT_FORMAT_INTERNAL:
-      [self->savePanel setRequiredFileType:@"latexhist"];
+      savePanel.allowedFileTypes = @[@"latexhist"];
       break;
     case HISTORY_EXPORT_FORMAT_PLIST:
-      [self->savePanel setRequiredFileType:@"plist"];
+      savePanel.allowedFileTypes = @[@"plist"];
       break;
   }
 }
@@ -243,11 +247,14 @@
   [openPanel setDelegate:(id)self];
   [openPanel setTitle:NSLocalizedString(@"Import history...", @"Import history...")];
   [openPanel setAccessoryView:[self->importAccessoryView retain]];
-  if ([[self window] isVisible])
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexhist", @"plist", nil] modalForWindow:[self window]
-                        modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else
-    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexhist", @"plist", nil]] contextInfo:NULL];
+  openPanel.allowedFileTypes = [NSArray arrayWithObjects:@"latexhist", @"plist", nil];
+  if ([[self window] isVisible]) {
+    [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+      [self _openPanelDidEnd:openPanel returnCode:result contextInfo:NULL];
+    }];
+  } else {
+    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModal] contextInfo:NULL];
+  }
 }
 //end open:
 
@@ -264,7 +271,7 @@
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
    informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+     [alert runModal];
     }
     else
     {

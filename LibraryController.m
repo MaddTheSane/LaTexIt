@@ -124,7 +124,7 @@
 
 -(NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
-  int result = 0;
+  NSInteger result = 0;
   if (item)
     result = [[item children] count];
   else
@@ -172,7 +172,7 @@
     [pasteBoard declareTypes:[NSArray array] owner:nil];
   
   NSArray* minimumItemsCover = [NSObject minimumNodeCoverFromItemsInArray:items parentSelector:@selector(parent)];
-  unsigned int count = [minimumItemsCover count];
+  NSUInteger count = [minimumItemsCover count];
   NSMutableArray* libraryItems     = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* libraryEquations = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* latexitEquations = [NSMutableArray arrayWithCapacity:count];
@@ -417,7 +417,7 @@
       [brothers removeObjectsInArray:newLibraryRootItems];
       [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
         [brothers count] : (unsigned)proposedChildIndex];
-      unsigned int nbBrothers = [brothers count];
+      NSUInteger nbBrothers = [brothers count];
       while(nbBrothers--)
         [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
       [newLibraryRootItems release];

@@ -1451,7 +1451,7 @@ static LaTeXProcessor* sharedInstance = nil;
 //end composeLaTeX:customLog:stdoutLog:stderrLog:compositionMode:pdfLatexPath:xeLatexPath:latexPath:
 
 //returns an array of the errors. Each case will contain an error string
--(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift
+-(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(NSInteger)errorLineShift
 {
   NSArray* rawLogLines = [fullErrorLog componentsSeparatedByString:@"\n"];
   NSMutableArray* errorLines = [NSMutableArray arrayWithCapacity:[rawLogLines count]];
@@ -1510,7 +1510,7 @@ static LaTeXProcessor* sharedInstance = nil;
         [[lineComponent stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""];
       NSString* errorComponent = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)] componentsJoinedByString:@":"];
       if (lineComponentIsANumber)
-        lineComponent = [[NSNumber numberWithInt:[lineComponent intValue]+errorLineShift] stringValue];
+        lineComponent = [[NSNumber numberWithInteger:[lineComponent integerValue]+errorLineShift] stringValue];
       if (lineComponentIsANumber || ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
       {
         NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
@@ -1560,7 +1560,7 @@ static LaTeXProcessor* sharedInstance = nil;
         if (lineComponentIsANumber && nextLine)
           fullLine = [line stringByAppendingString:nextLine];
           
-          lineComponent = [[NSNumber numberWithInt:[lineComponent intValue]+errorLineShift] stringValue];
+          lineComponent = [[NSNumber numberWithInteger:[lineComponent integerValue]+errorLineShift] stringValue];
         if (lineComponentIsANumber && errorComponent)
         {
           NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
@@ -1840,10 +1840,10 @@ static LaTeXProcessor* sharedInstance = nil;
   NSDictionary* objects = [object dynamicCastToClass:[NSDictionary class]];
   NSString* informativeText1 = [[objects objectForKey:@"informativeText1"] dynamicCastToClass:[NSString class]];
   NSInteger displayError =
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), informativeText1,
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), @"%@",
                     NSLocalizedString(@"OK", @"OK"),
                     NSLocalizedString(@"Display the error message", @"Display the error message"),
-                    nil);
+                    nil, informativeText1);
   if (displayError == NSAlertAlternateReturn)
   {
     NSString* informativeText2 = [[objects objectForKey:@"informativeText2"] dynamicCastToClass:[NSString class]];
@@ -1890,8 +1890,6 @@ static LaTeXProcessor* sharedInstance = nil;
         NSSize originalSize = [pdfImageRep size];
         NSImage* pdfImage = [[NSImage alloc] initWithSize:originalSize];
         [pdfImage setCacheMode:NSImageCacheNever];
-        [pdfImage setDataRetained:YES];
-        [pdfImage setScalesWhenResized:YES];
         [pdfImage addRepresentation:pdfImageRep];
         NSImageView* imageView =
           [[NSImageView alloc] initWithFrame:
@@ -2120,10 +2118,9 @@ static LaTeXProcessor* sharedInstance = nil;
           if ([gsTask terminationStatus] != 0)
           {
             NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
-                                                                         @"An error occured while trying to create the file :\n%@"),
-                                                       errorString],
-                            @"OK", nil, nil);
+                            NSLocalizedString(@"An error occured while trying to create the file :\n%@",
+                                              @"An error occured while trying to create the file :\n%@"),
+                            @"OK", nil, nil, errorString);
           }
           #ifdef ARC_ENABLED
           #else
@@ -2256,10 +2253,9 @@ static LaTeXProcessor* sharedInstance = nil;
           if ([svgTask terminationStatus] != 0)
           {
             NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
-                                                                         @"An error occured while trying to create the file :\n%@"),
-                                                       errorString],
-                            @"OK", nil, nil);
+                            NSLocalizedString(@"An error occured while trying to create the file :\n%@",
+                                              @"An error occured while trying to create the file :\n%@"),
+                            @"OK", nil, nil, errorString);
           }//end if ([svgTask terminationStatus] != 0)
           #ifdef ARC_ENABLED          
           #else

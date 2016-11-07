@@ -35,6 +35,7 @@
 #import "PreferencesController.h"
 #import "RegexKitLite.h"
 #import "Utils.h"
+#import "LineCountTextView.h"
 
 #import "CGExtras.h"
 
@@ -48,13 +49,6 @@ static inline CGFloat sqr(CGFloat x) {return x*x;}
 NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
-@interface NSScroller (Bridge10_7)
--(NSInteger) scrollerStyle;
-@end
-@interface NSEvent (Bridge10_6)
--(CGFloat) magnification;
-@end
-
 @interface TransparentView : NSView
 @end
 @implementation TransparentView
@@ -65,7 +59,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 @end
 
 
-@interface MyImageView (PrivateAPI)
+@interface MyImageView ()
 -(NSImage*) imageForDrag;
 -(NSMenu*) lazyCopyAsContextualMenu;
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
@@ -74,12 +68,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(void) performProgrammaticDragCancellation:(id)context;
 -(void) performProgrammaticRedrag:(id)context;
 @end
-
-@class NSDraggingSession;
-#if defined(__clang__)
-#else
-typedef NSInteger NSDraggingContext;
-#endif
 
 @implementation MyImageView
 

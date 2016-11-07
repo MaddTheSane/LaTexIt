@@ -24,7 +24,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
   if ([self respondsToSelector:@selector(createSymbolicLinkAtPath:withDestinationPath:error:)])
     result = [self createSymbolicLinkAtPath:path withDestinationPath:destPath error:error];
   else
-    result = [self createSymbolicLinkAtPath:path pathContent:destPath] || !symlink([destPath UTF8String], [path UTF8String]);
+    result = [self createSymbolicLinkAtPath:path pathContent:destPath] || !symlink([destPath fileSystemRepresentation], [path fileSystemRepresentation]);
   return result;
 }
 //end bridge_createSymbolicLinkAtPath:withDestinationPath:error:
@@ -178,10 +178,10 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
                                         ? [templateString stringByAppendingPathExtension:extension] : templateString;
     NSString* tempFilenameTemplate = [workingDirectory stringByAppendingPathComponent:fileNameWithExtension];
-    unsigned int length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    NSUInteger length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     char* tmpString = (char*)calloc(length+1, sizeof(char));
     memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
-    int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);
+    int fd = mkstemps(tmpString, (int)([fileNameWithExtension length]-[templateString length]));
     if (fd != -1)
       fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
 

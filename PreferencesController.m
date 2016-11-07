@@ -1215,7 +1215,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end preambles
 
--(int) preambleDocumentIndex
+-(NSInteger) preambleDocumentIndex
 {
   NSInteger result = 0;
   Boolean ok = NO;
@@ -1227,7 +1227,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end preambleDocumentIndex
 
--(int) preambleServiceIndex
+-(NSInteger) preambleServiceIndex
 {
   NSInteger result = 0;
   Boolean ok = NO;
@@ -1243,7 +1243,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSAttributedString* result = nil;
   NSArray* preambles = [self preambles];
-  int      preambleDocumentIndex = [self preambleDocumentIndex];
+  NSInteger      preambleDocumentIndex = [self preambleDocumentIndex];
   NSDictionary* preamble = (0<=preambleDocumentIndex) && ((unsigned)preambleDocumentIndex<[preambles count]) ?
                            [preambles objectAtIndex:preambleDocumentIndex] : nil;
   id preambleValue = [preamble objectForKey:@"value"];
@@ -1258,7 +1258,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSAttributedString* result = nil;
   NSArray* preambles = [self preambles];
-  int      preambleServiceIndex = [self preambleServiceIndex];
+  NSInteger      preambleServiceIndex = [self preambleServiceIndex];
   NSDictionary* preamble = (0<=preambleServiceIndex) && ((unsigned)preambleServiceIndex<[preambles count]) ?
                            [preambles objectAtIndex:preambleServiceIndex] : nil;
   id preambleValue = [preamble objectForKey:@"value"];
@@ -1293,7 +1293,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end bodyTemplates
 
--(int) bodyTemplateDocumentIndex
+-(NSInteger) bodyTemplateDocumentIndex
 {
   NSInteger result = 0;
   Boolean ok = NO;
@@ -1305,7 +1305,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end bodyTemplateDocumentIndex
 
--(int) bodyTemplateServiceIndex
+-(NSInteger) bodyTemplateServiceIndex
 {
   NSInteger result = 0;
   Boolean ok = NO;
@@ -1321,7 +1321,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSDictionary* result = nil;
   NSArray* bodyTemplates = [self bodyTemplates];
-  int      bodyTemplateDocumentIndex = [self bodyTemplateDocumentIndex];
+  NSInteger bodyTemplateDocumentIndex = [self bodyTemplateDocumentIndex];
   NSDictionary* bodyTemplate = (0<=bodyTemplateDocumentIndex) && ((unsigned)bodyTemplateDocumentIndex<[bodyTemplates count]) ?
                            [bodyTemplates objectAtIndex:bodyTemplateDocumentIndex] : nil;
   result = !bodyTemplate? nil : [NSDictionary dictionaryWithDictionary:bodyTemplate];
@@ -1333,7 +1333,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSDictionary* result = nil;
   NSArray* bodyTemplates = [self bodyTemplates];
-  int      bodyTemplateServiceIndex = [self bodyTemplateServiceIndex];
+  NSInteger bodyTemplateServiceIndex = [self bodyTemplateServiceIndex];
   NSDictionary* bodyTemplate = (0<=bodyTemplateServiceIndex) && ((unsigned)bodyTemplateServiceIndex<[bodyTemplates count]) ?
                            [bodyTemplates objectAtIndex:bodyTemplateServiceIndex] : nil;
   result = !bodyTemplate? nil : [NSDictionary dictionaryWithDictionary:bodyTemplate];
@@ -1399,7 +1399,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     if (value >= 0)
       [compositionsController setSelectionIndex:value];
     else
-      [compositionsController setSelectedObjects:nil];
+      [compositionsController setSelectionIndexes:[NSIndexSet indexSet]];
   }
   else//if (!compositionsController)
   {
@@ -1767,7 +1767,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end encapsulations
 
--(int) encapsulationsSelectedIndex
+-(NSInteger) encapsulationsSelectedIndex
 {
   NSInteger result = 0;
   Boolean ok = NO;
@@ -2083,7 +2083,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
 #pragma mark Palette LaTeX
 
--(int) paletteLaTeXGroupSelectedTag
+-(NSInteger) paletteLaTeXGroupSelectedTag
 {
   NSInteger result = 0;
   Boolean ok = NO;
@@ -2095,13 +2095,13 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end paletteLaTeXGroupSelectedTag
 
--(void) setPaletteLaTeXGroupSelectedTag:(int)value
+-(void) setPaletteLaTeXGroupSelectedTag:(NSInteger)value
 {
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:LatexPaletteGroupKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((__bridge CFStringRef)LatexPaletteGroupKey, (__bridge const void*)[NSNumber numberWithInt:value], (__bridge CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((__bridge CFStringRef)LatexPaletteGroupKey, (__bridge CFNumberRef)@(value), (__bridge CFStringRef)LaTeXiTAppKey);
     #else
     CFPreferencesSetAppValue((CFStringRef)LatexPaletteGroupKey, [NSNumber numberWithInt:value], (CFStringRef)LaTeXiTAppKey);
     #endif

@@ -9,6 +9,7 @@
 #import "PaletteMatrix.h"
 
 #import "PaletteCell.h"
+#import "LaTeXPalettesWindowController.h"
 
 @implementation PaletteMatrix
 

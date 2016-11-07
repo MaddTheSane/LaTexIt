@@ -1825,9 +1825,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     {
       BOOL hasPdfOrBitmapImageRep = NO;
       NSArray* representations = [result representations];
-      int i = 0;
-      int count = [representations count];
-      for(i = 0 ; !hasPdfOrBitmapImageRep && (i<count) ; ++i)
+      NSInteger count = [representations count];
+      for(NSInteger i = 0 ; !hasPdfOrBitmapImageRep && (i<count) ; ++i)
       {
         id representation = [representations objectAtIndex:i];
         hasPdfOrBitmapImageRep |=
@@ -2055,7 +2054,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(NSString*) titleAuto
 {
   NSString* result = [[[self sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  unsigned int endIndex = MIN(17U, [result length]);
+  NSUInteger endIndex = MIN(17U, [result length]);
   result = [result substringToIndex:endIndex];
   return result;
 }

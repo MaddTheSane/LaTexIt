@@ -56,6 +56,7 @@
 #import "SynchronizationAdditionalScriptsController.h"
 #import "TextViewWithPlaceHolder.h"
 #import "Utils.h"
+#import "AdditionalFilesTableView.h"
 
 #import "RegexKitLite.h"
 #import <Sparkle/Sparkle.h>

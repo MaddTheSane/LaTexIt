@@ -41,10 +41,10 @@
 @interface NDProcess : NSObject
 {
 @private
-	ProcessSerialNumber			processSerialNumber;
-	ProcessInfoRec				infoRec;
-	NSString					* name;
-	NSURL						* url;
+	ProcessSerialNumber	processSerialNumber;
+	ProcessInfoRec		infoRec;
+	NSString			* name;
+	NSURL				* url;
 }
 
 /*!
@@ -84,16 +84,16 @@
 	@method makeFrontProcessFrontWindowOnly:
 	@abstract Bring the process to front.
 	@discussion Attempts to bring the process to front. If the <tt>flag</tt> is set then only the front most window of the process is made front.
-	@param flag If <tt>YES</tt> then only the front most window of the process is brought to front, if <tt>NO</tt> then all of the window for the process are made front.
-	@result Returns <tt>YES</tt> if the process did come to front. 
+	@param flag If \c YES then only the front most window of the process is brought to front, if \c NO then all of the window for the process are made front.
+	@result Returns \c YES if the process did come to front.
  */
-- (BOOL)makeFrontProcessFrontWindowOnly:(BOOL)flag;
+- (BOOL)makeFrontProcessFrontWindowOnly:(BOOL)flag NS_SWIFT_NAME(makeFrontProcess(frontWindowOnly:));
 
 /*!
 	@method makeFrontProcess
 	@abstract Bring the process to front.
 	@discussion Attempts to bring the process to front.
-	@result Returns <tt>YES</tt> if the process did come to front. 
+	@result Returns \c YES if the process did come to front.
  */
 - (BOOL)makeFrontProcess;
 
@@ -101,7 +101,7 @@
 	@method wakeUpProcess
 	@abstract Wake up the process.
 	@discussion Wakes up the process.
-	@result Returns <tt>YES</tt> if the process did wakr up.. 
+	@result Returns \c YES if the process did wakr up..
  */
 - (BOOL)wakeUpProcess;
 
@@ -110,8 +110,8 @@
 
 /*!
 	@category NDProcess(Construction)
-	@abstract <tt>NDProcess</tt> construction methods.
-	@discussion Most of the time you should use one of these methods to create <tt>NDProcess</tt> objects.
+	@abstract \c NDProcess construction methods.
+	@discussion Most of the time you should use one of these methods to create \c NDProcess objects.
  */
 @interface NDProcess (Construction)
 
@@ -119,7 +119,7 @@
 	@method initWithCurrentProcess
 	@abstract Initialises a <tt>NDProcess</tt>.
 	@discussion Initialises the recevier for the current process.
-	@result A initialised <tt>NDProcess</tt>
+	@result A initialised \c NDProcess
  */
 - (instancetype)initWithCurrentProcess;
 
@@ -127,7 +127,7 @@
 	@method initWithFrontProcess
 	@abstract Initialises a <tt>NDProcess</tt>.
 	@discussion Initialises the recevier for the front process.
-	@result A initialised <tt>NDProcess</tt>
+	@result A initialised \c NDProcess
  */
 - (instancetype)initWithFrontProcess;
 
@@ -136,7 +136,7 @@
 	@abstract Initialises a <tt>NDProcess</tt>.
 	@discussion Initialises a the recevier with the process ID <tt><i>pid</i></tt>.
 	@param pid The process ID.
-	@result A initialised <tt>NDProcess</tt>
+	@result A initialised \c NDProcess
 	 */
 - (instancetype)initWithProcessID:(pid_t)pid;
 
@@ -144,7 +144,7 @@
 	@property everyProcess
 	@abstract Get every process.
 	@discussion Returns a \c NSArray of <tt>NDProcess</tt>s for every process.
-	@result An <tt>NSArray</tt> of <tt>NDProcess</tt>s.
+	@result An \c NSArray of <tt>NDProcess</tt>s.
  */
 @property (class, readonly, copy) NSArray<NDProcess*> *everyProcess;
 
@@ -153,7 +153,7 @@
 	@abstract Get every process of supplied name.
 	@discussion Returns every process with a given name, the process name does not have to unique.
 	@param name The process name to find.
-	@result An <tt>NSArray</tt> of <tt>NDProcess</tt>s.
+	@result An \c NSArray of <tt>NDProcess</tt>s.
  */
 + (NSArray<NDProcess*> *)everyProcessNamed:(NSString *)name;
 
@@ -161,33 +161,33 @@
 /*!
 	@method processWithProcessSerialNumber:
 	@abstract Returns a new <tt>NDProcess</tt>.
-	@discussion Returns a <tt>NDProcess</tt> for the process with the given process serial number.
+	@discussion Returns a \c NDProcess for the process with the given process serial number.
 	@param processSerialNumber A valid process serial number.
-	@result A <tt>NDProcess</tt> object.
+	@result An \c NDProcess object.
  */
 + (NDProcess *)processWithProcessSerialNumber:(ProcessSerialNumber)processSerialNumber;
 
 /*!
 	@property currentProcess
 	@abstract Returns a new <tt>NDProcess</tt>.
-	@discussion Returns a <tt>NDProcess</tt> for the current process.
-	@result A <tt>NDProcess</tt> object.
+	@discussion Returns a \c NDProcess for the current process.
+	@result An \c NDProcess object.
  */
 @property (class, readonly, retain) NDProcess *currentProcess;
 
 /*!
 	@property frontProcess
 	@abstract Returns a new <tt>NDProcess</tt>.
-	@discussion Returns a <tt>NDProcess</tt> for the front process.
-	@result A <tt>NDProcess</tt> object.
+	@discussion Returns a \c NDProcess for the front process.
+	@result A \c NDProcess object.
  */
 @property (class, readonly, retain) NDProcess *frontProcess;
 
 /*!
 	@method processWithProcessID
 	@abstract Returns a new <tt>NDProcess</tt>.
-	@discussion Returns a <tt>NDProcess</tt> for the process with the UNIX process ID <tt><i>pid</i></tt>.
-	@result A <tt>NDProcess</tt> object.
+	@discussion Returns a \c NDProcess for the process with the UNIX process ID <tt><i>pid</i></tt>.
+	@result A \c NDProcess object.
  */
 + (NDProcess *)processWithProcessID:(pid_t)pid;
 
@@ -255,9 +255,9 @@
 
 /*!
 	@method processesEnumerater
-	@abstract Returns a <tt>NSEnumerator</tt> for every process.
-	@discussion The <tt>NSEnumerator</tt> will step through every process. WARNING: the instances returned from this enumerator will be reuses unless you retain them, before calling nextObject again.
-	@result A <tt>NSEnumerator</tt> for every process.
+	@abstract Returns an \c NSEnumerator for every process.
+	@discussion The \c NSEnumerator will step through every process. WARNING: the instances returned from this enumerator will be released unless you \c retain them, before calling \c nextObject again.
+	@result An \c NSEnumerator for every process.
  */
 + (NSEnumerator *)processesEnumerater;
 
@@ -281,7 +281,7 @@
 	@property valid
 	@abstract Is the process valid.
 	@discussion Attempts to get \c ProcessInfoRec and return true if no error. The process may not be running any more.
-	@result Returns <tt>YES</tt> if the is process valid.
+	@result Returns \c YES if the is process valid.
  */
 @property (readonly, getter=isValid) BOOL valid;
 
@@ -362,7 +362,7 @@
 @property (readonly) NSTimeInterval launchTime;
 
 /*!
-	@method url
+	@property url
 	@abstract Process url.
 	@discussion The url for the receviers process, this may be within the contents of some application package.
 	@result A file url \c NSURL to a file containing the process.
@@ -370,7 +370,7 @@
 @property (readonly, retain) NSURL *url;
 
 /*!
-	@method path
+	@property path
 	@abstract Process path.
 	@discussion The path for the receviers process, this may be within the contents of some application package.
 	@result A path \c NSString to a file containing the process.
@@ -378,9 +378,9 @@
 @property (readonly, copy) NSString *path;
 
 /*!
-	@method processID
+	@property processID
 	@abstract Obtains the preocess ID
-	@discussion Returns the UNIX ocess ID for the reciever.
+	@discussion Returns the UNIX process ID for the reciever.
 	@result A \c pid_t for the reciever or \c -1 if an error occurs.
  */
 @property (readonly) pid_t processID;

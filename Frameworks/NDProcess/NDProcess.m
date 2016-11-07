@@ -31,7 +31,7 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 /*
  * category interface NDProcess (Private)
  */
-@interface NDProcess (Private)
+@interface NDProcess ()
 - (void)setProcessSerialNumber:(ProcessSerialNumber)aProcessSerialNumber;
 - (BOOL)fillProcessInfoRec;
 @end
@@ -217,13 +217,6 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
   #endif
 	return self;
 }
-
-@end
-
-/*
- * category implementation NDProcess (Private)
- */
-@implementation NDProcess (Private)
 
 /*
  * -setProcessSerialNumber:
@@ -640,7 +633,7 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		
 			if( [self fillProcessInfoRec] && infoRec.processName != NULL )
 			{
-				name = [[NSString alloc] initWithCString:(const char *)(theProcessName + 1) length:*theProcessName];
+				name = [[NSString alloc] initWithBytes:(const char *)(theProcessName + 1) length:*theProcessName encoding:NSMacOSRomanStringEncoding];
 				infoRec.processName = NULL;		// not valid after this method call
 			}
 		}

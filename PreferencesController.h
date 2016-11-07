@@ -230,16 +230,16 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSArrayController*) editionTextShortcutsController;
 
 -(NSArray*)             preambles;
--(int)                  preambleDocumentIndex;
--(int)                  preambleServiceIndex;
+-(NSInteger)            preambleDocumentIndex;
+-(NSInteger)            preambleServiceIndex;
 -(NSAttributedString*)  preambleDocumentAttributedString;
 -(NSAttributedString*)  preambleServiceAttributedString;
 -(PreamblesController*) preamblesController;
 
 -(NSArray*)                 bodyTemplates;
 -(NSArray*)                 bodyTemplatesWithNone;
--(int)                      bodyTemplateDocumentIndex;
--(int)                      bodyTemplateServiceIndex;
+-(NSInteger)                bodyTemplateDocumentIndex;
+-(NSInteger)                bodyTemplateServiceIndex;
 -(NSDictionary*)            bodyTemplateDocumentDictionary;
 -(NSDictionary*)            bodyTemplateServiceDictionary;
 -(BodyTemplatesController*) bodyTemplatesController;
@@ -272,7 +272,7 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 
 -(BOOL)                      encapsulationsEnabled;
 -(NSArray*)                  encapsulations;
--(int)                       encapsulationsSelectedIndex;
+-(NSInteger)                 encapsulationsSelectedIndex;
 -(NSString*)                 encapsulationSelected;
 -(EncapsulationsController*) encapsulationsController;
 
@@ -293,8 +293,8 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSDictionary*)                               synchronizationAdditionalScripts;
 -(SynchronizationAdditionalScriptsController*) synchronizationAdditionalScriptsController;
 
--(int)    paletteLaTeXGroupSelectedTag;
--(void)   setPaletteLaTeXGroupSelectedTag:(int)value;
+-(NSInteger)paletteLaTeXGroupSelectedTag;
+-(void)   setPaletteLaTeXGroupSelectedTag:(NSInteger)value;
 -(NSRect) paletteLaTeXWindowFrame;
 -(void)   setPaletteLaTeXWindowFrame:(NSRect)value;
 -(BOOL)   paletteLaTeXDetailsOpened;

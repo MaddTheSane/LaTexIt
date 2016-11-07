@@ -13,6 +13,7 @@
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "PreferencesWindowController.h"
+#import "ImagePopupButton.h"
 
 @interface AdditionalFilesWindowController (PrivateAPI)
 -(IBAction) additionalFilesOpenDefaults:(id)sender;

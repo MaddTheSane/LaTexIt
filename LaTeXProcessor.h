@@ -59,7 +59,7 @@ extern NSString* LatexizationDidEndNotification;
               compositionConfiguration:(NSDictionary*)compositionConfiguration
               fullEnvironment:(NSDictionary*)fullEnvironment;
 
--(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift;
+-(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(NSInteger)errorLineShift;
 -(BOOL) crop:(NSString*)inoutPdfFilePath to:(NSString*)outputPdfFilePath canClip:(BOOL)canClip extraArguments:(NSArray*)extraArguments
         compositionConfiguration:(NSDictionary*)compositionConfiguration
         workingDirectory:(NSString*)workingDirectory

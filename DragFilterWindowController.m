@@ -169,7 +169,7 @@
     DragThroughButton* dragThroughButton = [notification object];
     if ([dragThroughButton state] == NSOnState)
     {
-      int tag = [dragThroughButton tag];
+      NSInteger tag = [dragThroughButton tag];
       if (tag < 0)
         [self setWindowVisible:NO withAnimation:YES];
       else//if (tag >= 0)

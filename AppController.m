@@ -2977,8 +2977,8 @@ static NSMutableDictionary* cachePaths = nil;
                                                 @"You can check it in LaTeXiT");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
-                                       NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), @"%@", NSLocalizedString(@"Cancel", @"Cancel"),
+                                       NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil, message);
           if (choice == NSAlertAlternateReturn)
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];

@@ -288,7 +288,7 @@
   NSString* filePath = [self svgPdfToSvgPath];
   NSString* filename =[filePath lastPathComponent];
   NSString* directory = [filePath stringByDeletingLastPathComponent];
-  int result = [openPanel runModalForDirectory:directory file:filename];
+  NSInteger result = [openPanel runModalForDirectory:directory file:filename];
   if (result == NSFileHandlingPanelOKButton)
   {
     filePath = [[openPanel URL] path];
@@ -369,7 +369,7 @@
 
 -(IBAction) close:(id)sender
 {
-  int senderTag = [sender tag];
+  NSInteger senderTag = [sender tag];
   if ((senderTag == 0) || (senderTag == 1))
     [self exportFormatOptionsPanel:self->exportFormatOptionsJpegPanel didCloseWithOK:(senderTag == 0)];
   else if ((senderTag == 2) || (senderTag == 3))

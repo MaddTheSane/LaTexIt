@@ -71,9 +71,9 @@
   else if ((object == [NSUserDefaultsController sharedUserDefaultsController]) &&
            [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
   {
-    int index = [[PreferencesController sharedController] compositionConfigurationsDocumentIndex];
+    NSInteger index = [[PreferencesController sharedController] compositionConfigurationsDocumentIndex];
     //for some reason, this GUI modification must be delayed
-    [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:0.];
+    [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:@(index) afterDelay:0.];
   }
 }
 //end observeValueForKeyPath:ofObject:change:context:
@@ -87,8 +87,8 @@
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
-  int selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if (!IsBetween_i(1, selectedIndex+1, [compositionConfigurations count]))
+  NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
+  if (!IsBetween_N(1, selectedIndex+1, [compositionConfigurations count]))
   {
     [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier options:nil];
     [[[AppController appController] preferencesWindowController] compositionConfigurationsManagerOpen:sender];

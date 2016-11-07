@@ -198,7 +198,7 @@
 -(BOOL) acceptsFirstMouse:(NSEvent*)event //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
+  NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
@@ -228,7 +228,7 @@
 
 -(void) moveUp:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -238,7 +238,7 @@
 
 -(void) moveDown:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];

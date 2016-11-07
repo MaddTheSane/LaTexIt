@@ -924,11 +924,11 @@
 		93CFB9AD16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewWithPlaceHolder.m; sourceTree = "<group>"; };
 		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
 		93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringExtended.m; sourceTree = "<group>"; };
-		93D4947410C1051700A0D06A /* NDProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDProcess.h; path = Frameworks/NDProcess/NDProcess.h; sourceTree = "<group>"; };
-		93D4947510C1051700A0D06A /* NDProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NDProcess.m; path = Frameworks/NDProcess/NDProcess.m; sourceTree = "<group>"; };
-		93D4947610C1051700A0D06A /* NDSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDSDKCompatibility.h; path = Frameworks/NDProcess/NDSDKCompatibility.h; sourceTree = "<group>"; };
-		93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+NDCarbonUtilities.h"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.h"; sourceTree = "<group>"; };
-		93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+NDCarbonUtilities.m"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.m"; sourceTree = "<group>"; };
+		93D4947410C1051700A0D06A /* NDProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = NDProcess.h; path = Frameworks/NDProcess/NDProcess.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
+		93D4947510C1051700A0D06A /* NDProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = NDProcess.m; path = Frameworks/NDProcess/NDProcess.m; sourceTree = "<group>"; usesTabs = 1; };
+		93D4947610C1051700A0D06A /* NDSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = NDSDKCompatibility.h; path = Frameworks/NDProcess/NDSDKCompatibility.h; sourceTree = "<group>"; usesTabs = 1; };
+		93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+NDCarbonUtilities.h"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.h"; sourceTree = "<group>"; usesTabs = 1; };
+		93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+NDCarbonUtilities.m"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.m"; sourceTree = "<group>"; usesTabs = 1; };
 		93D49E6D0F6EDB290024087A /* LibraryEquation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryEquation.h; sourceTree = "<group>"; };
 		93D49E6E0F6EDB290024087A /* LibraryEquation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryEquation.m; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
@@ -1090,7 +1090,7 @@
 			indentWidth = 2;
 			name = LaTeXiT;
 			sourceTree = "<group>";
-			tabWidth = 2;
+			tabWidth = 4;
 			usesTabs = 0;
 		};
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {

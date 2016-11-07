@@ -43,7 +43,7 @@
     [self selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:extend];
   else
   {
-    int row = [self rowForItem:item];
+    NSInteger row = [self rowForItem:item];
     [self selectRowIndexes:(row<0) ? [NSIndexSet indexSet] : [NSIndexSet indexSetWithIndex:(unsigned)row]
       byExtendingSelection:extend];
   }
@@ -57,7 +57,7 @@
   id item = nil;
   while((item = [enumerator nextObject]))
   {
-    int row = [self rowForItem:item];
+    NSInteger row = [self rowForItem:item];
     if (row>=0)
       [indexSet addIndex:(unsigned)row];
   }

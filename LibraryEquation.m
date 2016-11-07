@@ -248,7 +248,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   {
     NSString* string =
       [[[equation sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    unsigned int endIndex = MIN(17U, [string length]);
+    NSUInteger endIndex = MIN(17U, [string length]);
     [self setTitle:[string substringToIndex:endIndex]];
   }
 }
