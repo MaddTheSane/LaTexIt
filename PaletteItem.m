@@ -102,7 +102,7 @@
   }
   else if (self->type == LATEX_ITEM_TYPE_ENVIRONMENT)
   {
-    unsigned int length = [string length];
+    NSUInteger length = [string length];
     NSRange beginRange = [string rangeOfString:@"\\begin{"];
     NSRange endBeginRange =
       (beginRange.location != NSNotFound) ? [string rangeOfString:@"}" options:0 range:NSMakeRange(beginRange.location, length-beginRange.location)]

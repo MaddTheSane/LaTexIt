@@ -24,9 +24,9 @@
 @interface HistoryWindowController (PrivateAPI)
 -(void) clearAll:(BOOL)undoable;
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
--(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
--(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
--(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
+-(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+-(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
+-(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 @end
 
 @implementation HistoryWindowController
@@ -61,11 +61,9 @@
   
   NSImage* image = nil;
   image = [self->historyLockButton image];
-  [image setScalesWhenResized:YES];
   [image setSize:[self->historyLockButton frame].size];
   [self->historyLockButton setImage:image];
   image = [self->historyLockButton alternateImage];
-  [image setScalesWhenResized:YES];
   [image setSize:[self->historyLockButton frame].size];
   [self->historyLockButton setAlternateImage:image];
   [self->historyLockButton setState:[[HistoryManager sharedManager] isLocked] ? NSOnState : NSOffState];
@@ -112,7 +110,7 @@
   if ([keyPath isEqualToString:@"arrangedObjects"])
   {
     BOOL isKeyWindow = [[self window] isKeyWindow];
-    unsigned int nbItems = [self->historyView numberOfRows];
+    NSUInteger nbItems = [self->historyView numberOfRows];
     [self->clearHistoryButton setEnabled:(isKeyWindow && nbItems)];
     [[self window] setTitle:[NSString stringWithFormat:@"%@ (%d)", NSLocalizedString(@"History", @"History"), nbItems]];
   }//end if ([keyPath isEqualToString:@"arrangedObjects"])
@@ -125,7 +123,7 @@
 
 -(IBAction) changeLockedState:(id)sender
 {
-  [[HistoryManager sharedManager] setLocked:([sender state] == NSOnState)];
+  [[HistoryManager sharedManager] setLocked:([(NSButton*)sender state] == NSOnState)];
 }
 //end changeLockedState:
 
@@ -156,7 +154,7 @@
   }
   else
   {
-    int returnCode =
+    NSInteger returnCode =
       NSRunAlertPanel(NSLocalizedString(@"Clear History",@"Clear History"),
                       NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
                                         @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."),
@@ -168,7 +166,7 @@
 }
 //end clearHistory:
 
--(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+-(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
   if (returnCode == NSAlertDefaultReturn)
     [self clearAll:NO];
@@ -191,7 +189,7 @@
     [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
 }
 
--(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   if (returnCode == NSFileHandlingPanelOKButton)
   {
@@ -206,7 +204,7 @@
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
    informativeTextWithFormat:nil];
-     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+     [alert runModal];
     }//end if (ok)
   }
   [self->savePanel release];
@@ -253,7 +251,7 @@
 }
 //end open:
 
--(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   history_import_option_t import_option = [self->importOptionPopUpButton selectedTag];
   if (returnCode == NSOKButton)
@@ -293,14 +291,14 @@
 //the clear history button is not available if the history is not the key window
 -(void) windowDidBecomeKey:(NSNotification *)aNotification
 {
-  unsigned int nbItems = [self->historyView numberOfRows];
+  NSUInteger nbItems = [self->historyView numberOfRows];
   [self->clearHistoryButton setEnabled:nbItems];
 }
 //end windowDidBecomeKey:
 
 -(void) windowDidBecomeMain:(NSNotification *)aNotification
 {
-  unsigned int nbItems = [self->historyView numberOfRows];
+  NSUInteger nbItems = [self->historyView numberOfRows];
   [self->clearHistoryButton setEnabled:nbItems];
 }
 //end windowDidBecomeMain:

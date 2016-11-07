@@ -46,7 +46,7 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 -(BOOL) acceptsFirstMouse:(NSEvent*)event //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
+  NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
@@ -63,7 +63,7 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -107,7 +107,7 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 
 -(void) moveUp:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -117,7 +117,7 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 
 -(void) moveDown:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -128,7 +128,7 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification*)notification
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   [super textDidEndEditing:notification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }
@@ -137,7 +137,7 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 //delegate methods
 -(void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-  unsigned int lastIndex = [[self selectedRowIndexes] lastIndex];
+  NSUInteger lastIndex = [[self selectedRowIndexes] lastIndex];
   [self scrollRowToVisible:lastIndex];
 }
 //end tableViewSelectionDidChange:

@@ -355,7 +355,7 @@ static LibraryManager* sharedManagerInstance = nil;
         if (!uncompressedData) uncompressedData = [Compressor zipuncompressDeprecated:compressedData];
         if (uncompressedData)
         {
-          unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+          NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
           [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
           NSArray* libraryItemsAdded = nil;
           @try{
@@ -397,7 +397,7 @@ static LibraryManager* sharedManagerInstance = nil;
       else
       {
         NSError* error = nil;
-        unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+        NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
         if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
         NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[LibraryItem entity]];
@@ -411,9 +411,8 @@ static LibraryManager* sharedManagerInstance = nil;
         [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
         NSArray* libraryItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:libraryItemsToAddAsData];
         [LatexitEquation popManagedObjectContext];
-        unsigned int i = 0;
-        unsigned int count = [libraryItemsAdded count];
-        for(i = 0 ; i<count ; ++i)
+        NSUInteger count = [libraryItemsAdded count];
+        for(NSUInteger i = 0 ; i<count ; ++i)
           [[libraryItemsAdded objectAtIndex:i] setSortIndex:nbRootLibraryItemsBeforeAdding+i];
           
         NSEnumerator* enumerator = [libraryItemsToAdd objectEnumerator];
@@ -434,7 +433,7 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path setVersion:NO];
       NSError* error = nil;
-      unsigned int nbRootLibraryItemsBeforeAdding =
+      NSUInteger nbRootLibraryItemsBeforeAdding =
         [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
       if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
       NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
@@ -447,9 +446,8 @@ static LibraryManager* sharedManagerInstance = nil;
       [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
       NSArray* historyItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
       [LatexitEquation popManagedObjectContext];
-      unsigned int i = 0;
-      unsigned int count = [historyItemsAdded count];
-      for(i = 0 ; i<count ; ++i)
+      NSUInteger count = [historyItemsAdded count];
+      for(NSUInteger i = 0 ; i<count ; ++i)
       {
         HistoryItem* historyItem = [historyItemsAdded objectAtIndex:i];
         LibraryEquation* libraryEquation =
@@ -499,12 +497,12 @@ static LibraryManager* sharedManagerInstance = nil;
         if ([content isKindOfClass:[NSArray class]])
         {
           NSError* error = nil;
-          unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+          NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
           [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
           NSMutableArray* libraryItemsAdded = [NSMutableArray arrayWithCapacity:[content count]];
           NSEnumerator* enumerator = [content objectEnumerator];
           id description = nil;
-          unsigned int sortIndex = 0;
+          NSUInteger sortIndex = 0;
           while((description = [enumerator nextObject]))
           {
             LibraryItem* libraryItem = [LibraryItem libraryItemWithDescription:description];
@@ -518,9 +516,8 @@ static LibraryManager* sharedManagerInstance = nil;
               [libraryItem setBestTitle];
           }//end for each libraryItemDescription
           [LatexitEquation popManagedObjectContext];
-          unsigned int i = 0;
-          unsigned int count = [libraryItemsAdded count];
-          for(i = 0 ; i<count ; ++i)
+          NSUInteger count = [libraryItemsAdded count];
+          for(NSUInteger i = 0 ; i<count ; ++i)
             [[libraryItemsAdded objectAtIndex:i] setSortIndex:nbRootLibraryItemsBeforeAdding+i];
           ok = YES;
         }//end if ([content isKindOfClass:[NSArray class]])
@@ -557,10 +554,9 @@ static LibraryManager* sharedManagerInstance = nil;
         if ([latexitEquations count])
         {
           NSError* error = nil;
-          unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
-          unsigned int count = [latexitEquations count];
-          unsigned int i = 0;
-          for(i = 0 ; i<count ; ++i)
+          NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+          NSUInteger count = [latexitEquations count];
+          for(NSUInteger i = 0 ; i<count ; ++i)
           {
             LatexitEquation* latexitEquation = [latexitEquations objectAtIndex:i];
             LibraryEquation* libraryEquation =
@@ -606,9 +602,8 @@ static LibraryManager* sharedManagerInstance = nil;
     if (error) {DebugLog(0, @"error : %@", error);}
     [fetchRequest release];
 
-    unsigned int i = 0;
-    unsigned int n = [rootItemsOrdered count];
-    for(i = 0 ; i<n ; ++i)
+    NSUInteger n = [rootItemsOrdered count];
+    for(NSUInteger i = 0 ; i<n ; ++i)
     {
       LibraryItem* libraryItem = [rootItemsOrdered objectAtIndex:i];
       [libraryItem setSortIndex:i];
@@ -789,8 +784,8 @@ static LibraryManager* sharedManagerInstance = nil;
       [fetchRequest setEntity:[LatexitEquation entity]];
       NSError* error = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
-      unsigned int progression = 0;
-      unsigned int count = [latexitEquations count];
+      NSUInteger progression = 0;
+      NSUInteger count = [latexitEquations count];
       [migratingProgressIndicator setIndeterminate:NO];
       [migratingProgressIndicator setMaxValue:1.*count];
       [migratingProgressIndicator setDoubleValue:0.];

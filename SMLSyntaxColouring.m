@@ -753,8 +753,8 @@ static NSArray *syntaxDefinitionsArray;
 				if (searchStringLength > 1)
         {
 					rangeOfLine = [searchString lineRangeForRange:NSMakeRange(beginning, 0)];
-          unsigned int countPrecedingAntiSlashed = 0;
-          unsigned int prevIndex = beginning;
+          NSUInteger countPrecedingAntiSlashed = 0;
+          NSUInteger prevIndex = beginning;
           while(prevIndex--)
           {
             if ([searchString characterAtIndex:prevIndex] == '\\')

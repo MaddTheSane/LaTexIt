@@ -1314,7 +1314,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
  
   
   NSPanel* panelToOpen = nil;
-  export_format_t format = [self->generalExportFormatPopupButton selectedTag];
+  export_format_t format = (export_format_t)[self->generalExportFormatPopupButton selectedTag];
   if (format == EXPORT_FORMAT_JPEG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
   else if (format == EXPORT_FORMAT_SVG)
@@ -1446,7 +1446,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [self->applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Apply", @"Apply")];
     [self->applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
   }
-  int choice = [self->applyPreambleToLibraryAlert runModal];
+  NSInteger choice = [self->applyPreambleToLibraryAlert runModal];
   if (choice == NSAlertFirstButtonReturn)
   {
     NSArray* libraryEquations = [[LibraryManager sharedManager] libraryEquations];
@@ -1542,8 +1542,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
-  int selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_i(1, selectedIndex+1, [compositionConfigurations count]))
+  NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
+  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_N(1, selectedIndex+1, [compositionConfigurations count]))
     [NSApp beginSheet:self->compositionConfigurationsManagerPanel modalForWindow:[self window] modalDelegate:self
       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
   else

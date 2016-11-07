@@ -95,11 +95,59 @@ _TG_ATTRS
 __tg_Clip_N(double inf, double x, double sup) {return Clip_d(inf, x, sup);}
 
 
+static inline char
+_TG_ATTRS
+__tg_IsBetween_N(char inf, char x, char sup) {return IsBetween_c(inf, x, sup);}
+
+static inline unsigned char
+_TG_ATTRS
+__tg_IsBetween_N(unsigned char inf, unsigned char x, unsigned char sup) {return IsBetween_uc(inf, x, sup);}
+
+static inline short
+_TG_ATTRS
+__tg_IsBetween_N(short inf, short x, short sup) {return IsBetween_s(inf, x, sup);}
+
+static inline unsigned short
+_TG_ATTRS
+__tg_IsBetween_N(unsigned short inf, unsigned short x, unsigned short sup) {return IsBetween_us(inf, x, sup);}
+
+static inline int
+_TG_ATTRS
+__tg_IsBetween_N(int inf, int x, int sup) {return IsBetween_i(inf, x, sup);}
+
+static inline unsigned int
+_TG_ATTRS
+__tg_IsBetween_N(unsigned int inf, unsigned int x, unsigned int sup) {return IsBetween_ui(inf, x, sup);}
+
+static inline long
+_TG_ATTRS
+__tg_IsBetween_N(long inf, long x, long sup) {return IsBetween_l(inf, x, sup);}
+
+static inline unsigned long
+_TG_ATTRS
+__tg_IsBetween_N(unsigned long inf, unsigned long x, unsigned long sup) {return IsBetween_ul(inf, x, sup);}
+
+static inline float
+_TG_ATTRS
+__tg_IsBetween_N(float inf, float x, float sup) {return IsBetween_f(inf, x, sup);}
+
+static inline double
+_TG_ATTRS
+__tg_IsBetween_N(double inf, double x, double sup) {return IsBetween_d(inf, x, sup);}
+
+
 #undef Clip_N
 #define Clip_N(__x, __y, __z)                                \
 		__tg_Clip_N(__tg_promote3((__x), (__y), (__z))(__x), \
 					__tg_promote3((__x), (__y), (__z))(__y), \
 					__tg_promote3((__x), (__y), (__z))(__z))
+
+#undef IsBetween_N
+#define IsBetween_N(__x, __y, __z)                                \
+    __tg_IsBetween_N(__tg_promote3((__x), (__y), (__z))(__x), \
+    __tg_promote3((__x), (__y), (__z))(__y), \
+    __tg_promote3((__x), (__y), (__z))(__z))
+
 
 NSString* GetMySVGPboardType(void);
 NSString* GetMyPNGPboardType(void);

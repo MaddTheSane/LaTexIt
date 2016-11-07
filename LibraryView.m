@@ -210,7 +210,7 @@
   {
     NSArray* previousSelectedItems = [self itemsAtRowIndexes:[self selectedRowIndexes]];
     NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    int row = [self rowAtPoint:point];
+    NSInteger row = [self rowAtPoint:point];
     id candidateToSelection = [self itemAtRow:row];
     if (![previousSelectedItems containsObject:candidateToSelection])
       [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
@@ -219,8 +219,8 @@
     {
       [super mouseDown:theEvent];
       NSPoint pointInView = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-      int row = [self rowAtPoint:pointInView];
-      int column = [self columnAtPoint:pointInView];
+      NSInteger row = [self rowAtPoint:pointInView];
+      NSInteger column = [self columnAtPoint:pointInView];
       NSRect rect = ((row >= 0) && (column >= 0)) ? [self frameOfCellAtColumn:column row:row] : NSZeroRect;
       NSRect imageFrame = NSZeroRect;
       NSRect titleFrame = NSZeroRect;
@@ -282,7 +282,7 @@
   else if ([[self window] isKeyWindow])//if (NSPointInRect(location, [clipView bounds]))
   {
     location = [self convertPoint:location fromView:clipView];
-    int row = [self rowAtPoint:location];
+    NSInteger row = [self rowAtPoint:location];
     id libraryItem = (row >= 0) && (row < [self numberOfRows]) ? [self itemAtRow:row] : nil;
     NSImage* image = nil;
     NSColor* backgroundColor = nil;
@@ -300,7 +300,7 @@
 
 -(void) cancelOperation:(id)sender
 {
-  int editedRow = [self editedRow];
+  NSInteger editedRow = [self editedRow];
   if (editedRow >= 0)
   {
     LibraryItem* libraryItem = [self itemAtRow:editedRow];
@@ -330,7 +330,7 @@
 
 -(void) edit:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -371,7 +371,7 @@
   }
   else //if we are going down after an upwards selection, deselect last selected item
   {
-    unsigned int firstIndex = [selectedRowIndexes firstIndex];
+    NSUInteger firstIndex = [selectedRowIndexes firstIndex];
     [self deselectRow:firstIndex];
   }
 }
@@ -380,7 +380,7 @@
 -(void) moveUpAndModifySelection:(id)sender
 {
   //selection to up
-  unsigned int lastSelectedRow   = [self selectedRow];
+  NSUInteger lastSelectedRow   = [self selectedRow];
   NSIndexSet* selectedRowIndexes = [self selectedRowIndexes];
   if (lastSelectedRow == [selectedRowIndexes firstIndex]) //if the selection is going up, and up, increase it
   {
@@ -390,7 +390,7 @@
   }
   else //if we are going up after an downwards selection, deselect last selected item
   {
-    unsigned int lastIndex = [selectedRowIndexes lastIndex];
+    NSUInteger lastIndex = [selectedRowIndexes lastIndex];
     [self deselectRow:lastIndex];
   }
 }
@@ -398,7 +398,7 @@
 
 -(void) moveUp:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -408,7 +408,7 @@
 
 -(void) moveDown:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -564,7 +564,7 @@
   if ([selectedItems count])
   {
     [[self dataSource] outlineView:self writeItems:selectedItems toPasteboard:pasteBoard];
-    [pasteBoard setPropertyList:nil forType:LibraryItemsWrappedPboardType];//this pboard must be persistent
+    [pasteBoard setPropertyList:@{} forType:LibraryItemsWrappedPboardType];//this pboard must be persistent
   }//end if ([selectedItems count])
   [preferencesController setExportFormatCurrentSession:oldExportFormatCurrentSession];
 }
@@ -577,7 +577,7 @@
   {
     NSPasteboard* pasteBoard = [NSPasteboard generalPasteboard];
     [[self dataSource] outlineView:self writeItems:selectedItems toPasteboard:pasteBoard];
-    [pasteBoard setPropertyList:nil forType:LibraryItemsWrappedPboardType];
+    [pasteBoard setPropertyList:@{} forType:LibraryItemsWrappedPboardType];
     [self->libraryController removeItems:selectedItems];
     [[self->libraryController managedObjectContext] processPendingChanges];
     [self reloadData];

@@ -11,7 +11,7 @@
 
 @implementation NSArrayController (Extended)
 
--(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
   NSArray* objectsToMove = [[self arrangedObjects] objectsAtIndexes:indices];
   NSUInteger shift = 0;

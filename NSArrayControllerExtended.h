@@ -11,6 +11,6 @@
 
 @interface NSArrayController (Extended)
 
--(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
 @end

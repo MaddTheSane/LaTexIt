@@ -138,8 +138,8 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) fixChildrenSortIndexesRecursively:(BOOL)recursively
 {
   NSArray* theChildren = [self childrenOrdered];
-  unsigned int n = [theChildren count];
-  unsigned int i = 0;
+  NSUInteger n = [theChildren count];
+  NSUInteger i = 0;
   for(i = 0 ; i<n ; ++i)
   {
     LibraryItem* libraryItem = [theChildren objectAtIndex:i];
@@ -206,10 +206,9 @@ static NSEntityDescription* cachedEntity = nil;
   [self setExpanded:[[description objectForKey:@"expanded"] boolValue]];
   NSArray* childrenDescriptions = isOldLibraryItem ? [description objectForKey:@"content"] : [description objectForKey:@"children"];
   NSMutableArray* theChildren = [NSMutableArray arrayWithCapacity:[childrenDescriptions count]];
-  unsigned int count = [childrenDescriptions count];
-  unsigned int i = 0;
-  unsigned int index = 0;
-  for(i = 0 ; i<count ; ++i)
+  NSUInteger count = [childrenDescriptions count];
+  NSUInteger index = 0;
+  for(NSUInteger i = 0 ; i<count ; ++i)
   {
     id childDescription = [childrenDescriptions objectAtIndex:i];
     LibraryItem* child = [LibraryItem libraryItemWithDescription:childDescription];

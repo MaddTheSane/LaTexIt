@@ -1391,7 +1391,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end compositionConfigurationsDocumentIndex
 
--(void) setCompositionConfigurationsDocumentIndex:(int)value
+-(void) setCompositionConfigurationsDocumentIndex:(NSInteger)value
 {
   NSArrayController* compositionsController = [self lazyCompositionConfigurationsControllerWithCreationIfNeeded:NO];
   if (compositionsController)
@@ -1407,7 +1407,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       [[NSUserDefaults standardUserDefaults] setInteger:value forKey:CompositionConfigurationDocumentIndexKey];
     else
       #ifdef ARC_ENABLED
-      CFPreferencesSetAppValue((__bridge CFStringRef)CompositionConfigurationDocumentIndexKey, (__bridge const void*)[NSNumber numberWithInt:value], (__bridge CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((__bridge CFStringRef)CompositionConfigurationDocumentIndexKey, (__bridge const void*)@(value), (__bridge CFStringRef)LaTeXiTAppKey);
       #else
       CFPreferencesSetAppValue((CFStringRef)CompositionConfigurationDocumentIndexKey, [NSNumber numberWithInt:value], (CFStringRef)LaTeXiTAppKey);
       #endif

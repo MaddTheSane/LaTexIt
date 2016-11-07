@@ -171,12 +171,12 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification *)aNotification
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   //the shortcut must be only one character long
   NSArray* serviceShortcuts = [[PreferencesController sharedController] serviceShortcuts];
   NSString* normalShortcut = ((selectedRow>=0) && ((unsigned)selectedRow<[serviceShortcuts count])) ?
     [[[serviceShortcuts objectAtIndex:selectedRow] objectForKey:ServiceShortcutStringKey] uppercaseString] : nil;
-  unsigned int length = [normalShortcut length];
+  NSUInteger length = [normalShortcut length];
   if (!normalShortcut)
     normalShortcut = @"";
   else if (length > 0)

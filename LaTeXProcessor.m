@@ -556,7 +556,7 @@ static LaTeXProcessor* sharedInstance = nil;
       }//end if (r1.location != NSNotFound)
       if (r2.location != NSNotFound)
       {
-        [buildData appendData:[[NSString stringWithFormat:@"trailer\n<< /Size %u", 
+        [buildData appendData:[[NSString stringWithFormat:@"trailer\n<< /Size %lu", 
                                 annotationObjectIndex+(useAnnotationObjectIndex ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
         [buildData appendData:[trailerAfterSize dataUsingEncoding:NSUTF8StringEncoding]];
       }//end if (r2.location != NSNotFound)
