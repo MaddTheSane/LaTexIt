@@ -40,7 +40,7 @@
   NSSavePanel* currentSavePanel;
 }
 
--(id) initWithLoadingFromNib;
+-(instancetype) initWithLoadingFromNib;
 
 -(NSWindow*)   logWindow;
 -(NSTextView*) logTextView;

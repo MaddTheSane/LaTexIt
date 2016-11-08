@@ -18,11 +18,21 @@ extern int DebugLogLevel;
 #define LocalLocalizedString(key, comment) \
 	    [[NSBundle bundleForClass:[self class]] localizedStringForKey:(key) value:@"" table:nil]
 
+#ifndef NSAppKitVersionNumber10_4
 #define NSAppKitVersionNumber10_4 824
+#endif
+#ifndef NSAppKitVersionNumber10_5
 #define NSAppKitVersionNumber10_5 949
+#endif
+#ifndef NSAppKitVersionNumber10_6
 #define NSAppKitVersionNumber10_6 1038
-//#define NSAppKitVersionNumber10_7 1110
+#endif
+#ifndef NSAppKitVersionNumber10_7
+#define NSAppKitVersionNumber10_7 1110
+#endif
+#ifndef NSAppKitVersionNumber10_8
 #define NSAppKitVersionNumber10_8 1187
+#endif
 
 BOOL isMacOS10_5OrAbove(void);
 BOOL isMacOS10_6OrAbove(void);

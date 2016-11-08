@@ -11,67 +11,67 @@
 @protocol ExportFormatOptionsDelegate;
 
 @interface ExportFormatOptionsPanes : NSNib {
-  IBOutlet NSPanel*     exportFormatOptionsJpegPanel;
-  IBOutlet NSBox*       exportFormatOptionsJpegBox;
-  IBOutlet NSSlider*    exportFormatOptionsJpegQualitySlider;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityLeastLabel;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityLowLabel;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityMediumLabel;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityHighLabel;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityMaxiLabel;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityLabel;
-  IBOutlet NSTextField* exportFormatOptionsJpegQualityTextField;
-  IBOutlet NSTextField* exportFormatOptionsJpegBackgroundColorLabel;
-  IBOutlet NSColorWell* exportFormatOptionsJpegBackgroundColorWell;
-  IBOutlet NSButton*    exportFormatOptionsJpegOKButton;
-  IBOutlet NSButton*    exportFormatOptionsJpegCancelButton;
+  __weak NSPanel*     exportFormatOptionsJpegPanel;
+  IBOutlet __weak NSBox*       exportFormatOptionsJpegBox;
+  IBOutlet __weak NSSlider*    exportFormatOptionsJpegQualitySlider;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityLeastLabel;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityLowLabel;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityMediumLabel;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityHighLabel;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityMaxiLabel;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityLabel;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegQualityTextField;
+  IBOutlet __weak NSTextField* exportFormatOptionsJpegBackgroundColorLabel;
+  IBOutlet __weak NSColorWell* exportFormatOptionsJpegBackgroundColorWell;
+  IBOutlet __weak NSButton*    exportFormatOptionsJpegOKButton;
+  IBOutlet __weak NSButton*    exportFormatOptionsJpegCancelButton;
   
   CGFloat  jpegQualityPercent;
   NSColor* jpegBackgroundColor;
-  id       exportFormatOptionsJpegPanelDelegate;
+  __weak id<ExportFormatOptionsDelegate>       exportFormatOptionsJpegPanelDelegate;
 
-  IBOutlet NSPanel*     exportFormatOptionsSvgPanel;
-  IBOutlet NSBox*       exportFormatOptionsSvgBox;
-  IBOutlet NSTextField* exportFormatOptionsSvgPdfToSvgPathTextField;
-  IBOutlet NSButton*    exportFormatOptionsSvgPdfToSvgPathModifyButton;
-  IBOutlet NSButton*    exportFormatOptionsSvgOKButton;
-  IBOutlet NSButton*    exportFormatOptionsSvgCancelButton;
+  __weak NSPanel*     exportFormatOptionsSvgPanel;
+  IBOutlet __weak NSBox*       exportFormatOptionsSvgBox;
+  IBOutlet __weak NSTextField* exportFormatOptionsSvgPdfToSvgPathTextField;
+  IBOutlet __weak NSButton*    exportFormatOptionsSvgPdfToSvgPathModifyButton;
+  IBOutlet __weak NSButton*    exportFormatOptionsSvgOKButton;
+  IBOutlet __weak NSButton*    exportFormatOptionsSvgCancelButton;
   
   NSString* svgPdfToSvgPath;
-  id        exportFormatOptionsSvgPanelDelegate;
+  __weak id<ExportFormatOptionsDelegate>        exportFormatOptionsSvgPanelDelegate;
   
-  IBOutlet NSPanel*  exportFormatOptionsTextPanel;
-  IBOutlet NSBox*    exportFormatOptionsTextBox;
-  IBOutlet NSButton* exportFormatOptionsTextExportPreambleButton;
-  IBOutlet NSButton* exportFormatOptionsTextExportEnvironmentButton;
-  IBOutlet NSButton* exportFormatOptionsTextExportBodyButton;
-  IBOutlet NSButton* exportFormatOptionsTextOKButton;
-  IBOutlet NSButton* exportFormatOptionsTextCancelButton;
+  __weak NSPanel*  exportFormatOptionsTextPanel;
+  __weak NSBox*    exportFormatOptionsTextBox;
+  IBOutlet __weak NSButton* exportFormatOptionsTextExportPreambleButton;
+  IBOutlet __weak NSButton* exportFormatOptionsTextExportEnvironmentButton;
+  IBOutlet __weak NSButton* exportFormatOptionsTextExportBodyButton;
+  IBOutlet __weak NSButton* exportFormatOptionsTextOKButton;
+  IBOutlet __weak NSButton* exportFormatOptionsTextCancelButton;
 
   BOOL textExportPreamble;
   BOOL textExportEnvironment;
   BOOL textExportBody;
-  id   exportFormatOptionsTextPanelDelegate;
+  __weak id<ExportFormatOptionsDelegate>   exportFormatOptionsTextPanelDelegate;
 }
 
--(id) initWithLoadingFromNib;
+-(instancetype) initWithLoadingFromNib;
 
--(NSPanel*) exportFormatOptionsJpegPanel;
+@property (weak) IBOutlet NSPanel *exportFormatOptionsJpegPanel;
 @property CGFloat jpegQualityPercent;
 @property (retain) NSColor *jpegBackgroundColor;
-@property (assign) id<ExportFormatOptionsDelegate> exportFormatOptionsJpegPanelDelegate;
+@property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsJpegPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsSvgPanel;
+@property (weak) IBOutlet NSPanel *exportFormatOptionsSvgPanel;
 @property (copy) NSString *svgPdfToSvgPath;
-@property (assign) id<ExportFormatOptionsDelegate> exportFormatOptionsSvgPanelDelegate;
+@property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsSvgPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsTextPanel;
--(NSBox*)    exportFormatOptionsTextBox;
+@property (weak) IBOutlet NSPanel *exportFormatOptionsTextPanel;
+@property (weak) IBOutlet NSBox   *exportFormatOptionsTextBox;
 
 @property BOOL textExportPreamble;
 @property BOOL textExportEnvironment;
 @property BOOL textExportBody;
-@property (assign) id<ExportFormatOptionsDelegate> exportFormatOptionsTextPanelDelegate;
+@property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsTextPanelDelegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 -(IBAction) close:(id)sender;

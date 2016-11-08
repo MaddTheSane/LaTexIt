@@ -37,7 +37,7 @@ extern NSString* PluginsToolbarItemIdentifier;
 
 @class Plugin;
 
-@interface PreferencesWindowController : NSWindowController /*<NSTextFieldDelegate>*/ {
+@interface PreferencesWindowController : NSWindowController <NSTextFieldDelegate> {
   IBOutlet NSView*        generalView;
   IBOutlet NSView*        editionView;
   IBOutlet NSView*        templatesView;

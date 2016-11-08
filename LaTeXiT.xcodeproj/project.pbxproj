@@ -239,7 +239,7 @@
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
 		935AD8720F9E389700B361D8 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935AD8710F9E389700B361D8 /* MyDocument.xib */; };
 		935ADA2B0F9EF7AD00B361D8 /* LibraryWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */; };
-		935ADDAE0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m in Sources */ = {isa = PBXBuildFile; fileRef = 935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */; };
+		935ADDAE0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m in Sources */ = {isa = PBXBuildFile; fileRef = 935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		935AE46A0FA1F8A700B361D8 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */; };
 		935AECEE0CB16ECC001A5067 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		935B8B260FB426B700448B03 /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
@@ -958,8 +958,8 @@
 		93E9CF7A0E9F306800B08FB0 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Automator/CreateEquations/es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93E9CF7C0E9F307F00B08FB0 /* main.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = main.xib; sourceTree = "<group>"; };
 		93E9CFA20E9F317100B08FB0 /* CreateEquations_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateEquations_Prefix.pch; path = Automator/CreateEquations/CreateEquations_Prefix.pch; sourceTree = "<group>"; };
-		93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Automator_CreateEquations.m; path = Automator/CreateEquations/Automator_CreateEquations.m; sourceTree = "<group>"; };
-		93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Automator_CreateEquations.h; path = Automator/CreateEquations/Automator_CreateEquations.h; sourceTree = "<group>"; };
+		93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Automator_CreateEquations.m; sourceTree = "<group>"; };
+		93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Automator_CreateEquations.h; sourceTree = "<group>"; };
 		93EE114807F2F607009E1F36 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
 		93EE114907F2F607009E1F36 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
 		93EED7D508A2197500A99BDF /* HistoryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryWindowController.xib; sourceTree = "<group>"; };
@@ -1462,7 +1462,7 @@
 			children = (
 				93E9CF840E9F30A300B08FB0 /* CreateEquations */,
 			);
-			name = Automator;
+			path = Automator;
 			sourceTree = "<group>";
 		};
 		9344B6E70E8BBDA700FE90A5 /* LaTeX Processor */ = {
@@ -1883,7 +1883,7 @@
 				93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */,
 				93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */,
 			);
-			name = CreateEquations;
+			path = CreateEquations;
 			sourceTree = "<group>";
 		};
 		93E9CF880E9F30BE00B08FB0 /* Automator */ = {
@@ -2795,7 +2795,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IBC_FLATTEN_NIBS = NO;
 				IBC_STRIP_NIBS = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx;
@@ -2845,7 +2845,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PREBINDING = NO;
 				SDKROOT = macosx;
 			};
