@@ -13,7 +13,7 @@
   id reference;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithReference:(id)reference;
 -(instancetype) initWithReference:(id)reference;

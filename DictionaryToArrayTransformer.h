@@ -12,7 +12,7 @@
   NSArray* descriptors;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDescriptors:(NSArray*)descriptors;
 -(instancetype) initWithDescriptors:(NSArray*)descriptors;

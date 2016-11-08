@@ -150,8 +150,8 @@
 
 -(void) setBodyTemplate:(NSDictionary*)bodyTemplate moveCursor:(BOOL)moveCursor;
 
--(BOOL) canReexport;
--(BOOL) hasImage;
+@property (readonly) BOOL canReexport;
+@property (readonly) BOOL hasImage;
 @property (readonly, getter=isPreambleVisible) BOOL preambleVisible;
 -(void) setPreambleVisible:(BOOL)visible animate:(BOOL)animate;
 

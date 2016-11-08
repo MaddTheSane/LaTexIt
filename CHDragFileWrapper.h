@@ -17,7 +17,7 @@
 +(instancetype) dragFileWrapperWithFileName:(NSString*)filename uti:(NSString*)uti;
 
 -(instancetype) initWithFileName:(NSString*)filename uti:(NSString*)uti;
--(NSString*) fileName;
--(NSString*) uti;
+@property (readonly, copy) NSString *fileName;
+@property (readonly, copy) NSString *uti;
 
 @end

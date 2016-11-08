@@ -53,10 +53,10 @@ extern NSString* ImageDidChangeNotification;
 //but if you specify a non-nil cachedImage, it will use this cachedImage to be faster
 //the data is full pdfdata (that may contain meta-data like keywords, creator...)
 -(void) setPDFData:(NSData*)someData cachedImage:(NSImage*)cachedImage;
--(NSData*) pdfData;
--(NSSize) naturalPDFSize;
+@property (readonly, copy) NSData *pdfData;
+@property (readonly) NSSize naturalPDFSize;
 
--(NSColor*) backgroundColor;
+@property (readonly, retain) NSColor *backgroundColor;
 -(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem;
 
 //used to update the pasteboard content for a live Linkback link

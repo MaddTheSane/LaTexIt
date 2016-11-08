@@ -15,7 +15,7 @@
   NSString* additionalKeyPath;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
                      additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;

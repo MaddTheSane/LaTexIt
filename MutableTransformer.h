@@ -12,7 +12,7 @@
 
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformer;
 

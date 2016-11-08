@@ -10,6 +10,8 @@
 
 
 @implementation CHDragFileWrapper
+@synthesize fileName;
+@synthesize uti;
 
 +(id) dragFileWrapperWithFileName:(NSString*)fileName uti:(NSString*)uti
 {
@@ -41,28 +43,6 @@
   #endif
 }
 //end dealloc
-
--(NSString*) fileName
-{
-  #ifdef ARC_ENABLED
-  NSString* result = [self->fileName copy];
-  #else
-  NSString* result = [[self->fileName copy] autorelease];
-  #endif
-  return result;
-}
-//end fileName
-
--(NSString*) uti
-{
-  #ifdef ARC_ENABLED
-  NSString* result = [self->uti copy];
-  #else
-  NSString* result = [[self->uti copy] autorelease];
-  #endif
-  return result;
-}
-//end uti
 
 -(NSArray*) writableTypesForPasteboard:(NSPasteboard*)pasteboard
 {

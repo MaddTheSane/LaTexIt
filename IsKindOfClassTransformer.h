@@ -13,7 +13,7 @@
   Class theClass;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithClass:(Class)aClass;
 -(instancetype) initWithClass:(Class)aClass;

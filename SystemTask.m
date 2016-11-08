@@ -67,9 +67,7 @@
 
 -(id) init
 {
-  if (![self initWithWorkingDirectory:NSTemporaryDirectory()])
-    return nil;
-  return self;
+  return self = [self initWithWorkingDirectory:NSTemporaryDirectory()];
 }
 //end init
 
@@ -106,96 +104,18 @@
 }
 //end dealloc
 
--(void) setEnvironment:(NSDictionary*)theEnvironment
-{
-  #ifdef ARC_ENABLED
-  #else
-  [theEnvironment retain];
-  [self->environment release];
-  #endif
-  self->environment = theEnvironment;
-}
-//end setEnvironment:
-
--(void) setLaunchPath:(NSString*)path
-{
-  #ifdef ARC_ENABLED
-  #else
-  [path retain];
-  [self->launchPath release];
-  #endif
-  self->launchPath = path;
-}
-//end setEnvironment:
-
--(void) setArguments:(NSArray*)args
-{
-  #ifdef ARC_ENABLED
-  #else
-  [args retain];
-  [self->arguments release];
-  #endif
-  self->arguments = args;
-}
-//end setArguments:
-
--(void) setUsingLoginShell:(BOOL)value
-{
-  self->isUsingLoginShell = value;
-}
-
--(void) setCurrentDirectoryPath:(NSString*)directoryPath
-{
-  #ifdef ARC_ENABLED
-  #else
-  [directoryPath retain];
-  [self->currentDirectoryPath release];
-  #endif
-  self->currentDirectoryPath = directoryPath;
-}
-//end setCurrentDirectoryPath:
-
--(NSDictionary*) environment
-{
-  return self->environment;
-}
-//end environment
-
--(NSString*) launchPath
-{
-  return self->launchPath;
-}
-//end launchPath
-
--(NSArray*) arguments
-{
-  return self->arguments;
-}
-//end arguments
-
--(BOOL) isUsingLoginShell
-{
-  return self->isUsingLoginShell;
-}
-//end isUsingLoginShell
-
--(NSString*) currentDirectoryPath
-{
-  return self->currentDirectoryPath;
-}
-//end currentDirectoryPath
+@synthesize environment;
+@synthesize launchPath;
+@synthesize arguments = arguments;
+@synthesize currentDirectoryPath;
+@synthesize usingLoginShell = isUsingLoginShell;
+@synthesize terminationStatus;
 
 -(void) setTimeOut:(NSTimeInterval)value
 {
   self->timeOutLimit = value;
 }
 //end setTimeOut:
-
--(int) terminationStatus
-{
-  return self->terminationStatus;
-}
-//end terminationStatus
 
 -(NSString*) equivalentLaunchCommand
 {

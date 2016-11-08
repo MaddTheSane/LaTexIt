@@ -12,7 +12,7 @@
   BOOL directoryAllowed;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDirectoryAllowed:(BOOL)directoryAllowed;
 -(instancetype) initWithDirectoryAllowed:(BOOL)directoryAllowed;

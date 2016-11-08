@@ -13,7 +13,7 @@
   __strong NSOutlineView* outlineView;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView;
 -(instancetype) initWithOutlineView:(NSOutlineView*)outlineView;

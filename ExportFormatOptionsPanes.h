@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol ExportFormatOptionsDelegate;
+
 @interface ExportFormatOptionsPanes : NSNib {
   IBOutlet NSPanel*     exportFormatOptionsJpegPanel;
   IBOutlet NSBox*       exportFormatOptionsJpegBox;
@@ -55,34 +57,32 @@
 -(id) initWithLoadingFromNib;
 
 -(NSPanel*) exportFormatOptionsJpegPanel;
--(CGFloat)  jpegQualityPercent;
--(void)     setJpegQualityPercent:(CGFloat)value;
--(NSColor*) jpegBackgroundColor;
--(void)     setJpegBackgroundColor:(NSColor*)value;
--(id)       exportFormatOptionsJpegPanelDelegate;
--(void)     setExportFormatOptionsJpegPanelDelegate:(id)delegate;
+@property CGFloat jpegQualityPercent;
+@property (retain) NSColor *jpegBackgroundColor;
+@property (assign) id<ExportFormatOptionsDelegate> exportFormatOptionsJpegPanelDelegate;
 
 -(NSPanel*)  exportFormatOptionsSvgPanel;
--(NSString*) svgPdfToSvgPath;
--(void)      setSvgPdfToSvgPath:(NSString*)value;
--(id)        exportFormatOptionsSvgPanelDelegate;
--(void)      setExportFormatOptionsSvgPanelDelegate:(id)delegate;
+@property (copy) NSString *svgPdfToSvgPath;
+@property (assign) id<ExportFormatOptionsDelegate> exportFormatOptionsSvgPanelDelegate;
 
 -(NSPanel*)  exportFormatOptionsTextPanel;
 -(NSBox*)    exportFormatOptionsTextBox;
--(BOOL)      textExportPreamble;
--(void)      setTextExportPreamble:(BOOL)value;
--(BOOL)      textExportEnvironment;
--(void)      setTextExportEnvironment:(BOOL)value;
--(BOOL)      textExportBody;
--(void)      setTextExportBody:(BOOL)value;
--(id)        exportFormatOptionsTextPanelDelegate;
--(void)      setExportFormatOptionsTextPanelDelegate:(id)delegate;
+
+@property BOOL textExportPreamble;
+@property BOOL textExportEnvironment;
+@property BOOL textExportBody;
+@property (assign) id<ExportFormatOptionsDelegate> exportFormatOptionsTextPanelDelegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 -(IBAction) close:(id)sender;
 
 #pragma mark delegate
+-(void) exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok;
+
+@end
+
+@protocol ExportFormatOptionsDelegate <NSObject>
+
 -(void) exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok;
 
 @end

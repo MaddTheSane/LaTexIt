@@ -8,13 +8,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ArraySortingTransformer : NSValueTransformer {
-  NSArray* descriptors;
+  NSArray<NSSortDescriptor*>* descriptors;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
-+(instancetype) transformerWithDescriptors:(NSArray*)descriptors;
--(instancetype) initWithDescriptors:(NSArray*)descriptors;
++(instancetype) transformerWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors;
+-(instancetype) initWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors;
 
 @end
+
+NS_ASSUME_NONNULL_END

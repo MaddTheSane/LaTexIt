@@ -13,7 +13,7 @@
   NSArray* references;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithReferences:(id)references;
 -(instancetype) initWithReferences:(id)references;

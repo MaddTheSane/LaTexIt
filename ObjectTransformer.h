@@ -13,7 +13,7 @@
   NSDictionary* dictionary;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDictionary:(NSDictionary*)dictionary;
 -(instancetype) initWithDictionary:(NSDictionary*)dictionary;

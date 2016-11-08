@@ -13,7 +13,7 @@
   NSNumber* shift;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithShift:(NSNumber*)shift;
 -(instancetype) initWithShift:(NSNumber*)shift;

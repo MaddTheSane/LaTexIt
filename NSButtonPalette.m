@@ -10,6 +10,8 @@
 
 
 @implementation NSButtonPalette
+@synthesize exclusive = isExclusive;
+@synthesize delegate;
 
 -(id) init
 {
@@ -19,18 +21,6 @@
   return self;
 }
 //end init
-
--(BOOL) isExclusive
-{
-  return self->isExclusive;
-}
-//end isExclusive
-
--(void) setExclusive:(BOOL)value
-{
-  self->isExclusive = value;
-}
-//end setExclusive:
 
 -(void) add:(NSButton*)button
 {
@@ -45,18 +35,6 @@
   [button removeObserver:self forKeyPath:@"state"];
 }
 //end remove:
-
--(id) delegate
-{
-  return self->delegate;
-}
-//end delegate;
-
--(void) setDelegate:(id)value
-{
-  self->delegate = value;
-}
-//end setDelegate:
 
 -(NSButton*) buttonWithTag:(NSInteger)tag
 {
@@ -76,7 +54,7 @@
 -(NSButton*) buttonWithState:(NSInteger)state
 {
   NSButton* result = nil;
-  NSEnumerator* enumerator = [self->buttons objectEnumerator];
+  NSEnumerator* enumerator = [buttons objectEnumerator];
   NSButton* button = nil;
   while(!result && ((button = [enumerator nextObject])))
   {
@@ -92,7 +70,7 @@
 {
   if ([keyPath isEqualToString:@"state"] && [self->buttons containsObject:object])
   {
-    if (self->isExclusive && ([(NSButton*)object state] == NSOnState))
+    if (isExclusive && ([(NSButton*)object state] == NSOnState))
     {
       NSUInteger count = [self->buttons count];
       while(count--)
@@ -102,8 +80,8 @@
           [button setState:NSOffState];
       }//end for each button
     }//end if (self->isExclusive && ([object state] == NSOnState))
-    if ([self->delegate respondsToSelector:@selector(buttonPalette:buttonStateChanged:)])
-      [self->delegate buttonPalette:self buttonStateChanged:object];
+    if ([delegate respondsToSelector:@selector(buttonPalette:buttonStateChanged:)])
+      [delegate buttonPalette:self buttonStateChanged:object];
   }//end if ([keyPath isEqualToString:@"state"] && [self->buttons containsObject:object])
 }
 //end observeValueForKeyPath:ofObject:change:context:

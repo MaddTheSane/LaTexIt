@@ -8,11 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol NSButtonPaletteDelegate;
 
 @interface NSButtonPalette : NSObject {
   NSMutableArray* buttons;
   BOOL isExclusive;
-  id delegate;
+  id<NSButtonPaletteDelegate> delegate;
 }
 
 @property (getter=isExclusive) BOOL exclusive;
@@ -21,7 +22,14 @@
 -(NSButton*) buttonWithTag:(NSInteger)tag;
 -(NSButton*) buttonWithState:(NSInteger)state;
 
-@property (assign) id delegate;
+@property (assign) id<NSButtonPaletteDelegate> delegate;
 -(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;
 
 @end
+
+@protocol NSButtonPaletteDelegate <NSObject>
+
+-(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;
+
+@end
+

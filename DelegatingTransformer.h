@@ -19,7 +19,7 @@
   id context;
 }
 
-+(NSString*) name;
+@property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
 -(instancetype) initWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;

@@ -23,7 +23,7 @@
   {
     #ifdef ARC_ENABLED
     #else
-    [self autorelease];
+    [self release];
     #endif
     self = nil;
     return nil;

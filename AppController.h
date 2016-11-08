@@ -73,6 +73,7 @@
 }
 
 +(AppController*)           appController; //getting the unique instance of appController
+@property (class, readonly, retain) AppController *appController;
 +(NSDocument*)              currentDocument;
 -(NSDocument*)              currentDocument;
 -(NSWindow*)                whiteColorWarningWindow;
