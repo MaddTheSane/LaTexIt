@@ -82,6 +82,9 @@
 
 /* Begin PBXBuildFile section */
 		555AA5671DCC329F007894B7 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 555AA5661DCC3241007894B7 /* Icons.xcassets */; };
+		558E21D81DD1AAED00251C1A /* ExportFormatOptionsPanes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558E21DB1DD1AAED00251C1A /* ExportFormatOptionsPanes.xib */; };
+		558E21D91DD1AAED00251C1A /* ExportFormatOptionsPanes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558E21DB1DD1AAED00251C1A /* ExportFormatOptionsPanes.xib */; };
+		558E21DC1DD1AB1700251C1A /* DocumentExtraPanelsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558E21DE1DD1AB1700251C1A /* DocumentExtraPanelsController.xib */; };
 		55EC50921DCD3CF300096CC0 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		55EC50931DCD3F0E00096CC0 /* LinkBack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		55EC50951DCD3F6300096CC0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50941DCD3F6300096CC0 /* libz.tbd */; };
@@ -336,7 +339,6 @@
 		93A9FF4D10201DA70061DB60 /* NSObjectTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */; };
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
-		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.xib */; };
 		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
 		93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
@@ -384,8 +386,6 @@
 		93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DARC_ENABLED"; }; };
 		93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */; };
-		93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */; };
-		93ECCA69137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */; };
 		93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EE114907F2F607009E1F36 /* HistoryCell.m */; };
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
@@ -544,6 +544,16 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
 		555AA5661DCC3241007894B7 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
+		558E21DA1DD1AAED00251C1A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
+		558E21DD1DD1AB1700251C1A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
+		558E21DF1DD1AB6D00251C1A /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
+		558E21E01DD1ABFF00251C1A /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
+		558E21E11DD1AC0500251C1A /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
+		558E21E21DD1AC0A00251C1A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
+		558E21E31DD1AC3F00251C1A /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
+		558E21E41DD1AC4300251C1A /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
+		558E21E51DD1AC4600251C1A /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
+		558E21E61DD1AC4800251C1A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
 		55EC50941DCD3F6300096CC0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		55EC50961DCD3F6A00096CC0 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
@@ -620,7 +630,6 @@
 		9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CHiWorkSpotlightPlugin.mdimporter; path = Spotlight/CHiWorkSpotlightPlugin.mdimporter; sourceTree = "<group>"; };
 		9324182B0F9CF389006BA13B /* DocumentExtraPanelsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentExtraPanelsController.h; sourceTree = "<group>"; };
 		9324182C0F9CF389006BA13B /* DocumentExtraPanelsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentExtraPanelsController.m; sourceTree = "<group>"; };
-		9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
 		9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
 		9325E1261831946F006BCD30 /* CHProtoBuffers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProtoBuffers.h; sourceTree = "<group>"; };
@@ -734,7 +743,6 @@
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		935AD8710F9E389700B361D8 /* MyDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDocument.xib; sourceTree = "<group>"; };
 		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryWindowController.xib; sourceTree = "<group>"; };
-		935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
 		935ADDAC0FA0B0C500B361D8 /* ExportFormatOptionsPanes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportFormatOptionsPanes.h; sourceTree = "<group>"; };
 		935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportFormatOptionsPanes.m; sourceTree = "<group>"; };
 		935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSegmentedControlExtended.m; sourceTree = "<group>"; };
@@ -1490,9 +1498,9 @@
 				939A64570800281900AE4486 /* ServicesMenu.strings */,
 				934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */,
 				93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.xib */,
-				9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.xib */,
+				558E21DE1DD1AB1700251C1A /* DocumentExtraPanelsController.xib */,
 				93BEEB551195BDB40060166A /* DragFilterWindowController.xib */,
-				935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */,
+				558E21DB1DD1AAED00251C1A /* ExportFormatOptionsPanes.xib */,
 				93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.xib */,
 				93EED7D508A2197500A99BDF /* HistoryWindowController.xib */,
 				935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */,
@@ -1998,7 +2006,6 @@
 				fr,
 				de,
 				es,
-				JA,
 				it,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
@@ -2047,10 +2054,10 @@
 				932417EF0F9BBAD1006BA13B /* AdditionalFilesWindowController.xib in Resources */,
 				9396E9470EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem in Resources */,
 				934AAB290F343D830010E384 /* pdfcrop.pl in Resources */,
-				93AFF7971381D03B00054033 /* DocumentExtraPanelsController.xib in Resources */,
+				558E21DC1DD1AB1700251C1A /* DocumentExtraPanelsController.xib in Resources */,
 				935AD8720F9E389700B361D8 /* MyDocument.xib in Resources */,
 				935ADA2B0F9EF7AD00B361D8 /* LibraryWindowController.xib in Resources */,
-				93ECCA69137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */,
+				558E21D91DD1AAED00251C1A /* ExportFormatOptionsPanes.xib in Resources */,
 				93F7842710177099005BC2B6 /* PreferencesWindowController.xib in Resources */,
 				93BEEB561195BDB40060166A /* DragFilterWindowController.xib in Resources */,
 				932BD009122BA6F3003C312C /* LaTeXMathML.pl in Resources */,
@@ -2075,7 +2082,7 @@
 				933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
 				9341922E1281C70C009D3E97 /* Localizable.strings in Resources */,
-				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */,
+				558E21D81DD1AAED00251C1A /* ExportFormatOptionsPanes.xib in Resources */,
 				936B925313898EE3007C8AF4 /* LaTeXMathML.js in Resources */,
 				936B925213898EDE007C8AF4 /* LaTeXMathML.pl in Resources */,
 				93FA9A331569280000268E55 /* current-version-it.rtf in Resources */,
@@ -2480,6 +2487,30 @@
 			);
 			name = Credits.rtf;
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		558E21DB1DD1AAED00251C1A /* ExportFormatOptionsPanes.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				558E21DA1DD1AAED00251C1A /* en */,
+				558E21E31DD1AC3F00251C1A /* ja */,
+				558E21E41DD1AC4300251C1A /* fr */,
+				558E21E51DD1AC4600251C1A /* de */,
+				558E21E61DD1AC4800251C1A /* es */,
+			);
+			name = ExportFormatOptionsPanes.xib;
+			sourceTree = "<group>";
+		};
+		558E21DE1DD1AB1700251C1A /* DocumentExtraPanelsController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				558E21DD1DD1AB1700251C1A /* en */,
+				558E21DF1DD1AB6D00251C1A /* de */,
+				558E21E01DD1ABFF00251C1A /* ja */,
+				558E21E11DD1AC0500251C1A /* fr */,
+				558E21E21DD1AC0A00251C1A /* es */,
+			);
+			name = DocumentExtraPanelsController.xib;
 			sourceTree = "<group>";
 		};
 		930255CF07F0C2A800011996 /* Localizable.strings */ = {
