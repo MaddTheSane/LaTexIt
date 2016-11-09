@@ -1113,7 +1113,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
           informativeTextWithFormat:NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.",
                                                       @"You did not type any text in the body. The result will certainly be empty.")];
      NSInteger result = [alert runModal];
-     mustProcess = (result == NSAlertDefaultReturn);
+     mustProcess = (result == NSAlertFirstButtonReturn);
   }//end if (runBegin && !mustProcess)
   
   if (runBegin && mustProcess)
@@ -1124,7 +1124,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self->lowerBoxControlsBoxFontColorWell deactivate];
       [[[AppController appController] whiteColorWarningWindow] center];
       NSInteger result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
-      if (result == NSCancelButton)
+      if (result == NSModalResponseCancel)
         mustProcess = NO;
     }
   }//end if (runBegin && mustProcess)

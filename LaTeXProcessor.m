@@ -307,9 +307,8 @@ static LaTeXProcessor* sharedInstance = nil;
         [NSNumber numberWithDouble:baseline], @"baseline",
         nil];
       NSData* dictionaryContentPlistData =
-        isMacOS10_6OrAbove() ?
-          [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] :
-          [NSPropertyListSerialization dataFromPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 errorDescription:nil];
+      
+      [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil];
       NSData* annotationContentRawData = dictionaryContentPlistData;
       NSData* annotationContentCompressedData = [Compressor zipcompress:annotationContentRawData];
       NSString* annotationContentBase64 = [annotationContentCompressedData encodeBase64WithNewlines:NO];
@@ -1844,13 +1843,13 @@ static LaTeXProcessor* sharedInstance = nil;
                     NSLocalizedString(@"OK", @"OK"),
                     NSLocalizedString(@"Display the error message", @"Display the error message"),
                     nil, informativeText1);
-  if (displayError == NSAlertAlternateReturn)
+  if (displayError == NSAlertSecondButtonReturn)
   {
     NSString* informativeText2 = [[objects objectForKey:@"informativeText2"] dynamicCastToClass:[NSString class]];
     [[NSAlert alertWithMessageText:NSLocalizedString(@"Error message", @"Error message")
                      defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil
          informativeTextWithFormat:@"%@", informativeText2] runModal];
-  }//end if (displayError == NSAlertAlternateReturn)
+  }//end if (displayError == NSAlertSecondButtonReturn)
 }
 //end displayAlertError:
 

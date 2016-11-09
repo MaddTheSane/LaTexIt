@@ -490,7 +490,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if (setVersion && persistentStore)
     [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
                          forPersistentStore:persistentStore];
-  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
   [result setRetainsRegisteredObjects:YES];
@@ -743,7 +743,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       oldManagedObjectModel = nil;
     }//end if (!oldPersistentStore)
   }//end for each oldDataModelName
-  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [oldManagedObjectContext setUndoManager:nil];
   [oldManagedObjectContext setPersistentStoreCoordinator:oldPersistentStoreCoordinator];
 
@@ -772,7 +772,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     DebugLog(0, @"exception : %@", e);
   }
 
-  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [newManagedObjectContext setUndoManager:nil];
   [newManagedObjectContext setPersistentStoreCoordinator:newPersistentStoreCoordinator];
 

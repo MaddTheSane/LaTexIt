@@ -60,10 +60,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
       NSString*  keywordsPlistPath = [[NSBundle mainBundle] pathForResource:@"latex-keywords" ofType:@"plist"];
       NSData*    dataKeywordsPlist = [NSData dataWithContentsOfFile:keywordsPlistPath options:NSUncachedRead error:nil];
       NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
-      NSString* errorString = nil;
-      NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataKeywordsPlist
-                                                             mutabilityOption:NSPropertyListImmutable
-                                                                       format:&format errorDescription:&errorString];
+      NSError* errorString = nil;
+      NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:dataKeywordsPlist
+                                                             options:NSPropertyListImmutable
+                                                                       format:&format error:&errorString];
       NSString* version = [plist objectForKey:@"version"];
       //we can check the version...
       if (!version || [version compare:@"1.9.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
@@ -566,8 +566,13 @@ static NSInteger SpellCheckerDocumentTag = 0;
   {
     NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
     NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-    [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
-                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
+    
+    NSString *colorStr = [NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}",
+                          [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:colorStr];
+    
+    [[self textStorage] appendAttributedString:attributedString];
+    [attributedString release];
   }
   else if ((type = [pboard availableTypeFromArray:
         [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]]))
@@ -664,11 +669,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [NSString stringWithContentsOfFile:lastFilePath guessEncoding:&encoding error:&error];
       
     if (equationSourceAttributedString)
-      [self insertText:equationSourceAttributedString];
+      [[self textStorage] appendAttributedString:equationSourceAttributedString];
     else if (rtfContent)
-      [self insertText:rtfContent];
+      [[self textStorage] appendAttributedString:rtfContent];
     else if (plainTextContent)
-      [self insertText:plainTextContent];
+      [[self textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:plainTextContent] autorelease]];
     
     if (uti) CFRelease(uti);
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
@@ -745,16 +750,18 @@ static NSInteger SpellCheckerDocumentTag = 0;
     else if (pdfWrapperData)
     {
       NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfWrapperData);
-      if (pdfString)
-        [self insertText:pdfString];
+      if (pdfString) {
+        [[self textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:pdfString] autorelease]];
+      }
       done = YES;
     }
     else
     {
         NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
       [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
-      if (attributedString)
-        [self insertText:attributedString];
+      if (attributedString){
+        [[self textStorage] appendAttributedString:attributedString];
+      }
       [attributedString release];
       //[super paste:sender];
       done = YES;
@@ -768,7 +775,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
     [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
     if (attributedString)
-      [self insertText:attributedString];
+      [[self textStorage] appendAttributedString:attributedString];
     //[super paste:sender];
     done = YES;
   }//end @"NSRTFPboardType"
@@ -873,9 +880,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
       NSString* right = [textShortcut objectForKey:@"right"];
       if (!left)  left  = @"";
       if (!right) right = @"";
-      if (range.location == NSNotFound)
-        [self insertText:[left stringByAppendingString:right]];
-      else
+      if (range.location == NSNotFound) {
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:[left stringByAppendingString:right]];
+        [[self textStorage] appendAttributedString:attributedString];
+        [attributedString release];
+      } else
       {
         NSString* selectedText = [[self string] substringWithRange:range];
         [self replaceCharactersInRange:range withString:[NSString stringWithFormat:@"%@%@%@",left,selectedText,right]];

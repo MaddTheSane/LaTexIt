@@ -1414,13 +1414,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-  if (returnCode == NSAlertDefaultReturn)
+  if (returnCode == NSAlertFirstButtonReturn)
   {
     [preamblesValueTextView setValue:[PreamblesController defaultLocalizedPreambleValueAttributedString] forKey:NSAttributedStringBinding];
     [[[PreferencesController sharedController] preamblesController]
       setValue:[NSKeyedArchiver archivedDataWithRootObject:[PreamblesController defaultLocalizedPreambleValueAttributedString]]
       forKeyPath:@"selection.value"];
-  }//end if (returnCode == NSAlertDefaultReturn)
+  }//end if (returnCode == NSAlertFirstButtonReturn)
 }
 //end _clearHistorySheetDidEnd:returnCode:contextInfo:
 
@@ -1713,7 +1713,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(void) compositionConfigurationsCurrentResetDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-  if (returnCode == NSAlertDefaultReturn)
+  if (returnCode == NSAlertFirstButtonReturn)
   {
     PreferencesController* preferencesController = [PreferencesController sharedController];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
@@ -1810,7 +1810,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
                                                 [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
                                                 [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
-  }//end if (returnCode == NSAlertDefaultReturn)
+  }//end if (returnCode == NSAlertFirstButtonReturn)
 }
 //end compositionConfigurationsCurrentReset:
 

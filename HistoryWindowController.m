@@ -161,7 +161,7 @@
                                         @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."),
                       NSLocalizedString(@"Clear History",@"Clear History"),
                       NSLocalizedString(@"Cancel", @"Cancel"), nil);
-    if (returnCode == NSAlertDefaultReturn)
+    if (returnCode == NSAlertFirstButtonReturn)
       [self clearAll:NO];
   }
 }
@@ -169,7 +169,7 @@
 
 -(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-  if (returnCode == NSAlertDefaultReturn)
+  if (returnCode == NSAlertFirstButtonReturn)
     [self clearAll:NO];
 }
 //end _clearHistorySheetDidEnd:returnCode:contextInfo:

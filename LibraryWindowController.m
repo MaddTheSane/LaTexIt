@@ -433,7 +433,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                             otherButton:nil
               informativeTextWithFormat:NSLocalizedString(@"You changed the library selection since the last equation was imported into the editor",
                                                           @"You changed the library selection since the last equation was imported into the editor")];
-         cancel = ([alert runModal] == NSAlertAlternateReturn);
+         cancel = ([alert runModal] == NSAlertSecondButtonReturn);
       }
 
       if (!cancel)

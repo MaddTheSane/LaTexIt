@@ -2941,11 +2941,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                 informativeTextWithFormat:NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"__EXPLAIN_CHANGE_SHORTCUTS__")];
           [[[alert buttons] objectAtIndex:2] setKeyEquivalent:[NSString stringWithFormat:@"%c", '\033']];//escape
           NSInteger result = [alert runModal];
-          if (result == NSAlertDefaultReturn)
+          if (result == NSAlertFirstButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS;
-          else if (result == NSAlertAlternateReturn)
+          else if (result == NSAlertSecondButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;
-          else if (result == NSAlertOtherReturn)
+          else if (result == NSAlertThirdButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE;
         }
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE)
@@ -3007,7 +3007,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                               @"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle")];
               [[[alert buttons] objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
               NSInteger result = [alert runModal];
-              if (result == NSAlertDefaultReturn)
+              if (result == NSAlertFirstButtonReturn)
                  authenticationFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;
               else
                  authenticationFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE;
