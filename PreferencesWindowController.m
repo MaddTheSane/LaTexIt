@@ -83,9 +83,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(void) updateProgramArgumentsToolTips;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender;
 -(void) tableViewSelectionDidChange:(NSNotification*)notification;
--(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
--(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo;
--(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
+-(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
+-(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
 -(void) textDidChange:(NSNotification*)notification;
 @end
 
@@ -1402,17 +1402,21 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(IBAction) preamblesValueResetDefault:(id)sender
 {
-    NSBeginAlertSheet(NSLocalizedString(@"Reset preamble",@"Reset preamble"),
-                      NSLocalizedString(@"Reset preamble",@"Reset preamble"),
-                      NSLocalizedString(@"Cancel", @"Cancel"),
-                      nil, [self window], self,
-                      @selector(_preamblesValueResetDefault:returnCode:contextInfo:), nil, NULL,
-                      NSLocalizedString(@"Are you sure you want to reset the preamble ?\nThis operation is irreversible.",
-                                        @"Are you sure you want to reset the preamble ?\nThis operation is irreversible."));
+  NSAlert *alert = [NSAlert new];
+  alert.messageText = NSLocalizedString(@"Reset preamble",@"Reset preamble");
+  alert.informativeText = NSLocalizedString(@"Are you sure you want to reset the preamble ?\nThis operation is irreversible.",
+                                            @"Are you sure you want to reset the preamble ?\nThis operation is irreversible.");
+  [alert addButtonWithTitle:NSLocalizedString(@"Reset preamble",@"Reset preamble")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
+  [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+    [self _preamblesValueResetDefault:nil returnCode:returnCode contextInfo:NULL];
+  }];
+  
+  [alert autorelease];
 }
 //end preamblesValueResetDefault:
 
--(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+-(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
   if (returnCode == NSAlertFirstButtonReturn)
   {
@@ -1500,8 +1504,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [compositionConfigurationsProgramArgumentsAddButton bind:NSEnabledBinding toObject:controller withKeyPath:@"canAdd" options:nil];
     [compositionConfigurationsProgramArgumentsRemoveButton bind:NSEnabledBinding toObject:controller withKeyPath:@"canRemove" options:nil];
     [compositionConfigurationsProgramArgumentsTableView setController:controller];
-    [NSApp beginSheet:compositionConfigurationsProgramArgumentsPanel modalForWindow:[self window] modalDelegate:self
-      didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    [self.window beginSheet:compositionConfigurationsProgramArgumentsPanel completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:compositionConfigurationsProgramArgumentsPanel returnCode:returnCode contextInfo:NULL];
+    }];
   }
 }
 //end compositionConfigurationsProgramArgumentsOpen:
@@ -1509,7 +1514,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) compositionConfigurationsProgramArgumentsClose:(id)sender
 {
   [compositionConfigurationsProgramArgumentsPanel makeFirstResponder:nil];//commit editing
-  [NSApp endSheet:compositionConfigurationsProgramArgumentsPanel returnCode:NSOKButton];
+  [self.window endSheet:compositionConfigurationsProgramArgumentsPanel returnCode:NSModalResponseOK];
   [self updateProgramArgumentsToolTips];
 }
 //end compositionConfigurationsProgramArgumentsClose:
@@ -1546,24 +1551,26 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if ((sender != compositionConfigurationsCurrentPopUpButton) || !IsBetween_N(1, selectedIndex+1, [compositionConfigurations count]))
-    [NSApp beginSheet:compositionConfigurationsManagerPanel modalForWindow:[self window] modalDelegate:self
-      didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
-  else
+  if ((sender != compositionConfigurationsCurrentPopUpButton) || !IsBetween_N(1, selectedIndex+1, [compositionConfigurations count])) {
+    [self.window beginSheet:compositionConfigurationsManagerPanel completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:compositionConfigurationsManagerPanel returnCode:returnCode contextInfo:NULL];
+    }];
+  } else {
     [preferencesController setCompositionConfigurationsDocumentIndex:selectedIndex];
+  }
 }
 //end compositionConfigurationsManagerOpen:
 
 -(IBAction) compositionConfigurationsManagerClose:(id)sender
 {
   [compositionConfigurationsManagerPanel makeFirstResponder:nil];//commit editing
-  [NSApp endSheet:compositionConfigurationsManagerPanel returnCode:NSOKButton];
+  [self.window endSheet:compositionConfigurationsManagerPanel returnCode:NSModalResponseOK];
   [self observeValueForKeyPath:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]
     ofObject:[NSUserDefaultsController sharedUserDefaultsController] change:nil context:nil];
 }
 //end compositionConfigurationsManagerClose:
 
--(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   if (sheet == compositionConfigurationsManagerPanel)
     [sheet orderOut:self];
@@ -1613,7 +1620,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       nil];
   else if (sender == synchronizationNewDocumentsPathChangeButton)
   {
-    [openPanel setDirectory:[[PreferencesController sharedController] synchronizationNewDocumentsPath]];
+    [openPanel setDirectoryURL:[NSURL fileURLWithPath:[[PreferencesController sharedController] synchronizationNewDocumentsPath]]];
     [openPanel setCanChooseDirectories:YES];
     [openPanel setCanChooseFiles:NO];
     contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1627,14 +1634,17 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   NSString* filename = [[contextInfo objectForKey:@"textField"] stringValue];
   NSString* path = filename ? filename : @"";
   path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? [path stringByDeletingLastPathComponent] : nil;
-  [openPanel beginSheetForDirectory:path file:[filename lastPathComponent] types:nil modalForWindow:[self window] modalDelegate:self
-                           didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:) contextInfo:[contextInfo copy]];
+  openPanel.directoryURL = [NSURL fileURLWithPath:path];
+  openPanel.nameFieldStringValue = [filename lastPathComponent];
+  [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+    [self didEndOpenPanel:openPanel returnCode:result contextInfo:[contextInfo copy]];
+  }];
 }
 //end changePath:
 
--(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
-  if ((returnCode == NSOKButton) && contextInfo)
+  if ((returnCode == NSModalResponseOK) && contextInfo)
   {
     NSTextField* textField = [(NSDictionary*)contextInfo objectForKey:@"textField"];
     NSString*    pathKey   = [(NSDictionary*)contextInfo objectForKey:@"pathKey"];
@@ -1690,7 +1700,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSString* rtfdFilePath = [[NSBundle mainBundle] pathForResource:@"additional-files-help" ofType:@"rtfd"];
     NSURL* rtfdUrl = !rtfdFilePath ? nil : [NSURL fileURLWithPath:rtfdFilePath];
     NSAttributedString* attributedString = !rtfdUrl ? nil :
-      [[[NSAttributedString alloc] initWithURL:rtfdUrl documentAttributes:0] autorelease];
+    [[[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:0 error:NULL] autorelease];
     if (attributedString)
       [[textView textStorage] setAttributedString:attributedString];
     [textView setSelectedRange:NSMakeRange(0, 0)];
@@ -1701,116 +1711,112 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(IBAction) compositionConfigurationsCurrentReset:(id)sender
 {
-  NSAlert* alert = 
-    [NSAlert alertWithMessageText:NSLocalizedString(@"Do you really want to reset the paths ?", @"Do you really want to reset the paths ?")
-      defaultButton:NSLocalizedString(@"OK", @"OK")
-      alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
-      otherButton:nil
-        informativeTextWithFormat:NSLocalizedString(@"Invalid paths will be replaced by the result of auto-detection", @"Invalid paths will be replaced by the result of auto-detection")];
-  [alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(compositionConfigurationsCurrentResetDidEnd:returnCode:contextInfo:) contextInfo:0];
-}
-//end compositionConfigurationsCurrentReset:
-
--(void) compositionConfigurationsCurrentResetDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-  if (returnCode == NSAlertFirstButtonReturn)
-  {
-    PreferencesController* preferencesController = [PreferencesController sharedController];
-    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
-    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationXeLatexPathKey];
-    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLatexPathKey];
-    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationDviPdfPathKey];
-    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationGsPathKey];
-    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPsToPdfPathKey];
-
-    AppController* appController = [AppController appController];
-    NSMutableDictionary* configuration =
+  NSAlert* alert = [NSAlert new];
+  alert.messageText = NSLocalizedString(@"Do you really want to reset the paths ?", @"Do you really want to reset the paths ?");
+  alert.informativeText = NSLocalizedString(@"Invalid paths will be replaced by the result of auto-detection", @"Invalid paths will be replaced by the result of auto-detection");
+  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
+  [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+    if (returnCode == NSAlertFirstButtonReturn)
+    {
+      PreferencesController* preferencesController = [PreferencesController sharedController];
+      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
+      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationXeLatexPathKey];
+      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLatexPathKey];
+      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationDviPdfPathKey];
+      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationGsPathKey];
+      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPsToPdfPathKey];
+      
+      AppController* appController = [AppController appController];
+      NSMutableDictionary* configuration =
       [NSMutableDictionary dictionaryWithObjectsAndKeys:
-         [NSNumber numberWithBool:NO], @"checkOnlyIfNecessary",
-         [NSNumber numberWithBool:NO], @"allowUIAlertOnFailure",
-         [NSNumber numberWithBool:NO], @"allowUIFindOnFailure",
-         nil];
-    BOOL isPdfLaTeXAvailable = NO;
-    BOOL isXeLaTeXAvailable = NO;
-    BOOL isLaTeXAvailable = NO;
-    BOOL isDviPdfAvailable = NO;
-    BOOL isGsAvailable = NO;
-    BOOL isPsToPdfAvailable = NO;
-    BOOL isPdfToSvgAvailable = NO;
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
-                                       [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
-    if (!isPdfLaTeXAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                  [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
+       @NO, @"checkOnlyIfNecessary",
+       @NO, @"allowUIAlertOnFailure",
+       @NO, @"allowUIFindOnFailure",
+       nil];
+      BOOL isPdfLaTeXAvailable = NO;
+      BOOL isXeLaTeXAvailable = NO;
+      BOOL isLaTeXAvailable = NO;
+      BOOL isDviPdfAvailable = NO;
+      BOOL isGsAvailable = NO;
+      BOOL isPsToPdfAvailable = NO;
+      BOOL isPdfToSvgAvailable = NO;
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
+                                                  @[@"pdflatex"], @"executableNames",
                                                   [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
-                                       [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
-    if (!isXeLaTeXAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
+      if (!isPdfLaTeXAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
+                                                   [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                   [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
-                                       [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
-    if (!isLaTeXAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
+      if (!isXeLaTeXAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
+                                                   [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                                   [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
-                                       [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
-    if (!isDviPdfAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
+      if (!isLaTeXAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
+                                                   [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
                                                   [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
-                                       @"ghostscript", @"executableDisplayName",
-                                       [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
-    if (!isGsAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
+      if (!isDviPdfAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
+                                                   [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
                                                   @"ghostscript", @"executableDisplayName",
                                                   [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
-                                       [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
-    if (!isPsToPdfAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
+      if (!isGsAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                   @"ghostscript", @"executableDisplayName",
+                                                   [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
                                                   [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
-                                       [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
-                                       [NSValue valueWithPointer:&isPdfToSvgAvailable], @"monitor", nil]];
-    if (!isPdfToSvgAvailable)
-      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
+      if (!isPsToPdfAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
+                                                   [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
                                                   [NSValue valueWithPointer:&isPdfToSvgAvailable], @"monitor", nil]];
-    
-    [configuration setObject:[NSNumber numberWithBool:YES] forKey:@"allowUIAlertOnFailure"];
-    [configuration setObject:[NSNumber numberWithBool:YES] forKey:@"allowUIFindOnFailure"];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
-                                                [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                                [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
-                                                [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
-                                                [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
-                                                [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
-                                                @"ghostscript", @"executableDisplayName",
-                                                [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
-    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
-                                                [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
-  }//end if (returnCode == NSAlertFirstButtonReturn)
+      if (!isPdfToSvgAvailable)
+        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
+                                                   [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
+                                                   [NSValue valueWithPointer:&isPdfToSvgAvailable], @"monitor", nil]];
+      
+      [configuration setObject:[NSNumber numberWithBool:YES] forKey:@"allowUIAlertOnFailure"];
+      [configuration setObject:[NSNumber numberWithBool:YES] forKey:@"allowUIFindOnFailure"];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
+                                                  [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
+                                                  [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
+                                                  [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
+                                                  [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
+                                                  [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
+                                                  [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
+                                                  [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
+                                                  [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
+                                                  [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                  @"ghostscript", @"executableDisplayName",
+                                                  [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
+      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
+                                                  [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
+                                                  [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
+    }//end if (returnCode == NSAlertFirstButtonReturn)
+  }];
+  [alert autorelease];
 }
 //end compositionConfigurationsCurrentReset:
 
@@ -1875,7 +1881,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSString* rtfdFilePath = [[NSBundle mainBundle] pathForResource:@"synchronization-scripts-help" ofType:@"rtfd"];
     NSURL* rtfdUrl = !rtfdFilePath ? nil : [NSURL fileURLWithPath:rtfdFilePath];
     NSAttributedString* attributedString = !rtfdUrl ? nil :
-    [[[NSAttributedString alloc] initWithURL:rtfdUrl documentAttributes:0] autorelease];
+    [[[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:nil error:NULL] autorelease];
     if (attributedString)
       [[textView textStorage] setAttributedString:attributedString];
     [textView setSelectedRange:NSMakeRange(0, 0)];

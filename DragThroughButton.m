@@ -143,7 +143,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
   self->lastMoveDate = [[NSDate alloc] init];
   if ([self state] != NSOnState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
-  return NSDragOperationAll;
+  return NSDragOperationEvery;
 }
 //end draggingEntered:
 
@@ -154,7 +154,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
   self->lastMoveDate = [[NSDate alloc] init];
   if ([self state] != NSOnState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
-  return NSDragOperationAll;
+  return NSDragOperationEvery;
 }
 //end draggingExited:
 

@@ -17,7 +17,7 @@
 #import "NSPopupButtonExtended.h"
 #import "NSViewExtended.h"
 
-@interface DocumentExtraPanelsController ()
+@interface DocumentExtraPanelsController () <ExportFormatOptionsDelegate>
 -(IBAction) nilAction:(id)sender;
 @end
 
@@ -271,7 +271,7 @@
     if (isJpegFormat)
       [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"jpg", @"jpeg", kUTTypeJPEG, nil]];
     else
-      [self->currentSavePanel setRequiredFileType:extension];
+      [self->currentSavePanel setAllowedFileTypes:@[extension]];
   }//end if ([keyPath isEqualToString:@"saveAccessoryViewExportFormat"])
   else if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
   {

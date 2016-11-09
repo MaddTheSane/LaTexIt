@@ -1105,15 +1105,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
   if (runBegin && !mustProcess)
   {
-    NSAlert* alert = 
-      [NSAlert alertWithMessageText:NSLocalizedString(@"Empty LaTeX body", @"Empty LaTeX body")
-                      defaultButton:NSLocalizedString(@"Process anyway", @"Process anyway")
-                    alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
-                        otherButton:nil
-          informativeTextWithFormat:NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.",
-                                                      @"You did not type any text in the body. The result will certainly be empty.")];
-     NSInteger result = [alert runModal];
-     mustProcess = (result == NSAlertFirstButtonReturn);
+    NSAlert* alert = [NSAlert new];
+    alert.messageText = NSLocalizedString(@"Empty LaTeX body", @"Empty LaTeX body");
+    alert.informativeText = NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.",
+                                              @"You did not type any text in the body. The result will certainly be empty.");
+    [alert addButtonWithTitle:NSLocalizedString(@"Process anyway", @"Process anyway")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
+    
+    NSInteger result = [alert runModal];
+    [alert release];
+    mustProcess = (result == NSAlertFirstButtonReturn);
   }//end if (runBegin && !mustProcess)
   
   if (runBegin && mustProcess)
@@ -1737,7 +1738,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)code contextInfo:(void*)contextInfo
 {
   DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
-  if ((code == NSOKButton) && [self->upperBoxImageView image])
+  if ((code == NSModalResponseOK) && [self->upperBoxImageView image])
   {
     export_format_t exportFormat = [controller saveAccessoryViewExportFormat];
     NSString* filePath = [[sheet URL] path];

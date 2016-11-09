@@ -210,9 +210,9 @@ static LibraryManager* sharedManagerInstance = nil;
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
           @"2.8.1", @"version", nil];
-        NSString* errorDescription = nil;
+        NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
+          [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
@@ -342,9 +342,9 @@ static LibraryManager* sharedManagerInstance = nil;
         NSData* fileData = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:&error];
         if (error) {DebugLog(0, @"error : %@", error);}
         NSPropertyListFormat format = 0;
-        NSString* errorDescription = nil;
+        NSError* errorDescription = nil;
         id plist =
-          [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&errorDescription];
+          [NSPropertyListSerialization propertyListWithData:fileData options:NSPropertyListImmutable format:&format error:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         NSData* compressedData = nil;
         if (!plist)
@@ -472,10 +472,10 @@ static LibraryManager* sharedManagerInstance = nil;
     else if ([[path pathExtension] isEqualToString:@"plist"])
     {
       NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
-      NSString* errorDescription = nil;
+      NSError* errorDescription = nil;
       NSPropertyListFormat format = 0;
-      id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format
-        errorDescription:&errorDescription];
+      id plist = [NSPropertyListSerialization propertyListWithData:data options:NSPropertyListImmutable format:&format
+        error:&errorDescription];
       if (errorDescription)
       {
         DebugLog(0, @"error : %@", errorDescription);
@@ -527,9 +527,9 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       NSString* xmlDescriptionPath = [path stringByAppendingPathComponent:@"library.dict"];
       NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
-      NSString* errorDescription = nil;
-      id plist = [NSPropertyListSerialization propertyListFromData:[NSData dataWithContentsOfFile:xmlDescriptionPath options:NSUncachedRead error:nil]
-                                                  mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&errorDescription];
+      NSError* errorDescription = nil;
+      id plist = [NSPropertyListSerialization propertyListWithData:[NSData dataWithContentsOfFile:xmlDescriptionPath options:NSUncachedRead error:nil]
+                                                  options:NSPropertyListImmutable format:&format error:&errorDescription];
       if (errorDescription)
       {
         DebugLog(0, @"error : %@", errorDescription);
@@ -669,7 +669,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if (setVersion && persistentStore)
     [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
                          forPersistentStore:persistentStore];
-  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
   [result setRetainsRegisteredObjects:YES];
@@ -882,7 +882,7 @@ static LibraryManager* sharedManagerInstance = nil;
       oldManagedObjectModel = nil;
     }//end if (!oldPersistentStore)
   }//end for each oldDataModelName
-  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [oldManagedObjectContext setUndoManager:nil];
   [oldManagedObjectContext setPersistentStoreCoordinator:oldPersistentStoreCoordinator];
 
@@ -911,7 +911,7 @@ static LibraryManager* sharedManagerInstance = nil;
     DebugLog(0, @"exception : %@", e);
   }
 
-  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [newManagedObjectContext setUndoManager:nil];
   [newManagedObjectContext setPersistentStoreCoordinator:newPersistentStoreCoordinator];
 

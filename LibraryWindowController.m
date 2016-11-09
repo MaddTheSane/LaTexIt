@@ -426,14 +426,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       BOOL cancel = NO;
       if (libraryItem && [document lastAppliedLibraryEquation] && (libraryItem != [document lastAppliedLibraryEquation]))
       {
-        NSAlert* alert =
-          [NSAlert alertWithMessageText:NSLocalizedString(@"You may not be updating the good equation", @"You may not be updating the good equation")
-                          defaultButton:NSLocalizedString(@"Update the equation", @"Update the equation")
-                        alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
-                            otherButton:nil
-              informativeTextWithFormat:NSLocalizedString(@"You changed the library selection since the last equation was imported into the editor",
-                                                          @"You changed the library selection since the last equation was imported into the editor")];
-         cancel = ([alert runModal] == NSAlertSecondButtonReturn);
+        NSAlert* alert = [NSAlert new];
+        alert.messageText = NSLocalizedString(@"You may not be updating the good equation", @"You may not be updating the good equation");
+        alert.informativeText = NSLocalizedString(@"You changed the library selection since the last equation was imported into the editor",
+                                                  @"You changed the library selection since the last equation was imported into the editor");
+        [alert addButtonWithTitle:NSLocalizedString(@"Update the equation", @"Update the equation")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
+        cancel = ([alert runModal] == NSAlertSecondButtonReturn);
+        [alert release];
       }
 
       if (!cancel)
@@ -524,12 +524,11 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
     if (!ok)
     {
-      NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"Loading error", @"Loading error")
-               defaultButton:NSLocalizedString(@"OK", @"OK")
-             alternateButton:nil otherButton:nil
-   informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-     [alert runModal];
+      NSAlert* alert = [NSAlert new];
+      alert.messageText = NSLocalizedString(@"Loading error", @"Loading error");
+      alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format");
+      [alert runModal];
+      [alert release];
     }
     else
     {
@@ -603,12 +602,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                                              options:options];
     if (!ok)
     {
-      NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
-               defaultButton:NSLocalizedString(@"OK", @"OK")
-             alternateButton:nil otherButton:nil
-   informativeTextWithFormat:@""];
-     [alert runModal];
+      NSAlert* alert = [NSAlert new];
+      alert.messageText = NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.");
+      alert.informativeText = @"";
+      
+      [alert runModal];
+      [alert release];
     }//end if (ok)
   }
   [self->savePanel release];
@@ -623,12 +622,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
       [self->exportAccessoryView setFrame:
         NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setRequiredFileType:@"latexlib"];
+      [self->savePanel setAllowedFileTypes:@[@"latexlib"]];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
       [self->exportAccessoryView setFrame:
        NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setRequiredFileType:@"plist"];
+      [self->savePanel setAllowedFileTypes:@[@"plist"]];
       break;
     case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
       [self->exportAccessoryView setFrame:
@@ -638,7 +637,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                  MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
                      NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
                   156)];
-      [self->savePanel setRequiredFileType:@"tex"];
+      [self->savePanel setAllowedFileTypes:@[@"tex"]];
       break;
   }
 }

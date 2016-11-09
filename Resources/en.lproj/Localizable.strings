@@ -12,7 +12,7 @@
 "Clear History" = "Clear History";
 "Remove all" = "Remove all";
 "Remove selection" = "Remove selection";
-"Are you sure you want to clear the whole history ?\nThis operation is irreversible." = "Are you sure you want to clear the whole history ?\nThis operation is irreversible.";
+"Are you sure you want to clear the whole history ?\nThis operation is irreversible." = "Are you sure you want to clear the whole history?\nThis operation is irreversible.";
 "Hide preamble" = "Hide preamble";
 "Show preamble" = "Show preamble";
 "Hide History" = "Hide History";
@@ -65,7 +65,7 @@
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "You need ps2pdf to export as \"PDF with outlined fonts\"";
 "Find %@..." = "Find %@…";
-"What's that ?" = "What's that ?";
+"What's that ?" = "What's that?";
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.";
 "See help..." = "See help…";
 "Install LaTeX" = "Install LaTeX";
@@ -73,7 +73,7 @@
 "color.sty seems to be unavailable" = "color.sty seems to be unavailable";
 "Without the color.sty package, you won't be able to change the font color" = "Without the color.sty package, you won't be able to change the font color";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled.";
-"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT" = "This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT";
+"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT" = "This text is not LaTeX compliant; or perhaps it is a preamble problem? You can check it in LaTeXiT";
 "Empty LaTeX body" = "Empty LaTeX body";
 "Process anyway" = "Process anyway";
 "You did not type any text in the body. The result will certainly be empty." = "You did not type any text in the body. The result will certainly be empty.";
@@ -88,11 +88,11 @@
 "Suspend Linkback link" = "Suspend Linkback link";
 "Resume Linkback link" = "Resume Linkback link";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT cannot be run properly, please check its configuration";
-"Do you want to load the library <%@> ?" = "Do you want to load the library <%@> ?";
+"Do you want to load the library <%@> ?" = "Do you want to load the library <%@>?";
 "If you choose <Replace the library>, the current library will be lost" = "If you choose <Replace the library>, the current library will be lost";
 "Add to the library" = "Add to the library";
 "Replace the library" = "Replace the library";
-"Do you want to load the history <%@> ?" = "Do you want to load the history <%@> ?";
+"Do you want to load the history <%@> ?" = "Do you want to load the history <%@>?";
 "If you choose <Replace the history>, the current history will be lost" = "If you choose <Replace the history>, the current history will be lost";
 "Add to the history" = "Add to the history";
 "Replace the history" = "Replace the history";
@@ -111,8 +111,8 @@
 "Web" = "Web";
 "Plugins" = "Plugins";
 "Reset preamble" = "Reset preamble";
-"Are you sure you want to reset the preamble ?\nThis operation is irreversible." = "Are you sure you want to reset the preamble ?\nThis operation is irreversible.";
-"Do you really want to apply that preamble to the library items ?" = "Do you really want to apply that preamble to the library items ?";
+"Are you sure you want to reset the preamble ?\nThis operation is irreversible." = "Are you sure you want to reset the preamble?\nThis operation is irreversible.";
+"Do you really want to apply that preamble to the library items ?" = "Do you really want to apply that preamble to the library items?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
 "Apply" = "Apply";
 "Typeset LaTeX Maths eqnarray" = "Typeset LaTeX Maths Eqnarray";
@@ -158,12 +158,12 @@
 "Script too long : timeout reached" = "Script too long : timeout reached";
 "Palette installation" = "Palette installation";
 "It does not appear to be a valid Latex palette package" = "It does not appear to be a valid Latex palette package";
-"Do you want to install the palette %@ ?" = "Do you want to install the palette %@ ?";
+"Do you want to install the palette %@ ?" = "Do you want to install the palette %@?";
 "This palette will be installed into \n%@" = "This palette will be installed into \n%@";
 "Install palette" = "Install palette";
 "Could not create path" = "Could not create path";
 "The path %@ could not be created to install a palette in it" = "The path %@ could not be created to install a palette in it";
-"The palette %@ already exists, do you want to replace it ?" = "The palette %@ already exists, do you want to replace it ?";
+"The palette %@ already exists, do you want to replace it ?" = "The palette %@ already exists, do you want to replace it?";
 "A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents." = "A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.";
 "Replace" = "Replace";
 "Installation failed" = "Installation failed";
@@ -220,7 +220,7 @@
 "Help on synchronization scripts" = "Help on synchronization scripts";
 "path to the Unix executable program" = "path to the Unix executable program";
 "Reset..." = "Reset…";
-"Do you really want to reset the paths ?" = "Do you really want to reset the paths ?";
+"Do you really want to reset the paths ?" = "Do you really want to reset the paths?";
 "Invalid paths will be replaced by the result of auto-detection" = "All paths will be replaced by the result of auto-detection.";
 
 /* document */

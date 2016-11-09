@@ -174,7 +174,7 @@
       NSData*   infoPlistData = [NSData dataWithContentsOfFile:[bundle pathForResource:@"Info" ofType:@"plist"] options:NSUncachedRead error:nil];
       NSPropertyListFormat format;
       id plist = !infoPlistData ? nil :
-        [NSPropertyListSerialization propertyListFromData:infoPlistData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+        [NSPropertyListSerialization propertyListWithData:infoPlistData options:NSPropertyListImmutable format:&format error:nil];
       if ([plist isKindOfClass:[NSDictionary class]])
       {
         NSString* paletteName = [plist objectForKey:@"name"];
@@ -337,7 +337,7 @@
     NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
     PaletteCell* prototype = [[[PaletteCell alloc] initImageCell:nil] autorelease];
     [prototype setImageAlignment:NSImageAlignCenter];
-    [prototype setImageScaling:NSScaleToFit];
+    [prototype setImageScaling:NSImageScaleAxesIndependently];
     while([matrix numberOfRows])
       [matrix removeRow:0];
     [matrix setPrototype:prototype];

@@ -32,7 +32,7 @@ static NSMutableIndexSet* freeIds = nil;
 
 typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORARY_FOLDER} equationDestination_t;
 
-@interface Automator_CreateEquations ()
+@interface Automator_CreateEquations () <ExportFormatOptionsDelegate>
 -(IBAction) nilAction:(id)sender;
 @end
 

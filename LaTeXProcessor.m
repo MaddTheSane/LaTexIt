@@ -1838,17 +1838,19 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSDictionary* objects = [object dynamicCastToClass:[NSDictionary class]];
   NSString* informativeText1 = [[objects objectForKey:@"informativeText1"] dynamicCastToClass:[NSString class]];
-  NSInteger displayError =
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), @"%@",
-                    NSLocalizedString(@"OK", @"OK"),
-                    NSLocalizedString(@"Display the error message", @"Display the error message"),
-                    nil, informativeText1);
+  NSAlert *alert = [NSAlert new];
+  alert.messageText = NSLocalizedString(@"Error", @"Error");
+  alert.informativeText = informativeText1;
+  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Display the error message", @"Display the error message")];
+  NSInteger displayError = [alert runModal];
   if (displayError == NSAlertSecondButtonReturn)
   {
     NSString* informativeText2 = [[objects objectForKey:@"informativeText2"] dynamicCastToClass:[NSString class]];
-    [[NSAlert alertWithMessageText:NSLocalizedString(@"Error message", @"Error message")
-                     defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil
-         informativeTextWithFormat:@"%@", informativeText2] runModal];
+    alert = [NSAlert new];
+    alert.messageText = NSLocalizedString(@"Error message", @"Error message");
+    alert.informativeText = informativeText2;
+    [alert runModal];
   }//end if (displayError == NSAlertSecondButtonReturn)
 }
 //end displayAlertError:
@@ -2116,10 +2118,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([gsTask terminationStatus] != 0)
           {
-            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            NSLocalizedString(@"An error occured while trying to create the file :\n%@",
-                                              @"An error occured while trying to create the file :\n%@"),
-                            @"OK", nil, nil, errorString);
+            NSAlert *alert = [NSAlert new];
+            alert.messageText = NSLocalizedString(@"Error", @"Error");
+            alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
+                                                                                 @"An error occured while trying to create the file :\n%@"), errorString];
+            [alert runModal];
           }
           #ifdef ARC_ENABLED
           #else
@@ -2251,10 +2254,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([svgTask terminationStatus] != 0)
           {
-            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            NSLocalizedString(@"An error occured while trying to create the file :\n%@",
-                                              @"An error occured while trying to create the file :\n%@"),
-                            @"OK", nil, nil, errorString);
+            NSAlert *alert = [NSAlert new];
+            alert.messageText = NSLocalizedString(@"Error", @"Error");
+            alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
+                                                                                 @"An error occured while trying to create the file :\n%@"), errorString];
+            [alert runModal];
           }//end if ([svgTask terminationStatus] != 0)
           #ifdef ARC_ENABLED          
           #else
@@ -2295,8 +2299,8 @@ static LaTeXProcessor* sharedInstance = nil;
         for(i = 0 ; i<4 ; ++i)
           rgba_i[i] = MAX(0, MIN(255, round(255*rgba_f[i])));
         NSString* inputString = [NSString stringWithFormat:@"<body><blockquote style=\"color:rgba(%d,%d,%d,%d);color:rgb(%d,%d,%d);font-size:%.2fpt;\">%@%@%@</blockquote></body>",
-          rgba_i[0], rgba_i[1], rgba_i[2], rgba_i[3],
-          rgba_i[0], rgba_i[1], rgba_i[2],
+          (int)rgba_i[0], (int)rgba_i[1], (int)rgba_i[2], (int)rgba_i[3],
+          (int)rgba_i[0], (int)rgba_i[1], (int)rgba_i[2],
           [[[metaData objectForKey:@"magnification"] dynamicCastToClass:[NSNumber class]] doubleValue],
           addSymbolLeft, escapedSourceString, addSymbolRight];
         NSData* inputData = [inputString dataUsingEncoding:NSUTF8StringEncoding];

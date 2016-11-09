@@ -20,7 +20,7 @@ CG_INLINE CGFloat CGBlendPow(CGFloat t, CFNumberRef parameter)
 
 typedef struct blend_colors_t* CGBlendColorsRef;
 CGBlendColorsRef CGBlendColorsCreateCGF(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CGFloat blendFunctionParameter);
-CGBlendColorsRef CGBlendColorsCreate(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CFNumberRef blendFunctionParameter);
+CGBlendColorsRef CGBlendColorsCreate(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CFNumberRef __nullable blendFunctionParameter);
 CGBlendColorsRef CGBlendColorsRetain(CGBlendColorsRef blendColors);
 void CGBlendColorsRelease(CGBlendColorsRef blendColors);
 

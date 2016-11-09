@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AdditionalFilesTableView : NSTableView {
+@interface AdditionalFilesTableView : NSTableView <NSTableViewDelegate> {
   BOOL isDefaultTableView;
   NSIndexSet* draggedRowIndexes;//transient, used only during drag'n drop
   NSArrayController* filesWithExtrasController;

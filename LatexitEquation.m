@@ -107,7 +107,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
                                  range:NSMakeRange(0, [string length]) error:&error];
     if ([components count] == 3)
     {
-      DebugLogStatic(1, @"this is metadata", string);
+      DebugLogStatic(1, @"this is metadata (%@)", string);
       NSString* sha1Base64 = [components objectAtIndex:1];
       NSString* dataBase64Encoded = [components objectAtIndex:2];
       NSString* dataBase64EncodedSha1Base64 = [[dataBase64Encoded dataUsingEncoding:NSUTF8StringEncoding] sha1Base64];
@@ -120,8 +120,8 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
         isMacOS10_5OrAbove() ?
           [NSPropertyListSerialization propertyListWithData:uncompressedData
             options:NSPropertyListImmutable format:&format error:nil] :
-          [NSPropertyListSerialization propertyListFromData:uncompressedData
-            mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+          [NSPropertyListSerialization propertyListWithData:uncompressedData
+            options:NSPropertyListImmutable format:&format error:nil];
       NSDictionary* plistAsDictionary = [plist dynamicCastToClass:[NSDictionary class]];
       if (plistAsDictionary)
       {
@@ -1851,8 +1851,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       {
         self->pdfCachedImage = [[NSImage alloc] initWithSize:[pdfImageRep size]];
         [self->pdfCachedImage setCacheMode:NSImageCacheNever];
-        [self->pdfCachedImage setDataRetained:YES];
-        [self->pdfCachedImage setScalesWhenResized:YES];
         [self->pdfCachedImage addRepresentation:pdfImageRep];
         if (![self->pdfCachedImage bitmapImageRepresentationWithMaxSize:NSMakeSize(0, 128)])//to help drawing in library
           [self->pdfCachedImage bitmapImageRepresentation];

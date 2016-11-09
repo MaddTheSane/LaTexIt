@@ -42,6 +42,7 @@
 @end
 
 @implementation HistoryManager
+@synthesize locked;
 
 static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 

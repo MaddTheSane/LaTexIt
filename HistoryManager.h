@@ -12,8 +12,14 @@
 
 #import "LaTeXiTSharedTypes.h"
 
-typedef enum {HISTORY_IMPORT_OVERWRITE, HISTORY_IMPORT_MERGE} history_import_option_t;
-typedef enum {HISTORY_EXPORT_FORMAT_INTERNAL, HISTORY_EXPORT_FORMAT_PLIST} history_export_format_t;
+typedef NS_ENUM(NSInteger, history_import_option_t) {
+  HISTORY_IMPORT_OVERWRITE,
+  HISTORY_IMPORT_MERGE
+};
+typedef NS_ENUM(NSInteger, history_export_format_t) {
+  HISTORY_EXPORT_FORMAT_INTERNAL,
+  HISTORY_EXPORT_FORMAT_PLIST
+};
 
 @class HistoryItem;
 @interface HistoryManager : NSObject {
@@ -28,10 +34,9 @@ typedef enum {HISTORY_EXPORT_FORMAT_INTERNAL, HISTORY_EXPORT_FORMAT_PLIST} histo
 -(NSUndoManager*)          undoManager;
 
 -(NSObjectController*) bindController;
--(BOOL) isLocked;
--(void) setLocked:(BOOL)value;
+@property (getter=isLocked) BOOL locked;
 
--(NSUInteger) numberOfItems;
+@property (readonly) NSUInteger numberOfItems;
 -(void) deleteOldEntries;
 
 -(void) saveHistory;

@@ -143,27 +143,27 @@
 
 -(IBAction) clearHistory:(id)sender
 {
+  NSAlert *alert = [NSAlert new];
+  alert.messageText = NSLocalizedString(@"Clear History",@"Clear History");
+  alert.informativeText = NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
+                                            @"Are you sure you want to clear the whole history ?\nThis operation is irreversible.");
+  [alert addButtonWithTitle:NSLocalizedString(@"Clear History",@"Clear History")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
   if ([[self window] isVisible])
   {
-    NSBeginAlertSheet(NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Cancel", @"Cancel"),
-                      nil, [self window], self,
-                      @selector(_clearHistorySheetDidEnd:returnCode:contextInfo:), nil, NULL,
-                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
-                                        @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."));
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+      if (returnCode == NSAlertFirstButtonReturn) {
+        [self clearAll:NO];
+      }
+    }];
   }
   else
   {
-    NSInteger returnCode =
-      NSRunAlertPanel(NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
-                                        @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."),
-                      NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Cancel", @"Cancel"), nil);
+    NSInteger returnCode = [alert runModal];
     if (returnCode == NSAlertFirstButtonReturn)
       [self clearAll:NO];
   }
+  [alert autorelease];
 }
 //end clearHistory:
 
@@ -203,12 +203,11 @@
                                               format:[exportFormatPopUpButton selectedTag]];
     if (!ok)
     {
-      NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
-               defaultButton:NSLocalizedString(@"OK", @"OK")
-             alternateButton:nil otherButton:nil
-   informativeTextWithFormat:@""];
-     [alert runModal];
+      NSAlert* alert = [NSAlert new];
+      alert.messageText = NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.");
+      alert.informativeText = @"";
+      [alert runModal];
+      [alert release];
     }//end if (ok)
   }
   [self->savePanel release];
@@ -261,17 +260,16 @@
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   history_import_option_t import_option = [self->importOptionPopUpButton selectedTag];
-  if (returnCode == NSOKButton)
+  if (returnCode == NSModalResponseOK)
   {
     BOOL ok = [[HistoryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
     if (!ok)
     {
-      NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"Loading error", @"Loading error")
-               defaultButton:NSLocalizedString(@"OK", @"OK")
-             alternateButton:nil otherButton:nil
-   informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-     [alert runModal];
+      NSAlert* alert = [NSAlert new];
+      alert.messageText = NSLocalizedString(@"Loading error", @"Loading error");
+      alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format");
+      [alert runModal];
+      [alert release];
     }
     else
     {

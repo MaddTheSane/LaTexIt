@@ -227,10 +227,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     NSString*  textShortcutsPlistPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"textShortcuts" ofType:@"plist"];
     NSData*    dataTextShortcutsPlist = [NSData dataWithContentsOfFile:textShortcutsPlistPath options:NSUncachedRead error:nil];
     NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
-    NSString* errorString = nil;
-    NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataTextShortcutsPlist
-                                                           mutabilityOption:NSPropertyListImmutable
-                                                                     format:&format errorDescription:&errorString];
+    NSError* errorString = nil;
+    NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:dataTextShortcutsPlist
+                                                           options:NSPropertyListImmutable
+                                                                     format:&format error:&errorString];
     NSString* version = [plist objectForKey:@"version"];
     //we can check the version...
     if (!version || [version compare:@"1.13.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
@@ -2677,11 +2677,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     NSString* infoPlistPath =
       [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
     NSURL* infoPlistURL = [NSURL fileURLWithPath:infoPlistPath];
-    CFStringRef cfStringError = nil;
+    CFErrorRef cfStringError = nil;
     #ifdef ARC_ENABLED
-    CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
+    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
                                                                     (__bridge CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
-                                                                    kCFPropertyListMutableContainersAndLeaves, &cfStringError);
+                                                                    kCFPropertyListMutableContainersAndLeaves, NULL, &cfStringError);
     #else
     CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
                                                                     (CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
@@ -2930,16 +2930,16 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       {
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
         {
-          NSAlert* alert =
-            [NSAlert alertWithMessageText:NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences",
-                                                            @"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences")
-                            defaultButton:NSLocalizedString(@"Apply preferences",
-                                                            @"Apply preferences")
-                          alternateButton:NSLocalizedString(@"Update preferences",
-                                                            @"Update preferences")
-                              otherButton:NSLocalizedString(@"Ignore", @"Ignore")
-                informativeTextWithFormat:NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"__EXPLAIN_CHANGE_SHORTCUTS__")];
-          [[[alert buttons] objectAtIndex:2] setKeyEquivalent:[NSString stringWithFormat:@"%c", '\033']];//escape
+          NSAlert* alert = [NSAlert new];
+          alert.messageText = NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences",
+                                                @"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences");
+          alert.informativeText = NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"__EXPLAIN_CHANGE_SHORTCUTS__");
+          [alert addButtonWithTitle:NSLocalizedString(@"Apply preferences",
+                                                      @"Apply preferences")];
+          [alert addButtonWithTitle:NSLocalizedString(@"Update preferences",
+                                                      @"Update preferences")];
+          [[alert addButtonWithTitle:NSLocalizedString(@"Ignore", @"Ignore")] setKeyEquivalent:@"\033"];//escape
+          
           NSInteger result = [alert runModal];
           if (result == NSAlertFirstButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS;
@@ -2997,15 +2997,14 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
           {
             if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
             {
-              NSAlert* alert =
-              [NSAlert alertWithMessageText:NSLocalizedString(@"New Service shortcuts could not be set",
-                                                              @"New Service shortcuts could not be set")
-                              defaultButton:NSLocalizedString(@"Update preferences",@"Update preferences")
-                            alternateButton:NSLocalizedString(@"Ignore",@"Ignore")
-                                otherButton:nil
-                  informativeTextWithFormat:NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle",
-                                                              @"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle")];
-              [[[alert buttons] objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
+              NSAlert* alert = [NSAlert new];
+              alert.messageText = NSLocalizedString(@"New Service shortcuts could not be set",
+                                                    @"New Service shortcuts could not be set");
+              alert.informativeText = NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle",
+                                                        @"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle");
+              [alert addButtonWithTitle:NSLocalizedString(@"Update preferences",@"Update preferences")];
+              [[alert addButtonWithTitle:NSLocalizedString(@"Ignore",@"Ignore")] setKeyEquivalent:@"\033"];
+              
               NSInteger result = [alert runModal];
               if (result == NSAlertFirstButtonReturn)
                  authenticationFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;

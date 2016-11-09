@@ -24,7 +24,7 @@ void CGContextAddRoundedRect(CGContextRef context, CGRect rect, CGFloat ovalWidt
 
 //----------------- Blend colors --------------------
 
-typedef struct {
+typedef struct blend_colors_t {
   NSUInteger refCount;
   CGColorRef* colors;
   NSUInteger nbColors;
