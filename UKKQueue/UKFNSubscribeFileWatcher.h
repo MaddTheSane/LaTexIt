@@ -19,7 +19,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "UKFileWatcher.h"
-#import <Carbon/Carbon.h>
+#include <Carbon/Carbon.h>
 
 /*
 	NOTE: FNSubscribe has a built-in delay: If your application is in the
@@ -35,11 +35,11 @@
 
 @interface UKFNSubscribeFileWatcher : NSObject <UKFileWatcher>
 {
-    id                      delegate;           // Delegate must respond to UKFileWatcherDelegate protocol.
-    NSMutableDictionary*    subscriptions;      // List of FNSubscription pointers in NSValues, with the pathnames as their keys.
+    __unsafe_unretained id<UKFileWatcherDelegate> delegate;           ///< Delegate must respond to \c UKFileWatcherDelegate protocol.
+    NSMutableDictionary*      subscriptions;      ///< List of \c FNSubscription pointers in NSValues, with the pathnames as their keys.
 }
 
-+(id) sharedFileWatcher;
++(UKFNSubscribeFileWatcher*) sharedFileWatcher;
 
 // UKFileWatcher defines the methods: addPath: removePath: and delegate accessors.
 

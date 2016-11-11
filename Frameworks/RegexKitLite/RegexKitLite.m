@@ -1120,7 +1120,7 @@ static id rkl_performRegexOp(id self, SEL _cmd, RKLRegexOp regexOp, NSString *re
   rkl_cacheSpinLockStatus |= RKLLockedCacheSpinLock;
   rkl_dtrace_incrementEventID();
   
-  if(RKL_EXPECTED((cachedRegex = rkl_getCachedRegexSetToString(regexString, options, matchNSString, &stringU16Length, matchRange, error, &exception, &status)) == NULL, 0L)) { stringU16Length = (NSUInteger)CFStringGetLength((CFStringRef)matchNSString); }
+  if(RKL_EXPECTED((cachedRegex = rkl_getCachedRegexSetToString(regexString, options, matchNSString, &stringU16Length, matchRange, error, &exception, &status)) == NULL, 0L)) { stringU16Length = [matchNSString length]; }
   if(RKL_EXPECTED(matchRange->length == NSUIntegerMax,           0L))                                        { matchRange->length = stringU16Length; } // For convenience.
   if(RKL_EXPECTED(stringU16Length     < NSMaxRange(*matchRange), 0L) && RKL_EXPECTED(exception == NULL, 1L)) { exception = (id)RKL_EXCEPTION(NSRangeException, @"Range or index out of bounds.");  goto exitNow; }
   if(RKL_EXPECTED(stringU16Length    >= (NSUInteger)INT_MAX,     0L) && RKL_EXPECTED(exception == NULL, 1L)) { exception = (id)RKL_EXCEPTION(NSRangeException, @"String length exceeds INT_MAX."); goto exitNow; }
@@ -2665,5 +2665,57 @@ exitNow2:
   rkl_performRegexOp(self, _cmd, (RKLRegexOp)(RKLReplaceOp | RKLReplaceMutable), regex, options,      0L, self, &searchRange, replacement, error, (void **)((void *)&replacedCount), 0UL, NULL, NULL);
   return(replacedCount);
 }
+
+@end
+
+
+@implementation NSString (RegexKitLiteSwiftFriendlyAdditions)
+
+//// >= 4.1
+
+- (NSArray *)RKL_METHOD_PREPEND(arrayOfDictionariesByMatchingRegex):(NSString *)regex options:(RKLRegexOptions)options range:(NSRange)range withFirstKey:(id)firstKey arguments:(va_list)varArgsList error:(NSError **)error
+{
+  return(rkl_performDictionaryVarArgsOp(self, _cmd, (RKLRegexOp)RKLArrayOfDictionariesOfCapturesOp, regex, options, 0L, self, &range, NULL, error, NULL, firstKey, varArgsList));
+}
+
+- (NSArray<NSDictionary*> *)RKL_METHOD_PREPEND(arrayOfDictionariesByMatchingRegex):(NSString *)regex options:(RKLRegexOptions)options range:(NSRange)range withKeys:(id *)keys forCaptures:(int *)captures count:(NSUInteger)count error:(NSError **)error
+{
+  return(rkl_performRegexOp(self, _cmd, (RKLRegexOp)RKLArrayOfDictionariesOfCapturesOp, regex, options, 0L, self, &range, NULL, error, NULL, count, keys, captures));
+
+}
+
+- (NSDictionary *)RKL_METHOD_PREPEND(dictionaryByMatchingRegex):(NSString *)regex options:(RKLRegexOptions)options range:(NSRange)range withFirstKey:(id)firstKey arguments:(va_list)varArgsList error:(NSError **)error
+{
+  return(rkl_performDictionaryVarArgsOp(self, _cmd, (RKLRegexOp)RKLDictionaryOfCapturesOp, regex, options, 0L, self, &range, NULL, error, NULL, firstKey, varArgsList));
+}
+
+- (NSDictionary *)RKL_METHOD_PREPEND(dictionaryByMatchingRegex):(NSString *)regex options:(RKLRegexOptions)options range:(NSRange)range withKeys:(id *)keys forCaptures:(int *)captures count:(NSUInteger)count error:(NSError **)error
+{
+  return(rkl_performRegexOp(self, _cmd, (RKLRegexOp)RKLDictionaryOfCapturesOp, regex, options, 0L, self, &range, NULL, error, NULL, count, keys, captures));
+}
+
+#ifdef    _RKL_BLOCKS_ENABLED
+
+- (BOOL)RKL_METHOD_PREPEND(enumerateStringsMatchedByRegex):(NSString *)regex options:(RKLRegexOptions)options inRange:(NSRange)range enumerationOptions:(RKLRegexEnumerationOptions)enumerationOptions usingBlock:(void (^)(NSInteger captureCount, NSString * const capturedStrings[captureCount], const NSRange capturedRanges[captureCount], volatile BOOL * const stop))block error:(NSError **)error
+{
+  NSUInteger errorFree = NO;
+  rkl_performEnumerationUsingBlock(self, _cmd, (RKLRegexOp)RKLCapturesArrayOp, regex, (RKLRegexOptions)RKLNoOptions, self, NSMaxiumRange, (RKLBlockEnumerationOp)RKLBlockEnumerationMatchOp, 0UL,                NULL, &errorFree, NULL,  block, NULL);
+  return(errorFree == NO ? NO : YES);
+}
+
+- (BOOL)RKL_METHOD_PREPEND(enumerateStringsSeparatedByRegex):(NSString *)regex options:(RKLRegexOptions)options inRange:(NSRange)range enumerationOptions:(RKLRegexEnumerationOptions)enumerationOptions usingBlock:(void (^)(NSInteger captureCount, NSString * const capturedStrings[captureCount], const NSRange capturedRanges[captureCount], volatile BOOL * const stop))block error:(NSError **)error
+{
+  NSUInteger errorFree = NO;
+  rkl_performEnumerationUsingBlock(self, _cmd, (RKLRegexOp)RKLCapturesArrayOp, regex, options,                       self, range,         (RKLBlockEnumerationOp)RKLBlockEnumerationMatchOp, enumerationOptions, NULL, &errorFree, error, block, NULL);
+  return(errorFree == NO ? NO : YES);
+}
+
+- (NSString *)RKL_METHOD_PREPEND(stringByReplacingOccurrencesOfRegex):(NSString *)regex options:(RKLRegexOptions)options inRange:(NSRange)range enumerationOptions:(RKLRegexEnumerationOptions)enumerationOptions usingBlock:(NSString *(^)(NSInteger captureCount, NSString * const capturedStrings[captureCount], const NSRange capturedRanges[captureCount], volatile BOOL * const stop))block error:(NSError **)error
+{
+  return(rkl_performEnumerationUsingBlock(self, _cmd, (RKLRegexOp)RKLCapturesArrayOp, regex, options,                       self, range,         (RKLBlockEnumerationOp)RKLBlockEnumerationReplaceOp, enumerationOptions, NULL, NULL, error, NULL, block));
+
+}
+
+#endif
 
 @end

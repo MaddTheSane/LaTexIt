@@ -25,15 +25,23 @@
 //  Protocol:
 // -----------------------------------------------------------------------------
 
-@protocol UKFileWatcher
+#import <Foundation/NSObject.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+typedef NSString *UKFileWatcherNotifications NS_STRING_ENUM;
+
+
+@protocol UKFileWatcherDelegate;
+
+@protocol UKFileWatcher <NSObject>
 
 // +(id) sharedFileWatcher;			// Singleton accessor. Not officially part of the protocol, but use this name if you provide a singleton.
 
 -(void) addPath: (NSString*)path;
 -(void) removePath: (NSString*)path;
 
--(id)   delegate;
--(void) setDelegate: (id)newDelegate;
+@property (unsafe_unretained, nullable) id<UKFileWatcherDelegate> delegate;
 
 @end
 
@@ -41,9 +49,10 @@
 //  Methods delegates need to provide:
 // -----------------------------------------------------------------------------
 
-@interface NSObject (UKFileWatcherDelegate)
 
--(void) watcher: (id<UKFileWatcher>)kq receivedNotification: (NSString*)nm forPath: (NSString*)fpath;
+@protocol UKFileWatcherDelegate <NSObject>
+
+-(void) watcher: (nullable id<UKFileWatcher>)kq receivedNotification: (UKFileWatcherNotifications)nm forPath: (NSString*)fpath;
 
 @end
 
@@ -52,11 +61,12 @@
 /*  object			= the file watcher object
 	userInfo.path	= file path watched
 	These notifications are sent via the NSWorkspace notification center */
-extern NSString* UKFileWatcherRenameNotification;
-extern NSString* UKFileWatcherWriteNotification;
-extern NSString* UKFileWatcherDeleteNotification;
-extern NSString* UKFileWatcherAttributeChangeNotification;
-extern NSString* UKFileWatcherSizeIncreaseNotification;
-extern NSString* UKFileWatcherLinkCountChangeNotification;
-extern NSString* UKFileWatcherAccessRevocationNotification;
+extern UKFileWatcherNotifications UKFileWatcherRenameNotification;
+extern UKFileWatcherNotifications UKFileWatcherWriteNotification;
+extern UKFileWatcherNotifications UKFileWatcherDeleteNotification;
+extern UKFileWatcherNotifications UKFileWatcherAttributeChangeNotification;
+extern UKFileWatcherNotifications UKFileWatcherSizeIncreaseNotification;
+extern UKFileWatcherNotifications UKFileWatcherLinkCountChangeNotification;
+extern UKFileWatcherNotifications UKFileWatcherAccessRevocationNotification;
 
+NS_ASSUME_NONNULL_END

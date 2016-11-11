@@ -61,7 +61,7 @@
   }//end if (runningApplicationClass)
   else//if (!runningApplicationClass)
   {
-    NSArray* runningApplications = [self launchedApplications];
+    NSArray<NSDictionary<NSString*,id>*>* runningApplications = [self launchedApplications];
     NSEnumerator* enumerator = [runningApplications objectEnumerator];
     id application = nil;
     id applicationFound = nil;

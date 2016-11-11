@@ -31,7 +31,7 @@
   NSString*     workingDirectory;
 }
 
--(instancetype)   init;///<NSTemporaryDirectory() as workingDirectory
+-(instancetype)   init; ///< \c NSTemporaryDirectory() as workingDirectory
 -(instancetype)   initWithWorkingDirectory:(NSString*)workingDirectory;
 @property (copy)  NSDictionary<NSString *, NSString*> *environment;
 @property (copy)  NSString *launchPath;

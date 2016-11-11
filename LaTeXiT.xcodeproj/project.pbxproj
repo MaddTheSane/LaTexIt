@@ -193,7 +193,7 @@
 		9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
-		9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
 		9344BBA30E8CF5AE00FE90A5 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
 		9344BBA70E8CF5C500FE90A5 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
 		9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
@@ -384,7 +384,7 @@
 		93E25B171231A1B200D65279 /* LaTeXMathML.js in Resources */ = {isa = PBXBuildFile; fileRef = 932BD079122BAFAE003C312C /* LaTeXMathML.js */; };
 		93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
 		93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -DARC_ENABLED"; }; };
+		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
 		93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */; };
 		93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EE114907F2F607009E1F36 /* HistoryCell.m */; };
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2684,6 +2684,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2744,6 +2745,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2892,6 +2894,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks @loader_path/../../../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2950,6 +2953,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks @loader_path/../../../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3045,6 +3049,7 @@
 				GENERATE_PROFILING_CODE = NO;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PREBINDING = YES;
@@ -3099,6 +3104,7 @@
 				GENERATE_PROFILING_CODE = NO;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;

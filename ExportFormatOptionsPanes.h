@@ -26,7 +26,7 @@
   IBOutlet __weak NSButton*    exportFormatOptionsJpegOKButton;
   IBOutlet __weak NSButton*    exportFormatOptionsJpegCancelButton;
   
-  CGFloat  jpegQualityPercent;
+  float  jpegQualityPercent;
   NSColor* jpegBackgroundColor;
   __weak id<ExportFormatOptionsDelegate>       exportFormatOptionsJpegPanelDelegate;
 
@@ -57,7 +57,7 @@
 -(instancetype) initWithLoadingFromNib;
 
 @property (weak) IBOutlet NSPanel *exportFormatOptionsJpegPanel;
-@property CGFloat jpegQualityPercent;
+@property float jpegQualityPercent;
 @property (retain) NSColor *jpegBackgroundColor;
 @property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsJpegPanelDelegate;
 

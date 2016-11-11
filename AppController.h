@@ -31,7 +31,7 @@
 @class PropertyStorage;
 @class SUUpdater;
 
-@interface AppController : NSObject <LinkBackServerDelegate> {
+@interface AppController : NSObject <LinkBackServerDelegate, NSOpenSavePanelDelegate> {
   IBOutlet NSMenuItem*    editCopyImageAsMenuItem;
   IBOutlet NSWindow*      readmeWindow;
   IBOutlet NSTextView*    readmeTextView;
@@ -72,7 +72,7 @@
   BOOL shouldOpenInstallLaTeXHelp;
 }
 
-+(AppController*)           appController; //getting the unique instance of appController
+///getting the unique instance of appController
 @property (class, readonly, retain) AppController *appController;
 +(NSDocument*)              currentDocument;
 -(NSDocument*)              currentDocument;
@@ -156,7 +156,7 @@
 
 //utility : finds a program in the unix environment. You can give an environment, and
 //some "prefixes", that is to say an array of PATH in which the program could be
--(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes environment:(NSDictionary*)environment useLoginShell:(BOOL)useLoginShell;
+-(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray<NSString*>*)prefixes environment:(NSDictionary*)environment useLoginShell:(BOOL)useLoginShell;
 
 ///returns the default preamble. If color.sty is not available, it may add % in front of \usepackage{color}
 -(NSAttributedString*) preambleLatexisationAttributedString;

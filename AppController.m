@@ -80,7 +80,7 @@
 }
 @end
 
-@interface AppController (PrivateAPI)
+@interface AppController ()
 
 -(void) beginCheckUpdates;
 -(void) endCheckUpdates;
@@ -90,7 +90,7 @@
 
 //specialized quick version of _findUnixProgram... that does not take environment in account.
 //It only looks for the existence of the file in the given paths, but does not look more.
--(NSString*) _findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes;
+-(NSString*) _findUnixProgram:(NSString*)programName inPrefixes:(NSArray<NSString*>*)prefixes;
 
 -(void) _setEnvironment:(NSDictionary*)environment; //utility that calls setenv() with the current content of environmentPath
 
@@ -109,6 +109,15 @@
 @end
 
 @implementation AppController
+@synthesize gsAvailable = isGsAvailable;
+@synthesize dviPdfAvailable = isDviPdfAvailable;
+@synthesize pdfLaTeXAvailable = isPdfLaTeXAvailable;
+@synthesize psToPdfAvailable = isPsToPdfAvailable;
+@synthesize xeLaTeXAvailable = isXeLaTeXAvailable;
+@synthesize laTeXAvailable = isLaTeXAvailable;
+@synthesize colorStyAvailable = isColorStyAvailable;
+@synthesize pdfToSvgAvailable = isPdfToSvgAvailable;
+@synthesize perlWithLibXMLAvailable = isPerlWithLibXMLAvailable;
 
 //the unique instance of the appController
 static AppController* appControllerInstance = nil;
@@ -1357,12 +1366,12 @@ static NSMutableDictionary* cachePaths = nil;
                                                               ([openFileTypeLabel frame].size.height-[self->openFileTypePopUpButton frame].size.height)/2)];
     [self->openFileTypeView sizeToFit];
 
-    [self->openFileOptions setObject:[NSNumber numberWithBool:NO] forKey:@"synchronizeEnabled"];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizePreamble"];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizeEnvironment"];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizeBody"];
+    [self->openFileOptions setObject:@NO forKey:@"synchronizeEnabled"];
+    [self->openFileOptions setObject:@YES forKey:@"synchronizePreamble"];
+    [self->openFileOptions setObject:@YES forKey:@"synchronizeEnvironment"];
+    [self->openFileOptions setObject:@YES forKey:@"synchronizeBody"];
   }//end if (!self->openFileTypeView)
-  [self->openFileOptions setObject:[NSNumber numberWithBool:NO] forKey:@"synchronizeEnabled"];
+  [self->openFileOptions setObject:@NO forKey:@"synchronizeEnabled"];
   self->openFileTypeOpenPanel = [NSOpenPanel openPanel];
   [self changeOpenFileType:openFileTypePopUpButton];
   [self->openFileTypeOpenPanel setAllowsMultipleSelection:NO];
@@ -1371,7 +1380,7 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setCanCreateDirectories:NO];
   [self->openFileTypeOpenPanel setResolvesAliases:YES];
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
-  [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
+  [self->openFileTypeOpenPanel setDelegate:self];//panel:shouldShowFilename:
   NSInteger result = [self->openFileTypeOpenPanel runModal];
   if (result == NSModalResponseOK)
   {
@@ -1430,16 +1439,20 @@ static NSMutableDictionary* cachePaths = nil;
     result = ([[NSFileManager defaultManager] fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory &&
               ![[NSWorkspace sharedWorkspace] isFilePackageAtPath:filename]) ||
     [allowedFileTypes containsObject:[filename pathExtension]];
-    NSEnumerator* enumerator = [allowedFileTypes objectEnumerator];
-    NSString*     uti = nil;
     if (!result)
     {
-      FSRef fsRefToItem;
-      FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &fsRefToItem, NULL );
-      CFTypeRef itemUTI = NULL;
-      LSCopyItemAttribute( &fsRefToItem, kLSRolesAll, kLSItemContentType, &itemUTI);
-      while(!result && ((uti = [enumerator nextObject])))
-        result |= UTTypeConformsTo((CFStringRef)itemUTI, (CFStringRef)uti);
+      id resValue = nil;
+      if (![url getResourceValue:&resValue forKey:NSURLTypeIdentifierKey error:NULL]) {
+        return result;
+      }
+      
+      for (NSString *uti in allowedFileTypes)
+      {
+        if (UTTypeConformsTo((CFStringRef)resValue, (CFStringRef)uti))
+        {
+          return YES;
+        }
+      }
     }//end if (!result)
   }//end if (sender == self->openFileTypeOpenPanel)
   return result;
@@ -1868,11 +1881,9 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end nameOfType:
 
--(void) _setEnvironment:(NSDictionary*)environment
+-(void) _setEnvironment:(NSDictionary<NSString*,NSString*>*)environment
 {
-  NSEnumerator* keyEnumerator = [environment keyEnumerator];
-  NSString* key = nil;
-  while((key = [keyEnumerator nextObject]))
+  for(NSString *key in environment)
   {
     NSString* value = [environment objectForKey:key];
     if (value)
@@ -1882,7 +1893,7 @@ static NSMutableDictionary* cachePaths = nil;
 //end _setEnvironment:
 
 //looks for a programName in the given PATHs. Just tests that the file exists
--(NSString*) _findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes
+-(NSString*) _findUnixProgram:(NSString*)programName inPrefixes:(NSArray<NSString*>*)prefixes
 {
   NSString* path = nil;
   @synchronized(cachePaths)
@@ -1996,60 +2007,6 @@ static NSMutableDictionary* cachePaths = nil;
   return mutablePreamble;
 }
 //end adaptPreambleToCurrentConfiguration:
-
--(BOOL) isGsAvailable
-{
-  return self->isGsAvailable;
-}
-//end isGsAvailable
-
--(BOOL) isDviPdfAvailable
-{
-  return self->isDviPdfAvailable;
-}
-//end isDvipdfAvailable
-
--(BOOL) isPdfLaTeXAvailable
-{
-  return self->isPdfLaTeXAvailable;
-}
-//end isPdfLatexAvailable
-
--(BOOL) isPsToPdfAvailable
-{
-  return self->isPsToPdfAvailable;
-}
-//end isPs2PdfAvailable
-
--(BOOL) isXeLaTeXAvailable
-{
-  return self->isXeLaTeXAvailable;
-}
-//end isXeLatexAvailable
-
--(BOOL) isLaTeXAvailable
-{
-  return self->isLaTeXAvailable;
-}
-//end isLaTeXAvailable
-
--(BOOL) isColorStyAvailable
-{
-  return self->isColorStyAvailable;
-}
-//end isColorStyAvailable
-
--(BOOL) isPdfToSvgAvailable
-{
-  return self->isPdfToSvgAvailable;
-}
-//end isPdfToSvgAvailable
-
--(BOOL) isPerlWithLibXMLAvailable
-{
-  return self->isPerlWithLibXMLAvailable;
-}
-//end isPerlWithLibXMLAvailable
 
 //try to find gs program, searching by its name
 -(void) _findPathWithConfiguration:(id)configuration

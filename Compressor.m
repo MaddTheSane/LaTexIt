@@ -24,7 +24,7 @@
     uLong srcLength = [data length];
     uLongf buffLength = srcLength * 1.001 + 12;
     NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:buffLength+sizeof(uLong)];
-    uLong swappedSrclength = CFSwapInt32HostToBig(srcLength);
+    uLong swappedSrclength = CFSwapInt32HostToBig((uint32_t)srcLength);
     [compData appendBytes:&swappedSrclength length:sizeof(uLong)];
     [compData increaseLengthBy:buffLength];
     int error=compress([compData mutableBytes]+sizeof(uLong),&buffLength,[data bytes],srcLength);

@@ -48,6 +48,18 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 
 
 @implementation UKKQueue
+@synthesize delegate;
+@synthesize alwaysNotify;
+
+// -----------------------------------------------------------------------------
+//	queueFD:
+//		Returns a Unix file descriptor for the KQueue this uses. The descriptor
+//		is owned by this object. Do not close it!
+//
+//	REVISIONS:
+//		2004-03-13	UK	Documented.
+// -----------------------------------------------------------------------------
+@synthesize queueFD;
 
 // Deprecated:
 #if UKKQUEUE_OLD_SINGLETON_ACCESSOR_NAME
@@ -174,21 +186,6 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 	[super dealloc];
     
     //NSLog(@"kqueue released.");
-}
-
-
-// -----------------------------------------------------------------------------
-//	queueFD:
-//		Returns a Unix file descriptor for the KQueue this uses. The descriptor
-//		is owned by this object. Do not close it!
-//
-//	REVISIONS:
-//		2004-03-13	UK	Documented.
-// -----------------------------------------------------------------------------
-
--(int)  queueFD
-{
-	return queueFD;
 }
 
 
@@ -431,32 +428,17 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 	}
 }
 
--(id)	delegate
+-(id<UKFileWatcherDelegate>)	delegate
 {
     return delegate;
 }
 
--(void)	setDelegate: (id)newDelegate
+-(void)	setDelegate: (id<UKFileWatcherDelegate>)newDelegate
 {
 	id	oldProxy = delegateProxy;
 	delegate = newDelegate;
-	delegateProxy = [delegate copyMainThreadProxy];
+	delegateProxy = [(NSObject*)delegate copyMainThreadProxy];
 	[oldProxy release];
-}
-
-// -----------------------------------------------------------------------------
-//	Flag to send a notification even if we have a delegate:
-// -----------------------------------------------------------------------------
-
--(BOOL)	alwaysNotify
-{
-	return alwaysNotify;
-}
-
-
--(void)	setAlwaysNotify: (BOOL)n
-{
-	alwaysNotify = n;
 }
 
 

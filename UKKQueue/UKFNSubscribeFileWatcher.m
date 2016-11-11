@@ -29,6 +29,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
 
 
 @implementation UKFNSubscribeFileWatcher
+@synthesize delegate;
 
 // -----------------------------------------------------------------------------
 //  sharedFileWatcher:
@@ -155,28 +156,6 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
     //NSLog( @"UKFNSubscribeFileWatcher noticed change to %@", path );	// DEBUG ONLY!
 }
 
-
-
-// -----------------------------------------------------------------------------
-//  delegate:
-//		Accessor for file watcher delegate.
-// -----------------------------------------------------------------------------
-
--(id)   delegate
-{
-    return delegate;
-}
-
-
-// -----------------------------------------------------------------------------
-//  setDelegate:
-//		Mutator for file watcher delegate.
-// -----------------------------------------------------------------------------
-
--(void) setDelegate: (id)newDelegate
-{
-    delegate = newDelegate;
-}
 
 
 @end

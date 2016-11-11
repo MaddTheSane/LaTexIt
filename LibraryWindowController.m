@@ -564,7 +564,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(IBAction) openDefaultLibraryPath:(id)sender
 {
   [(NSOpenPanel*)[importAccessoryView window]
-    setDirectory:[[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent]];
+    setDirectoryURL:[NSURL fileURLWithPath:[[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent]]];
 }
 //end openDefaultLibraryPath:
 

@@ -448,7 +448,11 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSRect bleh = NSZeroRect;
+  bleh.origin = [self convertPoint:center toView:nil];
+  bleh.size = NSMakeSize(1, 1);
+  bleh = [[self window] convertRectToScreen:bleh];
+  NSPoint mouseLocation2 = bleh.origin;
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =

@@ -11,16 +11,22 @@
 
 @interface NSString (Extended)
 
-//a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
-+(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
-+(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
+///a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
++(NSString*) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
++(NSString*) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 
 -(NSString*) string;//useful for binding
 -(NSString*)trim;
 -(BOOL) startsWith:(NSString*)substring options:(NSStringCompareOptions)mask;
 -(BOOL) endsWith:(NSString*)substring options:(NSStringCompareOptions)mask;
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag;
--(NSString*) filteredStringForLatex;
--(NSString*) replaceYenSymbol;
+-(NSString*) stringWithFilteredStringForLatex;
+-(NSString*) stringByReplacingYenSymbol;
+-(NSString*) filteredStringForLatex DEPRECATED_ATTRIBUTE;
+-(NSString*) replaceYenSymbol DEPRECATED_ATTRIBUTE;
 
+@end
+
+@interface NSMutableString (Extended)
+- (void)replaceYenSymbol;
 @end

@@ -7,7 +7,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 CG_INLINE CGRect CGRectFromNSRect(NSRect rect) {return CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);}
 
-//Path
+///Path
 void CGContextAddRoundedRect(CGContextRef context, CGRect rect, CGFloat ovalWidth, CGFloat ovalHeight);
 
 //color blends
@@ -24,7 +24,7 @@ CGBlendColorsRef CGBlendColorsCreate(CGColorRef colors[], NSUInteger nbColors, b
 CGBlendColorsRef CGBlendColorsRetain(CGBlendColorsRef blendColors);
 void CGBlendColorsRelease(CGBlendColorsRef blendColors);
 
-//Shadings
+///Shadings
 extern CGFunctionCallbacks CGBlendColorsFunctionCallBacks;
 
 //Color conversions

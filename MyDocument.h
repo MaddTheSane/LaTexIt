@@ -24,7 +24,7 @@
 @class MySplitView;
 @class PropertyStorage;
 
-@interface MyDocument : NSDocument <NSWindowDelegate, NSSplitViewDelegate>
+@interface MyDocument : NSDocument <NSWindowDelegate, NSSplitViewDelegate, UKFileWatcherDelegate>
 {
   IBOutlet NSBox*               upperBox;
   IBOutlet NSBox*               upperImageBox;

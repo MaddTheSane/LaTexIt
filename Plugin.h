@@ -10,21 +10,25 @@
 
 #import "LaTeXiTPluginProtocol.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface Plugin : NSObject<LaTeXiTPluginProtocol> {
   NSBundle* bundle;
   NSImage*  cachedImage;
   id<NSObject,LaTeXiTPluginProtocol> principalClassInstance;
 }
 
--(instancetype) initWithPath:(NSString*)path;
+-(nullable instancetype) initWithPath:(NSString*)path;
 
 @property (readonly, retain) NSBundle *bundle;
 -(void)      load;
 @property (readonly, copy) NSString *localizedName;
 
 #pragma mark LaTeXiTPluginProtocol
--(NSImage*) icon;
+-(nullable NSImage*) icon;
 -(void) importConfigurationPanelIntoView:(NSView*)view;
 -(void) dropConfigurationPanel;
 
 @end
+
+NS_ASSUME_NONNULL_END

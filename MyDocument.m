@@ -1362,7 +1362,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (sender == self->lowerBoxControlsBoxLatexModeSegmentedControl)
   {
     NSInteger lastClickedSegment = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment];
-    [self setLatexModeRequested:[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:lastClickedSegment]];
+    [self setLatexModeRequested:(latex_mode_t)[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:lastClickedSegment]];
   }//end if (sender == self->lowerBoxControlsBoxLatexModeSegmentedControl)
 }
 //end changeRequestedLatexMode:

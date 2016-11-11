@@ -791,7 +791,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
   if (panelToOpen)
     [NSApp beginSheet:panelToOpen
-       modalForWindow:[self->tabView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+       modalForWindow:[tabView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
 //end generalExportFormatOptionsOpen:
 

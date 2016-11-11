@@ -30,7 +30,7 @@
 
 -(void) dealloc
 {
-  [self->dictionary release];
+  [dictionary release];
   [super dealloc];
 }
 //end dealloc

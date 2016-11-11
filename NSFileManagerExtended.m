@@ -10,6 +10,9 @@
 
 #include <unistd.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 static NSMutableSet* createdTemporaryPaths = nil;
 
 @interface NSFileManager (Extended_Private)
@@ -145,6 +148,8 @@ static NSMutableSet* createdTemporaryPaths = nil;
 //end bridge_setAttributes:ofItemAtPath:error:
 
 @end
+
+#pragma clang diagnostic pop
 
 @implementation NSFileManager (Extended)
 
@@ -296,3 +301,4 @@ static NSMutableSet* createdTemporaryPaths = nil;
 //end UTIFromURL:
 
 @end
+

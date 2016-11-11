@@ -8,17 +8,22 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface PropertyStorage : NSObject {
   NSMutableDictionary* dictionary;
 }
 
--(id) init;
--(id) initWithDictionary:(NSDictionary*)aDictionary;
--(id) objectForKey:(id)key;
--(void) setObject:(id)object forKey:(id)key;
+-(instancetype) init;
+-(instancetype) initWithDictionary:(nullable NSDictionary<NSString*,NSNumber*>*)aDictionary NS_DESIGNATED_INITIALIZER;
+-(nullable NSNumber*) objectForKey:(NSString*)key;
+-(void) setObject:(nullable NSNumber*)object forKey:(NSString*)key;
 
--(void) setDictionary:(NSDictionary*)value;
--(NSDictionary*) dictionary;
+@property (copy, null_resettable) NSDictionary<NSString*,NSNumber*> *dictionary;
+
+- (nullable NSNumber*)objectForKeyedSubscript:(NSString*)key;
+- (void)setObject:(nullable NSNumber*)obj forKeyedSubscript:(NSString*)key;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -12,6 +12,10 @@
 #import "RegexKitLite.h"
 #import "Utils.h"
 
+#if !__has_feature(objc_arc)
+#error This must be built with ARC
+#endif
+
 @implementation NSString (Extended)
 
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
@@ -146,7 +150,7 @@
 }
 //end cStringUsingEncoding:allowLossyConversion:
 
--(NSString*) filteredStringForLatex
+-(NSString*) stringWithFilteredStringForLatex
 {
   NSString* softbreakString = @"\u2028";
   NSString* unbreakableSpaceString = @"\u00A0";
@@ -155,11 +159,11 @@
   [string replaceOccurrencesOfString:unbreakableSpaceString withString:@" " options:0 range:NSMakeRange(0, [string length])];
   return string;
 }
-//end filteredStringForLatex
+//end stringWithFilteredStringForLatex
 
 //in Japanese environment, we should replace the Yen symbol by a backslash
 //You can read http://www.xs4all.nl/~msneep/articles/japanese.html to know more about that problem
--(NSString*) replaceYenSymbol
+-(NSString*) stringByReplacingYenSymbol
 {
   NSMutableString* stringWithBackslash = [NSMutableString stringWithString:self];
   [stringWithBackslash replaceOccurrencesOfRegex:@"¥([[:space:]]+)"
@@ -174,12 +178,40 @@
   [stringWithBackslash replaceOccurrencesOfRegex:@"¥"
                                       withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
                                            range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-#ifdef ARC_ENABLED
   return [stringWithBackslash copy];
-#else
-	return [[stringWithBackslash copy] autorelease];
-#endif
+}
+//end stringByReplacingYenSymbol
+
+-(NSString*) replaceYenSymbol
+{
+  return [self stringByReplacingYenSymbol];
 }
 //end replaceYenSymbol
 
+-(NSString *)filteredStringForLatex
+{
+  return [self stringWithFilteredStringForLatex];
+}
+
 @end
+
+@implementation NSMutableString (Extended)
+//in Japanese environment, we should replace the Yen symbol by a backslash
+//You can read http://www.xs4all.nl/~msneep/articles/japanese.html to know more about that problem
+- (void)replaceYenSymbol
+{
+  [self replaceOccurrencesOfRegex:@"¥([[:space:]]+)"
+                       withString:@"\\\\yen{}$1" options:RKLCaseless|RKLMultiline
+                            range:NSMakeRange(0, [self length]) error:nil];
+  [self replaceOccurrencesOfRegex:@"¥¥"
+                       withString:@"\\\\\\\\" options:RKLCaseless|RKLMultiline
+                            range:NSMakeRange(0, [self length]) error:nil];
+  [self replaceOccurrencesOfRegex:@"¥([^[[:space:]]0-9])"
+                       withString:@"\\\\$1" options:RKLCaseless|RKLMultiline
+                            range:NSMakeRange(0, [self length]) error:nil];
+  [self replaceOccurrencesOfRegex:@"¥"
+                       withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
+                            range:NSMakeRange(0, [self length]) error:nil];
+}
+@end
+

@@ -11,8 +11,8 @@
 
 @protocol LaTeXiTPluginProtocol <NSObject>
 
--(NSImage*) icon;
--(void) importConfigurationPanelIntoView:(NSView*)view;
+-(nullable NSImage*) icon;
+-(void) importConfigurationPanelIntoView:(nonnull NSView*)view;
 -(void) dropConfigurationPanel;
 
 @end

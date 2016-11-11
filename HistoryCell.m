@@ -98,14 +98,14 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     NSImage* image = [self image];
     NSImageRep* imageRep = [image bestImageRepresentationInContext:[NSGraphicsContext currentContext]];
     NSPDFImageRep* pdfImageRep = ![imageRep isKindOfClass:[NSPDFImageRep class]] ? nil : (NSPDFImageRep*)imageRep;
-    NSRect bounds = !pdfImageRep ? NSMakeRect(0.f, 0.f, [imageRep pixelsWide], [imageRep pixelsHigh]) :
+    NSRect bounds = !pdfImageRep ? NSMakeRect(0.0, 0.0, [imageRep pixelsWide], [imageRep pixelsHigh]) :
                     [pdfImageRep bounds];
     NSRect imageDrawRect = adaptRectangle(bounds, imageRect, YES, NO, YES);
     [NSGraphicsContext saveGraphicsState];
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:imageDrawRect.origin.x yBy:imageDrawRect.origin.y];
     [transform translateXBy:0 yBy:imageDrawRect.size.height/2];
-    [transform scaleXBy:1.f yBy:[image isFlipped] ^ [controlView isFlipped] ? -1.f : 1.f];
+    [transform scaleXBy:1.0 yBy:[image isFlipped] ^ [controlView isFlipped] ? -1.0 : 1.0];
     [transform translateXBy:0 yBy:-imageDrawRect.size.height/2];
     [transform concat];
     [imageRep drawInRect:NSMakeRect(0, 0, imageDrawRect.size.width, imageDrawRect.size.height)];
