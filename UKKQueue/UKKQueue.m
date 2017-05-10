@@ -226,7 +226,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 //		2004-03-13	UK	Documented.
 // -----------------------------------------------------------------------------
 
--(void) addPathToQueue: (NSString*)path notifyingAbout: (u_int)fflags
+-(void) addPathToQueue: (NSString*)path notifyingAbout: (UKKQueueNotifyAbout)fflags
 {
 	struct timespec		nullts = { 0, 0 };
 	struct kevent		ev;
@@ -343,7 +343,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
     {
 		NSAutoreleasePool*  pool = [[NSAutoreleasePool alloc] init];
 		
-		NS_DURING
+      @try {
 			n = kevent( queueFD, NULL, 0, &ev, 1, &timeout );
 			if( n > 0 )
 			{
@@ -374,9 +374,9 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 					}
 				}
 			}
-		NS_HANDLER
+		} @catch (NSException *localException) {
 			NSLog(@"Error in UKKQueue watcherThread: %@",localException);
-		NS_ENDHANDLER
+        }
 		
 		[pool release];
     }

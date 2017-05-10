@@ -682,8 +682,8 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSData* pdfData = nil;
   
-  preamble = [preamble filteredStringForLatex];
-  body     = [body filteredStringForLatex];
+  preamble = [preamble stringWithFilteredStringForLatex];
+  body     = [body stringWithFilteredStringForLatex];
 
   //this function is rather long, because it is not quite easy to get a tight image (well cropped)
   //and magnification.
@@ -847,10 +847,10 @@ static LaTeXProcessor* sharedInstance = nil;
        "\\begin{document}"\
        "%@%@%@%@\n"\
        "\\end{document}",
-       [colouredPreamble replaceYenSymbol],
+       [colouredPreamble stringByReplacingYenSymbol],
        (compositionMode == COMPOSITION_MODE_XELATEX) ? colorString : @"",
        addSymbolLeft,
-       [trimmedBody replaceYenSymbol],
+       [trimmedBody stringByReplacingYenSymbol],
        addSymbolRight];
 
   //creates the corresponding latex file
@@ -965,7 +965,7 @@ static LaTeXProcessor* sharedInstance = nil;
           ceil((boundingBox.origin.y+boundingBox.size.height)*magnification/ptSizeBase),
           0.f,
           magnification/ptSizeBase, //latexitscalefactor = magnification
-          addSymbolLeft, [body replaceYenSymbol], addSymbolRight, //source text
+          addSymbolLeft, [body stringByReplacingYenSymbol], addSymbolRight, //source text
           magnification/ptSizeBase,
           (compositionMode == COMPOSITION_MODE_XELATEX) ? @"false" : @"true",
           boundingBox.origin.x,
@@ -1895,7 +1895,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSImageView* imageView =
           [[NSImageView alloc] initWithFrame:
             NSMakeRect(0, 0, ceil(originalSize.width*scaleAsPercent/100), ceil(originalSize.height*scaleAsPercent/100))];
-        [imageView setImageScaling:NSScaleToFit];
+        [imageView setImageScaling:NSImageScaleAxesIndependently];
         [imageView setImage:pdfImage];
         NSData* resizedPdfData = [imageView dataWithPDFInsideRect:[imageView bounds]];
         NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];

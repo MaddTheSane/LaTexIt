@@ -166,18 +166,7 @@
 -(NSString*) stringByReplacingYenSymbol
 {
   NSMutableString* stringWithBackslash = [NSMutableString stringWithString:self];
-  [stringWithBackslash replaceOccurrencesOfRegex:@"¥([[:space:]]+)"
-                                      withString:@"\\\\yen{}$1" options:RKLCaseless|RKLMultiline
-                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  [stringWithBackslash replaceOccurrencesOfRegex:@"¥¥"
-                                      withString:@"\\\\\\\\" options:RKLCaseless|RKLMultiline
-                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  [stringWithBackslash replaceOccurrencesOfRegex:@"¥([^[[:space:]]0-9])"
-                                      withString:@"\\\\$1" options:RKLCaseless|RKLMultiline
-                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
-  [stringWithBackslash replaceOccurrencesOfRegex:@"¥"
-                                      withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
-                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
+  [stringWithBackslash replaceYenSymbol];
   return [stringWithBackslash copy];
 }
 //end stringByReplacingYenSymbol

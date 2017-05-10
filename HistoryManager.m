@@ -105,7 +105,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       return nil;
     sharedManagerInstance = self;
 
-    self->bindController = [[NSObjectController alloc] initWithContent:self];
+    bindController = [[NSObjectController alloc] initWithContent:self];
     //[self->bindController bind:NSContentBinding toObject:self withKeyPath:@"locked" options:nil];
     [self createHistoryMigratingIfNeeded];
     [self deleteOldEntries];
@@ -200,8 +200,13 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSNumber* historyDeleteOldEntriesLimit = ![preferencesController historyDeleteOldEntriesEnabled] ? nil :
     [preferencesController historyDeleteOldEntriesLimit];
-  NSDate* oldestDate = !historyDeleteOldEntriesLimit ? nil :
-    [[NSCalendarDate calendarDate] dateByAddingYears:0 months:0 days:-[historyDeleteOldEntriesLimit intValue] hours:0 minutes:0 seconds:0];
+  NSDate* oldestDate = nil;
+  if (historyDeleteOldEntriesLimit)
+  {
+    oldestDate = [NSDate date];
+    NSCalendar *cal = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    oldestDate = [cal dateByAddingUnit:NSCalendarUnitDay value:[historyDeleteOldEntriesLimit intValue] toDate:oldestDate options:NSCalendarSearchBackwards];
+  }
   if (oldestDate)
   {
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"date < %@" argumentArray:[NSArray arrayWithObjects:oldestDate, nil]];
@@ -209,7 +214,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [fetchRequest setEntity:[LatexitEquation entity]];
     [fetchRequest setPredicate:predicate];
     NSError* error = nil;
-    NSArray* oldEntries = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSArray* oldEntries = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error)
       {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     NSArray* oldHistoryItems = [oldEntries valueForKey:@"wrapper"];
@@ -219,9 +224,9 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     #endif
     if ([oldHistoryItems count])
     {
-      [self->managedObjectContext disableUndoRegistration];
-      [self->managedObjectContext safeDeleteObjects:oldHistoryItems];
-      [self->managedObjectContext enableUndoRegistration];
+      [managedObjectContext disableUndoRegistration];
+      [managedObjectContext safeDeleteObjects:oldHistoryItems];
+      [managedObjectContext enableUndoRegistration];
     }//end if ([oldHistoryItems count])
   }//end if (oldestDate)
 }
@@ -231,7 +236,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 {
   @try {
     NSError* error = nil;
-    BOOL saved = [self->managedObjectContext save:&error];
+    BOOL saved = [managedObjectContext save:&error];
     if (!saved || error)
       {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
   }//end @try

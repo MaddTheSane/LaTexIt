@@ -37,7 +37,7 @@
 
 -(id) objectForKey:(id)key
 {
-  id result = [self->dictionary objectForKey:key];
+  id result = [dictionary objectForKey:key];
   return result;
 }
 //end objectForKey:
@@ -45,7 +45,7 @@
 -(void) setObject:(id)object forKey:(id)key
 {
   [self willChangeValueForKey:key];
-  [self->dictionary setObject:object forKey:key];
+  [dictionary setObject:object forKey:key];
   [self didChangeValueForKey:key];
 }
 //end setObject:forKey:
@@ -53,15 +53,15 @@
 -(void) setDictionary:(NSDictionary*)value
 {
   if (!value)
-    [self->dictionary removeAllObjects];
+    [dictionary removeAllObjects];
   else
-    [self->dictionary setDictionary:value];
+    [dictionary setDictionary:value];
 }
 //end setDictionary
 
 -(NSDictionary*) dictionary
 {
-  NSDictionary* result = [[self->dictionary copy] autorelease];
+  NSDictionary* result = [[dictionary copy] autorelease];
   return result;
 }
 //end dictionary
@@ -78,5 +78,16 @@
   [self setObject:object forKey:key];
 }
 //end setValue:forKey:
+
+- (nullable NSNumber*)objectForKeyedSubscript:(NSString*)key
+{
+  return [self objectForKey:key];
+}
+
+- (void)setObject:(nullable NSNumber*)obj forKeyedSubscript:(NSString*)key
+{
+  [self setObject:obj forKey:key];
+}
+
 
 @end

@@ -213,11 +213,11 @@ static NSMutableSet* createdTemporaryPaths = nil;
     result = [self bridge_createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
   else
   {
-    NSDictionary* attributes = [self fileAttributesAtPath:linkPath traverseLink:NO];
+    NSDictionary* attributes = [self attributesOfItemAtPath:linkPath error:NULL];
     if ([[attributes objectForKey:NSFileType] isEqualToString:NSFileTypeSymbolicLink])
       result = [[self bridge_destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
     if (!result)
-      result = [self removeFileAtPath:linkPath handler:nil] &&
+      result = [self removeItemAtPath:linkPath error:nil] &&
                [self createLinkInDirectory:directoryPath toTarget:targetPath linkName:linkName outLinkPath:outLinkPath];
   }
   if (outLinkPath)
@@ -253,7 +253,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSEnumerator* enumerator = [createdTemporaryPaths objectEnumerator];
     NSString* filePath = nil;
     while((filePath = [enumerator nextObject]))
-      [self removeFileAtPath:filePath handler:0];
+      [self removeItemAtPath:filePath error:0];
     [createdTemporaryPaths removeAllObjects];
   }//end @synchronized(self)
 }
@@ -261,42 +261,15 @@ static NSMutableSet* createdTemporaryPaths = nil;
 
 -(NSString*) UTIFromPath:(NSString*)path
 {
-  NSString* result = nil;
-  OSStatus error = 0;
-  FSRef fsRef = {{0}};
-  Boolean isDirectory = NO;
-  error = FSPathMakeRefWithOptions((const UInt8*)[path fileSystemRepresentation], kFSPathMakeRefDefaultOptions, &fsRef, &isDirectory);
-  if (!error && !isDirectory)
-  {
-    CFStringRef uti = 0;
-    error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
-    #ifdef ARC_ENABLED
-    result = CFBridgingRelease(uti);
-    #else
-    result = [(NSString*)uti autorelease];
-    #endif
-  }//end if (!error && !isDirectory)
-  return result;
+  return [self UTIFromURL:[NSURL fileURLWithPath:path]];
 };
 //end UTIFromPath:
 
 -(NSString*) UTIFromURL:(NSURL*)url
 {
-  NSString* result = nil;
-  OSStatus error = 0;
-  FSRef fsRef = {{0}};
-  Boolean ok = CFURLGetFSRef((CFURLRef)url, &fsRef);
-  if (ok)
-  {
-    CFStringRef uti = 0;
-    error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
-    #ifdef ARC_ENABLED
-    result = CFBridgingRelease(uti);
-    #else
-    result = [(NSString*)uti autorelease];
-    #endif
-  }//end if (ok)
-  return result;
+  id resVal = nil;
+  [url getResourceValue:&resVal forKey:NSURLTypeIdentifierKey error:NULL];
+  return resVal;
 };
 //end UTIFromURL:
 

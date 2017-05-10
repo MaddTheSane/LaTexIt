@@ -23,7 +23,7 @@
 -(NSString*) stringWithFilteredStringForLatex;
 -(NSString*) stringByReplacingYenSymbol;
 -(NSString*) filteredStringForLatex DEPRECATED_ATTRIBUTE;
--(NSString*) replaceYenSymbol DEPRECATED_ATTRIBUTE;
+-(NSString*) replaceYenSymbol NS_UNAVAILABLE;
 
 @end
 

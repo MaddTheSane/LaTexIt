@@ -314,11 +314,10 @@ enum {
 };
 typedef NSUInteger RKLRegexOp;
 
-enum {
+typedef NS_ENUM(NSUInteger, RKLBlockEnumerationOp) {
   RKLBlockEnumerationMatchOp   = 1UL,
   RKLBlockEnumerationReplaceOp = 2UL,
 };
-typedef NSUInteger RKLBlockEnumerationOp;
 
 typedef struct {
   RKL_STRONG_REF NSRange    * RKL_GC_VOLATILE ranges;

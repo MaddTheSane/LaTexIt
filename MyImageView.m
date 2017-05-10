@@ -42,8 +42,8 @@
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 
-static inline CGFloat frac(CGFloat x) {return x-floor(x);}
-static inline CGFloat sqr(CGFloat x) {return x*x;}
+//static inline CGFloat frac(CGFloat x) {return x-floor(x);}
+//static inline CGFloat sqr(CGFloat x) {return x*x;}
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";

@@ -17,8 +17,8 @@
 -(void) registerTemporaryPath:(NSString*)path;
 -(void) removeAllCreatedTemporaryPaths;
 
--(NSString*) UTIFromPath:(NSString*)path;
--(NSString*) UTIFromURL:(NSURL*)url;
+-(NSString*) UTIFromPath:(NSString*)path /* __OSX_AVAILABLE_BUT_DEPRECATED_MSG(__MAC_10_4, __MAC_10_10, __IPHONE_NA, __IPHONE_NA, "Use the URL resource property kCFURLTypeIdentifierKey or NSURLTypeIdentifierKey instead.") */ ;
+-(NSString*) UTIFromURL:(NSURL*)url /* __OSX_AVAILABLE_BUT_DEPRECATED_MSG(__MAC_10_4, __MAC_10_10, __IPHONE_NA, __IPHONE_NA, "Use the URL resource property kCFURLTypeIdentifierKey or NSURLTypeIdentifierKey instead.") */ ;
     
 @end
 

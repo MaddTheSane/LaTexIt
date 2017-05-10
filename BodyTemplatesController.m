@@ -19,6 +19,7 @@
 
 static NSDictionary* noneBodyTemplate = nil;
 
+#if 0
 +(NSSet*) keyPathsForValuesAffectingValueForKey:(NSString*)key
 {
   NSSet* result = nil;
@@ -27,13 +28,17 @@ static NSDictionary* noneBodyTemplate = nil;
   return result;
 }
 //end keyPathsForValuesAffectingValueForKey:
+#endif
+
++(NSSet*)keyPathsForValuesAffectingArrangedObjectsNamesWithNone
+{
+  return [NSSet setWithObject:@"arrangedObjects"];
+}
 
 +(void) initialize
 {
   [self exposeBinding:@"selection"];
   [self exposeBinding:@"arrangedObjectsNamesWithNone"];
-  if (!isMacOS10_5OrAbove())
-    [self setKeys:[NSArray arrayWithObjects:@"arrangedObjects", nil] triggerChangeNotificationsForDependentKey:@"arrangedObjectsNamesWithNone"];
 }
 //end initialize
 

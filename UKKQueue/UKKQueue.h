@@ -94,7 +94,7 @@ typedef NS_OPTIONS(u_int, UKKQueueNotifyAbout) {
 
 // High-level file watching: (use UKFileWatcher protocol methods instead, where possible!)
 -(void) addPathToQueue: (NSString*)path;
--(void) addPathToQueue: (NSString*)path notifyingAbout: (u_int)fflags;
+-(void) addPathToQueue: (NSString*)path notifyingAbout: (UKKQueueNotifyAbout)fflags;
 -(void) removePathFromQueue: (NSString*)path;
 
 /// Flag to send a notification even if we have a delegate:

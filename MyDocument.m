@@ -2044,33 +2044,33 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   
   BOOL forceEasterEggForDebugging = NO;
   
-  NSCalendarDate* now = [NSCalendarDate date];
+  NSCalendar *cal = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+  NSDate* now = [NSDate date];
+  NSDateComponents *nowComp = [cal componentsInTimeZone:[NSTimeZone localTimeZone] fromDate:now];
   NSString* easterEggString = nil;
-  if (forceEasterEggForDebugging || (([now monthOfYear] == 4) && ([now dayOfMonth] == 1)))
+  if (forceEasterEggForDebugging || (([nowComp month] == 4) && ([nowComp day] == 1)))
     easterEggString = @"aprilfish";
     
   if (easterEggString)
   {
     NSDictionary* resources = [NSDictionary dictionaryWithObjectsAndKeys:@"poisson.pdf", @"aprilfish", nil];
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSData* dataFromUserDefaults = [userDefaults dataForKey:LastEasterEggsDatesKey];
-    NSMutableDictionary* easterEggLastDates = dataFromUserDefaults ?
-      [NSMutableDictionary dictionaryWithDictionary:[NSUnarchiver unarchiveObjectWithData:dataFromUserDefaults]] :
-      [NSMutableDictionary dictionary];
+    NSMutableDictionary* easterEggLastDates = [NSMutableDictionary dictionaryWithDictionary:[userDefaults dictionaryForKey:LastEasterEggsDatesKey]] ?: [NSMutableDictionary dictionary];
     if (!easterEggLastDates)
       easterEggLastDates = [NSMutableDictionary dictionary];
-    NSCalendarDate* easterEggLastDate = [easterEggLastDates objectForKey:easterEggString];
+    NSDate* easterEggLastDate = [easterEggLastDates objectForKey:easterEggString];
+    NSDateComponents *lastComp = [cal componentsInTimeZone:[NSTimeZone localTimeZone] fromDate:easterEggLastDate];
     if (forceEasterEggForDebugging || (!easterEggLastDate) || [now isLessThan:easterEggLastDate] ||
-        ([now yearOfCommonEra] != [easterEggLastDate yearOfCommonEra]))
+        ([nowComp year] != [lastComp year]))
     {
       NSString* resource = [resources objectForKey:easterEggString];
       NSString* filePath = resource ? [[NSBundle mainBundle] pathForResource:[resource stringByDeletingPathExtension]
                                                                       ofType:[resource pathExtension]] : nil;
       if (resource && filePath)
         easterEggImage = [[[NSImage alloc] initWithContentsOfFile:filePath] autorelease];
-      [easterEggLastDates setObject:[NSCalendarDate date] forKey:easterEggString];
+      [easterEggLastDates setObject:[NSDate date] forKey:easterEggString];
     }
-    [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDates] forKey:LastEasterEggsDatesKey];
+    [userDefaults setObject:easterEggLastDates forKey:LastEasterEggsDatesKey];
   }//end if (easterEggString)
   return easterEggImage;
 }
