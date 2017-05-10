@@ -16,23 +16,13 @@
   if (!(self = [super init]))
     return nil;
   self->bundle = [[NSBundle alloc] initWithPath:path];
-  if (!self->bundle)
+  if (!bundle)
   {
-    [self release];
     return nil;
   }//end if (!self->bundle)
   return self;
 }
 //end initWithPath:
-
--(void) dealloc
-{
-  [self->cachedImage release];
-  [self->principalClassInstance release];
-  [self->bundle release];
-  [super dealloc];
-}
-//end dealloc
 
 -(NSString*) localizedName
 {
@@ -43,11 +33,11 @@
 
 -(void) load
 {
-  if ([self->bundle load])
+  if ([bundle load])
   {
-    Class bundlePrincipalClass = [self->bundle principalClass];
+    Class bundlePrincipalClass = [bundle principalClass];
     if ([bundlePrincipalClass conformsToProtocol:@protocol(LaTeXiTPluginProtocol)])
-      self->principalClassInstance = [[bundlePrincipalClass alloc] init];
+      principalClassInstance = [[bundlePrincipalClass alloc] init];
   }//end if ([self->bundle load])
 }
 //end load
@@ -56,29 +46,29 @@
 
 -(NSImage*) icon
 {
-  if (!self->cachedImage)
+  if (!cachedImage)
   {
     @synchronized(self)
     {
-      if (!self->cachedImage)
-        self->cachedImage = [[self->principalClassInstance icon] retain];
-      if (!self->cachedImage)
-        self->cachedImage = [[[NSWorkspace sharedWorkspace] iconForFile:[self->bundle bundlePath]] retain];
+      if (!cachedImage)
+        cachedImage = [principalClassInstance icon];
+      if (!cachedImage)
+        cachedImage = [[NSWorkspace sharedWorkspace] iconForFile:[self->bundle bundlePath]];
     }//end @synchronized(self)
   }//end if (!self->cachedImage)
-  return self->cachedImage;
+  return cachedImage;
 }
 //end icon
 
 -(void) importConfigurationPanelIntoView:(NSView*)view
 {
-  [self->principalClassInstance importConfigurationPanelIntoView:view];
+  [principalClassInstance importConfigurationPanelIntoView:view];
 }
 //end importConfigurationPanelIntoView
 
 -(void) dropConfigurationPanel
 {
-  [self->principalClassInstance dropConfigurationPanel];
+  [principalClassInstance dropConfigurationPanel];
 }
 //end dropConfigurationPanel
 

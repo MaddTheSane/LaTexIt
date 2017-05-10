@@ -197,7 +197,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSEnumerator* enumerator = [compositionConfigurationsCurrentAdvancedButtons objectEnumerator];
     NSButton* button = nil;
     while((button = [enumerator nextObject]))
-      [button setImage:[NSImage imageNamed:@"NSActionTemplate10_4"]];
+      [button setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
   }//end if (!isMacOS10_5OrAbove())
   
   NSToolbar* toolbar = [[NSToolbar alloc] initWithIdentifier:@"preferencesToolbar"];

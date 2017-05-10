@@ -8,8 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HistoryController : NSArrayController {
-}
+@interface HistoryController : NSArrayController
 
 -(id) initWithContent:(id)content;
 

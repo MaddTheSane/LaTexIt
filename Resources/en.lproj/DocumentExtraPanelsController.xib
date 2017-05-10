@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +22,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Log" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="4" userLabel="logWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -38,7 +38,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="huf-dm-aDN">
                             <rect key="frame" x="1" y="1" width="554" height="618"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="58">
                                     <rect key="frame" x="0.0" y="0.0" width="554" height="618"/>
@@ -67,7 +67,7 @@
             <rect key="frame" x="0.0" y="0.0" width="366" height="98"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" id="35">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="35">
                     <rect key="frame" x="121" y="35" width="45" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Scale :" id="53">
@@ -76,7 +76,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" id="36">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="36">
                     <rect key="frame" x="171" y="33" width="69" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="52">
@@ -101,7 +101,7 @@
                         <outlet property="nextKeyView" destination="36" id="66"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="39">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="39">
                     <rect key="frame" x="9" y="72" width="57" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Format :" id="42">
@@ -115,7 +115,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="43">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="menu"/>
                         <menu key="menu" title="OtherViews" id="44"/>
                     </popUpButtonCell>
                     <connections>
@@ -125,7 +125,7 @@
                 <button id="37">
                     <rect key="frame" x="27" y="8" width="311" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : jpeg does not manage transparency" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="leading" alignment="center" alternateImage="warning-triangle" inset="2" id="51">
+                    <buttonCell key="cell" type="square" title="Warning : jpeg does not manage transparency" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="51">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -133,7 +133,7 @@
                 <button id="87">
                     <rect key="frame" x="101" y="8" width="164" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : pdf2svg path is invalid" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="leading" alignment="center" alternateImage="warning-triangle" inset="2" id="88">
+                    <buttonCell key="cell" type="square" title="Warning : pdf2svg path is invalid" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="88">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -141,7 +141,7 @@
                 <button id="90">
                     <rect key="frame" x="101" y="8" width="164" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="leading" alignment="center" alternateImage="warning-triangle" inset="2" id="91">
+                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="91">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -157,6 +157,6 @@
         </numberFormatter>
     </objects>
     <resources>
-        <image name="warning-triangle" width="16" height="16"/>
+        <image name="NSCaution" width="32" height="32"/>
     </resources>
 </document>

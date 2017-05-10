@@ -42,6 +42,7 @@
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSRange.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSError.h>
 #endif // __OBJC__
 
 #include <limits.h>
@@ -166,7 +167,7 @@ typedef NS_OPTIONS(NSUInteger, RKLRegexEnumerationOptions) {
 extern NSString * const RKLICURegexException;
 
 // NSError error domains and user info keys.
-extern NSString * const RKLICURegexErrorDomain;
+extern NSErrorDomain const RKLICURegexErrorDomain;
 
 extern NSString * const RKLICURegexEnumerationOptionsErrorKey;
 extern NSString * const RKLICURegexErrorCodeErrorKey;

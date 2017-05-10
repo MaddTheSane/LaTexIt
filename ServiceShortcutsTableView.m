@@ -142,7 +142,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
         conflict |= (service != value) && valueHasShortcut && [[value objectForKey:ServiceShortcutEnabledKey] boolValue] &&
                     [[service objectForKey:ServiceShortcutEnabledKey] boolValue] &&
                     [[[service objectForKey:ServiceShortcutStringKey] uppercaseString] isEqualToString:valueShortcutString];
-      result = !conflict ? nil : [NSImage imageNamed:@"warning-triangle"];
+      result = !conflict ? nil : [NSImage imageNamed:NSImageNameCaution];
       [self->serviceWarningShortcutConflictButton setHidden:!conflict && [self->serviceWarningShortcutConflictButton isHidden]];
     }
   }//end if (!reverse)

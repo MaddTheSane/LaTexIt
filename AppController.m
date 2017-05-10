@@ -668,8 +668,8 @@ static NSMutableDictionary* cachePaths = nil;
   OSStatus status = LSRegisterURL(latexitHelperURL, true);
   if (status != noErr)
     DebugLog(0, @"LSRegisterURL : %d", status);
-  [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
-  //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
+  //[[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
+  [[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
 
   if (latexitHelperURL)
     CFRelease(latexitHelperURL);

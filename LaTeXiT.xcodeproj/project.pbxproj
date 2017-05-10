@@ -117,8 +117,8 @@
 		93102836127A136600170119 /* NSMutableSetExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93102834127A136600170119 /* NSMutableSetExtended.m */; };
 		93102837127A136600170119 /* NSMutableSetExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93102834127A136600170119 /* NSMutableSetExtended.m */; };
 		931030240C116A2E000BECED /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 93102E960C116A2E000BECED /* palettes */; };
-		9310AA18124942EB007EFF23 /* PluginsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310AA17124942EB007EFF23 /* PluginsManager.m */; };
-		9310AA1B124943DF007EFF23 /* Plugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310AA1A124943DF007EFF23 /* Plugin.m */; };
+		9310AA18124942EB007EFF23 /* PluginsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310AA17124942EB007EFF23 /* PluginsManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9310AA1B124943DF007EFF23 /* Plugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310AA1A124943DF007EFF23 /* Plugin.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		9310CDEB101753BF0077E0D5 /* NSMutableDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310CDEA101753BF0077E0D5 /* NSMutableDictionaryExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		9310CDEC101753BF0077E0D5 /* NSMutableDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310CDEA101753BF0077E0D5 /* NSMutableDictionaryExtended.m */; };
 		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
