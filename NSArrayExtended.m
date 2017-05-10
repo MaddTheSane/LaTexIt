@@ -8,6 +8,10 @@
 #import "NSArrayExtended.h"
 #import "NSMutableArrayExtended.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation NSArray (Extended)
 
 
@@ -36,25 +40,17 @@
 
 -(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index
 {
-  #ifdef ARC_ENABLED
   NSMutableArray* result = [self mutableCopy];
-  #else
-  NSMutableArray* result = [[self mutableCopy] autorelease];
-  #endif
   [result insertObject:object atIndex:index];
-  return result;
+  return [result copy];
 }
 //end arrayByAddingObject:atIndex:
 
 -(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
-  #ifdef ARC_ENABLED
   NSMutableArray* result = [self mutableCopy];
-  #else
-  NSMutableArray* result = [[self mutableCopy] autorelease];
-  #endif
   [result moveObjectsAtIndices:indices toIndex:index];
-  return result;
+  return [result copy];
 }
 //end arrayByMovingObjectsAtIndices:toIndex:
 
@@ -79,11 +75,7 @@
         [result addObject:object];
     }
   }//end if (!exactClass)
-  #ifdef ARC_ENABLED
   result = [result copy];
-  #else
-  result = [[result copy] autorelease];
-  #endif
   return result;
 }
 //end filteredArrayWithItemsOfClass:exactClass:
@@ -99,16 +91,8 @@
     id copyOfObject =
       [object respondsToSelector:@selector(deepCopyWithZone:)] ? [object deepCopyWithZone:zone] : [object copyWithZone:zone];
     [clone addObject:copyOfObject];
-    #ifdef ARC_ENABLED
-    #else
-    [copyOfObject release];
-    #endif
   }//end for each object
   NSArray* immutableClone = [[NSArray allocWithZone:zone] initWithArray:clone];
-  #ifdef ARC_ENABLED
-  #else
-  [clone release];
-  #endif
   return immutableClone;
 }
 //end deepCopyWithZone:
@@ -126,10 +110,6 @@
          ? [object deepMutableCopyWithZone:zone]
          : ([object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] : [object copyWithZone:zone]);
     [clone addObject:copyOfObject];
-    #ifdef ARC_ENABLED
-    #else
-    [copyOfObject release];
-    #endif
   }//end for each object
   return clone;
 }

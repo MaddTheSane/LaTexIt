@@ -8,6 +8,10 @@
 
 #import "LogicTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation LogicTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformerWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithTransformers:transformers logicOperator:logicOperator];
-  #else
-  id result = [[[[self class] alloc] initWithTransformers:transformers logicOperator:logicOperator] autorelease];
-  #endif
   return result;
 }
 //end transformerWithTransformers:
@@ -55,16 +55,6 @@
   return self;
 }
 //end initWithTransformers:logicOperator:
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [self->transformers release];
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

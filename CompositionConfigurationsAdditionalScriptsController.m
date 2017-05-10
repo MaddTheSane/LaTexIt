@@ -6,6 +6,10 @@
 //  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 #import "CompositionConfigurationsAdditionalScriptsController.h"
 
 #import "CompositionConfigurationsController.h"

@@ -14,6 +14,10 @@
 #import "PreferencesController.h"
 #import "Utils.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation PreamblesController
 
 static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
@@ -77,10 +81,6 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   [self removeObserver:self forKeyPath:@"arrangedObjects"];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:LatexisationSelectedPreambleIndexKey];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:ServiceSelectedPreambleIndexKey];
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
 }
 //end dealloc
 
@@ -111,13 +111,8 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 
 -(void) ensureDefaultPreamble
 {
-  #ifdef ARC_ENABLED
   if (![[self arrangedObjects] count])
     [self addObject:[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy]];
-  #else
-  if (![[self arrangedObjects] count])
-    [self addObject:[[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy] autorelease]];
-  #endif
 }
 //end ensureDefaultPreamble
 

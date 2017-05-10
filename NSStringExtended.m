@@ -51,10 +51,6 @@
     }
     if (enc)
       *enc = usedEncoding;
-    #ifdef ARC_ENABLED
-    #else
-    [string autorelease];
-    #endif
   }
   return [[self alloc] initWithString:string];
 }
@@ -92,10 +88,6 @@
     }
     if (enc)
       *enc = usedEncoding;
-    #ifdef ARC_ENABLED
-    #else
-    [string autorelease];
-    #endif
   }
   return [[self alloc] initWithString:string];
 }

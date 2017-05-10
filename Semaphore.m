@@ -8,6 +8,10 @@
 
 #import "Semaphore.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation Semaphore
 
 //designated initializer
@@ -21,10 +25,6 @@
   error = error ? error : pthread_mutex_init(&mutex, &mutex_attr);
   if (error)
   {
-    #ifdef ARC_ENABLED
-    #else
-    [self release];
-    #endif
     self = nil;
     return nil;
   }
@@ -45,10 +45,6 @@
   pthread_cond_destroy(&cond);
   pthread_mutexattr_destroy(&mutex_attr);
   pthread_mutex_destroy(&mutex);
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
 }
 //end dealloc
 

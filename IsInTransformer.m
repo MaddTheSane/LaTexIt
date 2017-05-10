@@ -8,6 +8,10 @@
 
 #import "IsInTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation IsInTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformerWithReferences:(id)references
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithReferences:references];
-  #else
-  id result = [[[[self class] alloc] initWithReferences:references] autorelease];
-  #endif
   return result;
 }
 //end transformerWithReference:
@@ -50,24 +50,10 @@
 {
   if ((!(self = [super init])))
     return nil;
-  #ifdef ARC_ENABLED
   self->references = theReferences;
-  #else
-  self->references = [theReferences retain];
-  #endif
   return self;
 }
 //end initWithFalseValue:
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [self->references release];
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

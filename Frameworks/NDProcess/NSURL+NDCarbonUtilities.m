@@ -25,6 +25,10 @@
 
 #import "NSURL+NDCarbonUtilities.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 /*
  * category implementation NSURL (NDCarbonUtilities)
  */
@@ -38,11 +42,7 @@
 	CFURLRef theURL = CFURLCreateFromFSRef( kCFAllocatorDefault, aFsRef );
 
 	/* To support GC and non-GC, we need this contortion. */
-  #ifdef ARC_ENABLED
-  return CFBridgingRelease(theURL);
-  #else
-	return [NSMakeCollectable(theURL) autorelease];
-  #endif
+	return CFBridgingRelease(theURL);
 }
 
 /*
@@ -53,11 +53,7 @@
 	CFURLRef theURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, (CFStringRef)aHFSString, kCFURLHFSPathStyle, [aHFSString hasSuffix:@":"] );
 
 	/* To support GC and non-GC, we need this contortion. */
-  #ifdef ARC_ENABLED
-  return CFBridgingRelease(theURL);
-  #else
-	return [NSMakeCollectable(theURL) autorelease];
-  #endif
+	return CFBridgingRelease(theURL);
 }
 
 /*

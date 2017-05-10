@@ -8,16 +8,15 @@
 
 #import "NSDictionaryExtended.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
 
 @implementation NSDictionary (Extended)
 
 -(NSDictionary*) dictionaryByAddingDictionary:(NSDictionary*)dictionary
 {
-  #ifdef ARC_ENABLED
   NSMutableDictionary* result = [self mutableCopy];
-  #else
-  NSMutableDictionary* result = [[self mutableCopy] autorelease];
-  #endif
   NSEnumerator* enumerator = [[dictionary allKeys] objectEnumerator];
   id key = nil;
   while((key = [enumerator nextObject]))
@@ -28,11 +27,7 @@
 
 -(NSDictionary*) dictionaryByAddingObjectsAndKeys:(id)firstObject, ...
 {
-  #ifdef ARC_ENABLED
   NSMutableDictionary* result = [self mutableCopy];
-  #else
-  NSMutableDictionary* result = [[self mutableCopy] autorelease];
-  #endif
   va_list argumentList;
   id object = firstObject;
   if (object)
@@ -63,10 +58,6 @@
       [dictionary setObject:object forKey:key];
   }
   result = [NSDictionary dictionaryWithDictionary:dictionary];
-  #ifdef ARC_ENABLED
-  #else
-  [dictionary release];
-  #endif
   return result;
 }
 //end subDictionaryWithKeys:
@@ -81,16 +72,8 @@
     id copyOfObject =
       [object respondsToSelector:@selector(deepCopyWithZone:)] ? [object deepCopyWithZone:zone] : [object copyWithZone:zone];
     [clone setObject:copyOfObject forKey:key];
-    #ifdef ARC_ENABLED
-    #else
-    [copyOfObject release];
-    #endif
   }//end for each object
   NSDictionary* immutableClone = [[NSDictionary allocWithZone:zone] initWithDictionary:clone];
-  #ifdef ARC_ENABLED
-  #else
-  [clone release];
-  #endif
   return immutableClone;
 }
 //end deepCopyWithZone:
@@ -107,16 +90,8 @@
     id copyOfObject =
       [object respondsToSelector:@selector(deepMutableCopyWithZone:)] ? [object deepMutableCopyWithZone:zone] :
       [object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] :
-      #ifdef ARC_ENABLED
       [object respondsToSelector:@selector(copyWithZone:)] ? [object copyWithZone:zone] : object;
-      #else
-      [object respondsToSelector:@selector(copyWithZone:)] ? [object copyWithZone:zone] : [object retain];
-      #endif
     [clone setObject:copyOfObject forKey:key];
-    #ifdef ARC_ENABLED
-    #else
-    [copyOfObject release];
-    #endif
   }//end for each object
   return clone;
 }

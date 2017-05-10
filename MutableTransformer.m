@@ -10,6 +10,10 @@
 
 #import "DeepCopying.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation MutableTransformer
 
 +(void) initialize
@@ -39,11 +43,7 @@
 
 +(id) transformer
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] init];
-  #else
-  id result = [[[[self class] alloc] init] autorelease];
-  #endif
   return result;
 }
 //end transformerWithDictionary:
@@ -56,36 +56,15 @@
 }
 //end init
 
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
-}
-//end dealloc
-
 -(id) transformedValue:(id)value
 {
   id result = value;
   if ([result respondsToSelector:@selector(deepMutableCopy)])
-    #ifdef ARC_ENABLED
     result = [result deepMutableCopy];
-    #else
-    result = [[result deepMutableCopy] autorelease];
-    #endif
-  else if ([result respondsToSelector:@selector(mutableCopy)])    
-    #ifdef ARC_ENABLED
+  else if ([result respondsToSelector:@selector(mutableCopy)])
     result = [result mutableCopy];
-    #else
-    result = [[result mutableCopy] autorelease];
-    #endif
   else if ([result respondsToSelector:@selector(copy)])
-    #ifdef ARC_ENABLED
     result = [result copy];
-    #else
-    result = [[result copy] autorelease];
-    #endif
   return result;
 }
 //end transformedValue:
@@ -94,11 +73,7 @@
 {
   id result = value;
   if ([result respondsToSelector:@selector(copy)])
-    #ifdef ARC_ENABLED
     result = [result copy];
-    #else
-    result = [[result copy] autorelease];
-    #endif
   return result;
 }
 //end reverseTransformedValue:

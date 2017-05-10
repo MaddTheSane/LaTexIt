@@ -8,6 +8,9 @@
 
 #import "CHDragFileWrapper.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
 
 @implementation CHDragFileWrapper
 @synthesize fileName;
@@ -15,11 +18,7 @@
 
 +(id) dragFileWrapperWithFileName:(NSString*)fileName uti:(NSString*)uti
 {
-  #ifdef ARC_ENABLED
   return [[[self class] alloc] initWithFileName:fileName uti:uti];
-  #else
-  return [[[[self class] alloc] initWithFileName:fileName uti:uti] autorelease];
-  #endif
 }
 //end dragFileWrapperWithFileName:
 
@@ -32,17 +31,6 @@
   return self;
 }
 //end initWithFileName:
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [self->fileName release];
-  [self->uti release];
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(NSArray*) writableTypesForPasteboard:(NSPasteboard*)pasteboard
 {

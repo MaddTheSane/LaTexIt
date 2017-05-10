@@ -27,6 +27,10 @@
 #endif
 #endif
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation NSData (Extended)
 
 +(id) dataWithBase64:(NSString*)base64
@@ -103,10 +107,6 @@
   CC_SHA1([self bytes], (CC_LONG)[self length], sha);
   NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:CC_SHA1_DIGEST_LENGTH freeWhenDone:NO];
   result = [wrapper encodeBase64WithNewlines:NO];
-  #ifdef ARC_ENABLED
-  #else
-  [wrapper release];
-  #endif
   return result;
 }
 //end sha1Base64

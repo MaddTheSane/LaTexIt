@@ -8,6 +8,10 @@
 
 #import "IsKindOfClassTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation IsKindOfClassTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformerWithClass:(id)aClass
 {
-#ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithClass:aClass];
-#else
-  id result = [[[[self class] alloc] initWithClass:aClass] autorelease];
-#endif
   return result;
 }
 //end transformerWithClass:
@@ -54,15 +54,6 @@
   return self;
 }
 //end initWithClass:
-
--(void) dealloc
-{
-#ifdef ARC_ENABLED
-#else
-  [super dealloc];
-#endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

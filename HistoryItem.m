@@ -18,6 +18,10 @@
 
 #import <LinkBack/LinkBack.h>
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation HistoryItem
 
 static NSEntityDescription* cachedEntity = nil;
@@ -29,13 +33,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   {
     @synchronized(self)
     {
-      #ifdef ARC_ENABLED
       if (!cachedEntity)
         cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
-      #else
-      if (!cachedEntity)
-        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
-      #endif
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -48,15 +47,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   {
     @synchronized(self)
     {
-      #ifdef ARC_ENABLED
       if (!cachedWrapperEntity)
         cachedWrapperEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
           objectForKey:@"HistoryEquationWrapper"];
-      #else
-      if (!cachedWrapperEntity)
-        cachedWrapperEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:@"HistoryEquationWrapper"] retain];
-      #endif
     }//end @synchronized(self)
   }//end if (!cachedWrapperEntity)
   return cachedWrapperEntity;
@@ -87,10 +80,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   [self dispose];
   //in didTurnInToFault, a problem occurs with undo, that does not call any awakeFrom... to reactivate the observer
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
 }
 //end dealloc
 
@@ -259,10 +248,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       [self willChangeValueForKey:@"equationWrapper"];
       [self setPrimitiveValue:equationWrapper forKey:@"equationWrapper"];
       [self didChangeValueForKey:@"equationWrapper"];
-      #ifdef ARC_ENABLED
-      #else
-      [equationWrapper release];
-      #endif
     }//end if (!equationWrapper)
     else
       [[self managedObjectContext] safeInsertObject:equationWrapper];
@@ -319,10 +304,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   id equationDescription = !isOldLibraryItem ? [description objectForKey:@"equation"] : description;
   LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithDescription:equationDescription];
   [self setEquation:latexitEquation];
-  #ifdef ARC_ENABLED
-  #else
-  [latexitEquation release];
-  #endif
   return self;
 }
 //end initWithDescription:
@@ -337,10 +318,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && [description objectForKey:@"equation"]));
   Class instanceClass = isEquation ? [HistoryItem class] : 0;
   result = !instanceClass ? nil : [[instanceClass alloc] initWithDescription:description];
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
   return result;
 }
 //end libraryItemWithDescription:
@@ -364,11 +341,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
   if ([version compare:@"2.0.0" options:NSCaseInsensitiveSearch|NSNumericSearch] != NSOrderedAscending)
   {
-    #ifdef ARC_ENABLED
     equation = [coder decodeObjectForKey:@"equation"];
-    #else
-    equation = [[coder decodeObjectForKey:@"equation"] retain];
-    #endif
   }
   else //if version < 2.0.0
   {
@@ -383,7 +356,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     NSString* title = nil;
     if (!version || [version compare:@"1.2" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
     {
-      #ifdef ARC_ENABLED
       pdfData     = [coder decodeObjectForKey:@"pdfData"];
       NSMutableString* tempPreamble = [NSMutableString stringWithString:[coder decodeObjectForKey:@"preamble"]];
       [tempPreamble replaceOccurrencesOfString:@"\\usepackage[dvips]{color}" withString:@"\\usepackage{color}"
@@ -394,22 +366,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       pointSize   = [[coder decodeObjectForKey:@"pointSize"] doubleValue];
       date        = [coder decodeObjectForKey:@"date"];
       mode        = validateLatexMode((latex_mode_t) [coder decodeIntForKey:@"mode"]);
-      #else
-      pdfData     = [[coder decodeObjectForKey:@"pdfData"]    retain];
-      NSMutableString* tempPreamble = [NSMutableString stringWithString:[coder decodeObjectForKey:@"preamble"]];
-      [tempPreamble replaceOccurrencesOfString:@"\\usepackage[dvips]{color}" withString:@"\\usepackage{color}"
-                                       options:0 range:NSMakeRange(0, [tempPreamble length])];
-      preamble    = [[NSAttributedString alloc] initWithString:tempPreamble];
-      sourceText  = [[NSAttributedString alloc] initWithString:[coder decodeObjectForKey:@"sourceText"]];
-      color       = [[coder decodeObjectForKey:@"color"]      retain];
-      pointSize   = [[coder decodeObjectForKey:@"pointSize"] doubleValue];
-      date        = [[coder decodeObjectForKey:@"date"]       retain];
-      mode        = validateLatexMode((latex_mode_t) [coder decodeIntForKey:@"mode"]);
-      #endif
     }
     else
     {
-      #ifdef ARC_ENABLED
       pdfData     = [coder decodeObjectForKey:@"pdfData"];
       preamble    = [coder decodeObjectForKey:@"preamble"];
       sourceText  = [coder decodeObjectForKey:@"sourceText"];
@@ -421,19 +380,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       //initialized in the "image" methods, using the pdfData
       backgroundColor = [coder decodeObjectForKey:@"backgroundColor"];
       title       = [coder decodeObjectForKey:@"title"];//may be nil
-      #else
-      pdfData     = [[coder decodeObjectForKey:@"pdfData"]    retain];
-      preamble    = [[coder decodeObjectForKey:@"preamble"]   retain];
-      sourceText  = [[coder decodeObjectForKey:@"sourceText"] retain];
-      color       = [[coder decodeObjectForKey:@"color"]      retain];
-      pointSize   = [coder decodeDoubleForKey:@"pointSize"];
-      date        = [[coder decodeObjectForKey:@"date"]       retain];
-      mode        = validateLatexMode((latex_mode_t) [coder decodeIntForKey:@"mode"]);
-      //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
-      //initialized in the "image" methods, using the pdfData
-      backgroundColor = [[coder decodeObjectForKey:@"backgroundColor"] retain];
-      title       = [[coder decodeObjectForKey:@"title"]       retain];//may be nil
-      #endif
     }
     //old versions of LaTeXiT would use \usepackage[pdftex]{color} in the preamble. [pdftex] is useless, in fact
     NSRange rangeOfColorPackage = [[preamble string] rangeOfString:@"\\usepackage[pdftex]{color}"];
@@ -441,30 +387,13 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     {
       NSMutableAttributedString* newPreamble = [[NSMutableAttributedString alloc] initWithAttributedString:preamble];
       [newPreamble replaceCharactersInRange:rangeOfColorPackage withString:@"\\usepackage{color}"];
-      #ifdef ARC_ENABLED
-      #else
-      [preamble release];
-      #endif
       preamble = newPreamble;
     }
     
     equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor];
 
-    #ifdef ARC_ENABLED
-    #else
-    [backgroundColor release];
-    [color release];
-    [date release];
-    [pdfData release];
-    [preamble release];
-    [sourceText release];
-    #endif
 
     [equation setTitle:title];
-    #ifdef ARC_ENABLED
-    #else
-    [title release];
-    #endif
 
     //for versions < 1.5.4, we must reannotate the pdfData to retreive the diacritic characters
     if (!version || [version compare:@"1.5.4" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
@@ -473,18 +402,10 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
   if (!equation)
   {
-    #ifdef ARC_ENABLED
-    #else
-    [self release];
-    #endif
     return nil;
   }
   
   [self setEquation:equation];
-  #ifdef ARC_ENABLED
-  #else
-  [equation release];
-  #endif
     
   return self;
 }

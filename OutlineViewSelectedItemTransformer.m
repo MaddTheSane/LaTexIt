@@ -11,6 +11,10 @@
 #import "NSObjectExtended.h"
 #import "NSOutlineViewExtended.h"
 
+#if __has_feature(objc_arc)
+#error this file needs to be compiled without Automatic Reference Counting (ARC)
+#endif
+
 @implementation OutlineViewSelectedItemTransformer
 
 +(void) initialize

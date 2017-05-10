@@ -19,6 +19,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation SystemTask
 
 -(id) initWithWorkingDirectory:(NSString*)aWorkingDirectory
@@ -30,36 +34,16 @@
   self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXX" extension:@"log"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
   self->tmpStdinFilePath = localString;
-  #ifdef ARC_ENABLED
-  #else
-  [self->tmpStdinFileHandle retain];
-  [self->tmpStdinFilePath   retain];
-  #endif
   self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXX" extension:@"log"  outFilePath:&localString
 
                                                         workingDirectory:self->workingDirectory];
   self->tmpStdoutFilePath = localString;
-  #ifdef ARC_ENABLED
-  #else
-  [self->tmpStdoutFileHandle retain];
-  [self->tmpStdoutFilePath   retain];
-  #endif
   self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXX" extension:@"log"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
   self->tmpStderrFilePath = localString;
-  #ifdef ARC_ENABLED
-  #else
-  [self->tmpStderrFileHandle retain];
-  [self->tmpStderrFilePath   retain];
-  #endif
   self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXX" extension:@"sh"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
   self->tmpScriptFilePath = localString;
-  #ifdef ARC_ENABLED
-  #else
-  [self->tmpScriptFileHandle retain];
-  [self->tmpScriptFilePath   retain];
-  #endif
   self->runningLock = [[NSLock alloc] init];
   return self;
 }
@@ -73,13 +57,6 @@
 
 -(void) dealloc
 {
-  #ifdef ARC_ENABLED
-  #else
-  [self->environment          release];
-  [self->launchPath           release];
-  [self->arguments            release];
-  [self->currentDirectoryPath release];
-  #endif
   if (DebugLogLevel < 1)
   {
     unlink([self->tmpStdinFilePath UTF8String]);
@@ -87,20 +64,6 @@
     unlink([self->tmpStderrFilePath UTF8String]);
     unlink([self->tmpScriptFilePath UTF8String]);
   }//end if (DebugLogLevel < 1)
-  #ifdef ARC_ENABLED
-  #else
-  [self->tmpStdinFilePath   release];
-  [self->tmpStdoutFilePath   release];
-  [self->tmpStderrFilePath   release];
-  [self->tmpScriptFilePath   release];
-  [self->tmpStdinFileHandle release];
-  [self->tmpStdoutFileHandle release];
-  [self->tmpStderrFileHandle release];
-  [self->tmpScriptFileHandle release];
-  [self->runningLock release];
-  [self->workingDirectory release];
-  [super dealloc];
-  #endif
 }
 //end dealloc
 
@@ -201,11 +164,6 @@
 
 -(void) setStdInputData:(NSData*)data
 {
-  #ifdef ARC_ENABLED
-  #else
-  [data retain];
-  [self->stdInputData release];
-  #endif
   self->stdInputData = data;
   [self->stdInputData writeToFile:self->tmpStdinFilePath atomically:NO];
 }

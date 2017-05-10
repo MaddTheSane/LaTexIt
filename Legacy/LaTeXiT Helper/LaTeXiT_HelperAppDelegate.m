@@ -18,7 +18,7 @@
   if (!published)
     NSLog(@"LaTeXiT_Helper : published server failed");
   NSArray* componentsOfSelfPath = [[[NSBundle mainBundle] bundlePath] pathComponents];
-  unsigned int count = [componentsOfSelfPath count];
+  NSInteger count = [componentsOfSelfPath count];
   NSArray* componentsOfOwnerPath = (count < 3) ? nil : [componentsOfSelfPath subarrayWithRange:NSMakeRange(0, count-3)];
   NSString* ownerPath = [NSString pathWithComponents:componentsOfOwnerPath];
   if ([[[ownerPath pathExtension] lowercaseString] isEqualToString:@"app"])

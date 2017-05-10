@@ -8,6 +8,10 @@
 
 #import "NSTaskExtended.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation NSTask (Extended)
 
 //returns a string containing the equivalent command line of the NSTask
@@ -22,7 +26,7 @@
     [commandLine appendString:argument];
     argument = [enumerator nextObject];
   }
-  return commandLine;
+  return [commandLine copy];
 }
 
 @end

@@ -14,6 +14,10 @@
 #import "NSObjectExtended.h"
 #import "Utils.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation HistoryController
 
 -(id) initWithContent:(id)content
@@ -30,10 +34,6 @@
 -(void) dealloc
 {
   [self removeObserver:self forKeyPath:NSContentBinding];
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
 }
 //end dealloc
 

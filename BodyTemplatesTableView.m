@@ -11,6 +11,10 @@
 #import "BodyTemplatesController.h"
 #import "PreferencesController.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard type for drag'n drop of tableviews rows
 
 @implementation BodyTemplatesTableView
@@ -25,15 +29,6 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
   [self registerForDraggedTypes:[NSArray arrayWithObject:BodyTemplatesPboardType]];
 }
 //end awakeFromNib:
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {

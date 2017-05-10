@@ -10,6 +10,10 @@
 
 #import "PreferencesController.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation NSDictionary (CompositionConfiguration)
 
 -(composition_mode_t) compositionConfigurationCompositionMode

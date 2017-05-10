@@ -10,6 +10,10 @@
 
 #import "Utils.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation NSManagedObjectContext (Extended)
 
 -(void) disableUndoRegistration
@@ -75,10 +79,6 @@
     NSArray* managedObjects = [self executeFetchRequest:fetchRequest error:error];
     result = [managedObjects count];
   }
-  #ifdef ARC_ENABLED
-  #else
-  [fetchRequest release];
-  #endif
   return result;
 }
 //end countForEntity:predicate:error:

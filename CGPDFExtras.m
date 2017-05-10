@@ -11,15 +11,13 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#ifdef ARC_ENABLED
-#define CHBRIDGE __bridge
-#else
-#define CHBRIDGE
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
 #endif
 
 static void arrayCallback(CGPDFScannerRef inScanner, void* userInfo)
 {
-  NSMutableString* string = (CHBRIDGE NSMutableString*)userInfo;
+  NSMutableString* string = (__bridge NSMutableString*)userInfo;
   CGPDFArrayRef array = 0;
   bool success = CGPDFScannerPopArray(inScanner, &array);
   size_t index = 0;
@@ -31,14 +29,8 @@ static void arrayCallback(CGPDFScannerRef inScanner, void* userInfo)
     if (success)
     {
       CFStringRef cfStringPart = CGPDFStringCopyTextString(pdfString);
-      #ifdef ARC_ENABLED
       NSString* stringPart = !cfStringPart ? nil : (NSString*)CFBridgingRelease(cfStringPart);
       [string appendString:stringPart];
-      #else
-      NSString* stringPart = !cfStringPart ? nil : (NSString*)CFMakeCollectable(cfStringPart);
-      [string appendString:stringPart];
-      [stringPart release];
-      #endif
     }//end if (success)
   }//end for each array item
 }
@@ -46,20 +38,14 @@ static void arrayCallback(CGPDFScannerRef inScanner, void* userInfo)
 
 static void stringCallback(CGPDFScannerRef inScanner, void *userInfo)
 {
-  NSMutableString* string = (CHBRIDGE NSMutableString*)userInfo;
+  NSMutableString* string = (__bridge NSMutableString*)userInfo;
   CGPDFStringRef pdfString = 0;
   bool success = CGPDFScannerPopString(inScanner, &pdfString);
   if (success)
   {
     CFStringRef cfStringPart = CGPDFStringCopyTextString(pdfString);
-    #ifdef ARC_ENABLED
     NSString* stringPart = !cfStringPart ? nil : (NSString*)CFBridgingRelease(cfStringPart);
     [string appendString:stringPart];
-    #else
-    NSString* stringPart = !cfStringPart ? nil : (NSString*)CFMakeCollectable(cfStringPart);
-    [string appendString:stringPart];
-    [stringPart release];
-    #endif
   }//end if (success)
 }
 //end stringCallback()
@@ -108,7 +94,7 @@ NSString* CGPDFDocumentCreateStringRepresentation(CGPDFDocumentRef pdfDocument)
   {
     CGPDFPageRef pdfPage = CGPDFDocumentGetPage(pdfDocument, pageNumber);
     CGPDFContentStreamRef contentStream = !pdfPage ? 0 : CGPDFContentStreamCreateWithPage(pdfPage);
-    CGPDFScannerRef scanner = !contentStream ? 0 : CGPDFScannerCreate(contentStream, callbacksTable, (CHBRIDGE void*)stringRepresentation);
+    CGPDFScannerRef scanner = !contentStream ? 0 : CGPDFScannerCreate(contentStream, callbacksTable, (__bridge void*)stringRepresentation);
     if (scanner)
       CGPDFScannerScan(scanner);
     if (scanner)
@@ -121,10 +107,6 @@ NSString* CGPDFDocumentCreateStringRepresentation(CGPDFDocumentRef pdfDocument)
   
   if (stringRepresentation)
     result = [NSString stringWithString:stringRepresentation];
-  #ifdef ARC_ENABLED
-  #else
-  [stringRepresentation release];
-  #endif
   return result;
 }
 //end CGPDFDocumentCreateStringRepresentation()

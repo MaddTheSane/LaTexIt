@@ -8,6 +8,9 @@
 
 #import "NSMutableDictionaryExtended.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
 
 @implementation NSMutableDictionary (Extended)
 
@@ -15,19 +18,11 @@
 {
   if (oldKey && ![oldKey isEqual:newKey])
   {
-    #ifdef ARC_ENABLED
     id value = !oldKey ? nil : [self objectForKey:oldKey];
-    #else
-    id value = !oldKey ? nil : [[self objectForKey:oldKey] retain];
-    #endif
     if (oldKey)
       [self removeObjectForKey:oldKey];
     if (value && newKey)
       [self setObject:value forKey:newKey];
-    #ifdef ARC_ENABLED
-    #else
-    [value release];
-    #endif
   }//end if (oldKey && ![oldKey isEqual:newKey])
 }
 //end replaceKey:withKey:

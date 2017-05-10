@@ -28,6 +28,10 @@
 #import <OSAKit/OSAKit.h>
 #import "RegexKitLite.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 static NSMutableIndexSet* freeIds = nil;
 
 typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORARY_FOLDER} equationDestination_t;
@@ -123,10 +127,6 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 -(void) dealloc
 {
   [[self class] releaseIdentifier:self->uniqueId];
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
 }
 //end dealloc
 
@@ -306,10 +306,6 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
   NSMutableArray* result = [[NSMutableArray alloc] initWithCapacity:[input count]];
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
 
   NSDictionary* parameters = [self parameters];
   latex_mode_t equationMode = (latex_mode_t)[[parameters objectForKey:@"equationMode"] intValue];
@@ -369,21 +365,12 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         if (!isDirectory)
         {//keep it if it is a file text
           NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:string];
-          #ifdef ARC_ENABLED
           if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
             [filteredInput addObject:object];
           else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
             [filteredInput addObject:object];
           else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
             [filteredInput addObject:object];
-          #else
-          if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-            [filteredInput addObject:object];
-          else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-            [filteredInput addObject:object];
-          else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
-            [filteredInput addObject:object];
-          #endif
         }//end if (!isDirectory)
         else //if (isDirectory)
         {//if this folder was embedded in a previous folder,forget it. otherwise, explore it
@@ -404,17 +391,10 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   BOOL didEncounterError = NO;
   if (errorInfo && !defaultPreamble)
   {
-    #ifdef ARC_ENABLED
     *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-      [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
+      @(errOSAGeneralError), OSAScriptErrorNumber,
       LocalLocalizedString(@"No preamble found", @"No preamble found"), OSAScriptErrorMessage,
       nil];
-    #else
-    *errorInfo = [[[NSDictionary alloc] initWithObjectsAndKeys:
-      [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
-      LocalLocalizedString(@"No preamble found", @"No preamble found"), OSAScriptErrorMessage,
-      nil] autorelease];
-    #endif
   }//end if (errorInfo && !defaultPreamble)
 
   NSMutableArray* errorStrings = [NSMutableArray array];
@@ -435,17 +415,10 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [uniqueIdentifiers addObject:uniqueIdentifier];
     if (!body && errorInfo)
     {
-      #ifdef ARC_ENABLED
       *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-        [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
+        @(errOSAGeneralError), OSAScriptErrorNumber,
         [error localizedDescription], OSAScriptErrorMessage,
         nil];
-      #else
-      *errorInfo = [[[NSDictionary alloc] initWithObjectsAndKeys:
-        [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
-        [error localizedDescription], OSAScriptErrorMessage,
-        nil] autorelease];
-      #endif
       didEncounterError = YES;
     }//end if (!body && errorInfo)
     else if (body)
@@ -580,24 +553,13 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   }//end or each object
   if (didEncounterError && [errorStrings count] && errorInfo)
   {
-    #ifdef ARC_ENABLED
     *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-                   [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
+                   @(errOSAGeneralError), OSAScriptErrorNumber,
                    [errorStrings componentsJoinedByString:@"\n"], OSAScriptErrorMessage,
                    nil];
-    #else
-    *errorInfo = [[[NSDictionary alloc] initWithObjectsAndKeys:
-                   [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
-                   [errorStrings componentsJoinedByString:@"\n"], OSAScriptErrorMessage,
-                   nil] autorelease];
-    #endif
     if (*errorInfo)
       DebugLog(0, @"%@", [*errorInfo objectForKey:OSAScriptErrorMessage]);
   }//end if (didEncounterError && [errorStrings count] && errorInfo)
-  #ifdef ARC_ENABLED
-  #else
-  [uniqueIdentifiers release];
-  #endif
 	return result;
 }
 //end runWithInput:fromAction:error:
@@ -626,45 +588,21 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       if (error && *error)
         {DebugLog(0, @"error: %@", *error);}
       NSStringEncoding encoding = NSUTF8StringEncoding;
-      #ifdef ARC_ENABLED
       if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-      #else
-      if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-      #endif
       {
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
         fullText = [attributedString string];
-        #ifdef ARC_ENABLED
-        #else
-        [attributedString release];
-        #endif
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-      #ifdef ARC_ENABLED
       else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
-      #else
-      else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-      #endif
       {
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
         fullText = [attributedString string];
-        #ifdef ARC_ENABLED
-        #else
-        [attributedString release];
-        #endif
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-      #ifdef ARC_ENABLED
       else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
-      #else
-      else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
-      #endif
         fullText = [NSString stringWithContentsOfFile:object guessEncoding:&encoding error:error];
       result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
-      #ifdef ARC_ENABLED
-      #else
-      [fileData release];
-      #endif
     }//end if ([[NSFileManager defaultManager] fileExistsAtPath:object isDirectory:&isDirectory])
     else //(if !path)
     {
@@ -679,45 +617,21 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     if (error && *error)
       {DebugLog(0, @"error: %@", *error);}
     NSStringEncoding encoding = NSUTF8StringEncoding;
-    #ifdef ARC_ENABLED
     if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-    #else
-    if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-    #endif
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
       fullText = [attributedString string];
-      #ifdef ARC_ENABLED
-      #else
-      [attributedString release];
-      #endif
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-    #ifdef ARC_ENABLED
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
-    #else
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-    #endif
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
       fullText = [attributedString string];
-      #ifdef ARC_ENABLED
-      #else
-      [attributedString release];
-      #endif
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-    #ifdef ARC_ENABLED
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
-    #else
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
-    #endif
       fullText = [NSString stringWithContentsOfURL:object guessEncoding:&encoding error:error];
     result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
-    #ifdef ARC_ENABLED
-    #else
-    [fileData release];
-    #endif
   }//end if ([object isKindOfClass:[NSURL class]])
 
   //analyze fullText

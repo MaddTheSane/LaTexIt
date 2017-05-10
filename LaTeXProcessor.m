@@ -28,10 +28,8 @@
 
 #import <Quartz/Quartz.h>
 
-#ifdef ARC_ENABLED
-#define CHBRIDGE __bridge
-#else
-#define CHBRIDGE
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
 #endif
 
 NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
@@ -72,20 +70,6 @@ static LaTeXProcessor* sharedInstance = nil;
   return self;
 }
 //end init
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [self->managedObjectModel     release];
-  [self->unixBins               release];
-  [self->globalExtraEnvironment release];
-  [self->globalFullEnvironment  release];
-  [self->globalExtraEnvironment release];
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(void) initializeEnvironment
 {
@@ -255,13 +239,6 @@ static LaTeXProcessor* sharedInstance = nil;
     @catch(NSException* e){
       DebugLog(0, @"exception : %@", e);
     }
-    @finally{
-      #ifdef ARC_ENABLED
-      #else
-      [pdfAnnotation release];
-      [pdfDocument release];
-      #endif
-    }
   }//end if (embeddAsAnnotation)
 
   NSString* colorAsString   = [(color ? color : [NSColor blackColor]) rgbaString];
@@ -276,7 +253,7 @@ static LaTeXProcessor* sharedInstance = nil;
 
     CFStringRef cfEscapedPreamble =
       CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)preamble, NULL, NULL, kCFStringEncodingUTF8);
-    NSMutableString* escapedPreamble = [NSMutableString stringWithString:(CHBRIDGE NSString*)cfEscapedPreamble];
+    NSMutableString* escapedPreamble = [NSMutableString stringWithString:(__bridge NSString*)cfEscapedPreamble];
     CFRelease(cfEscapedPreamble);
 
     NSMutableString* replacedSource = [NSMutableString stringWithString:source];
@@ -287,7 +264,7 @@ static LaTeXProcessor* sharedInstance = nil;
 
     CFStringRef cfEscapedSource =
       CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)source, NULL, NULL, kCFStringEncodingUTF8);
-    NSMutableString* escapedSource = [NSMutableString stringWithString:(CHBRIDGE NSString*)cfEscapedSource];
+    NSMutableString* escapedSource = [NSMutableString stringWithString:(__bridge NSString*)cfEscapedSource];
     CFRelease(cfEscapedSource);
 
     NSString* type = [[NSNumber numberWithInt:mode] stringValue];
@@ -402,11 +379,7 @@ static LaTeXProcessor* sharedInstance = nil;
              "endobj\n",
              [NSNumber numberWithUnsignedInteger:[annotationContentBase64 length]],
              annotationContentBase64];
-      #ifdef ARC_ENABLED
       NSMutableString* pdfString = [[NSMutableString alloc] initWithData:data2 encoding:NSASCIIStringEncoding];
-      #else
-      NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data2 encoding:NSASCIIStringEncoding] autorelease];
-      #endif
       
       NSRange r1 = [pdfString rangeOfString:@"\nxref" options:NSBackwardsSearch];
       NSRange r2 = [pdfString rangeOfString:@"startxref" options:NSBackwardsSearch];
@@ -469,19 +442,11 @@ static LaTeXProcessor* sharedInstance = nil;
       r3.length = [data2 length]-r3.location;
 
     NSData* xrefData = (r1.location == NSNotFound) ? nil : [data2 subdataWithRange:r1];
-    #ifdef ARC_ENABLED
     NSString* xrefString = [[NSString alloc] initWithData:xrefData encoding:NSASCIIStringEncoding];
-    #else
-    NSString* xrefString = [[[NSString alloc] initWithData:xrefData encoding:NSASCIIStringEncoding] autorelease];
-    #endif
     NSString* afterObjCountString = [xrefString stringByMatching:@"xref\\s*[0-9]+\\s+[0-9]+\\s+(.*)" options:RKLDotAll inRange:NSMakeRange(0, [xrefString length]) capture:1 error:0];
 
     NSData* trailerData = (r2.location == NSNotFound) ? nil : [data2 subdataWithRange:r2];
-    #ifdef ARC_ENABLED
     NSString* trailerString = [[NSString alloc] initWithData:trailerData encoding:NSASCIIStringEncoding];
-    #else
-    NSString* trailerString = [[[NSString alloc] initWithData:trailerData encoding:NSASCIIStringEncoding] autorelease];
-    #endif
     NSString* trailerAfterSize = [trailerString stringByMatching:@"trailer\\s+<<\\s+/Size\\s+[0-9]+(.*)" options:RKLDotAll inRange:NSMakeRange(0, [trailerString length]) capture:1 error:0];
     
     NSUInteger nbObjects = 0;
@@ -491,10 +456,6 @@ static LaTeXProcessor* sharedInstance = nil;
       NSString* s = [[NSString alloc] initWithBytesNoCopy:(unsigned char*)bytes+r1.location length:r2.location-r1.location encoding:NSUTF8StringEncoding freeWhenDone:NO];
       NSArray* components = [s componentsMatchedByRegex:@"^[0-9]+\\s+[0-9]+\\s[^0-9]+$" options:RKLMultiline range:NSMakeRange(0, [s length]) capture:0 error:0];
       nbObjects = [components count];
-      #ifdef ARC_ENABLED
-      #else
-      [s release];
-      #endif
     }//end if ((r1.location != NSNotFound) && (r2.location != NSNotFound))
     NSUInteger annotationObjectIndex = !nbObjects ? 100000 : nbObjects;
     BOOL useAnnotationObjectIndex = YES;
@@ -520,22 +481,14 @@ static LaTeXProcessor* sharedInstance = nil;
        type, colorAsString, bkColorAsString, (title ? title : @""), magnification, baseline];
     
     NSData* startxrefData = (r3.location == NSNotFound) ? nil : [data2 subdataWithRange:r3];
-    #ifdef ARC_ENABLED
     NSString* startxrefString = [[NSString alloc] initWithData:startxrefData encoding:NSASCIIStringEncoding];
-    #else
-    NSString* startxrefString = [[[NSString alloc] initWithData:startxrefData encoding:NSASCIIStringEncoding] autorelease];
-    #endif
     NSString* byteCountString = [startxrefString stringByMatching:@"[^0-9]*([0-9]*).*" options:RKLDotAll inRange:NSMakeRange(0, [startxrefString length]) capture:1 error:0];
-    #ifdef ARC_ENABLED
     NSNumberFormatter* numberFormatter = [[NSNumberFormatter alloc] init];
-    #else
-    NSNumberFormatter* numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
-    #endif
     [numberFormatter setFormatterBehavior:NSNumberFormatterBehaviorDefault];
     [numberFormatter setMinimum:[NSNumber numberWithUnsignedInt:0]];
     [numberFormatter setMaximum:[NSNumber numberWithUnsignedInt:(unsigned int)(-1)]];
     NSNumber* number = !byteCountString ? nil : [numberFormatter numberFromString:byteCountString];
-    NSUInteger byte_count = [number unsignedIntValue];
+    NSUInteger byte_count = [number unsignedIntegerValue];
 
     BOOL annotateWithPDF = YES;
     if (!annotateWithPDF)
@@ -619,10 +572,6 @@ static LaTeXProcessor* sharedInstance = nil;
 
 -(void) latexiseWithConfiguration:(NSMutableDictionary*)configuration
 {
-  #ifdef ARC_ENABLED
-  #else
-  [configuration retain];
-  #endif
   BOOL runInBackgroundThread = [[configuration objectForKey:@"runInBackgroundThread"] boolValue];
   if (runInBackgroundThread)
   {
@@ -656,16 +605,8 @@ static LaTeXProcessor* sharedInstance = nil;
     if (pdfData) [configuration2 setObject:pdfData forKey:@"outPdfData"];
     if (result)  [configuration2 setObject:result  forKey:@"result"];
     [configuration setDictionary:configuration2];
-    #ifdef ARC_ENABLED
-    #else
-    [configuration2 release];
-    #endif
     [[NSNotificationCenter defaultCenter] postNotificationName:LatexizationDidEndNotification object:configuration];
   }//end if (!runInBackgroundThread)
-  #ifdef ARC_ENABLED
-  #else
-  [configuration autorelease];
-  #endif
 }
 //end latexiseWithConfiguration:
 
@@ -1182,12 +1123,6 @@ static LaTeXProcessor* sharedInstance = nil;
       @catch(NSException* e){
         DebugLog(0, @"exception : %@", e);
       }
-      @finally {
-        #ifdef ARC_ENABLED
-        #else
-        [pdfDocument release];
-        #endif
-      }
     }//end if (!failed && pdfData && !shouldDenyDueTo64Bitsproblem)
 
     if (!failed && pdfData)
@@ -1260,15 +1195,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [boundingBoxTask launch];
     [boundingBoxTask waitUntilExit];
     NSData*   boundingBoxData = [boundingBoxTask dataForStdError];
-    #ifdef ARC_ENABLED
-    #else
-    [boundingBoxTask release];
-    #endif
-    #ifdef ARC_ENABLED
     NSString* boundingBoxString = [[NSString alloc] initWithData:boundingBoxData encoding:NSUTF8StringEncoding];
-    #else
-    NSString* boundingBoxString = [[[NSString alloc] initWithData:boundingBoxData encoding:NSUTF8StringEncoding] autorelease];
-    #endif
     NSRange range = [boundingBoxString rangeOfString:@"%%HiResBoundingBox:"];
     if (range.location != NSNotFound)
       boundingBoxString = [boundingBoxString substringFromIndex:range.location+range.length];
@@ -1332,11 +1259,7 @@ static LaTeXProcessor* sharedInstance = nil;
        : (compositionMode == COMPOSITION_MODE_PDFLATEX) ? [compositionConfiguration compositionConfigurationProgramArgumentsPdfLaTeX]
          : [compositionConfiguration compositionConfigurationProgramArgumentsLaTeX];
 
-  #ifdef ARC_ENABLED
   SystemTask* systemTask = [[SystemTask alloc] initWithWorkingDirectory:workingDirectory];
-  #else
-  SystemTask* systemTask = [[[SystemTask alloc] initWithWorkingDirectory:workingDirectory] autorelease];
-  #endif
   [systemTask setUsingLoginShell:useLoginShell];
   [systemTask setTimeOut:120];
   [systemTask setCurrentDirectoryPath:workingDirectory];
@@ -1351,11 +1274,7 @@ static LaTeXProcessor* sharedInstance = nil;
   [systemTask launch];
   BOOL failed = ([systemTask terminationStatus] != 0) && ![fileManager fileExistsAtPath:pdfFile];
   NSData* dataForStdOutput = [systemTask dataForStdOutput];
-  #ifdef ARC_ENABLED
   NSString* stdOutputErrors = [[NSString alloc] initWithData:dataForStdOutput encoding:NSUTF8StringEncoding];
-  #else
-  NSString* stdOutputErrors = [[[NSString alloc] initWithData:dataForStdOutput encoding:NSUTF8StringEncoding] autorelease];
-  #endif
   [customString appendString:stdOutputErrors ? stdOutputErrors : @""];
   [stdoutString appendString:stdOutputErrors ? stdOutputErrors : @""];
   
@@ -1393,21 +1312,13 @@ static LaTeXProcessor* sharedInstance = nil;
       NSData* stdoutData = [dvipdfTask dataForStdOutput];
       NSData* stderrData = [dvipdfTask dataForStdError];
       NSString* tmp = nil;
-      #ifdef ARC_ENABLED
       tmp = stdoutData ? [[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding] : nil;
-      #else
-      tmp = stdoutData ? [[[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding] autorelease] : nil;
-      #endif
       if (tmp)
       {
         [customString appendString:tmp];
         [stdoutString appendString:tmp];
       }
-      #ifdef ARC_ENABLED
       tmp = stderrData ? [[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding] : nil;
-      #else
-      tmp = stderrData ? [[[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding] autorelease] : nil;
-      #endif
       if (tmp)
       {
         [customString appendString:tmp];
@@ -1419,13 +1330,6 @@ static LaTeXProcessor* sharedInstance = nil;
     {
       failed = YES;
       [customString appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
-    }
-    @finally
-    {
-      #ifdef ARC_ENABLED
-      #else
-      [dvipdfTask release];
-      #endif
     }
     
     if (failed)
@@ -1617,10 +1521,6 @@ static LaTeXProcessor* sharedInstance = nil;
   [pdfCropTask launch];
   [pdfCropTask waitUntilExit];
   result = ([pdfCropTask terminationStatus] == 0);
-  #ifdef ARC_ENABLED
-  #else
-  [pdfCropTask release];
-  #endif
   if (result)
   {
     NSData* croppedData = [NSData dataWithContentsOfFile:outputPdfFilePath options:NSUncachedRead error:nil];
@@ -1716,11 +1616,7 @@ static LaTeXProcessor* sharedInstance = nil;
     
     BOOL useLoginShell = [compositionConfiguration compositionConfigurationUseLoginShell];
 
-    #ifdef ARC_ENABLED
     SystemTask* task = [[SystemTask alloc] initWithWorkingDirectory:workingDirectory];
-    #else
-    SystemTask* task = [[[SystemTask alloc] initWithWorkingDirectory:workingDirectory] autorelease];
-    #endif
     [task setUsingLoginShell:useLoginShell];
     [task setCurrentDirectoryPath:workingDirectory];
     [task setEnvironment:environment];
@@ -1740,34 +1636,20 @@ static LaTeXProcessor* sharedInstance = nil;
                                                                @"Script too long : timeout reached")];
       else if ([task terminationStatus])
       {
-        #ifdef ARC_ENABLED
         [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
         NSString* outputLog1 = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
         NSString* outputLog2 = [[NSString alloc] initWithData:[task dataForStdError]  encoding:encoding];
-        #else
-        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
-        NSString* outputLog1 = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
-        NSString* outputLog2 = [[NSString alloc] initWithData:[task dataForStdError]  encoding:encoding];
-        #endif
         [logString appendFormat:@"%@\n%@\n----------------------------------------------------\n", outputLog1, outputLog2];
       }
       else
       {
-        #ifdef ARC_ENABLED
         NSString* outputLog = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
-        #else
-        NSString* outputLog = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
-        #endif
         [logString appendFormat:@"\n%@\n----------------------------------------------------\n", outputLog];
       }
     }//end try task
     @catch(NSException* e) {
         [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
-        #ifdef ARC_ENABLED
         NSString* outputLog = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
-        #else
-        NSString* outputLog = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
-        #endif
         [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
     }
   }//end if (source != SCRIPT_SOURCE_NONE)
@@ -1778,17 +1660,9 @@ static LaTeXProcessor* sharedInstance = nil;
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor
 {
   NSImage* icon = nil;
-  #ifdef ARC_ENABLED
   NSImage* image = [[NSImage alloc] initWithData:pdfData];
-  #else
-  NSImage* image = [[[NSImage alloc] initWithData:pdfData] autorelease];
-  #endif
   NSSize imageSize = [image size];
-  #ifdef ARC_ENABLED
   icon = [[NSImage alloc] initWithSize:NSMakeSize(128, 128)];
-  #else
-  icon = [[[NSImage alloc] initWithSize:NSMakeSize(128, 128)] autorelease];
-  #endif
   NSRect imageRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
   NSRect srcRect = imageRect;
   CGFloat maxAspectRatio = 5;
@@ -1927,20 +1801,8 @@ static LaTeXProcessor* sharedInstance = nil;
           @catch(NSException* e) {
             DebugLog(0, @"exception : %@", e);
           }
-          @finally{
-            #ifdef ARC_ENABLED
-            #else
-            [pdfDocument release];
-            #endif
-          }
         }//end if (pdfData && !shouldDenyDueTo64Bitsproblem)
 
-        #ifdef ARC_ENABLED
-        #else
-        [imageView release];
-        [pdfImage release];
-        [pdfImageRep release];
-        #endif
       }//end if (scaleAsPercent != 100)
       
       BOOL      useLoginShell    = [compositionConfiguration compositionConfigurationUseLoginShell];
@@ -2007,11 +1869,7 @@ static LaTeXProcessor* sharedInstance = nil;
           int error = system([systemCall UTF8String]);
           if (error)
           {
-            #ifdef ARC_ENABLED
             NSString* output = [[NSString alloc] initWithData:[tmpFileHandle availableData] encoding:NSUTF8StringEncoding];
-            #else
-            NSString* output = [[[NSString alloc] initWithData:[tmpFileHandle availableData] encoding:NSUTF8StringEncoding] autorelease];
-            #endif
             DebugLog(0, @"error with command <%@> : <%@>", systemCall, output);
             [self performSelectorOnMainThread:@selector(displayAlertError:)
                                    withObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -2110,11 +1968,7 @@ static LaTeXProcessor* sharedInstance = nil;
         @finally
         {
           NSData* errorData = [gsTask dataForStdError];
-          #ifdef ARC_ENABLED
           [errorString appendString:[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding]];
-          #else
-          [errorString appendString:[[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding] autorelease]];
-          #endif
 
           if ([gsTask terminationStatus] != 0)
           {
@@ -2124,10 +1978,6 @@ static LaTeXProcessor* sharedInstance = nil;
                                                                                  @"An error occured while trying to create the file :\n%@"), errorString];
             [alert runModal];
           }
-          #ifdef ARC_ENABLED
-          #else
-          [gsTask release];
-          #endif
         }
         data = [NSData dataWithContentsOfFile:tmpEpsFilePath options:NSUncachedRead error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:tmpEpsFilePath error:0];
@@ -2138,10 +1988,6 @@ static LaTeXProcessor* sharedInstance = nil;
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentation];
-        #ifdef ARC_ENABLED
-        #else
-        [image release];
-        #endif
         NSData* annotationData =
         [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
@@ -2154,10 +2000,6 @@ static LaTeXProcessor* sharedInstance = nil;
         data = [image TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
 		data = [imageRep representationUsingType:NSPNGFileType properties:@{}];
-        #ifdef ARC_ENABLED
-        #else
-        [image release];
-        #endif
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
@@ -2205,11 +2047,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
         NSMutableData* mutableData = !cgImage ? nil : [NSMutableData data];
         CGImageDestinationRef cgImageDestination = !mutableData ? 0 : CGImageDestinationCreateWithData(
-          (CHBRIDGE CFMutableDataRef)mutableData, CFSTR("public.jpeg"), 1, 0);
+          (__bridge CFMutableDataRef)mutableData, CFSTR("public.jpeg"), 1, 0);
         if (cgImageDestination && cgImage)
         {
           CGImageDestinationAddImage(cgImageDestination, cgImage,
-            (CHBRIDGE CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
+            (__bridge CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
               [NSNumber numberWithFloat:jpegQuality/100], (NSString*)kCGImageDestinationLossyCompressionQuality,
               nil]);
           CGImageDestinationFinalize(cgImageDestination);
@@ -2246,11 +2088,7 @@ static LaTeXProcessor* sharedInstance = nil;
         @finally
         {
           NSData* errorData = [svgTask dataForStdError];
-          #ifdef ARC_ENABLED
           [errorString appendString:[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding]];
-          #else
-          [errorString appendString:[[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding] autorelease]];
-          #endif
 
           if ([svgTask terminationStatus] != 0)
           {
@@ -2260,10 +2098,6 @@ static LaTeXProcessor* sharedInstance = nil;
                                                                                  @"An error occured while trying to create the file :\n%@"), errorString];
             [alert runModal];
           }//end if ([svgTask terminationStatus] != 0)
-          #ifdef ARC_ENABLED          
-          #else
-          [svgTask release];
-          #endif
         }
         data = [NSData dataWithContentsOfFile:tmpSvgFilePath options:NSUncachedRead error:nil];
         NSData* annotationData =
@@ -2325,17 +2159,10 @@ static LaTeXProcessor* sharedInstance = nil;
           [laTeXMathMLTask waitUntilExit];
           int terminationStatus = [laTeXMathMLTask terminationStatus];
           ok = (terminationStatus == 0);
-          #ifdef ARC_ENABLED
           NSString* logStdOut = ok ? nil :
             [[NSString alloc] initWithData:[laTeXMathMLTask dataForStdOutput] encoding:NSUTF8StringEncoding];
           NSString* logStdErr = ok ? nil :
             [[NSString alloc] initWithData:[laTeXMathMLTask dataForStdError] encoding:NSUTF8StringEncoding];
-          #else
-          NSString* logStdOut = ok ? nil :
-            [[[NSString alloc] initWithData:[laTeXMathMLTask dataForStdOutput] encoding:NSUTF8StringEncoding] autorelease];
-          NSString* logStdErr = ok ? nil :
-            [[[NSString alloc] initWithData:[laTeXMathMLTask dataForStdError] encoding:NSUTF8StringEncoding] autorelease];
-          #endif
           if (!ok)
           {
             DebugLog(1, @"command = %@", [laTeXMathMLTask commandLine]);
@@ -2343,10 +2170,6 @@ static LaTeXProcessor* sharedInstance = nil;
             DebugLog(1, @"logStdOut = %@", logStdOut);
             DebugLog(1, @"logStdErr = %@", logStdErr);
           }//end if (!ok)
-          #ifdef ARC_ENABLED
-          #else
-          [laTeXMathMLTask release];
-          #endif
           data = [NSData dataWithContentsOfFile:outputFile];
           NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
           NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
@@ -2400,35 +2223,30 @@ static LaTeXProcessor* sharedInstance = nil;
   if (inputData && annotationData)
   {
     if (!sourceUTI ||//may be guessed
-        UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.tiff")) ||
-        UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.png")) ||
-        UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.jpeg")))
+        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.tiff")) ||
+        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.png")) ||
+        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.jpeg")))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];
       NSMutableData* annotatedData = !annotationDataBase64 ? nil : [[NSMutableData alloc] initWithCapacity:[inputData length]];
       CGImageSourceRef imageSource = !annotatedData ? 0 :
-        CGImageSourceCreateWithData((CHBRIDGE CFDataRef)inputData, (CHBRIDGE CFDictionaryRef)
+        CGImageSourceCreateWithData((__bridge CFDataRef)inputData, (__bridge CFDictionaryRef)
           [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
       CFStringRef detectedUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
-      if (( sourceUTI && UTTypeConformsTo(detectedUTI, (CHBRIDGE CFStringRef)sourceUTI)) ||
+      if (( sourceUTI && UTTypeConformsTo(detectedUTI, (__bridge CFStringRef)sourceUTI)) ||
           (!sourceUTI && (UTTypeConformsTo(detectedUTI, CFSTR("public.tiff")) ||
                           UTTypeConformsTo(detectedUTI, CFSTR("public.png")) || 
                           UTTypeConformsTo(detectedUTI, CFSTR("public.jpeg")))))
       {
         CGImageDestinationRef imageDestination = !imageSource ? 0 :
-          CGImageDestinationCreateWithData((CHBRIDGE CFMutableDataRef)annotatedData,
-                                           sourceUTI ? (CHBRIDGE CFStringRef)sourceUTI : detectedUTI, 1, 0);
+          CGImageDestinationCreateWithData((__bridge CFMutableDataRef)annotatedData,
+                                           sourceUTI ? (__bridge CFStringRef)sourceUTI : detectedUTI, 1, 0);
         NSDictionary* propertiesImmutable = nil;
         NSMutableDictionary* properties = nil;
         if (imageSource && imageDestination)
         {
-          #ifdef ARC_ENABLED
           propertiesImmutable = (NSDictionary*)CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
           properties = [propertiesImmutable deepMutableCopy];
-          #else
-          propertiesImmutable = NSMakeCollectable((CHBRIDGE NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
-          properties = [[propertiesImmutable deepMutableCopy] autorelease];
-          #endif
           NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
           if (!exifDictionary)
           {
@@ -2437,37 +2255,20 @@ static LaTeXProcessor* sharedInstance = nil;
           }//end if (!exifDictionary)
           [exifDictionary setObject:annotationDataBase64 forKey:(NSString*)kCGImagePropertyExifUserComment];
         }//if (imageSource && imageDestination)
-        #ifdef ARC_ENABLED
-        #else
-        [propertiesImmutable release];
-        #endif
-        CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CHBRIDGE CFDictionaryRef)properties);
+        CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (__bridge CFDictionaryRef)properties);
         if (imageDestination) CGImageDestinationFinalize(imageDestination);
         if (imageDestination) CFRelease(imageDestination);
       }//end if (UTTypeConformsTo(detectedUTI, sourceUTI))
       if (imageSource)
         CFRelease(imageSource);
       if (annotatedData)
-        #ifdef ARC_ENABLED
         result = [annotatedData copy];
-        #else
-        result = [[annotatedData copy] autorelease];
-        #endif
-      #ifdef ARC_ENABLED
-      #else
-      [annotatedData release];
-      #endif
     }//end if (tiff, png, jpeg)
-    else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.svg-image")))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];
-      #ifdef ARC_ENABLED
       NSMutableString* outputString = !annotationDataBase64 ? nil :
         [[NSMutableString alloc] initWithData:inputData encoding:NSUTF8StringEncoding];
-      #else
-      NSMutableString* outputString = !annotationDataBase64 ? nil :
-        [[[NSMutableString alloc] initWithData:inputData encoding:NSUTF8StringEncoding] autorelease];
-      #endif
       NSError* error = nil;
       [outputString
          replaceOccurrencesOfRegex:@"<svg(.*?)>(.*)</svg>"
@@ -2477,16 +2278,11 @@ static LaTeXProcessor* sharedInstance = nil;
         DebugLog(0, @"error : %@", error);
       result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
-    else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.html")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.html")))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];
-      #ifdef ARC_ENABLED
       NSMutableString* outputString = !annotationDataBase64 ? nil :
         [[NSMutableString alloc] initWithData:inputData encoding:NSUTF8StringEncoding];
-      #else
-      NSMutableString* outputString = !annotationDataBase64 ? nil :
-        [[[NSMutableString alloc] initWithData:inputData encoding:NSUTF8StringEncoding] autorelease];
-      #endif
       NSError* error = nil;
       [outputString replaceOccurrencesOfRegex:@"<blockquote(.*?)>(.*?)</blockquote>"
          withString:[NSString stringWithFormat:@"<blockquote$1><!--latexit:%@-->$2</blockquote>", annotationDataBase64]
@@ -2556,25 +2352,12 @@ static LaTeXProcessor* sharedInstance = nil;
     [gsTask launch];
     [gsTask waitUntilExit];
     NSData* stdOutputData = [gsTask dataForStdOutput];
-    #ifdef ARC_ENABLED
     result = !stdOutputData ? nil :
       [[[NSString alloc] initWithData:stdOutputData encoding:NSUTF8StringEncoding]
         stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    #else
-    result = !stdOutputData ? nil :
-      [[[[NSString alloc] initWithData:stdOutputData encoding:NSUTF8StringEncoding] autorelease]
-        stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    #endif
   }
   @catch(NSException* e)
   {
-  }
-  @finally
-  {
-    #ifdef ARC_ENABLED
-    #else
-    [gsTask release];
-    #endif
   }
   return result;
 }

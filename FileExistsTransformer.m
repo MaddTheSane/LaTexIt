@@ -8,6 +8,10 @@
 
 #import "FileExistsTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation FileExistsTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformerWithDirectoryAllowed:(BOOL)directoryAllowed
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithDirectoryAllowed:directoryAllowed];
-  #else
-  id result = [[[[self class] alloc] initWithDirectoryAllowed:directoryAllowed] autorelease];
-  #endif
   return result;
 }
 //end transformerWithDirectoryAllowed:

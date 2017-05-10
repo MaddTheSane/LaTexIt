@@ -18,6 +18,10 @@
 #import "PreferencesController.h"
 #import "Utils.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation CompositionConfigurationsController
 
 +(void) initialize
@@ -74,12 +78,6 @@
 -(void) dealloc
 {
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:CompositionConfigurationDocumentIndexKey];
-  #ifdef ARC_ENABLED
-  #else
-  [self->currentConfigurationScriptsController release];
-  [self->currentConfigurationProgramArgumentsControllerDictionary release];
-  [super dealloc];
-  #endif
 }
 //end dealloc
 
@@ -227,10 +225,6 @@
         nil]];
     result = controller;
     [self->currentConfigurationProgramArgumentsControllerDictionary setObject:result forKey:key];
-    #ifdef ARC_ENABLED
-    #else
-    [result release];
-    #endif
   }//end if (!result)
   return result;
 }

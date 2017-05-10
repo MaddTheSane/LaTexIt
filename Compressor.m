@@ -7,9 +7,13 @@
 //This file is useful to zip-[un]compress NSData
 
 #import "Compressor.h"
-#import <zlib.h>
+#include <zlib.h>
 
 #import "Utils.h"
+
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
 
 @implementation Compressor
 
@@ -35,18 +39,10 @@
         result = [compData copy];
         break;
       default:
-        NSCAssert( YES, @"Error while compressing data: Insufficient memory" );
+        NSAssert( NO, @"Error while compressing data: Insufficient memory" );
         break;
     }//end switch(error)
-    #ifdef ARC_ENABLED
-    #else
-    [compData release];
-    #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
   return result;
 }
 //end zipcompressDeprecated:
@@ -81,15 +77,7 @@
         DebugLog(0, @"Error while compressing data");
         break;
     }//end switch(error)
-    #ifdef ARC_ENABLED
-    #else
-    [compData release];
-    #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
   return result;
 }
 //end zipcompress:level:
@@ -125,10 +113,6 @@
     }//end switch(error)
     if (error != Z_OK)
     {
-      #ifdef ARC_ENABLED
-      #else
-      [decompData release];
-      #endif
       destLen = MAX(swappedDestLen, unswappedDestLen);
       void* test = malloc(destLen);
       BOOL ok = (test != 0);
@@ -150,15 +134,7 @@
           break;
       }//end switch(error)
     }//end if (error != Z_OK)
-    #ifdef ARC_ENABLED
-    #else
-    [decompData release];
-    #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
   return result;
 }
 //end zipuncompressDeprecated:
@@ -188,15 +164,7 @@
         DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         break;
     }//end switch(error)
-    #ifdef ARC_ENABLED
-    #else
-    [decompData release];
-    #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
   return result;
 }
 //end zipuncompress:

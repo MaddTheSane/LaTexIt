@@ -8,6 +8,10 @@
 
 #import "KeyedUnarchiveFromDataTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation KeyedUnarchiveFromDataTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformer
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] init];
-  #else
-  id result = [[[[self class] alloc] init] autorelease];
-  #endif
   return result;
 }
 //end transformer

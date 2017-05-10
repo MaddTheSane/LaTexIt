@@ -12,6 +12,10 @@
 #import "PreferencesController.h"
 #import "RegexKitLite.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation ServiceRegularExpressionFiltersController
 
 -(id) newObject
@@ -41,11 +45,7 @@
 
 -(NSString*) applyFilter:(NSString*)value
 {
-  #ifdef ARC_ENABLED
   NSMutableString* result = [value mutableCopy];
-  #else
-  NSMutableString* result = [[value mutableCopy] autorelease];
-  #endif
   NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
   NSDictionary* filter = nil;
   while((filter = [enumerator nextObject]))
@@ -67,22 +67,14 @@
       }
     }//end if (enabled)
   }//end for each filter
-  #ifdef ARC_ENABLED
   result = [result copy];
-  #else
-  result = [[result copy] autorelease];
-  #endif
   return result;
 }
 //end applyFilter:
 
 -(NSAttributedString*) applyFilterToAttributedString:(NSAttributedString*)value
 {
-  #ifdef ARC_ENABLED
   NSMutableAttributedString* result = [value mutableCopy];
-  #else
-  NSMutableAttributedString* result = [[value mutableCopy] autorelease];
-  #endif
   NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
   NSDictionary* filter = nil;
   while((filter = [enumerator nextObject]))
@@ -104,11 +96,7 @@
       }
     }//end if (enabled)
   }//end for each filter
-  #ifdef ARC_ENABLED
   result = [result copy];
-  #else
-  result = [[result copy] autorelease];
-  #endif
   return result;
 }
 //end applyFilterToAttributedString:

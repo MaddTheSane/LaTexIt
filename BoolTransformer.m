@@ -8,6 +8,10 @@
 
 #import "BoolTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation BoolTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithFalseValue:falseValue trueValue:trueValue];
-  #else
-  id result = [[[[self class] alloc] initWithFalseValue:falseValue trueValue:trueValue] autorelease];
-  #endif
   return result;
 }
 //end transformerWithReference:
@@ -50,27 +50,11 @@
 {
   if ((!(self = [super init])))
     return nil;
-  #ifdef ARC_ENABLED
   self->falseValue = aFalseValue;
   self->trueValue  = aTrueValue;
-  #else
-  self->falseValue = [aFalseValue retain];
-  self->trueValue  = [aTrueValue  retain];
-  #endif
   return self;
 }
 //end initWithFalseValue:
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [self->falseValue release];
-  [self->trueValue  release];
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

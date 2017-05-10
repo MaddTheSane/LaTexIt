@@ -10,6 +10,10 @@
 
 #import "LaTeXProcessor.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 static NSEntityDescription* cachedEntity = nil;
 
 @implementation LatexitEquationData
@@ -20,13 +24,8 @@ static NSEntityDescription* cachedEntity = nil;
   {
     @synchronized(self)
     {
-      #ifdef ARC_ENABLED
       if (!cachedEntity)
         cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
-      #else
-      if (!cachedEntity)
-        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
-      #endif
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;

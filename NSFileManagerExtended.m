@@ -10,16 +10,15 @@
 
 #include <unistd.h>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
 
 static NSMutableSet* createdTemporaryPaths = nil;
 
 @interface NSFileManager (Extended_Private)
 -(void) registerTemporaryPath:(NSString*)path;
 @end
-
-#pragma clang diagnostic pop
 
 @implementation NSFileManager (Extended)
 
@@ -67,11 +66,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
       *outFilePath = createdPath;
     free(tmpString);
   }
-  #ifdef ARC_ENABLED
   return fileHandle;
-  #else
-  return [fileHandle autorelease];
-  #endif
 }
 //end temporaryFileWithTemplate:extension:outFilePath:
 

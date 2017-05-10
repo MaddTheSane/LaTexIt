@@ -8,6 +8,10 @@
 
 #import "DictionaryToArrayTransformer.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
+
 @implementation DictionaryToArrayTransformer
 
 +(void) initialize
@@ -37,11 +41,7 @@
 
 +(id) transformerWithDescriptors:(NSArray*)descriptors
 {
-  #ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithDescriptors:descriptors];
-  #else
-  id result = [[[[self class] alloc] initWithDescriptors:descriptors] autorelease];
-  #endif
   return result;
 }
 //end transformerWithValueTransformer:
@@ -50,26 +50,11 @@
 {
   if ((!(self = [super init])))
     return nil;
-  #ifdef ARC_ENABLED
-  self->descriptors = theDescriptors ? [theDescriptors copy] : 
+  self->descriptors = theDescriptors ? [theDescriptors copy] :
     [[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil], nil];
-  #else
-  self->descriptors = theDescriptors ? [theDescriptors copy] : 
-    [[NSArray alloc] initWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil] autorelease], nil];
-  #endif
   return self;
 }
 //end initWithDescriptors:
-
--(void) dealloc
-{
-  #ifdef ARC_ENABLED
-  #else
-  [self->descriptors release];
-  [super dealloc];
-  #endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {
