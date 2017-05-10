@@ -126,11 +126,11 @@
   BOOL exists = [fileManager fileExistsAtPath:temporaryPath isDirectory:&isDirectory];
   if (exists && !isDirectory)
   {
-    [fileManager bridge_removeItemAtPath:temporaryPath error:0];
+    [fileManager removeItemAtPath:temporaryPath error:0];
     exists = NO;
   }
   if (!exists)
-    [fileManager bridge_createDirectoryAtPath:temporaryPath withIntermediateDirectories:YES attributes:nil error:0];
+    [fileManager createDirectoryAtPath:temporaryPath withIntermediateDirectories:YES attributes:nil error:0];
   return temporaryPath;
 }
 //end temporaryDirectory

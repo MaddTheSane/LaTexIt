@@ -52,7 +52,7 @@
   NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
   unsigned int numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntValue] == 0) ?
                                      4 : [numberOfItemsPerRowNumber unsignedIntValue];
-  CGFloat clipViewWidth = [[[self->matrix superview] superview] frame].size.width-[NSScroller scrollerWidth]+1;
+  CGFloat clipViewWidth = [[[self->matrix superview] superview] frame].size.width-[NSScroller scrollerWidthForControlSize:[[(NSScrollView*)[[matrix superview] superview] horizontalScroller] controlSize] scrollerStyle:[[(NSScrollView*)[[matrix superview] superview] horizontalScroller] scrollerStyle]]+1;
   CGFloat cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
   [self->matrix setCellSize:NSMakeSize(cellWidth, cellWidth)];
   [self->matrix setFrame:NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*[matrix numberOfRows])];
@@ -140,7 +140,7 @@
     NSString* domainName = domainPath;
     NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"Palettes", nil];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
-    NSArray* palettesPaths  = [fileManager bridge_contentsOfDirectoryAtPath:directoryPath error:0];
+    NSArray* palettesPaths  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
     NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:[palettesPaths count]];
     NSEnumerator* latexPalettesEnumerator = [palettesPaths objectEnumerator];
     NSString* file = nil;

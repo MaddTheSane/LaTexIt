@@ -1324,8 +1324,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     panelToOpen = [generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
   else if (format == EXPORT_FORMAT_TEXT)
     panelToOpen = [generalExportFormatOptionsPanes exportFormatOptionsTextPanel];
-  if (panelToOpen)
-    [NSApp beginSheet:panelToOpen modalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+  if (panelToOpen) {
+    [self.window beginSheet:panelToOpen completionHandler:^(NSModalResponse returnCode) {
+      
+    }];
+  }
 }
 //end openOptionsForDragExport:
 
@@ -1349,7 +1352,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       [[PreferencesController sharedController] setExportTextExportBody:[generalExportFormatOptionsPanes textExportBody]];
     }//end if (exportFormatOptionsPanel == [generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
   }//end if (ok)
-  [NSApp endSheet:exportFormatOptionsPanel];
+  [self.window endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:

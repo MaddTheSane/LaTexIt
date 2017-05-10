@@ -98,7 +98,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSString* temporaryPathFileName = @"latexit-paths";
         NSString* temporaryPathFilePath = [[[NSWorkspace sharedWorkspace] temporaryDirectory] stringByAppendingPathComponent:temporaryPathFileName];
         NSString* systemCall = [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" >| %@",
-                                temporaryPathFilePath, temporaryPathFilePath];
+                                temporaryPathFilePath];
         int error = system([systemCall UTF8String]);
         NSError* nserror = nil;
         NSStringEncoding encoding = NSUTF8StringEncoding;
@@ -438,9 +438,9 @@ static LaTeXProcessor* sharedInstance = nil;
     }//end if (annotateWithXML)
 
     NSRange r0 = NSMakeRange(0, [data2 length]);
-    NSRange r1 = [data2 bridge_rangeOfData:[@"\nxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
-    NSRange r2 = [data2 bridge_rangeOfData:[@"trailer" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
-    NSRange r3 = [data2 bridge_rangeOfData:[@"startxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
+    NSRange r1 = [data2 rangeOfData:[@"\nxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
+    NSRange r2 = [data2 rangeOfData:[@"trailer" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
+    NSRange r3 = [data2 rangeOfData:[@"startxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
     if (r0.location != NSNotFound)
     {
       if (r1.location != NSNotFound)
@@ -737,21 +737,21 @@ static LaTeXProcessor* sharedInstance = nil;
 
   //trash old files
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  [fileManager bridge_removeItemAtPath:latexFilePath            error:0];
-  [fileManager bridge_removeItemAtPath:latexAuxFilePath         error:0];
-  [fileManager bridge_removeItemAtPath:latexFilePath2           error:0];
-  [fileManager bridge_removeItemAtPath:latexAuxFilePath2        error:0];
-  [fileManager bridge_removeItemAtPath:pdfFilePath              error:0];
-  [fileManager bridge_removeItemAtPath:dviFilePath              error:0];
-  [fileManager bridge_removeItemAtPath:pdfFilePath2             error:0];
-  [fileManager bridge_removeItemAtPath:pdfCroppedFilePath       error:0];
-  [fileManager bridge_removeItemAtPath:latexBaselineFilePath    error:0];
-  [fileManager bridge_removeItemAtPath:latexAuxBaselineFilePath error:0];
-  [fileManager bridge_removeItemAtPath:pdfBaselineFilePath      error:0];
-  [fileManager bridge_removeItemAtPath:sizesFilePath            error:0];
+  [fileManager removeItemAtPath:latexFilePath            error:0];
+  [fileManager removeItemAtPath:latexAuxFilePath         error:0];
+  [fileManager removeItemAtPath:latexFilePath2           error:0];
+  [fileManager removeItemAtPath:latexAuxFilePath2        error:0];
+  [fileManager removeItemAtPath:pdfFilePath              error:0];
+  [fileManager removeItemAtPath:dviFilePath              error:0];
+  [fileManager removeItemAtPath:pdfFilePath2             error:0];
+  [fileManager removeItemAtPath:pdfCroppedFilePath       error:0];
+  [fileManager removeItemAtPath:latexBaselineFilePath    error:0];
+  [fileManager removeItemAtPath:latexAuxBaselineFilePath error:0];
+  [fileManager removeItemAtPath:pdfBaselineFilePath      error:0];
+  [fileManager removeItemAtPath:sizesFilePath            error:0];
   
   //trash *.*pk, *.mf, *.tfm, *.mp, *.script, *.[[:digit:]], *.t[[:digit:]]+
-  NSArray* files = [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:0];
+  NSArray* files = [fileManager contentsOfDirectoryAtPath:workingDirectory error:0];
   NSEnumerator* enumerator = [files objectEnumerator];
   NSString* file = nil;
   while((file = [enumerator nextObject]))
@@ -767,7 +767,7 @@ static LaTeXProcessor* sharedInstance = nil;
                         [extension isMatchedByRegex:@"^[[:digit:]]+$"] ||
                         [extension isMatchedByRegex:@"^t[[:digit:]]+$"];
       if (mustDelete)
-        [fileManager bridge_removeItemAtPath:file error:0];
+        [fileManager removeItemAtPath:file error:0];
     }
   }
   
@@ -1216,7 +1216,7 @@ static LaTeXProcessor* sharedInstance = nil;
   enumerator = [additionalFilesPathsLinksCreated objectEnumerator];
   NSString* additionalFilePathLinkPath = nil;
   while((additionalFilePathLinkPath = [enumerator nextObject]))
-    [fileManager bridge_removeItemAtPath:additionalFilePathLinkPath error:0];
+    [fileManager removeItemAtPath:additionalFilePathLinkPath error:0];
 
   if (outPdfData)
     *outPdfData = pdfData;
@@ -1306,8 +1306,8 @@ static LaTeXProcessor* sharedInstance = nil;
   NSString* pdfFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pdf"];
   //NSString* errFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"err"];
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  [fileManager bridge_removeItemAtPath:dviFile error:0];
-  [fileManager bridge_removeItemAtPath:pdfFile error:0];
+  [fileManager removeItemAtPath:dviFile error:0];
+  [fileManager removeItemAtPath:pdfFile error:0];
   
   NSMutableString* customString = [NSMutableString string];
   NSMutableString* stdoutString = [NSMutableString string];
@@ -1677,8 +1677,8 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* logScriptPath   = [workingDirectory stringByAppendingPathComponent:logScript];
 
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    [fileManager bridge_removeItemAtPath:latexScriptPath error:0];
-    [fileManager bridge_removeItemAtPath:logScriptPath   error:0];
+    [fileManager removeItemAtPath:latexScriptPath error:0];
+    [fileManager removeItemAtPath:logScriptPath   error:0];
     
     NSString* scriptBody = nil;
 
@@ -1697,11 +1697,11 @@ static LaTeXProcessor* sharedInstance = nil;
     [scriptData writeToFile:latexScriptPath atomically:NO];
 
     NSMutableDictionary* fileAttributes =
-    [NSMutableDictionary dictionaryWithDictionary:[fileManager bridge_attributesOfFileSystemForPath:latexScriptPath error:0]];
+    [NSMutableDictionary dictionaryWithDictionary:[fileManager attributesOfFileSystemForPath:latexScriptPath error:0]];
     NSNumber* posixPermissions = [fileAttributes objectForKey:NSFilePosixPermissions];
     posixPermissions = [NSNumber numberWithUnsignedLong:[posixPermissions unsignedLongValue] | 0700];//add rwx flag
     [fileAttributes setObject:posixPermissions forKey:NSFilePosixPermissions];
-    [fileManager bridge_setAttributes:fileAttributes ofItemAtPath:latexScriptPath error:0];
+    [fileManager setAttributes:fileAttributes ofItemAtPath:latexScriptPath error:0];
 
     NSString* scriptShell = nil;
     switch(source)
@@ -2079,10 +2079,10 @@ static LaTeXProcessor* sharedInstance = nil;
                                            baseline:0
                                     backgroundColor:[latexitEquation backgroundColor] title:[latexitEquation title]];
           }//end if (!error)
-          [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpFilePath error:0];
+          [[NSFileManager defaultManager] removeItemAtPath:tmpFilePath error:0];
         }//if (gsPath && ![gsPath isEqualToString:@""] && psToPdfPath && ![psToPdfPath isEqualToString:@""])
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:pdfFilePath error:0];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpPdfFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:pdfFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:tmpPdfFilePath error:0];
       }//end if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       else if (format == EXPORT_FORMAT_EPS)
       {
@@ -2130,8 +2130,8 @@ static LaTeXProcessor* sharedInstance = nil;
           #endif
         }
         data = [NSData dataWithContentsOfFile:tmpEpsFilePath options:NSUncachedRead error:nil];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpEpsFilePath error:0];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:pdfFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:tmpEpsFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:pdfFilePath error:0];
         DebugLog(1, @"create EPS data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_EPS)
       else if (format == EXPORT_FORMAT_TIFF)
@@ -2270,7 +2270,7 @@ static LaTeXProcessor* sharedInstance = nil;
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:@"public.svg-image" withData:annotationDataCompressed];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpSvgFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:tmpSvgFilePath error:0];
       }//end if (format == EXPORT_FORMAT_SVG)
       else if (format == EXPORT_FORMAT_MATHML)
       {
@@ -2351,9 +2351,9 @@ static LaTeXProcessor* sharedInstance = nil;
           NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
           NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
           data = [self annotateData:data ofUTI:@"public.html" withData:annotationDataCompressed];
-          [[NSFileManager defaultManager] bridge_removeItemAtPath:outputFile error:0];
+          [[NSFileManager defaultManager] removeItemAtPath:outputFile error:0];
         }//end if (ok)
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:inputFile error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:inputFile error:0];
       }//end if (format == EXPORT_FORMAT_MATHML)
       else if (format == EXPORT_FORMAT_TEXT)
       {

@@ -301,7 +301,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (shouldRenameHistoryFile)
     {
       NSError* error = nil;
-      BOOL moved = [fileManager bridge_moveItemAtPath:oldFilePathDb toPath:newFilePath error:&error];
+      BOOL moved = [fileManager moveItemAtPath:oldFilePathDb toPath:newFilePath error:&error];
       if (error)
         {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
       if (!moved)
@@ -312,7 +312,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     BOOL exists = [fileManager fileExistsAtPath:newFilePath isDirectory:&isDirectory] && !isDirectory &&
                   [fileManager isReadableFileAtPath:newFilePath];
     if (!exists)
-      [fileManager bridge_createDirectoryAtPath:[newFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
+      [fileManager createDirectoryAtPath:[newFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
 
     #ifdef ARC_ENABLED
     self->managedObjectContext = [self managedObjectContextAtPath:newFilePath setVersion:NO];
@@ -383,7 +383,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       }//end if (uncompressedData)
       migrationError |= (error != nil);
       if (!migrationError)
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:oldFilePathDat error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:oldFilePathDat error:0];
     }//end if (shouldMigrateHistoryToCoreData)
     else if (shouldMigrateHistoryToAlign)
     {
@@ -537,7 +537,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       {
         NSFileManager* fileManager = [NSFileManager defaultManager];
         BOOL isDirectory = NO;
-        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager bridge_removeItemAtPath:path error:0]));
+        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager removeItemAtPath:path error:0]));
         if (ok)
         {
           NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
@@ -572,7 +572,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         if (ok)
         {
           [[NSFileManager defaultManager]
-             bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+             setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
                      ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
@@ -883,7 +883,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!migrationOK)
     {
       NSError* error = nil;
-      [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+      [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
       if (error)
         {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     }//end if (!migrationOK)
@@ -893,25 +893,25 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [migratingProgressIndicator display];
       NSError* error = nil;
       NSFileManager* fileManager = [NSFileManager defaultManager];
-      BOOL removedOldStore = [fileManager bridge_removeItemAtPath:oldPath error:&error];
+      BOOL removedOldStore = [fileManager removeItemAtPath:oldPath error:&error];
       if (error)
         {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
       if (!removedOldStore || error)
       {
         error = nil;
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+        [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
         if (error)
           {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
       }//end if (!removedOldStore || error)
       else//if (removedOldStore && !error)
       {
-        BOOL movedNewStore = [fileManager bridge_moveItemAtPath:newPath toPath:oldPath error:&error];
+        BOOL movedNewStore = [fileManager moveItemAtPath:newPath toPath:oldPath error:&error];
         if (error)
           {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
         if (!movedNewStore)
         {
           error = nil;
-          [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+          [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
           if (error)
             {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
         }//end if (!movedNewStore)

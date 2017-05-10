@@ -54,7 +54,7 @@
 	@param processSerialNumber The process serial number.
 	@result A initialised <tt>NDProcess</tt>
  */
-- (id)initWithProcessSerialNumber:(ProcessSerialNumber)processSerialNumber;
+- (instancetype)initWithProcessSerialNumber:(ProcessSerialNumber)processSerialNumber;
 
 /*!
 	@property processSerialNumber

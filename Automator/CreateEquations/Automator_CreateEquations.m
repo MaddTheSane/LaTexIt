@@ -101,11 +101,11 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   BOOL exists = [fileManager fileExistsAtPath:temporaryPath isDirectory:&isDirectory];
   if (exists && !isDirectory)
   {
-    [fileManager bridge_removeItemAtPath:temporaryPath error:0];
+    [fileManager removeItemAtPath:temporaryPath error:0];
     exists = NO;
   }
   if (!exists)
-    [fileManager bridge_createDirectoryAtPath:temporaryPath withIntermediateDirectories:YES attributes:nil error:0];
+    [fileManager createDirectoryAtPath:temporaryPath withIntermediateDirectories:YES attributes:nil error:0];
   return temporaryPath;
 }
 //end workingDirectory
@@ -390,7 +390,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
           if ([inputAsSet containsObject:object])
           {
             NSError* error = nil;
-            NSArray* directoryContent = [fileManager bridge_contentsOfDirectoryAtPath:string error:&error];
+            NSArray* directoryContent = [fileManager contentsOfDirectoryAtPath:string error:&error];
             NSEnumerator* fileEnumerator = [directoryContent objectEnumerator];
             NSString* filename = nil;
             while((filename = [fileEnumerator nextObject]))
@@ -542,21 +542,21 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
           NSError* error = nil;
           if (![outFilePath isEqualToString:newPath])
           {
-            BOOL moved = [fileManager bridge_moveItemAtPath:outFilePath toPath:newPath error:&error];
+            BOOL moved = [fileManager moveItemAtPath:outFilePath toPath:newPath error:&error];
             if (moved)
               outFilePath = newPath;
             else//if (!moved)
             {
-              BOOL removed = [fileManager bridge_removeItemAtPath:newPath error:&error];
-              BOOL moved = [fileManager bridge_moveItemAtPath:outFilePath toPath:newPath error:&error];
+              BOOL removed = [fileManager removeItemAtPath:newPath error:&error];
+              BOOL moved = [fileManager moveItemAtPath:outFilePath toPath:newPath error:&error];
               if (removed && moved)
                 outFilePath = newPath;
             }//end //if (!moved)
             DebugLog(1, @"moved = %d, outFilePath = %@", moved, outFilePath);
           }//end if (![outFilePath isEqualToString:newPath])
         }
-        [fileManager bridge_setAttributes:
-          [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+        [fileManager setAttributes:
+          [NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
                                 ofItemAtPath:outFilePath error:0];
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
@@ -784,14 +784,16 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   [self->generalExportFormatOptionsPanes setTextExportBody:
    [[[[self parameters] objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue]];
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = [self->exportFormatPopupButton selectedTag];
+  export_format_t exportFormat = (export_format_t)[self->exportFormatPopupButton selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
   else if (exportFormat == EXPORT_FORMAT_SVG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
-  if (panelToOpen)
-    [NSApp beginSheet:panelToOpen
-       modalForWindow:[tabView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+  if (panelToOpen) {
+    [tabView.window beginSheet:panelToOpen completionHandler:^(NSModalResponse returnCode) {
+      
+    }];
+  }
 }
 //end generalExportFormatOptionsOpen:
 
@@ -815,7 +817,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportBody]] forKey:@"exportTextExportBody"];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
   }//end if (ok)
-  [NSApp endSheet:exportFormatOptionsPanel];
+  [tabView.window endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:

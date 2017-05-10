@@ -19,136 +19,6 @@ static NSMutableSet* createdTemporaryPaths = nil;
 -(void) registerTemporaryPath:(NSString*)path;
 @end
 
-@implementation NSFileManager (Bridge10_5)
-
--(BOOL) bridge_createSymbolicLinkAtPath:(NSString*)path withDestinationPath:(NSString*)destPath error:(NSError**)error;
-{
-  BOOL result = NO;
-  if ([self respondsToSelector:@selector(createSymbolicLinkAtPath:withDestinationPath:error:)])
-    result = [self createSymbolicLinkAtPath:path withDestinationPath:destPath error:error];
-  else
-    result = [self createSymbolicLinkAtPath:path pathContent:destPath] || !symlink([destPath fileSystemRepresentation], [path fileSystemRepresentation]);
-  return result;
-}
-//end bridge_createSymbolicLinkAtPath:withDestinationPath:error:
-
--(NSString*) bridge_destinationOfSymbolicLinkAtPath:(NSString*)path error:(NSError**)error
-{
-  NSString* result = nil;
-  if ([self respondsToSelector:@selector(destinationOfSymbolicLinkAtPath:error:)])
-    result = [self destinationOfSymbolicLinkAtPath:path error:error];
-  else
-    result = [self pathContentOfSymbolicLinkAtPath:path];
-  return result;
-}
-//end bridge_destinationOfSymbolicLinkAtPath:error:
-
--(BOOL) bridge_createDirectoryAtPath:(NSString *)path withIntermediateDirectories:(BOOL)createIntermediates attributes:(NSDictionary *)attributes error:(NSError **)error
-{
-  BOOL result = NO;
-  if ([self respondsToSelector:@selector(createDirectoryAtPath:withIntermediateDirectories:attributes:error:)])
-    result = [self createDirectoryAtPath:path withIntermediateDirectories:createIntermediates attributes:attributes error:error];
-  else if (!createIntermediates)
-  {
-    result = [self createDirectoryAtPath:path attributes:attributes];
-  }//end if (!createIntermediates)
-  else//if (createIntermediates)
-  {
-    result = YES;
-    BOOL isDirectory = NO;
-    NSArray* components = [path pathComponents];
-    components = components ? components : [NSArray array];
-    unsigned int i = 0;
-    for(i = 1 ; result && (i <= [components count]) ; ++i)
-    {
-      NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
-      result &= ([self fileExistsAtPath:subPath isDirectory:&isDirectory] && isDirectory) ||
-      [self createDirectoryAtPath:subPath attributes:attributes];
-    }//end for each subPath
-  }//end if (createIntermediates)
-  return result;
-}
-//end bridge_createDirectoryAtPath:withIntermediateDirectories:attributes:
-
--(NSArray*) bridge_contentsOfDirectoryAtPath:(NSString *)path error:(NSError**)error
-{
-  NSArray* result = nil;
-  if ([self respondsToSelector:@selector(contentsOfDirectoryAtPath:error:)])
-    result = [self contentsOfDirectoryAtPath:path error:error];
-  else
-    result = [self directoryContentsAtPath:path];
-  return result;
-}
-//end bridge_contentsOfDirectoryAtPath:error:
-
--(BOOL) bridge_copyItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error
-{
-  BOOL result = NO;
-  if ([self respondsToSelector:@selector(copyItemAtPath:toPath:error:)])
-    result = [self copyItemAtPath:srcPath toPath:dstPath error:error];
-  else
-    result = [self copyPath:srcPath toPath:dstPath handler:0];
-  return result;
-}
-//end bridge_copyItemAtPath:toPath:error:
-
--(BOOL) bridge_removeItemAtPath:(NSString*)path error:(NSError**)error
-{
-  BOOL result = NO;
-  if ([self respondsToSelector:@selector(removeItemAtPath:error:)])
-    result = [self removeItemAtPath:path error:error];
-  else
-    result = [self removeFileAtPath:path handler:0];
-  return result;
-}
-//end bridge_removeItemAtPath:error:
-
--(BOOL) bridge_moveItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error
-{
-  BOOL result = NO;
-  if ([self respondsToSelector:@selector(moveItemAtPath:toPath:error:)])
-    result = [self moveItemAtPath:srcPath toPath:dstPath error:error];
-  else
-    result = [self movePath:srcPath toPath:dstPath handler:0];
-  return result;
-}
-//end bridge_moveItemAtPath:toPath:error:
-
--(NSDictionary *) bridge_attributesOfFileSystemForPath:(NSString *)path error:(NSError **)error
-{
-  NSDictionary* result = nil;
-  if ([self respondsToSelector:@selector(attributesOfFileSystemForPath:error:)])
-    result = [self attributesOfFileSystemForPath:path error:error];
-  else
-    result = [self fileSystemAttributesAtPath:path];
-  return result;
-}
-//end bridge_attributesOfFileSystemForPath:error:
-
--(NSDictionary *) bridge_attributesOfItemAtPath:(NSString *)path error:(NSError **)error
-{
-  NSDictionary* result = nil;
-  if ([self respondsToSelector:@selector(attributesOfFileSystemForPath:error:)])
-    result = [self attributesOfItemAtPath:path error:error];
-  else
-    result = [self fileAttributesAtPath:path traverseLink:YES];
-  return result;
-}
-//end bridge_attributesOfItemAtPath:error:
-
--(BOOL) bridge_setAttributes:(NSDictionary *)attributes ofItemAtPath:(NSString *)path error:(NSError **)error
-{
-  BOOL result = NO;
-  if ([self respondsToSelector:@selector(setAttributes:ofItemAtPath:error:)])
-    result = [self setAttributes:attributes ofItemAtPath:path error:error];
-  else
-    result = [self changeFileAttributes:attributes atPath:path];
-  return result;
-}
-//end bridge_setAttributes:ofItemAtPath:error:
-
-@end
-
 #pragma clang diagnostic pop
 
 @implementation NSFileManager (Extended)
@@ -210,12 +80,12 @@ static NSMutableSet* createdTemporaryPaths = nil;
   BOOL result = NO;
   NSString* linkPath = [directoryPath stringByAppendingPathComponent:(linkName ? linkName : [targetPath lastPathComponent])];
   if (![self fileExistsAtPath:linkPath])
-    result = [self bridge_createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
+    result = [self createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
   else
   {
     NSDictionary* attributes = [self attributesOfItemAtPath:linkPath error:NULL];
     if ([[attributes objectForKey:NSFileType] isEqualToString:NSFileTypeSymbolicLink])
-      result = [[self bridge_destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
+      result = [[self destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
     if (!result)
       result = [self removeItemAtPath:linkPath error:nil] &&
                [self createLinkInDirectory:directoryPath toTarget:targetPath linkName:linkName outLinkPath:outLinkPath];

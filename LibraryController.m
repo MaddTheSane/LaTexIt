@@ -514,7 +514,7 @@
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //does a folder of that name already exist ?
       {
-        BOOL ok = [fileManager bridge_createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
+        BOOL ok = [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
         if (ok)
         {
           //Recursive call to fill the folder
@@ -535,7 +535,7 @@
         //I may have found a free name; create the folder in this case
         if (![fileManager fileExistsAtPath:filePath])
         {
-          BOOL ok = [fileManager bridge_createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
+          BOOL ok = [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
           if (ok)
           {
             //Recursive call to fill the folder
@@ -562,7 +562,7 @@
                          uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+        [fileManager setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
                              ofItemAtPath:filePath error:0];
         NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
@@ -590,7 +590,7 @@
                            uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
-          [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+          [fileManager setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
                                ofItemAtPath:filePath error:0];
           NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
           if ((exportFormat != EXPORT_FORMAT_PNG) &&

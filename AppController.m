@@ -717,7 +717,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSString* newPath = [NSString pathWithComponents:newPaths];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   if (![fileManager fileExistsAtPath:newPath] && [fileManager fileExistsAtPath:oldPath])
-    [fileManager bridge_copyItemAtPath:oldPath toPath:newPath error:0];
+    [fileManager copyItemAtPath:oldPath toPath:newPath error:0];
 
   //sets visible controllers
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
@@ -3623,7 +3623,7 @@ static NSMutableDictionary* cachePaths = nil;
       [alert release]; alert = nil;
       if (choice == NSAlertFirstButtonReturn)
       {
-        BOOL shouldInstall = [[NSFileManager defaultManager] bridge_createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
+        BOOL shouldInstall = [[NSFileManager defaultManager] createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
         if (!shouldInstall) {
           alert = [NSAlert new];
           alert.messageText = NSLocalizedString(@"Could not create path", @"Could not create path");
@@ -3656,8 +3656,8 @@ static NSMutableDictionary* cachePaths = nil;
         
         if (overwrite)
         {
-          [fileManager bridge_removeItemAtPath:destinationPath error:0];
-          BOOL success = [fileManager bridge_copyItemAtPath:palettePath toPath:destinationPath error:0];
+          [fileManager removeItemAtPath:destinationPath error:0];
+          BOOL success = [fileManager copyItemAtPath:palettePath toPath:destinationPath error:0];
           if (!success) {
             alert = [NSAlert new];
             alert.messageText = NSLocalizedString(@"Installation failed", @"Installation failed");

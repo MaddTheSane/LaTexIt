@@ -1012,7 +1012,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
   NSError* error = nil;
   NSArray* result = ![self->poolOfObsoleteUniqueIds count] ? nil :
-  [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:&error];
+  [fileManager contentsOfDirectoryAtPath:workingDirectory error:&error];
   NSUInteger count = [result count];
   if (count)
   {
@@ -1027,7 +1027,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         while((obsoleteUniqueId = [enumerator nextObject]))
         {
           if ([filename isMatchedByRegex:[NSString stringWithFormat:@"^\\Q%@\\E.*", obsoleteUniqueId]])
-            [fileManager bridge_removeItemAtPath:[workingDirectory stringByAppendingPathComponent:filename] error:0];
+            [fileManager removeItemAtPath:[workingDirectory stringByAppendingPathComponent:filename] error:0];
         }//end for each obsoleteUniqueId
       }//end for each file
     }//end @synchronized(self->poolOfObsoleteUniqueIds)
@@ -1770,7 +1770,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (data)
   {
     [data writeToFile:filePath atomically:YES];
-    [[NSFileManager defaultManager] bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt']
+    [[NSFileManager defaultManager] setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt']
                                                                                      forKey:NSFileHFSCreatorCode]
                                             ofItemAtPath:filePath error:0];    
     NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;
@@ -2554,7 +2554,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self->backSyncOptions setDictionary:options];
     self->backSyncFilePath = [path copy];
     self->backSyncFileLastModificationDate =
-      [[[[NSFileManager defaultManager] bridge_attributesOfItemAtPath:self->backSyncFilePath error:nil]
+      [[[[NSFileManager defaultManager] attributesOfItemAtPath:self->backSyncFilePath error:nil]
         fileModificationDate] copy];
     if (!self->backSyncUkkQueue)
     {
@@ -2772,7 +2772,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     else if ([fpath isEqualToString:[self->backSyncFilePath stringByDeletingLastPathComponent]])
     {
       NSDate* newFileModificationDate = 
-        [[[NSFileManager defaultManager] bridge_attributesOfItemAtPath:self->backSyncFilePath error:nil]
+        [[[NSFileManager defaultManager] attributesOfItemAtPath:self->backSyncFilePath error:nil]
           fileModificationDate];
       shouldUpdate = newFileModificationDate && 
         (!self->backSyncFileLastModificationDate || [newFileModificationDate isGreaterThan:self->backSyncFileLastModificationDate]);
@@ -2804,7 +2804,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       [self->backSyncFileLastModificationDate release];
       self->backSyncFileLastModificationDate =
-        [[[[NSFileManager defaultManager] bridge_attributesOfItemAtPath:self->backSyncFilePath error:nil]
+        [[[[NSFileManager defaultManager] attributesOfItemAtPath:self->backSyncFilePath error:nil]
           fileModificationDate] copy];
       NSStringEncoding encoding;
       NSError* error = nil;

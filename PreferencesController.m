@@ -2987,7 +2987,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
               myStatus = AuthorizationExecuteWithPrivileges(myAuthorizationRef, "/bin/cp", kAuthorizationFlagDefaults, (char**)args, NULL);
             }
             if (src)
-              [[NSFileManager defaultManager] bridge_removeItemAtPath:src error:0];
+              [[NSFileManager defaultManager] removeItemAtPath:src error:0];
             myStatus = myStatus ? myStatus : AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDestroyRights);
             ok = (myStatus == 0);
           }//end if (!ok)

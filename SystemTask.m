@@ -186,7 +186,7 @@
     self->selfExited        = WIFEXITED(self->terminationStatus) && !WIFSIGNALED(self->terminationStatus);
     self->terminationStatus = WIFEXITED(self->terminationStatus) ? WEXITSTATUS(self->terminationStatus) : -1;
     [self->runningLock unlock];
-    [[NSFileManager defaultManager] bridge_removeItemAtPath:timeLimitedScriptPath error:0];
+    [[NSFileManager defaultManager] removeItemAtPath:timeLimitedScriptPath error:0];
   }//end if filePath
 }
 //end launch

@@ -127,7 +127,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
       {
         #ifdef ARC_ENABLED
         if (info)
-          memcpy((void**)info, &plistAsDictionary, sizeof(NSDictionary*));
+          memcpy((void**)info, (void*)&plistAsDictionary, sizeof(NSDictionary*));
         #else
         NSDictionary** outLatexitMetadata = (NSDictionary**)info;
         if (outLatexitMetadata)
@@ -396,9 +396,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
       [preambleString deleteCharactersInRange:range];
       NSString* unescapedPreamble =
-		(NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-																							 (CHBRIDGE CFStringRef)preambleString, CFSTR(""),
-																							 kCFStringEncodingUTF8));
+		(NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault,
+																							 (CHBRIDGE CFStringRef)preambleString, CFSTR("")));
       preambleString = [NSMutableString stringWithString:(NSString*)unescapedPreamble];
       #ifdef ARC_ENABLED
       #else
@@ -462,9 +461,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
       [sourceString deleteCharactersInRange:range];
       NSString* unescapedSource =
-		(NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-																							 (CHBRIDGE CFStringRef)sourceString, CFSTR(""),
-																							 kCFStringEncodingUTF8));
+		(NSString*)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault,
+																							 (CHBRIDGE CFStringRef)sourceString, CFSTR("")));
       [sourceString setString:unescapedSource];
       #ifdef ARC_ENABLED
       #else
@@ -598,7 +596,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       {
         NSData* streamAsData = [streamData dynamicCastToClass:[NSData class]];
         NSData* streamAsPdfData = 
-          ([streamAsData bridge_rangeOfData:pdfHeader options:NSDataSearchAnchored range:NSMakeRange(0, [streamAsData length])].location == NSNotFound) ?
+          ([streamAsData rangeOfData:pdfHeader options:NSDataSearchAnchored range:NSMakeRange(0, [streamAsData length])].location == NSNotFound) ?
           nil : streamAsData;
         NSData* pdfData2 = nil;
         #ifdef ARC_ENABLED

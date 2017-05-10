@@ -14,7 +14,7 @@
 #import "Utils.h"
 
 #import "NSButtonExtended.h"
-#import "NSPopupButtonExtended.h"
+#import "NSPopUpButtonExtended.h"
 #import "NSViewExtended.h"
 
 @interface DocumentExtraPanelsController () <ExportFormatOptionsDelegate>
