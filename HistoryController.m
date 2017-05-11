@@ -50,16 +50,14 @@
 -(BOOL) automaticallyRearrangesObjects
 {
   BOOL result = NO;
-  if (isMacOS10_5OrAbove())
-    result = [super automaticallyRearrangesObjects];
+  result = [super automaticallyRearrangesObjects];
   return result;
 }
 //end automaticallyRearrangesObjects
 
 -(void) setAutomaticallyRearrangesObjects:(BOOL)value
 {
-  if (isMacOS10_5OrAbove())
-    [super setAutomaticallyRearrangesObjects:value];
+  [super setAutomaticallyRearrangesObjects:value];
 }
 //end setAutomaticallyRearrangesObjects:
 

@@ -639,7 +639,6 @@ static LibraryManager* sharedManagerInstance = nil;
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSDictionary* options = nil;
-    if (isMacOS10_6OrAbove())
       options = [NSDictionary dictionaryWithObjectsAndKeys:
                   @YES, NSMigratePersistentStoresAutomaticallyOption,
                   @YES, NSInferMappingModelAutomaticallyOption,

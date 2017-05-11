@@ -22,33 +22,25 @@ extern NSString* NSPNGPboardType __attribute__((weak_import));
 static NSString* MyJPEGPboardType = nil;
 static NSString* MyWebURLsWithTitlesPboardType = nil;
 
-BOOL isMacOS10_5OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_4);
-  return result;
-}
-//end isMacOS10_5OrAbove()
-
-BOOL isMacOS10_6OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_5);
-  return result;
-}
-//end isMacOS10_6OrAbove()
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+#else
 BOOL isMacOS10_7OrAbove(void)
 {
   BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6);
   return result;
 }
 //end isMacOS10_7OrAbove()
+#endif
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_8
+#else
 BOOL isMacOS10_8OrAbove(void)
 {
   BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7);
   return result;
 }
 //end isMacOS10_8OrAbove()
+#endif
 
 NSString* GetMySVGPboardType(void)
 {

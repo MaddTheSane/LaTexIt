@@ -188,18 +188,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [NSValue valueWithSize:[webView frame].size], WebToolbarItemIdentifier,
     nil];
   
-  if (!isMacOS10_5OrAbove())
-  {
-    NSArray* compositionConfigurationsCurrentAdvancedButtons = [NSArray arrayWithObjects:
-      compositionConfigurationsCurrentPdfLaTeXAdvancedButton, compositionConfigurationsCurrentXeLaTeXAdvancedButton,
-      compositionConfigurationsCurrentLaTeXAdvancedButton, compositionConfigurationsCurrentDviPdfAdvancedButton,
-      compositionConfigurationsCurrentGsAdvancedButton, compositionConfigurationsCurrentPsToPdfAdvancedButton, nil];
-    NSEnumerator* enumerator = [compositionConfigurationsCurrentAdvancedButtons objectEnumerator];
-    NSButton* button = nil;
-    while((button = [enumerator nextObject]))
-      [button setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
-  }//end if (!isMacOS10_5OrAbove())
-  
   NSToolbar* toolbar = [[NSToolbar alloc] initWithIdentifier:@"preferencesToolbar"];
   [toolbar setDelegate:(id)self];
   NSWindow* window = [self window];
@@ -820,7 +808,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
       NSValueTransformerBindingOption, nil]];
       
-  [serviceRelaunchWarning setHidden:isMacOS10_5OrAbove()];
+  [serviceRelaunchWarning setHidden:YES/*isMacOS10_5OrAbove()*/];
   
   //service regular expression filters
   NSArrayController* serviceRegularExpressionFiltersController = [preferencesController serviceRegularExpressionFiltersController];

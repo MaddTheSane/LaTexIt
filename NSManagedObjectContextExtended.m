@@ -72,13 +72,7 @@
     [fetchRequest setPredicate:predicate];
   }
 
-  if (isMacOS10_5OrAbove())
-    result = [super countForFetchRequest:fetchRequest error:error];
-  else
-  {
-    NSArray* managedObjects = [self executeFetchRequest:fetchRequest error:error];
-    result = [managedObjects count];
-  }
+  result = [super countForFetchRequest:fetchRequest error:error];
   return result;
 }
 //end countForEntity:predicate:error:
@@ -86,10 +80,7 @@
 -(NSUInteger) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error
 {
   NSUInteger result = 0;
-  if (isMacOS10_5OrAbove())
-    result = [self countForFetchRequest:request error:error];
-  else
-    result = [[self executeFetchRequest:request error:error] count];
+  result = [self countForFetchRequest:request error:error];
   return result;
 }
 //end myCountForFetchRequest:error:

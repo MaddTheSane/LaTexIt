@@ -469,7 +469,6 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSDictionary* options = nil;
-    if (isMacOS10_6OrAbove())
       options = [NSDictionary dictionaryWithObjectsAndKeys:
                   @YES, NSMigratePersistentStoresAutomaticallyOption,
                   @YES, NSInferMappingModelAutomaticallyOption,

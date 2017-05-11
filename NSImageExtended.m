@@ -185,10 +185,6 @@
 -(NSImageRep*) bestImageRepresentationInContext:(NSGraphicsContext*)context
 {
   NSImageRep* result = nil;
-  if (!isMacOS10_6OrAbove())
-    result = [self bestRepresentationForDevice:nil];
-  else//if (isMacOS10_6OrAbove())
-  {
     NSEnumerator* enumerator = [[self representations] objectEnumerator];
     NSImageRep* imageRep = nil;
     while (!result && (imageRep = [enumerator nextObject]))
@@ -204,7 +200,6 @@
       if (!result)
         result = [[self newBitmapImageRepresentation] autorelease];
     }//end if (!result)
-  }//end if (isMacOS10_6OrAbove())
   return result;
 }
 //end bestImageRepresentation

@@ -38,7 +38,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
       if (!result)
       {
         NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"defaultPreamble" ofType:@"rtf"];
-        defaultLocalizedPreambleValueAttributedString = !path ? nil : [[NSAttributedString alloc] initWithPath:path documentAttributes:nil];
+        defaultLocalizedPreambleValueAttributedString = !path ? nil : [[NSAttributedString alloc] initWithURL:[NSURL fileURLWithPath:path] options:@{NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType} documentAttributes:NULL error:NULL];
         result = defaultLocalizedPreambleValueAttributedString;
       }//end if (!result)
     }//end @synchronized(self)

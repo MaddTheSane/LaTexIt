@@ -14,8 +14,6 @@
 
 -(id) initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
 {
-  if (!isMacOS10_5OrAbove())
-    windowStyle = windowStyle & ~NSUnifiedTitleAndToolbarWindowMask;//fixes a Tiger bug with segmented controls
   if (!((self = [super initWithContentRect:contentRect styleMask:windowStyle backing:bufferingType defer:deferCreation])))
     return nil;
   return self;
@@ -24,8 +22,6 @@
 
 -(id) initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen
 {
-  if (!isMacOS10_5OrAbove())
-    windowStyle = windowStyle & ~NSUnifiedTitleAndToolbarWindowMask;//fixes a Tiger bug with segmented controls
   if (!((self = [super initWithContentRect:contentRect styleMask:windowStyle backing:bufferingType defer:deferCreation screen:screen])))
     return nil;
   return self;

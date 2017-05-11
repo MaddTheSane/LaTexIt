@@ -136,10 +136,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   {
     @synchronized(self)
     {
-      const NSUInteger legacyNSNotFound = 0x7fffffff;
-      NSUInteger notFound = isMacOS10_5OrAbove() ? NSNotFound : legacyNSNotFound;
       if (!freeIds)
-        freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, notFound-2)];
+        freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, NSNotFound-2)];
     }//end @synchronized(self)
   }//end if (!freeIds)
 }
@@ -1974,8 +1972,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     else//if (self->linkedLibraryEquation)
     {
       [self setDocumentTitle:[libraryEquation title]];
-      if (isMacOS10_5OrAbove())
-        [[self windowForSheet] setRepresentedFilename:[libraryEquation title]];
+      [[self windowForSheet] setRepresentedFilename:[libraryEquation title]];
     }//end if (self->linkedLibraryEquation)
   }//end if (libraryEquation != self->linkedLibraryEquation)
 }
@@ -2031,8 +2028,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       [self applyLibraryEquation:self->linkedLibraryEquation];
       [self setDocumentTitle:[self->linkedLibraryEquation title]];
-      if (isMacOS10_5OrAbove())
-        [[self windowForSheet] setRepresentedFilename:[self->linkedLibraryEquation title]];
+      [[self windowForSheet] setRepresentedFilename:[self->linkedLibraryEquation title]];
     }//end if ([[[notification userInfo] objectForKey:NSUpdatedObjectsKey] containsObject:self->linkedLibraryEquation])
   }//end if (self->linkedLibraryEquation)
 }

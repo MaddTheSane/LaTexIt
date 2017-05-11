@@ -63,10 +63,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         }
         
         
-        const NSUInteger legacyNSNotFound = 0x7fffffff;
-        NSUInteger notFound = isMacOS10_5OrAbove() ? NSNotFound : legacyNSNotFound;
         if (!freeIds)
-          freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, notFound-2)];
+          freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, NSNotFound-2)];
         [KeyedUnarchiveFromDataTransformer initialize];//seems needed on Tiger
       }//end if (!freeIds)
     }//end @synchronized(self)

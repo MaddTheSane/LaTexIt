@@ -124,11 +124,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [actionMenu setDelegate:(id)self];
   [actionMenu release];
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
-  if (!isMacOS10_5OrAbove())//fix an interface bug to refresh the button
-  {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuWillOpen:) name:NSMenuDidBeginTrackingNotification object:actionMenu];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDidClose:) name:NSMenuDidEndTrackingNotification object:actionMenu];
-  }//end if (!isMacOS10_5OrAbove())
   
   [self->libraryPreviewPanelSegmentedControl setToolTip:NSLocalizedString(@"Display the equations in real size on mouse over", @"Display the equations in real size on mouse over")];
   

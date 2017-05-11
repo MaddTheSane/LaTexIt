@@ -34,10 +34,18 @@ extern int DebugLogLevel;
 #define NSAppKitVersionNumber10_8 1187
 #endif
 
-BOOL isMacOS10_5OrAbove(void);
-BOOL isMacOS10_6OrAbove(void);
+#define isMacOS10_5OrAbove() (YES)
+#define isMacOS10_6OrAbove() (YES)
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+#define isMacOS10_7OrAbove() (YES)
+#else
 BOOL isMacOS10_7OrAbove(void);
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_8
+#define isMacOS10_8OrAbove() (YES)
+#else
 BOOL isMacOS10_8OrAbove(void);
+#endif
 
 FOUNDATION_STATIC_INLINE          char  IsBetween_c(char inf, char x, char sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned char  IsBetween_uc(unsigned char inf, unsigned char x, unsigned char sup) {return (inf <= x) && (x <= sup);}

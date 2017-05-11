@@ -102,9 +102,6 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
       NSData* uncompressedData = !compressedData ? nil : [Compressor zipuncompress:compressedData];
       NSPropertyListFormat format = 0;
       id plist = !uncompressedData ? nil :
-        isMacOS10_5OrAbove() ?
-          [NSPropertyListSerialization propertyListWithData:uncompressedData
-            options:NSPropertyListImmutable format:&format error:nil] :
           [NSPropertyListSerialization propertyListWithData:uncompressedData
             options:NSPropertyListImmutable format:&format error:nil];
       NSDictionary* plistAsDictionary = [plist dynamicCastToClass:[NSDictionary class]];

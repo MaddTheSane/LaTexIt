@@ -430,14 +430,7 @@
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGEventRef cgEvent0 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
     CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGEventGetLocation(cgEvent0);
-    point.y = [[NSScreen mainScreen] frame].size.height-point.y;
-    CGEventSetLocation(cgEvent0, point);
-  }//if (!isMacOS10_5OrAbove())
   CGEventPost(kCGHIDEventTap, cgEvent0);
   CFRelease(cgEvent0);
 }//end performProgrammaticDragCancellation:
@@ -461,26 +454,9 @@
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation2, kCGMouseButtonLeft);
   CGEventRef cgEvent3 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-  {
-    CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
-    CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
-    CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
-  }//end if (isMacOS10_5OrAbove())
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGPointZero;
-    NSRect screenFrame = [[NSScreen mainScreen] frame];
-    point = CGEventGetLocation(cgEvent1);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent1, point);
-    point = CGEventGetLocation(cgEvent2);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent2, point);
-    point = CGEventGetLocation(cgEvent3);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent3, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
+  CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
+  CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
   CGEventPost(kCGHIDEventTap, cgEvent1);
   CGEventPost(kCGHIDEventTap, cgEvent2);
   CGEventPost(kCGHIDEventTap, cgEvent3);

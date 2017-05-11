@@ -966,10 +966,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if ([sender action] == @selector(historyClearHistory:))
   {
-    if (isMacOS10_5OrAbove())
-      ok = ([[HistoryManager sharedManager] numberOfItems] > 0);
-    else
-      ok = ([[[[self->historyWindowController historyView] historyItemsController] arrangedObjects] count] > 0);
+    ok = ([[HistoryManager sharedManager] numberOfItems] > 0);
   }
   else if ([sender action] == @selector(historyChangeLock:))
   {
@@ -2634,7 +2631,7 @@ static NSMutableDictionary* cachePaths = nil;
 
             //creates a mutable attributed string containing the image file
             [attachedData writeToFile:attachedFilePath atomically:NO];
-            NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
+            NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithURL:[NSURL fileURLWithPath:attachedFilePath] options:0 error:NULL] autorelease];
             NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
             NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
             NSMutableAttributedString* mutableAttributedStringWithImage =
@@ -3237,7 +3234,7 @@ static NSMutableDictionary* cachePaths = nil;
               //creates a mutable attributed string containing the image file
               [fileHandle writeData:attachedData];
               [fileHandle closeFile];
-              NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
+              NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithURL:[NSURL fileURLWithPath:attachedFilePath] options:0 error:NULL] autorelease];
               NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
               NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
               NSMutableAttributedString* mutableAttributedStringWithImage =
