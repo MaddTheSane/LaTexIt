@@ -241,7 +241,7 @@
 		935ADDAE0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m in Sources */ = {isa = PBXBuildFile; fileRef = 935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		935AE46A0FA1F8A700B361D8 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */; };
 		935AECEE0CB16ECC001A5067 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		935B8B260FB426B700448B03 /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
+		935B8B260FB426B700448B03 /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		935B8B290FB426C800448B03 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
 		935B8FDD0FB6E5CF00448B03 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 935B8FDC0FB6E5CF00448B03 /* LibraryController.m */; };
 		936091A21087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
@@ -386,7 +386,7 @@
 		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
 		93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */; };
 		93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EE114907F2F607009E1F36 /* HistoryCell.m */; };
-		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
 		93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C5D80A30D9130009FB59 /* latex-keywords.plist */; };

@@ -9,17 +9,17 @@
 #import <Cocoa/Cocoa.h>
 #import "DeepCopying.h"
 
-@interface NSDictionary (Extended) <DeepCopying, DeepMutableCopying>
+@interface NSDictionary<KeyType, ObjectType> (Extended) <DeepCopying, DeepMutableCopying>
 
--(NSDictionary*) dictionaryByAddingDictionary:(NSDictionary*)dictionary;
--(NSDictionary*) dictionaryByAddingObjectsAndKeys:(id)firstObject, ...;
--(NSDictionary*) subDictionaryWithKeys:(NSArray*)keys;
+-(NSDictionary<KeyType, ObjectType>*) dictionaryByAddingDictionary:(NSDictionary*)dictionary;
+-(NSDictionary<KeyType, ObjectType>*) dictionaryByAddingObjectsAndKeys:(id)firstObject, ...;
+-(NSDictionary<KeyType, ObjectType>*) subDictionaryWithKeys:(NSArray<KeyType>*)keys;
 
 -(id) deepCopy;
 -(id) deepCopyWithZone:(NSZone*)zone;
 -(id) deepMutableCopy;
 -(id) deepMutableCopyWithZone:(NSZone*)zone;
 
--(id) objectForKey:(id)aKey withClass:(Class)class;
+-(ObjectType) objectForKey:(KeyType)aKey withClass:(Class)class;
 
 @end

@@ -26,15 +26,8 @@
 //returns a copy of the receiver in the reversed order
 -(NSArray*) reversed
 {
-  NSMutableArray* result = [NSMutableArray arrayWithCapacity:[self count]];
   NSEnumerator* enumerator = [self reverseObjectEnumerator];
-  id object = [enumerator nextObject];
-  while(object)
-  {
-    [result addObject:object];
-    object = [enumerator nextObject];
-  }
-  return result;
+  return [enumerator allObjects];
 }
 //end reversed
 
@@ -85,8 +78,7 @@
 {
   NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:[self count]];
   NSEnumerator* enumerator = [self objectEnumerator];
-  id object = nil;
-  while((object = [enumerator nextObject]))
+  for(id object in enumerator)
   {
     id copyOfObject =
       [object respondsToSelector:@selector(deepCopyWithZone:)] ? [object deepCopyWithZone:zone] : [object copyWithZone:zone];
@@ -102,8 +94,7 @@
 {
   NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:[self count]];
   NSEnumerator* enumerator = [self objectEnumerator];
-  id object = nil;
-  while((object = [enumerator nextObject]))
+  for(id object in enumerator)
   {
     id copyOfObject =
       [object respondsToSelector:@selector(deepMutableCopyWithZone:)]

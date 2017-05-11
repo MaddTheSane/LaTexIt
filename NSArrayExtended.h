@@ -8,22 +8,26 @@
 #import <Cocoa/Cocoa.h>
 #import "DeepCopying.h"
 
-@interface NSArray (Extended) <DeepCopying, DeepMutableCopying>
+NS_ASSUME_NONNULL_BEGIN
+
+@interface NSArray<ObjectType> (Extended) <DeepCopying, DeepMutableCopying>
 
 //checks if the array contains an object, based on adress comparison, not isEqual:
--(BOOL) containsObjectIdenticalTo:(id)object;
+-(BOOL) containsObjectIdenticalTo:(ObjectType)object;
 
 //returns a copy of the receiver in the reversed order
--(NSArray*) reversed;
+-(NSArray<ObjectType>*) reversed;
 
--(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index;
--(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
+-(NSArray<ObjectType>*) arrayByAddingObject:(ObjectType)object atIndex:(NSUInteger)index;
+-(NSArray<ObjectType>*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
--(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
+-(NSArray<ObjectType>*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 
 -(id) deepCopy;
--(id) deepCopyWithZone:(NSZone*)zone;
+-(id) deepCopyWithZone:(nullable NSZone*)zone;
 -(id) deepMutableCopy;
--(id) deepMutableCopyWithZone:(NSZone*)zone;
+-(id) deepMutableCopyWithZone:(nullable NSZone*)zone;
 
 @end
+
+NS_ASSUME_NONNULL_END

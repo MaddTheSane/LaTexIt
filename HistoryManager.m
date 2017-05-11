@@ -29,18 +29,18 @@
 
 #import <LinkBack/LinkBack.h>
 
-#if !__has_feature(objc_arc)
-#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#if __has_feature(objc_arc)
+#error this file needs to be compiled without Automatic Reference Counting (ARC)
 #endif
 
-@interface HistoryManager (PrivateAPI)
+@interface HistoryManager () <NSTableViewDelegate>
 -(void) _migrateLatexitManagedModel:(NSString*)path;
 -(NSString*) defaultHistoryPath;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves history when quitting
 -(void) createHistoryMigratingIfNeeded;
--(BOOL) tableView:(NSTableView*)tableView writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard;
--(BOOL) tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard;
+//-(BOOL) tableView:(NSTableView*)tableView writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard;
+//-(BOOL) tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard;
 -(NSModalSession) showMigratingProgressionWindow:(NSWindowController**)outMigratingWindowController progressIndicator:(NSProgressIndicator**)outProgressIndicator;
 -(void) hideMigratingProgressionWindow:(NSModalSession)modalSession windowController:(NSWindowController*)windowController;
 @end

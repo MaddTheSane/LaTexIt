@@ -6,14 +6,18 @@
 //  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol DeepCopying <NSObject>
 -(id) deepCopy;
--(id) deepCopyWithZone:(NSZone*)zone;
+-(id) deepCopyWithZone:(nullable NSZone*)zone;
 @end
 
 @protocol DeepMutableCopying <NSObject>
 -(id) deepMutableCopy;
--(id) deepMutableCopyWithZone:(NSZone*)zone;
+-(id) deepMutableCopyWithZone:(nullable NSZone*)zone;
 @end
+
+NS_ASSUME_NONNULL_END
