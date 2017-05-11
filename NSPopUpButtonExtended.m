@@ -11,7 +11,7 @@
 
 @implementation NSPopUpButton (Extended)
 
--(id) addItemWithTitle:(NSString*)title tag:(int)tag
+-(id) addItemWithTitle:(NSString*)title tag:(NSInteger)tag
 {
   NSInteger nbItemsBefore = [self numberOfItems];
   id item = [self itemWithTitle:title];
@@ -25,7 +25,7 @@
 }
 //end addItemWithTitle:tag:
 
--(NSMenuItem*) addItemWithTitle:(NSString*)aString target:(id)target action:(SEL)action tag:(int)tag
+-(NSMenuItem*) addItemWithTitle:(NSString*)aString target:(id)target action:(SEL)action tag:(NSInteger)tag
 {
   NSMenuItem* result = [self addItemWithTitle:aString tag:tag];
   [result setTarget:target];

@@ -11,7 +11,6 @@
 
 @interface NSButton (Extended)
 
--(NSColor*) textColor;
--(void) setTextColor:(NSColor*)textColor;
+@property (copy) NSColor *textColor;
 
 @end

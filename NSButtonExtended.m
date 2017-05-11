@@ -8,6 +8,9 @@
 
 #import "NSButtonExtended.h"
 
+#if !__has_feature(objc_arc)
+#error this file needs to be compiled with Automatic Reference Counting (ARC)
+#endif
 
 @implementation NSButton (Extended)
 
@@ -33,7 +36,6 @@
   [attributedTitle addAttribute:NSForegroundColorAttributeName value:textColor range:range];
   [attributedTitle fixAttributesInRange:range];
   [self setAttributedTitle:attributedTitle];
-  [attributedTitle release];
 }
 //end setTextColor:
 

@@ -641,8 +641,8 @@ static LibraryManager* sharedManagerInstance = nil;
     NSDictionary* options = nil;
     if (isMacOS10_6OrAbove())
       options = [NSDictionary dictionaryWithObjectsAndKeys:
-                  [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                  [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+                  @YES, NSMigratePersistentStoresAutomaticallyOption,
+                  @YES, NSInferMappingModelAutomaticallyOption,
                   nil];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];

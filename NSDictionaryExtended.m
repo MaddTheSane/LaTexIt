@@ -17,9 +17,7 @@
 -(NSDictionary*) dictionaryByAddingDictionary:(NSDictionary*)dictionary
 {
   NSMutableDictionary* result = [self mutableCopy];
-  NSEnumerator* enumerator = [[dictionary allKeys] objectEnumerator];
-  id key = nil;
-  while((key = [enumerator nextObject]))
+  for(id key in [dictionary allKeys])
     [result setObject:[dictionary objectForKey:key] forKey:key];
   return result;
 }
@@ -49,9 +47,7 @@
 {
   NSDictionary* result = nil;
   NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] initWithCapacity:[keys count]];
-  NSEnumerator* enumerator = [keys objectEnumerator];
-  id key = nil;
-  while((key = [enumerator nextObject]))
+  for(id key in keys)
   {
     id object = [self objectForKey:key];
     if (object)
@@ -83,8 +79,7 @@
 {
   NSMutableDictionary* clone = [[NSMutableDictionary allocWithZone:zone] initWithCapacity:[self count]];
   NSEnumerator* keyEnumerator = [self keyEnumerator];
-  id key = nil;
-  while((key = [keyEnumerator nextObject]))
+  for(id key in keyEnumerator)
   {
     id object = [self valueForKey:key];
     id copyOfObject =

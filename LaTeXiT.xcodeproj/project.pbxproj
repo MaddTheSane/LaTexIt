@@ -337,7 +337,7 @@
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
 		93A9FF4D10201DA70061DB60 /* NSObjectTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */; };
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
-		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
+		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
 		93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };

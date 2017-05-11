@@ -19,9 +19,3 @@
 -(NSString*) getBestStandardPast:(NSSearchPathDirectory)searchPathDirectory domain:(NSSearchPathDomainMask)domain defaultValue:(NSString*)defaultValue;
 -(BOOL)      closeApplicationWithBundleIdentifier:(NSString*)bundleIdentifier;
 @end
-
-@interface NSWorkspace (Bridge10_5)
-
--(BOOL) filenameExtension:(NSString*)filenameExtension isValidForType:(NSString *)typeName;
-
-@end

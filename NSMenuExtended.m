@@ -12,8 +12,8 @@
 @implementation NSMenu (Extended)
 
 -(NSMenuItem*) addItemWithTitle:(NSString*)aString target:(id)target action:(SEL)aSelector
-                  keyEquivalent:(NSString*)keyEquivalent  keyEquivalentModifierMask:(int)keyEquivalentModifierMask
-                  tag:(int)tag;
+                  keyEquivalent:(NSString*)keyEquivalent  keyEquivalentModifierMask:(NSEventModifierFlags)keyEquivalentModifierMask
+                  tag:(NSInteger)tag;
 {
   NSMenuItem* result = [self addItemWithTitle:aString action:aSelector keyEquivalent:keyEquivalent];
   [result setTarget:target];
