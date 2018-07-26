@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Plugin : NSObject<LaTeXiTPluginProtocol> {
   NSBundle* bundle;
   NSImage*  cachedImage;
-  id<NSObject,LaTeXiTPluginProtocol> principalClassInstance;
+  id<LaTeXiTPluginProtocol> principalClassInstance;
 }
 
 -(nullable instancetype) initWithPath:(NSString*)path;

@@ -15,7 +15,7 @@
 {
   if (!(self = [super init]))
     return nil;
-  self->bundle = [[NSBundle alloc] initWithPath:path];
+  bundle = [[NSBundle alloc] initWithPath:path];
   if (!bundle)
   {
     return nil;
@@ -53,7 +53,7 @@
       if (!cachedImage)
         cachedImage = [principalClassInstance icon];
       if (!cachedImage)
-        cachedImage = [[NSWorkspace sharedWorkspace] iconForFile:[self->bundle bundlePath]];
+        cachedImage = [[NSWorkspace sharedWorkspace] iconForFile:[bundle bundlePath]];
     }//end @synchronized(self)
   }//end if (!self->cachedImage)
   return cachedImage;

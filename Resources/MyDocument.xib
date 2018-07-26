@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -159,7 +159,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="206"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <textField verticalHuggingPriority="750" id="340">
+                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="340">
                                                 <rect key="frame" x="3" y="195" width="19" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="+" id="1102">
@@ -168,7 +168,7 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" id="341">
+                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="341">
                                                 <rect key="frame" x="4" y="-5" width="16" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="-" id="1103">
@@ -337,7 +337,7 @@
                                                     </segmentedControl>
                                                 </subviews>
                                             </customView>
-                                            <textField verticalHuggingPriority="750" id="169">
+                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="169">
                                                 <rect key="frame" x="17" y="15" width="70" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Font size :" id="1097">
@@ -346,7 +346,7 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" id="105">
+                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="105">
                                                 <rect key="frame" x="88" y="12" width="68" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="36" drawsBackground="YES" id="1095">
@@ -359,7 +359,7 @@
                                                     <outlet property="nextKeyView" destination="103" id="305"/>
                                                 </connections>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" id="170">
+                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="170">
                                                 <rect key="frame" x="169" y="15" width="47" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Color :" id="1098">
@@ -393,7 +393,7 @@
                                             <button hidden="YES" id="1155">
                                                 <rect key="frame" x="367" y="15" width="16" height="16"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="linkback-off" imagePosition="only" alignment="left" alternateImage="linkback-on" enabled="NO" state="on" inset="2" id="1156">
+                                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="linkback-off" imagePosition="only" alignment="left" alternateImage="linkback-on" enabled="NO" state="on" imageScaling="proportionallyDown" inset="2" id="1156">
                                                     <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>

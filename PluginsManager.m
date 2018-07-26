@@ -59,7 +59,7 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(NSUInteger) retainCount
 {
-  return UINT_MAX;  //denotes an object that cannot be released
+  return NSUIntegerMax;  //denotes an object that cannot be released
 }
 //end retainCount
 
@@ -82,7 +82,7 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
     if ((!(self = [super init])))
       return nil;
     sharedManagerInstance = self;
-    self->plugins = [[NSMutableArray alloc] init];
+    plugins = [[NSMutableArray alloc] init];
     if (!self->plugins)
     {
       [self release];
@@ -96,14 +96,14 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(void) dealloc
 {
-  [self->plugins release];
+  [plugins release];
   [super dealloc];
 }
 //end dealloc
 
 -(NSArray*) plugins
 {
-  return [[self->plugins copy] autorelease];
+  return [[plugins copy] autorelease];
 }
 //end plugins
 
