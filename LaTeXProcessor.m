@@ -222,9 +222,9 @@ static LaTeXProcessor* sharedInstance = nil;
             preamble, @"preamble",
             source, @"source",
             [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
-            [NSNumber numberWithInt:mode], @"mode",
-            [NSNumber numberWithDouble:magnification], @"magnification",
-            [NSNumber numberWithDouble:baseline], @"baseline",
+            @(mode), @"mode",
+            @(magnification), @"magnification",
+            @(baseline), @"baseline",
             [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
             title, @"title",
             nil]];
@@ -251,10 +251,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedPreamble length])];
     [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedPreamble length])];
 
-    CFStringRef cfEscapedPreamble =
-      CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)preamble, NULL, NULL, kCFStringEncodingUTF8);
-    NSMutableString* escapedPreamble = [NSMutableString stringWithString:(__bridge NSString*)cfEscapedPreamble];
-    CFRelease(cfEscapedPreamble);
+    NSMutableString* escapedPreamble = [[preamble stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]] mutableCopy];
 
     NSMutableString* replacedSource = [NSMutableString stringWithString:source];
     [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedSource length])];
@@ -262,12 +259,9 @@ static LaTeXProcessor* sharedInstance = nil;
     [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
     [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
 
-    CFStringRef cfEscapedSource =
-      CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)source, NULL, NULL, kCFStringEncodingUTF8);
-    NSMutableString* escapedSource = [NSMutableString stringWithString:(__bridge NSString*)cfEscapedSource];
-    CFRelease(cfEscapedSource);
+    NSMutableString* escapedSource = [[source stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]] mutableCopy];
 
-    NSString* type = [[NSNumber numberWithInt:mode] stringValue];
+    NSString* type = [@(mode) stringValue];
     
     BOOL annotateWithTransparentData = NO;
     if (annotateWithTransparentData)
@@ -280,8 +274,8 @@ static LaTeXProcessor* sharedInstance = nil;
         colorAsString, @"color",
         bkColorAsString, @"bkColor",
         !title ? @"" : title, @"title",
-        [NSNumber numberWithDouble:magnification], @"magnification",
-        [NSNumber numberWithDouble:baseline], @"baseline",
+        @(magnification), @"magnification",
+        @(baseline), @"baseline",
         nil];
       NSData* dictionaryContentPlistData =
       

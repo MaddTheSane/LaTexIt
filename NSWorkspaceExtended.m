@@ -45,66 +45,13 @@
 -(BOOL) closeApplicationWithBundleIdentifier:(NSString*)bundleIdentifier
 {
   BOOL result = NO;
-  id runningApplicationClass = NSClassFromString(@"NSRunningApplication");//10.6 only
-  if (runningApplicationClass)
-  {
-    NSArray* runningApplications =
-      [runningApplicationClass performSelector:@selector(runningApplicationsWithBundleIdentifier:) withObject:bundleIdentifier];
-    NSEnumerator* enumerator = [runningApplications objectEnumerator];
-    id runningApplication = nil;
-    while((runningApplication = [enumerator nextObject]))
+    NSArray<NSRunningApplication*>* runningApplications =
+      [NSRunningApplication runningApplicationsWithBundleIdentifier:bundleIdentifier];
+    for (NSRunningApplication *runningApplication in runningApplications)
     {
-      SEL terminateSelector = NSSelectorFromString(@"terminate");
-      [runningApplication performSelector:terminateSelector];
+      [runningApplication terminate];
       result = YES;
     }
-  }//end if (runningApplicationClass)
-  else//if (!runningApplicationClass)
-  {
-    NSArray<NSDictionary<NSString*,id>*>* runningApplications = [self launchedApplications];
-    NSEnumerator* enumerator = [runningApplications objectEnumerator];
-    id application = nil;
-    id applicationFound = nil;
-    while((application = [enumerator nextObject]))
-    {
-      NSString* candidateBundleIdentifier = [application objectForKey:@"NSApplicationBundleIdentifier"];
-      if ([candidateBundleIdentifier isEqualToString:bundleIdentifier])
-      {
-        applicationFound = application;
-        break;
-      }//end if ([candidateBundleIdentifier isEqualToString:bundleIdentifier])
-    }//end for each application
-    if (applicationFound)
-    {
-      NSNumber* processId = [application objectForKey:@"NSApplicationProcessIdentifier"];
-      if (processId)
-      {
-        kill([processId intValue], SIGKILL);
-        result = YES;
-      }
-    }//end if (applicationFound)
-    else//if (!applicationFound)
-    {
-      NSString* applicationPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:bundleIdentifier];
-      NDProcess* process = [NDProcess processForApplicationPath:applicationPath];
-      if (process)
-      {
-        kill([process processID], SIGKILL);
-        result = YES;
-      }
-      else
-      {
-        NSArray* processes = [NDProcess everyProcessNamed:@"LaTeXiT Helper"];
-        NSEnumerator* enumerator = [processes objectEnumerator];
-        NDProcess* process = nil;
-        while((process = [enumerator nextObject]))
-        {
-          kill([process processID], SIGKILL);
-          result = YES;
-        }//end for each process
-      }//end if (!process)
-    }//end if (!applicationFound)
-  }//end if (!runningApplicationClass)
   return result;
 }
 //end closeApplicationWithBundleIdentifier:

@@ -8,10 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <zlib.h>
+#include <zlib.h>
 
-@interface Compressor : NSObject {
-}
+@interface Compressor : NSObject
 
 +(NSData*) zipcompressDeprecated:(NSData*)data;
 +(NSData*) zipuncompressDeprecated:(NSData*)data;

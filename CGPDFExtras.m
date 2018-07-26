@@ -55,7 +55,7 @@ BOOL CGPDFDocumentPossibleFromData(NSData* data)
   BOOL result = NO;
   CGDataProviderRef dataProvider = !data ? 0 : CGDataProviderCreateWithCFData((CFDataRef)data);
   CGPDFDocumentRef pdfDocument = !dataProvider ? 0 : CGPDFDocumentCreateWithProvider(dataProvider);
-  result = (pdfDocument != 0);
+  result = (pdfDocument != NULL);
   if (pdfDocument)
     CGPDFDocumentRelease(pdfDocument);
   if (dataProvider)
@@ -67,8 +67,8 @@ BOOL CGPDFDocumentPossibleFromData(NSData* data)
 NSString* CGPDFDocumentCreateStringRepresentationFromData(NSData* pdfData)
 {
   NSString* result = nil;
-  CGDataProviderRef dataProvider = !pdfData ? 0 : CGDataProviderCreateWithCFData((CFDataRef)pdfData);
-  CGPDFDocumentRef pdfDocument = !dataProvider ? 0 : CGPDFDocumentCreateWithProvider(dataProvider);
+  CGDataProviderRef dataProvider = !pdfData ? NULL : CGDataProviderCreateWithCFData((CFDataRef)pdfData);
+  CGPDFDocumentRef pdfDocument = !dataProvider ? NULL : CGPDFDocumentCreateWithProvider(dataProvider);
   result = CGPDFDocumentCreateStringRepresentation(pdfDocument);
   if (pdfDocument)
     CGPDFDocumentRelease(pdfDocument);

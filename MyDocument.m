@@ -833,11 +833,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end updateGUIfromSystemAvailabilities
 
--(NSData*) dataRepresentationOfType:(NSString *)aType
+-(NSData*) dataOfType:(NSString *)typeName error:(NSError * _Nullable *)outError
 {
   return nil;
 }
-//end dataRepresentationOfType:
+//end dataOfType:error:
 
 //LaTeXiT can open documents
 - (BOOL)readFromURL:(NSURL*)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError

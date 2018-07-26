@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -42,11 +42,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="242" height="135"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button id="11">
+                    <button verticalHuggingPriority="750" id="11">
                         <rect key="frame" x="0.0" y="0.0" width="32" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="Button" bezelStyle="shadowlessSquare" image="add-big" imagePosition="only" alignment="center" alternateImage="add-big-pressed" inset="2" id="193">
-                            <behavior key="behavior" lightByContents="YES"/>
+                        <buttonCell key="cell" type="smallSquare" title="Button" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="193">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
@@ -57,12 +57,12 @@
                     <popUpButton id="12" customClass="ImagePopupButton">
                         <rect key="frame" x="31" y="0.0" width="32" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" alternateImage="action-pressed" lineBreakMode="truncatingTail" borderStyle="bezel" inset="2" pullsDown="YES" arrowPosition="noArrow" preferredEdge="maxY" selectedItem="14" id="194">
+                        <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" preferredEdge="maxY" selectedItem="14" id="194">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="13">
                                 <items>
-                                    <menuItem image="action" hidden="YES" id="14"/>
+                                    <menuItem image="NSActionTemplate" hidden="YES" id="14"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -71,23 +71,23 @@
                         </connections>
                     </popUpButton>
                     <segmentedControl verticalHuggingPriority="750" misplaced="YES" id="44">
-                        <rect key="frame" x="97" y="0.0" width="43" height="19"/>
+                        <rect key="frame" x="95" y="0.0" width="47" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectOne" id="195">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
-                                <segment image="NSIconViewTemplate" imageScaling="none" width="20" tag="1"/>
-                                <segment image="NSListViewTemplate" imageScaling="none" width="20"/>
+                                <segment image="NSIconViewTemplate" width="20" tag="1"/>
+                                <segment image="NSListViewTemplate" width="20"/>
                             </segments>
                         </segmentedCell>
                     </segmentedControl>
                     <segmentedControl verticalHuggingPriority="750" id="47">
-                        <rect key="frame" x="192" y="0.0" width="33" height="20"/>
+                        <rect key="frame" x="192" y="0.0" width="33" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectAny" id="196">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
-                                <segment image="magnifying-glass" imageScaling="none" width="27" tag="1">
+                                <segment image="magnifying-glass" width="27" tag="1">
                                     <nil key="label"/>
                                 </segment>
                             </segments>
@@ -234,7 +234,7 @@
                 <button id="60">
                     <rect key="frame" x="38" y="120" width="192" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Export the selection only" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="200">
+                    <buttonCell key="cell" type="check" title="Export the selection only" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="200">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -242,7 +242,7 @@
                 <button id="228">
                     <rect key="frame" x="38" y="58" width="210" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Export commented preamble " bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="229">
+                    <buttonCell key="cell" type="check" title="Export commented preamble " bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="229">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -250,7 +250,7 @@
                 <button id="230">
                     <rect key="frame" x="38" y="38" width="165" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Export user comments" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="231">
+                    <buttonCell key="cell" type="check" title="Export user comments" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="231">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -258,7 +258,7 @@
                 <button id="232">
                     <rect key="frame" x="38" y="18" width="154" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Ignore title hierarchy" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="233">
+                    <buttonCell key="cell" type="check" title="Ignore title hierarchy" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="233">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -273,7 +273,7 @@
                 <rect key="frame" x="1" y="1" width="238" height="133"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textView importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="214">
+                    <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="214">
                         <rect key="frame" x="0.0" y="0.0" width="238" height="133"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -303,13 +303,11 @@
         </drawer>
     </objects>
     <resources>
+        <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSHomeTemplate" width="14" height="14"/>
         <image name="NSIconViewTemplate" width="10" height="10"/>
         <image name="NSListViewTemplate" width="14" height="10"/>
-        <image name="action" width="32" height="23"/>
-        <image name="action-pressed" width="32" height="23"/>
-        <image name="add-big" width="32" height="23"/>
-        <image name="add-big-pressed" width="32" height="23"/>
         <image name="magnifying-glass" width="23.5" height="18"/>
     </resources>
 </document>

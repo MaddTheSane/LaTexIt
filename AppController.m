@@ -196,8 +196,8 @@ static NSMutableDictionary* cachePaths = nil;
     Semaphore* configurationSemaphore = [[Semaphore alloc] initWithValue:7];
     NSDictionary* configuration = nil;
     configuration = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], @"checkOnlyIfNecessary",
-      [NSNumber numberWithBool:YES], @"allowFindOnFailure",
+      @NO, @"checkOnlyIfNecessary",
+      @YES, @"allowFindOnFailure",
       configurationSemaphore, @"semaphore",
       nil];
     [PreferencesController sharedController];//create out of thread
@@ -264,24 +264,24 @@ static NSMutableDictionary* cachePaths = nil;
     configurationSemaphore = nil;
 
     configuration = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
-      [NSNumber numberWithBool:YES], @"allowUIAlertOnFailure",
-      [NSNumber numberWithBool:YES], @"allowUIFindOnFailure",
+      @YES, @"checkOnlyIfNecessary",
+      @YES, @"allowUIAlertOnFailure",
+      @YES, @"allowUIFindOnFailure",
       nil];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
+                                                                 @[@"pdflatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
+                                                                 @[@"xelatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
+                                                                 @[@"latex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
+                                                                 @[@"dvipdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                                 @[@"gs-noX11", @"gs"], @"executableNames",
                                                                  @"ghostscript", @"executableDisplayName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
