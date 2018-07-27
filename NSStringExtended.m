@@ -85,4 +85,16 @@
   return [data bytes];
 }
 
+-(NSString*) filteredStringForLatex
+{
+  unichar softbreak = 0x2028;
+  NSString* softbreakString = [NSString stringWithCharacters:&softbreak length:1];
+  unichar unbreakableSpace = 0x00A0;
+  NSString* unbreakableSpaceString = [NSString stringWithCharacters:&unbreakableSpace length:1];
+  NSMutableString* string = [NSMutableString stringWithString:self];
+  [string replaceOccurrencesOfString:softbreakString withString:@"\n" options:0 range:NSMakeRange(0, [string length])];
+  [string replaceOccurrencesOfString:unbreakableSpaceString withString:@" " options:0 range:NSMakeRange(0, [string length])];
+  return string;
+}
+
 @end

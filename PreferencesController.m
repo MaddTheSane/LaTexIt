@@ -35,6 +35,7 @@ NSString* WebToolbarItemIdentifier         = @"WebToolbarItem";
 NSString* DragExportTypeKey            = @"LaTeXiT_DragExportTypeKey";
 NSString* DragExportJpegColorKey       = @"LaTeXiT_DragExportJpegColorKey";
 NSString* DragExportJpegQualityKey     = @"LaTeXiT_DragExportJpegQualityKey";
+NSString* DragExportScaleAsPercentKey  = @"LateXiT_DragExportScaleAsPercentKey";
 NSString* DefaultImageViewBackground   = @"LaTeXiT_DefaultImageViewBackground";
 NSString* DefaultColorKey              = @"LaTeXiT_DefaultColorKey";
 NSString* DefaultPointSizeKey          = @"LaTeXiT_DefaultPointSizeKey";
@@ -219,6 +220,7 @@ static PreferencesController* sharedController = nil;
     [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:EXPORT_FORMAT_PDF], DragExportTypeKey,
                                                [[NSColor whiteColor] data],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
+                                               [NSNumber numberWithFloat:100],   DragExportScaleAsPercentKey,
                                                [[NSColor whiteColor] data],      DefaultImageViewBackground,
                                                [[NSColor  blackColor]   data],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
@@ -466,7 +468,7 @@ static PreferencesController* sharedController = nil;
   NSView*   contentView = [window contentView];
   if (view != contentView)
   {
-    NSRect oldContentFrame = contentView ? [contentView frame] : NSMakeRect(0, 0, 0, 0);
+    NSRect oldContentFrame = contentView ? [contentView frame] : NSZeroRect;
     NSRect newContentFrame = [view frame];
     NSRect newFrame = [window frame];
     newFrame.size.width  += (newContentFrame.size.width  - oldContentFrame.size.width);
@@ -515,6 +517,8 @@ static PreferencesController* sharedController = nil;
 
   [dragExportPopupFormat selectItemWithTag:[userDefaults integerForKey:DragExportTypeKey]];
   [self dragExportPopupFormatDidChange:dragExportPopupFormat];
+  
+  [dragExportScaleAsPercentTextField setFloatValue:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
   [defaultImageViewBackgroundColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultImageViewBackground]]];
   
@@ -909,7 +913,11 @@ static PreferencesController* sharedController = nil;
     [textField setTextColor:(fileSeemsOk ? [NSColor blackColor] : [NSColor redColor])];
   }
   
-  if (textField == pdfLatexTextField)
+  if (textField == dragExportScaleAsPercentTextField)
+  {
+    [userDefaults setFloat:[textField floatValue] forKey:DragExportScaleAsPercentKey];
+  }
+  else if (textField == pdfLatexTextField)
   {
     if (didChangePdfLatexTextField)
     {

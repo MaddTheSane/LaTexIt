@@ -40,6 +40,7 @@
   IBOutlet NSSlider*      jpegQualitySlider;
   IBOutlet NSTextField*   jpegQualityTextField;
   IBOutlet NSColorWell*   jpegColorWell;
+  IBOutlet NSTextField*   saveAccessoryViewScaleAsPercentTextField;
   
   IBOutlet NSProgressIndicator* progressMessageProgressIndicator;
   IBOutlet NSTextField*         progressMessageTextField;

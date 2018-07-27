@@ -108,6 +108,7 @@
                 saveAccessoryViewOptionsButton = NSButton; 
                 saveAccessoryViewOptionsPane = NSPanel; 
                 saveAccessoryViewPopupFormat = NSPopUpButton; 
+                saveAccessoryViewScaleAsPercentTextField = NSTextField; 
                 sizeText = NSTextField; 
                 sourceTextView = LineCountTextView; 
                 splitView = NSSplitView; 

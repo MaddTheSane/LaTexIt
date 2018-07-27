@@ -88,6 +88,7 @@
                 dragExportOptionsButton = NSButton; 
                 dragExportOptionsPane = NSPanel; 
                 dragExportPopupFormat = NSPopUpButton; 
+                dragExportScaleAsPercentTextField = NSTextField; 
                 dvipdfButton = NSButton; 
                 dvipdfTextField = NSTextField; 
                 editionView = NSView; 

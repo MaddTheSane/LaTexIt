@@ -834,7 +834,8 @@ static NSMutableDictionary* cachePaths = nil;
 -(NSAttributedString*) preamble
 {
   NSData* preambleData = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultPreambleAttributedKey];
-  NSMutableAttributedString* preamble = [[NSMutableAttributedString alloc] initWithRTF:preambleData documentAttributes:NULL];
+  NSDictionary* documentAttributes = nil;
+  NSMutableAttributedString* preamble = [[NSMutableAttributedString alloc] initWithRTF:preambleData documentAttributes:&documentAttributes];
   NSString* preambleString = [preamble string];
   if (!isColorStyAvailable)
   {
@@ -1624,8 +1625,9 @@ static NSMutableDictionary* cachePaths = nil;
       //in the case of RTF input, we may deduce size, color, and change baseline
       if ([types containsObject:NSRTFPboardType])
       {
+        NSDictionary* documentAttributes = nil;
         NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
-                                                               documentAttributes:NULL] autorelease];
+                                                               documentAttributes:&documentAttributes] autorelease];
         NSDictionary* contextAttributes = [attrString attributesAtIndex:0 effectiveRange:NULL];
         NSFont*  font  = usePointSize ? [contextAttributes objectForKey:NSFontAttributeName] : nil;
         float pointSize = font ? [font pointSize] : defaultPointSize;
@@ -1674,7 +1676,8 @@ static NSMutableDictionary* cachePaths = nil;
           float     quality            = [userDefaults floatForKey:DragExportJpegQualityKey];
           NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
           NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
-          NSData*   attachedData       = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+          NSData*   attachedData       = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                            scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
           
           //Now we must feed the pasteboard
           [pboard declareTypes:[NSArray array] owner:nil];
@@ -1716,24 +1719,24 @@ static NSMutableDictionary* cachePaths = nil;
             //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
             //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
             //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-            NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
-            [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-            [mutableAttributedStringWithImage appendAttributedString:space];
+            //NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+            //[space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
+            //[mutableAttributedStringWithImage appendAttributedString:space];
 
             //finally creates the rtdfData
             NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:NSMakeRange(0, [mutableAttributedStringWithImage length])
-                                                            documentAttributes:nil];
+                                                            documentAttributes:documentAttributes];
 
             //RTFd data
             [pboard addTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
             [pboard setData:rtfdData forType:NSRTFDPboardType];
-          }
+          }//end if useBaseline
 
           //LinkBack data
           HistoryItem* historyItem =
             [HistoryItem historyItemWithPDFData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
                                      sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
-                                          color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:[NSColor whiteColor]];
+                                          color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:nil];
           NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
           NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData];
@@ -1759,7 +1762,7 @@ static NSMutableDictionary* cachePaths = nil;
             [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
             [pboard setData:attachedData forType:NSTIFFPboardType];
           }
-        }
+        }//end if pdfData
         else
         {
           NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
@@ -1836,7 +1839,8 @@ static NSMutableDictionary* cachePaths = nil;
 
           NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
           float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
-          NSData*   data               = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+          NSData*   data               = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                               scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
           //now feed the pasteboard
           [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
@@ -1847,7 +1851,7 @@ static NSMutableDictionary* cachePaths = nil;
                                      preamble:preamble
                                    sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
                                         color:[NSColor blackColor]
-                                    pointSize:defaultPointSize date:[NSDate date] mode:mode backgroundColor:[NSColor whiteColor]];
+                                    pointSize:defaultPointSize date:[NSDate date] mode:mode backgroundColor:nil];
           NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
           NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
@@ -1917,8 +1921,11 @@ static NSMutableDictionary* cachePaths = nil;
 
       //the input must be RTF, so that we can insert images in it      
       //in the case of RTF input, we may deduce size, color, and change baseline
-      NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
-                                                             documentAttributes:NULL] autorelease];
+      NSDictionary* documentAttributes = nil;
+      NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTFD:[pboard dataForType:NSRTFDPboardType]
+                                                             documentAttributes:&documentAttributes] autorelease];
+      attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
+                                                                   documentAttributes:&documentAttributes] autorelease];
       NSMutableAttributedString* mutableAttrString = [[attrString mutableCopy] autorelease];
       
       NSRange remainingRange = NSMakeRange(0, [mutableAttrString length]);
@@ -1931,7 +1938,8 @@ static NSMutableDictionary* cachePaths = nil;
           [NSArray arrayWithObjects:@"\\[", @"\\]", [NSNumber numberWithInt:LATEX_MODE_DISPLAY], nil],
           [NSArray arrayWithObjects:@"$", @"$"    , [NSNumber numberWithInt:LATEX_MODE_INLINE],nil],
           nil];
-          
+
+      NSMutableArray* errorDocuments = [NSMutableArray array];
       unsigned int delimiterIndex = 0;
       for(delimiterIndex = 0 ; delimiterIndex < [delimiters count] ; ++delimiterIndex)
       {
@@ -1996,7 +2004,7 @@ static NSMutableDictionary* cachePaths = nil;
             if (!originalBaseline) originalBaseline = [NSNumber numberWithFloat:0.0];
             NSString* body     = [string substringWithRange:rangeOfTextOfEquation];
             NSString* preamble = [self insertColorInPreamble:[[self preamble] string] color:color];
-
+            
             //calls the effective latexisation
             NSData* pdfData = [[self _myDocumentServiceProvider] latexiseWithPreamble:preamble body:body color:color mode:mode
                                                                         magnification:magnification];
@@ -2006,7 +2014,16 @@ static NSMutableDictionary* cachePaths = nil;
               ++numberOfFailures;
               remainingRange.location = end.location+delimiterRightLength;
               remainingRange.length = [mutableAttrString length]-remainingRange.location;
-            }
+              
+              //builds a document containg the error
+              MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:NO];
+              [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//calls windowDidLoad
+              [document setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
+              [document setLatexMode:mode];
+              [document setColor:color];
+              [document setMagnification:magnification];
+              [errorDocuments addObject:document];
+            }//end if !pdfData
             else
             {
               //we will create the image file that will be attached to the rtfd
@@ -2035,11 +2052,19 @@ static NSMutableDictionary* cachePaths = nil;
                   break;
               }
 
+              HistoryItem* historyItem =
+                [HistoryItem historyItemWithPDFData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
+                                         sourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]
+                                              color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:nil];
+              if ([userDefaults boolForKey:ServiceUsesHistoryKey])//we may add the item to the history
+                [[HistoryManager sharedManager] addItem:historyItem];
+
               NSColor*  color              = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
               float     quality            = [userDefaults floatForKey:DragExportJpegQualityKey];
               NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
               NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
-              NSData*   attachedData       = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+              NSData*   attachedData       = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                                scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
               //extracts the baseline of the equation, if possible
               NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
@@ -2073,9 +2098,9 @@ static NSMutableDictionary* cachePaths = nil;
               //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
               //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
               //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-              NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
-              [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-              [mutableAttributedStringWithImage appendAttributedString:space];
+              //NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+              //[space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
+              //[mutableAttributedStringWithImage appendAttributedString:space];
 
               //inserts the image in the global string
               [mutableAttrString replaceCharactersInRange:rangeOfEquation withAttributedString:mutableAttributedStringWithImage];
@@ -2099,12 +2124,26 @@ static NSMutableDictionary* cachePaths = nil;
                                 @"also check if they are compatible with the default preamble in use.");
         message = [NSString stringWithFormat:message, numberOfFailures];
         *error = message;
+        
         [NSApp activateIgnoringOtherApps:YES];
-        NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Ok", @"Ok"), nil, nil);
-      }
+        int choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
+                                     NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+        if (choice == NSAlertAlternateReturn)
+        {
+          NSEnumerator* enumerator = [errorDocuments objectEnumerator];
+          MyDocument* document = nil;
+          while((document = [enumerator nextObject]))
+          {
+            [document showWindows];
+            [[document windowForSheet] makeFirstResponder:[document sourceTextView]];
+            [document makeLatex:self];
+          }
+        }
+      }//if there were failures
       
       //Now we must feed the pasteboard
-      NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length]) documentAttributes:nil];
+      NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length])
+                                       documentAttributes:documentAttributes];
       [pboard declareTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
       [pboard setData:rtfdData forType:NSRTFDPboardType];
     }//end @synchronized(self)
@@ -2186,7 +2225,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
-             jpegColor:(NSColor*)color jpegQuality:(float)quality
+             jpegColor:(NSColor*)color jpegQuality:(float)quality scaleAsPercent:(float)scaleAsPercent
 {
   NSData* data = nil;
   @synchronized(self) //only one person may ask that service at a time
@@ -2203,6 +2242,26 @@ static NSMutableDictionary* cachePaths = nil;
 
     if (pdfData)
     {
+      if (scaleAsPercent != 100)//if scale is not 100%, change image scale
+      {
+        NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
+        NSSize originalSize = [pdfImageRep size];
+        NSImage* pdfImage = [[NSImage alloc] initWithSize:originalSize];
+        [pdfImage setCacheMode:NSImageCacheNever];
+        [pdfImage setDataRetained:YES];
+        [pdfImage setScalesWhenResized:YES];
+        [pdfImage addRepresentation:pdfImageRep];
+        NSImageView* imageView =
+          [[NSImageView alloc] initWithFrame:
+            NSMakeRect(0, 0, originalSize.width*scaleAsPercent/100,originalSize.height*scaleAsPercent/100)];
+        [imageView setImageScaling:NSScaleToFit];
+        [imageView setImage:pdfImage];
+        pdfData = [imageView dataWithPDFInsideRect:[imageView bounds]];
+        [imageView release];
+        [pdfImage release];
+        [pdfImageRep release];
+      }
+    
       if (format == EXPORT_FORMAT_PDF)
       {
         data = pdfData;
@@ -2292,11 +2351,16 @@ static NSMutableDictionary* cachePaths = nil;
         NSSize size = [image size];
         NSImage* opaqueImage = [[NSImage alloc] initWithSize:size];
         NSRect rect = NSMakeRect(0, 0, size.width, size.height);
+        @try{
         [opaqueImage lockFocus];
           [color set];
           NSRectFill(rect);
           [image drawInRect:rect fromRect:rect operation:NSCompositeSourceOver fraction:1.0];
         [opaqueImage unlockFocus];
+        }
+        @catch(NSException* e)//may occur if lockFocus fails
+        {
+        }
         data = [opaqueImage TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
         [opaqueImage release];
         NSBitmapImageRep *opaqueImageRep = [NSBitmapImageRep imageRepWithData:data];
@@ -2331,27 +2395,34 @@ static NSMutableDictionary* cachePaths = nil;
   NSRect dstRect = NSMakeRect(marginX, marginY, 128-2*marginX, 128-2*marginY);
   if (!backgroundColor)
     backgroundColor = [NSColor colorWithCalibratedRed:1 green:1 blue:1 alpha:0.25];
-  [icon lockFocus];
-    [backgroundColor set];
-    NSRectFill(NSMakeRect(0, 0, 128, 128));
-    [image drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:1];
-    if (imageSize.width > 2*imageSize.height) //if the equation is truncated, adds <...>
-    {
-      NSRectFill(NSMakeRect(100, 0, 28, 128));
-      [[NSColor blackColor] set];
-      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(102, 56, 6, 6)] fill];
-      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(112, 56, 6, 6)] fill];
-      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(122, 56, 6, 6)] fill];
-    }
-    else if (imageSize.height > 2*imageSize.width)
-    {
-      NSRectFill(NSMakeRect(0, 0, 128, 16));
-      [[NSColor blackColor] set];
-      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(51, 5, 6, 6)] fill];
-      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(61, 5, 6, 6)] fill];
-      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(71, 5, 6, 6)] fill];
-    }
-  [icon unlockFocus];
+  @try
+  {
+    [icon lockFocus];
+      [backgroundColor set];
+      NSRectFill(NSMakeRect(0, 0, 128, 128));
+      [image drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:1];
+      if (imageSize.width > 2*imageSize.height) //if the equation is truncated, adds <...>
+      {
+        NSRectFill(NSMakeRect(100, 0, 28, 128));
+        [[NSColor blackColor] set];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(102, 56, 6, 6)] fill];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(112, 56, 6, 6)] fill];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(122, 56, 6, 6)] fill];
+      }
+      else if (imageSize.height > 2*imageSize.width)
+      {
+        NSRectFill(NSMakeRect(0, 0, 128, 16));
+        [[NSColor blackColor] set];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(51, 5, 6, 6)] fill];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(61, 5, 6, 6)] fill];
+        [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(71, 5, 6, 6)] fill];
+      }
+    [icon unlockFocus];
+  }
+  @catch(NSException* e)//may occur if lockFocus fails
+  {
+  }
+
   return icon;
 }
 

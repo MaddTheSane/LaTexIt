@@ -645,7 +645,8 @@ static NSImage*        libraryFileIcon       = nil;
       {
         HistoryItem* historyItem = [libraryFile value];
         NSData* pdfData = [historyItem pdfData];
-        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                                   scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
@@ -672,7 +673,8 @@ static NSImage*        libraryFileIcon       = nil;
         {
           HistoryItem* historyItem = [libraryFile value];
           NSData* pdfData = [historyItem pdfData];
-          NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+          NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                                     scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
           [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]

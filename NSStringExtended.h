@@ -17,4 +17,5 @@
 -(BOOL) startsWith:(NSString*)substring options:(unsigned)mask;
 -(BOOL) endsWith:(NSString*)substring options:(unsigned)mask;
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag;
+-(NSString*) filteredStringForLatex;
 @end

@@ -73,6 +73,7 @@ static NSMutableArray* freeIds = nil;
 
 -(NSImage*) _checkEasterEgg;//may return an easter egg image
 
+-(void) _updateTextField:(NSTimer*)timer; //to fix a refresh bug
 -(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
 @end
 
@@ -167,8 +168,10 @@ static NSString* yenString = nil;
   [progressIndicator removeFromSuperview];
   
   [saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
-  
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
+  [saveAccessoryViewScaleAsPercentTextField setFloatValue:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
+
   [[typeOfTextControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
   [[typeOfTextControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
   [[typeOfTextControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
@@ -517,7 +520,7 @@ static NSString* yenString = nil;
 //computes the tight bounding box of a pdfFile
 -(NSRect) _computeBoundingBox:(NSString*)pdfFilePath
 {
-  NSRect boundingBoxRect = NSMakeRect(0, 0, 0, 0);
+  NSRect boundingBoxRect = NSZeroRect;
   
   //We will rely on GhostScript (gs) to compute the bounding box
   NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -565,7 +568,7 @@ static NSString* yenString = nil;
     NSData*   boundingBoxData   = [[outPipe fileHandleForReading] availableData];
     NSString* boundingBoxString = [[[NSString alloc] initWithData:boundingBoxData encoding:NSUTF8StringEncoding] autorelease];
     NSScanner* scanner = [NSScanner scannerWithString:boundingBoxString];
-    NSRect tmpRect = NSMakeRect(0, 0, 0, 0);
+    NSRect tmpRect = NSZeroRect;
     [scanner scanFloat:&tmpRect.origin.x];
     [scanner scanFloat:&tmpRect.origin.y];
     [scanner scanFloat:&tmpRect.size.width];//in fact, we read the right corner, not the width
@@ -714,6 +717,9 @@ static NSString* yenString = nil;
                   magnification:(double)magnification
 {
   NSData* pdfData = nil;
+
+  preamble = [preamble filteredStringForLatex];
+  body     = [body filteredStringForLatex];
 
   //this function is rather long, because it is not quite easy to get a tight image (well cropped)
   //and magnification.
@@ -1293,7 +1299,7 @@ static NSString* yenString = nil;
     [currentSavePanel setRequiredFileType:extension];
     allowOptions = NO;
   }
-  
+
   [saveAccessoryViewOptionsButton setEnabled:allowOptions];
 }
 
@@ -1322,19 +1328,36 @@ static NSString* yenString = nil;
   [currentSavePanel setCanCreateDirectories:YES];
   [currentSavePanel setAccessoryView:saveAccessoryView];
   [currentSavePanel setExtensionHidden:NO];
+  [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(_updateTextField:)
+                                 userInfo:saveAccessoryViewScaleAsPercentTextField repeats:NO];
   [currentSavePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled")
                             modalForWindow:[self windowForSheet] modalDelegate:self
                             didEndSelector:@selector(exportChooseFileDidEnd:returnCode:contextInfo:)
                                contextInfo:NULL];
 }
 
+-(void) controlTextDidEndEditing:(NSNotification *)aNotification
+{
+  if ([aNotification object] == saveAccessoryViewScaleAsPercentTextField);
+    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(_updateTextField:)
+                                   userInfo:saveAccessoryViewScaleAsPercentTextField repeats:NO];
+}
+
+-(void) _updateTextField:(NSTimer*)timer
+{
+  NSTextField* textField = [timer userInfo];
+  [textField drawCellInside:[textField cell]];
+}
+
 -(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(int)code contextInfo:(void*)contextInfo
-{  
+{
   if ((code == NSOKButton) && [imageView image])
   {
     NSData*  pdfData = [imageView pdfData];
     export_format_t format = [saveAccessoryViewPopupFormat selectedTag];
-    NSData*   data   = [[AppController appController] dataForType:format pdfData:pdfData jpegColor:[jpegColorWell color] jpegQuality:jpegQuality/100];
+    float scaleAsPercent = [saveAccessoryViewScaleAsPercentTextField floatValue];
+    NSData*   data   = [[AppController appController] dataForType:format pdfData:pdfData jpegColor:[jpegColorWell color]
+                                                      jpegQuality:jpegQuality/100 scaleAsPercent:scaleAsPercent];
     if (data)
     {
       NSString* filePath = [sheet filename];

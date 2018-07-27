@@ -1918,25 +1918,6 @@
 			};
 			name = "Deployment Tiger";
 		};
-		932388590854FD210017F3BB /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					/Users/chacha/Desktop/LinkBack/Source/build,
-					/Users/chacha/Programmation/LinkBack/Builds,
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT\\ mainline";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = LaTeXiT;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 		9323885B0854FD210017F3BB /* Development Tiger */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1988,24 +1969,6 @@
 			};
 			name = "Deployment Tiger";
 		};
-		9323885D0854FD210017F3BB /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				GCC_AUTO_VECTORIZATION = NO;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = YES;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_FAST_OBJC_DISPATCH = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2014,20 +1977,18 @@
 			buildConfigurations = (
 				932388570854FD210017F3BB /* Development Tiger */,
 				932388580854FD210017F3BB /* Deployment Tiger */,
-				932388590854FD210017F3BB /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Development Tiger";
 		};
 		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9323885B0854FD210017F3BB /* Development Tiger */,
 				9323885C0854FD210017F3BB /* Deployment Tiger */,
-				9323885D0854FD210017F3BB /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Development Tiger";
 		};
 /* End XCConfigurationList section */
 	};

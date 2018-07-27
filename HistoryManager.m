@@ -552,7 +552,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       {
         HistoryItem* historyItem = [historyItems objectAtIndex:index];
         NSData* pdfData = [historyItem pdfData];
-        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                                   scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]

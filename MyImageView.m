@@ -233,7 +233,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
     NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
     float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
-    NSData* data   = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+    NSData* data   = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
+                                                 scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
     if (extension)
     {
@@ -281,7 +282,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSData* data = [[AppController appController] dataForType:[userDefaults integerForKey:DragExportTypeKey] pdfData:pdfData
                                                   jpegColor:[NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]]
-                                                jpegQuality:[userDefaults floatForKey:DragExportJpegQualityKey]];
+                                                jpegQuality:[userDefaults floatForKey:DragExportJpegQualityKey]
+                                             scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
   [pasteboard setData:data forType:type];
 }
 
@@ -429,7 +431,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   //   the history selection changes (and it is rather long when browsing the whole history)
   
   NSImage* image = [self image];
-  NSSize naturalImageSize = image ? [image size] : NSMakeSize(0, 0);
+  NSSize naturalImageSize = image ? [image size] : NSZeroSize;
   float factor = exp(3*([zoomSlider floatValue]-1));
   NSSize newSize = naturalImageSize;
   newSize.width *= factor;

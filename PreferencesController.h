@@ -22,6 +22,7 @@ extern NSString* WebToolbarItemIdentifier;
 extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
 extern NSString* DragExportJpegQualityKey;
+extern NSString* DragExportScaleAsPercentKey;
 extern NSString* DefaultImageViewBackground;
 extern NSString* DefaultColorKey;
 extern NSString* DefaultPointSizeKey;
@@ -114,6 +115,7 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   IBOutlet NSSlider*      dragExportJpegQualitySlider;
   IBOutlet NSTextField*   dragExportJpegQualityTextField;
   IBOutlet NSColorWell*   dragExportJpegColorWell;
+  IBOutlet NSTextField*   dragExportScaleAsPercentTextField;
   
   IBOutlet NSColorWell*   defaultImageViewBackgroundColorWell;
 

@@ -275,7 +275,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.9.0"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.9.1"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -380,18 +380,29 @@ static NSLock* strangeLock = nil;
     {
       NSImage* pdfImage = [self pdfImage];//may trigger pdfCachedImage computation, in its own @synchronized{} block
       //we will compute a bitmap representation. To avoid that it is heavier than the pdf one, we will limit its size
-      NSSize realSize = pdfImage ? [pdfImage size] : NSMakeSize(0, 0);
+      NSSize realSize = pdfImage ? [pdfImage size] : NSZeroSize;
       //we limit the max size to 256, and do nothing if it is already smaller
       float factor = MIN(1.0f, 256.0f/MAX(1.0f, MAX(realSize.width, realSize.height)));
       NSSize newSize = NSMakeSize(factor*realSize.width, factor*realSize.height);
       //temporarily change size
       [strangeLock lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
-      //[pdfImage setScalesWhenResized:YES];
       [pdfImage setSize:newSize];
-      [pdfImage lockFocus];
-      NSData* bitmapData = [pdfImage TIFFRepresentation];
-      bitmapCachedImage = [[NSImage alloc] initWithData:bitmapData];
-      [pdfImage unlockFocus];
+      @try{
+        [pdfImage lockFocus];
+        NSData* bitmapData = nil;
+        @try{
+          bitmapData = [pdfImage TIFFRepresentation];
+        }
+        @catch(NSException* e){
+        }
+        bitmapCachedImage = bitmapData ? [[NSImage alloc] initWithData:bitmapData] : [[NSImage alloc] initWithSize:NSZeroSize];
+        [pdfImage unlockFocus];
+      }
+      @catch(NSException* e) //may occur if lockFocus fails
+      {
+        [bitmapCachedImage release];
+        bitmapCachedImage = [[NSImage alloc] initWithSize:NSZeroSize];
+      }
       //restore size
       [pdfImage setSize:realSize];
       [strangeLock unlock];
@@ -488,7 +499,8 @@ static NSLock* strangeLock = nil;
   NSColor*  jpegColor      = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
   float     quality        = [userDefaults floatForKey:DragExportJpegQualityKey];
   NSData*   data           = lazyDataProvider ? nil :
-                             [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:jpegColor jpegQuality:quality];
+                             [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:jpegColor jpegQuality:quality
+                                                         scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   switch(exportFormat)
   {
