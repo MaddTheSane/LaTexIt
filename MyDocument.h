@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright Pierre Chatelier 2005, 2006, 2007, 2008 . All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 

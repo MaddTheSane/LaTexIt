@@ -11,10 +11,12 @@
 int main(int argc, char *argv[])
 {
   NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
-  NSString* filePath_en = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-en.rtf";
-  NSString* filePath_fr = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-fr.rtf";
-  NSString* filePath_de = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-de.rtf";
-  NSString* filePath_es = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-es.rtf";
+  
+  NSString* projectDir = (argc < 2) ? @"" : [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+  NSString* filePath_en = [projectDir stringByAppendingPathComponent:@"Resources/documentation/current-version-en.rtf"];
+  NSString* filePath_fr = [projectDir stringByAppendingPathComponent:@"Resources/documentation/current-version-fr.rtf"];
+  NSString* filePath_de = [projectDir stringByAppendingPathComponent:@"Resources/documentation/current-version-de.rtf"];
+  NSString* filePath_es = [projectDir stringByAppendingPathComponent:@"Resources/documentation/current-version-es.rtf"];
   NSData* rtfData_en = [NSData dataWithContentsOfFile:filePath_en];
   NSData* rtfData_fr = [NSData dataWithContentsOfFile:filePath_fr];
   NSData* rtfData_de = [NSData dataWithContentsOfFile:filePath_de];
@@ -49,7 +51,7 @@ int main(int argc, char *argv[])
   
   NSDictionary* newVersionDictionary =
     [NSDictionary dictionaryWithObjectsAndKeys:
-       @"1.16.0", @"number",
+       @"1.16.1", @"number",
        descriptions, @"descriptions",
        nil];
       

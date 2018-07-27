@@ -3,7 +3,7 @@
 //  MozoDojo
 //
 //  Created by Pierre Chatelier on 12/10/06.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 //
 
 #import "ImageAndTextCell.h"

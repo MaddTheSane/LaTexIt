@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/05/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSColor class
 
@@ -18,11 +18,11 @@
 //end colorWithData:
 
 //returns the color as data
--(NSData*) data
+-(NSData*) colorAsData
 {
   return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
-//end data
+//end colorAsData
 
 //creates a color from an rgba string
 +(NSColor*) colorWithRgbaString:(NSString*)string

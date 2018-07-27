@@ -1,11 +1,11 @@
-/*
- *  LaTeXiTPreferencesKey.m
- *  LaTeXiT
- *
- *  Created by Pierre Chatelier on 25/09/08.
- *  Copyright 2008 LAIC. All rights reserved.
- *
- */
+//
+//  LaTeXiTPreferencesKey.m
+//  LaTeXiT
+//
+//  Created by Pierre Chatelier on 25/09/08.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//
+//
 
 #include "LaTeXiTPreferencesKeys.h"
 

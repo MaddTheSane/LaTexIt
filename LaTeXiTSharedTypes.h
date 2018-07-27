@@ -1,11 +1,11 @@
-/*
- *  LaTeXiTTypes.h
- *  LaTeXiT
- *
- *  Created by Pierre Chatelier on 25/09/08.
- *  Copyright 2008 LAIC. All rights reserved.
- *
- */
+//
+//  LaTeXiTTypes.h
+//  LaTeXiT
+//
+//  Created by Pierre Chatelier on 25/09/08.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//
+//
 
 //useful to differenciate the different latex modes : EQNARRAY, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
 typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE_EQNARRAY} latex_mode_t;

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -347,7 +347,7 @@ static NSImage*        libraryFileIcon       = nil;
         {
           NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
           NSData* compressedData = [Compressor zipcompress:uncompressedData];
-          plist = [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.0", @"version", compressedData, @"data", nil];
+          plist = [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.1", @"version", compressedData, @"data", nil];
         }
         break;
       case LIBRARY_EXPORT_FORMAT_PLIST:

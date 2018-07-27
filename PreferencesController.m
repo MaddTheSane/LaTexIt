@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -177,23 +177,23 @@ static NSMutableArray*        factoryDefaultsPreambles = nil;
 
   NSDictionary* defaults =
     [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:EXPORT_FORMAT_PDF], DragExportTypeKey,
-                                               [[NSColor whiteColor] data],      DragExportJpegColorKey,
+                                               [[NSColor whiteColor] colorAsData],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
                                                [NSNumber numberWithFloat:100],   DragExportScaleAsPercentKey,
-                                               [[NSColor whiteColor] data],      DefaultImageViewBackgroundKey,
+                                               [[NSColor whiteColor] colorAsData],      DefaultImageViewBackgroundKey,
                                                [NSNumber numberWithBool:NO],     DefaultAutomaticHighContrastedPreviewBackgroundKey,
-                                               [[NSColor  blackColor]   data],   DefaultColorKey,
+                                               [[NSColor  blackColor]   colorAsData],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
                                                [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], DefaultModeKey,
                                                [NSNumber numberWithBool:YES], SpellCheckingEnableKey,
                                                [NSNumber numberWithBool:YES], SyntaxColoringEnableKey,
-                                               [[NSColor blackColor]   data], SyntaxColoringTextForegroundColorKey,
-                                               [[NSColor whiteColor]   data], SyntaxColoringTextBackgroundColorKey,
-                                               [[NSColor blueColor]    data], SyntaxColoringCommandColorKey,
-                                               [[NSColor magentaColor] data], SyntaxColoringMathsColorKey,
-                                               [[NSColor blueColor]    data], SyntaxColoringKeywordColorKey,
+                                               [[NSColor blackColor]   colorAsData], SyntaxColoringTextForegroundColorKey,
+                                               [[NSColor whiteColor]   colorAsData], SyntaxColoringTextBackgroundColorKey,
+                                               [[NSColor blueColor]    colorAsData], SyntaxColoringCommandColorKey,
+                                               [[NSColor magentaColor] colorAsData], SyntaxColoringMathsColorKey,
+                                               [[NSColor blueColor]    colorAsData], SyntaxColoringKeywordColorKey,
                                                [NSNumber numberWithInt:NSOffState], ReducedTextAreaStateKey,
-                                               [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] data], SyntaxColoringCommentColorKey,
+                                               [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] colorAsData], SyntaxColoringCommentColorKey,
                                                factoryDefaultsPreambles, PreamblesKey,
                                                defaultFontAsData, DefaultFontKey,
                                                [NSNumber numberWithUnsignedInt:0], LatexisationSelectedPreambleIndexKey,
@@ -581,7 +581,10 @@ static NSMutableArray*        factoryDefaultsPreambles = nil;
   [removePreambleButton setAction:@selector(remove:)];
   [removePreambleButton setTarget:preamblesController];
   [removePreambleButton bind:@"enabled" toObject:preamblesController withKeyPath:@"canRemove" options:nil];  
-  [preambleTextView bind:@"attributedString" toObject:preamblesController withKeyPath:@"selection.value" options:nil];
+  [preambleTextView bind:@"attributedString" toObject:preamblesController withKeyPath:@"selection.value" options:
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption,
+      nil]];
   [latexisationSelectedPreamblePopUpButton bind:@"content" toObject:preamblesController withKeyPath:@"arrangedObjects" options:nil];
   [latexisationSelectedPreamblePopUpButton bind:@"contentValues" toObject:preamblesController withKeyPath:@"arrangedObjects.name" options:nil];
   [latexisationSelectedPreamblePopUpButton bind:@"selectedObject" toObject:selfController withKeyPath:@"content.latexisationSelectedPreamble" options:nil];
@@ -687,7 +690,7 @@ static NSMutableArray*        factoryDefaultsPreambles = nil;
   {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setFloat:[dragExportJpegQualitySlider floatValue] forKey:DragExportJpegQualityKey];
-    [userDefaults setObject:[[dragExportJpegColorWell color] data] forKey:DragExportJpegColorKey];
+    [userDefaults setObject:[[dragExportJpegColorWell color] colorAsData] forKey:DragExportJpegColorKey];
   }
   [NSApp stopModal];
   [dragExportOptionsPane orderOut:self];
@@ -738,10 +741,10 @@ static NSMutableArray*        factoryDefaultsPreambles = nil;
   if (sender == defaultImageViewBackgroundColorWell)
   {
     NSColor* color = [defaultImageViewBackgroundColorWell color];
-    [userDefaults setObject:[color data] forKey:DefaultImageViewBackgroundKey];
+    [userDefaults setObject:[color colorAsData] forKey:DefaultImageViewBackgroundKey];
   }
   else if (sender == defaultColorColorWell)
-    [userDefaults setObject:[[defaultColorColorWell color] data] forKey:DefaultColorKey];
+    [userDefaults setObject:[[defaultColorColorWell color] colorAsData] forKey:DefaultColorKey];
   else if (sender == defaultPointSizeTextField)
     [userDefaults setFloat:[defaultPointSizeTextField doubleValue] forKey:DefaultPointSizeKey];
   else if (sender == defaultModeSegmentedControl)
@@ -782,17 +785,17 @@ static NSMutableArray*        factoryDefaultsPreambles = nil;
     [userDefaults setBool:enabled forKey:SyntaxColoringEnableKey];
   }
   else if (sender == syntaxColoringTextForegroundColorColorWell)
-    [userDefaults setObject:[[sender color] data] forKey:SyntaxColoringTextForegroundColorKey];
+    [userDefaults setObject:[[sender color] colorAsData] forKey:SyntaxColoringTextForegroundColorKey];
   else if (sender == syntaxColoringTextBackgroundColorColorWell)
-    [userDefaults setObject:[[sender color] data] forKey:SyntaxColoringTextBackgroundColorKey];
+    [userDefaults setObject:[[sender color] colorAsData] forKey:SyntaxColoringTextBackgroundColorKey];
   else if (sender == syntaxColoringCommandColorColorWell)
-    [userDefaults setObject:[[sender color] data] forKey:SyntaxColoringCommandColorKey];
+    [userDefaults setObject:[[sender color] colorAsData] forKey:SyntaxColoringCommandColorKey];
   else if (sender == syntaxColoringMathsColorColorWell)
-    [userDefaults setObject:[[sender color] data] forKey:SyntaxColoringMathsColorKey];
+    [userDefaults setObject:[[sender color] colorAsData] forKey:SyntaxColoringMathsColorKey];
   else if (sender == syntaxColoringKeywordColorColorWell)
-    [userDefaults setObject:[[sender color] data] forKey:SyntaxColoringKeywordColorKey];
+    [userDefaults setObject:[[sender color] colorAsData] forKey:SyntaxColoringKeywordColorKey];
   else if (sender == syntaxColoringCommentColorColorWell)
-    [userDefaults setObject:[[sender color] data] forKey:SyntaxColoringCommentColorKey];
+    [userDefaults setObject:[[sender color] colorAsData] forKey:SyntaxColoringCommentColorKey];
   [[preambleTextView syntaxColouring] setColours];
   [[preambleTextView syntaxColouring] recolourCompleteDocument];
   [preambleTextView setNeedsDisplay:YES];

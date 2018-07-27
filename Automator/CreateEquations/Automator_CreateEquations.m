@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2008 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -13,6 +13,7 @@
 
 #import "LatexProcessor.h"
 
+#import "ColorDataTransformer.h"
 #import "NSColorExtended.h"
 #import "NSStringExtended.h"
 #import "PreamblesController.h"
@@ -88,6 +89,7 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
 {
   if (![super initWithDefinition:dict fromArchive:archived])
     return nil;
+  self->fromArchive = archived;
   self->uniqueId = [[self class] getNewIdentifier];
   return self;
 }
@@ -102,24 +104,28 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
 
 -(void) opened
 {
-  NSMutableDictionary* dict = [self parameters];
-  CFStringRef appKey = (CFStringRef)@"fr.club.ktd.LaTeXiT";
-  NSString* latexitVersion = (NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, appKey);
-  self->latexitPreferencesAvailable = (latexitVersion != nil);
-  [normalView  setHidden:!self->latexitPreferencesAvailable];
-  [warningView setHidden:self->latexitPreferencesAvailable];
-  Boolean ok = CFPreferencesSynchronize(appKey, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-  latex_mode_t equationMode = CFPreferencesGetAppIntegerValue((CFStringRef)DefaultModeKey, appKey, &ok);
-  if (!ok)     equationMode = LATEX_MODE_EQNARRAY;
-  NSNumber*    fontSizeNumber = (NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DefaultPointSizeKey, appKey);
-  float        fontSize       = !fontSizeNumber ? 36.f : [fontSizeNumber floatValue];
-  NSData*      fontColorData  = (NSData*)CFPreferencesCopyAppValue((CFStringRef)DefaultColorKey, appKey);
-  NSColor*     fontColor      = !fontColorData ? [NSColor blackColor] : [NSColor colorWithData:fontColorData];
-  [dict setValue:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
-  [dict setValue:[NSNumber numberWithFloat:fontSize] forKey:@"fontSize"];
-  [dict setValue:fontColor forKey:@"fontColor"];
-  [self setParameters:dict];
-  [self updateParameters];
+  if (!self->fromArchive) //init from latexit preferences
+  {
+    NSMutableDictionary* dict = [self parameters];
+    CFStringRef appKey = (CFStringRef)@"fr.club.ktd.LaTeXiT";
+    NSString* latexitVersion = (NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, appKey);
+    self->latexitPreferencesAvailable = (latexitVersion != nil);
+    [normalView  setHidden:!self->latexitPreferencesAvailable];
+    [warningView setHidden:self->latexitPreferencesAvailable];
+    Boolean ok = FALSE;
+    ok = CFPreferencesSynchronize(appKey, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
+    latex_mode_t equationMode = CFPreferencesGetAppIntegerValue((CFStringRef)DefaultModeKey, appKey, &ok);
+    if (!ok)     equationMode = LATEX_MODE_EQNARRAY;
+    NSNumber*    fontSizeNumber = (NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DefaultPointSizeKey, appKey);
+    float        fontSize       = !fontSizeNumber ? 36.f : [fontSizeNumber floatValue];
+    NSData*      fontColorData  = (NSData*)CFPreferencesCopyAppValue((CFStringRef)DefaultColorKey, appKey);
+    [dict setObject:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
+    [dict setObject:[NSNumber numberWithFloat:fontSize] forKey:@"fontSize"];
+    if (fontColorData)
+      [dict setObject:fontColorData forKey:@"fontColorData"];
+    [self setParameters:dict];
+  }//end if (!self->fromArchive) //init from latexit preferences
+  [self parametersUpdated];
   [super opened];
 }
 //end opened
@@ -135,7 +141,8 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
   NSDictionary* parameters = [self parameters];
   latex_mode_t equationMode = (latex_mode_t)[[parameters objectForKey:@"equationMode"] intValue];
   float        fontSize     = [[parameters objectForKey:@"fontSize"] floatValue];
-  NSColor*     fontColor    = [parameters objectForKey:@"fontColor"];
+  NSData*      fontColorData = [parameters objectForKey:@"fontColorData"];
+  NSColor*     fontColor      = !fontColorData ? [NSColor blackColor] : [NSColor colorWithData:fontColorData];
   equationDestination_t equationDestination = (equationDestination_t) [[parameters objectForKey:@"equationFilesDestination"] intValue];
   NSString*    workingDirectory = [self workingDirectory];
   NSDictionary* fullEnvironment = nil;

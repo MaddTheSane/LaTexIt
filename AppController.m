@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -493,6 +493,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) newFromClipboard:(id)sender
 {
+  NSColor* color = nil;
   NSData* data = nil;
   NSString* filename = @"clipboard";
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
@@ -514,6 +515,13 @@ static NSMutableDictionary* cachePaths = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     data = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    if (!data && [attributedString length])
+    {
+      NSRange range = NSMakeRange(0, 0);
+      color = [attributedString attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:&range];
+      filename = [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"tex"];
+      data = [[attributedString string] dataUsingEncoding:NSUTF8StringEncoding];
+    }
     [attributedString release];
   }
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd"]])
@@ -524,6 +532,13 @@ static NSMutableDictionary* cachePaths = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     data = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    if (!data && [attributedString length])
+    {
+      NSRange range = NSMakeRange(0, 0);
+      color = [attributedString attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:&range];
+      filename = [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"tex"];
+      data = [[attributedString string] dataUsingEncoding:NSUTF8StringEncoding];
+    }
     [attributedString release];
   }
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
@@ -556,6 +571,7 @@ static NSMutableDictionary* cachePaths = nil;
       [document makeWindowControllers];
       #endif
       [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
+      if (color) [document setColor:color];
       [document showWindows];
     }
   }
@@ -597,6 +613,13 @@ static NSMutableDictionary* cachePaths = nil;
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
     if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       ok &= isGsAvailable && isPs2PdfAvailable;
+    if ([sender tag] == -1)//default
+    {
+      export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
+      [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
+        NSLocalizedString(@"Default Format", @"Default Format"),
+        [self nameOfType:exportFormat]]];
+    }
   }
   else if ([sender action] == @selector(exportImage:))
   {
@@ -1281,8 +1304,39 @@ static NSMutableDictionary* cachePaths = nil;
   
   //first try with kpsewhich
   NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:extraEnvironmentDict];
+  ok = kpseWhichPath && ![kpseWhichPath isEqualToString:@""];
+  if (ok)
+  {
+    SystemTask* kpseWhichTask = [[SystemTask alloc] init];
+    @try{
+      NSString* directory      = [AppController latexitTemporaryPath];
+      //NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+      [kpseWhichTask setCurrentDirectoryPath:directory];
+      NSString* launchPath = kpseWhichPath;
+      BOOL isDirectory = YES;
+      if ([[NSFileManager defaultManager] fileExistsAtPath:launchPath isDirectory:&isDirectory] && !isDirectory)
+      {
+        [kpseWhichTask setEnvironment:extraEnvironmentDict];
+        [kpseWhichTask setLaunchPath:launchPath];
+        [kpseWhichTask setArguments:[NSArray arrayWithObjects:@"color.sty", nil]];
+        //[kpseWhichTask setStandardOutput:nullDevice];
+        //[kpseWhichTask setStandardError:nullDevice];
+        [kpseWhichTask setTimeOut:2.0];
+        [kpseWhichTask launch];
+        [kpseWhichTask waitUntilExit];
+        ok = ([kpseWhichTask terminationStatus] == 0);
+      }
+    }
+    @catch(NSException* e) {
+      ok = NO;
+    }
+    [kpseWhichTask release];
+  }//end check kpsewhich
+
+  /*
   ok = kpseWhichPath  && [kpseWhichPath length] &&
          (system([[NSString stringWithFormat:@"%@ %@ 1>|/dev/null 2>&1", kpseWhichPath, @"color.sty"] UTF8String]) == 0);
+  */
 
   //perhaps second try without kpsewhich
   if (!ok)
@@ -2636,6 +2690,22 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end _somePathDidChangeNotification:
 
+-(NSString*) nameOfType:(export_format_t)format
+{
+  NSString* result = nil;
+  switch(format)
+  {
+    case EXPORT_FORMAT_PDF : result = @"PDF";   break;
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS : result = NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts"); break;
+    case EXPORT_FORMAT_EPS : result = @"EPS";   break;
+    case EXPORT_FORMAT_TIFF : result = @"TIFF"; break;
+    case EXPORT_FORMAT_PNG : result = @"PNG";   break;
+    case EXPORT_FORMAT_JPEG : result = @"JPEG"; break;
+  }//end switch(format)
+  return result;
+}
+//end nameOfType:
+
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
              jpegColor:(NSColor*)color jpegQuality:(float)quality scaleAsPercent:(float)scaleAsPercent
@@ -2806,6 +2876,32 @@ static NSMutableDictionary* cachePaths = nil;
         data = [opaqueImageRep representationUsingType:NSJPEGFileType properties:properties];
         [image release];
       }
+      /*else if (format == EXPORT_FORMAT_PICT)
+      {
+        NSImage* image = [[NSImage alloc] initWithData:pdfData];
+        NSSize size = [image size];
+        NSPICTImageRep* pictImageRep = [[NSPICTImageRep alloc] initWithData:nil]
+        NSRect rect = NSMakeRect(0, 0, size.width, size.height);
+        @try{
+        [opaqueImage lockFocus];
+          [color set];
+          NSRectFill(rect);
+          [image drawInRect:rect fromRect:rect operation:NSCompositeSourceOver fraction:1.0];
+        [opaqueImage unlockFocus];
+        }
+        @catch(NSException* e)//may occur if lockFocus fails
+        {
+        }
+        data = [opaqueImage TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
+        [opaqueImage release];
+        NSBitmapImageRep *opaqueImageRep = [NSBitmapImageRep imageRepWithData:data];
+        NSDictionary* properties =
+          [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithFloat:quality/100], NSImageCompressionFactor, nil];
+        data = [opaqueImageRep representationUsingType:NSJPEGFileType properties:properties];
+        [image release];
+      }//end if PICT
+      */
     }//end if pdfData available
   }//end @synchronized
   return data;

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2008 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexProcessor.h"
@@ -203,8 +203,9 @@ NSString* PDFDocumentKeywordsAttribute = @"Keywords";
       else if ([task terminationStatus])
       {
         [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
-        NSString* outputLog = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
-        [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
+        NSString* outputLog1 = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
+        NSString* outputLog2 = [[[NSString alloc] initWithData:[task dataForStdError]  encoding:encoding] autorelease];
+        [logString appendFormat:@"%@\n%@\n----------------------------------------------------\n", outputLog1, outputLog2];
       }
       else
       {
@@ -692,7 +693,8 @@ NSString* PDFDocumentKeywordsAttribute = @"Keywords";
         [NSString stringWithFormat:
           @"%@\n" //preamble
           "\\pagestyle{empty}\n"
-          "\\usepackage[papersize={%fpx,%fpx},margin=0px]{geometry}\n"
+          //"\\usepackage[papersize={%fpx,%fpx},margin=0px]{geometry}\n"
+          "\\usepackage[papersize={%f,%f},margin=0]{geometry}\n"
           "\\pagestyle{empty}\n"
           "\\usepackage{graphicx}\n"
           "\\newsavebox{\\latexitbox}\n"
@@ -707,7 +709,8 @@ NSString* PDFDocumentKeywordsAttribute = @"Keywords";
           "\\immediate\\openout\\foo=\\jobname.sizes\n"
           "\\immediate\\write\\foo{\\the\\latexitdepth (Depth)}\n"
           "\\closeout\\foo\n"
-          "\\begin{document}\\includegraphics*[scale=%f,clip=true,bb = %fpx %fpx %fpx %fpx, viewport = %fpx %fpx %fpx %fpx]{%@}\n\\end{document}\n", 
+          //"\\begin{document}\\includegraphics*[scale=%f,clip=true,bb = %fpx %fpx %fpx %fpx, viewport = %fpx %fpx %fpx %fpx]{%@}\n\\end{document}\n", 
+          "\\begin{document}\\includegraphics*[scale=%f,clip=true,bb = %f %f %f %f, viewport = %f %f %f %f]{%@}\n\\end{document}\n", 
           [colouredPreamble replaceYenSymbol], //preamble
           ceil((boundingBox.origin.x+boundingBox.size.width)*magnification/ptSizeBase),
           ceil((boundingBox.origin.y+boundingBox.size.height)*magnification/ptSizeBase),
@@ -772,10 +775,12 @@ NSString* PDFDocumentKeywordsAttribute = @"Keywords";
       NSString* magicSourceToProducePDF =
         [NSString stringWithFormat:
           @"\\documentclass[%dpt]{article}\n"
-          "\\usepackage[papersize={%fpx,%fpx},margin=0px]{geometry}\n"
+          //"\\usepackage[papersize={%fpx,%fpx},margin=0px]{geometry}\n"
+          "\\usepackage[papersize={%f,%f},margin=0]{geometry}\n"
           "\\pagestyle{empty}\n"
           "\\usepackage{graphicx}\n"
-          "\\begin{document}\\includegraphics*[scale=%f,clip=true,viewport = %fpx %fpx %fpx %fpx,bb = %fpx %fpx %fpx %fpx]{%@}\n\\end{document}\n", 
+          //"\\begin{document}\\includegraphics*[scale=%f,clip=true,viewport = %fpx %fpx %fpx %fpx,bb = %fpx %fpx %fpx %fpx]{%@}\n\\end{document}\n", 
+          "\\begin{document}\\includegraphics*[scale=%f,clip=true,viewport = %f %f %f %f,bb = %f %f %f %f]{%@}\n\\end{document}\n", 
           (int)ptSizeBase,
           ceil((boundingBox.origin.x+boundingBox.size.width)*magnification/ptSizeBase),
           ceil((boundingBox.origin.y+boundingBox.size.height)*magnification/ptSizeBase),

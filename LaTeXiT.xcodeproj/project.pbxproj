@@ -7,16 +7,63 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		93BD651D0E8D08EC00DB341B /* All */ = {
+		934AAA060F3388450010E384 /* Packaging */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All" */;
+			buildConfigurationList = 934AAA1D0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "Packaging" */;
+			buildPhases = (
+			);
+			dependencies = (
+				934AAA0B0F33884C0010E384 /* PBXTargetDependency */,
+				934AAA0D0F33884F0010E384 /* PBXTargetDependency */,
+			);
+			name = Packaging;
+			productName = Packaging;
+		};
+		934AAA120F33887F0010E384 /* All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 934AAA1E0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "All" */;
+			buildPhases = (
+			);
+			dependencies = (
+				934AAA170F3388880010E384 /* PBXTargetDependency */,
+				934AAA190F33888A0010E384 /* PBXTargetDependency */,
+			);
+			name = All;
+			productName = All;
+		};
+		9396E5440EC628C30014C4BD /* Package as DMG */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 9396E54D0EC628D60014C4BD /* Build configuration list for PBXAggregateTarget "Package as DMG" */;
+			buildPhases = (
+				9396E5430EC628C30014C4BD /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Package as DMG";
+			productName = "Create dmg";
+		};
+		9396E9680EC843190014C4BD /* Apply Sparkle DSA keys */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 9396E96A0EC843190014C4BD /* Build configuration list for PBXAggregateTarget "Apply Sparkle DSA keys" */;
+			buildPhases = (
+				9396E9690EC843190014C4BD /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Apply Sparkle DSA keys";
+			productName = "Create dmg";
+		};
+		93BD651D0E8D08EC00DB341B /* All compilations */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All compilations" */;
 			buildPhases = (
 			);
 			dependencies = (
 				93BD65230E8D08FA00DB341B /* PBXTargetDependency */,
 				93BD65210E8D08F700DB341B /* PBXTargetDependency */,
+				934AAA110F33886C0010E384 /* PBXTargetDependency */,
 			);
-			name = All;
+			name = "All compilations";
 			productName = All;
 		};
 /* End PBXAggregateTarget section */
@@ -57,8 +104,6 @@
 		930F271E0E4B8FE7006C207E /* button-menu.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 930F271D0E4B8FE7006C207E /* button-menu.tiff */; };
 		930F28FE0E4BBC5F006C207E /* warning-triangle.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */; };
 		930F298A0E4BC543006C207E /* PreamblesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930F29890E4BC543006C207E /* PreamblesTableView.m */; };
-		930F2B940E4C5534006C207E /* OgreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
-		930F2C0A0E4C5783006C207E /* OgreKit.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
 		930F2CF20E4C5C49006C207E /* OgreKit-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 930F2CF10E4C5C49006C207E /* OgreKit-License.txt */; };
 		930F2DCE0E4C6D0F006C207E /* NotifyingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930F2DCD0E4C6D0F006C207E /* NotifyingScrollView.m */; };
 		931030240C116A2E000BECED /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 93102E960C116A2E000BECED /* palettes */; };
@@ -98,7 +143,6 @@
 		9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */; };
 		9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B4370E8B7DAC00FE90A5 /* Automator.framework */; };
 		9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		9344B9F70E8CF4D000FE90A5 /* OgreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
 		9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		9344BB9F0E8CF59400FE90A5 /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
 		9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
@@ -110,9 +154,6 @@
 		9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		9344BBA90E8CF5D400FE90A5 /* LaTeXiTPreferencesKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B2F80E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m */; };
 		9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
-		9344BBAB0E8CF5E900FE90A5 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */; };
-		9344BBB00E8CF69800FE90A5 /* OgreKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
-		9344BBB10E8CF69E00FE90A5 /* Bridge10_5.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 934D22220E60120B00BA812B /* Bridge10_5.framework */; };
 		9344D77108257B2400B17B37 /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D76F08257B2400B17B37 /* LibraryTableView.m */; };
 		9344D8280825808900B17B37 /* LibraryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8260825808900B17B37 /* LibraryCell.m */; };
 		9344D83D0825818B00B17B37 /* small-folder-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9344D83C0825818B00B17B37 /* small-folder-icon.png */; };
@@ -121,12 +162,25 @@
 		9345E42A0AC9C5310082ADB4 /* TextShortcutsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4240AC9C5310082ADB4 /* TextShortcutsController.m */; };
 		9345E42D0AC9C5310082ADB4 /* TextShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4270AC9C5310082ADB4 /* TextShortcutsTableView.m */; };
 		9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4280AC9C5310082ADB4 /* TextShortcutsManager.m */; };
+		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
+		934AA8AA0F3380CD0010E384 /* OgreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A70F3380CD0010E384 /* OgreKit.framework */; };
+		934AA8AB0F3380CD0010E384 /* Bridge10_5.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A80F3380CD0010E384 /* Bridge10_5.framework */; };
+		934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
+		934AA8F40F33813B0010E384 /* Bridge10_5.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A80F3380CD0010E384 /* Bridge10_5.framework */; };
+		934AA8F50F33813B0010E384 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
+		934AA8F60F33813B0010E384 /* OgreKit.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A70F3380CD0010E384 /* OgreKit.framework */; };
+		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
+		934AA8FA0F33816A0010E384 /* Bridge10_5.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 934AA8A80F3380CD0010E384 /* Bridge10_5.framework */; };
+		934AA8FB0F33816A0010E384 /* OgreKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 934AA8A70F3380CD0010E384 /* OgreKit.framework */; };
+		934AA98D0F3386120010E384 /* OgreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A70F3380CD0010E384 /* OgreKit.framework */; };
+		934AA9900F33862B0010E384 /* Bridge10_5.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A80F3380CD0010E384 /* Bridge10_5.framework */; };
+		934AAAAC0F338D570010E384 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
+		934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
 		934D1FD70E5F30FB00BA812B /* AdditionalFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934D1FD60E5F30FB00BA812B /* AdditionalFilesController.m */; };
 		934D1FD90E5F32F800BA812B /* AdditionalFiles.nib in Resources */ = {isa = PBXBuildFile; fileRef = 934D1FD80E5F32F800BA812B /* AdditionalFiles.nib */; };
 		934D20BB0E5F5A2000BA812B /* AdditionalFilesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */; };
-		934D22230E60120B00BA812B /* Bridge10_5.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934D22220E60120B00BA812B /* Bridge10_5.framework */; };
-		934D222C0E60121400BA812B /* Bridge10_5.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934D22220E60120B00BA812B /* Bridge10_5.framework */; };
 		934D22AD0E6014FF00BA812B /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */; };
 		935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 935784510E9D21FB00736F31 /* LatexitEquation.m */; };
 		935784540E9D226000736F31 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 935784530E9D226000736F31 /* Latexit.xcdatamodel */; };
@@ -149,15 +203,14 @@
 		9372A2F4087827FF00A3A645 /* Margin.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A2F3087827FF00A3A645 /* Margin.nib */; };
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
-		9387AD220DD2E31D00E4ED4A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9387AD210DD2E31D00E4ED4A /* Sparkle.framework */; };
-		9387AD400DD2E34400E4ED4A /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */; };
-		9387AD450DD2E34900E4ED4A /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */; };
-		9387AD460DD2E34900E4ED4A /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9387AD210DD2E31D00E4ED4A /* Sparkle.framework */; };
 		938E23A60889C382000626E6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
 		938E244B0889C392000626E6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
 		93914201094F9A8A00B9F2F9 /* preambleToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93914200094F9A8A00B9F2F9 /* preambleToolbarItem.tiff */; };
 		9391D8FA09607C2100A22F19 /* PaletteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9391D8F809607C2100A22F19 /* PaletteItem.m */; };
+		9396E9470EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */; };
+		9396EAD00EC96E500014C4BD /* ColorDataTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9396EACF0EC96E500014C4BD /* ColorDataTransformer.m */; };
+		9396EB150EC9D4280014C4BD /* ColorDataTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9396EACF0EC96E500014C4BD /* ColorDataTransformer.m */; };
 		939A64580800281900AE4486 /* ServicesMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 939A64570800281900AE4486 /* ServicesMenu.strings */; };
 		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */; };
@@ -174,7 +227,6 @@
 		93B52890089FF95800F14B77 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B5288C089FF95800F14B77 /* remove.tiff */; };
 		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
-		93C1BB9B0DCDBA57007466E1 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
 		93C531900D9E2781003AF7FC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C5318F0D9E2781003AF7FC /* Security.framework */; };
 		93C531D00D9E310C003AF7FC /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
@@ -209,6 +261,41 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		934AAA0A0F33884C0010E384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9396E5440EC628C30014C4BD;
+			remoteInfo = "Package as DMG";
+		};
+		934AAA0C0F33884F0010E384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9396E9680EC843190014C4BD;
+			remoteInfo = "Apply Sparkle DSA keys";
+		};
+		934AAA100F33886C0010E384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93A0FFB00DABA1E500DDBAF4;
+			remoteInfo = CreateHistoryPlist;
+		};
+		934AAA160F3388880010E384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93BD651D0E8D08EC00DB341B;
+			remoteInfo = "All compilations";
+		};
+		934AAA180F33888A0010E384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 934AAA060F3388450010E384;
+			remoteInfo = Packaging;
+		};
 		93BD65200E8D08F700DB341B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -232,10 +319,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				934D222C0E60121400BA812B /* Bridge10_5.framework in Copy Files (Frameworks) */,
-				9387AD450DD2E34900E4ED4A /* LinkBack.framework in Copy Files (Frameworks) */,
-				930F2C0A0E4C5783006C207E /* OgreKit.framework in Copy Files (Frameworks) */,
-				9387AD460DD2E34900E4ED4A /* Sparkle.framework in Copy Files (Frameworks) */,
+				934AA8F40F33813B0010E384 /* Bridge10_5.framework in Copy Files (Frameworks) */,
+				934AA8F50F33813B0010E384 /* LinkBack.framework in Copy Files (Frameworks) */,
+				934AA8F60F33813B0010E384 /* OgreKit.framework in Copy Files (Frameworks) */,
+				934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */,
 			);
 			name = "Copy Files (Frameworks)";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,8 +333,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9344BBB10E8CF69E00FE90A5 /* Bridge10_5.framework in CopyFiles */,
-				9344BBB00E8CF69800FE90A5 /* OgreKit.framework in CopyFiles */,
+				934AA8FA0F33816A0010E384 /* Bridge10_5.framework in CopyFiles */,
+				934AA8FB0F33816A0010E384 /* OgreKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +391,6 @@
 		930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "warning-triangle.tiff"; path = "Resources/interface/warning-triangle.tiff"; sourceTree = "<group>"; };
 		930F29880E4BC543006C207E /* PreamblesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreamblesTableView.h; sourceTree = "<group>"; };
 		930F29890E4BC543006C207E /* PreamblesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreamblesTableView.m; sourceTree = "<group>"; };
-		930F2B930E4C5534006C207E /* OgreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OgreKit.framework; sourceTree = "<group>"; };
 		930F2CF10E4C5C49006C207E /* OgreKit-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "OgreKit-License.txt"; path = "Resources/documentation/OgreKit-License.txt"; sourceTree = "<group>"; };
 		930F2DCC0E4C6D0F006C207E /* NotifyingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifyingScrollView.h; sourceTree = "<group>"; };
 		930F2DCD0E4C6D0F006C207E /* NotifyingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifyingScrollView.m; sourceTree = "<group>"; };
@@ -388,6 +474,12 @@
 		9345E4260AC9C5310082ADB4 /* TextShortcutsController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsController.h; sourceTree = "<group>"; };
 		9345E4270AC9C5310082ADB4 /* TextShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsTableView.m; sourceTree = "<group>"; };
 		9345E4280AC9C5310082ADB4 /* TextShortcutsManager.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsManager.m; sourceTree = "<group>"; };
+		934AA8A60F3380CD0010E384 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
+		934AA8A70F3380CD0010E384 /* OgreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OgreKit.framework; path = Frameworks/OgreKit.framework; sourceTree = "<group>"; };
+		934AA8A80F3380CD0010E384 /* Bridge10_5.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bridge10_5.framework; path = Frameworks/Bridge10_5.framework; sourceTree = "<group>"; };
+		934AA8ED0F3381050010E384 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack.framework; sourceTree = "<group>"; };
+		934AA8F30F3381210010E384 /* package-as-dmg.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "package-as-dmg.sh"; path = "scripts/package-as-dmg.sh"; sourceTree = "<group>"; };
+		934AAB280F343D830010E384 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; name = pdfcrop.pl; path = Resources/scripts/pdfcrop.pl; sourceTree = "<group>"; };
 		934C03330AD035D4007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
 		934C03360AD035E5007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Encapsulation.nib; sourceTree = "<group>"; };
 		934C03370AD035EE007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/History.nib; sourceTree = "<group>"; };
@@ -407,7 +499,6 @@
 		934D1FD80E5F32F800BA812B /* AdditionalFiles.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = AdditionalFiles.nib; sourceTree = "<group>"; };
 		934D20B90E5F5A2000BA812B /* AdditionalFilesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesTableView.h; sourceTree = "<group>"; };
 		934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesTableView.m; sourceTree = "<group>"; };
-		934D22220E60120B00BA812B /* Bridge10_5.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bridge10_5.framework; sourceTree = "<group>"; };
 		934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		935784500E9D21FB00736F31 /* LatexitEquation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexitEquation.h; sourceTree = "<group>"; };
@@ -451,11 +542,12 @@
 		937D7D260E48F5B7006F04E1 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		937D7D270E48F5BA006F04E1 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		937D7D280E48F5CF006F04E1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
-		9387AD210DD2E31D00E4ED4A /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
-		9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LinkBack.framework; sourceTree = "<group>"; };
 		93914200094F9A8A00B9F2F9 /* preambleToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = preambleToolbarItem.tiff; sourceTree = "<group>"; };
 		9391D8F709607C2100A22F19 /* PaletteItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteItem.h; sourceTree = "<group>"; };
 		9391D8F809607C2100A22F19 /* PaletteItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteItem.m; sourceTree = "<group>"; };
+		9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_sparkle_latexit_pub.pem; path = Resources/sparkle/dsa_sparkle_latexit_pub.pem; sourceTree = "<group>"; };
+		9396EACE0EC96E500014C4BD /* ColorDataTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorDataTransformer.h; sourceTree = "<group>"; };
+		9396EACF0EC96E500014C4BD /* ColorDataTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorDataTransformer.m; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939D6B2109C7FEEB0076D19E /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -492,7 +584,6 @@
 		93B5288C089FF95800F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/interface/remove.tiff; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
 		93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "latexit-latex-palette.icns"; path = "Resources/file-icons/latexit-latex-palette.icns"; sourceTree = "<group>"; };
-		93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; path = pdfcrop.pl; sourceTree = "<group>"; };
 		93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableView.h; sourceTree = "<group>"; };
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93C5318F0D9E2781003AF7FC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
@@ -559,19 +650,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				934AA8AB0F3380CD0010E384 /* Bridge10_5.framework in Frameworks */,
 				938E244B0889C392000626E6 /* AppKit.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
 				938E23A60889C382000626E6 /* Quartz.framework in Frameworks */,
 				93C531900D9E2781003AF7FC /* Security.framework in Frameworks */,
-				9387AD220DD2E31D00E4ED4A /* Sparkle.framework in Frameworks */,
-				9387AD400DD2E34400E4ED4A /* LinkBack.framework in Frameworks */,
-				930F2B940E4C5534006C207E /* OgreKit.framework in Frameworks */,
-				934D22230E60120B00BA812B /* Bridge10_5.framework in Frameworks */,
 				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
 				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
 				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
 				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
+				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
+				934AA8AA0F3380CD0010E384 /* OgreKit.framework in Frameworks */,
+				934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,10 +670,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
 				9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */,
+				934AA9900F33862B0010E384 /* Bridge10_5.framework in Frameworks */,
 				9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */,
-				9344B9F70E8CF4D000FE90A5 /* OgreKit.framework in Frameworks */,
+				934AA98D0F3386120010E384 /* OgreKit.framework in Frameworks */,
+				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
 				9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -592,6 +684,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				93A0FFBC0DABA34B00DDBAF4 /* AppKit.framework in Frameworks */,
+				934AAAAC0F338D570010E384 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,10 +710,10 @@
 		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				934D22220E60120B00BA812B /* Bridge10_5.framework */,
-				9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */,
-				930F2B930E4C5534006C207E /* OgreKit.framework */,
-				9387AD210DD2E31D00E4ED4A /* Sparkle.framework */,
+				934AA8A80F3380CD0010E384 /* Bridge10_5.framework */,
+				934AA8ED0F3381050010E384 /* LinkBack.framework */,
+				934AA8A70F3380CD0010E384 /* OgreKit.framework */,
+				934AA8A60F3380CD0010E384 /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -643,6 +736,7 @@
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
+				934AAB2E0F343DC20010E384 /* Project Helpers */,
 			);
 			name = LaTeXiT;
 			sourceTree = "<group>";
@@ -688,6 +782,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				934AAB2B0F343DAA0010E384 /* scripts */,
 				9344BBE20E8CF7D400FE90A5 /* Automator */,
 				9344BBE10E8CF7C600FE90A5 /* LaTeXiT */,
 			);
@@ -788,6 +883,7 @@
 		931725970DA111E4001E036F /* Sparkle */ = {
 			isa = PBXGroup;
 			children = (
+				9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */,
 				931725AC0DA111F5001E036F /* latexit-sparkle-fr.rss */,
 				931725B20DA111F5001E036F /* latexit-sparkle-en.rss */,
 				931725B00DA111F5001E036F /* latexit-sparkle-de.rss */,
@@ -830,6 +926,8 @@
 		93344CB708251C9000F00A49 /* CocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				9396EACE0EC96E500014C4BD /* ColorDataTransformer.h */,
+				9396EACF0EC96E500014C4BD /* ColorDataTransformer.m */,
 				935A8349084EFF11005724CE /* NSApplicationExtended.h */,
 				935A834A084EFF11005724CE /* NSApplicationExtended.m */,
 				93D6BA1B082941900081D58A /* NSArrayExtended.h */,
@@ -886,7 +984,6 @@
 			isa = PBXGroup;
 			children = (
 				935784940E9D39A700736F31 /* Data models */,
-				93C1BB8A0DCBA1B6007466E1 /* scripts */,
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
 				9326DEDD0A2E3A1E003A430E /* latex-keywords */,
@@ -968,6 +1065,30 @@
 			name = ServiceShortcuts;
 			sourceTree = "<group>";
 		};
+		934AAB2B0F343DAA0010E384 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				934AAB280F343D830010E384 /* pdfcrop.pl */,
+			);
+			name = scripts;
+			sourceTree = "<group>";
+		};
+		934AAB2E0F343DC20010E384 /* Project Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				934AAB2F0F343DD00010E384 /* scripts */,
+			);
+			name = "Project Helpers";
+			sourceTree = "<group>";
+		};
+		934AAB2F0F343DD00010E384 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				934AA8F30F3381210010E384 /* package-as-dmg.sh */,
+			);
+			name = scripts;
+			sourceTree = "<group>";
+		};
 		934D1FD40E5F30CD00BA812B /* AdditionalFilesPalette */ = {
 			isa = PBXGroup;
 			children = (
@@ -1024,14 +1145,6 @@
 				932BA4CF0960C6CD004EECBA /* PaletteMatrix.m */,
 			);
 			name = LatexPalettes;
-			sourceTree = "<group>";
-		};
-		93C1BB8A0DCBA1B6007466E1 /* scripts */ = {
-			isa = PBXGroup;
-			children = (
-				93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */,
-			);
-			name = scripts;
 			sourceTree = "<group>";
 		};
 		93D06AE30990BCAA00C484B8 /* file-icons */ = {
@@ -1229,10 +1342,14 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				93BD651D0E8D08EC00DB341B /* All */,
+				934AAA120F33887F0010E384 /* All */,
+				93BD651D0E8D08EC00DB341B /* All compilations */,
+				934AAA060F3388450010E384 /* Packaging */,
 				8D15AC270486D014006FF6A4 /* LaTeXiT */,
 				93A0FFB00DABA1E500DDBAF4 /* CreateHistoryPlist */,
 				9344B98E0E8CF38700FE90A5 /* Automator-CreateEquations */,
+				9396E5440EC628C30014C4BD /* Package as DMG */,
+				9396E9680EC843190014C4BD /* Apply Sparkle DSA keys */,
 			);
 		};
 /* End PBXProject section */
@@ -1295,12 +1412,13 @@
 				93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */,
 				9308991F0C0A586F00B08453 /* latexit-lib.icns in Resources */,
 				931030240C116A2E000BECED /* palettes in Resources */,
-				93C1BB9B0DCDBA57007466E1 /* pdfcrop.pl in Resources */,
 				937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */,
 				930F271E0E4B8FE7006C207E /* button-menu.tiff in Resources */,
 				930F28FE0E4BBC5F006C207E /* warning-triangle.tiff in Resources */,
 				930F2CF20E4C5C49006C207E /* OgreKit-License.txt in Resources */,
 				934D1FD90E5F32F800BA812B /* AdditionalFiles.nib in Resources */,
+				9396E9470EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem in Resources */,
+				934AAB290F343D830010E384 /* pdfcrop.pl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1308,9 +1426,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9344BBAB0E8CF5E900FE90A5 /* pdfcrop.pl in Resources */,
 				93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */,
 				93E9D0130E9F3DC300B08FB0 /* main.xib in Resources */,
+				934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1353,6 +1471,35 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/bin/amlint \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"";
+		};
+		9396E5430EC628C30014C4BD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ". ${PROJECT_DIR}/scripts/package-as-dmg.sh";
+			showEnvVarsInLog = 0;
+		};
+		9396E9690EC843190014C4BD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			comments = "#!/bin/sh\nTMP=`mktemp -d -t latexit-dmg`\ncp ";
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -o errexit\n\n[ $BUILD_STYLE = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleVersion)\nDOWNLOAD_BASE_URL=\"http://ktd.club.fr/programmation/fichiers\"\nRELEASENOTES_URL=\"http://ktd.club.fr/programmation/fichiers/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleVersion)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nSIGNATURE=$(\n\topenssl dgst -sha1 -binary < \"${ARCHIVE_FILEPATH}\" \\\n\t| openssl dgst -dss1 -sign <(security find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g') \\\n\t| openssl enc -base64\n)\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1433,6 +1580,7 @@
 				935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */,
 				935784540E9D226000736F31 /* Latexit.xcdatamodel in Sources */,
 				93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */,
+				9396EAD00EC96E500014C4BD /* ColorDataTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1451,6 +1599,7 @@
 				9344BBA90E8CF5D400FE90A5 /* LaTeXiTPreferencesKeys.m in Sources */,
 				9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */,
 				93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */,
+				9396EB150EC9D4280014C4BD /* ColorDataTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1465,6 +1614,31 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		934AAA0B0F33884C0010E384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9396E5440EC628C30014C4BD /* Package as DMG */;
+			targetProxy = 934AAA0A0F33884C0010E384 /* PBXContainerItemProxy */;
+		};
+		934AAA0D0F33884F0010E384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9396E9680EC843190014C4BD /* Apply Sparkle DSA keys */;
+			targetProxy = 934AAA0C0F33884F0010E384 /* PBXContainerItemProxy */;
+		};
+		934AAA110F33886C0010E384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93A0FFB00DABA1E500DDBAF4 /* CreateHistoryPlist */;
+			targetProxy = 934AAA100F33886C0010E384 /* PBXContainerItemProxy */;
+		};
+		934AAA170F3388880010E384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93BD651D0E8D08EC00DB341B /* All compilations */;
+			targetProxy = 934AAA160F3388880010E384 /* PBXContainerItemProxy */;
+		};
+		934AAA190F33888A0010E384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 934AAA060F3388450010E384 /* Packaging */;
+			targetProxy = 934AAA180F33888A0010E384 /* PBXContainerItemProxy */;
+		};
 		93BD65210E8D08F700DB341B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8D15AC270486D014006FF6A4 /* LaTeXiT */;
@@ -1689,7 +1863,12 @@
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -1719,7 +1898,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = "";
@@ -1752,7 +1930,12 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -1797,7 +1980,12 @@
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -1827,7 +2015,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = "";
@@ -1847,21 +2034,16 @@
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../Frameworks/Sparkle/src/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../Frameworks/LinkBack/Source/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/Frameworks\"";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -1960,7 +2142,12 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -1969,7 +2156,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Automator-CreateEquations_Prefix.pch";
+				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -1988,13 +2175,13 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "LaTeXiT-CreateEquations/Info.plist";
+				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
-				PRODUCT_NAME = "LaTeXiT-CreateEquations";
+				PRODUCT_NAME = CreateEquations;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WRAPPER_EXTENSION = action;
 			};
@@ -2008,8 +2195,13 @@
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/Frameworks\"";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -2039,16 +2231,123 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WRAPPER_EXTENSION = action;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		934AAA070F3388460010E384 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Packaging;
+			};
+			name = Development;
+		};
+		934AAA080F3388460010E384 /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Packaging;
+			};
+			name = "Development with Core Data";
+		};
+		934AAA090F3388460010E384 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Packaging;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		934AAA130F3388800010E384 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = All;
+			};
+			name = Development;
+		};
+		934AAA140F3388800010E384 /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = All;
+			};
+			name = "Development with Core Data";
+		};
+		934AAA150F3388800010E384 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = All;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		9396E5450EC628C40014C4BD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Create dmg";
+			};
+			name = Development;
+		};
+		9396E5460EC628C40014C4BD /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Create dmg";
+			};
+			name = "Development with Core Data";
+		};
+		9396E5470EC628C40014C4BD /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Create dmg";
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		9396E96B0EC843190014C4BD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Create dmg";
+			};
+			name = Development;
+		};
+		9396E96C0EC843190014C4BD /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Create dmg";
+			};
+			name = "Development with Core Data";
+		};
+		9396E96D0EC843190014C4BD /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Create dmg";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -2136,6 +2435,46 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
 		};
+		934AAA1D0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "Packaging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				934AAA070F3388460010E384 /* Development */,
+				934AAA080F3388460010E384 /* Development with Core Data */,
+				934AAA090F3388460010E384 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		934AAA1E0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				934AAA130F3388800010E384 /* Development */,
+				934AAA140F3388800010E384 /* Development with Core Data */,
+				934AAA150F3388800010E384 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		9396E54D0EC628D60014C4BD /* Build configuration list for PBXAggregateTarget "Package as DMG" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9396E5450EC628C40014C4BD /* Development */,
+				9396E5460EC628C40014C4BD /* Development with Core Data */,
+				9396E5470EC628C40014C4BD /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		9396E96A0EC843190014C4BD /* Build configuration list for PBXAggregateTarget "Apply Sparkle DSA keys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9396E96B0EC843190014C4BD /* Development */,
+				9396E96C0EC843190014C4BD /* Development with Core Data */,
+				9396E96D0EC843190014C4BD /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
 		93A0FFB70DABA21400DDBAF4 /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2146,7 +2485,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
 		};
-		93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All" */ = {
+		93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All compilations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				93BD651E0E8D08EC00DB341B /* Development */,

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2008 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -55,8 +55,10 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
          managedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
   NSEntityDescription* entity = [NSEntityDescription entityForName:[self className] inManagedObjectContext:managedObjectContext];
+  NSLog(@"1: %p", self);
   if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
+  NSLog(@"2: %p", self);
   [self beginUpdate];
   [self setPdfData:someData];
   [self setPreamble:aPreamble];
@@ -74,6 +76,12 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   return self;
 }
 //end initWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
+
+-(void) dealloc
+{
+  NSLog(@"dealloc");
+  [super dealloc];
+}
 
 -(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults managedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
@@ -695,7 +703,7 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"1.16.0", @"version",
+       @"1.16.1", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

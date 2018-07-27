@@ -24,7 +24,7 @@
             </description>
             <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-en.html</sparkle:releaseNotesLink>
             <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
-            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream"/> 
+            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
         </item> 
         <item> 
             <title>Version 1.16.0</title>
@@ -44,7 +44,26 @@
             </description>
             <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-en.html</sparkle:releaseNotesLink>
             <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
-            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream"/> 
-        </item> 
+            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
+        </item>
+        <item>
+              <title>Version 1.16.1</title>
+              <description>
+                <ul>
+                  <li>better compatilibity with old versions of pdflatex/ghostscript;</li>
+                  <li>fixed a bug in the Automator action, that was preventing it to be saved;</li>
+                  <li>fixed bug regarding environment variables propagation in custom scripts.</li>
+                </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-en.html#version-1.16.1</sparkle:releaseNotesLink>
+              <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
+              <enclosure
+                url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_1.dmg"
+                sparkle:version="1.16.1"
+                type="application/octet-stream"
+                length="6355038"
+                sparkle:dsaSignature="MC4CFQCRTa5irB/NMrD6lUcow4yZxGPURgIVAJp73lYAEGtV/lPKWbVzUzA2ABAJ"
+              />
+          </item>
     </channel> 
 </rss>

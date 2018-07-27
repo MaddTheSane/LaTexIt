@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 //
 
 #import "SystemTask.h"
@@ -18,10 +18,11 @@
 
 @implementation SystemTask
 
--(id) initWithWorkingDirectory:(NSString*)workingDirectory
+-(id) initWithWorkingDirectory:(NSString*)aWorkingDirectory
 {
   if (![super init])
     return nil;
+  workingDirectory = [aWorkingDirectory copy];
   tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdinFilePath
                                                                 workingDirectory:workingDirectory];
   [tmpStdinFileHandle retain];
@@ -70,6 +71,7 @@
   [tmpStderrFileHandle release];
   [tmpScriptFileHandle release];
   [runningLock release];
+  [workingDirectory release];
   [super dealloc];
 }
 //end dealloc
@@ -157,14 +159,17 @@
 {
   NSMutableString* scriptContent = [NSMutableString stringWithString:@"#!/bin/sh\n"];
   //environment is now inherited with the call to bash -l
-  /*
   if (environment && [environment count])
   {
     NSEnumerator* environmentEnumerator = [environment keyEnumerator];
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
-      [scriptContent appendFormat:@"export %@=%@ 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
-  }//end if (environment && [environment count])*/
+    {
+      BOOL isDoubleQuoted = ([variable length] >= 2) && [variable startsWith:@"\"" options:0] && [variable endsWith:@"\"" options:0];
+      if ([variable length] && !isDoubleQuoted)
+        [scriptContent appendFormat:@"export %@=%@ 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
+    }
+  }//end if (environment && [environment count])
   if (currentDirectoryPath)
     [scriptContent appendFormat:@"cd %@\n", currentDirectoryPath];
   if (launchPath)
@@ -197,35 +202,24 @@
     if (!currentShell)
       currentShell = @"/bin/bash";
     NSString* option = (isUsingLoginShell && [currentShell isEqualToString:@"/bin/bash"]) ? @"-l" : @"";
-    NSString* systemCommand = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
-
-    if (!timeOutLimit)
-    {
-      [runningLock lock];
-      terminationStatus = system([systemCommand UTF8String]);
-      [runningLock unlock];
-    }
-    else //if timeOutLimit
-    {
-      [runningLock lock];
-      pid_t pid = fork();
-      if (!pid)//in the child
-      {
-        [NSApplication detachDrawingThread:@selector(threadTimeoutSignal:) toTarget:self
-                                withObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:getpid()] forKey:@"pid"]];
-        terminationStatus = system([systemCommand UTF8String]);
-        terminationStatus = WIFEXITED(terminationStatus) ? WEXITSTATUS(terminationStatus) : -1;
-        exit(terminationStatus);
-      }
-      else
-      {
-        int status = 0;
-        wait(&status);
-        selfExited = WIFEXITED(status) && !WIFSIGNALED(status);
-        terminationStatus = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
-      }
-      [runningLock unlock];
-    }//end if timeOutLimit
+    int       intTimeOutLimit = (int)timeOutLimit;
+    NSString* userScriptCall = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
+    [runningLock lock];
+    //terminationStatus = system([systemCommand UTF8String]);
+    NSString* timeLimitedScript = !intTimeOutLimit ?
+      [NSString stringWithFormat:@"#!/bin/bash\n%@", userScriptCall] :
+      [NSString stringWithFormat:@"#!/bin/bash\nsleep %d && kill -9 $$&\nKILLPID=$!\n%@\nRETURNCODE=$?\nkill -9 $KILLPID\nexit $RETURNCODE",
+                                 intTimeOutLimit, userScriptCall];
+    NSString* timeLimitedScriptPath = nil;
+    [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-timelimited.XXXXXXXXX" extension:@"script"
+                                                  outFilePath:&timeLimitedScriptPath workingDirectory:workingDirectory];
+    [timeLimitedScript writeToFile:timeLimitedScriptPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    NSString* systemCall = [NSString stringWithFormat:@"/bin/bash -l %@", timeLimitedScriptPath];
+    terminationStatus = system([systemCall UTF8String]);
+    selfExited        = WIFEXITED(terminationStatus) && !WIFSIGNALED(terminationStatus);
+    terminationStatus = WIFEXITED(terminationStatus) ? WEXITSTATUS(terminationStatus) : -1;
+    [runningLock unlock];
+    [[NSFileManager defaultManager] removeFileAtPath:timeLimitedScriptPath handler:nil];
   }//end if filePath
 }
 //end launch
@@ -263,12 +257,5 @@
   return !selfExited;
 }
 //end hasReachedTimeout
-
--(void) threadTimeoutSignal:(id)object
-{
-  [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:timeOutLimit]];
-  kill([[object valueForKey:@"pid"] unsignedIntValue], SIGKILL);
-}
-//end threadTimeoutSignal:
 
 @end

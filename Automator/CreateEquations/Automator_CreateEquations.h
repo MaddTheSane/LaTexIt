@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2008 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -15,6 +15,7 @@
   IBOutlet NSView* warningView;
   BOOL latexitPreferencesAvailable;
   unsigned int uniqueId;
+  BOOL fromArchive;
 }
 
 -(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary**)errorInfo;

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright Pierre Chatelier 2005, 2006, 2007, 2008 . All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -1058,6 +1058,14 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     ok = [[AppController appController] isGsAvailable];
   else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPs2PdfAvailable];
+  else if ([sender tag] == -1)//default
+  {
+    export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
+    [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
+      NSLocalizedString(@"Default Format", @"Default Format"),
+      [[AppController appController] nameOfType:exportFormat]]];
+  }
+
   return ok;
 }
 

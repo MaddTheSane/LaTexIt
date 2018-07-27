@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -363,7 +363,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
       //Then save the data
       NSDictionary* plist =
-        [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.0", @"version", compressedData, @"data", nil];
+        [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.1", @"version", compressedData, @"data", nil];
       NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
       historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
 

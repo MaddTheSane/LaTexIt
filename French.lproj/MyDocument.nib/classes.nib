@@ -68,11 +68,11 @@
 		</dict>
 		<dict>
 			<key>CLASS</key>
-			<string>LogTableView</string>
+			<string>NSPopUpButton</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
-			<string>NSTableView</string>
+			<string>NSButton</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -89,11 +89,11 @@
 		</dict>
 		<dict>
 			<key>CLASS</key>
-			<string>NSPopUpButton</string>
+			<string>LogTableView</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
-			<string>NSButton</string>
+			<string>NSTableView</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>

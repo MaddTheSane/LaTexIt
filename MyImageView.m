@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -392,8 +392,19 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(BOOL) validateMenuItem:(id)sender
 {
   BOOL ok = YES;
+  if ([sender tag] == -1)//default
+  {
+    export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
+    [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
+      NSLocalizedString(@"Default Format", @"Default Format"),
+      [[AppController appController] nameOfType:exportFormat]]];
+  }
+  if ([sender tag] == EXPORT_FORMAT_EPS)
+    ok = [[AppController appController] isGsAvailable];
+  else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPs2PdfAvailable];
   if ([sender action] == @selector(copy:))
-    ok = ([self image] != nil);
+    ok = ok && ([self image] != nil);
   return ok;
 }
 

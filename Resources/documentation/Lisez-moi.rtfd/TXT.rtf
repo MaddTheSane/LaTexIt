@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf350
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf430
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
@@ -281,7 +281,7 @@ FAQ (Foire aux questions)\
 (R) : Voyez la section "Bugs/incompatibilit\'e9s connues" ci-dessous.\
 \
 (Q) : Le service ne fonctionne pas avec Keynote\
-(R) : Le service ne marche pas avec Keynote 1, 2, 3 & 4, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement.\
+(R) : Le service ne marche pas avec Keynote 1, 2, 3, 4, 5, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement.\
 \
 (Q) : Quel format d'export devrais-je choisir ?\
 (R) : PDF est le choix de pr\'e9dilection puisque c'est un format "vectoriel" : on peut redimensionner l'image sans perte de qualit\'e9.\
@@ -332,13 +332,12 @@ Ici pour la police Chalkboard :\
 \fs26 \ul Bugs/incompatibilit\'e9s connues\
 
 \fs22 \ulnone \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 - si vous n'avez que TeXShop d'install\'e9, LaTeXiT ne peut fonctionner. Il vous faut une v\'e9ritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'e8s;\
+- si vous n'avez que TeXShop d'install\'e9, LaTeXiT ne peut fonctionner. Il vous faut une v\'e9ritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'e8s;\
 - Si vous observez des changements al\'e9atoires de police de caract\'e8res dans les images g\'e9n\'e9r\'e9es, il semble que cela puisse \'eatre d\'fb \'e0 un probl\'e8me d'historique corrompue; supprimer votre historique devrait arranger les choses. Il a aussi \'e9t\'e9 signal\'e9 que des polices Open-Type de tierce partie install\'e9es dans le syst\'e8me pouvaient poser des probl\'e8mes;\
 - si vous constatez que, m\'eame sans \'eatre utilis\'e9, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'e9moire, sachez simplement que pour acc\'e9l\'e9rer son temps de d\'e9marrage, il charge les images de l'historique en arri\'e8re plan. Ce travail, de tr\'e8s faible priorit\'e9, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'e9ellement l'\'e9viter, pensez simplement \'e0 faire le m\'e9nage dans votre historique de temps en temps\'a0!\
 - avec les \'e9quations tr\'e8s petites, LaTeX \'e9choue parfois \'e0 calculer sa taille exacte, et l'\'e9quation se retrouve alors tronqu\'e9e. Il y a deux fa\'e7ons d'y rem\'e9dier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'e9rence au sein de LaTeXiT);\
 - quand la couleur de l'\'e9quation est r\'e9gl\'e9e sur blanc pur, elle semble mal d\'e9coup\'e9e (disparition \'e9ventuelle des parenth\'e8ses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'e9choue \'e0 d\'e9couper correctement avec une \'e9quation blanche sur fond blanc. Pour corriger cela, utilisez une couleur "presque blanche", ou bien utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
-- le service ne marche pas avec Keynote 1, 2, 3 & 4, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement;\
+- le service ne marche pas avec Keynote 1, 2, 3, 4, 5, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement;\
 - le service ne marche pas avec Mail 2.0.0, ..., 2.1 (derni\'e8re version disponible au moment o\'f9 ces lignes sont \'e9crites);\
 - l'action Automator semble ne pas pouvoir \'eatre sauvegard\'e9e dans un processus,\
 - LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'e9quations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'e9es par le service dans un flot RTFD. Or, il peut arriver que les \'e9diteurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'eame si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'e0 l'\'e9diteur de texte, mais c'est quelque chose de difficile. Pour r\'e9soudre le probl\'e8me, d\'e9sactivez simplement l'alignement de l'\'e9quation avec la ligne de base texte dans les pr\'e9f\'e9rences du service LaTeXiT; cela d\'e9sactive l'utilisation des flots RTFD;\
@@ -351,8 +350,7 @@ Ici pour la police Chalkboard :\
 - la coloration syntaxique ne g\'e8re pas le "$$" correctement;\
 - les marges personnalis\'e9es ne sont pas prises en compte lors d'un export en EPS; cela semble \'eatre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'e0 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'e8que/LaTeXiT-panther en ~/Biblioth\'e8que/LaTeXiT pour r\'e9cup\'e9rer votre historique et votre biblioth\'e8que;\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 \
+\
 
 \fs26 \ul Installer LaTeX\
 
@@ -375,6 +373,11 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \fs26 \cf0 \ul Historique des versions\
 
 \fs22 \ulnone \
+v 1.16.1 (31 janvier 2009)\
+- Meilleure compatibilit\'e9 avec des versions anciennes de pdflatex/ghostscript;\
+- correction d'un bug dans l'action Automator, qui l'emp\'eachait d'\'eatre sauvegard\'e9e;\
+- correction d'un bug dans la propagation des variable d'environnement pour les scripts personnalis\'e9s.\
+\
 v 1.16.0 (6 novembre 2008)\
 - ajout d'une action Automator;\
 \pard\tx240\pardeftab240\ql\qnatural\pardirnatural

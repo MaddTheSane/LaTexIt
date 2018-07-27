@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="100057"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -22,7 +23,7 @@
 				<string key="NSClassName">FirstResponder</string>
 			</object>
 			<object class="NSCustomView" id="595191707">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -407,6 +408,7 @@ acOzbg</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{372, 100}</string>
+				<reference key="NSSuperview"/>
 				<object class="NSMutableString" key="NSClassName">
 					<characters key="NS.bytes">NSView</characters>
 				</object>
@@ -420,12 +422,16 @@ acOzbg</string>
 					<string>fontColor</string>
 					<string>equationMode</string>
 					<string>equationFilesDestination</string>
+					<string>fontColorData</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
 			</object>
 			<object class="NSCustomObject" id="967684443">
 				<string key="NSClassName">NSApplication</string>
+			</object>
+			<object class="NSCustomObject" id="221864266">
+				<string key="NSClassName">ColorDataTransformer</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -478,22 +484,6 @@ acOzbg</string>
 						</object>
 					</object>
 					<int key="connectionID">100058</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.fontColor</string>
-						<reference key="source" ref="997850257"/>
-						<reference key="destination" ref="377427500"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="997850257"/>
-							<reference key="NSDestination" ref="377427500"/>
-							<string key="NSLabel">value: selection.fontColor</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.fontColor</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">100059</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -566,6 +556,26 @@ acOzbg</string>
 						</object>
 					</object>
 					<int key="connectionID">100080</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.fontColorData</string>
+						<reference key="source" ref="997850257"/>
+						<reference key="destination" ref="377427500"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="997850257"/>
+							<reference key="NSDestination" ref="377427500"/>
+							<string key="NSLabel">value: selection.fontColorData</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.fontColorData</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">ColorDataTransformer</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100083</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -798,6 +808,11 @@ acOzbg</string>
 						<reference key="object" ref="626886013"/>
 						<reference key="parent" ref="482074200"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100082</int>
+						<reference key="object" ref="221864266"/>
+						<reference key="parent" ref="699349404"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -834,6 +849,7 @@ acOzbg</string>
 					<string>100076.IBPluginDependency</string>
 					<string>100078.IBPluginDependency</string>
 					<string>100079.IBPluginDependency</string>
+					<string>100082.IBPluginDependency</string>
 					<string>5.IBEditorWindowLastContentRect</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
@@ -880,6 +896,7 @@ acOzbg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{373, 734}, {372, 100}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -908,7 +925,7 @@ acOzbg</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100080</int>
+			<int key="maxID">100083</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -942,7 +959,15 @@ acOzbg</string>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Automator-CreateEquations.h</string>
+						<string key="minorKey">Automator/CreateEquations/Automator_CreateEquations.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ColorDataTransformer</string>
+					<string key="superclassName">NSValueTransformer</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">ColorDataTransformer.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -969,7 +994,7 @@ acOzbg</string>
 			</object>
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
-		<string key="IBDocument.LastKnownRelativeProjectPath">../../LaTeXiT.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../../../LaTeXiT.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>

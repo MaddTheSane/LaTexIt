@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -161,6 +161,7 @@ typedef enum {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
 -(float) marginControllerRightMargin;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
+-(NSString*) nameOfType:(export_format_t)format;
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality scaleAsPercent:(float)scaleAsPercent;
 
 //methods for the application service

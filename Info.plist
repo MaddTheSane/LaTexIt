@@ -89,7 +89,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.16.0</string>
+	<string>1.16.1</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -343,5 +343,7 @@
 	</array>
 	<key>SUFeedURL</key>
 	<string>http://ktd.club.fr/programmation/fichiers/latexit-sparkle-en.rss</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_sparkle_latexit_pub.pem</string>
 </dict>
 </plist>

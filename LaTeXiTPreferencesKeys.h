@@ -1,11 +1,11 @@
-/*
- *  LaTeXiTPreferencesKeys.h
- *  LaTeXiT
- *
- *  Created by Pierre Chatelier on 25/09/08.
- *  Copyright 2008 LAIC. All rights reserved.
- *
- */
+//
+//  LaTeXiTPreferencesKeys.h
+//  LaTeXiT
+//
+//  Created by Pierre Chatelier on 25/09/08.
+//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//
+//
 
 extern NSString* LaTeXiTVersionKey;
 extern NSString* DragExportTypeKey;
