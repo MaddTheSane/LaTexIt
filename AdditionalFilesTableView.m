@@ -191,7 +191,7 @@
     [self didChangeValueForKey:@"canRemove"];
   }
 }
-//end addObserver:forKeyPath:options:context:
+//end observeValueForKeyPath:ofObject:change:context:
 
 #pragma mark events
 
@@ -210,7 +210,7 @@
   if ([event clickCount] == 2)
     [self openSelection:self];
 }
-//end mouseUp:
+//end mouseDown:
 
 -(void) keyDown:(NSEvent*)event
 {

@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="81"/>
+			<integer value="57"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -56,15 +56,6 @@
 								<object class="NSMenuItem" id="951048354">
 									<reference key="NSMenu" ref="271662970"/>
 									<string key="NSTitle">About LaTeXiT</string>
-									<string key="NSKeyEquiv"/>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="380749168"/>
-									<reference key="NSMixedImage" ref="979262368"/>
-								</object>
-								<object class="NSMenuItem" id="158601911">
-									<reference key="NSMenu" ref="271662970"/>
-									<bool key="NSIsHidden">YES</bool>
-									<string key="NSTitle">Sponsors...</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="380749168"/>
@@ -2058,14 +2049,6 @@ IHdheQ</string>
 					<int key="connectionID">1625</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">displaySponsors:</string>
-						<reference key="source" ref="574030839"/>
-						<reference key="destination" ref="158601911"/>
-					</object>
-					<int key="connectionID">1626</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">editCopyImageAsMenuItem</string>
 						<reference key="source" ref="574030839"/>
@@ -2241,7 +2224,6 @@ IHdheQ</string>
 							<reference ref="285561909"/>
 							<reference ref="493724398"/>
 							<reference ref="895376756"/>
-							<reference ref="158601911"/>
 							<reference ref="951494435"/>
 						</array>
 						<reference key="parent" ref="862109237"/>
@@ -2312,11 +2294,6 @@ IHdheQ</string>
 					<object class="IBObjectRecord">
 						<int key="objectID">1238</int>
 						<reference key="object" ref="895376756"/>
-						<reference key="parent" ref="271662970"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1350</int>
-						<reference key="object" ref="158601911"/>
 						<reference key="parent" ref="271662970"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -3162,8 +3139,6 @@ IHdheQ</string>
 				<boolean value="YES" key="1342.ImportedFromIB2"/>
 				<string key="1343.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1343.ImportedFromIB2"/>
-				<string key="1350.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<boolean value="YES" key="1350.ImportedFromIB2"/>
 				<string key="1351.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1351.ImportedFromIB2"/>
 				<boolean value="YES" key="1351.windowTemplate.hasMinSize"/>
@@ -3364,7 +3339,7 @@ IHdheQ</string>
 				<boolean value="YES" key="5.ImportedFromIB2"/>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="56.ImportedFromIB2"/>
-				<string key="57.IBEditorWindowLastContentRect">{{315, 493}, {228, 243}}</string>
+				<string key="57.IBEditorWindowLastContentRect">{{67, 513}, {228, 223}}</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="57.ImportedFromIB2"/>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4626,6 +4601,33 @@ IHdheQ</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ServiceRegularExpressionFiltersTableView</string>
+					<string key="superclassName">NSTableView</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="edit:">id</string>
+						<string key="redo:">id</string>
+						<string key="undo:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">ServiceRegularExpressionFiltersTableView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

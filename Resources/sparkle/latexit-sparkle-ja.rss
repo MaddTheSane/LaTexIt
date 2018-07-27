@@ -322,5 +322,25 @@
         sparkle:dsaSignature="MCwCFHcmgI/y/DOfg/IhNMJC6jY8tHDoAhR8CpD9l/L4+z7tpxOH9qVSVHzhLQ=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.2</guid>
+      <title>Version 2.5.2</title>
+      <description><![CDATA[
+        <ul>
+          <li>背景色が機能しなかった問題を修正</li>
+          <li>Mac OS X 10.5 互換性のためRetina 対応アイコンファイルを修正</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.2</sparkle:releaseNotesLink>
+      <pubDate>Thu, 31 Jan 2013 19:45:03 +0100</pubDate>
+      <enclosure
+      url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_2.dmg"
+      sparkle:version="2.5.2"
+      sparkle:shortVersionString="2.5.2"
+      type="application/octet-stream"
+      length="9732750"
+      sparkle:dsaSignature="MCwCFHmVlXg/ecsvAi+xYwKHOaXvlhpdAhQZB1R7C8puewAQgh1eyIjcwSp3ag=="
+      />
+    </item>
   </channel> 
 </rss>

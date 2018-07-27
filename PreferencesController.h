@@ -50,6 +50,10 @@ extern NSString* ServiceRespectsBaselineKey;
 extern NSString* ServiceRespectsPointSizeKey;
 extern NSString* ServicePointSizeFactorKey;
 extern NSString* ServiceUsesHistoryKey;
+extern NSString* ServiceRegularExpressionFiltersKey;
+extern NSString* ServiceRegularExpressionFilterEnabledKey;
+extern NSString* ServiceRegularExpressionFilterInputPatternKey;
+extern NSString* ServiceRegularExpressionFilterOutputPatternKey;
 extern NSString* AdditionalTopMarginKey;
 extern NSString* AdditionalLeftMarginKey;
 extern NSString* AdditionalRightMarginKey;
@@ -114,23 +118,25 @@ extern NSString* CurrentCompositionConfigurationDidChangeNotification;
 extern NSString* AdditionalFilesPathsKey;
 
 @class AdditionalFilesController;
+@class BodyTemplatesController;
 @class CompositionConfigurationsController;
 @class EncapsulationsController;
 @class PreamblesController;
-@class BodyTemplatesController;
+@class ServiceRegularExpressionFiltersController;
 
 @interface PreferencesController : NSObject {
   BOOL      isLaTeXiT;
   
   NSUndoManager* undoManager;
 
-  NSArrayController*                   editionTextShortcutsController;
-  PreamblesController*                 preamblesController;
-  BodyTemplatesController*             bodyTemplatesController;
-  CompositionConfigurationsController* compositionConfigurationsController;
-  NSArrayController*                   serviceShortcutsController;
-  AdditionalFilesController*           additionalFilesController;
-  EncapsulationsController*            encapsulationsController;
+  NSArrayController*                         editionTextShortcutsController;
+  PreamblesController*                       preamblesController;
+  BodyTemplatesController*                   bodyTemplatesController;
+  CompositionConfigurationsController*       compositionConfigurationsController;
+  NSArrayController*                         serviceShortcutsController;
+  ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController;
+  AdditionalFilesController*                 additionalFilesController;
+  EncapsulationsController*                  encapsulationsController;
   
   export_format_t exportFormatCurrentSession;
 }
@@ -236,10 +242,13 @@ extern NSString* AdditionalFilesPathsKey;
 
 -(NSString*)          serviceDescriptionForIdentifier:(service_identifier_t)identifier;
 -(NSArray*)           serviceShortcuts;
--(void)               setServiceShortcuts:(NSArray*)serviceShortcuts;
+-(void)               setServiceShortcuts:(NSArray*)value;
 -(NSArrayController*) serviceShortcutsController;
 -(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
                                authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
+-(NSArray*)           serviceRegularExpressionFilters;
+-(void)               setServiceRegularExpressionFilters:(NSArray*)value;
+-(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController;
 
 -(BOOL)                      encapsulationsEnabled;
 -(NSArray*)                  encapsulations;

@@ -10,7 +10,8 @@
 
 #import "Utils.h"
 
-#import <openssl/ssl.h>
+#import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/bio.h>//specific to avoid compatibility problem prior MacOS 10.5
+#import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/ssl.h>//specific to avoid compatibility problem prior MacOS 10.5
 
 @implementation NSData (Extended)
 

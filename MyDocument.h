@@ -163,3 +163,6 @@
 -(void) splitViewDidResizeSubviews:(NSNotification*)notification;
 
 @end
+
+@interface MyDocumentWindow : NSWindow
+@end

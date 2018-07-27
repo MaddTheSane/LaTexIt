@@ -25,6 +25,7 @@
 #import "NSWorkspaceExtended.h"
 #import "PreamblesController.h"
 #import "PreferencesControllerMigration.h"
+#import "ServiceRegularExpressionFiltersController.h"
 #import "Utils.h"
 
 #import <Security/Security.h>
@@ -77,6 +78,11 @@ NSString* ServiceRespectsPointSizeKey     = @"ServiceRespectsPointSize";
 NSString* ServicePointSizeFactorKey       = @"ServicePointSizeFactor";
 NSString* ServiceRespectsColorKey         = @"ServiceRespectsColor";
 NSString* ServiceUsesHistoryKey           = @"ServiceUsesHistory";
+NSString* ServiceRegularExpressionFiltersKey         = @"ServiceRegularExpressionFilters";
+NSString* ServiceRegularExpressionFilterEnabledKey   = @"ServiceRegularExpressionFilterEnabled";
+NSString* ServiceRegularExpressionFilterInputPatternKey     = @"ServiceRegularExpressionFilterInputPattern";
+NSString* ServiceRegularExpressionFilterOutputPatternKey    = @"ServiceRegularExpressionFilterOutputPattern";
+
 NSString* AdditionalTopMarginKey          = @"AdditionalTopMargin";
 NSString* AdditionalLeftMarginKey         = @"AdditionalLeftMargin";
 NSString* AdditionalRightMarginKey        = @"AdditionalRightMargin";
@@ -151,6 +157,8 @@ NSString* AdditionalFilesPathsKey = @"AdditionalFilesPaths";
 -(NSArray*) compositionConfigurationsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
 -(NSArrayController*) lazyServiceShortcutsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
 -(NSArray*) serviceShortcutsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
+-(ServiceRegularExpressionFiltersController*) lazyServiceRegularExpressionFiltersControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
+-(NSArray*) serviceRegularExpressionFiltersFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
 -(AdditionalFilesController*) lazyAdditionalFilesControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
 -(NSArray*) additionalFilesPathsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
 -(EncapsulationsController*) lazyEncapsulationsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
@@ -276,6 +284,13 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                    [NSNumber numberWithInt:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
                                                    nil],
                                                 nil], ServiceShortcutsKey,
+                                              [NSArray arrayWithObjects:
+                                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                                   [NSNumber numberWithBool:NO], ServiceRegularExpressionFilterEnabledKey,
+                                                   @"(\\(.*\\))", ServiceRegularExpressionFilterInputPatternKey,
+                                                   @"\\1", ServiceRegularExpressionFilterOutputPatternKey,
+                                                   nil],
+                                                nil], ServiceRegularExpressionFiltersKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
                                                [NSNumber numberWithDouble:1.0], ServicePointSizeFactorKey,
@@ -406,6 +421,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   [self->bodyTemplatesController release];
   [self->compositionConfigurationsController release];
   [self->serviceShortcutsController release];
+  [self->serviceRegularExpressionFiltersController release];
   [self->encapsulationsController release];
   [super dealloc];
 }
@@ -1218,15 +1234,15 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end serviceShortcuts
 
--(void) setServiceShortcuts:(NSArray*)serviceShortcuts
+-(void) setServiceShortcuts:(NSArray*)value
 {
   NSArrayController* controller = [self lazyServiceShortcutsControllerWithCreationIfNeeded:NO];
   if (controller)
-    [controller setContent:[[serviceShortcuts mutableCopy] autorelease]];
+    [controller setContent:[[value mutableCopy] autorelease]];
   else if (self->isLaTeXiT)
-    [[NSUserDefaults standardUserDefaults] setObject:serviceShortcuts forKey:ServiceShortcutsKey];
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:ServiceShortcutsKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, (CFPropertyListRef)serviceShortcuts, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, (CFPropertyListRef)value, (CFStringRef)LaTeXiTAppKey);
 }
 //end setServiceShortcuts:
 
@@ -1236,6 +1252,32 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   return result;
 }
 //end serviceShortcutsController
+
+-(NSArray*) serviceRegularExpressionFilters
+{
+  NSArray* result = [self serviceRegularExpressionFiltersFromControllerIfPossible:YES createControllerIfNeeded:NO];
+  return result;
+}
+//end serviceRegularExpressionFilters
+
+-(void) setServiceRegularExpressionFilters:(NSArray*)value
+{
+  ServiceRegularExpressionFiltersController* controller = [self lazyServiceRegularExpressionFiltersControllerWithCreationIfNeeded:NO];
+  if (controller)
+    [controller setContent:[[value mutableCopy] autorelease]];
+  else if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:ServiceRegularExpressionFiltersKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)ServiceRegularExpressionFiltersKey, (CFPropertyListRef)value, (CFStringRef)LaTeXiTAppKey);
+}
+//end setServiceRegularExpressionFilters:
+
+-(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController
+{
+  ServiceRegularExpressionFiltersController* result = [self lazyServiceRegularExpressionFiltersControllerWithCreationIfNeeded:YES];
+  return result;
+}
+//end serviceRegularExpressionFiltersController
 
 #pragma mark margins
 
@@ -1765,6 +1807,47 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   return result;
 }
 //end serviceShortcutsFromControllerIfPossible:createControllerIfNeeded:
+
+-(ServiceRegularExpressionFiltersController*) lazyServiceRegularExpressionFiltersControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded
+{
+  ServiceRegularExpressionFiltersController* result = self->serviceRegularExpressionFiltersController;
+  if (!self->serviceRegularExpressionFiltersController && creationOptionIfNeeded)
+  {
+    if (self->isLaTeXiT)
+    {
+      self->serviceRegularExpressionFiltersController = [[ServiceRegularExpressionFiltersController alloc] initWithContent:nil];
+      [self->serviceRegularExpressionFiltersController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
+        withKeyPath:[NSUserDefaultsController adaptedKeyPath:ServiceRegularExpressionFiltersKey]
+            options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+    }
+    else
+    {
+      NSArray* serviceRegularExpressionFilters = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)ServiceRegularExpressionFiltersKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+      self->serviceRegularExpressionFiltersController = [[ServiceRegularExpressionFiltersController alloc] initWithContent:!serviceRegularExpressionFilters ? [NSArray array] : serviceRegularExpressionFilters];
+    }
+    [self->serviceRegularExpressionFiltersController setAutomaticallyPreparesContent:NO];
+    [self->serviceRegularExpressionFiltersController setObjectClass:[NSMutableDictionary class]];
+    result = self->serviceRegularExpressionFiltersController;
+  }//end if (!self->serviceRegularExpressionFiltersController && creationOptionIfNeeded)
+  return result;
+}
+//end lazyServiceRegularExpressionFiltersControllerWithCreationIfNeeded:
+
+-(NSArray*) serviceRegularExpressionFiltersFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded
+{
+  NSArray* result = nil;
+  if (fromControllerIfPossible)
+    result = [[self lazyServiceRegularExpressionFiltersControllerWithCreationIfNeeded:createControllerIfNeeded] arrangedObjects];
+  if (!result)
+  {
+    if (self->isLaTeXiT)
+      result = [[NSUserDefaults standardUserDefaults] arrayForKey:ServiceRegularExpressionFiltersKey];
+    else
+      result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)ServiceRegularExpressionFiltersKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  }
+  return result;
+}
+//end serviceRegularExpressionFiltersFromControllerIfPossible:createControllerIfNeeded:
 
 -(AdditionalFilesController*) lazyAdditionalFilesControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded
 {

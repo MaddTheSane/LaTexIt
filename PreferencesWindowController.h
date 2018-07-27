@@ -30,12 +30,13 @@ extern NSString* PluginsToolbarItemIdentifier;
 @class PreamblesTableView;
 @class BodyTemplatesTableView;
 @class LineCountTextView;
+@class ServiceRegularExpressionFiltersTableView;
 @class ServiceShortcutsTableView;
 @class TextShortcutsTableView;
 
 @class Plugin;
 
-@interface PreferencesWindowController : NSWindowController {
+@interface PreferencesWindowController : NSWindowController /*<NSTextFieldDelegate>*/ {
   IBOutlet NSView*        generalView;
   IBOutlet NSView*        editionView;
   IBOutlet NSView*        templatesView;
@@ -172,6 +173,11 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSButton*                  serviceUsesHistoryButton;
   IBOutlet ServiceShortcutsTableView* serviceShortcutsTableView;
   IBOutlet NSTextField*               serviceRelaunchWarning;
+  IBOutlet ServiceRegularExpressionFiltersTableView* serviceRegularExpressionFiltersTableView;
+  IBOutlet NSButton*                  serviceRegularExpressionsAddButton;
+  IBOutlet NSButton*                  serviceRegularExpressionsRemoveButton;
+  IBOutlet NSTextField*               serviceRegularExpressionsTestInputTextField;
+  IBOutlet NSTextField*               serviceRegularExpressionsTestOutputTextField;
 
   IBOutlet AdditionalFilesTableView* additionalFilesTableView;
   IBOutlet NSButton*                 additionalFilesAddButton;

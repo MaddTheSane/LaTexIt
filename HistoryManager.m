@@ -370,7 +370,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.1", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.2", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -403,8 +403,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   @try{
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
+    NSDictionary* options = nil;
+    if (isMacOS10_6OrAbove())
+      options = [NSDictionary dictionaryWithObjectsAndKeys:
+                  [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                  [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+                  nil];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                        configuration:nil URL:storeURL options:nil error:&error];
+                        configuration:nil URL:storeURL options:options error:&error];
     if (error)
       {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     if (!persistentStore)
@@ -412,7 +418,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSError* error = nil;
       [self _migrateLatexitManagedModel:path];
       persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                          configuration:nil URL:storeURL options:nil error:&error];
+                          configuration:nil URL:storeURL options:options error:&error];
       if (error)
         {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     }//end if (!persistentStore)
@@ -427,7 +433,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.1", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.2", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -485,7 +491,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.5.1", @"version",
+          @"2.5.2", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -614,32 +620,52 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 -(void) _migrateLatexitManagedModel:(NSString*)path
 {
   BOOL isManagedObjectModelPrevious250 = NO;
+  BOOL isManagedObjectModelPrevious260 = NO;
 
-  NSString* oldManagedObjectModelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Latexit-2.4.0" ofType:@"mom"];
-  NSURL*    oldManagedObjectModelURL  = [NSURL fileURLWithPath:oldManagedObjectModelPath];
-  NSManagedObjectModel* oldManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
-  NSPersistentStoreCoordinator* oldPersistentStoreCoordinator =
-    [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
-  NSString* oldPath = [[path copy] autorelease];
-  NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
+  NSArray* oldDataModelNames = [NSArray arrayWithObjects:/*@"Latexit-2.5.0",*/ @"Latexit-2.4.0", nil];
+  NSEnumerator* enumerator = [oldDataModelNames objectEnumerator];
+  NSString* oldDataModelName = nil;
   id oldPersistentStore = nil;
-  @try{
-    NSError* error = nil;
-    oldPersistentStore = !oldStoreURL ? nil :
-      [oldPersistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldStoreURL
-                                                        options:nil error:&error];
-    isManagedObjectModelPrevious250 = oldPersistentStore && !error;
-    if (error)
-      {DebugLog(0, @"error : %@", error);}
-  }
-  @catch (NSException* e){
-    DebugLog(0, @"exception : %@", e);
-  }
+  NSPersistentStoreCoordinator* oldPersistentStoreCoordinator = nil;
+  NSString* oldPath = nil;
+  NSManagedObjectModel* oldManagedObjectModel = nil;
+  while(!oldPersistentStore && ((oldDataModelName = [enumerator nextObject])))
+  {
+    NSString* oldManagedObjectModelPath =
+      [[NSBundle bundleForClass:[self class]] pathForResource:oldDataModelName ofType:@"mom"];
+    NSURL* oldManagedObjectModelURL  = [NSURL fileURLWithPath:oldManagedObjectModelPath];
+    oldManagedObjectModel =
+      [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
+    oldPersistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
+    oldPath = [[path copy] autorelease];
+    NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
+    @try{
+      NSError* error = nil;
+      oldPersistentStore = !oldStoreURL ? nil :
+        [oldPersistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldStoreURL
+                                                          options:nil error:&error];
+      isManagedObjectModelPrevious260 = oldPersistentStore && !error;
+      isManagedObjectModelPrevious250 = [oldDataModelName isEqualToString:@"Latexit-2.4.0"] && oldPersistentStore && !error;
+      if (error)
+        {DebugLog(0, @"error : %@", error);}
+    }
+    @catch (NSException* e){
+      DebugLog(0, @"exception : %@", e);
+    }
+    if (!oldPersistentStore)
+    {
+      [oldPersistentStoreCoordinator release];
+      oldPersistentStoreCoordinator = nil;
+      oldPath = nil;
+      [oldManagedObjectModel release];
+      oldManagedObjectModel = nil;
+    }//end if (!oldPersistentStore)
+  }//end for each oldDataModelName
   NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
   [oldManagedObjectContext setUndoManager:nil];
   [oldManagedObjectContext setPersistentStoreCoordinator:oldPersistentStoreCoordinator];
 
-  NSManagedObjectModel* newManagedObjectModel = !isManagedObjectModelPrevious250 ? nil :
+  NSManagedObjectModel* newManagedObjectModel = !isManagedObjectModelPrevious250 && !isManagedObjectModelPrevious260 ? nil :
     [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel];
   NSPersistentStoreCoordinator* newPersistentStoreCoordinator =
     [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:newManagedObjectModel];

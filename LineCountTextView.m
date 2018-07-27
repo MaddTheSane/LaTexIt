@@ -138,6 +138,8 @@ static int SpellCheckerDocumentTag = 0;
 
 -(void) _initializeSpellChecker:(id)object
 {
+  if ([self respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
+    [self setAutomaticTextReplacementEnabled:NO];
   if (!spellCheckerHasBeenInitialized)
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];

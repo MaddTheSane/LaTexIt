@@ -174,6 +174,8 @@
 		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
 		9311C80408A0FA95009AC959 /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C80208A0FA95009AC959 /* LibraryWindowController.m */; };
 		9311C8E708A10931009AC959 /* HistoryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C8E508A10931009AC959 /* HistoryWindowController.m */; };
+		93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
+		93155CB216AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */; };
 		9318ADBF101DBC3800F808E8 /* NSImageExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9318ADBE101DBC3800F808E8 /* NSImageExtended.m */; };
 		9318AEBD101DCB8E00F808E8 /* CGExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 9318AEBC101DCB8E00F808E8 /* CGExtras.m */; };
@@ -223,14 +225,13 @@
 		9333DDEA0FA6327300157F00 /* CompositionConfigurationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9333DD940FA62F8A00157F00 /* CompositionConfigurationsController.m */; };
 		93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
 		93362C0D15BF500A00EA0679 /* NSWindowExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93362C0C15BF500A00EA0679 /* NSWindowExtended.m */; };
-		933A1248156C055A00DCC7D4 /* current-version-ja.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933A1247156C055A00DCC7D4 /* current-version-ja.rtf */; };
 		933A1249156C055A00DCC7D4 /* current-version-ja.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933A1247156C055A00DCC7D4 /* current-version-ja.rtf */; };
 		933A73CD0F9B29AE00DFA78B /* NSViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */; };
 		933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 930255CF07F0C2A800011996 /* Localizable.strings */; };
 		933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */; };
 		933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9357846A0E9D2A9C00736F31 /* CoreData.framework */; };
-		933C72FA13A951FC0097D2EF /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */; };
-		933C72FB13A9520C0097D2EF /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */; };
+		933C72FA13A951FC0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */; };
+		933C72FB13A9520C0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */; };
 		934069DA0C058FFB0012A8DB /* Léeme.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934069D90C058FFB0012A8DB /* Léeme.rtfd */; };
 		934191951280CC38009D3E97 /* TooltipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 934191941280CC38009D3E97 /* TooltipWindow.m */; };
 		9341922E1281C70C009D3E97 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9341922D1281C70C009D3E97 /* Localizable.strings */; };
@@ -320,6 +321,8 @@
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
+		9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
+		9388E88016B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
 		938999BD10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		938999BE10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 938DBADA10BD7C19002350CF /* PalettePanel.m */; };
@@ -371,13 +374,13 @@
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
 		93B583131014704700907B47 /* NSManagedObjectContextExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */; };
 		93B5870C10159CC700907B47 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
+		93B5ECCF16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
+		93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
+		93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
 		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
 		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
 		93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */; };
-		93C0685D1697230300D20F06 /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
-		93C068771697240D00D20F06 /* latexit-changelog-ja.html in Resources */ = {isa = PBXBuildFile; fileRef = 93C068761697240D00D20F06 /* latexit-changelog-ja.html */; };
-		93C068791697241400D20F06 /* latexit-sparkle-ja.rss in Resources */ = {isa = PBXBuildFile; fileRef = 93C068781697241400D20F06 /* latexit-sparkle-ja.rss */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
 		93C27F9A139A5A1600410595 /* main.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF7C0E9F307F00B08FB0 /* main.xib */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
@@ -424,17 +427,18 @@
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
 		93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
 		93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C5D80A30D9130009FB59 /* latex-keywords.plist */; };
+		93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
+		93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
+		93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
+		93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */; };
 		93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.nib */; };
 		93F9DFD008A38ECA005DEBF6 /* poisson.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */; };
 		93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
 		93FA9A30156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
-		93FA9A321569280000268E55 /* current-version-it.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A311569280000268E55 /* current-version-it.rtf */; };
 		93FA9A331569280000268E55 /* current-version-it.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A311569280000268E55 /* current-version-it.rtf */; };
-		93FA9A351569282300268E55 /* latexit-changelog-it.html in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A341569282300268E55 /* latexit-changelog-it.html */; };
 		93FA9A361569282300268E55 /* latexit-changelog-it.html in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A341569282300268E55 /* latexit-changelog-it.html */; };
-		93FA9A381569282F00268E55 /* latexit-sparkle-it.rss in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */; };
 		93FA9A391569282F00268E55 /* latexit-sparkle-it.rss in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */; };
 		93FE04E809D2F22600B8B34E /* CompositionConfigurationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FE04E609D2F22600B8B34E /* CompositionConfigurationsTableView.m */; };
 /* End PBXBuildFile section */
@@ -669,6 +673,7 @@
 		9311C80208A0FA95009AC959 /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		9311C8E408A10931009AC959 /* HistoryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryWindowController.h; sourceTree = "<group>"; };
 		9311C8E508A10931009AC959 /* HistoryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryWindowController.m; sourceTree = "<group>"; };
+		93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.5.0.xcdatamodel"; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		931725AB0DA111F5001E036F /* latexit-changelog-en.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-en.html"; path = "Resources/sparkle/latexit-changelog-en.html"; sourceTree = "<group>"; };
@@ -739,7 +744,7 @@
 		933A1247156C055A00DCC7D4 /* current-version-ja.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-ja.rtf"; path = "Resources/documentation/current-version-ja.rtf"; sourceTree = "<group>"; };
 		933A73CB0F9B29AE00DFA78B /* NSViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSViewExtended.h; sourceTree = "<group>"; };
 		933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewExtended.m; sourceTree = "<group>"; };
-		933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
+		933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.6.0.xcdatamodel"; sourceTree = "<group>"; };
 		934069D90C058FFB0012A8DB /* Léeme.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Léeme.rtfd"; path = "Resources/documentation/Léeme.rtfd"; sourceTree = "<group>"; };
 		934191931280CC38009D3E97 /* TooltipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TooltipWindow.h; sourceTree = "<group>"; };
 		934191941280CC38009D3E97 /* TooltipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TooltipWindow.m; sourceTree = "<group>"; };
@@ -855,6 +860,7 @@
 		9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
 		93869F9D1195E3EB00147048 /* DragFilterWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindow.h; sourceTree = "<group>"; };
 		93869F9E1195E3EB00147048 /* DragFilterWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindow.m; sourceTree = "<group>"; };
+		9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
 		938999BB10159DA000A9E04F /* PreferencesControllerMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesControllerMigration.h; sourceTree = "<group>"; };
 		938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesControllerMigration.m; sourceTree = "<group>"; };
 		938DBAD910BD7C19002350CF /* PalettePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalettePanel.h; sourceTree = "<group>"; };
@@ -930,6 +936,10 @@
 		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93B2130C0BBC1CCC00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
+		93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersController.h; sourceTree = "<group>"; };
+		93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersController.m; sourceTree = "<group>"; };
+		93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersTableView.h; sourceTree = "<group>"; };
+		93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersTableView.m; sourceTree = "<group>"; };
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
@@ -991,6 +1001,8 @@
 		93EFDB72088FEFA6000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB73088FEFA6000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; };
 		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.plist.xml; name = "latex-keywords.plist"; path = "Resources/latex-keywords/latex-keywords.plist"; sourceTree = "<group>"; };
+		93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; path = "Frameworks/libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; sourceTree = "<group>"; };
+		93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; path = "Frameworks/libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
@@ -1034,6 +1046,8 @@
 				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
 				934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */,
 				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
+				93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
+				93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1049,6 +1063,8 @@
 				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
 				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
+				93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
+				93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1080,6 +1096,8 @@
 				9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */,
 				931AD67508491A8E00E8EE8B /* Quartz.framework */,
 				93C5318F0D9E2781003AF7FC /* Security.framework */,
+				93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
+				93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -1276,6 +1294,7 @@
 				93D7CA5309D362D40001DC5E /* CompositionConfiguration */,
 				9390D3300FA8D4BF0002100B /* Encapsulations */,
 				9333DD730FA62E6500157F00 /* Preambles */,
+				93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */,
 				9345E40E0AC9C5120082ADB4 /* ServiceShortcuts */,
 				9345E3D70AC9C3390082ADB4 /* TextShortcuts */,
 				932E60B00F5DA745002B3136 /* PreferencesController.h */,
@@ -1605,7 +1624,9 @@
 			isa = PBXGroup;
 			children = (
 				932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */,
-				933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */,
+				93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */,
+				933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */,
+				9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */,
 			);
 			name = "Data models";
 			sourceTree = "<group>";
@@ -1762,6 +1783,17 @@
 				932BA4CF0960C6CD004EECBA /* PaletteMatrix.m */,
 			);
 			name = LaTeX;
+			sourceTree = "<group>";
+		};
+		93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */ = {
+			isa = PBXGroup;
+			children = (
+				93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */,
+				93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */,
+				93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */,
+				93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */,
+			);
+			name = ServiceRegularExpressionFilters;
 			sourceTree = "<group>";
 		};
 		93BEEB581195BDD90060166A /* DragFilterWindow */ = {
@@ -2098,10 +2130,6 @@
 				93E25B171231A1B200D65279 /* LaTeXMathML.js in Resources */,
 				932AE79012606230004422CA /* latexit-plugin-icon.icns in Resources */,
 				93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */,
-				93FA9A321569280000268E55 /* current-version-it.rtf in Resources */,
-				93FA9A351569282300268E55 /* latexit-changelog-it.html in Resources */,
-				93FA9A381569282F00268E55 /* latexit-sparkle-it.rss in Resources */,
-				933A1248156C055A00DCC7D4 /* current-version-ja.rtf in Resources */,
 				93077A86169471C300ADAAA1 /* action-pressed.png in Resources */,
 				93077A87169471C300ADAAA1 /* action-pressed@2x.png in Resources */,
 				93077A88169471C300ADAAA1 /* action.png in Resources */,
@@ -2160,9 +2188,6 @@
 				93077AEF1694726200ADAAA1 /* templatesToolbarItem@2x.png in Resources */,
 				93077AF01694726200ADAAA1 /* webToolbarItem.png in Resources */,
 				93077AF11694726200ADAAA1 /* webToolbarItem@2x.png in Resources */,
-				93C0685D1697230300D20F06 /* お読みください.rtfd in Resources */,
-				93C068771697240D00D20F06 /* latexit-changelog-ja.html in Resources */,
-				93C068791697241400D20F06 /* latexit-sparkle-ja.rss in Resources */,
 				93EAEF8016989BDB00231560 /* linkback-off.png in Resources */,
 				93EAEF8116989BDB00231560 /* linkback-off@2x.png in Resources */,
 				93EAEF8216989BDB00231560 /* linkback-on.png in Resources */,
@@ -2280,7 +2305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9329229A0F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel in Sources */,
-				933C72FB13A9520C0097D2EF /* Latexit.xcdatamodel in Sources */,
+				933C72FB13A9520C0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */,
 				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */,
@@ -2411,6 +2436,10 @@
 				9350FC19139CB1A30016B2E8 /* CGPDFExtras.m in Sources */,
 				9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */,
 				93362C0D15BF500A00EA0679 /* NSWindowExtended.m in Sources */,
+				93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */,
+				9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */,
+				93B5ECCF16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
+				93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2419,7 +2448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9329229B0F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel in Sources */,
-				933C72FA13A951FC0097D2EF /* Latexit.xcdatamodel in Sources */,
+				933C72FA13A951FC0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */,
 				9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */,
 				9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */,
 				9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */,
@@ -2474,6 +2503,9 @@
 				93A35BA4137EB6FE0006DC07 /* LogicTransformer.m in Sources */,
 				9350FC18139CB1A30016B2E8 /* CGPDFExtras.m in Sources */,
 				9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */,
+				93155CB216AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */,
+				9388E88016B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */,
+				93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2704,12 +2736,15 @@
 				GENERATE_PROFILING_CODE = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)\"",
+				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
-					"-lcrypto",
-					"-lssl",
 				);
 				PREBINDING = YES;
 				PRODUCT_NAME = LaTeXiT;
@@ -2759,12 +2794,15 @@
 				GENERATE_PROFILING_CODE = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)\"",
+				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
-					"-lcrypto",
-					"-lssl",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = LaTeXiT;
@@ -2794,7 +2832,7 @@
 				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Development;
 		};
@@ -2834,7 +2872,7 @@
 				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.5;
 				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				VALID_ARCHS = "i386 ppc ppc7400 ppc970";
 			};
 			name = Deployment;
@@ -2878,12 +2916,15 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)\"",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
-					"-lssl",
-					"-lcrypto",
 				);
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
@@ -2934,11 +2975,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
-					"-lssl",
-					"-lcrypto",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;

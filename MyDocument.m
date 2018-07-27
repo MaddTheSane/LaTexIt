@@ -95,8 +95,6 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(void) selectLibraryItemForCurrentLinkedEquation:(id)sender;
 @end
 
-@interface MyDocumentWindow : NSWindow
-@end
 @implementation MyDocumentWindow
 -(void)toggleToolbarShown:(id)sender
 {
@@ -121,8 +119,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   {
     @synchronized(self)
     {
+      const NSUInteger legacyNSNotFound = 0x7fffffff;
+      NSUInteger notFound = isMacOS10_5OrAbove() ? NSNotFound : legacyNSNotFound;
       if (!freeIds)
-        freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, NSNotFound-1)];
+        freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, notFound-2)];
     }//end @synchronized(self)
   }//end if (!freeIds)
 }

@@ -46,6 +46,8 @@
 #import "PluginsManager.h"
 #import "PreamblesController.h"
 #import "PreamblesTableView.h"
+#import "ServiceRegularExpressionFiltersController.h"
+#import "ServiceRegularExpressionFiltersTableView.h"
 #import "ServiceShortcutsTableView.h"
 #import "ServiceShortcutsTextView.h"
 #import "Utils.h"
@@ -118,6 +120,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [[self->compositionConfigurationsCurrentPopUpButton menu] addItem:[NSMenuItem separatorItem]];
     [self->compositionConfigurationsCurrentPopUpButton addItemWithTitle:NSLocalizedString(@"Edit the configurations...", @"Edit the configurations...")];
   }
+  else if (object == [[PreferencesController sharedController] serviceRegularExpressionFiltersController])
+    [self controlTextDidChange:
+      [NSNotification notificationWithName:NSControlTextDidChangeNotification object:self->serviceRegularExpressionsTestInputTextField]];
   else if ((object == [NSUserDefaultsController sharedUserDefaultsController]) &&
            [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
   {
@@ -733,6 +738,28 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       NSValueTransformerBindingOption, nil]];
       
   [self->serviceRelaunchWarning setHidden:isMacOS10_5OrAbove()];
+  
+  //service regular expression filters
+  NSTabView* tabView = nil;
+  NSEnumerator* enumerator = [[self->serviceView subviews] objectEnumerator];
+  NSView* view = nil;
+  while(!tabView && ((view = [enumerator nextObject])))
+    tabView = [view dynamicCastToClass:[NSTabView class]];
+  [tabView removeTabViewItem:[tabView tabViewItemAtIndex:[tabView indexOfTabViewItemWithIdentifier:@"filters"]]];
+  /*NSArrayController* serviceRegularExpressionFiltersController = [preferencesController serviceRegularExpressionFiltersController];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterEnabledKey] options:0 context:nil];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterInputPatternKey] options:0 context:nil];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterOutputPatternKey] options:0 context:nil];
+  [self->serviceRegularExpressionsAddButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canAdd" options:nil];
+  [self->serviceRegularExpressionsAddButton setTarget:serviceRegularExpressionFiltersController];
+  [self->serviceRegularExpressionsAddButton setAction:@selector(add:)];
+
+  [self->serviceRegularExpressionsRemoveButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canRemove" options:nil];
+  [self->serviceRegularExpressionsRemoveButton setTarget:serviceRegularExpressionFiltersController];
+  [self->serviceRegularExpressionsRemoveButton setAction:@selector(remove:)];
+
+  [self->serviceRegularExpressionsTestInputTextField setDelegate:self];*/
 
   //additional files
   AdditionalFilesController* additionalFilesController = [preferencesController additionalFilesController];
@@ -1366,6 +1393,22 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->compositionConfigurationsAdditionalScriptsHelpPanel makeKeyAndOrderFront:sender];
 }
 //end compositionConfigurationsAdditionalScriptsOpenHelp:
+
+#pragma mark service
+
+-(void) controlTextDidChange:(NSNotification*)notification
+{
+  if ([notification object] == self->serviceRegularExpressionsTestInputTextField)
+  {
+    ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController =
+      [[PreferencesController sharedController] serviceRegularExpressionFiltersController];
+    NSString* output = [serviceRegularExpressionFiltersController applyFilter:[self->serviceRegularExpressionsTestInputTextField stringValue]];
+    if (!output)
+      output = @"";
+    [self->serviceRegularExpressionsTestOutputTextField setStringValue:output];
+  }//end if ([notification sender] == self->serviceRegularExpressionsTestInputTextField)
+}
+//end controlTextDidChange:
 
 #pragma mark additional files
 

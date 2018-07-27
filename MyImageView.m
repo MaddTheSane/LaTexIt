@@ -761,7 +761,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   {
     [self->backgroundColor set];
     NSRectFill(inRect);
-  }
+  }//end if (self->backgroundColor)
   
   CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
   NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
@@ -771,6 +771,11 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSRect inRoundedRect2 = NSInsetRect(borderRect, 2, 2);
   NSRect inRoundedRect3 = NSInsetRect(borderRect, 3, 3);
   CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+  CGFloat backgroundRGBcomponents[4] = {0.95f, 0.95f, 0.95f, 1.0f};
+  [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+    getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
+  CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
+
   CGContextAddRect(cgContext, CGRectFromNSRect([self bounds]));
   CGContextFillPath(cgContext);
 
@@ -894,15 +899,17 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
   if (!clipView)
   {
-    NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:[self frame]];
+    NSScrollView* scrollView = [[[NSScrollView alloc] initWithFrame:[self frame]] autorelease];
     [scrollView setAutoresizingMask:[self autoresizingMask]];
-    [[self superview] addSubview:scrollView];
-    [scrollView release];
+    NSView* superView = [self superview];
+    NSView* selfView = [self retain];
+    [superView replaceSubview:selfView with:scrollView];
     [scrollView setHasHorizontalScroller:NO];
     [scrollView setHasVerticalScroller:NO];
     clipView = (NSClipView*)[scrollView contentView];
     [clipView setCopiesOnScroll:NO];
-    [scrollView setDocumentView:self];
+    [scrollView setDocumentView:selfView];
+    [selfView release];
   }//end if (!clipView)
   CGFloat factor = exp(3*(self->zoomLevel-1));
   NSSize newSize = self->naturalPDFSize;
