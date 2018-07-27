@@ -174,6 +174,8 @@
 		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
 		9311C80408A0FA95009AC959 /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C80208A0FA95009AC959 /* LibraryWindowController.m */; };
 		9311C8E708A10931009AC959 /* HistoryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C8E508A10931009AC959 /* HistoryWindowController.m */; };
+		9313F9781775F94200BDEB7E /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9313F9771775F94200BDEB7E /* LinkBack.framework */; };
+		9313F97D1775F98F00BDEB7E /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9313F9771775F94200BDEB7E /* LinkBack.framework */; };
 		93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
 		93155CB216AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */; };
@@ -211,8 +213,6 @@
 		932CF4230826C2EB00434128 /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4210826C2EB00434128 /* LibraryItem.m */; };
 		932CF45F0826C5A500434128 /* icon-file.png in Resources */ = {isa = PBXBuildFile; fileRef = 932CF45E0826C5A500434128 /* icon-file.png */; };
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
-		932E608A0F5DA383002B3136 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
-		932E60900F5DA3A7002B3136 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
 		932E60930F5DA3BC002B3136 /* LatexitEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 935784510E9D21FB00736F31 /* LatexitEquation.m */; };
 		932E60B20F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		932E60B30F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
@@ -514,7 +514,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				932E60900F5DA3A7002B3136 /* LinkBack.framework in CopyFiles */,
+				9313F97D1775F98F00BDEB7E /* LinkBack.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,6 +673,7 @@
 		9311C80208A0FA95009AC959 /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		9311C8E408A10931009AC959 /* HistoryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryWindowController.h; sourceTree = "<group>"; };
 		9311C8E508A10931009AC959 /* HistoryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryWindowController.m; sourceTree = "<group>"; };
+		9313F9771775F94200BDEB7E /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/GC/LinkBack.framework; sourceTree = "<group>"; };
 		93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.5.0.xcdatamodel"; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
@@ -787,7 +788,7 @@
 		934A2C9A10B6C4AC00AAA2CD /* NSDataExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataExtended.h; sourceTree = "<group>"; };
 		934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataExtended.m; sourceTree = "<group>"; };
 		934AA8A60F3380CD0010E384 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
-		934AA8ED0F3381050010E384 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack.framework; sourceTree = "<group>"; };
+		934AA8ED0F3381050010E384 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/LinkBack.framework; sourceTree = "<group>"; };
 		934AA8F30F3381210010E384 /* package-as-dmg.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "package-as-dmg.sh"; path = "scripts/package-as-dmg.sh"; sourceTree = "<group>"; };
 		934AAB280F343D830010E384 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; name = pdfcrop.pl; path = Resources/scripts/pdfcrop.pl; sourceTree = "<group>"; };
 		934C03390AD03600007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -1035,17 +1036,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				938E244B0889C392000626E6 /* AppKit.framework in Frameworks */,
+				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
+				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
+				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
+				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
 				938E23A60889C382000626E6 /* Quartz.framework in Frameworks */,
 				93C531900D9E2781003AF7FC /* Security.framework in Frameworks */,
-				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
-				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
-				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
-				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
-				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
 				934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */,
-				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
+				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
 				93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 				93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
@@ -1056,13 +1057,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */,
+				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */,
+				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
 				9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */,
-				932E608A0F5DA383002B3136 /* LinkBack.framework in Frameworks */,
-				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
-				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
+				9313F9781775F94200BDEB7E /* LinkBack.framework in Frameworks */,
 				93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 				93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
@@ -1073,10 +1074,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */,
+				93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */,
 				938DBE0110BDC2E0002350CF /* Foundation.framework in Frameworks */,
 				938DBE0910BDC2E0002350CF /* LinkBack.framework in Frameworks */,
-				93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1106,6 +1107,7 @@
 			isa = PBXGroup;
 			children = (
 				934AA8ED0F3381050010E384 /* LinkBack.framework */,
+				9313F9771775F94200BDEB7E /* LinkBack.framework */,
 				934AA8A60F3380CD0010E384 /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
@@ -2703,7 +2705,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/LinkBack\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -2758,7 +2763,10 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/LinkBack\"",
+				);
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -2881,10 +2889,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_64_BIT)",
+					ppc,
+				);
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/LinkBack/GC\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
@@ -2937,18 +2950,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_64_BIT)",
+					ppc,
+				);
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/LinkBack/GC\"",
 				);
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_GC = supported;
+				"GCC_ENABLE_OBJC_GC[arch=ppc64]" = supported;
+				"GCC_ENABLE_OBJC_GC[arch=x86_64]" = supported;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2986,6 +3005,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;
+				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64";
 				WRAPPER_EXTENSION = action;
 				ZERO_LINK = NO;
 			};
@@ -3038,7 +3058,10 @@
 			buildSettings = {
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/LinkBack\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -3086,7 +3109,10 @@
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/LinkBack\"",
+				);
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;

@@ -74,24 +74,13 @@
 		</array>
 	</dict>
 	<key>AMRequiredResources</key>
-	<array>
-		<dict>
-			<key>Display Name</key>
-			<string>LaTeXiT</string>
-			<key>Resource</key>
-			<string>fr.chachatelier.pierre.LaTeXiT</string>
-			<key>Type</key>
-			<string>application</string>
-			<key>Version</key>
-			<string>2.5.2</string>
-		</dict>
-	</array>
+	<array/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr_FR</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>CreateEquations 2.5.2, Copyright © 2008-2013, Pierre Chatelier, All Rights Reserved</string>
+	<string>CreateEquations 2.5.3, Copyright © 2008-2013, Pierre Chatelier, All Rights Reserved</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -103,11 +92,11 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5.2</string>
+	<string>2.5.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.5.2</string>
+	<string>2.5.3</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2008-2013, Pierre Chatelier, All Rights Reserved.</string>
 	<key>NSPrincipalClass</key>

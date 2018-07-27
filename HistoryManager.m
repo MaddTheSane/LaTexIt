@@ -370,7 +370,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.2", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.3", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -433,7 +433,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.2", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.3", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -491,7 +491,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.5.2", @"version",
+          @"2.5.3", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
