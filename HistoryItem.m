@@ -280,7 +280,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) writeToPasteboard:(NSPasteboard*)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   //first, feed with equation
-  [[self equation] writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  [[self equation] writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
 
   //overwrite linkBack pasteboard
   NSArray* historyItemArray = [NSArray arrayWithObject:self];
@@ -302,7 +302,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.9.1", @"version",
+       @"2.10.0", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -347,7 +347,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.9.1"        forKey:@"version"];
+  [coder encodeObject:@"2.10.0"       forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:

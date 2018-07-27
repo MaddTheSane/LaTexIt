@@ -15,15 +15,21 @@
 #import "LibraryGroupItem.h"
 #import "LibraryManager.h"
 #import "LibraryView.h"
+#import "LibraryWindowController.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "NSObjectExtended.h"
 #import "NSObjectTreeNode.h"
+#import "NSStringExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 
 #import "Utils.h"
+
+#import "RegexKitLite.h"
 
 @interface LibraryController (PrivateAPI)
 -(NSFetchRequest*) rootFetchRequest;
@@ -213,7 +219,7 @@
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
     LatexitEquation* lastLatexitEquation = [latexitEquations lastObject];
     export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
-    [lastLatexitEquation writeToPasteboard:pasteBoard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:lastLatexitEquation];
+    [lastLatexitEquation writeToPasteboard:pasteBoard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:lastLatexitEquation options:nil];
   }//end if ([latexitEquations count])
 
   if (count && !isChangePasteboardOnTheFly)
@@ -263,7 +269,7 @@
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
   BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]] != nil);
+  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
   BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
   BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
   if (isSelfMoveDrop)
@@ -328,7 +334,7 @@
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
   BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]] != nil);
+  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
   BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
   BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
   if (isSelfMoveDrop)
@@ -358,6 +364,7 @@
       NSMutableDictionary* dictionaryOfFoldersByPath = [[NSMutableDictionary alloc] initWithCapacity:[filenames count]];
       NSMutableArray* candidateFilesQueue = [filenames mutableCopy];
       NSMutableArray* newLibraryRootItems = [[NSMutableArray alloc] initWithCapacity:[filenames count]];
+      NSMutableArray* teXItems = [NSMutableArray array];
       unsigned int i = 0;
       for(i = 0 ; i<[candidateFilesQueue count] ; ++i)
       {
@@ -407,7 +414,22 @@
             [libraryEquation release];
           }//end for each latexitEquation
         }//end if ([[filename pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame)
+        else//if other file
+        {
+          NSArray* newTeXItems = [[LibraryManager sharedManager] createTeXItemsFromFile:filename proposedParentItem:proposedParentItem proposedChildIndex:proposedChildIndex];
+          if (newTeXItems)
+            [teXItems addObjectsFromArray:newTeXItems];
+        }//end if other file
       }//end for each filename
+     
+      if ([teXItems count] > 0)
+      {
+        LibraryWindowController* libraryWindowController =
+          [[[outlineView window]  windowController] dynamicCastToClass:[LibraryWindowController class]];
+        NSDictionary* options = [[[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil] autorelease];
+        [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
+      }//end if ([teXItems count] > 0)
+      
       [dictionaryOfFoldersByPath release];
       [candidateFilesQueue release];
 

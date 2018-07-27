@@ -506,10 +506,10 @@ static int SpellCheckerDocumentTag = 0;
     shouldBePDFData = YES;
     data = [pboard dataForType:NSPDFPboardType];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.adobe.pdf"]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypePDF]])
   {
     shouldBePDFData = YES;
-    data = [pboard dataForType:@"com.adobe.pdf"];
+    data = [pboard dataForType:(NSString*)kUTTypePDF];
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
   {
@@ -606,7 +606,7 @@ static int SpellCheckerDocumentTag = 0;
     if (sourceText && ![[sourceText string] isEqualToString:@""])
       [self insertTextAtMousePosition:sourceText];
   }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -618,7 +618,7 @@ static int SpellCheckerDocumentTag = 0;
       [(id)[self nextResponder] performDragOperation:sender];
     else
       [super performDragOperation:sender];
-  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])
+  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]]))
   {
     NSData* rtfData = [pboard dataForType:type];
@@ -692,7 +692,7 @@ static int SpellCheckerDocumentTag = 0;
     //do nothing, pass to next responder
   }//end LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType
   
-  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", nil]]))
+  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, nil]]))
   {
     NSData* pdfData = [pasteboard dataForType:type];
     //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/toto.pdf", NSHomeDirectory()] atomically:YES];
@@ -702,7 +702,7 @@ static int SpellCheckerDocumentTag = 0;
       [(id)[self nextResponder] paste:sender];
       done = YES;
     }//end if (latexitEquation)
-  }//end @"com.adobe.pdf"
+  }//end kUTTypePDF
 
   if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, nil]]))
   {
@@ -728,7 +728,7 @@ static int SpellCheckerDocumentTag = 0;
     done = YES;
   }//end NSFilesPromisePboardType
   
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
   {
     NSData* rtfdData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -759,7 +759,7 @@ static int SpellCheckerDocumentTag = 0;
       //[super paste:sender];
       done = YES;
     }
-  }//end @"com.apple.flat-rtfd"
+  }//end kUTTypeRTFD
 
   if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])))
   {

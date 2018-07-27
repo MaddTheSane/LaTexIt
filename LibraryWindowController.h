@@ -14,7 +14,7 @@
 @class LibraryView;
 @class LibraryPreviewPanelImageView;
 
-@interface LibraryWindowController : NSWindowController <NSTextViewDelegate> {
+@interface LibraryWindowController : NSWindowController <NSTableViewDelegate, NSTextViewDelegate> {
   IBOutlet NSSearchField*                librarySearchField;
   IBOutlet NSButton*                     importCurrentButton;
   IBOutlet ImagePopupButton*             actionButton;
@@ -39,8 +39,21 @@
   IBOutlet NSDrawer* commentDrawer;
   IBOutlet NSTextView* commentTextView;
 
+  IBOutlet NSPanel*     importTeXPanel;
+  IBOutlet NSButton*    importTeXPanelInlineCheckBox;
+  IBOutlet NSButton*    importTeXPanelDisplayCheckBox;
+  IBOutlet NSButton*    importTeXPanelAlignCheckBox;
+  IBOutlet NSButton*    importTeXPanelEqnarrayCheckBox;
+  IBOutlet NSTableView* importTeXPanelTableView;
+  IBOutlet NSButton*    importTeXImportButton;
+  IBOutlet NSButton*    importTeXCancelButton;
+  
   BOOL              enablePreviewImage;  
   NSSavePanel*      savePanel;
+  
+  NSArrayController* importTeXArrayController;
+  NSDictionary*      importTeXOptions;
+  NSInteger updateLevel;
 }
 
 -(IBAction) changeLibraryDisplayPreviewPanelState:(id)sender;
@@ -77,5 +90,10 @@
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
 
 -(void) blink:(LibraryEquation*)libraryEquation;
+
+-(void) importTeXItemsWithOptions:(NSDictionary*)options;
+-(IBAction) changeImportTeXItems:(id)sender;
+-(IBAction) closeImportTeXItems:(id)sender;
+-(IBAction) performImportTeXItems:(id)sender;
 
 @end

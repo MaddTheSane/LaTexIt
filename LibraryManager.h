@@ -33,6 +33,10 @@ typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRA
 -(NSManagedObjectContext*) managedObjectContext;
 -(NSUndoManager*) undoManager;
 
+-(NSArray*) allItems;
+-(void) removeAllItems;
+-(void) removeItems:(NSArray*)items;
+
 -(void) saveLibrary;
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)selection selection:(NSArray*)selectedItems format:(library_export_format_t)format
        options:(NSDictionary*)options;
@@ -40,5 +44,7 @@ typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRA
 
 -(void) fixChildrenSortIndexesForParent:(LibraryGroupItem*)parent recursively:(BOOL)recursively;
 -(NSArray*) libraryEquations;
+
+-(NSArray*) createTeXItemsFromFile:(NSString*)filename proposedParentItem:(id)proposedParentItem proposedChildIndex:(NSInteger)proposedChildIndex;
 
 @end

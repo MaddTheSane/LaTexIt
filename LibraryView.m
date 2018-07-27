@@ -95,10 +95,7 @@
     folderIcon = [[[NSWorkspace sharedWorkspace] iconForFileType:NSFileTypeForHFSTypeCode(kGenericFolderIcon)] copy];
   result =
     [representedObject isKindOfClass:[LibraryEquation class]] ? [NSImage imageNamed:@"icon-file"] :
-    [representedObject isKindOfClass:[LibraryGroupItem class]] ? 
-      (self->libraryRowType == LIBRARY_ROW_IMAGE_LARGE) ?
-        folderIcon :
-        folderIcon :
+    [representedObject isKindOfClass:[LibraryGroupItem class]] ? folderIcon :
     nil;
   return result;
 }
@@ -648,11 +645,11 @@
       }//end if (libraryEquation)
     }//end for each latexitEquation
   }
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]])
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, (NSString*)kUTTypePDF, nil]])
   {
     NSData* pdfData = [pasteboard dataForType:NSPDFPboardType];
     if (!pdfData)
-      pdfData = [pasteboard dataForType:@"com.adobe.pdf"];
+      pdfData = [pasteboard dataForType:(NSString*)kUTTypePDF];
     if (pdfData)
     {
       LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:YES];
@@ -851,6 +848,21 @@
   if (libraryView && item && ([libraryView libraryRowType] == LIBRARY_ROW_IMAGE_LARGE) &&
       ![item isKindOfClass:[LibraryGroupItem class]])
     height = 34;
+  else if (libraryView && item && ([libraryView libraryRowType] == LIBRARY_ROW_IMAGE_ADJUST) &&
+      [item isKindOfClass:[LibraryEquation class]])
+  {
+    LibraryEquation* libraryEquation = [item dynamicCastToClass:[LibraryEquation class]];
+    LatexitEquation* latexitEquation = [libraryEquation equation];
+    NSImage* image = [latexitEquation pdfCachedImage];
+    NSSize imageSize = [image size];
+    if ((imageSize.width>0) && (imageSize.height>0))
+    {
+      CGFloat aspectRatio = imageSize.width/imageSize.height;
+      CGFloat columnWidth = [[outlineView outlineTableColumn] width];
+      CGFloat heightFromWidth = !aspectRatio ? 0. : MIN(columnWidth, imageSize.width)/aspectRatio;
+      height = MIN(heightFromWidth, 3*34);
+    }//end if ((imageSize.width>0) && (imageSize.height>0))
+  }//end LIBRARY_ROW_IMAGE_ADJUST
   return height;
 }
 //end outlineView:heightOfRowByItem:
@@ -861,7 +873,7 @@
   //disables preview image while editing. See in textDidEndEditing of LibraryView to re-enable it
   LibraryWindowController* libraryWindowController = (LibraryWindowController*)[[outlineView window] windowController];
   [libraryWindowController displayPreviewImage:nil backgroundColor:nil];
-  result = (self->libraryRowType != LIBRARY_ROW_IMAGE_LARGE) || [item isKindOfClass:[LibraryGroupItem class]];
+  result = (self->libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) || [item isKindOfClass:[LibraryGroupItem class]];
   self->willEdit = result;
   return result;
 }

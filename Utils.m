@@ -55,7 +55,7 @@ NSString* GetMySVGPboardType(void)
 NSString* GetMyPNGPboardType(void)
 {
   if (!MyPNGPboardType && isMacOS10_5OrAbove())
-    MyPNGPboardType = @"public.png";
+    MyPNGPboardType = (NSString*)kUTTypePNG;
   #ifdef ARC_ENABLED
   if (!MyPNGPboardType)  
     MyPNGPboardType = (__bridge NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
@@ -82,7 +82,7 @@ NSString* GetWebURLsWithTitlesPboardType(void)
 NSString* GetMyJPEGPboardType(void)
 {
   if (!MyJPEGPboardType && isMacOS10_5OrAbove())
-    MyJPEGPboardType = @"public.jpeg";
+    MyJPEGPboardType = (NSString*)kUTTypeJPEG;
   #ifdef ARC_ENABLED
   if (!MyJPEGPboardType)  
     MyJPEGPboardType = (__bridge NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1

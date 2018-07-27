@@ -1,4 +1,5 @@
 //
+
 //  LibraryWindowController.m
 //  LaTeXiT
 //
@@ -12,7 +13,9 @@
 #import "BorderlessPanel.h"
 #import "ComposedTransformer.h"
 #import "IsKindOfClassTransformer.h"
+#import "IsNotEqualToTransformer.h"
 #import "LatexitEquation.h"
+#import "LaTeXProcessor.h"
 #import "LibraryController.h"
 #import "LibraryEquation.h"
 #import "LibraryItem.h"
@@ -23,13 +26,17 @@
 #import "MyDocument.h"
 #import "MyImageView.h"
 #import "NSArrayExtended.h"
-#import "NSSegmentedControlExtended.h"
+#import "NSMutableArrayExtended.h"
 #import "NSObjectExtended.h"
 #import "NSOutlineViewExtended.h"
+#import "NSSegmentedControlExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
+#import "NSWorkspaceExtended.h"
+#import "ObjectTransformer.h"
 #import "OutlineViewSelectedItemTransformer.h"
 #import "OutlineViewSelectedItemsTransformer.h"
 #import "PreferencesController.h"
+#import "TeXItemWrapper.h"
 #import "Utils.h"
 
 extern NSString* NSMenuDidBeginTrackingNotification;
@@ -39,8 +46,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(void) _updateButtons:(NSNotification*)aNotification;
 -(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
+-(void) updateImportTeXItemsGUI;
 -(void) windowWillClose:(NSNotification*)notification;
 -(void) windowDidResignKey:(NSNotification*)notification;
+-(void) notified:(NSNotification *)notification;
+-(void) latexisationItemDidEndSelector:(NSDictionary*)configuration;
+-(void) latexisationGroupDidEndSelector:(NSDictionary*)configuration;
 @end
 
 @implementation LibraryWindowController
@@ -49,12 +60,15 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 {
   if ((!(self = [super initWithWindowNibName:@"LibraryWindowController"])))
     return nil;
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:LatexizationDidEndNotification object:nil];
   return self;
 }
 //end init
 
 -(void) dealloc
 {
+  [self->importTeXOptions release];  
+  [self->importTeXArrayController release];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:LibraryDisplayPreviewPanelKey];
   [super dealloc]; 
@@ -154,6 +168,22 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self bind:@"enablePreviewImage" toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryDisplayPreviewPanelKey] options:nil];
   
+  [self->importTeXPanelInlineCheckBox setTitle:NSLocalizedString(@"\"Inline\" items", @"")];
+  [self->importTeXPanelDisplayCheckBox setTitle:NSLocalizedString(@"\"Dislay\" items", @"")];
+  [self->importTeXPanelAlignCheckBox setTitle:NSLocalizedString(@"\"Align\" items", @"")];
+  [self->importTeXPanelEqnarrayCheckBox setTitle:NSLocalizedString(@"\"Eqnarray\" items", @"")];
+  [self->importTeXImportButton setTitle:NSLocalizedString(@"Import selection", @"")];
+  [self->importTeXCancelButton setTitle:NSLocalizedString(@"Cancel", @"")];
+  [self->importTeXImportButton sizeToFit];
+  [self->importTeXCancelButton sizeToFit];
+  CGRect cgrect1 = NSRectToCGRect([self->importTeXImportButton frame]);
+  CGRect cgrect2 = NSRectToCGRect([[self->importTeXImportButton superview] bounds]);
+  cgrect1.origin.x = CGRectGetMaxX(cgrect2)-16-cgrect1.size.width;
+  [self->importTeXImportButton setFrame:NSRectFromCGRect(cgrect1)];
+  cgrect2 = NSRectToCGRect([self->importTeXCancelButton frame]);
+  cgrect2.origin.x = CGRectGetMinX(cgrect1)-8-cgrect2.size.width;
+  [self->importTeXCancelButton setFrame:NSRectFromCGRect(cgrect2)];
+  
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self selector:@selector(applicationWillBecomeActive:)
                              name:NSApplicationWillBecomeActiveNotification object:nil];
@@ -165,9 +195,25 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 }
 //end awakeFromNib
 
+-(void) notified:(NSNotification*)notification
+{
+  if ([[notification name] isEqualTo:LatexizationDidEndNotification])
+  {
+    NSDictionary* configuration = [[notification object] dynamicCastToClass:[NSDictionary class]];
+    [self latexisationItemDidEndSelector:configuration];
+    [self performSelectorOnMainThread:@selector(latexisationGroupDidEndSelector:) withObject:configuration waitUntilDone:YES];
+  }//end if ([[notification name] isEqualTo:LatexizationDidEndNotification])
+}
+//end notified:
+
 -(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-  if ([keyPath isEqualToString:LibraryDisplayPreviewPanelKey])
+  if (object && (object == self->importTeXArrayController))
+  {
+    if (!self->updateLevel)
+      [self updateImportTeXItemsGUI];
+  }//end if (object && (object == self->importTeXArrayController))
+  else if ([keyPath isEqualToString:LibraryDisplayPreviewPanelKey])
     [[self->libraryPreviewPanelSegmentedControl cell] setSelected:
       !change ? [[PreferencesController sharedController] libraryDisplayPreviewPanelState] : [[change objectForKey:NSKeyValueChangeNewKey] boolValue]
       forSegment:0];
@@ -505,10 +551,10 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
   [openPanel setAccessoryView:[importAccessoryView retain]];
   if ([[self window] isVisible])
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"library", @"plist", nil] modalForWindow:[self window]
+    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil] modalForWindow:[self window]
                         modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
   else
-    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"plist", @"library", nil]] contextInfo:NULL];
+    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]] contextInfo:NULL];
 }
 //end open:
 
@@ -551,7 +597,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   {
     [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
     [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_OPEN];
-  }
+  }//end if (isLaTeXiTLibrary)
   if (selectedIndex >= [[self->importOptionPopUpButton itemArray] count])
     selectedIndex = 0;
   [self->importOptionPopUpButton selectItemAtIndex:selectedIndex];
@@ -723,6 +769,323 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 }
 //end blink:libraryEquation
 
+-(void) importTeXItemsWithOptions:(NSDictionary*)options
+{
+  NSArray* texItems = [[options objectForKey:@"teXItems"] dynamicCastToClass:[NSArray class]];
+  if ([texItems count] > 0)
+  {
+    NSMutableArray* dataSource = [NSMutableArray array];
+    NSDictionary* texItem = nil;
+    NSEnumerator* enumerator = [texItems objectEnumerator];
+    while((texItem = [enumerator nextObject]))
+    {
+      NSDictionary* texItemDict = [texItem dynamicCastToClass:[NSDictionary class]];
+      TeXItemWrapper* wrapper = !texItem ? nil : [[[TeXItemWrapper alloc] initWithItem:texItemDict] autorelease];
+      [dataSource safeAddObject:wrapper];
+    }//end while((texItem = [enumerator nextObject]))
+    if (!self->importTeXArrayController)
+    {
+      self->importTeXArrayController = [[NSArrayController alloc] initWithContent:dataSource];
+      [self->importTeXArrayController setAutomaticallyPreparesContent:YES];
+      [self->importTeXArrayController setAutomaticallyRearrangesObjects:YES];
+      [self->importTeXArrayController setObjectClass:[TeXItemWrapper class]];
+      [self->importTeXArrayController addObserver:self forKeyPath:@"arrangedObjects.checked" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
+    }//end if (!self->importTeXArrayController)
+    [self changeImportTeXItems:nil];//updatePredicate
+    [self->importTeXPanelTableView bind:NSContentBinding toObject:self->importTeXArrayController withKeyPath:@"arrangedObjects" options:nil];
+    [self->importTeXPanelTableView setDelegate:self];
+    NSString* NSEnabled2Binding = [NSEnabledBinding stringByAppendingString:@"2"];
+    NSString* NSEnabled3Binding = [NSEnabledBinding stringByAppendingString:@"3"];
+    NSTableColumn* tableColumnChecked = [self->importTeXPanelTableView tableColumnWithIdentifier:@"checked"];
+    NSTableColumn* tableColumnTitle = [self->importTeXPanelTableView tableColumnWithIdentifier:@"title"];
+    NSTableColumn* tableColumnImportButton = [self->importTeXPanelTableView tableColumnWithIdentifier:@"import"];
+    NSTableColumn* tableColumnImportState = [self->importTeXPanelTableView tableColumnWithIdentifier:@"state"];
+    [tableColumnChecked bind:NSEnabledBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+    [tableColumnChecked bind:NSValueBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.checked"] options:nil];
+    [tableColumnTitle bind:NSEnabledBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+    [tableColumnTitle bind:NSValueBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.title"] options:nil];
+    [tableColumnImportButton bind:NSEnabledBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+    [tableColumnImportButton bind:NSEnabled2Binding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.checked"] options:nil];
+    [tableColumnImportButton bind:NSEnabled3Binding toObject:self->importTeXArrayController
+                      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
+       [NSDictionary dictionaryWithObjectsAndKeys:
+         [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:1]], NSValueTransformerBindingOption,
+        nil]];
+    [tableColumnImportState bind:NSEnabledBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+    [tableColumnImportState bind:NSValueBinding toObject:self->importTeXArrayController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
+        [NSDictionary dictionaryWithObjectsAndKeys:
+           [ObjectTransformer transformerWithDictionary:
+              [NSDictionary dictionaryWithObjectsAndKeys:
+                @"", [NSNumber numberWithInteger:0],
+                NSLocalizedString(@"_IMPORTING_", @""), [NSNumber numberWithInteger:1],
+                NSLocalizedString(@"_IMPORTED_", @""), [NSNumber numberWithInteger:2],
+                @"!", [NSNumber numberWithInteger:3],
+               nil]], NSValueTransformerBindingOption,
+         nil]];
+
+    [self->importTeXOptions release];
+    self->importTeXOptions = [options copy];
+    [NSApp beginSheet:self->importTeXPanel modalForWindow:[self window] modalDelegate:self
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
+  }//end if ([texItems count] > 0)
+}
+//end importTeXItems:
+
+-(IBAction) changeImportTeXItems:(id)sender
+{
+  if (!self->updateLevel)
+  {
+    ++self->updateLevel;
+    /*NSMutableArray* predicates = [NSMutableArray array];
+    if ([self->importTeXPanelInlineCheckBox state] == NSOnState)
+      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_INLINE]];
+    if ([self->importTeXPanelDisplayCheckBox state] == NSOnState)
+      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_DISPLAY]];
+    if ([self->importTeXPanelAlignCheckBox state] == NSOnState)
+      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_ALIGN]];
+    if ([self->importTeXPanelEqnarrayCheckBox state] == NSOnState)
+      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_EQNARRAY]];
+    NSPredicate* filterPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
+    [self->importTeXArrayController setFilterPredicate:filterPredicate];*/
+    
+    NSEnumerator* enumerator = [[self->importTeXArrayController arrangedObjects] objectEnumerator];
+    TeXItemWrapper* teXItem = nil;
+    while((teXItem = [enumerator nextObject]))
+    {
+      teXItem = [teXItem dynamicCastToClass:[TeXItemWrapper class]];
+      NSDictionary* teXItemData = teXItem.data;
+      latex_mode_t latexMode = (latex_mode_t)[[[teXItemData objectForKey:@"mode"] dynamicCastToClass:[NSNumber class]] integerValue];
+      //teXItem.enabled = [filterPredicate evaluateWithObject:teXItem];
+      teXItem.checked =
+        (sender == self->importTeXPanelInlineCheckBox) && (latexMode == LATEX_MODE_INLINE) ?
+          ([self->importTeXPanelInlineCheckBox state] != NSOffState) :
+        (sender == self->importTeXPanelDisplayCheckBox) && (latexMode == LATEX_MODE_DISPLAY) ?
+          ([self->importTeXPanelDisplayCheckBox state] != NSOffState) :
+        (sender == self->importTeXPanelAlignCheckBox) && (latexMode == LATEX_MODE_ALIGN) ?
+          ([self->importTeXPanelAlignCheckBox state] != NSOffState) :
+        (sender == self->importTeXPanelEqnarrayCheckBox) && (latexMode == LATEX_MODE_EQNARRAY) ?
+          ([self->importTeXPanelEqnarrayCheckBox state] != NSOffState) :
+        teXItem.checked;
+    }//end for each teXItem
+    --self->updateLevel;
+  }//end if (!self->updateLevel)
+  [self updateImportTeXItemsGUI];
+}
+//end changeImportTeXItems:
+
+-(IBAction) closeImportTeXItems:(id)sender
+{
+  LibraryManager* libraryManager = [LibraryManager sharedManager];
+  NSNumber* importOption = [[self->importTeXOptions objectForKey:@"importOption"] dynamicCastToClass:[NSNumber class]];
+  #ifdef ARC_ENABLED
+  @autoreleasepool {
+  #else
+  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
+  #endif
+  NSArray* itemsToRemove = nil;
+  if (importOption && ([importOption integerValue] == LIBRARY_IMPORT_OVERWRITE))
+    itemsToRemove = [libraryManager allItems];
+  [self->importTeXOptions release];
+  self->importTeXOptions = nil;
+
+  BOOL souldImport = (sender == self->importTeXImportButton);
+  if (souldImport)
+    [self performImportTeXItems:sender];
+  
+  if (itemsToRemove)
+    [libraryManager removeItems:itemsToRemove];
+  #ifdef ARC_ENABLED
+  }//end @autoreleasepool
+  #else
+  [ap1 release];
+  #endif
+  [NSApp endSheet:self->importTeXPanel returnCode:(souldImport ? 1 : 0)];
+  [self->importTeXArrayController removeObserver:self forKeyPath:@"arrangedObjects.checked"];
+  [self->importTeXArrayController release];
+  self->importTeXArrayController = nil;
+}
+//end closeImportTeXItems:
+
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
+{
+  [sheet orderOut:self];
+  [self->libraryView reloadData];
+}
+//end sheetDidEnd:returnCode:contextInfo:
+
+-(IBAction) performImportTeXItems:(id)sender
+{
+  NSInteger clickedRow = [self->importTeXPanelTableView clickedRow];
+  NSArray* arrangedObjects = [self->importTeXArrayController arrangedObjects];
+  TeXItemWrapper* teXItem = (clickedRow < 0) || ((unsigned)clickedRow >= [arrangedObjects count]) ? nil :
+    [[arrangedObjects objectAtIndex:clickedRow] dynamicCastToClass:[TeXItemWrapper class]];
+  BOOL isFullImport = !teXItem;
+  NSMutableArray* teXItems = [NSMutableArray array];
+  [teXItems safeAddObject:teXItem];
+  if (isFullImport)
+  {
+    NSEnumerator* enumerator = [arrangedObjects objectEnumerator]; 
+    while((teXItem = [enumerator nextObject]))
+    {
+      if ([teXItem enabled] && [teXItem checked])
+        [teXItems safeAddObject:teXItem];
+    }//end for each teXItem
+  }//end if (isFullImport)
+  
+  BOOL backgroundly = !isFullImport;
+  [[LaTeXProcessor sharedLaTeXProcessor]
+     latexiseTeXItems:teXItems backgroundly:backgroundly
+     delegate:self
+   itemDidEndSelector:(backgroundly ? nil : @selector(latexisationItemDidEndSelector:))//in case of backgroundly, handled by notification
+   groupDidEndSelector:(backgroundly ? nil : @selector(latexisationGroupDidEndSelector:))//in case of backgroundly, handled by notification
+   ];
+  
+  if (isFullImport)
+  {
+    id proposedParentItem = nil;
+    LibraryEquation* proposedLocationAsEquation = nil;
+    LibraryGroupItem* proposedLocationAsGroup = nil;
+    LibraryGroupItem* parent = nil;
+    NSInteger proposedChildIndex = 0;
+
+    LibraryManager* libraryManager = [LibraryManager sharedManager];
+    NSMutableArray* newLibraryRootItems = [[NSMutableArray alloc] init];
+    NSEnumerator* enumerator = [teXItems objectEnumerator];
+    while((teXItem = [enumerator nextObject]))
+    {
+      NSDictionary* teXItemData = teXItem.data;
+      proposedParentItem = [teXItemData objectForKey:@"proposedParentItem"];
+      proposedChildIndex = [[[teXItemData objectForKey:@"proposedChildIndex"] dynamicCastToClass:[NSNumber class]] integerValue];
+      proposedLocationAsEquation = [proposedParentItem dynamicCastToClass:[LibraryEquation class]];
+      proposedLocationAsGroup = [proposedParentItem dynamicCastToClass:[LibraryGroupItem class]];
+      parent =
+        (proposedLocationAsGroup != nil) ? proposedLocationAsGroup :
+        [[proposedLocationAsEquation parent] dynamicCastToClass:[LibraryGroupItem class]];
+      LatexitEquation* latexitEquation = teXItem.equation;
+      LibraryEquation* libraryEquation = !latexitEquation ? nil :
+        [[[LibraryEquation alloc] initWithParent:parent equation:latexitEquation insertIntoManagedObjectContext:[libraryManager managedObjectContext]] autorelease];
+      if (libraryEquation)
+      {
+       [libraryEquation setBestTitle];
+       [newLibraryRootItems safeAddObject:libraryEquation];
+      }//end if (libraryEquation)
+    }//end for each teXItem
+    
+    //fix sortIndexes of root nodes
+    LibraryController* libraryController = [self->libraryView libraryController];
+    NSMutableArray* brothers = [NSMutableArray arrayWithArray:
+                                !parent  ? [libraryController rootItems] : [parent childrenOrdered]];
+    [brothers removeObjectsInArray:newLibraryRootItems];
+    [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
+      [brothers count] : MIN([brothers count], (unsigned)proposedChildIndex)];
+    unsigned int nbBrothers = [brothers count];
+    while(nbBrothers--)
+      [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
+    [newLibraryRootItems release];
+  }//end if (isFullImport))
+
+  [self->importTeXArrayController rearrangeObjects];
+}
+//end performImportTeXItems:
+
+-(void) latexisationItemDidEndSelector:(NSDictionary*)configuration
+{
+  TeXItemWrapper* teXItem = [[configuration objectForKey:@"context"] dynamicCastToClass:[TeXItemWrapper class]];
+  NSData* pdfData = [[configuration objectForKey:@"outPdfData"] dynamicCastToClass:[NSData class]];
+  LatexitEquation* latexitEquation = ![pdfData length] ? nil :
+    [[[LatexitEquation alloc] initWithData:pdfData sourceUTI:(NSString*)kUTTypePDF useDefaults:YES] autorelease];
+  teXItem.importState = !latexitEquation ? 3 : 2;
+  teXItem.equation = latexitEquation;
+  [self->importTeXArrayController rearrangeObjects];
+}
+//end latexisationItemDidEndSelector:
+
+-(void) latexisationGroupDidEndSelector:(NSDictionary*)configuration
+{
+  [self updateImportTeXItemsGUI];
+}
+//end latexisationGroupDidEndSelector:
+
+-(void) updateImportTeXItemsGUI
+{
+  if (!self->updateLevel)
+  {
+    ++self->updateLevel;
+    [self->importTeXArrayController rearrangeObjects];
+    NSUInteger inlineEnabledCount = 0;
+    NSUInteger inlineDisabledCount = 0;
+    NSUInteger displayEnabledCount = 0;
+    NSUInteger displayDisabledCount = 0;
+    NSUInteger alignEnabledCount = 0;
+    NSUInteger alignDisabledCount = 0;
+    NSUInteger eqnarrayEnabledCount = 0;
+    NSUInteger eqnarrayDisabledCount = 0;
+    NSArray* arrangedObjects = [[[self->importTeXArrayController arrangedObjects] mutableCopy] autorelease];
+    NSEnumerator* enumerator = [arrangedObjects objectEnumerator];
+    TeXItemWrapper* teXItem = nil;
+    while((teXItem = [enumerator nextObject]))
+    {
+      teXItem = [teXItem dynamicCastToClass:[TeXItemWrapper class]];
+      NSDictionary* teXItemData = teXItem.data;
+      latex_mode_t latexMode = (latex_mode_t)[[[teXItemData objectForKey:@"mode"] dynamicCastToClass:[NSNumber class]] integerValue];
+      if (latexMode == LATEX_MODE_INLINE)
+      {
+        inlineEnabledCount += teXItem.checked ? 1 : 0;
+        inlineDisabledCount += !teXItem.checked ? 1 : 0;
+      }//end if (latexMode == LATEX_MODE_INLINE)
+      else if (latexMode == LATEX_MODE_DISPLAY)
+      {
+        displayEnabledCount += teXItem.checked ? 1 : 0;
+        displayDisabledCount += !teXItem.checked ? 1 : 0;
+      }//end if (latexMode == LATEX_MODE_DISPLAY)  
+      else if (latexMode == LATEX_MODE_ALIGN)
+      {
+        alignEnabledCount += teXItem.checked ? 1 : 0;
+        alignDisabledCount += !teXItem.checked ? 1 : 0;
+      }//end if (latexMode == LATEX_MODE_ALIGN)  
+      else if (latexMode == LATEX_MODE_EQNARRAY)
+      {
+        eqnarrayEnabledCount += teXItem.checked ? 1 : 0;
+        eqnarrayDisabledCount += !teXItem.checked ? 1 : 0;
+      }//end if (latexMode == LATEX_MODE_EQNARRAY)  
+    }//end for each teXItem
+    [self->importTeXPanelInlineCheckBox setEnabled:((inlineEnabledCount+inlineDisabledCount)>0)];
+    [self->importTeXPanelInlineCheckBox setState:
+      !inlineEnabledCount && !inlineDisabledCount ? NSOffState :
+      inlineEnabledCount && !inlineDisabledCount ? NSOnState :
+      !inlineEnabledCount && inlineDisabledCount ? NSOffState :
+      NSMixedState];
+    [self->importTeXPanelDisplayCheckBox setEnabled:((displayEnabledCount+displayDisabledCount)>0)];
+    [self->importTeXPanelDisplayCheckBox setState:
+      !displayEnabledCount && !displayDisabledCount ? NSOffState :
+      displayEnabledCount && !displayDisabledCount ? NSOnState :
+      !displayEnabledCount && displayDisabledCount ? NSOffState :
+      NSMixedState];
+    [self->importTeXPanelAlignCheckBox setEnabled:((alignEnabledCount+alignDisabledCount)>0)];
+    [self->importTeXPanelAlignCheckBox setState:
+      !alignEnabledCount && !alignDisabledCount ? NSOffState :
+      alignEnabledCount && !alignDisabledCount ? NSOnState :
+      !alignEnabledCount && alignDisabledCount ? NSOffState :
+      NSMixedState];
+    [self->importTeXPanelEqnarrayCheckBox setEnabled:((eqnarrayEnabledCount+eqnarrayDisabledCount)>0)];
+    [self->importTeXPanelEqnarrayCheckBox setState:
+      !eqnarrayEnabledCount && !eqnarrayDisabledCount ? NSOffState :
+      eqnarrayEnabledCount && !eqnarrayDisabledCount ? NSOnState :
+      !eqnarrayEnabledCount && eqnarrayDisabledCount ? NSOffState :
+      NSMixedState];
+    --self->updateLevel;
+  }//end if (!self-updateLevel)
+}
+//end updateImportTeXItemsGUI
+
 -(void) windowWillClose:(NSNotification*)notification
 {
   [libraryPreviewPanel orderOut:self];
@@ -739,4 +1102,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 #pragma mark menu delegate to fix an interface bug
 -(void) menuWillOpen:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed"]];}
 -(void) menuDidClose:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action"]];}
+
+#pragma mark TableViewDelegate
+
 @end
