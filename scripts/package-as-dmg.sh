@@ -1,4 +1,14 @@
 #!/bin/sh
+if [[ -z "${PROJECT_DIR}" ]]; then
+  PROJECT_DIR="/Users/chacha/Programmation/Cocoa/Projets/Applications/LaTeXiT-mainline"
+fi
+if [[ -z "${BUILT_PRODUCTS_DIR}" ]]; then
+  BUILT_PRODUCTS_DIR="/Volumes/Snow Leopard/Users/chacha/Temporary/XCode/Deployment"
+fi
+if [[ -z "${PROJECT_NAME}" ]]; then
+  PROJECT_NAME="LaTeXiT"
+fi
+
 VERSION=$(defaults read "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info" CFBundleShortVersionString)
 VERSION2=`echo "${VERSION}" | sed "s/\\./_/g" | sed "s/\\ /-/g"`
 echo "VERSION=<$VERSION>, VERSION2=<$VERSION2>"
@@ -17,6 +27,8 @@ ditto "${PROJECT_DIR}/Resources/documentation/Lisez-moi.rtfd" "/Volumes/${VOLNAM
 ditto "${PROJECT_DIR}/Resources/documentation/Read Me.rtfd" "/Volumes/${VOLNAME}/Read Me.rtfd"
 ditto "${PROJECT_DIR}/Resources/documentation/Lies mich.rtfd" "/Volumes/${VOLNAME}/Lies mich.rtfd"
 ditto "${PROJECT_DIR}/Resources/documentation/Léeme.rtfd" "/Volumes/${VOLNAME}/Léeme.rtfd"
+
+osascript -e 'tell application "Finder"' -e "make new alias to folder (posix file \"/Applications\") at folder (posix file \"/Volumes/${VOLNAME}\")" -e 'end tell'
 
 hdiutil detach "/Volumes/${VOLNAME}"
 hdiutil compact "${SPARSEPATH}"

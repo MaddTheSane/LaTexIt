@@ -572,5 +572,29 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         sparkle:dsaSignature="MCwCFBUUeIDsNsYhG1DPyPMA3+/2RxziAhR/zorg7CNEQYoSoQnZBL59GPJ7cQ=="
       />
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.9.0</guid>
+      <title>Version 2.9.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Ajout d'annotation graphiques invisibles dans les PDF comme meta-données plus robustes, pour éviter que Keynote et PowerPoint ne les éliminent ;</li>
+          <li>tentative de création d'un nom intelligent lors du glisser/déposer d'un fichier dans le Finder ;</li>
+          <li>export SVG sous forme de texte si l'application cible ne peut afficher le SVG ;</li>
+          <li>toute occurrence de %__TEXTCOLOR__ dans le préambule sera remplacée par la couleur de texte actuellement sélectionnée, pour contourner le problème des packages qui écrasent les réglages les précédant ;</li>
+          <li>coloration plus intelligente de l'arrière-plan des icônes des équations créées dans le Finder, en utilisant l'&quot;arrière-plan automatiquement contrasté&quot; s'il est activé ;</li>
+          <li>ajout du menu &quot;Police &gt; Plus grand/Plus petit&quot;.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.9.0</sparkle:releaseNotesLink>
+			<pubDate>Tue, 06 Feb 2018 22:09:49 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_9_0.dmg"
+				sparkle:version="2.9.0"
+                   sparkle:shortVersionString="2.9.0"
+				type="application/octet-stream"
+				length="11670909"
+				sparkle:dsaSignature="MCwCFAU+lVlqWX6BvpC2cBxJ3geN47JbAhRZLIRENi3Lqq6oR3Q4vZ6hEktgjA=="
+			/>
+    </item>
   </channel> 
 </rss>

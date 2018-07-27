@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryItem.h"
@@ -302,7 +302,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.8.1", @"version",
+       @"2.9.0", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -347,7 +347,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.8.1" forKey:@"version"];
+  [coder encodeObject:@"2.9.0"        forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:

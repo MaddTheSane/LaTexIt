@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -76,8 +76,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 @end
 
 @class NSDraggingSession;
-#if defined(__clang__)
-#else
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 1070
 typedef NSInteger NSDraggingContext;
 #endif
 
@@ -556,7 +555,10 @@ typedef NSInteger NSDraggingContext;
   {
     NSString* dropPath = [dropDestination path];
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    NSString* filePrefix = @"latex-image";
+    NSString* equationSourceText = [[self->transientDragEquation sourceText] string];
+    NSString* filePrefix = [LatexitEquation computeFileNameFromContent:equationSourceText];
+    if (!filePrefix || [filePrefix isEqualToString:@""])
+      filePrefix = @"latex-image";
     
     NSString* extension = nil;
     PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -599,24 +601,23 @@ typedef NSInteger NSDraggingContext;
                                    [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                    nil];
     NSData* data = nil;
+    NSData* currentPdfData = nil;
     if (!data && self->transientDragEquation)
       data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
     if (!data)
-      data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData
+    {
+      if (!currentPdfData)
+        currentPdfData = [self->transientDragEquation pdfData];
+      if (!currentPdfData)
+        currentPdfData = self->pdfData;
+      data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:currentPdfData
                      exportOptions:exportOptions
                      compositionConfiguration:[preferencesController compositionConfigurationDocument]
                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+    }//end if (!data)
     if (extension)
     {
-      NSString* fileName = nil;
-      NSString* filePath = nil;
-      unsigned long i = 1;
-      //we try to compute a name that is not already in use
-      do
-      {
-        fileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
-        filePath = [dropPath stringByAppendingPathComponent:fileName];
-      } while (i && [fileManager fileExistsAtPath:filePath]);
+      NSString* filePath = [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:0];
       
       //if we find such a name, use it
       if (![fileManager fileExistsAtPath:filePath])
@@ -625,11 +626,21 @@ typedef NSInteger NSDraggingContext;
         [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                              ofItemAtPath:filePath error:0];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
-        if ((exportFormat != EXPORT_FORMAT_PNG) &&
-            (exportFormat != EXPORT_FORMAT_TIFF) &&
-            (exportFormat != EXPORT_FORMAT_JPEG))
-          [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:self->pdfData backgroundColor:jpegBackgroundColor]
+        NSColor* autoBackgroundColor = [self->transientDragEquation backgroundColor];
+        NSColor* iconBackgroundColor =
+         (jpegBackgroundColor != nil) ? jpegBackgroundColor :
+         (autoBackgroundColor != nil) ? autoBackgroundColor :
+          nil;
+        if ((exportFormat != EXPORT_FORMAT_PNG) &&(exportFormat != EXPORT_FORMAT_TIFF) && (exportFormat != EXPORT_FORMAT_JPEG))
+        {
+          if (!currentPdfData)
+            currentPdfData = [self->transientDragEquation pdfData];
+          if (!currentPdfData)
+            currentPdfData = self->pdfData;
+          [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:currentPdfData backgroundColor:iconBackgroundColor]
                                          forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
+        }//end if ((exportFormat != EXPORT_FORMAT_PNG) &&(exportFormat != EXPORT_FORMAT_TIFF) && (exportFormat != EXPORT_FORMAT_JPEG))
+        NSString* fileName = [filePath lastPathComponent];
         [names addObject:fileName];
       }//end if (![fileManager fileExistsAtPath:filePath])
     }//end if (extension)
@@ -640,12 +651,14 @@ typedef NSInteger NSDraggingContext;
 
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
-  DebugLog(1, @">");
+  DebugLog(1, @"lazyDataProvider = %p(%@)>", lazyDataProvider, lazyDataProvider);
   [self->document triggerSmartHistoryFeature];
 
   LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
   [self->transientDragEquation release];
   self->transientDragEquation = [equation retain];
+  DebugLog(1, @"self->transientDragEquation = %p>", self->transientDragEquation);
+  DebugLog(1, @"self->transientDragEquation.pdfData = %p>", [self->transientDragEquation pdfData]);
 
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
@@ -680,11 +693,16 @@ typedef NSInteger NSDraggingContext;
   if (!data && self->transientDragEquation)
     data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
   if (!data)
+  {
+    NSData* currentPdfData = [self->transientDragEquation pdfData];
+    if (!currentPdfData)
+      currentPdfData = self->pdfData;
     data = [[LaTeXProcessor sharedLaTeXProcessor]
-      dataForType:exportFormat pdfData:self->pdfData
+      dataForType:exportFormat pdfData:currentPdfData
       exportOptions:exportOptions
       compositionConfiguration:[preferencesController compositionConfigurationDocument]
       uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+  }//end if (!data)
   if (!hasAlreadyCachedData)
   {
     [self->transientDragData release];

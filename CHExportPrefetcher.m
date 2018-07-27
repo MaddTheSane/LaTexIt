@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 30/05/14.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "CHExportPrefetcher.h"
@@ -76,7 +76,7 @@
   }//end @synchronized(self->cache)
   if (data != self->isFetchingData)
     result = data;
-  else//if (data == self->isFetchingData)
+  else if (wait)
   {
     [self->fetchSemaphore P];
     @synchronized(self->cache)
@@ -85,7 +85,7 @@
     }//end @synchronized(self->cache)
     [self->fetchSemaphore V];
     result = data;
-  }//end if (data == self->isFetchingData)
+  }//end if (wait)
   return result;
 }
 //end fetchDataForFormat:
