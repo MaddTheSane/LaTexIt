@@ -54,6 +54,15 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(CGFloat) magnification;
 @end
 
+@interface TransparentView : NSView
+@end
+@implementation TransparentView
+-(BOOL) acceptsFirstMouse:(NSEvent *)theEvent {return NO;}
+-(BOOL) acceptsFirstResponder {return NO;}
+-(BOOL) becomeFirstResponder {return NO;}
+-(NSView*) hitTest:(NSPoint)aPoint {return nil;}
+@end
+
 
 @interface MyImageView (PrivateAPI)
 -(NSImage*) imageForDrag;
@@ -1254,7 +1263,8 @@ typedef NSInteger NSDraggingContext;
       {
         if (!self->layerView)
         {
-          self->layerView = [[NSView alloc] initWithFrame:[scrollView frame]];
+          self->layerView = [[TransparentView alloc] initWithFrame:[scrollView frame]];
+          [self->layerView setNextResponder:scrollView];
           [self->layerView setWantsLayer:YES];
           [self->layerView setAutoresizingMask:[scrollView autoresizingMask]];
           [[scrollView superview] addSubview:self->layerView];

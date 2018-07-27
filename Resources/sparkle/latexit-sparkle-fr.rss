@@ -461,5 +461,24 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         sparkle:dsaSignature="MC0CFFTVhIyQZjrxT/b+JY33oIIIvqQZAhUAm8KBtOxeho6dH/qOo8RVFIFM4JQ="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.7.3</guid>
+      <title>Version 2.7.3</title>
+      <description><![CDATA[
+        <ul>
+          <li>restauration du menu clic-droit sur l'image.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.7.3</sparkle:releaseNotesLink>
+			<pubDate>Sun, 14 Sep 2014 11:22:30 +0200</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_3.dmg"
+        sparkle:version="2.7.3"
+        sparkle:shortVersionString="2.7.3"
+        type="application/octet-stream"
+        length="10731743"
+        sparkle:dsaSignature="MC0CFQCpsn93JNCP4mbtZYVw5aiu/xSR4AIUUr3HF/TH1+5RS230wFr6vy5cR6s="
+			/>
+    </item>
   </channel> 
 </rss>

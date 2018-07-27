@@ -446,8 +446,7 @@
       <title>Version 2.7.2</title>
       <description><![CDATA[
         <ul>
-          <li>fixed CPU usage in some cases&nbsp;;</li>
-          <li>fixed minor bugs.</li>
+          <li>restored right-click menu on image.</li>
         </ul>
       ]]></description>
 			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.2</sparkle:releaseNotesLink>
@@ -459,6 +458,26 @@
         type="application/octet-stream"
         length="10740867"
         sparkle:dsaSignature="MC0CFFTVhIyQZjrxT/b+JY33oIIIvqQZAhUAm8KBtOxeho6dH/qOo8RVFIFM4JQ="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.3</guid>
+      <title>Version 2.7.3</title>
+      <description><![CDATA[
+        <ul>
+          <li>fixed CPU usage in some cases&nbsp;;</li>
+          <li>fixed minor bugs.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.3</sparkle:releaseNotesLink>
+			<pubDate>Sun, 14 Sep 2014 11:22:30 +0200</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_3.dmg"
+        sparkle:version="2.7.3"
+        sparkle:shortVersionString="2.7.3"
+        type="application/octet-stream"
+        length="10731743"
+        sparkle:dsaSignature="MC0CFQCpsn93JNCP4mbtZYVw5aiu/xSR4AIUUr3HF/TH1+5RS230wFr6vy5cR6s="
 			/>
     </item>
   </channel> 
