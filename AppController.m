@@ -77,24 +77,36 @@ static MyDocument*    myDocumentServiceProviderInstance = nil;
 //usual environment and PATH to find a program on the command line
 static NSMutableString*     environmentPath = nil;
 static NSMutableDictionary* environmentDict = nil;
-static NSArray* unixBins = nil;
+static NSMutableArray*      unixBins = nil;
 
 +(void) initialize
 {
   //Yes, it seems ugly, but I need it to force the user defaults to be initialized
   [PreferencesController initialize];
   
-  //usual unix PATH (to find latex)
+  NSString* temporaryPathFileName = @"latexit-paths";
+  NSString* temporaryPathFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:temporaryPathFileName];
+  NSString* systemCall =
+    [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" > %@",
+      temporaryPathFilePath, temporaryPathFilePath];
+  int error = system([systemCall UTF8String]);
+  NSArray* profileBins = error ? [NSArray array] 
+                               : [[NSString stringWithContentsOfFile:temporaryPathFilePath] componentsSeparatedByString:@":"];
+    
   if (!unixBins)
-    unixBins = [[NSArray alloc] initWithObjects:@"/bin", @"/sbin",
+    unixBins = [[NSMutableArray alloc] initWithArray:profileBins];
+  
+  //usual unix PATH (to find latex)
+  NSArray* usualBins = 
+    [NSArray arrayWithObjects:@"/bin", @"/sbin",
       @"/usr/bin", @"/usr/sbin",
       @"/usr/local/bin", @"/usr/local/sbin",
       @"/sw/bin", @"/sw/sbin",
       @"/sw/usr/bin", @"/sw/usr/sbin",
       @"/sw/local/bin", @"/sw/local/sbin",
       @"/sw/usr/local/bin", @"/sw/usr/local/sbin",
-      @"/usr/local/teTeX/bin/powerpc-apple-darwin-current",
       nil];
+  [unixBins addObjectsFromArray:usualBins];
 
   //try to build the best environment for the current user
   if (!environmentPath)
@@ -646,9 +658,8 @@ static NSArray* unixBins = nil;
     if (!thisVersion)
       thisVersion = @"";
     components = [thisVersion componentsSeparatedByString:@" "];
-    NSString* thisVersionNumber = @"";
     if (components && [components count])
-      thisVersionNumber = [components objectAtIndex:0];
+      thisVersion = [components objectAtIndex:0];
 
     int beta = (([components count] >= 3) && ([[components objectAtIndex:1] isEqualToString:@"beta"])) ?
                 [[components objectAtIndex:2] intValue] : 0;

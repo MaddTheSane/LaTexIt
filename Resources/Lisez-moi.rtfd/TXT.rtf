@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.5.2\
+\f2\b \cf0 LaTeXiT 1.5.3\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -52,7 +52,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.5.2 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.5.3 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -231,11 +231,11 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 - avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer la taille exacte. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
 - les marges personnalis\'8ees ne sont pas prises en compte lors d'un export en EPS; cela semble \'90tre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque;\
-- le service ne marche pas avec Mail 2.0.0, 2.0.1, 2.0.2 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites);\
-- le service ne marche pas avec Keynote 1&2, car Keynote ne peut ins\'8erer une image dans un bloc de texte;\
+- le service ne marche pas avec Mail 2.0.0, ..., 2.0.5 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites);\
+- le service ne marche pas avec Keynote 1, 2 & 3, car Keynote ne peut ins\'8erer une image dans un bloc de texte;\
 - LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'8equations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'8ees par le service dans un flot RTFD. Or, il peut arriver que les \'8editeurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'90me si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'88 l'\'8editeur de texte, mais c'est quelque chose de difficile. Pour r\'8esoudre le probl\'8fme, d\'8esactivez simplement l'alignement de l'\'8equation avec la ligne de base texte dans les pr\'8ef\'8erences du service LaTeXiT; cela d\'8esactive l'utilisation des flots RTFD;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 - avec Pages 1.0.2 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites), lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages;\
+\cf0 - avec Pages 1.0.2, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages, apparemment r\'8esolu avec Pages 2.0.\
 - avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, qui a \'8et\'8e corrig\'8e dans la version 1.8;\
 - avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS;\
 - toujours avec Adobe Illustrator, y glisser/d\'8eposer un objet peut entra\'94ner la cr\'8eation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'8don de g\'8erer le glisser/d\'8eposer. OmniGraffle ne pose pas ce genre de probl\'8fmes;\
@@ -271,7 +271,13 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs22 \cf0 \ulnone v 1.5.2 (2 f\'8evrier 2006)\
+\fs22 \cf0 \ulnone v 1.5.3 (4 f\'8evrier 2006)\
+- correction d'un bug portant sur la v\'8erification des mises \'88 jour;\
+- correction d'un bug portant sur la d\'8etection du chemin de pdflatex sur les Mac-Intel.
+\fs26 \ul \
+\
+
+\fs22 \ulnone v 1.5.2 (2 f\'8evrier 2006)\
 - correction d'un bug affectant le lissage de certains symboles dans la palette LaTeX;\
 - correction d'un bug introduit dans la version 1.5.1 qui emp\'90chait le champ de texte de se redimensionner correctement;\
 - correction d'un bug qui ignorait parfois les marges droite et sup\'8erieure;\
