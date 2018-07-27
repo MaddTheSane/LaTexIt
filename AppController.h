@@ -77,7 +77,6 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 
 -(IBAction) newFromClipboard:(id)sender;
 -(IBAction) copyAs:(id)sender;
--(IBAction) paste:(id)sender;
 
 -(IBAction) exportImage:(id)sender;
 -(IBAction) makeLatex:(id)sender;

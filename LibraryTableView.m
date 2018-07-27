@@ -331,6 +331,9 @@
   NSUndoManager* undoManager = [[LibraryManager sharedManager] undoManager];
   if ([sender action] == @selector(copy:))
     ok = ([self selectedRow] >= 0);
+  else if ([sender action] == @selector(paste:))
+    ok = ([[NSPasteboard generalPasteboard] availableTypeFromArray:
+            [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]] != nil);
   else if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
@@ -391,47 +394,47 @@
 -(IBAction) paste:(id)sender
 {
   MyDocument* document = (MyDocument*) [AppController currentDocument];
-  if (document)
+  if (!document)
+    document = [[AppController appController] dummyDocument];
+  NSPasteboard* pboard = [NSPasteboard generalPasteboard];
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
   {
-    NSPasteboard* pboard = [NSPasteboard generalPasteboard];
-    if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+    NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
+    NSEnumerator* enumerator = [libraryItems objectEnumerator];
+    LibraryItem* libraryItem = [enumerator nextObject];
+    while (libraryItem)
     {
-      NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
-      NSEnumerator* enumerator = [libraryItems objectEnumerator];
-      LibraryItem* libraryItem = [enumerator nextObject];
-      while (libraryItem)
-      {
-        [[LibraryManager sharedManager] addItem:libraryItem outlineView:self];
-        libraryItem = [enumerator nextObject];
-      }
+      [[LibraryManager sharedManager] addItem:libraryItem outlineView:self];
+      libraryItem = [enumerator nextObject];
     }
-    else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+    LibraryItem* lastItem = [libraryItems lastObject];
+    if (lastItem)
+      [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:lastItem]] byExtendingSelection:NO];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+  {
+    NSArray* historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:HistoryItemsPboardType]];
+    NSEnumerator* enumerator = [historyItems objectEnumerator];
+    HistoryItem* historyItem = [enumerator nextObject];
+    LibraryItem* libraryLastItem = nil;
+    while(historyItem)
     {
-      NSArray* historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:HistoryItemsPboardType]];
-      NSEnumerator* enumerator = [historyItems objectEnumerator];
-      HistoryItem* historyItem = [enumerator nextObject];
-      while(historyItem)
-      {
-        [[LibraryManager sharedManager] newFile:historyItem outlineView:self];
-        historyItem = [enumerator nextObject];
-      }
-      HistoryItem* lastItem = [historyItems lastObject];
-      if (lastItem)
-      {
-        [document applyHistoryItem:lastItem];
-        [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:lastItem]] byExtendingSelection:NO];
-      }
+      libraryLastItem = [[LibraryManager sharedManager] newFile:historyItem outlineView:self];
+      historyItem = [enumerator nextObject];
     }
-    else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+    if (libraryLastItem)
+      [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:libraryLastItem]] byExtendingSelection:NO];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+    if (pdfData)
     {
-      NSData* pdfData = [pboard dataForType:NSPDFPboardType];
-      if (pdfData)
-      {
-        [document applyPdfData:pdfData];
-        HistoryItem* item = [document historyItemWithCurrentState];
-        LibraryItem* libraryItem = [[LibraryManager sharedManager] newFile:item outlineView:self];
+      [document applyPdfData:pdfData];
+      HistoryItem* item = [document historyItemWithCurrentState];
+      LibraryItem* libraryItem = [[LibraryManager sharedManager] newFile:item outlineView:self];
+      if (libraryItem)
         [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:libraryItem]] byExtendingSelection:NO];
-      }
     }
   }
 }

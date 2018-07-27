@@ -278,6 +278,14 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
     [self setFont:currentFont range:NSMakeRange(0, [[self textStorage] length])];
 }
 
+-(BOOL) validateMenuItem:(id)sender
+{
+  BOOL ok = YES;
+  if ([sender action] == @selector(paste:))
+    return YES;
+  return ok;
+}
+
 -(void) keyDown:(NSEvent*)theEvent
 {
   BOOL isSmallReturn = NO;

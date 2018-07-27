@@ -25,6 +25,7 @@
 -(void) _updateButtons:(NSNotification*)aNotification;
 -(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
+-(void) windowWillClose:(NSNotification*)notification;
 @end
 
 @implementation LibraryController
@@ -93,6 +94,7 @@
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:NSWindowDidBecomeKeyNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:NSWindowDidResignMainNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:ImageDidChangeNotification object:nil];
+  [notificationCenter addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:[self window]];
 }
 
 -(void) dealloc
@@ -319,6 +321,11 @@
 -(void) setEnablePreviewImage:(BOOL)status
 {
   enablePreviewImage = status;
+}
+
+-(void) windowWillClose:(NSNotification*)notification
+{
+  [libraryPreviewPanel orderOut:self];
 }
 
 @end

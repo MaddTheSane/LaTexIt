@@ -823,7 +823,7 @@ static NSString* yenString = nil;
     [NSString stringWithFormat:
       @"%@\n\\pagestyle{empty} "\
        "\\begin{document}"\
-       "%@%@%@%@"\
+       "%@%@%@%@\n"\
        "\\end{document}",
        [self _replaceYenSymbol:colouredPreamble], addSymbolLeft,
        ([[PreferencesController currentCompositionConfigurationObjectForKey:

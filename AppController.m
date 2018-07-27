@@ -299,6 +299,8 @@ static NSMutableDictionary* cachePaths = nil;
     if ([orderedWindows count])
       document = [[[orderedWindows objectAtIndex:0] windowController] document];
   }
+  if (document == [[self appController] dummyDocument])
+    document = nil;
   return document;
 }
 
@@ -455,11 +457,6 @@ static NSMutableDictionary* cachePaths = nil;
   }
 }
 
--(IBAction) paste:(id)sender
-{
-  [NSApp sendAction:@selector(paste:) to:nil from:sender];//default behaviour (Well... I think so...)
-}
-
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
@@ -474,14 +471,6 @@ static NSMutableDictionary* cachePaths = nil;
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
     if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       ok &= isGsAvailable && isPs2PdfAvailable;
-  }
-  else if ([sender action] == @selector(paste:))
-  {
-    //we just allow rich LaTeXiT data to enable the "paste" menu item.
-    //Even if the first responder is a textView that cannot handle it, we will try to drive it to MyImageView
-    ok = [NSApp validateMenuItem:sender] ||
-           [[NSPasteboard generalPasteboard] availableTypeFromArray:
-             [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]];
   }
   else if ([sender action] == @selector(exportImage:))
   {

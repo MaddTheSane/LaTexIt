@@ -53,12 +53,18 @@
   [[[HistoryManager sharedManager] undoManager] redo];
 }
 
+-(IBAction) paste:(id)sender
+{
+}
+
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
   NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];
   if ([sender action] == @selector(copy:))
     ok = ([self selectedRow] >= 0);
+  else if ([sender action] == @selector(paste:))
+    ok = NO;
   else if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
@@ -190,6 +196,7 @@
   }
 }
 
+/*
 //paste data in the document
 -(IBAction) paste:(id)sender
 {
@@ -218,5 +225,6 @@
     }
   }
 }
+*/
 
 @end
