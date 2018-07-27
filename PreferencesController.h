@@ -20,11 +20,13 @@ extern NSString* DefaultFontKey;
 extern NSString* CompositionModeKey;
 extern NSString* PdfLatexPathKey;
 extern NSString* XeLatexPathKey;
+extern NSString* LatexPathKey;
 extern NSString* DvipdfPathKey;
 extern NSString* GsPathKey;
 extern NSString* ServiceRespectsColorKey;
 extern NSString* ServiceRespectsBaselineKey;
 extern NSString* ServiceRespectsPointSizeKey;
+extern NSString* ServiceUsesHistoryKey;
 extern NSString* AdditionalTopMarginKey;
 extern NSString* AdditionalLeftMarginKey;
 extern NSString* AdditionalRightMarginKey;
@@ -73,16 +75,19 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   IBOutlet NSMatrix*    compositionMatrix;  
   IBOutlet NSTextField* pdfLatexTextField;
   IBOutlet NSTextField* xeLatexTextField;
+  IBOutlet NSTextField* latexTextField;
   IBOutlet NSTextField* dvipdfTextField;
   IBOutlet NSTextField* gsTextField;
   IBOutlet NSButton*    pdfLatexButton;
   IBOutlet NSButton*    xeLatexButton;
+  IBOutlet NSButton*    latexButton;
   IBOutlet NSButton*    dvipdfButton;
   IBOutlet NSButton*    gsButton;
 
-  IBOutlet NSButton*    serviceRespectsBaseline;
-  IBOutlet NSMatrix*    serviceRespectsPointSize;
-  IBOutlet NSMatrix*    serviceRespectsColor;
+  IBOutlet NSMatrix*    serviceRespectsPointSizeMatrix;
+  IBOutlet NSMatrix*    serviceRespectsColorMatrix;
+  IBOutlet NSButton*    serviceRespectsBaselineButton;
+  IBOutlet NSButton*    serviceUsesHistoryButton;
 
   IBOutlet NSTextField* additionalTopMarginTextField;
   IBOutlet NSTextField* additionalLeftMarginTextField;
@@ -94,8 +99,9 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   
   IBOutlet NSButton* checkForNewVersionsButton;
 
-  BOOL didChangeXeLatexTextField;
   BOOL didChangePdfLatexTextField;
+  BOOL didChangeXeLatexTextField;
+  BOOL didChangeLatexTextField;
   BOOL didChangeDvipdfTextField;
   BOOL didChangeGsTextField;
 }

@@ -267,7 +267,7 @@ static NSString* yenString = nil;
   BOOL makeLatexButtonEnabled =
     (compositionMode == PDFLATEX) ? [appController isPdfLatexAvailable] && [appController isGsAvailable] :
     (compositionMode == XELATEX)  ? [appController isPdfLatexAvailable] && [appController isXeLatexAvailable] && [appController isGsAvailable] :
-    (compositionMode == LATEXDVIPDF) ? [appController isPdfLatexAvailable] && [appController isDvipdfAvailable] && [appController isGsAvailable] :
+    (compositionMode == LATEXDVIPDF) ? [appController isLatexAvailable] && [appController isDvipdfAvailable] && [appController isGsAvailable] :
     NO;    
   [makeLatexButton setEnabled:makeLatexButtonEnabled];
   [makeLatexButton setNeedsDisplay:YES];
@@ -275,8 +275,8 @@ static NSString* yenString = nil;
     [makeLatexButton setToolTip:nil];
   else if (![makeLatexButton toolTip])
     [makeLatexButton setToolTip:
-      NSLocalizedString(@"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
-                        @"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
+      NSLocalizedString(@"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
+                        @"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
   
   BOOL colorStyEnabled = [appController isColorStyAvailable];
   [colorWell setEnabled:colorStyEnabled];
@@ -541,10 +541,12 @@ static NSString* yenString = nil;
   [stdoutString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
 
   //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
-  NSString* executablePath = (compositionMode == XELATEX) ? [userDefaults stringForKey:XeLatexPathKey] : [userDefaults stringForKey:PdfLatexPathKey];
-  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ %@ -file-line-error -interaction nonstopmode %@ > %@", 
-                          directory, executablePath,
-                          (compositionMode == LATEXDVIPDF) ? @"-progname latex" : @"", texFile, errFile];
+  NSString* executablePath =
+     (compositionMode == XELATEX) ? [userDefaults stringForKey:XeLatexPathKey]
+                                  : (compositionMode == PDFLATEX) ? [userDefaults stringForKey:PdfLatexPathKey]
+                                                                  : [userDefaults stringForKey:LatexPathKey];
+  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ -file-line-error -interaction nonstopmode %@ > %@", 
+                          directory, executablePath, texFile, errFile];
   [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @"processing"),
                                                         [executablePath lastPathComponent],
@@ -714,7 +716,7 @@ static NSString* yenString = nil;
        [self _replaceYenSymbol:body], addSymbolRight];
 
   //creates the corresponding latex file
-  NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding];
+  NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
   BOOL failed = ![latexData writeToFile:latexFilePath atomically:NO];
   
   NSString* stdoutLog = nil;
@@ -741,41 +743,42 @@ static NSString* yenString = nil;
       //and efficient. This will even generated a baseline if it works !
       NSString* magicSourceToFindBaseLine =
         [NSString stringWithFormat:
-          @"%@\n"
-          "\\pagestyle{empty}\n"\
-          "\\usepackage{geometry}\n"\
-          "\\usepackage{graphicx}\n"\
-          "\\newsavebox{\\latexitbox}\n"\
-          "\\newcommand{\\latexitscalefactor}{%f}\n"\
-          "\\newlength{\\latexitwidth}\n\\newlength{\\latexitheight}\n\\newlength{\\latexitdepth}\n"\
-          "\\setlength{\\topskip}{0pt}\n\\setlength{\\parindent}{0pt}\n\\setlength{\\abovedisplayskip}{0pt}\n"\
-          "\\setlength{\\belowdisplayskip}{0pt}\n"\
-          "\\normalfont\n"\
-          "\\begin{lrbox}{\\latexitbox}\n"\
-          "%@%@%@\n"\
-          "\\end{lrbox}\n"\
-          "\\settowidth{\\latexitwidth}{\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}}\n"\
-          "\\settoheight{\\latexitheight}{\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}}\n"\
-          "\\settodepth{\\latexitdepth}{\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}}\n"\
-          "\\newwrite\\foo \\immediate\\openout\\foo=\\jobname.sizes \\immediate\\write\\foo{\\the\\latexitdepth (Depth)}\n"\
-          "\\immediate\\write\\foo{\\the\\latexitheight (Height)}\n"\
-          "\\addtolength{\\latexitheight}{\\latexitdepth}\n"\
-          "\\addtolength{\\latexitheight}{%f pt}\n"\
-          "\\addtolength{\\latexitheight}{%f pt}\n"\
-          "\\addtolength{\\latexitwidth}{%f pt}\n"\
-          "\\immediate\\write\\foo{\\the\\latexitheight (TotalHeight)} \\immediate\\write\\foo{\\the\\latexitwidth (Width)}\n"\
-          "\\closeout\\foo \\geometry{paperwidth=\\latexitwidth,paperheight=\\latexitheight,margin=0pt,left=%f pt,top=%f pt}\n"\
+          @"%@\n" //preamble
+          "\\pagestyle{empty}\n"
+          "\\usepackage{geometry}\n"
+          "\\usepackage{graphicx}\n"
+          "\\newsavebox{\\latexitbox}\n"
+          "\\newcommand{\\latexitscalefactor}{%f}\n" //magnification
+          "\\newlength{\\latexitwidth}\n\\newlength{\\latexitheight}\n\\newlength{\\latexitdepth}\n"
+          "\\setlength{\\topskip}{0pt}\n\\setlength{\\parindent}{0pt}\n\\setlength{\\abovedisplayskip}{0pt}\n"
+          "\\setlength{\\belowdisplayskip}{0pt}\n"
+          "\\normalfont\n"
+          "\\begin{lrbox}{\\latexitbox}\n"
+          "%@%@%@\n" //source text
+          "\\end{lrbox}\n"
+          "\\settowidth{\\latexitwidth}{\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}}\n"
+          "\\settoheight{\\latexitheight}{\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}}\n"
+          "\\settodepth{\\latexitdepth}{\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}}\n"
+          "\\newwrite\\foo \\immediate\\openout\\foo=\\jobname.sizes \\immediate\\write\\foo{\\the\\latexitdepth (Depth)}\n"
+          "\\immediate\\write\\foo{\\the\\latexitheight (Height)}\n"
+          "\\addtolength{\\latexitheight}{\\latexitdepth}\n"
+          "\\addtolength{\\latexitheight}{%f pt}\n" //little correction
+          "\\addtolength{\\latexitheight}{%f pt}\n" //top margin
+          "\\addtolength{\\latexitwidth}{%f pt}\n" //right margin
+          "\\immediate\\write\\foo{\\the\\latexitheight (TotalHeight)} \\immediate\\write\\foo{\\the\\latexitwidth (Width)}\n"
+          "\\closeout\\foo \\geometry{paperwidth=\\latexitwidth,paperheight=\\latexitheight,margin=0pt,left=%f pt,top=%f pt}\n"
           "\\begin{document}\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}\\end{document}\n",
-          [self _replaceYenSymbol:colouredPreamble], magnification/10.0,
-          addSymbolLeft, [self _replaceYenSymbol:body], addSymbolRight,
-          200*magnification/10000,
-          [appController marginControllerTopMargin]+[appController marginControllerBottomMargin],
-          [appController marginControllerLeftMargin]+[appController marginControllerRightMargin],
-          [appController marginControllerLeftMargin],[appController marginControllerTopMargin]
+          [self _replaceYenSymbol:colouredPreamble], //preamble
+          magnification/10.0, //latexitscalefactor = magnification
+          addSymbolLeft, [self _replaceYenSymbol:body], addSymbolRight, //source text
+          400*magnification/10000, //little correction
+          [appController marginControllerTopMargin]+[appController marginControllerBottomMargin],//top margin
+          [appController marginControllerLeftMargin]+[appController marginControllerRightMargin],//right margin
+          [appController marginControllerLeftMargin],400*magnification/10000+[appController marginControllerTopMargin]//for geometry
           ];
       
       //try to latexise that file
-      NSData* latexData = [magicSourceToFindBaseLine dataUsingEncoding:NSUTF8StringEncoding];  
+      NSData* latexData = [magicSourceToFindBaseLine dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexBaselineFilePath atomically:NO];
       
       if (!failed)
@@ -835,10 +838,10 @@ static NSString* yenString = nil;
           [self _replaceYenSymbol:colouredPreamble], magnification/10.0,
           boundingBox.origin.x, boundingBox.origin.y,
           boundingBox.origin.x+boundingBox.size.width, boundingBox.origin.y+boundingBox.size.height,
-          pdfFile, 200*magnification/10000];
+          pdfFile, 400*magnification/10000];
 
-      //Latexisation of step 3. Should never fail. Always performed in ComposeUsingPdfLatex mode
-      NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding];  
+      //Latexisation of step 3. Should never fail. Shoudl always be performed in PDFLatexMode to get a proper bounding box
+      NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexFilePath2 atomically:NO];
       if (!failed)
         pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:PDFLATEX];

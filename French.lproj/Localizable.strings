@@ -37,8 +37,8 @@
 "%@ not found or not working as expected" = "%@ introuvable ou non fonctionnel";
 "The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
 "Find %@..." = "Chercher %@...";
-"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
-"pdflatex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
+"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, latex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
 "Without the color.sty package, you won't be able to change the font color" =
 "Sans le package color.sty, vous ne pourrez pas modifier la couleur des équations";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." =

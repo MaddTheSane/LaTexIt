@@ -35,6 +35,7 @@
   BOOL isGsAvailable;
   BOOL isDvipdfAvailable;
   BOOL isXeLatexAvailable;
+  BOOL isLatexAvailable;
   BOOL isColorStyAvailable;
 
   EncapsulationController* encapsulationController;
@@ -104,6 +105,7 @@
 -(BOOL) isGsAvailable;
 -(BOOL) isDvipdfAvailable;
 -(BOOL) isXeLatexAvailable;
+-(BOOL) isLatexAvailable;
 -(BOOL) isColorStyAvailable;
 
 //if the marginController is not loaded, just use the user defaults values

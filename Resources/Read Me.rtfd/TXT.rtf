@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.4.2\
+\f2\b \cf0 LaTeXiT 1.4.3\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -33,7 +33,8 @@
 -Using the "LaTeXiT Service"\
 -Using LinkBack\
 -FAQ (Frequently Asked Questions )\
--Known issues
+-Known issues\
+-Install LaTeX
 \f2\b\fs26 \
 
 \f1\b0\fs22 -Versions History\
@@ -53,7 +54,7 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.4.2 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs).\
+LaTeXiT 1.4.3 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -129,9 +130,8 @@ The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usep
 \fs26 \cf0 \ul Using the history\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
+\fs22 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
 You can delete history items by pressing <Backspace>, or clear the whole history by clicking the appropriate button.\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
@@ -148,9 +148,8 @@ You can delete history items by pressing <Backspace>, or clear the whole history
 \fs26 \cf0 \ul Using the library\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
+\fs22 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
 The <+> button adds to the library the current equation (that you can rename by double-clicking it)\
 The <action> button proposes more actions.\
 The <refresh> action updates the selected item with the current equation. You cannot update more than one item at a time; it will blink to show that the modification has been taken in account.\
@@ -200,6 +199,12 @@ The <refresh> action updates the selected item with the current equation. You ca
 FAQ (Frequently asked questions)\
 
 \fs22 \ulnone \
+(Q): where can I get pdflatex, dvipdf and ghostscript ?\
+(A): please see the section "Install Latex" of this document.\
+\
+(Q): My equation is cut and does not display completely .\
+(A): See the "Known issues" section below.\
+\
 (Q): Which export format should I prefer ?\
 (A): PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality.\
 \
@@ -221,30 +226,61 @@ FAQ (Frequently asked questions)\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs26 \cf0 \ul \
-Known issues\
+\fs26 \cf0 \ul Known issues\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+- with very little equations, you may encounter a cropping problem. LaTeX may fail to compute the bounding box of an equation. There are two workarounds : either add margins with the Margin palette, or use $$...$$ in TEXT mode instead of using DISPLAY or INLINE mode (there is an internal difference in LaTeXiT);\
+- custom margins are not taken in account when exporting to EPS; it seems to be a bug of GhostScript;\
 - while evolving from version 1.2 for Panther to 1.3 for Panther, you need to rename the folder ~/Library/LaTeXiT-panther into ~/Library/LaTeXiT, to get back your history and library;\
 - the service does not work with Mail 2.0.0, 2.0.1, 2.0.2 (latest available version at the moment these lines are written);\
-- LinkBack may not work when using LaTeXiT's service. Indeed, to align the equation with the surrounding text, LaTeXiT embbeds the image in an RTFD stream, so that it can tune the baseline. However, it may happen that text editors fails "extracting" the image from the stream. So, even if the display is correct, LinkBack becomes "unreachable". The culprit in this case is the text editor, but it is something difficult. To solve the problem, disable the "alignement of the equation with the surrounding text" in the LaTeXiT's service preferences; this turns of baseline tuning and do not use RTFD streams;\
+- the service does not work with Keynote 1&2, since Keynote cannot insert an image into a block of text;\
+- LinkBack may not work when using LaTeXiT's service. Indeed, to align the equation with the surrounding text, LaTeXiT embbeds the image in an RTFD stream, so that it can tune the baseline. However, it may happen that text editors fails "extracting" the image from the stream. So, even if the display is correct, LinkBack becomes "unreachable". The culprit in this case is the text editor, but it is something difficult. To solve the problem, disable the "alignement of the equation with the surrounding text" in the LaTeXiT's service preferences; this turns off baseline tuning and do not use RTFD streams;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 - with Pages 1.0.2 (latest available version at the moment these lines are written), when using the LaTeXiT service, the automatic shift of the equation, in order to align it on the line ("baseline" management), seems not to work. However, it works well with TextEdit and Nisus Writer Express, so it is certainly a bug of Pages;\
 - with EazyDraw 1.7.1, drag'n dropped equations are displayed upside-down. This is a bug of EazyDraw, that has been fixed in the 1.8 version;\
 - with Adobe Illustrator, if you drag'n drop a PDF equation from LaTeXiT to illustrator, the font will be changed, because Illustrator can edit each symbol of the PDF generated by LaTeXiT, and uses its own fonts. To avoid that, use a temporary file: drag the equation from LaTeXiT to your desktop, a file is created, and drop this file into your Illustrator's document. It works, but then you won't be able to edit the equation in Illustrator any more. Other possibility: export with another format (see LaTeXiT Preferences), like EPS;\
-- still with Adobe Illustrator, when drag'n dropping in it, a file is created on the Desktop. It only occurs with Illustrator, and he is mostly responsible, because of its way to handle drag'n drop. Such problems does not occur with OmniGraffle;\
+- still with Adobe Illustrator, when drag'n dropping in it, a file may be created on the Desktop. It only occurs with Illustrator, and he is mostly responsible, because of its way to handle drag'n drop. Such problems do not occur with OmniGraffle;\
+- still with Adobe Illustrator : many glitches reported by users are solved by upgrading Illustrator to a newer version;\
 - if you notice that LaTeXiT, even when not used, eats some processor time an consumes more and more memory, just be aware that to speed up its launch time, it loads the images of the history in the background. This task has a very low priority and may take some time; however, it will stabilize. If you really want to avoid it, just think to clean up your history from time to time!\
 - you can notice that in the system console log, a message appears at each latexisation : "WARNING: Type1 font data returned by OFAStreamPSDownload isn't in the correct format required by the Adobe Type 1 Font Format specification". You can safely ignore this warning, which is due to the pdf files generated by pdflatex. In practice there are no problems, and it may even disappear in future versions of pdflatex (but I don't know, in fact).\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-
-\fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 Versions History\
+
+\fs26 \cf0 \ul Install LaTeX\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. So, here are some very basis explanations, as guidance if you need it.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 LaTeX is not really a single program. It is a bunch of executable files and data files that work together. So, like with Linux, you will find LaTeX *distributions*. A distribution of LaTeX is a set of files that somebody gathered and organized so that once installed, it would work.\
+On MacOS, there are two well-known distributions : Gerben Wierda's distribution through the i-installer, and the Fink  distribution. I will only talk about Gerben Wierda's installation, but keep in mind that it is just a way among others.\
+On the Gerben Wierda's i-installer page ({\field{\*\fldinst{HYPERLINK "http://www.rna.nl/ii.html"}}{\fldrslt http://www.rna.nl/ii.html}}), you can download the i-installer program ({\field{\*\fldinst{HYPERLINK "http://bloch.ling.yale.edu/volumes/ii2/II2.dmg"}}{\fldrslt http://bloch.ling.yale.edu/volumes/ii2/II2.dmg}})\
+The i-installer is a little program that allows you to install LaTeX (or other things) on your system, by getting all the files you need in a remote location. This is very handy, because you are ensured that the files you get are the most recent ones, and all the installation is made for you.\
+So, just download the i-installer, open the dmg, and install it. Now, you can launch the i-installer.\
+Choose the menu item "i-packages > Known packages i-directory"\
+In the left-panel choose and <Use> the Gerben's i-Directory @ TUG\
+In the right panel, choose "Tex" and <Open i-package>. Then, follow the instructions, and LaTeX will be installed on your system. You just have to answer yes (choose the default answer) to all questions.\
+Since you're there, you should also install Ghostscript 8 the same way, because it is required for most programs.\
+\
+Now, LaTeX is installed on your computer. But if you were not warned, you would not even notice that ! In fact, LaTeX has no graphical front-end, the programs are Unix-oriented and can only be called on the command line (using the /Application/Utilities/Terminal)\
+However, do not worry : there exist graphical interfaces to use LaTeX in a more user friendly manner. These are third-party software, most of the time free. LaTeXiT is one of them : it allows to typeset  small equations. To write big documents, you would rather use TexShop or iTexMac (for instance), which are designed for that.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Versions History\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+v 1.4.3\
+- in the preference pane, the user is now allowed to modify the first two line of the preamble (for those who *really* know what they are doing);\
+- better behaviour in "latex+dvipdf" mode (now really uses "latex" instead of "pdflatex -progname latex");\
+- the equations computed by the service can now be saved in the history;\
+- better bounding box adjustment (that tries to crop the equation);\
+- improved documentation.\
+\
 v 1.4.2\
 - fixed a bug causing a crash during LaTeXIT's launch on machines that do not have pdflatex or dvipdf installed;\
 - fixed some typo mistakes.\
@@ -291,7 +327,7 @@ v 1.3\
 \
 v 1.2\
 - the software has now two distributions : one for Panther, one for Tiger - the Tiger version has more capabilities;\
-- (Tiger version) ready for Mac-Intel (compiled using UniversalBinary); but even if the Intel version should not contain specific bugs, it could not be tested anyway. So it is considered "experimental", and bug reports (for those who own a Mac-Intel) are welcome;\
+- (Tiger version) ready for Mac-Intel (compiled using Universal Binary); but even if the Intel version should not contain specific bugs, it could not be tested anyway. So it is considered "experimental", and bug reports (for those who own a Mac-Intel) are welcome;\
 - (Tiger version) you can now repoen with LaTeXiT a PDF file created by it;\
 - (Tiger version) you can now drop on the Finder items from the history or from the library;\
 - (Tiger version) more drag'n drop abilities within LaTeXiT itself (from history to library, for instance);\

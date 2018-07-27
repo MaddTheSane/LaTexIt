@@ -35,8 +35,8 @@
 "%@ not found or not working as expected" = "%@ not found or not working as expected";
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
 "Find %@..." = "Find %@...";
-"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
-"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
+"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
 "color.sty seems to be unavailable" = "color.sty seems to be unavailable";
 "Without the color.sty package, you won't be able to change the font color" = "Without the color.sty package, you won't be able to change the font color";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled.";

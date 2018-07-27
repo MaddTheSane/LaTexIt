@@ -43,6 +43,7 @@
 -(BOOL) _checkDvipdf;  //called by _checkConfiguration to check for dvipdf's presence
 -(BOOL) _checkPdfLatex;//called by _checkConfiguration to check for pdflatex's presence
 -(BOOL) _checkXeLatex; //called by _checkConfiguration to check for pdflatex's presence
+-(BOOL) _checkLatex;   //called by _checkConfiguration to check for pdflatex's presence
 -(BOOL) _checkColorSty;//called by _checkConfiguration to check for color.sty's presence
 
 //helper for the configuration
@@ -50,6 +51,7 @@
 -(void) _findDvipdfPath;
 -(void) _findPdfLatexPath;
 -(void) _findXeLatexPath;
+-(void) _findLatexPath;
 
 //some notifications that trigger some work
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification;
@@ -620,20 +622,28 @@ static NSArray* unixBins = nil;
     if (!thisVersion)
       thisVersion = @"";
     components = [thisVersion componentsSeparatedByString:@" "];
+    NSString* thisVersionNumber = @"";
     if (components && [components count])
-      thisVersion = [components objectAtIndex:0];
+      thisVersionNumber = [components objectAtIndex:0];
 
-    NSComparisonResult comparison = [thisVersion compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
+    NSComparisonResult comparison = [thisVersionNumber compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
     if (sender && (comparison == NSOrderedSame))
-      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
-                      NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
-                      @"Ok", nil, nil);
-    else if (sender && (comparison == NSOrderedDescending))
-      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"CCheck for new versions"),
-                      NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
-                                        @"Your version of LaTeXiT is more recent than the official available one"),
-                      @"Ok", nil, nil);
-    else if (comparison == NSOrderedAscending)
+    {
+      if ([thisVersion rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        comparison = NSOrderedAscending;
+      else
+        NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
+                        NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
+                        @"Ok", nil, nil);
+    }
+    if (sender && (comparison == NSOrderedDescending))
+    {
+        NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
+                        NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
+                                          @"Your version of LaTeXiT is more recent than the official available one"),
+                        @"Ok", nil, nil);
+    }
+    if (comparison == NSOrderedAscending)
     {
       int choice = NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
                                    NSLocalizedString(@"A new version of LaTeXiT is available",
@@ -704,6 +714,11 @@ static NSArray* unixBins = nil;
   return isXeLatexAvailable;
 }
 
+-(BOOL) isLatexAvailable
+{
+  return isLatexAvailable;
+}
+
 -(BOOL) isColorStyAvailable
 {
   return isColorStyAvailable;
@@ -759,6 +774,24 @@ static NSArray* unixBins = nil;
   if ([fileManager fileExistsAtPath:xeLatexPath])
   {
     [userDefaults setObject:xeLatexPath forKey:XeLatexPathKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+  }
+}
+
+//try to find latex program, searching by its name
+-(void) _findLatexPath
+{
+  NSFileManager* fileManager   = [NSFileManager defaultManager];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSString* latexPath          = [userDefaults stringForKey:LatexPathKey];
+  NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
+  [prefixes addObjectsFromArray:[NSArray arrayWithObject:[latexPath stringByDeletingLastPathComponent]]];
+
+  if (![fileManager fileExistsAtPath:latexPath])
+    latexPath = [self findUnixProgram:@"latex" tryPrefixes:prefixes environment:environmentDict];
+  if ([fileManager fileExistsAtPath:latexPath])
+  {
+    [userDefaults setObject:latexPath forKey:LatexPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -868,6 +901,35 @@ static NSArray* unixBins = nil;
   return ok;
 }
 
+//check if latex works as expected. The user may have given a name different from "pdflatex"
+-(BOOL) _checkLatex
+{
+  BOOL ok = YES;
+  NSTask* latexTask = [[NSTask alloc] init];
+  @try
+  {
+    //currently, the only check is the option -v, at least to see if the program can be executed
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+    [latexTask setLaunchPath:[userDefaults stringForKey:LatexPathKey]];
+    [latexTask setArguments:[NSArray arrayWithObject:@"-v"]];
+    [latexTask setStandardOutput:nullDevice];
+    [latexTask setStandardError:nullDevice];
+    [latexTask launch];
+    [latexTask waitUntilExit];
+    ok = ([latexTask terminationStatus] == 0);
+  }
+  @catch(NSException* e)
+  {
+    ok = NO;
+  }
+  @finally
+  {
+    [latexTask release];
+  }
+  return ok;
+}
+
 //check if dvipdf works as expected. The user may have given a name different from "pdflatex"
 -(BOOL) _checkDvipdf
 {
@@ -928,26 +990,32 @@ static NSArray* unixBins = nil;
   //perhaps second try without kpsewhich
   if (!ok)
   {
-    @try
+    NSArray* latexProgramsPathsKeys = [NSArray arrayWithObjects:PdfLatexPathKey, LatexPathKey, XeLatexPathKey, nil];
+    NSEnumerator* enumerator = [latexProgramsPathsKeys objectEnumerator];
+    NSString* pathKey = nil;
+    while(!ok && ((pathKey = [enumerator nextObject])))
     {
-      NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
-      NSString* directory      = NSTemporaryDirectory();
-      NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-      NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-      [checkTask setCurrentDirectoryPath:directory];
-      [checkTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
-      [checkTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
-      [checkTask setStandardOutput:nullDevice];
-      [checkTask setStandardError:nullDevice];
-      [checkTask launch];
-      [checkTask waitUntilExit];
-      ok = ([checkTask terminationStatus] == 0);
-    }
-    @catch(NSException* e)
-    {
-      ok = NO;
-    }
-  }
+      @try
+      {
+        NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
+        NSString* directory      = NSTemporaryDirectory();
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+        [checkTask setCurrentDirectoryPath:directory];
+        [checkTask setLaunchPath:[userDefaults stringForKey:pathKey]];
+        [checkTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
+        [checkTask setStandardOutput:nullDevice];
+        [checkTask setStandardError:nullDevice];
+        [checkTask launch];
+        [checkTask waitUntilExit];
+        ok = ([checkTask terminationStatus] == 0);
+      }
+      @catch(NSException* e)
+      {
+        ok = NO;
+      }
+    }//end for each latex executable
+  }//end if kpsewhich failed
 
   [checkTask release];
   return ok;
@@ -955,11 +1023,12 @@ static NSArray* unixBins = nil;
 
 -(void) _checkConfiguration
 {
-  isGsAvailable          = [self _checkGs];
-  isPdfLatexAvailable    = [self _checkPdfLatex];
-  isXeLatexAvailable     = [self _checkXeLatex];
-  isDvipdfAvailable      = [self _checkDvipdf];
-  isColorStyAvailable    = [self _checkColorSty];
+  isGsAvailable       = [self _checkGs];
+  isPdfLatexAvailable = [self _checkPdfLatex];
+  isXeLatexAvailable  = [self _checkXeLatex];
+  isLatexAvailable    = [self _checkLatex];
+  isDvipdfAvailable   = [self _checkDvipdf];
+  isColorStyAvailable = [self _checkColorSty];
 }
 
 //when the user has clicked a latexPalettes element, we must put some text in the current document.
@@ -1168,8 +1237,46 @@ static NSArray* unixBins = nil;
       }
     }
   }
+
+  if (!isLatexAvailable)
+    [self _findLatexPath];
+  retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == LATEXDVIPDF);
+  while (!isLatexAvailable && retry)
+  {
+    int returnCode =
+      NSRunAlertPanel(
+        [NSString stringWithFormat:
+          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          @"latex"],
+        [NSString stringWithFormat:
+          NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
+                            @"The current configuration of LaTeXiT requires %@ to work."),
+          @"latex"],
+        [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), @"latex"],
+        @"Cancel", nil);
+    retry &= (returnCode == NSAlertDefaultReturn);
+    if (returnCode == NSAlertDefaultReturn)
+    {
+      NSFileManager* fileManager = [NSFileManager defaultManager];
+      NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+      [openPanel setResolvesAliases:NO];
+      int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
+      BOOL ok = (ret2 == NSOKButton) && ([[openPanel filenames] count]);
+      if (ok)
+      {
+        NSString* filepath = [[openPanel filenames] objectAtIndex:0];
+        if ([fileManager fileExistsAtPath:filepath])
+        {
+          [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
+          [userDefaults setObject:filepath forKey:LatexPathKey];
+          [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+          retry &= !isLatexAvailable;
+        }
+      }
+    }
+  }
   
-  if (isGsAvailable && isPdfLatexAvailable && !isColorStyAvailable)
+  if (isGsAvailable && (isPdfLatexAvailable || isLatexAvailable || isXeLatexAvailable) && !isColorStyAvailable)
     NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @"color.sty seems to be unavailable"),
                                  NSLocalizedString(@"Without the color.sty package, you won't be able to change the font color",
                                                    @"Without the color.sty package, you won't be able to change the font color"),
@@ -1180,6 +1287,8 @@ static NSArray* unixBins = nil;
     [self _addInEnvironmentPath:[[userDefaults stringForKey:PdfLatexPathKey] stringByDeletingLastPathComponent]];
   if (isXeLatexAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:XeLatexPathKey] stringByDeletingLastPathComponent]];
+  if (isLatexAvailable)
+    [self _addInEnvironmentPath:[[userDefaults stringForKey:LatexPathKey] stringByDeletingLastPathComponent]];
   if (isDvipdfAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:DvipdfPathKey] stringByDeletingLastPathComponent]];
 
@@ -1336,7 +1445,9 @@ static NSArray* unixBins = nil;
                                           color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:[NSColor whiteColor]];
           NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
-          NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
+          NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData];
+          if ([userDefaults boolForKey:ServiceUsesHistoryKey])//we may add the item to the history
+            [[HistoryManager sharedManager] addItem:historyItem];
         
           [pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
           [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
@@ -1428,6 +1539,8 @@ static NSArray* unixBins = nil;
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
           NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
           [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
+          if ([userDefaults boolForKey:ServiceUsesHistoryKey])//we may add the item to the history
+            [[HistoryManager sharedManager] addItem:historyItem];
           
           //additional data according to the export type (pdf, eps, tiff, jpeg, png...)
           if ([extension isEqualToString:@"pdf"])
