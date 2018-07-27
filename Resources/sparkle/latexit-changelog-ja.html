@@ -6,13 +6,25 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<h2><a name="version-2.5.4">Version 2.5.4 (2013/09/07)</a></h2>
+<h2><a name="version-2.6.0">Version 2.6.0 (2014/04/17)</a></h2>
 <ul>
-<li>fixed Preferences bug.</li>
-</ul>
-<h2><a name="version-2.5.3">Version 2.5.3 (2013/07/03)</a></h2>
-<ul>
-<li>fixed Automator action</li>
+<li>iWork'13 にドラッグ＆ドロップできなかった問題を修正。（iWork'13 の不可解な仕様変更への対応）</li>
+<li>iWork'13 のイメージパネルのファイル情報にあるアイコンから LaTeXiT へドラッグ＆ドロップできるように修正。（iWork'13の不可解な仕様変更のためコピー＆ペーストで数式の再編集ができなくなった問題への対応）</li>
+<li>サービス機能で正規表現に基づいたフィルターを追加。（環境設定のサービスを参照）</li>
+<li>LaTeX処理に&quot;Auto&quot;モードを追加。</li>
+<li>フォーマットメニューの「...揃え」を追加。</li>
+<li>LaTeX処理とクリップボードへのコピーを同時に行うショートカット Ctrl+Command+T を追加。</li>
+<li>サービス機能の各々に対しクリップボードへのコピーを伴うバージョンも追加。</li>
+<li>NSFlippableView がクラッシュする問題を修正。</li>
+<li>追加スクリプトで仕様できる環境変数 $OUTPUTPDFFILE2 を追加。（環境設定のプログラム > 追加スクリプトにあるヘルプを参照）</li>
+<li>gs 9.09 以降のバージョンとの互換性と &quot;PDF with outlined fonts&quot; で書き出す時の問題を修正。</li>
+<li>文字色がデフォルトの黒の時は、プリアンブルに \color を含めないように変更。これによりユーザーのカスタマイズ性を改善。</li>
+<li>&quot;プレビューをクリップしない&quot;を環境設定に追加。</li>
+<li>iWork'13 に取り除かれない新しい latexit メタデータをPDF ファイルに埋め込み。</li>
+<li>JPEG 書き出しのダイアログボックスを修正。</li>
+<li>XeLaTeX モードの色の扱いに関する問題を修正。</li>
+<li>Automator の仕様変更（改悪）への対応。</li>
+<li>OmniGraffle にドラッグ＆ドロップできなかった問題を修正。</li>
 </ul>
 <h2><a name="version-2.5.2">Version 2.5.2 (2013/02/01)</a></h2>
 <ul>

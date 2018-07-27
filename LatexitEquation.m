@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -26,6 +26,47 @@
 #import <LinkBack/LinkBack.h>
 
 #import <Quartz/Quartz.h>
+
+static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info);
+static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
+{
+  CGPDFStringRef pdfString = 0;
+  BOOL okString = CGPDFScannerPopString(scanner, &pdfString);
+  if (okString)
+  {
+    CFStringRef cfString = CGPDFStringCopyTextString(pdfString);
+    NSString* string = [(NSString*)cfString autorelease];
+    NSError* error = nil;
+    NSArray* components =
+      [string captureComponentsMatchedByRegex:@"^\\<latexit sha1_base64=\"(.*?)\"\\>(.*?)\\</latexit\\>$"
+                               options:RKLMultiline|RKLDotAll
+                                 range:NSMakeRange(0, [string length]) error:&error];
+    if ([components count] == 3)
+    {
+      NSString* sha1Base64 = [components objectAtIndex:1];
+      NSString* dataBase64Encoded = [components objectAtIndex:2];
+      NSString* dataBase64EncodedSha1Base64 = [[dataBase64Encoded dataUsingEncoding:NSUTF8StringEncoding] sha1Base64];
+      NSData* compressedData = [sha1Base64 isEqualToString:dataBase64EncodedSha1Base64] ?
+        [NSData dataWithBase64:dataBase64Encoded encodedWithNewlines:NO] :
+        nil;
+      NSData* uncompressedData = !compressedData ? nil : [Compressor zipuncompress:compressedData];
+      NSPropertyListFormat format = 0;
+      id plist = !uncompressedData ? nil :
+        isMacOS10_5OrAbove() ?
+          [NSPropertyListSerialization propertyListWithData:uncompressedData
+            options:NSPropertyListImmutable format:&format error:nil] :
+          [NSPropertyListSerialization propertyListFromData:uncompressedData
+            mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      NSDictionary* plistAsDictionary = [plist dynamicCastToClass:[NSDictionary class]];
+      if (plistAsDictionary)
+      {
+        NSDictionary** outLatexitMetadata = (NSDictionary**)info;
+        if (outLatexitMetadata)
+          *outLatexitMetadata = plistAsDictionary;
+      }//end if (plistAsDictionary)
+    }//end if ([components count] == 3)
+  }//end if (okString)
+}//end CHCGPDFOperatorCallback_Tj
 
 NSString* LatexitEquationsPboardType = @"LatexitEquationsPboardType";
 
@@ -391,6 +432,86 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     
     [result setObject:[NSDate date] forKey:@"date"];
   }//end if (!decodedFromAnnotation)
+  
+  if (!isLaTeXiTPDF)
+  {
+    CGDataProviderRef dataProvider = !someData ? 0 :
+      CGDataProviderCreateWithCFData((CFDataRef)someData);
+    CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
+      CGPDFDocumentCreateWithProvider(dataProvider);
+    CGPDFPageRef page = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
+      CGPDFDocumentGetPage(pdfDocument, 1);
+    CGPDFContentStreamRef contentStream = !page ? 0 :
+      CGPDFContentStreamCreateWithPage(page);
+    CGPDFOperatorTableRef operatorTable = CGPDFOperatorTableCreate();
+    CGPDFOperatorTableSetCallback(operatorTable, "Tj", &CHCGPDFOperatorCallback_Tj);
+    NSDictionary* latexitMetadata = nil;
+    CGPDFScannerRef pdfScanner = !contentStream ? 0 :
+      CGPDFScannerCreate(contentStream, operatorTable, &latexitMetadata);
+    CGPDFScannerScan(pdfScanner);
+    CGPDFScannerRelease(pdfScanner);
+    CGPDFOperatorTableRelease(operatorTable);
+    CGPDFContentStreamRelease(contentStream);
+    CGPDFDocumentRelease(pdfDocument);
+    CGDataProviderRelease(dataProvider);
+    if (latexitMetadata)
+    {
+      NSString* preambleAsString = [latexitMetadata objectForKey:@"preamble"];
+      NSAttributedString* preamble = !preambleAsString ? nil :
+        [[NSAttributedString alloc] initWithString:preambleAsString attributes:defaultAttributes];
+      [result setObject:(!preamble ? defaultPreambleAttributedString : preamble) forKey:@"preamble"];
+      [preamble release];
+
+      NSNumber* modeAsNumber = [latexitMetadata objectForKey:@"mode"];
+      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
+                                         (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
+      [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+
+      NSString* sourceAsString = [latexitMetadata objectForKey:@"source"];
+      NSAttributedString* sourceText =
+        [[NSAttributedString alloc] initWithString:(!sourceAsString ? @"" : sourceAsString) attributes:defaultAttributes];
+      if (mode == LATEX_MODE_EQNARRAY)
+      {
+        NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
+        [sourceText2 appendAttributedString:
+          [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
+        [sourceText2 appendAttributedString:sourceText];
+        [sourceText2 appendAttributedString:
+          [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+        [sourceText release];
+        sourceText = sourceText2;
+      }
+      [result setObject:sourceText forKey:@"sourceText"];
+      [sourceText release];
+      
+      NSNumber* pointSizeAsNumber = [latexitMetadata objectForKey:@"magnification"];
+      [result setObject:(pointSizeAsNumber ? pointSizeAsNumber :
+                         [NSNumber numberWithDouble:(useDefaults ? [preferencesController latexisationFontSize] : 0)])
+                 forKey:@"magnification"];
+
+      NSNumber* baselineAsNumber = [latexitMetadata objectForKey:@"baseline"];
+      [result setObject:(baselineAsNumber ? baselineAsNumber : [NSNumber numberWithDouble:0.])
+                 forKey:@"baseline"];
+
+      NSColor* defaultColor = [preferencesController latexisationFontColor];
+      NSColor* color = [NSColor colorWithRgbaString:[latexitMetadata objectForKey:@"color"]];
+      [result setObject:(color ? color : (useDefaults ? defaultColor : [NSColor blackColor]))
+                 forKey:@"color"];
+
+      NSColor* defaultBKColor = [NSColor whiteColor];
+      NSColor* backgroundColor = [NSColor colorWithRgbaString:[latexitMetadata objectForKey:@"backgroundColor"]];
+      [result setObject:(backgroundColor ? backgroundColor : (useDefaults ? defaultBKColor : [NSColor whiteColor]))
+                 forKey:@"backgroundColor"];
+
+      NSString* titleAsString = [latexitMetadata objectForKey:@"title"];
+      [result setObject:(!titleAsString ? @"" : titleAsString) forKey:@"title"];
+
+      [result setObject:[NSDate date] forKey:@"date"];
+      
+      decodedFromAnnotation = YES;
+      isLaTeXiTPDF = YES;
+    }//end if (latexitMetadata)
+  }//end if (!isLaTeXiTPDF)
   
   if (!isLaTeXiTPDF)
     result = nil;
@@ -1023,7 +1144,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.5.4"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.6.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1479,6 +1600,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     case LATEX_MODE_TEXT:
       result = @"text";
       break;
+    case LATEX_MODE_AUTO:
+      result = @"auto";
+      break;
   }
   return result;
 }
@@ -1531,6 +1655,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\end{align*}"] autorelease]];
       break;
     case LATEX_MODE_TEXT:
+      break;
+    case LATEX_MODE_AUTO:
       break;
   }
   return result;
@@ -1689,8 +1815,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
 
   NSData* pdfData = [self pdfData];
-  [pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:self];
-  [pboard setData:pdfData forType:NSFileContentsPboardType];
+  //[pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:self];
+  //[pboard setData:pdfData forType:NSFileContentsPboardType];
 
   //no NSStringPboardType because of stupid Pages
   //[pboard addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
@@ -1775,7 +1901,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.5.4", @"version",
+       @"2.6.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

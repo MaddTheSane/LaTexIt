@@ -286,6 +286,13 @@ extern NSString * const RKLICURegexSubjectStringErrorKey;
 
 @end
 
+@interface NSMutableAttributedString (RegexKitLiteAdditions)
+
+- (NSInteger)RKL_METHOD_PREPEND(replaceOccurrencesOfRegex):(NSString *)regex withString:(NSString *)replacement;
+- (NSInteger)RKL_METHOD_PREPEND(replaceOccurrencesOfRegex):(NSString *)regex withString:(NSString *)replacement range:(NSRange)searchRange;
+- (NSInteger)RKL_METHOD_PREPEND(replaceOccurrencesOfRegex):(NSString *)regex withString:(NSString *)replacement options:(RKLRegexOptions)options range:(NSRange)searchRange error:(NSError **)error;
+@end
+
 #endif // __OBJC__
 
 #endif // _REGEXKITLITE_H_

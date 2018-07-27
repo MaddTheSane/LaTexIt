@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -53,6 +53,7 @@
 #import "PreferencesWindowController.h"
 #import "RegexKitLite.h"
 #import "Semaphore.h"
+#import "ServiceRegularExpressionFiltersController.h"
 #import "SystemTask.h"
 #import "Utils.h"
 
@@ -96,8 +97,8 @@
 -(NSAttributedString*) adaptPreambleToCurrentConfiguration:(NSAttributedString*)preamble;
 
 //private method factorizing the work of the different application service calls
--(void) _serviceLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData mode:(latex_mode_t)mode error:(NSString**)error;
--(void) _serviceMultiLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
+-(void) _serviceLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData mode:(latex_mode_t)mode putIntoClipBoard:(BOOL)putIntoClipBoard error:(NSString**)error;
+-(void) _serviceMultiLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData putIntoClipBoard:(BOOL)putIntoClipBoard error:(NSString**)error;
 -(void) _serviceDeLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 
 -(MyDocument*) documentForLink:(LinkBack*)link;
@@ -665,7 +666,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSString* newPath = [NSString pathWithComponents:newPaths];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   if (![fileManager fileExistsAtPath:newPath] && [fileManager fileExistsAtPath:oldPath])
-    [fileManager copyPath:oldPath toPath:newPath handler:nil];
+    [fileManager bridge_copyItemAtPath:oldPath toPath:newPath error:0];
 
   //sets visible controllers
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
@@ -758,10 +759,13 @@ static NSMutableDictionary* cachePaths = nil;
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
     ok = ([pasteboard availableTypeFromArray:
             [NSArray arrayWithObjects:NSPDFPboardType,  @"com.adobe.pdf",
+                                      //@"com.apple.iWork.TSPNativeMetadata",             
                                       NSRTFDPboardType, @"com.apple.flat-rtfd",
                                       NSStringPboardType, @"public.utf8-plain-text", nil]] != nil);
     if (![pasteboard availableTypeFromArray:
-           [NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", NSStringPboardType, @"public.utf8-plain-text", nil]])//RTFD
+           [NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", 
+                                     //@"com.apple.iWork.TSPNativeMetadata",
+                                     NSStringPboardType, @"public.utf8-plain-text", nil]])//RTFD
     {
       NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
       if (!rtfdData) rtfdData = [pasteboard dataForType:@"com.apple.flat-rtfd"];
@@ -823,18 +827,17 @@ static NSMutableDictionary* cachePaths = nil;
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy];
-    latex_mode_t latexMode = [myDocument latexMode];
+    latex_mode_t latexMode = [myDocument latexModeRequested];
     if ([sender tag] == 1)
-    {
-      [sender setTitle:@"Align"];
       [sender setState:(myDocument && (latexMode == LATEX_MODE_ALIGN)) ? NSOnState : NSOffState];
-    }
     else if ([sender tag] == 2)
       [sender setState:(myDocument && (latexMode == LATEX_MODE_DISPLAY)) ? NSOnState : NSOffState];
     else if ([sender tag] == 3)
       [sender setState:(myDocument && (latexMode == LATEX_MODE_INLINE)) ? NSOnState : NSOffState];
     else if ([sender tag] == 4)
       [sender setState:(myDocument && (latexMode == LATEX_MODE_TEXT)) ? NSOnState : NSOffState];
+    else if ([sender tag] == 5)
+      [sender setState:(myDocument && (latexMode == LATEX_MODE_AUTO)) ? NSOnState : NSOffState];
   }
   else if ([sender action] == @selector(makeLatex:))
   {
@@ -862,6 +865,13 @@ static NSMutableDictionary* cachePaths = nil;
       [sender setTitle:NSLocalizedString(@"Hide preamble", @"Hide preamble")];
     else
       [sender setTitle:NSLocalizedString(@"Show preamble", @"Show preamble")];
+  }
+  else if ([sender action] == @selector(formatChangeAlignment:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy];// && ([myDocument latexModeApplied] == LATEX_MODE_TEXT);
+    if ([sender tag] == ALIGNMENT_MODE_NONE)
+      [sender setKeyEquivalentModifierMask:[sender keyEquivalentModifierMask]|NSAlternateKeyMask];
   }
   else if ([sender action] == @selector(showOrHideHistory:))
   {
@@ -1023,6 +1033,11 @@ static NSMutableDictionary* cachePaths = nil;
     filename = [filename stringByAppendingPathExtension:@"pdf"];
     data = [pasteboard dataForType:@"com.adobe.pdf"];
   }
+  /*else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.iWork.TSPNativeMetadata"]])
+  {
+    filename = nil;
+    data = [pasteboard dataForType:@"com.apple.iWork.TSPNativeMetadata"];
+  }*/
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
   {
     filename = [filename stringByAppendingPathExtension:@"pdf"];
@@ -1081,7 +1096,7 @@ static NSMutableDictionary* cachePaths = nil;
     //we try to compute a name that is not already in use
     while (i && [fileManager fileExistsAtPath:newFilePath])
     {
-      newFileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
+      newFileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
       newFilePath = [folderPath stringByAppendingPathComponent:newFileName];
     } 
     filepath = newFilePath;
@@ -1100,10 +1115,22 @@ static NSMutableDictionary* cachePaths = nil;
     {
       [document makeWindowControllers];
       [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
-      if (color) [document setColor:color];
+      if (color)
+        [document setColor:color];
       [document showWindows];
     }//end if (ok)
   }//end if (ok)
+  else if (data && !filepath)
+  {
+    NSError* error = nil;
+    MyDocument* document = [[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:@"MyDocumentType" error:&error];
+    [document makeWindowControllers];
+    [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
+    if (color)
+      [document setColor:color];
+    [[document imageView] paste:self];
+    [document showWindows];
+  }//end if (data && !filepath)
 }
 //end newFromClipboard:
 
@@ -1221,12 +1248,33 @@ static NSMutableDictionary* cachePaths = nil;
       case 2 : mode = LATEX_MODE_DISPLAY; break;
       case 3 : mode = LATEX_MODE_INLINE; break;
       case 4 : mode = LATEX_MODE_TEXT; break;
+      case 5 : mode = LATEX_MODE_AUTO; break;
       default: mode = LATEX_MODE_TEXT; break;
     }
-    [document setLatexMode:mode];
+    [document setLatexModeRequested:mode];
   }
 }
 //end makeLatexAndExport:
+
+-(IBAction) formatChangeAlignment:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  if (document)
+  {
+    alignment_mode_t alignment = ALIGNMENT_MODE_NONE;
+    switch([sender tag])
+    {
+      case 0 : alignment = ALIGNMENT_MODE_UNDEFINED; break;
+      case 1 : alignment = ALIGNMENT_MODE_NONE; break;
+      case 2 : alignment = ALIGNMENT_MODE_LEFT; break;
+      case 3 : alignment = ALIGNMENT_MODE_CENTER; break;
+      case 4 : alignment = ALIGNMENT_MODE_RIGHT; break;
+      default: alignment = ALIGNMENT_MODE_NONE; break;
+    }
+    [document formatChangeAlignment:alignment];
+  }//end if (document)
+}
+//end formatChangeAlignment
 
 -(IBAction) makeLatexAndExport:(id)sender
 {
@@ -1256,7 +1304,11 @@ static NSMutableDictionary* cachePaths = nil;
 {
   MyDocument* document = (MyDocument*) [self currentDocument];
   if (document)
+  {
+    [document setShouldApplyToPasteboardAfterLatexization:([sender tag] == 2)];
     [[document lowerBoxLatexizeButton] performClick:self];
+    [document setShouldApplyToPasteboardAfterLatexization:NO];
+  }
 }
 //end makeLatex:
 
@@ -2084,39 +2136,75 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) serviceLatexisationAlign:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_ALIGN error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_ALIGN putIntoClipBoard:NO error:error];
 }
 //end serviceLatexisationAlign:userData:error:
 
+-(void) serviceLatexisationAlignAndPutIntoClipBoard:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_ALIGN putIntoClipBoard:YES error:error];
+}
+//end serviceLatexisationAlignAndPutIntoClipBoard:userData:error:
+
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_EQNARRAY error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_EQNARRAY putIntoClipBoard:NO error:error];
 }
 //end serviceLatexisationEqnarray:userData:error:
 
+-(void) serviceLatexisationEqnarrayAndPutIntoClipBoard:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_EQNARRAY putIntoClipBoard:YES error:error];
+}
+//end serviceLatexisationEqnarrayAndPutIntoClipBoard:userData:error:
+
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_DISPLAY error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_DISPLAY putIntoClipBoard:NO error:error];
 }
 //end serviceLatexisationDisplay:userData:error:
 
+-(void) serviceLatexisationDisplayAndPutIntoClipBoard:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_DISPLAY putIntoClipBoard:YES error:error];
+}
+//end serviceLatexisationDisplayAndPutIntoClipBoard:userData:error:
+
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_INLINE error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_INLINE putIntoClipBoard:NO error:error];
 }
 //end serviceLatexisationInline:userData:error:
 
+-(void) serviceLatexisationInlineAndPutIntoClipBoard:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_INLINE putIntoClipBoard:YES error:error];
+}
+//end serviceLatexisationInlineAndPutIntoClipBoard:userData:error:
+
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_TEXT error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_TEXT putIntoClipBoard:NO error:error];
 }
 //end serviceLatexisationText:userData:error:
 
+-(void) serviceLatexisationTextAndPutIntoClipBoard:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_TEXT putIntoClipBoard:YES error:error];
+}
+//end serviceLatexisationTextAndPutIntoClipBoard:userData:error:
+
 -(void) serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceMultiLatexisation:pboard userData:userData error:error];
+  [self _serviceMultiLatexisation:pboard userData:userData putIntoClipBoard:NO error:error];
 }
 //end serviceMultiLatexisation:userData:error:
+
+-(void) serviceMultiLatexisationAndPutIntoClipBoard:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceMultiLatexisation:pboard userData:userData putIntoClipBoard:YES error:error];
+}
+//end serviceMultiLatexisationAndPutIntoClipBoard:userData:error:
 
 -(void) serviceDeLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
@@ -2125,7 +2213,7 @@ static NSMutableDictionary* cachePaths = nil;
 //end serviceDeLatexisation:userData:error:
 
 //performs the application service
--(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
+-(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode putIntoClipBoard:(BOOL)putIntoClipBoard
                        error:(NSString **)error
 {
   if (!self->isPdfLaTeXAvailable || !self->isGsAvailable)
@@ -2402,7 +2490,7 @@ static NSMutableDictionary* cachePaths = nil;
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
-           [document setLatexMode:mode];
+           [document setLatexModeRequested:mode];
            [document setColor:color];
            [document setMagnification:magnification];
            [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
@@ -2586,31 +2674,39 @@ static NSMutableDictionary* cachePaths = nil;
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
-           [document setLatexMode:mode];
+           [document setLatexModeRequested:mode];
            [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
            [document latexize:self];
           }
         }//end if pdfData (LaTeXisation has worked)
       }//end if not RTF
       
-      //add dummyPbord to pboar in one command
+      //add dummyPboard to pboard in one command
+      NSPasteboard* generalPboard = !putIntoClipBoard ? nil : [NSPasteboard generalPasteboard];
       [pboard declareTypes:[dummyPboard allKeys] owner:nil];
+      [generalPboard declareTypes:[dummyPboard allKeys] owner:nil];
       NSEnumerator* enumerator = [dummyPboard keyEnumerator];
       id key = nil;
       while((key = [enumerator nextObject]))
       {
         id value = [dummyPboard objectForKey:key];
         if ([value isKindOfClass:[NSData class]])
+        {
           [pboard setData:value forType:key];
-        else
+          [generalPboard setData:value forType:key];
+        }//end if ([value isKindOfClass:[NSData class]])
+        else//if (![value isKindOfClass:[NSData class]])
+        {
           [pboard setPropertyList:value forType:key];
+          [generalPboard setPropertyList:value forType:key];
+        }//end if (![value isKindOfClass:[NSData class]])
       }//end for each value
     }//end @synchronized(self)
   }//end if latexisation can be performed
 }
-//end _serviceLatexisation:userData:mode:error:
+//end _serviceLatexisation:userData:mode:putIntoClipBoard:error:
 
--(void) _serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+-(void) _serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData putIntoClipBoard:(BOOL)putIntoClipBoard error:(NSString **)error
 {
   if (!self->isPdfLaTeXAvailable || !self->isGsAvailable)
   {
@@ -2643,6 +2739,12 @@ static NSMutableDictionary* cachePaths = nil;
       attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:@"public.rtf"]
                                                                    documentAttributes:&documentAttributes] autorelease];
       NSMutableAttributedString* mutableAttrString = [[attrString mutableCopy] autorelease];
+            
+      ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController =
+        [[PreferencesController sharedController] serviceRegularExpressionFiltersController];
+      if (serviceRegularExpressionFiltersController)
+        [mutableAttrString setAttributedString:
+          [serviceRegularExpressionFiltersController applyFilterToAttributedString:mutableAttrString]];
       
       NSRange remainingRange = NSMakeRange(0, [mutableAttrString length]);
       int numberOfFailures = 0;
@@ -2754,7 +2856,7 @@ static NSMutableDictionary* cachePaths = nil;
               MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
               [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//calls windowDidLoad
               [document setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
-              [document setLatexMode:mode];
+              [document setLatexModeRequested:mode];
               [document setColor:color];
               [document setMagnification:magnification];
               [errorDocuments addObject:document];
@@ -2893,16 +2995,24 @@ static NSMutableDictionary* cachePaths = nil;
       [dummyPboard setObject:rtfdData forKey:NSRTFDPboardType];
       [dummyPboard setObject:rtfdData forKey:@"com.apple.flat-rtfd"];
 
+      NSPasteboard* generalPboard = !putIntoClipBoard ? nil : [NSPasteboard generalPasteboard];
       [pboard declareTypes:[dummyPboard allKeys] owner:nil];
+      [generalPboard declareTypes:[dummyPboard allKeys] owner:nil];
       NSEnumerator* enumerator = [dummyPboard keyEnumerator];
       id key = nil;
       while((key = [enumerator nextObject]))
       {
         id value = [dummyPboard objectForKey:key];
         if ([value isKindOfClass:[NSData class]])
+        {
           [pboard setData:value forType:key];
-        else
+          [generalPboard setData:value forType:key];
+        }//end if ([value isKindOfClass:[NSData class]])
+        else//if (![value isKindOfClass:[NSData class]])
+        {
           [pboard setPropertyList:value forType:key];
+          [generalPboard setPropertyList:value forType:key];
+        }//end if (![value isKindOfClass:[NSData class]])
       }//end for each value
     }//end @synchronized(self)
   }//end if latexisation can be performed
@@ -3191,7 +3301,7 @@ static NSMutableDictionary* cachePaths = nil;
         NSLocalizedString(@"Cancel", @"Cancel"), nil);
       if (choice == NSAlertDefaultReturn)
       {
-        BOOL shouldInstall = [[NSFileManager defaultManager] createDirectoryPath:palettesFolderPath attributes:nil];
+        BOOL shouldInstall = [[NSFileManager defaultManager] bridge_createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
         if (!shouldInstall)
           NSRunAlertPanel(NSLocalizedString(@"Could not create path", @"Could not create path"),
                           [NSString stringWithFormat:NSLocalizedString(@"The path %@ could not be created to install a palette in it",
@@ -3217,8 +3327,8 @@ static NSMutableDictionary* cachePaths = nil;
         
         if (overwrite)
         {
-          [fileManager removeFileAtPath:destinationPath handler:NULL];
-          BOOL success = [fileManager copyPath:palettePath toPath:destinationPath handler:NULL];
+          [fileManager bridge_removeItemAtPath:destinationPath error:0];
+          BOOL success = [fileManager bridge_copyItemAtPath:palettePath toPath:destinationPath error:0];
           if (!success)
             NSRunAlertPanel(NSLocalizedString(@"Installation failed", @"Installation failed"),
                             [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @"%@ could not be installed as %@"),

@@ -11,8 +11,8 @@
 #import "LaTeXiTSharedTypes.h"
 
 extern int DebugLogLevel;
-#define DebugLog(level,log,...) do{if (DebugLogLevel<=level) {NSLog(@"[%p : %@ %s] \"%@\"",[NSThread currentThread],[self class],sel_getName(_cmd),[NSString stringWithFormat:log,##__VA_ARGS__]);}}while(0)
-#define DebugLogStatic(level,log,...) do{if (DebugLogLevel<=level) {NSLog(@"[%p - static] \"%@\"",[NSThread currentThread], [NSString stringWithFormat:log,##__VA_ARGS__]);}}while(0)
+#define DebugLog(level,log,...) do{if (DebugLogLevel>=level) {NSLog(@"[%p : %@ %s] \"%@\"",[NSThread currentThread],[self class],sel_getName(_cmd),[NSString stringWithFormat:log,##__VA_ARGS__]);}}while(0)
+#define DebugLogStatic(level,log,...) do{if (DebugLogLevel>=level) {NSLog(@"[%p - static] \"%@\"",[NSThread currentThread], [NSString stringWithFormat:log,##__VA_ARGS__]);}}while(0)
 
 #define LocalLocalizedString(key, comment) \
 	    [[NSBundle bundleForClass:[self class]] localizedStringForKey:(key) value:@"" table:nil]
@@ -21,6 +21,7 @@ extern int DebugLogLevel;
 #define NSAppKitVersionNumber10_5 949
 #define NSAppKitVersionNumber10_6 1038
 #define NSAppKitVersionNumber10_7 1110
+#define NSAppKitVersionNumber10_8 1187
 
 BOOL isMacOS10_5OrAbove(void);
 BOOL isMacOS10_6OrAbove(void);

@@ -114,12 +114,18 @@
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
 "Apply" = "Apply";
 "Typeset LaTeX Maths eqnarray" = "Typeset LaTeX Maths Eqnarray";
+"Typeset LaTeX Maths eqnarray and put result into clipboard" = "Typeset LaTeX Maths Eqnarray and put result into clipboard";
 "Typeset LaTeX Maths align" = "Typeset LaTeX Maths Align";
+"Typeset LaTeX Maths align and put result into clipboard" = "Typeset LaTeX Maths Align and put result into clipboard";
 "Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
+"Typeset LaTeX Maths display and put result into clipboard" = "Typeset LaTeX Maths display \\[...\\] and put result into clipboard";
 "Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";
+"Typeset LaTeX Maths inline and put result into clipboard" = "Typeset LaTeX Maths inline $...$ and put result into clipboard";
 "Typeset LaTeX Text" = "Typeset LaTeX Text";
-"Un-latexize the equations" = "Revert equations back to LaTeX code";
+"Typeset LaTeX Text and put result into clipboard" = "Typeset LaTeX Text and put result into clipboard";
 "Detect and typeset equations" = "Detect and typeset equations";
+"Detect and typeset equations and put result into clipboard" = "Detect and typeset equations and put result into clipboard";
+"Un-latexize the equations" = "Revert equations back to LaTeX code";
 "Loading History" = "Loading History";
 "Saving History" = "Saving History";
 "Loading Library" = "Loading Library";
@@ -166,6 +172,8 @@
 "Enlarge the text area" = "Enlarge the text area";
 "Reduce the text area" = "Reduce the text area";
 "New Service shortcuts could not be set" = "New Service shortcuts could not be set";
+"Text to test" = "Text to test";
+"Result of text filtering" = "Result of text filtering";
 "Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle" = "Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle";
 "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences" = "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences";
 "Apply preferences" = "Apply preferences";
@@ -181,7 +189,6 @@
 "Additional files" = "Additional files";
 "Default Format" = "Default Format";
 "PDF with outlined fonts" = "PDF with outlined fonts";
-"PDF without embedded fonts" = "PDF with outlined fonts";
 "PDF w.o.f." = "PDF w.o.f.";
 "PDF vector format" = "PDF vector format";
 "EPS vector format" = "EPS vector format";
@@ -198,6 +205,7 @@
 
 /* document */
 "clipboard" = "clipboard";
+"Auto" = "Auto";
 "Text" = "Text";
 "Font size :" = "Font size :";
 "Color :" = "Color :";

@@ -3,9 +3,25 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 
-\f0\b\fs24 \cf0 version 2.5.4 (7th september 2013)\
+\f0\b\fs24 \cf0 version 2.6.0 (17th april 2014)\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 
 \f1\b0\fs22 \cf0 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab280\qj
-\cf0 -\'a0fixed Preferences bug.}
+\pard\pardeftab720\ql\qnatural
+\cf0 Fixed drag'n drop TO the terrible iWork'13 (and its bunch of regressions)\'a0;\
+Fixed drag'n drop FROM (the terrible) iWork'13 (and its bunch of regressions), thanks to the proxy icon of the "image" panel\'a0;\
+Added service filtering with regular expressions (see Preferences > Services)\'a0;\
+Added "Auto" LaTeXisation mode\'a0;\
+Added "Format > Align\'85" menu item\'a0;\
+Added Ctrl+Command+T shortcut to LaTeXize AND put into clipboard\'a0;\
+Duplicate all services, with versions that also put into clipboard\'a0;\
+Fixed NSFlippableView crash bug\'a0;\
+Added $OUTPUTPDFFILE2 environment variable for processing scripts\'a0;\
+Fixed incompatibility between gs >= 9.09 and the export "with outlined fonts"\'a0;\
+Deliberately omitting the \\color command inserted in the preamble, when the requested color is the default black, for better user customization\'a0;\
+Added the "Do not clip preview" preference\'a0;\
+New latexit metadata embedded inside PDFs that iWork'13 won't strip\'a0;\
+Fixed JPEG export dialog box\'a0;\
+Fixed a color handling bug in XeLaTeX mode\'a0;\
+Fixed Automator regressions\'a0;\
+Fixed drag'n drop to OmniGraffle.}

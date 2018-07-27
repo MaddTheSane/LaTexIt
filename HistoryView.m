@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -23,6 +23,7 @@
 #import "MyDocument.h"
 #import "MyImageView.h"
 #import "NSColorExtended.h"
+#import "NSFileManagerExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
 
@@ -276,7 +277,7 @@
   NSPoint            location          = [clipView convertPoint:[event locationInWindow] fromView:nil];
   if (!NSPointInRect(location, [clipView bounds]))
     [historyWindowController displayPreviewImage:nil backgroundColor:nil];
-  else//if NSPointInRect(location, [clipView bounds])
+  else if ([[self window] isKeyWindow]) //if NSPointInRect(location, [clipView bounds])
   {
     location = [self convertPoint:location fromView:clipView];
     int row = [self rowAtPoint:location];
@@ -567,7 +568,7 @@
   {
     do
     {
-      fileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
+      fileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
       filePath = [dropPath stringByAppendingPathComponent:fileName];
     } while (i && [fileManager fileExistsAtPath:filePath]);
     
@@ -585,8 +586,8 @@
              compositionConfiguration:[preferencesController compositionConfigurationDocument]
                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
-      [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                 atPath:filePath];
+      [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                           ofItemAtPath:filePath error:0];
       NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
       if ((exportFormat != EXPORT_FORMAT_PNG) &&
           (exportFormat != EXPORT_FORMAT_TIFF) &&

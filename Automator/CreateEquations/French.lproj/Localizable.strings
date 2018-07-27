@@ -8,9 +8,8 @@
 "in a temporary folder" = "dans un dossier temporaire";
 
 "Default format" = "Format par défaut";
-"PDF with outlined fonts" = "PDF sans polices";
-"PDF without embedded fonts" = "PDF sans polices embarquées";
-"PDF w.o.f." = "PDF s.p.";
+"PDF with outlined fonts" = "PDF avec polices vectorisées";
+"PDF w.o.f." = "PDF a.p.v.";
 "PDF vector format" = "Image vectorielle PDF";
 "EPS vector format" = "Image vectorielle EPS";
 "SVG vector format" = "Image vectorielle SVG";

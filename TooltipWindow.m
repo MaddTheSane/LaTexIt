@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 02/11/10.
-//  Copyright 2010 LAIC. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "TooltipWindow.h"

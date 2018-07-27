@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -11,6 +11,8 @@
 #import "MyImageView.h"
 
 #import "AppController.h"
+#import "CHDragFileWrapper.h"
+#import "CHProtoBuffers.h"
 #import "DragFilterWindow.h"
 #import "DragFilterWindowController.h"
 #import "HistoryItem.h"
@@ -23,7 +25,9 @@
 #import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSImageExtended.h"
 #import "NSManagedObjectContextExtended.h"
+#import "NSMutableArrayExtended.h"
 #import "NSMenuExtended.h"
 #import "NSObjectExtended.h"
 #import "NSWorkspaceExtended.h"
@@ -54,11 +58,14 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(NSMenu*) lazyCopyAsContextualMenu;
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(void) _copyCurrentImageNotification:(NSNotification*)notification;
--(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard;
+-(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard sender:(id <NSDraggingInfo>)sender;
 -(void) performProgrammaticDragCancellation:(id)context;
 -(void) performProgrammaticRedrag:(id)context;
 -(void) updateViewSize;
 @end
+
+@class NSDraggingSession;
+typedef NSInteger NSDraggingContext;
 
 @implementation MyImageView
 
@@ -71,21 +78,28 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [self setMenu:self->copyAsContextualMenu];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
                                                name:CopyCurrentImageNotification object:nil];
+  [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:DefaultDoNotClipPreviewKey options:NSKeyValueObservingOptionNew context:nil];
   [self registerForDraggedTypes:
-    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType,
+    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType,
+                              NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType,
                               @"com.adobe.pdf", @"public.tiff", @"public.png", @"public.jpeg", @"public.svg-image",
-                              @"public.html", nil]];
+                              @"public.html",
+                              //@"com.apple.iWork.TSPNativeMetadata",
+                              nil]];
   return self;
 }
 //end initWithCoder:
 
 -(void) dealloc
 {
+  [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:DefaultDoNotClipPreviewKey];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [self->copyAsContextualMenu release];
   [self->backgroundColor release];
   [self->imageRep release];
+  [self->transientFilesPromisedFilePaths release];
+  [self->transientDragData release];
   [super dealloc];
 }
 //end dealloc
@@ -94,6 +108,16 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
 }
 //end awakeFromNib
+
+-(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+  if ([keyPath isEqualToString:DefaultDoNotClipPreviewKey])
+  {
+    [self updateViewSize];
+    [self setNeedsDisplay:YES];
+  }//end if ([keyPath isEqualToString:DefaultDoNotClipPreviewKey])
+}
+//end observeValueForKeyPath:ofObject:change:context:
 
 -(BOOL) acceptsFirstMouse:(NSEvent*)theEvent//we can start a drag without selecting the window first
 {
@@ -206,6 +230,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 //the data is full pdfdata (that may contain meta-data like keywords, creator...)
 -(void) setPDFData:(NSData*)someData cachedImage:(NSImage*)cachedImage
 {
+  [self->transientDragData release];
+  self->transientDragData = nil;
+
   [someData retain];
   [self->pdfData release];
   self->pdfData = someData;
@@ -213,15 +240,24 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [self->imageRep release];
   self->imageRep = !self->pdfData ? nil : [[NSPDFImageRep alloc] initWithData:self->pdfData];
   self->naturalPDFSize = !self->imageRep ? NSZeroSize : [self->imageRep size];
-  NSImage* image = cachedImage;
-  if (!image && self->imageRep)
+  NSImage* image = [[cachedImage copy] autorelease];
+  [image removeRepresentationsOfClass:[NSBitmapImageRep class]];
+  if (image && ![image pdfImageRepresentation] && self->imageRep)
+  {
+    [image setCacheMode:NSImageCacheNever];
+    [image setDataRetained:YES];
+    [image setScalesWhenResized:YES];
+    [image addRepresentation:self->imageRep];
+  }//end if (image && ![image pdfImageRepresentation] && self->imageRep)
+  else if (!image && self->imageRep)
   {
     image = [[[NSImage alloc] initWithSize:[self->imageRep size]] autorelease];
     [image setCacheMode:NSImageCacheNever];
     [image setDataRetained:YES];
     [image setScalesWhenResized:YES];
     [image addRepresentation:self->imageRep];
-  }
+  }//end if (!image && self->imageRep)
+  DebugLog(1, @"image = %@", image);
   [self setImage:image];
   [self updateViewSize];
 }
@@ -254,9 +290,18 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 }
 //end updateLinkBackLink:
 
+-(NSDragOperation) draggingSession:(NSDraggingSession*)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+  NSDragOperation result = [self image] ? NSDragOperationCopy : NSDragOperationNone;
+  DebugLog(1, @"session = %@, context = %ld", session, (unsigned long)context);
+  return result;
+}
+//end draggingSession:sourceOperationMaskForDraggingContext:
+
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
   NSDragOperation result = [self image] ? NSDragOperationCopy : NSDragOperationNone;
+  DebugLog(1, @"isLocal = %d", isLocal);
   return result;
 }
 //end draggingSourceOperationMaskForLocal:
@@ -291,6 +336,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (draggedImage)
     {
       self->isDragging = YES;
+      [self->transientDragData release];
+      self->transientDragData = nil;
+      DebugLog(1, @"start dragPromisedFilesOfTypes");
       [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"svg", @"tiff", @"jpeg", @"png", @"html", nil]
                             fromRect:[self frame] source:self slideBack:YES event:event];
       self->isDragging = NO;
@@ -309,6 +357,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
+  DebugLog(1, @"");
   if (self->isDragging && !self->shouldRedrag)
   {
     [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
@@ -327,6 +376,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSSize   iconSize = [iconDragged size];
   NSPoint p = [self convertPoint:[event locationInWindow] fromView:nil];
 
+  DebugLog(1, @"self->shouldRedrag = %d", self->shouldRedrag);
   if (self->shouldRedrag)
     [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:NO];
   if (!self->shouldRedrag)
@@ -338,7 +388,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
 
+  DebugLog(1, @">_writeToPasteboard");
   [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:self];
+  DebugLog(1, @"<_writeToPasteboard");
 
   p.x -= iconSize.width/2;
   p.y -= iconSize.height/2;
@@ -354,24 +406,67 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSImage* tiffImage = [[[NSImage alloc] initWithData:[result TIFFRepresentation]] autorelease];
     result = tiffImage;
   }//end if (!isMacOS10_5OrAbove())
+  DebugLog(1, @"result = %@", result);
   return result;
 }
 //end imageForDrag
 
 -(void) concludeDragOperation:(id <NSDraggingInfo>)sender
 {
+  DebugLog(1, @"");
   //overridden to avoid some strange additional "setImage" that would occur...
+  NSPasteboard* pboard = [sender draggingPasteboard];
+  if ([self->transientFilesPromisedFilePaths count] &&
+      [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]])
+    [self performSelector:@selector(waitForPromisedFiles:) withObject:[NSDate date] afterDelay:0.];
+  [self->transientDragData release];
+  self->transientDragData = nil;
+}
+//end concludeDragOperation:
+
+-(void) waitForPromisedFiles:(id)object
+{
+  DebugLog(1, @"");
+  NSDate* beginDate = [object dynamicCastToClass:[NSDate class]];
+  BOOL stop = ![self->transientFilesPromisedFilePaths count];
+  BOOL done = NO;
+  NSEnumerator* enumerator = [self->transientFilesPromisedFilePaths objectEnumerator];
+  NSString* filePath = nil;
+  while((filePath = [enumerator nextObject]))
+  {
+    NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:filePath];
+    NSData* data = [NSData dataWithContentsOfFile:filePath options:NSUncachedRead error:nil];
+    done = [self->document applyData:data sourceUTI:sourceUTI];
+    if (done)
+      break;
+  }//end for each filePath
+  stop |= done;
+  NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:beginDate];
+  stop |= (elapsedTime >= 10);
+  if (!stop)
+    [self performSelector:@selector(waitForPromisedFiles:) withObject:beginDate afterDelay:0.25];
+  else//if (stop)
+  {
+    NSEnumerator* enumerator = [self->transientFilesPromisedFilePaths objectEnumerator];
+    NSString* filePath = nil;
+    while((filePath = [enumerator nextObject]))
+      [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    [self->transientFilesPromisedFilePaths release];
+    self->transientFilesPromisedFilePaths = nil;
+  }//end if (stop)
 }
 //end concludeDragOperation:
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {
+  DebugLog(1, @"");
   [self performProgrammaticDragCancellation:nil];
 }
 //end dragFilterWindowController:exportFormatDidChange:
 
 -(void) performProgrammaticDragCancellation:(id)context
 {
+  DebugLog(1, @"");
   self->shouldRedrag = YES;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
@@ -436,6 +531,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 //creates the promised file of the drag
 -(NSArray*) namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination
 {
+  DebugLog(1, @"");
   NSMutableArray* names = [NSMutableArray arrayWithCapacity:1];
   if (self->pdfData)
   {
@@ -486,7 +582,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       //we try to compute a name that is not already in use
       do
       {
-        fileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
+        fileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
         filePath = [dropPath stringByAppendingPathComponent:fileName];
       } while (i && [fileManager fileExistsAtPath:filePath]);
       
@@ -494,8 +590,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       if (![fileManager fileExistsAtPath:filePath])
       {
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                   atPath:filePath];
+        [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                             ofItemAtPath:filePath error:0];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
@@ -512,25 +608,129 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
+  DebugLog(1, @"");
+  DebugLog(1, @"lazyDataProvider = %@", lazyDataProvider);
   [self->document triggerSmartHistoryFeature];
   LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
   [equation writeToPasteboard:pasteboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  if (self->isDragging && (lazyDataProvider == self))
+  {
+    DebugLog(1, @"add types NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType");
+    [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*/ NSFilenamesPboardType, NSURLPboardType, nil]
+                   owner:lazyDataProvider];
+  }//end if (self->isDragging && (lazyDataProvider == self))
 }
 //end _writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
 //provides lazy data to a pasteboard
 -(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString*)type
 {
+  DebugLog(1, @"add types provideDataForType %@", type);
   PreferencesController* preferencesController = [PreferencesController sharedController];
   export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
-  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
-    dataForType:exportFormat pdfData:self->pdfData jpegColor:[preferencesController exportJpegBackgroundColor]
-    jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
-    compositionConfiguration:[preferencesController compositionConfigurationDocument]
-    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
-  [pasteboard setData:data forType:type];
+  BOOL hasAlreadyCachedData = (self->transientDragData != nil) && (exportFormat == self->transientLastExportFormat);
+  DebugLog(1, @"exportFormat = %d", exportFormat);
+  DebugLog(1, @"hasAlreadyCachedData = %d", hasAlreadyCachedData);
+  self->transientLastExportFormat = exportFormat;
+  NSData* data = hasAlreadyCachedData ? self->transientDragData :
+    [[LaTeXProcessor sharedLaTeXProcessor]
+      dataForType:exportFormat pdfData:self->pdfData jpegColor:[preferencesController exportJpegBackgroundColor]
+      jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
+      compositionConfiguration:[preferencesController compositionConfigurationDocument]
+      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+  if (!hasAlreadyCachedData)
+  {
+    [self->transientDragData release];
+    self->transientDragData = [data copy];
+  }//end if (!hasAlreadyCachedData)
+  DebugLog(1, @"data = %p (%d)", data, [data length]);
+  if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
+  {
+    NSString* extension = nil;
+    NSString* uti = nil;
+    switch(exportFormat)
+    {
+      case EXPORT_FORMAT_PDF:
+      case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+        extension = @"pdf";
+        uti = @"com.adobe.pdf";
+        break;
+      case EXPORT_FORMAT_EPS:
+        extension = @"eps";
+        uti = @"com.adobe.encapsulated-​postscript";
+        break;
+      case EXPORT_FORMAT_TIFF:
+        extension = @"tiff";
+        uti = @"public.tiff";
+        break;
+      case EXPORT_FORMAT_PNG:
+        extension = @"png";
+        uti = @"public.png";
+        break;
+      case EXPORT_FORMAT_JPEG:
+        extension = @"jpeg";
+        uti = @"public.jpeg";
+        break;
+      case EXPORT_FORMAT_MATHML:
+        extension = @"html";
+        uti = @"public.html";
+        break;
+      case EXPORT_FORMAT_SVG:
+        extension = @"svg";
+        uti = @"public.svg-image";
+        break;
+    }
+    DebugLog(1, @"uti = %@", uti);
+    if (data)
+    {
+      DebugLog(1, @"type = %@", type);
+      if ([type isEqualToString:NSFileContentsPboardType])
+        [pasteboard setData:data forType:NSFileContentsPboardType];
+      else if ([type isEqualToString:NSFilenamesPboardType])
+      {
+        NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+        NSString* filePath = !extension ? nil :
+        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+        DebugLog(1, @"filePath = %@", filePath);
+        if (filePath)
+        {
+          if (!hasAlreadyCachedData)
+            [data writeToFile:filePath atomically:YES];
+          NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+          DebugLog(1, @"fileURL = %@", fileURL);
+          if (isMacOS10_6OrAbove())
+            [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+          //else
+            [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+        }//end if (filePath)
+      }//end if ([type isEqualToString:NSFilenamesPboardType])
+      else if ([type isEqualToString:NSURLPboardType])
+      {
+        NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+        NSString* filePath = !extension ? nil :
+        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+        DebugLog(1, @"filePath = %@", filePath);
+        if (filePath)
+        {
+          if (!hasAlreadyCachedData)
+            [data writeToFile:filePath atomically:YES];
+          NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+          DebugLog(1, @"fileURL = %@", fileURL);
+          if (isMacOS10_6OrAbove())
+            [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+          else
+            [fileURL writeToPasteboard:pasteboard];
+        }//end if (filePath)
+      }//end if ([type isEqualToString:NSURLPboardType])
+    }//end if (data)
+  }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
+  else//if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
+  {
+    DebugLog(1, @"setData = %p (%d) for Type %@", data, [data length], type);
+    [pasteboard setData:data forType:type];
+  }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
 }
 //end pasteboard:provideDataForType:
 
@@ -555,6 +755,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:filepath];
     ok = [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]]))
+  {
+    ok = YES;//([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.iWork.TSPNativeMetadata"]] != nil);
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]]))
     ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
@@ -576,7 +780,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
-  return [self _applyDataFromPasteboard:[sender draggingPasteboard]];
+  BOOL result = [self _applyDataFromPasteboard:[sender draggingPasteboard] sender:sender];
+  [self->transientDragData release];
+  self->transientDragData = nil;
+  return result;
 }
 //end performDragOperation:
 
@@ -604,6 +811,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(IBAction) copy:(id)sender
 {
+  [self->transientDragData release];
+  self->transientDragData = nil;
   int tag = sender ? [sender tag] : -1;
   export_format_t copyExportFormat = ((tag == -1) ? [[PreferencesController sharedController] exportFormatCurrentSession] : (export_format_t) tag);
   [self copyAsFormat:copyExportFormat];
@@ -612,6 +821,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) copyAsFormat:(export_format_t)copyExportFormat
 {
+  [self->transientDragData release];
+  self->transientDragData = nil;
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
   PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -626,23 +837,25 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 //In my opinion, this paste: is triggered only programmatically from the paste: of LineCountTextView
 -(IBAction) paste:(id)sender
 {
-  [self _applyDataFromPasteboard:[NSPasteboard generalPasteboard]];
+  [self _applyDataFromPasteboard:[NSPasteboard generalPasteboard] sender:sender];
 }
 //end paste:
 
--(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard
+-(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard sender:(id <NSDraggingInfo>)sender;
 {
   BOOL ok = YES;
   NSString* type = nil;
   BOOL done = NO;
   
-  if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]]))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:type]] updateHistoryItem:YES];
     done = YES;
-  }
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]]))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
     unsigned int count = [libraryItemsWrappedArray count];
     LibraryEquation* libraryEquation = nil;
@@ -655,9 +868,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (libraryEquation)
       [self->document applyLibraryEquation:libraryEquation];
     done = YES;
-  }
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]]))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
     unsigned int count = [libraryItemsArray count];
     LibraryEquation* libraryEquation = nil;
@@ -666,28 +880,118 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (libraryEquation)
       [self->document applyLibraryEquation:libraryEquation];
     done = YES;
-  }
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]]))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* latexitEquationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
     [self->document applyLatexitEquation:[latexitEquationsArray lastObject] isRecentLatexisation:NO];
     done = YES;
-  }
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]]))
-    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]]))
-    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
+  {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])))
+  {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* plist = [[pboard propertyListForType:type] dynamicCastToClass:[NSArray class]];
     NSString* filepath = ![plist count] ? nil : [[plist objectAtIndex:0] dynamicCastToClass:[NSString class]];
     NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:filepath];
     NSData* data = !filepath ? nil : [NSData dataWithContentsOfFile:filepath options:NSUncachedRead error:nil];
     done = [self->document applyData:data sourceUTI:sourceUTI];
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])))
+  if (!done && ![sender draggingSource] &&
+      ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]])))
+  {
+    [self->transientFilesPromisedFilePaths release];
+    self->transientFilesPromisedFilePaths = [[NSMutableArray alloc] init];
+    NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+    NSURL* workingDirectoryURL = [NSURL fileURLWithPath:workingDirectory];
+    NSArray* files = [sender namesOfPromisedFilesDroppedAtDestination:workingDirectoryURL];
+    NSEnumerator* enumerator = [files objectEnumerator];
+    NSString* fileName = nil;
+    while((fileName = [enumerator nextObject]))
+    {
+      NSString* filePath = [workingDirectory stringByAppendingPathComponent:fileName];
+      [(NSMutableArray*)self->transientFilesPromisedFilePaths safeAddObject:filePath];
+    }//end for each filename
+    done = YES;
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
-
+  /*if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.iWork.TSPNativeMetadata"]])))
+  {
+    DebugLog(1, @"com.apple.iWork.TSPNativeMetadata found in clipboard");
+    NSData* data = [pboard dataForType:@"com.apple.iWork.TSPNativeMetadata"];
+    //NSData* data = [NSData dataWithContentsOfFile:@"/Volumes/Leopard/Users/chacha/Desktop/com.apple.iWork.TSPNativeMetadata"];
+    if (data)
+    {
+      DebugLog(1, @"data associated to com.apple.iWork.TSPNativeMetadata : %@", data);
+      NSString* pdfFileName = nil;
+      NSString* uuid = nil;
+      [CHProtoBuffers parseData:data outPdfFileName:&pdfFileName outUUID:&uuid];
+      DebugLog(1, @"after parsing data, pdfFileName = <%@> uuid = <%@>", pdfFileName, uuid);
+      if (pdfFileName && uuid)
+      {
+        MDQueryRef query = MDQueryCreate(kCFAllocatorDefault,
+          (CFStringRef)[NSString stringWithFormat:@"kCHiWorkDocumentUUIDKey == %@", uuid],
+          (CFArrayRef)[NSArray arrayWithObjects:(NSString*)kMDItemContentModificationDate, nil],
+          (CFArrayRef)[NSArray arrayWithObjects:(NSString*)kMDItemContentModificationDate, nil]);
+        MDQuerySetSearchScope(query,
+          (CFArrayRef)[NSArray arrayWithObjects:(NSString*)kMDQueryScopeAllIndexed, nil],
+          0);
+        MDQueryExecute(query, kMDQuerySynchronous);
+        NSUInteger count = MDQueryGetResultCount(query);
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        NSString* pdfFilePath = nil;
+        NSDate* pdfLastDate = nil;
+        DebugLog(1, @"query returned %d items", count);
+        while(count--)
+        {
+          MDItemRef item = (MDItemRef)MDQueryGetResultAtIndex(query, count);
+          NSString* path = (NSString*)MDItemCopyAttribute(item, kMDItemPath);
+          DebugLog(1, @"item path : <%@>", path);
+          NSString* candidatePath = [[path stringByAppendingPathComponent:@"Data"] stringByAppendingPathComponent:pdfFileName];
+          DebugLog(1, @"candidate path : <%@>", candidatePath);
+          if ([fileManager fileExistsAtPath:candidatePath])
+          {
+            DebugLog(1, @"candidate path exists", candidatePath);
+            NSError* error = nil;
+            NSDictionary* fileAttributes = [fileManager attributesOfItemAtPath:candidatePath error:&error];
+            NSDate* modificationDate = [fileAttributes fileModificationDate];
+            NSDate* creationDate = [fileAttributes fileCreationDate];
+            DebugLog(1, @"candidate modificationDate = <%@>", modificationDate);
+            DebugLog(1, @"candidate creationDate = <%@>", creationDate);
+            NSDate* candidateDate =
+              !modificationDate ? creationDate :
+              !creationDate ? modificationDate :
+              [modificationDate laterDate:creationDate];
+            DebugLog(1, @"candidateDate = <%@>", candidateDate);
+            if (!pdfFilePath || !pdfLastDate || ([pdfLastDate compare:candidateDate] != NSOrderedDescending))
+            {
+              pdfFilePath = candidatePath;
+              pdfLastDate = candidateDate;
+              DebugLog(1, @"keep pdfFilePath = <%@>", pdfFilePath);
+            }//end if (!pdfFilePath || !pdfLastDate || ([pdfLastDate compare:candidateDate] != NSOrderedDescending))
+          }//end if ([fileManager fileExistsAtPath:candidatePath])
+        }//end for each candidate
+        if (pdfFilePath)
+        {
+          NSData* filePdfData = [NSData dataWithContentsOfFile:pdfFilePath];
+          DebugLog(1, @"filePdfData = %p", filePdfData);
+          done = filePdfData && [self->document applyData:filePdfData sourceUTI:@"com.adobe.pdf"];
+        }//end if (pdfFilePath)
+      }//end if (pdfFileName && uuid)
+    }//end if (data)
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.iWork.TSPNativeMetadata"]])))*/
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     id plist = [pboard propertyListForType:type];
     NSArray* array = ![plist isKindOfClass:[NSArray class]] ? nil : (NSArray*)plist;
     array = [array lastObject];//array of titles
@@ -708,9 +1012,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (concats)
       [self->document applyString:concats];
     done = (concats != nil);
-  }
+  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
@@ -719,9 +1024,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (pdfWrapperData)
       done = [self->document applyData:pdfWrapperData sourceUTI:@"com.adobe.pdf"];
     [attributedString release];
-  }
+  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.rtf", NSRTFPboardType, nil]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
@@ -731,14 +1037,15 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
   {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     [self->document applyString:[pboard stringForType:type]];
     done = YES;
-  }
-  else if (!done)
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  if (!done)
     ok = NO;
   return ok;
 }
-//end _applyDataFromPasteboard:
+//end _applyDataFromPasteboard:sender:
 
 -(void) _copyCurrentImageNotification:(NSNotification*)notification
 {
@@ -748,142 +1055,188 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) drawRect:(NSRect)rect
 {
-  NSRect inRect = NSInsetRect([self bounds], 7, 7);
-
-  CGFloat factor = exp(3*(self->zoomLevel-1));
-  NSSize newSize = self->naturalPDFSize;
-  newSize.width *= factor;
-  newSize.height *= factor;
-
-  NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
-  destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
-  if (self->backgroundColor)
+  BOOL doNotClipPreview = [[PreferencesController sharedController] doNotClipPreview];
+  if (doNotClipPreview)
   {
-    [self->backgroundColor set];
-    NSRectFill(inRect);
-  }//end if (self->backgroundColor)
-  
-  CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-  NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
-  NSScrollView* scrollView = (NSScrollView*)[clipView superview];
-  NSRect borderRect = !clipView ? [self bounds] : [clipView visibleRect];
-  NSRect inRoundedRect1 = NSInsetRect(borderRect, 0, 0);
-  NSRect inRoundedRect2 = NSInsetRect(borderRect, 2, 2);
-  NSRect inRoundedRect3 = NSInsetRect(borderRect, 3, 3);
-  CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  CGFloat backgroundRGBcomponents[4] = {0.95f, 0.95f, 0.95f, 1.0f};
-  [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
-    getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
-  CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
+    NSRect bounds = [self bounds];
+    NSRect inRoundedRect1 = NSInsetRect(bounds, 1, 1);
+    NSRect inRoundedRect2 = NSInsetRect(bounds, 2, 2);
+    NSRect inRoundedRect3 = NSInsetRect(bounds, 3, 3);
+    NSRect inRect = NSInsetRect(bounds, 7, 7);
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+    CGContextFillPath(cgContext);
+    CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+    CGContextStrokePath(cgContext);
+    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+    CGContextStrokePath(cgContext);
+    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+    CGContextStrokePath(cgContext);
 
-  CGContextAddRect(cgContext, CGRectFromNSRect([self bounds]));
-  CGContextFillPath(cgContext);
+    NSImage* image = [self image];
+    NSSize naturalImageSize = image ? [image size] : NSZeroSize;
+    CGFloat factor = exp(3*(self->zoomLevel-1));
+    NSSize newSize = naturalImageSize;
+    newSize.width *= factor;
+    newSize.height *= factor;
 
-  if (self->imageRep)
-    [self->imageRep drawInRect:destRect];
-  else
-    [[self image] drawInRect:destRect fromRect:NSMakeRect(0, 0, self->naturalPDFSize.width, self->naturalPDFSize.height)
-            operation:NSCompositeSourceOver fraction:1.];
-
-  NSRect documentRect = [self frame];
-  NSRect documentVisibleRect = !clipView ? NSZeroRect : [clipView documentVisibleRect];
-  BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
-  BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
-  BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
-  BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
-  BOOL shoulDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
-  BOOL shoulDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
-  BOOL shoulDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
-  BOOL shoulDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
-  if ((shoulDisplayScrollLeft || shoulDisplayScrollRight || shoulDisplayScrollDown || shoulDisplayScrollUp))
+    NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
+    destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
+    if (self->backgroundColor)
+    {
+      [self->backgroundColor set];
+      NSRectFill(inRect);
+    }
+    //[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+    if (self->imageRep)
+      [self->imageRep drawInRect:destRect];
+    else
+      [[self image] drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)
+              operation:NSCompositeSourceOver fraction:1.];
+  }//end if (doNotClipPreview)
+  else//if (!doNotClipPreview)
   {
-    CGPoint trianglePoints[] = {CGPointMake(-2, -1), CGPointMake(0, 1), CGPointMake(2, -1)};
-    static NSDate* referenceDate = nil;
-    if (!referenceDate)
-      referenceDate = [[NSDate alloc] init];
-    CGFloat seconds = [[NSDate date] timeIntervalSinceDate:referenceDate];
-    CGFloat alpha = fabs(sin(seconds*2*M_PI/2));
-    if (shoulDisplayScrollLeft)
-    {
-      CGContextSaveGState(cgContext);
-      CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-      CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
-      CGContextScaleCTM(cgContext, 4, 4);
-      CGContextScaleCTM(cgContext, 1, -1);
-      CGContextRotateCTM(cgContext, M_PI/2);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-      CGContextFillPath(cgContext);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetLineWidth(cgContext, 1./4);
-      CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-      CGContextStrokePath(cgContext);
-      CGContextRestoreGState(cgContext);
-    }//end if (shoulDisplayScrollLeft)
-    if (shoulDisplayScrollRight)
-    {
-      CGContextSaveGState(cgContext);
-      CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-      CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width-10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
-      CGContextScaleCTM(cgContext, 4, 4);
-      CGContextScaleCTM(cgContext, 1, -1);
-      CGContextRotateCTM(cgContext, -M_PI/2);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-      CGContextFillPath(cgContext);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetLineWidth(cgContext, 1./4);
-      CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-      CGContextStrokePath(cgContext);
-      CGContextRestoreGState(cgContext);
-    }//end if (shoulDisplayScrollRight)
-    if (shoulDisplayScrollDown)
-    {
-      CGContextSaveGState(cgContext);
-      CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-      CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, inRoundedRect3.origin.y+10);
-      CGContextScaleCTM(cgContext, 4, 4);
-      CGContextScaleCTM(cgContext, 1, -1);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-      CGContextFillPath(cgContext);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetLineWidth(cgContext, 1./4);
-      CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-      CGContextStrokePath(cgContext);
-      CGContextRestoreGState(cgContext);
-    }//end if (shoulDisplayScrollDown)
-    if (shoulDisplayScrollUp)
-    {
-      CGContextSaveGState(cgContext);
-      CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-      CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, NSMaxY(inRoundedRect3)-10);
-      CGContextScaleCTM(cgContext, 4, 4);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-      CGContextFillPath(cgContext);
-      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-      CGContextSetLineWidth(cgContext, 1./4);
-      CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-      CGContextStrokePath(cgContext);
-      CGContextRestoreGState(cgContext);
-    }//end if (shoulDisplayScrollUp)
-    [self performSelector:@selector(setNeedsDisplay:) withObject:[NSNumber numberWithBool:YES] afterDelay:1/25.];
-  }//end if ((shoulDisplayScrollDown || shoulDisplayScrollDown))
+    NSRect inRect = NSInsetRect([self bounds], 7, 7);
 
-  CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
-  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
-  CGContextEOFillPath(cgContext);
-  CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
-  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
-  CGContextStrokePath(cgContext);
-  CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
-  CGContextStrokePath(cgContext);
-  CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
-  CGContextStrokePath(cgContext);
+    CGFloat factor = exp(3*(self->zoomLevel-1));
+    NSSize newSize = self->naturalPDFSize;
+    newSize.width *= factor;
+    newSize.height *= factor;
+
+    NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
+    destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
+    if (self->backgroundColor)
+    {
+      [self->backgroundColor set];
+      NSRectFill(inRect);
+    }//end if (self->backgroundColor)
+    
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
+    NSScrollView* scrollView = (NSScrollView*)[clipView superview];
+    NSRect borderRect = !clipView ? [self bounds] : [clipView visibleRect];
+    NSRect inRoundedRect1 = NSInsetRect(borderRect, 0, 0);
+    NSRect inRoundedRect2 = NSInsetRect(borderRect, 2, 2);
+    NSRect inRoundedRect3 = NSInsetRect(borderRect, 3, 3);
+    CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGFloat backgroundRGBcomponents[4] = {0.95f, 0.95f, 0.95f, 1.0f};
+    [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+      getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
+    CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
+
+    CGContextAddRect(cgContext, CGRectFromNSRect([self bounds]));
+    CGContextFillPath(cgContext);
+
+    if (self->imageRep)
+      [self->imageRep drawInRect:destRect];
+    else
+      [[self image] drawInRect:destRect fromRect:NSMakeRect(0, 0, self->naturalPDFSize.width, self->naturalPDFSize.height)
+              operation:NSCompositeSourceOver fraction:1.];
+
+    NSRect documentRect = [self frame];
+    NSRect documentVisibleRect = !clipView ? NSZeroRect : [clipView documentVisibleRect];
+    BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
+    BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
+    BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
+    BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
+    BOOL shoulDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
+    BOOL shoulDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
+    BOOL shoulDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
+    BOOL shoulDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
+    if ((shoulDisplayScrollLeft || shoulDisplayScrollRight || shoulDisplayScrollDown || shoulDisplayScrollUp))
+    {
+      CGPoint trianglePoints[] = {CGPointMake(-2, -1), CGPointMake(0, 1), CGPointMake(2, -1)};
+      static NSDate* referenceDate = nil;
+      if (!referenceDate)
+        referenceDate = [[NSDate alloc] init];
+      CGFloat seconds = [[NSDate date] timeIntervalSinceDate:referenceDate];
+      CGFloat alpha = fabs(sin(seconds*2*M_PI/2));
+      if (shoulDisplayScrollLeft)
+      {
+        CGContextSaveGState(cgContext);
+        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
+        CGContextScaleCTM(cgContext, 4, 4);
+        CGContextScaleCTM(cgContext, 1, -1);
+        CGContextRotateCTM(cgContext, M_PI/2);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
+        CGContextFillPath(cgContext);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetLineWidth(cgContext, 1./4);
+        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
+        CGContextStrokePath(cgContext);
+        CGContextRestoreGState(cgContext);
+      }//end if (shoulDisplayScrollLeft)
+      if (shoulDisplayScrollRight)
+      {
+        CGContextSaveGState(cgContext);
+        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width-10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
+        CGContextScaleCTM(cgContext, 4, 4);
+        CGContextScaleCTM(cgContext, 1, -1);
+        CGContextRotateCTM(cgContext, -M_PI/2);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
+        CGContextFillPath(cgContext);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetLineWidth(cgContext, 1./4);
+        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
+        CGContextStrokePath(cgContext);
+        CGContextRestoreGState(cgContext);
+      }//end if (shoulDisplayScrollRight)
+      if (shoulDisplayScrollDown)
+      {
+        CGContextSaveGState(cgContext);
+        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, inRoundedRect3.origin.y+10);
+        CGContextScaleCTM(cgContext, 4, 4);
+        CGContextScaleCTM(cgContext, 1, -1);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
+        CGContextFillPath(cgContext);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetLineWidth(cgContext, 1./4);
+        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
+        CGContextStrokePath(cgContext);
+        CGContextRestoreGState(cgContext);
+      }//end if (shoulDisplayScrollDown)
+      if (shoulDisplayScrollUp)
+      {
+        CGContextSaveGState(cgContext);
+        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, NSMaxY(inRoundedRect3)-10);
+        CGContextScaleCTM(cgContext, 4, 4);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
+        CGContextFillPath(cgContext);
+        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+        CGContextSetLineWidth(cgContext, 1./4);
+        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
+        CGContextStrokePath(cgContext);
+        CGContextRestoreGState(cgContext);
+      }//end if (shoulDisplayScrollUp)
+      [self performSelector:@selector(setNeedsDisplay:) withObject:[NSNumber numberWithBool:YES] afterDelay:1/25.];
+    }//end if ((shoulDisplayScrollDown || shoulDisplayScrollDown))
+
+    CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+    CGContextEOFillPath(cgContext);
+    CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+    CGContextStrokePath(cgContext);
+    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+    CGContextStrokePath(cgContext);
+    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+    CGContextStrokePath(cgContext);
+  }//end if (!doNotClipPreview)
 }
 //end drawRect:
 
@@ -896,35 +1249,54 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) updateViewSize
 {
-  NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
-  if (!clipView)
+  BOOL doNotClipPreview = [[PreferencesController sharedController] doNotClipPreview];
+  if (doNotClipPreview)
   {
-    NSScrollView* scrollView = [[[NSScrollView alloc] initWithFrame:[self frame]] autorelease];
-    [scrollView setAutoresizingMask:[self autoresizingMask]];
-    NSView* superView = [self superview];
-    NSView* selfView = [self retain];
-    [superView replaceSubview:selfView with:scrollView];
-    [scrollView setHasHorizontalScroller:NO];
-    [scrollView setHasVerticalScroller:NO];
-    clipView = (NSClipView*)[scrollView contentView];
-    [clipView setCopiesOnScroll:NO];
-    [scrollView setDocumentView:selfView];
-    [selfView release];
-  }//end if (!clipView)
-  CGFloat factor = exp(3*(self->zoomLevel-1));
-  NSSize newSize = self->naturalPDFSize;
-  newSize.width *= factor;
-  newSize.height *= factor;
-  NSScrollView* scrollView = (NSScrollView*)[clipView superview];
-  NSSize containerSize = [scrollView contentSize];
-  /*if (newSize.width > containerSize.width)
+    NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
+    if (clipView)
+    {
+      NSScrollView* scrollView = [[clipView superview] retain];
+      NSRect frame = [scrollView frame];
+      NSView* superView = [scrollView superview];
+      NSView* selfView = [self retain];
+      [superView replaceSubview:scrollView with:selfView];
+      [selfView setFrame:frame];
+      [selfView release];
+      [scrollView release];
+    }//end if (clipView)
+  }//end if (doNotClipPreview)
+  else//if (!doNotClipPreview)
   {
-    newSize.width = containerSize.width;
-    newSize.height = !self->naturalPDFSize.width ? 0 : containerSize.width*self->naturalPDFSize.height/self->naturalPDFSize.width;
-  }//end if (newSize.width > containerSize)*/
-  [scrollView setHasHorizontalScroller:(newSize.width > containerSize.width)];
-  [scrollView setHasVerticalScroller:(newSize.height > containerSize.height)];
-  [self setFrame:NSMakeRect(0, 0, MAX([scrollView contentSize].width, newSize.width), MAX([scrollView contentSize].height, newSize.height))];
+    NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
+    if (!clipView)
+    {
+      NSScrollView* scrollView = [[[NSScrollView alloc] initWithFrame:[self frame]] autorelease];
+      [scrollView setAutoresizingMask:[self autoresizingMask]];
+      NSView* superView = [self superview];
+      NSView* selfView = [self retain];
+      [superView replaceSubview:selfView with:scrollView];
+      [scrollView setHasHorizontalScroller:NO];
+      [scrollView setHasVerticalScroller:NO];
+      clipView = (NSClipView*)[scrollView contentView];
+      [clipView setCopiesOnScroll:NO];
+      [scrollView setDocumentView:selfView];
+      [selfView release];
+    }//end if (!clipView)
+    CGFloat factor = exp(3*(self->zoomLevel-1));
+    NSSize newSize = self->naturalPDFSize;
+    newSize.width *= factor;
+    newSize.height *= factor;
+    NSScrollView* scrollView = (NSScrollView*)[clipView superview];
+    NSSize containerSize = [scrollView contentSize];
+    /*if (newSize.width > containerSize.width)
+    {
+      newSize.width = containerSize.width;
+      newSize.height = !self->naturalPDFSize.width ? 0 : containerSize.width*self->naturalPDFSize.height/self->naturalPDFSize.width;
+    }//end if (newSize.width > containerSize)*/
+    [scrollView setHasHorizontalScroller:(newSize.width > containerSize.width)];
+    [scrollView setHasVerticalScroller:(newSize.height > containerSize.height)];
+    [self setFrame:NSMakeRect(0, 0, MAX([scrollView contentSize].width, newSize.width), MAX([scrollView contentSize].height, newSize.height))];
+  }//end if (!doNotClipPreview)
 }
 //end updateViewSize
 

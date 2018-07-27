@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "BodyTemplatesController.h"
@@ -19,11 +19,21 @@
 
 static NSDictionary* noneBodyTemplate = nil;
 
++(NSSet*) keyPathsForValuesAffectingValueForKey:(NSString*)key
+{
+  NSSet* result = nil;
+  if ([key isEqualToString:@"arrangedObjectsNamesWithNone"])
+    result = [NSSet setWithObjects:@"arrangedObjects", nil];
+  return result;
+}
+//end keyPathsForValuesAffectingValueForKey:
+
 +(void) initialize
 {
   [self exposeBinding:@"selection"];
   [self exposeBinding:@"arrangedObjectsNamesWithNone"];
-  [self setKeys:[NSArray arrayWithObjects:@"arrangedObjects", nil] triggerChangeNotificationsForDependentKey:@"arrangedObjectsNamesWithNone"];
+  if (!isMacOS10_5OrAbove())
+    [self setKeys:[NSArray arrayWithObjects:@"arrangedObjects", nil] triggerChangeNotificationsForDependentKey:@"arrangedObjectsNamesWithNone"];
 }
 //end initialize
 

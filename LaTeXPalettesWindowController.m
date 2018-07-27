@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //The LaTeXPalettesWindowController controller is responsible for loading and initializing the palette
 
@@ -140,7 +140,7 @@
     NSString* domainName = domainPath;
     NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"Palettes", nil];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
-    NSArray* palettesPaths  = [fileManager directoryContentsAtPath:directoryPath];
+    NSArray* palettesPaths  = [fileManager bridge_contentsOfDirectoryAtPath:directoryPath error:0];
     NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:[palettesPaths count]];
     NSEnumerator* latexPalettesEnumerator = [palettesPaths objectEnumerator];
     NSString* file = nil;

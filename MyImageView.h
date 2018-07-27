@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -30,10 +30,14 @@ extern NSString* ImageDidChangeNotification;
   BOOL        isDragging;
   NSPoint     lastDragStartPointSelfBased;
   BOOL        shouldRedrag;
+  export_format_t transientLastExportFormat;
+  NSData*         transientDragData;
+  NSArray*        transientFilesPromisedFilePaths;
 }
 
 -(void) setImage:(NSImage*)image;
 
+-(IBAction) paste:(id)sender;
 -(IBAction) copy:(id)sender;//copy the data into clipboard
 -(void)     copyAsFormat:(export_format_t)exportFormat;//copy the data into clipboard
 

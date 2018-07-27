@@ -344,42 +344,39 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.5.3</guid>
-      <title>Version 2.5.3</title>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.6.0</guid>
+      <title>Version 2.6.0</title>
       <description><![CDATA[
         <ul>
-          <li>Automatoraktion repariert.</li>
+          <li>Drag-and-Drop zu iWork'13 funktioniert wieder&nbsp;;</li>
+          <li>Drag-and-Drop aus iWork'13 heraus funktioniert wieder, dank des Proxy-Icons des “Bild”-Panel&nbsp;;</li>
+          <li>Filterung der Services mit regulären Ausdrücken hinzugefügt (Einstellungen > Services)&nbsp;;</li>
+          <li>“Auto”-LaTeXisation-Modus hinzugefügt&nbsp;;</li>
+          <li>“Formatierung -> Ausrichtung…”-Option hinzugefügt&nbsp;;</li>
+          <li>Neuer “Ctrl+Command+T”-Shortcut um das Resultat direkt in die Zwischenablage zu kopieren&nbsp;;</li>
+          <li>Alle Services durch Versionen ergänzt, die das Resultat in die Zwischenablage zu kopieren&nbsp;;</li>
+          <li>Fehler mit NSFlippableView behoben&nbsp;;</li>
+          <li>Neue $OUTPUTPDFFILE2-Umgebungsvariable zur Abarbeitung von Skripten&nbsp;;</li>
+          <li>Fehler bei Kompatibilität zwischen gs >= 9.09 und dem Export “mit Vektor-Schriften” behoben&nbsp;;</li>
+          <li>“\color”-Command in Präambel absichtlich ausgelassen, wenn die eingestellte Farbe das Standard Schwarz ist. (Für bessere Anpassung durch Benuzter)&nbsp;;</li>
+          <li>“Vorschau nicht beschneiden”-Option hinzugefügt&nbsp;;</li>
+          <li>Neue latexit-Metadaten in PDFs integriert, die von iWork'13 nicht entfernt werden&nbsp;;</li>
+          <li>Fehler in JPEG-export-Dialog behoben&nbsp;;</li>
+          <li>Fehler mit der Handhabung von Farben im “XeLaTeX”-Modus behoben&nbsp;;</li>
+          <li>Fehler bei Automator-Anbindung behoben&nbsp;;</li>
+          <li>Drag-and-Drop zu OmniGraffle funktioniert wieder.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.5.3</sparkle:releaseNotesLink>
-      <pubDate>Wed, 03 Jul 2013 21:04:37 +0200</pubDate>
-      <enclosure
-      url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_3.dmg"
-      sparkle:version="2.5.3"
-      sparkle:shortVersionString="2.5.3"
-      type="application/octet-stream"
-      length="9654852"
-      sparkle:dsaSignature="MCwCFBsouhH+yCdgjfxPbATHzuilEmMfAhRewrILtDeZ+6c8V3cvyQ5DXixNHQ=="
-      />
-    </item>
-    <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.4</guid>
-      <title>Version 2.5.4</title>
-      <description><![CDATA[
-        <ul>
-          <li>Voreinstellungen repariert.</li>
-        </ul>
-      ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.4</sparkle:releaseNotesLink>
-      <pubDate>Sat, 07 Sep 2013 19:26:13 +0200</pubDate>
-      <enclosure
-        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_4.dmg"
-        sparkle:version="2.5.4"
-        sparkle:shortVersionString="2.5.4"
-        type="application/octet-stream"
-        length="9682722"
-        sparkle:dsaSignature="MC0CFGMVnvutKBuvVdx3a0NpK4s97SfUAhUAhox2Iz+xb82IQ6/D6kZAN2gIxO4="
-      />
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.6.0</sparkle:releaseNotesLink>
+			<pubDate>Thu, 17 Apr 2014 22:23:07 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_6_0.dmg"
+				sparkle:version="2.6.0"
+                   sparkle:shortVersionString="2.6.0"
+				type="application/octet-stream"
+				length="10417645"
+				sparkle:dsaSignature="MC0CFQCQY0Rv5tom2dSlNsR+2lvvMyNNIwIUQCtLj012+0fZo0lgp+m370kODVo="
+			/>
     </item>
   </channel> 
 </rss>

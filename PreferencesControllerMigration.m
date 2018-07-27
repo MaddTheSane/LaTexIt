@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/09.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesControllerMigration.h"
@@ -292,6 +292,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
             [serviceItem objectForKey:ServiceShortcutEnabledKey], ServiceShortcutEnabledKey,
             [serviceItem objectForKey:ServiceShortcutStringKey], ServiceShortcutStringKey,
             [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+            [serviceItem objectForKey:ServiceShortcutClipBoardOptionKey], ServiceShortcutClipBoardOptionKey,
             nil]];
       }
     }//end for each serviceItem

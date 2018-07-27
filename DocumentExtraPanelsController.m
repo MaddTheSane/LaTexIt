@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -62,7 +62,7 @@
     [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"Format")]];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"PDF vector format")
     tag:(int)EXPORT_FORMAT_PDF];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF without embedded fonts", @"PDF without embedded fonts")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
     tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"EPS vector format", @"EPS vector format")
     tag:(int)EXPORT_FORMAT_EPS];

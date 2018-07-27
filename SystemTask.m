@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "SystemTask.h"
@@ -229,7 +229,7 @@
     self->selfExited        = WIFEXITED(self->terminationStatus) && !WIFSIGNALED(self->terminationStatus);
     self->terminationStatus = WIFEXITED(self->terminationStatus) ? WEXITSTATUS(self->terminationStatus) : -1;
     [self->runningLock unlock];
-    [[NSFileManager defaultManager] removeFileAtPath:timeLimitedScriptPath handler:nil];
+    [[NSFileManager defaultManager] bridge_removeItemAtPath:timeLimitedScriptPath error:0];
   }//end if filePath
 }
 //end launch

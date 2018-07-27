@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
@@ -276,6 +276,135 @@ static LaTeXProcessor* sharedInstance = nil;
     CFRelease(cfEscapedSource);
 
     NSString* type = [[NSNumber numberWithInt:mode] stringValue];
+    
+    BOOL annotateWithTransparentData = NO;
+    if (annotateWithTransparentData)
+    {
+      NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
+        @"2.6.0", @"version",
+        !preamble ? @"" : preamble, @"preamble",
+        !source ? @"" : source, @"source",
+        type, @"type",
+        colorAsString, @"color",
+        bkColorAsString, @"bkColor",
+        !title ? @"" : title, @"title",
+        [NSNumber numberWithDouble:magnification], @"magnification",
+        [NSNumber numberWithDouble:baseline], @"baseline",
+        nil];
+      NSData* dictionaryContentPlistData =
+        isMacOS10_6OrAbove() ?
+          [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] :
+          [NSPropertyListSerialization dataFromPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 errorDescription:nil];
+      NSData* annotationContentRawData = dictionaryContentPlistData;
+      NSData* annotationContentCompressedData = [Compressor zipcompress:annotationContentRawData];
+      NSString* annotationContentBase64 = [annotationContentCompressedData encodeBase64WithNewlines:NO];
+      NSData* annotationContentBase64Data =
+        [[NSString stringWithFormat:@"<latexit sha1_base64=\"%@\">%@</latexit>",
+          [[annotationContentBase64 dataUsingEncoding:NSUTF8StringEncoding] sha1Base64],
+          annotationContentBase64]
+          dataUsingEncoding:NSUTF8StringEncoding];
+      NSMutableData* dataConsumerData = [NSMutableData data];
+      CGDataConsumerRef dataConsumer = !dataConsumerData ? 0 :
+        CGDataConsumerCreateWithCFData((CFMutableDataRef)dataConsumerData);
+      CGDataProviderRef dataProvider = !data ? 0 :
+        CGDataProviderCreateWithCFData((CFDataRef)data);
+      CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
+        CGPDFDocumentCreateWithProvider(dataProvider);
+      CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
+        CGPDFDocumentGetPage(pdfDocument, 1);
+      CGRect mediaBox = !pdfPage ? CGRectZero :
+        CGPDFPageGetBoxRect(pdfPage, kCGPDFMediaBox);
+      CGContextRef cgPDFContext = !dataConsumer || !pdfPage ? 0 :
+        CGPDFContextCreate(dataConsumer, &mediaBox, 0);
+      BOOL dataRewritten = NO;
+      if (cgPDFContext && pdfPage)
+      {
+        CGPDFContextBeginPage(cgPDFContext, 0);
+        CGContextDrawPDFPage(cgPDFContext, pdfPage);
+        CGContextFlush(cgPDFContext);
+        CGContextSelectFont(cgPDFContext, "Courier", 1, kCGEncodingMacRoman);
+        CGContextSetRGBStrokeColor(cgPDFContext, 0, 0, 0, 0);
+        CGContextSetTextDrawingMode(cgPDFContext, kCGTextInvisible);
+        CGContextShowText(cgPDFContext, [annotationContentBase64Data bytes], [annotationContentBase64Data length]);
+        CGPDFContextEndPage(cgPDFContext);
+        CGContextFlush(cgPDFContext);
+        CGContextRelease(cgPDFContext);
+        dataRewritten = YES;
+      }//end if (cgPDFContext && pdfPage)
+      CGPDFDocumentRelease(pdfDocument);
+      CGDataProviderRelease(dataProvider);
+      CGDataConsumerRelease(dataConsumer);
+      if (dataRewritten)
+        data = dataConsumerData;
+     }//end if (annotateWithTransparentData)
+    
+    BOOL annotateWithXML = NO;
+    if (annotateWithXML)
+    {
+      NSString* annotationContent =
+          [NSMutableString stringWithFormat:
+            @"/Encoding /MacRomanEncoding\n"\
+             "/Preamble (ESannop%sESannopend)\n"\
+             "/EscapedPreamble (ESannoep%sESannoepend)\n"\
+             "/Subject (ESannot%sESannotend)\n"\
+             "/EscapedSubject (ESannoes%sESannoesend)\n"\
+             "/Type (EEtype%@EEtypeend)\n"\
+             "/Color (EEcol%@EEcolend)\n"\
+             "/BKColor (EEbkc%@EEbkcend)\n"\
+             "/Title (EEtitle%@EEtitleend)\n"\
+             "/Magnification (EEmag%fEEmagend)\n"\
+             "/Baseline (EEbas%fEEbasend)\n",
+            [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
+            [escapedPreamble  cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
+            [replacedSource  cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
+            [escapedSource   cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
+            type, colorAsString, bkColorAsString, (title ? title : @""), magnification, baseline];
+      NSString* annotationContentBase64 = 
+        [NSString stringWithFormat:
+           @"<![CDATA[%@]]>",
+           [[annotationContent dataUsingEncoding:NSUTF8StringEncoding] encodeBase64]];
+      NSMutableString *annotation =
+          [NSMutableString stringWithFormat:
+            @"\nobj\n<<\n/Type /Metadata\n"\
+             "/SubType /XML\n"\
+             "/Length %@\n"\
+             ">>\n"\
+             "stream\n"\
+             "%@\n"\
+             "endstream\n"\
+             "endobj\n",
+             [NSNumber numberWithUnsignedInteger:[annotationContentBase64 length]],
+             annotationContentBase64];
+      NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+      
+      NSRange r1 = [pdfString rangeOfString:@"\nxref" options:NSBackwardsSearch];
+      NSRange r2 = [pdfString rangeOfString:@"startxref" options:NSBackwardsSearch];
+      r2 = (r2.location == NSNotFound) ? r2 : [pdfString lineRangeForRange:r2];
+
+      NSString* tail_of_tail = (r2.location == NSNotFound) ? @"" : [pdfString substringFromIndex:r2.location];
+      NSArray*  tailarray    = [tail_of_tail componentsSeparatedByString:@"\n"];
+
+      int byte_count = 0;
+      NSScanner* scanner = ([tailarray count]<2) ? nil : [NSScanner scannerWithString:[tailarray objectAtIndex:1]];
+      [scanner scanInt:&byte_count];
+      if (r1.location != NSNotFound)
+        byte_count += [annotation length];
+
+      NSRange r3 = (r2.location == NSNotFound) ? r2 : NSMakeRange(r1.location, r2.location - r1.location);
+      NSString* stuff = (r3.location == NSNotFound) ? @"" : [pdfString substringWithRange:r3];
+
+      [annotation appendString:stuff];
+      [annotation appendString:[NSString stringWithFormat: @"startxref\n%d\n%%%%EOF", byte_count]];
+      
+      NSData* dataToAppend = [annotation dataUsingEncoding:NSMacOSRomanStringEncoding/*NSASCIIStringEncoding*/ allowLossyConversion:YES];
+
+      newData = [NSMutableData dataWithData:[data subdataWithRange:
+        (r1.location != NSNotFound) ? NSMakeRange(0, r1.location) :
+        (r2.location != NSNotFound) ? NSMakeRange(0, r2.location) :
+        NSMakeRange(0, 0)]];
+      [newData appendData:dataToAppend];
+      data = newData;
+    }//end if (annotateWithXML)
 
     NSMutableString *annotation =
         [NSMutableString stringWithFormat:
@@ -338,7 +467,7 @@ static LaTeXProcessor* sharedInstance = nil;
   color = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
   CGFloat rgba[4] = {0};
   [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
-  NSString* colorString =
+  NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
     [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
   NSMutableString* preamble = [NSMutableString stringWithString:thePreamble];
   NSRange colorRange = [preamble rangeOfString:@"{color}"];
@@ -485,21 +614,21 @@ static LaTeXProcessor* sharedInstance = nil;
 
   //trash old files
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  [fileManager removeFileAtPath:latexFilePath            handler:nil];
-  [fileManager removeFileAtPath:latexAuxFilePath         handler:nil];
-  [fileManager removeFileAtPath:latexFilePath2           handler:nil];
-  [fileManager removeFileAtPath:latexAuxFilePath2        handler:nil];
-  [fileManager removeFileAtPath:pdfFilePath              handler:nil];
-  [fileManager removeFileAtPath:dviFilePath              handler:nil];
-  [fileManager removeFileAtPath:pdfFilePath2             handler:nil];
-  [fileManager removeFileAtPath:pdfCroppedFilePath       handler:nil];
-  [fileManager removeFileAtPath:latexBaselineFilePath    handler:nil];
-  [fileManager removeFileAtPath:latexAuxBaselineFilePath handler:nil];
-  [fileManager removeFileAtPath:pdfBaselineFilePath      handler:nil];
-  [fileManager removeFileAtPath:sizesFilePath            handler:nil];
+  [fileManager bridge_removeItemAtPath:latexFilePath            error:0];
+  [fileManager bridge_removeItemAtPath:latexAuxFilePath         error:0];
+  [fileManager bridge_removeItemAtPath:latexFilePath2           error:0];
+  [fileManager bridge_removeItemAtPath:latexAuxFilePath2        error:0];
+  [fileManager bridge_removeItemAtPath:pdfFilePath              error:0];
+  [fileManager bridge_removeItemAtPath:dviFilePath              error:0];
+  [fileManager bridge_removeItemAtPath:pdfFilePath2             error:0];
+  [fileManager bridge_removeItemAtPath:pdfCroppedFilePath       error:0];
+  [fileManager bridge_removeItemAtPath:latexBaselineFilePath    error:0];
+  [fileManager bridge_removeItemAtPath:latexAuxBaselineFilePath error:0];
+  [fileManager bridge_removeItemAtPath:pdfBaselineFilePath      error:0];
+  [fileManager bridge_removeItemAtPath:sizesFilePath            error:0];
   
   //trash *.*pk, *.mf, *.tfm, *.mp, *.script, *.[[:digit:]], *.t[[:digit:]]+
-  NSArray* files = [fileManager directoryContentsAtPath:workingDirectory];
+  NSArray* files = [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:0];
   NSEnumerator* enumerator = [files objectEnumerator];
   NSString* file = nil;
   while((file = [enumerator nextObject]))
@@ -515,7 +644,7 @@ static LaTeXProcessor* sharedInstance = nil;
                         [extension isMatchedByRegex:@"^[[:digit:]]+$"] ||
                         [extension isMatchedByRegex:@"^t[[:digit:]]+$"];
       if (mustDelete)
-        [fileManager removeFileAtPath:file handler:NULL];
+        [fileManager bridge_removeItemAtPath:file error:0];
     }
   }
   
@@ -587,15 +716,17 @@ static LaTeXProcessor* sharedInstance = nil;
   color = [(color ? color : [NSColor blackColor]) colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
   CGFloat rgba[4] = {0, 0, 0, 0};
   [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
-  NSString* colorString = [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
+  NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
+    [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
   NSString* normalSourceToCompile =
     [NSString stringWithFormat:
       @"%@\n\\pagestyle{empty} "\
        "\\begin{document}"\
        "%@%@%@%@\n"\
        "\\end{document}",
-       [colouredPreamble replaceYenSymbol], addSymbolLeft,
+       [colouredPreamble replaceYenSymbol],
        (compositionMode == COMPOSITION_MODE_XELATEX) ? colorString : @"",
+       addSymbolLeft,
        [trimmedBody replaceYenSymbol],
        addSymbolRight];
 
@@ -611,7 +742,8 @@ static LaTeXProcessor* sharedInstance = nil;
     [NSDictionary dictionaryWithObjectsAndKeys:[latexFilePath stringByDeletingLastPathComponent], @"CURRENTDIRECTORY",
                                                 [latexFilePath stringByDeletingPathExtension], @"INPUTFILE",
                                                 latexFilePath, @"INPUTTEXFILE",
-                                                pdfFilePath2, @"OUTPUTPDFFILE",
+                                                pdfFilePath, @"OUTPUTPDFFILE",
+                                                pdfFilePath2, @"OUTPUTPDFFILE2",
                                                 (compositionMode == COMPOSITION_MODE_LATEXDVIPDF)
                                                   ? dviFilePath : nil, @"OUTPUTDVIFILE",
                                                 nil];
@@ -954,7 +1086,7 @@ static LaTeXProcessor* sharedInstance = nil;
   enumerator = [additionalFilesPathsLinksCreated objectEnumerator];
   NSString* additionalFilePathLinkPath = nil;
   while((additionalFilePathLinkPath = [enumerator nextObject]))
-    [fileManager removeFileAtPath:additionalFilePathLinkPath handler:nil];
+    [fileManager bridge_removeItemAtPath:additionalFilePathLinkPath error:0];
 
   if (outPdfData) *outPdfData = pdfData;
   
@@ -1032,8 +1164,8 @@ static LaTeXProcessor* sharedInstance = nil;
   NSString* pdfFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pdf"];
   //NSString* errFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"err"];
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  [fileManager removeFileAtPath:dviFile handler:nil];
-  [fileManager removeFileAtPath:pdfFile handler:nil];
+  [fileManager bridge_removeItemAtPath:dviFile error:0];
+  [fileManager bridge_removeItemAtPath:pdfFile error:0];
   
   NSMutableString* customString = [NSMutableString string];
   NSMutableString* stdoutString = [NSMutableString string];
@@ -1060,6 +1192,7 @@ static LaTeXProcessor* sharedInstance = nil;
 
   SystemTask* systemTask = [[[SystemTask alloc] initWithWorkingDirectory:workingDirectory] autorelease];
   [systemTask setUsingLoginShell:useLoginShell];
+  [systemTask setTimeOut:120];
   [systemTask setCurrentDirectoryPath:workingDirectory];
   [systemTask setLaunchPath:executablePath];
   [systemTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
@@ -1374,8 +1507,8 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* logScriptPath   = [workingDirectory stringByAppendingPathComponent:logScript];
 
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    [fileManager removeFileAtPath:latexScriptPath handler:NULL];
-    [fileManager removeFileAtPath:logScriptPath   handler:NULL];
+    [fileManager bridge_removeItemAtPath:latexScriptPath error:0];
+    [fileManager bridge_removeItemAtPath:logScriptPath   error:0];
     
     NSString* scriptBody = nil;
 
@@ -1394,11 +1527,11 @@ static LaTeXProcessor* sharedInstance = nil;
     [scriptData writeToFile:latexScriptPath atomically:NO];
 
     NSMutableDictionary* fileAttributes =
-      [NSMutableDictionary dictionaryWithDictionary:[fileManager fileSystemAttributesAtPath:latexScriptPath]];
+    [NSMutableDictionary dictionaryWithDictionary:[fileManager bridge_attributesOfFileSystemForPath:latexScriptPath error:0]];
     NSNumber* posixPermissions = [fileAttributes objectForKey:NSFilePosixPermissions];
     posixPermissions = [NSNumber numberWithUnsignedLong:[posixPermissions unsignedLongValue] | 0700];//add rwx flag
     [fileAttributes setObject:posixPermissions forKey:NSFilePosixPermissions];
-    [fileManager changeFileAttributes:fileAttributes atPath:latexScriptPath];
+    [fileManager bridge_setAttributes:fileAttributes ofItemAtPath:latexScriptPath error:0];
 
     NSString* scriptShell = nil;
     switch(source)
@@ -1605,7 +1738,7 @@ static LaTeXProcessor* sharedInstance = nil;
             tmpFilePath = @"/dev/null";
           NSString* systemCall =
             [NSString stringWithFormat:
-              @"%@ -sDEVICE=pswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dSAFER -dNOPLATFONTS %@ -c quit 2>|%@ | %@ %@ - %@ 1>>%@ 2>&1",
+              @"%@ -sDEVICE=epswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dSAFER -dNOPLATFONTS %@ -c quit 2>|%@ | %@  -dSubsetFonts=false -dEmbedAllFonts=true -dDEVICEWIDTHPOINTS=100000 -dDEVICEHEIGHTPOINTS=100000 -dPDFSETTINGS=/prepress %@ - %@ 1>>%@ 2>&1",
               gsPath, pdfFilePath, tmpFilePath, psToPdfPath, [psToPdfArguments componentsJoinedByString:@" "], tmpPdfFilePath, tmpFilePath];
           int error = system([systemCall UTF8String]);
           if (error)
@@ -1630,6 +1763,8 @@ static LaTeXProcessor* sharedInstance = nil;
           else//if (!error)
           {
             LatexitEquation* latexitEquation = [LatexitEquation latexitEquationWithPDFData:pdfData useDefaults:YES];
+            [self crop:tmpPdfFilePath to:tmpPdfFilePath canClip:YES extraArguments:[NSArray array]
+              compositionConfiguration:compositionConfiguration workingDirectory:temporaryDirectory environment:self->globalExtraEnvironment outPdfData:&pdfData];
             data = [NSData dataWithContentsOfFile:tmpPdfFilePath options:NSUncachedRead error:nil];
             data = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:data
                                            preamble:[[latexitEquation preamble] string]
@@ -1639,10 +1774,10 @@ static LaTeXProcessor* sharedInstance = nil;
                                            baseline:0
                                     backgroundColor:[latexitEquation backgroundColor] title:[latexitEquation title]];
           }//end if (!error)
-          [[NSFileManager defaultManager] removeFileAtPath:tmpFilePath handler:nil];
+          [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpFilePath error:0];
         }//if (gsPath && ![gsPath isEqualToString:@""] && psToPdfPath && ![psToPdfPath isEqualToString:@""])
-        [[NSFileManager defaultManager] removeFileAtPath:pdfFilePath handler:nil];
-        [[NSFileManager defaultManager] removeFileAtPath:tmpPdfFilePath handler:nil];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:pdfFilePath error:0];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpPdfFilePath error:0];
       }//end if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       else if (format == EXPORT_FORMAT_EPS)
       {
@@ -1681,8 +1816,9 @@ static LaTeXProcessor* sharedInstance = nil;
           [gsTask release];
         }
         data = [NSData dataWithContentsOfFile:tmpEpsFilePath options:NSUncachedRead error:nil];
-        [[NSFileManager defaultManager] removeFileAtPath:tmpEpsFilePath handler:nil];
-        [[NSFileManager defaultManager] removeFileAtPath:pdfFilePath handler:nil];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpEpsFilePath error:0];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:pdfFilePath error:0];
+        DebugLog(1, @"create EPS data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_EPS)
       else if (format == EXPORT_FORMAT_TIFF)
       {
@@ -1693,6 +1829,7 @@ static LaTeXProcessor* sharedInstance = nil;
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:@"public.tiff" withData:annotationDataCompressed];
+        DebugLog(1, @"create TIFF data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_TIFF)
       else if (format == EXPORT_FORMAT_PNG)
       {
@@ -1705,35 +1842,67 @@ static LaTeXProcessor* sharedInstance = nil;
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:@"public.png" withData:annotationDataCompressed];
+        DebugLog(1, @"create PNG data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_PNG)
       else if (format == EXPORT_FORMAT_JPEG)
       {
-        NSImage* image = [[NSImage alloc] initWithData:pdfData];
-        NSSize size = [image size];
-        NSImage* opaqueImage = [[NSImage alloc] initWithSize:size];
-        NSRect rect = NSMakeRect(0, 0, size.width, size.height);
-        @try{
-          [opaqueImage lockFocus];
-          [color set];
-          NSRectFill(rect);
-          [image drawInRect:rect fromRect:rect operation:NSCompositeSourceOver fraction:1.0];
-        [opaqueImage unlockFocus];
-        }
-        @catch(NSException* e){//may occur if lockFocus fails
-          DebugLog(0, @"exception: %@", e);
-        }
-        data = [opaqueImage TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
-        [opaqueImage release];
-        NSBitmapImageRep *opaqueImageRep = [NSBitmapImageRep imageRepWithData:data];
-        NSDictionary* properties =
-          [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithFloat:quality/100], NSImageCompressionFactor, nil];
-        data = [opaqueImageRep representationUsingType:NSJPEGFileType properties:properties];
-        [image release];
+        CGDataProviderRef pdfDataProvider = !pdfData ? 0 :
+          CGDataProviderCreateWithCFData((CFDataRef)pdfData);
+        CGPDFDocumentRef pdfDocument = !pdfDataProvider ? 0 :
+          CGPDFDocumentCreateWithProvider(pdfDataProvider);
+        CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
+          CGPDFDocumentGetPage(pdfDocument, 1);
+        CGRect mediaBox = !pdfPage ? CGRectZero :
+          CGPDFPageGetBoxRect(pdfPage, kCGPDFMediaBox);
+        NSUInteger width = round(mediaBox.size.width);
+        NSUInteger height = round(mediaBox.size.height);
+        NSUInteger bytesPerRow = 16*((4*width+15)/16);
+        NSUInteger bitmapBytesLength = bytesPerRow*height;
+        void* bytes = isMacOS10_6OrAbove() ? 0 : calloc(bitmapBytesLength, sizeof(unsigned char));
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef cgContext = !colorSpace || !bytesPerRow || (!bytes && !isMacOS10_6OrAbove()) ? 0 :
+          CGBitmapContextCreate(bytes, width, height, 8, !bytes ? 0 : bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
+        CGImageRef cgImage = 0;
+        if (cgContext)
+        {
+          NSColor* rgbColor = [color colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+          CGContextSetRGBFillColor(cgContext,
+            [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], [rgbColor alphaComponent]);
+          CGContextFillRect(cgContext, CGRectMake(0, 0, width, height));
+          CGContextDrawPDFPage(cgContext, pdfPage);
+          CGContextFlush(cgContext);
+          cgImage = CGBitmapContextCreateImage(cgContext);
+          CGContextRelease(cgContext);
+        }//end if (cgContext)
+        if (bytes)
+        {
+          free(bytes);
+          bytes = 0;
+        }//end if (bytes)
+        CGColorSpaceRelease(colorSpace);
+        CGPDFDocumentRelease(pdfDocument);
+        CGDataProviderRelease(pdfDataProvider);
+
+        NSMutableData* mutableData = !cgImage ? nil : [NSMutableData data];
+        CGImageDestinationRef cgImageDestination = !mutableData ? 0 : CGImageDestinationCreateWithData(
+          (CFMutableDataRef)mutableData, CFSTR("public.jpeg"), 1, 0);
+        if (cgImageDestination && cgImage)
+        {
+          CGImageDestinationAddImage(cgImageDestination, cgImage,
+            (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
+              [NSNumber numberWithFloat:quality/100], (NSString*)kCGImageDestinationLossyCompressionQuality,
+              nil]);
+          CGImageDestinationFinalize(cgImageDestination);
+          CFRelease(cgImageDestination);
+        }//end if (cgImageDestination && cgImage)
+        CGImageRelease(cgImage);
+
+        data = mutableData;
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:@"public.jpeg" withData:annotationDataCompressed];
+        DebugLog(1, @"create JPEG data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_JPEG)
       else if (format == EXPORT_FORMAT_SVG)
       {
@@ -1774,7 +1943,7 @@ static LaTeXProcessor* sharedInstance = nil;
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:@"public.svg-image" withData:annotationDataCompressed];
-        [[NSFileManager defaultManager] removeFileAtPath:tmpSvgFilePath handler:nil];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpSvgFilePath error:0];
       }//end if (format == EXPORT_FORMAT_SVG)
       else if (format == EXPORT_FORMAT_MATHML)
       {
@@ -1831,9 +2000,9 @@ static LaTeXProcessor* sharedInstance = nil;
           NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
           NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
           data = [self annotateData:data ofUTI:@"public.html" withData:annotationDataCompressed];
-          [[NSFileManager defaultManager] removeFileAtPath:outputFile handler:nil];
+          [[NSFileManager defaultManager] bridge_removeItemAtPath:outputFile error:0];
         }//end if (ok)
-        [[NSFileManager defaultManager] removeFileAtPath:inputFile handler:nil];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:inputFile error:0];
       }//end if (format == EXPORT_FORMAT_MATHML)
     }//end if pdfData available
   }//end @synchronized

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -279,7 +279,7 @@
   NSPoint location = [clipView convertPoint:[event locationInWindow] fromView:nil];
   if (!NSPointInRect(location, [clipView bounds]))
     [libraryWindowController displayPreviewImage:nil backgroundColor:nil];
-  else//if (NSPointInRect(location, [clipView bounds]))
+  else if ([[self window] isKeyWindow])//if (NSPointInRect(location, [clipView bounds]))
   {
     location = [self convertPoint:location fromView:clipView];
     int row = [self rowAtPoint:location];
@@ -842,7 +842,8 @@
 -(CGFloat) outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
 {
   CGFloat height = 16;
-  if (item && ([(LibraryView*)outlineView libraryRowType] == LIBRARY_ROW_IMAGE_LARGE) &&
+  LibraryView* libraryView = [outlineView dynamicCastToClass:[LibraryView class]];
+  if (libraryView && item && ([libraryView libraryRowType] == LIBRARY_ROW_IMAGE_LARGE) &&
       ![item isKindOfClass:[LibraryGroupItem class]])
     height = 34;
   return height;
@@ -890,44 +891,47 @@
 
 -(void) outlineView:(NSOutlineView*)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn*)tableColumn item:(id)item
 {
-  LibraryView* libraryTableView = (LibraryView*)outlineView;
-  id representedObject = item;
-  library_row_t currentLibraryRowType = [libraryTableView libraryRowType];
-  NSImage* cellImage           = nil;
-  NSColor* cellTextBackgroundColor = nil;
-  BOOL     cellDrawsBackground = NO;
-  NSColor* cellTextColor = nil;
-  if (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  LibraryView* libraryTableView = [outlineView dynamicCastToClass:[LibraryView class]];
+  if (libraryTableView)
   {
-    NSString* title = [representedObject title];
-    [cell setStringValue:!title ? @"" : title];
-    cellImage = [self iconForRepresentedObject:representedObject];
-    cellDrawsBackground = YES;
-  }
-  else if (![representedObject isKindOfClass:[LibraryGroupItem class]])
-  {
-    [cell setStringValue:@""];
-    cellDrawsBackground = NO;
-  }
-  if ([representedObject isKindOfClass:[LibraryEquation class]])
-  {
-    LatexitEquation* latexitEquation = [(LibraryEquation*)representedObject equation];
-    cellImage = (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) ? nil : [latexitEquation pdfCachedImage];
-    cellTextBackgroundColor = [latexitEquation backgroundColor];
-    NSColor* greyLevelColor  = [cellTextBackgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
-    cellDrawsBackground = (cellTextBackgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f);
-    if ((currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) && ![cell isHighlighted])
-      cellTextColor = [latexitEquation color];
-  }
-  else if ([representedObject isKindOfClass:[LibraryGroupItem class]])
-    cellImage = [self iconForRepresentedObject:representedObject];
-  else
-    cellImage = [self iconForRepresentedObject:representedObject];
-  [cell setImage:cellImage];
-  [cell setImageBackgroundColor:cellTextBackgroundColor];
-  [cell setTextBackgroundColor:cellTextBackgroundColor];
-  //[cell setTextColor:!cellTextColor ? [NSColor textColor] : cellTextColor];
-  [cell setDrawsBackground:cellDrawsBackground && cellTextBackgroundColor];
+    id representedObject = item;
+    library_row_t currentLibraryRowType = [libraryTableView libraryRowType];
+    NSImage* cellImage           = nil;
+    NSColor* cellTextBackgroundColor = nil;
+    BOOL     cellDrawsBackground = NO;
+    NSColor* cellTextColor = nil;
+    if (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+    {
+      NSString* title = [representedObject title];
+      [cell setStringValue:!title ? @"" : title];
+      cellImage = [self iconForRepresentedObject:representedObject];
+      cellDrawsBackground = YES;
+    }
+    else if (![representedObject isKindOfClass:[LibraryGroupItem class]])
+    {
+      [cell setStringValue:@""];
+      cellDrawsBackground = NO;
+    }
+    if ([representedObject isKindOfClass:[LibraryEquation class]])
+    {
+      LatexitEquation* latexitEquation = [(LibraryEquation*)representedObject equation];
+      cellImage = (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) ? nil : [latexitEquation pdfCachedImage];
+      cellTextBackgroundColor = [latexitEquation backgroundColor];
+      NSColor* greyLevelColor  = [cellTextBackgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
+      cellDrawsBackground = (cellTextBackgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f);
+      if ((currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) && ![cell isHighlighted])
+        cellTextColor = [latexitEquation color];
+    }
+    else if ([representedObject isKindOfClass:[LibraryGroupItem class]])
+      cellImage = [self iconForRepresentedObject:representedObject];
+    else
+      cellImage = [self iconForRepresentedObject:representedObject];
+    [cell setImage:cellImage];
+    [cell setImageBackgroundColor:cellTextBackgroundColor];
+    [cell setTextBackgroundColor:cellTextBackgroundColor];
+    //[cell setTextColor:!cellTextColor ? [NSColor textColor] : cellTextColor];
+    [cell setDrawsBackground:cellDrawsBackground && cellTextBackgroundColor];
+  }//end if (libraryTableView)
 }
 //end outlineView:willDisplayCell:forTableColumn:item:
 

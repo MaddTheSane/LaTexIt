@@ -124,12 +124,12 @@ NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDi
   if ([otherStrings containsObject:result])
   {
     didChange = YES;
-    differentString = [NSMutableString stringWithFormat:@"%@ (%u)", result, identifier++];
+    differentString = [NSMutableString stringWithFormat:@"%@ (%lu)", result, (unsigned long)identifier++];
   }
   while(identifier && [otherStrings containsObject:differentString])
   {
     [differentString setString:@""];
-    [differentString appendFormat:@"%@ (%u)", result, identifier++];
+    [differentString appendFormat:@"%@ (%lu)", result, (unsigned long)identifier++];
   }
   if (didChange)
     result = differentString;

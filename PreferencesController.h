@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -22,6 +22,7 @@ extern NSString* DragExportSvgPdfToSvgPathKey;
 extern NSString* DragExportScaleAsPercentKey;
 extern NSString* DefaultImageViewBackgroundKey;
 extern NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey;
+extern NSString* DefaultDoNotClipPreviewKey;
 extern NSString* DefaultColorKey;
 extern NSString* DefaultPointSizeKey;
 extern NSString* DefaultModeKey;
@@ -43,6 +44,7 @@ extern NSString* ServiceSelectedPreambleIndexKey;
 extern NSString* ServiceSelectedBodyTemplateIndexKey;
 extern NSString* ServiceShortcutsKey;
 extern NSString* ServiceShortcutEnabledKey;
+extern NSString* ServiceShortcutClipBoardOptionKey;
 extern NSString* ServiceShortcutStringKey;
 extern NSString* ServiceShortcutIdentifierKey;
 extern NSString* ServiceRespectsColorKey;
@@ -50,6 +52,10 @@ extern NSString* ServiceRespectsBaselineKey;
 extern NSString* ServiceRespectsPointSizeKey;
 extern NSString* ServicePointSizeFactorKey;
 extern NSString* ServiceUsesHistoryKey;
+extern NSString* ServiceRegularExpressionFiltersKey;
+extern NSString* ServiceRegularExpressionFilterEnabledKey;
+extern NSString* ServiceRegularExpressionFilterInputPatternKey;
+extern NSString* ServiceRegularExpressionFilterOutputPatternKey;
 extern NSString* AdditionalTopMarginKey;
 extern NSString* AdditionalLeftMarginKey;
 extern NSString* AdditionalRightMarginKey;
@@ -118,6 +124,7 @@ extern NSString* AdditionalFilesPathsKey;
 @class CompositionConfigurationsController;
 @class EncapsulationsController;
 @class PreamblesController;
+@class ServiceRegularExpressionFiltersController;
 
 @interface PreferencesController : NSObject {
   BOOL      isLaTeXiT;
@@ -129,6 +136,7 @@ extern NSString* AdditionalFilesPathsKey;
   BodyTemplatesController*                   bodyTemplatesController;
   CompositionConfigurationsController*       compositionConfigurationsController;
   NSArrayController*                         serviceShortcutsController;
+  ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController;
   AdditionalFilesController*                 additionalFilesController;
   EncapsulationsController*                  encapsulationsController;
   
@@ -157,6 +165,9 @@ extern NSString* AdditionalFilesPathsKey;
 -(void)            setExportSvgPdfToSvgPath:(NSString*)value;
 -(CGFloat)         exportScalePercent;
 -(void)            setExportScalePercent:(CGFloat)value;
+
+-(BOOL) doNotClipPreview;
+-(void) setDoNotClipPreview:(BOOL)value;
 
 -(latex_mode_t) latexisationLaTeXMode;
 -(void)         setLatexisationLaTeXMode:(latex_mode_t)mode;
@@ -240,6 +251,9 @@ extern NSString* AdditionalFilesPathsKey;
 -(NSArrayController*) serviceShortcutsController;
 -(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
                                authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
+-(NSArray*)           serviceRegularExpressionFilters;
+-(void)               setServiceRegularExpressionFilters:(NSArray*)value;
+-(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController;
 
 -(BOOL)                      encapsulationsEnabled;
 -(NSArray*)                  encapsulations;

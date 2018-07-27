@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/05/09.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryController.h"
@@ -499,7 +499,7 @@
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //does a folder of that name already exist ?
       {
-        BOOL ok = [fileManager createDirectoryAtPath:filePath attributes:nil];
+        BOOL ok = [fileManager bridge_createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
         if (ok)
         {
           //Recursive call to fill the folder
@@ -513,14 +513,14 @@
         unsigned long i = 1; //we will add a number
         do
         {
-          fileName = [NSString stringWithFormat:@"%@-%u", [libraryItem title], i++];
+          fileName = [NSString stringWithFormat:@"%@-%lu", [libraryItem title], (unsigned long)i++];
           filePath = [dropPath stringByAppendingPathComponent:fileName];
         } while (i && [fileManager fileExistsAtPath:filePath]);
         
         //I may have found a free name; create the folder in this case
         if (![fileManager fileExistsAtPath:filePath])
         {
-          BOOL ok = [fileManager createDirectoryAtPath:filePath attributes:nil];
+          BOOL ok = [fileManager bridge_createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
           if (ok)
           {
             //Recursive call to fill the folder
@@ -547,8 +547,8 @@
                                                    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                   atPath:filePath];
+        [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                             ofItemAtPath:filePath error:0];
         NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
@@ -561,7 +561,7 @@
       {
         do
         {
-          fileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
+          fileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
           filePath = [dropPath stringByAppendingPathComponent:fileName];
         } while (i && [fileManager fileExistsAtPath:filePath]);
         
@@ -575,8 +575,8 @@
                                                    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
-          [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                     atPath:filePath];
+          [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                               ofItemAtPath:filePath error:0];
           NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
           if ((exportFormat != EXPORT_FORMAT_PNG) &&
               (exportFormat != EXPORT_FORMAT_TIFF) &&

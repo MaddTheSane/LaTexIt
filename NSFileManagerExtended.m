@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -11,13 +11,6 @@
 #include <unistd.h>
 
 static NSMutableSet* createdTemporaryPaths = nil;
-
-
-@interface NSFileManager (Bridge10_5_declareonly)
--(BOOL) createSymbolicLinkAtPath:(NSString*)path withDestinationPath:(NSString*)destPath error:(NSError**)error;//only on 10.5
--(NSString*) destinationOfSymbolicLinkAtPath:(NSString*)path error:(NSError**)error;//only on 10.5
--(NSArray*) contentsOfDirectoryAtPath:(NSString *)path error:(NSError**)error;//only on 10.5
-@end
 
 @interface NSFileManager (Extended_Private)
 -(void) registerTemporaryPath:(NSString*)path;
@@ -46,6 +39,33 @@ static NSMutableSet* createdTemporaryPaths = nil;
   return result;
 }
 //end bridge_destinationOfSymbolicLinkAtPath:error:
+
+-(BOOL) bridge_createDirectoryAtPath:(NSString *)path withIntermediateDirectories:(BOOL)createIntermediates attributes:(NSDictionary *)attributes error:(NSError **)error
+{
+  BOOL result = NO;
+  if ([self respondsToSelector:@selector(createDirectoryAtPath:withIntermediateDirectories:attributes:error:)])
+    result = [self createDirectoryAtPath:path withIntermediateDirectories:createIntermediates attributes:attributes error:error];
+  else if (!createIntermediates)
+  {
+    result = [self createDirectoryAtPath:path attributes:attributes];
+  }//end if (!createIntermediates)
+  else//if (createIntermediates)
+  {
+    result = YES;
+    BOOL isDirectory = NO;
+    NSArray* components = [path pathComponents];
+    components = components ? components : [NSArray array];
+    unsigned int i = 0;
+    for(i = 1 ; result && (i <= [components count]) ; ++i)
+    {
+      NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
+      result &= ([self fileExistsAtPath:subPath isDirectory:&isDirectory] && isDirectory) ||
+      [self createDirectoryAtPath:subPath attributes:attributes];
+    }//end for each subPath
+  }//end if (createIntermediates)
+  return result;
+}
+//end bridge_createDirectoryAtPath:withIntermediateDirectories:attributes:
 
 -(NSArray*) bridge_contentsOfDirectoryAtPath:(NSString *)path error:(NSError**)error
 {
@@ -91,6 +111,28 @@ static NSMutableSet* createdTemporaryPaths = nil;
 }
 //end bridge_moveItemAtPath:toPath:error:
 
+-(NSDictionary *) bridge_attributesOfFileSystemForPath:(NSString *)path error:(NSError **)error
+{
+  NSDictionary* result = nil;
+  if ([self respondsToSelector:@selector(attributesOfFileSystemForPath:error:)])
+    result = [self attributesOfFileSystemForPath:path error:error];
+  else
+    result = [self fileSystemAttributesAtPath:path];
+  return result;
+}
+//end bridge_attributesOfFileSystemForPath:error:
+
+-(BOOL) bridge_setAttributes:(NSDictionary *)attributes ofItemAtPath:(NSString *)path error:(NSError **)error
+{
+  BOOL result = NO;
+  if ([self respondsToSelector:@selector(setAttributes:ofItemAtPath:error:)])
+    result = [self setAttributes:attributes ofItemAtPath:path error:error];
+  else
+    result = [self changeFileAttributes:attributes atPath:path];
+  return result;
+}
+//end bridge_setAttributes:ofItemAtPath:error:
+
 @end
 
 @implementation NSFileManager (Extended)
@@ -100,24 +142,6 @@ static NSMutableSet* createdTemporaryPaths = nil;
   return createdTemporaryPaths;
 }
 //end createdTemporaryPaths
-
--(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes
-{
-  BOOL ok = YES;
-  BOOL isDirectory = NO;
-  NSFileManager* fileManager = [NSFileManager defaultManager];
-  NSArray* components = [path pathComponents];
-  components = components ? components : [NSArray array];
-  unsigned int i = 0;
-  for(i = 1 ; ok && (i <= [components count]) ; ++i)
-  {
-    NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
-    ok &= ([fileManager fileExistsAtPath:subPath isDirectory:&isDirectory] && isDirectory) ||
-           [fileManager createDirectoryAtPath:subPath attributes:attributes];
-  }//end for each subPath
-  return ok;
-}
-//end createDirectoryPath:attributes:
 
 -(NSString*) localizedPath:(NSString*)path
 {

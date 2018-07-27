@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -38,6 +38,8 @@
   IBOutlet ImagePopupButton*    lowerBoxChangePreambleButton;
   IBOutlet ImagePopupButton*    lowerBoxChangeBodyTemplateButton;
   IBOutlet NSBox*               lowerBoxControlsBox;
+  IBOutlet NSView*              lowerBoxControlsBoxLatexModeView;
+  IBOutlet NSButton*            lowerBoxControlsBoxLatexModeAutoButton;
   IBOutlet NSSegmentedControl*  lowerBoxControlsBoxLatexModeSegmentedControl;
   IBOutlet NSTextField*         lowerBoxControlsBoxFontSizeLabel;
   IBOutlet NSTextField*         lowerBoxControlsBoxFontSizeTextField;
@@ -57,6 +59,8 @@
   NSSize           documentMiniMinimumSize;
   NSSize           lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize;
   document_style_t documentStyle;
+  latex_mode_t     latexModeRequested;
+  latex_mode_t     latexModeApplied;
   NSUInteger       uniqueId;
   NSDictionary*    lastRequestedBodyTemplate;
   
@@ -81,6 +85,8 @@
   
   BOOL             currentEquationIsARecentLatexisation;
   NSResponder*     lastFirstResponder;
+  
+  BOOL shouldApplyToPasteboardAfterLatexization;
 }
 
 //interface changing
@@ -89,6 +95,8 @@
 -(document_style_t) documentStyle;
 -(void) setDocumentStyle:(document_style_t)value;
 -(void) toggleDocumentStyle;
+
+-(IBAction) changeLatexModeAuto:(id)sender;
 
 //actions from menu (through the appController), or from self contained elements
 -(IBAction) latexize:(id)sender;
@@ -99,6 +107,8 @@
 -(IBAction) reexportImage:(id)sender;
 -(IBAction) changePreamble:(id)sender;
 -(IBAction) changeBodyTemplate:(id)sender;
+
+-(void) formatChangeAlignment:(alignment_mode_t)value;
 
 -(MyImageView*) imageView;
 -(NSButton*)    lowerBoxLatexizeButton;
@@ -113,8 +123,11 @@
 -(LibraryEquation*) lastAppliedLibraryEquation;
 -(void) setLastAppliedLibraryEquation:(LibraryEquation*)value;
 
--(latex_mode_t) latexMode;
--(void) setLatexMode:(latex_mode_t)mode;
+-(latex_mode_t) detectLatexMode;
+-(latex_mode_t) latexModeApplied;
+-(void) setLatexModeApplied:(latex_mode_t)value;
+-(latex_mode_t) latexModeRequested;
+-(void) setLatexModeRequested:(latex_mode_t)value;
 -(void) setColor:(NSColor*)color;
 -(void) setMagnification:(CGFloat)magnification;
 
@@ -134,6 +147,9 @@
 -(BOOL) hasImage;
 -(BOOL) isPreambleVisible;
 -(void) setPreambleVisible:(BOOL)visible animate:(BOOL)animate;
+
+-(BOOL) shouldApplyToPasteboardAfterLatexization;
+-(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value;
 
 //text actions in the first responder
 -(NSString*) selectedText;

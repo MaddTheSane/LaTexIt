@@ -3,13 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 //this file is an extension of the NSWorkspace class
 
 #import "NSWorkspaceExtended.h"
 
+#import "NSFileManagerExtended.h"
 #import "NDProcess.h"
 
 @implementation NSWorkspace (Extended)
@@ -124,11 +125,11 @@
   BOOL exists = [fileManager fileExistsAtPath:temporaryPath isDirectory:&isDirectory];
   if (exists && !isDirectory)
   {
-    [fileManager removeFileAtPath:temporaryPath handler:NULL];
+    [fileManager bridge_removeItemAtPath:temporaryPath error:0];
     exists = NO;
   }
   if (!exists)
-    [fileManager createDirectoryAtPath:temporaryPath attributes:nil];
+    [fileManager bridge_createDirectoryAtPath:temporaryPath withIntermediateDirectories:YES attributes:nil error:0];
   return temporaryPath;
 }
 //end temporaryDirectory

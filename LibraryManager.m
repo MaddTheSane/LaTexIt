@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -186,7 +186,7 @@ static LibraryManager* sharedManagerInstance = nil;
       {
         NSFileManager* fileManager = [NSFileManager defaultManager];
         BOOL isDirectory = NO;
-        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager removeFileAtPath:path handler:nil]));
+        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager bridge_removeItemAtPath:path error:0]));
         if (ok)
         {
           NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
@@ -211,7 +211,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.5.4", @"version", nil];
+          @"2.6.0", @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
@@ -220,8 +220,8 @@ static LibraryManager* sharedManagerInstance = nil;
         if (ok)
         {
           [[NSFileManager defaultManager]
-             changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                                              atPath:path];
+             bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                     ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case LIBRARY_EXPORT_FORMAT_PLIST
@@ -609,7 +609,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.4", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.6.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -681,8 +681,8 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       libraryPath = [self defaultLibraryPath];
       if (![fileManager isReadableFileAtPath:libraryPath])
-        [fileManager createDirectoryPath:[libraryPath stringByDeletingLastPathComponent] attributes:nil];
-    }
+        [fileManager bridge_createDirectoryAtPath:[libraryPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
+    }//end if (!exists)
     
     self->managedObjectContext = [[self managedObjectContextAtPath:libraryPath setVersion:NO] retain];
     NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
@@ -704,7 +704,7 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       BOOL ok = [self loadFrom:oldFilePath option:LIBRARY_IMPORT_OVERWRITE parent:nil];
       if (ok)
-        [[NSFileManager defaultManager] removeFileAtPath:oldFilePath handler:0];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:oldFilePath error:0];
     }
     else if (shouldMigrateLibraryToAlign)
     {
@@ -749,7 +749,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.4", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.6.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }

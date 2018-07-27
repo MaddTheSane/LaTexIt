@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -105,9 +105,11 @@ static int SpellCheckerDocumentTag = 0;
 
   NSArray* typesToAdd =
     [NSArray arrayWithObjects:NSStringPboardType, NSColorPboardType, NSPDFPboardType,
-                              NSFilenamesPboardType, NSFileContentsPboardType,
+                              NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSRTFDPboardType, LatexitEquationsPboardType, LibraryItemsArchivedPboardType,
-                              LibraryItemsWrappedPboardType, nil];
+                              LibraryItemsWrappedPboardType,
+                              //@"com.apple.iWork.TSPNativeMetadata",
+                              nil];
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObjectsFromArray:typesToAdd]];
   return self;
 }
@@ -250,6 +252,7 @@ static int SpellCheckerDocumentTag = 0;
   else if ([aString isKindOfClass:[NSAttributedString class]])
   {
     NSMutableAttributedString* attributedString = [[aString mutableCopy] autorelease];
+    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
     NSRange range = [[attributedString string] rangeOfString:@"\t"];
     while(range.location != NSNotFound)
     {
@@ -591,9 +594,9 @@ static int SpellCheckerDocumentTag = 0;
     if (sourceText && ![[sourceText string] isEqualToString:@""])
       [self insertTextAtMousePosition:sourceText];
   }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]]))
   {
-    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
@@ -603,21 +606,21 @@ static int SpellCheckerDocumentTag = 0;
       [(id)[self nextResponder] performDragOperation:sender];
     else
       [super performDragOperation:sender];
-  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd"]])
+  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]]))
   {
-    NSData* rtfdData = [pboard dataForType:@"com.apple.flat-rtfd"];
+    NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
-    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
-    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
-    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
-    [attributedString release];
-    if (pdfWrapperData)
-      [(id)[self nextResponder] performDragOperation:sender];
+    NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
+    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    if (attributedString)
+      [self insertTextAtMousePosition:attributedString];
     else
       [super performDragOperation:sender];
-  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd"]])
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
+    [attributedString release];
+  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])
+  
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   {
     NSString* lastFilePath = [[pboard propertyListForType:NSFilenamesPboardType] lastObject];
     CFStringRef uti = !lastFilePath ? NULL :
@@ -680,6 +683,7 @@ static int SpellCheckerDocumentTag = 0;
   if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", nil]]))
   {
     NSData* pdfData = [pasteboard dataForType:type];
+    //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/toto.pdf", NSHomeDirectory()] atomically:YES];
     LatexitEquation* latexitEquation = [[[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO] autorelease];
     if (latexitEquation)
     {
@@ -687,10 +691,11 @@ static int SpellCheckerDocumentTag = 0;
       done = YES;
     }//end if (latexitEquation)
   }//end @"com.adobe.pdf"
-  
+
   if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, nil]]))
   {
     NSData* pdfData = [pasteboard dataForType:type];
+    //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/tmp.pdf", NSHomeDirectory()] atomically:YES];
     LatexitEquation* latexitEquation = [[[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO] autorelease];
     if (latexitEquation)
     {
@@ -698,8 +703,20 @@ static int SpellCheckerDocumentTag = 0;
       done = YES;
     }//end if (latexitEquation)
   }//end NSPDFPboardType
+
+  /*if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.iWork.TSPNativeMetadata", nil]]))
+  {
+    [(id)[self nextResponder] paste:sender];
+    done = YES;
+  }//end @"com.apple.iWork.TSPNativeMetadata"*/
+
+  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilesPromisePboardType, nil]]))
+  {
+    [(id)[self nextResponder] paste:sender];
+    done = YES;
+  }//end NSFilesPromisePboardType
   
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", nil]])))
+  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
   {
     NSData* rtfdData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -722,38 +739,27 @@ static int SpellCheckerDocumentTag = 0;
     }
     else
     {
-      [super paste:sender];
+        NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+      [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+      if (attributedString)
+        [self insertText:attributedString];
+      [attributedString release];
+      //[super paste:sender];
       done = YES;
     }
   }//end @"com.apple.flat-rtfd"
-  
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, nil]])))
+
+  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])))
   {
-    NSData* rtfdData = [pasteboard dataForType:type];
+    NSData* rtfData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
-    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
-    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
-    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
-    [attributedString release];
-    LatexitEquation* latexitEquation = !pdfWrapperData ? nil : [[[LatexitEquation alloc] initWithPDFData:pdfWrapperData useDefaults:NO] autorelease];
-    if (latexitEquation)
-    {
-      [(id)[self nextResponder] paste:sender];
-      done = YES;
-    }//end if (latexitEquation)
-    else if (pdfWrapperData)
-    {
-      NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfWrapperData);
-      if (pdfString)
-        [self insertText:pdfString];
-      done = YES;
-    }//end if (pdfWrapperData)
-    else
-    {
-      [super paste:sender];
-      done = YES;
-    }
-  }//end NSRTFDPboardType
+    NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
+    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    if (attributedString)
+      [self insertText:attributedString];
+    //[super paste:sender];
+    done = YES;
+  }//end @"NSRTFPboardType"
   
   /*
   #error DEBUG
@@ -787,7 +793,11 @@ static int SpellCheckerDocumentTag = 0;
   NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];
   currentFont = [[PreferencesController sharedController] editionFont];
   if (currentFont)
-    [self setFont:currentFont range:NSMakeRange(0, [[self textStorage] length])];
+  {
+    NSRange range = NSMakeRange(0, [[self textStorage] length]);
+    [self setFont:currentFont range:range];
+    //[self setAlignment:NSLeftTextAlignment range:range];
+  }//end if (currentFont)
 }
 //end paste:
 

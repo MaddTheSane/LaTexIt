@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -63,6 +63,14 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end yaxb()
 
+BOOL NSRangeContains(NSRange range, NSUInteger index);
+BOOL NSRangeContains(NSRange range, NSUInteger index)
+{
+  BOOL result = ((range.location <= index) && (index < range.location+range.length));
+  return result;
+}
+//end NSRangeContains()
+
 @interface MyDocument (PrivateAPI)
 
 +(NSUInteger) _giveId; //returns a free id and marks it as used
@@ -93,6 +101,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(void) applicationWillTerminate:(NSNotification*)notification;
 
 -(void) selectLibraryItemForCurrentLinkedEquation:(id)sender;
+-(void) bodyTextDidChange:(NSNotification*)notification;
 @end
 
 @implementation MyDocumentWindow
@@ -241,7 +250,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   NSWindow* window = [self windowForSheet];
   
   [window setDelegate:(id)self];
-  [window setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
+  [window setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%lu", (unsigned long)self->uniqueId]];
   [window setTitle:[self displayName]];
   self->lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize = [self->lowerBoxControlsBoxLatexModeSegmentedControl frame].size;
   self->documentNormalMinimumSize = [window minSize];
@@ -249,13 +258,21 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   self->documentFrameSaved = [window frame];
   
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN   forSegment:0];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_TEXT    forSegment:3];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setLabel:NSLocalizedString(@"Align", @"Align") forSegment:0];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setLabel:NSLocalizedString(@"Text", @"Text") forSegment:3];
-  [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[preferencesController latexisationLaTeXMode]];
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setSegmentCount:4];
+  NSUInteger segmentIndex = 0;
+  NSSegmentedCell* latexModeSegmentedCell = [self->lowerBoxControlsBoxLatexModeSegmentedControl cell];
+  [latexModeSegmentedCell setTag:LATEX_MODE_ALIGN   forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Align", @"Align") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_DISPLAY forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Display", @"Display") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_INLINE  forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Inline", @"Inline") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_TEXT    forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Text", @"Text") forSegment:segmentIndex++];
+  [latexModeSegmentedCell bind:NSSelectedTagBinding toObject:self withKeyPath:@"latexModeRequested" options:nil];
+  [latexModeSegmentedCell setTarget:self];
+  [latexModeSegmentedCell setAction:@selector(changeRequestedLatexMode:)];
+  [self setLatexModeRequested:[preferencesController latexisationLaTeXMode]];
   
   [self->lowerBoxControlsBoxFontSizeLabel setStringValue:NSLocalizedString(@"Font size :", @"Font size :")];
   [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[preferencesController latexisationFontSize]];
@@ -384,6 +401,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self selector:@selector(_lineCountDidChange:)  name:LineCountDidChangeNotification object:self->lowerBoxPreambleTextView];
   [notificationCenter addObserver:self selector:@selector(_clickErrorLine:)      name:ClickErrorLineNotification object:self->upperBoxLogTableView];
+  [notificationCenter addObserver:self selector:@selector(bodyTextDidChange:) name:NSTextDidChangeNotification object:self->lowerBoxSourceTextView];
 
   [self splitViewDidResizeSubviews:nil];  
   [window makeFirstResponder:[self preferredFirstResponder]];
@@ -471,12 +489,20 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [self->lowerBoxChangePreambleButton setFrameOrigin:NSMakePoint(0, superviewFrame.size.height-[self->lowerBoxChangePreambleButton frame].size.height)];
       [self->lowerBoxControlsBox setFrame:NSMakeRect(0,  0, superviewFrame.size.width, 34)];
 
-      superviewFrame = [self->lowerBoxControlsBox frame];
+      NSRect lowerBoxControlsBoxLatexModeViewFrame =
+        NSMakeRect(0, 18, [[self->lowerBoxControlsBoxLatexModeView superview] frame].size.width, 16);
+      [self->lowerBoxControlsBoxLatexModeView setFrame:lowerBoxControlsBoxLatexModeViewFrame];
+      superviewFrame = [self->lowerBoxControlsBoxLatexModeView frame];
+      [[self->lowerBoxControlsBoxLatexModeAutoButton cell] setControlSize:NSMiniControlSize];
+      [self->lowerBoxControlsBoxLatexModeAutoButton setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [self->lowerBoxControlsBoxLatexModeAutoButton sizeToFit];
+      [self->lowerBoxControlsBoxLatexModeAutoButton setFrameOrigin:NSZeroPoint];
+      [self->lowerBoxControlsBoxLatexModeAutoButton centerInSuperviewHorizontally:NO vertically:YES];
       [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setControlSize:NSMiniControlSize];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl sizeToFitWithSegmentWidth:(superviewFrame.size.width-8)/[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] useSameSize:YES];
-      NSRect lowerBoxControlsBoxLatexModeSegmentedControlFrame = NSMakeRect(0, 18, superviewFrame.size.width, 16);
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrame:lowerBoxControlsBoxLatexModeSegmentedControlFrame];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl sizeToFitWithSegmentWidth:floor(superviewFrame.size.width-8-NSMaxX([self->lowerBoxControlsBoxLatexModeAutoButton frame]))/[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] useSameSize:YES];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxLatexModeAutoButton frame]), 0)];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl centerInSuperviewHorizontally:NO vertically:YES];
       [[self->lowerBoxControlsBoxFontSizeLabel cell] setControlSize:NSMiniControlSize];
       [self->lowerBoxControlsBoxFontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
       [self->lowerBoxControlsBoxFontSizeLabel sizeToFit];
@@ -515,7 +541,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                                      backing:NSBackingStoreBuffered defer:NO];
       [miniWindow setReleasedWhenClosed:YES];
       [miniWindow setDelegate:(id)self];
-      [miniWindow setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
+      [miniWindow setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%lu", (unsigned long)self->uniqueId]];
       [miniWindow setFrame:[window frame] display:YES];
       [miniWindow setShowsResizeIndicator:NO];
       [miniWindow setMinSize:self->documentMiniMinimumSize];
@@ -572,7 +598,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
         superviewFrame = [self->lowerBox frame];
         NSScrollView* sourceTextScrollView = (NSScrollView*)[[self->lowerBoxSourceTextView superview] superview];
-        [self->lowerBoxSplitView setFrame:NSMakeRect(20,  80, superviewFrame.size.width-40, superviewFrame.size.height-80)];
+        [self->lowerBoxSplitView setFrame:NSMakeRect(20+1,  80, superviewFrame.size.width-2*(20+1), superviewFrame.size.height-80)];
         [self->lowerBoxSplitView setDividerThickness:-1];
         [[sourceTextScrollView  horizontalScroller] setControlSize:NSRegularControlSize];
         [[sourceTextScrollView  verticalScroller]   setControlSize:NSRegularControlSize];
@@ -580,19 +606,26 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         [sourceTextScrollView setFrame:NSMakeRect(0, 0, superviewFrame.size.width, superviewFrame.size.height)];
         superviewFrame = [self->lowerBox frame];
         [self->lowerBoxChangePreambleButton setFrameOrigin:NSMakePoint(20, superviewFrame.size.height-[self->lowerBoxChangePreambleButton frame].size.height)];
-        [self->lowerBoxSplitView setFrame:NSMakeRect(20, 80, superviewFrame.size.width-2*20, superviewFrame.size.height-80)];
+        [self->lowerBoxSplitView setFrame:NSMakeRect(20+1, 80, superviewFrame.size.width-2*(20+1), superviewFrame.size.height-80)];
         [self setPreambleVisible:NO animate:NO];
         [self->lowerBoxSplitView setHidden:NO];
         [self->lowerBoxControlsBox setFrame:NSMakeRect(0,  0, superviewFrame.size.width, 80)];
       }//end if (oldValue != DOCUMENT_STYLE_UNDEFINED)
 
-      superviewFrame = [self->lowerBoxControlsBox frame];
+      [self->lowerBoxControlsBoxLatexModeView setFrame:NSMakeRect(0, 48, 342, 32)];
+      [self->lowerBoxControlsBoxLatexModeView centerInSuperviewHorizontally:YES vertically:NO];
+      superviewFrame = [self->lowerBoxControlsBoxLatexModeView frame];
+      [[self->lowerBoxControlsBoxLatexModeAutoButton cell] setControlSize:NSSmallControlSize];
+      [self->lowerBoxControlsBoxLatexModeAutoButton setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+      [self->lowerBoxControlsBoxLatexModeAutoButton sizeToFit];
+      [self->lowerBoxControlsBoxLatexModeAutoButton setFrameOrigin:NSMakePoint(6, 0)];
+      [self->lowerBoxControlsBoxLatexModeAutoButton centerInSuperviewHorizontally:NO vertically:YES];
       [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setControlSize:NSRegularControlSize];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl sizeToFitWithSegmentWidth:(self->lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize.width-8)/[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] useSameSize:YES];
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrame:NSMakeRect(0, 48, [self->lowerBoxSplitView frame].size.width, 24)];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrameSize:self->lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize];
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl centerInSuperviewHorizontally:YES vertically:NO];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxLatexModeAutoButton frame])+6, 0)];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl centerInSuperviewHorizontally:NO vertically:YES];
       [[self->lowerBoxControlsBoxFontSizeLabel cell] setControlSize:NSRegularControlSize];
       [self->lowerBoxControlsBoxFontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
       [self->lowerBoxControlsBoxFontSizeLabel sizeToFit];
@@ -611,9 +644,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [[self->lowerBoxLatexizeButton cell] setControlSize:NSRegularControlSize];
       [self->lowerBoxLatexizeButton setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
       [self->lowerBoxLatexizeButton sizeToFit];
+      superviewFrame = [[self->lowerBoxControlsBoxLatexModeView superview] frame];
       NSRect lowerBoxLatexizeButtonFrame = [self->lowerBoxLatexizeButton frame];
       [self->lowerBoxLatexizeButton setFrame:NSMakeRect(MAX(superviewFrame.size.width-18-lowerBoxLatexizeButtonFrame.size.width,
-                                                            NSMaxX([self->lowerBoxControlsBoxLatexModeSegmentedControl frame])-
+                                                            NSMaxX([self->lowerBoxControlsBoxLatexModeView frame])-
                                                             lowerBoxLatexizeButtonFrame.size.width), 5,
                                                         lowerBoxLatexizeButtonFrame.size.width, lowerBoxLatexizeButtonFrame.size.height)];
 
@@ -632,7 +666,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                                        backing:NSBackingStoreBuffered defer:NO];
         [normalWindow setReleasedWhenClosed:YES];
         [normalWindow setDelegate:(id)self];
-        [normalWindow setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
+        [normalWindow setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%lu", (unsigned long)self->uniqueId]];
         [normalWindow setFrame:[window frame] display:YES];
         [normalWindow setShowsResizeIndicator:YES];
         [normalWindow setMinSize:self->documentNormalMinimumSize];
@@ -724,7 +758,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   if ([self fileURL])
     title = [super displayName];
   else if (!title)
-    title = [NSString stringWithFormat:@"%@-%u", [[NSWorkspace sharedWorkspace] applicationName], uniqueId];
+    title = [NSString stringWithFormat:@"%@-%lu", [[NSWorkspace sharedWorkspace] applicationName], (unsigned long)self->uniqueId];
   return title;
 }
 //end displayName
@@ -857,7 +891,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(void) setPreamble:(NSAttributedString*)aString
 {
   [self->lowerBoxPreambleTextView clearErrors];
-  [[self->lowerBoxPreambleTextView textStorage] setAttributedString:aString];
+  [[self->lowerBoxPreambleTextView textStorage] setAttributedString:(aString ? aString : [[[NSAttributedString alloc] init] autorelease])];
   [[self->lowerBoxPreambleTextView syntaxColouring] recolourCompleteDocument];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->lowerBoxPreambleTextView];
   [self->lowerBoxPreambleTextView setNeedsDisplay:YES];
@@ -866,8 +900,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(void) setSourceText:(NSAttributedString*)aString
 {
+  [[[self undoManager] prepareWithInvocationTarget:self]
+    setSourceText:[[[self->lowerBoxSourceTextView textStorage] copy] autorelease]];
   [self->lowerBoxSourceTextView clearErrors];
-  [[self->lowerBoxSourceTextView textStorage] setAttributedString:aString];
+  [[self->lowerBoxSourceTextView textStorage] setAttributedString:(aString ? aString : [[[NSAttributedString alloc] init] autorelease])];
   [[self->lowerBoxSourceTextView syntaxColouring] recolourCompleteDocument];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->lowerBoxSourceTextView];
   [self->lowerBoxSourceTextView setNeedsDisplay:YES];
@@ -941,9 +977,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
   NSError* error = nil;
   NSArray* result = ![self->poolOfObsoleteUniqueIds count] ? nil :
-    [fileManager respondsToSelector:@selector(contentsOfDirectoryAtPath:error:)] ?
-      [fileManager contentsOfDirectoryAtPath:workingDirectory error:&error] :
-      [fileManager directoryContentsAtPath:workingDirectory];
+  [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:&error];
   unsigned int count = [result count];
   if (count)
   {
@@ -958,7 +992,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         while((obsoleteUniqueId = [enumerator nextObject]))
         {
           if ([filename isMatchedByRegex:[NSString stringWithFormat:@"^\\Q%@\\E.*", obsoleteUniqueId]])
-            [fileManager removeFileAtPath:[workingDirectory stringByAppendingPathComponent:filename] handler:nil];
+            [fileManager bridge_removeItemAtPath:[workingDirectory stringByAppendingPathComponent:filename] error:0];
         }//end for each obsoleteUniqueId
       }//end for each file
     }//end @synchronized(self->poolOfObsoleteUniqueIds)
@@ -976,7 +1010,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   {
     [self->lowerBoxControlsBoxFontSizeTextField validateEditing];
     NSDictionary* configuration =
-      [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"runBegin", nil];
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithBool:YES], @"runBegin",
+        [NSNumber numberWithBool:self->shouldApplyToPasteboardAfterLatexization], @"applyToPasteboard",
+         nil];
     [self latexizeCoreRunWithConfiguration:configuration];
   }//end if (![self isBusy])
 }
@@ -1026,6 +1063,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 {
   BOOL runBegin = [[configuration objectForKey:@"runBegin"] boolValue];
   BOOL runEnd   = [[configuration objectForKey:@"runEnd"] boolValue];
+  BOOL applyToPasteboard  = [[configuration objectForKey:@"applyToPasteboard"] boolValue];
 
   NSString* body = [self->lowerBoxSourceTextView string];
   BOOL mustProcess = runEnd || (body && [body length]);
@@ -1066,7 +1104,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     @synchronized(self){
       if (!self->nbBackgroundLatexizations)
       {
-        uniqueIdentifier = [NSString stringWithFormat:@"latexit-%u", uniqueId];
+        uniqueIdentifier = [NSString stringWithFormat:@"latexit-%lu", (unsigned long)self->uniqueId];
       }
       else//if (self->nbBackgroundLatexizations)
       {
@@ -1081,7 +1119,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
             CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
             CFStringRef uuidString = CFUUIDCreateString(kCFAllocatorDefault, uuid);
             if (uuid) CFRelease(uuid);
-            uniqueIdentifier = [NSString stringWithFormat:@"latexit-%u-%@", uniqueId, !uuidString ? @"" : (NSString*)uuidString];
+            uniqueIdentifier = [NSString stringWithFormat:@"latexit-%lu-%@", (unsigned long)self->uniqueId, !uuidString ? @"" : (NSString*)uuidString];
             if (uuidString) CFRelease(uuidString);
           }
         }
@@ -1139,6 +1177,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       !outFullLog ? @"" : outFullLog, @"outFullLog",
       !errors ? [NSArray array] : errors, @"outErrors",
       !pdfData ? [NSData data] : pdfData, @"outPdfData",
+      [NSNumber numberWithBool:applyToPasteboard], @"applyToPasteboard",
       nil] autorelease];
     @synchronized(self){
       ++self->nbBackgroundLatexizations;
@@ -1167,6 +1206,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     {
       //if it is ok, updates the image view
       [self->upperBoxImageView setPDFData:pdfData cachedImage:nil];
+      if (applyToPasteboard)
+        [self->upperBoxImageView copy:nil];
       self->currentEquationIsARecentLatexisation = YES;
 
       //and insert a new element into the history
@@ -1219,18 +1260,76 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end latexizeAndExport:
 
--(latex_mode_t) latexMode
+-(latex_mode_t) latexModeApplied
 {
-  latex_mode_t result = (latex_mode_t)[self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
+  latex_mode_t result = self->latexModeApplied;
   return result;
 }
-//end latexMode
+//end latexModeApplied
 
--(void) setLatexMode:(latex_mode_t)mode
+-(IBAction) changeLatexModeAuto:(id)sender
 {
-  [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:mode];
+  BOOL isAuto = ([sender state] == NSOnState);
+  [self setLatexModeRequested:isAuto ? LATEX_MODE_AUTO : [self detectLatexMode]];
 }
-//end setLatexMode:
+//end changeLatexModeAuto:(id)sender
+
+-(void) setLatexModeApplied:(latex_mode_t)value
+{
+  [self willChangeValueForKey:@"latexModeApplied"];
+  self->latexModeApplied = value;
+  NSSegmentedCell* segmentedCell = [self->lowerBoxControlsBoxLatexModeSegmentedControl cell];
+  NSInteger i = 0;
+  for(i = 0 ; i<[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] ; ++i)
+  {
+    NSInteger tagForSegment = [segmentedCell tagForSegment:i];
+    [self->lowerBoxControlsBoxLatexModeSegmentedControl setSelected:(tagForSegment == (signed)self->latexModeApplied) forSegment:i];
+  }//end for each segment
+  [self didChangeValueForKey:@"latexModeApplied"];
+}
+//end setLatexModeApplied:
+
+-(latex_mode_t) latexModeRequested
+{
+  latex_mode_t result = self->latexModeRequested;
+  return result;
+}
+//end latexModeRequested
+
+-(void) setLatexModeRequested:(latex_mode_t)value
+{
+  [self willChangeValueForKey:@"latexModeRequested"];
+  self->latexModeRequested = value;
+  BOOL newModeIsAuto = (self->latexModeRequested == LATEX_MODE_AUTO);
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!newModeIsAuto];
+  NSInteger i = 0;
+  for(i = 0 ; i<[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] ; ++i)
+    [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!newModeIsAuto forSegment:i];
+
+  [self->lowerBoxControlsBoxLatexModeAutoButton setState:newModeIsAuto ? NSOnState : NSOffState];
+  /*[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTrackingMode:
+    newModeIsAuto ? NSSegmentSwitchTrackingSelectAny : NSSegmentSwitchTrackingSelectOne];
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!newModeIsAuto forSegment:1];
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!newModeIsAuto forSegment:2];
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!newModeIsAuto forSegment:3];
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!newModeIsAuto forSegment:4];*/
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:self->latexModeRequested];
+  if (!newModeIsAuto)
+    [self setLatexModeApplied:[self latexModeRequested]];
+  [self didChangeValueForKey:@"latexModeRequested"];
+  [self bodyTextDidChange:nil];
+}
+//end setLatexModeRequested:
+
+-(IBAction) changeRequestedLatexMode:(id)sender
+{
+  if (sender == self->lowerBoxControlsBoxLatexModeSegmentedControl)
+  {
+    NSInteger lastClickedSegment = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment];
+    [self setLatexModeRequested:[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:lastClickedSegment]];
+  }//end if (sender == self->lowerBoxControlsBoxLatexModeSegmentedControl)
+}
+//end changeRequestedLatexMode:
 
 -(void) setColor:(NSColor*)color
 {
@@ -1308,12 +1407,30 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [self->lowerBoxSplitView adjustSubviews]; 
       [self->lowerBoxSplitView displayIfNeeded];
       if (animate)
-        [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:1/100.0f]];
+      {
+        if (isMacOS10_6OrAbove())
+          [NSThread sleepUntilDate:[[NSDate date] dateByAddingTimeInterval:1/100.0f]];
+        else
+          [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:1/100.0f]];
+      }//end if (animate)
     }
     [self splitViewDidResizeSubviews:nil];
   }//end if there is something to change
 }
 //end setPreambleVisible:
+
+-(BOOL) shouldApplyToPasteboardAfterLatexization
+{
+  BOOL result = self->shouldApplyToPasteboardAfterLatexization;
+  return result;
+}
+//end shouldApplyToPasteboardAfterLatexization
+
+-(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value
+{
+  self->shouldApplyToPasteboardAfterLatexization = value;
+}
+//end setShouldApplyToPasteboardAfterLatexization:
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient
 {
@@ -1331,7 +1448,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                                    sourceText:[[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease]
                                         color:[self->lowerBoxControlsBoxFontColorWell color]
                                     pointSize:[self->lowerBoxControlsBoxFontSizeTextField doubleValue] date:[NSDate date]
-                                         mode:[self latexMode] backgroundColor:backgroundColor] autorelease];
+                                         mode:[self latexModeApplied] backgroundColor:backgroundColor] autorelease];
   if (backgroundColor)
     [result setBackgroundColor:backgroundColor];
   return result;
@@ -1407,6 +1524,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 //sets the state of the document
 -(void) applyLatexitEquation:(LatexitEquation*)latexitEquation isRecentLatexisation:(BOOL)isRecentLatexisation
 {
+  PreferencesController* preferencesController = [PreferencesController sharedController];
   [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES] isRecentLatexisation:self->currentEquationIsARecentLatexisation];
   [[[self undoManager] prepareWithInvocationTarget:self] setLastAppliedLibraryEquation:[self lastAppliedLibraryEquation]];
   [self setLastAppliedLibraryEquation:nil];
@@ -1451,21 +1569,30 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self->lowerBoxControlsBoxFontColorWell deactivate];
     [self->lowerBoxControlsBoxFontColorWell setColor:[latexitEquation color]];
     [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[latexitEquation pointSize]];
-    [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[latexitEquation mode]];
+    if ([latexitEquation mode] != LATEX_MODE_AUTO)
+    {
+      [self->lowerBoxControlsBoxLatexModeAutoButton setState:NSOffState];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[latexitEquation mode]];
+    }//end if ([latexitEquation mode] != LATEX_MODE_AUTO)
+    else//if ([latexitEquation mode] == LATEX_MODE_AUTO)
+    {
+      [self->lowerBoxControlsBoxLatexModeAutoButton setState:NSOnState];
+      if ([self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment])
+        [self->lowerBoxControlsBoxLatexModeSegmentedControl setSelected:NO forSegment:[self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment]];
+    }//end if ([latexitEquation mode] == LATEX_MODE_AUTO)
     NSColor* latexitEquationBackgroundColor = [latexitEquation backgroundColor];
     NSColor* greyLevelLatexitEquationBackgroundColor = latexitEquationBackgroundColor ? [latexitEquationBackgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
     latexitEquationBackgroundColor = ([greyLevelLatexitEquationBackgroundColor whiteComponent] == 1.0f) ? nil : latexitEquationBackgroundColor;
-    NSColor* colorFromUserDefaults = [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:DefaultImageViewBackgroundKey]];
+    NSColor* colorFromUserDefaults = [preferencesController documentImageViewBackgroundColor];
     if (!latexitEquationBackgroundColor)
       latexitEquationBackgroundColor = colorFromUserDefaults;
     [self->upperBoxImageView setBackgroundColor:latexitEquationBackgroundColor updateHistoryItem:NO];
   }
   else
   {
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     [self _setLogTableViewVisible:NO];
     [self->upperBoxImageView setPDFData:nil cachedImage:nil];
-    NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
+    NSFont* defaultFont = [preferencesController editionFont];
 
     NSParagraphStyle* paragraphStyle = [self->lowerBoxPreambleTextView defaultParagraphStyle];
     [[self->lowerBoxPreambleTextView textStorage] addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
@@ -1480,10 +1607,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [[self->lowerBoxPreambleTextView textStorage] addAttributes:typingAttributes range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
     [[self->lowerBoxSourceTextView textStorage]   addAttributes:typingAttributes range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
     [self->lowerBoxControlsBoxFontColorWell deactivate];
-    [self->lowerBoxControlsBoxFontColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
-    [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
-    [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
-    [self->upperBoxImageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackgroundKey]]
+    [self->lowerBoxControlsBoxFontColorWell setColor:[preferencesController latexisationFontColor]];
+    [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[preferencesController latexisationFontSize]];
+    [self setLatexModeRequested:[preferencesController latexisationLaTeXMode]];
+    [self->upperBoxImageView setBackgroundColor:[preferencesController documentImageViewBackgroundColor]
                               updateHistoryItem:NO];
   }
 }
@@ -1518,7 +1645,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPsToPdfAvailable];
   else if ([sender tag] == -1)//default
   {
-    export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
+    export_format_t exportFormat = [[PreferencesController sharedController] exportFormatPersistent];
     [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
       NSLocalizedString(@"Default Format", @"Default Format"),
       [[AppController appController] nameOfType:exportFormat]]];
@@ -1543,7 +1670,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [currentSavePanel setCanSelectHiddenExtension:YES];
     [currentSavePanel setCanCreateDirectories:YES];
     [currentSavePanel setExtensionHidden:NO];
-
+    
     NSString* directory = nil;
     NSString* file = NSLocalizedString(@"Untitled", @"Untitled");
     NSString* currentFilePath = [[self fileURL] path];
@@ -1552,6 +1679,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       directory = [currentFilePath stringByDeletingLastPathComponent];
       file = [currentFilePath lastPathComponent];
     }
+    [controller willChangeValueForKey:@"saveAccessoryViewExportFormat"];
+    [controller didChangeValueForKey:@"saveAccessoryViewExportFormat"];
     [currentSavePanel beginSheetForDirectory:directory file:file
                               modalForWindow:[self windowForSheet] modalDelegate:self
                               didEndSelector:@selector(exportChooseFileDidEnd:returnCode:contextInfo:)
@@ -1590,10 +1719,12 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
   if ((code == NSOKButton) && [self->upperBoxImageView image])
   {
-    [self exportImageWithData:[self->upperBoxImageView pdfData] format:[controller saveAccessoryViewExportFormat]
+    export_format_t exportFormat = [controller saveAccessoryViewExportFormat];
+    NSString* filePath = [[sheet URL] path];
+    [self exportImageWithData:[self->upperBoxImageView pdfData] format:exportFormat
                scaleAsPercent:[controller saveAccessoryViewScalePercent]
                     jpegColor:[controller saveAccessoryViewOptionsJpegBackgroundColor] jpegQuality:[controller saveAccessoryViewOptionsJpegQualityPercent]
-                     filePath:[[sheet URL] path]];
+                     filePath:filePath];
   }//end if save
   [controller setCurrentSavePanel:nil];
 }
@@ -1604,14 +1735,15 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData jpegColor:aJpegColor
-                                                jpegQuality:aJpegQuality/100 scaleAsPercent:scaleAsPercent
+                                                jpegQuality:aJpegQuality scaleAsPercent:scaleAsPercent
                                                 compositionConfiguration:[preferencesController compositionConfigurationDocument]
                                                 uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   if (data)
   {
     [data writeToFile:filePath atomically:YES];
-    [[NSFileManager defaultManager] changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt']
-                                                  forKey:NSFileHFSCreatorCode] atPath:filePath];    
+    [[NSFileManager defaultManager] bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt']
+                                                                                     forKey:NSFileHFSCreatorCode]
+                                            ofItemAtPath:filePath error:0];    
     NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;
     if ((exportFormat != EXPORT_FORMAT_PNG) &&
         (exportFormat != EXPORT_FORMAT_TIFF) &&
@@ -1671,7 +1803,14 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       self->busyIdentifier = [value copy];
       //[self->upperBoxImageView     setEnabled:!self->busyIdentifier];
       [self->upperBoxZoomBoxSlider setEnabled:!self->busyIdentifier];
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!self->busyIdentifier];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:(self->latexModeRequested != LATEX_MODE_AUTO) &&
+                                                                     !self->busyIdentifier];
+      NSInteger i = 0;
+      for(i = 0 ; i<[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] ; ++i)
+        [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:(self->latexModeRequested != LATEX_MODE_AUTO) &&
+                                                                       !self->busyIdentifier forSegment:i];
+      
+      [self->lowerBoxControlsBoxLatexModeAutoButton setEnabled:!self->busyIdentifier];
       [self->lowerBoxControlsBoxFontSizeTextField setEnabled:!self->busyIdentifier];
       [self->lowerBoxControlsBoxFontColorWell setEnabled:!self->busyIdentifier];
       [self->lowerBoxPreambleTextView setEditable:!self->busyIdentifier];
@@ -2122,5 +2261,124 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInt:1]]; 
 }
 //end changeBodyTemplate:
+
+-(void) bodyTextDidChange:(NSNotification*)notification
+{
+  if ([self latexModeRequested] == LATEX_MODE_AUTO)
+    [self setLatexModeApplied:[self detectLatexMode]];
+}
+//end bodyTextDidChange:
+
+-(latex_mode_t) detectLatexMode
+{
+  latex_mode_t result = LATEX_MODE_DISPLAY;
+  NSString* body = [[self->lowerBoxSourceTextView textStorage] string];
+  NSRange range = NSMakeRange(0, [body length]);
+  NSInteger options = RKLDotAll | RKLMultiline;
+  if ([body isMatchedByRegex:@"\\$\\$(.+)\\$\\$" options:options inRange:range error:nil] ||
+      [body isMatchedByRegex:@"\\$(.+)\\$" options:options inRange:range error:nil] ||
+      [body isMatchedByRegex:@"\\[(.*)\\]" options:options inRange:range error:nil] ||
+      [body isMatchedByRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}" options:options inRange:range error:nil])
+    result = LATEX_MODE_TEXT;
+  else if ([body isMatchedByRegex:@"&" options:options inRange:range error:nil] ||
+           [body isMatchedByRegex:@"\\\\\\\\" options:options inRange:range error:nil])
+    result = LATEX_MODE_ALIGN;
+  return result;
+}
+//end detectLatexMode
+
+-(void) formatChangeAlignment:(alignment_mode_t)value
+{
+  NSString* string = [[self->lowerBoxSourceTextView textStorage] string];
+  NSRange fullRange = NSMakeRange(0, [string length]);
+  NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
+  NSMutableArray* mutableSelectedRanges = [[selectedRanges mutableCopy] autorelease];
+  if (![mutableSelectedRanges count])
+    [mutableSelectedRanges insertObject:[NSValue valueWithRange:fullRange] atIndex:0];
+  //while([mutableSelectedRanges count])
+  if([mutableSelectedRanges count])//for now, only consider first selection
+  {
+    NSRange firstRange = [[mutableSelectedRanges objectAtIndex:0] rangeValue];
+    NSRange searchRange = !firstRange.length ? fullRange : firstRange;
+    NSValue* bestFound = nil;
+    BOOL stop = !searchRange.length;
+    while(!stop)
+    {
+      NSRange found = [string rangeOfRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}" options:RKLMultiline|RKLDotAll inRange:searchRange capture:0 error:nil];
+      if (found.location != NSNotFound)
+      {
+        if (!firstRange.length || NSRangeContains(found, firstRange.location))
+          bestFound = [NSValue valueWithRange:found];
+        NSUInteger searchRangeEnd = searchRange.location+searchRange.length;
+        searchRange.location = found.location+found.length;
+        searchRange.length = (searchRange.location > searchRangeEnd) ? 0 : (searchRangeEnd-searchRange.location);
+      }//end if (found.location != NSNotFound)
+      stop |= (found.location == NSNotFound);
+      stop |= (searchRange.location > firstRange.location) || !searchRange.length;
+    }//end while(!stop)
+    if (!bestFound)
+    {
+      if ((value != ALIGNMENT_MODE_UNDEFINED) && (value != ALIGNMENT_MODE_NONE))
+      {
+        NSMutableAttributedString* attributedString1 = [[[NSMutableAttributedString alloc] initWithString:
+          [NSString stringWithFormat:@"\\begin{%@}",
+            (value == ALIGNMENT_MODE_LEFT) ? @"flushleft" :
+            (value == ALIGNMENT_MODE_RIGHT) ? @"flushright" :
+            (value == ALIGNMENT_MODE_CENTER) ? @"center" : @""]] autorelease];
+        NSMutableAttributedString* attributedString2 = [[[NSMutableAttributedString alloc] initWithString:
+          [NSString stringWithFormat:@"\\end{%@}",
+            (value == ALIGNMENT_MODE_LEFT) ? @"flushleft" :
+            (value == ALIGNMENT_MODE_RIGHT) ? @"flushright" :
+            (value == ALIGNMENT_MODE_CENTER) ? @"center" : @""]] autorelease];
+        NSMutableAttributedString* textStorage = [[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease];
+        NSRange firstRangeAdapted = firstRange;
+        if (!firstRangeAdapted.length)
+          firstRangeAdapted = fullRange;
+        BOOL isEmpty = ![textStorage length];
+        NSDictionary* attributes1 = isEmpty ? nil : [textStorage attributesAtIndex:firstRangeAdapted.location effectiveRange:0];
+        NSDictionary* attributes2 = isEmpty ? nil : [textStorage attributesAtIndex:!firstRangeAdapted.length ? 0 : (firstRangeAdapted.location+firstRangeAdapted.length-1) effectiveRange:0];
+        if (attributes1)
+          [attributedString1 setAttributes:attributes1 range:NSMakeRange(0, [attributedString1 length])];
+        if (attributes2)
+          [attributedString2 setAttributes:attributes2 range:NSMakeRange(0, [attributedString2 length])];
+        [textStorage insertAttributedString:attributedString1 atIndex:firstRangeAdapted.location];
+        [textStorage insertAttributedString:attributedString2 atIndex:firstRangeAdapted.location+firstRangeAdapted.length+[attributedString1 length]];
+        [self setSourceText:textStorage];
+        NSRange newSelectedRange = NSMakeRange(firstRangeAdapted.location, [attributedString1 length]+firstRangeAdapted.length+[attributedString2 length]);
+        [self->lowerBoxSourceTextView setSelectedRange:newSelectedRange];
+      }//end if ((value != ALIGNMENT_MODE_UNDEFINED) && (value != ALIGNMENT_MODE_NONE))
+    }//end if (!bestFound)
+    else//if (bestFound)
+    {
+      NSRange localSearchRange = [bestFound rangeValue];
+      NSMutableAttributedString* textStorage = [[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease];      
+      NSRange regexInnerRange =
+        [[textStorage string] rangeOfRegex:@"^\\\\begin\\{[^\\{\\}]+\\}(.*)\\\\end\\{[^\\{\\}]+\\}$" options:RKLMultiline|RKLDotAll inRange:localSearchRange capture:1 error:nil];
+      if (value == ALIGNMENT_MODE_NONE)
+      {
+        [textStorage replaceOccurrencesOfRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}" withString:@"$2" options:RKLMultiline|RKLDotAll range:[bestFound rangeValue] error:nil];
+        [self setSourceText:textStorage];
+        [self->lowerBoxSourceTextView setSelectedRange:NSMakeRange(localSearchRange.location, regexInnerRange.length)];
+      }//end if (value == ALIGNMENT_MODE_NONE)
+      else if ((value == ALIGNMENT_MODE_LEFT) || (value == ALIGNMENT_MODE_RIGHT) || (value == ALIGNMENT_MODE_CENTER))
+      {
+        NSString* newAligmentCodeString =
+            (value == ALIGNMENT_MODE_LEFT) ? @"flushleft" :
+            (value == ALIGNMENT_MODE_RIGHT) ? @"flushright" :
+            (value == ALIGNMENT_MODE_CENTER) ? @"center" : @"";
+        NSString* newCodeBefore = [NSString stringWithFormat:@"\\begin{%@}", newAligmentCodeString];
+        NSString* newCodeAfter  = [NSString stringWithFormat:@"\\end{%@}", newAligmentCodeString];
+        [textStorage replaceOccurrencesOfRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}"
+          withString:[NSString stringWithFormat:@"\\\\begin{%@}$2\\\\end{%@}", newAligmentCodeString, newAligmentCodeString]
+           options:RKLMultiline|RKLDotAll range:localSearchRange error:nil];
+        [self setSourceText:textStorage];
+        NSRange newSelectedRange = NSMakeRange(localSearchRange.location, [newCodeBefore length]+regexInnerRange.length+[newCodeAfter length]);
+        [self->lowerBoxSourceTextView setSelectedRange:newSelectedRange];
+      }//end if ((value != ALIGNMENT_MODE_UNDEFINED) && (value != ALIGNMENT_MODE_NONE))
+    }//end if (bestFound)
+    [mutableSelectedRanges removeObjectAtIndex:0];
+  }//end while([mutableSelectedRanges count])
+}
+//end formatChangeAlignment:
 
 @end

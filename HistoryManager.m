@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -262,7 +262,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     BOOL exists = [fileManager fileExistsAtPath:newFilePath isDirectory:&isDirectory] && !isDirectory &&
                   [fileManager isReadableFileAtPath:newFilePath];
     if (!exists)
-      [fileManager createDirectoryPath:[newFilePath stringByDeletingLastPathComponent] attributes:nil];
+      [fileManager bridge_createDirectoryAtPath:[newFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
 
     self->managedObjectContext = [[self managedObjectContextAtPath:newFilePath setVersion:NO] retain];
     NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
@@ -325,7 +325,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       }//end if (uncompressedData)
       migrationError |= (error != nil);
       if (!migrationError)
-        [[NSFileManager defaultManager] removeFileAtPath:oldFilePath handler:0];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:oldFilePath error:0];
     }//end if (shouldMigrateHistoryToCoreData)
     else if (shouldMigrateHistoryToAlign)
     {
@@ -370,7 +370,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.4", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.6.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -433,7 +433,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.4", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.6.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -466,7 +466,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       {
         NSFileManager* fileManager = [NSFileManager defaultManager];
         BOOL isDirectory = NO;
-        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager removeFileAtPath:path handler:nil]));
+        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager bridge_removeItemAtPath:path error:0]));
         if (ok)
         {
           NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
@@ -491,7 +491,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.5.4", @"version",
+          @"2.6.0", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -501,8 +501,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         if (ok)
         {
           [[NSFileManager defaultManager]
-             changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                                              atPath:path];
+             bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                     ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case HISTORY_EXPORT_FORMAT_PLIST

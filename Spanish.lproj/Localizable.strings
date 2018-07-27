@@ -115,12 +115,18 @@
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Su anterior preámbulo se reemplazará. Si es un preámbulo especial contruido para generarlas se perderá.";
 "Apply" = "Aplicar";
 "Typeset LaTeX Maths eqnarray" = "Componer ecuación de LaTeX en un entorno Eqnarray";
+"Typeset LaTeX Maths eqnarray and put result into clipboard" = "Componer ecuación de LaTeX en un entorno Eqnarray y colocar el resultado en el portapapeles";
 "Typeset LaTeX Maths align" = "Componer ecuación de LaTeX en un entorno Align";
+"Typeset LaTeX Maths align and put result into clipboard" = "Componer ecuación de LaTeX en un entorno Align y colocar el resultado en el portapapeles";
 "Typeset LaTeX Maths display" = "Componer ecuación de LaTeX en modo display, \\[...\\]";
+"Typeset LaTeX Maths display and put result into clipboard" = "Componer ecuación de LaTeX en modo display, \\[...\\] y colocar el resultado en el portapapeles";
 "Typeset LaTeX Maths inline" = "Componer ecuación de LaTeX en modo inline, $...$";
+"Typeset LaTeX Maths inline and put result into clipboard" = "Componer ecuación de LaTeX en modo inline, $...$ y colocar el resultado en el portapapeles";
 "Typeset LaTeX Text" = "Componer texto LaTeX";
-"Un-latexize the equations" = "Revertir las ecuaciones a código LaTeX";
+"Typeset LaTeX Text and put result into clipboard" = "Componer texto LaTeX y colocar el resultado en el portapapeles";
 "Detect and typeset equations" = "Detectar y componer ecuaciones";
+"Detect and typeset equations and put result into clipboard" = "Detectar y componer ecuaciones y colocar el resultado en el portapapeles";
+"Un-latexize the equations" = "Revertir las ecuaciones a código LaTeX";
 "Loading History" = "Cargando historial";
 "Saving History" = "Guardando historial";
 "Loading Library" = "Cargando librería";
@@ -167,6 +173,8 @@
 "Enlarge the text area" = "Ampliar el area de texto";
 "Reduce the text area" = "Rededucir el area de texto";
 "New Service shortcuts could not be set" = "No se han podido crear los nuevos menús de Servicios";
+"Text to test" = "Texto de prueba";
+"Result of text filtering" = "Resultado del filtro de texto";
 "Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle" = "La autenticación a fallado o no ha permitido sobrescribir el fichero <Info.plist> dentro del paquete LaTeXiT.app";
 "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences" = "El menú de Servicios de LaTeXiT no concuerda con el definido en las preferencias";
 "Apply preferences" = "Aplicar preferencias";
@@ -182,7 +190,6 @@
 "Additional files" = "Archivos adicionales";
 "Default Format" = "Formato por defecto";
 "PDF with outlined fonts" = "PDF con fuentes trazadas";
-"PDF without embedded fonts" = "PDF con fuentes trazadas";
 "PDF w.o.f." = "PDF c.f.t.";
 "PDF vector format" = "Imagen vectorial PDF";
 "EPS vector format" = "Imagen vectorial EPS";
@@ -199,6 +206,7 @@
 
 /* document */
 "clipboard" = "portapapeles";
+"Auto" = "Auto";
 "Text" = "Texto";
 "Font size :" = "Tamaño:";
 "Color :" = "Color:";

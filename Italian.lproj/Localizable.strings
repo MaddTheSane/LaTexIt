@@ -114,12 +114,18 @@
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Il loro vecchio preambolo sarà sovrascritto. Se era un preambolo straordinario usato per generarli, andrà perso.";
 "Apply" = "Applica";
 "Typeset LaTeX Maths eqnarray" = "Crea l'equazione in modalità Eqnarray";
+"Typeset LaTeX Maths eqnarray and put result into clipboard" = "Crea l'equazione in modalità Eqnarray e copia il risultato negli appunti";
 "Typeset LaTeX Maths align" = "Crea l'equazione in modalità Align";
+"Typeset LaTeX Maths align and put result into clipboard" = "Crea l'equazione in modalità Align e copia il risultato negli appunti";
 "Typeset LaTeX Maths display" = "Crea l'equazione in modalità display \\[...\\]";
+"Typeset LaTeX Maths display and put result into clipboard" = "Crea l'equazione in modalità display \\[...\\] e copia il risultato negli appunti";
 "Typeset LaTeX Maths inline" = "Crea l'equazione in modalità inline $...$";
+"Typeset LaTeX Maths inline and put result into clipboard" = "Crea l'equazione in modalità inline $...$ e copia il risultato negli appunti";
 "Typeset LaTeX Text" = "Crea l'equazione in modalità Testo";
-"Un-latexize the equations" = "Converti le equazioni al codice LaTeX equations back to LaTeX code";
+"Typeset LaTeX Text and put result into clipboard" = "Crea l'equazione in modalità Testo e copia il risultato negli appunti";
 "Detect and typeset equations" = "Trova e crea le equazioni";
+"Detect and typeset equations and put result into clipboard" = "Trova e crea le equazioni e copia il risultato negli appunti";
+"Un-latexize the equations" = "Converti le equazioni al codice LaTeX equations back to LaTeX code";
 "Loading History" = "Caricando la Cronologia";
 "Saving History" = "Salvando la Cronologia";
 "Loading Library" = "Caricando la Libreria";
@@ -166,6 +172,8 @@
 "Enlarge the text area" = "Ingrandisci area del testo";
 "Reduce the text area" = "Riduci area del testo";
 "New Service shortcuts could not be set" = "La nuova scorciatoia del servizio non può essere impostata";
+"Text to test" = "Testo da verificare";
+"Result of text filtering" = "Risultato del filtraggio del testo";
 "Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle" = "Autenticazione fallio oppure non è permesso di modificare <Info.plist>, file contenuto nel pacchetto LaTeXiT.app";
 "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences" = "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences";
 "Apply preferences" = "Apply preferences";
@@ -181,7 +189,6 @@
 "Additional files" = "Files addizionali";
 "Default Format" = "Formato di default";
 "PDF with outlined fonts" = "PDF con caratteri contornati";
-"PDF without embedded fonts" = "PDF con caratteri contornati";
 "PDF w.o.f." = "PDF w.o.f.";
 "PDF vector format" = "formato PDF vettoriale";
 "EPS vector format" = "formato EPS vettoriale";
@@ -198,6 +205,7 @@
 
 /* document */
 "clipboard" = "clipboard";
+"Auto" = "Auto";
 "Text" = "Testo";
 "Font size :" = "Dimensioni carattere :";
 "Color :" = "Colore :";

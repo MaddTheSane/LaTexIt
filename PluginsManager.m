@@ -3,12 +3,13 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/09/10.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "PluginsManager.h"
 
 #import "Plugin.h"
+#import "NSFileManagerExtended.h"
 #import "NSWorkspaceExtended.h"
 
 @interface PluginsManager ()
@@ -117,7 +118,7 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
     NSString* domainName = domainPath;
     NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"PlugIns", nil];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
-    NSArray* pluginsPath  = [fileManager directoryContentsAtPath:directoryPath];
+    NSArray* pluginsPath  = [fileManager bridge_contentsOfDirectoryAtPath:directoryPath error:0];
     NSMutableArray* pluginsFullPaths = [NSMutableArray arrayWithCapacity:[pluginsPath count]];
     NSEnumerator* pluginsEnumerator = [pluginsPath objectEnumerator];
     NSString* file = nil;

@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -13,6 +13,7 @@
 #import "KeyedUnarchiveFromDataTransformer.h"
 #import "LaTeXiTSharedTypes.h"
 #import "LaTeXProcessor.h"
+#import "NSMutableArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSDictionaryCompositionConfiguration.h"
 #import "NSFileManagerExtended.h"
@@ -45,6 +46,19 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     {
       if (!freeIds)
       {
+        int debugLogLevelShift = 0;
+        BOOL shiftIsPressed = ((GetCurrentEventKeyModifiers() & shiftKey) != 0);
+        if (shiftIsPressed)
+        {
+          NSLog(@"Shift key pressed during launch");
+          debugLogLevelShift = 1;
+        }//end if (shiftIsPressed)
+        DebugLogLevel += debugLogLevelShift;
+        if (DebugLogLevel >= 1){
+          NSLog(@"Launching with DebugLogLevel = %d", DebugLogLevel);
+        }
+        
+        
         const NSUInteger legacyNSNotFound = 0x7fffffff;
         NSUInteger notFound = isMacOS10_5OrAbove() ? NSNotFound : legacyNSNotFound;
         if (!freeIds)
@@ -81,17 +95,17 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 {
   NSString* temporaryPath =
     [NSTemporaryDirectory() stringByAppendingPathComponent:
-      [NSString stringWithFormat:@"latexit-automator-%u", self->uniqueId]];
+      [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)self->uniqueId]];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   BOOL isDirectory = NO;
   BOOL exists = [fileManager fileExistsAtPath:temporaryPath isDirectory:&isDirectory];
   if (exists && !isDirectory)
   {
-    [fileManager removeFileAtPath:temporaryPath handler:NULL];
+    [fileManager bridge_removeItemAtPath:temporaryPath error:0];
     exists = NO;
   }
   if (!exists)
-    [fileManager createDirectoryAtPath:temporaryPath attributes:nil];
+    [fileManager bridge_createDirectoryAtPath:temporaryPath withIntermediateDirectories:YES attributes:nil error:0];
   return temporaryPath;
 }
 //end workingDirectory
@@ -127,6 +141,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       @"parameters" : @"warning"];
     
     latex_mode_t equationMode = [preferencesController latexisationLaTeXMode];
+    if (equationMode == LATEX_MODE_AUTO)
+      equationMode = LATEX_MODE_ALIGN;
     [self->exportFormatPopupButton selectItemWithTag:[preferencesController exportFormatPersistent]];
     CGFloat      fontSize       = [preferencesController latexisationFontSize];
     NSData*      fontColorData  = [preferencesController latexisationFontColorData];
@@ -274,7 +290,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 
 -(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary**)errorInfo
 {
-  CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
+  Boolean synchronized = CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
+  DebugLog(1, @"synchronized = %d", synchronized);
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
   NSMutableArray* result = [[[NSMutableArray alloc] initWithCapacity:[input count]] autorelease];
@@ -285,7 +302,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   NSColor*     fontColor      = !fontColorData ? [NSColor blackColor] : [NSColor colorWithData:fontColorData];
   equationDestination_t equationDestination = (equationDestination_t) [[parameters objectForKey:@"equationFilesDestination"] intValue];
   NSString*    workingDirectory = [self workingDirectory];
-  NSDictionary* fullEnvironment = nil;
+  NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
   export_format_t exportFormat = (export_format_t)[[parameters objectForKey:@"exportFormat"] intValue];
   if ((int)exportFormat < 0)
     exportFormat = [preferencesController exportFormatPersistent];
@@ -295,6 +312,10 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   NSColor* exportJpegBackgroundColor = !exportJpegBackgroundColorData ? [NSColor whiteColor] :
                                        [NSColor colorWithData:exportJpegBackgroundColorData];
   //NSColor* exportSvgPdfToSvgPath = [parameters objectForKey:@"exportSvgPdfToSvgPath"];
+
+  DebugLog(1, @"parameters = %@", parameters);
+  DebugLog(1, @"equationMode = %d", equationMode);
+  DebugLog(1, @"fontSize = %f", fontSize);
 
   CGFloat leftMargin   = [preferencesController marginsAdditionalLeft];
   CGFloat rightMargin  = [preferencesController marginsAdditionalRight];
@@ -361,11 +382,12 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       nil] autorelease];
   }//end if (errorInfo && !defaultPreamble)
 
+  NSMutableArray* errorStrings = [NSMutableArray array];
   NSEnumerator* enumerator = [filteredInput objectEnumerator];
   id object = nil;
   while(defaultPreamble && (object = [enumerator nextObject]))
   {
-    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
+    //NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
     NSString* preamble = nil;
     NSString* body     = nil;
     NSError*  error    = nil;
@@ -374,7 +396,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     NSString* uniqueIdentifier = [uniqueIdentifierPrefix stringByReplacingOccurrencesOfRegex:@"\\s" withString:@"-"];
     unsigned long index = 1;
     while ([uniqueIdentifiers containsObject:uniqueIdentifier])
-      uniqueIdentifier = [NSString stringWithFormat:@"%@-%u", uniqueIdentifierPrefix, ++index];
+      uniqueIdentifier = [NSString stringWithFormat:@"%@-%lu", uniqueIdentifierPrefix, (unsigned long)++index];
     [uniqueIdentifiers addObject:uniqueIdentifier];
     if (!body && errorInfo)
     {
@@ -392,6 +414,14 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       NSString* outFullLog = nil;
       NSArray*  errors = nil;
       NSData*   pdfData = nil;
+      DebugLog(1, @"compositionConfiguration = %@", [preferencesController compositionConfigurationDocument]);
+      DebugLog(1, @"body = %@", body);
+      DebugLog(1, @"fontColor = %@", fontColor);
+      DebugLog(1, @"latexMode = %d", latexMode);
+      DebugLog(1, @"fontSize = %f", fontSize);
+      DebugLog(1, @"workingDirectory = %@", workingDirectory);
+      DebugLog(1, @"fullEnvironment = %@", fullEnvironment);
+      DebugLog(1, @"uniqueIdentifier = %ld", (unsigned long)uniqueIdentifier);
       NSString* outFilePath =
         [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:fontColor mode:latexMode magnification:fontSize
           compositionConfiguration:[preferencesController compositionConfigurationDocument] backgroundColor:nil
@@ -399,6 +429,11 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
           additionalFilesPaths:[preferencesController additionalFilesPaths]
           workingDirectory:workingDirectory fullEnvironment:fullEnvironment uniqueIdentifier:uniqueIdentifier
           outFullLog:&outFullLog outErrors:&errors outPdfData:&pdfData];
+      DebugLog(1, @"1outFilePath = %@", outFilePath);
+      DebugLog(1, @"outFullLog = %@", outFullLog);
+      DebugLog(1, @"errors = %@", errors);
+      DebugLog(1, @"pdfData = %p (%ld)", pdfData, [pdfData length]);
+      DebugLog(1, @"exportFormat = %d", exportFormat);
       NSData* convertedData = [[LaTeXProcessor sharedLaTeXProcessor]
         dataForType:exportFormat
             pdfData:pdfData
@@ -407,6 +442,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
            scaleAsPercent:[preferencesController exportScalePercent]
              compositionConfiguration:[preferencesController compositionConfigurationDocument]
              uniqueIdentifier:uniqueIdentifier];
+      DebugLog(1, @"convertedData = %p (%ld)", convertedData, [convertedData length]);
       if (convertedData)
       {
         NSString* extension = nil;
@@ -436,33 +472,41 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
             break;
         }
         NSString* outFilePath2 = [[outFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
+        DebugLog(1, @"outFilePath2 = %@", outFilePath2);
         if (![outFilePath2 isEqualToString:outFilePath])
         {
           if ([convertedData writeToFile:outFilePath2 atomically:YES])
             outFilePath = outFilePath2;
+          DebugLog(1, @"+outFilePath = %@", outFilePath);
         }//end if (![outFilePath2 isEqualToString:outFilePath])
       }//end if (convertedData)
 
+      DebugLog(1, @"outFilePath = %@, errors = %@", outFilePath, errors);
       if (outFilePath && ![errors count])
       {
         if (isInputFilePath && (equationDestination == EQUATION_DESTINATION_ALONGSIDE_INPUT))
         {
           NSString* destinationFolder = [object stringByDeletingLastPathComponent];
           NSString* newPath = [destinationFolder stringByAppendingPathComponent:[outFilePath lastPathComponent]];
+          NSError* error = nil;
           if (![outFilePath isEqualToString:newPath])
           {
-            if ([fileManager movePath:outFilePath toPath:newPath handler:0])
+            BOOL moved = [fileManager bridge_moveItemAtPath:outFilePath toPath:newPath error:&error];
+            if (moved)
               outFilePath = newPath;
-            else
+            else//if (!moved)
             {
-              if ([fileManager removeFileAtPath:newPath handler:0] && [fileManager movePath:outFilePath toPath:newPath handler:0])
+              BOOL removed = [fileManager bridge_removeItemAtPath:newPath error:&error];
+              BOOL moved = [fileManager bridge_moveItemAtPath:outFilePath toPath:newPath error:&error];
+              if (removed && moved)
                 outFilePath = newPath;
-            }
+            }//end //if (!moved)
+            DebugLog(1, @"moved = %d, outFilePath = %@", moved, outFilePath);
           }//end if (![outFilePath isEqualToString:newPath])
         }
-        [fileManager changeFileAttributes:
+        [fileManager bridge_setAttributes:
           [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                   atPath:outFilePath];
+                                ofItemAtPath:outFilePath error:0];
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
             (exportFormat != EXPORT_FORMAT_JPEG))
@@ -478,20 +522,20 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         NSString* errorMessage = [latexErrors count] ? [latexErrors componentsJoinedByString:@"\n"] :
           LocalLocalizedString(@"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.",
                                @"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.");
-        if (errorInfo)
-          *errorInfo = [[[NSDictionary alloc] initWithObjectsAndKeys:
-            [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
-            errorMessage, OSAScriptErrorMessage,
-            nil] autorelease];
+        [errorStrings safeAddObject:errorMessage];
       }
     }//end if (!body)
-    [ap drain];
+    //[ap drain];
   }//end or each object
-  if (didEncounterError && errorInfo)
+  if (didEncounterError && [errorStrings count] && errorInfo)
   {
-    if ([filteredInput count] > 1)//cancel errors if multiple input
-      *errorInfo = nil;
-  }//end if (didEncounterError && errorInfo)
+    *errorInfo = [[[NSDictionary alloc] initWithObjectsAndKeys:
+                   [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
+                   [errorStrings componentsJoinedByString:@"\n"], OSAScriptErrorMessage,
+                   nil] autorelease];
+    if (*errorInfo)
+      DebugLog(0, @"%@", [*errorInfo objectForKey:OSAScriptErrorMessage]);
+  }//end if (didEncounterError && [errorStrings count] && errorInfo)
   [uniqueIdentifiers release];
 	return result;
 }
@@ -507,7 +551,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   if ([object isKindOfClass:[NSAttributedString class]])
   {
     fullText = [object string];
-    result = [NSString stringWithFormat:@"latexit-automator-%u", ++self->uniqueId];
+    result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
   }//end if ([object isKindOfClass:[NSString class]])
   else if ([object isKindOfClass:[NSString class]])
   {
@@ -518,8 +562,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         *isFilePath = !isDirectory;
       NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:object];
       NSData* fileData = [[NSData alloc] initWithContentsOfFile:object options:NSUncachedRead error:error];
-      if (error)
-        DebugLog(0, @"error: %@", error);
+      if (error && *error)
+        {DebugLog(0, @"error: %@", *error);}
       NSStringEncoding encoding = NSUTF8StringEncoding;
       if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
       {
@@ -537,21 +581,21 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
       else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
         fullText = [NSString stringWithContentsOfFile:object guessEncoding:&encoding error:error];
-      result = [NSString stringWithFormat:@"latexit-automator-%u", ++self->uniqueId];
+      result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
       [fileData release];
     }//end if ([[NSFileManager defaultManager] fileExistsAtPath:object isDirectory:&isDirectory])
     else //(if !path)
     {
       fullText = object;
-      result = [NSString stringWithFormat:@"latexit-automator-%u", ++self->uniqueId];
+      result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
     }
   }//end if ([object isKindOfClass:[NSString class]])
   else if ([object isKindOfClass:[NSURL class]])
   {
     NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:object];
     NSData* fileData = [[NSData alloc] initWithContentsOfURL:object options:NSUncachedRead error:error];
-    if (error)
-      DebugLog(0, @"error: %@", error);
+    if (error && *error)
+      {DebugLog(0, @"error: %@", *error);}
     NSStringEncoding encoding = NSUTF8StringEncoding;
     if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
     {
@@ -569,7 +613,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
     else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
       fullText = [NSString stringWithContentsOfURL:object guessEncoding:&encoding error:error];
-    result = [NSString stringWithFormat:@"latexit-automator-%u", ++self->uniqueId];
+    result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
     [fileData release];
   }//end if ([object isKindOfClass:[NSURL class]])
 

@@ -40,12 +40,12 @@
 "Loading error" = "読み込みエラー";
 "An error occured while saving" = "保存するときにエラーが発生しました";
 "The file does not appear to be a valid format" = "ファイルはおそらく有効なフォーマットではありません";
-"New encapsulation" = "新規エンカプセレーション";
-"Change the encapsulation" = "エンカプセレーションを変更";
-"Remove encapsulation item" = "エンカプセレーションを削除";
-"Remove encapsulation items" = "複数のエンカプセレーションを削除";
-"Move the encapsulation" = "エンカプセレーションを移動";
-"Move encapsulations" = "複数のエンカプセレーションを移動";
+"New encapsulation" = "新規カプセル化";
+"Change the encapsulation" = "そのカプセル化を変更";
+"Remove encapsulation item" = "カプセル化項目を削除";
+"Remove encapsulation items" = "複数のカプセル化項目を削除";
+"Move the encapsulation" = "カプセル化項目を移動";
+"Move encapsulations" = "複数のカプセル化項目を移動";
 "New configuration" = "新規設定";
 "Change the configuration" = "設定を変更";
 "Remove configuration items" = "複数の設定項目を削除";
@@ -114,12 +114,18 @@
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "古いプリアンブルは上書きされます。これまでの変換に必要な特別なプリアンブルだとすると、それが失われます。";
 "Apply" = "適用";
 "Typeset LaTeX Maths eqnarray" = "LaTeX 数式 eqnarray 環境でタイプセット";
+"Typeset LaTeX Maths eqnarray and put result into clipboard" = "LaTeX 数式 eqnarray 環境でタイプセット そして結果をクリップボードにコピー";
 "Typeset LaTeX Maths align" = "LaTeX 数式 Align 環境でタイプセット";
+"Typeset LaTeX Maths align and put result into clipboard" = "LaTeX 数式 Align 環境でタイプセット そして結果をクリップボードにコピー";
 "Typeset LaTeX Maths display" = "LaTeX 数式ディスプレイモードでタイプセット";
+"Typeset LaTeX Maths display and put result into clipboard" = "LaTeX 数式ディスプレイモードでタイプセット そして結果をクリップボードにコピー";
 "Typeset LaTeX Maths inline" = "LaTeX 数式インラインモードでタイプセット";
+"Typeset LaTeX Maths inline and put result into clipboard" = "LaTeX 数式インラインモードでタイプセット そして結果をクリップボードにコピー";
 "Typeset LaTeX Text" = "LaTeX テキストモードでタイプセット";
-"Un-latexize the equations" = "数式を LaTeX コードに戻す";
+"Typeset LaTeX Text and put result into clipboard" = "LaTeX テキストモードでタイプセット そして結果をクリップボードにコピー";
 "Detect and typeset equations" = "数式の検出とタイプセット";
+"Detect and typeset equations and put result into clipboard" = "数式の検出とタイプセット そして結果をクリップボードにコピー";
+"Un-latexize the equations" = "数式を LaTeX コードに戻す";
 "Loading History" = "履歴を読み込み中";
 "Saving History" = "履歴を保存中";
 "Loading Library" = "ライブラリを読み込み中";
@@ -166,6 +172,8 @@
 "Enlarge the text area" = "入力エリアを大きくする";
 "Reduce the text area" = "入力エリアを小さくする";
 "New Service shortcuts could not be set" = "新しいサービスのショートカットを設定できませんでした";
+"Text to test" = "テスト用テキスト";
+"Result of text filtering" = "フィルターの結果";
 "Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle" = "パスワード認証に失敗したか LaTeXiT.app バンドル内にある <Info.plist> ファイルの書き換えが許可されませんでした。";
 "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences" = "現在の LaTeXiT サービスのショートカットは環境設定で定義されたものと一致しません";
 "Apply preferences" = "環境設定を適用";
@@ -181,7 +189,6 @@
 "Additional files" = "補足ファイル";
 "Default Format" = "デフォルトフォーマット";
 "PDF with outlined fonts" = "PDF with outlined fonts";
-"PDF without embedded fonts" = "PDF with outlined fonts";
 "PDF w.o.f." = "PDF w.o.f.";
 "PDF vector format" = "PDF";
 "EPS vector format" = "EPS";
@@ -198,6 +205,7 @@
 
 /* document */
 "clipboard" = "クリップボード";
+"Auto" = "Auto";
 "Text" = "Text";
 "Font size :" = "フォントサイズ :";
 "Color :" = "カラー :";
@@ -258,7 +266,7 @@
 "Composition configurations" = "プログラムの構成";
 
 /* palette : encapsulations */
-"Encapsulations" = "エンカプセレーション";
+"Encapsulations" = "カプセル化";
 
 /* palette : LaTeX */
 "LaTeX Palette" = "LaTeX パレット";

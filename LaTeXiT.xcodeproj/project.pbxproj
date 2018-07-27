@@ -174,8 +174,6 @@
 		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
 		9311C80408A0FA95009AC959 /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C80208A0FA95009AC959 /* LibraryWindowController.m */; };
 		9311C8E708A10931009AC959 /* HistoryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C8E508A10931009AC959 /* HistoryWindowController.m */; };
-		9313F9781775F94200BDEB7E /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9313F9771775F94200BDEB7E /* LinkBack.framework */; };
-		9313F97D1775F98F00BDEB7E /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9313F9771775F94200BDEB7E /* LinkBack.framework */; };
 		93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
 		93155CB216AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */; };
@@ -193,6 +191,7 @@
 		9324182D0F9CF389006BA13B /* DocumentExtraPanelsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324182C0F9CF389006BA13B /* DocumentExtraPanelsController.m */; };
 		9324D34F08A63E540010DB95 /* ButtonNotClickThrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */; };
 		93257A4E12366ABC006EF4E8 /* NSUserDefaultsControllerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937E2F0FA4E05A007BEAC0 /* NSUserDefaultsControllerExtended.m */; };
+		9325E1281831946F006BCD30 /* CHProtoBuffers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9325E1271831946F006BCD30 /* CHProtoBuffers.mm */; };
 		9326550E1080AADE00603657 /* NSNumberIntegerShiftTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9326550D1080AADE00603657 /* NSNumberIntegerShiftTransformer.m */; };
 		93265ED90FAE20A30060D667 /* NSArrayControllerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93265ED80FAE20A30060D667 /* NSArrayControllerExtended.m */; };
 		93265F0C0FAEBA370060D667 /* EncapsulationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93265F0B0FAEBA370060D667 /* EncapsulationsController.m */; };
@@ -278,8 +277,6 @@
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
-		934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
-		934AA8F50F33813B0010E384 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
 		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
 		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
@@ -307,6 +304,12 @@
 		936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 936368C91194BA4900C5DE49 /* DragThroughButton.m */; };
 		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
+		9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
+		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
+		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
 		9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
@@ -329,8 +332,6 @@
 		938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
 		938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		938DBE0110BDC2E0002350CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
-		938DBE0910BDC2E0002350CF /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
-		938DBE0C10BDC2E0002350CF /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
 		938DBE4610BDC4B1002350CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 938DBE1F10BDC338002350CF /* main.m */; };
 		938E23A60889C382000626E6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
@@ -354,6 +355,8 @@
 		93937FF90FA58814007BEAC0 /* IsNotInTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937FF80FA58814007BEAC0 /* IsNotInTransformer.m */; };
 		93937FFD0FA58873007BEAC0 /* FileExistsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937FFC0FA58873007BEAC0 /* FileExistsTransformer.m */; };
 		939380DB0FA5B0E8007BEAC0 /* BoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 939380DA0FA5B0E8007BEAC0 /* BoolTransformer.m */; };
+		939485EE1828472D0059522B /* CHDragFileWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 939485ED1828472D0059522B /* CHDragFileWrapper.m */; };
+		939485EF1828472D0059522B /* CHDragFileWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 939485ED1828472D0059522B /* CHDragFileWrapper.m */; };
 		9396E9470EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */; };
 		939A64580800281900AE4486 /* ServicesMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 939A64570800281900AE4486 /* ServicesMenu.strings */; };
 		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
@@ -364,6 +367,7 @@
 		93A35B8B137EB4580006DC07 /* FileExistsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937FFC0FA58873007BEAC0 /* FileExistsTransformer.m */; };
 		93A35BA4137EB6FE0006DC07 /* LogicTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A35BA3137EB6FE0006DC07 /* LogicTransformer.m */; };
 		93A35BA5137EB6FE0006DC07 /* LogicTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A35BA3137EB6FE0006DC07 /* LogicTransformer.m */; };
+		93A4221B189AFCD00073481F /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
 		93A592CB07F46075001DF900 /* Licence.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C807F46075001DF900 /* Licence.rtf */; };
 		93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C907F46075001DF900 /* Lisez-moi.rtfd */; };
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
@@ -374,6 +378,9 @@
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
 		93B583131014704700907B47 /* NSManagedObjectContextExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */; };
 		93B5870C10159CC700907B47 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
+		93B5ECCF16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
+		93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
+		93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
 		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
 		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
@@ -384,6 +391,7 @@
 		93C531900D9E2781003AF7FC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C5318F0D9E2781003AF7FC /* Security.framework */; };
 		93C531D00D9E310C003AF7FC /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
 		93CD21DE0827E9230079C367 /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
+		93CFB9AE16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CFB9AD16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m */; };
 		93D19DB20AA2E41C00DFBEE8 /* NSAttributedStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */; };
 		93D231CD101830A600768782 /* KeyedUnarchiveFromDataTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 939377350FA22E0E007BEAC0 /* KeyedUnarchiveFromDataTransformer.m */; };
 		93D231F91018332700768782 /* textShortcuts.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9345E3350AC9A2620082ADB4 /* textShortcuts.plist */; };
@@ -499,10 +507,20 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				934AA8F50F33813B0010E384 /* LinkBack.framework in Copy Files (Frameworks) */,
+				9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */,
 				934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */,
 			);
 			name = "Copy Files (Frameworks)";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9323F015182D9F9900F6EA37 /* Copy Files (Spotlight) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/Spotlight;
+			dstSubfolderSpec = 1;
+			files = (
+			);
+			name = "Copy Files (Spotlight)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9344BBB50E8CF6DF00FE90A5 /* CopyFiles */ = {
@@ -511,7 +529,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9313F97D1775F98F00BDEB7E /* LinkBack.framework in CopyFiles */,
+				9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,13 +544,23 @@
 			name = "Copy Files (LaTeXiT Helper)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		936BCE5418368E0100EF04DF /* Copy Files (Libraries) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Libraries;
+			dstSubfolderSpec = 1;
+			files = (
+			);
+			name = "Copy Files (Libraries)";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		938DBE0B10BDC2E0002350CF /* Copy Files (Frameworks) */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				938DBE0C10BDC2E0002350CF /* LinkBack.framework in Copy Files (Frameworks) */,
+				9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */,
 			);
 			name = "Copy Files (Frameworks)";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -670,7 +698,6 @@
 		9311C80208A0FA95009AC959 /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		9311C8E408A10931009AC959 /* HistoryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryWindowController.h; sourceTree = "<group>"; };
 		9311C8E508A10931009AC959 /* HistoryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryWindowController.m; sourceTree = "<group>"; };
-		9313F9771775F94200BDEB7E /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/GC/LinkBack.framework; sourceTree = "<group>"; };
 		93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.5.0.xcdatamodel"; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
@@ -693,11 +720,14 @@
 		931D94F50E8A252100D9A778 /* DirectoryService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DirectoryService.framework; path = /System/Library/Frameworks/DirectoryService.framework; sourceTree = "<absolute>"; };
 		931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryServiceHelper.h; sourceTree = "<group>"; };
 		931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryServiceHelper.m; sourceTree = "<group>"; };
+		9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CHiWorkSpotlightPlugin.mdimporter; path = Spotlight/CHiWorkSpotlightPlugin.mdimporter; sourceTree = "<group>"; };
 		9324182B0F9CF389006BA13B /* DocumentExtraPanelsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentExtraPanelsController.h; sourceTree = "<group>"; };
 		9324182C0F9CF389006BA13B /* DocumentExtraPanelsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentExtraPanelsController.m; sourceTree = "<group>"; };
 		9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = DocumentExtraPanelsController.nib; sourceTree = "<group>"; };
 		9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
+		9325E1261831946F006BCD30 /* CHProtoBuffers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProtoBuffers.h; sourceTree = "<group>"; };
+		9325E1271831946F006BCD30 /* CHProtoBuffers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CHProtoBuffers.mm; sourceTree = "<group>"; };
 		9326550C1080AADE00603657 /* NSNumberIntegerShiftTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSNumberIntegerShiftTransformer.h; sourceTree = "<group>"; };
 		9326550D1080AADE00603657 /* NSNumberIntegerShiftTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSNumberIntegerShiftTransformer.m; sourceTree = "<group>"; };
 		93265ED70FAE20A30060D667 /* NSArrayControllerExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayControllerExtended.h; sourceTree = "<group>"; };
@@ -785,7 +815,6 @@
 		934A2C9A10B6C4AC00AAA2CD /* NSDataExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataExtended.h; sourceTree = "<group>"; };
 		934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataExtended.m; sourceTree = "<group>"; };
 		934AA8A60F3380CD0010E384 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
-		934AA8ED0F3381050010E384 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/LinkBack.framework; sourceTree = "<group>"; };
 		934AA8F30F3381210010E384 /* package-as-dmg.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "package-as-dmg.sh"; path = "scripts/package-as-dmg.sh"; sourceTree = "<group>"; };
 		934AAB280F343D830010E384 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; name = pdfcrop.pl; path = Resources/scripts/pdfcrop.pl; sourceTree = "<group>"; };
 		934C03390AD03600007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -828,6 +857,8 @@
 		936369E01194C9BD00C5DE49 /* NSButtonPalette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSButtonPalette.m; sourceTree = "<group>"; };
 		93636AAB11957D5B00C5DE49 /* DragFilterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterView.h; sourceTree = "<group>"; };
 		93636AAC11957D5B00C5DE49 /* DragFilterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterView.m; sourceTree = "<group>"; };
+		9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/LinkBack.framework; sourceTree = "<group>"; };
+		9368A60C17737E9E00B2ACC1 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack/GC/LinkBack.framework; sourceTree = "<group>"; };
 		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
 		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
 		9369017713ABEF32006B3BDD /* LatexitEquationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexitEquationData.h; sourceTree = "<group>"; };
@@ -897,6 +928,8 @@
 		93937FFC0FA58873007BEAC0 /* FileExistsTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileExistsTransformer.m; sourceTree = "<group>"; };
 		939380D90FA5B0E8007BEAC0 /* BoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoolTransformer.h; sourceTree = "<group>"; };
 		939380DA0FA5B0E8007BEAC0 /* BoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoolTransformer.m; sourceTree = "<group>"; };
+		939485EC1828472D0059522B /* CHDragFileWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDragFileWrapper.h; sourceTree = "<group>"; };
+		939485ED1828472D0059522B /* CHDragFileWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHDragFileWrapper.m; sourceTree = "<group>"; };
 		9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_sparkle_latexit_pub.pem; path = Resources/sparkle/dsa_sparkle_latexit_pub.pem; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
@@ -934,6 +967,10 @@
 		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93B2130C0BBC1CCC00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
+		93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersController.h; sourceTree = "<group>"; };
+		93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersController.m; sourceTree = "<group>"; };
+		93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersTableView.h; sourceTree = "<group>"; };
+		93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersTableView.m; sourceTree = "<group>"; };
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
@@ -951,6 +988,8 @@
 		93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFileManagerExtended.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
 		93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArrayExtended.m; sourceTree = "<group>"; };
+		93CFB9AC16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewWithPlaceHolder.h; sourceTree = "<group>"; };
+		93CFB9AD16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewWithPlaceHolder.m; sourceTree = "<group>"; };
 		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
 		93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringExtended.m; sourceTree = "<group>"; };
 		93D4947410C1051700A0D06A /* NDProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDProcess.h; path = Frameworks/NDProcess/NDProcess.h; sourceTree = "<group>"; };
@@ -1029,16 +1068,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				938E244B0889C392000626E6 /* AppKit.framework in Frameworks */,
-				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
-				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
-				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
-				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
-				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
 				938E23A60889C382000626E6 /* Quartz.framework in Frameworks */,
 				93C531900D9E2781003AF7FC /* Security.framework in Frameworks */,
-				934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */,
+				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
+				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
+				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
+				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
+				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
+				9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */,
 				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
 				93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 				93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
@@ -1050,13 +1089,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */,
-				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */,
-				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
 				9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */,
+				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
-				9313F9781775F94200BDEB7E /* LinkBack.framework in Frameworks */,
+				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
+				9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */,
 				93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 				93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
@@ -1067,10 +1106,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */,
-				93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */,
 				938DBE0110BDC2E0002350CF /* Foundation.framework in Frameworks */,
-				938DBE0910BDC2E0002350CF /* LinkBack.framework in Frameworks */,
+				93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */,
+				9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1099,8 +1138,8 @@
 		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				934AA8ED0F3381050010E384 /* LinkBack.framework */,
-				9313F9771775F94200BDEB7E /* LinkBack.framework */,
+				9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */,
+				9368A60C17737E9E00B2ACC1 /* LinkBack.framework */,
 				934AA8A60F3380CD0010E384 /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
@@ -1177,6 +1216,7 @@
 				9344BBE20E8CF7D400FE90A5 /* Automator */,
 				938DBD2810BDC2B3002350CF /* Legacy */,
 				9344BBE10E8CF7C600FE90A5 /* LaTeXiT */,
+				9323EFE3182D9EFF00F6EA37 /* Spotlight */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1228,6 +1268,7 @@
 		9302548807F0BC7600011996 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				9325E1251831944C006BCD30 /* ProtoBuffers */,
 				93D4947110C1050700A0D06A /* NDProcess */,
 				935AE0E40FA1B41F00B361D8 /* Value transformers */,
 				936369DF1194C9BD00C5DE49 /* NSButtonPalette.h */,
@@ -1240,6 +1281,8 @@
 				9318AEBC101DCB8E00F808E8 /* CGExtras.m */,
 				9350FC16139CB1A30016B2E8 /* CGPDFExtras.h */,
 				9350FC17139CB1A30016B2E8 /* CGPDFExtras.m */,
+				939485EC1828472D0059522B /* CHDragFileWrapper.h */,
+				939485ED1828472D0059522B /* CHDragFileWrapper.m */,
 				93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */,
 				93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */,
 				936C315D0C0DEEA90082F86D /* Semaphore.h */,
@@ -1289,6 +1332,7 @@
 				93D7CA5309D362D40001DC5E /* CompositionConfiguration */,
 				9390D3300FA8D4BF0002100B /* Encapsulations */,
 				9333DD730FA62E6500157F00 /* Preambles */,
+				93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */,
 				9345E40E0AC9C5120082ADB4 /* ServiceShortcuts */,
 				9345E3D70AC9C3390082ADB4 /* TextShortcuts */,
 				932E60B00F5DA745002B3136 /* PreferencesController.h */,
@@ -1321,6 +1365,14 @@
 			name = Sparkle;
 			sourceTree = "<group>";
 		};
+		9323EFE3182D9EFF00F6EA37 /* Spotlight */ = {
+			isa = PBXGroup;
+			children = (
+				9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */,
+			);
+			name = Spotlight;
+			sourceTree = "<group>";
+		};
 		9324D35808A63ED90010DB95 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
@@ -1343,8 +1395,19 @@
 				938DBADA10BD7C19002350CF /* PalettePanel.m */,
 				934191931280CC38009D3E97 /* TooltipWindow.h */,
 				934191941280CC38009D3E97 /* TooltipWindow.m */,
+				93CFB9AC16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.h */,
+				93CFB9AD16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m */,
 			);
 			name = Interface;
+			sourceTree = "<group>";
+		};
+		9325E1251831944C006BCD30 /* ProtoBuffers */ = {
+			isa = PBXGroup;
+			children = (
+				9325E1261831946F006BCD30 /* CHProtoBuffers.h */,
+				9325E1271831946F006BCD30 /* CHProtoBuffers.mm */,
+			);
+			name = ProtoBuffers;
 			sourceTree = "<group>";
 		};
 		932660590FB05E750060D667 /* AdditionalFiles */ = {
@@ -1779,6 +1842,17 @@
 			name = LaTeX;
 			sourceTree = "<group>";
 		};
+		93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */ = {
+			isa = PBXGroup;
+			children = (
+				93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */,
+				93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */,
+				93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */,
+				93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */,
+			);
+			name = ServiceRegularExpressionFilters;
+			sourceTree = "<group>";
+		};
 		93BEEB581195BDD90060166A /* DragFilterWindow */ = {
 			isa = PBXGroup;
 			children = (
@@ -1976,9 +2050,11 @@
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
+				936BCE5418368E0100EF04DF /* Copy Files (Libraries) */,
 				93126C5C0834966D0021D026 /* Copy Files (Frameworks) */,
 				93BD66330E8D095400DB341B /* Copy Files (Automator) */,
 				9349518410BDCEEE00931D51 /* Copy Files (LaTeXiT Helper) */,
+				9323F015182D9F9900F6EA37 /* Copy Files (Spotlight) */,
 			);
 			buildRules = (
 			);
@@ -1999,7 +2075,6 @@
 				9344B98C0E8CF38700FE90A5 /* Sources */,
 				9344B98D0E8CF38700FE90A5 /* Frameworks */,
 				9344BBB50E8CF6DF00FE90A5 /* CopyFiles */,
-				9344BBB30E8CF6B300FE90A5 /* Run Script (Change embedded Frameworks install-name) */,
 				9344BBE00E8CF73E00FE90A5 /* Rez */,
 				9344BBBA0E8CF71600FE90A5 /* ShellScript */,
 			);
@@ -2224,20 +2299,6 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9344BBB30E8CF6B300FE90A5 /* Run Script (Change embedded Frameworks install-name) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script (Change embedded Frameworks install-name)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#install_name_tool -id @loader_path/../Frameworks/RegexKit.framework/Versions/A/RegexKit \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/RegexKit.framework/Versions/A/RegexKit\"\n#install_name_tool -change @executable_path/../Frameworks/RegexKit.framework/Versions/A/RegexKit @loader_path/../Frameworks/#RegexKit.framework/Versions/A/RegexKit \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\n\ninstall_name_tool -id @loader_path/../Frameworks/LinkBack.framework/Versions/A/LinkBack \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/LinkBack.framework/Versions/A/LinkBack\"\ninstall_name_tool -change @executable_path/../Frameworks/LinkBack.framework/Versions/A/LinkBack @loader_path/../Frameworks/LinkBack.framework/Versions/A/LinkBack \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"";
-		};
 		9344BBBA0E8CF71600FE90A5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2277,7 +2338,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -o errexit\n\n[ $BUILD_STYLE = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleVersion)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleVersion)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
+			shellScript = "set -o errexit\n\n[ $BUILD_STYLE = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2421,6 +2482,11 @@
 				93362C0D15BF500A00EA0679 /* NSWindowExtended.m in Sources */,
 				93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */,
 				9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */,
+				93B5ECCF16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
+				93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */,
+				93CFB9AE16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m in Sources */,
+				939485EE1828472D0059522B /* CHDragFileWrapper.m in Sources */,
+				9325E1281831946F006BCD30 /* CHProtoBuffers.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2486,6 +2552,9 @@
 				9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */,
 				93155CB216AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */,
 				9388E88016B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */,
+				93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
+				939485EF1828472D0059522B /* CHDragFileWrapper.m in Sources */,
+				93A4221B189AFCD00073481F /* NSMutableArrayExtended.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2546,12 +2615,12 @@
 		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				089C1660FE840EACC02AAC07 /* English */,
 				93773C4907FFF713004AAB30 /* French */,
+				089C1660FE840EACC02AAC07 /* English */,
 				934C03410AD03648007FEC06 /* German */,
 				93B212FB0BBC1C8100EFCA2F /* Spanish */,
-				93F874FA1088645700995B12 /* Japanese */,
 				93ADD64F144AE96700BA13D9 /* Italian */,
+				93F874FA1088645700995B12 /* Japanese */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2559,12 +2628,12 @@
 		2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A37F4B7FDCFA73011CA2CEA /* English */,
 				93773C3207FFF541004AAB30 /* French */,
+				2A37F4B7FDCFA73011CA2CEA /* English */,
 				934C03390AD03600007FEC06 /* German */,
 				93B2130C0BBC1CCC00EFCA2F /* Spanish */,
-				93F87500108864C000995B12 /* Japanese */,
 				93ADD652144AE98300BA13D9 /* Italian */,
+				93F87500108864C000995B12 /* Japanese */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -2572,12 +2641,12 @@
 		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A37F4BAFDCFA73011CA2CEA /* English */,
 				93773C4707FFF704004AAB30 /* French */,
+				2A37F4BAFDCFA73011CA2CEA /* English */,
 				934C034D0AD0368D007FEC06 /* German */,
 				93B212C80BBC1BF400EFCA2F /* Spanish */,
-				93F874F9108863D900995B12 /* Japanese */,
 				93ADD64D144AE94A00BA13D9 /* Italian */,
+				93F874F9108863D900995B12 /* Japanese */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -2598,12 +2667,12 @@
 		9341922D1281C70C009D3E97 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9341922B1281C703009D3E97 /* English */,
 				9341922F1281C711009D3E97 /* French */,
+				9341922B1281C703009D3E97 /* English */,
 				934192301281C714009D3E97 /* German */,
 				934192311281C716009D3E97 /* Spanish */,
-				934192321281C718009D3E97 /* Japanese */,
 				93ADD64C144AE93000BA13D9 /* Italian */,
+				934192321281C718009D3E97 /* Japanese */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2627,12 +2696,12 @@
 		937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
-				937D7D1F0E48F5A2006F04E1 /* English */,
 				937D7D260E48F5B7006F04E1 /* French */,
+				937D7D1F0E48F5A2006F04E1 /* English */,
 				937D7D270E48F5BA006F04E1 /* German */,
 				937D7D280E48F5CF006F04E1 /* Spanish */,
-				93F874FB1088647D00995B12 /* Japanese */,
 				93ADD64E144AE95D00BA13D9 /* Italian */,
+				93F874FB1088647D00995B12 /* Japanese */,
 			);
 			name = defaultPreamble.rtf;
 			sourceTree = "<group>";
@@ -2653,12 +2722,12 @@
 		93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				93E9CF760E9F305B00B08FB0 /* English */,
 				93E9CF780E9F306000B08FB0 /* French */,
+				93E9CF760E9F305B00B08FB0 /* English */,
 				93E9CF790E9F306400B08FB0 /* German */,
 				93E9CF7A0E9F306800B08FB0 /* Spanish */,
-				93F875031088650400995B12 /* Japanese */,
 				93ADD64A144AE92500BA13D9 /* Italian */,
+				93F875031088650400995B12 /* Japanese */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2666,12 +2735,12 @@
 		93F7842510177099005BC2B6 /* PreferencesWindowController.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				93F7842610177099005BC2B6 /* English */,
 				93F78428101770A5005BC2B6 /* French */,
+				93F7842610177099005BC2B6 /* English */,
 				93F7844C101770B6005BC2B6 /* German */,
 				93F78449101770AE005BC2B6 /* Spanish */,
-				93F87502108864D100995B12 /* Japanese */,
 				93ADD653144AE98D00BA13D9 /* Italian */,
+				93F87502108864D100995B12 /* Japanese */,
 			);
 			name = PreferencesWindowController.nib;
 			sourceTree = "<group>";
@@ -2717,12 +2786,14 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Frameworks/CHProtobuf.framework/Headers/**";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Frameworks/LibProtobuf.framework/lib\"",
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -2739,6 +2810,10 @@
 		932388580854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_64_BIT)",
+					ppc,
+				);
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2778,12 +2853,14 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Frameworks/CHProtobuf.framework/Headers/**";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Frameworks/LibProtobuf.framework/lib\"",
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -2792,6 +2869,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = LaTeXiT;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -2931,6 +3009,7 @@
 				ARCHS = (
 					"$(ARCHS_STANDARD_32_64_BIT)",
 					ppc,
+					ppc7400,
 				);
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -2944,8 +3023,7 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				"GCC_ENABLE_OBJC_GC[arch=ppc64]" = supported;
-				"GCC_ENABLE_OBJC_GC[arch=x86_64]" = supported;
+				GCC_ENABLE_OBJC_GC = supported;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2983,7 +3061,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;
-				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = action;
 				ZERO_LINK = NO;
 			};

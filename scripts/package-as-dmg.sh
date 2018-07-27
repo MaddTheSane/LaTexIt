@@ -1,5 +1,5 @@
 #!/bin/sh
-VERSION=$(defaults read "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info" CFBundleVersion)
+VERSION=$(defaults read "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info" CFBundleShortVersionString)
 VERSION2=`echo "${VERSION}" | sed "s/\\./_/g" | sed "s/\\ /-/g"`
 echo "VERSION=<$VERSION>, VERSION2=<$VERSION2>"
 VOLNAME="LaTeXiT ${VERSION}"

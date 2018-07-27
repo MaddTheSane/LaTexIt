@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -46,8 +46,11 @@
 #import "PluginsManager.h"
 #import "PreamblesController.h"
 #import "PreamblesTableView.h"
+#import "ServiceRegularExpressionFiltersController.h"
+#import "ServiceRegularExpressionFiltersTableView.h"
 #import "ServiceShortcutsTableView.h"
 #import "ServiceShortcutsTextView.h"
+#import "TextViewWithPlaceHolder.h"
 #import "Utils.h"
 
 #import "RegexKitLite.h"
@@ -68,12 +71,14 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 @interface PreferencesWindowController (PrivateAPI)
 -(IBAction) nilAction:(id)sender;
+-(void) afterAwakeFromNib:(id)object;
 -(void) updateProgramArgumentsToolTips;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender;
 -(void) tableViewSelectionDidChange:(NSNotification*)notification;
 -(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+-(void) textDidChange:(NSNotification*)notification;
 @end
 
 @implementation PreferencesWindowController
@@ -118,6 +123,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [[self->compositionConfigurationsCurrentPopUpButton menu] addItem:[NSMenuItem separatorItem]];
     [self->compositionConfigurationsCurrentPopUpButton addItemWithTitle:NSLocalizedString(@"Edit the configurations...", @"Edit the configurations...")];
   }
+  else if (object == [[PreferencesController sharedController] serviceRegularExpressionFiltersController])
+    [self textDidChange:
+      [NSNotification notificationWithName:NSTextDidChangeNotification object:self->serviceRegularExpressionsTestInputTextView]];
   else if ((object == [NSUserDefaultsController sharedUserDefaultsController]) &&
            [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
   {
@@ -181,7 +189,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   //General
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF vector format", @"PDF vector format")
     tag:(int)EXPORT_FORMAT_PDF];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF without embedded fonts", @"PDF without embedded fonts")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
     tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"EPS vector format", @"EPS vector format")
     tag:(int)EXPORT_FORMAT_EPS];
@@ -248,12 +256,22 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
         options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
   [self->generalDummyBackgroundAutoStateButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DefaultAutomaticHighContrastedPreviewBackgroundKey] options:nil];
+  [self->generalDoNotClipPreviewButton bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DefaultDoNotClipPreviewKey] options:nil];
 
-  [self->generalLatexisationLaTeXModeSegmentedControl setLabel:@"Align" forSegment:0];
-  [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN forSegment:0];
-  [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
-  [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
-  [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
+  [self->generalLatexisationLaTeXModeSegmentedControl setSegmentCount:5];
+  NSUInteger segmentIndex = 0;
+  NSSegmentedCell* latexModeSegmentedCell = [self->generalLatexisationLaTeXModeSegmentedControl cell];
+  [latexModeSegmentedCell setTag:LATEX_MODE_AUTO    forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Auto", @"Auto") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_ALIGN   forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Align", @"Align") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_DISPLAY forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Display", @"Display") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_INLINE  forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Inline", @"Inline") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setTag:LATEX_MODE_TEXT    forSegment:segmentIndex];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Text", @"Text") forSegment:segmentIndex++];
   [self->generalLatexisationLaTeXModeSegmentedControl bind:NSSelectedTagBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DefaultModeKey] options:nil];
 
@@ -335,6 +353,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->editionTextShortcutsRemoveButton bind:NSEnabledBinding toObject:editionTextShortcutsController withKeyPath:@"canRemove" options:nil];
   [self->editionTextShortcutsRemoveButton setTarget:editionTextShortcutsController];
   [self->editionTextShortcutsRemoveButton setAction:@selector(remove:)];
+  
+  [self performSelector:@selector(afterAwakeFromNib:) withObject:nil afterDelay:0];
+  [self->editionSyntaxColouringTextView
+    bind:NSFontBinding toObject:userDefaultsController withKeyPath:[userDefaultsController adaptedKeyPath:DefaultFontKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      NSUnarchiveFromDataTransformerName, NSValueTransformerNameBindingOption,
+      nil]];
 
   //Preambles
   PreamblesController* preamblesController = [preferencesController preamblesController];
@@ -735,14 +760,32 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->serviceRelaunchWarning setHidden:isMacOS10_5OrAbove()];
   
   //service regular expression filters
-  NSTabView* tabView = nil;
-  NSEnumerator* enumerator = [[self->serviceView subviews] objectEnumerator];
-  NSView* view = nil;
-  while(!tabView && ((view = [enumerator nextObject])))
-    tabView = [view dynamicCastToClass:[NSTabView class]];
-  NSUInteger filtersTabViewIndex = [tabView indexOfTabViewItemWithIdentifier:@"filters"];
-  if (filtersTabViewIndex != NSNotFound)
-    [tabView removeTabViewItem:[tabView tabViewItemAtIndex:filtersTabViewIndex]];
+  NSArrayController* serviceRegularExpressionFiltersController = [preferencesController serviceRegularExpressionFiltersController];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterEnabledKey] options:0 context:nil];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterInputPatternKey] options:0 context:nil];
+  [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterOutputPatternKey] options:0 context:nil];
+  [self->serviceRegularExpressionsAddButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canAdd" options:nil];
+  [self->serviceRegularExpressionsAddButton setTarget:serviceRegularExpressionFiltersController];
+  [self->serviceRegularExpressionsAddButton setAction:@selector(add:)];
+
+  [self->serviceRegularExpressionsRemoveButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canRemove" options:nil];
+  [self->serviceRegularExpressionsRemoveButton setTarget:serviceRegularExpressionFiltersController];
+  [self->serviceRegularExpressionsRemoveButton setAction:@selector(remove:)];
+
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:NSTextDidChangeNotification object:self->serviceRegularExpressionsTestInputTextView];
+  [self->serviceRegularExpressionsTestInputTextView setDelegate:(id)self];
+  [self->serviceRegularExpressionsTestInputTextView setFont:[NSFont controlContentFontOfSize:0]];
+  [self->serviceRegularExpressionsTestInputTextView setPlaceHolder:NSLocalizedString(@"Text to test", @"Text to test")];
+  if ([self->serviceRegularExpressionsTestInputTextView respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
+    [self->serviceRegularExpressionsTestInputTextView setAutomaticTextReplacementEnabled:NO];
+  [self->serviceRegularExpressionsTestOutputTextView setFont:[NSFont controlContentFontOfSize:0]];
+  [self->serviceRegularExpressionsTestOutputTextView setPlaceHolder:NSLocalizedString(@"Result of text filtering", @"Result of text filtering")];
+  if ([self->serviceRegularExpressionsTestOutputTextView respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
+    [self->serviceRegularExpressionsTestOutputTextView setAutomaticTextReplacementEnabled:NO];
+
+  [self->serviceRegularExpressionsHelpButton setTarget:self];
+  [self->serviceRegularExpressionsHelpButton setAction:@selector(serviceRegularExpressionsHelpOpen:)];
 
   //additional files
   AdditionalFilesController* additionalFilesController = [preferencesController additionalFilesController];
@@ -813,6 +856,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [pluginsController release];*/
 }
 //end awakeFromNib
+
+-(void) afterAwakeFromNib:(id)object
+{
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  [self->editionSyntaxColouringTextView setFont:[preferencesController editionFont]];
+}
+//end afterAwakeFromNib:
 
 //initializes the controls with default values
 -(void) windowDidLoad
@@ -1379,10 +1429,26 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 #pragma mark service
 
--(void) controlTextDidChange:(NSNotification*)notification
+-(IBAction) serviceRegularExpressionsHelpOpen:(id)sender
 {
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://userguide.icu-project.org/strings/regexp"]];
 }
-//end controlTextDidChange:
+//end serviceRegularExpressionsHelpOpen:
+
+-(void) textDidChange:(NSNotification*)notification
+{
+  if ([notification object] == self->serviceRegularExpressionsTestInputTextView)
+  {
+    ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController =
+      [[PreferencesController sharedController] serviceRegularExpressionFiltersController];
+    NSAttributedString* input = [[[self->serviceRegularExpressionsTestInputTextView textStorage] copy] autorelease];
+    NSAttributedString* output = [serviceRegularExpressionFiltersController applyFilterToAttributedString:input];
+    if (!output)
+      output = [[[NSAttributedString alloc] initWithString:@""] autorelease];
+    [[self->serviceRegularExpressionsTestOutputTextView textStorage] setAttributedString:output];
+  }//end if ([notification sender] == self->serviceRegularExpressionsTestInputTextField)
+}
+//end textDidChange:
 
 #pragma mark additional files
 

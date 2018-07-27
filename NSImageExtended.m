@@ -3,10 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/07/09.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSImageExtended.h"
+
+#import "NSObjectExtended.h"
 
 #import "Utils.h"
 
@@ -22,77 +24,94 @@
 
 @implementation NSImage (Extended)
 
+-(void) removeRepresentationsOfClass:(Class)representationClass
+{
+  BOOL stop = !representationClass;
+  while(!stop)
+  {
+    NSArray* representations = [self representations];
+    NSEnumerator* enumerator = [representations objectEnumerator];
+    NSImageRep* representation = nil;
+    NSImageRep* representationToRemove = nil;
+    while(!representationToRemove && ((representation = [enumerator nextObject])))
+      representationToRemove = [representation dynamicCastToClass:representationClass];
+    stop |= !representationToRemove;
+    if (representationToRemove)
+      [self removeRepresentation:representationToRemove];
+  }//end while(!stop)
+}
+//end removeRepresentationsOfClass:
+
 -(NSBitmapImageRep*) bitmapImageRepresentation
 {
   NSBitmapImageRep* result = nil;
-  NSImageRep* imageRep = [self bestRepresentationForDevice:nil];
-  if([imageRep isKindOfClass:[NSBitmapImageRep class]])
+  NSImageRep* imageRep = [self bestImageRepresentationInContext:nil];
+  if ([imageRep isKindOfClass:[NSBitmapImageRep class]])
     result = (NSBitmapImageRep*)imageRep;
-  else
+  else//if (![imageRep isKindOfClass:[NSBitmapImageRep class]])
   {
     NSEnumerator* enumerator = [[self representations] objectEnumerator];
     NSImageRep* imageRep = nil;
     while(!result && (imageRep = [enumerator nextObject]))
     {
-      if([imageRep isKindOfClass:[NSBitmapImageRep class]])
+      if ([imageRep isKindOfClass:[NSBitmapImageRep class]])
         result = (NSBitmapImageRep*)imageRep;
-    }
-  }
-    
-  // if result is nil we create a new representation
+    }//enf fore each image representation
+  }//end if (![imageRep isKindOfClass:[NSBitmapImageRep class]])
   if (!result)
   {
-    if (!isMacOS10_5OrAbove())
-    {
-      result = [NSBitmapImageRep imageRepWithData:[self TIFFRepresentation]];
-      if (result)
-        [self addRepresentation:result];
-    }
-    else//if (isMacOS10_5OrAbove())
-    {
-      NSSize size          = [self size];
-      size_t width         = size.width;
-      size_t height        = size.height;
-      size_t bitsPerComp   = 32;
-      size_t bytesPerPixel = (bitsPerComp / CHAR_BIT) * 4;
-      size_t bytesPerRow   = bytesPerPixel * width;
-      size_t totalBytes    = height * bytesPerRow;
-      NSMutableData* data = nil;
-      @try{
-        data = [NSMutableData dataWithBytesNoCopy:calloc(totalBytes, 1) length:totalBytes freeWhenDone:YES];
-      }
-      @catch(NSException* e){
-        DebugLog(0, @"exception : %@", e);
-      }
-      CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-      CGContextRef ctx = !data ? 0 : CGBitmapContextCreate([data mutableBytes], width, height, bitsPerComp, bytesPerRow, space, kCGBitmapFloatComponents | kCGImageAlphaPremultipliedLast);
-      if (ctx)
-      {
-        [NSGraphicsContext saveGraphicsState];
-        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:[self isFlipped]]];
-        [self drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-        [NSGraphicsContext restoreGraphicsState];
-        CGImageRef img = CGBitmapContextCreateImage(ctx);
-        result = !img ? nil : [[NSBitmapImageRep alloc] initWithCGImage:img];
-        if (result)
-        {
-          [self addRepresentation:result];
-          [result release];
-        }//end if (result)
-        if (img)   CFRelease(img);
-        if (ctx)   CGContextRelease(ctx);
-      }//end if (ctx)
-      if (space) CFRelease(space);
-    }//end if (isMacOS10_5OrAbove())
+    result = [[self newBitmapImageRepresentation] autorelease];
+    if (result)
+      [self addRepresentation:result];
   }//end if (!result)
   return result;
 }
 //end bitmapImageRepresentation
 
+-(NSBitmapImageRep*) newBitmapImageRepresentation
+{
+  NSBitmapImageRep* result = nil;
+  if (!isMacOS10_5OrAbove())
+    result = [[NSBitmapImageRep alloc] initWithData:[self TIFFRepresentation]];
+  else//if (isMacOS10_5OrAbove())
+  {
+    NSSize size          = [self size];
+    size_t width         = size.width;
+    size_t height        = size.height;
+    size_t bitsPerComp   = 32;
+    size_t bytesPerPixel = (bitsPerComp / CHAR_BIT) * 4;
+    size_t bytesPerRow   = bytesPerPixel * width;
+    size_t totalBytes    = height * bytesPerRow;
+    NSMutableData* data = nil;
+    @try{
+      data = [NSMutableData dataWithBytesNoCopy:calloc(totalBytes, 1) length:totalBytes freeWhenDone:YES];
+    }
+    @catch(NSException* e){
+      DebugLog(0, @"exception : %@", e);
+    }
+    CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+    CGContextRef ctx = !data ? 0 : CGBitmapContextCreate([data mutableBytes], width, height, bitsPerComp, bytesPerRow, space, kCGBitmapFloatComponents | kCGImageAlphaPremultipliedLast);
+    if (ctx)
+    {
+      [NSGraphicsContext saveGraphicsState];
+      [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:[self isFlipped]]];
+      [self drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+      [NSGraphicsContext restoreGraphicsState];
+      CGImageRef img = CGBitmapContextCreateImage(ctx);
+      result = !img ? nil : [[NSBitmapImageRep alloc] initWithCGImage:img];
+      if (img)   CFRelease(img);
+      if (ctx)   CGContextRelease(ctx);
+    }//end if (ctx)
+    if (space) CFRelease(space);
+  }//end if (isMacOS10_5OrAbove())
+  return result;
+}
+//end newBitmapImageRepresentation
+
 -(NSBitmapImageRep*) bitmapImageRepresentationWithMaxSize:(NSSize)maxSize
 {
   NSBitmapImageRep* result = nil;
-  NSImageRep* imageRep = [self bestRepresentationForDevice:nil];
+  NSImageRep* imageRep = [self bestImageRepresentationInContext:nil];
   if([imageRep isKindOfClass:[NSBitmapImageRep class]])
     result = (NSBitmapImageRep*)imageRep;
   else
@@ -146,10 +165,10 @@
 -(NSPDFImageRep*) pdfImageRepresentation
 {
   NSPDFImageRep* result = nil;
-  NSImageRep* imageRep = [self bestRepresentationForDevice:nil];
-  if([imageRep isKindOfClass:[NSPDFImageRep class]])
+  NSImageRep* imageRep = [self bestImageRepresentationInContext:nil];
+  if ([imageRep isKindOfClass:[NSPDFImageRep class]])
     result = (NSPDFImageRep*)imageRep;
-  else
+  else//if (![imageRep isKindOfClass:[NSPDFImageRep class]])
   {
     NSEnumerator* enumerator = [[self representations] objectEnumerator];
     NSImageRep* imageRep = nil;
@@ -157,29 +176,35 @@
     {
       if([imageRep isKindOfClass:[NSPDFImageRep class]])
         result = (NSPDFImageRep*)imageRep;
-    }
-  }
+    }//end for each imageRep
+  }//end if (![imageRep isKindOfClass:[NSPDFImageRep class]])
   return result;
 }
 //end pdfImageRepresentation
 
--(NSImageRep*) bestImageRepresentationInContext:(NSGraphicsContext*)context;
+-(NSImageRep*) bestImageRepresentationInContext:(NSGraphicsContext*)context
 {
   NSImageRep* result = nil;
-  if (![self respondsToSelector:@selector(bestRepresentationForRect:context:hints:)])
+  if (!isMacOS10_6OrAbove())
     result = [self bestRepresentationForDevice:nil];
-  else
+  else//if (isMacOS10_6OrAbove())
   {
-    NSSize size = [self size];
-    result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height) 
-                                     context:context hints:nil];
-  }
-  if (![result isKindOfClass:[NSPDFImageRep class]])
-  {
-    result = [self pdfImageRepresentation];
+    NSEnumerator* enumerator = [[self representations] objectEnumerator];
+    NSImageRep* imageRep = nil;
+    while (!result && (imageRep = [enumerator nextObject]))
+    {
+      if([imageRep isKindOfClass:[NSPDFImageRep class]])
+        result = (NSPDFImageRep*)imageRep;
+    }//end for each imageRep
     if (!result)
-      result = [self bitmapImageRepresentation];
-  }//end if (![result isKindOfClass:[NSPDFImageRep class]])
+    {
+      NSSize size = [self size];
+      result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height) 
+                                       context:context hints:nil];
+      if (!result)
+        result = [[self newBitmapImageRepresentation] autorelease];
+    }//end if (!result)
+  }//end if (isMacOS10_6OrAbove())
   return result;
 }
 //end bestImageRepresentation

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -391,7 +391,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
           isSelected = !isSelected;
           NSDate* now = [NSDate date];
           [self->libraryView display];
-          NSDate* next = [now addTimeInterval:1./30.];
+          NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now addTimeInterval:1./30.];
           [NSThread sleepUntilDate:next];
         }
         [undoManager setActionName:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation")];
@@ -598,7 +598,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       isSelected = !isSelected;
       NSDate* now = [NSDate date];
       [self->libraryView display];
-      NSDate* next = [now addTimeInterval:1./30.];
+      NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now addTimeInterval:1./30.];
       [NSThread sleepUntilDate:next];
     }
     if (isInitiallySelected)

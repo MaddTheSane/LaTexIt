@@ -343,42 +343,39 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.5.3</guid>
-      <title>Version 2.5.3</title>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.6.0</guid>
+      <title>Version 2.6.0</title>
       <description><![CDATA[
         <ul>
-          <li>fixed Automator action.</li>
+          <li>Corretto il drag’n drop verso il terribile iWork’13 (e il suo mucchio di regressioni)&nbsp;;</li>
+          <li>Corretto il drag’n drop dal (terribile) iWork’13 (e il suo mucchio di regressioni), grazie all’icona proxy del pannello immagini&nbsp;;</li>
+          <li>Aggiunto il filtraggio dei servizi tramite espressioni regolari (vedi Preferenze > Servizio)&nbsp;;</li>
+          <li>Aggiunta la modalità di “Auto” LaTeXizzazione&nbsp;;</li>
+          <li>Aggiunto l’elemento di menu “Format > Align”&nbsp;;</li>
+          <li>Aggiunta la scorciatoia Ctrl+Command+T per LaTeXizzare CON copia negli appunti&nbsp;;</li>
+          <li>Duplicati tutti i servizi aggiungendo per ognuno la versione con copia negli appunti&nbsp;;</li>
+          <li>Corretto il bug di NSFlippableView che causava crash&nbsp;;</li>
+          <li>Aggiunta la variabile d’ambiente $OUTPUTPDFFILE2 per processare gli script&nbsp;;</li>
+          <li>Corretta l’incompatibilità tra gs >= 9.09 e l’esportazione “con i font contornati”&nbsp;;</li>
+          <li>Omesso deliberatamente il comando \color inserito nel preambolo, quando il colore richiesto è il nero standard, per una migliore customizzazione da parte dell’utente&nbsp;;</li>
+          <li>Aggiunta la preferenza “Non ritagliare l’anteprima”&nbsp;;</li>
+          <li>Incorporati i nuovi metadati di latexit nei PDF, iWork’13 non li potrà rimuovere&nbsp;;</li>
+          <li>Corretto il box di dialogo dell’esportazione JPEG&nbsp;;</li>
+          <li>Corretto un bug nella gestione dei colori in modalità XeLaTeX&nbsp;;</li>
+          <li>Corrette le regressioni di Automator&nbsp;;</li>
+          <li>Corretto il drag’n drop verso OmniGraffle.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.5.3</sparkle:releaseNotesLink>
-      <pubDate>Wed, 03 Jul 2013 21:04:37 +0200</pubDate>
-      <enclosure
-      url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_3.dmg"
-      sparkle:version="2.5.3"
-      sparkle:shortVersionString="2.5.3"
-      type="application/octet-stream"
-      length="9654852"
-      sparkle:dsaSignature="MCwCFBsouhH+yCdgjfxPbATHzuilEmMfAhRewrILtDeZ+6c8V3cvyQ5DXixNHQ=="
-      />
-    </item>
-    <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.4</guid>
-      <title>Version 2.5.4</title>
-      <description><![CDATA[
-        <ul>
-          <li>corrette le preferenze.</li>
-        </ul>
-      ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.4</sparkle:releaseNotesLink>
-      <pubDate>Sat, 07 Sep 2013 19:26:13 +0200</pubDate>
-      <enclosure
-        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_4.dmg"
-        sparkle:version="2.5.4"
-        sparkle:shortVersionString="2.5.4"
-        type="application/octet-stream"
-        length="9682722"
-        sparkle:dsaSignature="MC0CFGMVnvutKBuvVdx3a0NpK4s97SfUAhUAhox2Iz+xb82IQ6/D6kZAN2gIxO4="
-      />
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.6.0</sparkle:releaseNotesLink>
+			<pubDate>Thu, 17 Apr 2014 22:23:07 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_6_0.dmg"
+				sparkle:version="2.6.0"
+                   sparkle:shortVersionString="2.6.0"
+				type="application/octet-stream"
+				length="10417645"
+				sparkle:dsaSignature="MC0CFQCQY0Rv5tom2dSlNsR+2lvvMyNNIwIUQCtLj012+0fZo0lgp+m370kODVo="
+			/>
     </item>
   </channel> 
 </rss>

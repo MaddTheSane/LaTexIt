@@ -1095,9 +1095,13 @@ static id rkl_performRegexOp(id self, SEL _cmd, RKLRegexOp regexOp, NSString *re
   BOOL       dictionaryOp   = ((maskedRegexOp == RKLDictionaryOfCapturesOp) || (maskedRegexOp == RKLArrayOfDictionariesOfCapturesOp)) ? YES : NO;
   
   if((error != NULL) && (*error != NULL))                                            { *error = NULL; }
+
+  NSString* matchNSString = [matchString isKindOfClass:[NSString class]] ? matchString :
+                            [matchString isKindOfClass:[NSAttributedString class]] ? [matchString string] :
+                            nil;
   
   if(RKL_EXPECTED(regexString == NULL, 0L))                                          { RKL_RAISE_EXCEPTION(NSInvalidArgumentException, @"The regular expression argument is NULL."); }
-  if(RKL_EXPECTED(matchString == NULL, 0L))                                          { RKL_RAISE_EXCEPTION(NSInternalInconsistencyException, @"The match string argument is NULL."); }
+  if(RKL_EXPECTED(matchNSString == NULL, 0L))                                        { RKL_RAISE_EXCEPTION(NSInternalInconsistencyException, @"The match string argument is NULL."); }
   if(RKL_EXPECTED(matchRange  == NULL, 0L))                                          { RKL_RAISE_EXCEPTION(NSInternalInconsistencyException, @"The match range argument is NULL.");  }
   if((maskedRegexOp == RKLReplaceOp) && RKL_EXPECTED(replacementString == NULL, 0L)) { RKL_RAISE_EXCEPTION(NSInvalidArgumentException, @"The replacement string argument is NULL."); }
   if((dictionaryOp  == YES)          && RKL_EXPECTED(captureKeys       == NULL, 0L)) { RKL_RAISE_EXCEPTION(NSInvalidArgumentException, @"The keys argument is NULL.");               }
@@ -1116,7 +1120,7 @@ static id rkl_performRegexOp(id self, SEL _cmd, RKLRegexOp regexOp, NSString *re
   rkl_cacheSpinLockStatus |= RKLLockedCacheSpinLock;
   rkl_dtrace_incrementEventID();
   
-  if(RKL_EXPECTED((cachedRegex = rkl_getCachedRegexSetToString(regexString, options, matchString, &stringU16Length, matchRange, error, &exception, &status)) == NULL, 0L)) { stringU16Length = (NSUInteger)CFStringGetLength((CFStringRef)matchString); }
+  if(RKL_EXPECTED((cachedRegex = rkl_getCachedRegexSetToString(regexString, options, matchNSString, &stringU16Length, matchRange, error, &exception, &status)) == NULL, 0L)) { stringU16Length = (NSUInteger)CFStringGetLength((CFStringRef)matchNSString); }
   if(RKL_EXPECTED(matchRange->length == NSUIntegerMax,           0L))                                        { matchRange->length = stringU16Length; } // For convenience.
   if(RKL_EXPECTED(stringU16Length     < NSMaxRange(*matchRange), 0L) && RKL_EXPECTED(exception == NULL, 1L)) { exception = (id)RKL_EXCEPTION(NSRangeException, @"Range or index out of bounds.");  goto exitNow; }
   if(RKL_EXPECTED(stringU16Length    >= (NSUInteger)INT_MAX,     0L) && RKL_EXPECTED(exception == NULL, 1L)) { exception = (id)RKL_EXCEPTION(NSRangeException, @"String length exceeds INT_MAX."); goto exitNow; }
@@ -1160,7 +1164,7 @@ static id rkl_performRegexOp(id self, SEL _cmd, RKLRegexOp regexOp, NSString *re
 
       break;
 
-    case RKLReplaceOp: resultObject = rkl_replaceString(cachedRegex, matchString, stringU16Length, replacementString, (NSUInteger)CFStringGetLength((CFStringRef)replacementString), (NSInteger *)result, (replaceMutable = (((regexOp & RKLReplaceMutable) != 0) ? 1UL : 0UL)), &exception, &status); break;
+    case RKLReplaceOp: resultObject = rkl_replaceString(cachedRegex, matchNSString, stringU16Length, replacementString, (NSUInteger)CFStringGetLength((CFStringRef)replacementString), (NSInteger *)result, (replaceMutable = (((regexOp & RKLReplaceMutable) != 0) ? 1UL : 0UL)), &exception, &status); break;
 
     default:           exception    = RKLCAssertDictionary(@"Unknown regexOp code."); break;
   }
@@ -1185,7 +1189,7 @@ exitNow:
     RKLUserInfoOptions userInfoOptions = RKLUserInfoNone;
     if((maskedRegexOp == RKLReplaceOp) && (result != NULL)) { userInfoOptions |= RKLUserInfoReplacedCount; replacedString = resultObject; replacedCount = *((NSInteger *)result); }
     if(matchRange != NULL) { userInfoOptions |= RKLUserInfoSubjectRange; }
-    *error = rkl_makeNSError(userInfoOptions, regexString, options, NULL, status, matchString, (matchRange != NULL) ? *matchRange : NSNotFoundRange, replacementString, replacedString, replacedCount, (RKLRegexEnumerationOptions)RKLRegexEnumerationNoOptions, @"The ICU library returned an unexpected error.");
+    *error = rkl_makeNSError(userInfoOptions, regexString, options, NULL, status, matchNSString, (matchRange != NULL) ? *matchRange : NSNotFoundRange, replacementString, replacedString, replacedCount, (RKLRegexEnumerationOptions)RKLRegexEnumerationNoOptions, @"The ICU library returned an unexpected error.");
   }
   return(resultObject);
 }
@@ -2632,5 +2636,34 @@ exitNow2:
 }
 
 #endif // _RKL_BLOCKS_ENABLED
+
+@end
+
+#pragma mark -
+@implementation NSMutableAttributedString (RegexKitLiteAdditions)
+
+#pragma mark -replaceOccurrencesOfRegex:
+
+- (NSInteger)RKL_METHOD_PREPEND(replaceOccurrencesOfRegex):(NSString *)regex withString:(NSString *)replacement
+{
+  NSRange    searchRange   = NSMaxiumRange;
+  NSInteger replacedCount = -1L;
+  rkl_performRegexOp(self, _cmd, (RKLRegexOp)(RKLReplaceOp | RKLReplaceMutable), regex, RKLNoOptions, 0L, self, &searchRange, replacement, NULL,  (void **)((void *)&replacedCount), 0UL, NULL, NULL);
+  return(replacedCount);
+}
+
+- (NSInteger)RKL_METHOD_PREPEND(replaceOccurrencesOfRegex):(NSString *)regex withString:(NSString *)replacement range:(NSRange)searchRange
+{
+  NSInteger replacedCount = -1L;
+  rkl_performRegexOp(self, _cmd, (RKLRegexOp)(RKLReplaceOp | RKLReplaceMutable), regex, RKLNoOptions, 0L, self, &searchRange, replacement, NULL,  (void **)((void *)&replacedCount), 0UL, NULL, NULL);
+  return(replacedCount);
+}
+
+- (NSInteger)RKL_METHOD_PREPEND(replaceOccurrencesOfRegex):(NSString *)regex withString:(NSString *)replacement options:(RKLRegexOptions)options range:(NSRange)searchRange error:(NSError **)error
+{
+  NSInteger replacedCount = -1L;
+  rkl_performRegexOp(self, _cmd, (RKLRegexOp)(RKLReplaceOp | RKLReplaceMutable), regex, options,      0L, self, &searchRange, replacement, error, (void **)((void *)&replacedCount), 0UL, NULL, NULL);
+  return(replacedCount);
+}
 
 @end

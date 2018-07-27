@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/11/09.
-//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDataExtended.h"
@@ -12,6 +12,7 @@
 
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/bio.h>//specific to avoid compatibility problem prior MacOS 10.5
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/ssl.h>//specific to avoid compatibility problem prior MacOS 10.5
+#import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/sha.h>//specific to avoid compatibility problem prior MacOS 10.5
 
 @implementation NSData (Extended)
 
@@ -70,5 +71,17 @@
   return result;
 }
 //end encodeBase64WithNewlines:
+
+-(NSString*) sha1Base64
+{
+  NSString* result = nil;
+  unsigned char sha[SHA_DIGEST_LENGTH] = {0};
+  SHA1([self bytes], [self length], sha);
+  NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:SHA_DIGEST_LENGTH freeWhenDone:NO];
+  result = [wrapper encodeBase64WithNewlines:NO];
+  [wrapper release];
+  return result;
+}
+//end sha1Base64
 
 @end

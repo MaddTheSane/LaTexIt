@@ -59,8 +59,9 @@ LaTeXiT 2.4.1 requiert Mac OS X version 10.4 ou sup\'e9rieure, ainsi qu'une inst
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \b\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\b0 \ul Installation/D\'e9sinstallation\
+\b0 \cf0 \ul Installation/D\'e9sinstallation\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
@@ -431,13 +432,29 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone v 2.5.4 (7 sept 2013)\
--\'a0correction d'un bug dans les pr\'e9f\'e9rences.\
-\
-v 2.5.3 (3 juillet 2013)\
--\'a0correction de l'action Automator.\
-\
-v 2.5.2 (1er f\'e9vrier 2013)\
+\fs22 \cf0 \ulnone v 2.6.0 (17 avril 2014)\
+- Correction du glisser/d\'e9poser VERS l'horrible iWork'13 (et son lot de r\'e9gressions)\'a0;\
+- Correction du glisser/d\'e9poser PROVENANT de (l'horrible) iWork'13 (et son lot de r\'e9gressions), gr\'e2ce \'e0 l'ic\'f4ne de proximit\'e9 du panneau "image"\'a0;\
+- Ajout d'un filtre aux services bas\'e9 sur les expressions r\'e9guli\'e8res (voyez Pr\'e9f\'e9rences > Services)\'a0;\
+- Ajout du mode "Auto" de latexisation\'a0;\
+- Ajout des menus "Format > Texte > Aligner\'85" \'a0;\
+- Ajout du raccourci Ctrl+Command+T (\uc0\u8963 +\u8984 +T) pour latexiser ET mettre dans le presse-papier\'a0;\
+- Duplication de tous les services, avec des versions qui mettent dans le presse-papier\'a0;\
+- Correction d'un crash li\'e9 \'e0 NSFlippableView\'a0;\
+- Ajout de la variable d'environnement $OUTPUTPDFFILE2 pour les scripts de traitement\'a0;\
+- Correction d'une incompatibilit\'e9 entre gs >= 9.09 et l'export "avec polices vectoris\'e9es"\'a0;\
+- Omission volontaire de la commande \\color ins\'e9r\'e9e aux pr\'e9ambules, lorsque la couleur demand\'e9e est noire, pour faciliter la personnalisation\'a0;\
+- Ajout de la pr\'e9f\'e9rence "Ne pas couper l'aper\'e7u"\'a0;\
+- Nouvelles m\'e9ta-donn\'e9es embarqu\'e9es dans les PDFs pour que iWork'13 ne l'enl\'e8ve pas\'a0;\
+- Correction de la bo\'eete de dialogue d'export JPEG\'a0;\
+- Correction d'un bug de gestion des couleurs en mode XeLaTeX\'a0;\
+- Correction de r\'e9gressions avec l'action Automator\'a0;\
+- Correction du glisser/d\'e9poser vers OmniGraffle\'a0;\
+- Fixed drag'n drop to OmniGraffle.\
+\pard\pardeftab720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.5.2 (1er f\'e9vrier 2013)\
 - correction d'un bug emp\'eachant le fonctionnement de la couleur du fond\'a0;\
 - correction des ic\'f4nes de fichiers Retina pour qu'elles fonctionnent aussi sous Mac\'a0OS\'a010.5.\
 \
