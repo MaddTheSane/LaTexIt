@@ -590,7 +590,7 @@ static NSArray *syntaxDefinitionsArray;
 			[scanner scanUpToCharactersFromSet:keywordStartCharacterSet intoString:nil];
 			beginning = [scanner scanLocation];
 			if ((beginning + 1) < searchStringLength) {
-				[scanner setScanLocation:(beginning + 1)];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 			}
 			[scanner scanUpToCharactersFromSet:keywordEndCharacterSet intoString:nil];
 			
@@ -645,7 +645,7 @@ static NSArray *syntaxDefinitionsArray;
 			if (beginning >= searchStringLength) break;
 			characterToCheck = [searchString characterAtIndex:beginning - 1];
 			if ([letterCharacterSet characterIsMember:characterToCheck] || [searchString characterAtIndex:beginning - 1] == '\\') {
-				[scanner setScanLocation:beginning + 1];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 				continue; // to avoid e.g. \'
 			}		
 
@@ -673,7 +673,7 @@ static NSArray *syntaxDefinitionsArray;
 				[scanner setScanLocation:index];
 				[layoutManager addTemporaryAttributes:self->stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
 			} else {
-				[scanner setScanLocation:beginning + 1];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 			}
 		}
 	}
@@ -690,7 +690,7 @@ static NSArray *syntaxDefinitionsArray;
 			if (beginning >= searchStringLength) break;
 			characterToCheck = [searchString characterAtIndex:beginning - 1];
 			if (characterToCheck == '\\' || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour] || [letterCharacterSet characterIsMember:characterToCheck]) {
-				[scanner setScanLocation:beginning + 1];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 				continue; // to avoid e.g. \" or if it's on a string
 			}
 			
@@ -715,7 +715,7 @@ static NSArray *syntaxDefinitionsArray;
 				[scanner setScanLocation:index];
 				[layoutManager addTemporaryAttributes:self->stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
 			} else {
-				[scanner setScanLocation:beginning + 1];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 			}
 		}
 	}
@@ -730,7 +730,7 @@ static NSArray *syntaxDefinitionsArray;
 			beginning = [scanner scanLocation];
 			if ([firstSingleLineComment isEqual:@"//"]) {
 				if (beginning > 0 && [searchString characterAtIndex:beginning - 1] == ':') {
-					[scanner setScanLocation:beginning + 1];
+					[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 					continue; // to avoid http:// ftp:// file:// etc.
 				}
 			} else if ([firstSingleLineComment isEqual:@"#"]) {
@@ -740,10 +740,10 @@ static NSArray *syntaxDefinitionsArray;
 						[scanner setScanLocation:NSMaxRange(rangeOfLine)];
 						continue; // don't treat the line as a comment if it begins with #!
 					} else if ([searchString characterAtIndex:beginning - 1] == '$') {
-						[scanner setScanLocation:beginning + 1];
+						[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 						continue; // to avoid $#
 					} else if ([searchString characterAtIndex:beginning - 1] == '&') {
-						[scanner setScanLocation:beginning + 1];
+						[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 						continue; // to avoid &#
 					}
 				}
@@ -764,14 +764,14 @@ static NSArray *syntaxDefinitionsArray;
           }
           if (countPrecedingAntiSlashed && (countPrecedingAntiSlashed%2))
           {
-						[scanner setScanLocation:beginning + 1];
+						[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 						continue; // to avoid \%
           }
         }
 			}
 			if (beginning + rangeLocation + searchSyntaxLength < [[scanner string] length]/*completeStringLength*/) {
 				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
-					[scanner setScanLocation:beginning + 1];
+					[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 					continue; // if the comment is within a string disregard it
 				}
 			}
@@ -792,7 +792,7 @@ static NSArray *syntaxDefinitionsArray;
 			
 			if ([secondSingleLineComment isEqual:@"//"]) {
 				if (beginning > 0 && [searchString characterAtIndex:beginning - 1] == ':') {
-					[scanner setScanLocation:beginning + 1];
+					[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 					continue; // to avoid http:// ftp:// file:// etc.
 				}
 			} else if ([secondSingleLineComment isEqual:@"#"]) {
@@ -802,17 +802,17 @@ static NSArray *syntaxDefinitionsArray;
 						[scanner setScanLocation:NSMaxRange(rangeOfLine)];
 						continue; // don't treat the line as a comment if it begins with #!
 					} else if ([searchString characterAtIndex:beginning - 1] == '$') {
-						[scanner setScanLocation:beginning + 1];
+						[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 						continue; // to avoid $#
 					} else if ([searchString characterAtIndex:beginning - 1] == '&') {
-						[scanner setScanLocation:beginning + 1];
+						[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 						continue; // to avoid &#
 					}
 				}
 			}
 			if (beginning + rangeLocation + searchSyntaxLength < completeStringLength) {
 				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
-					[scanner setScanLocation:beginning + 1];
+					[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 					continue; // if the comment is within a string disregard it
 				}
 			}
@@ -846,7 +846,7 @@ static NSArray *syntaxDefinitionsArray;
 			[completeDocumentScanner setScanLocation:beginning];
 			if (beginning + 1 < completeStringLength) {
 				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
-					[completeDocumentScanner setScanLocation:beginning + 1];
+					[completeDocumentScanner setScanLocation:MIN(beginning + 1, [[completeDocumentScanner string] length])];
 					beginLocationInMultiLine++;
 					continue; // if the comment is within a string disregard it
 				}
@@ -904,7 +904,7 @@ static NSArray *syntaxDefinitionsArray;
 			[completeDocumentScanner setScanLocation:beginning];
 			if (beginning + 1 < completeStringLength) {
 				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
-					[completeDocumentScanner setScanLocation:beginning + 1];
+					[completeDocumentScanner setScanLocation:MIN(beginning + 1, [[completeDocumentScanner string] length])];
 					beginLocationInMultiLine++;
 					continue; // if the comment is within a string disregard it
 				}
@@ -949,7 +949,7 @@ static NSArray *syntaxDefinitionsArray;
 			if (beginning >= searchStringLength) break;
 			characterToCheck = [searchString characterAtIndex:beginning - 1];
 			if ([letterCharacterSet characterIsMember:characterToCheck] || characterToCheck == '\\' || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour] || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:commentsColour]) {
-				[scanner setScanLocation:beginning + 1];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 				continue; // to avoid e.g. \' and if it's on a string or comment 
 			}
 			
@@ -976,7 +976,7 @@ static NSArray *syntaxDefinitionsArray;
 				[scanner setScanLocation:index];
 				[layoutManager addTemporaryAttributes:self->stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
 			} else {
-				[scanner setScanLocation:beginning + 1];
+				[scanner setScanLocation:MIN(beginning + 1, [[scanner string] length])];
 			}
 		}
 	}

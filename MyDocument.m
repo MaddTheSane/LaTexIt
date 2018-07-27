@@ -726,6 +726,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         [normalWindow setAnimationEnabled:YES];
       }//end if (oldValue != DOCUMENT_STYLE_UNDEFINED)
     }//end if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
+    [self->upperBoxImageView updateViewSize];
+    
     
     NSToolbar* toolbar = [[[NSToolbar alloc] initWithIdentifier:@""] autorelease];
     [toolbar setDisplayMode:NSToolbarDisplayModeLabelOnly];

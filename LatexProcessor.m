@@ -281,7 +281,7 @@ static LaTeXProcessor* sharedInstance = nil;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.7.1", @"version",
+        @"2.7.2", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",

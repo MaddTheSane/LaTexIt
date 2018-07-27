@@ -54,6 +54,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(CGFloat) magnification;
 @end
 
+
 @interface MyImageView (PrivateAPI)
 -(NSImage*) imageForDrag;
 -(NSMenu*) lazyCopyAsContextualMenu;
@@ -62,7 +63,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard sender:(id <NSDraggingInfo>)sender;
 -(void) performProgrammaticDragCancellation:(id)context;
 -(void) performProgrammaticRedrag:(id)context;
--(void) updateViewSize;
 @end
 
 @class NSDraggingSession;
@@ -102,6 +102,8 @@ typedef NSInteger NSDraggingContext;
   [self->transientFilesPromisedFilePaths release];
   [self->transientDragData release];
   [self->transientDragEquation release];
+  [self->layerView release];
+  [self->layerArrows release];
   [super dealloc];
 }
 //end dealloc
@@ -252,6 +254,7 @@ typedef NSInteger NSDraggingContext;
     [image setDataRetained:YES];
     [image setScalesWhenResized:YES];
     [image addRepresentation:self->imageRep];
+    //[image recache];
   }//end if (image && ![image pdfImageRepresentation] && self->imageRep)
   else if (!image && self->imageRep)
   {
@@ -260,6 +263,7 @@ typedef NSInteger NSDraggingContext;
     [image setDataRetained:YES];
     [image setScalesWhenResized:YES];
     [image addRepresentation:self->imageRep];
+    //[image recache];
   }//end if (!image && self->imageRep)
   [self setImage:image];
   [self updateViewSize];
@@ -1160,90 +1164,28 @@ typedef NSInteger NSDraggingContext;
 
     NSRect documentRect = [self frame];
     NSRect documentVisibleRect = !clipView ? NSZeroRect : [clipView documentVisibleRect];
-    BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
+    BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
     BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
     BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
-    BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
-    BOOL shoulDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
-    BOOL shoulDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
-    BOOL shoulDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
-    BOOL shoulDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
-    if ((shoulDisplayScrollLeft || shoulDisplayScrollRight || shoulDisplayScrollDown || shoulDisplayScrollUp))
-    {
-      CGPoint trianglePoints[] = {CGPointMake(-2, -1), CGPointMake(0, 1), CGPointMake(2, -1)};
-      static NSDate* referenceDate = nil;
-      if (!referenceDate)
-        referenceDate = [[NSDate alloc] init];
-      CGFloat seconds = [[NSDate date] timeIntervalSinceDate:referenceDate];
-      CGFloat alpha = fabs(sin(seconds*2*M_PI/2));
-      if (shoulDisplayScrollLeft)
-      {
-        CGContextSaveGState(cgContext);
-        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
-        CGContextScaleCTM(cgContext, 4, 4);
-        CGContextScaleCTM(cgContext, 1, -1);
-        CGContextRotateCTM(cgContext, M_PI/2);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-        CGContextFillPath(cgContext);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetLineWidth(cgContext, 1./4);
-        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-        CGContextStrokePath(cgContext);
-        CGContextRestoreGState(cgContext);
-      }//end if (shoulDisplayScrollLeft)
-      if (shoulDisplayScrollRight)
-      {
-        CGContextSaveGState(cgContext);
-        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width-10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
-        CGContextScaleCTM(cgContext, 4, 4);
-        CGContextScaleCTM(cgContext, 1, -1);
-        CGContextRotateCTM(cgContext, -M_PI/2);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-        CGContextFillPath(cgContext);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetLineWidth(cgContext, 1./4);
-        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-        CGContextStrokePath(cgContext);
-        CGContextRestoreGState(cgContext);
-      }//end if (shoulDisplayScrollRight)
-      if (shoulDisplayScrollDown)
-      {
-        CGContextSaveGState(cgContext);
-        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, inRoundedRect3.origin.y+10);
-        CGContextScaleCTM(cgContext, 4, 4);
-        CGContextScaleCTM(cgContext, 1, -1);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-        CGContextFillPath(cgContext);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetLineWidth(cgContext, 1./4);
-        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-        CGContextStrokePath(cgContext);
-        CGContextRestoreGState(cgContext);
-      }//end if (shoulDisplayScrollDown)
-      if (shoulDisplayScrollUp)
-      {
-        CGContextSaveGState(cgContext);
-        CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
-        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, NSMaxY(inRoundedRect3)-10);
-        CGContextScaleCTM(cgContext, 4, 4);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetRGBFillColor(cgContext, 1., 0., 0., alpha);
-        CGContextFillPath(cgContext);
-        CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
-        CGContextSetLineWidth(cgContext, 1./4);
-        CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., alpha);
-        CGContextStrokePath(cgContext);
-        CGContextRestoreGState(cgContext);
-      }//end if (shoulDisplayScrollUp)
-      [self performSelector:@selector(setNeedsDisplay:) withObject:[NSNumber numberWithBool:YES] afterDelay:1/25.];
-    }//end if ((shoulDisplayScrollDown || shoulDisplayScrollDown))
-
+    BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
+    BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
+    BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
+    BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
+    BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
+    BOOL shouldDisplayArrows = shouldDisplayScrollUp || shouldDisplayScrollRight || shouldDisplayScrollDown || shouldDisplayScrollLeft;
+    BOOL arrowsVisibleChanged =
+      (self->previousArrowsVisible[0] != shouldDisplayScrollUp) ||
+      (self->previousArrowsVisible[1] != shouldDisplayScrollRight) ||
+      (self->previousArrowsVisible[2] != shouldDisplayScrollDown) ||
+      (self->previousArrowsVisible[3] != shouldDisplayScrollLeft);
+    [self->layerArrows setHidden:!shouldDisplayArrows];
+    if (arrowsVisibleChanged)
+      [self->layerArrows setNeedsDisplay];
+    self->previousArrowsVisible[0] = shouldDisplayScrollUp;
+    self->previousArrowsVisible[1] = shouldDisplayScrollRight;
+    self->previousArrowsVisible[2] = shouldDisplayScrollDown;
+    self->previousArrowsVisible[3] = shouldDisplayScrollLeft;
+    
     CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
@@ -1284,6 +1226,11 @@ typedef NSInteger NSDraggingContext;
       [selfView setFrame:frame];
       [selfView release];
       [scrollView release];
+      [self->layerView removeFromSuperview];
+      [self->layerView release];
+      self->layerView = nil;
+      [self->layerArrows release];
+      self->layerArrows = nil;
     }//end if (clipView)
   }//end if (doNotClipPreview)
   else//if (!doNotClipPreview)
@@ -1302,6 +1249,37 @@ typedef NSInteger NSDraggingContext;
       [clipView setCopiesOnScroll:NO];
       [scrollView setDocumentView:selfView];
       [selfView release];
+      
+      if (isMacOS10_7OrAbove())
+      {
+        if (!self->layerView)
+        {
+          self->layerView = [[NSView alloc] initWithFrame:[scrollView frame]];
+          [self->layerView setWantsLayer:YES];
+          [self->layerView setAutoresizingMask:[scrollView autoresizingMask]];
+          [[scrollView superview] addSubview:self->layerView];
+          [[self->layerView layer] setFrame:NSRectToCGRect([self->layerView bounds])];
+        }
+        if (!self->layerArrows)
+        {
+          CABasicAnimation* opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+          [opacityAnimation setDuration:1.0];
+          [opacityAnimation setRepeatCount:HUGE_VALF];
+          [opacityAnimation setAutoreverses:YES];
+          [opacityAnimation setFromValue:[NSNumber numberWithFloat:1.0]];
+          [opacityAnimation setToValue:[NSNumber numberWithFloat:0.0]];
+          [opacityAnimation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+
+          self->layerArrows = [[CALayer alloc] init];
+          [self->layerArrows setFrame:[[self->layerView layer] bounds]];
+          [self->layerArrows setHidden:YES];
+          [self->layerArrows setDelegate:self];
+          [self->layerArrows addAnimation:opacityAnimation forKey:@"animateOpacity"];
+          [[self->layerView layer] addSublayer:self->layerArrows];
+          [self->layerArrows setNeedsDisplay];
+          [self setNeedsDisplay:YES];
+        }//end if (!self->layerArrows)
+      }//end if (isMacOS10_7OrAbove())
     }//end if (!clipView)
     CGFloat factor = exp(3*(self->zoomLevel-1));
     NSSize newSize = self->naturalPDFSize;
@@ -1316,9 +1294,61 @@ typedef NSInteger NSDraggingContext;
     }//end if (newSize.width > containerSize)*/
     [scrollView setHasHorizontalScroller:(newSize.width > containerSize.width)];
     [scrollView setHasVerticalScroller:(newSize.height > containerSize.height)];
+    [[scrollView horizontalScroller] setControlSize:NSSmallControlSize];
+    [[scrollView verticalScroller] setControlSize:NSSmallControlSize];
     [self setFrame:NSMakeRect(0, 0, MAX([scrollView contentSize].width, newSize.width), MAX([scrollView contentSize].height, newSize.height))];
   }//end if (!doNotClipPreview)
 }
 //end updateViewSize
+
+-(void) drawLayer:(CALayer*)layer inContext:(CGContextRef)cgContext
+{
+  NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
+  NSScrollView* scrollView = (NSScrollView*)[clipView superview];
+  NSRect documentRect = [self frame];
+  NSRect documentVisibleRect = !clipView ? NSZeroRect : [clipView documentVisibleRect];
+  BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
+  BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
+  BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
+  BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
+  BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
+  BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
+  BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && [[scrollView verticalScroller] scrollerStyle]);
+  BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && [[scrollView horizontalScroller] scrollerStyle]);
+  BOOL shouldDisplayArrow[4] = {shouldDisplayScrollUp, shouldDisplayScrollRight, shouldDisplayScrollDown, shouldDisplayScrollLeft};
+  
+  //NSRect borderRect = !clipView ? [self bounds] : NSMakeRect(0, 0, [clipView bounds].size.width, [clipView bounds].size.height);
+  NSRect inRoundedRect3 = [scrollView bounds];//NSInsetRect(borderRect, 3, 3);
+  CGPoint trianglePoints[] = {CGPointMake(-2, -1), CGPointMake(0, 1), CGPointMake(2, -1)};
+  NSUInteger i = 0;
+  for(i = 0 ; i<4 ; ++i)
+  {
+    if (shouldDisplayArrow[i])
+    {
+      CGContextSaveGState(cgContext);
+      CGContextSetShadow(cgContext, CGSizeMake(1, -1), 3.);
+      if (i == 0)
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, inRoundedRect3.origin.y+inRoundedRect3.size.height-10);
+      else if (i == 1)
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width-10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
+      else if (i == 2)
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+inRoundedRect3.size.width/2, inRoundedRect3.origin.y+10);
+      else if (i == 3)
+        CGContextTranslateCTM(cgContext, inRoundedRect3.origin.x+10, inRoundedRect3.origin.y+inRoundedRect3.size.height/2);
+      CGContextScaleCTM(cgContext, 4, 4);
+      CGContextScaleCTM(cgContext, 1, -1);
+      CGContextRotateCTM(cgContext, -M_PI+i*M_PI/2);
+      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+      CGContextSetRGBFillColor(cgContext, 1., 0., 0., 1);
+      CGContextFillPath(cgContext);
+      CGContextAddLines(cgContext, trianglePoints, sizeof(trianglePoints)/sizeof(CGPoint));
+      CGContextSetLineWidth(cgContext, 1./4);
+      CGContextSetRGBStrokeColor(cgContext, 1., 1., 1., 1);
+      CGContextStrokePath(cgContext);
+      CGContextRestoreGState(cgContext);
+    }//end if shouldDisplayArrow
+  }//end for each shouldDisplayArrow
+}
+//end drawLayer:inContext:
 
 @end

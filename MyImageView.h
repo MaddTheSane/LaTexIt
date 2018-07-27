@@ -35,6 +35,9 @@ extern NSString* ImageDidChangeNotification;
   NSData*         transientDragData;
   NSArray*        transientFilesPromisedFilePaths;
   LatexitEquation* transientDragEquation;
+  NSView*  layerView;
+  CALayer* layerArrows;
+  BOOL     previousArrowsVisible[4];
 }
 
 -(void) setImage:(NSImage*)image;
@@ -45,6 +48,7 @@ extern NSString* ImageDidChangeNotification;
 
 -(CGFloat) zoomLevel;
 -(void)    setZoomLevel:(CGFloat)value;
+-(void)    updateViewSize;
 
 //when you set the pdfData encapsulated by the imageView, it creates an NSImage with this data.
 //but if you specify a non-nil cachedImage, it will use this cachedImage to be faster

@@ -312,7 +312,11 @@ static int SpellCheckerDocumentTag = 0;
   [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
   
   //syntax colouring
-  [syntaxColouring textDidChange:notification];
+  @try{
+    [syntaxColouring textDidChange:notification];
+  }
+  @catch (NSException*) {
+  }
 
   //forbidden lines are displayed in gray
   NSDictionary* forbiddenAttributes =

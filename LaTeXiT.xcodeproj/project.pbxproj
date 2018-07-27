@@ -1020,6 +1020,7 @@
 		93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersController.m; sourceTree = "<group>"; };
 		93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersTableView.h; sourceTree = "<group>"; };
 		93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersTableView.m; sourceTree = "<group>"; };
+		93B8E92B19C0F99A00263C1F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
@@ -1180,6 +1181,7 @@
 				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
 				9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */,
 				931AD67508491A8E00E8EE8B /* Quartz.framework */,
+				93B8E92B19C0F99A00263C1F /* QuartzCore.framework */,
 				93C5318F0D9E2781003AF7FC /* Security.framework */,
 				93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
 				93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
