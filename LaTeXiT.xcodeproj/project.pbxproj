@@ -91,7 +91,7 @@
 		55EC50971DCD3F6A00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
 		55EC50981DCD3F8C00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
 		55EC50991DCD3F8C00096CC0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50941DCD3F6300096CC0 /* libz.tbd */; };
-		55FF53FC210AB9EA002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */ = {isa = PBXBuildFile; fileRef = 9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		55FF5409210ABF95002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */ = {isa = PBXBuildFile; fileRef = 55FF5402210ABF64002D5190 /* CHiWorkSpotlightPlugin.mdimporter */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -402,6 +402,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		55FF5401210ABF64002D5190 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D576316048677EA00EA77CD;
+			remoteInfo = CHiWorkSpotlightPlugin;
+		};
+		55FF5403210ABF85002D5190 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9344B98E0E8CF38700FE90A5;
+			remoteInfo = "Automator-CreateEquations";
+		};
+		55FF5405210ABF85002D5190 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 938DBD4C10BDC2E0002350CF;
+			remoteInfo = "LaTeXiT Helper";
+		};
+		55FF5407210ABF85002D5190 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
+			remoteInfo = CHiWorkSpotlightPlugin;
+		};
 		934AAA0A0F33884C0010E384 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -472,7 +500,7 @@
 			dstPath = Contents/Library/Spotlight;
 			dstSubfolderSpec = 1;
 			files = (
-				55FF53FC210AB9EA002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */,
+				55FF5409210ABF95002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */,
 			);
 			name = "Copy Files (Spotlight)";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -557,6 +585,7 @@
 		558E21E61DD1AC4800251C1A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
 		55EC50941DCD3F6300096CC0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		55EC50961DCD3F6A00096CC0 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CHiWorkSpotlightPlugin.xcodeproj; path = CHiWorkSpotlightPlugin/CHiWorkSpotlightPlugin.xcodeproj; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
@@ -1167,6 +1196,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		55FF53FE210ABF64002D5190 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				55FF5402210ABF64002D5190 /* CHiWorkSpotlightPlugin.mdimporter */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		93019F14086C763600A2A9E7 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -1313,6 +1350,7 @@
 		9323EFE3182D9EFF00F6EA37 /* Spotlight */ = {
 			isa = PBXGroup;
 			children = (
+				55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */,
 				9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */,
 			);
 			path = Spotlight;
@@ -1944,6 +1982,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				55FF5404210ABF85002D5190 /* PBXTargetDependency */,
+				55FF5406210ABF85002D5190 /* PBXTargetDependency */,
+				55FF5408210ABF85002D5190 /* PBXTargetDependency */,
 			);
 			name = LaTeXiT;
 			productInstallPath = "$(HOME)/Applications";
@@ -2013,6 +2054,12 @@
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 55FF53FE210ABF64002D5190 /* Products */;
+					ProjectRef = 55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				934AAA120F33887F0010E384 /* All */,
@@ -2026,6 +2073,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		55FF5402210ABF64002D5190 /* CHiWorkSpotlightPlugin.mdimporter */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CHiWorkSpotlightPlugin.mdimporter;
+			remoteRef = 55FF5401210ABF64002D5190 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
@@ -2413,6 +2470,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		55FF5404210ABF85002D5190 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9344B98E0E8CF38700FE90A5 /* Automator-CreateEquations */;
+			targetProxy = 55FF5403210ABF85002D5190 /* PBXContainerItemProxy */;
+		};
+		55FF5406210ABF85002D5190 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 938DBD4C10BDC2E0002350CF /* LaTeXiT Helper */;
+			targetProxy = 55FF5405210ABF85002D5190 /* PBXContainerItemProxy */;
+		};
+		55FF5408210ABF85002D5190 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CHiWorkSpotlightPlugin;
+			targetProxy = 55FF5407210ABF85002D5190 /* PBXContainerItemProxy */;
+		};
 		934AAA0B0F33884C0010E384 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9396E5440EC628C30014C4BD /* Package as DMG */;
