@@ -3,8 +3,7 @@
         {
             ACTIONS = {
                 checkUpdates = id; 
-                copyEquation = id; 
-                copyEquationWithOutlinedFonts = id; 
+                copyAs = id; 
                 displayLog = id; 
                 exportImage = id; 
                 historyClearHistory = id; 

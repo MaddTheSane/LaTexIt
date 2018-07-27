@@ -190,7 +190,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) concludeDragOperation:(id <NSDraggingInfo>)sender
 {
-  //overwritten to avoid some strange additional "setImage" tghat would occur...
+  //overwritten to avoid some strange additional "setImage" that would occur...
 }
 
 //creates the promised file of the drag
@@ -347,18 +347,17 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(IBAction) copy:(id)sender
 {
-  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-  [pasteboard declareTypes:[NSArray array] owner:self];
-  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:self];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [self copyAsFormat:[userDefaults integerForKey:DragExportTypeKey]];
 }
 
--(IBAction) copyWithOutlinedFonts:(id)sender
+-(void) copyAsFormat:(export_format_t)exportFormat
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   export_format_t savExportFormat = [userDefaults integerForKey:DragExportTypeKey];
-  [userDefaults setInteger:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS forKey:DragExportTypeKey];
+  [userDefaults setInteger:exportFormat forKey:DragExportTypeKey];
   //lazyDataProvider to nil to force immediate computation of the pdf with outlined fonts
   [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:nil];
   [userDefaults setInteger:savExportFormat forKey:DragExportTypeKey];

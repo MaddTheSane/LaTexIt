@@ -406,16 +406,16 @@ static NSMutableDictionary* cachePaths = nil;
   [donationPanel orderFront:sender];
 }
 
--(IBAction) copyEquation:(id)sender
+-(IBAction) copyAs:(id)sender
 {
-  //[[[[NSDocumentController sharedDocumentController] currentDocument] imageView] copy:sender];
-  [[(MyDocument*)[self currentDocument] imageView] copy:sender];
-}
-
--(IBAction) copyEquationWithOutlinedFonts:(id)sender
-{
-  //[[[[NSDocumentController sharedDocumentController] currentDocument] imageView] copyEquationWithOutlinedFonts:sender];
-  [[(MyDocument*)[self currentDocument] imageView] copyWithOutlinedFonts:sender];
+  int tag = [sender tag];
+  if (tag == -1)
+    [[(MyDocument*)[self currentDocument] imageView] copy:sender]; 
+  else
+  {
+    export_format_t exportFormat = (export_format_t)[sender tag];
+    [[(MyDocument*)[self currentDocument] imageView] copyAsFormat:exportFormat];
+  }
 }
 
 -(IBAction) paste:(id)sender
@@ -426,15 +426,12 @@ static NSMutableDictionary* cachePaths = nil;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
-  if ([sender action] == @selector(copyEquation:))
+  if ([sender action] == @selector(copyAs:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
-  }
-  else if ([sender action] == @selector(copyEquationWithOutlinedFonts:))
-  {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
-    ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage] && isGsAvailable && isPs2PdfAvailable;
+    if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+      ok &= isGsAvailable && isPs2PdfAvailable;
   }
   else if ([sender action] == @selector(paste:))
   {

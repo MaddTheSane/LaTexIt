@@ -10,6 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "PreferencesController.h"
+
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 extern NSString* CopyCurrentImageNotification;
 extern NSString* ImageDidChangeNotification;
@@ -26,7 +28,7 @@ extern NSString* ImageDidChangeNotification;
 
 -(IBAction) zoom:(id)sender;//zooms the image, but does not modify it (drag'n drop will be with original image size)
 -(IBAction) copy:(id)sender;//copy the data into clipboard
--(IBAction) copyWithOutlinedFonts:(id)sender;//copy the data into clipboard
+-(void) copyAsFormat:(export_format_t)exportFormat;//copy the data into clipboard
 
 //when you set the pdfData encapsulated by the imageView, it creates an NSImage with this data.
 //but if you specify a non-nil cachedImage, it will use this cachedImage to be faster
