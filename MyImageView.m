@@ -345,6 +345,14 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   return [self _applyDataFromPasteboard:[sender draggingPasteboard]];
 }
 
+-(BOOL) validateMenuItem:(id)sender
+{
+  BOOL ok = YES;
+  if ([sender action] == @selector(copy:))
+    ok = ([self image] != nil);
+  return ok;
+}
+
 -(IBAction) copy:(id)sender
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];

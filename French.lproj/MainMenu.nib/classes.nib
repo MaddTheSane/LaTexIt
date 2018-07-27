@@ -19,7 +19,6 @@
                 makeLatex = id; 
                 newFromClipboard = id; 
                 openWebSite = id; 
-                paste = id; 
                 showHelp = id; 
                 showOrHideColorInspector = id; 
                 showOrHideCompositionConfiguration = id; 
