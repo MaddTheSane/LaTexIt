@@ -2,14 +2,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum {EXPORT_FORMAT_PDF, EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS,
-              EXPORT_FORMAT_EPS, EXPORT_FORMAT_TIFF, EXPORT_FORMAT_PNG, EXPORT_FORMAT_JPEG} export_format_t;
+#import "LaTeXiTSharedTypes.h"
+#import "LaTeXiTPreferencesKeys.h"
 
 extern NSString* SpellCheckingDidChangeNotification;
 
@@ -21,94 +21,15 @@ extern NSString* ServiceToolbarItemIdentifier;
 extern NSString* AdvancedToolbarItemIdentifier;
 extern NSString* WebToolbarItemIdentifier;
 
-extern NSString* DragExportTypeKey;
-extern NSString* DragExportJpegColorKey;
-extern NSString* DragExportJpegQualityKey;
-extern NSString* DragExportScaleAsPercentKey;
-extern NSString* DefaultImageViewBackgroundKey;
-extern NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey;
-extern NSString* DefaultColorKey;
-extern NSString* DefaultPointSizeKey;
-extern NSString* DefaultModeKey;
-extern NSString* SpellCheckingEnableKey;
-extern NSString* SyntaxColoringEnableKey;
-extern NSString* SyntaxColoringTextForegroundColorKey;
-extern NSString* SyntaxColoringTextBackgroundColorKey;
-extern NSString* SyntaxColoringCommandColorKey;
-extern NSString* SyntaxColoringMathsColorKey;
-extern NSString* SyntaxColoringKeywordColorKey;
-extern NSString* SyntaxColoringCommentColorKey;
-extern NSString* ReducedTextAreaStateKey;
-extern NSString* DefaultPreambleAttributedKey;
-extern NSString* DefaultFontKey;
-extern NSString* ServiceShortcutEnabledKey;
-extern NSString* ServiceShortcutStringsKey;
-extern NSString* ServiceRespectsColorKey;
-extern NSString* ServiceRespectsBaselineKey;
-extern NSString* ServiceRespectsPointSizeKey;
-extern NSString* ServiceUsesHistoryKey;
-extern NSString* AdditionalTopMarginKey;
-extern NSString* AdditionalLeftMarginKey;
-extern NSString* AdditionalRightMarginKey;
-extern NSString* AdditionalBottomMarginKey;
-extern NSString* EncapsulationsKey;
-extern NSString* CurrentEncapsulationIndexKey;
-extern NSString* TextShortcutsKey;
-extern NSString* CompositionConfigurationsKey;
-extern NSString* CurrentCompositionConfigurationIndexKey;
-extern NSString* CompositionConfigurationNameKey;
-extern NSString* CompositionConfigurationIsDefaultKey;
-extern NSString* CompositionConfigurationCompositionModeKey;
-extern NSString* CompositionConfigurationCompositionModeKey;
-extern NSString* CompositionConfigurationPdfLatexPathKey;
-extern NSString* CompositionConfigurationPs2PdfPathKey;
-extern NSString* CompositionConfigurationXeLatexPathKey;
-extern NSString* CompositionConfigurationLatexPathKey;
-extern NSString* CompositionConfigurationDvipdfPathKey;
-extern NSString* CompositionConfigurationGsPathKey;
-extern NSString* CompositionConfigurationAdditionalProcessingScriptsKey;
-extern NSString* LastEasterEggsDatesKey;
-
-extern NSString* CompositionConfigurationControllerVisibleAtStartupKey;
-extern NSString* EncapsulationControllerVisibleAtStartupKey;
-extern NSString* HistoryControllerVisibleAtStartupKey;
-extern NSString* LatexPalettesControllerVisibleAtStartupKey;
-extern NSString* LibraryControllerVisibleAtStartupKey;
-extern NSString* MarginControllerVisibleAtStartupKey;
-
-extern NSString* LibraryViewRowTypeKey;
-extern NSString* LibraryDisplayPreviewPanelKey;
-extern NSString* HistoryDisplayPreviewPanelKey;
-
-extern NSString* CheckForNewVersionsKey;
-
-extern NSString* LatexPaletteGroupKey;
-extern NSString* LatexPaletteFrameKey;
-extern NSString* LatexPaletteDetailsStateKey;
-
-extern NSString* ScriptEnabledKey;
-extern NSString* ScriptSourceTypeKey;
-extern NSString* ScriptShellKey;
-extern NSString* ScriptBodyKey;
-extern NSString* ScriptFileKey;
-
-extern NSString* SomePathDidChangeNotification;
-extern NSString* CompositionModeDidChangeNotification;
-extern NSString* CurrentCompositionConfigurationDidChangeNotification;
-
-typedef enum {COMPOSITION_MODE_PDFLATEX, COMPOSITION_MODE_LATEXDVIPDF, COMPOSITION_MODE_XELATEX} composition_mode_t;
-typedef enum {SCRIPT_SOURCE_STRING, SCRIPT_SOURCE_FILE} script_source_t;
-typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_PLACE_POSTPROCESSING} script_place_t;
-
 @class EncapsulationTableView;
+@class PreamblesController;
 @class LineCountTextView;
 @class SMLSyntaxColouring;
 @class TextShortcutsTableView;
 @interface PreferencesController : NSWindowController {
-
   IBOutlet NSView*        generalView;
   IBOutlet NSView*        editionView;
-  IBOutlet NSView*        preambleView;
+  IBOutlet NSView*        preamblesView;
   IBOutlet NSView*        compositionView;
   IBOutlet NSView*        serviceView;
   IBOutlet NSView*        advancedView;
@@ -150,8 +71,10 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   IBOutlet TextShortcutsTableView* textShortcutsTableView;
   IBOutlet NSButton*               removeTextShortcutsButton;
 
-
+  IBOutlet NSTableView*       preamblesTableView;
   IBOutlet LineCountTextView* preambleTextView;
+  IBOutlet NSButton*          addPreambleButton;
+  IBOutlet NSButton*          removePreambleButton;
 
   IBOutlet NSPopUpButton* compositionSelectionPopUpButton;
   IBOutlet NSPanel*       compositionSelectionPanel;
@@ -170,13 +93,15 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   IBOutlet NSButton*      dvipdfButton;
   IBOutlet NSButton*      gsButton;
 
-  IBOutlet NSMatrix*    serviceRespectsPointSizeMatrix;
-  IBOutlet NSMatrix*    serviceRespectsColorMatrix;
-  IBOutlet NSButton*    serviceRespectsBaselineButton;
-  IBOutlet NSButton*    serviceUsesHistoryButton;
-  IBOutlet NSButton*    serviceWarningLinkBackButton;
-  IBOutlet NSTableView* serviceShortcutsTableView;
-  IBOutlet NSButton*    serviceWarningShortcutConflict;
+  IBOutlet NSPopUpButton* servicePreamblePopUpButton;
+  IBOutlet NSMatrix*      serviceRespectsPointSizeMatrix;
+  IBOutlet NSMatrix*      serviceRespectsColorMatrix;
+  IBOutlet NSButton*      serviceRespectsBaselineButton;
+  IBOutlet NSButton*      serviceUsesHistoryButton;
+  IBOutlet NSButton*      serviceWarningLinkBackButton;
+  IBOutlet NSTableView*   serviceShortcutsTableView;
+  IBOutlet NSButton*      serviceWarningShortcutConflict;
+  IBOutlet NSTextField*   serviceRelaunchWarning;
 
   IBOutlet NSTextField* additionalTopMarginTextField;
   IBOutlet NSTextField* additionalLeftMarginTextField;
@@ -209,6 +134,16 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   NSImage* warningImage;
   
   NSTextView* shortcutTextView;
+  
+  NSObjectController*  selfController;
+  PreamblesController* preamblesController;
+  NSMutableArray* preambles;
+
+  IBOutlet NSPopUpButton* latexisationSelectedPreamblePopUpButton;
+  IBOutlet NSPopUpButton* serviceSelectedPreamblePopUpButton;
+  NSDictionary*  latexisationSelectedPreamble;
+  NSDictionary*  serviceSelectedPreamble;
+  NSIndexSet*   draggedRowIndexes;
 }
 
 +(PreferencesController*) sharedController;
@@ -229,7 +164,7 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
 -(IBAction) changeSpellChecking:(id)sender;
 -(IBAction) changeSyntaxColoringConfiguration:(id)sender;
 -(IBAction) changeReduceTextArea:(id)sender;
--(IBAction) resetDefaultPreamble:(id)sender;
+-(IBAction) resetSelectedPreambleToDefault:(id)sender;
 -(IBAction) selectFont:(id)sender;
 -(IBAction) applyPreambleToOpenDocuments:(id)sender;
 -(IBAction) applyPreambleToLibrary:(id)sender;
@@ -261,5 +196,16 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
 -(IBAction) gotoWebSite:(id)sender;
 
 -(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;
+
+-(NSMutableArray*) preambles;
+-(NSAttributedString*) preambleForLatexisation;
+-(NSAttributedString*) preambleForService;
+
+-(NSDictionary*) latexisationSelectedPreamble;
+-(void)          setLatexisationSelectedPreamble:(NSDictionary*)preamble;
+-(NSDictionary*) serviceSelectedPreamble;
+-(void)          setServiceSelectedPreamble:(NSDictionary*)preamble;
+
+-(void) commitChanges;
 
 @end

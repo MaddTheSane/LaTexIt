@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The LatexPalettesController controller is responsible for loading and initializing the palette
 
@@ -10,6 +10,7 @@
 
 #import "AppController.h"
 #import "NSApplicationExtended.h"
+#import "NSFileManagerExtended.h"
 #import "NSPopUpButtonExtended.h"
 #import "PaletteCell.h"
 #import "PaletteItem.h"
@@ -65,7 +66,7 @@
   for(i = 0 ; i<[orderedPalettes count] ; ++i)
   {
     NSDictionary* paletteAsDictionary = [orderedPalettes objectAtIndex:i];
-    NSString* domainName = [Utils localizedPath:[paletteAsDictionary objectForKey:@"domainName"]];
+    NSString* domainName = [[NSFileManager defaultManager] localizedPath:[paletteAsDictionary objectForKey:@"domainName"]];
     if (![domainName isEqualToString:lastDomain])
     {
       [[matrixChoicePopUpButton menu] addItem:[NSMenuItem separatorItem]];
@@ -298,7 +299,7 @@
   {
     NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
     NSString* author = [palette objectForKey:@"author"];
-    [authorTextField setStringValue:[NSString stringWithFormat:@"%@ : %@", NSLocalizedString(@"Author", @"Author"), author]];
+    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author]];
     NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
     unsigned int numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntValue] == 0) ?
                                        4 : [numberOfItemsPerRowNumber unsignedIntValue];

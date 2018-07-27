@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -15,9 +15,12 @@
 #import "AppController.h"
 #import "Compressor.h"
 #import "HistoryItem.h"
+#import "LatexitEquation.h"
+#import "LatexProcessor.h"
 #import "NSApplicationExtended.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
+#import "NSFileManagerExtended.h"
 #import "NSIndexSetExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
@@ -106,6 +109,42 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [[AppController appController] startMessageProgress:NSLocalizedString(@"Loading History", @"Loading History")];
     [self _loadHistory];
     [[AppController appController] stopMessageProgress];
+    
+    #warning preparing migration to Core Data
+    #ifdef USE_COREDATA
+    NSManagedObjectModel* managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:[NSBundle mainBundle]]];
+    NSPersistentStoreCoordinator* persistentStoreCoordinator =
+      [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel] autorelease];
+    //load from ~/Library/LaTeXiT/Application Support/history.dat
+    NSArray* historyPathComponents = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+    historyPathComponents = [historyPathComponents count] ? [historyPathComponents subarrayWithRange:NSMakeRange(0, 1)] : nil;
+    historyPathComponents = [historyPathComponents arrayByAddingObjectsFromArray:
+      [NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.db", nil]];
+    NSString* historyPath = [NSString pathWithComponents:historyPathComponents];
+    if (![[NSFileManager defaultManager] isReadableFileAtPath:historyPath])
+      [[NSFileManager defaultManager] createDirectoryPath:[historyPath stringByDeletingLastPathComponent] attributes:nil];
+    NSURL* storeURL = [NSURL fileURLWithPath:historyPath];
+    NSError* error = nil;
+    id persistentStore =
+      [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+    NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
+    if ([version compare:@"1.0.0" options:NSNumericSearch] > 0){
+    }
+    if (persistentStore)
+      [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"1.0.0", @"version", nil]
+                           forPersistentStore:persistentStore];
+    managedObjectContext = [[NSManagedObjectContext alloc] init];
+    [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    [managedObjectContext setRetainsRegisteredObjects:YES];
+    
+    latexitEquationsController = [[NSArrayController alloc] initWithContent:nil];
+    [latexitEquationsController setEntityName:[LatexitEquation className]];
+    [latexitEquationsController setManagedObjectContext:managedObjectContext];
+    [latexitEquationsController setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO] autorelease]]];
+    [latexitEquationsController prepareContent];
+    [latexitEquationsController setAutomaticallyPreparesContent:YES];
+    #endif
+    
     //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
@@ -125,8 +164,16 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [undoManager release];
   [historyItems release];
+  [latexitEquationsController release];
+  [managedObjectContext release];
   [super dealloc];
 }
+
+-(NSArrayController*) latexitEquationsController
+{
+  return latexitEquationsController;
+}
+//end latexitEquationsController
 
 -(NSUndoManager*) undoManager
 {
@@ -150,6 +197,17 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     historyShouldBeSaved = state;
   }
 }
+
+//migrating to Core-Data
+#warning preparing migration to Core Data
+-(void) addItemWithPDFData:(NSData*)pdfData preamble:(NSAttributedString*)preamble sourceText:(NSAttributedString*)sourceText
+                     color:(NSColor*)color pointSize:(double)pointSize date:(NSDate*)date mode:(latex_mode_t)mode
+                     backgroundColor:(NSColor*)backgroundColor;
+{
+  [LatexitEquation latexitEquationWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize
+                                         date:date mode:mode backgroundColor:backgroundColor managedObjectContext:managedObjectContext];
+}
+//end addItemWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor
 
 //Management methods, undo-aware
 
@@ -301,16 +359,23 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
       paths = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.dat", nil]];
       NSString* historyFilePath = [NSString pathWithComponents:paths];
-      [Utils createDirectoryPath:[historyFilePath stringByDeletingLastPathComponent] attributes:nil];
+      [[NSFileManager defaultManager] createDirectoryPath:[historyFilePath stringByDeletingLastPathComponent] attributes:nil];
 
       //Then save the data
       NSDictionary* plist =
-        [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.4", @"version", compressedData, @"data", nil];
+        [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.0", @"version", compressedData, @"data", nil];
       NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
       historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
 
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] stopMessageProgress];
+
+      #warning preparing migration to Core Data
+      #ifdef USE_COREDATA
+      NSError* error = nil;
+      [managedObjectContext save:&error];
+      NSLog(@"error = %@", error);
+      #endif
     }//end if historyShouldBeSaved
   }//end @synchronized(historyItems)
 }
@@ -335,7 +400,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSString* newFilePath = [NSString pathWithComponents:newPath];
     if (![fileManager isReadableFileAtPath:newFilePath] && [fileManager isReadableFileAtPath:oldFilePath])
     {
-      [Utils createDirectoryPath:[newFilePath stringByDeletingLastPathComponent] attributes:nil];
+      [[NSFileManager defaultManager] createDirectoryPath:[newFilePath stringByDeletingLastPathComponent] attributes:nil];
       [fileManager copyPath:oldFilePath toPath:newFilePath handler:NULL];
     }
 
@@ -406,12 +471,17 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
+  #warning preparing migration to Core Data
+  #ifdef USE_COREDATA
+  return nil;
+  #else
   id item = nil;
   @synchronized(historyItems)
   {
     item = [historyItems objectAtIndex:rowIndex];
   }
   return [item image];
+  #endif
 }
 
 //NSTableView delegate
@@ -423,6 +493,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 -(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
              row:(int)rowIndex
 {
+  #warning preparing migration to Core Data
+  #ifdef USE_COREDATA
+  LatexitEquation* latexitEquation = [[latexitEquationsController arrangedObjects] objectAtIndex:rowIndex];
+  [aCell setBackgroundColor:[latexitEquation backgroundColor]];
+  [aCell setRepresentedObject:latexitEquation];
+  #else
   HistoryItem* historyItem = nil;
   @synchronized(historyItem)
   {
@@ -430,6 +506,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   }
   [aCell setBackgroundColor:[historyItem backgroundColor]];
   [aCell setRepresentedObject:historyItem];
+  #endif
 }
 
 //drag'n drop
@@ -478,8 +555,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       
       //bonus : we can also feed other pasteboards with one of the selected items
       //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-      [historyItem writeToPasteboard:pboard forDocument:[[AppController appController] dummyDocument]
-                   isLinkBackRefresh:NO lazyDataProvider:nil];
+      [historyItem writeToPasteboard:pboard isLinkBackRefresh:NO lazyDataProvider:nil];
     }//end if ([rowIndexes count])
   }//end @synchronized(historyItems)
 
@@ -548,7 +624,6 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         NSData* pdfData = [historyItem pdfData];
         NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
                                                    scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
-
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                                    atPath:filePath];
@@ -557,7 +632,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
         NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
+        [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
                                        forFile:filePath options:options];
         [names addObject:fileName];
       }

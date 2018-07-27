@@ -3,7 +3,7 @@
 //  MozoDojo
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 //
 
 #import "Semaphore.h"
@@ -14,7 +14,7 @@
 -(id) initWithValue:(unsigned int)initialValue
 {
   if (![super init])
-    return self;
+    return nil;
   int error = pthread_condattr_init(&cond_attr);
   error = error ? error : pthread_cond_init(&cond, &cond_attr);
   error = error ? error : pthread_mutexattr_init(&mutex_attr);

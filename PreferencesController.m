@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -14,16 +14,23 @@
 #import "EncapsulationTableView.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
+#import "NSMutableArrayExtended.h"
 #import "NSPopUpButtonExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "LibraryManager.h"
 #import "LibraryTableView.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
+#import "PreamblesController.h"
+#import "PreamblesTableView.h"
 #import "SMLSyntaxColouring.h"
 #import "ServiceShortcutsTextView.h"
 #import "TextShortcutsManager.h"
 #import "Utils.h"
+
+#import <Sparkle/Sparkle.h>
+
+#define NSAppKitVersionNumber10_4 824
 
 NSString* SpellCheckingDidChangeNotification = @"LaTeXiT_SpellCheckingDidChangeNotification";
 
@@ -34,55 +41,6 @@ NSString* CompositionToolbarItemIdentifier = @"CompositionToolbarItem";
 NSString* ServiceToolbarItemIdentifier     = @"ServiceToolbarItem";
 NSString* AdvancedToolbarItemIdentifier    = @"AdvancedToolbarItem";
 NSString* WebToolbarItemIdentifier         = @"WebToolbarItem";
-
-NSString* DragExportTypeKey             = @"LaTeXiT_DragExportTypeKey";
-NSString* DragExportJpegColorKey        = @"LaTeXiT_DragExportJpegColorKey";
-NSString* DragExportJpegQualityKey      = @"LaTeXiT_DragExportJpegQualityKey";
-NSString* DragExportScaleAsPercentKey   = @"LateXiT_DragExportScaleAsPercentKey";
-NSString* DefaultImageViewBackgroundKey = @"LaTeXiT_DefaultImageViewBackground";
-NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey = @"LaTeXiT_DefaultAutomaticHighContrastedPreviewBackgroundKey";
-NSString* DefaultColorKey               = @"LaTeXiT_DefaultColorKey";
-NSString* DefaultPointSizeKey           = @"LaTeXiT_DefaultPointSizeKey";
-NSString* DefaultModeKey                = @"LaTeXiT_DefaultModeKey";
-
-NSString* SpellCheckingEnableKey               = @"LaTeXiT_SpellCheckingEnableKey";
-NSString* SyntaxColoringEnableKey              = @"LaTeXiT_SyntaxColoringEnableKey";
-NSString* SyntaxColoringTextForegroundColorKey = @"LaTeXiT_SyntaxColoringTextForegroundColorKey";
-NSString* SyntaxColoringTextBackgroundColorKey = @"LaTeXiT_SyntaxColoringTextBackgroundColorKey";
-NSString* SyntaxColoringCommandColorKey        = @"LaTeXiT_SyntaxColoringCommandColorKey";
-NSString* SyntaxColoringMathsColorKey          = @"LaTeXiT_SyntaxColoringMathsColorKey";
-NSString* SyntaxColoringKeywordColorKey        = @"LaTeXiT_SyntaxColoringKeywordColorKey";
-NSString* SyntaxColoringCommentColorKey        = @"LaTeXiT_SyntaxColoringCommentColorKey";
-NSString* ReducedTextAreaStateKey              = @"LaTeXiT_ReducedTextAreaStateKey";
-
-NSString* DefaultPreambleAttributedKey = @"LaTeXiT_DefaultPreambleAttributedKey";
-NSString* DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
-
-NSString* ServiceShortcutEnabledKey    = @"LaTeXiT_ServiceShortcutEnabledKey";
-NSString* ServiceShortcutStringsKey    = @"LaTeXiT_ServiceShortcutStringsKey";
-NSString* ServiceRespectsBaselineKey   = @"LaTeXiT_ServiceRespectsBaselineKey";
-NSString* ServiceRespectsPointSizeKey  = @"LaTeXiT_ServiceRespectsPointSizeKey";
-NSString* ServiceRespectsColorKey      = @"LaTeXiT_ServiceRespectsColorKey";
-NSString* ServiceUsesHistoryKey        = @"LaTeXiT_ServiceUsesHistoryKey";
-NSString* AdditionalTopMarginKey       = @"LaTeXiT_AdditionalTopMarginKey";
-NSString* AdditionalLeftMarginKey      = @"LaTeXiT_AdditionalLeftMarginKey";
-NSString* AdditionalRightMarginKey     = @"LaTeXiT_AdditionalRightMarginKey";
-NSString* AdditionalBottomMarginKey    = @"LaTeXiT_AdditionalBottomMarginKey";
-NSString* EncapsulationsKey            = @"LaTeXiT_EncapsulationsKey";
-NSString* CurrentEncapsulationIndexKey = @"LaTeXiT_CurrentEncapsulationIndexKey";
-NSString* TextShortcutsKey             = @"LaTeXiT_TextShortcutsKey";
-
-NSString* CurrentCompositionConfigurationIndexKey    = @"LaTeXiT_CurrentCompositionConfigurationIndexKey";
-NSString* CompositionConfigurationsKey               = @"LaTeXiT_CompositionConfigurationsKey";
-NSString* CompositionConfigurationNameKey            = @"LaTeXiT_CompositionConfigurationNameKey";
-NSString* CompositionConfigurationIsDefaultKey       = @"LaTeXiT_CompositionConfigurationIsDefaultKey";
-NSString* CompositionConfigurationCompositionModeKey = @"LaTeXiT_CompositionConfigurationCompositionModeKey";
-NSString* CompositionConfigurationPdfLatexPathKey    = @"LaTeXiT_CompositionConfigurationPdfLatexPathKey";
-NSString* CompositionConfigurationPs2PdfPathKey      = @"LaTeXiT_CompositionConfigurationPs2PdfPathKey";
-NSString* CompositionConfigurationXeLatexPathKey     = @"LaTeXiT_CompositionConfigurationXeLatexPathKey";
-NSString* CompositionConfigurationLatexPathKey       = @"LaTeXiT_CompositionConfigurationLatexPathKey";
-NSString* CompositionConfigurationDvipdfPathKey      = @"LaTeXiT_CompositionConfigurationDvipdfPathKey";
-NSString* CompositionConfigurationGsPathKey          = @"LaTeXiT_CompositionConfigurationGsPathKey";
 
 /*-----------------------------*/
 /* deprecated in LateXiT 1.8.0 */
@@ -95,52 +53,32 @@ static NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
 static NSString* GsPathKey                    = @"LaTeXiT_GsPathKey";
 /*-----------------------------*/
 
-NSString* CompositionConfigurationAdditionalProcessingScriptsKey = @"LaTeXiT_CompositionConfigurationAdditionalProcessingScriptsKey";
-NSString* LastEasterEggsDatesKey       = @"LaTeXiT_LastEasterEggsDatesKey";
-
-NSString* CompositionConfigurationControllerVisibleAtStartupKey = @"CompositionConfigurationControllerVisibleAtStartupKey";
-NSString* EncapsulationControllerVisibleAtStartupKey = @"EncapsulationControllerVisibleAtStartupKey";
-NSString* HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibleAtStartupKey";
-NSString* LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartupKey";
-NSString* LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibleAtStartupKey";
-NSString* MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartupKey";
-
-NSString* LibraryViewRowTypeKey = @"LibraryViewRowTypeKey";
-NSString* LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanelKey";
-NSString* HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanelKey";
-
-NSString* CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
-
-NSString* LatexPaletteGroupKey        = @"LaTeXiT_LatexPaletteGroupKey";
-NSString* LatexPaletteFrameKey        = @"LaTeXiT_LatexPaletteFrameKey";
-NSString* LatexPaletteDetailsStateKey = @"LaTeXiT_LatexPaletteDetailsStateKey";
-
-NSString* ScriptEnabledKey               = @"LaTeXiT_ScriptEnabledKey";
-NSString* ScriptSourceTypeKey            = @"LaTeXiT_ScriptSourceTypeKey";
-NSString* ScriptShellKey                 = @"LaTeXiT_ScriptShellKey";
-NSString* ScriptBodyKey                  = @"LaTeXiT_ScriptBodyKey";
-NSString* ScriptFileKey                  = @"LaTeXiT_ScriptFileKey";
-
-NSString* SomePathDidChangeNotification        = @"SomePathDidChangeNotification"; //changing the path to an executable (like pdflatex)
-NSString* CompositionModeDidChangeNotification = @"CompositionModeDidChangeNotification";
-NSString* CurrentCompositionConfigurationDidChangeNotification = @"CurrentCompositionConfigurationDidChangeNotification";
-
 @interface PreferencesController (PrivateAPI)
 -(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
 -(void) _updateButtonStates:(NSNotification*)notification;
 -(void) tableViewSelectionDidChange:(NSNotification*)notification;
 -(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode  contextInfo:(void*)contextInfo;
+-(void) preamblesDidChange;
 @end
 
 @implementation PreferencesController
 
-static NSAttributedString* factoryDefaultPreamble = nil;
 static PreferencesController* sharedController = nil;
+static NSMutableArray*        factoryDefaultsPreambles = nil;
 
 +(PreferencesController*) sharedController
 {
+  @synchronized(self)
+  {
+    if (!sharedController)
+    {
+      sharedController = [[self alloc] init];
+      [sharedController window];
+    }
+  }
   return sharedController;
 }
+//end sharedController
 
 +(NSDictionary*) defaultAdditionalScript
 {
@@ -151,6 +89,7 @@ static PreferencesController* sharedController = nil;
                                                @"", ScriptFileKey,
                                                nil];
 }
+//end defaultAdditionalScript
 
 +(NSDictionary*) defaultAdditionalScripts
 {
@@ -160,15 +99,19 @@ static PreferencesController* sharedController = nil;
                                                     noScript, [NSString stringWithFormat:@"%d",SCRIPT_PLACE_POSTPROCESSING],
                                                     nil];
 }
+//end defaultAdditionalScripts
 
 +(id) currentCompositionConfigurationObjectForKey:(id)key
 {
+  id result = nil;
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   int compositionConfigurationIndex = [userDefaults integerForKey:CurrentCompositionConfigurationIndexKey];
   NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
   NSDictionary* configuration = [compositionConfigurations objectAtIndex:compositionConfigurationIndex];
-  return [configuration objectForKey:key];
+  result = [configuration objectForKey:key];
+  return result;
 }
+//end currentCompositionConfigurationObjectForKey:
 
 +(void) currentCompositionConfigurationSetObject:(id)object forKey:(id)key
 {
@@ -180,6 +123,7 @@ static PreferencesController* sharedController = nil;
   [compositionConfigurations replaceObjectAtIndex:compositionConfigurationIndex withObject:compositionConfiguration];
   [userDefaults setObject:compositionConfigurations forKey:CompositionConfigurationsKey];
 }
+//end currentCompositionConfigurationSetObject:forKey:
 
 +(void) initialize
 {
@@ -188,23 +132,10 @@ static PreferencesController* sharedController = nil;
     defaultFont = [NSFont userFontOfSize:0];
   NSData* defaultFontAsData = [defaultFont data];
 
-  if (!factoryDefaultPreamble)
-  {
-    NSString* factoryDefaultPreambleString = [NSString stringWithFormat:
-      @"\\documentclass[10pt]{article}\n"\
-      @"\\usepackage{color} %%%@\n"\
-      @"\\usepackage{amssymb} %%maths\n"\
-      @"\\usepackage{amsmath} %%maths\n"\
-      @"\\usepackage[utf8]{inputenc} %%%@\n",
-      NSLocalizedString(@"used for font color", @"used for font color"),
-      NSLocalizedString(@"useful to type directly accentuated characters",
-                        @"useful to type directly accentuated characters")];
-    NSDictionary* attributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
-    factoryDefaultPreamble = [[NSAttributedString alloc] initWithString:factoryDefaultPreambleString attributes:attributes];
-  }
-
-  NSData* factoryDefaultPreambleData =
-    [factoryDefaultPreamble RTFFromRange:NSMakeRange(0, [factoryDefaultPreamble length]) documentAttributes:nil];
+  if (!factoryDefaultsPreambles)
+    factoryDefaultsPreambles =
+      [[NSArray alloc] initWithObjects:
+        [PreamblesController encodePreamble:[PreamblesController defaultLocalizedPreambleDictionary]], nil];
 
   NSNumber* numberYes = [NSNumber numberWithBool:YES];
 
@@ -263,12 +194,15 @@ static PreferencesController* sharedController = nil;
                                                [[NSColor blueColor]    data], SyntaxColoringKeywordColorKey,
                                                [NSNumber numberWithInt:NSOffState], ReducedTextAreaStateKey,
                                                [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] data], SyntaxColoringCommentColorKey,
-                                               factoryDefaultPreambleData, DefaultPreambleAttributedKey,
+                                               factoryDefaultsPreambles, PreamblesKey,
                                                defaultFontAsData, DefaultFontKey,
+                                               [NSNumber numberWithUnsignedInt:0], LatexisationSelectedPreambleIndexKey,
+                                               [NSNumber numberWithUnsignedInt:0], ServiceSelectedPreambleIndexKey,
                                                [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
                                                [NSArray arrayWithObjects:@"", @"", @"", @"", @"", @"", nil], ServiceShortcutStringsKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
+                                               [NSNumber numberWithDouble:1.0], ServicePointSizeFactorKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
                                                [NSNumber numberWithBool:NO], ServiceUsesHistoryKey,
                                                [NSNumber numberWithFloat:0], AdditionalTopMarginKey,
@@ -282,7 +216,7 @@ static PreferencesController* sharedController = nil;
                                                defaultTextShortcuts, TextShortcutsKey,
                                                [NSArray arrayWithObject:defaultCompositionConfiguration], CompositionConfigurationsKey,
                                                [NSNumber numberWithUnsignedInt:0], CurrentCompositionConfigurationIndexKey,
-                                               [NSNumber numberWithBool:YES], CheckForNewVersionsKey,
+                                               //[NSNumber numberWithBool:YES], CheckForNewVersionsKey,
                                                [NSNumber numberWithBool:NO], CompositionConfigurationControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], EncapsulationControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], HistoryControllerVisibleAtStartupKey,
@@ -295,6 +229,8 @@ static PreferencesController* sharedController = nil;
                                                [NSNumber numberWithInt:0], LatexPaletteGroupKey,
                                                NSStringFromRect(NSMakeRect(235, 624, 200, 170)), LatexPaletteFrameKey,
                                                [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
+                                               [NSNumber numberWithBool:YES], ShowWhiteColorWarningKey,
+                                               [NSNumber numberWithBool:NO], UseLoginShellKey,
                                                nil];
 
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
@@ -386,7 +322,20 @@ static PreferencesController* sharedController = nil;
     [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationPs2PdfPathKey];
     [userDefaults removeObjectForKey:Ps2PdfPathKey];
   }
+  
+  //from version 1.15.0, SUCheckAtStartupKey replaces CheckForNewVersionsKey
+  //from version 1.15.1, SUEnableAutomaticChecksKey replaces SUCheckAtStartupKey
+  if ([userDefaults objectForKey:CheckForNewVersionsKey])
+  {
+    [[[AppController appController] sparkleUpdater] setAutomaticallyChecksForUpdates:[userDefaults boolForKey:CheckForNewVersionsKey]];
+    [userDefaults removeObjectForKey:CheckForNewVersionsKey];
+  }
+  
+  //from version 1.16.0, add the current version number
+  NSString* selfVersionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+  [userDefaults setObject:selfVersionNumber forKey:LaTeXiTVersionKey];
 }
+//end initialize
 
 -(id) init
 {
@@ -394,10 +343,16 @@ static PreferencesController* sharedController = nil;
     return nil;
   sharedController = self;
   toolbarItems = [[NSMutableDictionary alloc] init];
-  warningImage = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"warning"]];
+  warningImage = [[NSImage imageNamed:@"warning-triangle"] retain];
   shortcutTextView = [[ServiceShortcutsTextView alloc] initWithFrame:NSMakeRect(0,0,10,10)];
+  preambles = [[NSMutableArray alloc] initWithCapacity:1];
+  selfController = [[NSObjectController alloc] init];
+  [selfController setContent:self];
+  preamblesController = [[PreamblesController alloc] init];
+  [preamblesController bind:@"contentArray" toObject:self withKeyPath:@"preambles" options:nil];
   return self;
 }
+//end init
 
 -(void) dealloc
 {
@@ -407,8 +362,30 @@ static PreferencesController* sharedController = nil;
   [exampleSyntaxColouring release];
   [applyPreambleToLibraryAlert release];
   [shortcutTextView release];
+  [preamblesController release];
+  [preambles release];
+  [selfController release];
   [super dealloc];
 }
+//end dealloc
+
+-(NSMutableArray*) preambles
+{
+  return preambles;
+}
+//end preambles
+
+-(NSAttributedString*) preambleForLatexisation
+{
+  return [latexisationSelectedPreamble objectForKey:@"value"];
+}
+//end preambleForLatexisation
+
+-(NSAttributedString*) preambleForService
+{
+  return [serviceSelectedPreamble objectForKey:@"value"];
+}
+//end preambles
 
 -(NSArray*) toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
@@ -417,18 +394,21 @@ static PreferencesController* sharedController = nil;
                                    ServiceToolbarItemIdentifier,  AdvancedToolbarItemIdentifier,
                                    WebToolbarItemIdentifier, nil];
 }
+//end toolbarDefaultItemIdentifiers:
 
 -(NSArray*) toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
 {
   return [self toolbarDefaultItemIdentifiers:toolbar];
 }
+//end toolbarAllowedItemIdentifiers:
 
 -(NSArray*) toolbarSelectableItemIdentifiers:(NSToolbar*)toolbar
 {
   return [self toolbarDefaultItemIdentifiers:toolbar];
 }
+//end toolbarSelectableItemIdentifiers:
  
-- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
+-(NSToolbarItem*) toolbar:(NSToolbar*)toolbar itemForItemIdentifier:(NSString*)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
   NSToolbarItem* item = [toolbarItems objectForKey:itemIdentifier];
   if (!item)
@@ -450,7 +430,7 @@ static PreferencesController* sharedController = nil;
     else if ([itemIdentifier isEqualToString:PreambleToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"preambleToolbarItem" ofType:@"tiff"];
-      label = NSLocalizedString(@"Preamble", @"Preamble");
+      label = NSLocalizedString(@"Preambles", @"Preambles");
     }
     else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     {
@@ -481,6 +461,7 @@ static PreferencesController* sharedController = nil;
   }
   return item;
 }
+//end toolbar:itemForItemIdentifier:willBeInsertedIntoToolbar:
 
 -(IBAction) toolbarHit:(id)sender
 {
@@ -492,7 +473,7 @@ static PreferencesController* sharedController = nil;
   else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
     view = editionView;
   else if ([itemIdentifier isEqualToString:PreambleToolbarItemIdentifier])
-    view = preambleView;
+    view = preamblesView;
   else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     view = compositionView;
   else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
@@ -543,6 +524,7 @@ static PreferencesController* sharedController = nil;
   
   exampleSyntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:exampleTextView];
 }
+//end awakeFromNib
 
 //initializes the controls with default values
 -(void) windowDidLoad
@@ -584,12 +566,39 @@ static PreferencesController* sharedController = nil;
   //[preambleTextView setDelegate:self];//No ! preambleTextView's delegate is itself to manage forbidden lines
   //[preambleTextView setForbiddenLine:0 forbidden:YES];//finally, the user is allowed to modify
   //[preambleTextView setForbiddenLine:1 forbidden:YES];//finally, the user is allowed to modify
-  NSData* attributedStringData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
-  NSAttributedString* attributedString = [[[NSAttributedString alloc] initWithRTF:attributedStringData documentAttributes:NULL] autorelease];
-  [[preambleTextView textStorage] setAttributedString:attributedString];
-  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
+  NSArray* preamblesEncodedInUserDefaults = [userDefaults arrayForKey:PreamblesKey];
+  if (![preamblesEncodedInUserDefaults count])
+    preamblesEncodedInUserDefaults = factoryDefaultsPreambles;
+  unsigned int i = 0;
+  for(i = 0 ; i<[preamblesEncodedInUserDefaults count] ; ++i)
+    [preamblesController addObject:[PreamblesController decodePreamble:[preamblesEncodedInUserDefaults objectAtIndex:i]]];
+  [preamblesController setSelectionIndex:0];
+  [[preamblesTableView tableColumnWithIdentifier:@"name"] bind:@"value" toObject:preamblesController withKeyPath:@"arrangedObjects.name" options:nil];
+  [preamblesTableView setDataSource:self];
+  [addPreambleButton setAction:@selector(insert:)];
+  [addPreambleButton setTarget:preamblesController];
+  [addPreambleButton bind:@"enabled" toObject:preamblesController withKeyPath:@"canAdd" options:nil];
+  [removePreambleButton setAction:@selector(remove:)];
+  [removePreambleButton setTarget:preamblesController];
+  [removePreambleButton bind:@"enabled" toObject:preamblesController withKeyPath:@"canRemove" options:nil];  
+  [preambleTextView bind:@"attributedString" toObject:preamblesController withKeyPath:@"selection.value" options:nil];
+  [latexisationSelectedPreamblePopUpButton bind:@"content" toObject:preamblesController withKeyPath:@"arrangedObjects" options:nil];
+  [latexisationSelectedPreamblePopUpButton bind:@"contentValues" toObject:preamblesController withKeyPath:@"arrangedObjects.name" options:nil];
+  [latexisationSelectedPreamblePopUpButton bind:@"selectedObject" toObject:selfController withKeyPath:@"content.latexisationSelectedPreamble" options:nil];
+  [serviceSelectedPreamblePopUpButton bind:@"content" toObject:preamblesController withKeyPath:@"arrangedObjects" options:nil];
+  [serviceSelectedPreamblePopUpButton bind:@"contentValues" toObject:preamblesController withKeyPath:@"arrangedObjects.name" options:nil];
+  [serviceSelectedPreamblePopUpButton bind:@"selectedObject" toObject:selfController withKeyPath:@"content.serviceSelectedPreamble" options:nil];
+  [self addObserver:self forKeyPath:@"preambles" options:NSKeyValueObservingOptionNew context:NULL];
   [[preambleTextView syntaxColouring] recolourCompleteDocument];
-
+  unsigned int latexisationSelectedPreambleIndex = [[userDefaults objectForKey:LatexisationSelectedPreambleIndexKey] unsignedIntValue];
+  [self setLatexisationSelectedPreamble:(latexisationSelectedPreambleIndex < [preambles count]) ?
+                                        [preambles objectAtIndex:latexisationSelectedPreambleIndex] :
+                                        [preambles count] ? [preambles objectAtIndex:0] : nil];
+  unsigned int serviceSelectedPreambleIndex = [[userDefaults objectForKey:ServiceSelectedPreambleIndexKey] unsignedIntValue];
+  [self setServiceSelectedPreamble:(serviceSelectedPreambleIndex < [preambles count]) ?
+                                     [preambles objectAtIndex:serviceSelectedPreambleIndex] :
+                                     [preambles count] ? [preambles objectAtIndex:0] : nil];
+  [preamblesTableView selectRow:[preambles indexOfObject:latexisationSelectedPreamble] byExtendingSelection:NO];
   [self changeFont:self];//updates font textfield
   
   [pdfLatexTextField        setDelegate:self];
@@ -611,6 +620,8 @@ static PreferencesController* sharedController = nil;
   [serviceUsesHistoryButton       setState:([userDefaults boolForKey:ServiceUsesHistoryKey]  ? NSOnState : NSOffState)];
   [serviceWarningLinkBackButton   setHidden:([serviceRespectsBaselineButton state] == NSOffState)];
   [serviceWarningShortcutConflict setHidden:YES];
+  [serviceRelaunchWarning setHidden:(floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_4)]; //Leopard+
+    
   
   [additionalTopMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalTopMarginKey]];
   [additionalTopMarginTextField setDelegate:self];
@@ -621,7 +632,7 @@ static PreferencesController* sharedController = nil;
   [additionalBottomMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
   [additionalBottomMarginTextField setDelegate:self];
   
-  [checkForNewVersionsButton setState:([userDefaults boolForKey:CheckForNewVersionsKey] ? NSOnState : NSOffState)];
+  [checkForNewVersionsButton setState:([[[AppController appController] sparkleUpdater] automaticallyChecksForUpdates] ? NSOnState : NSOffState)];
   
   [self controlTextDidEndEditing:nil];
   [self _updateButtonStates:nil];
@@ -646,6 +657,7 @@ static PreferencesController* sharedController = nil;
   [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
                              name:CurrentCompositionConfigurationDidChangeNotification object:nil];
 }
+//end windowDidLoad
 
 -(void) windowWillClose:(NSNotification *)aNotification
 {
@@ -653,7 +665,9 @@ static PreferencesController* sharedController = nil;
   NSFontManager* fontManager = [NSFontManager sharedFontManager];
   if ([fontManager delegate] == self)
     [fontManager setDelegate:nil];
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
+//end windowWillClose:
 
 //image exporting
 -(IBAction) openOptionsForDragExport:(id)sender
@@ -664,6 +678,7 @@ static PreferencesController* sharedController = nil;
   [dragExportJpegColorWell setColor:[NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]]];
   [NSApp runModalForWindow:dragExportOptionsPane];
 }
+//end openOptionsForDragExport:
 
 //close option pane of the image export
 -(IBAction) closeOptionsPane:(id)sender
@@ -677,6 +692,7 @@ static PreferencesController* sharedController = nil;
   [NSApp stopModal];
   [dragExportOptionsPane orderOut:self];
 }
+//end closeOptionsPane:
 
 -(IBAction) dragExportJpegQualitySliderDidChange:(id)sender
 {
@@ -702,6 +718,7 @@ static PreferencesController* sharedController = nil;
   [dragExportOptionsButton setEnabled:allowOptions];
   [[NSUserDefaults standardUserDefaults] setInteger:exportFormat forKey:DragExportTypeKey];
 }
+//end dragExportPopupFormatDidChange:
 
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
@@ -712,6 +729,7 @@ static PreferencesController* sharedController = nil;
     ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPs2PdfAvailable];
   return ok;
 }
+//end validateMenuItem:
 
 //handles default color, point size, and mode
 -(IBAction) changeDefaultGeneralConfig:(id)sender
@@ -730,20 +748,15 @@ static PreferencesController* sharedController = nil;
     [userDefaults setInteger:[[defaultModeSegmentedControl cell] tagForSegment:[defaultModeSegmentedControl selectedSegment]]
                       forKey:DefaultModeKey];
 }
+//end changeDefaultGeneralConfig:
 
 //updates the user defaults as the user is typing. Not very efficient, but textDidEndEditing was not working properly
 -(void)textDidChange:(NSNotification *)aNotification
 {
-  if ([aNotification object] == preambleTextView)
-  {
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSAttributedString* attributedString = [preambleTextView textStorage];
-    [userDefaults setObject:[attributedString RTFFromRange:NSMakeRange(0, [attributedString length]) documentAttributes:nil]
-                     forKey:DefaultPreambleAttributedKey];
-  }
-  else if ([aNotification object] == scriptsScriptDefinitionBodyTextView)
+  if ([aNotification object] == scriptsScriptDefinitionBodyTextView)
     [self changeScriptsConfiguration:scriptsScriptDefinitionBodyTextView];
 }
+//end textDidChange:
 
 -(IBAction) changeSpellChecking:(id)sender
 {
@@ -754,6 +767,7 @@ static PreferencesController* sharedController = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SpellCheckingDidChangeNotification object:nil];
   }
 }
+//end changeSpellChecking:
 
 -(IBAction) changeSyntaxColoringConfiguration:(id)sender
 {
@@ -801,14 +815,13 @@ static PreferencesController* sharedController = nil;
 }
 //end changeReduceTextArea:
 
--(IBAction) resetDefaultPreamble:(id)sender
+-(IBAction) resetSelectedPreambleToDefault:(id)sender
 {
-  [[preambleTextView textStorage] setAttributedString:factoryDefaultPreamble];
-  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
-  [[preambleTextView syntaxColouring] recolourCompleteDocument];
+  [preamblesController setValue:[[PreamblesController defaultLocalizedPreambleDictionary] valueForKey:@"value"] forKeyPath:@"selection.value"];
   [preambleTextView setNeedsDisplay:YES];
+  [self preamblesDidChange];
 }
-//end resetDefaultPreamble:
+//end resetSelectedPreambleToDefault:
 
 -(IBAction) selectFont:(id)sender
 {
@@ -817,6 +830,7 @@ static PreferencesController* sharedController = nil;
   [fontManager orderFrontFontPanel:self];
   [fontManager setDelegate:self]; //the delegate will be reset in tabView:willSelectTabViewItem: or windowWillClose:
 }
+//end selectFont:
 
 -(void) changeFont:(id)sender
 {
@@ -844,14 +858,16 @@ static PreferencesController* sharedController = nil;
     [documents makeObjectsPerformSelector:@selector(setFont:) withObject:newFont];
   }
 }
+//end changeFont:
 
 -(IBAction) applyPreambleToOpenDocuments:(id)sender
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSArray* documents = [[NSDocumentController sharedDocumentController] documents];
-  [documents makeObjectsPerformSelector:@selector(setPreamble:) withObject:[[[preambleTextView textStorage] mutableCopy] autorelease]];
+  [documents makeObjectsPerformSelector:@selector(setPreamble:) withObject:[[[self preambleForLatexisation] mutableCopy] autorelease]];
   [documents makeObjectsPerformSelector:@selector(setFont:) withObject:[NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]]];
 }
+//end applyPreambleToOpenDocuments:
 
 -(IBAction) applyPreambleToLibrary:(id)sender
 {
@@ -872,9 +888,10 @@ static PreferencesController* sharedController = nil;
   {
     NSArray* historyItems = [[LibraryManager sharedManager] allValues];
     [historyItems makeObjectsPerformSelector:@selector(setPreamble:)
-                                  withObject:[[[preambleTextView textStorage] mutableCopy] autorelease]];
+                                  withObject:[[[self preambleForLatexisation] mutableCopy] autorelease]];
   }
 }
+//end applyPreambleToLibrary:
 
 -(IBAction) changeCompositionMode:(id)sender
 {
@@ -895,6 +912,7 @@ static PreferencesController* sharedController = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:CompositionModeDidChangeNotification object:self];
   }
 }
+//end changeCompositionMode:
 
 //opens a panel to let the user select a file, as the new path
 -(IBAction) changePath:(id)sender
@@ -919,6 +937,7 @@ static PreferencesController* sharedController = nil;
   [openPanel beginSheetForDirectory:path file:[filename lastPathComponent] types:nil modalForWindow:[self window] modalDelegate:self
                            didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:) contextInfo:textField];
 }
+//end changePath:
 
 -(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
@@ -936,6 +955,7 @@ static PreferencesController* sharedController = nil;
     }
   }
 }
+//end didEndOpenPanel:returnCode:contextInfo:
 
 -(void) controlTextDidChange:(NSNotification*)aNotification
 {
@@ -953,6 +973,7 @@ static PreferencesController* sharedController = nil;
   else if (textField == ps2pdfTextField)
     didChangePs2PdfTextField = YES;
 }
+//end controlTextDidChange:
 
 -(void) controlTextDidEndEditing:(NSNotification*)aNotification
 {
@@ -1087,6 +1108,7 @@ static PreferencesController* sharedController = nil;
   else if ((textField == scriptsScriptDefinitionShellTextField) && !(userInfo == self))
     [self changeScriptsConfiguration:scriptsScriptDefinitionShellTextField];
 }
+//end controlTextDidEndEditing:
 
 -(IBAction) changeServiceConfiguration:(id)sender
 {
@@ -1104,6 +1126,7 @@ static PreferencesController* sharedController = nil;
   else if (sender == serviceUsesHistoryButton)
     [userDefaults setBool:([serviceUsesHistoryButton state] == NSOnState) forKey:ServiceUsesHistoryKey];
 }
+//end changeServiceConfiguration:
 
 -(IBAction) gotoPreferencePane:(id)sender
 {
@@ -1119,6 +1142,7 @@ static PreferencesController* sharedController = nil;
     [[self window] makeFirstResponder:defaultColorColorWell];
   }
 }
+//end gotoPreferencePane:
 
 -(IBAction) changeAdditionalMargin:(id)sender
 {
@@ -1132,18 +1156,20 @@ static PreferencesController* sharedController = nil;
   else if (sender == additionalBottomMarginTextField)
     [userDefaults setFloat:[additionalBottomMarginTextField floatValue] forKey:AdditionalBottomMarginKey];
 }
+//end changeAdditionalMargin:
 
 -(IBAction) newEncapsulation:(id)sender
 {
   [[EncapsulationManager sharedManager] newEncapsulation];
   [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[encapsulationTableView numberOfRows]-1]
                       byExtendingSelection:NO];
-}
+}//end newEncapsulation:
 
 -(IBAction) removeSelectedEncapsulations:(id)sender
 {
   [[EncapsulationManager sharedManager] removeEncapsulationIndexes:[encapsulationTableView selectedRowIndexes]];
 }
+//end removeSelectedEncapsulations:
 
 -(IBAction) newTextShortcut:(id)sender
 {
@@ -1151,11 +1177,13 @@ static PreferencesController* sharedController = nil;
   [textShortcutsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[textShortcutsTableView numberOfRows]-1]
                     byExtendingSelection:NO];
 }
+//end newTextShortcut:
 
 -(IBAction) removeSelectedTextShortcuts:(id)sender
 {
   [[TextShortcutsManager sharedManager] removeTextShortcutsIndexes:[textShortcutsTableView selectedRowIndexes]];
 }
+//end removeSelectedTextShortcuts:
 
 -(IBAction) newCompositionConfiguration:(id)sender
 {
@@ -1163,32 +1191,38 @@ static PreferencesController* sharedController = nil;
   [compositionConfigurationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[compositionConfigurationTableView numberOfRows]-1]
                       byExtendingSelection:NO];
 }
+//end newCompositionConfiguration:
 
 -(IBAction) removeSelectedCompositionConfigurations:(id)sender
 {
   [[CompositionConfigurationManager sharedManager] removeCompositionConfigurationIndexes:[compositionConfigurationTableView selectedRowIndexes]];
 }
+//end removeSelectedCompositionConfigurations:
 
 -(IBAction) checkForUpdatesChange:(id)sender
 {
-  [[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:CheckForNewVersionsKey];
+  [[[AppController appController] sparkleUpdater] setAutomaticallyChecksForUpdates:([sender state] == NSOnState)];
 }
+//end checkForUpdatesChange:
 
 -(IBAction) checkNow:(id)sender
 {
   [[AppController appController] checkUpdates:self];
 }
+//end checkNow:
 
 -(IBAction) gotoWebSite:(id)sender
 {
   [[AppController appController] openWebSite:self];
 }
+//end gotoWebSite:
 
 -(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier
 {
   [[[self window] toolbar] setSelectedItemIdentifier:itemIdentifier];
   [self toolbarHit:[toolbarItems objectForKey:itemIdentifier]];
 }
+//end selectPreferencesPaneWithItemIdentifier:
 
 -(void) _userDefaultsDidChangeNotification:(NSNotification*)notification
 {
@@ -1199,6 +1233,7 @@ static PreferencesController* sharedController = nil;
   [additionalRightMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalRightMarginKey]];
   [additionalBottomMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
 }
+//end _userDefaultsDidChangeNotification:
 
 -(void) _updateButtonStates:(NSNotification*)notification
 {
@@ -1254,11 +1289,13 @@ static PreferencesController* sharedController = nil;
     [compositionSelectionPopUpButton selectItemWithTag:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
   }
 }
+//end _updateButtonStates:
 
 //useful to avoid some bad connections in Interface builder
 -(IBAction) nullAction:(id)sender
 {
 }
+//end nullAction:
 
 //data source of the shortcut/scripts tableview
 -(int) numberOfRowsInTableView:(NSTableView *)aTableView
@@ -1270,6 +1307,7 @@ static PreferencesController* sharedController = nil;
     nbRows = 3;
   return nbRows;
 }
+//end numberOfRowsInTableView:
 
 -(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
@@ -1307,6 +1345,46 @@ static PreferencesController* sharedController = nil;
       NSNumber* currentEnabled  = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:enabledColumn row:rowIndex];
       NSString* currentShortcut = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:shortcutColumn row:rowIndex];
       BOOL conflict = NO;
+      unsigned int index = 0;
+      NSMutableArray* serviceMenuItems = [NSMutableArray arrayWithArray:[[NSApp servicesMenu] itemArray]];
+      NSMutableArray* alreadyUsedServiceShortcuts = [NSMutableArray array];
+      while(index < [serviceMenuItems count])
+      {
+        id object = [serviceMenuItems objectAtIndex:index];
+        if ([object isKindOfClass:[NSMenu class]])
+        {
+          [serviceMenuItems addObjectsFromArray:[object itemArray]];
+          [serviceMenuItems removeObjectAtIndex:index];
+        }
+        else if ([object isKindOfClass:[NSMenuItem class]])
+        {
+          if ([object hasSubmenu] && ![[object title] isEqualToString:@"LaTeXiT"])
+          {
+            [serviceMenuItems addObjectsFromArray:[[object submenu] itemArray]];
+            [serviceMenuItems removeObjectAtIndex:index];
+          }
+          else
+          {
+            NSString* lowerCaseShortcut = [[object keyEquivalent] lowercaseString];
+            if (![lowerCaseShortcut isEqualToString:@""])
+              [alreadyUsedServiceShortcuts addObject:lowerCaseShortcut];
+            ++index;
+          }
+        }
+        else
+          [serviceMenuItems removeObjectAtIndex:index];
+      }//end for each service
+      
+      const unichar shift = 0x21e7;
+      const unichar command = 0x2318;
+      const unichar shortcutMaskCharacters[] = {shift, command};
+      NSCharacterSet* shortcutMaskCharacterSet =
+        [NSCharacterSet characterSetWithCharactersInString:[NSString stringWithCharacters:shortcutMaskCharacters
+                                                                                   length:sizeof(shortcutMaskCharacters)]];
+      NSString* trimmedCurrentShortcut = [currentShortcut stringByTrimmingCharactersInSet:shortcutMaskCharacterSet];
+      conflict |= [currentEnabled boolValue] && currentShortcut && ![currentShortcut isEqualToString:@""] &&
+                  ![trimmedCurrentShortcut isEqualToString:@""] &&
+                  [alreadyUsedServiceShortcuts containsObject:[trimmedCurrentShortcut lowercaseString]];
       int i = 0;
       for(i = 0 ; [currentEnabled boolValue] && !conflict && i<[aTableView numberOfRows] ; ++i)
       {
@@ -1314,7 +1392,7 @@ static PreferencesController* sharedController = nil;
          NSString* shortcut = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:shortcutColumn row:i];
          conflict |= (i != rowIndex) && [enabled boolValue] && currentShortcut && ![currentShortcut isEqualToString:@""] &&
                                         [currentShortcut isEqualToString:shortcut];
-      }
+      }//end for each defined shortcut
 
       object = conflict ? warningImage : nil;
       [serviceWarningShortcutConflict setHidden:!conflict && [serviceWarningShortcutConflict isHidden]];
@@ -1339,6 +1417,7 @@ static PreferencesController* sharedController = nil;
   }
   return object;
 }
+//end tableView:objectValueForTableColumn:row:
 
 -(void) tableView:(NSTableView *)aTableView setObjectValue:(id)value forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
@@ -1354,6 +1433,9 @@ static PreferencesController* sharedController = nil;
       NSMutableArray* shortcutEnabled = [NSMutableArray arrayWithArray:[userDefaults objectForKey:ServiceShortcutEnabledKey]];
       [shortcutEnabled replaceObjectAtIndex:index withObject:value];
       [userDefaults setObject:shortcutEnabled forKey:ServiceShortcutEnabledKey];
+      [[AppController appController]
+        changeServiceShortcutsWithDiscrepancyFallback:CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS
+                               authenticationFallback:CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK];
     }
     else if ([identifier isEqualToString:@"shortcut"])
     {
@@ -1362,10 +1444,10 @@ static PreferencesController* sharedController = nil;
                                  ? [value substringWithRange:NSMakeRange([value length]-1, 1)] : @"";
       [shorcutStrings replaceObjectAtIndex:index withObject:valueToStore];
       [userDefaults setObject:shorcutStrings forKey:ServiceShortcutStringsKey];
+      [[AppController appController]
+        changeServiceShortcutsWithDiscrepancyFallback:CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS
+                               authenticationFallback:CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK];
     }
-
-    [[AppController appController] changeServiceShortcuts];
-  
     [serviceWarningShortcutConflict setHidden:YES];
     [aTableView reloadData];
   }
@@ -1386,6 +1468,7 @@ static PreferencesController* sharedController = nil;
     [self changeScriptsConfiguration:aTableView];
   }
 }
+//end tableView:setObjectValue:forTableColumn:row:
 
 -(void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex
 {
@@ -1396,11 +1479,13 @@ static PreferencesController* sharedController = nil;
       [aCell setPlaceholderString:NSLocalizedString(@"none", @"none")];
   }
 }
+//end tableView:willDisplayCell:forTableColumn:row:
 
 -(id) windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)anObject
 {
   return (anObject == serviceShortcutsTableView) ? shortcutTextView : nil;
 }
+//end windowWillReturnFieldEditor:toObject:
 
 -(IBAction) changeScriptsConfiguration:(id)sender
 {
@@ -1459,12 +1544,14 @@ static PreferencesController* sharedController = nil;
                                                              forKey:CompositionConfigurationAdditionalProcessingScriptsKey];
   }
 }
+//end changeScriptsConfiguration:
 
 -(void) tableViewSelectionDidChange:(NSNotification*)notification
 {
   if ([notification object] == scriptsTableView)
     [self changeScriptsConfiguration:scriptsTableView];
 }
+//end tableViewSelectionDidChange:
 
 -(IBAction) selectScript:(id)sender
 {
@@ -1477,6 +1564,7 @@ static PreferencesController* sharedController = nil;
                            didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:)
                               contextInfo:scriptsScriptSelectionTextField];
 }
+//end selectScript:
 
 -(IBAction) showScriptHelp:(id)sender
 {
@@ -1486,6 +1574,7 @@ static PreferencesController* sharedController = nil;
     [scriptsHelpPanel makeKeyAndOrderFront:sender];
   }
 }
+//end showScriptHelp:
 
 -(IBAction) changeCompositionSelection:(id)sender
 {
@@ -1509,6 +1598,7 @@ static PreferencesController* sharedController = nil;
     }
   }
 }
+//end changeCompositionSelection:
 
 -(IBAction) closeCompositionSelectionPanel:(id)sender
 {
@@ -1520,12 +1610,134 @@ static PreferencesController* sharedController = nil;
   [[NSNotificationCenter defaultCenter] postNotificationName:CurrentCompositionConfigurationDidChangeNotification
                                                       object:compositionSelectionPopUpButton];
 }
+//end closeCompositionSelectionPanel:
 
--(void)sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode  contextInfo:(void*)contextInfo
+-(void)sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   [compositionSelectionPopUpButton selectItemWithTag:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
   [sheet orderOut:self];
 }
+//end sheetDidEnd:returnCode:contextInfo:
+
+-(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void *)context
+{
+  if ([keyPath isEqualToString:@"preambles"])
+    [self preamblesDidChange];
+}
+//end observeValueForKeyPath:ofObject:change:context:
+
+-(NSDictionary*) serviceSelectedPreamble {return serviceSelectedPreamble;}
+-(void) setServiceSelectedPreamble:(NSDictionary*)preamble {[serviceSelectedPreamble autorelease]; serviceSelectedPreamble = [preamble retain];}
+-(NSDictionary*) latexisationSelectedPreamble {return latexisationSelectedPreamble;}
+-(void) setLatexisationSelectedPreamble:(NSDictionary*)preamble
+{
+  if (preamble != latexisationSelectedPreamble)
+  {
+    [latexisationSelectedPreamble release];
+    latexisationSelectedPreamble = [preamble retain];
+    [preamblesTableView selectRow:[preambles indexOfObject:latexisationSelectedPreamble] byExtendingSelection:NO];
+  }
+}
+//end setLatexisationSelectedPreamble:
+
+-(void) commitChanges
+{
+  [self preamblesDidChange];
+}
+//end commitChanges
+
+-(void) checkSelectedPreamble:(NSDictionary**)pPreamble
+{
+  if (pPreamble)
+  {
+    NSDictionary* preamble = *pPreamble;
+    if (preamble && ![preambles containsObject:preamble])
+    {
+      [preamble release];
+      preamble = nil;
+    }
+    if (!preamble && [preambles count])
+      preamble = [[preambles objectAtIndex:0] retain];
+    *pPreamble = preamble;
+  }
+}
+//end checkSelectedPreamble:
+
+-(void) preamblesDidChange
+{
+  [self checkSelectedPreamble:&latexisationSelectedPreamble];
+  [self checkSelectedPreamble:&serviceSelectedPreamble];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults setObject:[NSNumber numberWithUnsignedInt:[preambles indexOfObject:latexisationSelectedPreamble]] forKey:LatexisationSelectedPreambleIndexKey];
+  [userDefaults setObject:[NSNumber numberWithUnsignedInt:[preambles indexOfObject:serviceSelectedPreamble]] forKey:ServiceSelectedPreambleIndexKey];
+  NSMutableArray* encodedPreambles = [NSMutableArray arrayWithCapacity:[preambles count]];
+  NSEnumerator* enumerator = [preambles objectEnumerator];
+  NSDictionary* preamble = nil;
+  while((preamble = [enumerator nextObject]))
+    [encodedPreambles addObject:[PreamblesController encodePreamble:preamble]];
+  [userDefaults setObject:encodedPreambles forKey:PreamblesKey];
+}
+//end preamblesDidChange
+
+//drag'n drop for moving rows
+
+-(NSIndexSet*) _draggedRowIndexes //utility method to access draggedItems when working with pasteboard sender
+{
+  return draggedRowIndexes;
+}
+//end _draggedRowIndexes
+
+//this one is deprecated in OS 10.4, calls writeRowsWithIndexes
+-(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard
+{
+  NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
+  NSEnumerator* enumerator = [rows objectEnumerator];
+  NSNumber* row = [enumerator nextObject];
+  while(row)
+  {
+    [indexSet addIndex:[row unsignedIntValue]];
+    row = [enumerator nextObject];
+  }
+  return [self tableView:tableView writeRowsWithIndexes:indexSet toPasteboard:pboard];
+}
+//end tableView:writeRows:toPasteboard:
+
+//this one is for OS 10.4
+-(BOOL) tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+  //we put the moving rows in pasteboard
+  draggedRowIndexes = rowIndexes;
+  [pboard declareTypes:[NSArray arrayWithObject:PreamblesPboardType] owner:self];
+  [pboard setPropertyList:[NSKeyedArchiver archivedDataWithRootObject:preambles] forType:PreamblesPboardType];
+  return YES;
+}
+//end tableView:writeRowsWithIndexes:toPasteboard:
+
+-(NSDragOperation) tableView:(NSTableView*)tableView validateDrop:(id <NSDraggingInfo>)info
+                 proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
+{
+  //we only accept moving inside the table (not between different ones)
+  NSPasteboard* pboard = [info draggingPasteboard];
+  NSIndexSet* indexSet =  [[[info draggingSource] dataSource] _draggedRowIndexes];
+  BOOL ok = (tableView == [info draggingSource]) && pboard &&
+            [pboard availableTypeFromArray:[NSArray arrayWithObject:PreamblesPboardType]] &&
+            [pboard propertyListForType:PreamblesPboardType] &&
+            (operation == NSTableViewDropAbove) &&
+            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+  return ok ? NSDragOperationGeneric : NSDragOperationNone;
+}
+//end tableView:validateDrop:proposedRow:proposedDropOperation:
+
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)operation
+{
+  [preamblesController willChangeValueForKey:@"arrangedOjects"];
+  NSIndexSet* indexSet = [[[info draggingSource] dataSource] _draggedRowIndexes];
+  [preambles moveObjectsAtIndices:indexSet toIndex:row];
+  [preamblesController didChangeValueForKey:@"arrangedOjects"];
+  [tableView setNeedsDisplay:YES];
+  return YES;
+}
+//end tableView:acceptDrop:row:dropOperation:
 
 @end

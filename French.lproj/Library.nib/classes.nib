@@ -1,58 +1,159 @@
-{
-    IBClasses = (
-        {CLASS = BorderlessPanel; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
-        {
-            ACTIONS = {"" = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = ImagePopupButton; LANGUAGE = ObjC; SUPERCLASS = NSPopUpButton; }, 
-        {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
-        {
-            ACTIONS = {
-                changeLibraryExportFormat = id; 
-                changeLibraryPreviewPanelSegmentedControl = id; 
-                changeLibraryRowType = id; 
-                importCurrent = id; 
-                newFolder = id; 
-                open = id; 
-                openDefaultLibraryPath = id; 
-                refreshItems = id; 
-                removeSelectedItems = id; 
-                renameItem = id; 
-                saveAs = id; 
-            }; 
-            CLASS = LibraryController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                actionButton = ImagePopupButton; 
-                exportAccessoryView = NSView; 
-                exportFormatPopUpButton = NSPopUpButton; 
-                exportOnlySelectedButton = NSButton; 
-                importAccessoryView = NSView; 
-                importCurrentButton = NSButton; 
-                importOptionPopUpButton = NSPopUpButton; 
-                libraryPreviewPanel = BorderlessPanel; 
-                libraryPreviewPanelImageView = LibraryPreviewPanelImageView; 
-                libraryPreviewPanelSegmentedControl = NSSegmentedControl; 
-                libraryRowTypeSegmentedControl = NSSegmentedControl; 
-                libraryTableView = LibraryTableView; 
-            }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {
-            CLASS = LibraryPreviewPanelImageView; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSImageView; 
-        }, 
-        {
-            ACTIONS = {copy = id; redo = id; undo = id; }; 
-            CLASS = LibraryTableView; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSOutlineView; 
-        }, 
-        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>NSSegmentedControl</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSControl</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>copy</key>
+				<string>id</string>
+				<key>edit</key>
+				<string>id</string>
+				<key>redo</key>
+				<string>id</string>
+				<key>undo</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>LibraryTableView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSOutlineView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>LibraryPreviewPanelImageView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSImageView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>ImagePopupButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSPopUpButton</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changeLibraryExportFormat</key>
+				<string>id</string>
+				<key>changeLibraryPreviewPanelSegmentedControl</key>
+				<string>id</string>
+				<key>changeLibraryRowType</key>
+				<string>id</string>
+				<key>importCurrent</key>
+				<string>id</string>
+				<key>newFolder</key>
+				<string>id</string>
+				<key>open</key>
+				<string>id</string>
+				<key>openDefaultLibraryPath</key>
+				<string>id</string>
+				<key>refreshItems</key>
+				<string>id</string>
+				<key>removeSelectedItems</key>
+				<string>id</string>
+				<key>renameItem</key>
+				<string>id</string>
+				<key>saveAs</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>LibraryController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>actionButton</key>
+				<string>ImagePopupButton</string>
+				<key>exportAccessoryView</key>
+				<string>NSView</string>
+				<key>exportFormatPopUpButton</key>
+				<string>NSPopUpButton</string>
+				<key>exportOnlySelectedButton</key>
+				<string>NSButton</string>
+				<key>importAccessoryView</key>
+				<string>NSView</string>
+				<key>importCurrentButton</key>
+				<string>NSButton</string>
+				<key>importOptionPopUpButton</key>
+				<string>NSPopUpButton</string>
+				<key>libraryPreviewPanel</key>
+				<string>BorderlessPanel</string>
+				<key>libraryPreviewPanelImageView</key>
+				<string>LibraryPreviewPanelImageView</string>
+				<key>libraryPreviewPanelSegmentedControl</key>
+				<string>NSSegmentedControl</string>
+				<key>libraryRowTypeSegmentedControl</key>
+				<string>NSSegmentedControl</string>
+				<key>libraryTableView</key>
+				<string>LibraryTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSApplication</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSResponder</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSPopUpButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>LibraryCell</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTextFieldCell</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>BorderlessPanel</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSPanel</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

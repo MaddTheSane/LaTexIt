@@ -1,162 +1,192 @@
-{
-    IBClasses = (
-        {
-            ACTIONS = {
-                addCurrentEquationToLibrary = id; 
-                addLibraryFolder = id; 
-                clearHistory = id; 
-                displayLog = id; 
-                exportImage = id; 
-                makeLatex = id; 
-                paletteClick = id; 
-                removeHistoryEntries = id; 
-                removeLibraryItems = id; 
-                showHelp = id; 
-                showOrHideHistory = id; 
-                showOrHideLibrary = id; 
-                showOrHidePalette = id; 
-                showPreferencesPane = id; 
-            }; 
-            CLASS = AppController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                paletteMenuItem = NSMenuItem; 
-                readmeTextView = NSTextView; 
-                readmeWindow = NSWindow; 
-                showHistoryMenuItem = NSMenuItem; 
-                showLibraryMenuItem = NSMenuItem; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = Compressor; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {"" = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = HistoryCell; LANGUAGE = ObjC; SUPERCLASS = NSImageCell; }, 
-        {CLASS = HistoryItem; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = HistoryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {copy = id; }; 
-            CLASS = HistoryView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {document = MyDocument; }; 
-            SUPERCLASS = NSTableView; 
-        }, 
-        {CLASS = IsJpegCell; LANGUAGE = ObjC; SUPERCLASS = NSValueTransformer; }, 
-        {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
-        {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
-        {
-            ACTIONS = {importCurrent = id; newFolder = id; refreshItem = id; removeItem = id; }; 
-            CLASS = LibraryDrawer; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                addFolderButton = NSButton; 
-                importCurrentButton = NSButton; 
-                libraryView = LibraryView; 
-                refreshItemButton = NSButton; 
-                removeItemButton = NSButton; 
-            }; 
-            SUPERCLASS = NSDrawer; 
-        }, 
-        {CLASS = LibraryFile; LANGUAGE = ObjC; SUPERCLASS = LibraryItem; }, 
-        {CLASS = LibraryFolder; LANGUAGE = ObjC; SUPERCLASS = LibraryItem; }, 
-        {CLASS = LibraryItem; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = LibraryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {copy = id; }; 
-            CLASS = LibraryView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {document = MyDocument; }; 
-            SUPERCLASS = NSOutlineView; 
-        }, 
-        {CLASS = LineCountRulerView; LANGUAGE = ObjC; SUPERCLASS = NSRulerView; }, 
-        {CLASS = LineCountTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
-        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
-        {
-            ACTIONS = {
-                closeOptionsPane = id; 
-                displayLastLog = id; 
-                exportImage = id; 
-                jpegQualitySliderDidChange = id; 
-                makeLatex = id; 
-                nullAction = id; 
-                openOptions = id; 
-                saveAccessoryViewPopupFormatDidChange = id; 
-            }; 
-            CLASS = MyDocument; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                colorWell = NSColorWell; 
-                copyAsContextualMenuItem = NSMenu; 
-                imageView = MyImageView; 
-                jpegColorWell = NSColorWell; 
-                jpegQualitySlider = NSSlider; 
-                jpegQualityTextField = NSTextField; 
-                logTableView = LogTableView; 
-                logTextView = NSTextView; 
-                logWindow = NSWindow; 
-                lowerBox = NSBox; 
-                makeLatexButton = NSButton; 
-                preambleTextView = LineCountTextView; 
-                progressIndicator = NSProgressIndicator; 
-                progressMessageProgressIndicator = NSProgressIndicator; 
-                progressMessageTextField = NSTextField; 
-                saveAccessoryView = NSView; 
-                saveAccessoryViewJpegWarning = NSButton; 
-                saveAccessoryViewOptionsButton = NSButton; 
-                saveAccessoryViewOptionsPane = NSPanel; 
-                saveAccessoryViewPopupFormat = NSPopUpButton; 
-                saveAccessoryViewScaleAsPercentTextField = NSTextField; 
-                sizeText = NSTextField; 
-                sourceTextView = LineCountTextView; 
-                splitView = NSSplitView; 
-                typeOfTextControl = NSSegmentedControl; 
-                upperBox = NSBox; 
-            }; 
-            SUPERCLASS = NSDocument; 
-        }, 
-        {
-            ACTIONS = {copy = id; zoom = id; }; 
-            CLASS = MyImageView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {document = MyDocument; zoomSlider = NSSlider; }; 
-            SUPERCLASS = NSImageView; 
-        }, 
-        {CLASS = NSApplication; LANGUAGE = ObjC; SUPERCLASS = NSResponder; }, 
-        {CLASS = NSArray; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = NSMutableArray; LANGUAGE = ObjC; SUPERCLASS = NSArray; }, 
-        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
-        {CLASS = NSValueTransformer; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {paletteClick = id; }; 
-            CLASS = PalettesController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                greekMatrix = NSMatrix; 
-                mathDecorationsMatrix = NSMatrix; 
-                mathLettersMatrix = NSMatrix; 
-                mathOperatorsMatrix = NSMatrix; 
-            }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {
-            ACTIONS = {changePath = id; changeServiceConfiguration = id; resetDefaultPreamble = id; }; 
-            CLASS = PreferencesController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                pdfLatexTextField = NSTextField; 
-                preambleTextView = LineCountTextView; 
-                serviceColor = NSColorWell; 
-                servicePointSize = NSTextField; 
-                serviceRespectsBaseline = NSButton; 
-                serviceRespectsColor = NSButton; 
-                serviceRespectsPointSize = NSButton; 
-            }; 
-            SUPERCLASS = NSWindowController; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>NSSegmentedControl</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSControl</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NotifyingScrollView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSScrollView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>ImagePopupButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSPopUpButton</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSApplication</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSResponder</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>copy</key>
+				<string>id</string>
+				<key>zoom</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>MyImageView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>document</key>
+				<string>MyDocument</string>
+				<key>zoomSlider</key>
+				<string>NSSlider</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSImageView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>LineCountTextView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTextView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSPopUpButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>LogTableView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTableView</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changePreamble</key>
+				<string>id</string>
+				<key>closeOptionsPane</key>
+				<string>id</string>
+				<key>displayLastLog</key>
+				<string>id</string>
+				<key>exportImage</key>
+				<string>id</string>
+				<key>jpegQualitySliderDidChange</key>
+				<string>id</string>
+				<key>makeLatex</key>
+				<string>id</string>
+				<key>makeLatexAndExport</key>
+				<string>id</string>
+				<key>nullAction</key>
+				<string>id</string>
+				<key>openOptions</key>
+				<string>id</string>
+				<key>reexportImage</key>
+				<string>id</string>
+				<key>saveAccessoryViewPopupFormatDidChange</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>MyDocument</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>changePreambleButton</key>
+				<string>ImagePopupButton</string>
+				<key>colorWell</key>
+				<string>NSColorWell</string>
+				<key>copyAsContextualMenuItem</key>
+				<string>NSMenu</string>
+				<key>imageView</key>
+				<string>MyImageView</string>
+				<key>jpegColorWell</key>
+				<string>NSColorWell</string>
+				<key>jpegQualitySlider</key>
+				<string>NSSlider</string>
+				<key>jpegQualityTextField</key>
+				<string>NSTextField</string>
+				<key>logTableView</key>
+				<string>LogTableView</string>
+				<key>logTextView</key>
+				<string>NSTextView</string>
+				<key>logWindow</key>
+				<string>NSWindow</string>
+				<key>lowerBox</key>
+				<string>NSBox</string>
+				<key>makeLatexButton</key>
+				<string>NSButton</string>
+				<key>preambleTextView</key>
+				<string>LineCountTextView</string>
+				<key>progressIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>progressMessageProgressIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>progressMessageTextField</key>
+				<string>NSTextField</string>
+				<key>saveAccessoryView</key>
+				<string>NSView</string>
+				<key>saveAccessoryViewJpegWarning</key>
+				<string>NSButton</string>
+				<key>saveAccessoryViewOptionsButton</key>
+				<string>NSButton</string>
+				<key>saveAccessoryViewOptionsPane</key>
+				<string>NSPanel</string>
+				<key>saveAccessoryViewPopupFormat</key>
+				<string>NSPopUpButton</string>
+				<key>saveAccessoryViewScaleAsPercentTextField</key>
+				<string>NSTextField</string>
+				<key>sizeText</key>
+				<string>NSTextField</string>
+				<key>sourceTextView</key>
+				<string>LineCountTextView</string>
+				<key>splitView</key>
+				<string>NSSplitView</string>
+				<key>typeOfTextControl</key>
+				<string>NSSegmentedControl</string>
+				<key>upperBox</key>
+				<string>NSBox</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSDocument</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

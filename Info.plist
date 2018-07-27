@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -44,6 +44,22 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>library</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>LEELibraryType</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>latexlib</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -73,7 +89,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.14.4 (Tiger version)</string>
+	<string>1.16.0</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -89,6 +105,8 @@
 			<dict>
 				<key>default</key>
 				<string></string>
+				<key>whenEnabled</key>
+				<string></string>
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
@@ -102,23 +120,36 @@
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
+				<string>com.adobe.encapsulated-postscript</string>
 				<string>NSTIFFPboardType</string>
+				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
+				<string>public.png</string>
+				<string>public.jpeg</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>public.rtf</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
+				<string>NSStringPboardType</string>
+				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSTimeOut</key>
+			<integer>30000</integer>
 		</dict>
 		<dict>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
-				<string>.</string>
+				<string></string>
+				<key>whenEnabled</key>
+				<string></string>
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
@@ -132,22 +163,35 @@
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
+				<string>com.adobe.encapsulated-postscript</string>
 				<string>NSTIFFPboardType</string>
+				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
+				<string>public.png</string>
+				<string>public.jpeg</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>public.rtf</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
+				<string>NSStringPboardType</string>
+				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSTimeOut</key>
+			<integer>30000</integer>
 		</dict>
 		<dict>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
+				<string></string>
+				<key>whenEnabled</key>
 				<string></string>
 			</dict>
 			<key>NSMenuItem</key>
@@ -162,23 +206,36 @@
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
+				<string>com.adobe.encapsulated-postscript</string>
 				<string>NSTIFFPboardType</string>
+				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
+				<string>public.png</string>
+				<string>public.jpeg</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>public.rtf</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
+				<string>NSStringPboardType</string>
+				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSTimeOut</key>
+			<integer>30000</integer>
 		</dict>
 		<dict>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
-				<string>,</string>
+				<string></string>
+				<key>whenEnabled</key>
+				<string></string>
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
@@ -192,22 +249,35 @@
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
+				<string>com.adobe.encapsulated-postscript</string>
 				<string>NSTIFFPboardType</string>
+				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
+				<string>public.png</string>
+				<string>public.jpeg</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>public.rtf</string>
 				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
+				<string>NSStringPboardType</string>
+				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSTimeOut</key>
+			<integer>30000</integer>
 		</dict>
 		<dict>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
+				<string></string>
+				<key>whenEnabled</key>
 				<string></string>
 			</dict>
 			<key>NSMenuItem</key>
@@ -222,17 +292,24 @@
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
 				<string>NSRTFPboardType</string>
+				<string>public.rtf</string>
 			</array>
+			<key>NSTimeOut</key>
+			<integer>30000</integer>
 		</dict>
 		<dict>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
+				<string></string>
+				<key>whenEnabled</key>
 				<string></string>
 			</dict>
 			<key>NSMenuItem</key>
@@ -246,16 +323,25 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
-				<string>NSPDFPboardType</string>
-				<string>NSRTFPboardType</string>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
+				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
+				<string>NSRTFPboardType</string>
+				<string>public.rtf</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSPDFPboardType</string>
 				<string>NSRTFDPboardType</string>
+				<string>com.apple.flat-rtfd</string>
+				<string>NSPDFPboardType</string>
+				<string>com.adobe.pdf</string>
 			</array>
+			<key>NSTimeOut</key>
+			<integer>30000</integer>
 		</dict>
 	</array>
+	<key>SUFeedURL</key>
+	<string>http://ktd.club.fr/programmation/fichiers/latexit-sparkle-en.rss</string>
 </dict>
 </plist>

@@ -3,33 +3,50 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2007 __MyCompanyName__. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 //
 
 #import "SystemTask.h"
 
+#import "DirectoryServiceHelper.h"
+#import "NSFileManagerExtended.h"
 #import "NSStringExtended.h"
-#import "Utils.h"
 
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
 @implementation SystemTask
 
--(id) init
+-(id) initWithWorkingDirectory:(NSString*)workingDirectory
 {
   if (![super init])
     return nil;
-  tmpStdinFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdinFilePath];
+  tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdinFilePath
+                                                                workingDirectory:workingDirectory];
   [tmpStdinFileHandle retain];
   [tmpStdinFilePath   retain];
-  tmpStdoutFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdoutFilePath];
+  tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdoutFilePath
+                                                                workingDirectory:workingDirectory];
   [tmpStdoutFileHandle retain];
   [tmpStdoutFilePath   retain];
-  tmpStderrFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStderrFilePath];
+  tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStderrFilePath
+                                                                workingDirectory:workingDirectory];
   [tmpStderrFileHandle retain];
   [tmpStderrFilePath   retain];
+  tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXXX" extension:@"sh"  outFilePath:&tmpScriptFilePath
+                                                                workingDirectory:workingDirectory];
+  [tmpScriptFileHandle retain];
+  [tmpScriptFilePath   retain];
   runningLock = [[NSLock alloc] init];
+  return self;
+}
+//end initWithWorkingDirectory
+
+-(id) init
+{
+  if (![self initWithWorkingDirectory:NSTemporaryDirectory()])
+    return nil;
   return self;
 }
 //end init
@@ -43,12 +60,15 @@
   unlink([tmpStdinFilePath UTF8String]);
   unlink([tmpStdoutFilePath UTF8String]);
   unlink([tmpStderrFilePath UTF8String]);
+  unlink([tmpScriptFilePath UTF8String]);
   [tmpStdinFilePath   release];
   [tmpStdoutFilePath   release];
   [tmpStderrFilePath   release];
+  [tmpScriptFilePath   release];
   [tmpStdinFileHandle release];
   [tmpStdoutFileHandle release];
   [tmpStderrFileHandle release];
+  [tmpScriptFileHandle release];
   [runningLock release];
   [super dealloc];
 }
@@ -78,6 +98,11 @@
 }
 //end setArguments:
 
+-(void) setUsingLoginShell:(BOOL)value
+{
+  isUsingLoginShell = value;
+}
+
 -(void) setCurrentDirectoryPath:(NSString*)directoryPath
 {
   [directoryPath retain];
@@ -102,7 +127,13 @@
 {
   return arguments;
 }
-//end arguments;
+//end arguments
+
+-(BOOL) isUsingLoginShell
+{
+  return isUsingLoginShell;
+}
+//end isUsingLoginShell
 
 -(NSString*) currentDirectoryPath
 {
@@ -124,44 +155,49 @@
 
 -(NSString*) equivalentLaunchCommand
 {
-  NSMutableString* systemCommand = [NSMutableString string];
-  if (currentDirectoryPath)
-    [systemCommand appendFormat:@"cd %@ 1>|/dev/null 2>&1;", currentDirectoryPath];
-  if (environment)
+  NSMutableString* scriptContent = [NSMutableString stringWithString:@"#!/bin/sh\n"];
+  //environment is now inherited with the call to bash -l
+  /*
+  if (environment && [environment count])
   {
     NSEnumerator* environmentEnumerator = [environment keyEnumerator];
-    NSMutableString* exportedVariables = [NSMutableString string];
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
-    {
-      if ([[environment objectForKey:variable] startsWith:@"'" options:0] && [[environment objectForKey:variable] endsWith:@"'" options:0])
-        [exportedVariables appendFormat:@" %@=%@", variable, [environment objectForKey:variable]];
-      else if ([[environment objectForKey:variable] startsWith:@"\"" options:0] && [[environment objectForKey:variable] endsWith:@"\"" options:0])
-        [exportedVariables appendFormat:@" %@=%@", variable, [environment objectForKey:variable]];
-      else
-        [exportedVariables appendFormat:@" %@=\"%@\"", variable, [environment objectForKey:variable]];
-    }
-    [systemCommand appendFormat:@"export %@ 1>|/dev/null 2>&1 || echo \"\" 1>|/dev/null 2>&1;", exportedVariables];
-  }
+      [scriptContent appendFormat:@"export %@=%@ 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
+  }//end if (environment && [environment count])*/
+  if (currentDirectoryPath)
+    [scriptContent appendFormat:@"cd %@\n", currentDirectoryPath];
   if (launchPath)
-    [systemCommand appendFormat:@"%@", launchPath];
-  if (arguments)
-    [systemCommand appendFormat:@" %@", [arguments componentsJoinedByString:@" "]];
-  if (tmpStdoutFilePath && tmpStderrFilePath)
-    [systemCommand appendFormat:@" 1>|%@ 2>|%@ <%@", tmpStdoutFilePath, tmpStderrFilePath, (stdInputData ? tmpStdinFilePath : @"/dev/null")];
-  return [NSString stringWithString:systemCommand];
+  {
+    [scriptContent appendFormat:@"%@", launchPath];
+    if (arguments)
+      [scriptContent appendFormat:@" %@", [arguments componentsJoinedByString:@" "]];
+    if (tmpStdoutFilePath && tmpStderrFilePath)
+      [scriptContent appendFormat:@" 1>|%@ 2>|%@ <%@\n", tmpStdoutFilePath, tmpStderrFilePath, (stdInputData ? tmpStdinFilePath : @"/dev/null")];
+  }//end if (launchPath)
+  return scriptContent;
 }
 //end equivalentLaunchCommand
 
 -(void) launch
 {
-  NSString* filePath = nil;
-  [Utils temporaryFileWithTemplate:@"latexit-command-XXXXXXXXX" extension:@"sh" outFilePath:&filePath];
-  if (!filePath || ![[self equivalentLaunchCommand] writeToFile:filePath atomically:YES])
+  NSError* error = nil;
+  if (![[self equivalentLaunchCommand] writeToFile:tmpScriptFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error])
     terminationStatus = -1;
   else
   {
-    NSString* systemCommand = [NSString stringWithFormat:@"/bin/bash -l %@", filePath];
+    NSString* currentShell = nil;
+    #warning fix bugs with TCSH first
+    /*if (isUsingLoginShell)
+    {
+      DirectoryServiceHelper* directoryServiceHelper = [[DirectoryServiceHelper alloc] init];
+      currentShell = [directoryServiceHelper valueForKey:kDS1AttrUserShell andUser:NSUserName()];
+      [directoryServiceHelper release];
+    }*/
+    if (!currentShell)
+      currentShell = @"/bin/bash";
+    NSString* option = (isUsingLoginShell && [currentShell isEqualToString:@"/bin/bash"]) ? @"-l" : @"";
+    NSString* systemCommand = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
 
     if (!timeOutLimit)
     {
@@ -190,9 +226,6 @@
       }
       [runningLock unlock];
     }//end if timeOutLimit
-    
-    if (filePath)
-      unlink([filePath UTF8String]);
   }//end if filePath
 }
 //end launch

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSWorkspace class
 
@@ -12,7 +12,7 @@
 @implementation NSString (Extended)
 
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
-+(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
++(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
 {
   NSString* string = nil;
   #ifndef PANTHER
@@ -50,8 +50,9 @@
   }
   return string;
 }
+//end stringWithContentsOfFile:guessEncoding:error:
 
-+(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
++(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
 {
   NSString* string = nil;
   #ifndef PANTHER
@@ -89,6 +90,13 @@
   }
   return string;
 }
+//end stringWithContentsOfURL:guessEncoding:error:
+
+-(NSString*) trim
+{
+  return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+//end trim
 
 -(BOOL) startsWith:(NSString*)substring options:(unsigned)mask
 {
@@ -102,6 +110,7 @@
   }
   return ok;
 }
+//end startsWith:options:
 
 -(BOOL) endsWith:(NSString*)substring options:(unsigned)mask
 {
@@ -115,6 +124,7 @@
   }
   return ok;
 }
+//end endsWith:options:
 
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag
 {
@@ -123,6 +133,7 @@
   [data appendBytes:&zero length:sizeof(zero)];
   return [data bytes];
 }
+//end cStringUsingEncoding:allowLossyConversion:
 
 -(NSString*) filteredStringForLatex
 {
@@ -135,5 +146,23 @@
   [string replaceOccurrencesOfString:unbreakableSpaceString withString:@" " options:0 range:NSMakeRange(0, [string length])];
   return string;
 }
+//end filteredStringForLatex
+
+//in Japanese environment, we should replace the Yen symbol by a backslash
+//You can read http://www.xs4all.nl/~msneep/articles/japanese.html to know more about that problem
+-(NSString*) replaceYenSymbol
+{
+  NSMutableString* stringWithBackslash = [NSMutableString stringWithString:self];
+  static NSString* yenString = nil;
+  if (!yenString)
+  {
+    unichar yenChar = 0x00a5;
+    yenString = [[NSString alloc] initWithCharacters:&yenChar length:1]; //the yen symbol as a string
+  }
+  [stringWithBackslash replaceOccurrencesOfString:yenString withString:@"\\"
+                                          options:NSLiteralSearch range:NSMakeRange(0, [stringWithBackslash length])];
+  return stringWithBackslash;
+}
+//end replaceYenSymbol
 
 @end

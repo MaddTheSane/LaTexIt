@@ -5,9 +5,12 @@
 "Untitled" = "Sans Titre";
 "none" = "aucun";
 "default" = "par défaut";
+"Copy of %@" = "Copie de %@";
 "Read Me" = "Lisez-moi";
 "History" = "Historique";
 "Clear History" = "Effacer l'historique";
+"Remove all" = "Tout supprimer";
+"Remove selection" = "Supprimer la sélection";
 "Are you sure you want to clear the whole history ?\nThis operation is irreversible." =
 "Voulez-vous vraiment effacer entièrement l'historique ?\nCette operation est irréversible.";
 "Hide preamble" = "Masquer le préambule";
@@ -73,13 +76,10 @@
 "Open in LaTeXiT" = "Ouvrir dans LaTeXiT";
 "Check for new versions" = "Vérification des mises à jour";
 "An error occured while trying to reach %@.\nYou should check your network." = "Une erreur est survenue lors de l'accès à %@.\nVous devriez vérifier le bon fonctionnement de votre réseau.";
-"Your version of LaTeXiT is up-to-date" = "Votre version de LaTeXiT est à jour";
-"Your version of LaTeXiT is more recent than the latest one available" = "Votre version de LaTeXiT est plus récente que la dernière version disponible";
-"Your version of LaTeXiT is the same as the latest one available" = "Votre version de LaTeXiT est la même que la dernière version disponible";
 "Open download page" = "Aller sur le site";
 "General" = "Général";
 "Edition" = "Édition";
-"Preamble" = "Préambule";
+"Preambles" = "Préambules";
 "Composition" = "Composition";
 "Service" = "Service";
 "Advanced" = "Avancé";
@@ -133,3 +133,16 @@
 "Error" = "Erreur";
 "Enlarge the text area" = "Agrandir la zone de texte";
 "Reduce the text area" = "Réduire la zone de texte";
+"New Service shortcuts could not be set" = "Les nouveaux raccourcis claviers pour les Services n'ont pu être inscrits.";
+"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle" = "L'authentification a échoué ou n'a pas permis de modifier le fichier <Info.plist> qui se trouve dans le paquet LaTeXiT.app";
+"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences" = "Les raccourcis claviers pour les Services de LaTeXiT ne correspondent pas à ceux définis dans les préférences.";
+"Apply preferences" = "Appliquer les préférences";
+"Update preferences" = "Mettre à jour les préférences";
+"Ignore" = "Ignorer";
+"__EXPLAIN_CHANGE_SHORTCUTS__" = "";
+"PDF Equation" = "Équation PDF";
+"Text file" = "Fichier texte";
+"LaTeXiT library" = "Bibliothèque LaTeXiT";
+"LaTeX Equation Editor library" = "Bibliothèque LaTeX Equation Editor";
+"LaTeXiT LaTeX Palette" = "Palette LaTeX LaTeXiT";
+"Additional files" = "Fichiers supplémentaires";

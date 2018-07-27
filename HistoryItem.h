@@ -2,13 +2,13 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //An HistoryItem is a useful structure to hold the info about the generated image
 //It will typically contain the latex source code (preamble+body), the color, the mode (\[...\], $...$ or text)
 //the date, the point size.
 
-#import "MyDocument.h" //for latex_mode_t
+#import "LaTeXiTSharedTypes.h" //for latex_mode_t
 
 #import <Cocoa/Cocoa.h>
 
@@ -66,8 +66,7 @@ extern NSString* HistoryItemDidChangeNotification;
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
 //the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)
--(void) writeToPasteboard:(NSPasteboard *)pboard forDocument:(MyDocument*)document isLinkBackRefresh:(BOOL)isLinkBackRefresh
-         lazyDataProvider:(id)lazyDataProvider;
+-(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
          
 //returns reannotated pdfData before returning it. Very rare. Only needed to resynchronize because of some backgroundColor change.
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;

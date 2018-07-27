@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -13,6 +13,8 @@
 #import "AppController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
+#import "LatexProcessor.h"
+#import "LibraryFile.h"
 #import "LibraryManager.h"
 #import "MyDocument.h"
 #import "NSApplicationExtended.h"
@@ -30,6 +32,8 @@
 #ifndef PANTHER
 #import <Quartz/Quartz.h>
 #endif
+
+#import "rects.h"
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
@@ -101,7 +105,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   if ([charactersIgnoringModifiers length])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
-    handlesEvent = ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask));
+    handlesEvent = ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask)) ||
+                   ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask) && ([theEvent modifierFlags] & NSShiftKeyMask)) ||
+                   ((character == 'L') && ([theEvent modifierFlags] & NSCommandKeyMask) && ([theEvent modifierFlags] & NSShiftKeyMask));
     if (handlesEvent)
       [[document makeLatexButton] performClick:self];
   }
@@ -265,7 +271,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
+        [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
                                        forFile:filePath options:options];
         [names addObject:fileName];
       }
@@ -279,7 +285,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   HistoryItem* historyItem = [document historyItemWithCurrentState];
   [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:historyItem]] forType:HistoryItemsPboardType];
-  [historyItem writeToPasteboard:pasteboard forDocument:document isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  [historyItem writeToPasteboard:pasteboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
 }
 
 //provides lazy data to a pasteboard
@@ -309,6 +315,11 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     shouldBePDFData = YES;
     data = [pboard dataForType:NSPDFPboardType];
   }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.adobe.pdf"]])
+  {
+    shouldBePDFData = YES;
+    data = [pboard dataForType:@"com.adobe.pdf"];
+  }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
   {
     shouldBePDFData = YES;
@@ -331,6 +342,16 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
   {
     NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+    ok = (pdfWrapperData != nil);
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd"]])
+  {
+    NSData* rtfdData = [pboard dataForType:@"com.apple.flat-rtfd"];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
@@ -402,49 +423,75 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   [self _applyDataFromPasteboard:[NSPasteboard generalPasteboard]];
 }
+//end paste:
 
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard
 {
   BOOL ok = YES;
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
-    [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:NSColorPboardType]] updateHistoryItem:YES];
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+  NSString* type = nil;
+  BOOL done = NO;
+  if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]]))
   {
-    NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
+    [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:type]] updateHistoryItem:YES];
+    done = YES;
+  }
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]]))
+  {
+    NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
     unsigned int count = [libraryItemsArray count];
     LibraryFile* libraryFile = nil;
     while(count-- && !libraryFile)
       libraryFile = [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryFile class]] ? [libraryItemsArray objectAtIndex:count] : nil;
     if (libraryFile)
       [document applyLibraryFile:libraryFile];
+    done = YES;
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]]))
   {
-    NSArray* historyItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:HistoryItemsPboardType]];
+    NSArray* historyItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
     [document applyHistoryItem:[historyItemsArray lastObject]];
+    done = YES;
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
-    [document applyPdfData:[pboard dataForType:NSPDFPboardType]];
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
-    [document applyPdfData:[pboard dataForType:NSFileContentsPboardType]];
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]]))
+    done = [document applyPdfData:[pboard dataForType:type]];
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]]))
+    done = [document applyPdfData:[pboard dataForType:type]];
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   {
-    NSArray* plist = [pboard propertyListForType:NSFilenamesPboardType];
+    NSArray* plist = [pboard propertyListForType:type];
     NSData* data = (plist && [plist count]) ? [NSData dataWithContentsOfFile:[plist objectAtIndex:0]] : nil;
-    [document applyPdfData:data];
+    done = [document applyPdfData:data];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
   {
-    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
-    [attributedString release];
     if (pdfWrapperData)
-      [document applyPdfData:pdfWrapperData];
+      done = [document applyPdfData:pdfWrapperData];
+    if (!done)
+      [document applyString:[attributedString string]];
+    [attributedString release];
+    done = YES;
   }
-  else
+  else if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.rtf", NSRTFPboardType, nil]])))
+  {
+    NSData* rtfData = [pboard dataForType:type];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
+    [document applyString:[attributedString string]];
+    [attributedString release];
+    done = YES;
+  }
+  else if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  {
+    [document applyString:[pboard stringForType:type]];
+    done = YES;
+  }
+  else if (!done)
     ok = NO;
   return ok;
 }
@@ -456,12 +503,20 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) drawRect:(NSRect)rect
 {
-  //we very temporarily change the image size, just for drawing
-  //it is not done permanently in setImage:,  for two reasons:
-  //  -we should not modify here the images stored in the history items, this is not what we want
-  //  -if we work on copy of images from history items, the requires some time, to copy the image, each time
-  //   the history selection changes (and it is rather long when browsing the whole history)
-  NSRect inRect = NSInsetRect([self bounds], 7, 7);
+  NSRect bounds = [self bounds];
+  NSRect inRoundedRect1 = NSInsetRect(bounds, 1, 1);
+  NSRect inRoundedRect2 = NSInsetRect(bounds, 2, 2);
+  NSRect inRoundedRect3 = NSInsetRect(bounds, 3, 3);
+  NSRect inRect = NSInsetRect(bounds, 7, 7);
+  CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+  CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+  fillRoundedRect(cgContext, *((CGRect*)&inRoundedRect1), 2.f, 2.f);
+  CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
+  mystrokeRoundedRect(cgContext, *((CGRect*)&inRoundedRect3), 2.f, 2.f);
+  CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+  mystrokeRoundedRect(cgContext, *((CGRect*)&inRoundedRect1), 2.f, 2.f);
+  CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+  mystrokeRoundedRect(cgContext, *((CGRect*)&inRoundedRect2), 2.f, 2.f);
 
   NSImage* image = [self image];
   NSSize naturalImageSize = image ? [image size] : NSZeroSize;
@@ -480,25 +535,13 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   destRect.origin.x = inRect.origin.x+inRect.size.width /2-destRect.size.width /2;
   destRect.origin.y = inRect.origin.y+inRect.size.height/2-destRect.size.height/2;
 
-  [super setImage:nil];
-  [super drawRect:rect];
   if (backgroundColor)
   {
     [backgroundColor set];
     NSRectFill(inRect);
   }
   [image drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)  operation:NSCompositeSourceOver fraction:1.0];
-  [super setImage:image];
-  
-/*  [image setSize:newSize];
-  if (backgroundColor)
-  {
-    [backgroundColor set];
-    NSRect bounds = [self bounds];
-    NSRectFill(NSMakeRect(bounds.origin.x+5, bounds.origin.y+5, bounds.size.width-10, bounds.size.height-10));
-  }
-  [super drawRect:rect];
-  [image setSize:naturalImageSize];*/
 }
+//end drawRect:
 
 @end

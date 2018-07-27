@@ -1,89 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>IBDocumentLocation</key>
-	<string>100 307 502 376 0 0 1280 832 </string>
-	<key>IBEditorPositions</key>
-	<dict>
-		<key>537</key>
-		<string>359 397 562 341 0 0 1280 832 </string>
-		<key>565</key>
-		<string>359 293 562 529 0 0 1280 832 </string>
-		<key>594</key>
-		<string>359 333 562 470 0 0 1280 832 </string>
-		<key>631</key>
-		<string>359 376 562 384 0 0 1280 832 </string>
-		<key>665</key>
-		<string>356 521 568 296 0 0 1280 1002 </string>
-		<key>707</key>
-		<string>359 581 562 175 0 0 1280 1002 </string>
-		<key>714</key>
-		<string>562 615 155 107 0 0 1280 1002 </string>
-		<key>715</key>
-		<string>359 513 562 312 0 0 1280 1002 </string>
-	</dict>
 	<key>IBFramework Version</key>
-	<string>446.1</string>
-	<key>IBGroupedObjects</key>
-	<dict>
-		<key>10</key>
-		<array>
-			<string>578</string>
-			<string>585</string>
-		</array>
-		<key>11</key>
-		<array>
-			<string>576</string>
-			<string>574</string>
-		</array>
-		<key>13</key>
-		<array>
-			<string>667</string>
-			<string>696</string>
-			<string>687</string>
-			<string>677</string>
-			<string>683</string>
-			<string>692</string>
-			<string>688</string>
-			<string>679</string>
-			<string>682</string>
-			<string>686</string>
-			<string>690</string>
-			<string>673</string>
-		</array>
-		<key>6</key>
-		<array>
-			<string>580</string>
-			<string>577</string>
-		</array>
-		<key>7</key>
-		<array>
-			<string>579</string>
-			<string>575</string>
-		</array>
-		<key>8</key>
-		<array>
-			<string>584</string>
-			<string>573</string>
-		</array>
-		<key>9</key>
-		<array>
-			<string>583</string>
-			<string>581</string>
-		</array>
-	</dict>
-	<key>IBLastGroupID</key>
-	<string>15</string>
+	<string>672</string>
+	<key>IBLastKnownRelativeProjectPath</key>
+	<string>../LaTeXiT.xcodeproj</string>
 	<key>IBOldestOS</key>
-	<integer>3</integer>
+	<integer>4</integer>
 	<key>IBOpenObjects</key>
 	<array>
-		<integer>947</integer>
-		<integer>565</integer>
-		<integer>537</integer>
+		<integer>665</integer>
 	</array>
 	<key>IBSystem Version</key>
-	<string>8P135</string>
+	<string>9F33</string>
+	<key>targetFramework</key>
+	<string>IBCocoaFramework</string>
 </dict>
 </plist>

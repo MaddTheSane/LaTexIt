@@ -1,38 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>IBDocumentLocation</key>
-	<string>310 322 356 240 0 0 1280 1002 </string>
 	<key>IBFramework Version</key>
-	<string>437.0</string>
-	<key>IBGroupedObjects</key>
-	<dict>
-		<key>0</key>
-		<array>
-			<string>58</string>
-			<string>62</string>
-			<string>42</string>
-			<string>48</string>
-			<string>81</string>
-			<string>85</string>
-			<string>46</string>
-			<string>83</string>
-			<string>44</string>
-			<string>87</string>
-			<string>56</string>
-			<string>60</string>
-		</array>
-	</dict>
-	<key>IBLastGroupID</key>
-	<string>1</string>
+	<string>672</string>
+	<key>IBLastKnownRelativeProjectPath</key>
+	<string>../LaTeXiT.xcodeproj</string>
 	<key>IBOldestOS</key>
-	<integer>3</integer>
+	<integer>5</integer>
 	<key>IBOpenObjects</key>
 	<array>
-		<integer>38</integer>
+		<integer>39</integer>
 	</array>
 	<key>IBSystem Version</key>
-	<string>8I127</string>
+	<string>9F33</string>
+	<key>targetFramework</key>
+	<string>IBCocoaFramework</string>
 </dict>
 </plist>

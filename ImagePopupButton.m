@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 //
 
 #import "ImagePopupButton.h"
@@ -57,9 +57,10 @@
 
 -(void) drawRect:(NSRect)aRect
 {
+  [super drawRect:aRect];
   NSImage* imageToDisplay = isDown ? [self alternateImage] : [self image];
   NSSize size = [imageToDisplay size];
-  [imageToDisplay drawInRect:[self bounds] fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeCopy fraction:1.0];
+  [imageToDisplay drawInRect:[self bounds] fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
 }
 
 @end

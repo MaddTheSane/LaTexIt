@@ -21,7 +21,9 @@ static NSArray *syntaxDefinitionsArray;
 {
 	if (self == [SMLSyntaxColouring class]) {
 		NSMutableArray *syntaxDefinitionsStandardArray = [[NSMutableArray alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"SyntaxDefinitions" ofType:@"plist"]];
-		NSString *path = [[[[NSHomeDirectory() stringByAppendingPathComponent:@"Library"] stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"Smultron"] stringByAppendingPathComponent:@"SyntaxDefinitions.plist"];
+   NSArray* libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+   NSString* libraryPath = [libraryPaths count] ? [libraryPaths objectAtIndex:0] : nil;
+		NSString *path = !libraryPaths ? nil : [[[libraryPath stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"Smultron"] stringByAppendingPathComponent:@"SyntaxDefinitions.plist"];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
 			NSArray *syntaxDefinitionsUserArray = [[NSMutableArray alloc] initWithContentsOfFile:path];
 			[syntaxDefinitionsStandardArray addObjectsFromArray:syntaxDefinitionsUserArray];

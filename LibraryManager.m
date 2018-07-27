@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -16,6 +16,8 @@
 #import "Compressor.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
+#import "LatexitEquation.h"
+#import "LatexProcessor.h"
 #import "LibraryController.h"
 #import "LibraryFile.h"
 #import "LibraryFolder.h"
@@ -23,6 +25,7 @@
 #import "NSApplicationExtended.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
+#import "NSFileManagerExtended.h"
 #import "NSIndexSetExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
@@ -128,6 +131,42 @@ static NSImage*        libraryFileIcon       = nil;
     library = [[LibraryFolder alloc] init];
     [[AppController appController] startMessageProgress:NSLocalizedString(@"Loading Library", @"Loading Library")];
     [self _loadLibrary];
+    
+    #warning preparing migration to Core Data
+    #ifdef USE_COREDATA
+    NSManagedObjectModel* managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:[NSBundle mainBundle]]];
+    NSPersistentStoreCoordinator* persistentStoreCoordinator =
+      [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel] autorelease];
+    //load from ~/Library/LaTeXiT/Application Support/history.dat
+    NSArray* libraryPathComponents = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+    libraryPathComponents = [libraryPathComponents count] ? [libraryPathComponents subarrayWithRange:NSMakeRange(0, 1)] : nil;
+    libraryPathComponents = [libraryPathComponents arrayByAddingObjectsFromArray:
+      [NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"library.db", nil]];
+    NSString* libraryPath = [NSString pathWithComponents:libraryPathComponents];
+    if (![[NSFileManager defaultManager] isReadableFileAtPath:libraryPath])
+      [[NSFileManager defaultManager] createDirectoryPath:[libraryPath stringByDeletingLastPathComponent] attributes:nil];
+    NSURL* storeURL = [NSURL fileURLWithPath:libraryPath];
+    NSError* error = nil;
+    id persistentStore =
+      [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+    NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
+    if ([version compare:@"1.0.0" options:NSNumericSearch] > 0){
+    }
+    if (persistentStore)
+      [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"1.0.0", @"version", nil]
+                           forPersistentStore:persistentStore];
+    managedObjectContext = [[NSManagedObjectContext alloc] init];
+    [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    [managedObjectContext setRetainsRegisteredObjects:YES];
+    
+    latexitEquationsRootController = [[NSArrayController alloc] initWithContent:nil];
+    [latexitEquationsRootController setEntityName:[LatexitEquation className]];
+    [latexitEquationsRootController setManagedObjectContext:managedObjectContext];
+    [latexitEquationsRootController setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES] autorelease]]];
+    [latexitEquationsRootController prepareContent];
+    [latexitEquationsRootController setAutomaticallyPreparesContent:YES];
+    #endif
+
     [[AppController appController] stopMessageProgress];
     [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
     //registers applicationWillTerminate notification to automatically save the library
@@ -143,8 +182,17 @@ static NSImage*        libraryFileIcon       = nil;
   [undoManager release];
   [libraryPath release];
   [library release];
+  [latexitEquationsRootController release];
+  [managedObjectContext release];
   [super dealloc];
 }
+
+
+-(NSArrayController*) latexitEquationsRootController
+{
+  return latexitEquationsRootController;
+}
+//end latexitEquationsRootController
 
 -(NSUndoManager*) undoManager
 {
@@ -237,7 +285,7 @@ static NSImage*        libraryFileIcon       = nil;
   defaultLibraryPath = [NSString pathWithComponents:paths];
   BOOL isDirectory = NO;
   if (![[NSFileManager defaultManager] fileExistsAtPath:defaultLibraryPath isDirectory:&isDirectory] || isDirectory)
-    [Utils createDirectoryPath:[defaultLibraryPath stringByDeletingLastPathComponent] attributes:nil];
+    [[NSFileManager defaultManager] createDirectoryPath:[defaultLibraryPath stringByDeletingLastPathComponent] attributes:nil];
   return defaultLibraryPath;
 }
 //end defaultLibraryPath
@@ -299,7 +347,7 @@ static NSImage*        libraryFileIcon       = nil;
         {
           NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
           NSData* compressedData = [Compressor zipcompress:uncompressedData];
-          plist = [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.4", @"version", compressedData, @"data", nil];
+          plist = [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.0", @"version", compressedData, @"data", nil];
         }
         break;
       case LIBRARY_EXPORT_FORMAT_PLIST:
@@ -321,6 +369,13 @@ static NSImage*        libraryFileIcon       = nil;
       #endif
       [[NSWorkspace sharedWorkspace] setIcon:libraryFileIcon forFile:path options:options];
     }//end if file has been created
+    
+    #warning preparing migration to Core Data
+    #ifdef USE_COREDATA
+    NSError* error = nil;
+    [managedObjectContext save:&error];
+    NSLog(@"error = %@", error);
+    #endif
   }
   return ok;
 }
@@ -351,17 +406,52 @@ static NSImage*        libraryFileIcon       = nil;
     LibraryFolder* newLibrary = nil;
     @try
     {
-      NSData* fileData = [NSData dataWithContentsOfFile:path];
-      NSPropertyListFormat format;
-      id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
-      NSData* compressedData = nil;
-      if (!plist)
-        compressedData = fileData;
-      else
-        compressedData = [plist objectForKey:@"data"];
-      NSData* uncompressedData = [Compressor zipuncompress:compressedData];
-      if (uncompressedData)
-        newLibrary = [NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData];
+      if ([[path pathExtension] isEqualToString:@"latexlib"])
+      {
+        NSData* fileData = [NSData dataWithContentsOfFile:path];
+        NSPropertyListFormat format;
+        id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+        NSData* compressedData = nil;
+        if (!plist)
+          compressedData = fileData;
+        else
+          compressedData = [plist objectForKey:@"data"];
+        NSData* uncompressedData = [Compressor zipuncompress:compressedData];
+        if (uncompressedData)
+          newLibrary = [NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData];
+      }
+      else if ([[path pathExtension] isEqualToString:@"library"]) //from LEE
+      {
+        NSString* xmlDescriptionPath = [path stringByAppendingPathComponent:@"library.dict"];
+        NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
+        NSString* error = nil;
+        id plist = [NSPropertyListSerialization propertyListFromData:[NSData dataWithContentsOfFile:xmlDescriptionPath]
+                                                    mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
+        if ([plist isKindOfClass:[NSDictionary class]])
+        {
+          newLibrary = [[[LibraryFolder alloc] init] autorelease];
+          [newLibrary setTitle:[[path lastPathComponent] stringByDeletingPathExtension]];
+          NSEnumerator* enumerator = [(NSDictionary*)plist keyEnumerator];
+          id key = nil;
+          while((key = [enumerator nextObject]))
+          {
+            id item = [(NSDictionary*)plist objectForKey:key];
+            if ([item isKindOfClass:[NSDictionary class]])
+            {
+              NSString* pdfFile = [path stringByAppendingPathComponent:[(NSDictionary*)item objectForKey:@"filename"]];
+              NSData* someData = [NSData dataWithContentsOfFile:pdfFile];
+              HistoryItem* historyItem = [HistoryItem historyItemWithPDFData:someData useDefaults:YES];
+              if (historyItem)
+              {
+                LibraryFile* libraryItem = [[[LibraryFile alloc] init] autorelease];
+                [libraryItem setValue:historyItem setAutomaticTitle:YES];
+                [libraryItem setParent:newLibrary];
+                [newLibrary insertChild:libraryItem];
+              }//end if (historyItem)
+            }//end if ([item isKindOfClass:[NSDictionary class]])
+          }//end for each key
+        }//end if ([plist isKindOfClass:[NSDictionary class]])
+      }//end if  ([[path pathExtension] isEqualToString:@"library"]) //from LEE
     }
     @catch(NSException* e) //reading may fail for some reason
     {
@@ -480,7 +570,7 @@ static NSImage*        libraryFileIcon       = nil;
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
     HistoryItem* historyItem = [historyItems lastObject];
-    [historyItem writeToPasteboard:pboard forDocument:[[AppController appController] dummyDocument] isLinkBackRefresh:NO lazyDataProvider:nil];
+    [historyItem writeToPasteboard:pboard isLinkBackRefresh:NO lazyDataProvider:nil];
   }
 
   //NSStringPBoardType may contain some info for LibraryFiles the label of the equations : useful for users that only want to \ref this equation
@@ -868,7 +958,7 @@ static NSImage*        libraryFileIcon       = nil;
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
         NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
+        [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
                                        forFile:filePath options:options];
         [names addObject:fileName];
       }
@@ -896,7 +986,7 @@ static NSImage*        libraryFileIcon       = nil;
           options = NSExclude10_4ElementsIconCreationOption;
           #endif
           NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
+          [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
                                          forFile:filePath options:options];
           [names addObject:fileName];
         }

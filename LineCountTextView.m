@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -140,6 +140,19 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end awakeFromNib
 
+-(void) bind:(NSString*)binding toObject:(id)observableController withKeyPath:(NSString*)keyPath options:(NSDictionary*)options
+{
+  [super bind:binding toObject:observableController withKeyPath:keyPath options:options];
+  if ([binding isEqualToString:@"attributedString"])
+    [observableController addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+  [[self syntaxColouring] recolourCompleteDocument];
+}
+//end observeValueForKeyPath:
+
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -150,6 +163,12 @@ static int SpellCheckerDocumentTag = 0;
   [super dealloc];
 }
 //end dealloc
+
+-(LineCountRulerView*) lineCountRulerView
+{
+  return lineCountRulerView;
+}
+//end lineCountRulerView
 
 -(int) spellCheckerDocumentTag
 {
@@ -336,9 +355,12 @@ static int SpellCheckerDocumentTag = 0;
   NSRange range   = [self selectedRange];
   NSFont* oldFont = [self font];
   NSFont* newFont = [sender convertFont:oldFont];
+  NSMutableDictionary* typingAttributes = [NSMutableDictionary dictionaryWithDictionary:[self typingAttributes]];
   if (!range.length)
-    [self setTypingAttributes:
-      [NSDictionary dictionaryWithObjectsAndKeys:newFont, NSFontAttributeName, nil]];
+  {
+    [typingAttributes setObject:newFont forKey:NSFontAttributeName];
+    [self setTypingAttributes:typingAttributes];
+  }
   else
     [self setFont:newFont range:range];
   [lineCountRulerView setNeedsDisplay:YES];
@@ -363,6 +385,11 @@ static int SpellCheckerDocumentTag = 0;
   {
     shouldBePDFData = YES;
     data = [pboard dataForType:NSPDFPboardType];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.adobe.pdf"]])
+  {
+    shouldBePDFData = YES;
+    data = [pboard dataForType:@"com.adobe.pdf"];
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
   {
@@ -437,6 +464,19 @@ static int SpellCheckerDocumentTag = 0;
     else
       [super performDragOperation:sender];
   }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd"]])
+  {
+    NSData* rtfdData = [pboard dataForType:@"com.apple.flat-rtfd"];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+    if (pdfWrapperData)
+      [(id)[self nextResponder] performDragOperation:sender];
+    else
+      [super performDragOperation:sender];
+  }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, NSFileContentsPboardType, nil]])
     [(id)[self nextResponder] performDragOperation:sender];
   else
@@ -449,24 +489,50 @@ static int SpellCheckerDocumentTag = 0;
 {
   //if this view is the first responder, it may allow pasting rich LaTeXiT data, but delegates that elsewhere
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-  if ([pasteboard availableTypeFromArray:
-        [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]])
-    [(id)[self nextResponder] paste:sender];
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  NSString* type = nil;
+  BOOL done = NO;
+  MyDocument* document = (MyDocument*)[[[self window] windowController] document];
+  if ((type = [pasteboard availableTypeFromArray:
+                [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, nil]]))
   {
-    NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
+    [(id)[self nextResponder] paste:sender];
+    done = YES;
+  }
+  else if ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]]))
+    done = [document applyPdfData:[pasteboard dataForType:type]];
+
+  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
+  {
+    NSData* rtfdData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     [attributedString release];
-    if (pdfWrapperData)
+    HistoryItem* historyItem = pdfWrapperData ? [HistoryItem historyItemWithPDFData:pdfWrapperData useDefaults:NO] : nil;
+    if (historyItem)
+    {
       [(id)[self nextResponder] paste:sender];
+      done = YES;
+    }
+    else if (pdfWrapperData)
+    {
+      PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfWrapperData];
+      NSString* pdfString = [pdfDocument string];
+      if (pdfString)
+        [self insertText:pdfString];
+      [pdfDocument release];
+      done = YES;
+    }
     else
+    {
       [super paste:sender];
+      done = YES;
+    }
   }
-  else
+  else if (!done)
     [super paste:sender];
+
   NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];
   currentFont = [NSFont fontWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultFontKey]];
   if (currentFont)

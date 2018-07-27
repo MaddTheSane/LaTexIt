@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -20,9 +20,14 @@
 #import <LinkBack/LinkBack.h>
 #endif
 
-//useful to differenciate the different latex modes : EQNARRAY, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
-typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE_EQNARRAY} latex_mode_t;
+#import "LaTeXiTSharedTypes.h"
 
+typedef enum {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
+              CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS,
+              CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS,
+              CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK} change_service_shortcuts_fallback_t;
+
+@class AdditionalFilesController;
 @class CompositionConfigurationController;
 @class EncapsulationController;
 @class HistoryController;
@@ -32,13 +37,19 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 @class MyDocument;
 @class PreferencesController;
 @class Semaphore;
+@class SUUpdater;
 
 @interface AppController : NSObject <LinkBackServerDelegate> {  
-  IBOutlet NSWindow*   readmeWindow;
-  IBOutlet NSTextView* readmeTextView;
-  IBOutlet NSPanel*    donationPanel;
-  IBOutlet NSPanel*    updatesPanel;
-  IBOutlet NSTextView* updatesInformationTextView;
+  IBOutlet NSWindow*      readmeWindow;
+  IBOutlet NSTextView*    readmeTextView;
+  IBOutlet NSPanel*       donationPanel;
+  IBOutlet NSPanel*       updatesPanel;
+  IBOutlet NSTextView*    updatesInformationTextView;
+  IBOutlet NSWindow*      whiteColorWarningWindow;
+  IBOutlet SUUpdater*     sparkleUpdater;
+  IBOutlet NSView*        openFileTypeView;
+  IBOutlet NSPopUpButton* openFileTypePopUp;
+  NSOpenPanel*            openFileTypeOpenPanel;
   
   //some info on current configuration
   Semaphore* configurationSemaphore;
@@ -50,26 +61,27 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
   BOOL isLatexAvailable;
   BOOL isColorStyAvailable;
 
+  AdditionalFilesController* additionalFilesController;
   CompositionConfigurationController* compositionConfigurationController;
   EncapsulationController* encapsulationController;
   HistoryController*       historyController;
   LatexPalettesController* latexPalettesController;
   LibraryController*       libraryController;
   MarginController*        marginController;
-  PreferencesController*   preferencesController;
 }
 
 +(AppController*)           appController; //getting the unique instance of appController
 +(NSDocument*)              currentDocument;
 +(NSString*)                latexitTemporaryPath;
 -(NSDocument*)              currentDocument;
+-(NSWindow*)                whiteColorWarningWindow;
+-(AdditionalFilesController*) additionalFilesController;
 -(CompositionConfigurationController*) compositionConfigurationController;
 -(EncapsulationController*) encapsulationController;
 -(HistoryController*)       historyController;
 -(LatexPalettesController*) latexPalettesController;
 -(LibraryController*)       libraryController;
 -(MarginController*)        marginController;
--(PreferencesController*)   preferencesController;
 
 +(NSArray*) unixBins; //usual unix PATH
 +(NSDictionary*) fullEnvironmentDict; //environment useful to call programs on the command line
@@ -83,8 +95,12 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(IBAction) newFromClipboard:(id)sender;
 -(IBAction) copyAs:(id)sender;
 
+-(IBAction) openFile:(id)sender;
+-(IBAction) changeOpenFileType:(id)sender;
 -(IBAction) exportImage:(id)sender;
+-(IBAction) reexportImage:(id)sender;
 -(IBAction) makeLatex:(id)sender;
+-(IBAction) makeLatexAndExport:(id)sender;
 -(IBAction) displayLog:(id)sender;
 
 -(IBAction) historyRemoveHistoryEntries:(id)sender;
@@ -102,6 +118,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 
 -(IBAction) showOrHideColorInspector:(id)sender;
 -(IBAction) showOrHidePreamble:(id)sender;
+-(IBAction) showOrHideAdditionalFiles:(id)sender;
 -(IBAction) showOrHideCompositionConfiguration:(id)sender;
 -(IBAction) showOrHideEncapsulation:(id)sender;
 -(IBAction) showOrHideMargin:(id)sender;
@@ -110,9 +127,10 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(IBAction) showPreferencesPane:(id)sender;
 -(void)     showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;//showPreferencesPane + select one pane
 -(IBAction) showHelp:(id)sender;
+-(void) showHelp:(id)sender section:(NSString*)section;
 -(IBAction) reduceOrEnlargeTextArea:(id)sender;
 
--(MyDocument*) dummyDocument;
+-(IBAction) returnFromWhiteColorWarningWindow:(id)sender;
 
 //updates the documents with a loading message
 -(void) startMessageProgress:(NSString*)message;
@@ -124,7 +142,8 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
                  environment:(NSDictionary*)environment;
 
 //returns the default preamble. If color.sty is not available, it may add % in front of \usepackage{color}
--(NSAttributedString*) preamble;
+-(NSAttributedString*) preambleForLatexisation;
+-(NSAttributedString*) preambleForService;
 
 //returns some configuration info
 -(BOOL) isPdfLatexAvailable;
@@ -141,19 +160,8 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(float) marginControllerLeftMargin;
 -(float) marginControllerRightMargin;
 
-//modifies the \usepackage{color} line of the preamble in order to use the given color
--(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor;
-
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality scaleAsPercent:(float)scaleAsPercent;
-
-//returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
--(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
-
-//annotates data in LEE format
--(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
-                                 mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
-                                 backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
 
 //methods for the application service
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
@@ -162,7 +170,8 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceDeLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
--(void) changeServiceShortcuts;
+-(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
+                               authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
 
 //LinkBackServerDelegateProtocol
 -(void) linkBackDidClose:(LinkBack*)link;
@@ -170,5 +179,8 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 
 //LatexPalette installation
 -(BOOL) installLatexPalette:(NSString*)palettePath;
+
+//Sparkle
+-(SUUpdater*) sparkleUpdater;
 
 @end

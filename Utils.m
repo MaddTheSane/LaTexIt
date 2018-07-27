@@ -9,34 +9,42 @@
 #import "Utils.h"
 
 static NSString* MyPNGPboardType = nil;
-
-#ifndef PANTHER
 extern NSString* NSPNGPboardType __attribute__((weak_import));
-#endif
+static NSString* MyJPEGPboardType = nil;
+
+#define NSAppKitVersionNumber10_4 824
 
 NSString* GetMyPNGPboardType(void)
 {
-  #ifdef PANTHER
-  if (!MyPNGPboardType)
-    MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass((CFStringRef)@"public.png", kUTTagClassNSPboardType);//retain count is 1
-  #else
+  if (!MyPNGPboardType && (!(floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_4))) //Leopard+
+    MyPNGPboardType = @"public.png";
   if (!MyPNGPboardType)  
     MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
-  #endif
-  #ifndef PANTHER
   if (!MyPNGPboardType && NSPNGPboardType)
     MyPNGPboardType = [[NSString alloc] initWithString:NSPNGPboardType];
-  #endif
-
   if (!MyPNGPboardType)
     MyPNGPboardType = NSTIFFPboardType;
   return MyPNGPboardType;
 }
+//end GetMyPNGPboardType()
+
+NSString* GetMyJPEGPboardType(void)
+{
+  if (!MyJPEGPboardType && (!(floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_4))) //Leopard+
+    MyJPEGPboardType = @"public.jpeg";
+  if (!MyJPEGPboardType)  
+    MyJPEGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1
+  if (!MyJPEGPboardType)
+    MyJPEGPboardType = NSTIFFPboardType;
+  return MyJPEGPboardType;
+}
+//end GetMyPNGPboardType()
 
 latex_mode_t validateLatexMode(latex_mode_t mode)
 {
   return (mode >= LATEX_MODE_DISPLAY) && (mode <= LATEX_MODE_EQNARRAY) ? mode : LATEX_MODE_DISPLAY;
 }
+//end validateLatexMode()
 
 int indexOfLatexMode(latex_mode_t mode)
 {
@@ -51,6 +59,7 @@ int indexOfLatexMode(latex_mode_t mode)
   }
   return index;
 }
+//end indexOfLatexMode()
 
 latex_mode_t latexModeForIndex(int index)
 {
@@ -65,6 +74,7 @@ latex_mode_t latexModeForIndex(int index)
   }
   return mode;
 }
+//end latexModeForIndex()
 
 int EndianI_BtoN(int x)
 {
@@ -121,67 +131,3 @@ unsigned long EndianUL_NtoB(unsigned long x)
          (sizeof(x) == sizeof(uint64_t)) ? EndianU64_NtoB(x) :
          x;
 }
-
-@implementation Utils
-
-+(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes
-{
-  BOOL ok = YES;
-  BOOL isDirectory = NO;
-  NSFileManager* fileManager = [NSFileManager defaultManager];
-  NSArray* components = [path pathComponents];
-  components = components ? components : [NSArray array];
-  unsigned int i = 0;
-  for(i = 1 ; ok && (i <= [components count]) ; ++i)
-  {
-    NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
-    ok &= ([fileManager fileExistsAtPath:subPath isDirectory:&isDirectory] && isDirectory) ||
-           [fileManager createDirectoryAtPath:subPath attributes:attributes];
-  }//end for each subPath
-  return ok;
-}
-//end createDirectoryPath:attributes:
-
-+(NSString*) localizedPath:(NSString*)path
-{
-  NSMutableArray* localizedPathComponents = [NSMutableArray array];
-  NSFileManager* fileManager = [NSFileManager defaultManager];
-  NSArray* components = [path pathComponents];
-  components = components ? components : [NSArray array];
-  unsigned int i = 0;
-  for(i = 1 ; (i <= [components count]) ; ++i)
-  {
-    NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
-    [localizedPathComponents addObject:[fileManager displayNameAtPath:subPath]];
-  }//end for each subPath
-  return [NSString pathWithComponents:localizedPathComponents];
-}
-//end localizedPath:
-
-+(NSFileHandle*) temporaryFileWithTemplate:(NSString*)templateString extension:(NSString*)extension outFilePath:(NSString**)outFilePath
-{
-  NSFileHandle* fileHandle = nil;
-  if (templateString && ![templateString isEqualToString:@""])
-  {
-    NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
-                                        ? [templateString stringByAppendingPathExtension:extension] : templateString;
-    NSString* tempFilenameTemplate = [[AppController latexitTemporaryPath] stringByAppendingPathComponent:fileNameWithExtension];
-    #ifdef PANTHER
-    unsigned int length = [tempFilenameTemplate length];
-    #else
-    unsigned int length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    #endif
-    char* tmpString = (char*)calloc(length+1, sizeof(char));
-    memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
-    int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);
-    if (fd != -1)
-      fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
-    if (outFilePath)
-      *outFilePath = [NSString stringWithUTF8String:tmpString];
-    free(tmpString);
-  }
-  return [fileHandle autorelease];
-}
-//end temporaryFileWithTemplate:extension:outFilePath:
-
-@end

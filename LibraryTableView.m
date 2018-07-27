@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -14,8 +14,10 @@
 #import "LibraryCell.h"
 #import "LibraryController.h"
 #import "LibraryFile.h"
+#import "LibraryFolder.h"
 #import "LibraryItem.h"
 #import "LibraryManager.h"
+#import "MyDocument.h"
 #import "MyImageView.h"
 #import "NSColorExtended.h"
 
@@ -507,6 +509,8 @@
   {
     [pasteboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:self];
     [pasteboard setData:[lastItem pdfData] forType:NSPDFPboardType];
+    [pasteboard addTypes:[NSArray arrayWithObject:@"com.adobe.pdf"] owner:self];
+    [pasteboard setData:[lastItem pdfData] forType:@"com.adobe.pdf"];
   }
 }
 //end copy:
@@ -515,8 +519,6 @@
 -(IBAction) paste:(id)sender
 {
   MyDocument* document = (MyDocument*) [AppController currentDocument];
-  if (!document)
-    document = [[AppController appController] dummyDocument];
   NSPasteboard* pboard = [NSPasteboard generalPasteboard];
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
   {
@@ -546,9 +548,10 @@
     if (libraryLastItem)
       [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:libraryLastItem]] byExtendingSelection:NO];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]])
   {
     NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+    if (!pdfData) pdfData = [pboard dataForType:@"com.adobe.pdf"];
     if (pdfData)
     {
       [document applyPdfData:pdfData];

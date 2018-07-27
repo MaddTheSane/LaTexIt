@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSWorkspace class
 
@@ -15,8 +15,11 @@
 +(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 +(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 
+-(NSString*)trim;
 -(BOOL) startsWith:(NSString*)substring options:(unsigned)mask;
 -(BOOL) endsWith:(NSString*)substring options:(unsigned)mask;
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag;
 -(NSString*) filteredStringForLatex;
+-(NSString*) replaceYenSymbol;
+
 @end

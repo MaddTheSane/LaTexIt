@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //An HistoryItem is a useful structure to hold the info about the generated image
 //It will typically contain the latex source code (preamble+body), the color, the mode (EQNARRAY, \[...\], $...$ or text)
@@ -11,6 +11,7 @@
 #import "HistoryItem.h"
 
 #import "AppController.h"
+#import "LatexProcessor.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
@@ -23,6 +24,8 @@
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 #endif
+
+#define NSAppKitVersionNumber10_4 824
 
 NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification";
 
@@ -86,16 +89,17 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding/*NSASCIIStringEncoding*/] autorelease];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSArray*  testArray    = nil;
+  
+  BOOL isLaTeXiTPDF = NO;
 
   NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
-  NSData* defaultPreambleData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
   NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
-  NSAttributedString* defaultPreambleAttributedString =
-    [[[NSAttributedString alloc] initWithRTF:defaultPreambleData documentAttributes:NULL] autorelease];
+  NSAttributedString* defaultPreambleAttributedString = [[PreferencesController sharedController] preambleForLatexisation];
   NSMutableString* preambleString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [preambleString rangeOfString:@"ESannopend"];
     range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
@@ -113,6 +117,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     [preamble autorelease];
     preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [preambleString rangeOfString:@"ESannoepend"];
@@ -132,6 +137,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     [sourceString appendString:[testArray objectAtIndex:1]];
     NSRange range = [sourceString rangeOfString:@"ESannotend"];
     range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
@@ -147,6 +153,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     [sourceText autorelease];
     [sourceString setString:@""];
     [sourceString appendString:[testArray objectAtIndex:1]];
@@ -167,6 +174,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
     range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
@@ -179,6 +187,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
     range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
@@ -193,6 +202,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [colorAsString rangeOfString:@"EEcolend"];
     range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
@@ -207,6 +217,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
     range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
@@ -220,14 +231,17 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
   if (testArray && ([testArray count] >= 2))
   {
+    isLaTeXiTPDF |= YES;
     titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
     range.length = (range.location != NSNotFound) ? [titleAsString length]-range.location : 0;
     [titleAsString deleteCharactersInRange:range];
   }
   [self setTitle:titleAsString];
-
-  return self;
+  
+  if (!isLaTeXiTPDF)
+    [self autorelease];
+  return isLaTeXiTPDF ? self : nil;
 }
 //end initWithPDFData:useDefaults:
 
@@ -377,7 +391,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.14.4"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.16.0"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -437,7 +451,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
     preamble = newPreamble;
   }
   
-  //for versions < 1.5.4, we must reannotate the pdfData to retreive the accentuated characters
+  //for versions < 1.5.4, we must reannotate the pdfData to retreive the diacritic characters
   if (!version || [version compare:@"1.5.4" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
     [self _reannotatePDFDataUsingPDFKeywords:NO];
   return self;
@@ -550,18 +564,16 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   #endif
 
   //annotate in LEE format
-  newData = [[AppController appController]
-                annotatePdfDataInLEEFormat:newData
-                                  preamble:(preamble ? [preamble string] : @"") source:(sourceText ? [sourceText string] : @"")
-                                     color:color mode:mode magnification:pointSize baseline:baseline backgroundColor:backgroundColor title:title];
+  newData = [LatexProcessor annotatePdfDataInLEEFormat:newData
+                                              preamble:(preamble ? [preamble string] : @"") source:(sourceText ? [sourceText string] : @"")
+                                                 color:color mode:mode magnification:pointSize baseline:baseline backgroundColor:backgroundColor title:title];
   return newData;
 }
 //end annotatedPDFDataUsingPDFKeywords:usingPDFKeywords
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
 //the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)
--(void) writeToPasteboard:(NSPasteboard *)pboard forDocument:(MyDocument*)document isLinkBackRefresh:(BOOL)isLinkBackRefresh
-         lazyDataProvider:(id)lazyDataProvider
+-(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   //LinkBack pasteboard
   NSArray* historyItemArray = [NSArray arrayWithObject:self];
@@ -593,31 +605,41 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   {
     case EXPORT_FORMAT_PDF:
     case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-      [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSPDFPboardType];
+      if (!lazyDataProvider) [pboard setData:data forType:@"com.adobe.pdf"];
       break;
     case EXPORT_FORMAT_EPS:
-      [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPostScriptPboardType, @"com.adobe.encapsulated-postscript", nil] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSPostScriptPboardType];
+      if (!lazyDataProvider) [pboard setData:data forType:@"com.adobe.encapsulated-postscript"];
       break;
     case EXPORT_FORMAT_PNG:
-      [pboard addTypes:[NSArray arrayWithObject:GetMyPNGPboardType()] owner:lazyDataProvider];
+      /*[pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];*/
+      [pboard addTypes:[NSArray arrayWithObjects:GetMyPNGPboardType(), nil] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:GetMyPNGPboardType()];
       break;
     case EXPORT_FORMAT_JPEG:
+      /*[pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];*/
+      [pboard addTypes:[NSArray arrayWithObjects:GetMyJPEGPboardType(), nil] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:GetMyJPEGPboardType()];
+      break;
     case EXPORT_FORMAT_TIFF:
-      [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, @"public.tiff", nil] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];
+      if (!lazyDataProvider) [pboard setData:data forType:@"public.tiff"];
       break;
   }//end switch
 }
-//end writeToPasteboard:forDocument:isLinkBackRefresh:lazyDataProvider:
+//end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
 -(id) plistDescription
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"1.14.4", @"version",
+       @"1.16.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

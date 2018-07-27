@@ -1,6 +1,6 @@
 //
 //  createHistoryPlist.m
-//  LaTeXiT
+//  MozoDojo
 //
 //  Created by Pierre Chatelier on 20/10/06.
 //  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
@@ -11,7 +11,6 @@
 int main(int argc, char *argv[])
 {
   NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
-  
   NSString* filePath_en = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-en.rtf";
   NSString* filePath_fr = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-fr.rtf";
   NSString* filePath_de = @"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT-mainline/Resources/documentation/current-version-de.rtf";
@@ -42,15 +41,15 @@ int main(int argc, char *argv[])
   
   NSDictionary* descriptions =
     [NSDictionary dictionaryWithObjectsAndKeys:
-      descriptionData_en, @"en",
-      descriptionData_fr, @"fr",
-      descriptionData_de, @"de",
-      descriptionData_es, @"es",
+      descriptionData_en, @"en", 
+      descriptionData_fr, @"fr", 
+      descriptionData_de, @"de", 
+      descriptionData_es, @"es", 
       nil];
   
   NSDictionary* newVersionDictionary =
     [NSDictionary dictionaryWithObjectsAndKeys:
-       @"1.14.4", @"number",
+       @"1.16.0", @"number",
        descriptions, @"descriptions",
        nil];
       
@@ -60,8 +59,7 @@ int main(int argc, char *argv[])
   NSMutableDictionary* plist =
     [NSPropertyListSerialization propertyListFromData:plistData
                                       mutabilityOption:NSPropertyListMutableContainers format:&plistFormat errorDescription:&errorString];
-  if (![plist objectForKey:@"versions"])
-    [plist setObject:[NSMutableDictionary dictionary] forKey:@"versions"];
+
   [[plist objectForKey:@"versions"] setObject:newVersionDictionary forKey:[newVersionDictionary objectForKey:@"number"]];
   [plist setObject:[newVersionDictionary objectForKey:@"number"] forKey:@"latestVersionId"];
 

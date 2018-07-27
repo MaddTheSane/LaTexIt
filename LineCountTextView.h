@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -28,6 +28,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   BOOL            spellCheckerHasBeenInitialized;
 }
 
+-(LineCountRulerView*) lineCountRulerView;
 -(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line
 -(void) setLineShift:(int)aShift; //defines the shift in the displayed line numbers
 -(int)  lineShift;

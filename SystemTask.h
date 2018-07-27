@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2007 __MyCompanyName__. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -14,19 +14,24 @@
   NSString*     tmpStdinFilePath;
   NSString*     tmpStdoutFilePath;
   NSString*     tmpStderrFilePath;
+  NSString*     tmpScriptFilePath;
   NSFileHandle* tmpStdinFileHandle;
   NSFileHandle* tmpStdoutFileHandle;
   NSFileHandle* tmpStderrFileHandle;
+  NSFileHandle* tmpScriptFileHandle;
   NSData*       stdInputData;
   NSDictionary* environment;
   NSString*     launchPath;
   NSArray*      arguments;
+  BOOL          isUsingLoginShell;
   NSString*     currentDirectoryPath;
   NSLock*       runningLock;
   int           terminationStatus;
   BOOL          selfExited;
 }
 
+-(id)   init;//NSTemporaryDirectory() as workingDirectory
+-(id)   initWithWorkingDirectory:(NSString*)workingDirectory;
 -(void) setEnvironment:(NSDictionary*)environment;
 -(void) setLaunchPath:(NSString*)launchPath;
 -(void) setArguments:(NSArray*)arguments;
@@ -35,6 +40,8 @@
 -(NSString*)     launchPath;
 -(NSArray*)      arguments;
 -(NSString*)     currentDirectoryPath;
+-(BOOL) isUsingLoginShell;
+-(void) setUsingLoginShell:(BOOL)value;
 
 -(void) setTimeOut:(NSTimeInterval)timeOut;
 -(NSString*) equivalentLaunchCommand;

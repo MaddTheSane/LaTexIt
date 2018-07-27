@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 3/05/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSMutableArray class
 
@@ -40,5 +40,20 @@
   }
 }
 #endif
+
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
+{
+  NSArray* objectsToMove = [self objectsAtIndexes:indices];
+  unsigned int shift = 0;
+  unsigned int i = [indices firstIndex];
+  while((i != NSNotFound) && i<index)
+  {
+    ++shift;
+    i = [indices indexGreaterThanIndex:i];
+  }
+  [self removeObjectsAtIndexes:indices];
+  [self insertObjects:objectsToMove atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(index-shift, [objectsToMove count])]];
+}
+//end moveObjectsAtIndices:toIndex:
 
 @end

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" content="text/html; charset=utf-8">
+    <channel>
+        <title>LaTeXiT Changelog</title>
+        <link>http://ktd.club.fr/programmation/latexit_en.php</link>
+        <description>Updates und Download-Links.</description>
+        <language>en</language>
+        <item> 
+            <title>Version 1.15.0</title>
+            <description>
+              <ul>
+                <li>Die Mac OS X 10.3 (Panther) Version wird nicht mehr unterstützt</li>
+                <li>Problembehebung einer Inkompatibilität mit Leopard</li>
+                <li>Dienste funktionieren nun auch unter Leopard</li>
+                <li>Robustere Art und Weiße um Tastenkürzel zu handhaben</li>
+                <li>Der Dienst &quot;Gleichung detektieren und umwandeln&quot; unterstützt nun \begin{eqnarray*}...\end{eqnarray*}</li>
+                <li>Es ist nun möglich Gleichungen vom LaTeX Formel Editor in die Bibliothek zu importieren</li>
+                <li>Tabellen sind nicht länger limitiert</li>
+                <li>LaTeXiT verwendet nun Sparkle für Updates</li>
+                <li>Die Latexierung wird nun ausgelöst durch ⌘T in TexShop; ⌘L, ⇧⌘L, ⇧⌘T funktioniert auch</li>
+                <li>Die Standard-Einleitung verwendet nun \usepackage[usenames]{color} anstatt \usepackage{color}</li>
+                <li>Neues Programm-Icon von Jacob Bandes-Storch</li>
+              </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-de.html</sparkle:releaseNotesLink>
+            <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
+            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream"/> 
+        </item>
+        <item> 
+            <title>Version 1.16.0</title>
+            <description>
+              <ul>
+                <li>Jetzt mit Automator Aktion;</li>
+                <li>bessere Handhabung der UNIX-Ablaufumgebung, die bei manchen Konfigurationen zu Fehlern führt;</li>
+                <li>Verwaltung von multiplen Einleitungen;</li>
+                <li>Möglichkeit hinzugefügt die derzeitige Benutzer Login Shell Konfiguration zu verwenden oder nicht;</li>
+                <li>Palette "Zusätzliche Dateien" hinzugefügt;</li>
+                <li>bessere Vorgehensweise beim automatischen Beschneiden der Gleichungen;</li>
+                <li>bessere Lesbarkeit dadurch, dass die Icons der erzeugten Dateien keinen durchsichtigen Hintergrund mehr haben;</li>
+                <li>die automatische Bestimmung der Schriftgröße durch den Dienst verwendet einen spezifischen Faktor;</li>
+                <li>Deutsch Übersetzung aktualisiert (Peter Dyballa / Simon Lämmle);</li>
+                <li>Sparkle aktualisiert;</li>
+                <li>Beheben einiger kleiner Fehler.</li>
+              </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-en.html</sparkle:releaseNotesLink>
+            <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
+            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream"/> 
+        </item> 
+    </channel> 
+</rss>

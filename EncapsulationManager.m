@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/07/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //the EncapsulationManager is dataSource and delegate of the EncapsulationView
 //encapsulations are customizable exports of library items, when drag'n dropping to destinations that are text-only

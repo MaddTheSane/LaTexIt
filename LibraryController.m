@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryController.h"
@@ -282,10 +282,10 @@
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
   [openPanel setAccessoryView:[importAccessoryView retain]];
   if ([[self window] isVisible])
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"latexlib"] modalForWindow:[self window]
+    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"library", nil] modalForWindow:[self window]
                         modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
   else
-    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObject:@"latexlib"]] contextInfo:NULL];
+    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"library", nil]] contextInfo:NULL];
 }
 //end open:
 

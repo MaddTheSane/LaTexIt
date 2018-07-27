@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -33,6 +33,9 @@ typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST} libra
   NSThread* mainThread;
   
   NSString* libraryPath;
+  
+  NSManagedObjectContext* managedObjectContext;
+  NSArrayController*      latexitEquationsRootController;
 }
 
 +(LibraryManager*) sharedManager; //the library manager singleton

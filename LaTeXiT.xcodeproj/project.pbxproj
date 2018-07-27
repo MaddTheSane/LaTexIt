@@ -6,6 +6,33 @@
 	objectVersion = 42;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		93BD651D0E8D08EC00DB341B /* All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All" */;
+			buildPhases = (
+			);
+			dependencies = (
+				93BD65230E8D08FA00DB341B /* PBXTargetDependency */,
+				93BD65210E8D08F700DB341B /* PBXTargetDependency */,
+			);
+			name = All;
+			productName = All;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXAppleScriptBuildPhase section */
+		9344BBDF0E8CF73E00FE90A5 /* AppleScript */ = {
+			isa = PBXAppleScriptBuildPhase;
+			buildActionMask = 2147483647;
+			contextName = "";
+			files = (
+			);
+			isSharedContext = 0;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXAppleScriptBuildPhase section */
+
 /* Begin PBXBuildFile section */
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
@@ -27,6 +54,13 @@
 		930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC29907ECBC3C00EEB238 /* AppController.m */; };
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
 		930E51E60C0711C300BF15A8 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
+		930F271E0E4B8FE7006C207E /* button-menu.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 930F271D0E4B8FE7006C207E /* button-menu.tiff */; };
+		930F28FE0E4BBC5F006C207E /* warning-triangle.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */; };
+		930F298A0E4BC543006C207E /* PreamblesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930F29890E4BC543006C207E /* PreamblesTableView.m */; };
+		930F2B940E4C5534006C207E /* OgreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
+		930F2C0A0E4C5783006C207E /* OgreKit.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
+		930F2CF20E4C5C49006C207E /* OgreKit-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 930F2CF10E4C5C49006C207E /* OgreKit-License.txt */; };
+		930F2DCE0E4C6D0F006C207E /* NotifyingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930F2DCD0E4C6D0F006C207E /* NotifyingScrollView.m */; };
 		931030240C116A2E000BECED /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 93102E960C116A2E000BECED /* palettes */; };
 		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
 		9311C80408A0FA95009AC959 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C80208A0FA95009AC959 /* LibraryController.m */; };
@@ -36,8 +70,9 @@
 		9315F6C4089A5F2200EAE085 /* EncapsulationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315F6C2089A5F2200EAE085 /* EncapsulationManager.m */; };
 		931CB3080801311100CF9D2B /* LatexPalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 931CB3060801311100CF9D2B /* LatexPalettesController.m */; };
 		931CB341080132D900CF9D2B /* LatexPalettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 931CB340080132D900CF9D2B /* LatexPalettes.nib */; };
+		931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931D94F50E8A252100D9A778 /* DirectoryService.framework */; };
+		931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */; };
 		9324D34F08A63E540010DB95 /* ButtonNotClickThrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */; };
-		9326E12F0A2E46B5003A430E /* convert in Resources */ = {isa = PBXBuildFile; fileRef = 9326E0E50A2E46B5003A430E /* convert */; };
 		9328604407F4505F009BF03D /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		932BA15609609A3D004EECBA /* PaletteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA15409609A3D004EECBA /* PaletteCell.m */; };
 		932BA4D10960C6CD004EECBA /* PaletteMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA4CF0960C6CD004EECBA /* PaletteMatrix.m */; };
@@ -48,11 +83,6 @@
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
 		93310172083D1D6500DE67ED /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
-		933EB9CD0B7FB9AB00D84BDB /* current-version-fr.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933EB9CA0B7FB9AB00D84BDB /* current-version-fr.rtf */; };
-		933EB9CE0B7FB9AB00D84BDB /* current-version-en.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */; };
-		933EB9CF0B7FB9AB00D84BDB /* current-version-de.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */; };
-		933EB9EC0B7FBAEB00D84BDB /* createHistoryPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */; };
-		933EB9F90B7FBB9E00D84BDB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		933EBA920B7FCDD900D84BDB /* home.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBA900B7FCDD900D84BDB /* home.tiff */; };
 		933EBA930B7FCDD900D84BDB /* homePressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBA910B7FCDD900D84BDB /* homePressed.tiff */; };
 		933F2ED908A0B86F004C7A31 /* action-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933F2ED708A0B86F004C7A31 /* action-pressed.tiff */; };
@@ -61,6 +91,28 @@
 		933F2EE508A0B993004C7A31 /* add-big.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933F2EE308A0B993004C7A31 /* add-big.tiff */; };
 		934069DA0C058FFB0012A8DB /* Léeme.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934069D90C058FFB0012A8DB /* Léeme.rtfd */; };
 		9343D0C908604F430024CDC2 /* refresh.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9343D0C808604F430024CDC2 /* refresh.tiff */; };
+		9344B2F90E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B2F80E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m */; };
+		9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B4370E8B7DAC00FE90A5 /* Automator.framework */; };
+		9344B6EA0E8BBDCC00FE90A5 /* LatexProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B6E90E8BBDCC00FE90A5 /* LatexProcessor.m */; };
+		9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */; };
+		9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */; };
+		9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B4370E8B7DAC00FE90A5 /* Automator.framework */; };
+		9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		9344B9F70E8CF4D000FE90A5 /* OgreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
+		9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
+		9344BB9F0E8CF59400FE90A5 /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
+		9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
+		9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
+		9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
+		9344BBA30E8CF5AE00FE90A5 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
+		9344BBA40E8CF5B900FE90A5 /* LatexProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B6E90E8BBDCC00FE90A5 /* LatexProcessor.m */; };
+		9344BBA70E8CF5C500FE90A5 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
+		9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
+		9344BBA90E8CF5D400FE90A5 /* LaTeXiTPreferencesKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B2F80E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m */; };
+		9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
+		9344BBAB0E8CF5E900FE90A5 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */; };
+		9344BBB00E8CF69800FE90A5 /* OgreKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 930F2B930E4C5534006C207E /* OgreKit.framework */; };
+		9344BBB10E8CF69E00FE90A5 /* Bridge10_5.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 934D22220E60120B00BA812B /* Bridge10_5.framework */; };
 		9344D77108257B2400B17B37 /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D76F08257B2400B17B37 /* LibraryTableView.m */; };
 		9344D8280825808900B17B37 /* LibraryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8260825808900B17B37 /* LibraryCell.m */; };
 		9344D83D0825818B00B17B37 /* small-folder-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9344D83C0825818B00B17B37 /* small-folder-icon.png */; };
@@ -70,11 +122,20 @@
 		9345E42D0AC9C5310082ADB4 /* TextShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4270AC9C5310082ADB4 /* TextShortcutsTableView.m */; };
 		9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4280AC9C5310082ADB4 /* TextShortcutsManager.m */; };
 		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
+		934D1FD70E5F30FB00BA812B /* AdditionalFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934D1FD60E5F30FB00BA812B /* AdditionalFilesController.m */; };
+		934D1FD90E5F32F800BA812B /* AdditionalFiles.nib in Resources */ = {isa = PBXBuildFile; fileRef = 934D1FD80E5F32F800BA812B /* AdditionalFiles.nib */; };
+		934D20BB0E5F5A2000BA812B /* AdditionalFilesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */; };
+		934D22230E60120B00BA812B /* Bridge10_5.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934D22220E60120B00BA812B /* Bridge10_5.framework */; };
+		934D222C0E60121400BA812B /* Bridge10_5.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934D22220E60120B00BA812B /* Bridge10_5.framework */; };
+		934D22AD0E6014FF00BA812B /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */; };
+		935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 935784510E9D21FB00736F31 /* LatexitEquation.m */; };
+		935784540E9D226000736F31 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 935784530E9D226000736F31 /* Latexit.xcdatamodel */; };
+		9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9357846A0E9D2A9C00736F31 /* CoreData.framework */; };
 		935888EA096048A00068C698 /* ServiceShortcutsTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935888E8096048A00068C698 /* ServiceShortcutsTextView.m */; };
 		935A834C084EFF11005724CE /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
 		935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */; };
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
-		935A8612084F4F27005724CE /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 935A860C084F4F15005724CE /* LinkBack.framework */; };
+		935AECEE0CB16ECC001A5067 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		936E319309465EAE0091BEC1 /* advancedToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */; };
@@ -86,27 +147,37 @@
 		936E5F920906E64000A26F7B /* SMLSyntaxColouring.m in Sources */ = {isa = PBXBuildFile; fileRef = 936E5F900906E64000A26F7B /* SMLSyntaxColouring.m */; };
 		9372A1F5087819EF00A3A645 /* MarginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9372A1F3087819EF00A3A645 /* MarginController.m */; };
 		9372A2F4087827FF00A3A645 /* Margin.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A2F3087827FF00A3A645 /* Margin.nib */; };
-		93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93773C2107FFF2B6004AAB30 /* warning.tiff */; };
+		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
+		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
+		9387AD220DD2E31D00E4ED4A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9387AD210DD2E31D00E4ED4A /* Sparkle.framework */; };
+		9387AD400DD2E34400E4ED4A /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */; };
+		9387AD450DD2E34900E4ED4A /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */; };
+		9387AD460DD2E34900E4ED4A /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9387AD210DD2E31D00E4ED4A /* Sparkle.framework */; };
 		938E23A60889C382000626E6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
 		938E244B0889C392000626E6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
-		938E24550889C453000626E6 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935A860C084F4F15005724CE /* LinkBack.framework */; };
 		93914201094F9A8A00B9F2F9 /* preambleToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93914200094F9A8A00B9F2F9 /* preambleToolbarItem.tiff */; };
 		9391D8FA09607C2100A22F19 /* PaletteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9391D8F809607C2100A22F19 /* PaletteItem.m */; };
 		939A64580800281900AE4486 /* ServicesMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 939A64570800281900AE4486 /* ServicesMenu.strings */; };
 		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */; };
+		93A0FFB50DABA1F100DDBAF4 /* createHistoryPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */; };
+		93A0FFBC0DABA34B00DDBAF4 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
 		93A592CB07F46075001DF900 /* Licence.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C807F46075001DF900 /* Licence.rtf */; };
 		93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C907F46075001DF900 /* Lisez-moi.rtfd */; };
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
-		93B212FA0BBC1C6900EFCA2F /* current-version-es.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93B212F90BBC1C6900EFCA2F /* current-version-es.rtf */; };
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
+		93B524990DCEDF5500B52185 /* rects.c in Sources */ = {isa = PBXBuildFile; fileRef = 93B524980DCEDF5500B52185 /* rects.c */; };
 		93B5288D089FF95800F14B77 /* add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B52889089FF95800F14B77 /* add.tiff */; };
 		93B5288E089FF95800F14B77 /* add-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B5288A089FF95800F14B77 /* add-pressed.tiff */; };
 		93B5288F089FF95800F14B77 /* remove-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B5288B089FF95800F14B77 /* remove-pressed.tiff */; };
 		93B52890089FF95800F14B77 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B5288C089FF95800F14B77 /* remove.tiff */; };
+		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
+		93C1BB9B0DCDBA57007466E1 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
+		93C531900D9E2781003AF7FC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C5318F0D9E2781003AF7FC /* Security.framework */; };
+		93C531D00D9E310C003AF7FC /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
 		93CD21DE0827E9230079C367 /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
 		93D19DB20AA2E41C00DFBEE8 /* NSAttributedStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
@@ -114,6 +185,10 @@
 		93D7CB5A09D36D6D0001DC5E /* CompositionConfiguration.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93D7CB5909D36D6D0001DC5E /* CompositionConfiguration.nib */; };
 		93E81972087969BE0081B897 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */; };
 		93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
+		93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
+		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
+		93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */; };
+		93E9D0130E9F3DC300B08FB0 /* main.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF7B0E9F307F00B08FB0 /* main.xib */; };
 		93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EE114907F2F607009E1F36 /* HistoryCell.m */; };
 		93EED7E008A2198600A99BDF /* History.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93EED7DF08A2198600A99BDF /* History.nib */; };
 		93EED80908A21ADD00A99BDF /* Library.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93EED80808A21ADD00A99BDF /* Library.nib */; };
@@ -133,15 +208,58 @@
 		93FE050A09D2F32C00B8B34E /* CompositionConfigurationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FE050809D2F32C00B8B34E /* CompositionConfigurationManager.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		93BD65200E8D08F700DB341B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D15AC270486D014006FF6A4;
+			remoteInfo = LaTeXiT;
+		};
+		93BD65220E8D08FA00DB341B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9344B98E0E8CF38700FE90A5;
+			remoteInfo = "Automator-CreateEquations";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		93126C5C0834966D0021D026 /* CopyFiles */ = {
+		93126C5C0834966D0021D026 /* Copy Files (Frameworks) */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				935A8612084F4F27005724CE /* LinkBack.framework in CopyFiles */,
+				934D222C0E60121400BA812B /* Bridge10_5.framework in Copy Files (Frameworks) */,
+				9387AD450DD2E34900E4ED4A /* LinkBack.framework in Copy Files (Frameworks) */,
+				930F2C0A0E4C5783006C207E /* OgreKit.framework in Copy Files (Frameworks) */,
+				9387AD460DD2E34900E4ED4A /* Sparkle.framework in Copy Files (Frameworks) */,
 			);
+			name = "Copy Files (Frameworks)";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9344BBB50E8CF6DF00FE90A5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9344BBB10E8CF69E00FE90A5 /* Bridge10_5.framework in CopyFiles */,
+				9344BBB00E8CF69800FE90A5 /* OgreKit.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93BD66330E8D095400DB341B /* Copy Files (Automator) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/Automator;
+			dstSubfolderSpec = 1;
+			files = (
+				93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */,
+			);
+			name = "Copy Files (Automator)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -158,7 +276,7 @@
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
-		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
 		9302547F07F0BC6A00011996 /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
@@ -182,6 +300,14 @@
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
 		930E51E30C0711C300BF15A8 /* SystemTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemTask.h; sourceTree = "<group>"; };
 		930E51E40C0711C300BF15A8 /* SystemTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemTask.m; sourceTree = "<group>"; };
+		930F271D0E4B8FE7006C207E /* button-menu.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "button-menu.tiff"; path = "Resources/interface/button-menu.tiff"; sourceTree = "<group>"; };
+		930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "warning-triangle.tiff"; path = "Resources/interface/warning-triangle.tiff"; sourceTree = "<group>"; };
+		930F29880E4BC543006C207E /* PreamblesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreamblesTableView.h; sourceTree = "<group>"; };
+		930F29890E4BC543006C207E /* PreamblesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreamblesTableView.m; sourceTree = "<group>"; };
+		930F2B930E4C5534006C207E /* OgreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OgreKit.framework; sourceTree = "<group>"; };
+		930F2CF10E4C5C49006C207E /* OgreKit-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "OgreKit-License.txt"; path = "Resources/documentation/OgreKit-License.txt"; sourceTree = "<group>"; };
+		930F2DCC0E4C6D0F006C207E /* NotifyingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifyingScrollView.h; sourceTree = "<group>"; };
+		930F2DCD0E4C6D0F006C207E /* NotifyingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifyingScrollView.m; sourceTree = "<group>"; };
 		93102E960C116A2E000BECED /* palettes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = palettes; path = Resources/palettes; sourceTree = "<group>"; };
 		9311C64208A0C409009AC959 /* ImagePopupButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePopupButton.h; sourceTree = "<group>"; };
 		9311C64308A0C409009AC959 /* ImagePopupButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePopupButton.m; sourceTree = "<group>"; };
@@ -194,11 +320,22 @@
 		9315A59907FD36BD00AFCCE9 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		9315F6C1089A5F2200EAE085 /* EncapsulationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationManager.h; sourceTree = "<group>"; };
 		9315F6C2089A5F2200EAE085 /* EncapsulationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationManager.m; sourceTree = "<group>"; };
+		931725AB0DA111F5001E036F /* latexit-changelog-en.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-en.html"; path = "Resources/sparkle/latexit-changelog-en.html"; sourceTree = "<group>"; };
+		931725AC0DA111F5001E036F /* latexit-sparkle-fr.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "latexit-sparkle-fr.rss"; path = "Resources/sparkle/latexit-sparkle-fr.rss"; sourceTree = "<group>"; };
+		931725AD0DA111F5001E036F /* latexit-changelog-fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-fr.html"; path = "Resources/sparkle/latexit-changelog-fr.html"; sourceTree = "<group>"; };
+		931725AE0DA111F5001E036F /* latexit-changelog-es.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-es.html"; path = "Resources/sparkle/latexit-changelog-es.html"; sourceTree = "<group>"; };
+		931725AF0DA111F5001E036F /* latexit-changelog-de.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-de.html"; path = "Resources/sparkle/latexit-changelog-de.html"; sourceTree = "<group>"; };
+		931725B00DA111F5001E036F /* latexit-sparkle-de.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "latexit-sparkle-de.rss"; path = "Resources/sparkle/latexit-sparkle-de.rss"; sourceTree = "<group>"; };
+		931725B10DA111F5001E036F /* latexit-sparkle-es.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "latexit-sparkle-es.rss"; path = "Resources/sparkle/latexit-sparkle-es.rss"; sourceTree = "<group>"; };
+		931725B20DA111F5001E036F /* latexit-sparkle-en.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "latexit-sparkle-en.rss"; path = "Resources/sparkle/latexit-sparkle-en.rss"; sourceTree = "<group>"; };
 		931AD67508491A8E00E8EE8B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		931CB3050801311100CF9D2B /* LatexPalettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexPalettesController.h; sourceTree = "<group>"; };
 		931CB3060801311100CF9D2B /* LatexPalettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatexPalettesController.m; sourceTree = "<group>"; };
 		931CB32E0801325800CF9D2B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		931CB342080132DF00CF9D2B /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
+		931D94F50E8A252100D9A778 /* DirectoryService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DirectoryService.framework; path = /System/Library/Frameworks/DirectoryService.framework; sourceTree = "<absolute>"; };
+		931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryServiceHelper.h; sourceTree = "<group>"; };
+		931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryServiceHelper.m; sourceTree = "<group>"; };
 		9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
 		9326E0E50A2E46B5003A430E /* convert */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.script.sh; name = convert; path = "Resources/latex-keywords/convert"; sourceTree = "<group>"; };
@@ -220,11 +357,7 @@
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
-		933EB9CA0B7FB9AB00D84BDB /* current-version-fr.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-fr.rtf"; path = "Resources/documentation/current-version-fr.rtf"; sourceTree = "<group>"; };
-		933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "Resources/documentation/current-version-en.rtf"; sourceTree = "<group>"; };
-		933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "Resources/documentation/current-version-de.rtf"; sourceTree = "<group>"; };
 		933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = createHistoryPlist.m; sourceTree = "<group>"; };
-		933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CreateHistoryPlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		933EBA900B7FCDD900D84BDB /* home.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = home.tiff; path = Resources/interface/home.tiff; sourceTree = "<group>"; };
 		933EBA910B7FCDD900D84BDB /* homePressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = homePressed.tiff; path = Resources/interface/homePressed.tiff; sourceTree = "<group>"; };
 		933F2ED708A0B86F004C7A31 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/interface/action-pressed.tiff"; sourceTree = "<group>"; };
@@ -233,6 +366,14 @@
 		933F2EE308A0B993004C7A31 /* add-big.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big.tiff"; path = "Resources/interface/add-big.tiff"; sourceTree = "<group>"; };
 		934069D90C058FFB0012A8DB /* Léeme.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Léeme.rtfd"; path = "Resources/documentation/Léeme.rtfd"; sourceTree = "<group>"; };
 		9343D0C808604F430024CDC2 /* refresh.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = refresh.tiff; path = Resources/interface/refresh.tiff; sourceTree = "<group>"; };
+		9344B2980E8B60BB00FE90A5 /* LaTeXiTSharedTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiTSharedTypes.h; sourceTree = "<group>"; };
+		9344B29F0E8B63E300FE90A5 /* LaTeXiTPreferencesKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiTPreferencesKeys.h; sourceTree = "<group>"; };
+		9344B2F80E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaTeXiTPreferencesKeys.m; sourceTree = "<group>"; };
+		9344B4370E8B7DAC00FE90A5 /* Automator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Automator.framework; path = /System/Library/Frameworks/Automator.framework; sourceTree = "<absolute>"; };
+		9344B6E80E8BBDCC00FE90A5 /* LatexProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexProcessor.h; sourceTree = "<group>"; };
+		9344B6E90E8BBDCC00FE90A5 /* LatexProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatexProcessor.m; sourceTree = "<group>"; };
+		9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = /System/Library/Frameworks/OSAKit.framework; sourceTree = "<absolute>"; };
+		9344B98F0E8CF38700FE90A5 /* CreateEquations.action */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CreateEquations.action; sourceTree = BUILT_PRODUCTS_DIR; };
 		9344D76E08257B2400B17B37 /* LibraryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableView.h; sourceTree = "<group>"; };
 		9344D76F08257B2400B17B37 /* LibraryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableView.m; sourceTree = "<group>"; };
 		9344D8250825808900B17B37 /* LibraryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryCell.h; sourceTree = "<group>"; };
@@ -240,7 +381,7 @@
 		9344D83C0825818B00B17B37 /* small-folder-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "small-folder-icon.png"; path = "Resources/interface/small-folder-icon.png"; sourceTree = "<group>"; };
 		9344D89F082587ED00B17B37 /* LibraryFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFolder.h; sourceTree = "<group>"; };
 		9344D8A0082587ED00B17B37 /* LibraryFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFolder.m; sourceTree = "<group>"; };
-		9345E3350AC9A2620082ADB4 /* textShortcuts.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = textShortcuts.plist; path = Resources/textShortcuts.plist; sourceTree = "<group>"; };
+		9345E3350AC9A2620082ADB4 /* textShortcuts.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = textShortcuts.plist; path = Resources/textShortcuts.plist; sourceTree = "<group>"; };
 		9345E4230AC9C5310082ADB4 /* TextShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsTableView.h; sourceTree = "<group>"; };
 		9345E4240AC9C5310082ADB4 /* TextShortcutsController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsController.m; sourceTree = "<group>"; };
 		9345E4250AC9C5310082ADB4 /* TextShortcutsManager.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsManager.h; sourceTree = "<group>"; };
@@ -257,17 +398,30 @@
 		934C033D0AD0361F007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		934C033E0AD03626007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Preferences.nib; sourceTree = "<group>"; };
 		934C033F0AD03632007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
-		934C03400AD0363B007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
+		934C03400AD0363B007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		934C03410AD03648007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		934C034D0AD0368D007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
 		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "Resources/documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
+		934D1FD50E5F30FB00BA812B /* AdditionalFilesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesController.h; sourceTree = "<group>"; };
+		934D1FD60E5F30FB00BA812B /* AdditionalFilesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesController.m; sourceTree = "<group>"; };
+		934D1FD80E5F32F800BA812B /* AdditionalFiles.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = AdditionalFiles.nib; sourceTree = "<group>"; };
+		934D20B90E5F5A2000BA812B /* AdditionalFilesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesTableView.h; sourceTree = "<group>"; };
+		934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesTableView.m; sourceTree = "<group>"; };
+		934D22220E60120B00BA812B /* Bridge10_5.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bridge10_5.framework; sourceTree = "<group>"; };
+		934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
+		934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
+		935784500E9D21FB00736F31 /* LatexitEquation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexitEquation.h; sourceTree = "<group>"; };
+		935784510E9D21FB00736F31 /* LatexitEquation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatexitEquation.m; sourceTree = "<group>"; };
+		935784530E9D226000736F31 /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
+		9357846A0E9D2A9C00736F31 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		935888E7096048A00068C698 /* ServiceShortcutsTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTextView.h; sourceTree = "<group>"; };
 		935888E8096048A00068C698 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
 		935A8349084EFF11005724CE /* NSApplicationExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSApplicationExtended.h; sourceTree = "<group>"; };
 		935A834A084EFF11005724CE /* NSApplicationExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSApplicationExtended.m; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
-		935A860C084F4F15005724CE /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LinkBack.framework; sourceTree = "<group>"; };
+		935AECEB0CB16ECB001A5067 /* NSDictionaryExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionaryExtended.h; sourceTree = "<group>"; };
+		935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryExtended.m; sourceTree = "<group>"; };
 		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
 		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
 		936C315C0C0DEEA90082F86D /* Semaphore.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Semaphore.m; sourceTree = "<group>"; };
@@ -284,13 +438,21 @@
 		9372A1F3087819EF00A3A645 /* MarginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Margin.nib; sourceTree = "<group>"; };
 		9372A2F50878280700A3A645 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Margin.nib; sourceTree = "<group>"; };
-		93773C2107FFF2B6004AAB30 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = warning.tiff; path = Resources/interface/warning.tiff; sourceTree = "<group>"; };
 		93773C3207FFF541004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93773C3307FFF547004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MyDocument.nib; sourceTree = "<group>"; };
 		93773C3407FFF54D004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Preferences.nib; sourceTree = "<group>"; };
 		93773C4607FFF6FB004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		937D7CE80E48F315006F04E1 /* PreamblesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreamblesController.h; sourceTree = "<group>"; };
+		937D7CE90E48F315006F04E1 /* PreamblesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreamblesController.m; sourceTree = "<group>"; };
+		937D7D000E48F4E5006F04E1 /* DeepCopying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeepCopying.h; sourceTree = "<group>"; };
+		937D7D1F0E48F5A2006F04E1 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
+		937D7D260E48F5B7006F04E1 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
+		937D7D270E48F5BA006F04E1 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
+		937D7D280E48F5CF006F04E1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
+		9387AD210DD2E31D00E4ED4A /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LinkBack.framework; sourceTree = "<group>"; };
 		93914200094F9A8A00B9F2F9 /* preambleToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = preambleToolbarItem.tiff; sourceTree = "<group>"; };
 		9391D8F709607C2100A22F19 /* PaletteItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteItem.h; sourceTree = "<group>"; };
 		9391D8F809607C2100A22F19 /* PaletteItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteItem.m; sourceTree = "<group>"; };
@@ -300,11 +462,15 @@
 		939D6B2209C7FEEB0076D19E /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		939E652C0A23D427009308E4 /* LibraryPreviewPanelImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryPreviewPanelImageView.h; sourceTree = "<group>"; };
 		939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryPreviewPanelImageView.m; sourceTree = "<group>"; };
+		93A0FF9D0DABA17800DDBAF4 /* current-version-fr.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-fr.rtf"; path = "Resources/documentation/current-version-fr.rtf"; sourceTree = "<group>"; };
+		93A0FF9E0DABA17800DDBAF4 /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "Resources/documentation/current-version-en.rtf"; sourceTree = "<group>"; };
+		93A0FFA90DABA1B500DDBAF4 /* current-version-es.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-es.rtf"; path = "Resources/documentation/current-version-es.rtf"; sourceTree = "<group>"; };
+		93A0FFAA0DABA1B500DDBAF4 /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "Resources/documentation/current-version-de.rtf"; sourceTree = "<group>"; };
+		93A0FFB10DABA1E500DDBAF4 /* CreateHistoryPlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CreateHistoryPlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = Resources/documentation/Licence.rtf; sourceTree = "<group>"; };
 		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "Resources/documentation/Lisez-moi.rtfd"; sourceTree = "<group>"; };
 		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/documentation/Read Me.rtfd"; sourceTree = "<group>"; };
 		93B212C80BBC1BF400EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/Credits.rtf; sourceTree = "<group>"; };
-		93B212F90BBC1C6900EFCA2F /* current-version-es.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-es.rtf"; path = "Resources/documentation/current-version-es.rtf"; sourceTree = "<group>"; };
 		93B212FB0BBC1C8100EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93B212FE0BBC1C8A00EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
@@ -317,14 +483,21 @@
 		93B213120BBC1CD700EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MyDocument.nib; sourceTree = "<group>"; };
 		93B213150BBC1CDC00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		93B213180BBC1CE100EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Preferences.nib; sourceTree = "<group>"; };
-		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
+		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
+		93B524970DCEDF5500B52185 /* rects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rects.h; sourceTree = "<group>"; };
+		93B524980DCEDF5500B52185 /* rects.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rects.c; sourceTree = "<group>"; };
 		93B52889089FF95800F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/interface/add.tiff; sourceTree = "<group>"; };
 		93B5288A089FF95800F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/interface/add-pressed.tiff"; sourceTree = "<group>"; };
 		93B5288B089FF95800F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/interface/remove-pressed.tiff"; sourceTree = "<group>"; };
 		93B5288C089FF95800F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/interface/remove.tiff; sourceTree = "<group>"; };
+		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
 		93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "latexit-latex-palette.icns"; path = "Resources/file-icons/latexit-latex-palette.icns"; sourceTree = "<group>"; };
+		93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; path = pdfcrop.pl; sourceTree = "<group>"; };
 		93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableView.h; sourceTree = "<group>"; };
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
+		93C5318F0D9E2781003AF7FC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		93C531CE0D9E310C003AF7FC /* NSFileManagerExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFileManagerExtended.h; sourceTree = "<group>"; };
+		93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFileManagerExtended.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
 		93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArrayExtended.m; sourceTree = "<group>"; };
 		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
@@ -339,6 +512,17 @@
 		93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSegmentedControlExtended.m; sourceTree = "<group>"; };
 		93E81A9F087978AD0081B897 /* NSFontExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFontExtended.h; sourceTree = "<group>"; };
 		93E81AA0087978AD0081B897 /* NSFontExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFontExtended.m; sourceTree = "<group>"; };
+		93E9CF760E9F305B00B08FB0 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Automator/CreateEquations/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF780E9F306000B08FB0 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = Automator/CreateEquations/French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF790E9F306400B08FB0 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Automator/CreateEquations/German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF7A0E9F306800B08FB0 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Automator/CreateEquations/Spanish.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF7C0E9F307F00B08FB0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Automator/CreateEquations/English.lproj/main.xib; sourceTree = "<group>"; };
+		93E9CF7E0E9F308400B08FB0 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = Automator/CreateEquations/French.lproj/main.xib; sourceTree = "<group>"; };
+		93E9CF7F0E9F308700B08FB0 /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = Automator/CreateEquations/German.lproj/main.xib; sourceTree = "<group>"; };
+		93E9CF800E9F308900B08FB0 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Spanish; path = Automator/CreateEquations/Spanish.lproj/main.xib; sourceTree = "<group>"; };
+		93E9CFA20E9F317100B08FB0 /* CreateEquations_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateEquations_Prefix.pch; path = Automator/CreateEquations/CreateEquations_Prefix.pch; sourceTree = "<group>"; };
+		93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Automator_CreateEquations.m; path = Automator/CreateEquations/Automator_CreateEquations.m; sourceTree = "<group>"; };
+		93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Automator_CreateEquations.h; path = Automator/CreateEquations/Automator_CreateEquations.h; sourceTree = "<group>"; };
 		93EE114807F2F607009E1F36 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
 		93EE114907F2F607009E1F36 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
 		93EED7D508A2197500A99BDF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/History.nib; sourceTree = "<group>"; };
@@ -356,7 +540,7 @@
 		93F0FFC1098847940064888E /* big-folder-icon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "big-folder-icon.tiff"; path = "Resources/interface/big-folder-icon.tiff"; sourceTree = "<group>"; };
 		93F0FFE409884B030064888E /* view-icons.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-icons.tiff"; path = "Resources/interface/view-icons.tiff"; sourceTree = "<group>"; };
 		93F0FFEB09884BDA0064888E /* view-titles.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-titles.tiff"; path = "Resources/interface/view-titles.tiff"; sourceTree = "<group>"; };
-		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.xml; name = "latex-keywords.plist"; path = "Resources/latex-keywords/latex-keywords.plist"; sourceTree = "<group>"; };
+		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.plist.xml; name = "latex-keywords.plist"; path = "Resources/latex-keywords/latex-keywords.plist"; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationController.h; sourceTree = "<group>"; };
@@ -378,16 +562,36 @@
 				938E244B0889C392000626E6 /* AppKit.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
-				938E24550889C453000626E6 /* LinkBack.framework in Frameworks */,
 				938E23A60889C382000626E6 /* Quartz.framework in Frameworks */,
+				93C531900D9E2781003AF7FC /* Security.framework in Frameworks */,
+				9387AD220DD2E31D00E4ED4A /* Sparkle.framework in Frameworks */,
+				9387AD400DD2E34400E4ED4A /* LinkBack.framework in Frameworks */,
+				930F2B940E4C5534006C207E /* OgreKit.framework in Frameworks */,
+				934D22230E60120B00BA812B /* Bridge10_5.framework in Frameworks */,
+				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
+				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
+				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
+				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		933EB9E80B7FBADA00D84BDB /* Frameworks */ = {
+		9344B98D0E8CF38700FE90A5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				933EB9F90B7FBB9E00D84BDB /* Cocoa.framework in Frameworks */,
+				9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */,
+				9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */,
+				9344B9F60E8CF4CA00FE90A5 /* Cocoa.framework in Frameworks */,
+				9344B9F70E8CF4D000FE90A5 /* OgreKit.framework in Frameworks */,
+				9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A0FFAF0DABA1E500DDBAF4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93A0FFBC0DABA34B00DDBAF4 /* AppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,8 +601,15 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				935A860C084F4F15005724CE /* LinkBack.framework */,
+				9357846A0E9D2A9C00736F31 /* CoreData.framework */,
+				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
+				9344B4370E8B7DAC00FE90A5 /* Automator.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
+				931D94F50E8A252100D9A778 /* DirectoryService.framework */,
+				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
+				9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */,
+				931AD67508491A8E00E8EE8B /* Quartz.framework */,
+				93C5318F0D9E2781003AF7FC /* Security.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -406,9 +617,10 @@
 		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
-				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
-				931AD67508491A8E00E8EE8B /* Quartz.framework */,
+				934D22220E60120B00BA812B /* Bridge10_5.framework */,
+				9387AD3F0DD2E34400E4ED4A /* LinkBack.framework */,
+				930F2B930E4C5534006C207E /* OgreKit.framework */,
+				9387AD210DD2E31D00E4ED4A /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -417,7 +629,8 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* LaTeXiT.app */,
-				933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */,
+				93A0FFB10DABA1E500DDBAF4 /* CreateHistoryPlist */,
+				9344B98F0E8CF38700FE90A5 /* CreateEquations.action */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -437,12 +650,15 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9344B4280E8B7D6600FE90A5 /* Automator */,
+				934D1FD40E5F30CD00BA812B /* AdditionalFilesPalette */,
 				93344CB708251C9000F00A49 /* CocoaExtensions */,
 				93D7CA5309D362D40001DC5E /* CompositionConfiguration */,
 				93F73CF10898E26000EFFA5E /* Encapsulation */,
 				93EF9D1B07EF7B5C0003FA6E /* History */,
 				9324D35808A63ED90010DB95 /* Interface */,
 				93A5972207F479B8001DF900 /* LatexPalettes */,
+				9344B6E70E8BBDA700FE90A5 /* LaTeX Processor */,
 				9344D76D08257B1600B17B37 /* Library */,
 				9372A1FA08781A0F00A3A645 /* Margins */,
 				9315A44A07FD30E800AFCCE9 /* Preferences */,
@@ -453,6 +669,7 @@
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
 				930BC2A707ECBD6500EEB238 /* MyImageView.h */,
 				930BC2A807ECBD6500EEB238 /* MyImageView.m */,
+				9344B2980E8B60BB00FE90A5 /* LaTeXiTSharedTypes.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -460,6 +677,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				93E9CF880E9F30BE00B08FB0 /* Automator */,
 				32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 				933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */,
@@ -470,25 +688,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				93019F15086C765800A2A9E7 /* Documentation */,
-				93019F14086C763600A2A9E7 /* Icons */,
-				9326DEDD0A2E3A1E003A430E /* latex-keywords */,
-				93102E960C116A2E000BECED /* palettes */,
-				9345E3350AC9A2620082ADB4 /* textShortcuts.plist */,
-				93B48F5D091FA47C00FDEEB6 /* tex.plist */,
-				8D15AC360486D014006FF6A4 /* Info.plist */,
-				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
-				930255CF07F0C2A800011996 /* Localizable.strings */,
-				939A64570800281900AE4486 /* ServicesMenu.strings */,
-				93D7CB5909D36D6D0001DC5E /* CompositionConfiguration.nib */,
-				93F73DAD0898FE2700EFFA5E /* Encapsulation.nib */,
-				93EED7DF08A2198600A99BDF /* History.nib */,
-				93EED80808A21ADD00A99BDF /* Library.nib */,
-				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
-				9372A2F3087827FF00A3A645 /* Margin.nib */,
-				2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */,
-				931CB340080132D900CF9D2B /* LatexPalettes.nib */,
-				9315A45007FD331800AFCCE9 /* Preferences.nib */,
+				9344BBE20E8CF7D400FE90A5 /* Automator */,
+				9344BBE10E8CF7C600FE90A5 /* LaTeXiT */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -516,15 +717,16 @@
 		93019F15086C765800A2A9E7 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
-				933EB9CA0B7FB9AB00D84BDB /* current-version-fr.rtf */,
-				933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */,
-				933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */,
-				93B212F90BBC1C6900EFCA2F /* current-version-es.rtf */,
+				931725970DA111E4001E036F /* Sparkle */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				93A592C907F46075001DF900 /* Lisez-moi.rtfd */,
 				93A592CA07F46075001DF900 /* Read Me.rtfd */,
 				934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */,
 				934069D90C058FFB0012A8DB /* Léeme.rtfd */,
+				93A0FF9D0DABA17800DDBAF4 /* current-version-fr.rtf */,
+				93A0FF9E0DABA17800DDBAF4 /* current-version-en.rtf */,
+				93A0FFAA0DABA1B500DDBAF4 /* current-version-de.rtf */,
+				93A0FFA90DABA1B500DDBAF4 /* current-version-es.rtf */,
 				93A592C807F46075001DF900 /* Licence.rtf */,
 				935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */,
 				935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */,
@@ -537,12 +739,16 @@
 			children = (
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
+				93B524970DCEDF5500B52185 /* rects.h */,
+				93B524980DCEDF5500B52185 /* rects.c */,
 				936C315D0C0DEEA90082F86D /* Semaphore.h */,
 				936C315C0C0DEEA90082F86D /* Semaphore.m */,
 				930E51E30C0711C300BF15A8 /* SystemTask.h */,
 				930E51E40C0711C300BF15A8 /* SystemTask.m */,
 				939D6B2109C7FEEB0076D19E /* Utils.h */,
 				939D6B2209C7FEEB0076D19E /* Utils.m */,
+				931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */,
+				931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -556,6 +762,8 @@
 				930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */,
 				936E5F910906E64000A26F7B /* SMLSyntaxColouring.h */,
 				936E5F900906E64000A26F7B /* SMLSyntaxColouring.m */,
+				930F2DCC0E4C6D0F006C207E /* NotifyingScrollView.h */,
+				930F2DCD0E4C6D0F006C207E /* NotifyingScrollView.m */,
 			);
 			name = LineCount;
 			sourceTree = "<group>";
@@ -567,8 +775,29 @@
 				9345E3D70AC9C3390082ADB4 /* TextShortcuts */,
 				9315A59907FD36BD00AFCCE9 /* PreferencesController.h */,
 				9315A59807FD36BD00AFCCE9 /* PreferencesController.m */,
+				937D7CE80E48F315006F04E1 /* PreamblesController.h */,
+				937D7CE90E48F315006F04E1 /* PreamblesController.m */,
+				930F29880E4BC543006C207E /* PreamblesTableView.h */,
+				930F29890E4BC543006C207E /* PreamblesTableView.m */,
+				9344B29F0E8B63E300FE90A5 /* LaTeXiTPreferencesKeys.h */,
+				9344B2F80E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m */,
 			);
 			name = Preferences;
+			sourceTree = "<group>";
+		};
+		931725970DA111E4001E036F /* Sparkle */ = {
+			isa = PBXGroup;
+			children = (
+				931725AC0DA111F5001E036F /* latexit-sparkle-fr.rss */,
+				931725B20DA111F5001E036F /* latexit-sparkle-en.rss */,
+				931725B00DA111F5001E036F /* latexit-sparkle-de.rss */,
+				931725B10DA111F5001E036F /* latexit-sparkle-es.rss */,
+				931725AD0DA111F5001E036F /* latexit-changelog-fr.html */,
+				931725AB0DA111F5001E036F /* latexit-changelog-en.html */,
+				931725AF0DA111F5001E036F /* latexit-changelog-de.html */,
+				931725AE0DA111F5001E036F /* latexit-changelog-es.html */,
+			);
+			name = Sparkle;
 			sourceTree = "<group>";
 		};
 		9324D35808A63ED90010DB95 /* Interface */ = {
@@ -579,6 +808,8 @@
 				9309DCD309C8B17600C5231C /* BorderlessPanel.m */,
 				9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */,
 				9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */,
+				934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */,
+				934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */,
 				9311C64208A0C409009AC959 /* ImagePopupButton.h */,
 				9311C64308A0C409009AC959 /* ImagePopupButton.m */,
 				93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */,
@@ -607,6 +838,11 @@
 				93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */,
 				9331016F083D1D6400DE67ED /* NSColorExtended.h */,
 				93310170083D1D6400DE67ED /* NSColorExtended.m */,
+				937D7D000E48F4E5006F04E1 /* DeepCopying.h */,
+				935AECEB0CB16ECB001A5067 /* NSDictionaryExtended.h */,
+				935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */,
+				93C531CE0D9E310C003AF7FC /* NSFileManagerExtended.h */,
+				93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */,
 				93E81A9F087978AD0081B897 /* NSFontExtended.h */,
 				93E81AA0087978AD0081B897 /* NSFontExtended.m */,
 				9304224A082975ED00F2B555 /* NSIndexSetExtended.h */,
@@ -625,6 +861,64 @@
 				9308AB92088CEAE20062A340 /* NSWorkspaceExtended.m */,
 			);
 			name = CocoaExtensions;
+			sourceTree = "<group>";
+		};
+		9344B4280E8B7D6600FE90A5 /* Automator */ = {
+			isa = PBXGroup;
+			children = (
+				93E9CF840E9F30A300B08FB0 /* CreateEquations */,
+			);
+			name = Automator;
+			sourceTree = "<group>";
+		};
+		9344B6E70E8BBDA700FE90A5 /* LaTeX Processor */ = {
+			isa = PBXGroup;
+			children = (
+				935784500E9D21FB00736F31 /* LatexitEquation.h */,
+				935784510E9D21FB00736F31 /* LatexitEquation.m */,
+				9344B6E80E8BBDCC00FE90A5 /* LatexProcessor.h */,
+				9344B6E90E8BBDCC00FE90A5 /* LatexProcessor.m */,
+			);
+			name = "LaTeX Processor";
+			sourceTree = "<group>";
+		};
+		9344BBE10E8CF7C600FE90A5 /* LaTeXiT */ = {
+			isa = PBXGroup;
+			children = (
+				935784940E9D39A700736F31 /* Data models */,
+				93C1BB8A0DCBA1B6007466E1 /* scripts */,
+				93019F15086C765800A2A9E7 /* Documentation */,
+				93019F14086C763600A2A9E7 /* Icons */,
+				9326DEDD0A2E3A1E003A430E /* latex-keywords */,
+				93102E960C116A2E000BECED /* palettes */,
+				937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */,
+				9345E3350AC9A2620082ADB4 /* textShortcuts.plist */,
+				93B48F5D091FA47C00FDEEB6 /* tex.plist */,
+				8D15AC360486D014006FF6A4 /* Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				930255CF07F0C2A800011996 /* Localizable.strings */,
+				939A64570800281900AE4486 /* ServicesMenu.strings */,
+				930F2CF10E4C5C49006C207E /* OgreKit-License.txt */,
+				934D1FD80E5F32F800BA812B /* AdditionalFiles.nib */,
+				93D7CB5909D36D6D0001DC5E /* CompositionConfiguration.nib */,
+				93F73DAD0898FE2700EFFA5E /* Encapsulation.nib */,
+				93EED7DF08A2198600A99BDF /* History.nib */,
+				93EED80808A21ADD00A99BDF /* Library.nib */,
+				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
+				9372A2F3087827FF00A3A645 /* Margin.nib */,
+				2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */,
+				931CB340080132D900CF9D2B /* LatexPalettes.nib */,
+				9315A45007FD331800AFCCE9 /* Preferences.nib */,
+			);
+			name = LaTeXiT;
+			sourceTree = "<group>";
+		};
+		9344BBE20E8CF7D400FE90A5 /* Automator */ = {
+			isa = PBXGroup;
+			children = (
+				93E9CF740E9F300000B08FB0 /* CreateEquations */,
+			);
+			name = Automator;
 			sourceTree = "<group>";
 		};
 		9344D76D08257B1600B17B37 /* Library */ = {
@@ -674,6 +968,25 @@
 			name = ServiceShortcuts;
 			sourceTree = "<group>";
 		};
+		934D1FD40E5F30CD00BA812B /* AdditionalFilesPalette */ = {
+			isa = PBXGroup;
+			children = (
+				934D1FD50E5F30FB00BA812B /* AdditionalFilesController.h */,
+				934D1FD60E5F30FB00BA812B /* AdditionalFilesController.m */,
+				934D20B90E5F5A2000BA812B /* AdditionalFilesTableView.h */,
+				934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */,
+			);
+			name = AdditionalFilesPalette;
+			sourceTree = "<group>";
+		};
+		935784940E9D39A700736F31 /* Data models */ = {
+			isa = PBXGroup;
+			children = (
+				935784530E9D226000736F31 /* Latexit.xcdatamodel */,
+			);
+			name = "Data models";
+			sourceTree = "<group>";
+		};
 		936E318C09465EAE0091BEC1 /* toolbarItems */ = {
 			isa = PBXGroup;
 			children = (
@@ -713,6 +1026,14 @@
 			name = LatexPalettes;
 			sourceTree = "<group>";
 		};
+		93C1BB8A0DCBA1B6007466E1 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				93C1BB9A0DCDBA57007466E1 /* pdfcrop.pl */,
+			);
+			name = scripts;
+			sourceTree = "<group>";
+		};
 		93D06AE30990BCAA00C484B8 /* file-icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -733,6 +1054,7 @@
 				933F2EE308A0B993004C7A31 /* add-big.tiff */,
 				933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */,
 				93F0FFC1098847940064888E /* big-folder-icon.tiff */,
+				930F271D0E4B8FE7006C207E /* button-menu.tiff */,
 				9308E39207EE46BB00DD1B5F /* error.tiff */,
 				932CF45E0826C5A500434128 /* file-icon.png */,
 				933EBA900B7FCDD900D84BDB /* home.tiff */,
@@ -744,7 +1066,7 @@
 				9344D83C0825818B00B17B37 /* small-folder-icon.png */,
 				93F0FFE409884B030064888E /* view-icons.tiff */,
 				93F0FFEB09884BDA0064888E /* view-titles.tiff */,
-				93773C2107FFF2B6004AAB30 /* warning.tiff */,
+				930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */,
 			);
 			name = interface;
 			sourceTree = "<group>";
@@ -760,6 +1082,33 @@
 				93FE050809D2F32C00B8B34E /* CompositionConfigurationManager.m */,
 			);
 			name = CompositionConfiguration;
+			sourceTree = "<group>";
+		};
+		93E9CF740E9F300000B08FB0 /* CreateEquations */ = {
+			isa = PBXGroup;
+			children = (
+				93BD64910E8D006200DB341B /* Info.plist */,
+				93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */,
+				93E9CF7B0E9F307F00B08FB0 /* main.xib */,
+			);
+			name = CreateEquations;
+			sourceTree = "<group>";
+		};
+		93E9CF840E9F30A300B08FB0 /* CreateEquations */ = {
+			isa = PBXGroup;
+			children = (
+				93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */,
+				93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */,
+			);
+			name = CreateEquations;
+			sourceTree = "<group>";
+		};
+		93E9CF880E9F30BE00B08FB0 /* Automator */ = {
+			isa = PBXGroup;
+			children = (
+				93E9CFA20E9F317100B08FB0 /* CreateEquations_Prefix.pch */,
+			);
+			name = Automator;
 			sourceTree = "<group>";
 		};
 		93EF9D1B07EF7B5C0003FA6E /* History */ = {
@@ -807,11 +1156,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 932388560854FD210017F3BB /* Build configuration list for PBXNativeTarget "LaTeXiT" */;
 			buildPhases = (
-				93EEB29F09CB32EF00E732A0 /* ShellScript */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
-				93126C5C0834966D0021D026 /* CopyFiles */,
+				93126C5C0834966D0021D026 /* Copy Files (Frameworks) */,
+				93BD66330E8D095400DB341B /* Copy Files (Automator) */,
 			);
 			buildRules = (
 			);
@@ -823,12 +1172,34 @@
 			productReference = 8D15AC370486D014006FF6A4 /* LaTeXiT.app */;
 			productType = "com.apple.product-type.application";
 		};
-		933EB9E90B7FBADA00D84BDB /* CreateHistoryPlist */ = {
+		9344B98E0E8CF38700FE90A5 /* Automator-CreateEquations */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 933EB9EF0B7FBB2700D84BDB /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */;
+			buildConfigurationList = 9344B9930E8CF38800FE90A5 /* Build configuration list for PBXNativeTarget "Automator-CreateEquations" */;
 			buildPhases = (
-				933EB9E70B7FBADA00D84BDB /* Sources */,
-				933EB9E80B7FBADA00D84BDB /* Frameworks */,
+				9344BBDF0E8CF73E00FE90A5 /* AppleScript */,
+				9344B98B0E8CF38700FE90A5 /* Resources */,
+				9344B98C0E8CF38700FE90A5 /* Sources */,
+				9344B98D0E8CF38700FE90A5 /* Frameworks */,
+				9344BBB50E8CF6DF00FE90A5 /* CopyFiles */,
+				9344BBB30E8CF6B300FE90A5 /* Run Script (Change embedded Frameworks install-name) */,
+				9344BBE00E8CF73E00FE90A5 /* Rez */,
+				9344BBBA0E8CF71600FE90A5 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Automator-CreateEquations";
+			productName = "Automator-CreateEquations";
+			productReference = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */;
+			productType = "com.apple.product-type.bundle";
+		};
+		93A0FFB00DABA1E500DDBAF4 /* CreateHistoryPlist */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93A0FFB70DABA21400DDBAF4 /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */;
+			buildPhases = (
+				93A0FFAE0DABA1E500DDBAF4 /* Sources */,
+				93A0FFAF0DABA1E500DDBAF4 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -836,7 +1207,7 @@
 			);
 			name = CreateHistoryPlist;
 			productName = CreateHistoryPlist;
-			productReference = 933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */;
+			productReference = 93A0FFB10DABA1E500DDBAF4 /* CreateHistoryPlist */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -845,6 +1216,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -855,9 +1227,12 @@
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
+				93BD651D0E8D08EC00DB341B /* All */,
 				8D15AC270486D014006FF6A4 /* LaTeXiT */,
-				933EB9E90B7FBADA00D84BDB /* CreateHistoryPlist */,
+				93A0FFB00DABA1E500DDBAF4 /* CreateHistoryPlist */,
+				9344B98E0E8CF38700FE90A5 /* Automator-CreateEquations */,
 			);
 		};
 /* End PBXProject section */
@@ -878,7 +1253,6 @@
 				93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */,
 				93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */,
 				9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */,
-				93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */,
 				939A64580800281900AE4486 /* ServicesMenu.strings in Resources */,
 				931CB341080132D900CF9D2B /* LatexPalettes.nib in Resources */,
 				9344D83D0825818B00B17B37 /* small-folder-icon.png in Resources */,
@@ -912,40 +1286,73 @@
 				93F0FFEC09884BDA0064888E /* view-titles.tiff in Resources */,
 				9309DEB209C8D09700C5231C /* magnifying-glass.png in Resources */,
 				93D7CB5A09D36D6D0001DC5E /* CompositionConfiguration.nib in Resources */,
-				9326E12F0A2E46B5003A430E /* convert in Resources */,
 				93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */,
 				9345E3360AC9A2620082ADB4 /* textShortcuts.plist in Resources */,
 				934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */,
-				933EB9CD0B7FB9AB00D84BDB /* current-version-fr.rtf in Resources */,
-				933EB9CE0B7FB9AB00D84BDB /* current-version-en.rtf in Resources */,
-				933EB9CF0B7FB9AB00D84BDB /* current-version-de.rtf in Resources */,
 				933EBA920B7FCDD900D84BDB /* home.tiff in Resources */,
 				933EBA930B7FCDD900D84BDB /* homePressed.tiff in Resources */,
-				93B212FA0BBC1C6900EFCA2F /* current-version-es.rtf in Resources */,
 				934069DA0C058FFB0012A8DB /* Léeme.rtfd in Resources */,
 				93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */,
 				9308991F0C0A586F00B08453 /* latexit-lib.icns in Resources */,
 				931030240C116A2E000BECED /* palettes in Resources */,
+				93C1BB9B0DCDBA57007466E1 /* pdfcrop.pl in Resources */,
+				937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */,
+				930F271E0E4B8FE7006C207E /* button-menu.tiff in Resources */,
+				930F28FE0E4BBC5F006C207E /* warning-triangle.tiff in Resources */,
+				930F2CF20E4C5C49006C207E /* OgreKit-License.txt in Resources */,
+				934D1FD90E5F32F800BA812B /* AdditionalFiles.nib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9344B98B0E8CF38700FE90A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9344BBAB0E8CF5E900FE90A5 /* pdfcrop.pl in Resources */,
+				93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */,
+				93E9D0130E9F3DC300B08FB0 /* main.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXRezBuildPhase section */
+		9344BBE00E8CF73E00FE90A5 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
 /* Begin PBXShellScriptBuildPhase section */
-		93EEB29F09CB32EF00E732A0 /* ShellScript */ = {
+		9344BBB30E8CF6B300FE90A5 /* Run Script (Change embedded Frameworks install-name) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/replaceInFile",
-				"$(SRCROOT)/Info.plist",
+			);
+			name = "Run Script (Change embedded Frameworks install-name)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -id @loader_path/../Frameworks/OgreKit.framework/Versions/A/OgreKit \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/OgreKit.framework/Versions/A/OgreKit\"\ninstall_name_tool -change @executable_path/../Frameworks/OgreKit.framework/Versions/A/OgreKit @loader_path/../Frameworks/OgreKit.framework/Versions/A/OgreKit \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\n\ninstall_name_tool -id @loader_path/../Frameworks/Bridge10_5.framework/Versions/A/Bridge10_5 \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/Bridge10_5.framework/Versions/A/Bridge10_5\"\ninstall_name_tool -change @executable_path/../Frameworks/Bridge10_5.framework/Versions/A/Bridge10_5 @loader_path/../Frameworks/Bridge10_5.framework/Versions/A/Bridge10_5 \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"";
+		};
+		9344BBBA0E8CF71600FE90A5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "INFOPLIST=\"${SRCROOT}/Info.plist\"\n${SRCROOT}/replaceInFile ${INFOPLIST} UTF8 panther tiger\n${SRCROOT}/replaceInFile ${INFOPLIST} UTF8 Panther Tiger\nLPROJS=`ls -d *.lproj`\nfor i in $LPROJS; do\n  INFOPLISTSTRINGS=\"${SRCROOT}/${i}/InfoPlist.strings\"\n  ${SRCROOT}/replaceInFile ${INFOPLISTSTRINGS} UTF16 panther tiger\n  ${SRCROOT}/replaceInFile ${INFOPLISTSTRINGS} UTF16 Panther Tiger\ndone";
+			shellScript = "/usr/bin/amlint \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1011,18 +1418,64 @@
 				9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */,
 				930E51E60C0711C300BF15A8 /* SystemTask.m in Sources */,
 				936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */,
+				935AECEE0CB16ECC001A5067 /* NSDictionaryExtended.m in Sources */,
+				93C531D00D9E310C003AF7FC /* NSFileManagerExtended.m in Sources */,
+				93B524990DCEDF5500B52185 /* rects.c in Sources */,
+				937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */,
+				930F298A0E4BC543006C207E /* PreamblesTableView.m in Sources */,
+				930F2DCE0E4C6D0F006C207E /* NotifyingScrollView.m in Sources */,
+				934D1FD70E5F30FB00BA812B /* AdditionalFilesController.m in Sources */,
+				934D20BB0E5F5A2000BA812B /* AdditionalFilesTableView.m in Sources */,
+				934D22AD0E6014FF00BA812B /* ImageAndTextCell.m in Sources */,
+				931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */,
+				9344B2F90E8B678C00FE90A5 /* LaTeXiTPreferencesKeys.m in Sources */,
+				9344B6EA0E8BBDCC00FE90A5 /* LatexProcessor.m in Sources */,
+				935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */,
+				935784540E9D226000736F31 /* Latexit.xcdatamodel in Sources */,
+				93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		933EB9E70B7FBADA00D84BDB /* Sources */ = {
+		9344B98C0E8CF38700FE90A5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				933EB9EC0B7FBAEB00D84BDB /* createHistoryPlist.m in Sources */,
+				9344BB9F0E8CF59400FE90A5 /* NSApplicationExtended.m in Sources */,
+				9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */,
+				9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */,
+				9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */,
+				9344BBA30E8CF5AE00FE90A5 /* NSTaskExtended.m in Sources */,
+				9344BBA40E8CF5B900FE90A5 /* LatexProcessor.m in Sources */,
+				9344BBA70E8CF5C500FE90A5 /* SystemTask.m in Sources */,
+				9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */,
+				9344BBA90E8CF5D400FE90A5 /* LaTeXiTPreferencesKeys.m in Sources */,
+				9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */,
+				93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A0FFAE0DABA1E500DDBAF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93A0FFB50DABA1F100DDBAF4 /* createHistoryPlist.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		93BD65210E8D08F700DB341B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8D15AC270486D014006FF6A4 /* LaTeXiT */;
+			targetProxy = 93BD65200E8D08F700DB341B /* PBXContainerItemProxy */;
+		};
+		93BD65230E8D08FA00DB341B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9344B98E0E8CF38700FE90A5 /* Automator-CreateEquations */;
+			targetProxy = 93BD65220E8D08FA00DB341B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
@@ -1113,6 +1566,17 @@
 			name = Margin.nib;
 			sourceTree = "<group>";
 		};
+		937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				937D7D1F0E48F5A2006F04E1 /* English */,
+				937D7D260E48F5B7006F04E1 /* French */,
+				937D7D270E48F5BA006F04E1 /* German */,
+				937D7D280E48F5CF006F04E1 /* Spanish */,
+			);
+			name = defaultPreamble.rtf;
+			sourceTree = "<group>";
+		};
 		939A64570800281900AE4486 /* ServicesMenu.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1133,6 +1597,28 @@
 				93B213000BBC1CB500EFCA2F /* Spanish */,
 			);
 			name = CompositionConfiguration.nib;
+			sourceTree = "<group>";
+		};
+		93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93E9CF760E9F305B00B08FB0 /* English */,
+				93E9CF780E9F306000B08FB0 /* French */,
+				93E9CF790E9F306400B08FB0 /* German */,
+				93E9CF7A0E9F306800B08FB0 /* Spanish */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		93E9CF7B0E9F307F00B08FB0 /* main.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93E9CF7C0E9F307F00B08FB0 /* English */,
+				93E9CF7E0E9F308400B08FB0 /* French */,
+				93E9CF7F0E9F308700B08FB0 /* German */,
+				93E9CF800E9F308900B08FB0 /* Spanish */,
+			);
+			name = main.xib;
 			sourceTree = "<group>";
 		};
 		93EED7DF08A2198600A99BDF /* History.nib */ = {
@@ -1171,9 +1657,37 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		932388570854FD210017F3BB /* Development Tiger */ = {
+		9308565A0E9DD6A500E4BD48 /* Development with Core Data */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_FAST_OBJC_DISPATCH = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_COREDATA;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = "Development with Core Data";
+		};
+		9308565B0E9DD6A500E4BD48 /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = All;
+			};
+			name = "Development with Core Data";
+		};
+		9308565C0E9DD6A500E4BD48 /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1215,14 +1729,139 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
-			name = "Development Tiger";
+			name = "Development with Core Data";
 		};
-		932388580854FD210017F3BB /* Deployment Tiger */ = {
+		9308565D0E9DD6A500E4BD48 /* Development with Core Data */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = CreateHistoryPlist;
+				ZERO_LINK = YES;
+			};
+			name = "Development with Core Data";
+		};
+		9308565E0E9DD6A500E4BD48 /* Development with Core Data */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Automator";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_OSAFLAGS = "-x -t 0 -c 0";
+				PREBINDING = NO;
+				PRODUCT_NAME = CreateEquations;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WRAPPER_EXTENSION = action;
+			};
+			name = "Development with Core Data";
+		};
+		932388570854FD210017F3BB /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-lz";
+				PREBINDING = YES;
+				PRODUCT_NAME = LaTeXiT;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		932388580854FD210017F3BB /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../Frameworks/Sparkle/src/Sparkle/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../Frameworks/LinkBack/Source/build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)\"";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -1236,6 +1875,7 @@
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
 				GCC_STRICT_ALIASING = YES;
 				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1262,30 +1902,29 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = "Deployment Tiger";
+			name = Deployment;
 		};
-		9323885B0854FD210017F3BB /* Development Tiger */ = {
+		9323885B0854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = ppc;
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_FAST_OBJC_DISPATCH = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = "Development Tiger";
+			name = Development;
 		};
-		9323885C0854FD210017F3BB /* Deployment Tiger */ = {
+		9323885C0854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -1313,31 +1952,156 @@
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = "Deployment Tiger";
+			name = Deployment;
 		};
-		933EB9F00B7FBB2700D84BDB /* Development Tiger */ = {
+		9344B9910E8CF38800FE90A5 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Automator-CreateEquations_Prefix.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "LaTeXiT-CreateEquations/Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Automator";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_OSAFLAGS = "-x -t 0 -c 0";
+				PREBINDING = NO;
+				PRODUCT_NAME = "LaTeXiT-CreateEquations";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WRAPPER_EXTENSION = action;
+			};
+			name = Development;
+		};
+		9344B9920E8CF38800FE90A5 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
+				GCC_STRICT_ALIASING = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Automator";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = CreateEquations;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WRAPPER_EXTENSION = action;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		93A0FFB30DABA1E500DDBAF4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateHistoryPlist;
 				ZERO_LINK = YES;
 			};
-			name = "Development Tiger";
+			name = Development;
 		};
-		933EB9F10B7FBB2700D84BDB /* Deployment Tiger */ = {
+		93A0FFB40DABA1E500DDBAF4 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
+				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateHistoryPlist;
-				ZERO_LINK = YES;
+				ZERO_LINK = NO;
 			};
-			name = "Deployment Tiger";
+			name = Deployment;
+		};
+		93BD651E0E8D08EC00DB341B /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = All;
+			};
+			name = Development;
+		};
+		93BD651F0E8D08EC00DB341B /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = All;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1345,29 +2109,52 @@
 		932388560854FD210017F3BB /* Build configuration list for PBXNativeTarget "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				932388570854FD210017F3BB /* Development Tiger */,
-				932388580854FD210017F3BB /* Deployment Tiger */,
+				932388570854FD210017F3BB /* Development */,
+				9308565C0E9DD6A500E4BD48 /* Development with Core Data */,
+				932388580854FD210017F3BB /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Development Tiger";
+			defaultConfigurationName = Development;
 		};
 		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9323885B0854FD210017F3BB /* Development Tiger */,
-				9323885C0854FD210017F3BB /* Deployment Tiger */,
+				9323885B0854FD210017F3BB /* Development */,
+				9308565A0E9DD6A500E4BD48 /* Development with Core Data */,
+				9323885C0854FD210017F3BB /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Development Tiger";
+			defaultConfigurationName = Development;
 		};
-		933EB9EF0B7FBB2700D84BDB /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */ = {
+		9344B9930E8CF38800FE90A5 /* Build configuration list for PBXNativeTarget "Automator-CreateEquations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				933EB9F00B7FBB2700D84BDB /* Development Tiger */,
-				933EB9F10B7FBB2700D84BDB /* Deployment Tiger */,
+				9344B9910E8CF38800FE90A5 /* Development */,
+				9308565E0E9DD6A500E4BD48 /* Development with Core Data */,
+				9344B9920E8CF38800FE90A5 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Development Tiger";
+			defaultConfigurationName = Development;
+		};
+		93A0FFB70DABA21400DDBAF4 /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93A0FFB30DABA1E500DDBAF4 /* Development */,
+				9308565D0E9DD6A500E4BD48 /* Development with Core Data */,
+				93A0FFB40DABA1E500DDBAF4 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93BD651E0E8D08EC00DB341B /* Development */,
+				9308565B0E9DD6A500E4BD48 /* Development with Core Data */,
+				93BD651F0E8D08EC00DB341B /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
 		};
 /* End XCConfigurationList section */
 	};

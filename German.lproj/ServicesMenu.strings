@@ -3,4 +3,4 @@
 "LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/LaTeX-Zeichensatz in Inline umwandeln $...$";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/LaTeX-Zeichensatz in Text umwandeln";
 "LaTeXiT/Detect and typeset equations" = "LaTeXiT/Gleichung detektieren und umwandeln";
-"LaTeXiT/Un-latexize equations" = "LaTeXiT/Von der Gleichung zum LaTeX Code zurückkehren";
+"LaTeXiT/Un-latexize equations" = "LaTeXiT/Von der Gleichung zum LaTeX-Kode zurückkehren";
