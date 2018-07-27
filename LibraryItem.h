@@ -58,4 +58,7 @@
 //ancestor. It solves many problems.
 +(NSArray*) minimumNodeCoverFromItemsInArray:(NSArray*)allItems;
 
+//for readable export
+-(id) plistDescription;
+
 @end

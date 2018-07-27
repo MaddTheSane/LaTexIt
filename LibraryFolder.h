@@ -18,4 +18,7 @@
 -(NSImage*) icon; //to get an icon
 -(NSImage*) bigIcon; //to get an icon
 
+//for readable export
+-(id) plistDescription;
+
 @end

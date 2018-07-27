@@ -32,6 +32,7 @@
   children = [[NSMutableArray alloc] init];
   return self;
 }
+//end init
 
 -(void) dealloc
 {
@@ -39,16 +40,19 @@
   [children release];
   [super    dealloc];
 }
+//end dealloc
 
 -(void) setExpanded:(BOOL)expanded
 {
   isExpanded = expanded;
 }
+//end setExpanded:
 
 -(BOOL) isExpanded
 {
   return isExpanded;
 }
+//end isExpanded
 
 -(id) copyWithZone:(NSZone*)zone
 {
@@ -69,16 +73,19 @@
   }
   return item;
 }
+//end copyWithZone:
 
 -(void) setParent:(LibraryItem*)aParent
 {
   parent = aParent; //weak link to prevent cycling
 }
+//end setParent:
 
 -(LibraryItem*) parent
 {
   return parent;
 }
+//end parent
 
 -(void) setTitle:(NSString*)aTitle
 {
@@ -88,11 +95,13 @@
   if ([self isKindOfClass:[LibraryFile class]])
     [[(LibraryFile*)self value] setTitle:title];
 }
+//end setTitle:
 
 -(NSString*) title
 {
   return title;
 }
+//end title
 
 -(BOOL) updateTitle//try to change the name so that no brother has the same; rretusn YES if it has changed
 {
@@ -130,6 +139,7 @@
   
   return hasChangedTitle;
 }
+//end updateTitle
 
 //Structuring methods
 
@@ -137,18 +147,21 @@
 {
   [self insertChild:child atIndex:[children count]];
 }
+//end insertChild:
 
 -(void) insertChild:(LibraryItem*)child atIndex:(int)index
 {
   [children insertObject:child atIndex:index];
   [child setParent:self];
 }
+//end insertChild:atIndex:
 
 -(void) insertChildren:(NSArray*)someChildren atIndex:(int)index
 {
   [children insertObjectsFromArray:someChildren atIndex:index];
   [children makeObjectsPerformSelector:@selector(setParent:) withObject:self];
 }
+//end insertChildren:atIndex:
 
 -(void) _removeChildrenIdenticalTo:(NSArray*)someChildren
 {
@@ -161,6 +174,7 @@
     child = [childEnumerator nextObject];
   }
 }
+//end _removeChildrenIdenticalTo:
 
 -(void) removeChild:(LibraryItem*)child
 {
@@ -168,6 +182,7 @@
   if (index != NSNotFound)
     [self _removeChildrenIdenticalTo:[NSArray arrayWithObject:[self childAtIndex:index]]];
 }
+//end removeChild:
 
 -(void) removeChildren:(NSArray*)someChildren
 {
@@ -179,6 +194,7 @@
     child = [enumerator nextObject];
   }
 }
+//end removeChildren:
 
 -(void) removeFromParent
 {
@@ -189,29 +205,33 @@
 {
   return [children indexOfObject:child];
 }
+//end indexOfChild:
 
-- (int) numberOfChildren
+-(int) numberOfChildren
 {
   return [children count];
 }
+//end numberOfChildren
 
 -(NSArray*) children
 {
   return [NSArray arrayWithArray:children];
 }
+//end children
 
 -(LibraryItem*) childAtIndex:(int)index
 {
   return [children objectAtIndex:index];
 }
 
--(void) encodeWithCoder:(NSCoder*) coder
+-(void) encodeWithCoder:(NSCoder*)coder
 {
   [coder encodeObject:title    forKey:@"title"];
   [coder encodeObject:children forKey:@"children"];
   [coder encodeBool:isExpanded forKey:@"isExpanded"];
   //we do not encode the parent, it is useless
 }
+//end encodeWithCoder:
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -224,11 +244,13 @@
   [children makeObjectsPerformSelector:@selector(setParent:) withObject:self];
   return self;
 }
+//end initWithCoder:
 
 -(NSImage*) icon
 {
   return nil;
 }
+//end icon
 
 // returns YES if 'item' is an ancestor.
 // Walk up the tree, to see if any of our ancestors is 'item'.
@@ -243,6 +265,7 @@
   }
   return isDescendant;
 }
+//end isDescendantOfItem:
 
 // returns YES if any 'item' in the array 'items' is an ancestor of ours.
 // For each item in items, if item is an ancestor return YES.  If none is an
@@ -259,6 +282,7 @@
   }
   return isDescendant;
 }
+//end isDescendantOfItemInArray:
 
 -(LibraryItem*) nextSibling
 {
@@ -278,6 +302,7 @@
   }
   return nextSibling;
 }
+//end nextSibling
 
 //Difficult method : returns a simplified array, to be sure that no item of the array has an ancestor
 //in this array. This is useful, when several items are selected, to factorize the work in a common
@@ -308,5 +333,23 @@
   }
   return minimumCover;
 }
+//end minimumNodeCoverFromItemsInArray:
+
+//for readable export
+-(id) plistDescription
+{
+  NSMutableArray* childDescriptions = [NSMutableArray arrayWithCapacity:[children count]];
+  NSEnumerator* enumerator = [children objectEnumerator];
+  LibraryItem* child = nil;
+  while((child = [enumerator nextObject]))
+    [childDescriptions addObject:[child plistDescription]];
+  
+  return [NSDictionary dictionaryWithObjectsAndKeys:
+    @"1.14.4", @"version",
+    [self title], @"title",
+    childDescriptions, @"content",
+    nil];
+}
+//end plistDescription
 
 @end

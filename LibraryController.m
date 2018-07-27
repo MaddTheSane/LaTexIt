@@ -39,6 +39,7 @@
   enablePreviewImage = YES;
   return self;
 }
+//end init
 
 -(void) awakeFromNib
 {
@@ -99,12 +100,14 @@
   [notificationCenter addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:[self window]];
   [notificationCenter addObserver:self selector:@selector(windowDidResignKey:) name:NSWindowDidResignKeyNotification object:[self window]];
 }
+//end awakeFromNib
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc]; 
 }
+//end dealloc
 
 -(IBAction) showOrHideWindow:(id)sender
 {
@@ -114,21 +117,25 @@
   else
     [self showWindow:self];
 }
+//end showOrHideWindow:
 
 -(NSArray*) selectedItems
 {
   return [libraryTableView selectedItems];
 }
+//end selectedItems
 
 -(BOOL) canRemoveSelectedItems
 {
   return [[self window] isVisible] && ([libraryTableView selectedRow] >= 0);
 }
+//end canRemoveSelectedItems
 
 -(BOOL) canRenameSelectedItems
 {
   return [[self window] isVisible] && ([[libraryTableView selectedRowIndexes] count] == 1);
 }
+//end canRenameSelectedItems
 
 -(BOOL) canRefreshItems
 {
@@ -138,11 +145,13 @@
   unsigned int firstIndex = [selectedRowIndexes firstIndex];
   return (document != nil) && onlyOneItemSelected && [[libraryTableView itemAtRow:firstIndex] isKindOfClass:[LibraryFile class]];
 }
+//end canRefreshItems
 
 -(NSMenu*) actionMenu
 {
   return [actionButton menu];
 }
+//end actionMenu
 
 -(BOOL) validateMenuItem:(NSMenuItem*)menuItem
 {
@@ -160,6 +169,7 @@
     ok &= [self canRefreshItems];
   return ok;
 }
+//end validateMenuItem:
 
 //Creates a library item with the current document state
 -(IBAction) importCurrent:(id)sender
@@ -174,6 +184,7 @@
            byExtendingSelection:NO];
   [[document windowForSheet] makeKeyWindow];
 }
+//end importCurrent:
 
 //Creates a folder library item
 -(IBAction) newFolder:(id)sender
@@ -183,12 +194,14 @@
            byExtendingSelection:NO];
   [libraryTableView edit:self];
 }
+//end newFolder:
 
 //remove selected items
 -(IBAction) removeSelectedItems:(id)sender
 {
   [libraryTableView removeSelectedItems];
 }
+//end removeSelectedItems:
 
 //if one LibraryFile item is selected, update it with current document's state
 -(IBAction) refreshItems:(id)sender
@@ -255,7 +268,7 @@
     }//end if selection is LibraryFile
   }//end if document
 }
-//end refreshItems
+//end refreshItems:
 
 -(IBAction) renameItem:(id)sender
 {
@@ -293,9 +306,9 @@
 
 -(IBAction) saveAs:(id)sender
 {
-  NSSavePanel* savePanel = [NSSavePanel savePanel];
+  savePanel = [[NSSavePanel savePanel] retain];
   [savePanel setTitle:NSLocalizedString(@"Export library...", @"Export library...")];
-  [savePanel setRequiredFileType:@"latexlib"];
+  [self changeLibraryExportFormat:exportFormatPopUpButton];
   [savePanel setCanSelectHiddenExtension:YES];
   [savePanel setAccessoryView:[exportAccessoryView retain]];
   [exportOnlySelectedButton setState:([[self selectedItems] count] ? NSOnState : NSOffState)];
@@ -306,14 +319,32 @@
     [self _savePanelDidEnd:savePanel returnCode:[savePanel runModal] contextInfo:NULL];
 }
 
--(void) _savePanelDidEnd:(NSSavePanel*)savePanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
   if (returnCode == NSFileHandlingPanelOKButton)
   {
     BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
-    [[LibraryManager sharedManager] saveAs:[[savePanel URL] path] onlySelection:onlySelection selection:[libraryTableView selectedItems]];
+    [[LibraryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:[libraryTableView selectedItems]
+                                    format:[exportFormatPopUpButton selectedTag]];
+  }
+  [savePanel release];
+  savePanel = nil;
+}
+//end _savePanelDidEnd:returnCode:contextInfo:
+
+-(IBAction) changeLibraryExportFormat:(id)sender
+{
+  switch((library_export_format_t)[sender selectedTag])
+  {
+    case LIBRARY_EXPORT_FORMAT_INTERNAL:
+      [savePanel setRequiredFileType:@"latexlib"];
+      break;
+    case LIBRARY_EXPORT_FORMAT_PLIST:
+      [savePanel setRequiredFileType:@"plist"];
+      break;
   }
 }
+//end changeLibraryExportFormat:
 
 -(void) _updateButtons:(NSNotification *)aNotification
 {
@@ -322,6 +353,7 @@
   [importCurrentButton setEnabled:(anyDocument && [anyDocument hasImage])];
   [[[libraryTableView superview] superview] setNeedsDisplay:YES];//to bring scrollview to front and hide the top line of the button
 }
+//end _updateButtons:
 
 //display library when application becomes active
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification
@@ -330,6 +362,7 @@
   if ([[self window] isVisible])
     [[self window] orderFront:self];
 }
+//end applicationWillBecomeActive:
 
 -(IBAction) changeLibraryRowType:(id)sender
 {
@@ -337,6 +370,7 @@
   [libraryTableView setLibraryRowType:(library_row_t)tag];
   [[NSUserDefaults standardUserDefaults] setInteger:tag forKey:LibraryViewRowTypeKey];
 }
+//end changeLibraryRowType:
 
 -(IBAction) changeLibraryPreviewPanelSegmentedControl:(id)sender
 {
@@ -345,6 +379,7 @@
   [[NSUserDefaults standardUserDefaults] setBool:status forKey:LibraryDisplayPreviewPanelKey];
   [self setEnablePreviewImage:status];
 }
+//end changeLibraryPreviewPanelSegmentedControl:
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
 {
@@ -369,20 +404,24 @@
       [libraryPreviewPanel orderFront:self];
   }
 }
+//end displayPreviewImage:backgroundColor:
 
 -(void) setEnablePreviewImage:(BOOL)status
 {
   enablePreviewImage = status;
 }
+//end setEnablePreviewImage:
 
 -(void) windowWillClose:(NSNotification*)notification
 {
   [libraryPreviewPanel orderOut:self];
 }
+//end windowWillClose:
 
 -(void) windowDidResignKey:(NSNotification*)notification
 {
   [libraryPreviewPanel orderOut:self];
 }
+//end windowDidResignKey:
 
 @end

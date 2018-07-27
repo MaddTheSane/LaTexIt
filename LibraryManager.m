@@ -267,14 +267,14 @@ static NSImage*        libraryFileIcon       = nil;
     {
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] startMessageProgress:NSLocalizedString(@"Saving Library", @"Saving Library")];
-      [self saveAs:[self libraryPath] onlySelection:NO selection:nil];
+      [self saveAs:[self libraryPath] onlySelection:NO selection:nil format:LIBRARY_EXPORT_FORMAT_INTERNAL];
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] stopMessageProgress];
     }//end if libraryShouldBeSaved
   }//end @synchronized(library)
 }
 
--(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems
+-(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(library_export_format_t)format
 {
   BOOL ok = NO;
   @synchronized(library) //to prevent concurrent saving, and conflicts, if library is modified in another thread
@@ -291,10 +291,22 @@ static NSImage*        libraryFileIcon       = nil;
         [libraryToSave insertChild:clone];
       }
     }
-    NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
-    NSData* compressedData = [Compressor zipcompress:uncompressedData];
-    NSDictionary* plist =
-      [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.3", @"version", compressedData, @"data", nil];
+
+    NSDictionary* plist = nil;
+    switch(format)
+    {
+      case LIBRARY_EXPORT_FORMAT_INTERNAL:
+        {
+          NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
+          NSData* compressedData = [Compressor zipcompress:uncompressedData];
+          plist = [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.4", @"version", compressedData, @"data", nil];
+        }
+        break;
+      case LIBRARY_EXPORT_FORMAT_PLIST:
+          plist = [libraryToSave plistDescription];
+        break;
+    }
+    
     NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     ok = [dataToWrite writeToFile:path atomically:YES];

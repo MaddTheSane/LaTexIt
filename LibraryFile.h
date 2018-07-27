@@ -24,4 +24,7 @@
 -(void) setValue:(HistoryItem*)historyItem setAutomaticTitle:(BOOL)setAutomaticTitle;
 -(HistoryItem*) value;
 
+//for readable export
+-(id) plistDescription;
+
 @end

@@ -27,6 +27,9 @@
   IBOutlet NSPopUpButton*      importOptionPopUpButton;
   IBOutlet NSView*             exportAccessoryView;
   IBOutlet NSButton*           exportOnlySelectedButton;
+  IBOutlet NSPopUpButton*      exportFormatPopUpButton;
+  
+  NSSavePanel*                 savePanel;
 }
 
 -(IBAction) importCurrent:(id)sender; //creates a library item with the current document state
@@ -42,6 +45,8 @@
 -(IBAction) openDefaultLibraryPath:(id)sender;
 
 -(IBAction) changeLibraryPreviewPanelSegmentedControl:(id)sender;
+
+-(IBAction) changeLibraryExportFormat:(id)sender;
 
 -(BOOL) canRemoveSelectedItems;
 -(BOOL) canRenameSelectedItems;

@@ -72,7 +72,8 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(PreferencesController*)   preferencesController;
 
 +(NSArray*) unixBins; //usual unix PATH
-+(NSDictionary*) environmentDict; //environment useful to call programs on the command line
++(NSDictionary*) fullEnvironmentDict; //environment useful to call programs on the command line
++(NSDictionary*) extraEnvironmentDict; //environment useful to call programs on the command line
 
 //the menu actions
 -(IBAction) makeDonation:(id)sender;//display info panel

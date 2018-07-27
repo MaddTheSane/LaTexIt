@@ -37,12 +37,14 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
     [image release];
   }
 }
+//end initialize
 
 -(void) dealloc
 {
   [historyItem release];
   [super dealloc];
 }
+//end dealloc
 
 -(id) copyWithZone:(NSZone*) zone
 {
@@ -51,11 +53,13 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
     newInstance->historyItem = [historyItem copy];
   return newInstance;
 }
+//end copyWithZone:
 
 -(NSImage*) icon
 {
   return smallFileIcon; //icon of a LibraryFile
 }
+//end icon
 
 //The document's state contained in the LibraryFile item is called a "value"
 //because the fact that it is represented by a historyItem
@@ -76,11 +80,13 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
     [self setTitle:[string substringToIndex:endIndex]];
   }
 }
+//end setValue:setAutomaticTitle:
 
 -(HistoryItem*) value
 {
   return historyItem;
 }
+//end value:
 
 //NSCoding protocol
 
@@ -89,6 +95,7 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
   [super encodeWithCoder:coder];
   [coder encodeObject:historyItem forKey:@"value"];
 }
+//end encodeWithCoder:
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -97,5 +104,17 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
   historyItem = [[coder decodeObjectForKey:@"value"] retain];
   return self;
 }
+//end initWithCoder:
+
+//for readable export
+-(id) plistDescription
+{
+  NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithDictionary:[[self value] plistDescription]];
+  NSString* theTitle = [self title];
+  if (theTitle)
+    [plist setValue:theTitle forKey:@"title"];
+  return plist;
+}
+//end plistDescription
 
 @end

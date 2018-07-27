@@ -45,7 +45,7 @@
 -(NSString*) findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes;
 
 -(void) _addInEnvironmentPath:(NSString*)path; //increase the environmentPath
--(void) _setEnvironment; //utility that calls setenv() with the current content of environmentPath
+-(void) _setEnvironment:(NSDictionary*)environment; //utility that calls setenv() with the current content of environmentPath
 
 //check the configuration, updates isGsAvailable, isPdfLatexAvailable and isColorStyAvailable
 -(void) _checkConfiguration;
@@ -90,7 +90,8 @@ static MyDocument*    myDocumentServiceProviderInstance = nil;
 
 //usual environment and PATH to find a program on the command line
 static NSMutableString*     environmentPath = nil;
-static NSMutableDictionary* environmentDict = nil;
+static NSMutableDictionary* fullEnvironmentDict = nil;
+static NSMutableDictionary* extraEnvironmentDict = nil;
 static NSMutableArray*      unixBins = nil;
 
 static NSMutableDictionary* cachePaths = nil;
@@ -146,25 +147,30 @@ static NSMutableDictionary* cachePaths = nil;
       [environmentPath setString:[components componentsJoinedByString:@":"]];
     }
   }
+  
+  if (!extraEnvironmentDict)
+    extraEnvironmentDict = [[NSMutableDictionary alloc] init];
 
-  if (!environmentDict)
+  if (!fullEnvironmentDict)
   {
-    environmentDict = [[[NSProcessInfo processInfo] environment] mutableCopy];
+    fullEnvironmentDict = [[[NSProcessInfo processInfo] environment] mutableCopy];
 
-    NSString* pathEnv = [environmentDict objectForKey:@"PATH"];
+    NSString* pathEnv = [fullEnvironmentDict objectForKey:@"PATH"];
     if (pathEnv)
     {
       NSMutableSet* pathsSet = [NSMutableSet setWithCapacity:30];
       [pathsSet addObjectsFromArray:[environmentPath componentsSeparatedByString:@":"]];
       [pathsSet addObjectsFromArray:[pathEnv componentsSeparatedByString:@":"]];
       [environmentPath setString:[[pathsSet allObjects] componentsJoinedByString:@":"]];
-      [environmentDict setObject:environmentPath forKey:@"PATH"];
+      [fullEnvironmentDict setObject:environmentPath forKey:@"PATH"];
+      [extraEnvironmentDict setObject:environmentPath forKey:@"PATH"];
     }
     
     //run the "set" command to get the environment variables
     SystemTask* task = [[SystemTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     [task setArguments:[NSArray arrayWithObjects:@"-l", @"-c", @"set", nil]];
+    [task setEnvironment:extraEnvironmentDict];
     [task launch];
     [task waitUntilExit];
     NSData* ouputData = [task dataForStdOutput];
@@ -181,26 +187,33 @@ static NSMutableDictionary* cachePaths = nil;
         NSString* value = (equalCharacter.location+1 < [line length]) ?
                             [line substringFromIndex:equalCharacter.location+equalCharacter.length] : @"";
         if (![key isEqualToString:@"PATH"])
-          [environmentDict setObject:value forKey:key];
+          [fullEnvironmentDict setObject:value forKey:key];
         else
         {
-          NSString* path1 = [environmentDict objectForKey:@"PATH"];
+          NSString* path1 = [fullEnvironmentDict objectForKey:@"PATH"];
           NSArray*  components1 = path1 ? [path1 componentsSeparatedByString:@":"] : [NSArray array];
           NSArray*  components2 = value ? [value componentsSeparatedByString:@":"] : [NSArray array];
           NSArray*  allComponents = [components1 arrayByAddingObjectsFromArray:components2];
-          [environmentDict setObject:[allComponents componentsJoinedByString:@":"] forKey:key];
+          [fullEnvironmentDict setObject:[allComponents componentsJoinedByString:@":"] forKey:key];
+          [extraEnvironmentDict setObject:[allComponents componentsJoinedByString:@":"] forKey:key];
         }
       }//end if equalCharacter found
     }//end for each line
-  }//end if !environmentDict
+  }//end if !fullEnvironmentDict
 }
 //end initialize
 
-+(NSDictionary*) environmentDict
++(NSDictionary*) fullEnvironmentDict
 {
-  return environmentDict;
+  return fullEnvironmentDict;
 }
-//end environmentDict
+//end fullEnvironmentDict
+
++(NSDictionary*) extraEnvironmentDict
+{
+  return extraEnvironmentDict;
+}
+//end extraEnvironmentDict
 
 +(NSArray*) unixBins
 {
@@ -268,7 +281,7 @@ static NSMutableDictionary* cachePaths = nil;
       return nil;
     appControllerInstance = self;
     configurationSemaphore = [[Semaphore alloc] init];
-    [self _setEnvironment];     //performs a setenv()
+    [self _setEnvironment:extraEnvironmentDict];     //performs a setenv()
     [self _findGsPath];
     [self _findPdfLatexPath];
     [self _findPs2PdfPath];
@@ -453,18 +466,18 @@ static NSMutableDictionary* cachePaths = nil;
 //end _addInEnvironmentPath
 
 //performs a setenv()
--(void) _setEnvironment
+-(void) _setEnvironment:(NSDictionary*)environment
 {
-  NSEnumerator* keyEnumerator = [environmentDict keyEnumerator];
+  NSEnumerator* keyEnumerator = [environment keyEnumerator];
   NSString* key = nil;
   while((key = [keyEnumerator nextObject]))
   {
-    NSString* value = [environmentDict objectForKey:key];
+    NSString* value = [environment objectForKey:key];
     if (value)
       setenv([key UTF8String], [value UTF8String], 1);
   }//end for each environment key
 }
-//end _setEnvironment
+//end _setEnvironment:
 
 -(BOOL) applicationShouldOpenUntitledFile:(NSApplication*)sender
 {
@@ -1101,7 +1114,7 @@ static NSMutableDictionary* cachePaths = nil;
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[gsPath stringByDeletingLastPathComponent]]];
 
   if (![fileManager fileExistsAtPath:gsPath])
-    gsPath = [self findUnixProgram:@"gs" tryPrefixes:prefixes environment:environmentDict];
+    gsPath = [self findUnixProgram:@"gs" tryPrefixes:prefixes environment:extraEnvironmentDict];
   if ([fileManager fileExistsAtPath:gsPath])
   {
     [PreferencesController currentCompositionConfigurationSetObject:gsPath forKey:CompositionConfigurationGsPathKey];
@@ -1119,7 +1132,7 @@ static NSMutableDictionary* cachePaths = nil;
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[pdfLatexPath stringByDeletingLastPathComponent]]];
 
   if (![fileManager fileExistsAtPath:pdfLatexPath])
-    pdfLatexPath = [self findUnixProgram:@"pdflatex" tryPrefixes:prefixes environment:environmentDict];
+    pdfLatexPath = [self findUnixProgram:@"pdflatex" tryPrefixes:prefixes environment:extraEnvironmentDict];
   if ([fileManager fileExistsAtPath:pdfLatexPath])
   {
     [PreferencesController currentCompositionConfigurationSetObject:pdfLatexPath forKey:CompositionConfigurationPdfLatexPathKey];
@@ -1137,7 +1150,7 @@ static NSMutableDictionary* cachePaths = nil;
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[ps2PdfPath stringByDeletingLastPathComponent]]];
 
   if (![fileManager fileExistsAtPath:ps2PdfPath])
-    ps2PdfPath = [self findUnixProgram:@"ps2pdf" tryPrefixes:prefixes environment:environmentDict];
+    ps2PdfPath = [self findUnixProgram:@"ps2pdf" tryPrefixes:prefixes environment:extraEnvironmentDict];
   if ([fileManager fileExistsAtPath:ps2PdfPath])
   {
     [PreferencesController currentCompositionConfigurationSetObject:ps2PdfPath forKey:CompositionConfigurationPs2PdfPathKey];
@@ -1155,7 +1168,7 @@ static NSMutableDictionary* cachePaths = nil;
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[xeLatexPath stringByDeletingLastPathComponent]]];
 
   if (![fileManager fileExistsAtPath:xeLatexPath])
-    xeLatexPath = [self findUnixProgram:@"xelatex" tryPrefixes:prefixes environment:environmentDict];
+    xeLatexPath = [self findUnixProgram:@"xelatex" tryPrefixes:prefixes environment:extraEnvironmentDict];
   if ([fileManager fileExistsAtPath:xeLatexPath])
   {
     [PreferencesController currentCompositionConfigurationSetObject:xeLatexPath forKey:CompositionConfigurationXeLatexPathKey];
@@ -1173,7 +1186,7 @@ static NSMutableDictionary* cachePaths = nil;
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[latexPath stringByDeletingLastPathComponent]]];
 
   if (![fileManager fileExistsAtPath:latexPath])
-    latexPath = [self findUnixProgram:@"latex" tryPrefixes:prefixes environment:environmentDict];
+    latexPath = [self findUnixProgram:@"latex" tryPrefixes:prefixes environment:extraEnvironmentDict];
   if ([fileManager fileExistsAtPath:latexPath])
   {
     [PreferencesController currentCompositionConfigurationSetObject:latexPath forKey:CompositionConfigurationLatexPathKey];
@@ -1191,7 +1204,7 @@ static NSMutableDictionary* cachePaths = nil;
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[dvipdfPath stringByDeletingLastPathComponent]]];
 
   if (![fileManager fileExistsAtPath:dvipdfPath])
-    dvipdfPath = [self findUnixProgram:@"dvipdf" tryPrefixes:prefixes environment:environmentDict];
+    dvipdfPath = [self findUnixProgram:@"dvipdf" tryPrefixes:prefixes environment:extraEnvironmentDict];
   if ([fileManager fileExistsAtPath:dvipdfPath])
   {
     [PreferencesController currentCompositionConfigurationSetObject:dvipdfPath forKey:CompositionConfigurationDvipdfPathKey];
@@ -1207,7 +1220,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSFileManager defaultManager]
      isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]];
   int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
-                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]] UTF8String]);
+                          [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]] UTF8String]);
   error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
   isGsAvailable = (error != 127);
   [configurationSemaphore P];
@@ -1294,9 +1307,9 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL ok = YES;
   
   //first try with kpsewhich
-  NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:environmentDict];
+  NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:extraEnvironmentDict];
   ok = kpseWhichPath  && [kpseWhichPath length] &&
-       (system([[NSString stringWithFormat:@"%@ %@ 1>|/dev/null 2>&1",kpseWhichPath,@"color.sty"] UTF8String]) == 0);
+         (system([[NSString stringWithFormat:@"%@ %@ 1>|/dev/null 2>&1", kpseWhichPath, @"color.sty"] UTF8String]) == 0);
 
   //perhaps second try without kpsewhich
   if (!ok)
@@ -1321,6 +1334,7 @@ static NSMutableDictionary* cachePaths = nil;
         BOOL isDirectory = YES;
         if ([[NSFileManager defaultManager] fileExistsAtPath:launchPath isDirectory:&isDirectory] && !isDirectory)
         {
+          [checkTask setEnvironment:extraEnvironmentDict];
           [checkTask setLaunchPath:launchPath];
           [checkTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
           [checkTask setStandardOutput:nullDevice];
@@ -1663,7 +1677,7 @@ static NSMutableDictionary* cachePaths = nil;
   if (isDvipdfAvailable)
     [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey] stringByDeletingLastPathComponent]];
 
-  [self _setEnvironment];
+  [self _setEnvironment:extraEnvironmentDict];
 
   //From LateXiT 1.13.0, move Library/LaTeXiT to Library/ApplicationSupport/LaTeXiT
   NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
@@ -2554,7 +2568,7 @@ static NSMutableDictionary* cachePaths = nil;
         @try
         {
           [gsTask setCurrentDirectoryPath:directory];
-          [gsTask setEnvironment:environmentDict];
+          [gsTask setEnvironment:extraEnvironmentDict];
           [gsTask setLaunchPath:gsPath];
           [gsTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE", @"-dNOCACHE", @"-dBATCH", @"-sDEVICE=epswrite",
                                                          [NSString stringWithFormat:@"-sOutputFile=%@", tmpEpsFilePath],

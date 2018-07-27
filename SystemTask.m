@@ -8,6 +8,7 @@
 
 #import "SystemTask.h"
 
+#import "NSStringExtended.h"
 #import "Utils.h"
 
 #include <sys/types.h>
@@ -132,7 +133,14 @@
     NSMutableString* exportedVariables = [NSMutableString string];
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
-      [exportedVariables appendFormat:@" %@=\"%@\"", variable, [environment objectForKey:variable]];
+    {
+      if ([[environment objectForKey:variable] startsWith:@"'" options:0] && [[environment objectForKey:variable] endsWith:@"'" options:0])
+        [exportedVariables appendFormat:@" %@=%@", variable, [environment objectForKey:variable]];
+      else if ([[environment objectForKey:variable] startsWith:@"\"" options:0] && [[environment objectForKey:variable] endsWith:@"\"" options:0])
+        [exportedVariables appendFormat:@" %@=%@", variable, [environment objectForKey:variable]];
+      else
+        [exportedVariables appendFormat:@" %@=\"%@\"", variable, [environment objectForKey:variable]];
+    }
     [systemCommand appendFormat:@"export %@ 1>|/dev/null 2>&1 || echo \"\" 1>|/dev/null 2>&1;", exportedVariables];
   }
   if (launchPath)
@@ -147,35 +155,45 @@
 
 -(void) launch
 {
-  NSString* systemCommand = [self equivalentLaunchCommand];
+  NSString* filePath = nil;
+  [Utils temporaryFileWithTemplate:@"latexit-command-XXXXXXXXX" extension:@"sh" outFilePath:&filePath];
+  if (!filePath || ![[self equivalentLaunchCommand] writeToFile:filePath atomically:YES])
+    terminationStatus = -1;
+  else
+  {
+    NSString* systemCommand = [NSString stringWithFormat:@"/bin/bash -l %@", filePath];
 
-  if (!timeOutLimit)
-  {
-    [runningLock lock];
-    terminationStatus = system([systemCommand UTF8String]);
-    [runningLock unlock];
-  }
-  else //if timeOutLimit
-  {
-    [runningLock lock];
-    pid_t pid = fork();
-    if (!pid)//in the child
+    if (!timeOutLimit)
     {
-      [NSApplication detachDrawingThread:@selector(threadTimeoutSignal:) toTarget:self
-                              withObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:getpid()] forKey:@"pid"]];
+      [runningLock lock];
       terminationStatus = system([systemCommand UTF8String]);
-      terminationStatus = WIFEXITED(terminationStatus) ? WEXITSTATUS(terminationStatus) : -1;
-      exit(terminationStatus);
+      [runningLock unlock];
     }
-    else
+    else //if timeOutLimit
     {
-      int status = 0;
-      wait(&status);
-      selfExited = WIFEXITED(status) && !WIFSIGNALED(status);
-      terminationStatus = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
-    }
-    [runningLock unlock];
-  }//end if timeOutLimit
+      [runningLock lock];
+      pid_t pid = fork();
+      if (!pid)//in the child
+      {
+        [NSApplication detachDrawingThread:@selector(threadTimeoutSignal:) toTarget:self
+                                withObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:getpid()] forKey:@"pid"]];
+        terminationStatus = system([systemCommand UTF8String]);
+        terminationStatus = WIFEXITED(terminationStatus) ? WEXITSTATUS(terminationStatus) : -1;
+        exit(terminationStatus);
+      }
+      else
+      {
+        int status = 0;
+        wait(&status);
+        selfExited = WIFEXITED(status) && !WIFSIGNALED(status);
+        terminationStatus = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+      }
+      [runningLock unlock];
+    }//end if timeOutLimit
+    
+    if (filePath)
+      unlink([filePath UTF8String]);
+  }//end if filePath
 }
 //end launch
 

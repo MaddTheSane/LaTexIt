@@ -16,6 +16,7 @@ extern NSString* LibraryDidChangeNotification;
 extern NSString* LibraryItemsPboardType;
 
 typedef enum {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN} library_import_option_t;
+typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST} library_export_format_t;
 
 @class HistoryItem;
 @class LibraryFile;
@@ -53,7 +54,7 @@ typedef enum {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPE
 -(void) removeItems:(NSArray*)items;
 -(void) refreshFileItem:(LibraryFile*)item withValue:(HistoryItem*)value;
 
--(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)selection selection:(NSArray*)selectedItems;
+-(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)selection selection:(NSArray*)selectedItems format:(library_export_format_t)format;
 -(BOOL) loadFrom:(NSString*)path option:(library_import_option_t)option;
 
 -(NSString*) defaultLibraryPath;

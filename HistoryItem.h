@@ -50,6 +50,7 @@ extern NSString* HistoryItemDidChangeNotification;
 -(double)              pointSize;
 -(NSDate*)             date;
 -(latex_mode_t)        mode;
+-(NSString*)           modeAsString;
 -(NSColor*)            backgroundColor;
 -(NSString*)           title;
 
@@ -70,5 +71,8 @@ extern NSString* HistoryItemDidChangeNotification;
          
 //returns reannotated pdfData before returning it. Very rare. Only needed to resynchronize because of some backgroundColor change.
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
+
+//for readable export
+-(id) plistDescription;
 
 @end

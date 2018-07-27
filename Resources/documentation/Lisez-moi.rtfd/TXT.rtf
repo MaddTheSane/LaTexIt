@@ -5,12 +5,12 @@
 }
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\fs24 \cf0  {{\NeXTGraphic latexit128.png \width2560 \height2560
+\f0\fs24 \cf0  {{\NeXTGraphic latexit_128.png \width2560 \height2560
 }¬}
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.14.3\
+\f2\b \cf0 LaTeXiT 1.14.4\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -51,7 +51,7 @@ Adresse e-mail (commentaires, suggestions, probl\'8fmes,...): \cf3 pierre.chatel
 Syst\'8fme Requis\
 
 \fs22 \ulnone \
-LaTeXiT 1.14.3 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.14.4 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 
 \f2\b\fs26 \
 
@@ -171,7 +171,7 @@ Le service "D\'8etecter et cr\'8eer les \'8equations" est un peu diff\'8erent : 
 \f2\b \cf0 Astuce: le mode "$...$" (inline) essaye quand c'est possible d'aligner l'\'8equation sur la ligne de base du texte.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f1\b0 \cf0 Un nouveau service est disponible depuis la version 1.14.3, permettant d'effectuer la manipulation inverse, c'est-\'88-dire revenir des \'8equations au code LaTeX.\
+\f1\b0 \cf0 Un nouveau service est disponible depuis la version 1.14.4, permettant d'effectuer la manipulation inverse, c'est-\'88-dire revenir des \'8equations au code LaTeX.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
@@ -209,7 +209,7 @@ LinkBack est une technologie, incorpor\'8ee \'88 LaTeXiT. Si vous d\'8eposez une
 Palettes LaTeX\
 
 \fs22 \ulnone \
-Depuis la version 1.14.3, LaTeXiT g\'8fre les palettes LaTeX comme des plugins. Les palettes int\'8egr\'8ees font partie de l'application, mais des palettes suppl\'8ementaires peuvent \'90tre ajout\'8ees dans les r\'8epertoires Biblioth\'8fque, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
+Depuis la version 1.14.4, LaTeXiT g\'8fre les palettes LaTeX comme des plugins. Les palettes int\'8egr\'8ees font partie de l'application, mais des palettes suppl\'8ementaires peuvent \'90tre ajout\'8ees dans les r\'8epertoires Biblioth\'8fque, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
 Exemples :\
 /Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
 /Users/[votre nom]/Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
@@ -316,13 +316,13 @@ Ici pour la police Chalkboard :\
 - si vous constatez que, m\'90me sans \'90tre utilis\'8e, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'8emoire, sachez simplement que pour acc\'8el\'8erer son temps de d\'8emarrage, il charge les images de l'historique en arri\'8fre plan. Ce travail, de tr\'8fs faible priorit\'8e, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'8eellement l'\'8eviter, pensez simplement \'88 faire le m\'8enage dans votre historique de temps en temps\'ca!\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f1\b0 \cf0 - quand la couleur de l'\'8equation est r\'8egl\'8ee sur blanc pur, elle semble mal d\'8ecoup\'8ee (disparition \'8eventuelle des parenth\'8fses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'8echoue \'88 d\'8ecouper correctement avec une \'8equation blanche sur fond blanc. Pour corriger cela, utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
+\f1\b0 \cf0 - quand la couleur de l'\'8equation est r\'8egl\'8ee sur blanc pur, elle semble mal d\'8ecoup\'8ee (disparition \'8eventuelle des parenth\'8fses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'8echoue \'88 d\'8ecouper correctement avec une \'8equation blanche sur fond blanc. Pour corriger cela, utilisez une couleur "presque blanche", ou bien utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
 - la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
 - avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer sa taille exacte, et l'\'8equation se retrouve alors tronqu\'8ee. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
 - les marges personnalis\'8ees ne sont pas prises en compte lors d'un export en EPS; cela semble \'90tre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque;\
 - le service ne marche pas avec Mail 2.0.0, ..., 2.1 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites);\
-- le service ne marche pas avec Keynote 1, 2 & 3, car Keynote ne peut ins\'8erer une image dans un bloc de texte;\
+- le service ne marche pas avec Keynote 1, 2, 3 & 4, car Keynote ne peut ins\'8erer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'8ef\'8erences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'8don, m\'90me si le service \'8echoue \'88 ins\'8erer l'image, cette derni\'8fre devient disponible dans la fen\'90tre d'historique que vous pouvez avoir mise dans un coin pour y acc\'8eder facilement;\
 - LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'8equations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'8ees par le service dans un flot RTFD. Or, il peut arriver que les \'8editeurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'90me si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'88 l'\'8editeur de texte, mais c'est quelque chose de difficile. Pour r\'8esoudre le probl\'8fme, d\'8esactivez simplement l'alignement de l'\'8equation avec la ligne de base texte dans les pr\'8ef\'8erences du service LaTeXiT; cela d\'8esactive l'utilisation des flots RTFD;\
 - avec Pages 1.0.2 and 2.0.1, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages.\
 - avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, qui a \'8et\'8e corrig\'8e dans la version 1.8;\
@@ -358,6 +358,12 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \fs26 \cf0 \ul Historique des versions\
 
 \fs22 \ulnone \
+v 1.14.4 (24 ao\'9et 2007)\
+- correction d'un conflit avec certaines variables shell;\
+- un caract\'8fre % en fin de texte provoquait une erreur;\
+- ic\'99ne de l'application retravaill\'8ee par Mael Hill\'8ereau;\
+- l'export de la biblioth\'8fque peut maintenant \'90tre fait dans un format XML.\
+\
 v 1.14.3 (18 juin 2007)\
 - Il est maintenant possible de r\'8eduire la taille de la zone de texte (via les Pr\'8ef\'8erences ou le menu Fen\'90tre);\
 - L'historique affiche maintenant directement le PDF au lieu d'une version bitmap de l'image. Il me semble que finalement, le gain en vitesse de d\'8efilement ne compense pas la consommation m\'8emoire induite;\

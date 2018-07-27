@@ -26,6 +26,7 @@
 #import "PreferencesController.h"
 #import "SMLSyntaxColouring.h"
 #import "SystemTask.h"
+#import "Utils.h"
 
 #ifdef PANTHER
 #import <LinkBack-panther/LinkBack.h>
@@ -361,7 +362,6 @@ static NSString* yenString = nil;
   //You can also choose to override -loadFileWrapperRepresentation:ofType: or -readFromFile:ofType: instead.
   if ([aType isEqualToString:@"LatexPalette"])
   {
-     NSLog(@"LatexPalette");
     [[AppController appController] installLatexPalette:file];
     ok = YES;
   }
@@ -556,7 +556,7 @@ static NSString* yenString = nil;
 
     SystemTask* boundingBoxTask = [[SystemTask alloc] init];
     [boundingBoxTask setCurrentDirectoryPath:directory];
-    [boundingBoxTask setEnvironment:[AppController environmentDict]];
+    [boundingBoxTask setEnvironment:[AppController extraEnvironmentDict]];
     [boundingBoxTask setLaunchPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]];
     [boundingBoxTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE",@"-sDEVICE=bbox",@"-dBATCH",@"-q", pdfFilePath, nil]];
     [boundingBoxTask launch];
@@ -621,7 +621,13 @@ static NSString* yenString = nil;
                                                         NSLocalizedString(@"processing", @"processing"),
                                                         [executablePath lastPathComponent],
                                                         systemCall]];
-  BOOL failed = (system([systemCall UTF8String]) != 0) && ![fileManager fileExistsAtPath:pdfFile];
+  NSString* tmpFilePath = nil;
+  [Utils temporaryFileWithTemplate:@"latexit-command-XXXXXXXXX" extension:@"sh" outFilePath:&tmpFilePath];
+  BOOL failed = !tmpFilePath || ![systemCall writeToFile:tmpFilePath atomically:NO] ||
+                ((system([[NSString stringWithFormat:@"/bin/bash -l %@", tmpFilePath] UTF8String]) != 0) &&
+                 ![fileManager fileExistsAtPath:pdfFile]);
+  if (tmpFilePath)
+    unlink([tmpFilePath UTF8String]);
   encoding = NSUTF8StringEncoding;
   error = nil;
   NSString* errors = [NSString stringWithContentsOfFile:errFile guessEncoding:&encoding error:&error];
@@ -638,7 +644,7 @@ static NSString* yenString = nil;
   {
     SystemTask* dvipdfTask = [[SystemTask alloc] init];
     [dvipdfTask setCurrentDirectoryPath:directory];
-    [dvipdfTask setEnvironment:[AppController environmentDict]];
+    [dvipdfTask setEnvironment:[AppController extraEnvironmentDict]];
     [dvipdfTask setLaunchPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
     [dvipdfTask setArguments:[NSArray arrayWithObject:dviFile]];
     NSString* executablePath = [[dvipdfTask launchPath] lastPathComponent];
@@ -816,7 +822,6 @@ static NSString* yenString = nil;
                              (latexMode == LATEX_MODE_DISPLAY) ? @"$" :
                              (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
   NSString* colouredPreamble = [[AppController appController] insertColorInPreamble:preamble color:color];
-  
   NSMutableString* fullLog = [NSMutableString string];
   
   
@@ -825,6 +830,7 @@ static NSString* yenString = nil;
   
   //the body is trimmed to avoid some latex problems (sometimes, a newline at the end of the equation makes it fail!)
   NSString* trimmedBody = [body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  trimmedBody = [trimmedBody stringByAppendingString:@"\n"];//in case that a % is on the last line
   //the problem is that now, the error lines must be shifted ! How many new lines have been removed ?
   NSString* firstChar = [trimmedBody length] ? [trimmedBody substringWithRange:NSMakeRange(0, 1)] : @"";
   NSRange firstCharLocation = [body rangeOfString:firstChar];
@@ -858,7 +864,7 @@ static NSString* yenString = nil;
   //  [fullLog appendFormat:@"Source :\n%@\n", normalSourceToCompile];
       
   //PREPROCESSING
-  NSDictionary* sharedEnvironment = [AppController environmentDict];
+  NSDictionary* sharedEnvironment = [AppController extraEnvironmentDict];
   NSDictionary* extraEnvironment =
     [NSDictionary dictionaryWithObjectsAndKeys:[latexFilePath stringByDeletingLastPathComponent], @"CURRENTDIRECTORY",
                                                 [latexFilePath stringByDeletingPathExtension], @"INPUTFILE",

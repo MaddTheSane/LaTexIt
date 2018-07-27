@@ -41,11 +41,13 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
                                               backgroundColor:backgroundColor];
   return [instance autorelease];
 }
+//end historyItemWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
 
 +(id) historyItemWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
   return [[[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults] autorelease];
 }
+//end historyItemWithPDFData:useDefaults:
 
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
@@ -58,7 +60,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   sourceText = [aSourceText copy];
   color      = [aColor      copy];
   pointSize  = aPointSize;
-  date       = [aDate       copy];
+  date       = aDate ? [aDate copy] : [[NSDate date] retain];
   mode       = aMode;
   //pdfCachedImage is lazily initialized in the "image" methods that returns these cached images
   backgroundColor = [aBackgroundColor copy];
@@ -73,6 +75,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   }
   return self;
 }
+//end initWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
 
 -(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
@@ -226,6 +229,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
   return self;
 }
+//end initWithPDFData:useDefaults:
 
 -(void) dealloc
 {
@@ -239,6 +243,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   [title             release];
   [super dealloc];
 }
+//end dealloc
 
 -(id) copyWithZone:(NSZone*)zone
 {
@@ -251,51 +256,83 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   }
   return newInstance;
 }
+//end copyWithZone:
 
 -(NSData*) pdfData
 {
   return pdfData;
 }
+//end pdfData
 
 -(NSAttributedString*) preamble
 {
   return preamble;
 }
+//end preamble
 
 -(NSAttributedString*) sourceText
 {
   return sourceText;
 }
+//end sourceText
 
 -(double) pointSize
 {
   return pointSize;
 }
+//end pointSize
 
 -(NSColor*) color
 {
   return color;
 }
+//end color
 
 -(NSDate*) date
 {
   return date;
 }
+//end date
 
 -(latex_mode_t) mode
 {
   return mode;
 }
+//end mode
+
+-(NSString*) modeAsString
+{
+  NSString* string = nil;
+  switch([self mode])
+  {
+    case LATEX_MODE_EQNARRAY:
+      string = @"eqnarray";
+      break;
+    case LATEX_MODE_DISPLAY:
+      string = @"display";
+      break;
+    case LATEX_MODE_INLINE:
+      string = @"inline";
+      break;
+    case LATEX_MODE_TEXT:
+      string = @"text";
+      break;
+  }
+  return string;
+}
+//end modeAsString
 
 -(NSColor*) backgroundColor
 {
   return backgroundColor;
 }
+//end backgroundColor
 
 -(NSString*) title
 {
   return title;
 }
+//end title
 
 -(void) setPreamble:(NSAttributedString*)text
 {
@@ -308,6 +345,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
+//end setPreamble:
 
 -(void) setBackgroundColor:(NSColor*)aColor
 {
@@ -322,6 +360,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
+//end setBackgroundColor:
 
 -(void) setTitle:(NSString*)newTitle
 {
@@ -334,10 +373,11 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
+//end setTitle:
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.14.3"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.14.4"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -352,6 +392,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   [coder encodeObject:backgroundColor forKey:@"backgroundColor"];
   [coder encodeObject:title forKey:@"title"];
 }
+//end encodeWithCoder:
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -401,12 +442,14 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
     [self _reannotatePDFDataUsingPDFKeywords:NO];
   return self;
 }
+//end initWithCoder:
 
 //triggered for tableView display : may return something else than pdfImage to speedup display
 -(NSImage*) image
 {
   return [self pdfImage];
 }
+//end image
 
 -(NSImage*) pdfImage
 {
@@ -426,6 +469,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   }
   return pdfCachedImage;
 }
+//end pdfImage
 
 //latex source code (preamble+body) typed by the user. This WON'T add magnification, auto-bounding, coloring.
 //It is a summary of what the user did effectively type. We just add \begin{document} and \end{document}
@@ -433,6 +477,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 {
   return [NSString stringWithFormat:@"%@\n\\begin{document}\n%@\n\\end{document}", [preamble string], [sourceText string]];
 }
+//end string
 
 -(NSAttributedString*) encapsulatedSource//the body, with \[...\], $...$ or nothing according to the mode
 {
@@ -467,6 +512,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   [pdfData release];
   pdfData = newData;
 }
+//end _reannotatePDFDataUsingPDFKeywords:
 
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
@@ -510,6 +556,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
                                      color:color mode:mode magnification:pointSize baseline:baseline backgroundColor:backgroundColor title:title];
   return newData;
 }
+//end annotatedPDFDataUsingPDFKeywords:usingPDFKeywords
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
 //the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)
@@ -564,5 +611,27 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
       break;
   }//end switch
 }
+//end writeToPasteboard:forDocument:isLinkBackRefresh:lazyDataProvider:
+
+-(id) plistDescription
+{
+  NSMutableDictionary* plist = 
+    [NSMutableDictionary dictionaryWithObjectsAndKeys:
+       @"1.14.4", @"version",
+       [self pdfData], @"pdfData",
+       [[self preamble] string], @"preamble",
+       [[self sourceText] string], @"sourceText",
+       [[self color] rgbaString], @"color",
+       [NSNumber numberWithDouble:[self pointSize]], @"pointSize",
+       [self modeAsString], @"mode",
+       [self date], @"date",
+       nil];
+  if ([self backgroundColor])
+    [plist setObject:[[self backgroundColor] rgbaString] forKey:@"backgroundColor"];
+  if ([self title])
+    [plist setObject:[self title] forKey:@"title"];
+  return plist;
+}
+//end plistDescription
 
 @end

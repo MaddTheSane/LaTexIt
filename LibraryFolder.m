@@ -36,22 +36,26 @@ static NSImage* bigFolderIcon   = nil; //stores the big icon of a LibraryFolder
     [image release];
   }
 }
+//end initialize
 
 -(id) copyWithZone:(NSZone*)zone
 {
   LibraryFolder* newInstance = (LibraryFolder*) [super copyWithZone:zone];
   return newInstance;
 }
+//end copyWithZone:
 
 -(NSImage*) icon
 {
   return smallFolderIcon; //icon of a LibraryFolder
 }
+//end icon
 
 -(NSImage*) bigIcon
 {
   return bigFolderIcon; //icon of a LibraryFolder
 }
+//end bigIcon
 
 //NSCoding protocol
 
@@ -59,6 +63,7 @@ static NSImage* bigFolderIcon   = nil; //stores the big icon of a LibraryFolder
 {
   [super encodeWithCoder:coder];
 }
+//end encodeWithCoder:
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -66,5 +71,13 @@ static NSImage* bigFolderIcon   = nil; //stores the big icon of a LibraryFolder
     return nil;
   return self;
 }
+//end initWithCoder:
+
+//for readable export
+-(id) plistDescription
+{
+  return [super plistDescription];
+}
+//end plistDescription
 
 @end

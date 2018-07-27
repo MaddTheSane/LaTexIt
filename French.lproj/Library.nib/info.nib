@@ -9,9 +9,9 @@
 		<key>22</key>
 		<string>69 314 236 199 0 0 1280 832 </string>
 		<key>70</key>
-		<string>486 536 316 102 0 0 1280 832 </string>
+		<string>482 517 316 102 0 0 1280 832 </string>
 		<key>73</key>
-		<string>516 515 248 106 0 0 1280 832 </string>
+		<string>477 400 289 124 0 0 1280 832 </string>
 	</dict>
 	<key>IBFramework Version</key>
 	<string>446.1</string>
@@ -19,11 +19,11 @@
 	<array>
 		<integer>22</integer>
 		<integer>73</integer>
-		<integer>58</integer>
 		<integer>70</integer>
+		<integer>58</integer>
 		<integer>5</integer>
 	</array>
 	<key>IBSystem Version</key>
-	<string>8L127</string>
+	<string>8R218</string>
 </dict>
 </plist>
