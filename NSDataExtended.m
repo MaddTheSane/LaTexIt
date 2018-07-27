@@ -10,19 +10,7 @@
 
 #import "Utils.h"
 
-#ifdef ARC_ENABLED
-#import <openssl/bio.h>
-#import <openssl/ssl.h>
-#import <openssl/sha.h>
-#elif defined(__clang__)
-#import <openssl/bio.h>
-#import <openssl/ssl.h>
-#import <openssl/sha.h>
-#else
-#import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/bio.h>//specific to avoid compatibility problem prior MacOS 10.5
-#import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/ssl.h>//specific to avoid compatibility problem prior MacOS 10.5
-#import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/sha.h>//specific to avoid compatibility problem prior MacOS 10.5
-#endif
+#include <CommonCrypto/CommonCrypto.h>
 
 @implementation NSData (Extended)
 
@@ -94,9 +82,9 @@
 -(NSString*) sha1Base64
 {
   NSString* result = nil;
-  unsigned char sha[SHA_DIGEST_LENGTH] = {0};
-  SHA1([self bytes], [self length], sha);
-  NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:SHA_DIGEST_LENGTH freeWhenDone:NO];
+  unsigned char sha[CC_SHA1_DIGEST_LENGTH] = {0};
+  CC_SHA1([self bytes], [self length], sha);
+  NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:CC_SHA1_DIGEST_LENGTH freeWhenDone:NO];
   result = [wrapper encodeBase64WithNewlines:NO];
   #ifdef ARC_ENABLED
   #else
