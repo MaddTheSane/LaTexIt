@@ -22,6 +22,7 @@
                 paste = id; 
                 showHelp = id; 
                 showOrHideColorInspector = id; 
+                showOrHideCompositionConfiguration = id; 
                 showOrHideEncapsulation = id; 
                 showOrHideHistory = id; 
                 showOrHideLatexPalettes = id; 

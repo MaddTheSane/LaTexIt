@@ -12,6 +12,7 @@
 
 #import "AppController.h"
 
+#import "CompositionConfigurationController.h"
 #import "EncapsulationController.h"
 #import "HistoryController.h"
 #import "HistoryItem.h"
@@ -67,6 +68,7 @@
 -(MyDocument*) _myDocumentServiceProvider;
 -(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
                        error:(NSString **)error;
+-(void) _serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 //delegate method to filter file opening                       
 -(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename;
@@ -82,6 +84,8 @@ static MyDocument*    myDocumentServiceProviderInstance = nil;
 static NSMutableString*     environmentPath = nil;
 static NSMutableDictionary* environmentDict = nil;
 static NSMutableArray*      unixBins = nil;
+
+static NSMutableDictionary* cachePaths = nil;
 
 +(void) initialize
 {
@@ -111,6 +115,8 @@ static NSMutableArray*      unixBins = nil;
       @"/sw/usr/local/bin", @"/sw/usr/local/sbin",
       nil];
   [unixBins addObjectsFromArray:usualBins];
+  if (!cachePaths)
+    cachePaths = [[NSMutableDictionary alloc] init];
 
   //try to build the best environment for the current user
   if (!environmentPath)
@@ -207,6 +213,12 @@ static NSMutableArray*      unixBins = nil;
       return nil;
     appControllerInstance = self;
     [self _setEnvironment];     //performs a setenv()
+    [self _findGsPath];
+    [self _findPdfLatexPath];
+    [self _findPs2PdfPath];
+    [self _findXeLatexPath];
+    [self _findLatexPath];
+    [self _findDvipdfPath];
     [self _checkConfiguration]; //mainly, looks for pdflatex program
     
     //export to EPS needs ghostscript to be available
@@ -232,6 +244,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [compositionConfigurationController release];
   [encapsulationController release];
   [historyController release];
   [marginController release];
@@ -287,6 +300,13 @@ static NSMutableArray*      unixBins = nil;
       document = [[[orderedWindows objectAtIndex:0] windowController] document];
   }
   return document;
+}
+
+-(CompositionConfigurationController*) compositionConfigurationController
+{
+  if (!compositionConfigurationController)
+    compositionConfigurationController = [[CompositionConfigurationController alloc] init];
+  return compositionConfigurationController;
 }
 
 -(EncapsulationController*) encapsulationController
@@ -500,6 +520,8 @@ static NSMutableArray*      unixBins = nil;
   }
   else if ([sender action] == @selector(showOrHideColorInspector:))
     [sender setState:[[NSColorPanel sharedColorPanel] isVisible] ? NSOnState : NSOffState];
+  else if ([sender action] == @selector(showOrHideCompositionConfiguration:))
+    [sender setState:(compositionConfigurationController && [[compositionConfigurationController window] isVisible]) ? NSOnState : NSOffState];
   else if ([sender action] == @selector(showOrHideEncapsulation:))
     [sender setState:(encapsulationController && [[encapsulationController window] isVisible]) ? NSOnState : NSOffState];
   else if ([sender action] == @selector(showOrHideMargin:))
@@ -595,6 +617,15 @@ static NSMutableArray*      unixBins = nil;
     [controller showWindow:self];
 }
 
+-(IBAction) showOrHideCompositionConfiguration:(id)sender
+{
+  NSWindowController* controller = [self compositionConfigurationController];
+  if ([[controller window] isVisible])
+    [controller close];
+  else
+    [controller showWindow:self];
+}
+
 -(IBAction) showOrHideEncapsulation:(id)sender
 {
   NSWindowController* controller = [self encapsulationController];
@@ -616,8 +647,8 @@ static NSMutableArray*      unixBins = nil;
 //looks for a programName in the given PATHs. Just tests that the file exists
 -(NSString*) findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes
 {
-  NSString* path = nil;
-  if (prefixes)
+  NSString* path = [cachePaths objectForKey:programName];
+  if (!path && prefixes)
   {
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSEnumerator* enumerator = [prefixes objectEnumerator];
@@ -630,6 +661,8 @@ static NSMutableArray*      unixBins = nil;
           [fileManager isExecutableFileAtPath:fullpath])
         path = fullpath;
     }
+    if (path)
+      [cachePaths setObject:path forKey:programName];
   }
   return path;  
 }
@@ -639,7 +672,9 @@ static NSMutableArray*      unixBins = nil;
                  environment:(NSDictionary*)environment
 {
   //first, it may be simply found in the common, usual, path
-  NSString* path = [self findUnixProgram:programName inPrefixes:prefixes];
+  NSString* path = [cachePaths objectForKey:programName];
+  if (!path)
+    path = [self findUnixProgram:programName inPrefixes:prefixes];
   
   if (!path) //if it is not...
   {
@@ -671,6 +706,8 @@ static NSMutableArray*      unixBins = nil;
     {
       [whichTask release];
     }
+    if (path)
+      [cachePaths setObject:path forKey:programName];
   }
   return path;
 }
@@ -827,8 +864,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) _findGsPath
 {
   NSFileManager* fileManager   = [NSFileManager defaultManager];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* gsPath             = [userDefaults stringForKey:GsPathKey];
+  NSString* gsPath             = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey];
   NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[gsPath stringByDeletingLastPathComponent]]];
 
@@ -836,7 +872,7 @@ static NSMutableArray*      unixBins = nil;
     gsPath = [self findUnixProgram:@"gs" tryPrefixes:prefixes environment:environmentDict];
   if ([fileManager fileExistsAtPath:gsPath])
   {
-    [userDefaults setObject:gsPath forKey:GsPathKey];
+    [PreferencesController currentCompositionConfigurationSetObject:gsPath forKey:CompositionConfigurationGsPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -845,8 +881,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) _findPdfLatexPath
 {
   NSFileManager* fileManager   = [NSFileManager defaultManager];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* pdfLatexPath       = [userDefaults stringForKey:PdfLatexPathKey];
+  NSString* pdfLatexPath       = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey];
   NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[pdfLatexPath stringByDeletingLastPathComponent]]];
 
@@ -854,7 +889,7 @@ static NSMutableArray*      unixBins = nil;
     pdfLatexPath = [self findUnixProgram:@"pdflatex" tryPrefixes:prefixes environment:environmentDict];
   if ([fileManager fileExistsAtPath:pdfLatexPath])
   {
-    [userDefaults setObject:pdfLatexPath forKey:PdfLatexPathKey];
+    [PreferencesController currentCompositionConfigurationSetObject:pdfLatexPath forKey:CompositionConfigurationPdfLatexPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -863,8 +898,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) _findPs2PdfPath
 {
   NSFileManager* fileManager   = [NSFileManager defaultManager];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* ps2PdfPath         = [userDefaults stringForKey:Ps2PdfPathKey];
+  NSString* ps2PdfPath         = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey];
   NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[ps2PdfPath stringByDeletingLastPathComponent]]];
 
@@ -872,7 +906,7 @@ static NSMutableArray*      unixBins = nil;
     ps2PdfPath = [self findUnixProgram:@"ps2pdf" tryPrefixes:prefixes environment:environmentDict];
   if ([fileManager fileExistsAtPath:ps2PdfPath])
   {
-    [userDefaults setObject:ps2PdfPath forKey:Ps2PdfPathKey];
+    [PreferencesController currentCompositionConfigurationSetObject:ps2PdfPath forKey:CompositionConfigurationPs2PdfPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -881,8 +915,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) _findXeLatexPath
 {
   NSFileManager* fileManager   = [NSFileManager defaultManager];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* xeLatexPath        = [userDefaults stringForKey:XeLatexPathKey];
+  NSString* xeLatexPath        = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey];
   NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[xeLatexPath stringByDeletingLastPathComponent]]];
 
@@ -890,7 +923,7 @@ static NSMutableArray*      unixBins = nil;
     xeLatexPath = [self findUnixProgram:@"xelatex" tryPrefixes:prefixes environment:environmentDict];
   if ([fileManager fileExistsAtPath:xeLatexPath])
   {
-    [userDefaults setObject:xeLatexPath forKey:XeLatexPathKey];
+    [PreferencesController currentCompositionConfigurationSetObject:xeLatexPath forKey:CompositionConfigurationXeLatexPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -899,8 +932,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) _findLatexPath
 {
   NSFileManager* fileManager   = [NSFileManager defaultManager];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* latexPath          = [userDefaults stringForKey:LatexPathKey];
+  NSString* latexPath          = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey];
   NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[latexPath stringByDeletingLastPathComponent]]];
 
@@ -908,7 +940,7 @@ static NSMutableArray*      unixBins = nil;
     latexPath = [self findUnixProgram:@"latex" tryPrefixes:prefixes environment:environmentDict];
   if ([fileManager fileExistsAtPath:latexPath])
   {
-    [userDefaults setObject:latexPath forKey:LatexPathKey];
+    [PreferencesController currentCompositionConfigurationSetObject:latexPath forKey:CompositionConfigurationLatexPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -917,8 +949,7 @@ static NSMutableArray*      unixBins = nil;
 -(void) _findDvipdfPath
 {
   NSFileManager* fileManager   = [NSFileManager defaultManager];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* dvipdfPath         = [userDefaults stringForKey:DvipdfPathKey];
+  NSString* dvipdfPath         = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey];
   NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
   [prefixes addObjectsFromArray:[NSArray arrayWithObject:[dvipdfPath stringByDeletingLastPathComponent]]];
 
@@ -926,7 +957,7 @@ static NSMutableArray*      unixBins = nil;
     dvipdfPath = [self findUnixProgram:@"dvipdf" tryPrefixes:prefixes environment:environmentDict];
   if ([fileManager fileExistsAtPath:dvipdfPath])
   {
-    [userDefaults setObject:dvipdfPath forKey:DvipdfPathKey];
+    [PreferencesController currentCompositionConfigurationSetObject:dvipdfPath forKey:CompositionConfigurationDvipdfPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -939,7 +970,9 @@ static NSMutableArray*      unixBins = nil;
   @try
   {
     //currently, the only check is the option -v, at least to see if the program can be executed
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
+                   [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]] UTF8String]) == 0);
+    /*
     NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
     [gsTask setLaunchPath:[userDefaults stringForKey:GsPathKey]];
     [gsTask setArguments:[NSArray arrayWithObject:@"-v"]];
@@ -947,7 +980,7 @@ static NSMutableArray*      unixBins = nil;
     [gsTask setStandardError:nullDevice];
     [gsTask launch];
     [gsTask waitUntilExit];
-    ok = ([gsTask terminationStatus] == 0);
+    ok = ([gsTask terminationStatus] == 0);*/
   }
   @catch(NSException* e)
   {
@@ -968,7 +1001,9 @@ static NSMutableArray*      unixBins = nil;
   @try
   {
     //currently, the only check is the option -v, at least to see if the program can be executed
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
+                   [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]] UTF8String]) == 0);
+    /*
     NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
     [pdfLatexTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
     [pdfLatexTask setArguments:[NSArray arrayWithObject:@"-v"]];
@@ -976,7 +1011,7 @@ static NSMutableArray*      unixBins = nil;
     [pdfLatexTask setStandardError:nullDevice];
     [pdfLatexTask launch];
     [pdfLatexTask waitUntilExit];
-    ok = ([pdfLatexTask terminationStatus] == 0);
+    ok = ([pdfLatexTask terminationStatus] == 0);*/
   }
   @catch(NSException* e)
   {
@@ -997,14 +1032,15 @@ static NSMutableArray*      unixBins = nil;
   @try
   {
     //currently, the only check is the option -v, at least to see if the program can be executed
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+    ok = [[NSFileManager defaultManager]
+            isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey]];
+    /*NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
     [ps2PdfTask setLaunchPath:[userDefaults stringForKey:Ps2PdfPathKey]];
     [ps2PdfTask setArguments:[NSArray arrayWithObject:@"-v"]];
     [ps2PdfTask setStandardOutput:nullDevice];
     [ps2PdfTask setStandardError:nullDevice];
     [ps2PdfTask launch];
-    [ps2PdfTask waitUntilExit];
+    [ps2PdfTask waitUntilExit];*/
   }
   @catch(NSException* e)
   {
@@ -1025,7 +1061,9 @@ static NSMutableArray*      unixBins = nil;
   @try
   {
     //currently, the only check is the option -v, at least to see if the program can be executed
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
+                    [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey]] UTF8String]) == 0);
+    /*
     NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
     [xeLatexTask setLaunchPath:[userDefaults stringForKey:XeLatexPathKey]];
     [xeLatexTask setArguments:[NSArray arrayWithObject:@"-v"]];
@@ -1033,7 +1071,7 @@ static NSMutableArray*      unixBins = nil;
     [xeLatexTask setStandardError:nullDevice];
     [xeLatexTask launch];
     [xeLatexTask waitUntilExit];
-    ok = ([xeLatexTask terminationStatus] == 0);
+    ok = ([xeLatexTask terminationStatus] == 0);*/
   }
   @catch(NSException* e)
   {
@@ -1054,7 +1092,9 @@ static NSMutableArray*      unixBins = nil;
   @try
   {
     //currently, the only check is the option -v, at least to see if the program can be executed
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
+                   [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey]] UTF8String]) == 0);
+    /*
     NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
     [latexTask setLaunchPath:[userDefaults stringForKey:LatexPathKey]];
     [latexTask setArguments:[NSArray arrayWithObject:@"-v"]];
@@ -1062,7 +1102,7 @@ static NSMutableArray*      unixBins = nil;
     [latexTask setStandardError:nullDevice];
     [latexTask launch];
     [latexTask waitUntilExit];
-    ok = ([latexTask terminationStatus] == 0);
+    ok = ([latexTask terminationStatus] == 0);*/
   }
   @catch(NSException* e)
   {
@@ -1082,14 +1122,16 @@ static NSMutableArray*      unixBins = nil;
   NSTask* dvipdfTask = [[NSTask alloc] init];
   @try
   {
-    //currently, the only check is the option -v, at least to see if the program can be executed
+    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:
+            [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
+    /*    
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
     [dvipdfTask setLaunchPath:[userDefaults stringForKey:DvipdfPathKey]];
     [dvipdfTask setStandardOutput:nullDevice];
     [dvipdfTask setStandardError:nullDevice];
     [dvipdfTask launch];
-    [dvipdfTask waitUntilExit];
+    [dvipdfTask waitUntilExit];*/
   }
   @catch(NSException* e)
   {
@@ -1112,7 +1154,9 @@ static NSMutableArray*      unixBins = nil;
   @try
   {
     NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:environmentDict];
-    ok = kpseWhichPath  && [kpseWhichPath length];
+    ok = kpseWhichPath  && [kpseWhichPath length] &&
+         (system([[NSString stringWithFormat:@"%@ %@ 1>/dev/null 2>/dev/null",kpseWhichPath,@"color.sty"] UTF8String]) == 0);
+    /*
     if (ok)
     {
       NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
@@ -1125,7 +1169,7 @@ static NSMutableArray*      unixBins = nil;
       [checkTask launch];
       [checkTask waitUntilExit];
       ok = ([checkTask terminationStatus] == 0);
-    }
+    }*/
   }
   @catch(NSException* e)
   {
@@ -1135,7 +1179,11 @@ static NSMutableArray*      unixBins = nil;
   //perhaps second try without kpsewhich
   if (!ok)
   {
-    NSArray* latexProgramsPathsKeys = [NSArray arrayWithObjects:PdfLatexPathKey, LatexPathKey, XeLatexPathKey, nil];
+    NSArray* latexProgramsPathsKeys =
+      [NSArray arrayWithObjects:CompositionConfigurationPdfLatexPathKey,
+                                CompositionConfigurationLatexPathKey,
+                                CompositionConfigurationXeLatexPathKey,
+                                nil];
     NSEnumerator* enumerator = [latexProgramsPathsKeys objectEnumerator];
     NSString* pathKey = nil;
     while(!ok && ((pathKey = [enumerator nextObject])))
@@ -1144,16 +1192,20 @@ static NSMutableArray*      unixBins = nil;
       {
         NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
         NSString* directory      = [AppController latexitTemporaryPath];
-        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
         NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
         [checkTask setCurrentDirectoryPath:directory];
-        [checkTask setLaunchPath:[userDefaults stringForKey:pathKey]];
-        [checkTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
-        [checkTask setStandardOutput:nullDevice];
-        [checkTask setStandardError:nullDevice];
-        [checkTask launch];
-        [checkTask waitUntilExit];
-        ok = ([checkTask terminationStatus] == 0);
+        NSString* launchPath = [PreferencesController currentCompositionConfigurationObjectForKey:pathKey];
+        BOOL isDirectory = YES;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:launchPath isDirectory:&isDirectory] && !isDirectory)
+        {
+          [checkTask setLaunchPath:launchPath];
+          [checkTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
+          [checkTask setStandardOutput:nullDevice];
+          [checkTask setStandardError:nullDevice];
+          [checkTask launch];
+          [checkTask waitUntilExit];
+          ok = ([checkTask terminationStatus] == 0);
+        }
       }
       @catch(NSException* e)
       {
@@ -1261,7 +1313,7 @@ static NSMutableArray*      unixBins = nil;
         if ([fileManager fileExistsAtPath:filepath])
         {
           [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
-          [userDefaults setObject:filepath forKey:GsPathKey];
+          [PreferencesController currentCompositionConfigurationSetObject:filepath forKey:CompositionConfigurationGsPathKey];
           [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
           retry &= !isGsAvailable;
         }
@@ -1299,7 +1351,7 @@ static NSMutableArray*      unixBins = nil;
         if ([fileManager fileExistsAtPath:filepath])
         {
           [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
-          [userDefaults setObject:filepath forKey:PdfLatexPathKey];
+          [PreferencesController currentCompositionConfigurationSetObject:filepath forKey:CompositionConfigurationPdfLatexPathKey];
           [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
           retry &= !isPdfLatexAvailable;
         }
@@ -1337,7 +1389,7 @@ static NSMutableArray*      unixBins = nil;
         if ([fileManager fileExistsAtPath:filepath])
         {
           [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
-          [userDefaults setObject:filepath forKey:Ps2PdfPathKey];
+          [PreferencesController currentCompositionConfigurationSetObject:filepath forKey:CompositionConfigurationPs2PdfPathKey];
           [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
           retry &= !isPs2PdfAvailable;
         }
@@ -1347,7 +1399,8 @@ static NSMutableArray*      unixBins = nil;
 
   if (!isDvipdfAvailable)
     [self _findDvipdfPath];
-  retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == LATEXDVIPDF);
+  NSNumber* compositionModeAsNumber = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationCompositionModeKey];
+  retry = ((composition_mode_t)[compositionModeAsNumber intValue] == COMPOSITION_MODE_LATEXDVIPDF);
   while (!isDvipdfAvailable && retry)
   {
     int returnCode =
@@ -1375,7 +1428,7 @@ static NSMutableArray*      unixBins = nil;
         if ([fileManager fileExistsAtPath:filepath])
         {
           [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
-          [userDefaults setObject:filepath forKey:DvipdfPathKey];
+          [PreferencesController currentCompositionConfigurationSetObject:filepath forKey:CompositionConfigurationDvipdfPathKey];
           [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
           retry &= !isDvipdfAvailable;
         }
@@ -1385,7 +1438,7 @@ static NSMutableArray*      unixBins = nil;
 
   if (!isXeLatexAvailable)
     [self _findXeLatexPath];
-  retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == XELATEX);
+  retry = ((composition_mode_t)[compositionModeAsNumber intValue] == COMPOSITION_MODE_XELATEX);
   while (!isXeLatexAvailable && retry)
   {
     int returnCode =
@@ -1413,7 +1466,7 @@ static NSMutableArray*      unixBins = nil;
         if ([fileManager fileExistsAtPath:filepath])
         {
           [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
-          [userDefaults setObject:filepath forKey:XeLatexPathKey];
+          [PreferencesController currentCompositionConfigurationSetObject:filepath forKey:CompositionConfigurationXeLatexPathKey];
           [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
           retry &= !isXeLatexAvailable;
         }
@@ -1423,7 +1476,7 @@ static NSMutableArray*      unixBins = nil;
 
   if (!isLatexAvailable)
     [self _findLatexPath];
-  retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == LATEXDVIPDF);
+  retry = ((composition_mode_t)[compositionModeAsNumber intValue] == COMPOSITION_MODE_LATEXDVIPDF);
   while (!isLatexAvailable && retry)
   {
     int returnCode =
@@ -1451,7 +1504,7 @@ static NSMutableArray*      unixBins = nil;
         if ([fileManager fileExistsAtPath:filepath])
         {
           [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
-          [userDefaults setObject:filepath forKey:LatexPathKey];
+          [PreferencesController currentCompositionConfigurationSetObject:filepath forKey:CompositionConfigurationLatexPathKey];
           [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
           retry &= !isLatexAvailable;
         }
@@ -1465,21 +1518,23 @@ static NSMutableArray*      unixBins = nil;
                                                    @"Without the color.sty package, you won't be able to change the font color"),
                                  @"OK", nil, nil);
   if (isGsAvailable)
-    [self _addInEnvironmentPath:[[userDefaults stringForKey:GsPathKey] stringByDeletingLastPathComponent]];
+    [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey] stringByDeletingLastPathComponent]];
   if (isPdfLatexAvailable)
-    [self _addInEnvironmentPath:[[userDefaults stringForKey:PdfLatexPathKey] stringByDeletingLastPathComponent]];
+    [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey] stringByDeletingLastPathComponent]];
   if (isPs2PdfAvailable)
-    [self _addInEnvironmentPath:[[userDefaults stringForKey:Ps2PdfPathKey] stringByDeletingLastPathComponent]];
+    [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey] stringByDeletingLastPathComponent]];
   if (isXeLatexAvailable)
-    [self _addInEnvironmentPath:[[userDefaults stringForKey:XeLatexPathKey] stringByDeletingLastPathComponent]];
+    [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey] stringByDeletingLastPathComponent]];
   if (isLatexAvailable)
-    [self _addInEnvironmentPath:[[userDefaults stringForKey:LatexPathKey] stringByDeletingLastPathComponent]];
+    [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey] stringByDeletingLastPathComponent]];
   if (isDvipdfAvailable)
-    [self _addInEnvironmentPath:[[userDefaults stringForKey:DvipdfPathKey] stringByDeletingLastPathComponent]];
+    [self _addInEnvironmentPath:[[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey] stringByDeletingLastPathComponent]];
 
   [self _setEnvironment];
 
   //sets visible controllers  
+  if ([userDefaults boolForKey:CompositionConfigurationControllerVisibleAtStartupKey])
+    [[self compositionConfigurationController] showWindow:self];
   if ([userDefaults boolForKey:EncapsulationControllerVisibleAtStartupKey])
     [[self encapsulationController] showWindow:self];
   if ([userDefaults boolForKey:HistoryControllerVisibleAtStartupKey])
@@ -1516,6 +1571,10 @@ static NSMutableArray*      unixBins = nil;
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_TEXT error:error];
+}
+-(void) serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceMultiLatexisation:pboard userData:userData error:error];
 }
 
 //performs the application service
@@ -1816,6 +1875,221 @@ static NSMutableArray*      unixBins = nil;
   }//end if latexisation can be performed
 }
 
+-(void) _serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  if (!isPdfLatexAvailable || !isGsAvailable)
+  {
+    NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration",
+                                          @"LaTeXiT cannot be run properly, please check its configuration");
+    *error = message;
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, @"OK", nil, nil);
+  }
+  else
+  {
+    @synchronized(self) //one latexisation at a time
+    {
+      NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+      BOOL useColor     = [userDefaults boolForKey:ServiceRespectsColorKey];
+      BOOL useBaseline  = [userDefaults boolForKey:ServiceRespectsBaselineKey];
+      BOOL usePointSize = [userDefaults boolForKey:ServiceRespectsPointSizeKey];
+      double defaultPointSize = [userDefaults floatForKey:DefaultPointSizeKey];
+
+      //the input must be RTF, so that we can insert images in it      
+      //in the case of RTF input, we may deduce size, color, and change baseline
+      NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
+                                                             documentAttributes:NULL] autorelease];
+      NSMutableAttributedString* mutableAttrString = [[attrString mutableCopy] autorelease];
+      
+      NSRange remainingRange = NSMakeRange(0, [mutableAttrString length]);
+      int numberOfFailures = 0;
+
+      //we must find some places where latexisations should be done. We look for "$$..$$", "\[..\]", and "$...$"
+      NSArray* delimiters =
+        [NSArray arrayWithObjects:
+          [NSArray arrayWithObjects:@"$$", @"$$"  , [NSNumber numberWithInt:LATEX_MODE_DISPLAY], nil],
+          [NSArray arrayWithObjects:@"\\[", @"\\]", [NSNumber numberWithInt:LATEX_MODE_DISPLAY], nil],
+          [NSArray arrayWithObjects:@"$", @"$"    , [NSNumber numberWithInt:LATEX_MODE_INLINE],nil],
+          nil];
+          
+      unsigned int delimiterIndex = 0;
+      for(delimiterIndex = 0 ; delimiterIndex < [delimiters count] ; ++delimiterIndex)
+      {
+        NSArray* delimiter = [delimiters objectAtIndex:delimiterIndex];
+        NSString* delimiterLeft  = [delimiter objectAtIndex:0];
+        NSString* delimiterRight = [delimiter objectAtIndex:1];
+        unsigned int delimiterLeftLength  = [delimiterLeft  length];
+        unsigned int delimiterRightLength = [delimiterRight length];
+        latex_mode_t mode = (latex_mode_t) [[delimiter objectAtIndex:2] intValue];
+      
+        BOOL finished = NO;
+        while(!finished)
+        {
+          NSString* string = [mutableAttrString string];
+          unsigned int length = [string length];
+          
+          NSRange begin = NSMakeRange(NSNotFound, 0);
+          BOOL mustFindBegin = YES;
+          while(mustFindBegin)
+          {
+            mustFindBegin = NO;
+            begin = [string rangeOfString:delimiterLeft options:0 range:remainingRange];
+            //check if it is not a previous delimiter (problem for $$ and $)
+            unsigned int index2 = 0;
+            for(index2 = 0 ; !mustFindBegin && (begin.location != NSNotFound) && (index2 < delimiterIndex) ; ++index2)
+            {
+              NSString* otherDelimiterLeft  = [[delimiters objectAtIndex:index2] objectAtIndex:0];
+              NSString* otherDelimiterRight = [[delimiters objectAtIndex:index2] objectAtIndex:1];
+              if ([string rangeOfString:otherDelimiterLeft options:0 range:remainingRange].location == begin.location)
+              {
+                mustFindBegin |= YES;
+                remainingRange.location += [otherDelimiterLeft length];
+                remainingRange.length   -= [otherDelimiterLeft length];
+              }
+              else if ([string rangeOfString:otherDelimiterRight options:0 range:remainingRange].location == begin.location)
+              {
+                mustFindBegin |= YES;
+                remainingRange.location += [otherDelimiterRight length];
+                remainingRange.length   -= [otherDelimiterRight length];
+              }
+            }
+          }//end while mustFindbegin
+
+          NSRange end = (begin.location == NSNotFound)
+                          ? begin
+                          : [string rangeOfString:delimiterRight options:0
+                                            range:NSMakeRange(begin.location+delimiterLeftLength,
+                                                              length-(begin.location+delimiterLeftLength))];
+          finished = (end.location == NSNotFound);
+          if (end.location != NSNotFound) //if we found a pair of delimiters, let's LaTeXize
+          {
+            NSRange rangeOfEquation = NSMakeRange(begin.location, end.location-begin.location+delimiterRightLength);
+            NSRange rangeOfTextOfEquation = NSMakeRange(rangeOfEquation.location+delimiterLeftLength,
+                                                        rangeOfEquation.length-delimiterLeftLength-delimiterRightLength);
+            NSDictionary* contextAttributes = [mutableAttrString attributesAtIndex:rangeOfEquation.location effectiveRange:NULL];
+            NSFont*  font  = usePointSize ? [contextAttributes objectForKey:NSFontAttributeName] : nil;
+            float pointSize = font ? [font pointSize] : defaultPointSize;
+            float magnification = pointSize;
+            NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
+            if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
+            NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
+            if (!originalBaseline) originalBaseline = [NSNumber numberWithFloat:0.0];
+            NSString* body     = [string substringWithRange:rangeOfTextOfEquation];
+            NSString* preamble = [self insertColorInPreamble:[[self preamble] string] color:color];
+
+            //calls the effective latexisation
+            NSData* pdfData = [[self _myDocumentServiceProvider] latexiseWithPreamble:preamble body:body color:color mode:mode
+                                                                        magnification:magnification];
+            //if it has worked, put back data in the attributedString. First, we get rid of the error case
+            if (!pdfData)
+            {
+              ++numberOfFailures;
+              remainingRange.location = end.location+delimiterRightLength;
+              remainingRange.length = [mutableAttrString length]-remainingRange.location;
+            }
+            else
+            {
+              //we will create the image file that will be attached to the rtfd
+              NSString* directory          = [AppController latexitTemporaryPath];
+              NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
+              NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+              export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+              NSString* extension = nil;
+              switch(exportFormat)
+              {
+                case EXPORT_FORMAT_PDF:
+                case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+                  extension = @"pdf";
+                  break;
+                case EXPORT_FORMAT_EPS:
+                  extension = @"eps";
+                  break;
+                case EXPORT_FORMAT_TIFF:
+                  extension = @"tiff";
+                  break;
+                case EXPORT_FORMAT_PNG:
+                  extension = @"png";
+                  break;
+                case EXPORT_FORMAT_JPEG:
+                  extension = @"jpeg";
+                  break;
+              }
+
+              NSColor*  color              = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
+              float     quality            = [userDefaults floatForKey:DragExportJpegQualityKey];
+              NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
+              NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
+              NSData*   attachedData       = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
+
+              //extracts the baseline of the equation, if possible
+              NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
+              NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+              NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+              if (testArray && ([testArray count] >= 2))
+              {
+                [equationBaselineAsString setString:[testArray objectAtIndex:1]];
+                NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
+                range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
+                [equationBaselineAsString deleteCharactersInRange:range];
+              }
+                
+              float newBaseline = [originalBaseline floatValue];
+              if (useBaseline)
+                newBaseline -= [equationBaselineAsString floatValue];
+
+              //creates a mutable attributed string containing the image file
+              [attachedData writeToFile:attachedFilePath atomically:NO];
+              NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
+              NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
+              NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
+              NSMutableAttributedString* mutableAttributedStringWithImage = [[attributedStringWithImage mutableCopy] autorelease];
+                  
+              //changes the baseline of the attachment to align it with the surrounding text
+              [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
+                                                       value:[NSNumber numberWithFloat:newBaseline]
+                                                       range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
+                
+              //add a space after the image, to restore the baseline of the surrounding text
+              //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
+              //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
+              //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
+              NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+              [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
+              [mutableAttributedStringWithImage appendAttributedString:space];
+
+              //inserts the image in the global string
+              [mutableAttrString replaceCharactersInRange:rangeOfEquation withAttributedString:mutableAttributedStringWithImage];
+              remainingRange = NSMakeRange(remainingRange.location, [mutableAttrString length]-remainingRange.location);
+            }//end if latexisation has worked
+          }//end if a pair of $$...$$ was found
+        }//end if finished
+      }//end for each delimiter
+      
+      if (numberOfFailures)
+      {
+        NSString* message =
+          (numberOfFailures == 1)
+            ? NSLocalizedString(@"%d equation could not be converted because of syntax errors in it. You should "
+                                @"also check if it is compatible with the default preamble in use.",
+                                @"%d equation could not be converted because of syntax errors in it. You should "
+                                @"also check if it is compatible with the default preamble in use.")
+            : NSLocalizedString(@"%d equations could not be converted because of syntax errors in them. You should "
+                                @"also check if they are compatible with the default preamble in use.",
+                                @"%d equations could not be converted because of syntax errors in them. You should "
+                                @"also check if they are compatible with the default preamble in use.");
+        message = [NSString stringWithFormat:message, numberOfFailures];
+        *error = message;
+        [NSApp activateIgnoringOtherApps:YES];
+        NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Ok", @"Ok"), nil, nil);
+      }
+      
+      //Now we must feed the pasteboard
+      NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length]) documentAttributes:nil];
+      [pboard declareTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
+      [pboard setData:rtfdData forType:NSRTFDPboardType];
+    }//end @synchronized(self)
+  }//end if latexisation can be performed
+}
+
 -(IBAction) showPreferencesPane:(id)sender
 {
   if (!preferencesController)
@@ -1921,7 +2195,7 @@ static NSMutableArray*      unixBins = nil;
         {
           NSString* systemCall =
             [NSString stringWithFormat:
-              @"%@ -sDEVICE=pswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dQUIET %@ -c quit | %@ - %@",
+              @"%@ -sDEVICE=pswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dQUIET %@ -c quit | %@ - %@ 1>/dev/null 2>/dev/null",
               gsPath, pdfFilePath, epstopdfPath, tmpPdfFilePath];
           int error = system([systemCall UTF8String]);
           if (error)
@@ -2155,6 +2429,9 @@ static NSMutableArray*      unixBins = nil;
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   BOOL visible = NO;
 
+  visible = compositionConfigurationController && [[compositionConfigurationController window] isVisible];
+  [userDefaults setBool:visible forKey:CompositionConfigurationControllerVisibleAtStartupKey];
+
   visible = encapsulationController && [[encapsulationController window] isVisible];
   [userDefaults setBool:visible forKey:EncapsulationControllerVisibleAtStartupKey];
 
@@ -2251,6 +2528,19 @@ static NSMutableArray*      unixBins = nil;
             nil];
         [services insertObject:serviceItemPlist atIndex:latex_mode];
       }//end if index<count
+      
+      //adds multi latexisation
+      NSDictionary* serviceItemPlist = ![[shortcutEnabled objectAtIndex:4] boolValue] ? [NSDictionary dictionary] :
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          [NSDictionary dictionaryWithObject:[shortcutStrings objectAtIndex:4] forKey:@"default"], @"NSKeyEquivalent",
+          [NSDictionary dictionaryWithObject:@"LaTeXiT/Detect and typeset equations" forKey:@"default"], @"NSMenuItem",
+          @"serviceMultiLatexisation", @"NSMessage",
+          @"LaTeXiT", @"NSPortName",
+          [NSArray arrayWithObject:@"NSRTFDPboardType"], @"NSReturnTypes",
+          [NSArray arrayWithObject:@"NSRTFPboardType"], @"NSSendTypes",
+          nil];
+      [services addObject:serviceItemPlist];
+      
       [infoPlist writeToURL:infoPlistURL atomically:YES];
     }//end for each latex mode
   }//end if infoPlist

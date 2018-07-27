@@ -1,6 +1,11 @@
 {
     IBClasses = (
         {
+            CLASS = CompositionConfigurationTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
             ACTIONS = {addEncapsulation = id; removeEncapsulations = id; }; 
             CLASS = EncapsulationManager; 
             LANGUAGE = ObjC; 
@@ -31,23 +36,30 @@
                 applyPreambleToOpenDocuments = id; 
                 changeAdditionalMargin = id; 
                 changeCompositionMode = id; 
+                changeCompositionSelection = id; 
                 changeDefaultGeneralConfig = id; 
                 changePath = id; 
+                changeScriptsConfiguration = id; 
                 changeServiceConfiguration = id; 
                 changeSyntaxColoringConfiguration = id; 
                 checkForUpdatesChange = id; 
                 checkNow = id; 
+                closeCompositionSelectionPanel = id; 
                 closeOptionsPane = id; 
                 dragExportJpegQualitySliderDidChange = id; 
                 dragExportPopupFormatDidChange = id; 
                 gotoPreferencePane = id; 
                 gotoWebSite = id; 
+                newCompositionConfiguration = id; 
                 newEncapsulation = id; 
                 nullAction = id; 
                 openOptionsForDragExport = id; 
+                removeSelectedCompositionConfigurations = id; 
                 removeSelectedEncapsulations = id; 
                 resetDefaultPreamble = id; 
                 selectFont = id; 
+                selectScript = id; 
+                showScriptHelp = id; 
                 toolbarHit = id; 
             }; 
             CLASS = PreferencesController; 
@@ -59,7 +71,11 @@
                 additionalTopMarginTextField = NSTextField; 
                 advancedView = NSView; 
                 checkForNewVersionsButton = NSButton; 
+                compositionConfigurationRemoveButton = NSButton; 
+                compositionConfigurationTableView = NSTableView; 
                 compositionMatrix = NSMatrix; 
+                compositionSelectionPanel = NSPanel; 
+                compositionSelectionPopUpButton = NSPopUpButton; 
                 compositionView = NSView; 
                 defaultColorColorWell = NSColorWell; 
                 defaultImageViewBackgroundColorWell = NSColorWell; 
@@ -91,6 +107,15 @@
                 preambleView = NSView; 
                 ps2pdfTextField = NSTextField; 
                 removeEncapsulationButton = NSButton; 
+                scriptsHelpPanel = NSPanel; 
+                scriptsScriptDefinitionBodyTextView = NSTextView; 
+                scriptsScriptDefinitionBox = NSBox; 
+                scriptsScriptDefinitionShellTextField = NSTextField; 
+                scriptsScriptSelectionBox = NSBox; 
+                scriptsScriptSelectionButton = NSButton; 
+                scriptsScriptSelectionTextField = NSTextField; 
+                scriptsSourceTypePopUpButton = NSPopUpButton; 
+                scriptsTableView = NSTableView; 
                 serviceRespectsBaselineButton = NSButton; 
                 serviceRespectsColorMatrix = NSMatrix; 
                 serviceRespectsPointSizeMatrix = NSMatrix; 

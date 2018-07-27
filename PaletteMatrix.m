@@ -17,6 +17,12 @@
   return YES;
 }
 
+-(void) scrollWheel:(NSEvent*)event
+{
+  [super scrollWheel:event];
+  [[[self window] windowController] mouseMoved:event];
+}
+
 -(void) mouseDown:(NSEvent*)event
 {
   [[self window] makeFirstResponder:self];

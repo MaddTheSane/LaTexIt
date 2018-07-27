@@ -11,7 +11,7 @@
 		<key>599</key>
 		<string>360 354 560 434 0 0 1280 832 </string>
 		<key>634</key>
-		<string>360 383 560 374 0 0 1280 832 </string>
+		<string>360 336 560 470 0 0 1280 832 </string>
 		<key>635</key>
 		<string>360 379 560 384 0 0 1280 832 </string>
 		<key>636</key>
@@ -92,11 +92,13 @@
 		</array>
 	</dict>
 	<key>IBLastGroupID</key>
-	<string>31</string>
+	<string>32</string>
 	<key>IBOldestOS</key>
 	<integer>3</integer>
 	<key>IBOpenObjects</key>
 	<array>
+		<integer>634</integer>
+		<integer>1127</integer>
 		<integer>635</integer>
 	</array>
 	<key>IBSystem Version</key>

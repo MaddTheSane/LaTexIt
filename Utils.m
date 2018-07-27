@@ -22,6 +22,7 @@ int indexOfLatexMode(latex_mode_t mode)
     case LATEX_MODE_DISPLAY :index=1;break;
     case LATEX_MODE_INLINE  :index=2;break;
     case LATEX_MODE_TEXT    :index=3;break;
+    default: index = mode; break;
   }
   return index;
 }
@@ -35,7 +36,7 @@ latex_mode_t latexModeForIndex(int index)
     case 1:mode = LATEX_MODE_DISPLAY ;break;
     case 2:mode = LATEX_MODE_INLINE  ;break;
     case 3:mode = LATEX_MODE_TEXT    ;break;
-    default:mode = LATEX_MODE_DISPLAY ;break;
+    default:mode = index ;break;
   }
   return mode;
 }

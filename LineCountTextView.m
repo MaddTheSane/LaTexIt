@@ -255,7 +255,12 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 {
   NSPasteboard* pboard = [sender draggingPasteboard];
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
-    [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:NSColorPboardType]]];
+  {
+    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
+    NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+    [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
+  }
   return YES;
 }
 

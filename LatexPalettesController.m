@@ -318,6 +318,7 @@
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSWindow* window = [self window];
+  [window setAcceptsMouseMovedEvents:YES];
   NSRect defaultFrame = NSRectFromString([userDefaults stringForKey:LatexPaletteFrameKey]);
   BOOL   defaultDetails = [userDefaults boolForKey:LatexPaletteDetailsStateKey];
   if (defaultDetails)
@@ -330,6 +331,24 @@
   [detailsButton setState:defaultDetails ? NSOnState : NSOffState];
   if (defaultDetails)
     [self openOrHideDetails:detailsButton];
+}
+
+-(void) mouseMoved:(NSEvent*)event
+{
+  NSClipView* clipView = (NSClipView*) [matrix superview];
+  NSPoint locationInWindow = [event locationInWindow];
+  NSPoint location = [clipView convertPoint:locationInWindow fromView:nil];
+  if (NSPointInRect(location, [clipView bounds]))
+  {
+    int row = -1;
+    int column = 0;
+    BOOL ok = [matrix getRow:&row column:&column forPoint:[matrix convertPoint:location fromView:clipView]];
+    if (ok)
+    {
+      [matrix selectCellAtRow:row column:column];
+      [self latexPalettesSelect:matrix];
+    }
+  }
 }
 
 //triggered when the user selects an element on the palette

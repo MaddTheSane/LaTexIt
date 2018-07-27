@@ -20,9 +20,10 @@
 #import <LinkBack/LinkBack.h>
 #endif
 
-//useful to differenciate the different latex modes : EQNARRA, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
+//useful to differenciate the different latex modes : EQNARRAY, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
 typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE_EQNARRAY} latex_mode_t;
 
+@class CompositionConfigurationController;
 @class EncapsulationController;
 @class HistoryController;
 @class MarginController;
@@ -45,6 +46,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
   BOOL isLatexAvailable;
   BOOL isColorStyAvailable;
 
+  CompositionConfigurationController* compositionConfigurationController;
   EncapsulationController* encapsulationController;
   HistoryController*       historyController;
   LatexPalettesController* latexPalettesController;
@@ -57,6 +59,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 +(NSDocument*)              currentDocument;
 +(NSString*)                latexitTemporaryPath;
 -(NSDocument*)              currentDocument;
+-(CompositionConfigurationController*) compositionConfigurationController;
 -(EncapsulationController*) encapsulationController;
 -(HistoryController*)       historyController;
 -(LatexPalettesController*) latexPalettesController;
@@ -94,6 +97,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 
 -(IBAction) showOrHideColorInspector:(id)sender;
 -(IBAction) showOrHidePreamble:(id)sender;
+-(IBAction) showOrHideCompositionConfiguration:(id)sender;
 -(IBAction) showOrHideEncapsulation:(id)sender;
 -(IBAction) showOrHideMargin:(id)sender;
 -(IBAction) showOrHideLatexPalettes:(id)sender;
@@ -150,6 +154,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+-(void) serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) changeServiceShortcuts;
 
 //LinkBackServerDelegateProtocol

@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {changeCompositionConfiguration = id; }; 
+            CLASS = CompositionConfigurationController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {compositionConfigurationsPopUpButton = NSPopUpButton; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

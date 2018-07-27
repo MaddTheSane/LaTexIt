@@ -277,6 +277,10 @@
 		93CD21DE0827E9230079C367 /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
 		93D4E3F109C821A700736816 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4E3EF09C821A700736816 /* Utils.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
+		93D7CB2509D36C870001DC5E /* CompositionConfigurationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CB1F09D36C870001DC5E /* CompositionConfigurationController.m */; };
+		93D7CB2809D36C870001DC5E /* CompositionConfigurationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CB2209D36C870001DC5E /* CompositionConfigurationManager.m */; };
+		93D7CB2A09D36C870001DC5E /* CompositionConfigurationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CB2409D36C870001DC5E /* CompositionConfigurationTableView.m */; };
+		93D7CB7909D36DC10001DC5E /* CompositionConfiguration.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93D7CB7609D36DC10001DC5E /* CompositionConfiguration.nib */; };
 		93E81972087969BE0081B897 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */; };
 		93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
 		93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EE114907F2F607009E1F36 /* HistoryCell.m */; };
@@ -412,7 +416,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
 		9302547F07F0BC6A00011996 /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
 		930255CD07F0C2A300011996 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -683,8 +687,8 @@
 		9344D8A0082587ED00B17B37 /* LibraryFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFolder.m; sourceTree = "<group>"; };
 		935A8349084EFF11005724CE /* NSApplicationExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSApplicationExtended.h; sourceTree = "<group>"; };
 		935A834A084EFF11005724CE /* NSApplicationExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSApplicationExtended.m; sourceTree = "<group>"; };
-		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
-		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
+		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
+		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		936A2C5B09C9A0CC00310E33 /* BorderlessPanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = BorderlessPanel.h; sourceTree = "<group>"; };
 		936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = BorderlessPanel.m; sourceTree = "<group>"; };
 		9372A1F2087819EF00A3A645 /* MarginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginController.h; sourceTree = "<group>"; };
@@ -700,9 +704,9 @@
 		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
-		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = Resources/Licence.rtf; sourceTree = "<group>"; };
-		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "Resources/Lisez-moi.rtfd"; sourceTree = "<group>"; };
-		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/Read Me.rtfd"; sourceTree = "<group>"; };
+		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = Resources/documentation/Licence.rtf; sourceTree = "<group>"; };
+		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "Resources/documentation/Lisez-moi.rtfd"; sourceTree = "<group>"; };
+		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/documentation/Read Me.rtfd"; sourceTree = "<group>"; };
 		93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93AD08B708A2D2CE0045B7F9 /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
 		93B419E4095C017D009C6A1F /* ShortcutTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ShortcutTableView.m; sourceTree = "<group>"; };
@@ -719,6 +723,14 @@
 		93D4E3F009C821A700736816 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
 		93D6BA1C082941900081D58A /* NSArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtended.m; sourceTree = "<group>"; };
+		93D7CB1F09D36C870001DC5E /* CompositionConfigurationController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = CompositionConfigurationController.m; sourceTree = "<group>"; };
+		93D7CB2009D36C870001DC5E /* CompositionConfigurationTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationTableView.h; sourceTree = "<group>"; };
+		93D7CB2109D36C870001DC5E /* CompositionConfigurationManager.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationManager.h; sourceTree = "<group>"; };
+		93D7CB2209D36C870001DC5E /* CompositionConfigurationManager.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = CompositionConfigurationManager.m; sourceTree = "<group>"; };
+		93D7CB2309D36C870001DC5E /* CompositionConfigurationController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationController.h; sourceTree = "<group>"; };
+		93D7CB2409D36C870001DC5E /* CompositionConfigurationTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = CompositionConfigurationTableView.m; sourceTree = "<group>"; };
+		93D7CB7709D36DC10001DC5E /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
+		93D7CB7809D36DC10001DC5E /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
 		93E8196F087969BE0081B897 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
 		93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSegmentedControlExtended.m; sourceTree = "<group>"; };
 		93E81A9F087978AD0081B897 /* NSFontExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFontExtended.h; sourceTree = "<group>"; };
@@ -817,6 +829,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				93D7CB1B09D36C6D0001DC5E /* CompositionConfiguration */,
 				9324D3EE08A6453D0010DB95 /* Interface */,
 				93F73E870899091300EFFA5E /* Encapsulation */,
 				93344CB708251C9000F00A49 /* CocoaExtensions */,
@@ -856,6 +869,7 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				930255CF07F0C2A800011996 /* Localizable.strings */,
 				939A64570800281900AE4486 /* ServicesMenu.strings */,
+				93D7CB7609D36DC10001DC5E /* CompositionConfiguration.nib */,
 				93F9DEAC08A2D96C005DEBF6 /* Library.nib */,
 				93F9DEAE08A2D96C005DEBF6 /* History.nib */,
 				93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */,
@@ -1331,6 +1345,19 @@
 			name = relations;
 			sourceTree = "<group>";
 		};
+		93D7CB1B09D36C6D0001DC5E /* CompositionConfiguration */ = {
+			isa = PBXGroup;
+			children = (
+				93D7CB2309D36C870001DC5E /* CompositionConfigurationController.h */,
+				93D7CB1F09D36C870001DC5E /* CompositionConfigurationController.m */,
+				93D7CB2109D36C870001DC5E /* CompositionConfigurationManager.h */,
+				93D7CB2209D36C870001DC5E /* CompositionConfigurationManager.m */,
+				93D7CB2009D36C870001DC5E /* CompositionConfigurationTableView.h */,
+				93D7CB2409D36C870001DC5E /* CompositionConfigurationTableView.m */,
+			);
+			name = CompositionConfiguration;
+			sourceTree = "<group>";
+		};
 		93EF9D1B07EF7B5C0003FA6E /* History */ = {
 			isa = PBXGroup;
 			children = (
@@ -1679,6 +1706,7 @@
 				93F0009109885B310064888E /* view-titles.tiff in Resources */,
 				93F0009309885B550064888E /* big-folder-icon.tiff in Resources */,
 				93F6D54009CE9B10002ED258 /* magnifying-glass.png in Resources */,
+				93D7CB7909D36DC10001DC5E /* CompositionConfiguration.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1756,6 +1784,9 @@
 				932BA87209615747004EECBA /* ShortcutTextView.m in Sources */,
 				93D4E3F109C821A700736816 /* Utils.m in Sources */,
 				936A2C5E09C9A0CC00310E33 /* BorderlessPanel.m in Sources */,
+				93D7CB2509D36C870001DC5E /* CompositionConfigurationController.m in Sources */,
+				93D7CB2809D36C870001DC5E /* CompositionConfigurationManager.m in Sources */,
+				93D7CB2A09D36C870001DC5E /* CompositionConfigurationTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1832,6 +1863,15 @@
 				939A64590800281C00AE4486 /* French */,
 			);
 			name = ServicesMenu.strings;
+			sourceTree = "<group>";
+		};
+		93D7CB7609D36DC10001DC5E /* CompositionConfiguration.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93D7CB7709D36DC10001DC5E /* English */,
+				93D7CB7809D36DC10001DC5E /* French */,
+			);
+			name = CompositionConfiguration.nib;
 			sourceTree = "<group>";
 		};
 		93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */ = {

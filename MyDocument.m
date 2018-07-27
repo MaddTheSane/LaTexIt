@@ -285,12 +285,13 @@ static NSString* yenString = nil;
 -(void) updateAvailabilities:(NSNotification*)notification
 {
   AppController* appController = [AppController appController];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  composition_mode_t compositionMode = (composition_mode_t) [userDefaults integerForKey:CompositionModeKey];
+  composition_mode_t compositionMode =
+    (composition_mode_t) [[PreferencesController currentCompositionConfigurationObjectForKey:
+                            CompositionConfigurationCompositionModeKey] intValue];
   BOOL makeLatexButtonEnabled =
-    (compositionMode == PDFLATEX) ? [appController isPdfLatexAvailable] && [appController isGsAvailable] :
-    (compositionMode == XELATEX)  ? [appController isPdfLatexAvailable] && [appController isXeLatexAvailable] && [appController isGsAvailable] :
-    (compositionMode == LATEXDVIPDF) ? [appController isLatexAvailable] && [appController isDvipdfAvailable] && [appController isGsAvailable] :
+    (compositionMode == COMPOSITION_MODE_PDFLATEX) ? [appController isPdfLatexAvailable] && [appController isGsAvailable] :
+    (compositionMode == COMPOSITION_MODE_XELATEX)  ? [appController isPdfLatexAvailable] && [appController isXeLatexAvailable] && [appController isGsAvailable] :
+    (compositionMode == COMPOSITION_MODE_LATEXDVIPDF) ? [appController isLatexAvailable] && [appController isDvipdfAvailable] && [appController isGsAvailable] :
     NO;    
   [makeLatexButton setEnabled:makeLatexButtonEnabled];
   [makeLatexButton setNeedsDisplay:YES];
@@ -493,8 +494,6 @@ static NSString* yenString = nil;
   NSFileManager* fileManager = [NSFileManager defaultManager];
   if ([fileManager fileExistsAtPath:pdfFilePath])
   {
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  
     NSString* directory      = [AppController latexitTemporaryPath];
 
     NSTask* boundingBoxTask  = [[NSTask alloc] init];
@@ -503,7 +502,7 @@ static NSString* yenString = nil;
     NSFileHandle* nullDevice = [NSFileHandle fileHandleWithNullDevice];
     [boundingBoxTask setCurrentDirectoryPath:directory];
     [boundingBoxTask setEnvironment:[AppController environmentDict]];
-    [boundingBoxTask setLaunchPath:[userDefaults stringForKey:GsPathKey]];
+    [boundingBoxTask setLaunchPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]];
     [boundingBoxTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE",@"-sDEVICE=bbox",@"-dBATCH",@"-q", pdfFilePath, nil]];
     [boundingBoxTask setStandardOutput:gs2awkPipe];
     [boundingBoxTask setStandardError:gs2awkPipe];
@@ -558,8 +557,6 @@ static NSString* yenString = nil;
 {
   NSData* pdfData = nil;
   
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  
   NSString* directory = [filePath stringByDeletingLastPathComponent];
   NSString* texFile   = filePath;
   NSString* dviFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"dvi"];
@@ -577,11 +574,13 @@ static NSString* yenString = nil;
 
   //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
   NSString* executablePath =
-     (compositionMode == XELATEX) ? [userDefaults stringForKey:XeLatexPathKey]
-                                  : (compositionMode == PDFLATEX) ? [userDefaults stringForKey:PdfLatexPathKey]
-                                                                  : [userDefaults stringForKey:LatexPathKey];
-  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ -file-line-error -interaction nonstopmode %@ > %@", 
-                          directory, executablePath, texFile, errFile];
+     (compositionMode == COMPOSITION_MODE_XELATEX)
+       ? [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey]
+       : (compositionMode == COMPOSITION_MODE_PDFLATEX)
+         ? [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]
+         : [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey];
+  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ -file-line-error -interaction nonstopmode %@ 1> %@ 2>%@", 
+                          directory, executablePath, texFile, errFile, errFile];
   [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @"processing"),
                                                         [executablePath lastPathComponent],
@@ -596,12 +595,12 @@ static NSString* yenString = nil;
                                [executablePath lastPathComponent]]];
 
   //if !failed and must call dvipdf...
-  if (!failed && (compositionMode == LATEXDVIPDF))
+  if (!failed && (compositionMode == COMPOSITION_MODE_LATEXDVIPDF))
   {
     NSTask* dvipdfTask = [[NSTask alloc] init];
     [dvipdfTask setCurrentDirectoryPath:directory];
     [dvipdfTask setEnvironment:[AppController environmentDict]];
-    [dvipdfTask setLaunchPath:[userDefaults stringForKey:DvipdfPathKey]];
+    [dvipdfTask setLaunchPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
     [dvipdfTask setArguments:[NSArray arrayWithObject:dviFile]];
     NSPipe* stdoutPipe2 = [NSPipe pipe];
     NSPipe* stderrPipe2 = [NSPipe pipe];
@@ -694,7 +693,9 @@ static NSString* yenString = nil;
   //All these steps need many intermediate files, so don't be surprised if you feel a little lost
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  composition_mode_t compositionMode = (composition_mode_t) [userDefaults integerForKey:CompositionModeKey];
+  composition_mode_t compositionMode =
+    (composition_mode_t) [[PreferencesController currentCompositionConfigurationObjectForKey:
+                            CompositionConfigurationCompositionModeKey] intValue];
 
   //prepare file names
   NSString* directory      = [AppController latexitTemporaryPath];
@@ -707,6 +708,8 @@ static NSString* yenString = nil;
   NSString* latexAuxFilePath      = [directory stringByAppendingPathComponent:latexAuxFile];
   NSString* pdfFile               = [NSString stringWithFormat:@"%@.pdf", filePrefix];
   NSString* pdfFilePath           = [directory stringByAppendingPathComponent:pdfFile];
+  NSString* dviFile               = [NSString stringWithFormat:@"%@.dvi", filePrefix];
+  NSString* dviFilePath           = [directory stringByAppendingPathComponent:dviFile];
   
   //the files useful for step 2 (tex file with magical boxes, pdf result, and a file summarizing the bounding box and baseline)
   NSString* latexBaselineFile        = [NSString stringWithFormat:@"%@-baseline.tex", filePrefix];
@@ -733,12 +736,13 @@ static NSString* yenString = nil;
   [fileManager removeFileAtPath:latexFilePath2           handler:nil];
   [fileManager removeFileAtPath:latexAuxFilePath2        handler:nil];
   [fileManager removeFileAtPath:pdfFilePath              handler:nil];
+  [fileManager removeFileAtPath:dviFilePath              handler:nil];
   [fileManager removeFileAtPath:pdfFilePath2             handler:nil];
   [fileManager removeFileAtPath:latexBaselineFilePath    handler:nil];
   [fileManager removeFileAtPath:latexAuxBaselineFilePath handler:nil];
   [fileManager removeFileAtPath:pdfBaselineFilePath      handler:nil];
   [fileManager removeFileAtPath:sizesFilePath            handler:nil];
-  //trash *.*pk, *.mf, *.tfm
+  //trash *.*pk, *.mf, *.tfm, *.mp, *.script
   NSArray* files = [fileManager directoryContentsAtPath:directory];
   NSEnumerator* enumerator = [files objectEnumerator];
   NSString* file = nil;
@@ -749,8 +753,9 @@ static NSString* yenString = nil;
     if ([fileManager fileExistsAtPath:file isDirectory:&isDirectory] && !isDirectory)
     {
       NSString* extension = [[file pathExtension] lowercaseString];
-      BOOL mustDelete = [extension isEqualToString:@"mf"] || [extension isEqualToString:@"tfm"] ||
-                        [extension endsWith:@"pk"];
+      BOOL mustDelete = [extension isEqualToString:@"mf"] ||  [extension isEqualToString:@"mp"] ||
+                        [extension isEqualToString:@"tfm"] || [extension endsWith:@"pk"] ||
+                        [extension isEqualToString:@"script"];
       if (mustDelete)
         [fileManager removeFileAtPath:file handler:NULL];
     }
@@ -767,6 +772,25 @@ static NSString* yenString = nil;
   NSString* colouredPreamble = [[AppController appController] insertColorInPreamble:preamble color:color];
   
   NSMutableString* fullLog = [NSMutableString string];
+  
+  
+  //PREPROCESSING
+   NSDictionary* environment =
+    [NSDictionary dictionaryWithObjectsAndKeys:latexFilePath, @"INPUTTEXFILE",
+                                                pdfFilePath2, @"OUTPUTPDFFILE",
+                                                (compositionMode == COMPOSITION_MODE_LATEXDVIPDF)
+                                                  ? dviFilePath : nil, @"OUTPUTDVIFILE",
+                                                nil];
+  NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+  NSDictionary* compositionConfiguration = [compositionConfigurations objectAtIndex:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+  NSDictionary* additionalProcessingScripts = [compositionConfiguration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+  NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_PREPROCESSING]];
+  if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
+  {
+    [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing", @"Pre-processing")];
+    [self executeScript:script setEnvironment:environment logString:fullLog];
+    [logTextView setString:fullLog];
+  }
 
   //STEP 1
   //first, creates simple latex source text to compile and report errors (if there are any)
@@ -783,7 +807,8 @@ static NSString* yenString = nil;
        "%@%@%@%@"\
        "\\end{document}",
        [self _replaceYenSymbol:colouredPreamble], addSymbolLeft,
-       ([userDefaults integerForKey:CompositionModeKey] == XELATEX) ? colorString : @"",
+       ([[PreferencesController currentCompositionConfigurationObjectForKey:
+            CompositionConfigurationCompositionModeKey] intValue] == COMPOSITION_MODE_XELATEX) ? colorString : @"",
        [self _replaceYenSymbol:body], addSymbolRight];
 
   //creates the corresponding latex file
@@ -799,11 +824,27 @@ static NSString* yenString = nil;
 
   NSArray* errors = [self _filterLatexErrors:[stdoutLog stringByAppendingString:stderrLog]];
   [self _analyzeErrors:errors];
+  failed |= errors && [errors count];
   //STEP 1 is over. If it has failed, it is the fault of the user, and syntax errors will be reported
-  
+
+  //Middle-Processing
+  if (!failed)
+  {
+    NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+    NSDictionary* compositionConfiguration = [compositionConfigurations objectAtIndex:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+    NSDictionary* additionalProcessingScripts = [compositionConfiguration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+    NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_MIDDLEPROCESSING]];
+    if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
+    {
+      [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Middle-processing", @"Middle-processing")];
+      [self executeScript:script setEnvironment:environment logString:fullLog];
+      [logTextView setString:fullLog];
+    }
+  }
+
   //STEP 2
   BOOL shouldTryStep2 = (latexMode != LATEX_MODE_TEXT) && (latexMode != LATEX_MODE_EQNARRAY) &&
-                        (compositionMode != LATEXDVIPDF) && (compositionMode != XELATEX);
+                        (compositionMode != COMPOSITION_MODE_LATEXDVIPDF) && (compositionMode != COMPOSITION_MODE_XELATEX);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
   if (!failed)
   {
@@ -918,7 +959,7 @@ static NSString* yenString = nil;
       NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexFilePath2 atomically:NO];
       if (!failed)
-        pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:PDFLATEX];
+        pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:COMPOSITION_MODE_PDFLATEX];
       failed |= !pdfData;
     }//end STEP 3
     
@@ -941,6 +982,21 @@ static NSString* yenString = nil;
     }
     #endif
 
+    if (pdfData)
+    {
+      //POSTPROCESSING
+      NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+      NSDictionary* compositionConfiguration = [compositionConfigurations objectAtIndex:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+      NSDictionary* additionalProcessingScripts = [compositionConfiguration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+      NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_POSTPROCESSING]];
+      if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
+      {
+        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Post-processing", @"Post-processing")];
+        [self executeScript:script setEnvironment:environment logString:fullLog];
+        [logTextView setString:fullLog];
+      }
+    }
+
     //adds some meta-data to be compatible with Latex Equation Editor
     if (pdfData)
       pdfData = [[AppController appController]
@@ -949,6 +1005,7 @@ static NSString* yenString = nil;
                              backgroundColor:[imageView backgroundColor]];
 
     [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
+    
   }//end if latex source could be compiled
   
   //returns the cropped/magnified/coloured image if possible; nil if it has failed. 
@@ -1336,6 +1393,65 @@ static NSString* yenString = nil;
     [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDates] forKey:LastEasterEggsDatesKey];
   }
   return easterEggImage;
+}
+
+-(void) executeScript:(NSDictionary*)script setEnvironment:(NSDictionary*)environment logString:(NSMutableString*)logString
+{
+  if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
+  {
+    NSString* directory       = [AppController latexitTemporaryPath];
+    NSString* filePrefix      = [NSString stringWithFormat:@"latexit-%u", uniqueId]; //file name, related to the current document
+    NSString* latexScript     = [NSString stringWithFormat:@"%@.script", filePrefix];
+    NSString* latexScriptPath = [directory stringByAppendingPathComponent:latexScript];
+    NSString* logScript       = [NSString stringWithFormat:@"%@.script.log", filePrefix];
+    NSString* logScriptPath   = [directory stringByAppendingPathComponent:logScript];
+
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    [fileManager removeFileAtPath:latexScriptPath handler:NULL];
+    [fileManager removeFileAtPath:logScriptPath   handler:NULL];
+    
+    NSString* scriptBody = nil;
+
+    NSNumber* scriptType = [script objectForKey:ScriptSourceTypeKey];
+    script_source_t source = scriptType ? [scriptType intValue] : SCRIPT_SOURCE_STRING;
+
+    switch(source)
+    {
+      case SCRIPT_SOURCE_STRING: scriptBody = [script objectForKey:ScriptBodyKey];break;
+      case SCRIPT_SOURCE_FILE: scriptBody = [NSString stringWithContentsOfFile:[script objectForKey:ScriptFileKey]]; break;
+    }
+    
+    NSData* scriptData = [scriptBody dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    [scriptData writeToFile:latexScriptPath atomically:NO];
+
+    NSMutableDictionary* fileAttributes =
+      [NSMutableDictionary dictionaryWithDictionary:[fileManager fileSystemAttributesAtPath:latexScriptPath]];
+    NSNumber* posixPermissions = [fileAttributes objectForKey:NSFilePosixPermissions];
+    posixPermissions = [NSNumber numberWithUnsignedLong:[posixPermissions unsignedLongValue] | 0700];//add rwx flag
+    [fileAttributes setObject:posixPermissions forKey:NSFilePosixPermissions];
+    [fileManager changeFileAttributes:fileAttributes atPath:latexScriptPath];
+    
+    NSMutableString* systemCommand = [NSMutableString string];
+    NSEnumerator* environmentEnumerator = [environment keyEnumerator];
+    NSString* variable = nil;
+    [systemCommand appendFormat:@"cd %@;", directory];
+    while((variable = [environmentEnumerator nextObject]))
+      [systemCommand appendFormat:@"export %@=\"%@\";", variable, [environment objectForKey:variable]];
+
+    NSString* scriptShell = nil;
+    switch(source)
+    {
+      case SCRIPT_SOURCE_STRING: scriptShell = [script objectForKey:ScriptShellKey]; break;
+      case SCRIPT_SOURCE_FILE: scriptShell = @"/bin/sh"; break;
+    }
+    
+    [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
+    [systemCommand appendFormat:@"%@ -c %@ 1> %@ 2> %@", scriptShell, latexScriptPath, logScriptPath, logScriptPath];
+    [logString appendFormat:@"%@\n", systemCommand];
+    system([systemCommand UTF8String]);
+    [logString appendFormat:@"%@\n",[NSString stringWithContentsOfFile:logScriptPath]];
+    [logString appendString:@"----------------------------------------------------\n\n"];
+  }//end if (source != SCRIPT_SOURCE_NONE)
 }
 
 -(IBAction) nullAction:(id)sender

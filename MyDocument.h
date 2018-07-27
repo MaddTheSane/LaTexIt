@@ -89,6 +89,7 @@
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
 -(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode
                   magnification:(double)magnification;
+-(void) executeScript:(NSDictionary*)script setEnvironment:(NSDictionary*)environment logString:(NSMutableString*)logString;
 
 //updates interface according to whether the latexisation is possible or not
 -(void) updateAvailabilities:(NSNotification*)notification;

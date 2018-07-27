@@ -55,7 +55,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.7.1 (Panther version)</string>
+	<string>1.8.1 (Tiger version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -180,6 +180,30 @@
 				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
 				<string>NSPDFPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+			</dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>LaTeXiT/Multi-Latexisations on a text</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>serviceMultiLatexisation</string>
+			<key>NSPortName</key>
+			<string>LaTeXiT</string>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSRTFDPboardType</string>
+			</array>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSRTFPboardType</string>
 			</array>
 		</dict>
 	</array>

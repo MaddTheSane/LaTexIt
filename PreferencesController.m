@@ -9,6 +9,7 @@
 #import "PreferencesController.h"
 
 #import "AppController.h"
+#import "CompositionConfigurationManager.h"
 #import "EncapsulationManager.h"
 #import "EncapsulationTableView.h"
 #import "NSColorExtended.h"
@@ -49,13 +50,6 @@ NSString* SyntaxColoringCommentColorKey        = @"LaTeXiT_SyntaxColoringComment
 
 NSString* DefaultPreambleAttributedKey = @"LaTeXiT_DefaultPreambleAttributedKey";
 NSString* DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
-NSString* CompositionModeKey           = @"LaTeXiT_CompositionModeKey";
-NSString* PdfLatexPathKey              = @"LaTeXiT_PdfLatexPathKey";
-NSString* Ps2PdfPathKey                = @"LaTeXiT_Ps2PdfPathKey";
-NSString* XeLatexPathKey               = @"LaTeXiT_XeLatexPathKey";
-NSString* LatexPathKey                 = @"LaTeXiT_LatexPathKey";
-NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
-NSString* GsPathKey                    = @"LaTeXiT_GsPathKey";
 
 NSString* ServiceShortcutEnabledKey    = @"LaTeXiT_ServiceShortcutEnabledKey";
 NSString* ServiceShortcutStringsKey    = @"LaTeXiT_ServiceShortcutStringsKey";
@@ -69,8 +63,34 @@ NSString* AdditionalRightMarginKey     = @"LaTeXiT_AdditionalRightMarginKey";
 NSString* AdditionalBottomMarginKey    = @"LaTeXiT_AdditionalBottomMarginKey";
 NSString* EncapsulationsKey            = @"LaTeXiT_EncapsulationsKey";
 NSString* CurrentEncapsulationIndexKey = @"LaTeXiT_CurrentEncapsulationIndexKey";
+
+NSString* CurrentCompositionConfigurationIndexKey    = @"LaTeXiT_CurrentCompositionConfigurationIndexKey";
+NSString* CompositionConfigurationsKey               = @"LaTeXiT_CompositionConfigurationsKey";
+NSString* CompositionConfigurationNameKey            = @"LaTeXiT_CompositionConfigurationNameKey";
+NSString* CompositionConfigurationIsDefaultKey       = @"LaTeXiT_CompositionConfigurationIsDefaultKey";
+NSString* CompositionConfigurationCompositionModeKey = @"LaTeXiT_CompositionConfigurationCompositionModeKey";
+NSString* CompositionConfigurationPdfLatexPathKey    = @"LaTeXiT_CompositionConfigurationPdfLatexPathKey";
+NSString* CompositionConfigurationPs2PdfPathKey      = @"LaTeXiT_CompositionConfigurationPs2PdfPathKey";
+NSString* CompositionConfigurationXeLatexPathKey     = @"LaTeXiT_CompositionConfigurationXeLatexPathKey";
+NSString* CompositionConfigurationLatexPathKey       = @"LaTeXiT_CompositionConfigurationLatexPathKey";
+NSString* CompositionConfigurationDvipdfPathKey      = @"LaTeXiT_CompositionConfigurationDvipdfPathKey";
+NSString* CompositionConfigurationGsPathKey          = @"LaTeXiT_CompositionConfigurationGsPathKey";
+
+/*-----------------------------*/
+/* deprecated in LateXiT 1.8.0 */
+static NSString* CompositionModeKey           = @"LaTeXiT_CompositionModeKey";
+static NSString* PdfLatexPathKey              = @"LaTeXiT_PdfLatexPathKey";
+static NSString* Ps2PdfPathKey                = @"LaTeXiT_Ps2PdfPathKey";
+static NSString* XeLatexPathKey               = @"LaTeXiT_XeLatexPathKey";
+static NSString* LatexPathKey                 = @"LaTeXiT_LatexPathKey";
+static NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
+static NSString* GsPathKey                    = @"LaTeXiT_GsPathKey";
+/*-----------------------------*/
+
+NSString* CompositionConfigurationAdditionalProcessingScriptsKey = @"LaTeXiT_CompositionConfigurationAdditionalProcessingScriptsKey";
 NSString* LastEasterEggsDatesKey       = @"LaTeXiT_LastEasterEggsDatesKey";
 
+NSString* CompositionConfigurationControllerVisibleAtStartupKey = @"CompositionConfigurationControllerVisibleAtStartupKey";
 NSString* EncapsulationControllerVisibleAtStartupKey = @"EncapsulationControllerVisibleAtStartupKey";
 NSString* HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibleAtStartupKey";
 NSString* LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartupKey";
@@ -86,17 +106,71 @@ NSString* LatexPaletteGroupKey        = @"LaTeXiT_LatexPaletteGroupKey";
 NSString* LatexPaletteFrameKey        = @"LaTeXiT_LatexPaletteFrameKey";
 NSString* LatexPaletteDetailsStateKey = @"LaTeXiT_LatexPaletteDetailsStateKey";
 
+NSString* ScriptEnabledKey               = @"LaTeXiT_ScriptEnabledKey";
+NSString* ScriptSourceTypeKey            = @"LaTeXiT_ScriptSourceTypeKey";
+NSString* ScriptShellKey                 = @"LaTeXiT_ScriptShellKey";
+NSString* ScriptBodyKey                  = @"LaTeXiT_ScriptBodyKey";
+NSString* ScriptFileKey                  = @"LaTeXiT_ScriptFileKey";
+
 NSString* SomePathDidChangeNotification        = @"SomePathDidChangeNotification"; //changing the path to an executable (like pdflatex)
 NSString* CompositionModeDidChangeNotification = @"CompositionModeDidChangeNotification";
+NSString* CurrentCompositionConfigurationDidChangeNotification = @"CurrentCompositionConfigurationDidChangeNotification";
 
 @interface PreferencesController (PrivateAPI)
 -(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
 -(void) _updateButtonStates:(NSNotification*)notification;
+-(void) tableViewSelectionDidChange:(NSNotification*)notification;
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode  contextInfo:(void*)contextInfo;
 @end
 
 @implementation PreferencesController
 
 static NSAttributedString* factoryDefaultPreamble = nil;
+static PreferencesController* sharedController = nil;
+
++(PreferencesController*) sharedController
+{
+  return sharedController;
+}
+
++(NSDictionary*) defaultAdditionalScript
+{
+  return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], ScriptEnabledKey,
+                                               [NSNumber numberWithInt:SCRIPT_SOURCE_STRING], ScriptSourceTypeKey,
+                                               @"/bin/sh", ScriptShellKey,
+                                               @"", ScriptBodyKey,
+                                               @"", ScriptFileKey,
+                                               nil];
+}
+
++(NSDictionary*) defaultAdditionalScripts
+{
+  NSDictionary* noScript = [self defaultAdditionalScript];
+  return [NSDictionary dictionaryWithObjectsAndKeys:noScript, [NSString stringWithFormat:@"%d",SCRIPT_PLACE_PREPROCESSING],
+                                                    noScript, [NSString stringWithFormat:@"%d",SCRIPT_PLACE_MIDDLEPROCESSING],
+                                                    noScript, [NSString stringWithFormat:@"%d",SCRIPT_PLACE_POSTPROCESSING],
+                                                    nil];
+}
+
++(id) currentCompositionConfigurationObjectForKey:(id)key
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  int compositionConfigurationIndex = [userDefaults integerForKey:CurrentCompositionConfigurationIndexKey];
+  NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+  NSDictionary* configuration = [compositionConfigurations objectAtIndex:compositionConfigurationIndex];
+  return [configuration objectForKey:key];
+}
+
++(void) currentCompositionConfigurationSetObject:(id)object forKey:(id)key
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  int compositionConfigurationIndex = [userDefaults integerForKey:CurrentCompositionConfigurationIndexKey];
+  NSMutableArray* compositionConfigurations = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:CompositionConfigurationsKey]];
+  NSMutableDictionary* compositionConfiguration = [NSMutableDictionary dictionaryWithDictionary:[compositionConfigurations objectAtIndex:compositionConfigurationIndex]];
+  [compositionConfiguration setObject:object forKey:key];
+  [compositionConfigurations replaceObjectAtIndex:compositionConfigurationIndex withObject:compositionConfiguration];
+  [userDefaults setObject:compositionConfigurations forKey:CompositionConfigurationsKey];
+}
 
 +(void) initialize
 {
@@ -124,6 +198,23 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [factoryDefaultPreamble RTFFromRange:NSMakeRange(0, [factoryDefaultPreamble length]) documentAttributes:nil];
 
   NSNumber* numberYes = [NSNumber numberWithBool:YES];
+
+  NSMutableDictionary* additionalProcessingScripts = [NSMutableDictionary dictionaryWithDictionary:[self defaultAdditionalScripts]];
+                                                      
+  NSDictionary* defaultCompositionConfiguration =
+    [NSDictionary dictionaryWithObjectsAndKeys:
+       NSLocalizedString(@"default", @"default"), CompositionConfigurationNameKey,
+       [NSNumber numberWithBool:YES], CompositionConfigurationIsDefaultKey,
+       [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
+       @"", CompositionConfigurationPdfLatexPathKey,
+       @"", CompositionConfigurationXeLatexPathKey,
+       @"", CompositionConfigurationLatexPathKey,
+       @"", CompositionConfigurationDvipdfPathKey,
+       @"", CompositionConfigurationGsPathKey,
+       @"", CompositionConfigurationPs2PdfPathKey,
+       additionalProcessingScripts, CompositionConfigurationAdditionalProcessingScriptsKey,
+       nil];
+
   NSDictionary* defaults =
     [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:EXPORT_FORMAT_PDF], DragExportTypeKey,
                                                [[NSColor whiteColor] data],      DragExportJpegColorKey,
@@ -132,13 +223,6 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [[NSColor  blackColor]   data],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
                                                [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], DefaultModeKey,
-                                               [NSNumber numberWithInt:0], CompositionModeKey,
-                                               @"", PdfLatexPathKey,
-                                               @"", XeLatexPathKey,
-                                               @"", LatexPathKey,
-                                               @"", DvipdfPathKey,
-                                               @"", GsPathKey,
-                                               @"", Ps2PdfPathKey,
                                                [NSNumber numberWithBool:YES], SyntaxColoringEnableKey,
                                                [[NSColor blackColor]   data], SyntaxColoringTextForegroundColorKey,
                                                [[NSColor whiteColor]   data], SyntaxColoringTextBackgroundColorKey,
@@ -148,8 +232,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] data], SyntaxColoringCommentColorKey,
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
                                                defaultFontAsData, DefaultFontKey,
-                                               [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
-                                               [NSArray arrayWithObjects:@"", @"", @"", @"", nil], ServiceShortcutStringsKey,
+                                               [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
+                                               [NSArray arrayWithObjects:@"", @"", @"", @"", @"", nil], ServiceShortcutStringsKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
@@ -162,7 +246,10 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                                          @"\\[#\\]", @"\\begin{equation}#\\label{@}\\end{equation}",
                                                                          nil], EncapsulationsKey,
                                                [NSNumber numberWithUnsignedInt:0], CurrentEncapsulationIndexKey,
+                                               [NSArray arrayWithObject:defaultCompositionConfiguration], CompositionConfigurationsKey,
+                                               [NSNumber numberWithUnsignedInt:0], CurrentCompositionConfigurationIndexKey,
                                                [NSNumber numberWithBool:YES], CheckForNewVersionsKey,
+                                               [NSNumber numberWithBool:NO], CompositionConfigurationControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], EncapsulationControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], HistoryControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], LatexPalettesControllerVisibleAtStartupKey,
@@ -198,21 +285,74 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [userDefaults setObject:exportFormat forKey:DragExportTypeKey];
   }
   
-  //from version >= 1.7.0, one service has been added
+  //from version >= 1.7.0, one service has been added at the beginning
+  //from version >= 1.8.1, one service has been added at the end
   NSMutableArray* serviceShortcutStrings = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:ServiceShortcutStringsKey]];
-  if ([serviceShortcutStrings count] < 4)
+  while ([serviceShortcutStrings count] < 4)
     [serviceShortcutStrings insertObject:@"" atIndex:0];
+  while ([serviceShortcutStrings count] < 5)
+    [serviceShortcutStrings addObject:@""];
   [userDefaults setObject:serviceShortcutStrings forKey:ServiceShortcutStringsKey];
   NSMutableArray* serviceShortcutEnabled = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:ServiceShortcutEnabledKey]];
-  if ([serviceShortcutEnabled count] < 4)
+  while ([serviceShortcutEnabled count] < 4)
     [serviceShortcutEnabled insertObject:numberYes atIndex:0];
+  while ([serviceShortcutEnabled count] < 5)
+    [serviceShortcutEnabled addObject:numberYes];
   [userDefaults setObject:serviceShortcutEnabled forKey:ServiceShortcutEnabledKey];
+  
+  //ensure at least one default config
+  NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+  int      currentCompositionConfigurationIndex = [userDefaults integerForKey:CurrentCompositionConfigurationIndexKey];
+  if (![compositionConfigurations count])
+    compositionConfigurations = [NSArray arrayWithObject:defaultCompositionConfiguration];
+  currentCompositionConfigurationIndex = MIN((int)[compositionConfigurations count]-1, currentCompositionConfigurationIndex);
+  [userDefaults setObject:compositionConfigurations forKey:CompositionConfigurationsKey];
+  [userDefaults setInteger:currentCompositionConfigurationIndex forKey:CurrentCompositionConfigurationIndexKey];
+  
+  //from version >= 1.8.0, the initial composition configuration is deported into the default config
+  id object = nil;
+  if ((object = [userDefaults objectForKey:CompositionModeKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationCompositionModeKey];
+    [userDefaults removeObjectForKey:CompositionModeKey];
+  }
+  if ((object = [userDefaults objectForKey:PdfLatexPathKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationPdfLatexPathKey];
+    [userDefaults removeObjectForKey:PdfLatexPathKey];
+  }
+  if ((object = [userDefaults objectForKey:XeLatexPathKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationXeLatexPathKey];
+    [userDefaults removeObjectForKey:XeLatexPathKey];
+  }
+  if ((object = [userDefaults objectForKey:LatexPathKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationLatexPathKey];
+    [userDefaults removeObjectForKey:LatexPathKey];
+  }
+  if ((object = [userDefaults objectForKey:DvipdfPathKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationDvipdfPathKey];
+    [userDefaults removeObjectForKey:DvipdfPathKey];
+  }
+  if ((object = [userDefaults objectForKey:GsPathKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationGsPathKey];
+    [userDefaults removeObjectForKey:GsPathKey];
+  }
+  if ((object = [userDefaults objectForKey:Ps2PdfPathKey]))
+  {
+    [self currentCompositionConfigurationSetObject:object forKey:CompositionConfigurationPs2PdfPathKey];
+    [userDefaults removeObjectForKey:Ps2PdfPathKey];
+  }
 }
 
 -(id) init
 {
   if (![super initWithWindowNibName:@"Preferences"])
     return nil;
+  sharedController = self;
   toolbarItems = [[NSMutableDictionary alloc] init];
   warningImage = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"warning"]];
   shortcutTextView = [[ShortcutTextView alloc] initWithFrame:NSMakeRect(0,0,10,10)];
@@ -406,22 +546,19 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
   [self changeFont:self];//updates font textfield
   
-  [compositionMatrix selectCellWithTag:[userDefaults integerForKey:CompositionModeKey]];
-  
-  [pdfLatexTextField        setStringValue:[userDefaults stringForKey:PdfLatexPathKey]];
   [pdfLatexTextField        setDelegate:self];
-  [xeLatexTextField         setStringValue:[userDefaults stringForKey:XeLatexPathKey]];
   [xeLatexTextField         setDelegate:self];
-  [latexTextField           setStringValue:[userDefaults stringForKey:LatexPathKey]];
   [latexTextField           setDelegate:self];
-  [dvipdfTextField          setStringValue:[userDefaults stringForKey:DvipdfPathKey]];
   [dvipdfTextField          setDelegate:self];
-  [gsTextField              setStringValue:[userDefaults stringForKey:GsPathKey]];
   [gsTextField              setDelegate:self];
-  [ps2pdfTextField          setStringValue:[userDefaults stringForKey:Ps2PdfPathKey]];
   [ps2pdfTextField          setDelegate:self];
-  [self changeCompositionMode:compositionMatrix];//to update enable state of the buttons just above (here in the code)
-  
+
+  [scriptsScriptSelectionTextField       setDelegate:self];
+  [scriptsScriptDefinitionShellTextField setDelegate:self];
+  [scriptsScriptDefinitionBodyTextView   setDelegate:self];
+  [scriptsScriptDefinitionBodyTextView   setFont:[NSFont fontWithName:@"Monaco" size:12.]];
+  [self changeScriptsConfiguration:nil];
+
   [serviceRespectsPointSizeMatrix selectCellWithTag:([userDefaults boolForKey:ServiceRespectsPointSizeKey] ? 1 : 0)];
   [serviceRespectsColorMatrix     selectCellWithTag:([userDefaults boolForKey:ServiceRespectsColorKey]     ? 1 : 0)];
   [serviceRespectsBaselineButton  setState:([userDefaults boolForKey:ServiceRespectsBaselineKey]  ? NSOnState : NSOffState)];
@@ -441,16 +578,25 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [checkForNewVersionsButton setState:([userDefaults boolForKey:CheckForNewVersionsKey] ? NSOnState : NSOffState)];
   
   [self controlTextDidEndEditing:nil];
+  [self _updateButtonStates:nil];
     
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self selector:@selector(textDidChange:)
                              name:NSTextDidChangeNotification object:preambleTextView];
   [notificationCenter addObserver:self selector:@selector(textDidChange:)
                              name:FontDidChangeNotification object:preambleTextView];
+  [notificationCenter addObserver:self selector:@selector(tableViewSelectionDidChange:)
+                             name:NSTableViewSelectionDidChangeNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_userDefaultsDidChangeNotification:)
                              name:NSUserDefaultsDidChangeNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
                              name:NSTableViewSelectionDidChangeNotification object:encapsulationTableView];
+  [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
+                             name:NSTableViewSelectionDidChangeNotification object:compositionConfigurationTableView];
+  [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
+                             name:CompositionConfigurationsDidChangeNotification object:nil];
+  [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
+                             name:CurrentCompositionConfigurationDidChangeNotification object:nil];
 }
 
 -(void) windowWillClose:(NSNotification *)aNotification
@@ -537,11 +683,15 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 //updates the user defaults as the user is typing. Not very efficient, but textDidEndEditing was not working properly
 -(void)textDidChange:(NSNotification *)aNotification
 {
-  //only seen for object preambleTextView
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSAttributedString* attributedString = [preambleTextView textStorage];
-  [userDefaults setObject:[attributedString RTFFromRange:NSMakeRange(0, [attributedString length]) documentAttributes:nil]
-                   forKey:DefaultPreambleAttributedKey];
+  if ([aNotification object] == preambleTextView)
+  {
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSAttributedString* attributedString = [preambleTextView textStorage];
+    [userDefaults setObject:[attributedString RTFFromRange:NSMakeRange(0, [attributedString length]) documentAttributes:nil]
+                     forKey:DefaultPreambleAttributedKey];
+  }
+  else if ([aNotification object] == scriptsScriptDefinitionBodyTextView)
+    [self changeScriptsConfiguration:scriptsScriptDefinitionBodyTextView];
 }
 
 -(IBAction) changeSyntaxColoringConfiguration:(id)sender
@@ -653,20 +803,20 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(IBAction) changeCompositionMode:(id)sender
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   if (sender == compositionMatrix)
   {
     composition_mode_t mode = (composition_mode_t) [[sender selectedCell] tag];
-    [pdfLatexTextField setEnabled:(mode == PDFLATEX)];
-    [pdfLatexButton    setEnabled:(mode == PDFLATEX)];
-    [xeLatexTextField  setEnabled:(mode == XELATEX)];
-    [xeLatexButton     setEnabled:(mode == XELATEX)];
-    [latexTextField    setEnabled:(mode == LATEXDVIPDF)];
-    [latexButton       setEnabled:(mode == LATEXDVIPDF)];
-    [dvipdfTextField   setEnabled:(mode == LATEXDVIPDF)];
-    [dvipdfButton      setEnabled:(mode == LATEXDVIPDF)];
+    [pdfLatexTextField setEnabled:(mode == COMPOSITION_MODE_PDFLATEX)];
+    [pdfLatexButton    setEnabled:(mode == COMPOSITION_MODE_PDFLATEX)];
+    [xeLatexTextField  setEnabled:(mode == COMPOSITION_MODE_XELATEX)];
+    [xeLatexButton     setEnabled:(mode == COMPOSITION_MODE_XELATEX)];
+    [latexTextField    setEnabled:(mode == COMPOSITION_MODE_LATEXDVIPDF)];
+    [latexButton       setEnabled:(mode == COMPOSITION_MODE_LATEXDVIPDF)];
+    [dvipdfTextField   setEnabled:(mode == COMPOSITION_MODE_LATEXDVIPDF)];
+    [dvipdfButton      setEnabled:(mode == COMPOSITION_MODE_LATEXDVIPDF)];
     [self controlTextDidEndEditing:nil];
-    [userDefaults setInteger:(int)mode forKey:CompositionModeKey];
+    [PreferencesController currentCompositionConfigurationSetObject:[NSNumber numberWithInt:mode]
+                                                             forKey:CompositionConfigurationCompositionModeKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:CompositionModeDidChangeNotification object:self];
   }
 }
@@ -733,10 +883,12 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSTextField* textField = [aNotification object];
+  void* userInfo = [aNotification userInfo];
   BOOL isDirectory = NO;
 
   NSArray* pathTextFields =
-    [NSArray arrayWithObjects:pdfLatexTextField, xeLatexTextField, latexTextField, dvipdfTextField, gsTextField, ps2pdfTextField, nil];
+    [NSArray arrayWithObjects:pdfLatexTextField, xeLatexTextField, latexTextField, dvipdfTextField, gsTextField, ps2pdfTextField,
+                              scriptsScriptSelectionTextField, nil];
 
   //if it is a path textfield, color in red in case of invalid file
   if (!textField)//check all
@@ -761,7 +913,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     if (didChangePdfLatexTextField)
     {
-      [userDefaults setObject:[textField stringValue] forKey:PdfLatexPathKey];
+      [PreferencesController currentCompositionConfigurationSetObject:[textField stringValue]
+                                                               forKey:CompositionConfigurationPdfLatexPathKey];
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
     }
     didChangePdfLatexTextField = NO;
@@ -770,7 +923,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     if (didChangeXeLatexTextField)
     {
-      [userDefaults setObject:[textField stringValue] forKey:XeLatexPathKey];
+      [PreferencesController currentCompositionConfigurationSetObject:[textField stringValue]
+                                                               forKey:CompositionConfigurationXeLatexPathKey];
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
     }
     didChangeXeLatexTextField = NO;
@@ -779,7 +933,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     if (didChangeLatexTextField)
     {
-      [userDefaults setObject:[textField stringValue] forKey:LatexPathKey];
+      [PreferencesController currentCompositionConfigurationSetObject:[textField stringValue]
+                                                               forKey:CompositionConfigurationLatexPathKey];
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
     }
     didChangeLatexTextField = NO;
@@ -788,7 +943,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     if (didChangeDvipdfTextField)
     {
-      [userDefaults setObject:[textField stringValue] forKey:DvipdfPathKey];
+      [PreferencesController currentCompositionConfigurationSetObject:[textField stringValue]
+                                                               forKey:CompositionConfigurationDvipdfPathKey];
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
     }
     didChangeDvipdfTextField = NO;
@@ -797,7 +953,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     if (didChangeGsTextField)
     {
-      [userDefaults setObject:[textField stringValue] forKey:GsPathKey];
+      [PreferencesController currentCompositionConfigurationSetObject:[textField stringValue]
+                                                               forKey:CompositionConfigurationGsPathKey];
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
       
       //export to EPS needs ghostscript to be available
@@ -822,7 +979,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     if (didChangePs2PdfTextField)
     {
-      [userDefaults setObject:[textField stringValue] forKey:Ps2PdfPathKey];
+      [PreferencesController currentCompositionConfigurationSetObject:[textField stringValue]
+                                                               forKey:CompositionConfigurationPs2PdfPathKey];
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
       
       //export to PDF_NO_EMBEDDED_FONTS needs ps2Pdf to be available
@@ -845,6 +1003,10 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [userDefaults setFloat:[additionalRightMarginTextField floatValue] forKey:AdditionalRightMarginKey];
   else if (textField == additionalBottomMarginTextField)
     [userDefaults setFloat:[additionalBottomMarginTextField floatValue] forKey:AdditionalBottomMarginKey];
+  else if ((textField == scriptsScriptSelectionTextField) && !(userInfo == self))
+    [self changeScriptsConfiguration:scriptsScriptSelectionTextField];
+  else if ((textField == scriptsScriptDefinitionShellTextField) && !(userInfo == self))
+    [self changeScriptsConfiguration:scriptsScriptDefinitionShellTextField];
 }
 
 -(IBAction) changeServiceConfiguration:(id)sender
@@ -904,6 +1066,18 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [[EncapsulationManager sharedManager] removeEncapsulationIndexes:[encapsulationTableView selectedRowIndexes]];
 }
 
+-(IBAction) newCompositionConfiguration:(id)sender
+{
+  [[CompositionConfigurationManager sharedManager] newCompositionConfiguration];
+  [compositionConfigurationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[compositionConfigurationTableView numberOfRows]-1]
+                      byExtendingSelection:NO];
+}
+
+-(IBAction) removeSelectedCompositionConfigurations:(id)sender
+{
+  [[CompositionConfigurationManager sharedManager] removeCompositionConfigurationIndexes:[compositionConfigurationTableView selectedRowIndexes]];
+}
+
 -(IBAction) checkForUpdatesChange:(id)sender
 {
   [[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:CheckForNewVersionsKey];
@@ -937,8 +1111,55 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(void) _updateButtonStates:(NSNotification*)notification
 {
-  //only registered for encapsulationTableView
-  [removeEncapsulationButton setEnabled:([encapsulationTableView selectedRow] >= 0)];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  if ([notification object] == encapsulationTableView)
+    [removeEncapsulationButton setEnabled:([encapsulationTableView selectedRow] >= 0)];
+  else if ([notification object] == compositionConfigurationTableView)
+  {
+    int selectedRow = [compositionConfigurationTableView selectedRow];
+    NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+    NSDictionary* selectedConfiguration =
+      (selectedRow >= 0) && (selectedRow < (int)[compositionConfigurations count])
+        ? [compositionConfigurations objectAtIndex:selectedRow] : nil;
+    NSNumber* isDefaultCompositionConfiguration = selectedConfiguration
+      ? [selectedConfiguration objectForKey:CompositionConfigurationIsDefaultKey] : [NSNumber numberWithBool:YES];
+    [compositionConfigurationRemoveButton setEnabled:(selectedRow >= 0) && ![isDefaultCompositionConfiguration boolValue]];
+  }
+  if (!notification || [[notification name] isEqualToString:CurrentCompositionConfigurationDidChangeNotification])
+  {
+    NSNumber* isDefaultCompositionConfiguration =
+      [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationIsDefaultKey];
+    [compositionConfigurationRemoveButton setEnabled:![isDefaultCompositionConfiguration boolValue]];
+    [compositionSelectionPopUpButton selectItemWithTag:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+    [compositionMatrix selectCellWithTag:
+      [[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationCompositionModeKey] intValue]];
+    [pdfLatexTextField        setStringValue:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]];
+    [xeLatexTextField         setStringValue:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey]];
+    [latexTextField           setStringValue:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey]];
+    [dvipdfTextField          setStringValue:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
+    [gsTextField              setStringValue:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]];
+    [ps2pdfTextField          setStringValue:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey]];
+    [self changeCompositionMode:compositionMatrix];//to update enable state of the buttons just above (here in the code)
+    [self changeScriptsConfiguration:nil];
+  }
+    
+  if (!notification || [[notification name] isEqualToString:CompositionConfigurationsDidChangeNotification])
+  {
+    [compositionSelectionPopUpButton removeAllItems];
+    NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+    unsigned int i = 0;
+    for(i = 0 ; i<[compositionConfigurations count] ; ++i)
+    {
+      NSString* title = [[compositionConfigurations objectAtIndex:i] objectForKey:CompositionConfigurationNameKey];
+      [[compositionSelectionPopUpButton menu] addItemWithTitle:title action:nil keyEquivalent:@""];
+      [[compositionSelectionPopUpButton lastItem] setTag:i];
+    }
+    [[compositionSelectionPopUpButton menu] addItem:[NSMenuItem separatorItem]];
+    [[compositionSelectionPopUpButton menu] addItemWithTitle:
+      NSLocalizedString(@"Edit configurations list...", @"Edit configurations list...") action:nil keyEquivalent:@""];
+    [[compositionSelectionPopUpButton lastItem] setTag:-1];
+    [compositionSelectionPopUpButton selectItemWithTag:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+  }
 }
 
 //useful to avoid some bad connections in Interface builder
@@ -946,11 +1167,15 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 {
 }
 
-//data source of the shortcut tableviw
+//data source of the shortcut/scripts tableview
 -(int) numberOfRowsInTableView:(NSTableView *)aTableView
 {
-  //4 rows for the 4 latex modes
-  return (aTableView == serviceShortcutsTableView) ? 4 : 0;
+  int nbRows = 0;
+  if (aTableView == serviceShortcutsTableView)//5 rows for the 5 latex modes
+    nbRows = 5;
+  else if (aTableView == scriptsTableView)//3 rows for the 3 processings
+    nbRows = 3;
+  return nbRows;
 }
 
 -(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
@@ -969,6 +1194,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                    NSLocalizedString(@"Typeset LaTeX Maths display" , @"Typeset LaTeX Maths display"),
                    NSLocalizedString(@"Typeset LaTeX Maths inline"  , @"Typeset LaTeX Maths inline"),
                    NSLocalizedString(@"Typeset LaTeX Text"          , @"Typeset LaTeX Text"),
+                   NSLocalizedString(@"Detect and typeset equations", @"Detect and typeset equations"),
                    nil] objectAtIndex:rowIndex];
     else if ([identifier isEqualToString:@"shortcut"])
     {
@@ -988,7 +1214,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       NSString* currentShortcut = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:shortcutColumn row:rowIndex];
       BOOL conflict = NO;
       int i = 0;
-      for(i = 0 ; [currentEnabled boolValue] && !conflict && i<4 ; ++i)
+      for(i = 0 ; [currentEnabled boolValue] && !conflict && i<[aTableView numberOfRows] ; ++i)
       {
          NSNumber* enabled =  [[aTableView delegate] tableView:aTableView objectValueForTableColumn:enabledColumn row:i];
          NSString* shortcut = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:shortcutColumn row:i];
@@ -999,6 +1225,23 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       object = conflict ? warningImage : nil;
       [serviceWarningShortcutConflict setHidden:!conflict && [serviceWarningShortcutConflict isHidden]];
     }
+  }
+  else if (aTableView == scriptsTableView)
+  {
+    NSString* placeAsString = [NSString stringWithFormat:@"%d",rowIndex];
+    NSDictionary* additionalProcessingScripts =
+      [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+    NSDictionary* script = [additionalProcessingScripts objectForKey:placeAsString];
+    if ([[aTableColumn identifier] isEqualToString:@"scriptPlace"])
+    {
+      NSArray* labels = [NSArray arrayWithObjects:NSLocalizedString(@"Pre-processing", @"Pre-processing"),
+                                                  NSLocalizedString(@"Middle-processing", @"Middle-processing"),
+                                                  NSLocalizedString(@"Post-processing", @"Post-processing"),
+                                                  nil];
+      object = [labels objectAtIndex:rowIndex];
+    }
+    else if ([[aTableColumn identifier] isEqualToString:@"scriptEnabled"])
+      object = [script objectForKey:ScriptEnabledKey];
   }
   return object;
 }
@@ -1030,15 +1273,165 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [[AppController appController] changeServiceShortcuts];
   
     [serviceWarningShortcutConflict setHidden:YES];
-    [aTableView reloadData];    
+    [aTableView reloadData];
+  }
+  else if (aTableView == scriptsTableView)
+  {
+    script_place_t scriptPlace = rowIndex;
+    NSString* placeAsString = [NSString stringWithFormat:@"%d",scriptPlace];
+    NSMutableDictionary* mutableAdditionalProcessingScripts =
+      [NSMutableDictionary dictionaryWithDictionary:
+        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationAdditionalProcessingScriptsKey]];
+    NSMutableDictionary* script =
+      [NSMutableDictionary dictionaryWithDictionary:
+        [mutableAdditionalProcessingScripts objectForKey:placeAsString]];
+    [script setObject:value forKey:ScriptEnabledKey];
+    [mutableAdditionalProcessingScripts setObject:script forKey:placeAsString];
+    [PreferencesController currentCompositionConfigurationSetObject:mutableAdditionalProcessingScripts
+                                                             forKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+    [self changeScriptsConfiguration:aTableView];
   }
 }
 
-- (id)windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)anObject
+-(void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex
+{
+  if (aTableView ==  serviceShortcutsTableView)
+  {
+    NSString* identifier = [aTableColumn identifier];
+    if ([identifier isEqualToString:@"shortcut"])
+      [aCell setPlaceholderString:NSLocalizedString(@"none", @"none")];
+  }
+}
+
+-(id) windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)anObject
 {
   return (anObject == serviceShortcutsTableView) ? shortcutTextView : nil;
 }
 
+-(IBAction) changeScriptsConfiguration:(id)sender
+{
+  NSMutableDictionary* mutableAdditionalProcessingScripts =
+    [NSMutableDictionary dictionaryWithDictionary:
+      [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationAdditionalProcessingScriptsKey]];
+
+  int selectedScript = [scriptsTableView selectedRow];
+  script_place_t place = (selectedScript < 0) ? SCRIPT_SOURCE_STRING : selectedScript;
+  NSString* placeAsString = [NSString stringWithFormat:@"%d",place];
+  NSMutableDictionary* script =
+    (selectedScript < 0) ? nil
+                         : [NSMutableDictionary dictionaryWithDictionary:[mutableAdditionalProcessingScripts objectForKey:placeAsString]];
+
+  [scriptsSourceTypePopUpButton          setEnabled:(script != nil)];
+  [scriptsScriptSelectionTextField       setEnabled:(script != nil)];
+  [scriptsScriptSelectionButton          setEnabled:(script != nil)];
+  [scriptsScriptDefinitionShellTextField setEnabled:(script != nil)];
+  [scriptsScriptDefinitionBodyTextView   setEditable:(script != nil)];
+  [scriptsScriptSelectionBox  setHidden:([scriptsSourceTypePopUpButton selectedTag] == SCRIPT_SOURCE_STRING)];
+  [scriptsScriptDefinitionBox setHidden:([scriptsSourceTypePopUpButton selectedTag] == SCRIPT_SOURCE_FILE)];
+
+  if (!sender || (sender == scriptsTableView))
+  {
+    [scriptsTableView reloadData];
+    if (script)
+    {
+      [scriptsSourceTypePopUpButton          selectItemWithTag:[[script objectForKey:ScriptSourceTypeKey] intValue]];
+      [scriptsScriptSelectionBox  setHidden:([scriptsSourceTypePopUpButton selectedTag] == SCRIPT_SOURCE_STRING)];
+      [scriptsScriptDefinitionBox setHidden:([scriptsSourceTypePopUpButton selectedTag] == SCRIPT_SOURCE_FILE)];
+      [scriptsScriptSelectionTextField       setStringValue:[script objectForKey:ScriptFileKey]];
+      [scriptsScriptDefinitionShellTextField setStringValue:[script objectForKey:ScriptShellKey]];
+      [scriptsScriptDefinitionBodyTextView   setString:[script objectForKey:ScriptBodyKey]];
+      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+      [notificationCenter postNotificationName:NSControlTextDidEndEditingNotification object:scriptsScriptSelectionTextField
+                                      userInfo:(void*)self];
+    }
+  }
+
+  if (sender == scriptsSourceTypePopUpButton)
+    [script setObject:[NSNumber numberWithInt:[sender selectedTag]] forKey:ScriptSourceTypeKey];
+
+  if (sender == scriptsScriptSelectionTextField)
+    [script setObject:[sender stringValue] forKey:ScriptFileKey];
+
+  if (sender == scriptsScriptDefinitionShellTextField)
+    [script setObject:[sender stringValue] forKey:ScriptShellKey];
+
+  if (sender == scriptsScriptDefinitionBodyTextView)
+    [script setObject:[sender string] forKey:ScriptBodyKey];
+
+  if (script)
+  {
+    [mutableAdditionalProcessingScripts setObject:script forKey:placeAsString];
+    [PreferencesController currentCompositionConfigurationSetObject:mutableAdditionalProcessingScripts
+                                                             forKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+  }
+}
+
+-(void) tableViewSelectionDidChange:(NSNotification*)notification
+{
+  if ([notification object] == scriptsTableView)
+    [self changeScriptsConfiguration:scriptsTableView];
+}
+
+-(IBAction) selectScript:(id)sender
+{
+  NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+  [openPanel setResolvesAliases:NO];
+  NSString* filename = [scriptsScriptSelectionTextField stringValue];
+  NSString* path = filename ? filename : @"";
+  path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? [path stringByDeletingLastPathComponent] : nil;
+  [openPanel beginSheetForDirectory:path file:[filename lastPathComponent] types:nil modalForWindow:[self window] modalDelegate:self
+                           didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:)
+                              contextInfo:scriptsScriptSelectionTextField];
+}
+
+-(IBAction) showScriptHelp:(id)sender
+{
+  if (![scriptsHelpPanel isVisible])
+  {
+    [scriptsHelpPanel center];
+    [scriptsHelpPanel orderFront:sender];
+  }
+}
+
+-(IBAction) changeCompositionSelection:(id)sender
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  if (sender)
+  {
+    if ([sender selectedTag] == -1) //modify configurations
+    {
+      int index = [userDefaults integerForKey:CurrentCompositionConfigurationIndexKey];
+      [compositionConfigurationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
+      [[NSNotificationCenter defaultCenter]
+        postNotificationName:NSTableViewSelectionDidChangeNotification object:compositionConfigurationTableView];
+      [NSApp beginSheet:compositionSelectionPanel modalForWindow:[self window] modalDelegate:self
+         didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+    }
+    else //update the pane with the current composition configuration
+    {
+      [userDefaults setInteger:[sender selectedTag] forKey:CurrentCompositionConfigurationIndexKey];
+      [[NSNotificationCenter defaultCenter]
+        postNotificationName:CurrentCompositionConfigurationDidChangeNotification object:compositionSelectionPopUpButton];
+    }
+  }
+}
+
+-(IBAction) closeCompositionSelectionPanel:(id)sender
+{
+  [compositionSelectionPanel endEditingFor:nil];
+  [NSApp endSheet:compositionSelectionPanel];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults setInteger:[[compositionConfigurationTableView selectedRowIndexes] lastIndex]
+                    forKey:CurrentCompositionConfigurationIndexKey];
+  [[NSNotificationCenter defaultCenter] postNotificationName:CurrentCompositionConfigurationDidChangeNotification
+                                                      object:compositionSelectionPopUpButton];
+}
+
+-(void)sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode  contextInfo:(void*)contextInfo
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [compositionSelectionPopUpButton selectItemWithTag:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+  [sheet orderOut:self];
+}
+
 @end
-
-
