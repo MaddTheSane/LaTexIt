@@ -58,7 +58,7 @@ NSString* GetMyPNGPboardType(void)
     MyPNGPboardType = (NSString*)kUTTypePNG;
   #ifdef ARC_ENABLED
   if (!MyPNGPboardType)  
-    MyPNGPboardType = (__bridge NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
+    MyPNGPboardType = (__bridge_transfer NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
   #else
   if (!MyPNGPboardType)  
     MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
@@ -85,7 +85,7 @@ NSString* GetMyJPEGPboardType(void)
     MyJPEGPboardType = (NSString*)kUTTypeJPEG;
   #ifdef ARC_ENABLED
   if (!MyJPEGPboardType)  
-    MyJPEGPboardType = (__bridge NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1
+    MyJPEGPboardType = (__bridge_transfer NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1
   #else
   if (!MyJPEGPboardType)  
     MyJPEGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1

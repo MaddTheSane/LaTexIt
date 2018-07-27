@@ -39,7 +39,7 @@
 
 	/* To support GC and non-GC, we need this contortion. */
   #ifdef ARC_ENABLED
-  return (__bridge NSURL*)theURL;
+  return (__bridge_transfer NSURL*)theURL;
   #else
 	return [NSMakeCollectable(theURL) autorelease];
   #endif
@@ -54,7 +54,7 @@
 
 	/* To support GC and non-GC, we need this contortion. */
   #ifdef ARC_ENABLED
-  return (__bridge NSURL*)theURL;
+  return (__bridge_transfer NSURL*)theURL;
   #else
 	return [NSMakeCollectable(theURL) autorelease];
   #endif
@@ -92,7 +92,7 @@
 
 	/* To support GC and non-GC, we need this contortion. */
   #ifdef ARC_ENABLED
-  return (__bridge NSURL*)theURL;
+  return (__bridge_transfer NSURL*)theURL;
   #else
 	return [NSMakeCollectable(theURL) autorelease];
   #endif
@@ -107,7 +107,7 @@
 
 	/* To support GC and non-GC, we need this contortion. */
   #ifdef ARC_ENABLED
-  return (__bridge NSString*)theString;
+  return (__bridge_transfer NSString*)theString;
   #else
 	return [NSMakeCollectable(theString) autorelease];
   #endif

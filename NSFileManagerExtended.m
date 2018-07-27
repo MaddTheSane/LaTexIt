@@ -266,7 +266,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     CFStringRef uti = 0;
     error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
     #ifdef ARC_ENABLED
-    result = (__bridge NSString*)uti;
+    result = (__bridge_transfer NSString*)uti;
     #else
     result = [(NSString*)uti autorelease];
     #endif
@@ -286,7 +286,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     CFStringRef uti = 0;
     error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
     #ifdef ARC_ENABLED
-    result = (__bridge NSString*)uti;
+    result = (__bridge_transfer NSString*)uti;
     #else
     result = [(NSString*)uti autorelease];
     #endif
