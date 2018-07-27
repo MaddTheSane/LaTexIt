@@ -110,11 +110,13 @@
     if (lastSelectedRow != NSNotFound)
       ++lastSelectedRow;
     [self selectRowIndexes:[NSIndexSet indexSetWithIndex:lastSelectedRow] byExtendingSelection:YES];
+    [self scrollRowToVisible:lastSelectedRow-1];
   }
   else //if we are going down after an upwards selection, deselect last selected item
   {
     unsigned int firstIndex = [selectedRowIndexes firstIndex];
     [self deselectRow:firstIndex];
+    [self scrollRowToVisible:firstIndex+1];
   }
 }
 
@@ -128,11 +130,13 @@
     if (lastSelectedRow > 0)
       --lastSelectedRow;
     [self selectRowIndexes:[NSIndexSet indexSetWithIndex:lastSelectedRow] byExtendingSelection:YES];
+    [self scrollRowToVisible:lastSelectedRow];
   }
   else //if we are going up after an downwards selection, deselect last selected item
   {
     unsigned int lastIndex = [selectedRowIndexes lastIndex];
     [self deselectRow:lastIndex];
+    [self scrollRowToVisible:lastIndex-1];
   }
 }
 

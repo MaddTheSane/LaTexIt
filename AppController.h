@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005 PierreChatelier. All rights reserved.
+//  Copyright 2005 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -17,6 +17,9 @@
 #else
 #import <LinkBack/LinkBack.h>
 #endif
+
+//useful to differenciate the different latex modes : DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
+typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode_t;
 
 @class EncapsulationController;
 @class HistoryController;
@@ -47,6 +50,7 @@
 }
 
 +(AppController*)           appController; //getting the unique instance of appController
++(NSDocument*)              currentDocument;
 -(EncapsulationController*) encapsulationController;
 -(HistoryController*)       historyController;
 -(LatexPalettesController*) latexPalettesController;
@@ -87,7 +91,7 @@
 -(IBAction) showOrHideLatexPalettes:(id)sender;
 -(IBAction) latexPalettesClick:(id)sender;
 -(IBAction) showPreferencesPane:(id)sender;
--(void)     showPreferencesPaneWithIdentifier:(id)identifier;//showPreferencesPane + select one tab
+-(void)     showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;//showPreferencesPane + select one pane
 -(IBAction) showHelp:(id)sender;
 
 -(MyDocument*) dummyDocument;
@@ -132,6 +136,7 @@
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+-(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode;
 
 //LinkBackServerDelegateProtocol
 -(void) linkBackDidClose:(LinkBack*)link;

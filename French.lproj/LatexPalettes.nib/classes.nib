@@ -2,21 +2,28 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {latexPalettesClick = id; }; 
+            ACTIONS = {
+                changeGroup = id; 
+                latexPalettesClick = id; 
+                latexPalettesSelect = id; 
+                openOrHideDetails = id; 
+            }; 
             CLASS = LatexPalettesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                arrowsMatrix = NSMatrix; 
-                binaryOperatorsMatrix = NSMatrix; 
-                decorationsMatrix = NSMatrix; 
-                greekMatrix = NSMatrix; 
-                lettersMatrix = NSMatrix; 
-                otherOperatorsMatrix = NSMatrix; 
-                relationsMatrix = NSMatrix; 
+                detailsBox = NSBox; 
+                detailsButton = NSButton; 
+                detailsImageView = NSImageView; 
+                detailsLatexCodeTextField = NSTextField; 
+                detailsRequiresTextField = NSTextField; 
+                matrix = NSMatrix; 
+                matrixBox = NSBox; 
+                matrixChoicePopUpButton = NSPopUpButton; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = PaletteMatrix; LANGUAGE = ObjC; SUPERCLASS = NSMatrix; }, 
         {CLASS = PaletteView; LANGUAGE = ObjC; SUPERCLASS = NSView; }
     ); 
     IBVersion = 1; 

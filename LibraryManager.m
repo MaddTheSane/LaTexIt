@@ -798,9 +798,7 @@ static NSImage*        libraryFileIcon       = nil;
   NSOutlineView* outlineView = [notification object];
   [outlineView scrollRowToVisible:[[outlineView selectedRowIndexes] firstIndex]];
 
-  MyDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
-  if (!document)
-    document = [[[[[NSApp orderedWindows] reversed] lastObject] windowController] document];
+  MyDocument* document = (MyDocument*)[AppController currentDocument];
   if (document && ([outlineView selectedRow] >= 0))
   {
     LibraryItem* libraryItem = [outlineView itemAtRow:[outlineView selectedRow]];

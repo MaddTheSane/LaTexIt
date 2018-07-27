@@ -57,7 +57,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.4.4 (Tiger version)</string>
+	<string>1.5.0 (Tiger version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -69,6 +69,11 @@
 	<key>NSServices</key>
 	<array>
 		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string>/</string>
+			</dict>
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
@@ -93,6 +98,11 @@
 			</array>
 		</dict>
 		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string>.</string>
+			</dict>
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
@@ -117,6 +127,11 @@
 			</array>
 		</dict>
 		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+			</dict>
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>

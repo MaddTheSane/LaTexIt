@@ -29,22 +29,26 @@
             ACTIONS = {
                 applyPreambleToLibrary = id; 
                 applyPreambleToOpenDocuments = id; 
-                changeAdvancedConfiguration = id; 
+                changeAdditionalMargin = id; 
                 changeCompositionMode = id; 
                 changeDefaultGeneralConfig = id; 
                 changePath = id; 
                 changeServiceConfiguration = id; 
+                changeSyntaxColoringConfiguration = id; 
                 checkForUpdatesChange = id; 
                 checkNow = id; 
                 closeOptionsPane = id; 
                 dragExportJpegQualitySliderDidChange = id; 
                 dragExportPopupFormatDidChange = id; 
+                gotoPreferencePane = id; 
                 gotoWebSite = id; 
                 newEncapsulation = id; 
-                openOptions = id; 
+                nullAction = id; 
+                openOptionsForDragExport = id; 
                 removeSelectedEncapsulations = id; 
                 resetDefaultPreamble = id; 
                 selectFont = id; 
+                toolbarHit = id; 
             }; 
             CLASS = PreferencesController; 
             LANGUAGE = ObjC; 
@@ -53,8 +57,10 @@
                 additionalLeftMarginTextField = NSTextField; 
                 additionalRightMarginTextField = NSTextField; 
                 additionalTopMarginTextField = NSTextField; 
+                advancedView = NSView; 
                 checkForNewVersionsButton = NSButton; 
                 compositionMatrix = NSMatrix; 
+                compositionView = NSView; 
                 defaultColorColorWell = NSColorWell; 
                 defaultImageViewBackgroundColorWell = NSColorWell; 
                 defaultModeSegmentedControl = NSSegmentedControl; 
@@ -68,8 +74,13 @@
                 dragExportPopupFormat = NSPopUpButton; 
                 dvipdfButton = NSButton; 
                 dvipdfTextField = NSTextField; 
+                editionView = NSView; 
+                emptyView = NSView; 
+                enableSyntaxColoringButton = NSButton; 
                 encapsulationTableView = EncapsulationTableView; 
+                exampleTextView = NSTextView; 
                 fontTextField = NSTextField; 
+                generalView = NSView; 
                 gsButton = NSButton; 
                 gsTextField = NSTextField; 
                 latexButton = NSButton; 
@@ -77,18 +88,29 @@
                 pdfLatexButton = NSButton; 
                 pdfLatexTextField = NSTextField; 
                 preambleTextView = LineCountTextView; 
-                preferencesTabView = NSTabView; 
+                preambleView = NSView; 
                 removeEncapsulationButton = NSButton; 
-                selectFontButton = NSButton; 
                 serviceRespectsBaselineButton = NSButton; 
                 serviceRespectsColorMatrix = NSMatrix; 
                 serviceRespectsPointSizeMatrix = NSMatrix; 
+                serviceShortcutsTableView = NSTableView; 
                 serviceUsesHistoryButton = NSButton; 
+                serviceView = NSView; 
+                serviceWarningLinkBackButton = NSButton; 
+                serviceWarningShortcutConflict = NSButton; 
+                syntaxColoringCommandColorColorWell = NSColorWell; 
+                syntaxColoringCommentColorColorWell = NSColorWell; 
+                syntaxColoringKeywordColorColorWell = NSColorWell; 
+                syntaxColoringMathsColorColorWell = NSColorWell; 
+                syntaxColoringTextBackgroundColorColorWell = NSColorWell; 
+                syntaxColoringTextForegroundColorColorWell = NSColorWell; 
+                webView = NSView; 
                 xeLatexButton = NSButton; 
                 xeLatexTextField = NSTextField; 
             }; 
             SUPERCLASS = NSWindowController; 
-        }
+        }, 
+        {CLASS = ShortcutTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }
     ); 
     IBVersion = 1; 
 }

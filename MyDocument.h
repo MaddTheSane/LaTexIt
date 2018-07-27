@@ -8,14 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "AppController.h"
+
 @class HistoryItem;
 @class LineCountTextView;
 @class LinkBack;
 @class LogTableView;
 @class MyImageView;
-
-//useful to differenciate the different latex modes : DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
-typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 
 @interface MyDocument : NSDocument
 {
@@ -76,6 +75,9 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 -(NSButton*) makeLatexButton;
 -(MyImageView*) imageView;
 
+-(void) setLatexMode:(latex_mode_t)mode;
+-(void) setColor:(NSColor*)color;
+-(void) setMagnification:(float)magnification;
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
 -(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode
                   magnification:(double)magnification;
@@ -85,6 +87,7 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 //tells whether the document is currently performing a latexisation
 -(BOOL) isBusy;
 
+-(void) resetSyntaxColoring;//reapply syntax coloring
 -(void) setFont:(NSFont*)font;//changes the font of both preamble and sourceText views
 -(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
 -(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield

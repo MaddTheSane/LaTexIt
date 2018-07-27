@@ -389,9 +389,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 -(void) tableViewSelectionDidChange:(NSNotification*)notification
 {
   NSTableView* historyTableView = [notification object];
-  MyDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
-  if (!document)
-    document = [[[[[NSApp orderedWindows] reversed] lastObject] windowController] document];
+  MyDocument* document = (MyDocument*)[AppController currentDocument];
   if (document)
   {
     int selectedRow = [historyTableView selectedRow];

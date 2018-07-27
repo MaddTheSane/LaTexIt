@@ -157,8 +157,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
   if (draggedImage)
   {
-    NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-    [pasteboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
+    //NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+    //[pasteboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
     [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil]
                           fromRect:[self frame] source:self slideBack:YES event:theEvent];
   }

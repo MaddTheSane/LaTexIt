@@ -62,3 +62,17 @@
 "Your version of LaTeXiT is more recent than the official available one" = "Votre version de LaTeXiT est plus récente que la dernière version officielle";
 "A new version of LaTeXiT is available" = "Une nouvelle version de LaTeXiT est disponible";
 "Open download page" = "Aller sur le site";
+"General" = "Général";
+"Edition" = "Édition";
+"Preamble" = "Préambule";
+"Composition" = "Composition";
+"Service" = "Service";
+"Advanced" = "Avancé";
+"Web" = "Web";
+"Do you really want to apply that preamble to the library items ?" = "Voulez-vous vraiment appliquer ce préambule aux éléments de la bibliothèque ?";
+"Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." =
+"Leur ancien préambule sera écrasé. S'il s'agissait d'un préambule spécial utilisé pour leur génération, il sera perdu.";
+"Apply" = "Appliquer";
+"Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
+"Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $...$";
+"Typeset LaTeX Text" = "Créer l'équation en mode texte";

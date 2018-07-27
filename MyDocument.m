@@ -22,6 +22,7 @@
 #import "NSTaskExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "SMLSyntaxColouring.h"
 
 #ifdef PANTHER
 #import <LinkBack-panther/LinkBack.h>
@@ -164,9 +165,9 @@ static NSString* yenString = nil;
   [saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [[typeOfTextControl cell] setTag:DISPLAY forSegment:0];
-  [[typeOfTextControl cell] setTag:INLINE  forSegment:1];
-  [[typeOfTextControl cell] setTag:TEXT  forSegment:2];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_DISPLAY forSegment:0];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_INLINE  forSegment:1];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_TEXT  forSegment:2];
   [typeOfTextControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
   
   [sizeText setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
@@ -197,7 +198,7 @@ static NSString* yenString = nil;
   
   if (initialBody)
   {
-    [typeOfTextControl setSelectedSegment:[[typeOfTextControl cell] tagForSegment:TEXT]];
+    [typeOfTextControl setSelectedSegment:[[typeOfTextControl cell] tagForSegment:LATEX_MODE_TEXT]];
     [self setSourceText:[[[NSAttributedString alloc] initWithString:initialBody] autorelease]];
     initialBody = nil;
   }
@@ -367,11 +368,22 @@ static NSString* yenString = nil;
   [[sourceTextView textStorage] setFont:font];
 }
 
+-(void) resetSyntaxColoring
+{
+  [[preambleTextView syntaxColouring] setColours];
+  [[preambleTextView syntaxColouring] recolourCompleteDocument];
+  [preambleTextView setNeedsDisplay:YES];
+  [[sourceTextView syntaxColouring] setColours];
+  [[sourceTextView syntaxColouring] recolourCompleteDocument];
+  [sourceTextView setNeedsDisplay:YES];
+}
+
 -(void) setPreamble:(NSAttributedString*)aString
 {
   [preambleTextView clearErrors];
   [[preambleTextView textStorage] setAttributedString:aString];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
+  [[preambleTextView syntaxColouring] recolourCompleteDocument];
   [preambleTextView setNeedsDisplay:YES];
 }
 
@@ -380,6 +392,7 @@ static NSString* yenString = nil;
   [sourceTextView clearErrors];
   [[sourceTextView textStorage] setAttributedString:aString];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:sourceTextView];
+  [[sourceTextView syntaxColouring] recolourCompleteDocument];
   [sourceTextView setNeedsDisplay:YES];
 }
 
@@ -620,6 +633,21 @@ static NSString* yenString = nil;
   return pdfData;
 }
 
+-(void) setLatexMode:(latex_mode_t)mode
+{
+  [typeOfTextControl selectSegmentWithTag:mode];
+}
+
+-(void) setColor:(NSColor*)color
+{
+  [colorWell setColor:color];
+}
+
+-(void) setMagnification:(float)magnification
+{
+  [sizeText setFloatValue:magnification];
+}
+
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
 -(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
                   magnification:(double)magnification
@@ -691,8 +719,8 @@ static NSString* yenString = nil;
 
   //some tuning due to parameters; note that \[...\] is replaced by $\displaystyle because of
   //incompatibilities with the magical boxes
-  NSString* addSymbolLeft  = (latexMode == DISPLAY) ? @"$\\displaystyle " : (latexMode == INLINE) ? @"$" : @"";
-  NSString* addSymbolRight = (latexMode == DISPLAY) ? @"$" : (latexMode == INLINE) ? @"$" : @"";
+  NSString* addSymbolLeft  = (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " : (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
+  NSString* addSymbolRight = (latexMode == LATEX_MODE_DISPLAY) ? @"$" : (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
   NSString* colouredPreamble = [[AppController appController] insertColorInPreamble:preamble color:color];
   
   NSMutableString* fullLog = [NSMutableString string];
@@ -731,7 +759,7 @@ static NSString* yenString = nil;
   //STEP 1 is over. If it has failed, it is the fault of the user, and syntax errors will be reported
   
   //STEP 2
-  BOOL shouldTryStep2 = (latexMode != TEXT) && (compositionMode != LATEXDVIPDF) && (compositionMode != XELATEX);
+  BOOL shouldTryStep2 = (latexMode != LATEX_MODE_TEXT) && (compositionMode != LATEXDVIPDF) && (compositionMode != XELATEX);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
   if (!failed)
   {
@@ -892,7 +920,8 @@ static NSString* yenString = nil;
   while(line)
   {
     NSArray* components = [line componentsSeparatedByString:@":"];
-    if ((([components count] >= 3) && [[components objectAtIndex:1] intValue]) ||
+    if ((([components count] >= 3) &&
+          [[[components objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""]) ||
         ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
     {
       NSMutableString* fullError = [NSMutableString stringWithString:line];

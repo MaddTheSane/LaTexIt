@@ -16,8 +16,10 @@ extern NSString* FontDidChangeNotification;
 extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 
 @class LineCountRulerView;
+@class SMLSyntaxColouring;
 
 @interface LineCountTextView : NSTextView {
+  SMLSyntaxColouring* syntaxColouring;
   NSMutableArray* lineRanges;      //contains the ranges of each line
   NSMutableSet*   forbiddenLines;  //lines that cannot be edited
   LineCountRulerView* lineCountRulerView;
@@ -32,5 +34,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 -(void) clearErrors; //remove error markers
 -(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message; //set error markers
 -(BOOL) gotoLine:(int)row;//scroll to visible line <row>
+
+-(SMLSyntaxColouring*) syntaxColouring;
 
 @end

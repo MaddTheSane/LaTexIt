@@ -58,3 +58,16 @@
 "Your version of LaTeXiT is more recent than the official available one" = "Your version of LaTeXiT is more recent than the official available one";
 "A new version of LaTeXiT is available" = "A new version of LaTeXiT is available";
 "Open download page" = "Open download page";
+"General" = "General";
+"Edition" = "Edition";
+"Preamble" = "Preamble";
+"Composition" = "Composition";
+"Service" = "Service";
+"Advanced" = "Advanced";
+"Web" = "Web";
+"Do you really want to apply that preamble to the library items ?" = "Do you really want to apply that preamble to the library items ?";
+"Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
+"Apply" = "Apply";
+"Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
+"Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";
+"Typeset LaTeX Text" = "Typeset LaTeX Text";

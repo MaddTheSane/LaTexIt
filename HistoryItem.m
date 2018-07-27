@@ -31,6 +31,14 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 @implementation HistoryItem
 
+static NSLock* strangeLock = nil;
+
++(void) initialize
+{
+  if (!strangeLock)
+    strangeLock = [[NSLock alloc] init];
+}
+
 +(id) historyItemWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor
@@ -265,7 +273,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.4.4"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.5.0"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -363,10 +371,12 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
       //temporarily change size
       [pdfImage setScalesWhenResized:YES];
       [pdfImage setSize:newSize];
-      [pdfImage lockFocus];//this lockfocus seems necessary to avoid erratic AppKit deadlock when loading history in the background
+      [strangeLock lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
+      [pdfImage lockFocus];//same problem
       NSData* bitmapData = [pdfImage TIFFRepresentation];
       bitmapCachedImage = [[NSImage alloc] initWithData:bitmapData];
       [pdfImage unlockFocus];
+      [strangeLock unlock];
       //restore size
       [pdfImage setSize:realSize];
     }

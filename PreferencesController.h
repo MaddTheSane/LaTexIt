@@ -8,6 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern NSString* GeneralToolbarItemIdentifier;
+extern NSString* EditionToolbarItemIdentifier;
+extern NSString* PreambleToolbarItemIdentifier;
+extern NSString* CompositionToolbarItemIdentifier;
+extern NSString* ServiceToolbarItemIdentifier;
+extern NSString* AdvancedToolbarItemIdentifier;
+extern NSString* WebToolbarItemIdentifier;
+
 extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
 extern NSString* DragExportJpegQualityKey;
@@ -15,6 +23,13 @@ extern NSString* DefaultImageViewBackground;
 extern NSString* DefaultColorKey;
 extern NSString* DefaultPointSizeKey;
 extern NSString* DefaultModeKey;
+extern NSString* SyntaxColoringEnableKey;
+extern NSString* SyntaxColoringTextForegroundColorKey;
+extern NSString* SyntaxColoringTextBackgroundColorKey;
+extern NSString* SyntaxColoringCommandColorKey;
+extern NSString* SyntaxColoringMathsColorKey;
+extern NSString* SyntaxColoringKeywordColorKey;
+extern NSString* SyntaxColoringCommentColorKey;
 extern NSString* DefaultPreambleAttributedKey;
 extern NSString* DefaultFontKey;
 extern NSString* CompositionModeKey;
@@ -23,6 +38,8 @@ extern NSString* XeLatexPathKey;
 extern NSString* LatexPathKey;
 extern NSString* DvipdfPathKey;
 extern NSString* GsPathKey;
+extern NSString* ServiceShortcutEnabledKey;
+extern NSString* ServiceShortcutStringsKey;
 extern NSString* ServiceRespectsColorKey;
 extern NSString* ServiceRespectsBaselineKey;
 extern NSString* ServiceRespectsPointSizeKey;
@@ -43,6 +60,10 @@ extern NSString* MarginControllerVisibleAtStartupKey;
 
 extern NSString* CheckForNewVersionsKey;
 
+extern NSString* LatexPaletteGroupKey;
+extern NSString* LatexPaletteFrameKey;
+extern NSString* LatexPaletteDetailsStateKey;
+
 extern NSString* SomePathDidChangeNotification;
 extern NSString* CompositionModeDidChangeNotification;
 
@@ -50,9 +71,18 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
 
 @class EncapsulationTableView;
 @class LineCountTextView;
+@class SMLSyntaxColouring;
 @interface PreferencesController : NSWindowController {
 
-  IBOutlet NSTabView*     preferencesTabView;
+  IBOutlet NSView*        generalView;
+  IBOutlet NSView*        editionView;
+  IBOutlet NSView*        preambleView;
+  IBOutlet NSView*        compositionView;
+  IBOutlet NSView*        serviceView;
+  IBOutlet NSView*        advancedView;
+  IBOutlet NSView*        webView;
+  IBOutlet NSView*        emptyView;
+  NSMutableDictionary*    toolbarItems;
 
   IBOutlet NSPopUpButton* dragExportPopupFormat;
   IBOutlet NSButton*      dragExportOptionsButton;
@@ -68,9 +98,19 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   IBOutlet NSTextField*        defaultPointSizeTextField;
   IBOutlet NSColorWell*        defaultColorColorWell;
 
-  IBOutlet LineCountTextView* preambleTextView;
-  IBOutlet NSButton*          selectFontButton;
+  IBOutlet NSColorWell*       syntaxColoringTextForegroundColorColorWell;
+  IBOutlet NSColorWell*       syntaxColoringTextBackgroundColorColorWell;
+  IBOutlet NSButton*          enableSyntaxColoringButton;
+  IBOutlet NSColorWell*       syntaxColoringCommandColorColorWell;
+  IBOutlet NSColorWell*       syntaxColoringMathsColorColorWell;
+  IBOutlet NSColorWell*       syntaxColoringKeywordColorColorWell;
+  IBOutlet NSColorWell*       syntaxColoringCommentColorColorWell;
+
   IBOutlet NSTextField*       fontTextField;
+  SMLSyntaxColouring*         exampleSyntaxColouring;
+  IBOutlet NSTextView*        exampleTextView;
+
+  IBOutlet LineCountTextView* preambleTextView;
 
   IBOutlet NSMatrix*    compositionMatrix;  
   IBOutlet NSTextField* pdfLatexTextField;
@@ -88,6 +128,9 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   IBOutlet NSMatrix*    serviceRespectsColorMatrix;
   IBOutlet NSButton*    serviceRespectsBaselineButton;
   IBOutlet NSButton*    serviceUsesHistoryButton;
+  IBOutlet NSButton*    serviceWarningLinkBackButton;
+  IBOutlet NSTableView* serviceShortcutsTableView;
+  IBOutlet NSButton*    serviceWarningShortcutConflict;
 
   IBOutlet NSTextField* additionalTopMarginTextField;
   IBOutlet NSTextField* additionalLeftMarginTextField;
@@ -104,15 +147,23 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   BOOL didChangeLatexTextField;
   BOOL didChangeDvipdfTextField;
   BOOL didChangeGsTextField;
+  
+  NSAlert* applyPreambleToLibraryAlert;
+  NSImage* warningImage;
+  
+  NSTextView* shortcutTextView;
 }
 
+-(IBAction) nullAction:(id)sender;//useful to avoid some bad connections in Interface builder
+-(IBAction) toolbarHit:(id)sender;
 -(IBAction) dragExportPopupFormatDidChange:(id)sender;
 -(IBAction) dragExportJpegQualitySliderDidChange:(id)sender;
--(IBAction) openOptions:(id)sender;
+-(IBAction) openOptionsForDragExport:(id)sender;
 -(IBAction) closeOptionsPane:(id)sender;
 
 -(IBAction) changeDefaultGeneralConfig:(id)sender;
 
+-(IBAction) changeSyntaxColoringConfiguration:(id)sender;
 -(IBAction) resetDefaultPreamble:(id)sender;
 -(IBAction) selectFont:(id)sender;
 -(IBAction) applyPreambleToOpenDocuments:(id)sender;
@@ -121,8 +172,9 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
 -(IBAction) changeCompositionMode:(id)sender;
 -(IBAction) changePath:(id)sender;
 -(IBAction) changeServiceConfiguration:(id)sender;
+-(IBAction) gotoPreferencePane:(id)sender;
 
--(IBAction) changeAdvancedConfiguration:(id)sender;
+-(IBAction) changeAdditionalMargin:(id)sender;
 
 -(IBAction) newEncapsulation:(id)sender;
 -(IBAction) removeSelectedEncapsulations:(id)sender;
@@ -131,6 +183,6 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
 -(IBAction) checkNow:(id)sender;
 -(IBAction) gotoWebSite:(id)sender;
 
--(void) selectPreferencesPaneWithIdentifier:(id)identifier;
+-(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;
 
 @end

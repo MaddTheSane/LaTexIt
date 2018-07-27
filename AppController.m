@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005 PierreChatelier. All rights reserved.
+//  Copyright 2005 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -25,6 +25,7 @@
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
 #import "MarginController.h"
+#import "PaletteItem.h"
 #import "PreferencesController.h"
 
 @interface AppController (PrivateAPI)
@@ -220,6 +221,24 @@ static NSArray* unixBins = nil;
   [libraryController release];
   [preferencesController release];
   [super dealloc];
+}
+
++(NSDocument*) currentDocument
+{
+  NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+  if (!document)
+  {
+    NSArray* orderedDocument = [NSApp orderedDocuments];
+    if ([orderedDocument count])
+      document = [orderedDocument objectAtIndex:0];
+  }
+  if (!document)
+  {
+    NSArray* orderedWindows = [NSApp orderedWindows];
+    if ([orderedWindows count])
+      document = [[[orderedWindows objectAtIndex:0] windowController] document];
+  }
+  return document;
 }
 
 -(EncapsulationController*) encapsulationController
@@ -680,13 +699,12 @@ static NSArray* unixBins = nil;
 //returns the preamble that should be used, according to the fact that color.sty is available or not
 -(NSAttributedString*) preamble
 {
-  //return [[NSAttributedString alloc] initWithString:@""];
   NSData* preambleData = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultPreambleAttributedKey];
   NSMutableAttributedString* preamble = [[NSMutableAttributedString alloc] initWithRTF:preambleData documentAttributes:NULL];
   NSString* preambleString = [preamble string];
   if (!isColorStyAvailable)
   {
-    NSRange pdftexColorRange = [preambleString rangeOfString:@"\\usepackage{color}"];
+    NSRange pdftexColorRange = [preambleString rangeOfString:@"{color}"];
     if (pdftexColorRange.location != NSNotFound)
       [preamble insertAttributedString:[[[NSAttributedString alloc] initWithString:@"%"] autorelease]
                                atIndex:pdftexColorRange.location];
@@ -1036,13 +1054,12 @@ static NSArray* unixBins = nil;
 //The difference is made using the cell tag
 -(IBAction) latexPalettesClick:(id)sender
 {
-  id cell = [sender selectedCell];
-  NSString* string = cell ? [cell alternateTitle] : nil;
-  if (!string || ![string length]) string = cell ? [cell title] : nil;
+  PaletteItem* item = [[sender selectedCell] representedObject];
+  NSString* string = [item latexCode];
   MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (string && myDocument)
   {
-    if ([cell tag])
+    if ([item type] == LATEX_ITEM_TYPE_FUNCTION)
       string = [NSString stringWithFormat:@"%@{%@}", string, [myDocument selectedText]];
     [myDocument insertText:string];
   }
@@ -1315,15 +1332,15 @@ static NSArray* unixBins = nil;
 
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:DISPLAY error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_DISPLAY error:error];
 }
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:INLINE error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_INLINE error:error];
 }
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:TEXT error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_TEXT error:error];
 }
 
 //performs the application service
@@ -1377,10 +1394,10 @@ static NSArray* unixBins = nil;
           NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
           NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-          NSArray* components          = [dragExportType componentsSeparatedByString:@" "];
+          NSArray*  components         = [dragExportType componentsSeparatedByString:@" "];
           NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
-          NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
-          float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
+          NSColor*  color              = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
+          float     quality            = [userDefaults floatForKey:DragExportJpegQualityKey];
           NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
           NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
           NSData*   attachedData       = [self dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
@@ -1483,6 +1500,9 @@ static NSArray* unixBins = nil;
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
+           [document setLatexMode:mode];
+           [document setColor:color];
+           [document setMagnification:magnification];
            [[document windowForSheet] makeFirstResponder:[document sourceTextView]];
            [document makeLatex:self];
           }
@@ -1573,6 +1593,7 @@ static NSArray* unixBins = nil;
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
+           [document setLatexMode:mode];
            [[document windowForSheet] makeFirstResponder:[document sourceTextView]];
            [document makeLatex:self];
           }
@@ -1590,10 +1611,10 @@ static NSArray* unixBins = nil;
   [window makeKeyAndOrderFront:self];
 }
 
--(void) showPreferencesPaneWithIdentifier:(id)identifier//showPreferencesPane + select one tab
+-(void) showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier//showPreferencesPane + select one pane
 {
   [self showPreferencesPane:self];
-  [preferencesController selectPreferencesPaneWithIdentifier:identifier];
+  [preferencesController selectPreferencesPaneWithItemIdentifier:itemIdentifier];
 }
 
 -(IBAction) showHelp:(id)sender
@@ -1627,21 +1648,21 @@ static NSArray* unixBins = nil;
   NSString* colorString =
     [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
   NSMutableString* preamble = [NSMutableString stringWithString:thePreamble];
-  NSRange colorRange = [preamble rangeOfString:@"\\usepackage{color}"];
+  NSRange colorRange = [preamble rangeOfString:@"{color}"];
   if (colorRange.location == NSNotFound)
-    colorRange = [preamble rangeOfString:@"\\usepackage[pdftex]{color}"]; //because of old versions of LaTeXiT
+    colorRange = [preamble rangeOfString:@"[pdftex]{color}"]; //because of old versions of LaTeXiT
   if ([self isColorStyAvailable])
   {
     if (colorRange.location != NSNotFound)
     {
       //int insertionPoint = pdftexColorRange.location+pdftexColorRange.length;
       //[preamble insertString:colorString atIndex:insertionPoint];
-      colorString = [NSString stringWithFormat:@"\\usepackage{color}%@", colorString];
+      colorString = [NSString stringWithFormat:@"{color}%@", colorString];
       [preamble replaceCharactersInRange:colorRange withString:colorString];
     }
     else //try to find a good place of insertion
     {
-      colorString = [NSString stringWithFormat:@"\\usepackage{color}%@", colorString];
+      colorString = [NSString stringWithFormat:@"{color}%@", colorString];
       NSRange firstUsePackage = [preamble rangeOfString:@"\\usepackage"];
       if (firstUsePackage.location != NSNotFound)
         [preamble insertString:colorString atIndex:firstUsePackage.location];
@@ -1842,7 +1863,7 @@ static NSArray* unixBins = nil;
     [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
     [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
 
-    NSString *type = (mode == DISPLAY) ? @"0" : (mode == INLINE) ? @"1" : @"2";
+    NSString *type = (mode == LATEX_MODE_DISPLAY) ? @"0" : (mode == LATEX_MODE_INLINE) ? @"1" : @"2";
 
     NSMutableString *annotation =
         [NSMutableString stringWithFormat:
@@ -1938,6 +1959,39 @@ static NSArray* unixBins = nil;
   [NSThread setThreadPriority:0];
   [HistoryManager sharedManager];
   [threadAutoreleasePool release];
+}
+
+-(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode
+{
+  NSString* infoPlistPath =
+    [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
+  NSURL* infoPlistURL = [NSURL fileURLWithPath:infoPlistPath];
+  CFStringRef cfStringError = nil;
+  CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
+                                                                  (CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
+                                                                  kCFPropertyListMutableContainersAndLeaves, &cfStringError);
+  if (cfInfoPlist && !cfStringError)
+  {
+    NSMutableDictionary* infoPlist = (NSMutableDictionary*) cfInfoPlist;
+    NSMutableArray* services = [infoPlist objectForKey:@"NSServices"];
+    unsigned int index = (mode == LATEX_MODE_DISPLAY) ? 0 : (mode == LATEX_MODE_INLINE) ? 1 : 2;
+    if (services && (index < [services count]))
+    {
+      NSMutableDictionary* service = [services objectAtIndex:index];
+      if (!shortCut || [shortCut isEqualToString:@""])
+        [service removeObjectForKey:@"NSKeyEquivalent"];
+      else
+      {
+        NSMutableDictionary* keyEquivalent = [service objectForKey:@"NSKeyEquivalent"];
+        if (!keyEquivalent)
+          [service setObject:[NSDictionary dictionaryWithObject:shortCut forKey:@"default"] forKey:@"NSKeyEquivalent"];
+        else
+          [keyEquivalent setObject:shortCut forKey:@"default"];
+      }
+      [infoPlist writeToURL:infoPlistURL atomically:YES];
+    }
+  }
+  CFRelease(cfInfoPlist);
 }
 
 @end

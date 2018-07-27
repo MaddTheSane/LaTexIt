@@ -26,8 +26,6 @@
 		930AC4E407EDEEF400AC66FA /* LineCountRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */; };
 		930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC29907ECBC3C00EEB238 /* AppController.m */; };
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
-		9313BF26086C3B410056DB21 /* leqslant.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9313BF24086C3B410056DB21 /* leqslant.tiff */; };
-		9313BF27086C3B410056DB21 /* geqslant.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9313BF25086C3B410056DB21 /* geqslant.tiff */; };
 		93149F7E089438B10017C83A /* latexit-lib.png in Resources */ = {isa = PBXBuildFile; fileRef = 93149F7D089438B10017C83A /* latexit-lib.png */; };
 		9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9315A45007FD331800AFCCE9 /* Preferences.nib */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesController.m */; };
@@ -43,6 +41,207 @@
 		931D5E2708A15C1400573DD8 /* add-big-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 931D5E2308A15C1400573DD8 /* add-big-pressed.tiff */; };
 		9324D3F608A645500010DB95 /* ButtonNotClickThrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324D3F408A645500010DB95 /* ButtonNotClickThrough.m */; };
 		9328604407F4505F009BF03D /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
+		932BA60E0960CC82004EECBA /* sqrt3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA54A0960CC82004EECBA /* sqrt3.pdf */; };
+		932BA60F0960CC82004EECBA /* rightarrow-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA54B0960CC82004EECBA /* rightarrow-big.pdf */; };
+		932BA6100960CC82004EECBA /* partial.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA54C0960CC82004EECBA /* partial.pdf */; };
+		932BA6110960CC82004EECBA /* sum.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA54D0960CC82004EECBA /* sum.pdf */; };
+		932BA6120960CC82004EECBA /* coprod.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA54E0960CC82004EECBA /* coprod.pdf */; };
+		932BA6130960CC82004EECBA /* dot.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA54F0960CC82004EECBA /* dot.pdf */; };
+		932BA6140960CC82004EECBA /* iiint.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5500960CC82004EECBA /* iiint.pdf */; };
+		932BA6150960CC82004EECBA /* iint.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5510960CC82004EECBA /* iint.pdf */; };
+		932BA6160960CC82004EECBA /* oint.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5520960CC82004EECBA /* oint.pdf */; };
+		932BA6170960CC82004EECBA /* nexists.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5530960CC82004EECBA /* nexists.pdf */; };
+		932BA6180960CC82004EECBA /* exists.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5540960CC82004EECBA /* exists.pdf */; };
+		932BA6190960CC82004EECBA /* forall.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5550960CC82004EECBA /* forall.pdf */; };
+		932BA61A0960CC82004EECBA /* neg.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5560960CC82004EECBA /* neg.pdf */; };
+		932BA61B0960CC82004EECBA /* bigwedge.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5570960CC82004EECBA /* bigwedge.pdf */; };
+		932BA61C0960CC82004EECBA /* bigvee.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5580960CC82004EECBA /* bigvee.pdf */; };
+		932BA61D0960CC82004EECBA /* bigcap.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5590960CC82004EECBA /* bigcap.pdf */; };
+		932BA61E0960CC82004EECBA /* bigcup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA55A0960CC82004EECBA /* bigcup.pdf */; };
+		932BA61F0960CC82004EECBA /* widetilde.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA55B0960CC82004EECBA /* widetilde.pdf */; };
+		932BA6200960CC82004EECBA /* rightarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA55C0960CC82004EECBA /* rightarrow.pdf */; };
+		932BA6210960CC82004EECBA /* leftarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA55D0960CC82004EECBA /* leftarrow.pdf */; };
+		932BA6220960CC82004EECBA /* int.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA55E0960CC82004EECBA /* int.pdf */; };
+		932BA6230960CC82004EECBA /* dagger.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA55F0960CC82004EECBA /* dagger.pdf */; };
+		932BA6240960CC82004EECBA /* sim.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5600960CC82004EECBA /* sim.pdf */; };
+		932BA6250960CC82004EECBA /* rtimes.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5610960CC82004EECBA /* rtimes.pdf */; };
+		932BA6260960CC82004EECBA /* approx.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5620960CC82004EECBA /* approx.pdf */; };
+		932BA6270960CC82004EECBA /* cong.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5630960CC82004EECBA /* cong.pdf */; };
+		932BA6280960CC82004EECBA /* leq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5640960CC82004EECBA /* leq.pdf */; };
+		932BA6290960CC82004EECBA /* ddot.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5650960CC82004EECBA /* ddot.pdf */; };
+		932BA62A0960CC82004EECBA /* supseteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5660960CC82004EECBA /* supseteq.pdf */; };
+		932BA62B0960CC82004EECBA /* nsubseteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5670960CC82004EECBA /* nsubseteq.pdf */; };
+		932BA62C0960CC82004EECBA /* subseteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5680960CC82004EECBA /* subseteq.pdf */; };
+		932BA62D0960CC82004EECBA /* leqslant.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5690960CC82004EECBA /* leqslant.pdf */; };
+		932BA62E0960CC82004EECBA /* ggg.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA56A0960CC82004EECBA /* ggg.pdf */; };
+		932BA62F0960CC82004EECBA /* uparrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA56B0960CC82004EECBA /* uparrow.pdf */; };
+		932BA6300960CC82004EECBA /* models.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA56C0960CC82004EECBA /* models.pdf */; };
+		932BA6310960CC82004EECBA /* ltimes.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA56D0960CC82004EECBA /* ltimes.pdf */; };
+		932BA6320960CC82004EECBA /* widehat.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA56E0960CC82004EECBA /* widehat.pdf */; };
+		932BA6330960CC82004EECBA /* nparallel.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA56F0960CC82004EECBA /* nparallel.pdf */; };
+		932BA6340960CC82004EECBA /* sqsubseteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5700960CC82004EECBA /* sqsubseteq.pdf */; };
+		932BA6350960CC82004EECBA /* sqsubset.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5710960CC82004EECBA /* sqsubset.pdf */; };
+		932BA6360960CC82004EECBA /* leftarrow-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5720960CC82004EECBA /* leftarrow-big.pdf */; };
+		932BA6370960CC82004EECBA /* mapsto.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5730960CC82004EECBA /* mapsto.pdf */; };
+		932BA6380960CC82004EECBA /* sqcap.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5740960CC82004EECBA /* sqcap.pdf */; };
+		932BA6390960CC82004EECBA /* mid.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5750960CC82004EECBA /* mid.pdf */; };
+		932BA63A0960CC82004EECBA /* pm.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5760960CC82004EECBA /* pm.pdf */; };
+		932BA63B0960CC82004EECBA /* div.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5770960CC82004EECBA /* div.pdf */; };
+		932BA63C0960CC82004EECBA /* gg.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5780960CC82004EECBA /* gg.pdf */; };
+		932BA63D0960CC82004EECBA /* cap.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5790960CC82004EECBA /* cap.pdf */; };
+		932BA63E0960CC82004EECBA /* vdash.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA57A0960CC82004EECBA /* vdash.pdf */; };
+		932BA63F0960CC82004EECBA /* star.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA57B0960CC82004EECBA /* star.pdf */; };
+		932BA6400960CC82004EECBA /* tilde.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA57C0960CC82004EECBA /* tilde.pdf */; };
+		932BA6410960CC82004EECBA /* nsupseteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA57D0960CC82004EECBA /* nsupseteq.pdf */; };
+		932BA6420960CC82004EECBA /* bowtie.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA57E0960CC82004EECBA /* bowtie.pdf */; };
+		932BA6430960CC82004EECBA /* ni.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA57F0960CC82004EECBA /* ni.pdf */; };
+		932BA6440960CC82004EECBA /* vec.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5800960CC82004EECBA /* vec.pdf */; };
+		932BA6450960CC82004EECBA /* jmath.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5810960CC82004EECBA /* jmath.pdf */; };
+		932BA6460960CC82004EECBA /* ell.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5820960CC82004EECBA /* ell.pdf */; };
+		932BA6470960CC82004EECBA /* re.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5830960CC82004EECBA /* re.pdf */; };
+		932BA6480960CC82004EECBA /* im.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5840960CC82004EECBA /* im.pdf */; };
+		932BA6490960CC82004EECBA /* n-mathbb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5850960CC82004EECBA /* n-mathbb.pdf */; };
+		932BA64A0960CC82004EECBA /* z-mathbb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5860960CC82004EECBA /* z-mathbb.pdf */; };
+		932BA64B0960CC82004EECBA /* q-mathbb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5870960CC82004EECBA /* q-mathbb.pdf */; };
+		932BA64D0960CC82004EECBA /* doteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5890960CC82004EECBA /* doteq.pdf */; };
+		932BA64E0960CC82004EECBA /* aleph.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA58A0960CC82004EECBA /* aleph.pdf */; };
+		932BA64F0960CC82004EECBA /* infty.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA58B0960CC82004EECBA /* infty.pdf */; };
+		932BA6500960CC82004EECBA /* nabla.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA58C0960CC82004EECBA /* nabla.pdf */; };
+		932BA6510960CC82004EECBA /* gtrsim.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA58D0960CC82004EECBA /* gtrsim.pdf */; };
+		932BA6520960CC82004EECBA /* nsucceq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA58E0960CC82004EECBA /* nsucceq.pdf */; };
+		932BA6530960CC82004EECBA /* p-mathbb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA58F0960CC82004EECBA /* p-mathbb.pdf */; };
+		932BA6540960CC82004EECBA /* r-mathbb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5900960CC82004EECBA /* r-mathbb.pdf */; };
+		932BA6550960CC82004EECBA /* leftharpoondown.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5910960CC82004EECBA /* leftharpoondown.pdf */; };
+		932BA6560960CC82004EECBA /* lambda-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5920960CC82004EECBA /* lambda-big.pdf */; };
+		932BA6570960CC82004EECBA /* pi-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5930960CC82004EECBA /* pi-big.pdf */; };
+		932BA6580960CC82004EECBA /* sigma-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5940960CC82004EECBA /* sigma-big.pdf */; };
+		932BA6590960CC82004EECBA /* xi-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5950960CC82004EECBA /* xi-big.pdf */; };
+		932BA65A0960CC82004EECBA /* gamma.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5960960CC82004EECBA /* gamma.pdf */; };
+		932BA65B0960CC82004EECBA /* delta.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5970960CC82004EECBA /* delta.pdf */; };
+		932BA65C0960CC82004EECBA /* epsilon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5980960CC82004EECBA /* epsilon.pdf */; };
+		932BA65D0960CC82004EECBA /* zeta.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5990960CC82004EECBA /* zeta.pdf */; };
+		932BA65E0960CC82004EECBA /* eta.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA59A0960CC82004EECBA /* eta.pdf */; };
+		932BA65F0960CC82004EECBA /* theta.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA59B0960CC82004EECBA /* theta.pdf */; };
+		932BA6600960CC82004EECBA /* iota.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA59C0960CC82004EECBA /* iota.pdf */; };
+		932BA6610960CC82004EECBA /* kappa.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA59D0960CC82004EECBA /* kappa.pdf */; };
+		932BA6620960CC82004EECBA /* lambda.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA59E0960CC82004EECBA /* lambda.pdf */; };
+		932BA6630960CC82004EECBA /* mu.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA59F0960CC82004EECBA /* mu.pdf */; };
+		932BA6640960CC82004EECBA /* nu.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A00960CC82004EECBA /* nu.pdf */; };
+		932BA6650960CC82004EECBA /* xi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A10960CC82004EECBA /* xi.pdf */; };
+		932BA6660960CC82004EECBA /* succeq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A20960CC82004EECBA /* succeq.pdf */; };
+		932BA6670960CC82004EECBA /* sqsupset.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A30960CC82004EECBA /* sqsupset.pdf */; };
+		932BA6680960CC82004EECBA /* upsilon-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A40960CC82004EECBA /* upsilon-big.pdf */; };
+		932BA6690960CC82004EECBA /* phi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A50960CC82004EECBA /* phi.pdf */; };
+		932BA66A0960CC82004EECBA /* phi-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A60960CC82004EECBA /* phi-big.pdf */; };
+		932BA66B0960CC82004EECBA /* omega-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A70960CC82004EECBA /* omega-big.pdf */; };
+		932BA66C0960CC82004EECBA /* nprec.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A80960CC82004EECBA /* nprec.pdf */; };
+		932BA66D0960CC82004EECBA /* pi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5A90960CC82004EECBA /* pi.pdf */; };
+		932BA66E0960CC82004EECBA /* rho.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5AA0960CC82004EECBA /* rho.pdf */; };
+		932BA66F0960CC82004EECBA /* sigma.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5AB0960CC82004EECBA /* sigma.pdf */; };
+		932BA6700960CC82004EECBA /* tau.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5AC0960CC82004EECBA /* tau.pdf */; };
+		932BA6710960CC82004EECBA /* upsilon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5AD0960CC82004EECBA /* upsilon.pdf */; };
+		932BA6720960CC82004EECBA /* varphi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5AE0960CC82004EECBA /* varphi.pdf */; };
+		932BA6730960CC82004EECBA /* chi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5AF0960CC82004EECBA /* chi.pdf */; };
+		932BA6740960CC82004EECBA /* psi.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B00960CC82004EECBA /* psi.pdf */; };
+		932BA6750960CC82004EECBA /* omega.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B10960CC82004EECBA /* omega.pdf */; };
+		932BA6760960CC82004EECBA /* gamma-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B20960CC82004EECBA /* gamma-big.pdf */; };
+		932BA6770960CC82004EECBA /* delta-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B30960CC82004EECBA /* delta-big.pdf */; };
+		932BA6780960CC82004EECBA /* theta-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B40960CC82004EECBA /* theta-big.pdf */; };
+		932BA6790960CC82004EECBA /* unrhd.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B50960CC82004EECBA /* unrhd.pdf */; };
+		932BA67A0960CC82004EECBA /* bigtriangledown.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B60960CC82004EECBA /* bigtriangledown.pdf */; };
+		932BA67B0960CC82004EECBA /* circ.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B70960CC82004EECBA /* circ.pdf */; };
+		932BA67D0960CC82004EECBA /* lesssim.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5B90960CC82004EECBA /* lesssim.pdf */; };
+		932BA67E0960CC82004EECBA /* odot.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5BA0960CC82004EECBA /* odot.pdf */; };
+		932BA67F0960CC82004EECBA /* emptyset.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5BB0960CC82004EECBA /* emptyset.pdf */; };
+		932BA6800960CC82004EECBA /* sqcup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5BC0960CC82004EECBA /* sqcup.pdf */; };
+		932BA6810960CC82004EECBA /* mp.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5BD0960CC82004EECBA /* mp.pdf */; };
+		932BA6820960CC82004EECBA /* in.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5BE0960CC82004EECBA /* in.pdf */; };
+		932BA6830960CC82004EECBA /* bar.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5BF0960CC82004EECBA /* bar.pdf */; };
+		932BA6840960CC82004EECBA /* rightharpoonup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C00960CC82004EECBA /* rightharpoonup.pdf */; };
+		932BA6850960CC82004EECBA /* bot.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C10960CC82004EECBA /* bot.pdf */; };
+		932BA6860960CC82004EECBA /* top.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C20960CC82004EECBA /* top.pdf */; };
+		932BA6870960CC82004EECBA /* hookleftarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C30960CC82004EECBA /* hookleftarrow.pdf */; };
+		932BA6880960CC82004EECBA /* nearrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C40960CC82004EECBA /* nearrow.pdf */; };
+		932BA6890960CC82004EECBA /* dashv.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C50960CC82004EECBA /* dashv.pdf */; };
+		932BA68A0960CC82004EECBA /* diamond.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C60960CC82004EECBA /* diamond.pdf */; };
+		932BA68B0960CC82004EECBA /* leftrightarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C70960CC82004EECBA /* leftrightarrow.pdf */; };
+		932BA68C0960CC82004EECBA /* npreceq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C80960CC82004EECBA /* npreceq.pdf */; };
+		932BA68D0960CC82004EECBA /* bullet.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5C90960CC82004EECBA /* bullet.pdf */; };
+		932BA68E0960CC82004EECBA /* notin.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5CA0960CC82004EECBA /* notin.pdf */; };
+		932BA68F0960CC82004EECBA /* ast.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5CB0960CC82004EECBA /* ast.pdf */; };
+		932BA6900960CC82004EECBA /* neq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5CC0960CC82004EECBA /* neq.pdf */; };
+		932BA6910960CC82004EECBA /* lll.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5CD0960CC82004EECBA /* lll.pdf */; };
+		932BA6920960CC82004EECBA /* ngeqslant.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5CE0960CC82004EECBA /* ngeqslant.pdf */; };
+		932BA6930960CC82004EECBA /* ominus.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5CF0960CC82004EECBA /* ominus.pdf */; };
+		932BA6940960CC82004EECBA /* overleftarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D00960CC82004EECBA /* overleftarrow.pdf */; };
+		932BA6950960CC82004EECBA /* looparrowleft.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D10960CC82004EECBA /* looparrowleft.pdf */; };
+		932BA6960960CC82004EECBA /* equiv.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D20960CC82004EECBA /* equiv.pdf */; };
+		932BA6970960CC82004EECBA /* cup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D30960CC82004EECBA /* cup.pdf */; };
+		932BA6980960CC82004EECBA /* imath.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D40960CC82004EECBA /* imath.pdf */; };
+		932BA6990960CC82004EECBA /* nleq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D50960CC82004EECBA /* nleq.pdf */; };
+		932BA69A0960CC82004EECBA /* ddagger.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D60960CC82004EECBA /* ddagger.pdf */; };
+		932BA69B0960CC82004EECBA /* downarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D70960CC82004EECBA /* downarrow.pdf */; };
+		932BA69C0960CC82004EECBA /* o.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D80960CC82004EECBA /* o.pdf */; };
+		932BA69D0960CC82004EECBA /* overrightarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5D90960CC82004EECBA /* overrightarrow.pdf */; };
+		932BA69E0960CC82004EECBA /* simeq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5DA0960CC82004EECBA /* simeq.pdf */; };
+		932BA69F0960CC82004EECBA /* ngeq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5DB0960CC82004EECBA /* ngeq.pdf */; };
+		932BA6A00960CC82004EECBA /* parallel.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5DC0960CC82004EECBA /* parallel.pdf */; };
+		932BA6A10960CC82004EECBA /* h-mathbb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5DD0960CC82004EECBA /* h-mathbb.pdf */; };
+		932BA6A20960CC82004EECBA /* hbar.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5DE0960CC82004EECBA /* hbar.pdf */; };
+		932BA6A30960CC82004EECBA /* nwarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5DF0960CC82004EECBA /* nwarrow.pdf */; };
+		932BA6A40960CC82004EECBA /* wedge.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E00960CC82004EECBA /* wedge.pdf */; };
+		932BA6A50960CC82004EECBA /* oslash.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E10960CC82004EECBA /* oslash.pdf */; };
+		932BA6A60960CC82004EECBA /* supset.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E20960CC82004EECBA /* supset.pdf */; };
+		932BA6A70960CC82004EECBA /* nsucc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E30960CC82004EECBA /* nsucc.pdf */; };
+		932BA6A80960CC82004EECBA /* unlhd.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E40960CC82004EECBA /* unlhd.pdf */; };
+		932BA6A90960CC82004EECBA /* subset.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E50960CC82004EECBA /* subset.pdf */; };
+		932BA6AA0960CC82004EECBA /* rightharpoondown.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E60960CC82004EECBA /* rightharpoondown.pdf */; };
+		932BA6AB0960CC82004EECBA /* setminus.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E70960CC82004EECBA /* setminus.pdf */; };
+		932BA6AC0960CC82004EECBA /* oplus.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E80960CC82004EECBA /* oplus.pdf */; };
+		932BA6AD0960CC82004EECBA /* bigtriangleup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5E90960CC82004EECBA /* bigtriangleup.pdf */; };
+		932BA6AE0960CC82004EECBA /* ll.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5EA0960CC82004EECBA /* ll.pdf */; };
+		932BA6AF0960CC82004EECBA /* cdot.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5EB0960CC82004EECBA /* cdot.pdf */; };
+		932BA6B00960CC82004EECBA /* asymp.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5EC0960CC82004EECBA /* asymp.pdf */; };
+		932BA6B10960CC82004EECBA /* propto.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5ED0960CC82004EECBA /* propto.pdf */; };
+		932BA6B20960CC82004EECBA /* geqslant.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5EE0960CC82004EECBA /* geqslant.pdf */; };
+		932BA6B30960CC82004EECBA /* beta.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5EF0960CC82004EECBA /* beta.pdf */; };
+		932BA6B40960CC82004EECBA /* hookrightarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F00960CC82004EECBA /* hookrightarrow.pdf */; };
+		932BA6B50960CC82004EECBA /* triangleleft.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F10960CC82004EECBA /* triangleleft.pdf */; };
+		932BA6B60960CC82004EECBA /* geq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F20960CC82004EECBA /* geq.pdf */; };
+		932BA6B70960CC82004EECBA /* longmapsto.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F30960CC82004EECBA /* longmapsto.pdf */; };
+		932BA6B80960CC82004EECBA /* looparrowright.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F40960CC82004EECBA /* looparrowright.pdf */; };
+		932BA6B90960CC82004EECBA /* hat.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F50960CC82004EECBA /* hat.pdf */; };
+		932BA6BA0960CC82004EECBA /* swarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F60960CC82004EECBA /* swarrow.pdf */; };
+		932BA6BB0960CC82004EECBA /* uplus.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F70960CC82004EECBA /* uplus.pdf */; };
+		932BA6BC0960CC82004EECBA /* leftharpoonup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F80960CC82004EECBA /* leftharpoonup.pdf */; };
+		932BA6BD0960CC82004EECBA /* underrightarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5F90960CC82004EECBA /* underrightarrow.pdf */; };
+		932BA6BE0960CC82004EECBA /* succ.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5FA0960CC82004EECBA /* succ.pdf */; };
+		932BA6BF0960CC82004EECBA /* preceq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5FB0960CC82004EECBA /* preceq.pdf */; };
+		932BA6C00960CC82004EECBA /* sqrt.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5FC0960CC82004EECBA /* sqrt.pdf */; };
+		932BA6C10960CC82004EECBA /* nleqslant.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5FD0960CC82004EECBA /* nleqslant.pdf */; };
+		932BA6C20960CC82004EECBA /* sqsupseteq.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5FE0960CC82004EECBA /* sqsupseteq.pdf */; };
+		932BA6C30960CC82004EECBA /* alpha.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA5FF0960CC82004EECBA /* alpha.pdf */; };
+		932BA6C40960CC82004EECBA /* triangleright.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6000960CC82004EECBA /* triangleright.pdf */; };
+		932BA6C50960CC82004EECBA /* overbrace.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6010960CC82004EECBA /* overbrace.pdf */; };
+		932BA6C60960CC82004EECBA /* prec.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6020960CC82004EECBA /* prec.pdf */; };
+		932BA6C70960CC82004EECBA /* underleftarrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6030960CC82004EECBA /* underleftarrow.pdf */; };
+		932BA6C80960CC82004EECBA /* bigcirc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6040960CC82004EECBA /* bigcirc.pdf */; };
+		932BA6C90960CC82004EECBA /* amalg.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6050960CC82004EECBA /* amalg.pdf */; };
+		932BA6CA0960CC82004EECBA /* underbrace.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6060960CC82004EECBA /* underbrace.pdf */; };
+		932BA6CB0960CC82004EECBA /* wr.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6070960CC82004EECBA /* wr.pdf */; };
+		932BA6CC0960CC82004EECBA /* leftrightarrow-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6080960CC82004EECBA /* leftrightarrow-big.pdf */; };
+		932BA6CD0960CC82004EECBA /* vee.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA6090960CC82004EECBA /* vee.pdf */; };
+		932BA6CE0960CC82004EECBA /* psi-big.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA60A0960CC82004EECBA /* psi-big.pdf */; };
+		932BA6CF0960CC82004EECBA /* times.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA60B0960CC82004EECBA /* times.pdf */; };
+		932BA6D00960CC82004EECBA /* searrow.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA60C0960CC82004EECBA /* searrow.pdf */; };
+		932BA6D10960CC82004EECBA /* otimes.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA60D0960CC82004EECBA /* otimes.pdf */; };
+		932BA6D80960CC9B004EECBA /* PaletteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA6D20960CC9B004EECBA /* PaletteCell.m */; };
+		932BA6D90960CC9B004EECBA /* PaletteMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA6D30960CC9B004EECBA /* PaletteMatrix.m */; };
+		932BA6DD0960CC9B004EECBA /* PaletteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA6D70960CC9B004EECBA /* PaletteItem.m */; };
+		932BA8450961562A004EECBA /* prod.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA8440961562A004EECBA /* prod.pdf */; };
+		932BA852096156B1004EECBA /* NSPopUpButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA850096156B1004EECBA /* NSPopUpButtonExtended.m */; };
+		932BA87209615747004EECBA /* ShortcutTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA87009615747004EECBA /* ShortcutTextView.m */; };
+		932BADD609629EA7004EECBA /* nmid.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BADD509629EA7004EECBA /* nmid.pdf */; };
 		932CF4230826C2EB00434128 /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4210826C2EB00434128 /* LibraryItem.m */; };
 		932CF4270826C33D00434128 /* LibraryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4250826C33D00434128 /* LibraryFile.m */; };
 		932CF45F0826C5A500434128 /* file-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 932CF45E0826C5A500434128 /* file-icon.png */; };
@@ -69,34 +268,13 @@
 		93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C907F46075001DF900 /* Lisez-moi.rtfd */; };
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
 		93AD08B808A2D2CE0045B7F9 /* EncapsulationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */; };
-		93B202C2080EA86C00AB6463 /* widetilde.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AB080EA86C00AB6463 /* widetilde.tiff */; };
-		93B202C3080EA86C00AB6463 /* widehat.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AC080EA86C00AB6463 /* widehat.tiff */; };
-		93B202C4080EA86C00AB6463 /* vec.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AD080EA86C00AB6463 /* vec.tiff */; };
-		93B202C5080EA86C00AB6463 /* underrightarrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AE080EA86C00AB6463 /* underrightarrow.tiff */; };
-		93B202C6080EA86C00AB6463 /* underleftarrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AF080EA86C00AB6463 /* underleftarrow.tiff */; };
-		93B202C7080EA86C00AB6463 /* underbrace.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B0080EA86C00AB6463 /* underbrace.tiff */; };
-		93B202C8080EA86C00AB6463 /* tilde.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B1080EA86C00AB6463 /* tilde.tiff */; };
-		93B202C9080EA86C00AB6463 /* phi.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B2080EA86C00AB6463 /* phi.tiff */; };
-		93B202CA080EA86C00AB6463 /* overrightarrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B3080EA86C00AB6463 /* overrightarrow.tiff */; };
-		93B202CB080EA86C00AB6463 /* overleftarrow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B4080EA86C00AB6463 /* overleftarrow.tiff */; };
-		93B202CC080EA86C00AB6463 /* overbrace.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B5080EA86C00AB6463 /* overbrace.tiff */; };
-		93B202D0080EA86C00AB6463 /* jmath.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202B9080EA86C00AB6463 /* jmath.tiff */; };
-		93B202D1080EA86C00AB6463 /* dot.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202BA080EA86C00AB6463 /* dot.tiff */; };
-		93B202D3080EA86C00AB6463 /* ddot.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202BC080EA86C00AB6463 /* ddot.tiff */; };
-		93B202D6080EA86C00AB6463 /* bar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202BF080EA86C00AB6463 /* bar.tiff */; };
-		93B202D7080EA86C00AB6463 /* imath.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202C0080EA86C00AB6463 /* imath.tiff */; };
-		93B202D8080EA86C00AB6463 /* hat.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202C1080EA86C00AB6463 /* hat.tiff */; };
+		93B419E6095C017D009C6A1F /* ShortcutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B419E4095C017D009C6A1F /* ShortcutTableView.m */; };
 		93B528B0089FFC2B00F14B77 /* add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AC089FFC2B00F14B77 /* add.tiff */; };
 		93B528B1089FFC2B00F14B77 /* add-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AD089FFC2B00F14B77 /* add-pressed.tiff */; };
 		93B528B2089FFC2B00F14B77 /* remove-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */; };
 		93B528B3089FFC2B00F14B77 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AF089FFC2B00F14B77 /* remove.tiff */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
 		93CD21DE0827E9230079C367 /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
-		93D682F3086C3FAC0009A451 /* nleq.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93D682EF086C3FAC0009A451 /* nleq.tiff */; };
-		93D682F4086C3FAC0009A451 /* ngeq.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93D682F0086C3FAC0009A451 /* ngeq.tiff */; };
-		93D682F5086C3FAC0009A451 /* ngeqslant.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93D682F1086C3FAC0009A451 /* ngeqslant.tiff */; };
-		93D682F6086C3FAC0009A451 /* nleqslant.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93D682F2086C3FAC0009A451 /* nleqslant.tiff */; };
-		93D6833E086C45270009A451 /* nparallel.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93D6833D086C45270009A451 /* nparallel.tiff */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		93E81972087969BE0081B897 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */; };
 		93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
@@ -106,6 +284,15 @@
 		93EFDB9F088FF163000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB9D088FF163000156A3 /* NSStringExtended.m */; };
 		93F16CAD089FC1D800FF7B94 /* LatexPalettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */; };
 		93F16CD1089FC25200FF7B94 /* LatexPalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */; };
+		93F350220952AF2300DDFD09 /* SMLSyntaxColouring.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F350200952AF2300DDFD09 /* SMLSyntaxColouring.m */; };
+		93F350480952AFC400DDFD09 /* advancedToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350410952AFC400DDFD09 /* advancedToolbarItem.tiff */; };
+		93F350490952AFC400DDFD09 /* compositionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350420952AFC400DDFD09 /* compositionToolbarItem.tiff */; };
+		93F3504A0952AFC400DDFD09 /* editionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350430952AFC400DDFD09 /* editionToolbarItem.tiff */; };
+		93F3504B0952AFC400DDFD09 /* generalToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350440952AFC400DDFD09 /* generalToolbarItem.tiff */; };
+		93F3504C0952AFC400DDFD09 /* preambleToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350450952AFC400DDFD09 /* preambleToolbarItem.tiff */; };
+		93F3504D0952AFC400DDFD09 /* serviceToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350460952AFC400DDFD09 /* serviceToolbarItem.tiff */; };
+		93F3504E0952AFC400DDFD09 /* webToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350470952AFC400DDFD09 /* webToolbarItem.tiff */; };
+		93F3506D0952B08700DDFD09 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F3506C0952B08700DDFD09 /* tex.plist */; };
 		93F73E920899092A00EFFA5E /* EncapsulationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73E8E0899092A00EFFA5E /* EncapsulationController.m */; };
 		93F73E9D0899095F00EFFA5E /* Encapsulation.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73E9B0899095F00EFFA5E /* Encapsulation.nib */; };
 		93F9DEB008A2D96C005DEBF6 /* Library.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F9DEAC08A2D96C005DEBF6 /* Library.nib */; };
@@ -242,8 +429,6 @@
 		930BC29907ECBC3C00EEB238 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		930BC2A707ECBD6500EEB238 /* MyImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyImageView.h; sourceTree = "<group>"; };
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
-		9313BF24086C3B410056DB21 /* leqslant.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = leqslant.tiff; path = Resources/symbols/leqslant.tiff; sourceTree = "<group>"; };
-		9313BF25086C3B410056DB21 /* geqslant.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = geqslant.tiff; path = Resources/symbols/geqslant.tiff; sourceTree = "<group>"; };
 		93149F7D089438B10017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/latexit-lib.png"; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
@@ -268,6 +453,212 @@
 		9324D3F308A645500010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D3F408A645500010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
 		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = Resources/latexit.icns; sourceTree = "<group>"; };
+		932BA54A0960CC82004EECBA /* sqrt3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqrt3.pdf; path = Resources/symbols/sqrt3.pdf; sourceTree = "<group>"; };
+		932BA54B0960CC82004EECBA /* rightarrow-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "rightarrow-big.pdf"; path = "Resources/symbols/rightarrow-big.pdf"; sourceTree = "<group>"; };
+		932BA54C0960CC82004EECBA /* partial.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = partial.pdf; path = Resources/symbols/partial.pdf; sourceTree = "<group>"; };
+		932BA54D0960CC82004EECBA /* sum.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sum.pdf; path = Resources/symbols/sum.pdf; sourceTree = "<group>"; };
+		932BA54E0960CC82004EECBA /* coprod.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = coprod.pdf; path = Resources/symbols/coprod.pdf; sourceTree = "<group>"; };
+		932BA54F0960CC82004EECBA /* dot.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = dot.pdf; path = Resources/symbols/dot.pdf; sourceTree = "<group>"; };
+		932BA5500960CC82004EECBA /* iiint.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = iiint.pdf; path = Resources/symbols/iiint.pdf; sourceTree = "<group>"; };
+		932BA5510960CC82004EECBA /* iint.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = iint.pdf; path = Resources/symbols/iint.pdf; sourceTree = "<group>"; };
+		932BA5520960CC82004EECBA /* oint.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = oint.pdf; path = Resources/symbols/oint.pdf; sourceTree = "<group>"; };
+		932BA5530960CC82004EECBA /* nexists.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nexists.pdf; path = Resources/symbols/nexists.pdf; sourceTree = "<group>"; };
+		932BA5540960CC82004EECBA /* exists.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = exists.pdf; path = Resources/symbols/exists.pdf; sourceTree = "<group>"; };
+		932BA5550960CC82004EECBA /* forall.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = forall.pdf; path = Resources/symbols/forall.pdf; sourceTree = "<group>"; };
+		932BA5560960CC82004EECBA /* neg.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = neg.pdf; path = Resources/symbols/neg.pdf; sourceTree = "<group>"; };
+		932BA5570960CC82004EECBA /* bigwedge.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigwedge.pdf; path = Resources/symbols/bigwedge.pdf; sourceTree = "<group>"; };
+		932BA5580960CC82004EECBA /* bigvee.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigvee.pdf; path = Resources/symbols/bigvee.pdf; sourceTree = "<group>"; };
+		932BA5590960CC82004EECBA /* bigcap.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigcap.pdf; path = Resources/symbols/bigcap.pdf; sourceTree = "<group>"; };
+		932BA55A0960CC82004EECBA /* bigcup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigcup.pdf; path = Resources/symbols/bigcup.pdf; sourceTree = "<group>"; };
+		932BA55B0960CC82004EECBA /* widetilde.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = widetilde.pdf; path = Resources/symbols/widetilde.pdf; sourceTree = "<group>"; };
+		932BA55C0960CC82004EECBA /* rightarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rightarrow.pdf; path = Resources/symbols/rightarrow.pdf; sourceTree = "<group>"; };
+		932BA55D0960CC82004EECBA /* leftarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = leftarrow.pdf; path = Resources/symbols/leftarrow.pdf; sourceTree = "<group>"; };
+		932BA55E0960CC82004EECBA /* int.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = int.pdf; path = Resources/symbols/int.pdf; sourceTree = "<group>"; };
+		932BA55F0960CC82004EECBA /* dagger.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = dagger.pdf; path = Resources/symbols/dagger.pdf; sourceTree = "<group>"; };
+		932BA5600960CC82004EECBA /* sim.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sim.pdf; path = Resources/symbols/sim.pdf; sourceTree = "<group>"; };
+		932BA5610960CC82004EECBA /* rtimes.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rtimes.pdf; path = Resources/symbols/rtimes.pdf; sourceTree = "<group>"; };
+		932BA5620960CC82004EECBA /* approx.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = approx.pdf; path = Resources/symbols/approx.pdf; sourceTree = "<group>"; };
+		932BA5630960CC82004EECBA /* cong.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = cong.pdf; path = Resources/symbols/cong.pdf; sourceTree = "<group>"; };
+		932BA5640960CC82004EECBA /* leq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = leq.pdf; path = Resources/symbols/leq.pdf; sourceTree = "<group>"; };
+		932BA5650960CC82004EECBA /* ddot.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ddot.pdf; path = Resources/symbols/ddot.pdf; sourceTree = "<group>"; };
+		932BA5660960CC82004EECBA /* supseteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = supseteq.pdf; path = Resources/symbols/supseteq.pdf; sourceTree = "<group>"; };
+		932BA5670960CC82004EECBA /* nsubseteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nsubseteq.pdf; path = Resources/symbols/nsubseteq.pdf; sourceTree = "<group>"; };
+		932BA5680960CC82004EECBA /* subseteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = subseteq.pdf; path = Resources/symbols/subseteq.pdf; sourceTree = "<group>"; };
+		932BA5690960CC82004EECBA /* leqslant.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = leqslant.pdf; path = Resources/symbols/leqslant.pdf; sourceTree = "<group>"; };
+		932BA56A0960CC82004EECBA /* ggg.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ggg.pdf; path = Resources/symbols/ggg.pdf; sourceTree = "<group>"; };
+		932BA56B0960CC82004EECBA /* uparrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = uparrow.pdf; path = Resources/symbols/uparrow.pdf; sourceTree = "<group>"; };
+		932BA56C0960CC82004EECBA /* models.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = models.pdf; path = Resources/symbols/models.pdf; sourceTree = "<group>"; };
+		932BA56D0960CC82004EECBA /* ltimes.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ltimes.pdf; path = Resources/symbols/ltimes.pdf; sourceTree = "<group>"; };
+		932BA56E0960CC82004EECBA /* widehat.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = widehat.pdf; path = Resources/symbols/widehat.pdf; sourceTree = "<group>"; };
+		932BA56F0960CC82004EECBA /* nparallel.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nparallel.pdf; path = Resources/symbols/nparallel.pdf; sourceTree = "<group>"; };
+		932BA5700960CC82004EECBA /* sqsubseteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqsubseteq.pdf; path = Resources/symbols/sqsubseteq.pdf; sourceTree = "<group>"; };
+		932BA5710960CC82004EECBA /* sqsubset.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqsubset.pdf; path = Resources/symbols/sqsubset.pdf; sourceTree = "<group>"; };
+		932BA5720960CC82004EECBA /* leftarrow-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "leftarrow-big.pdf"; path = "Resources/symbols/leftarrow-big.pdf"; sourceTree = "<group>"; };
+		932BA5730960CC82004EECBA /* mapsto.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = mapsto.pdf; path = Resources/symbols/mapsto.pdf; sourceTree = "<group>"; };
+		932BA5740960CC82004EECBA /* sqcap.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqcap.pdf; path = Resources/symbols/sqcap.pdf; sourceTree = "<group>"; };
+		932BA5750960CC82004EECBA /* mid.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = mid.pdf; path = Resources/symbols/mid.pdf; sourceTree = "<group>"; };
+		932BA5760960CC82004EECBA /* pm.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = pm.pdf; path = Resources/symbols/pm.pdf; sourceTree = "<group>"; };
+		932BA5770960CC82004EECBA /* div.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = div.pdf; path = Resources/symbols/div.pdf; sourceTree = "<group>"; };
+		932BA5780960CC82004EECBA /* gg.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = gg.pdf; path = Resources/symbols/gg.pdf; sourceTree = "<group>"; };
+		932BA5790960CC82004EECBA /* cap.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = cap.pdf; path = Resources/symbols/cap.pdf; sourceTree = "<group>"; };
+		932BA57A0960CC82004EECBA /* vdash.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = vdash.pdf; path = Resources/symbols/vdash.pdf; sourceTree = "<group>"; };
+		932BA57B0960CC82004EECBA /* star.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = star.pdf; path = Resources/symbols/star.pdf; sourceTree = "<group>"; };
+		932BA57C0960CC82004EECBA /* tilde.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = tilde.pdf; path = Resources/symbols/tilde.pdf; sourceTree = "<group>"; };
+		932BA57D0960CC82004EECBA /* nsupseteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nsupseteq.pdf; path = Resources/symbols/nsupseteq.pdf; sourceTree = "<group>"; };
+		932BA57E0960CC82004EECBA /* bowtie.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bowtie.pdf; path = Resources/symbols/bowtie.pdf; sourceTree = "<group>"; };
+		932BA57F0960CC82004EECBA /* ni.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ni.pdf; path = Resources/symbols/ni.pdf; sourceTree = "<group>"; };
+		932BA5800960CC82004EECBA /* vec.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = vec.pdf; path = Resources/symbols/vec.pdf; sourceTree = "<group>"; };
+		932BA5810960CC82004EECBA /* jmath.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jmath.pdf; path = Resources/symbols/jmath.pdf; sourceTree = "<group>"; };
+		932BA5820960CC82004EECBA /* ell.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ell.pdf; path = Resources/symbols/ell.pdf; sourceTree = "<group>"; };
+		932BA5830960CC82004EECBA /* re.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = re.pdf; path = Resources/symbols/re.pdf; sourceTree = "<group>"; };
+		932BA5840960CC82004EECBA /* im.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = im.pdf; path = Resources/symbols/im.pdf; sourceTree = "<group>"; };
+		932BA5850960CC82004EECBA /* n-mathbb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "n-mathbb.pdf"; path = "Resources/symbols/n-mathbb.pdf"; sourceTree = "<group>"; };
+		932BA5860960CC82004EECBA /* z-mathbb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "z-mathbb.pdf"; path = "Resources/symbols/z-mathbb.pdf"; sourceTree = "<group>"; };
+		932BA5870960CC82004EECBA /* q-mathbb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "q-mathbb.pdf"; path = "Resources/symbols/q-mathbb.pdf"; sourceTree = "<group>"; };
+		932BA5890960CC82004EECBA /* doteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = doteq.pdf; path = Resources/symbols/doteq.pdf; sourceTree = "<group>"; };
+		932BA58A0960CC82004EECBA /* aleph.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = aleph.pdf; path = Resources/symbols/aleph.pdf; sourceTree = "<group>"; };
+		932BA58B0960CC82004EECBA /* infty.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = infty.pdf; path = Resources/symbols/infty.pdf; sourceTree = "<group>"; };
+		932BA58C0960CC82004EECBA /* nabla.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nabla.pdf; path = Resources/symbols/nabla.pdf; sourceTree = "<group>"; };
+		932BA58D0960CC82004EECBA /* gtrsim.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = gtrsim.pdf; path = Resources/symbols/gtrsim.pdf; sourceTree = "<group>"; };
+		932BA58E0960CC82004EECBA /* nsucceq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nsucceq.pdf; path = Resources/symbols/nsucceq.pdf; sourceTree = "<group>"; };
+		932BA58F0960CC82004EECBA /* p-mathbb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "p-mathbb.pdf"; path = "Resources/symbols/p-mathbb.pdf"; sourceTree = "<group>"; };
+		932BA5900960CC82004EECBA /* r-mathbb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "r-mathbb.pdf"; path = "Resources/symbols/r-mathbb.pdf"; sourceTree = "<group>"; };
+		932BA5910960CC82004EECBA /* leftharpoondown.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = leftharpoondown.pdf; path = Resources/symbols/leftharpoondown.pdf; sourceTree = "<group>"; };
+		932BA5920960CC82004EECBA /* lambda-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "lambda-big.pdf"; path = "Resources/symbols/lambda-big.pdf"; sourceTree = "<group>"; };
+		932BA5930960CC82004EECBA /* pi-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "pi-big.pdf"; path = "Resources/symbols/pi-big.pdf"; sourceTree = "<group>"; };
+		932BA5940960CC82004EECBA /* sigma-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "sigma-big.pdf"; path = "Resources/symbols/sigma-big.pdf"; sourceTree = "<group>"; };
+		932BA5950960CC82004EECBA /* xi-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "xi-big.pdf"; path = "Resources/symbols/xi-big.pdf"; sourceTree = "<group>"; };
+		932BA5960960CC82004EECBA /* gamma.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = gamma.pdf; path = Resources/symbols/gamma.pdf; sourceTree = "<group>"; };
+		932BA5970960CC82004EECBA /* delta.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = delta.pdf; path = Resources/symbols/delta.pdf; sourceTree = "<group>"; };
+		932BA5980960CC82004EECBA /* epsilon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = epsilon.pdf; path = Resources/symbols/epsilon.pdf; sourceTree = "<group>"; };
+		932BA5990960CC82004EECBA /* zeta.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = zeta.pdf; path = Resources/symbols/zeta.pdf; sourceTree = "<group>"; };
+		932BA59A0960CC82004EECBA /* eta.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = eta.pdf; path = Resources/symbols/eta.pdf; sourceTree = "<group>"; };
+		932BA59B0960CC82004EECBA /* theta.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = theta.pdf; path = Resources/symbols/theta.pdf; sourceTree = "<group>"; };
+		932BA59C0960CC82004EECBA /* iota.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = iota.pdf; path = Resources/symbols/iota.pdf; sourceTree = "<group>"; };
+		932BA59D0960CC82004EECBA /* kappa.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = kappa.pdf; path = Resources/symbols/kappa.pdf; sourceTree = "<group>"; };
+		932BA59E0960CC82004EECBA /* lambda.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = lambda.pdf; path = Resources/symbols/lambda.pdf; sourceTree = "<group>"; };
+		932BA59F0960CC82004EECBA /* mu.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = mu.pdf; path = Resources/symbols/mu.pdf; sourceTree = "<group>"; };
+		932BA5A00960CC82004EECBA /* nu.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nu.pdf; path = Resources/symbols/nu.pdf; sourceTree = "<group>"; };
+		932BA5A10960CC82004EECBA /* xi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = xi.pdf; path = Resources/symbols/xi.pdf; sourceTree = "<group>"; };
+		932BA5A20960CC82004EECBA /* succeq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = succeq.pdf; path = Resources/symbols/succeq.pdf; sourceTree = "<group>"; };
+		932BA5A30960CC82004EECBA /* sqsupset.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqsupset.pdf; path = Resources/symbols/sqsupset.pdf; sourceTree = "<group>"; };
+		932BA5A40960CC82004EECBA /* upsilon-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "upsilon-big.pdf"; path = "Resources/symbols/upsilon-big.pdf"; sourceTree = "<group>"; };
+		932BA5A50960CC82004EECBA /* phi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = phi.pdf; path = Resources/symbols/phi.pdf; sourceTree = "<group>"; };
+		932BA5A60960CC82004EECBA /* phi-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "phi-big.pdf"; path = "Resources/symbols/phi-big.pdf"; sourceTree = "<group>"; };
+		932BA5A70960CC82004EECBA /* omega-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "omega-big.pdf"; path = "Resources/symbols/omega-big.pdf"; sourceTree = "<group>"; };
+		932BA5A80960CC82004EECBA /* nprec.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nprec.pdf; path = Resources/symbols/nprec.pdf; sourceTree = "<group>"; };
+		932BA5A90960CC82004EECBA /* pi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = pi.pdf; path = Resources/symbols/pi.pdf; sourceTree = "<group>"; };
+		932BA5AA0960CC82004EECBA /* rho.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rho.pdf; path = Resources/symbols/rho.pdf; sourceTree = "<group>"; };
+		932BA5AB0960CC82004EECBA /* sigma.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sigma.pdf; path = Resources/symbols/sigma.pdf; sourceTree = "<group>"; };
+		932BA5AC0960CC82004EECBA /* tau.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = tau.pdf; path = Resources/symbols/tau.pdf; sourceTree = "<group>"; };
+		932BA5AD0960CC82004EECBA /* upsilon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = upsilon.pdf; path = Resources/symbols/upsilon.pdf; sourceTree = "<group>"; };
+		932BA5AE0960CC82004EECBA /* varphi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = varphi.pdf; path = Resources/symbols/varphi.pdf; sourceTree = "<group>"; };
+		932BA5AF0960CC82004EECBA /* chi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = chi.pdf; path = Resources/symbols/chi.pdf; sourceTree = "<group>"; };
+		932BA5B00960CC82004EECBA /* psi.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = psi.pdf; path = Resources/symbols/psi.pdf; sourceTree = "<group>"; };
+		932BA5B10960CC82004EECBA /* omega.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = omega.pdf; path = Resources/symbols/omega.pdf; sourceTree = "<group>"; };
+		932BA5B20960CC82004EECBA /* gamma-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "gamma-big.pdf"; path = "Resources/symbols/gamma-big.pdf"; sourceTree = "<group>"; };
+		932BA5B30960CC82004EECBA /* delta-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "delta-big.pdf"; path = "Resources/symbols/delta-big.pdf"; sourceTree = "<group>"; };
+		932BA5B40960CC82004EECBA /* theta-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "theta-big.pdf"; path = "Resources/symbols/theta-big.pdf"; sourceTree = "<group>"; };
+		932BA5B50960CC82004EECBA /* unrhd.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = unrhd.pdf; path = Resources/symbols/unrhd.pdf; sourceTree = "<group>"; };
+		932BA5B60960CC82004EECBA /* bigtriangledown.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigtriangledown.pdf; path = Resources/symbols/bigtriangledown.pdf; sourceTree = "<group>"; };
+		932BA5B70960CC82004EECBA /* circ.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = circ.pdf; path = Resources/symbols/circ.pdf; sourceTree = "<group>"; };
+		932BA5B90960CC82004EECBA /* lesssim.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = lesssim.pdf; path = Resources/symbols/lesssim.pdf; sourceTree = "<group>"; };
+		932BA5BA0960CC82004EECBA /* odot.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = odot.pdf; path = Resources/symbols/odot.pdf; sourceTree = "<group>"; };
+		932BA5BB0960CC82004EECBA /* emptyset.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = emptyset.pdf; path = Resources/symbols/emptyset.pdf; sourceTree = "<group>"; };
+		932BA5BC0960CC82004EECBA /* sqcup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqcup.pdf; path = Resources/symbols/sqcup.pdf; sourceTree = "<group>"; };
+		932BA5BD0960CC82004EECBA /* mp.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = mp.pdf; path = Resources/symbols/mp.pdf; sourceTree = "<group>"; };
+		932BA5BE0960CC82004EECBA /* in.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = in.pdf; path = Resources/symbols/in.pdf; sourceTree = "<group>"; };
+		932BA5BF0960CC82004EECBA /* bar.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bar.pdf; path = Resources/symbols/bar.pdf; sourceTree = "<group>"; };
+		932BA5C00960CC82004EECBA /* rightharpoonup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rightharpoonup.pdf; path = Resources/symbols/rightharpoonup.pdf; sourceTree = "<group>"; };
+		932BA5C10960CC82004EECBA /* bot.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bot.pdf; path = Resources/symbols/bot.pdf; sourceTree = "<group>"; };
+		932BA5C20960CC82004EECBA /* top.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = top.pdf; path = Resources/symbols/top.pdf; sourceTree = "<group>"; };
+		932BA5C30960CC82004EECBA /* hookleftarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = hookleftarrow.pdf; path = Resources/symbols/hookleftarrow.pdf; sourceTree = "<group>"; };
+		932BA5C40960CC82004EECBA /* nearrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nearrow.pdf; path = Resources/symbols/nearrow.pdf; sourceTree = "<group>"; };
+		932BA5C50960CC82004EECBA /* dashv.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = dashv.pdf; path = Resources/symbols/dashv.pdf; sourceTree = "<group>"; };
+		932BA5C60960CC82004EECBA /* diamond.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = diamond.pdf; path = Resources/symbols/diamond.pdf; sourceTree = "<group>"; };
+		932BA5C70960CC82004EECBA /* leftrightarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = leftrightarrow.pdf; path = Resources/symbols/leftrightarrow.pdf; sourceTree = "<group>"; };
+		932BA5C80960CC82004EECBA /* npreceq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = npreceq.pdf; path = Resources/symbols/npreceq.pdf; sourceTree = "<group>"; };
+		932BA5C90960CC82004EECBA /* bullet.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bullet.pdf; path = Resources/symbols/bullet.pdf; sourceTree = "<group>"; };
+		932BA5CA0960CC82004EECBA /* notin.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = notin.pdf; path = Resources/symbols/notin.pdf; sourceTree = "<group>"; };
+		932BA5CB0960CC82004EECBA /* ast.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ast.pdf; path = Resources/symbols/ast.pdf; sourceTree = "<group>"; };
+		932BA5CC0960CC82004EECBA /* neq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = neq.pdf; path = Resources/symbols/neq.pdf; sourceTree = "<group>"; };
+		932BA5CD0960CC82004EECBA /* lll.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = lll.pdf; path = Resources/symbols/lll.pdf; sourceTree = "<group>"; };
+		932BA5CE0960CC82004EECBA /* ngeqslant.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ngeqslant.pdf; path = Resources/symbols/ngeqslant.pdf; sourceTree = "<group>"; };
+		932BA5CF0960CC82004EECBA /* ominus.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ominus.pdf; path = Resources/symbols/ominus.pdf; sourceTree = "<group>"; };
+		932BA5D00960CC82004EECBA /* overleftarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = overleftarrow.pdf; path = Resources/symbols/overleftarrow.pdf; sourceTree = "<group>"; };
+		932BA5D10960CC82004EECBA /* looparrowleft.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = looparrowleft.pdf; path = Resources/symbols/looparrowleft.pdf; sourceTree = "<group>"; };
+		932BA5D20960CC82004EECBA /* equiv.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = equiv.pdf; path = Resources/symbols/equiv.pdf; sourceTree = "<group>"; };
+		932BA5D30960CC82004EECBA /* cup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = cup.pdf; path = Resources/symbols/cup.pdf; sourceTree = "<group>"; };
+		932BA5D40960CC82004EECBA /* imath.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = imath.pdf; path = Resources/symbols/imath.pdf; sourceTree = "<group>"; };
+		932BA5D50960CC82004EECBA /* nleq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nleq.pdf; path = Resources/symbols/nleq.pdf; sourceTree = "<group>"; };
+		932BA5D60960CC82004EECBA /* ddagger.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ddagger.pdf; path = Resources/symbols/ddagger.pdf; sourceTree = "<group>"; };
+		932BA5D70960CC82004EECBA /* downarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = downarrow.pdf; path = Resources/symbols/downarrow.pdf; sourceTree = "<group>"; };
+		932BA5D80960CC82004EECBA /* o.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = o.pdf; path = Resources/symbols/o.pdf; sourceTree = "<group>"; };
+		932BA5D90960CC82004EECBA /* overrightarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = overrightarrow.pdf; path = Resources/symbols/overrightarrow.pdf; sourceTree = "<group>"; };
+		932BA5DA0960CC82004EECBA /* simeq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = simeq.pdf; path = Resources/symbols/simeq.pdf; sourceTree = "<group>"; };
+		932BA5DB0960CC82004EECBA /* ngeq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ngeq.pdf; path = Resources/symbols/ngeq.pdf; sourceTree = "<group>"; };
+		932BA5DC0960CC82004EECBA /* parallel.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = parallel.pdf; path = Resources/symbols/parallel.pdf; sourceTree = "<group>"; };
+		932BA5DD0960CC82004EECBA /* h-mathbb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "h-mathbb.pdf"; path = "Resources/symbols/h-mathbb.pdf"; sourceTree = "<group>"; };
+		932BA5DE0960CC82004EECBA /* hbar.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = hbar.pdf; path = Resources/symbols/hbar.pdf; sourceTree = "<group>"; };
+		932BA5DF0960CC82004EECBA /* nwarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nwarrow.pdf; path = Resources/symbols/nwarrow.pdf; sourceTree = "<group>"; };
+		932BA5E00960CC82004EECBA /* wedge.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = wedge.pdf; path = Resources/symbols/wedge.pdf; sourceTree = "<group>"; };
+		932BA5E10960CC82004EECBA /* oslash.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = oslash.pdf; path = Resources/symbols/oslash.pdf; sourceTree = "<group>"; };
+		932BA5E20960CC82004EECBA /* supset.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = supset.pdf; path = Resources/symbols/supset.pdf; sourceTree = "<group>"; };
+		932BA5E30960CC82004EECBA /* nsucc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nsucc.pdf; path = Resources/symbols/nsucc.pdf; sourceTree = "<group>"; };
+		932BA5E40960CC82004EECBA /* unlhd.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = unlhd.pdf; path = Resources/symbols/unlhd.pdf; sourceTree = "<group>"; };
+		932BA5E50960CC82004EECBA /* subset.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = subset.pdf; path = Resources/symbols/subset.pdf; sourceTree = "<group>"; };
+		932BA5E60960CC82004EECBA /* rightharpoondown.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rightharpoondown.pdf; path = Resources/symbols/rightharpoondown.pdf; sourceTree = "<group>"; };
+		932BA5E70960CC82004EECBA /* setminus.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = setminus.pdf; path = Resources/symbols/setminus.pdf; sourceTree = "<group>"; };
+		932BA5E80960CC82004EECBA /* oplus.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = oplus.pdf; path = Resources/symbols/oplus.pdf; sourceTree = "<group>"; };
+		932BA5E90960CC82004EECBA /* bigtriangleup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigtriangleup.pdf; path = Resources/symbols/bigtriangleup.pdf; sourceTree = "<group>"; };
+		932BA5EA0960CC82004EECBA /* ll.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = ll.pdf; path = Resources/symbols/ll.pdf; sourceTree = "<group>"; };
+		932BA5EB0960CC82004EECBA /* cdot.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = cdot.pdf; path = Resources/symbols/cdot.pdf; sourceTree = "<group>"; };
+		932BA5EC0960CC82004EECBA /* asymp.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = asymp.pdf; path = Resources/symbols/asymp.pdf; sourceTree = "<group>"; };
+		932BA5ED0960CC82004EECBA /* propto.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = propto.pdf; path = Resources/symbols/propto.pdf; sourceTree = "<group>"; };
+		932BA5EE0960CC82004EECBA /* geqslant.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = geqslant.pdf; path = Resources/symbols/geqslant.pdf; sourceTree = "<group>"; };
+		932BA5EF0960CC82004EECBA /* beta.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = beta.pdf; path = Resources/symbols/beta.pdf; sourceTree = "<group>"; };
+		932BA5F00960CC82004EECBA /* hookrightarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = hookrightarrow.pdf; path = Resources/symbols/hookrightarrow.pdf; sourceTree = "<group>"; };
+		932BA5F10960CC82004EECBA /* triangleleft.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = triangleleft.pdf; path = Resources/symbols/triangleleft.pdf; sourceTree = "<group>"; };
+		932BA5F20960CC82004EECBA /* geq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = geq.pdf; path = Resources/symbols/geq.pdf; sourceTree = "<group>"; };
+		932BA5F30960CC82004EECBA /* longmapsto.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = longmapsto.pdf; path = Resources/symbols/longmapsto.pdf; sourceTree = "<group>"; };
+		932BA5F40960CC82004EECBA /* looparrowright.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = looparrowright.pdf; path = Resources/symbols/looparrowright.pdf; sourceTree = "<group>"; };
+		932BA5F50960CC82004EECBA /* hat.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = hat.pdf; path = Resources/symbols/hat.pdf; sourceTree = "<group>"; };
+		932BA5F60960CC82004EECBA /* swarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = swarrow.pdf; path = Resources/symbols/swarrow.pdf; sourceTree = "<group>"; };
+		932BA5F70960CC82004EECBA /* uplus.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = uplus.pdf; path = Resources/symbols/uplus.pdf; sourceTree = "<group>"; };
+		932BA5F80960CC82004EECBA /* leftharpoonup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = leftharpoonup.pdf; path = Resources/symbols/leftharpoonup.pdf; sourceTree = "<group>"; };
+		932BA5F90960CC82004EECBA /* underrightarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = underrightarrow.pdf; path = Resources/symbols/underrightarrow.pdf; sourceTree = "<group>"; };
+		932BA5FA0960CC82004EECBA /* succ.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = succ.pdf; path = Resources/symbols/succ.pdf; sourceTree = "<group>"; };
+		932BA5FB0960CC82004EECBA /* preceq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = preceq.pdf; path = Resources/symbols/preceq.pdf; sourceTree = "<group>"; };
+		932BA5FC0960CC82004EECBA /* sqrt.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqrt.pdf; path = Resources/symbols/sqrt.pdf; sourceTree = "<group>"; };
+		932BA5FD0960CC82004EECBA /* nleqslant.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nleqslant.pdf; path = Resources/symbols/nleqslant.pdf; sourceTree = "<group>"; };
+		932BA5FE0960CC82004EECBA /* sqsupseteq.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqsupseteq.pdf; path = Resources/symbols/sqsupseteq.pdf; sourceTree = "<group>"; };
+		932BA5FF0960CC82004EECBA /* alpha.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = alpha.pdf; path = Resources/symbols/alpha.pdf; sourceTree = "<group>"; };
+		932BA6000960CC82004EECBA /* triangleright.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = triangleright.pdf; path = Resources/symbols/triangleright.pdf; sourceTree = "<group>"; };
+		932BA6010960CC82004EECBA /* overbrace.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = overbrace.pdf; path = Resources/symbols/overbrace.pdf; sourceTree = "<group>"; };
+		932BA6020960CC82004EECBA /* prec.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = prec.pdf; path = Resources/symbols/prec.pdf; sourceTree = "<group>"; };
+		932BA6030960CC82004EECBA /* underleftarrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = underleftarrow.pdf; path = Resources/symbols/underleftarrow.pdf; sourceTree = "<group>"; };
+		932BA6040960CC82004EECBA /* bigcirc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = bigcirc.pdf; path = Resources/symbols/bigcirc.pdf; sourceTree = "<group>"; };
+		932BA6050960CC82004EECBA /* amalg.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = amalg.pdf; path = Resources/symbols/amalg.pdf; sourceTree = "<group>"; };
+		932BA6060960CC82004EECBA /* underbrace.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = underbrace.pdf; path = Resources/symbols/underbrace.pdf; sourceTree = "<group>"; };
+		932BA6070960CC82004EECBA /* wr.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = wr.pdf; path = Resources/symbols/wr.pdf; sourceTree = "<group>"; };
+		932BA6080960CC82004EECBA /* leftrightarrow-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "leftrightarrow-big.pdf"; path = "Resources/symbols/leftrightarrow-big.pdf"; sourceTree = "<group>"; };
+		932BA6090960CC82004EECBA /* vee.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = vee.pdf; path = Resources/symbols/vee.pdf; sourceTree = "<group>"; };
+		932BA60A0960CC82004EECBA /* psi-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "psi-big.pdf"; path = "Resources/symbols/psi-big.pdf"; sourceTree = "<group>"; };
+		932BA60B0960CC82004EECBA /* times.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = times.pdf; path = Resources/symbols/times.pdf; sourceTree = "<group>"; };
+		932BA60C0960CC82004EECBA /* searrow.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = searrow.pdf; path = Resources/symbols/searrow.pdf; sourceTree = "<group>"; };
+		932BA60D0960CC82004EECBA /* otimes.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = otimes.pdf; path = Resources/symbols/otimes.pdf; sourceTree = "<group>"; };
+		932BA6D20960CC9B004EECBA /* PaletteCell.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PaletteCell.m; sourceTree = "<group>"; };
+		932BA6D30960CC9B004EECBA /* PaletteMatrix.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PaletteMatrix.m; sourceTree = "<group>"; };
+		932BA6D40960CC9B004EECBA /* PaletteCell.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PaletteCell.h; sourceTree = "<group>"; };
+		932BA6D50960CC9B004EECBA /* PaletteItem.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PaletteItem.h; sourceTree = "<group>"; };
+		932BA6D60960CC9B004EECBA /* PaletteMatrix.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PaletteMatrix.h; sourceTree = "<group>"; };
+		932BA6D70960CC9B004EECBA /* PaletteItem.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PaletteItem.m; sourceTree = "<group>"; };
+		932BA8440961562A004EECBA /* prod.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = prod.pdf; path = Resources/symbols/prod.pdf; sourceTree = "<group>"; };
+		932BA84F096156B1004EECBA /* NSPopUpButtonExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonExtended.h; sourceTree = "<group>"; };
+		932BA850096156B1004EECBA /* NSPopUpButtonExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonExtended.m; sourceTree = "<group>"; };
+		932BA87009615747004EECBA /* ShortcutTextView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ShortcutTextView.m; sourceTree = "<group>"; };
+		932BA87109615747004EECBA /* ShortcutTextView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ShortcutTextView.h; sourceTree = "<group>"; };
+		932BADD509629EA7004EECBA /* nmid.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nmid.pdf; path = Resources/symbols/nmid.pdf; sourceTree = "<group>"; };
 		932CF4200826C2EB00434128 /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
 		932CF4210826C2EB00434128 /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
 		932CF4240826C33D00434128 /* LibraryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFile.h; sourceTree = "<group>"; };
@@ -308,23 +699,8 @@
 		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/Read Me.rtfd"; sourceTree = "<group>"; };
 		93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93AD08B708A2D2CE0045B7F9 /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
-		93B202AB080EA86C00AB6463 /* widetilde.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = widetilde.tiff; path = Resources/symbols/widetilde.tiff; sourceTree = "<group>"; };
-		93B202AC080EA86C00AB6463 /* widehat.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = widehat.tiff; path = Resources/symbols/widehat.tiff; sourceTree = "<group>"; };
-		93B202AD080EA86C00AB6463 /* vec.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = vec.tiff; path = Resources/symbols/vec.tiff; sourceTree = "<group>"; };
-		93B202AE080EA86C00AB6463 /* underrightarrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = underrightarrow.tiff; path = Resources/symbols/underrightarrow.tiff; sourceTree = "<group>"; };
-		93B202AF080EA86C00AB6463 /* underleftarrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = underleftarrow.tiff; path = Resources/symbols/underleftarrow.tiff; sourceTree = "<group>"; };
-		93B202B0080EA86C00AB6463 /* underbrace.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = underbrace.tiff; path = Resources/symbols/underbrace.tiff; sourceTree = "<group>"; };
-		93B202B1080EA86C00AB6463 /* tilde.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = tilde.tiff; path = Resources/symbols/tilde.tiff; sourceTree = "<group>"; };
-		93B202B2080EA86C00AB6463 /* phi.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = phi.tiff; path = Resources/symbols/phi.tiff; sourceTree = "<group>"; };
-		93B202B3080EA86C00AB6463 /* overrightarrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = overrightarrow.tiff; path = Resources/symbols/overrightarrow.tiff; sourceTree = "<group>"; };
-		93B202B4080EA86C00AB6463 /* overleftarrow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = overleftarrow.tiff; path = Resources/symbols/overleftarrow.tiff; sourceTree = "<group>"; };
-		93B202B5080EA86C00AB6463 /* overbrace.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = overbrace.tiff; path = Resources/symbols/overbrace.tiff; sourceTree = "<group>"; };
-		93B202B9080EA86C00AB6463 /* jmath.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = jmath.tiff; path = Resources/symbols/jmath.tiff; sourceTree = "<group>"; };
-		93B202BA080EA86C00AB6463 /* dot.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = dot.tiff; path = Resources/symbols/dot.tiff; sourceTree = "<group>"; };
-		93B202BC080EA86C00AB6463 /* ddot.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ddot.tiff; path = Resources/symbols/ddot.tiff; sourceTree = "<group>"; };
-		93B202BF080EA86C00AB6463 /* bar.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = bar.tiff; path = Resources/symbols/bar.tiff; sourceTree = "<group>"; };
-		93B202C0080EA86C00AB6463 /* imath.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = imath.tiff; path = Resources/symbols/imath.tiff; sourceTree = "<group>"; };
-		93B202C1080EA86C00AB6463 /* hat.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = hat.tiff; path = Resources/symbols/hat.tiff; sourceTree = "<group>"; };
+		93B419E4095C017D009C6A1F /* ShortcutTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ShortcutTableView.m; sourceTree = "<group>"; };
+		93B419E5095C017D009C6A1F /* ShortcutTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ShortcutTableView.h; sourceTree = "<group>"; };
 		93B528AC089FFC2B00F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/add.tiff; sourceTree = "<group>"; };
 		93B528AD089FFC2B00F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/add-pressed.tiff"; sourceTree = "<group>"; };
 		93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/remove-pressed.tiff"; sourceTree = "<group>"; };
@@ -333,11 +709,6 @@
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
 		93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArrayExtended.m; sourceTree = "<group>"; };
-		93D682EF086C3FAC0009A451 /* nleq.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = nleq.tiff; path = Resources/symbols/nleq.tiff; sourceTree = "<group>"; };
-		93D682F0086C3FAC0009A451 /* ngeq.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ngeq.tiff; path = Resources/symbols/ngeq.tiff; sourceTree = "<group>"; };
-		93D682F1086C3FAC0009A451 /* ngeqslant.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ngeqslant.tiff; path = Resources/symbols/ngeqslant.tiff; sourceTree = "<group>"; };
-		93D682F2086C3FAC0009A451 /* nleqslant.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = nleqslant.tiff; path = Resources/symbols/nleqslant.tiff; sourceTree = "<group>"; };
-		93D6833D086C45270009A451 /* nparallel.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = nparallel.tiff; path = Resources/symbols/nparallel.tiff; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
 		93D6BA1C082941900081D58A /* NSArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtended.m; sourceTree = "<group>"; };
 		93E8196F087969BE0081B897 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
@@ -356,6 +727,16 @@
 		93F16CAE089FC1E700FF7B94 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		93F16CCC089FC25200FF7B94 /* LatexPalettesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LatexPalettesController.h; sourceTree = "<group>"; };
 		93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LatexPalettesController.m; sourceTree = "<group>"; };
+		93F350200952AF2300DDFD09 /* SMLSyntaxColouring.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = SMLSyntaxColouring.m; sourceTree = "<group>"; };
+		93F350210952AF2300DDFD09 /* SMLSyntaxColouring.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = SMLSyntaxColouring.h; sourceTree = "<group>"; };
+		93F350410952AFC400DDFD09 /* advancedToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = advancedToolbarItem.tiff; sourceTree = "<group>"; };
+		93F350420952AFC400DDFD09 /* compositionToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = compositionToolbarItem.tiff; sourceTree = "<group>"; };
+		93F350430952AFC400DDFD09 /* editionToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = editionToolbarItem.tiff; sourceTree = "<group>"; };
+		93F350440952AFC400DDFD09 /* generalToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = generalToolbarItem.tiff; sourceTree = "<group>"; };
+		93F350450952AFC400DDFD09 /* preambleToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = preambleToolbarItem.tiff; sourceTree = "<group>"; };
+		93F350460952AFC400DDFD09 /* serviceToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = serviceToolbarItem.tiff; sourceTree = "<group>"; };
+		93F350470952AFC400DDFD09 /* webToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = webToolbarItem.tiff; sourceTree = "<group>"; };
+		93F3506C0952B08700DDFD09 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
 		93F73E8D0899092A00EFFA5E /* EncapsulationController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationController.h; sourceTree = "<group>"; };
 		93F73E8E0899092A00EFFA5E /* EncapsulationController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationController.m; sourceTree = "<group>"; };
 		93F73E9C0899095F00EFFA5E /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Encapsulation.nib; sourceTree = "<group>"; };
@@ -458,6 +839,8 @@
 			children = (
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
+				93F350400952AFC400DDFD09 /* toolbarItems */,
+				93F3506C0952B08700DDFD09 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				930255CF07F0C2A800011996 /* Localizable.strings */,
@@ -540,6 +923,8 @@
 				9308E1E807EE3A5900DD1B5F /* LineCountTextView.m */,
 				930AC4E107EDEEF400AC66FA /* LineCountRulerView.h */,
 				930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */,
+				93F350210952AF2300DDFD09 /* SMLSyntaxColouring.h */,
+				93F350200952AF2300DDFD09 /* SMLSyntaxColouring.m */,
 			);
 			name = LineCount;
 			sourceTree = "<group>";
@@ -549,6 +934,10 @@
 			children = (
 				9315A59907FD36BD00AFCCE9 /* PreferencesController.h */,
 				9315A59807FD36BD00AFCCE9 /* PreferencesController.m */,
+				93B419E5095C017D009C6A1F /* ShortcutTableView.h */,
+				93B419E4095C017D009C6A1F /* ShortcutTableView.m */,
+				932BA87009615747004EECBA /* ShortcutTextView.m */,
+				932BA87109615747004EECBA /* ShortcutTextView.h */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -581,6 +970,8 @@
 				9304224B082975ED00F2B555 /* NSIndexSetExtended.m */,
 				93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */,
 				93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */,
+				932BA84F096156B1004EECBA /* NSPopUpButtonExtended.h */,
+				932BA850096156B1004EECBA /* NSPopUpButtonExtended.m */,
 				93E8196F087969BE0081B897 /* NSSegmentedControlExtended.h */,
 				93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */,
 				93EFDB9C088FF163000156A3 /* NSStringExtended.h */,
@@ -596,30 +987,202 @@
 		93351D2C07F8216B004E4606 /* Symbols */ = {
 			isa = PBXGroup;
 			children = (
-				93B202BF080EA86C00AB6463 /* bar.tiff */,
-				93B202BC080EA86C00AB6463 /* ddot.tiff */,
-				93B202BA080EA86C00AB6463 /* dot.tiff */,
-				93B202C1080EA86C00AB6463 /* hat.tiff */,
-				9313BF24086C3B410056DB21 /* leqslant.tiff */,
-				9313BF25086C3B410056DB21 /* geqslant.tiff */,
-				93D682EF086C3FAC0009A451 /* nleq.tiff */,
-				93D682F0086C3FAC0009A451 /* ngeq.tiff */,
-				93D682F1086C3FAC0009A451 /* ngeqslant.tiff */,
-				93D682F2086C3FAC0009A451 /* nleqslant.tiff */,
-				93B202C0080EA86C00AB6463 /* imath.tiff */,
-				93B202B9080EA86C00AB6463 /* jmath.tiff */,
-				93D6833D086C45270009A451 /* nparallel.tiff */,
-				93B202B5080EA86C00AB6463 /* overbrace.tiff */,
-				93B202B4080EA86C00AB6463 /* overleftarrow.tiff */,
-				93B202B3080EA86C00AB6463 /* overrightarrow.tiff */,
-				93B202B2080EA86C00AB6463 /* phi.tiff */,
-				93B202B1080EA86C00AB6463 /* tilde.tiff */,
-				93B202B0080EA86C00AB6463 /* underbrace.tiff */,
-				93B202AF080EA86C00AB6463 /* underleftarrow.tiff */,
-				93B202AE080EA86C00AB6463 /* underrightarrow.tiff */,
-				93B202AD080EA86C00AB6463 /* vec.tiff */,
-				93B202AC080EA86C00AB6463 /* widehat.tiff */,
-				93B202AB080EA86C00AB6463 /* widetilde.tiff */,
+				932BA54A0960CC82004EECBA /* sqrt3.pdf */,
+				932BA54B0960CC82004EECBA /* rightarrow-big.pdf */,
+				932BA54C0960CC82004EECBA /* partial.pdf */,
+				932BA54D0960CC82004EECBA /* sum.pdf */,
+				932BA54E0960CC82004EECBA /* coprod.pdf */,
+				932BA54F0960CC82004EECBA /* dot.pdf */,
+				932BA5500960CC82004EECBA /* iiint.pdf */,
+				932BA5510960CC82004EECBA /* iint.pdf */,
+				932BA5520960CC82004EECBA /* oint.pdf */,
+				932BA5530960CC82004EECBA /* nexists.pdf */,
+				932BA5540960CC82004EECBA /* exists.pdf */,
+				932BA5550960CC82004EECBA /* forall.pdf */,
+				932BA5560960CC82004EECBA /* neg.pdf */,
+				932BA5570960CC82004EECBA /* bigwedge.pdf */,
+				932BA5580960CC82004EECBA /* bigvee.pdf */,
+				932BA5590960CC82004EECBA /* bigcap.pdf */,
+				932BA55A0960CC82004EECBA /* bigcup.pdf */,
+				932BA55B0960CC82004EECBA /* widetilde.pdf */,
+				932BA55C0960CC82004EECBA /* rightarrow.pdf */,
+				932BA55D0960CC82004EECBA /* leftarrow.pdf */,
+				932BA55E0960CC82004EECBA /* int.pdf */,
+				932BA55F0960CC82004EECBA /* dagger.pdf */,
+				932BA5600960CC82004EECBA /* sim.pdf */,
+				932BA5610960CC82004EECBA /* rtimes.pdf */,
+				932BA5620960CC82004EECBA /* approx.pdf */,
+				932BA5630960CC82004EECBA /* cong.pdf */,
+				932BA5640960CC82004EECBA /* leq.pdf */,
+				932BA5650960CC82004EECBA /* ddot.pdf */,
+				932BA5660960CC82004EECBA /* supseteq.pdf */,
+				932BA5670960CC82004EECBA /* nsubseteq.pdf */,
+				932BA5680960CC82004EECBA /* subseteq.pdf */,
+				932BA5690960CC82004EECBA /* leqslant.pdf */,
+				932BA56A0960CC82004EECBA /* ggg.pdf */,
+				932BA56B0960CC82004EECBA /* uparrow.pdf */,
+				932BA56C0960CC82004EECBA /* models.pdf */,
+				932BA56D0960CC82004EECBA /* ltimes.pdf */,
+				932BA56E0960CC82004EECBA /* widehat.pdf */,
+				932BA56F0960CC82004EECBA /* nparallel.pdf */,
+				932BA5700960CC82004EECBA /* sqsubseteq.pdf */,
+				932BA5710960CC82004EECBA /* sqsubset.pdf */,
+				932BA5720960CC82004EECBA /* leftarrow-big.pdf */,
+				932BA5730960CC82004EECBA /* mapsto.pdf */,
+				932BA5740960CC82004EECBA /* sqcap.pdf */,
+				932BA5750960CC82004EECBA /* mid.pdf */,
+				932BA5760960CC82004EECBA /* pm.pdf */,
+				932BA5770960CC82004EECBA /* div.pdf */,
+				932BA5780960CC82004EECBA /* gg.pdf */,
+				932BA5790960CC82004EECBA /* cap.pdf */,
+				932BA57A0960CC82004EECBA /* vdash.pdf */,
+				932BA57B0960CC82004EECBA /* star.pdf */,
+				932BA57C0960CC82004EECBA /* tilde.pdf */,
+				932BA57D0960CC82004EECBA /* nsupseteq.pdf */,
+				932BA57E0960CC82004EECBA /* bowtie.pdf */,
+				932BA57F0960CC82004EECBA /* ni.pdf */,
+				932BA5800960CC82004EECBA /* vec.pdf */,
+				932BA5810960CC82004EECBA /* jmath.pdf */,
+				932BA5820960CC82004EECBA /* ell.pdf */,
+				932BA5830960CC82004EECBA /* re.pdf */,
+				932BA5840960CC82004EECBA /* im.pdf */,
+				932BA5850960CC82004EECBA /* n-mathbb.pdf */,
+				932BA5860960CC82004EECBA /* z-mathbb.pdf */,
+				932BA5870960CC82004EECBA /* q-mathbb.pdf */,
+				932BA8440961562A004EECBA /* prod.pdf */,
+				932BA5890960CC82004EECBA /* doteq.pdf */,
+				932BA58A0960CC82004EECBA /* aleph.pdf */,
+				932BA58B0960CC82004EECBA /* infty.pdf */,
+				932BA58C0960CC82004EECBA /* nabla.pdf */,
+				932BA58D0960CC82004EECBA /* gtrsim.pdf */,
+				932BA58E0960CC82004EECBA /* nsucceq.pdf */,
+				932BA58F0960CC82004EECBA /* p-mathbb.pdf */,
+				932BA5900960CC82004EECBA /* r-mathbb.pdf */,
+				932BA5910960CC82004EECBA /* leftharpoondown.pdf */,
+				932BA5920960CC82004EECBA /* lambda-big.pdf */,
+				932BA5930960CC82004EECBA /* pi-big.pdf */,
+				932BA5940960CC82004EECBA /* sigma-big.pdf */,
+				932BA5950960CC82004EECBA /* xi-big.pdf */,
+				932BA5960960CC82004EECBA /* gamma.pdf */,
+				932BA5970960CC82004EECBA /* delta.pdf */,
+				932BA5980960CC82004EECBA /* epsilon.pdf */,
+				932BA5990960CC82004EECBA /* zeta.pdf */,
+				932BA59A0960CC82004EECBA /* eta.pdf */,
+				932BA59B0960CC82004EECBA /* theta.pdf */,
+				932BA59C0960CC82004EECBA /* iota.pdf */,
+				932BA59D0960CC82004EECBA /* kappa.pdf */,
+				932BA59E0960CC82004EECBA /* lambda.pdf */,
+				932BA59F0960CC82004EECBA /* mu.pdf */,
+				932BA5A00960CC82004EECBA /* nu.pdf */,
+				932BA5A10960CC82004EECBA /* xi.pdf */,
+				932BA5A20960CC82004EECBA /* succeq.pdf */,
+				932BA5A30960CC82004EECBA /* sqsupset.pdf */,
+				932BA5A40960CC82004EECBA /* upsilon-big.pdf */,
+				932BA5A50960CC82004EECBA /* phi.pdf */,
+				932BA5A60960CC82004EECBA /* phi-big.pdf */,
+				932BA5A70960CC82004EECBA /* omega-big.pdf */,
+				932BA5A80960CC82004EECBA /* nprec.pdf */,
+				932BA5A90960CC82004EECBA /* pi.pdf */,
+				932BA5AA0960CC82004EECBA /* rho.pdf */,
+				932BA5AB0960CC82004EECBA /* sigma.pdf */,
+				932BA5AC0960CC82004EECBA /* tau.pdf */,
+				932BA5AD0960CC82004EECBA /* upsilon.pdf */,
+				932BA5AE0960CC82004EECBA /* varphi.pdf */,
+				932BA5AF0960CC82004EECBA /* chi.pdf */,
+				932BA5B00960CC82004EECBA /* psi.pdf */,
+				932BA5B10960CC82004EECBA /* omega.pdf */,
+				932BA5B20960CC82004EECBA /* gamma-big.pdf */,
+				932BA5B30960CC82004EECBA /* delta-big.pdf */,
+				932BA5B40960CC82004EECBA /* theta-big.pdf */,
+				932BA5B50960CC82004EECBA /* unrhd.pdf */,
+				932BA5B60960CC82004EECBA /* bigtriangledown.pdf */,
+				932BA5B70960CC82004EECBA /* circ.pdf */,
+				932BA5B90960CC82004EECBA /* lesssim.pdf */,
+				932BA5BA0960CC82004EECBA /* odot.pdf */,
+				932BA5BB0960CC82004EECBA /* emptyset.pdf */,
+				932BA5BC0960CC82004EECBA /* sqcup.pdf */,
+				932BA5BD0960CC82004EECBA /* mp.pdf */,
+				932BA5BE0960CC82004EECBA /* in.pdf */,
+				932BA5BF0960CC82004EECBA /* bar.pdf */,
+				932BA5C00960CC82004EECBA /* rightharpoonup.pdf */,
+				932BA5C10960CC82004EECBA /* bot.pdf */,
+				932BA5C20960CC82004EECBA /* top.pdf */,
+				932BA5C30960CC82004EECBA /* hookleftarrow.pdf */,
+				932BA5C40960CC82004EECBA /* nearrow.pdf */,
+				932BA5C50960CC82004EECBA /* dashv.pdf */,
+				932BA5C60960CC82004EECBA /* diamond.pdf */,
+				932BA5C70960CC82004EECBA /* leftrightarrow.pdf */,
+				932BA5C80960CC82004EECBA /* npreceq.pdf */,
+				932BA5C90960CC82004EECBA /* bullet.pdf */,
+				932BA5CA0960CC82004EECBA /* notin.pdf */,
+				932BA5CB0960CC82004EECBA /* ast.pdf */,
+				932BA5CC0960CC82004EECBA /* neq.pdf */,
+				932BADD509629EA7004EECBA /* nmid.pdf */,
+				932BA5CD0960CC82004EECBA /* lll.pdf */,
+				932BA5CE0960CC82004EECBA /* ngeqslant.pdf */,
+				932BA5CF0960CC82004EECBA /* ominus.pdf */,
+				932BA5D00960CC82004EECBA /* overleftarrow.pdf */,
+				932BA5D10960CC82004EECBA /* looparrowleft.pdf */,
+				932BA5D20960CC82004EECBA /* equiv.pdf */,
+				932BA5D30960CC82004EECBA /* cup.pdf */,
+				932BA5D40960CC82004EECBA /* imath.pdf */,
+				932BA5D50960CC82004EECBA /* nleq.pdf */,
+				932BA5D60960CC82004EECBA /* ddagger.pdf */,
+				932BA5D70960CC82004EECBA /* downarrow.pdf */,
+				932BA5D80960CC82004EECBA /* o.pdf */,
+				932BA5D90960CC82004EECBA /* overrightarrow.pdf */,
+				932BA5DA0960CC82004EECBA /* simeq.pdf */,
+				932BA5DB0960CC82004EECBA /* ngeq.pdf */,
+				932BA5DC0960CC82004EECBA /* parallel.pdf */,
+				932BA5DD0960CC82004EECBA /* h-mathbb.pdf */,
+				932BA5DE0960CC82004EECBA /* hbar.pdf */,
+				932BA5DF0960CC82004EECBA /* nwarrow.pdf */,
+				932BA5E00960CC82004EECBA /* wedge.pdf */,
+				932BA5E10960CC82004EECBA /* oslash.pdf */,
+				932BA5E20960CC82004EECBA /* supset.pdf */,
+				932BA5E30960CC82004EECBA /* nsucc.pdf */,
+				932BA5E40960CC82004EECBA /* unlhd.pdf */,
+				932BA5E50960CC82004EECBA /* subset.pdf */,
+				932BA5E60960CC82004EECBA /* rightharpoondown.pdf */,
+				932BA5E70960CC82004EECBA /* setminus.pdf */,
+				932BA5E80960CC82004EECBA /* oplus.pdf */,
+				932BA5E90960CC82004EECBA /* bigtriangleup.pdf */,
+				932BA5EA0960CC82004EECBA /* ll.pdf */,
+				932BA5EB0960CC82004EECBA /* cdot.pdf */,
+				932BA5EC0960CC82004EECBA /* asymp.pdf */,
+				932BA5ED0960CC82004EECBA /* propto.pdf */,
+				932BA5EE0960CC82004EECBA /* geqslant.pdf */,
+				932BA5EF0960CC82004EECBA /* beta.pdf */,
+				932BA5F00960CC82004EECBA /* hookrightarrow.pdf */,
+				932BA5F10960CC82004EECBA /* triangleleft.pdf */,
+				932BA5F20960CC82004EECBA /* geq.pdf */,
+				932BA5F30960CC82004EECBA /* longmapsto.pdf */,
+				932BA5F40960CC82004EECBA /* looparrowright.pdf */,
+				932BA5F50960CC82004EECBA /* hat.pdf */,
+				932BA5F60960CC82004EECBA /* swarrow.pdf */,
+				932BA5F70960CC82004EECBA /* uplus.pdf */,
+				932BA5F80960CC82004EECBA /* leftharpoonup.pdf */,
+				932BA5F90960CC82004EECBA /* underrightarrow.pdf */,
+				932BA5FA0960CC82004EECBA /* succ.pdf */,
+				932BA5FB0960CC82004EECBA /* preceq.pdf */,
+				932BA5FC0960CC82004EECBA /* sqrt.pdf */,
+				932BA5FD0960CC82004EECBA /* nleqslant.pdf */,
+				932BA5FE0960CC82004EECBA /* sqsupseteq.pdf */,
+				932BA5FF0960CC82004EECBA /* alpha.pdf */,
+				932BA6000960CC82004EECBA /* triangleright.pdf */,
+				932BA6010960CC82004EECBA /* overbrace.pdf */,
+				932BA6020960CC82004EECBA /* prec.pdf */,
+				932BA6030960CC82004EECBA /* underleftarrow.pdf */,
+				932BA6040960CC82004EECBA /* bigcirc.pdf */,
+				932BA6050960CC82004EECBA /* amalg.pdf */,
+				932BA6060960CC82004EECBA /* underbrace.pdf */,
+				932BA6070960CC82004EECBA /* wr.pdf */,
+				932BA6080960CC82004EECBA /* leftrightarrow-big.pdf */,
+				932BA6090960CC82004EECBA /* vee.pdf */,
+				932BA60A0960CC82004EECBA /* psi-big.pdf */,
+				932BA60B0960CC82004EECBA /* times.pdf */,
+				932BA60C0960CC82004EECBA /* searrow.pdf */,
+				932BA60D0960CC82004EECBA /* otimes.pdf */,
 			);
 			name = Symbols;
 			sourceTree = "<group>";
@@ -667,6 +1230,12 @@
 			children = (
 				93F16CCC089FC25200FF7B94 /* LatexPalettesController.h */,
 				93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */,
+				932BA6D40960CC9B004EECBA /* PaletteCell.h */,
+				932BA6D20960CC9B004EECBA /* PaletteCell.m */,
+				932BA6D50960CC9B004EECBA /* PaletteItem.h */,
+				932BA6D70960CC9B004EECBA /* PaletteItem.m */,
+				932BA6D60960CC9B004EECBA /* PaletteMatrix.h */,
+				932BA6D30960CC9B004EECBA /* PaletteMatrix.m */,
 			);
 			name = LatexPalettes;
 			sourceTree = "<group>";
@@ -686,6 +1255,21 @@
 				931D5E0D08A15B9E00573DD8 /* HistoryTableView.m */,
 			);
 			name = History;
+			sourceTree = "<group>";
+		};
+		93F350400952AFC400DDFD09 /* toolbarItems */ = {
+			isa = PBXGroup;
+			children = (
+				93F350410952AFC400DDFD09 /* advancedToolbarItem.tiff */,
+				93F350420952AFC400DDFD09 /* compositionToolbarItem.tiff */,
+				93F350430952AFC400DDFD09 /* editionToolbarItem.tiff */,
+				93F350440952AFC400DDFD09 /* generalToolbarItem.tiff */,
+				93F350450952AFC400DDFD09 /* preambleToolbarItem.tiff */,
+				93F350460952AFC400DDFD09 /* serviceToolbarItem.tiff */,
+				93F350470952AFC400DDFD09 /* webToolbarItem.tiff */,
+			);
+			name = toolbarItems;
+			path = Resources/toolbarItems;
 			sourceTree = "<group>";
 		};
 		93F73E870899091300EFFA5E /* Encapsulation */ = {
@@ -776,35 +1360,11 @@
 				9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */,
 				93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */,
 				939A64580800281900AE4486 /* ServicesMenu.strings in Resources */,
-				93B202C2080EA86C00AB6463 /* widetilde.tiff in Resources */,
-				93B202C3080EA86C00AB6463 /* widehat.tiff in Resources */,
-				93B202C4080EA86C00AB6463 /* vec.tiff in Resources */,
-				93B202C5080EA86C00AB6463 /* underrightarrow.tiff in Resources */,
-				93B202C6080EA86C00AB6463 /* underleftarrow.tiff in Resources */,
-				93B202C7080EA86C00AB6463 /* underbrace.tiff in Resources */,
-				93B202C8080EA86C00AB6463 /* tilde.tiff in Resources */,
-				93B202C9080EA86C00AB6463 /* phi.tiff in Resources */,
-				93B202CA080EA86C00AB6463 /* overrightarrow.tiff in Resources */,
-				93B202CB080EA86C00AB6463 /* overleftarrow.tiff in Resources */,
-				93B202CC080EA86C00AB6463 /* overbrace.tiff in Resources */,
-				93B202D0080EA86C00AB6463 /* jmath.tiff in Resources */,
-				93B202D1080EA86C00AB6463 /* dot.tiff in Resources */,
-				93B202D3080EA86C00AB6463 /* ddot.tiff in Resources */,
-				93B202D6080EA86C00AB6463 /* bar.tiff in Resources */,
-				93B202D7080EA86C00AB6463 /* imath.tiff in Resources */,
-				93B202D8080EA86C00AB6463 /* hat.tiff in Resources */,
 				9344D83D0825818B00B17B37 /* folder-icon.png in Resources */,
 				932CF45F0826C5A500434128 /* file-icon.png in Resources */,
 				935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */,
 				935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */,
 				9343D0C908604F430024CDC2 /* refresh.tiff in Resources */,
-				9313BF26086C3B410056DB21 /* leqslant.tiff in Resources */,
-				9313BF27086C3B410056DB21 /* geqslant.tiff in Resources */,
-				93D682F3086C3FAC0009A451 /* nleq.tiff in Resources */,
-				93D682F4086C3FAC0009A451 /* ngeq.tiff in Resources */,
-				93D682F5086C3FAC0009A451 /* ngeqslant.tiff in Resources */,
-				93D682F6086C3FAC0009A451 /* nleqslant.tiff in Resources */,
-				93D6833E086C45270009A451 /* nparallel.tiff in Resources */,
 				9372A2F4087827FF00A3A645 /* Margin.nib in Resources */,
 				93149F7E089438B10017C83A /* latexit-lib.png in Resources */,
 				93F73E9D0899095F00EFFA5E /* Encapsulation.nib in Resources */,
@@ -820,6 +1380,210 @@
 				93F9DEB008A2D96C005DEBF6 /* Library.nib in Resources */,
 				93F9DEB108A2D96C005DEBF6 /* History.nib in Resources */,
 				934497ED08A520FC00CE2E61 /* poisson.pdf in Resources */,
+				93F350480952AFC400DDFD09 /* advancedToolbarItem.tiff in Resources */,
+				93F350490952AFC400DDFD09 /* compositionToolbarItem.tiff in Resources */,
+				93F3504A0952AFC400DDFD09 /* editionToolbarItem.tiff in Resources */,
+				93F3504B0952AFC400DDFD09 /* generalToolbarItem.tiff in Resources */,
+				93F3504C0952AFC400DDFD09 /* preambleToolbarItem.tiff in Resources */,
+				93F3504D0952AFC400DDFD09 /* serviceToolbarItem.tiff in Resources */,
+				93F3504E0952AFC400DDFD09 /* webToolbarItem.tiff in Resources */,
+				93F3506D0952B08700DDFD09 /* tex.plist in Resources */,
+				932BA60E0960CC82004EECBA /* sqrt3.pdf in Resources */,
+				932BA60F0960CC82004EECBA /* rightarrow-big.pdf in Resources */,
+				932BA6100960CC82004EECBA /* partial.pdf in Resources */,
+				932BA6110960CC82004EECBA /* sum.pdf in Resources */,
+				932BA6120960CC82004EECBA /* coprod.pdf in Resources */,
+				932BA6130960CC82004EECBA /* dot.pdf in Resources */,
+				932BA6140960CC82004EECBA /* iiint.pdf in Resources */,
+				932BA6150960CC82004EECBA /* iint.pdf in Resources */,
+				932BA6160960CC82004EECBA /* oint.pdf in Resources */,
+				932BA6170960CC82004EECBA /* nexists.pdf in Resources */,
+				932BA6180960CC82004EECBA /* exists.pdf in Resources */,
+				932BA6190960CC82004EECBA /* forall.pdf in Resources */,
+				932BA61A0960CC82004EECBA /* neg.pdf in Resources */,
+				932BA61B0960CC82004EECBA /* bigwedge.pdf in Resources */,
+				932BA61C0960CC82004EECBA /* bigvee.pdf in Resources */,
+				932BA61D0960CC82004EECBA /* bigcap.pdf in Resources */,
+				932BA61E0960CC82004EECBA /* bigcup.pdf in Resources */,
+				932BA61F0960CC82004EECBA /* widetilde.pdf in Resources */,
+				932BA6200960CC82004EECBA /* rightarrow.pdf in Resources */,
+				932BA6210960CC82004EECBA /* leftarrow.pdf in Resources */,
+				932BA6220960CC82004EECBA /* int.pdf in Resources */,
+				932BA6230960CC82004EECBA /* dagger.pdf in Resources */,
+				932BA6240960CC82004EECBA /* sim.pdf in Resources */,
+				932BA6250960CC82004EECBA /* rtimes.pdf in Resources */,
+				932BA6260960CC82004EECBA /* approx.pdf in Resources */,
+				932BA6270960CC82004EECBA /* cong.pdf in Resources */,
+				932BA6280960CC82004EECBA /* leq.pdf in Resources */,
+				932BA6290960CC82004EECBA /* ddot.pdf in Resources */,
+				932BA62A0960CC82004EECBA /* supseteq.pdf in Resources */,
+				932BA62B0960CC82004EECBA /* nsubseteq.pdf in Resources */,
+				932BA62C0960CC82004EECBA /* subseteq.pdf in Resources */,
+				932BA62D0960CC82004EECBA /* leqslant.pdf in Resources */,
+				932BA62E0960CC82004EECBA /* ggg.pdf in Resources */,
+				932BA62F0960CC82004EECBA /* uparrow.pdf in Resources */,
+				932BA6300960CC82004EECBA /* models.pdf in Resources */,
+				932BA6310960CC82004EECBA /* ltimes.pdf in Resources */,
+				932BA6320960CC82004EECBA /* widehat.pdf in Resources */,
+				932BA6330960CC82004EECBA /* nparallel.pdf in Resources */,
+				932BA6340960CC82004EECBA /* sqsubseteq.pdf in Resources */,
+				932BA6350960CC82004EECBA /* sqsubset.pdf in Resources */,
+				932BA6360960CC82004EECBA /* leftarrow-big.pdf in Resources */,
+				932BA6370960CC82004EECBA /* mapsto.pdf in Resources */,
+				932BA6380960CC82004EECBA /* sqcap.pdf in Resources */,
+				932BA6390960CC82004EECBA /* mid.pdf in Resources */,
+				932BA63A0960CC82004EECBA /* pm.pdf in Resources */,
+				932BA63B0960CC82004EECBA /* div.pdf in Resources */,
+				932BA63C0960CC82004EECBA /* gg.pdf in Resources */,
+				932BA63D0960CC82004EECBA /* cap.pdf in Resources */,
+				932BA63E0960CC82004EECBA /* vdash.pdf in Resources */,
+				932BA63F0960CC82004EECBA /* star.pdf in Resources */,
+				932BA6400960CC82004EECBA /* tilde.pdf in Resources */,
+				932BA6410960CC82004EECBA /* nsupseteq.pdf in Resources */,
+				932BA6420960CC82004EECBA /* bowtie.pdf in Resources */,
+				932BA6430960CC82004EECBA /* ni.pdf in Resources */,
+				932BA6440960CC82004EECBA /* vec.pdf in Resources */,
+				932BA6450960CC82004EECBA /* jmath.pdf in Resources */,
+				932BA6460960CC82004EECBA /* ell.pdf in Resources */,
+				932BA6470960CC82004EECBA /* re.pdf in Resources */,
+				932BA6480960CC82004EECBA /* im.pdf in Resources */,
+				932BA6490960CC82004EECBA /* n-mathbb.pdf in Resources */,
+				932BA64A0960CC82004EECBA /* z-mathbb.pdf in Resources */,
+				932BA64B0960CC82004EECBA /* q-mathbb.pdf in Resources */,
+				932BA64D0960CC82004EECBA /* doteq.pdf in Resources */,
+				932BA64E0960CC82004EECBA /* aleph.pdf in Resources */,
+				932BA64F0960CC82004EECBA /* infty.pdf in Resources */,
+				932BA6500960CC82004EECBA /* nabla.pdf in Resources */,
+				932BA6510960CC82004EECBA /* gtrsim.pdf in Resources */,
+				932BA6520960CC82004EECBA /* nsucceq.pdf in Resources */,
+				932BA6530960CC82004EECBA /* p-mathbb.pdf in Resources */,
+				932BA6540960CC82004EECBA /* r-mathbb.pdf in Resources */,
+				932BA6550960CC82004EECBA /* leftharpoondown.pdf in Resources */,
+				932BA6560960CC82004EECBA /* lambda-big.pdf in Resources */,
+				932BA6570960CC82004EECBA /* pi-big.pdf in Resources */,
+				932BA6580960CC82004EECBA /* sigma-big.pdf in Resources */,
+				932BA6590960CC82004EECBA /* xi-big.pdf in Resources */,
+				932BA65A0960CC82004EECBA /* gamma.pdf in Resources */,
+				932BA65B0960CC82004EECBA /* delta.pdf in Resources */,
+				932BA65C0960CC82004EECBA /* epsilon.pdf in Resources */,
+				932BA65D0960CC82004EECBA /* zeta.pdf in Resources */,
+				932BA65E0960CC82004EECBA /* eta.pdf in Resources */,
+				932BA65F0960CC82004EECBA /* theta.pdf in Resources */,
+				932BA6600960CC82004EECBA /* iota.pdf in Resources */,
+				932BA6610960CC82004EECBA /* kappa.pdf in Resources */,
+				932BA6620960CC82004EECBA /* lambda.pdf in Resources */,
+				932BA6630960CC82004EECBA /* mu.pdf in Resources */,
+				932BA6640960CC82004EECBA /* nu.pdf in Resources */,
+				932BA6650960CC82004EECBA /* xi.pdf in Resources */,
+				932BA6660960CC82004EECBA /* succeq.pdf in Resources */,
+				932BA6670960CC82004EECBA /* sqsupset.pdf in Resources */,
+				932BA6680960CC82004EECBA /* upsilon-big.pdf in Resources */,
+				932BA6690960CC82004EECBA /* phi.pdf in Resources */,
+				932BA66A0960CC82004EECBA /* phi-big.pdf in Resources */,
+				932BA66B0960CC82004EECBA /* omega-big.pdf in Resources */,
+				932BA66C0960CC82004EECBA /* nprec.pdf in Resources */,
+				932BA66D0960CC82004EECBA /* pi.pdf in Resources */,
+				932BA66E0960CC82004EECBA /* rho.pdf in Resources */,
+				932BA66F0960CC82004EECBA /* sigma.pdf in Resources */,
+				932BA6700960CC82004EECBA /* tau.pdf in Resources */,
+				932BA6710960CC82004EECBA /* upsilon.pdf in Resources */,
+				932BA6720960CC82004EECBA /* varphi.pdf in Resources */,
+				932BA6730960CC82004EECBA /* chi.pdf in Resources */,
+				932BA6740960CC82004EECBA /* psi.pdf in Resources */,
+				932BA6750960CC82004EECBA /* omega.pdf in Resources */,
+				932BA6760960CC82004EECBA /* gamma-big.pdf in Resources */,
+				932BA6770960CC82004EECBA /* delta-big.pdf in Resources */,
+				932BA6780960CC82004EECBA /* theta-big.pdf in Resources */,
+				932BA6790960CC82004EECBA /* unrhd.pdf in Resources */,
+				932BA67A0960CC82004EECBA /* bigtriangledown.pdf in Resources */,
+				932BA67B0960CC82004EECBA /* circ.pdf in Resources */,
+				932BA67D0960CC82004EECBA /* lesssim.pdf in Resources */,
+				932BA67E0960CC82004EECBA /* odot.pdf in Resources */,
+				932BA67F0960CC82004EECBA /* emptyset.pdf in Resources */,
+				932BA6800960CC82004EECBA /* sqcup.pdf in Resources */,
+				932BA6810960CC82004EECBA /* mp.pdf in Resources */,
+				932BA6820960CC82004EECBA /* in.pdf in Resources */,
+				932BA6830960CC82004EECBA /* bar.pdf in Resources */,
+				932BA6840960CC82004EECBA /* rightharpoonup.pdf in Resources */,
+				932BA6850960CC82004EECBA /* bot.pdf in Resources */,
+				932BA6860960CC82004EECBA /* top.pdf in Resources */,
+				932BA6870960CC82004EECBA /* hookleftarrow.pdf in Resources */,
+				932BA6880960CC82004EECBA /* nearrow.pdf in Resources */,
+				932BA6890960CC82004EECBA /* dashv.pdf in Resources */,
+				932BA68A0960CC82004EECBA /* diamond.pdf in Resources */,
+				932BA68B0960CC82004EECBA /* leftrightarrow.pdf in Resources */,
+				932BA68C0960CC82004EECBA /* npreceq.pdf in Resources */,
+				932BA68D0960CC82004EECBA /* bullet.pdf in Resources */,
+				932BA68E0960CC82004EECBA /* notin.pdf in Resources */,
+				932BA68F0960CC82004EECBA /* ast.pdf in Resources */,
+				932BA6900960CC82004EECBA /* neq.pdf in Resources */,
+				932BA6910960CC82004EECBA /* lll.pdf in Resources */,
+				932BA6920960CC82004EECBA /* ngeqslant.pdf in Resources */,
+				932BA6930960CC82004EECBA /* ominus.pdf in Resources */,
+				932BA6940960CC82004EECBA /* overleftarrow.pdf in Resources */,
+				932BA6950960CC82004EECBA /* looparrowleft.pdf in Resources */,
+				932BA6960960CC82004EECBA /* equiv.pdf in Resources */,
+				932BA6970960CC82004EECBA /* cup.pdf in Resources */,
+				932BA6980960CC82004EECBA /* imath.pdf in Resources */,
+				932BA6990960CC82004EECBA /* nleq.pdf in Resources */,
+				932BA69A0960CC82004EECBA /* ddagger.pdf in Resources */,
+				932BA69B0960CC82004EECBA /* downarrow.pdf in Resources */,
+				932BA69C0960CC82004EECBA /* o.pdf in Resources */,
+				932BA69D0960CC82004EECBA /* overrightarrow.pdf in Resources */,
+				932BA69E0960CC82004EECBA /* simeq.pdf in Resources */,
+				932BA69F0960CC82004EECBA /* ngeq.pdf in Resources */,
+				932BA6A00960CC82004EECBA /* parallel.pdf in Resources */,
+				932BA6A10960CC82004EECBA /* h-mathbb.pdf in Resources */,
+				932BA6A20960CC82004EECBA /* hbar.pdf in Resources */,
+				932BA6A30960CC82004EECBA /* nwarrow.pdf in Resources */,
+				932BA6A40960CC82004EECBA /* wedge.pdf in Resources */,
+				932BA6A50960CC82004EECBA /* oslash.pdf in Resources */,
+				932BA6A60960CC82004EECBA /* supset.pdf in Resources */,
+				932BA6A70960CC82004EECBA /* nsucc.pdf in Resources */,
+				932BA6A80960CC82004EECBA /* unlhd.pdf in Resources */,
+				932BA6A90960CC82004EECBA /* subset.pdf in Resources */,
+				932BA6AA0960CC82004EECBA /* rightharpoondown.pdf in Resources */,
+				932BA6AB0960CC82004EECBA /* setminus.pdf in Resources */,
+				932BA6AC0960CC82004EECBA /* oplus.pdf in Resources */,
+				932BA6AD0960CC82004EECBA /* bigtriangleup.pdf in Resources */,
+				932BA6AE0960CC82004EECBA /* ll.pdf in Resources */,
+				932BA6AF0960CC82004EECBA /* cdot.pdf in Resources */,
+				932BA6B00960CC82004EECBA /* asymp.pdf in Resources */,
+				932BA6B10960CC82004EECBA /* propto.pdf in Resources */,
+				932BA6B20960CC82004EECBA /* geqslant.pdf in Resources */,
+				932BA6B30960CC82004EECBA /* beta.pdf in Resources */,
+				932BA6B40960CC82004EECBA /* hookrightarrow.pdf in Resources */,
+				932BA6B50960CC82004EECBA /* triangleleft.pdf in Resources */,
+				932BA6B60960CC82004EECBA /* geq.pdf in Resources */,
+				932BA6B70960CC82004EECBA /* longmapsto.pdf in Resources */,
+				932BA6B80960CC82004EECBA /* looparrowright.pdf in Resources */,
+				932BA6B90960CC82004EECBA /* hat.pdf in Resources */,
+				932BA6BA0960CC82004EECBA /* swarrow.pdf in Resources */,
+				932BA6BB0960CC82004EECBA /* uplus.pdf in Resources */,
+				932BA6BC0960CC82004EECBA /* leftharpoonup.pdf in Resources */,
+				932BA6BD0960CC82004EECBA /* underrightarrow.pdf in Resources */,
+				932BA6BE0960CC82004EECBA /* succ.pdf in Resources */,
+				932BA6BF0960CC82004EECBA /* preceq.pdf in Resources */,
+				932BA6C00960CC82004EECBA /* sqrt.pdf in Resources */,
+				932BA6C10960CC82004EECBA /* nleqslant.pdf in Resources */,
+				932BA6C20960CC82004EECBA /* sqsupseteq.pdf in Resources */,
+				932BA6C30960CC82004EECBA /* alpha.pdf in Resources */,
+				932BA6C40960CC82004EECBA /* triangleright.pdf in Resources */,
+				932BA6C50960CC82004EECBA /* overbrace.pdf in Resources */,
+				932BA6C60960CC82004EECBA /* prec.pdf in Resources */,
+				932BA6C70960CC82004EECBA /* underleftarrow.pdf in Resources */,
+				932BA6C80960CC82004EECBA /* bigcirc.pdf in Resources */,
+				932BA6C90960CC82004EECBA /* amalg.pdf in Resources */,
+				932BA6CA0960CC82004EECBA /* underbrace.pdf in Resources */,
+				932BA6CB0960CC82004EECBA /* wr.pdf in Resources */,
+				932BA6CC0960CC82004EECBA /* leftrightarrow-big.pdf in Resources */,
+				932BA6CD0960CC82004EECBA /* vee.pdf in Resources */,
+				932BA6CE0960CC82004EECBA /* psi-big.pdf in Resources */,
+				932BA6CF0960CC82004EECBA /* times.pdf in Resources */,
+				932BA6D00960CC82004EECBA /* searrow.pdf in Resources */,
+				932BA6D10960CC82004EECBA /* otimes.pdf in Resources */,
+				932BA8450961562A004EECBA /* prod.pdf in Resources */,
+				932BADD609629EA7004EECBA /* nmid.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,6 +1634,13 @@
 				931D5E1208A15B9E00573DD8 /* HistoryController.m in Sources */,
 				93AD08B808A2D2CE0045B7F9 /* EncapsulationTableView.m in Sources */,
 				9324D3F608A645500010DB95 /* ButtonNotClickThrough.m in Sources */,
+				93F350220952AF2300DDFD09 /* SMLSyntaxColouring.m in Sources */,
+				93B419E6095C017D009C6A1F /* ShortcutTableView.m in Sources */,
+				932BA6D80960CC9B004EECBA /* PaletteCell.m in Sources */,
+				932BA6D90960CC9B004EECBA /* PaletteMatrix.m in Sources */,
+				932BA6DD0960CC9B004EECBA /* PaletteItem.m in Sources */,
+				932BA852096156B1004EECBA /* NSPopUpButtonExtended.m in Sources */,
+				932BA87209615747004EECBA /* ShortcutTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,15 +1763,18 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				GCC_AUTO_VECTORIZATION = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
+				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
@@ -1029,6 +1803,7 @@
 				PREBINDING = YES;
 				PRODUCT_NAME = LaTeXiT;
 				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
 			};
 			name = "Development Panther";
 		};
@@ -1092,6 +1867,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;

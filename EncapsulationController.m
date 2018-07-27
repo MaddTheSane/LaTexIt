@@ -56,7 +56,7 @@
 //the help button opens the "Advanced" pane of the preferences controller
 -(IBAction) openHelp:(id)sender
 {
-  [[AppController appController] showPreferencesPaneWithIdentifier:@"advanced"];
+  [[AppController appController] showPreferencesPaneWithItemIdentifier:AdvancedToolbarItemIdentifier];
 }
 
 -(void) _updateButtonStates:(NSNotification*)notification

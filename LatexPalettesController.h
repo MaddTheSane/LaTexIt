@@ -8,18 +8,37 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class PaletteView;
+
 @interface LatexPalettesController : NSWindowController
 {
-  IBOutlet NSMatrix* greekMatrix;
-  IBOutlet NSMatrix* lettersMatrix;
-  IBOutlet NSMatrix* relationsMatrix;
-  IBOutlet NSMatrix* binaryOperatorsMatrix;
-  IBOutlet NSMatrix* otherOperatorsMatrix;
-  IBOutlet NSMatrix* arrowsMatrix;
-  IBOutlet NSMatrix* decorationsMatrix;
+  IBOutlet NSBox*         matrixBox;
+  IBOutlet NSPopUpButton* matrixChoicePopUpButton;
+  IBOutlet NSMatrix*      matrix;
+  IBOutlet NSButton*      detailsButton;
+
+  IBOutlet NSBox*       detailsBox;
+  IBOutlet NSImageView* detailsImageView;
+  IBOutlet NSTextField* detailsLatexCodeTextField;
+  IBOutlet NSTextField* detailsRequiresTextField;
+  
+  NSArray* groups;
+  NSArray* greekItems;
+  NSArray* lettersItems;
+  NSArray* relationsItems;
+  NSArray* binaryOperatorsItems;
+  NSArray* otherOperatorsItems;
+  NSArray* arrowsItems;
+  NSArray* decorationsItems;
+  
+  int numberOfItemsPerRow;
 }
+
+-(IBAction) changeGroup:(id)sender;
+-(IBAction) openOrHideDetails:(id)sender;
 
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document
 -(IBAction) latexPalettesClick:(id)sender;
+-(IBAction) latexPalettesSelect:(id)sender;
 
 @end

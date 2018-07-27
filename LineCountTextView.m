@@ -16,6 +16,7 @@
 #import "LineCountRulerView.h"
 #import "MyDocument.h"
 #import "NSColorExtended.h"
+#import "SMLSyntaxColouring.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
@@ -38,6 +39,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   #else
   NSArray* registeredDraggedTypes = [self registeredDraggedTypes];
   #endif
+  
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObject:NSColorPboardType]];
   return self;
 }
@@ -51,10 +53,12 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   lineCountRulerView = [[LineCountRulerView alloc] initWithScrollView:scrollView orientation:NSVerticalRuler];
   [scrollView setVerticalRulerView:lineCountRulerView];
   [lineCountRulerView setClientView:self];
+  syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 }
 
 -(void) dealloc
 {
+  [syntaxColouring release];
   [lineRanges release];
   [forbiddenLines release];
   [lineCountRulerView release];
@@ -90,6 +94,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
   //line count
   [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
+  [syntaxColouring textDidChange:aNotification];
 }
 
 -(NSArray*) lineRanges
@@ -250,7 +255,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 {
   BOOL isSmallReturn = NO;
   NSString* charactersIgnoringModifiers = [theEvent charactersIgnoringModifiers];
-  if ([charactersIgnoringModifiers length])
+  if (![charactersIgnoringModifiers isEqualToString:@""])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
     isSmallReturn = (character == 3);//return key
@@ -259,6 +264,62 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
     [super keyDown:theEvent];
   else
     [[(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] makeLatexButton] performClick:self];
+}
+
+//method taken from Smultron
+//it allows parenthesis detection for user friendly selection
+-(NSRange) selectionRangeForProposedRange:(NSRange)proposedSelRange granularity:(NSSelectionGranularity)granularity
+{
+	if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
+		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+	
+	unsigned int location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
+	unsigned int originalLocation = location;
+
+	NSString *completeString = [self string];
+	unichar characterToCheck = [completeString characterAtIndex:location];
+	unsigned short skipMatchingBrace = 0;
+	unsigned int lengthOfString = [completeString length];
+	if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
+		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+	
+	BOOL triedToMatchBrace = NO;
+  static const unichar parenthesis[3][2] = {{'(', ')'}, {'[', ']'}, {'$', '$'}};
+  int parenthesisIndex = 0;
+  for(parenthesisIndex = 0 ;
+      (parenthesisIndex<3) && (characterToCheck != parenthesis[parenthesisIndex][1]) ;
+      ++parenthesisIndex);
+	
+  //detect if characterToCheck is a closing brace, and find the opening brace
+	if (parenthesisIndex < 3)
+  {
+		triedToMatchBrace = YES;
+		while (location--)
+    {
+			characterToCheck = [completeString characterAtIndex:location];
+			if (characterToCheck == parenthesis[parenthesisIndex][0])
+      {
+				if (!skipMatchingBrace)
+					return NSMakeRange(location, originalLocation - location + 1);
+				else
+					--skipMatchingBrace;
+			}
+      else if (characterToCheck == parenthesis[parenthesisIndex][1])
+        ++skipMatchingBrace;
+		}
+		NSBeep();
+	}
+
+	// If it has a found a "starting" brace but not found a match, a double-click should only select the "starting" brace and not what it usually would select at a double-click
+	if (triedToMatchBrace)
+		return [super selectionRangeForProposedRange:NSMakeRange(proposedSelRange.location, 1) granularity:NSSelectByCharacter];
+	else
+		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+}
+
+-(SMLSyntaxColouring*) syntaxColouring
+{
+  return syntaxColouring;
 }
 
 @end
