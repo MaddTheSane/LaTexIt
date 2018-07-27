@@ -1,0 +1,86 @@
+#!/bin/sh
+
+TEXPLIST="latex-keywords.plist"
+echo -e "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $TEXPLIST
+echo -e "<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> $TEXPLIST
+echo -e "<plist version=\"1.0\">" >> $TEXPLIST
+echo -e "<dict>" >> $TEXPLIST
+
+echo -e "<key>version</key>" >> $TEXPLIST
+echo -e "<string>1.9.0</string>" >> $TEXPLIST
+
+echo -e "<key>packages</key>" >> $TEXPLIST
+echo -e "<array>" >> $TEXPLIST
+for i in $*;do
+  RAC=`echo $i | sed "s/\(.*\)\.txt/\1/g"`
+  TXT="$RAC.txt"
+  PACKAGE=`cat $TXT | grep "exists(" | grep "package_file" | sed "s/\(.*\)exists(\"\([^\"]*\)_package_file.*/\2/g"`
+  echo $PACKAGE
+  echo -e "\t<dict>" >> $TEXPLIST
+  echo -e "\t\t<key>name</key>\n\t\t<string>$PACKAGE</string>" >> $TEXPLIST
+  echo -e "\t\t<key>keywords</key>" >> $TEXPLIST
+  echo -e "\t\t<array>" >> $TEXPLIST
+
+  WORDS=`cat $TXT | grep "\\\.'env:" | sed "s/\(.*\)'env:\([a-zA-Z0-9_\*]*\)\(.*\)/\2/g"`
+  for WORD in $WORDS; do
+    echo -e "\t\t\t<dict>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>type</key>" >> $TEXPLIST
+    echo -e "\t\t\t\t<string>environment</string>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>word</key>" >> $TEXPLIST
+    printf "\t\t\t\t<string>" >> $TEXPLIST
+    echo -n "$WORD" >> $TEXPLIST
+    echo    "</string>" >> $TEXPLIST
+    echo -e "\t\t\t</dict>" >> $TEXPLIST
+  done
+  WORDS=`cat $TXT | grep "\\\.'bra:" | sed "s/\(.*\)'bra:\([a-zA-Z0-9_\*]*\)\(.*\)/\2/g"`
+  for WORD in $WORDS; do
+    echo -e "\t\t\t<dict>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>type</key>" >> $TEXPLIST
+    echo -e "\t\t\t\t<string>braces</string>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>word</key>" >> $TEXPLIST
+    printf "\t\t\t\t<string>" >> $TEXPLIST
+    echo -n "\\$WORD" >> $TEXPLIST
+    echo    "</string>" >> $TEXPLIST
+    echo -e "\t\t\t</dict>" >> $TEXPLIST
+  done
+  WORDS=`cat $TXT | grep "\\\.'bra2:" | sed "s/\(.*\)'bra2:\([a-zA-Z0-9_\*]*\)\(.*\)/\2/g"`
+  for WORD in $WORDS; do
+    echo -e "\t\t\t<dict>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>type</key>" >> $TEXPLIST
+    echo -e "\t\t\t\t<string>braces2</string>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>word</key>" >> $TEXPLIST
+    printf "\t\t\t\t<string>" >> $TEXPLIST
+    echo -n "\\$WORD" >> $TEXPLIST
+    echo    "</string>" >> $TEXPLIST
+    echo -e "\t\t\t</dict>" >> $TEXPLIST
+  done
+  WORDS=`cat $TXT | grep "\\\.'brs:" | sed "s/\(.*\)'brs:\([a-zA-Z0-9_\*]*\)\(.*\)/\2/g"`
+  for WORD in $WORDS; do
+    echo -e "\t\t\t<dict>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>type</key>" >> $TEXPLIST
+    echo -e "\t\t\t\t<string>braces</string>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>word</key>" >> $TEXPLIST
+    printf "\t\t\t\t<string>" >> $TEXPLIST
+    echo -n "\\$WORD" >> $TEXPLIST
+    echo    "</string>" >> $TEXPLIST
+    echo -e "\t\t\t</dict>" >> $TEXPLIST
+  done
+  WORDS=`cat $TXT | grep "\\\.'nor:" | sed "s/\(.*\)'nor:\([a-zA-Z0-9_\*]*\)\(.*\)/\2/g"`
+  for WORD in $WORDS; do
+    echo -e "\t\t\t<dict>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>type</key>" >> $TEXPLIST
+    echo -e "\t\t\t\t<string>normal</string>" >> $TEXPLIST
+    echo -e "\t\t\t\t<key>word</key>" >> $TEXPLIST
+    printf "\t\t\t\t<string>" >> $TEXPLIST
+    echo -n "\\$WORD" >> $TEXPLIST
+    echo    "</string>" >> $TEXPLIST
+    echo -e "\t\t\t</dict>" >> $TEXPLIST
+  done
+
+  echo -e "\t\t</array>" >> $TEXPLIST
+  echo -e "\t</dict>" >> $TEXPLIST
+done
+
+echo -e "\t</array>" >> $TEXPLIST
+echo -e "</dict>" >> $TEXPLIST
+echo -e "</plist>" >> $TEXPLIST

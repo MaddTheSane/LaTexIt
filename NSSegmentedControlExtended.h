@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 04/07/05.
-//  Copyright 2005 __MyCompanyName__. All rights reserved.
+//  Copyright 2005 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSSegmentedControl class
 //It is only useful to compile LaTeXiT for Panther

@@ -30,6 +30,7 @@
   IBOutlet NSWindow*            logWindow;
   IBOutlet NSTextView*          logTextView;
   IBOutlet NSProgressIndicator* progressIndicator;
+  IBOutlet NSMenu*              copyAsContextualMenuItem;
   
   IBOutlet NSView*        saveAccessoryView;
   IBOutlet NSPopUpButton* saveAccessoryViewPopupFormat;

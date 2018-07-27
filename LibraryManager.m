@@ -302,6 +302,7 @@ static NSImage*        libraryFileIcon       = nil;
     }
   }
   [self loadFrom:libraryFilePath];
+  libraryShouldBeSaved = NO; //at LaTeXiT launch, library should not be saved
 }
 
 -(BOOL) loadFrom:(NSString*)path
@@ -329,6 +330,7 @@ static NSImage*        libraryFileIcon       = nil;
     library = [newLibrary retain];
   }
 
+  libraryShouldBeSaved = YES;
   [[NSNotificationCenter defaultCenter] postNotificationName:LibraryDidChangeNotification object:nil];
 
   return ok;

@@ -293,6 +293,8 @@
 		93F0009309885B550064888E /* big-folder-icon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0009209885B550064888E /* big-folder-icon.tiff */; };
 		93F16CAD089FC1D800FF7B94 /* LatexPalettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */; };
 		93F16CD1089FC25200FF7B94 /* LatexPalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */; };
+		93F2C6D90A31A88C0009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C6D70A31A88C0009FB59 /* latex-keywords.plist */; };
+		93F2C6DA0A31A88C0009FB59 /* convert in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C6D80A31A88C0009FB59 /* convert */; };
 		93F350220952AF2300DDFD09 /* SMLSyntaxColouring.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F350200952AF2300DDFD09 /* SMLSyntaxColouring.m */; };
 		93F350480952AFC400DDFD09 /* advancedToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350410952AFC400DDFD09 /* advancedToolbarItem.tiff */; };
 		93F350490952AFC400DDFD09 /* compositionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F350420952AFC400DDFD09 /* compositionToolbarItem.tiff */; };
@@ -671,6 +673,8 @@
 		93F16CAE089FC1E700FF7B94 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		93F16CCC089FC25200FF7B94 /* LatexPalettesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LatexPalettesController.h; sourceTree = "<group>"; };
 		93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LatexPalettesController.m; sourceTree = "<group>"; };
+		93F2C6D70A31A88C0009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.xml; name = "latex-keywords.plist"; path = "Resources/latex-keywords/latex-keywords.plist"; sourceTree = "<group>"; };
+		93F2C6D80A31A88C0009FB59 /* convert */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.script.sh; name = convert; path = "Resources/latex-keywords/convert"; sourceTree = "<group>"; };
 		93F350200952AF2300DDFD09 /* SMLSyntaxColouring.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = SMLSyntaxColouring.m; sourceTree = "<group>"; };
 		93F350210952AF2300DDFD09 /* SMLSyntaxColouring.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = SMLSyntaxColouring.h; sourceTree = "<group>"; };
 		93F350410952AFC400DDFD09 /* advancedToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = advancedToolbarItem.tiff; sourceTree = "<group>"; };
@@ -785,6 +789,7 @@
 			children = (
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
+				93F2C6C20A31A8760009FB59 /* latex-keywords */,
 				93F3506C0952B08700DDFD09 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -1298,6 +1303,15 @@
 			name = History;
 			sourceTree = "<group>";
 		};
+		93F2C6C20A31A8760009FB59 /* latex-keywords */ = {
+			isa = PBXGroup;
+			children = (
+				93F2C6D80A31A88C0009FB59 /* convert */,
+				93F2C6D70A31A88C0009FB59 /* latex-keywords.plist */,
+			);
+			name = "latex-keywords";
+			sourceTree = "<group>";
+		};
 		93F350400952AFC400DDFD09 /* toolbarItems */ = {
 			isa = PBXGroup;
 			children = (
@@ -1610,6 +1624,8 @@
 				93F0009309885B550064888E /* big-folder-icon.tiff in Resources */,
 				93F6D54009CE9B10002ED258 /* magnifying-glass.png in Resources */,
 				93D7CB7909D36DC10001DC5E /* CompositionConfiguration.nib in Resources */,
+				93F2C6D90A31A88C0009FB59 /* latex-keywords.plist in Resources */,
+				93F2C6DA0A31A88C0009FB59 /* convert in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

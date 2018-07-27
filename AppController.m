@@ -447,14 +447,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) copyAs:(id)sender
 {
-  int tag = [sender tag];
-  if (tag == -1)
-    [[(MyDocument*)[self currentDocument] imageView] copy:sender]; 
-  else
-  {
-    export_format_t exportFormat = (export_format_t)[sender tag];
-    [[(MyDocument*)[self currentDocument] imageView] copyAsFormat:exportFormat];
-  }
+  [[(MyDocument*)[self currentDocument] imageView] copy:sender]; 
 }
 
 -(BOOL) validateMenuItem:(NSMenuItem*)sender

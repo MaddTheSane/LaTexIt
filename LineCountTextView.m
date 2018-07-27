@@ -17,6 +17,8 @@
 #import "MyDocument.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
+#import "NSMutableArrayExtended.h"
+#import "NSStringExtended.h"
 #import "SMLSyntaxColouring.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
@@ -27,6 +29,32 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 @end
 
 @implementation LineCountTextView
+
+static NSArray* WellKnownLatexKeywords = nil;
+
++(void) initialize
+{
+  //load well-known LaTeX keywords
+  @synchronized(self)
+  {
+    if (!WellKnownLatexKeywords)
+    {
+      NSString*  keywordsPlistPath = [[NSBundle mainBundle] pathForResource:@"latex-keywords" ofType:@"plist"];
+      NSData*    dataKeywordsPlist = [NSData dataWithContentsOfFile:keywordsPlistPath];
+      NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
+      NSString* errorString = nil;
+      NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataKeywordsPlist
+                                                             mutabilityOption:NSPropertyListImmutable
+                                                                       format:&format errorDescription:&errorString];
+      NSString* version = [plist objectForKey:@"version"];
+      //we can check the version...
+      if (!version || [version compare:@"1.9.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
+      {
+      }
+      WellKnownLatexKeywords = [[plist objectForKey:@"packages"] retain];
+    }//end if WellKnownLatexKeywords
+  }//end @synchronized
+}
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -355,6 +383,128 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 -(SMLSyntaxColouring*) syntaxColouring
 {
   return syntaxColouring;
+}
+
+-(NSRange) rangeForUserCompletion
+{
+  NSRange range = [super rangeForUserCompletion];
+  BOOL canExtendRange = (range.location != 0) && (range.location != NSNotFound) && (range.length+1 != NSNotFound);
+  NSRange extendedRange = canExtendRange ? NSMakeRange(range.location-1, range.length+1) : range;
+  NSString* extendedWord = [[self string] substringWithRange:extendedRange];
+  BOOL isBackslashedWord = ([extendedWord length] && [extendedWord characterAtIndex:0] == '\\');
+  return isBackslashedWord ? extendedRange : range;
+}
+
+-(NSArray*) completionsForPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+{
+  //first, normal system calling [super completionsForPartialWordRange:...]
+  NSMutableArray* propositions =
+    [NSMutableArray arrayWithArray:[super completionsForPartialWordRange:charRange indexOfSelectedItem:index]];
+
+  //then, check the LaTeX dictionary (will work for a backslashed word)    
+  NSString* text = [self string];
+  NSString* word = [text substringWithRange:charRange];
+  BOOL isBackslashedWord = ([word length] && [word characterAtIndex:0] == '\\');
+  NSMutableArray* newPropositions = [NSMutableArray array];
+
+  if (isBackslashedWord)
+  {
+    NSMutableArray* keywordsToCheck = [NSMutableArray array];
+    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    while(nbPackages--)
+    {
+      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+      //NSString*     packageName = [package objectForKey:@"name"];
+      //if ([text rangeOfString:packageName options:NSCaseInsensitiveSearch].location != NSNotFound)
+        [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
+    }
+  
+    #ifndef PANTHER
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
+    [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
+    #else
+    unsigned int count = [keywordsToCheck count];
+    unsigned int i = 0;
+    for(i = 0 ; i<count ; ++i)
+    {
+      NSDictionary* typeAndKeyword = [keywordsToCheck objectAtIndex:i];
+      NSString* latexKeyword = [typeAndKeyword objectForKey:@"word"];
+      if ([latexKeyword startsWith:word options:NSCaseInsensitiveSearch])
+        [newPropositions addObject:typeAndKeyword];
+    }
+    #endif
+    
+    unsigned int nbPropositions = [newPropositions count];
+    while(nbPropositions--)
+    {
+      NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
+      NSString* type    = [typeAndKeyword objectForKey:@"type"];
+      NSString* keyword = [typeAndKeyword objectForKey:@"word"];
+      if ([type isEqualToString:@"normal"])
+        [propositions addObject:keyword];
+      else if ([type isEqualToString:@"braces"])
+        [propositions addObject:[keyword stringByAppendingString:@"{}"]];
+      else if ([type isEqualToString:@"braces2"])
+        [propositions addObject:[keyword stringByAppendingString:@"{}{}"]];
+    }
+  }
+  
+  //if no proposition is found, do as if the backslash was not there
+  if (isBackslashedWord && ![propositions count])
+  {
+    NSRange reducedRange = NSMakeRange(charRange.location+1, charRange.length-1);
+    [newPropositions setArray:[super completionsForPartialWordRange:reducedRange indexOfSelectedItem:index]];
+    //add the missing backslashes
+    unsigned int count = [newPropositions count];
+    while(count--)
+    {
+      NSString* proposition = [newPropositions objectAtIndex:count];
+      [newPropositions replaceObjectAtIndex:count withObject:[NSString stringWithFormat:@"\\%@", proposition]];
+    }
+    [propositions setArray:newPropositions];
+  }
+  
+  if (!isBackslashedWord) //try a latex environment and add normal completions
+  {
+    NSMutableArray* keywordsToCheck = [NSMutableArray array];
+    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    while(nbPackages--)
+    {
+      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+      //NSString*     packageName = [package objectForKey:@"name"];
+      //if ([text rangeOfString:packageName options:NSCaseInsensitiveSearch].location != NSNotFound)
+        [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
+    }
+  
+    #ifndef PANTHER
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
+    [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
+    #else
+    unsigned int count = [keywordsToCheck count];
+    unsigned int i = 0;
+    for(i = 0 ; i<count ; ++i)
+    {
+      NSDictionary* typeAndKeyword = [keywordsToCheck objectAtIndex:i];
+      NSString* latexKeyword = [typeAndKeyword objectForKey:@"word"];
+      if ([latexKeyword startsWith:word options:NSCaseInsensitiveSearch])
+        [newPropositions addObject:typeAndKeyword];
+    }
+    #endif
+    
+    unsigned int nbPropositions = [newPropositions count];
+    while(nbPropositions--)
+    {
+      NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
+      NSString* type    = [typeAndKeyword objectForKey:@"type"];
+      NSString* keyword = [typeAndKeyword objectForKey:@"word"];
+      if ([type isEqualToString:@"environment"])
+        [propositions addObject:keyword];
+    }
+  }
+  
+  [propositions sortUsingSelector:@selector(caseInsensitiveCompare:)];
+  
+  return propositions;
 }
 
 @end

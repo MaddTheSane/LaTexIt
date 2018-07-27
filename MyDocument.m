@@ -134,6 +134,7 @@ static NSString* yenString = nil;
   [saveAccessoryView release];
   [jpegColor release];
   [self closeLinkBackLink:linkBackLink];
+  [progressIndicator release];
   [super dealloc];
 }
 
@@ -162,6 +163,8 @@ static NSString* yenString = nil;
 
   //useful to avoid conflicts between mouse clicks on imageView and the progressIndicator
   [progressIndicator setNextResponder:imageView];
+  [progressIndicator retain];
+  [progressIndicator removeFromSuperview];
   
   [saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
   
@@ -184,6 +187,17 @@ static NSString* yenString = nil;
   
   [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]
               updateHistoryItem:NO];
+              
+  //connect contextual copy As menu to imageView
+  NSMenuItem* menuItem = [copyAsContextualMenuItem itemAtIndex:0];
+  NSArray* items = [[menuItem submenu] itemArray];
+  unsigned int count = items ? [items count] : 0;
+  while(count--)
+  {
+    NSMenuItem* item = [items objectAtIndex:count];
+    [item setTarget:imageView];
+    [item setAction:@selector(copy:)];
+  }
 
   //the initial... variables has been set into a readFromFile
   if (initialPreamble)
@@ -443,6 +457,11 @@ static NSString* yenString = nil;
     [imageView setPDFData:nil cachedImage:nil];       //clears current image
     [imageView setNeedsDisplay:YES];
     [imageView displayIfNeeded];      //refresh it
+    NSRect imageViewFrame = [imageView frame];
+    NSSize progressIndicatorSize = [progressIndicator frame].size;
+    [progressIndicator setFrameOrigin:NSMakePoint((imageViewFrame.size.width-progressIndicatorSize.width)/2,
+                                                  (imageViewFrame.size.height-progressIndicatorSize.height)/2)];
+    [imageView addSubview:progressIndicator];
     [progressIndicator setHidden:NO]; //shows the progress indicator
     [progressIndicator startAnimation:self];
     isBusy = YES; //marks as busy
@@ -485,6 +504,7 @@ static NSString* yenString = nil;
     //hides progress indicator
     [progressIndicator stopAnimation:self];
     [progressIndicator setHidden:YES];
+    [progressIndicator removeFromSuperview];
     
     //hides/how the error view
     [self _setLogTableViewVisible:[logTableView numberOfRows]];
@@ -774,7 +794,7 @@ static NSString* yenString = nil;
     {
       NSString* extension = [[file pathExtension] lowercaseString];
       BOOL mustDelete = [extension isEqualToString:@"mf"] ||  [extension isEqualToString:@"mp"] ||
-                        [extension isEqualToString:@"tfm"] || [extension endsWith:@"pk"] ||
+                        [extension isEqualToString:@"tfm"] || [extension endsWith:@"pk" options:NSCaseInsensitiveSearch] ||
                         [extension isEqualToString:@"script"];
       if (mustDelete)
         [fileManager removeFileAtPath:file handler:NULL];

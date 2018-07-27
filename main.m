@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright __MyCompanyName__ 2005 . All rights reserved.
+//  Copyright Pierre Chatelier 2005 . All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/05.
-//  Copyright 2005 __MyCompanyName__. All rights reserved.
+//  Copyright 2005 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSWorkspace class
 
@@ -51,7 +51,20 @@
   return string;
 }
 
--(BOOL) endsWith:(NSString*)substring
+-(BOOL) startsWith:(NSString*)substring options:(unsigned)mask
+{
+  BOOL ok = NO;
+  unsigned int selfLength = [self length];
+  unsigned int subLength = [substring length];
+  if (selfLength >= subLength)
+  {
+    NSRange rangeOfBegin = NSMakeRange(0, subLength);
+    ok = ([[self substringWithRange:rangeOfBegin] compare:substring options:mask] == NSOrderedSame);
+  }
+  return ok;
+}
+
+-(BOOL) endsWith:(NSString*)substring options:(unsigned)mask
 {
   BOOL ok = NO;
   unsigned int selfLength = [self length];
@@ -59,7 +72,7 @@
   if (selfLength >= subLength)
   {
     NSRange rangeOfEnd = NSMakeRange(selfLength-subLength, subLength);
-    ok = [[self substringWithRange:rangeOfEnd] isEqualToString:substring];
+    ok = ([[self substringWithRange:rangeOfEnd] compare:substring options:mask] == NSOrderedSame);
   }
   return ok;
 }

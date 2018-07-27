@@ -161,14 +161,19 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 //begins a drag operation
 -(void) mouseDown:(NSEvent*)theEvent
 {
-  NSImage* draggedImage = [self image];
-
-  if (draggedImage)
+  if ([theEvent modifierFlags] & NSControlKeyMask)
+    [super mouseDown:theEvent];
+  else
   {
-    //NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-    //[pasteboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-    [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil]
-                          fromRect:[self frame] source:self slideBack:YES event:theEvent];
+    NSImage* draggedImage = [self image];
+
+    if (draggedImage)
+    {
+      //NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+      //[pasteboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
+      [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil]
+                            fromRect:[self frame] source:self slideBack:YES event:theEvent];
+    }
   }
 }
 
@@ -355,8 +360,11 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(IBAction) copy:(id)sender
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [self copyAsFormat:[userDefaults integerForKey:DragExportTypeKey]];
+  int tag = sender ? [sender tag] : -1;
+  export_format_t exportFormat = (export_format_t)
+                                    ((tag == -1) ? [[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey]
+                                                 : tag);
+  [self copyAsFormat:exportFormat];
 }
 
 -(void) copyAsFormat:(export_format_t)exportFormat

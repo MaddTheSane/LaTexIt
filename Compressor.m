@@ -21,8 +21,9 @@
   {
     uLong srcLength = [data length];
     uLongf buffLength = srcLength * 1.001 + 12;
-    NSMutableData *compData = [[NSMutableData alloc] initWithCapacity:buffLength+sizeof(uLong)];
-    [compData appendBytes:&srcLength length:sizeof(uLong)];
+    NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:buffLength+sizeof(uLong)];
+    uLong swappedSrclength = CFSwapInt32HostToBig(srcLength);
+    [compData appendBytes:&swappedSrclength length:sizeof(uLong)];
     [compData increaseLengthBy:buffLength];
     int error=compress([compData mutableBytes]+sizeof(uLong),&buffLength,[data bytes],srcLength);
     switch(error)
@@ -46,9 +47,15 @@
   NSData *result = nil;
   if (data)
   {
-    uLongf destLen;
-    [data getBytes:&destLen length:sizeof(uLong)];
-    NSMutableData *decompData = [[NSMutableData alloc] initWithLength:destLen];
+    //I made a mistake = getBytes and appendBytes do not behave the same on MacIntels.
+    //I must make ugly code to read data that is not know to be from PPC or x86
+    uLongf unswappedDestLen = 0;
+    [data getBytes:&unswappedDestLen length:sizeof(uLong)];
+    unswappedDestLen = CFSwapInt32BigToHost(unswappedDestLen);
+    
+    uLongf swappedDestLen = CFSwapInt32(unswappedDestLen);
+    uLongf destLen = MIN(swappedDestLen, unswappedDestLen);
+    NSMutableData* decompData = [[NSMutableData alloc] initWithLength:destLen];
     int error = uncompress( [decompData mutableBytes], &destLen,
                             [data bytes]+sizeof(uLong), [data length]-sizeof(uLong) );
     switch(error)
@@ -57,11 +64,31 @@
         result = [decompData copy];
         break;
       case Z_DATA_ERROR:
-        NSCAssert(YES, @"Error while decompressing data : data seems corrupted");
+        NSLog(@"Error while decompressing data : data seems corrupted");
         break;
       default:
-       NSCAssert( YES, @"Error while decompressing data : Insufficient memory" );
-       break;
+        NSLog(@"Error while decompressing data : Insufficient memory" );
+        break;
+    }
+    if (error != Z_OK)
+    {
+      [decompData release];
+      destLen = MAX(swappedDestLen, unswappedDestLen);
+      decompData = [[NSMutableData alloc] initWithLength:destLen];
+      error = uncompress( [decompData mutableBytes], &destLen,
+                          [data bytes]+sizeof(uLong), [data length]-sizeof(uLong) );
+      switch(error)
+      {
+        case Z_OK:
+          result = [decompData copy];
+          break;
+        case Z_DATA_ERROR:
+          NSLog(@"Error while decompressing data : data seems corrupted");
+          break;
+        default:
+          NSLog(@"Error while decompressing data : Insufficient memory" );
+          break;
+      }
     }
     [decompData release];
   }

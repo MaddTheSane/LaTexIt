@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 04/07/05.
-//  Copyright 2005 __MyCompanyName__. All rights reserved.
+//  Copyright 2005 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSFont class
 

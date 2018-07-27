@@ -296,8 +296,8 @@
 
 -(void) windowDidResize:(NSNotification*)notification
 {
-  float clipViewWidth = [[[matrix superview] superview] frame].size.width-[NSScroller scrollerWidth];
-  float cellWidth = clipViewWidth/numberOfItemsPerRow;
+  float clipViewWidth = [[[matrix superview] superview] frame].size.width-[NSScroller scrollerWidth]+1;
+  float cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
   [matrix setCellSize:NSMakeSize(cellWidth, cellWidth)];
   [matrix setFrame:NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*[matrix numberOfRows])];
   [matrix setNeedsDisplay:YES];
@@ -338,15 +338,19 @@
   NSClipView* clipView = (NSClipView*) [matrix superview];
   NSPoint locationInWindow = [event locationInWindow];
   NSPoint location = [clipView convertPoint:locationInWindow fromView:nil];
-  if (NSPointInRect(location, [clipView bounds]))
+  NSRect clipBounds = [clipView bounds];
+  if (NSPointInRect(location, clipBounds))
   {
     int row = -1;
     int column = 0;
     BOOL ok = [matrix getRow:&row column:&column forPoint:[matrix convertPoint:location fromView:clipView]];
     if (ok)
     {
+    
       [matrix selectCellAtRow:row column:column];
       [self latexPalettesSelect:matrix];
+      [clipView setBounds:clipBounds];
+      [clipView setNeedsDisplay:YES];
     }
   }
 }

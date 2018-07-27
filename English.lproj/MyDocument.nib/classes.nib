@@ -90,6 +90,7 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 colorWell = NSColorWell; 
+                copyAsContextualMenuItem = NSMenu; 
                 imageView = MyImageView; 
                 jpegColorWell = NSColorWell; 
                 jpegQualitySlider = NSSlider; 

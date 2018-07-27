@@ -35,6 +35,7 @@
 		931CB3080801311100CF9D2B /* LatexPalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 931CB3060801311100CF9D2B /* LatexPalettesController.m */; };
 		931CB341080132D900CF9D2B /* LatexPalettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 931CB340080132D900CF9D2B /* LatexPalettes.nib */; };
 		9324D34F08A63E540010DB95 /* ButtonNotClickThrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */; };
+		9326E12F0A2E46B5003A430E /* convert in Resources */ = {isa = PBXBuildFile; fileRef = 9326E0E50A2E46B5003A430E /* convert */; };
 		9328604407F4505F009BF03D /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		932BA15609609A3D004EECBA /* PaletteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA15409609A3D004EECBA /* PaletteCell.m */; };
 		932BA1B009609D0C004EECBA /* jmath.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA1A009609D0C004EECBA /* jmath.pdf */; };
@@ -298,6 +299,7 @@
 		93F0FFC2098847940064888E /* big-folder-icon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0FFC1098847940064888E /* big-folder-icon.tiff */; };
 		93F0FFE509884B030064888E /* view-icons.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0FFE409884B030064888E /* view-icons.tiff */; };
 		93F0FFEC09884BDA0064888E /* view-titles.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0FFEB09884BDA0064888E /* view-titles.tiff */; };
+		93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C5D80A30D9130009FB59 /* latex-keywords.plist */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationController.m */; };
 		93F73DAE0898FE2700EFFA5E /* Encapsulation.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73DAD0898FE2700EFFA5E /* Encapsulation.nib */; };
@@ -373,6 +375,7 @@
 		931CB342080132DF00CF9D2B /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
+		9326E0E50A2E46B5003A430E /* convert */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.script.sh; name = convert; path = "Resources/latex-keywords/convert"; sourceTree = "<group>"; };
 		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = "Resources/file-icons/latexit.icns"; sourceTree = "<group>"; };
 		932BA15309609A3D004EECBA /* PaletteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteCell.h; sourceTree = "<group>"; };
 		932BA15409609A3D004EECBA /* PaletteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteCell.m; sourceTree = "<group>"; };
@@ -673,6 +676,7 @@
 		93F0FFC1098847940064888E /* big-folder-icon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "big-folder-icon.tiff"; path = "Resources/interface/big-folder-icon.tiff"; sourceTree = "<group>"; };
 		93F0FFE409884B030064888E /* view-icons.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-icons.tiff"; path = "Resources/interface/view-icons.tiff"; sourceTree = "<group>"; };
 		93F0FFEB09884BDA0064888E /* view-titles.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-titles.tiff"; path = "Resources/interface/view-titles.tiff"; sourceTree = "<group>"; };
+		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.xml; name = "latex-keywords.plist"; path = "Resources/latex-keywords/latex-keywords.plist"; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationController.h; sourceTree = "<group>"; };
@@ -781,6 +785,7 @@
 			children = (
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
+				9326DEDD0A2E3A1E003A430E /* latex-keywords */,
 				93B48F5D091FA47C00FDEEB6 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -883,6 +888,15 @@
 				93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */,
 			);
 			name = Interface;
+			sourceTree = "<group>";
+		};
+		9326DEDD0A2E3A1E003A430E /* latex-keywords */ = {
+			isa = PBXGroup;
+			children = (
+				9326E0E50A2E46B5003A430E /* convert */,
+				93F2C5D80A30D9130009FB59 /* latex-keywords.plist */,
+			);
+			name = "latex-keywords";
 			sourceTree = "<group>";
 		};
 		932BA18A09609CEB004EECBA /* greek */ = {
@@ -1604,6 +1618,8 @@
 				93F0FFEC09884BDA0064888E /* view-titles.tiff in Resources */,
 				9309DEB209C8D09700C5231C /* magnifying-glass.png in Resources */,
 				93D7CB5A09D36D6D0001DC5E /* CompositionConfiguration.nib in Resources */,
+				9326E12F0A2E46B5003A430E /* convert in Resources */,
+				93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
