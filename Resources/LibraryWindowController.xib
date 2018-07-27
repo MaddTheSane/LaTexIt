@@ -22,6 +22,14 @@
                 <outlet property="importCurrentButton" destination="11" id="31"/>
                 <outlet property="importHomeButton" destination="75" id="99"/>
                 <outlet property="importOptionPopUpButton" destination="68" id="74"/>
+                <outlet property="importTeXCancelButton" destination="240" id="282"/>
+                <outlet property="importTeXImportButton" destination="260" id="281"/>
+                <outlet property="importTeXPanel" destination="238" id="262"/>
+                <outlet property="importTeXPanelAlignCheckBox" destination="255" id="267"/>
+                <outlet property="importTeXPanelDisplayCheckBox" destination="253" id="266"/>
+                <outlet property="importTeXPanelEqnarrayCheckBox" destination="257" id="268"/>
+                <outlet property="importTeXPanelInlineCheckBox" destination="251" id="265"/>
+                <outlet property="importTeXPanelTableView" destination="245" id="274"/>
                 <outlet property="libraryPreviewPanel" destination="51" id="54"/>
                 <outlet property="libraryPreviewPanelImageView" destination="53" id="55"/>
                 <outlet property="libraryPreviewPanelSegmentedControl" destination="47" id="129"/>
@@ -42,10 +50,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="242" height="135"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" id="11">
+                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="11">
                         <rect key="frame" x="0.0" y="0.0" width="32" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="Button" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="193">
+                        <buttonCell key="cell" type="smallSquare" title="Button" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="193">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -54,7 +62,7 @@
                             <outlet property="nextKeyView" destination="12" id="15"/>
                         </connections>
                     </button>
-                    <popUpButton id="12" customClass="ImagePopupButton">
+                    <popUpButton imageHugsTitle="YES" id="12" customClass="ImagePopupButton">
                         <rect key="frame" x="31" y="0.0" width="32" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" preferredEdge="maxY" selectedItem="14" id="194">
@@ -70,13 +78,14 @@
                             <outlet property="nextKeyView" destination="8" id="18"/>
                         </connections>
                     </popUpButton>
-                    <segmentedControl verticalHuggingPriority="750" misplaced="YES" id="44">
-                        <rect key="frame" x="95" y="0.0" width="47" height="21"/>
+                    <segmentedControl verticalHuggingPriority="750" id="44">
+                        <rect key="frame" x="87" y="0.0" width="68" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectOne" id="195">
+                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="automatic" trackingMode="selectOne" id="195">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
                                 <segment image="NSIconViewTemplate" width="20" tag="1"/>
+                                <segment image="view-icons-adjust" width="20" tag="2"/>
                                 <segment image="NSListViewTemplate" width="20"/>
                             </segments>
                         </segmentedCell>
@@ -84,7 +93,7 @@
                     <segmentedControl verticalHuggingPriority="750" id="47">
                         <rect key="frame" x="192" y="0.0" width="33" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectAny" id="196">
+                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="automatic" trackingMode="selectAny" id="196">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
                                 <segment image="magnifying-glass" width="27" tag="1">
@@ -172,10 +181,10 @@
             <rect key="frame" x="0.0" y="0.0" width="298" height="60"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button toolTip="Reach default library" misplaced="YES" id="75">
-                    <rect key="frame" x="16" y="14" width="32" height="30"/>
+                <button toolTip="Reach default library" imageHugsTitle="YES" id="75">
+                    <rect key="frame" x="18" y="17" width="28" height="25"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSHomeTemplate" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="199">
+                    <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSHomeTemplate" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="199">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system" size="10"/>
                     </buttonCell>
@@ -183,7 +192,7 @@
                         <action selector="openDefaultLibraryPath:" target="-2" id="77"/>
                     </connections>
                 </button>
-                <popUpButton verticalHuggingPriority="750" id="68">
+                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="68">
                     <rect key="frame" x="65" y="16" width="216" height="26"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <popUpButtonCell key="cell" type="push" title="Add to current library" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="72" id="198">
@@ -213,7 +222,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="78">
+                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="78">
                     <rect key="frame" x="76" y="90" width="176" height="26"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="LaTeXiT" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="82" id="201">
@@ -231,7 +240,7 @@
                         <action selector="changeLibraryExportFormat:" target="-2" id="85"/>
                     </connections>
                 </popUpButton>
-                <button id="60">
+                <button imageHugsTitle="YES" id="60">
                     <rect key="frame" x="38" y="120" width="192" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Export the selection only" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="200">
@@ -239,7 +248,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button id="228">
+                <button imageHugsTitle="YES" id="228">
                     <rect key="frame" x="38" y="58" width="210" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Export commented preamble " bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="229">
@@ -247,7 +256,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button id="230">
+                <button imageHugsTitle="YES" id="230">
                     <rect key="frame" x="38" y="38" width="165" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Export user comments" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="231">
@@ -255,7 +264,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button id="232">
+                <button imageHugsTitle="YES" id="232">
                     <rect key="frame" x="38" y="18" width="154" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Ignore title hierarchy" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="233">
@@ -301,6 +310,172 @@
                 <outlet property="parentWindow" destination="5" id="225"/>
             </connections>
         </drawer>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="238" userLabel="importTeXPanel" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="162" y="203" width="408" height="276"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <view key="contentView" id="239">
+                <rect key="frame" x="0.0" y="0.0" width="408" height="276"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="240">
+                        <rect key="frame" x="162" y="12" width="89" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="241">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="closeImportTeXItems:" target="-2" id="283"/>
+                        </connections>
+                    </button>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="242">
+                        <rect key="frame" x="13" y="60" width="375" height="154"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="ppC-H1-jAM">
+                            <rect key="frame" x="1" y="0.0" width="373" height="153"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" headerView="246" id="245">
+                                    <rect key="frame" x="0.0" y="0.0" width="373" height="130"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="checked" width="20" minWidth="20" maxWidth="1000" id="247">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" inset="2" id="259">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="title" editable="NO" width="301" minWidth="40" maxWidth="1000" id="248">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="249">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="import" width="20" minWidth="10" maxWidth="3.4028234663852886e+38" id="275">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="square" title="⬇" bezelStyle="shadowlessSquare" alignment="center" controlSize="small" borderStyle="border" inset="2" id="279">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <connections>
+                                                    <action selector="performImportTeXItems:" target="-2" id="280"/>
+                                                </connections>
+                                            </buttonCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="state" editable="NO" width="20" minWidth="10" maxWidth="3.4028234663852886e+38" id="277">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" id="278">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
+                                        </tableColumn>
+                                    </tableColumns>
+                                </tableView>
+                            </subviews>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="244">
+                            <rect key="frame" x="1" y="138" width="373" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="243">
+                            <rect key="frame" x="359" y="17" width="15" height="121"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <tableHeaderView key="headerView" id="246">
+                            <rect key="frame" x="0.0" y="0.0" width="373" height="23"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </tableHeaderView>
+                    </scrollView>
+                    <button imageHugsTitle="YES" id="251">
+                        <rect key="frame" x="18" y="240" width="105" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="&quot;Inline&quot; items" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" allowsMixedState="YES" inset="2" id="252">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="changeImportTeXItems:" target="-2" id="269"/>
+                        </connections>
+                    </button>
+                    <button imageHugsTitle="YES" id="253">
+                        <rect key="frame" x="18" y="220" width="117" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="&quot;Display&quot; items" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" allowsMixedState="YES" inset="2" id="254">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="changeImportTeXItems:" target="-2" id="271"/>
+                        </connections>
+                    </button>
+                    <button imageHugsTitle="YES" id="255">
+                        <rect key="frame" x="192" y="240" width="102" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="&quot;align&quot; items" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" allowsMixedState="YES" inset="2" id="256">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="changeImportTeXItems:" target="-2" id="270"/>
+                        </connections>
+                    </button>
+                    <button imageHugsTitle="YES" id="257">
+                        <rect key="frame" x="192" y="220" width="126" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="&quot;eqnarray&quot; items" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" allowsMixedState="YES" inset="2" id="258">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="changeImportTeXItems:" target="-2" id="272"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="260">
+                        <rect key="frame" x="251" y="12" width="143" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Import selection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="261">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="closeImportTeXItems:" target="-2" id="284"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+        </window>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
@@ -309,5 +484,6 @@
         <image name="NSIconViewTemplate" width="10" height="10"/>
         <image name="NSListViewTemplate" width="14" height="10"/>
         <image name="magnifying-glass" width="23.5" height="18"/>
+        <image name="view-icons-adjust" width="20" height="20"/>
     </resources>
 </document>

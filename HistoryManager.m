@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -435,7 +435,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.10.1", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -468,11 +468,15 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   @try{
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
-    NSDictionary* options = nil;
-      options = [NSDictionary dictionaryWithObjectsAndKeys:
-                  @YES, NSMigratePersistentStoresAutomaticallyOption,
-                  @YES, NSInferMappingModelAutomaticallyOption,
-                  nil];
+    NSMutableDictionary* options = [NSMutableDictionary dictionary];
+    if (isMacOS10_5OrAbove())
+    {
+      [options setValue:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
+      NSDictionary* journalMode = [NSDictionary dictionaryWithObjectsAndKeys:@"DELETE", @"journal_mode", nil];
+      [options setValue:journalMode forKey:NSSQLitePragmasOption];
+    }//end if (isMacOS10_5OrAbove())
+    if (isMacOS10_6OrAbove())
+      [options setValue:@YES forKey:NSInferMappingModelAutomaticallyOption];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];
     if (error)
@@ -497,7 +501,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.10.1", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -565,7 +569,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.8.1", @"version",
+          @"2.10.1", @"version",
           nil];
         NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -208,6 +208,46 @@
 }
 //end setSaveAccessoryViewOptionsSvgPdfToSvgPath:
 
+-(NSString*) saveAccessoryViewOptionsPDFWofGSWriteEngine
+{
+  return self->saveAccessoryViewOptionsPDFWofGSWriteEngine;
+}
+//end saveAccessoryViewOptionsPDFWofGSWriteEngine
+
+-(void) setSaveAccessoryViewOptionsPDFWofGSWriteEngine:(NSString*)value
+{
+  [value retain];
+  [self->saveAccessoryViewOptionsPDFWofGSWriteEngine release];
+  self->saveAccessoryViewOptionsPDFWofGSWriteEngine = value;
+}
+//end setSaveAccessoryViewOptionsPDFWofGSWriteEngine:
+
+-(NSString*) saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel
+{
+  return self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+}
+//end saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel
+
+-(void) setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:(NSString*)value
+{
+  [value retain];
+  [self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel release];
+  self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel = value;
+}
+//end setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:
+
+-(BOOL) saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled
+{
+  return self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
+}
+//end saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled
+
+-(void) setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:(BOOL)value
+{
+  self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled = value;
+}
+//end setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:
+
 -(void) setCurrentSavePanel:(NSSavePanel*)value
 {
   [self->currentSavePanel setAccessoryView:nil];
@@ -256,7 +296,8 @@
     BOOL isJpegFormat = (exportFormat == EXPORT_FORMAT_JPEG);
     BOOL isMathMLFormat = (exportFormat == EXPORT_FORMAT_MATHML);
     BOOL isSvgFormat = (exportFormat == EXPORT_FORMAT_SVG);
-    allowOptions = isJpegFormat || isSvgFormat;
+    BOOL isPdfWofFormat = (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS);
+    allowOptions = isJpegFormat || isSvgFormat || isPdfWofFormat;
     [self->saveAccessoryViewOptionsButton setEnabled:allowOptions];
     [self->saveAccessoryViewScaleLabel setHidden:isMathMLFormat];
     [self->saveAccessoryViewScalePercentTextField setHidden:isMathMLFormat];
@@ -308,6 +349,9 @@
   [self->saveAccessoryViewExportFormatOptionsPanes setTextExportPreamble:self->saveAccessoryViewOptionsTextExportPreamble];
   [self->saveAccessoryViewExportFormatOptionsPanes setTextExportEnvironment:self->saveAccessoryViewOptionsTextExportEnvironment];
   [self->saveAccessoryViewExportFormatOptionsPanes setTextExportBody:self->saveAccessoryViewOptionsTextExportBody];
+  [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofGSWriteEngine:self->saveAccessoryViewOptionsPDFWofGSWriteEngine];
+  [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofGSPDFCompatibilityLevel:self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel];
+  [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled];
   NSPanel* panelToOpen = nil;
   export_format_t exportFormat = (export_format_t)[self->saveAccessoryViewPopupFormat selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
@@ -332,6 +376,12 @@
     {
       [self setSaveAccessoryViewOptionsSvgPdfToSvgPath:[self->saveAccessoryViewExportFormatOptionsPanes svgPdfToSvgPath]];
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
+    {
+      [self setSaveAccessoryViewOptionsPDFWofGSWriteEngine:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSWriteEngine]];
+      [self setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSPDFCompatibilityLevel]];
+      [self setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofMetaDataInvisibleGraphicsEnabled]];
+    }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
   }//end if (ok)
   [NSApp stopModal];
   [exportFormatOptionsPanel orderOut:self];

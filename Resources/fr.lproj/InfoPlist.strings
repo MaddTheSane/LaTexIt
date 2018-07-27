@@ -1,8 +1,8 @@
-﻿/* Localized versions of Info.plist keys */
+/* Localized versions of Info.plist keys */
 
 CFBundleName = "LaTeXiT";
-CFBundleVersion = "2.8.1";
-CFBundleShortVersionString = "2.8.1";
-CFBundleGetInfoString = "LaTeXiT version 2.8.1";
-NSHumanReadableCopyright = "© Pierre Chatelier, 2005-2016";
+CFBundleVersion = "2.10.1";
+CFBundleShortVersionString = "2.10.1";
+CFBundleGetInfoString = "LaTeXiT version 2.10.1";
+NSHumanReadableCopyright = "© Pierre Chatelier, 2005-2018";
 SUFeedURL = "http://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-fr.rss";

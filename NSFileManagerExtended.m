@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -137,6 +137,26 @@ static NSMutableSet* createdTemporaryPaths = nil;
   return resVal;
 };
 //end UTIFromURL:
+
+-(NSString*) getUnusedFilePathFromPrefix:(NSString*)filePrefix extension:(NSString*)extension folder:(NSString*)folder startSuffix:(NSUInteger)startSuffix
+{
+  NSString* result = nil;
+  NSString* fileName = nil;
+  NSString* filePath = nil;
+  NSUInteger suffix = startSuffix;
+  do
+  {
+    fileName = [NSString stringWithFormat:@"%@%@",
+                 filePrefix,
+                 !suffix ? @"" : [NSString stringWithFormat:@"-%lu", (unsigned long)suffix]];
+    ++suffix;
+    fileName = [fileName stringByAppendingPathExtension:extension];
+    filePath = [folder stringByAppendingPathComponent:fileName];
+  } while ((suffix != NSNotFound) && [self fileExistsAtPath:filePath]);
+  result = filePath;
+  return result;
+}
+//end getUnusedFilePathFromPrefix:folder:startSuffix:
 
 @end
 

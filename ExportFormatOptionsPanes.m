@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #if !__has_feature(objc_arc)
@@ -44,6 +44,9 @@
   textExportPreamble = YES;
   textExportEnvironment = YES;
   textExportBody = YES;
+  pdfWofGSWriteEngine = @"pdfwrite";
+  pdfWofGSPDFCompatibilityLevel = @"1.5";
+  pdfWofMetaDataInvisibleGraphicsEnabled = YES;
   return self;
 }
 //end initWithLoadingFromNib:
@@ -70,7 +73,7 @@
   [exportFormatOptionsJpegBackgroundColorLabel sizeToFit];
   [exportFormatOptionsJpegOKButton sizeToFit];
   [exportFormatOptionsJpegCancelButton sizeToFit];
-  
+
   [exportFormatOptionsJpegQualityLeastLabel setFrameOrigin:
     NSMakePoint([exportFormatOptionsJpegQualitySlider frame].origin.x,
                 [exportFormatOptionsJpegQualityLeastLabel frame].origin.y)];
@@ -172,6 +175,44 @@
    NSMakePoint([exportFormatOptionsTextOKButton frame].origin.x-12-[exportFormatOptionsTextCancelButton frame].size.width,
                [exportFormatOptionsTextCancelButton frame].origin.y)];
   
+  [self->exportFormatOptionsPDFWofGSBox setTitle:LocalLocalizedString(@"Ghostscript options", @"Ghostscript options")];
+  [self->exportFormatOptionsPDFWofGSWriteEngineLabel setStringValue:[NSString stringWithFormat:@"%@:",LocalLocalizedString(@"Write engine", @"Write engine")]];
+  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel setStringValue:[NSString stringWithFormat:@"%@:",LocalLocalizedString(@"PDF Compatibility level", @"PDF Compatibility level")]];
+  [self->exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox setTitle:NSLocalizedString(@"Add invisible graphic commands", @"Add invisible graphic commands")];
+  [self->exportFormatOptionsPDFWofGSWriteEngineLabel sizeToFit];
+  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel sizeToFit];
+  [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton sizeToFit];
+  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton sizeToFit];
+  [self->exportFormatOptionsPDFWofMetadataBox setTitle:LocalLocalizedString(@"LaTeXiT medata", @"LaTeXiT medata")];  
+  [self->exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox sizeToFit];
+  [self->exportFormatOptionsPDFWofOKButton sizeToFit];
+  [self->exportFormatOptionsPDFWofCancelButton sizeToFit];
+  
+  [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton setFrame:
+   NSMakeRect(MAX(CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSWriteEngineLabel frame])),
+                  CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel frame]))),
+              [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].origin.y,
+              MAX([self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].size.width,
+                  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].size.width),
+              [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].size.height)];
+  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton setFrame:
+   NSMakeRect(MAX(CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSWriteEngineLabel frame])),
+                   CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel frame]))),
+              [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].origin.y,
+              MAX([self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].size.width,
+                  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].size.width),
+              [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].size.height)];
+  
+  [self->exportFormatOptionsPDFWofCancelButton setFrameSize:
+   NSMakeSize(MAX(90, [self->exportFormatOptionsPDFWofCancelButton frame].size.width),
+              [self->exportFormatOptionsPDFWofCancelButton frame].size.height)];
+  [self->exportFormatOptionsPDFWofOKButton setFrameSize:[self->exportFormatOptionsPDFWofCancelButton frame].size];
+  [self->exportFormatOptionsPDFWofOKButton setFrameOrigin:
+   NSMakePoint(NSMaxX([self->exportFormatOptionsPDFWofGSBox frame])-[self->exportFormatOptionsPDFWofOKButton frame].size.width,
+               [self->exportFormatOptionsPDFWofOKButton frame].origin.y)];
+  [self->exportFormatOptionsPDFWofCancelButton setFrameOrigin:
+   NSMakePoint([self->exportFormatOptionsPDFWofOKButton frame].origin.x-12-[self->exportFormatOptionsPDFWofCancelButton frame].size.width,
+               [self->exportFormatOptionsPDFWofCancelButton frame].origin.y)];
 
   [exportFormatOptionsJpegQualitySlider bind:NSValueBinding toObject:self withKeyPath:@"jpegQualityPercent"
     options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption, nil]];
@@ -185,6 +226,10 @@
   [exportFormatOptionsTextExportEnvironmentButton bind:NSValueBinding toObject:self withKeyPath:@"textExportEnvironment" options:nil];
   [exportFormatOptionsTextExportBodyButton bind:NSValueBinding toObject:self withKeyPath:@"textExportBody" options:nil];
 
+  [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton bind:NSSelectedValueBinding toObject:self withKeyPath:@"pdfWofGSWriteEngine" options:nil];
+  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton bind:NSSelectedValueBinding toObject:self withKeyPath:@"pdfWofGSPDFCompatibilityLevel" options:nil];
+  
+  [self->exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox bind:NSValueBinding toObject:self withKeyPath:@"pdfWofMetaDataInvisibleGraphicsEnabled" options:nil];
 }
 //end awakeFromNib
 
@@ -210,6 +255,84 @@
 
 #pragma mark TEXT
 
+#pragma mark PDF Wof
+
+-(NSPanel*) exportFormatOptionsPDFWofPanel
+{
+  return self->exportFormatOptionsPDFWofPanel;
+}
+//end exportFormatOptionsPDFWofPanel
+
+-(NSString*) pdfWofGSWriteEngine
+{
+  return self->pdfWofGSWriteEngine;
+}
+//end pdfWofGSWriteEngine
+
+-(void) setPdfWofGSWriteEngine:(NSString*)value
+{
+#ifdef ARC_ENABLED
+#else
+  [value retain];
+#endif
+  [self willChangeValueForKey:@"pdfWofGSWriteEngine"];
+#ifdef ARC_ENABLED
+#else
+  [self->pdfWofGSWriteEngine release];
+#endif
+  self->pdfWofGSWriteEngine = value;
+  [self didChangeValueForKey:@"pdfWofGSWriteEngine"];
+}
+//end setPdfWofGSWriteEngine:
+
+-(NSString*) pdfWofGSPDFCompatibilityLevel
+{
+  return self->pdfWofGSPDFCompatibilityLevel;
+}
+//end pdfWofGSPDFCompatibilityLevel
+
+-(void) setPdfWofGSPDFCompatibilityLevel:(NSString*)value
+{
+  #ifdef ARC_ENABLED
+  #else
+  [value retain];
+  #endif
+  [self willChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
+  #ifdef ARC_ENABLED
+  #else
+  [self->pdfWofGSPDFCompatibilityLevel release];
+  #endif
+  self->pdfWofGSPDFCompatibilityLevel = value;
+  [self didChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
+}
+//end setPdfWofGSPDFCompatibilityLevel:
+
+-(BOOL) pdfWofMetaDataInvisibleGraphicsEnabled
+{
+  return self->pdfWofMetaDataInvisibleGraphicsEnabled;
+}
+//end pdfWofMetaDataInvisibleGraphicsEnabled
+
+-(void) setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value
+{
+  [self willChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
+  self->pdfWofMetaDataInvisibleGraphicsEnabled = value;
+  [self didChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
+}
+//end setPdfWofMetaDataInvisibleGraphicsEnabled
+
+-(id) exportFormatOptionsPDFWofPanelDelegate
+{
+  return self->exportFormatOptionsPDFWofPanelDelegate;
+}
+//end exportFormatOptionsPDFWofPanelDelegate
+
+-(void) setExportFormatOptionsPDFWofPanelDelegate:(id)delegate
+{
+  self->exportFormatOptionsPDFWofPanelDelegate = delegate;
+}
+//end setExportFormatOptionsPDFWofPanelDelegate:
+
 #pragma mark ALL
 
 -(IBAction) close:(id)sender
@@ -221,6 +344,8 @@
     [self exportFormatOptionsPanel:exportFormatOptionsSvgPanel didCloseWithOK:(senderTag == 2)];
   else if ((senderTag == 4) || (senderTag == 5))
     [self exportFormatOptionsPanel:exportFormatOptionsTextPanel didCloseWithOK:(senderTag == 4)];
+  else if ((senderTag == 6) || (senderTag == 7))
+    [self exportFormatOptionsPanel:self->exportFormatOptionsPDFWofPanel didCloseWithOK:(senderTag == 6)];
 }
 //end close:
 
@@ -236,6 +361,9 @@
   else if ((exportFormatOptionsPanel == exportFormatOptionsTextPanel) &&
            [exportFormatOptionsTextPanelDelegate respondsToSelector:@selector(exportFormatOptionsPanel:didCloseWithOK:)])
     [exportFormatOptionsTextPanelDelegate exportFormatOptionsPanel:exportFormatOptionsPanel didCloseWithOK:ok];
+  else if ((exportFormatOptionsPanel == self->exportFormatOptionsPDFWofPanel) &&
+           [self->exportFormatOptionsPDFWofPanelDelegate respondsToSelector:@selector(exportFormatOptionsPanel:didCloseWithOK:)])
+    [self->exportFormatOptionsPDFWofPanelDelegate exportFormatOptionsPanel:exportFormatOptionsPanel didCloseWithOK:ok];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:
 

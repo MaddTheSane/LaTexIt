@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //The LibraryCell is the kind of cell displayed in the NSOutlineView of the Library drawer
 //It contains an image and a text. It is a copy of the ImageAndTextCell provided by Apple
@@ -88,14 +88,14 @@
   if (libraryTableView)
   {
     library_row_t libraryRowType = [libraryTableView libraryRowType];
-    if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
+    if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) || (libraryRowType == LIBRARY_ROW_IMAGE_ADJUST))
     {
       BOOL saveDrawsBackground = [self drawsBackground];
       [self setDrawsBackground:NO];
       [super drawInteriorWithFrame:cellFrame inView:controlView]; //the image is displayed in a subrect of the cell
       [self setDrawsBackground:saveDrawsBackground];
-    }
-    else//if (libraryRowType != LIBRARY_ROW_IMAGE_LARGE)
+    }//end if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) || (libraryRowType == LIBRARY_ROW_IMAGE_ADJUST))
+    else if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
     {
       CGFloat pillCorner = cellFrame.size.height/2;
       CGRect pillRect = CGRectZero;
@@ -160,7 +160,7 @@
         [super drawInteriorWithFrame:cellFrame inView:controlView];
         [self setDrawsBackground:saveDrawsBackground];
       }//end if ([self isHighlighted])*/
-    }//end if (libraryRowType != LIBRARY_ROW_IMAGE_LARGE)
+    }//end if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
   }//end if (libraryView)
 }
 //end drawInteriorWithFrame:inView:

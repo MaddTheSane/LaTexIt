@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -31,6 +31,7 @@
 #import "NSMutableArrayExtended.h"
 #import "NSMenuExtended.h"
 #import "NSObjectExtended.h"
+#import "NSStringExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "RegexKitLite.h"
@@ -39,6 +40,7 @@
 
 #import "CGExtras.h"
 
+#import <Carbon/Carbon.h>
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 
@@ -85,8 +87,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType,
-                              @"com.adobe.pdf", @"public.tiff", @"public.png", @"public.jpeg", @"public.svg-image",
-                              @"public.html",
+                              kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, @"public.svg-image",
+                              kUTTypeHTML,
                               //@"com.apple.iWork.TSPNativeMetadata",
                               nil]];
   return self;
@@ -510,7 +512,11 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   {
     NSString* dropPath = [dropDestination path];
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    NSString* filePrefix = @"latex-image";
+    NSString* equationSourceText = [[self->transientDragEquation sourceText] string];
+    BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+    NSString* filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:equationSourceText];
+    if (!filePrefix || [filePrefix isEqualToString:@""])
+      filePrefix = @"latex-image";
     
     NSString* extension = nil;
     PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -553,24 +559,23 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
                                    [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                    nil];
     NSData* data = nil;
+    NSData* currentPdfData = nil;
     if (!data && self->transientDragEquation)
       data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
     if (!data)
-      data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData
+    {
+      if (!currentPdfData)
+        currentPdfData = [self->transientDragEquation pdfData];
+      if (!currentPdfData)
+        currentPdfData = self->pdfData;
+      data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:currentPdfData
                      exportOptions:exportOptions
                      compositionConfiguration:[preferencesController compositionConfigurationDocument]
                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+    }//end if (!data)
     if (extension)
     {
-      NSString* fileName = nil;
-      NSString* filePath = nil;
-      unsigned long i = 1;
-      //we try to compute a name that is not already in use
-      do
-      {
-        fileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
-        filePath = [dropPath stringByAppendingPathComponent:fileName];
-      } while (i && [fileManager fileExistsAtPath:filePath]);
+      NSString* filePath = [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:0];
       
       //if we find such a name, use it
       if (![fileManager fileExistsAtPath:filePath])
@@ -579,11 +584,21 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         [fileManager setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
                              ofItemAtPath:filePath error:0];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
-        if ((exportFormat != EXPORT_FORMAT_PNG) &&
-            (exportFormat != EXPORT_FORMAT_TIFF) &&
-            (exportFormat != EXPORT_FORMAT_JPEG))
-          [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:self->pdfData backgroundColor:jpegBackgroundColor]
+        NSColor* autoBackgroundColor = [self->transientDragEquation backgroundColor];
+        NSColor* iconBackgroundColor =
+         (jpegBackgroundColor != nil) ? jpegBackgroundColor :
+         (autoBackgroundColor != nil) ? autoBackgroundColor :
+          nil;
+        if ((exportFormat != EXPORT_FORMAT_PNG) &&(exportFormat != EXPORT_FORMAT_TIFF) && (exportFormat != EXPORT_FORMAT_JPEG))
+        {
+          if (!currentPdfData)
+            currentPdfData = [self->transientDragEquation pdfData];
+          if (!currentPdfData)
+            currentPdfData = self->pdfData;
+          [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:currentPdfData backgroundColor:iconBackgroundColor]
                                          forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
+        }//end if ((exportFormat != EXPORT_FORMAT_PNG) &&(exportFormat != EXPORT_FORMAT_TIFF) && (exportFormat != EXPORT_FORMAT_JPEG))
+        NSString* fileName = [filePath lastPathComponent];
         [names addObject:fileName];
       }//end if (![fileManager fileExistsAtPath:filePath])
     }//end if (extension)
@@ -594,20 +609,27 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
-  DebugLog(1, @">");
+  DebugLog(1, @"lazyDataProvider = %p(%@)>", lazyDataProvider, lazyDataProvider);
   [self->document triggerSmartHistoryFeature];
 
   LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
   [self->transientDragEquation release];
   self->transientDragEquation = [equation retain];
+  DebugLog(1, @"self->transientDragEquation = %p>", self->transientDragEquation);
+  DebugLog(1, @"self->transientDragEquation.pdfData = %p>", [self->transientDragEquation pdfData]);
 
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
-  [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
   if (self->isDragging && (lazyDataProvider == self))
   {
-    [pasteboard addTypes:@[/*NSFileContentsPboardType,*//* NSFilenamesPboardType, NSURLPboardType,*/ ]
-                   owner:lazyDataProvider];
+    NSMutableArray* types = [NSMutableArray array];
+    BOOL fillFilenames = NO;
+    if (fillFilenames)
+      [types addObjectsFromArray:[NSArray arrayWithObjects:
+        NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType,
+        nil]];
+    [pasteboard addTypes:types owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
   DebugLog(1, @"<");
 }
@@ -634,11 +656,16 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   if (!data && self->transientDragEquation)
     data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
   if (!data)
+  {
+    NSData* currentPdfData = [self->transientDragEquation pdfData];
+    if (!currentPdfData)
+      currentPdfData = self->pdfData;
     data = [[LaTeXProcessor sharedLaTeXProcessor]
-      dataForType:exportFormat pdfData:self->pdfData
+      dataForType:exportFormat pdfData:currentPdfData
       exportOptions:exportOptions
       compositionConfiguration:[preferencesController compositionConfigurationDocument]
       uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+  }//end if (!data)
   if (!hasAlreadyCachedData)
   {
     [self->transientDragData release];
@@ -653,7 +680,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       case EXPORT_FORMAT_PDF:
       case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
         extension = @"pdf";
-        uti = @"com.adobe.pdf";
+        uti = (NSString*)kUTTypePDF;
         break;
       case EXPORT_FORMAT_EPS:
         extension = @"eps";
@@ -661,19 +688,19 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         break;
       case EXPORT_FORMAT_TIFF:
         extension = @"tiff";
-        uti = @"public.tiff";
+        uti = (NSString*)kUTTypeTIFF;
         break;
       case EXPORT_FORMAT_PNG:
         extension = @"png";
-        uti = @"public.png";
+        uti = (NSString*)kUTTypePNG;
         break;
       case EXPORT_FORMAT_JPEG:
         extension = @"jpeg";
-        uti = @"public.jpeg";
+        uti = (NSString*)kUTTypeJPEG;
         break;
       case EXPORT_FORMAT_MATHML:
         extension = @"html";
-        uti = @"public.html";
+        uti = (NSString*)kUTTypeHTML;
         break;
       case EXPORT_FORMAT_SVG:
         extension = @"svg";
@@ -681,9 +708,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         break;
       case EXPORT_FORMAT_TEXT:
         extension = @"tex";
-        uti = @"public.text";
+        uti = (NSString*)kUTTypeText;
         break;
-    }
+    }//end witch(exportFormat)
     if (data)
     {
       if ([type isEqualToString:NSFileContentsPboardType])
@@ -692,7 +719,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
-        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+          [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
         if (filePath)
         {
           if (!hasAlreadyCachedData)
@@ -707,7 +734,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
-        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+          [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
         if (filePath)
         {
           if (!hasAlreadyCachedData)
@@ -725,9 +752,22 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     else//if (exportFormat == EXPORT_FORMAT_MATHML)
     {
       NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-      NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
-      if (blockQuote)
-        [pasteboard setString:blockQuote forType:type];
+      NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
+      if (blockquoteString)
+      {
+        NSError* error = nil;
+        NSString* mathString =
+          [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
+                                                     withString:@"<math$4 style=$2>$3$5</math>"
+                                                        options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
+        if (error)
+          DebugLog(1, @"error = <%@>", error);
+        BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:(NSString*)NSHTMLPboardType];
+        if (isHTML)
+          [pasteboard setString:blockquoteString forType:type];
+        else//if (!isHTML)
+          [pasteboard setString:(!mathString ? blockquoteString : mathString) forType:type];
+      }//end if (blockquoteString)
     }//end if (exportFormat == EXPORT_FORMAT_MATHML)
   }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
   DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);
@@ -744,7 +784,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSPasteboard* pboard = [sender draggingPasteboard];
   if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]]))
     ok = YES;
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]]))
     ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]]))
     ok = YES;
@@ -761,7 +801,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]]))
     ok = YES;
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -770,7 +810,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     ok = attributedString || (pdfWrapperData != nil);//now, allow string
     [attributedString release];
-  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, NSStringPboardType, nil]])
     ok = YES;
   result = ok ? NSDragOperationCopy : NSDragOperationNone;
@@ -896,15 +936,15 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [self->document applyLatexitEquation:[latexitEquationsArray lastObject] isRecentLatexisation:NO];
     done = YES;
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, NSPDFPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]])))
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypePDF];
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:kUTTypePDF, NSPDFPboardType, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypePDF];
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])))
   {
@@ -992,7 +1032,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         {
           NSData* filePdfData = [NSData dataWithContentsOfFile:pdfFilePath];
           DebugLog(1, @"filePdfData = %p", filePdfData);
-          done = filePdfData && [self->document applyData:filePdfData sourceUTI:@"com.adobe.pdf"];
+          done = filePdfData && [self->document applyData:filePdfData sourceUTI:kUTTypePDF];
         }//end if (pdfFilePath)
       }//end if (pdfFileName && uuid)
     }//end if (data)
@@ -1021,7 +1061,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       [self->document applyString:concats];
     done = (concats != nil);
   }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfdData = [pboard dataForType:type];
@@ -1030,10 +1070,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     if (pdfWrapperData)
-      done = [self->document applyData:pdfWrapperData sourceUTI:@"com.adobe.pdf"];
+      done = [self->document applyData:pdfWrapperData sourceUTI:(NSString*)kUTTypePDF];
     [attributedString release];
-  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.rtf", NSRTFPboardType, nil]])))
+  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfData = [pboard dataForType:type];
@@ -1042,18 +1082,18 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSString* string = [attributedString string];
     NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
     //[self->document applyString:string];
-    [self->document applyData:data sourceUTI:@"public.text"];
+    [self->document applyData:data sourceUTI:(NSString*)kUTTypeText];
     [attributedString release];
     done = YES;
-  }
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     //NSString* string = [pboard stringForType:type];
     //[self->document applyString:string];
-    [self->document applyData:[pboard dataForType:type] sourceUTI:@"public.text"];
+    [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypeText];
     done = YES;
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
   if (!done)
     ok = NO;
   return ok;

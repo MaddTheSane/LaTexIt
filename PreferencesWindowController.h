@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -115,13 +115,16 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSButton*               bodyTemplatesApplyToOpenedDocumentsButton;
 
   IBOutlet NSPopUpButton* compositionConfigurationsCurrentPopUpButton;
-  IBOutlet NSMatrix*      compositionConfigurationsCurrentEngineMatrix;
+  IBOutlet NSPopUpButton* compositionConfigurationsCurrentEnginePopUpButton;
   IBOutlet NSTextField*   compositionConfigurationsCurrentPdfLaTeXPathTextField;
   IBOutlet NSButton*      compositionConfigurationsCurrentPdfLaTeXAdvancedButton;
   IBOutlet NSButton*      compositionConfigurationsCurrentPdfLaTeXPathChangeButton;
   IBOutlet NSTextField*   compositionConfigurationsCurrentXeLaTeXPathTextField;
   IBOutlet NSButton*      compositionConfigurationsCurrentXeLaTeXAdvancedButton;
   IBOutlet NSButton*      compositionConfigurationsCurrentXeLaTeXPathChangeButton;
+  IBOutlet NSTextField*   compositionConfigurationsCurrentLuaLaTeXPathTextField;
+  IBOutlet NSButton*      compositionConfigurationsCurrentLuaLaTeXAdvancedButton;
+  IBOutlet NSButton*      compositionConfigurationsCurrentLuaLaTeXPathChangeButton;
   IBOutlet NSTextField*   compositionConfigurationsCurrentLaTeXPathTextField;
   IBOutlet NSButton*      compositionConfigurationsCurrentLaTeXAdvancedButton;
   IBOutlet NSButton*      compositionConfigurationsCurrentLaTeXPathChangeButton;

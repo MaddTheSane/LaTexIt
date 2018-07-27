@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 06/05/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDictionaryCompositionConfiguration.h"
@@ -23,6 +23,8 @@
              {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationPdfLatexPathKey];}
 -(NSString*) compositionConfigurationProgramPathXeLaTeX
              {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationXeLatexPathKey];}
+-(NSString*) compositionConfigurationProgramPathLuaLaTeX
+             {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationLuaLatexPathKey];}
 -(NSString*) compositionConfigurationProgramPathLaTeX
              {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationLatexPathKey];}
 -(NSString*) compositionConfigurationProgramPathDviPdf
@@ -39,17 +41,19 @@
 //end compositionConfigurationProgramPathForKey:
 
 -(NSArray*) compositionConfigurationProgramArgumentsPdfLaTeX
-             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationPdfLatexPathKey];}
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationPdfLatexPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsXeLaTeX
-             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationXeLatexPathKey];}
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationXeLatexPathKey];}
+-(NSArray*) compositionConfigurationProgramArgumentsLuaLaTeX
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationLuaLatexPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsLaTeX
-             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationLatexPathKey];}
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationLatexPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsDviPdf
-             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationDviPdfPathKey];}
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationDviPdfPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsGs
-             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationGsPathKey];}
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationGsPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsPsToPdf
-             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationPsToPdfPathKey];}
+            {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationPsToPdfPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsForKey:(NSString*)key
 {
   NSArray* result = [[self objectForKey:CompositionConfigurationProgramArgumentsKey] objectForKey:key];

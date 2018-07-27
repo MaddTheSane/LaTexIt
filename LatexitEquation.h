@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -93,9 +93,11 @@ extern NSString* LatexitEquationsPboardType;
 -(NSString*) titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
--(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
+-(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider options:(NSDictionary*)options;
 -(id) plistDescription;
 -(id) initWithDescription:(id)description;
 -(CHExportPrefetcher*) exportPrefetcher;
+
++(NSString*) computeFileNameFromContent:(NSString*)content;
 
 @end

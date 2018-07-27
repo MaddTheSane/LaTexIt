@@ -6,6 +6,36 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
+<h2><a name="version-2.10.1">Version 2.10.1 (31 marzo 2018)</a></h2>
+<ul>
+<li>fixed last-minute regression regarding drag'n dropping from the main window.</li>
+</ul>
+<h2><a name="version-2.10.0">Version 2.10.0 (30 marzo 2018)</a></h2>
+<ul>
+<li>Changed options of the history and library databases to avoid persistent journal files and make synchronizing those files between different machines;</li>
+<li>ability to import TeX files into the library, which will be split into detected equations;</li>
+<li>new library display mode to adjust to tall equations.</li>
+</ul>
+<h2><a name="version-2.9.1">Version 2.9.1 (25 febrero 2018)</a></h2>
+<ul>
+<li>More work on invisible graphic annotations in PDFs (as more robust metadata, to prevent Keynote and Powerpoint from stripping them). There were problems, especially with Adobe Illustrator;</li>
+<li>change the way Ghostscript is used to generate PDF &quot;with outlined fonts&quot;;</li>
+<li>added advanced Ghostscript options for export &quot;with outlined fonts&quot;, to circumvent potential problems;</li>
+<li>added ability to disable invisible graphic annotations in the PDF &quot;with outlined fonts&quot; export;</li>
+<li>fixed &quot;clever&quot; filenames that were invalid because of the slash character;</li>
+<li>ability to disable &quot;clever&quot; filenames by pressing option (⎇);</li>
+<li>added preliminary lualatex support;</li>
+<li>changed MathML export for easier integration into Office.</li>
+</ul>
+<h2><a name="version-2.9.0">Version 2.9.0 (6 febrero 2018)</a></h2>
+<ul>
+<li>Added invisible graphic annotations in PDFs as more robust metadata, to prevent Keynote and Powerpoint from stripping them;</li>
+<li>try to use a clever file name when dropping a file to the Finder;</li>
+<li>export SVG as string when the target application is not able to display SVG;</li>
+<li>any occurrence of %__TEXTCOLOR__ in the preamble will be replaced by the currently selected text color, to circumvent the problem of packages that override the previous settings;</li>
+<li>more clever background coloring of icon of equations created in the Finder, when the &quot;automatically contrasted background&quot; is enabled;</li>
+<li>added menu &quot;Font &gt; Bigger/Smaller&quot;.</li>
+</ul>
 <h2><a name="version-2.8.1">Version 2.8.1 (13 julio 2016)</a></h2>
 <ul>
 <li>fixed incompatibilities with recent updates of Ghostscript&nbsp;;</li>

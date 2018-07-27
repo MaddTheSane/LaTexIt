@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -695,6 +695,12 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
    [[[[self parameters] objectForKey:@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue]];
   [self->generalExportFormatOptionsPanes setTextExportBody:
    [[[[self parameters] objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue]];
+  [self->generalExportFormatOptionsPanes setPdfWofGSWriteEngine:
+   [[[self parameters] objectForKey:@"pdfWofGSWriteEngine"] dynamicCastToClass:[NSString class]]];
+  [self->generalExportFormatOptionsPanes setPdfWofGSPDFCompatibilityLevel:
+   [[[self parameters] objectForKey:@"pdfWofGSPDFCompatibilityLevel"] dynamicCastToClass:[NSString class]]];
+  [self->generalExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:
+   [[[[self parameters] objectForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"] dynamicCastToClass:[NSNumber class]] boolValue]];
   NSPanel* panelToOpen = nil;
   export_format_t exportFormat = (export_format_t)[self->exportFormatPopupButton selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)

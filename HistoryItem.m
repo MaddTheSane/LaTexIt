@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryItem.h"
@@ -265,7 +265,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) writeToPasteboard:(NSPasteboard*)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   //first, feed with equation
-  [[self equation] writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  [[self equation] writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
 
   //overwrite linkBack pasteboard
   NSArray* historyItemArray = [NSArray arrayWithObject:self];
@@ -287,7 +287,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.8.1", @"version",
+       @"2.10.1", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -324,7 +324,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.8.1" forKey:@"version"];
+  [coder encodeObject:@"2.10.1"       forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:

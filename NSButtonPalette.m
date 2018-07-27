@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSButtonPalette.h"
@@ -65,6 +65,34 @@
   return result;
 }
 //end buttonWithState:
+
+-(int) selectedTag
+{
+  int result = 0;
+  NSEnumerator* enumerator = [self->buttons objectEnumerator];
+  NSButton* button = nil;
+  while((button = [enumerator nextObject]))
+  {
+    if ([button state] == NSOnState)
+    {
+      result = [button tag];
+      break;
+    }//end if ([button state] == NSOnState)
+  }//end for each button
+  return result;
+}
+//end selectedTag
+
+-(void) setSelectedTag:(int)tag
+{
+  NSEnumerator* enumerator = [self->buttons objectEnumerator];
+  NSButton* button = nil;
+  while((button = [enumerator nextObject]))
+  {
+    [button setState:([button tag] == tag) ? NSOnState : NSOffState];
+  }//end for each button
+}
+//end setSelectedTag
 
 -(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {

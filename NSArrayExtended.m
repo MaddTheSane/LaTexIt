@@ -1,7 +1,7 @@
 //  NSArrayExtended.m
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 
@@ -14,6 +14,37 @@
 
 @implementation NSArray (Extended)
 
+
+-(id) firstObjectIdenticalTo:(id)object
+{
+  id result = nil;
+  if (object)
+  {
+    id current = nil;
+    NSEnumerator* enumerator = [self objectEnumerator];
+    while(!result && ((current = [enumerator nextObject])))
+    {
+      if ([current isEqual:object])
+        result = current;
+    }//end while(!result && ((current = [enumerator nextObject])))
+  }//end if (object)
+  return result;
+}
+//end firstObjectIdenticalTo:
+
+-(id) firstObjectNotIdenticalTo:(id)object
+{
+  id result = nil;
+  id current = nil;
+  NSEnumerator* enumerator = [self objectEnumerator];
+  while(!result && ((current = [enumerator nextObject])))
+  {
+    if (!object || ![current isEqual:object])
+      result = current;
+  }//end while(!result && ((current = [enumerator nextObject])))
+  return result;
+}
+//end firstObjectNotIdenticalTo:
 
 //checks if the array contains an object, based on adress comparison, not isEqual:
 -(BOOL) containsObjectIdenticalTo:(id)object

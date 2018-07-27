@@ -323,29 +323,46 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="フォーマット" id="1636">
                         <items>
-                            <menuItem title="テキスト" id="1637">
+                            <menuItem title="フォント" id="1637">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="テキスト" id="1638">
+                                <menu key="submenu" title="フォント" id="1638">
                                     <items>
-                                        <menuItem title="左揃え" tag="2" keyEquivalent="{" id="1642">
+                                        <menuItem title="大きく" keyEquivalent="+" id="1642">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1643"/>
+                                                <action selector="fontSizeChange:" target="210" id="1679"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="中央揃え" tag="3" keyEquivalent="|" id="1641">
+                                        <menuItem title="小さく" tag="1" keyEquivalent="-" id="1641">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1644"/>
+                                                <action selector="fontSizeChange:" target="210" id="1680"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="右揃え" tag="4" keyEquivalent="}" id="1640">
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="テキスト" id="1669">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="テキスト" id="1670">
+                                    <items>
+                                        <menuItem title="左揃え" tag="2" keyEquivalent="{" id="1671">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1645"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1677"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="揃えなし" tag="1" keyEquivalent="|" id="1639">
+                                        <menuItem title="中央揃え" tag="3" keyEquivalent="|" id="1672">
+                                            <connections>
+                                                <action selector="formatChangeAlignment:" target="210" id="1678"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="右揃え" tag="4" keyEquivalent="}" id="1673">
+                                            <connections>
+                                                <action selector="formatChangeAlignment:" target="210" id="1675"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="揃えなし" tag="1" keyEquivalent="|" id="1674">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1646"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1676"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -629,7 +646,7 @@ CA
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="584" height="575"/>
                                     <size key="maxSize" width="1170" height="10000000"/>
-                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </textView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -671,7 +688,7 @@ LaTeXiT はフリーウェアソフトですのでもちろん寄付は義務で
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button tag="1" id="1358">
+                    <button tag="1" imageHugsTitle="YES" id="1358">
                         <rect key="frame" x="90" y="65" width="190" height="29"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="bevel" title="LaTeXiT ウェブサイトへ…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1582">
@@ -698,7 +715,7 @@ LaTeXiT はフリーウェアソフトですのでもちろん寄付は義務で
                 <rect key="frame" x="0.0" y="0.0" width="448" height="132"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button id="1406">
+                    <button imageHugsTitle="YES" id="1406">
                         <rect key="frame" x="18" y="21" width="191" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="今後この警告を提示しない。" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1583">
@@ -715,7 +732,7 @@ LaTeXiT はフリーウェアソフトですのでもちろん寄付は義務で
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" tag="1" id="1408">
+                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="1408">
                         <rect key="frame" x="352" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1585">
@@ -726,7 +743,7 @@ LaTeXiT はフリーウェアソフトですのでもちろん寄付は義務で
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1417"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="1409">
+                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1409">
                         <rect key="frame" x="247" y="12" width="105" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="キャンセル" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1586">

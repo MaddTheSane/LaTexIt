@@ -92,6 +92,8 @@
 		55EC50981DCD3F8C00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
 		55EC50991DCD3F8C00096CC0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50941DCD3F6300096CC0 /* libz.tbd */; };
 		55FF5409210ABF95002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */ = {isa = PBXBuildFile; fileRef = 55FF5402210ABF64002D5190 /* CHiWorkSpotlightPlugin.mdimporter */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		55FF540D210B0F65002D5190 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FF540C210B0F65002D5190 /* libxml2.tbd */; };
+		55FF540E210B0F87002D5190 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FF540C210B0F65002D5190 /* libxml2.tbd */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -338,6 +340,8 @@
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
 		93A9FF4D10201DA70061DB60 /* NSObjectTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */; };
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
+		93ABA88D2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
+		93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
 		93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -586,6 +590,7 @@
 		55EC50941DCD3F6300096CC0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		55EC50961DCD3F6A00096CC0 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CHiWorkSpotlightPlugin.xcodeproj; path = CHiWorkSpotlightPlugin/CHiWorkSpotlightPlugin.xcodeproj; sourceTree = "<group>"; };
+		55FF540C210B0F65002D5190 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
@@ -917,6 +922,8 @@
 		93A9FF4C10201DA70061DB60 /* NSObjectTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectTreeNode.h; sourceTree = "<group>"; };
 		93A9FF741020436D0061DB60 /* NSOutlineViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOutlineViewExtended.h; sourceTree = "<group>"; };
 		93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOutlineViewExtended.m; sourceTree = "<group>"; };
+		93ABA88B2053D44100E60612 /* TeXItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeXItemWrapper.h; sourceTree = "<group>"; };
+		93ABA88C2053D44100E60612 /* TeXItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeXItemWrapper.m; sourceTree = "<group>"; };
 		93ADD64A144AE92500BA13D9 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93ADD64C144AE93000BA13D9 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93ADD64D144AE94A00BA13D9 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = it; path = it.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -1030,6 +1037,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55FF540D210B0F65002D5190 /* libxml2.tbd in Frameworks */,
 				938E244B0889C392000626E6 /* AppKit.framework in Frameworks */,
 				55EC50991DCD3F8C00096CC0 /* libz.tbd in Frameworks */,
 				55EC50981DCD3F8C00096CC0 /* libicucore.tbd in Frameworks */,
@@ -1051,6 +1059,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55FF540E210B0F87002D5190 /* libxml2.tbd in Frameworks */,
 				55EC50971DCD3F6A00096CC0 /* libicucore.tbd in Frameworks */,
 				55EC50951DCD3F6300096CC0 /* libz.tbd in Frameworks */,
 				9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */,
@@ -1188,6 +1197,7 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55FF540C210B0F65002D5190 /* libxml2.tbd */,
 				55EC50961DCD3F6A00096CC0 /* libicucore.tbd */,
 				55EC50941DCD3F6300096CC0 /* libz.tbd */,
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
@@ -1517,6 +1527,8 @@
 				933345891077322E0022DBEB /* LatexitEquationWrapper.m */,
 				9344B6E80E8BBDCC00FE90A5 /* LaTeXProcessor.h */,
 				939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */,
+				93ABA88B2053D44100E60612 /* TeXItemWrapper.h */,
+				93ABA88C2053D44100E60612 /* TeXItemWrapper.m */,
 			);
 			name = "LaTeX Processor";
 			sourceTree = "<group>";
@@ -2376,6 +2388,7 @@
 				937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
 				937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */,
 				937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */,
+				93ABA88D2053D44100E60612 /* TeXItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2451,6 +2464,7 @@
 				937CFB8D1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
 				937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */,
 				937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */,
+				93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2754,7 +2768,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
@@ -2812,7 +2826,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
@@ -2972,6 +2986,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks @loader_path/../../../../Frameworks";
@@ -3027,6 +3042,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks @loader_path/../../../../Frameworks";

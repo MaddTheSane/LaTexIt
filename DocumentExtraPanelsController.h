@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -36,7 +36,10 @@
   BOOL            saveAccessoryViewOptionsTextExportPreamble;
   BOOL            saveAccessoryViewOptionsTextExportEnvironment;
   BOOL            saveAccessoryViewOptionsTextExportBody;
-
+  NSString*       saveAccessoryViewOptionsPDFWofGSWriteEngine;
+  NSString*       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+  BOOL            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
+  
   NSSavePanel* currentSavePanel;
 }
 
@@ -54,6 +57,13 @@
 @property BOOL              saveAccessoryViewOptionsTextExportPreamble;
 @property BOOL              saveAccessoryViewOptionsTextExportEnvironment;
 @property BOOL              saveAccessoryViewOptionsTextExportBody;
+
+-(NSString*)       saveAccessoryViewOptionsPDFWofGSWriteEngine;
+-(void)            setSaveAccessoryViewOptionsPDFWofGSWriteEngine:(NSString*)value;
+-(NSString*)       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+-(void)            setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:(NSString*)value;
+-(BOOL)            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
+-(void)            setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
 @property (nonatomic, assign) NSSavePanel *currentSavePanel;
 

@@ -256,6 +256,12 @@
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
+"Ghostscript options" = "Ghostscript options";
+"Write engine" = "Write engine";
+"PDF Compatibility level" = "PDF Compatibility level";
+"LaTeXiT medata" = "LaTeXiT medata";
+"Add invisible graphic commands" = "Add invisible graphic commands";
+
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";
 "Export body" = "Export body";
@@ -283,6 +289,14 @@
 "Export commented preambles" = "Export commented preambles";
 "Export user comments" = "Export user comments";
 "Ignore title hierarchy" = "Ignore title hierarchy";
+
+"_IMPORTING_" = "…";
+"_IMPORTED_" = "⎷";
+"\"Inline\" items" = "\"Inline\" items";
+"\"Display\" items" = "\"Display\" items";
+"\"Align\" items" = "\"Align\" items";
+"\"Eqnarray\" items" = "\"Eqnarray\" items";
+"Import selection" = "Import selection";
 
 /* History */
 "Add to current history" = "Aggiungi all'attuale cronologia";

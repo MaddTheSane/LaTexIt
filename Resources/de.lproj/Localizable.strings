@@ -1,4 +1,4 @@
-﻿"current-language" = "de";
+"current-language" = "de";
 "OK" = "OK";
 "Cancel" = "Abbrechen";
 "Error" = "Fehler";
@@ -69,8 +69,8 @@
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT benötigt eine funktionsfähige LaTeX-Installation. Falls Sie nicht wissen was LaTeX ist, werden Sie dies möglicherweise kompliziert finden. In diesem Fall hilft Ihnen die Hilfesektion in der Dokumentation weiter.";
 "See help..." = "Zur Hilfe gehen…";
 "Install LaTeX" = "LaTeX installieren";
-"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
-"pdflatex, latex, dvipdf, xelatex oder gs (abhängig von der derzeitigen Konfiguration) wurde auf Ihrem System nicht gefunden. Bitte überprüfen Sie deren Installation.";
+"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, latex, dvipdf, xelatex, lualatex oder gs (abhängig von der derzeitigen Konfiguration) wurde auf Ihrem System nicht gefunden. Bitte überprüfen Sie deren Installation.";
 "color.sty seems to be unavailable" = "color.sty wurde nicht gefunden";
 "Without the color.sty package, you won't be able to change the font color" = "Ohne das color-Paket können Sie die Farbe der Schrift nicht einstellen";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "Das color-Paket scheint bei Ihrer Installation von LaTeX zu fehlen. Daher ist ein Ändern der Schriftfarbe nicht möglich.";
@@ -257,6 +257,12 @@
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
+"Ghostscript options" = "Ghostscript options";
+"Write engine" = "Write engine";
+"PDF Compatibility level" = "PDF Compatibility level";
+"LaTeXiT medata" = "LaTeXiT medata";
+"Add invisible graphic commands" = "Add invisible graphic commands";
+
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";
 "Export body" = "Export body";
@@ -284,6 +290,14 @@
 "Export commented preambles" = "Export commented preambles";
 "Export user comments" = "Export user comments";
 "Ignore title hierarchy" = "Ignore title hierarchy";
+
+"_IMPORTING_" = "…";
+"_IMPORTED_" = "⎷";
+"\"Inline\" items" = "\"Inline\" items";
+"\"Display\" items" = "\"Display\" items";
+"\"Align\" items" = "\"Align\" items";
+"\"Eqnarray\" items" = "\"Eqnarray\" items";
+"Import selection" = "Import selection";
 
 /* History */
 "Add to current history" = "Zur aktuellen Verlauf hinzufügen";

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -52,6 +52,22 @@
   BOOL textExportEnvironment;
   BOOL textExportBody;
   __weak id<ExportFormatOptionsDelegate>   exportFormatOptionsTextPanelDelegate;
+  
+  IBOutlet NSPanel*       exportFormatOptionsPDFWofPanel;
+  IBOutlet NSBox*         exportFormatOptionsPDFWofGSBox;
+  IBOutlet NSTextField*   exportFormatOptionsPDFWofGSWriteEngineLabel;
+  IBOutlet NSPopUpButton* exportFormatOptionsPDFWofGSWriteEnginePopUpButton;
+  IBOutlet NSTextField*   exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel;
+  IBOutlet NSPopUpButton* exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton;
+  IBOutlet NSBox*         exportFormatOptionsPDFWofMetadataBox;
+  IBOutlet NSButton*      exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox;
+  IBOutlet NSButton*      exportFormatOptionsPDFWofOKButton;
+  IBOutlet NSButton*      exportFormatOptionsPDFWofCancelButton;
+  
+  NSString* pdfWofGSWriteEngine;
+  NSString* pdfWofGSPDFCompatibilityLevel;
+  BOOL      pdfWofMetaDataInvisibleGraphicsEnabled;
+  __weak id<ExportFormatOptionsDelegate>        exportFormatOptionsPDFWofPanelDelegate;
 }
 
 -(instancetype) initWithLoadingFromNib;
@@ -73,7 +89,18 @@
 @property BOOL textExportBody;
 @property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsTextPanelDelegate;
 
+-(NSPanel*)  exportFormatOptionsPDFWofPanel;
+-(NSString*) pdfWofGSWriteEngine;
+-(void)      setPdfWofGSWriteEngine:(NSString*)value;
+-(NSString*) pdfWofGSPDFCompatibilityLevel;
+-(void)      setPdfWofGSPDFCompatibilityLevel:(NSString*)value;
+-(BOOL)      pdfWofMetaDataInvisibleGraphicsEnabled;
+-(void)      setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+-(id)        exportFormatOptionsPDFWofPanelDelegate;
+-(void)      setExportFormatOptionsPDFWofPanelDelegate:(id)delegate;
+
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
+
 -(IBAction) close:(id)sender;
 
 #pragma mark delegate

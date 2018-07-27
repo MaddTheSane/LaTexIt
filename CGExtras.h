@@ -31,7 +31,6 @@ extern CGFunctionCallbacks CGBlendColorsFunctionCallBacks;
 void    RGB2HLS(CGFloat r, CGFloat g, CGFloat b, CGFloat* __nullable pH, CGFloat* __nullable pL, CGFloat* __nullable pS);
 void    HLS2RGB(CGFloat h, CGFloat l, CGFloat s, CGFloat* __nullable pR, CGFloat* __nullable pG, CGFloat* __nullable pB);
 CGFloat H2RGB(CGFloat v1, CGFloat v2, CGFloat vH);
-void    HSV2RGB(CGFloat h, CGFloat s, CGFloat v, CGFloat* __nullable pR, CGFloat* __nullable pG, CGFloat* __nullable pB);
 
 NS_ASSUME_NONNULL_END
 

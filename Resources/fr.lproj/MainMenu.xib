@@ -12,7 +12,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="-3" userLabel="Application"/>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
                 <menuItem title="NewApplication" id="56">
@@ -323,6 +323,23 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Format" id="1705">
                         <items>
+                            <menuItem title="Police" id="1854">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Police" id="1855">
+                                    <items>
+                                        <menuItem title="Plus grand" keyEquivalent="+" id="1859">
+                                            <connections>
+                                                <action selector="fontSizeChange:" target="210" id="1864"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Plus petit" tag="1" keyEquivalent="-" id="1858">
+                                            <connections>
+                                                <action selector="fontSizeChange:" target="210" id="1865"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Texte" id="1707">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Texte" id="1708">
@@ -616,9 +633,9 @@ CA
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1116">
                         <rect key="frame" x="0.0" y="0.0" width="552" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="Kd0-yx-0tQ">
+                        <clipView key="contentView" id="sAs-lC-jDg">
                             <rect key="frame" x="1" y="1" width="550" height="549"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1118">
                                     <rect key="frame" x="0.0" y="0.0" width="550" height="549"/>
@@ -626,7 +643,7 @@ CA
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="550" height="549"/>
                                     <size key="maxSize" width="1102" height="10000000"/>
-                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </textView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -668,7 +685,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button tag="1" id="1412">
+                    <button tag="1" imageHugsTitle="YES" id="1412">
                         <rect key="frame" x="72" y="69" width="244" height="29"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="bevel" title=" Aller sur le site Web de LaTeXiT…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1647">
@@ -692,7 +709,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                 <rect key="frame" x="0.0" y="0.0" width="448" height="195"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button id="1464">
+                    <button imageHugsTitle="YES" id="1464">
                         <rect key="frame" x="99" y="58" width="250" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Ne plus afficher cette mise en garde" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1649">
@@ -710,7 +727,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" tag="1" id="1465">
+                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="1465">
                         <rect key="frame" x="352" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1650">
@@ -721,7 +738,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1472"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="1466">
+                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1466">
                         <rect key="frame" x="262" y="12" width="90" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1651">

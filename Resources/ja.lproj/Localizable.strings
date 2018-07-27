@@ -69,7 +69,7 @@
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT は動作可能な LaTeX のインストールを必要とします。もし LaTeX について知らない場合は、適切な LaTeX を見つけてインストールすることが難しいかもしれません。ドキュメントのヘルプセクションに情報があります。";
 "See help..." = "ヘルプを見る…";
 "Install LaTeX" = "LaTeX をインストール";
-"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." = "pdflatex, latex, dvipdf, xelatex or gs （設定に依存）が利用できないようです。それらのインストールを確認してください。";
+"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." = "pdflatex, latex, dvipdf, xelatex, lualatex or gs （設定に依存）が利用できないようです。それらのインストールを確認してください。";
 "color.sty seems to be unavailable" = "color.sty が利用できないようです";
 "Without the color.sty package, you won't be able to change the font color" = "フォントの色を変えるには color.sty が必要です";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "あなたの LaTeX 環境に color.sty が見つかりません。そのためフォントの色を変更することができません。";
@@ -256,6 +256,12 @@
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
+"Ghostscript options" = "Ghostscript options";
+"Write engine" = "Write engine";
+"PDF Compatibility level" = "PDF Compatibility level";
+"LaTeXiT medata" = "LaTeXiT medata";
+"Add invisible graphic commands" = "Add invisible graphic commands";
+
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";
 "Export body" = "Export body";
@@ -283,6 +289,14 @@
 "Export commented preambles" = "Export commented preambles";
 "Export user comments" = "Export user comments";
 "Ignore title hierarchy" = "Ignore title hierarchy";
+
+"_IMPORTING_" = "…";
+"_IMPORTED_" = "⎷";
+"\"Inline\" items" = "\"Inline\" items";
+"\"Display\" items" = "\"Display\" items";
+"\"Align\" items" = "\"Align\" items";
+"\"Eqnarray\" items" = "\"Eqnarray\" items";
+"Import selection" = "Import selection";
 
 /* History */
 "Add to current history" = "現在の履歴に追加";

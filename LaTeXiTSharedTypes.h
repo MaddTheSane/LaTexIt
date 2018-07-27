@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 //
 
@@ -26,7 +26,7 @@ typedef CF_ENUM(int, export_format_t)
               EXPORT_FORMAT_SVG,
               EXPORT_FORMAT_TEXT};
 
-typedef CF_ENUM(int, composition_mode_t) {COMPOSITION_MODE_PDFLATEX, COMPOSITION_MODE_LATEXDVIPDF, COMPOSITION_MODE_XELATEX};
+typedef CF_ENUM(int, composition_mode_t) {COMPOSITION_MODE_PDFLATEX, COMPOSITION_MODE_LATEXDVIPDF, COMPOSITION_MODE_XELATEX, COMPOSITION_MODE_LUALATEX};
 typedef CF_ENUM(char, script_source_t) {SCRIPT_SOURCE_STRING, SCRIPT_SOURCE_FILE};
 typedef CF_ENUM(int, script_place_t) {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_PLACE_POSTPROCESSING};
 typedef CF_ENUM(int, synchronization_script_place_t) {SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING, SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING,
@@ -34,7 +34,7 @@ typedef CF_ENUM(int, synchronization_script_place_t) {SYNCHRONIZATION_SCRIPT_PLA
 
 typedef CF_ENUM(signed char, document_style_t) {DOCUMENT_STYLE_UNDEFINED=-1, DOCUMENT_STYLE_NORMAL=0, DOCUMENT_STYLE_MINI=1};
 
-typedef CF_ENUM(char, library_row_t) {LIBRARY_ROW_IMAGE_AND_TEXT, LIBRARY_ROW_IMAGE_LARGE};
+typedef CF_ENUM(char, library_row_t) {LIBRARY_ROW_IMAGE_AND_TEXT, LIBRARY_ROW_IMAGE_LARGE, LIBRARY_ROW_IMAGE_ADJUST};
 
 typedef CF_ENUM(int, change_service_shortcuts_fallback_t) {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
               CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS,

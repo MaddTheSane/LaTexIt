@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -33,12 +33,13 @@ extern NSString* LatexizationDidEndNotification;
 
 -(NSData*) stripPdfData:(NSData*)pdfData;
 -(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData;
--(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
+-(NSData*) annotatePdfDataInLEEFormat:(NSData*)data exportFormat:(export_format_t)exportFormat preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
                                  backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
 
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable;
 
+-(void) latexiseTeXItems:(NSArray*)teXItems backgroundly:(BOOL)backgroundly delegate:(id)delegate itemDidEndSelector:(SEL)itemDidEndSelector groupDidEndSelector:(SEL)groupDidEndSelector;
 -(void)      latexiseWithConfiguration:(NSMutableDictionary*)configuration;
 -(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
                     magnification:(double)magnification compositionConfiguration:(NSDictionary*)compositionConfiguration

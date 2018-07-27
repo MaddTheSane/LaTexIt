@@ -572,5 +572,95 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         sparkle:dsaSignature="MCwCFBUUeIDsNsYhG1DPyPMA3+/2RxziAhR/zorg7CNEQYoSoQnZBL59GPJ7cQ=="
       />
     </item>
-  </channel> 
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.9.0</guid>
+      <title>Version 2.9.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Added invisible graphic annotations in PDFs as more robust metadata, to prevent Keynote and Powerpoint from stripping them;</li>
+          <li>try to use a clever file name when dropping a file to the Finder;</li>
+          <li>export SVG as string when the target application is not able to display SVG;</li>
+          <li>any occurrence of %__TEXTCOLOR__ in the preamble will be replaced by the currently selected text color, to circumvent the problem of packages that override the previous settings;</li>
+          <li>more clever background coloring of icon of equations created in the Finder, when the &quot;automatically contrasted background&quot; is enabled;</li>
+          <li>added menu &quot;Font &gt; Bigger/Smaller&quot;.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.9.0</sparkle:releaseNotesLink>
+			<pubDate>Tue, 06 Feb 2018 22:09:49 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_9_0.dmg"
+				sparkle:version="2.9.0"
+                   sparkle:shortVersionString="2.9.0"
+				type="application/octet-stream"
+				length="11670909"
+				sparkle:dsaSignature="MCwCFAU+lVlqWX6BvpC2cBxJ3geN47JbAhRZLIRENi3Lqq6oR3Q4vZ6hEktgjA=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.9.1</guid>
+      <title>Version 2.9.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>More work on invisible graphic annotations in PDFs (as more robust metadata, to prevent Keynote and Powerpoint from stripping them). There were problems, especially with Adobe Illustrator;</li>
+          <li>change the way Ghostscript is used to generate PDF &quot;with outlined fonts&quot;;</li>
+          <li>added advanced Ghostscript options for export &quot;with outlined fonts&quot;, to circumvent potential problems;</li>
+          <li>added ability to disable invisible graphic annotations in the PDF &quot;with outlined fonts&quot; export;</li>
+          <li>fixed &quot;clever&quot; filenames that were invalid because of the slash character;</li>
+          <li>ability to disable &quot;clever&quot; filenames by pressing option (⎇);</li>
+          <li>added preliminary lualatex support;</li>
+          <li>changed MathML export for easier integration into Office.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.9.1</sparkle:releaseNotesLink>
+			<pubDate>Sun, 25 Feb 2018 14:08:30 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_9_1.dmg"
+				sparkle:version="2.9.1"
+                   sparkle:shortVersionString="2.9.1"
+				type="application/octet-stream"
+				length="11740617"
+				sparkle:dsaSignature="MCwCFH9I3kG1S/vIXkuLpGlCsOwy+PSlAhQ9x6anyjw4Lj3dSP06yNJ4K7lMag=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.10.0</guid>
+      <title>Version 2.10.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Changed options of the history and library databases to avoid persistent journal files and make synchronizing those files between different machines;</li>
+          <li>ability to import TeX files into the library, which will be split into detected equations;</li>
+          <li>new library display mode to adjust to tall equations.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.10.0</sparkle:releaseNotesLink>
+			<pubDate>Fri, 30 Mar 2018 22:21:23 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_10_0.dmg"
+				sparkle:version="2.10.0"
+                   sparkle:shortVersionString="2.10.0"
+				type="application/octet-stream"
+				length="11806215"
+				sparkle:dsaSignature="MCwCFFN6ut29qozMdSm/G/7DFAP32mNAAhQWZ3uLh61V8+9jtsy4PBdxfWrxlA=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.10.1</guid>
+      <title>Version 2.10.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>fixed last-minute regression regarding drag'n dropping from the main window.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.10.1</sparkle:releaseNotesLink>
+			<pubDate>Sat, 31 Mar 2018 22:28:02 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_10_1.dmg"
+				sparkle:version="2.10.1"
+                   sparkle:shortVersionString="2.10.1"
+				type="application/octet-stream"
+				length="11806579"
+				sparkle:dsaSignature="MCwCFBFsTPffxx7/NU1WPHRYLQJsluVeAhQhVc07LnpM/SBCoRyfbEpl4LQtlg=="
+			/>
+    </item>
+  </channel>
 </rss>

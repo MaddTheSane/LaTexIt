@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -89,8 +89,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) _setLogTableViewVisible:(BOOL)status;
 
 -(NSImage*) _checkEasterEgg;//may return an easter egg image
-
--(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
 
 -(NSString*) descriptionForScript:(NSDictionary*)script;
 -(void) _decomposeString:(NSString*)string preamble:(NSString**)preamble body:(NSString**)body;
@@ -806,6 +804,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   BOOL lowerBoxLatexizeButtonEnabled =
     (compositionMode == COMPOSITION_MODE_PDFLATEX) ? [appController isPdfLaTeXAvailable] && [appController isGsAvailable] :
     (compositionMode == COMPOSITION_MODE_XELATEX)  ? [appController isPdfLaTeXAvailable] && [appController isXeLaTeXAvailable] && [appController isGsAvailable] :
+    (compositionMode == COMPOSITION_MODE_LUALATEX) ? [appController isPdfLaTeXAvailable] && [appController isLuaLaTeXAvailable] && [appController isGsAvailable] :
     (compositionMode == COMPOSITION_MODE_LATEXDVIPDF) ? [appController isLaTeXAvailable] && [appController isDviPdfAvailable] && [appController isGsAvailable] :
     NO;    
   [self->lowerBoxLatexizeButton setEnabled:lowerBoxLatexizeButtonEnabled];
@@ -814,8 +813,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self->lowerBoxLatexizeButton setToolTip:nil];
   else if (![self->lowerBoxLatexizeButton toolTip])
     [self->lowerBoxLatexizeButton setToolTip:
-      NSLocalizedString(@"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
-                        @"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
+      NSLocalizedString(@"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
+                        @"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
   
   BOOL colorStyEnabled = [appController isColorStyAvailable];
   [self->lowerBoxControlsBoxFontColorWell setEnabled:colorStyEnabled];
@@ -2293,6 +2292,27 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   return result;
 }
 //end detectLatexMode
+
+-(IBAction) fontSizeChange:(id)sender
+{
+  CGFloat fontSizeDelta = ([sender tag] == 1) ? -1 : 1;
+  NSTextStorage* textStorage = [self->lowerBoxSourceTextView textStorage];
+  NSRange fullRange = NSMakeRange(0, [textStorage length]);
+  NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
+  if (![selectedRanges count])
+    selectedRanges = [NSArray arrayWithObject:[NSValue valueWithRange:fullRange]];
+  NSUInteger i = 0;
+  for(i = 0 ; i<[selectedRanges count] ; ++i)
+  {
+    NSRange range = [[selectedRanges objectAtIndex:i] rangeValue];
+    NSRange effectiveRange = {0};
+    NSFont* font = [[textStorage attribute:NSFontAttributeName atIndex:range.location effectiveRange:&effectiveRange] dynamicCastToClass:[NSFont class]];
+    font = !font ? nil : [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]+fontSizeDelta];
+    if (font)
+      [textStorage addAttribute:NSFontAttributeName value:font range:range];
+  }//end for each range
+}
+//end fontSizeChange:
 
 -(void) formatChangeAlignment:(alignment_mode_t)value
 {

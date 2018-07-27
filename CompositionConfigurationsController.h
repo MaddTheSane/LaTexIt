@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -29,6 +29,8 @@
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsPdfLaTeXController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsXeLaTeX;
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsXeLaTeXController;
+-(NSArray*)                                              currentConfigurationProgramArgumentsLuaLaTeX;
+-(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLuaLaTeXController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsLaTeX;
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLaTeXController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsDviPdf;

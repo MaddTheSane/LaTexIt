@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -18,6 +18,10 @@ extern NSString* DocumentStyleKey;
 extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
 extern NSString* DragExportJpegQualityKey;
+extern NSString* DragExportPDFWOFGsWriteEngineKey;
+extern NSString* DragExportPDFWOFGsPDFCompatibilityLevelKey;
+extern NSString* DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey;
+
 extern NSString* DragExportSvgPdfToSvgPathKey;
 extern NSString* DragExportTextExportPreambleKey;
 extern NSString* DragExportTextExportEnvironmentKey;
@@ -81,6 +85,7 @@ extern NSString* CompositionConfigurationUseLoginShellKey;
 extern NSString* CompositionConfigurationPdfLatexPathKey;
 extern NSString* CompositionConfigurationPsToPdfPathKey;
 extern NSString* CompositionConfigurationXeLatexPathKey;
+extern NSString* CompositionConfigurationLuaLatexPathKey;
 extern NSString* CompositionConfigurationLatexPathKey;
 extern NSString* CompositionConfigurationDviPdfPathKey;
 extern NSString* CompositionConfigurationGsPathKey;
@@ -180,6 +185,13 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(void)            setExportTextExportBody:(BOOL)value;
 -(CGFloat)         exportScalePercent;
 -(void)            setExportScalePercent:(CGFloat)value;
+
+-(NSString*) exportPDFWOFGsWriteEngine;
+-(void) setExportPDFWOFGsWriteEngine:(NSString*)value;
+-(NSString*) exportPDFWOFGsPDFCompatibilityLevel;
+-(void) setExportPDFWOFGsPDFCompatibilityLevel:(NSString*)value;
+-(BOOL) exportPDFWOFMetaDataInvisibleGraphicsEnabled;
+-(void) setExportPDFWOFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
 -(BOOL) doNotClipPreview;
 -(void) setDoNotClipPreview:(BOOL)value;

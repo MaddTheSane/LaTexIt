@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -21,6 +21,8 @@
 -(void) remove:(NSButton*)button;
 -(NSButton*) buttonWithTag:(NSInteger)tag;
 -(NSButton*) buttonWithState:(NSInteger)state;
+-(int) selectedTag;
+-(void) setSelectedTag:(int)tag;
 
 @property (assign) id<NSButtonPaletteDelegate> delegate;
 -(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;

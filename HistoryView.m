@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -26,6 +26,8 @@
 #import "NSFileManagerExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
+
+#import <Carbon/Carbon.h>
 
 @interface HistoryView (PrivateAPI)
 -(void) activateSelectedItem;
@@ -320,8 +322,8 @@
   {
     [pasteboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:self];
     [pasteboard setData:lastLatexitEquationPdfData forType:NSPDFPboardType];
-    [pasteboard addTypes:[NSArray arrayWithObject:@"com.adobe.pdf"] owner:self];
-    [pasteboard setData:lastLatexitEquationPdfData forType:@"com.adobe.pdf"];
+    [pasteboard addTypes:[NSArray arrayWithObject:kUTTypePDF] owner:self];
+    [pasteboard setData:lastLatexitEquationPdfData forType:kUTTypePDF];
   }//end if (lastLatexitEquationPdfData)*/
 }
 //end copy:
@@ -547,26 +549,25 @@
       break;
   }
   
-  NSString* fileName = nil;
-  NSString* filePath = nil;
-  
-  //To avoid overwritting, and not bother the user with a dialog box, a number will be added to the filename.
-  //this number is <i>. It will begin at 1 and will be increased as long as we do not find a "free" file name.
-  NSUInteger i = 1;
   NSUInteger index = [indexSet firstIndex]; //we will have to do that for each item of the pasteboard
   while (index != NSNotFound) 
   {
-    do
-    {
-      fileName = [NSString stringWithFormat:@"%@-%lu.%@", filePrefix, (unsigned long)i++, extension];
-      filePath = [dropPath stringByAppendingPathComponent:fileName];
-    } while (i && [fileManager fileExistsAtPath:filePath]);
-    
+    NSString* filePath = [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:index];
     //now, we may have found a proper filename to save our data
     if (![fileManager fileExistsAtPath:filePath])
     {
       HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:index];
-      NSData* pdfData = [[historyItem equation] pdfData];
+      NSString* oldFilePath = filePath;
+      LatexitEquation* equation = [historyItem equation];
+      BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+      filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:[[equation sourceText] string]];
+      filePath = !filePrefix || [filePrefix isEqualToString:@""] ? filePath :
+        [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:index];
+      if (!filePath || [filePath isEqualToString:@""])
+        filePath = oldFilePath;
+      NSString* fileName = [filePath lastPathComponent];
+      
+      NSData* pdfData = [equation pdfData];
       
       PreferencesController* preferencesController = [PreferencesController sharedController];
       NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -586,11 +587,16 @@
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
       [fileManager setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
                            ofItemAtPath:filePath error:0];
-      NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+      NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+      NSColor* autoBackgroundColor = [equation backgroundColor];
+      NSColor* iconBackgroundColor =
+        (jpegBackgroundColor != nil) ? jpegBackgroundColor :
+        (autoBackgroundColor != nil) ? autoBackgroundColor :
+        nil;
       if ((exportFormat != EXPORT_FORMAT_PNG) &&
           (exportFormat != EXPORT_FORMAT_TIFF) &&
           (exportFormat != EXPORT_FORMAT_JPEG))
-        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[[historyItem equation] pdfData] backgroundColor:backgroundColor]
+        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[[historyItem equation] pdfData] backgroundColor:iconBackgroundColor]
                                        forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
       [names addObject:fileName];
     }//end if (![fileManager fileExistsAtPath:filePath])

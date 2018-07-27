@@ -323,29 +323,46 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Formato" id="1591">
                         <items>
-                            <menuItem title="Texto" id="1592">
+                            <menuItem title="Tipo de letra" id="1592">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Texto" id="1593">
+                                <menu key="submenu" title="Tipo de letra" id="1593">
                                     <items>
-                                        <menuItem title="Alinear a la izquierda" tag="2" keyEquivalent="{" id="1594">
+                                        <menuItem title="Más grande" keyEquivalent="+" id="1594">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1598"/>
+                                                <action selector="fontSizeChange:" target="210" id="1634"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Centrar" tag="3" keyEquivalent="|" id="1595">
+                                        <menuItem title="Más pequeño" tag="1" keyEquivalent="-" id="1595">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1599"/>
+                                                <action selector="fontSizeChange:" target="210" id="1635"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Alinear a la derecha" tag="4" keyEquivalent="}" id="1596">
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Texto" id="1624">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Texto" id="1625">
+                                    <items>
+                                        <menuItem title="Alinear a la izquierda" tag="2" keyEquivalent="{" id="1629">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1600"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1632"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="No alineamiento" tag="1" keyEquivalent="|" id="1597">
+                                        <menuItem title="Centrar" tag="3" keyEquivalent="|" id="1628">
+                                            <connections>
+                                                <action selector="formatChangeAlignment:" target="210" id="1630"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Alinear a la derecha" tag="4" keyEquivalent="}" id="1627">
+                                            <connections>
+                                                <action selector="formatChangeAlignment:" target="210" id="1631"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="No alineamiento" tag="1" keyEquivalent="|" id="1626">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1601"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1633"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -613,15 +630,15 @@ CA
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="1115">
-                <rect key="frame" x="1" y="9" width="586" height="568"/>
+                <rect key="frame" x="0.0" y="0.0" width="586" height="568"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1116">
                         <rect key="frame" x="0.0" y="0.0" width="586" height="577"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="qKr-rX-d8u">
+                        <clipView key="contentView" id="tlx-5f-Pvm">
                             <rect key="frame" x="1" y="1" width="584" height="575"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1118">
                                     <rect key="frame" x="0.0" y="0.0" width="584" height="575"/>
@@ -629,7 +646,7 @@ CA
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="584" height="575"/>
                                     <size key="maxSize" width="1170" height="10000000"/>
-                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </textView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -654,7 +671,7 @@ CA
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="1352">
-                <rect key="frame" x="1" y="1" width="354" height="181"/>
+                <rect key="frame" x="0.0" y="0.0" width="354" height="181"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" id="1353">
@@ -671,7 +688,7 @@ Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes di
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button tag="1" id="1358">
+                    <button tag="1" imageHugsTitle="YES" id="1358">
                         <rect key="frame" x="78" y="71" width="199" height="29"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="bevel" title=" Ir al sitio web de LaTeXiT…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1535">
@@ -698,7 +715,7 @@ Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes di
                 <rect key="frame" x="0.0" y="0.0" width="481" height="195"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button id="1407">
+                    <button imageHugsTitle="YES" id="1407">
                         <rect key="frame" x="18" y="54" width="222" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="No mostrar este aviso de nuevo" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1537">
@@ -716,7 +733,7 @@ Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes di
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" tag="1" id="1408">
+                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="1408">
                         <rect key="frame" x="385" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1538">
@@ -727,7 +744,7 @@ Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes di
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1416"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="1409">
+                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1409">
                         <rect key="frame" x="290" y="12" width="95" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Cancelar" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1539">

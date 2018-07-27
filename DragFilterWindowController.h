@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -33,6 +33,9 @@
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate;
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate atPoint:(NSPoint)point;
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate atPoint:(NSPoint)point isHintOnly:(BOOL)isHintOnly;
+
+-(export_format_t) exportFormat;
+-(void) setExportFormat:(export_format_t)value;
 
 -(id) delegate;
 -(void) setDelegate:(id)value;
