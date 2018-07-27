@@ -1,0 +1,17 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = MarginController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                bottomMarginButton = NSTextField; 
+                leftMarginButton = NSTextField; 
+                rightMarginButton = NSTextField; 
+                topMarginButton = NSTextField; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

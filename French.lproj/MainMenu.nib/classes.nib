@@ -1,0 +1,91 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                addCurrentEquationToLibrary = id; 
+                addLibraryFolder = id; 
+                clearHistory = id; 
+                displayLog = id; 
+                exportImage = id; 
+                makeLatex = id; 
+                openWebSite = id; 
+                paletteClick = id; 
+                refreshLibraryItems = id; 
+                removeHistoryEntries = id; 
+                removeLibraryItems = id; 
+                showHelp = id; 
+                showOrHideHistory = id; 
+                showOrHideLibrary = id; 
+                showOrHideMargin = id; 
+                showOrHidePalette = id; 
+                showPreferencesPane = id; 
+            }; 
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                marginMenuItem = NSMenuItem; 
+                paletteMenuItem = NSMenuItem; 
+                readmeTextView = NSTextView; 
+                readmeWindow = NSWindow; 
+                showHistoryMenuItem = NSMenuItem; 
+                showLibraryMenuItem = NSMenuItem; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = BoundingBoxController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
+        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {
+                addCurrentEquationToLibrary = id; 
+                addLibraryFolder = id; 
+                clearHistory = id; 
+                closeOptionsPane = id; 
+                colorDidChange = id; 
+                displayLastLog = id; 
+                exportImage = id; 
+                jpegQualitySliderDidChange = id; 
+                makeLatex = id; 
+                openOptions = id; 
+                removeHistoryEntry = id; 
+                removeLibraryItem = id; 
+                saveAccessoryViewPopupFormatDidChange = id; 
+            }; 
+            CLASS = MyDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                clearHistoryButton = NSButton; 
+                colorWell = NSColorWell; 
+                historyDrawer = NSDrawer; 
+                historyView = HistoryView; 
+                imageView = MyImageView; 
+                jpegColorWell = NSColorWell; 
+                jpegQualitySlider = NSSlider; 
+                jpegQualityTextField = NSTextField; 
+                libraryDrawer = NSDrawer; 
+                libraryView = LibraryView; 
+                logTableView = LogTableView; 
+                logTextView = NSTextView; 
+                logWindow = NSWindow; 
+                makeLatexButton = NSButton; 
+                preambleTextView = LineCountTextView; 
+                progressIndicator = NSProgressIndicator; 
+                saveAccessoryView = NSView; 
+                saveAccessoryViewJpegWarning = NSButton; 
+                saveAccessoryViewOptionsButton = NSButton; 
+                saveAccessoryViewOptionsPane = NSPanel; 
+                saveAccessoryViewPopupFormat = NSPopUpButton; 
+                sizeText = NSTextField; 
+                sourceTextView = LineCountTextView; 
+                typeOfTextControl = NSSegmentedControl; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }
+    ); 
+    IBVersion = 1; 
+}

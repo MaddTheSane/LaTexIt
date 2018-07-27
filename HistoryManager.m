@@ -1,0 +1,460 @@
+//  HistoryManager.m
+//  LaTeXiT
+//
+//  Created by Pierre Chatelier on 21/03/05.
+//  Copyright 2005 Pierre Chatelier. All rights reserved.
+
+//This file is the history manager, data source of every historyView.
+//It is a singleton, holding a single copy of the history items, that will be shared by all documents.
+//It provides management (insertion/deletion) with undoing, save/load, drag'n drop
+
+//Note that access to historyItem will be @synchronized
+
+#import "HistoryManager.h"
+
+#import "AppController.h"
+#import "Compressor.h"
+#import "HistoryItem.h"
+#import "NSApplicationExtended.h"
+#import "NSArrayExtended.h"
+#import "NSColorExtended.h"
+#import "NSIndexSetExtended.h"
+#import "PreferencesController.h"
+
+#ifdef PANTHER
+#import <LinkBack-panther/LinkBack.h>
+#else
+#import <LinkBack/LinkBack.h>
+#endif
+
+NSString* HistoryDidChangeNotification = @"HistoryDidChangeNotification";
+NSString* HistoryItemsPboardType = @"HistoryItemsPboardType";
+
+@interface HistoryManager (PrivateAPI)
+-(void) applicationDidFinishLaunching:(NSNotification*)aNotification; //triggers _automaticBackgroundSaving:
+-(void) applicationWillTerminate:(NSNotification*)aNotification; //saves history when quitting
+-(void) _saveHistory;
+-(void) _loadHistory;
+-(void) _loadCachedHistoryImages:(NSArray*)historyItemsCopy; //loads the historyItems cached images in the background
+-(void) _automaticBackgroundSaving:(id)unusedArg;//automatically and regularly saves the history on disk
+@end
+
+@implementation HistoryManager
+
+static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
+
++(void) initialize
+{
+  if (!sharedManagerInstance) //creating the singleton at first time
+  {
+    sharedManagerInstance = [[HistoryManager alloc] init];
+    [sharedManagerInstance _loadHistory];
+  }
+}
+
+//accessing the singleton
++(HistoryManager*) sharedManager
+{
+  return sharedManagerInstance;
+}
+
+//The init method can be called several times, it will only be applied once on the singleton
+-(id) init
+{
+  if (sharedManagerInstance)  //do not recreate an instance
+  {
+    [sharedManagerInstance retain]; //but makes a retain to allow a release
+    return sharedManagerInstance;
+  }
+  else
+  {
+    self = [super init];
+    if (self)
+    {
+      historyItems = [[NSMutableArray alloc] init];
+      //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:)
+                                                   name:NSApplicationDidFinishLaunchingNotification object:nil];
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
+                                                   name:NSApplicationWillTerminateNotification object:nil];
+    }
+    return self;
+  }
+}
+
+-(void) dealloc
+{
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [historyItems release];
+  [super dealloc];
+}
+
+
+//Management methods, undo-aware
+
+-(void) addItem:(HistoryItem*)item
+{
+  @synchronized(historyItems)
+  {
+    [historyItems insertObject:item atIndex:0];
+    historyShouldBeSaved = YES;
+  }
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
+}
+
+-(void) clearAll
+{
+  NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+  [undo removeAllActionsWithTarget:self];
+  @synchronized(historyItems)
+  {
+    [historyItems removeAllObjects];
+    historyShouldBeSaved = YES;
+  }
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
+}
+
+-(NSArray*) itemsAtIndexes:(NSIndexSet*)indexSet tableView:(NSTableView*)tableView
+{
+  NSMutableArray* array = [NSMutableArray arrayWithCapacity:[indexSet count]];
+  @synchronized(historyItems)
+  {
+    unsigned int index = [indexSet firstIndex];
+    while(index != NSNotFound)
+    {
+      [array addObject:[historyItems objectAtIndex:index]];
+      index = [indexSet indexGreaterThanIndex:index];
+    }
+  }//end @synchronized(historyItems)
+  return array;
+}
+
+-(void) removeItemsAtIndexes:(NSIndexSet*)indexSet tableView:(NSTableView*)tableView
+{
+  unsigned int index = [indexSet lastIndex];
+  if (index != NSNotFound)
+  {
+    id nextItemToSelect = nil;
+    NSMutableArray* removedItems = nil;
+    @synchronized(historyItems)
+    {
+      //We will remember deleted items to allow undoing
+      nextItemToSelect = ((index+1) < [historyItems count]) ? [historyItems objectAtIndex:index+1] : nil;
+      removedItems = [NSMutableArray arrayWithCapacity:[indexSet count]];
+      while(index != NSNotFound)
+      {
+        [removedItems addObject:[historyItems objectAtIndex:index]];
+        [historyItems removeObjectAtIndex:index];
+        index = [indexSet indexLessThanIndex:index];
+      }
+
+      NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+      [[undo prepareWithInvocationTarget:self] insertItems:[removedItems reversed] atIndexes:[indexSet array]
+                                                 tableView:tableView];
+      if (![undo isUndoing])
+      {
+        if ([indexSet count] > 1)
+          [undo setActionName:NSLocalizedString(@"Delete History items", @"Delete History items")];
+        else
+          [undo setActionName:NSLocalizedString(@"Delete History item", @"Delete History item")];
+      }
+      [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
+
+      //user friendly : we update the selection in the tableview
+      [tableView deselectAll:self];
+      if (!nextItemToSelect && [historyItems count])
+        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[historyItems count]-1] byExtendingSelection:NO];          
+      else if (nextItemToSelect)
+        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[historyItems indexOfObject:nextItemToSelect]]
+               byExtendingSelection:NO];
+               
+      historyShouldBeSaved = YES;
+    }//end @synchronized(historyItems)
+  }//end if index != NSNotFound
+}
+
+-(void) insertItems:(NSArray*)items atIndexes:(NSArray*)indexes tableView:(NSTableView*)tableView
+{
+  NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
+
+  const unsigned int count = MIN([items count], [indexes count]);
+  unsigned int i = 0;
+  @synchronized(historyItems)
+  {
+    for(i = 0 ; i < count ; ++i)
+    {
+      HistoryItem* item = [items objectAtIndex:i];
+      unsigned int index = [[indexes objectAtIndex:i] unsignedIntValue];
+      [indexSet addIndex:index];
+      [historyItems insertObject:item atIndex:index];
+    }
+    historyShouldBeSaved = YES;
+  }//end @synchronized(historyItems)
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
+  NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+  [[undo prepareWithInvocationTarget:self] removeItemsAtIndexes:indexSet tableView:tableView];
+
+  //user friendly : we update the selection in the tableview
+  [tableView selectRowIndexes:indexSet byExtendingSelection:NO];
+}
+
+-(HistoryItem*) itemAtIndex:(unsigned int)index tableView:(NSTableView*)tableView
+{
+  HistoryItem* item = nil;
+  @synchronized(historyItems)
+  {
+    if (index < [historyItems count])
+      item = [historyItems objectAtIndex:index];
+  }
+  return item;
+}
+
+//getting the history items
+-(NSArray*) historyItems
+{
+  return historyItems;
+}
+
+//automatically and regularly saves the history on disk
+-(void) _automaticBackgroundSaving:(id)unusedArg
+{
+  NSAutoreleasePool* threadAutoreleasePool = [[NSAutoreleasePool alloc] init];
+  [NSThread setThreadPriority:0];//this thread has a very low priority
+  while(YES)
+  {
+    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
+    [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:2*60]];//wakes up every two minutes
+    [self _saveHistory];
+    [ap release];
+  }
+  [threadAutoreleasePool release];
+}
+
+//saves the history on disk
+-(void) _saveHistory
+{
+  @synchronized(historyItems) //to prevent concurrent saving, and conflicts, if historyItems is modified in another thread
+  {
+    if (historyShouldBeSaved)
+    {
+      NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:historyItems];
+      NSData* compressedData = [Compressor zipcompress:uncompressedData];
+      
+      //we will create history.dat file inside ~/Library/LaTeXiT/history.dat, so we must ensure that these folders exist
+      NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+      if ([paths count])
+      {
+        NSString* path = [paths objectAtIndex:0];
+        path = [path stringByAppendingPathComponent:[NSApp applicationName]];
+        
+        //we (try to) create the folders step by step. If they already exist, does nothing
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        NSArray* pathComponents = [path pathComponents];
+        NSString* subPath = [NSString string];
+        const unsigned int count = [pathComponents count];
+        unsigned int i = 0;
+        for(i = 0 ; i<count ; ++i)
+        {
+          subPath = [subPath stringByAppendingPathComponent:[pathComponents objectAtIndex:i]];
+          [fileManager createDirectoryAtPath:subPath attributes:nil];
+        }
+        
+        //Then save the data
+        NSString* historyFilePath = [path stringByAppendingPathComponent:@"history.dat"];
+        historyShouldBeSaved = ![compressedData writeToFile:historyFilePath atomically:YES];
+      }//end if path ok
+    }//end if historyShouldBeSaved
+  }//end @synchronized(historyItems)
+}
+
+-(void) _loadHistory
+{
+  //not that there is no @synchronization here, since no other threads will exist before _loadHistory is complete
+  @try
+  {
+    [historyItems removeAllObjects];
+
+    //load from ~/Library/LaTeXiT/history.dat
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+    if ([paths count])
+    {
+      NSString* path = [paths objectAtIndex:0];
+      path = [path stringByAppendingPathComponent:[NSApp applicationName]];
+
+      NSString* filename = [path stringByAppendingPathComponent:@"history.dat"];
+      NSData* compressedData = [NSData dataWithContentsOfFile:filename];
+      NSData* uncompressedData = [Compressor zipuncompress:compressedData];
+      if (uncompressedData)
+      {
+        [historyItems release];
+        historyItems = nil;
+        historyItems = [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] retain];
+      }
+    }
+  }
+  @catch(NSException* e) //reading may fail for some reason
+  {
+  }
+  @finally //if the history could not be created, make it (empty) now
+  {
+    if (!historyItems)
+      historyItems = [[NSMutableArray alloc] init];
+  }
+
+  NSArray* historyItemsCopy = [historyItems copy];//WARNING ! THE THREAD WILL BE RESPONSIBLE OF RELEASING THAT OBJECT
+  [NSThread detachNewThreadSelector:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
+}
+
+//loads, in the background, the historyItems cached images
+-(void) _loadCachedHistoryImages:(NSArray*)historyItemsCopy
+{
+  NSAutoreleasePool* threadAutoreleasePool = [[NSAutoreleasePool alloc] init];
+  [NSThread setThreadPriority:0];//the current thread has a LOW priority, and won't use too much processor time
+  NSEnumerator* enumerator = [historyItemsCopy objectEnumerator];
+  HistoryItem* item = [enumerator nextObject];
+  while(item)
+  {
+    if([item retainCount] > 1)
+      [item bitmapImage];//computes the bitmapCachedImage. there is an @synchronized inside to prevent conflicts
+    item = [enumerator nextObject];
+  }
+  [historyItemsCopy release];
+  [threadAutoreleasePool release];
+}
+
+//When the application launches, the notification is caught to trigger _automaticBackgroundSaving
+-(void) applicationDidFinishLaunching:(NSNotification*)aNotification
+{
+  [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
+}
+
+//When the application quits, the notification is caught to perform saving
+-(void) applicationWillTerminate:(NSNotification*)aNotification
+{
+  [self _saveHistory];
+}
+
+//NSTableViewDataSource protocol
+-(int) numberOfRowsInTableView:(NSTableView *)aTableView
+{
+  int count = 0;
+  @synchronized(historyItems)
+  {
+    count = [historyItems count];
+  }
+  return count;
+}
+
+-(id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+  id item = nil;
+  @synchronized(historyItems)
+  {
+    item = [historyItems objectAtIndex:rowIndex];
+  }
+  return [item image];
+}
+
+//NSTableView delegate
+-(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
+             row:(int)rowIndex
+{
+  HistoryItem* historyItem = nil;
+  @synchronized(historyItem)
+  {
+    historyItem = [historyItems objectAtIndex:rowIndex];
+  }
+  [aCell setRepresentedObject:historyItem];
+}
+
+//drag'n drop
+-(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+  @synchronized(historyItems)
+  {
+    if ([rowIndexes count])
+    {
+      //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
+      [pboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
+      [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
+
+      //stores the array of selected history items in the HistoryItemsPboardType
+      NSMutableArray* selectedItems = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
+      unsigned int index = [rowIndexes firstIndex];
+      while(index != NSNotFound)
+      {
+        [selectedItems addObject:[historyItems objectAtIndex:index]];
+        index = [rowIndexes indexGreaterThanIndex:index];
+      }
+      [pboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
+      [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:selectedItems] forType:HistoryItemsPboardType];
+      
+      //Get the last selected item
+      int lastSelectedRow = [aTableView selectedRow];
+      if ((lastSelectedRow < 0) || (![rowIndexes containsIndex:lastSelectedRow]))
+        lastSelectedRow = [rowIndexes lastIndex];
+      HistoryItem* historyItem = [historyItems objectAtIndex:lastSelectedRow];
+      
+      //bonus : we can also feed other pasteboards with one of the selected items
+      //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
+      [historyItem writeToPasteboard:pboard forDocument:[(HistoryView*)aTableView document] isLinkBackRefresh:NO lazyDataProvider:nil];
+    }//end if ([rowIndexes count])
+  }//end @synchronized(historyItems)
+
+  return YES;
+}
+
+//triggered when dropping to the finder. It will create the files and return the filenames
+-(NSArray*) tableView:(NSTableView*)tableView namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination
+                                                             forDraggedRowsWithIndexes:(NSIndexSet *)indexSet
+{
+  NSMutableArray* names = [NSMutableArray arrayWithCapacity:1];
+  
+  NSString* dropPath = [dropDestination path];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  
+  //the problem will be to avoid overwritting files when they already exist
+  MyDocument* document = [(HistoryView*)tableView document];
+  NSString* filePrefix = @"latex-image";
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
+  NSArray* components = [dragExportType componentsSeparatedByString:@" "];
+  NSString* extension = [components count] ? [components objectAtIndex:0] : nil;
+  NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
+  float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
+
+  NSString* fileName = nil;
+  NSString* filePath = nil;
+  
+  //To avoid overwritting, and not bother the user with a dialog box, a number will be added to the filename.
+  //this number is <i>. It will begin at 1 and will be increased as long as we do not find a "free" file name.
+  unsigned long i = 1;
+
+  @synchronized(historyItems)
+  {
+    unsigned int index = [indexSet firstIndex]; //we will have to do that for each item of the pasteboard
+    while (index != NSNotFound) 
+    {
+      do
+      {
+        fileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
+        filePath = [dropPath stringByAppendingPathComponent:fileName];
+      } while (i && [fileManager fileExistsAtPath:filePath]);
+      
+      //now, we may have found a proper filename to save our data
+      if (![fileManager fileExistsAtPath:filePath])
+      {
+        NSData* pdfData = [[historyItems objectAtIndex:index] pdfData];
+        NSData* data = [document dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+
+        [fileManager createFileAtPath:filePath contents:data attributes:nil];
+        [names addObject:fileName];
+      }
+      index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item
+    }
+  }//end @synchronized(historyItems)
+  return names;
+}
+
+@end

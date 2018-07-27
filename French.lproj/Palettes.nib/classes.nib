@@ -1,0 +1,24 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
+        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = PaletteView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {paletteClick = id; }; 
+            CLASS = PalettesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                arrowsMatrix = NSMatrix; 
+                binaryOperatorsMatrix = NSMatrix; 
+                decorationsMatrix = NSMatrix; 
+                greekMatrix = NSMatrix; 
+                lettersMatrix = NSMatrix; 
+                otherOperatorsMatrix = NSMatrix; 
+                relationsMatrix = NSMatrix; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

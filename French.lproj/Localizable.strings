@@ -1,0 +1,52 @@
+"Error" = "Erreur";
+"Read Me" = "Lisez-moi";
+"Clear History" = "Effacer l'historique";
+"Cancel" = "Annuler";
+"Are you sure you want to clear the whole history ?\nThis operation is irreversible." =
+"Voulez-vous vraiment effacer entièrement l'historique ?\nCette operation est irréversible.";
+"Hide Margins" = "Masquer les Marges";
+"Show Margins" = "Afficher les Marges";
+"Hide History" = "Masquer l'historique";
+"Show History" = "Afficher l'historique";
+"Hide Library" = "Masquer la bibliothèque";
+"Show Library" = "Afficher la bibliothèque";
+"Hide Palettes" = "Masquer les Palettes";
+"Show Palettes" = "Afficher les Palettes";
+"Delete History item" = "Supprimer une entrée de l'historique";
+"Delete History items" = "Supprimer plusieurs entrées de l'historique";
+"Add Library folder" = "Ajouter un dossier à la bibliothèque";
+"Add Library item" = "Ajouter une entrée à la bibliothèque";
+"Delete Library item" = "Supprimer une entrée de la bibliothèque";
+"Delete Library items" = "Supprimer plusieurs entrées de la bibliothèque";
+"Move Library items" = "Déplacer des entrées de la bibliothèque";
+"Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
+"Untitled" = "Sans Titre";
+"processing pdflatex" = "exécution de pdflatex";
+"error while processing pdflatex" = "erreur à l'exécution de pdflatex";
+"used for font color" = "pour la couleur";
+"no color.sty found" = "color.sty introuvable";
+"useful to type directly accentuated characters" = "utile pour taper directement les caractères accentués";
+"gs not found or not working as expected" = "gs introuvable ou au comportement inattendu";
+"pdflatex not found or not working as expected" = "pdflatex introuvable ou au comportement inattendu";
+"Without GhostScript (gs) installed the software won't work at all.\nYou should install a LaTeX distribution packaging gs" =
+"Sans GhostScript (gs) d'installé, le logiciel ne fonctionnera pas du tout.\nVous devriez installer une distribution de LaTeX contenant gs";
+"Without pdflatex installed the software won't work at all.\nYou should install a LaTeX distribution packaging pdflatex" =
+"Sans pdflatex d'installé, le logiciel ne fonctionnera pas du tout.\nVous devriez installer une distribution de LaTeX contenant pdflatex";
+"color.sty seems to be unavailable" = "color.sty semble indisponible";
+"Without the color.sty package, you won't be able to change the font color" =
+"Sans le package color.sty, vous ne pourrez pas modifier la couleur des équations";
+"pdflatex and/or gs seem unavailable in your system. Please check their installation." =
+"pdflatex et/ou gs semblent indisponibles sur votre système. Veuillez vérifier leur installation.";
+"color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." =
+"le package color.sty semble indisponible dans votre installation de LaTeX. La sélection de couleur est donc désactivée.";
+"Find gs..." = "Rechercher gs...";
+"Find pdflatex..." = "Rechercher pdflatex...";
+"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT" =
+"Ce texte n'est pas conforme à LaTeX; ou peut-être y a-t-il un problème de préambule ? Vous pouvez le vérifier au sein de LaTeXiT";
+"Empty LaTeX body" = "Pas de corps LaTeX";
+"Process anyway" = "Procéder malgré tout";
+"You did not type any text in the body. The result will certainly be empty." = "Vous n'avez pas tapé de corps au document LaTeX. Le résultat sera sans doute vide.";
+"An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
+"http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_fr.php";
+"An error occured while trying to reach %@\n. You should check your network." = "Une erreur est survenue en essayant d'atteindre %@\n. Vous devriez vérifier votre réseau.";
+"Equation linked with another application" = "Équation liée à une autre application";

@@ -1,0 +1,131 @@
+//  MyDocument.h
+//  LaTeXiT
+//
+//  Created by Pierre Chatelier on 19/03/05.
+//  Copyright Pierre Chatelier 2005 . All rights reserved.
+
+// The main document of LaTeXiT. There is much to say !
+
+#import <Cocoa/Cocoa.h>
+
+@class HistoryItem;
+@class HistoryView;
+@class LibraryDrawer;
+@class LibraryItem;
+@class LibraryView;
+@class LineCountTextView;
+@class LinkBack;
+@class LogTableView;
+@class MyImageView;
+
+//useful to differenciate the different latex modes : DISPLAY (\[...\]), INLINE ($...$) and NORMAL (text)
+typedef enum {DISPLAY, INLINE, NORMAL} latex_mode_t;
+
+@interface MyDocument : NSDocument
+{
+  IBOutlet LineCountTextView*   preambleTextView;
+  IBOutlet LineCountTextView*   sourceTextView;
+  IBOutlet MyImageView*         imageView;
+  IBOutlet NSColorWell*         colorWell;
+  IBOutlet NSTextField*         sizeText;
+  IBOutlet NSButton*            makeLatexButton;
+  IBOutlet LogTableView*        logTableView;
+  IBOutlet NSDrawer*            historyDrawer;
+  IBOutlet HistoryView*         historyView;
+  IBOutlet NSButton*            clearHistoryButton;
+  IBOutlet LibraryDrawer*       libraryDrawer;
+  IBOutlet LibraryView*         libraryView;
+  IBOutlet NSSegmentedControl*  typeOfTextControl;
+  IBOutlet NSWindow*            logWindow;
+  IBOutlet NSTextView*          logTextView;
+  IBOutlet NSProgressIndicator* progressIndicator;
+  
+  IBOutlet NSView*        saveAccessoryView;
+  IBOutlet NSPopUpButton* saveAccessoryViewPopupFormat;
+  IBOutlet NSButton*      saveAccessoryViewOptionsButton;
+  IBOutlet NSPanel*       saveAccessoryViewOptionsPane;
+  IBOutlet NSButton*      saveAccessoryViewJpegWarning;
+  IBOutlet NSSlider*      jpegQualitySlider;
+  IBOutlet NSTextField*   jpegQualityTextField;
+  IBOutlet NSColorWell*   jpegColorWell;
+
+  NSString*    documentTitle;
+  
+  NSColor*     jpegColor;
+  float        jpegQuality;
+  NSSavePanel* currentSavePanel;
+  
+  NSString* initialPreamble;
+  NSString* initialBody;
+  NSData*   initialPdfData;
+  
+  BOOL isBusy;
+  
+  BOOL libraryHasBeenHidden;
+  BOOL historyHasBeenHidden;
+  
+  unsigned long uniqueId;
+  
+  LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
+}
+
+//actions from menu (through the appController), or from self contained elements
+-(IBAction) removeHistoryEntries:(id)sender;
+-(IBAction) clearHistory:(id)sender;
+-(IBAction) makeLatex:(id)sender;
+-(IBAction) colorDidChange:(id)sender;
+-(IBAction) displayLastLog:(id)sender;
+
+-(IBAction) exportImage:(id)sender;
+-(IBAction) openOptions:(id)sender;
+-(IBAction) closeOptionsPane:(id)sender;
+-(IBAction) jpegQualitySliderDidChange:(id)sender;
+-(IBAction) saveAccessoryViewPopupFormatDidChange:(id)sender;
+
+-(IBAction) addCurrentEquationToLibrary:(id)sender;
+-(IBAction) addLibraryFolder:(id)sender;
+-(IBAction) removeLibraryItems:(id)sender;
+-(IBAction) refreshLibraryItems:(id)sender;
+
+-(void) setDocumentTitle:(NSString*)title;
+
+//some accessors useful sometimes
+-(LineCountTextView*) sourceTextView;
+-(NSButton*) makeLatexButton;
+
+//latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
+-(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode
+                  magnification:(double)magnification;
+
+//returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
+-(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality;
+                  
+//updates interface according to whether the latexisation is possible or not
+-(void) updateAvailabilities;
+//tells whether the document is currently performing a latexisation
+-(BOOL) isBusy;
+
+-(NSArray*) selectedHistoryItems;
+-(NSArray*) selectedLibraryItems;
+-(void) deselectItems;
+
+-(BOOL) hasImage;
+-(BOOL) isHistoryVisible;
+-(void) setHistoryVisible:(BOOL)visible;
+-(BOOL) isLibraryVisible;
+-(void) setLibraryVisible:(BOOL)visible;
+
+//text actions in the first responder
+-(NSString*) selectedText;
+-(void) insertText:(NSString*)text;
+
+-(HistoryItem*) historyItemWithCurrentState;        //creates a history item with the current state of the document
+-(void) applyPdfData:(NSData*)pdfData;              //updates the document according to the given pdfdata
+-(void) applyHistoryItem:(HistoryItem*)historyItem; //updates the document according to the given history item
+
+//linkback live link management
+-(LinkBack*) linkBackLink;
+-(void) setLinkBackLink:(LinkBack*)link;
+-(void) closeLinkBackLink:(LinkBack*)link;
+
+@end

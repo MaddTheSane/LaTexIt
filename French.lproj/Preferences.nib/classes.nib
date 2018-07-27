@@ -1,0 +1,59 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = LineCountTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {
+                changeAdvancedConfiguration = id; 
+                changeDefaultGeneralConfig = id; 
+                changePath = id; 
+                changeServiceConfiguration = id; 
+                closeOptionsPane = id; 
+                dragExportJpegQualitySliderDidChange = id; 
+                dragExportPopupFormatDidChange = id; 
+                openOptions = id; 
+                resetDefaultPreamble = id; 
+                selectFont = id; 
+            }; 
+            CLASS = PreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                additionalBottomMarginTextField = NSTextField; 
+                additionalLeftMarginTextField = NSTextField; 
+                additionalRightMarginTextField = NSTextField; 
+                additionalTopMarginTextField = NSTextField; 
+                advancedLibraryStringExportCheckBox = NSButton; 
+                advancedLibraryStringExportMatrix = NSMatrix; 
+                advancedLibraryStringExportTextField = NSTextField; 
+                defaultColorColorWell = NSColorWell; 
+                defaultModeSegmentedControl = NSSegmentedControl; 
+                defaultPointSizeTextField = NSTextField; 
+                dragExportJpegColorWell = NSColorWell; 
+                dragExportJpegQualitySlider = NSSlider; 
+                dragExportJpegQualityTextField = NSTextField; 
+                dragExportJpegWarning = NSButton; 
+                dragExportOptionsButton = NSButton; 
+                dragExportOptionsPane = NSPanel; 
+                dragExportPopupFormat = NSPopUpButton; 
+                fontTextField = NSTextField; 
+                gsTextField = NSTextField; 
+                pdfLatexTextField = NSTextField; 
+                preambleTextView = LineCountTextView; 
+                preferencesTabView = NSTabView; 
+                selectFontButton = NSButton; 
+                serviceRespectsBaseline = NSButton; 
+                serviceRespectsColor = NSButton; 
+                serviceRespectsPointSize = NSButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
