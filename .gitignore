@@ -5,3 +5,5 @@
 *.perspective
 xcuserdata/
 project.xcworkspace/
+*~.nib
+build/
