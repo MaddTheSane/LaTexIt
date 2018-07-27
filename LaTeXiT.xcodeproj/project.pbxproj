@@ -2959,7 +2959,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -2969,8 +2969,9 @@
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					"-lz",
 					"-licucore",
+					"-lxml2",
+					"-lz",
 				);
 				PREBINDING = YES;
 				PRODUCT_NAME = LaTeXiT;
@@ -3026,7 +3027,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -3036,8 +3037,9 @@
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					"-lz",
 					"-licucore",
+					"-lxml2",
+					"-lz",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = LaTeXiT;
@@ -3156,6 +3158,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				LIBRARY_SEARCH_PATHS = (
@@ -3165,8 +3168,9 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
-					"-lz",
 					"-licucore",
+					"-lxml2",
+					"-lz",
 				);
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
@@ -3222,6 +3226,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				LIBRARY_SEARCH_PATHS = (
@@ -3230,8 +3235,9 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = (
-					"-lz",
 					"-licucore",
+					"-lxml2",
+					"-lz",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;

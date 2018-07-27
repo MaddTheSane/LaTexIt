@@ -34,6 +34,9 @@
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate atPoint:(NSPoint)point;
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate atPoint:(NSPoint)point isHintOnly:(BOOL)isHintOnly;
 
+-(export_format_t) exportFormat;
+-(void) setExportFormat:(export_format_t)value;
+
 -(id) delegate;
 -(void) setDelegate:(id)value;
 

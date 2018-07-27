@@ -69,8 +69,8 @@
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT necesita una instalación funcional de LaTeX. Si no sabe lo que es LaTeX, puede que le sea dificil encontrar e instalar una distribución de LaTeX. Una sección de la documentación está dedicada a esto.";
 "See help..." = "Ver la ayuda…";
 "Install LaTeX" = "Instalar LaTeX";
-"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
-"pdflatex, latex, dvipdf, xelatex o gs (dependiendo de la configuración actual) parece que no está diponible en su sistema. Por favor, compruebe su instalación.";
+"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, latex, dvipdf, xelatex, lualatex o gs (dependiendo de la configuración actual) parece que no está diponible en su sistema. Por favor, compruebe su instalación.";
 "color.sty seems to be unavailable" = "color.sty parece no estar disponible";
 "Without the color.sty package, you won't be able to change the font color" = "Sin el paquete color.sty, será imposible cambiar el color del texto.";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "Parece que el paquete color.sty no está presente en su instalación de LaTeX. Por lo tanto, es imposible cambiar el color del texto.";
@@ -256,6 +256,12 @@
 "Warning : pdf2svg path is invalid" = "Atención : La ruta de pdf2svg no es válida";
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
+
+"Ghostscript options" = "Ghostscript options";
+"Write engine" = "Write engine";
+"PDF Compatibility level" = "PDF Compatibility level";
+"LaTeXiT medata" = "LaTeXiT medata";
+"Add invisible graphic commands" = "Add invisible graphic commands";
 
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";

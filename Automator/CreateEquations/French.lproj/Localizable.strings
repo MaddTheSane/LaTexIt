@@ -36,5 +36,11 @@
 "Format" = "Format";
 "Change" = "Modifier";
 
+"Ghostscript options" = "Options de Ghostscript";
+"Write engine" = "Moteur d'écriture";
+"PDF Compatibility level" = "Niveau de compatibilité PDF";
+"LaTeXiT medata" = "Méta-données LaTeXiT";
+"Add invisible graphic commands" = "Ajouter les commandes graphiques invisibles";
+
 "No preamble found" = "Aucun préambule trouvé";
 "Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "Erreur inconnue. Veuillez vous assurer que LaTeXiT a été lancé au moins une fois et fonctionne normalement.";

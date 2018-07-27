@@ -256,6 +256,12 @@
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
+"Ghostscript options" = "Ghostscript options";
+"Write engine" = "Write engine";
+"PDF Compatibility level" = "PDF Compatibility level";
+"LaTeXiT medata" = "LaTeXiT medata";
+"Add invisible graphic commands" = "Add invisible graphic commands";
+
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";
 "Export body" = "Export body";

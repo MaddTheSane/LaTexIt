@@ -27,6 +27,8 @@
 #import "PreferencesController.h"
 #import "Utils.h"
 
+#import <Carbon/Carbon.h>
+
 @interface HistoryView (PrivateAPI)
 -(void) activateSelectedItem;
 -(void) performProgrammaticDragCancellation:(id)context;
@@ -577,7 +579,8 @@
       HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:index];
       NSString* oldFilePath = filePath;
       LatexitEquation* equation = [historyItem equation];
-      filePrefix = [LatexitEquation computeFileNameFromContent:[[equation sourceText] string]];
+      BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+      filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:[[equation sourceText] string]];
       filePath = !filePrefix || [filePrefix isEqualToString:@""] ? filePath :
         [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:index];
       if (!filePath || [filePath isEqualToString:@""])

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 02/06/15.
-//  Copyright 2015 __MyCompanyName__. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "OutlineViewSelectedItemTransformer.h"

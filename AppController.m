@@ -205,6 +205,10 @@ static NSMutableDictionary* cachePaths = nil;
                                                                  [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+      withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
+                                                                 [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                                 [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil]];
+    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                                                  [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
@@ -265,6 +269,9 @@ static NSMutableDictionary* cachePaths = nil;
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
                                                                  [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
+    [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
+                                                                 [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                                 [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                                                  [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
@@ -303,6 +310,8 @@ static NSMutableDictionary* cachePaths = nil;
       forKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationPdfLatexPathKey] options:0 context:nil];
     [compositionConfigurationsController addObserver:self
       forKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationXeLatexPathKey] options:0 context:nil];
+    [compositionConfigurationsController addObserver:self
+      forKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey] options:0 context:nil];
     [compositionConfigurationsController addObserver:self
       forKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLatexPathKey] options:0 context:nil];
     [compositionConfigurationsController addObserver:self
@@ -464,6 +473,10 @@ static NSMutableDictionary* cachePaths = nil;
       [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil],
     [@"selection." stringByAppendingString:CompositionConfigurationXeLatexPathKey],
     [NSDictionary dictionaryWithObjectsAndKeys:
+     CompositionConfigurationLuaLatexPathKey, @"path",
+     [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
       CompositionConfigurationLatexPathKey, @"path",
       [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil],
     [@"selection." stringByAppendingString:CompositionConfigurationLatexPathKey],
@@ -600,9 +613,20 @@ static NSMutableDictionary* cachePaths = nil;
       NSError* error = nil;
       NSData* data = [NSData dataWithContentsOfURL:fileURL options:NSUncachedRead error:&error];
       NSString* string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-      NSArray* equations = [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
+      NSArray* equations_legacy = [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
                           options:RKLCaseless|RKLMultiline|RKLDotAll
                              range:NSMakeRange(0, [string length]) capture:0 error:&error];
+      if (error)
+        DebugLog(1, @"error : %@", error);
+      error = nil;
+      NSArray* equations_new = [string componentsMatchedByRegex:@"<math(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</math>"
+                                                           options:RKLCaseless|RKLMultiline|RKLDotAll
+                                                             range:NSMakeRange(0, [string length]) capture:0 error:&error];
+      NSMutableArray* equations = [NSMutableArray arrayWithCapacity:([equations_legacy count]+[equations_new count])];
+      if (equations_legacy)
+        [equations addObjectsFromArray:equations_legacy];
+      if (equations_new)
+        [equations addObjectsFromArray:equations_new];
       if (error)
         DebugLog(1, @"error : %@", error);
       NSUInteger equationsCount = [equations count];
@@ -662,7 +686,7 @@ static NSMutableDictionary* cachePaths = nil;
     CFRelease(latexitHelperURL);
   [LinkBack publishServerWithName:[[NSWorkspace sharedWorkspace] applicationName] delegate:self];
 
-  if (self->isGsAvailable && (self->isPdfLaTeXAvailable || self->isLaTeXAvailable || self->isXeLaTeXAvailable) && !self->isColorStyAvailable)
+  if (self->isGsAvailable && (self->isPdfLaTeXAvailable || self->isLaTeXAvailable || self->isXeLaTeXAvailable || self->isLuaLaTeXAvailable) && !self->isColorStyAvailable)
     NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @"color.sty seems to be unavailable"),
                                  NSLocalizedString(@"Without the color.sty package, you won't be able to change the font color",
                                                    @"Without the color.sty package, you won't be able to change the font color"),
@@ -676,6 +700,9 @@ static NSMutableDictionary* cachePaths = nil;
   if (self->isXeLaTeXAvailable)
     [[LaTeXProcessor sharedLaTeXProcessor] addInEnvironmentPath:
       [[compositionConfiguration compositionConfigurationProgramPathXeLaTeX] stringByDeletingLastPathComponent]];
+  if (self->isLuaLaTeXAvailable)
+    [[LaTeXProcessor sharedLaTeXProcessor] addInEnvironmentPath:
+     [[compositionConfiguration compositionConfigurationProgramPathLuaLaTeX] stringByDeletingLastPathComponent]];
   if (self->isLaTeXAvailable)
     [[LaTeXProcessor sharedLaTeXProcessor] addInEnvironmentPath:
       [[compositionConfiguration compositionConfigurationProgramPathLaTeX] stringByDeletingLastPathComponent]];
@@ -2033,6 +2060,12 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end isXeLatexAvailable
 
+-(BOOL) isLuaLaTeXAvailable
+{
+  return self->isLuaLaTeXAvailable;
+}
+//end isLuaLatexAvailable
+
 -(BOOL) isLaTeXAvailable
 {
   return self->isLaTeXAvailable;
@@ -2113,6 +2146,7 @@ static NSMutableDictionary* cachePaths = nil;
     [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ||
     ([pathKey isEqualToString:CompositionConfigurationPdfLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_PDFLATEX))) ||
     ([pathKey isEqualToString:CompositionConfigurationXeLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_XELATEX))) ||
+    ([pathKey isEqualToString:CompositionConfigurationLuaLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_LUALATEX))) ||
     ([pathKey isEqualToString:CompositionConfigurationLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_LATEXDVIPDF))) ||
     ([pathKey isEqualToString:CompositionConfigurationDviPdfPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_LATEXDVIPDF))) ||
     ([pathKey isEqualToString:CompositionConfigurationGsPathKey]) ||
@@ -2291,6 +2325,7 @@ static NSMutableDictionary* cachePaths = nil;
         [NSArray arrayWithObjects:CompositionConfigurationPdfLatexPathKey,
                                   CompositionConfigurationLatexPathKey,
                                   CompositionConfigurationXeLatexPathKey,
+                                  CompositionConfigurationLuaLatexPathKey,
                                   nil];
       NSEnumerator* enumerator = [latexProgramsPathsKeys objectEnumerator];
       NSString* pathKey = nil;

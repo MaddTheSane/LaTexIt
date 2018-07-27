@@ -36,7 +36,10 @@
   BOOL            saveAccessoryViewOptionsTextExportPreamble;
   BOOL            saveAccessoryViewOptionsTextExportEnvironment;
   BOOL            saveAccessoryViewOptionsTextExportBody;
-
+  NSString*       saveAccessoryViewOptionsPDFWofGSWriteEngine;
+  NSString*       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+  BOOL            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
+  
   NSSavePanel* currentSavePanel;
 }
 
@@ -63,6 +66,12 @@
 -(void)            setSaveAccessoryViewOptionsTextExportEnvironment:(BOOL)value;
 -(BOOL)            saveAccessoryViewOptionsTextExportBody;
 -(void)            setSaveAccessoryViewOptionsTextExportBody:(BOOL)value;
+-(NSString*)       saveAccessoryViewOptionsPDFWofGSWriteEngine;
+-(void)            setSaveAccessoryViewOptionsPDFWofGSWriteEngine:(NSString*)value;
+-(NSString*)       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+-(void)            setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:(NSString*)value;
+-(BOOL)            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
+-(void)            setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
 -(NSSavePanel*) currentSavePanel;
 -(void) setCurrentSavePanel:(NSSavePanel*)value;

@@ -772,32 +772,6 @@ static int SpellCheckerDocumentTag = 0;
     //[super paste:sender];
     done = YES;
   }//end @"NSRTFPboardType"
-  
-  /*
-  #error DEBUG
-  if (!done)//check totally empirically
-  {
-    NSSet* typesAlreadyDone = [NSSet setWithObjects:
-      LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType,
-      @"com.adobe.pdf", NSPDFPboardType,
-      @"com.apple.flat-rtfd", NSRTFDPboardType, nil];
-    NSEnumerator* enumerator = [[pasteboard types] objectEnumerator];
-    while((type = [enumerator nextObject]))
-    {
-      if (![typesAlreadyDone containsObject:type])
-      {
-        NSData* maybePDFData = [pasteboard dataForType:type];
-        [maybePDFData writeToFile:@"/Users/chacha/Desktop/dada.dat" atomically:NO];
-        LatexitEquation* latexitEquation = [[[LatexitEquation alloc] initWithPDFData:maybePDFData useDefaults:NO] autorelease];
-        if (latexitEquation)
-        {
-          [(id)[self nextResponder] paste:sender];
-          done = YES;
-        }//end if (latexitEquation)
-      }//end if (![typesAlreadyDone containsObject:type])
-    }//end for each type
-  }//end if (!done)
-  */
 
   if (!done)
     [super paste:sender];

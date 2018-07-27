@@ -173,6 +173,8 @@
 {return [self currentConfigurationProgramArgumentsControllerForKey:CompositionConfigurationPdfLatexPathKey];}
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsXeLaTeXController
 {return [self currentConfigurationProgramArgumentsControllerForKey:CompositionConfigurationXeLatexPathKey];}
+-(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLuaLaTeXController
+{return [self currentConfigurationProgramArgumentsControllerForKey:CompositionConfigurationLuaLatexPathKey];}
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLaTeXController
 {return [self currentConfigurationProgramArgumentsControllerForKey:CompositionConfigurationLatexPathKey];}
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsDviPdfController
@@ -186,6 +188,8 @@
 {return [self currentConfigurationProgramArgumentsForKey:CompositionConfigurationPdfLatexPathKey];}
 -(NSArray*)  currentConfigurationProgramArgumentsXeLaTeX
 {return [self currentConfigurationProgramArgumentsForKey:CompositionConfigurationXeLatexPathKey];}
+-(NSArray*)  currentConfigurationProgramArgumentsLuaLaTeX
+{return [self currentConfigurationProgramArgumentsForKey:CompositionConfigurationLuaLatexPathKey];}
 -(NSArray*)  currentConfigurationProgramArgumentsLaTeX
 {return [self currentConfigurationProgramArgumentsForKey:CompositionConfigurationLatexPathKey];}
 -(NSArray*)  currentConfigurationProgramArgumentsDviPdf

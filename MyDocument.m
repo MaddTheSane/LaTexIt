@@ -808,6 +808,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   BOOL lowerBoxLatexizeButtonEnabled =
     (compositionMode == COMPOSITION_MODE_PDFLATEX) ? [appController isPdfLaTeXAvailable] && [appController isGsAvailable] :
     (compositionMode == COMPOSITION_MODE_XELATEX)  ? [appController isPdfLaTeXAvailable] && [appController isXeLaTeXAvailable] && [appController isGsAvailable] :
+    (compositionMode == COMPOSITION_MODE_LUALATEX) ? [appController isPdfLaTeXAvailable] && [appController isLuaLaTeXAvailable] && [appController isGsAvailable] :
     (compositionMode == COMPOSITION_MODE_LATEXDVIPDF) ? [appController isLaTeXAvailable] && [appController isDviPdfAvailable] && [appController isGsAvailable] :
     NO;    
   [self->lowerBoxLatexizeButton setEnabled:lowerBoxLatexizeButtonEnabled];
@@ -816,8 +817,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self->lowerBoxLatexizeButton setToolTip:nil];
   else if (![self->lowerBoxLatexizeButton toolTip])
     [self->lowerBoxLatexizeButton setToolTip:
-      NSLocalizedString(@"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
-                        @"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
+      NSLocalizedString(@"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
+                        @"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
   
   BOOL colorStyEnabled = [appController isColorStyAvailable];
   [self->lowerBoxControlsBoxFontColorWell setEnabled:colorStyEnabled];

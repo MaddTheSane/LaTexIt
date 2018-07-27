@@ -42,20 +42,24 @@ NSString* LaTeXiTVersionKey = @"version";
 
 NSString* DocumentStyleKey = @"DocumentStyle";
 
-NSString* DragExportTypeKey                  = @"DragExportType";
-NSString* DragExportJpegColorKey             = @"DragExportJpegColor";
-NSString* DragExportJpegQualityKey           = @"DragExportJpegQuality";
-NSString* DragExportSvgPdfToSvgPathKey       = @"DragExportSvgPdfToSvgPath";
-NSString* DragExportTextExportPreambleKey    = @"DragExportTextExportPreambleKey";
-NSString* DragExportTextExportEnvironmentKey = @"DragExportTextExportEnvironmentKey";
-NSString* DragExportTextExportBodyKey        = @"DragExportTextExportBodyKey";
-NSString* DragExportScaleAsPercentKey        = @"DragExportScaleAsPercent";
-NSString* DefaultImageViewBackgroundKey      = @"DefaultImageViewBackground";
+NSString* DragExportTypeKey                                   = @"DragExportType";
+NSString* DragExportJpegColorKey                              = @"DragExportJpegColor";
+NSString* DragExportJpegQualityKey                            = @"DragExportJpegQuality";
+NSString* DragExportPDFWOFGsWriteEngineKey                    = @"DragExportPDFWOFGsWriteEngine";
+NSString* DragExportPDFWOFGsPDFCompatibilityLevelKey          = @"DragExportPDFWOFGsPDFCompatibilityLevel";
+NSString* DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey = @"DragExportPDFWOFMetadataInvisibleGraphicsEnabled";
+NSString* DragExportSvgPdfToSvgPathKey                        = @"DragExportSvgPdfToSvgPath";
+NSString* DragExportTextExportPreambleKey                     = @"DragExportTextExportPreambleKey";
+NSString* DragExportTextExportEnvironmentKey                  = @"DragExportTextExportEnvironmentKey";
+NSString* DragExportTextExportBodyKey                         = @"DragExportTextExportBodyKey";
+NSString* DragExportScaleAsPercentKey                         = @"DragExportScaleAsPercent";
+
+NSString* DefaultImageViewBackgroundKey                      = @"DefaultImageViewBackground";
 NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey = @"DefaultAutomaticHighContrastedPreviewBackground";
-NSString* DefaultDoNotClipPreviewKey    = @"DefaultDoNotClipPreview";
-NSString* DefaultColorKey               = @"DefaultColor";
-NSString* DefaultPointSizeKey           = @"DefaultPointSize";
-NSString* DefaultModeKey                = @"DefaultMode";
+NSString* DefaultDoNotClipPreviewKey                         = @"DefaultDoNotClipPreview";
+NSString* DefaultColorKey                                    = @"DefaultColor";
+NSString* DefaultPointSizeKey                                = @"DefaultPointSize";
+NSString* DefaultModeKey                                     = @"DefaultMode";
 
 NSString* SpellCheckingEnableKey               = @"SpellCheckingEnabled";
 NSString* SyntaxColoringEnableKey              = @"SyntaxColoringEnabled";
@@ -141,6 +145,7 @@ NSString* CompositionConfigurationUseLoginShellKey               = @"useLoginShe
 NSString* CompositionConfigurationPdfLatexPathKey                = @"pdfLatexPath";
 NSString* CompositionConfigurationPsToPdfPathKey                 = @"psToPdfPath";
 NSString* CompositionConfigurationXeLatexPathKey                 = @"xeLatexPath";
+NSString* CompositionConfigurationLuaLatexPathKey                = @"luaLatexPath";
 NSString* CompositionConfigurationLatexPathKey                   = @"latexPath";
 NSString* CompositionConfigurationDviPdfPathKey                  = @"dviPdfPath";
 NSString* CompositionConfigurationGsPathKey                      = @"gsPath";
@@ -254,7 +259,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                [NSNumber numberWithInt:EXPORT_FORMAT_PDF], DragExportTypeKey,
                                                [[NSColor whiteColor] colorAsData],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
+                                               @"pdfwrite", DragExportPDFWOFGsWriteEngineKey,
+                                               @"1.5", DragExportPDFWOFGsPDFCompatibilityLevelKey,
                                                @"", DragExportSvgPdfToSvgPathKey,
+                                               [NSNumber numberWithBool:YES], DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey,
                                                [NSNumber numberWithBool:YES], DragExportTextExportPreambleKey,
                                                [NSNumber numberWithBool:YES], DragExportTextExportEnvironmentKey,
                                                [NSNumber numberWithBool:YES], DragExportTextExportBodyKey,
@@ -654,6 +662,92 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     #endif
 }
 //end setExportJpegQualityPercent:
+
+-(NSString*) exportPDFWOFGsWriteEngine
+{
+  NSString* result = nil;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportPDFWOFGsWriteEngineKey];
+  else
+    #ifdef ARC_ENABLED
+    result = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFGsWriteEngineKey, (__bridge CFStringRef)LaTeXiTAppKey);
+    #else
+    result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    #endif
+  return result;
+}
+//end exportPDFWOFGsWriteEngine
+
+-(void) setExportPDFWOFGsWriteEngine:(NSString*)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:DragExportPDFWOFGsWriteEngineKey];
+  else
+    #ifdef ARC_ENABLED
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, (__bridge const void*)value, (CFStringRef)LaTeXiTAppKey);
+    #else
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, value, (CFStringRef)LaTeXiTAppKey);
+    #endif
+}
+//end setExportPDFWOFGsWriteEngine:
+
+-(NSString*) exportPDFWOFGsPDFCompatibilityLevel
+{
+  NSString* result = nil;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportPDFWOFGsPDFCompatibilityLevelKey];
+  else
+#ifdef ARC_ENABLED
+    result = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (__bridge CFStringRef)LaTeXiTAppKey);
+#else
+  result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+#endif
+  return result;
+}
+//end exportPDFWOFGsPDFCompatibilityLevel
+
+-(void) setExportPDFWOFGsPDFCompatibilityLevel:(NSString*)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:DragExportPDFWOFGsPDFCompatibilityLevelKey];
+  else
+#ifdef ARC_ENABLED
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (__bridge const void*)value, (CFStringRef)LaTeXiTAppKey);
+#else
+  CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, value, (CFStringRef)LaTeXiTAppKey);
+#endif
+}
+//end setExportPDFWOFGsPDFCompatibilityLevel:
+
+-(BOOL) exportPDFWOFMetaDataInvisibleGraphicsEnabled
+{
+  BOOL result = NO;
+  NSNumber* number = nil;
+  if (self->isLaTeXiT)
+    number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey];
+  else
+  #ifdef ARC_ENABLED
+    number = (__bridge NSNumber*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (__bridge CFStringRef)LaTeXiTAppKey);
+  #else
+  number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  #endif
+  result = !number ? NO : [number boolValue];
+  return result;
+}
+//end exportPDFWOFMetaDataInvisibleGraphicsEnabled
+
+-(void) setExportPDFWOFMetaDataInvisibleGraphicsEnabled:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setBool:value forKey:DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey];
+  else
+  #ifdef ARC_ENABLED
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (__bridge const void*)[NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+  #else
+  CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+  #endif
+}
+//end setExportPDFWOFMetaDataInvisibleGraphicsEnabled:
 
 -(NSString*) exportSvgPdfToSvgPath
 {
