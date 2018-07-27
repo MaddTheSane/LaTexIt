@@ -310,7 +310,8 @@
     if (image != [libraryPreviewPanelImageView image])
       [libraryPreviewPanelImageView setImage:image];
     [libraryPreviewPanel setFrame:newFrame display:image ? YES : NO];
-    [libraryPreviewPanel orderFront:self];
+    if (![libraryPreviewPanel isVisible])
+      [libraryPreviewPanel orderFront:self];
   }
 }
 

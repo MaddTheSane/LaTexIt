@@ -1493,20 +1493,7 @@ static NSMutableArray*      unixBins = nil;
   [[[self currentDocument] windowForSheet] makeKeyAndOrderFront:self];
   
   //initialize system services
-  NSArray* serviceShortcutStrings = [userDefaults arrayForKey:ServiceShortcutStringsKey];
-  NSArray* serviceShortcutEnabled = [userDefaults arrayForKey:ServiceShortcutEnabledKey];
-  unsigned int count = MIN([serviceShortcutStrings count], [serviceShortcutEnabled count]);
-  while(count--)
-  {
-    NSString* currentShortcut = [serviceShortcutStrings objectAtIndex:count];
-    NSNumber* currentEnabled  = [serviceShortcutEnabled objectAtIndex:count];
-    latex_mode_t latex_mode = latexModeForIndex(count);
-    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
-    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
-    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
-    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
-  }
-
+  [self changeServiceShortcuts];
   
   [NSThread detachNewThreadSelector:@selector(_triggerHistoryBackgroundLoading:) toTarget:self withObject:nil];
   
@@ -2217,8 +2204,9 @@ static NSMutableArray*      unixBins = nil;
   [threadAutoreleasePool release];
 }
 
--(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode disable:(BOOL)disable
+-(void) changeServiceShortcuts
 {
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSString* infoPlistPath =
     [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
   NSURL* infoPlistURL = [NSURL fileURLWithPath:infoPlistPath];
@@ -2230,34 +2218,42 @@ static NSMutableArray*      unixBins = nil;
   {
     NSMutableDictionary* infoPlist = (NSMutableDictionary*) cfInfoPlist;
     NSMutableArray* services = [infoPlist objectForKey:@"NSServices"];
-    unsigned int index =    (mode == LATEX_MODE_EQNARRAY) ? 0 :
-                            (mode == LATEX_MODE_DISPLAY)  ? 1 :
-                            (mode == LATEX_MODE_INLINE)   ? 2 :
-                            (mode == LATEX_MODE_TEXT)     ? 3 : 0;
-    NSString* menuItemName = (mode == LATEX_MODE_EQNARRAY) ? @"LaTeXiT/Typeset LaTeX Maths eqnarray" :
-                             (mode == LATEX_MODE_DISPLAY)  ? @"LaTeXiT/Typeset LaTeX Maths display"  :
-                             (mode == LATEX_MODE_INLINE)   ? @"LaTeXiT/Typeset LaTeX Maths inline"   :
-                             (mode == LATEX_MODE_TEXT)     ? @"LaTeXiT/Typeset LaTeX Text"     : @"";
-    NSString* serviceMessage = (mode == LATEX_MODE_EQNARRAY) ? @"serviceLatexisationEqnarray" :
-                               (mode == LATEX_MODE_DISPLAY)  ? @"serviceLatexisationDisplay"  :
-                               (mode == LATEX_MODE_INLINE)   ? @"serviceLatexisationInline"   :
-                               (mode == LATEX_MODE_TEXT)     ? @"serviceLatexisationText"     : @"";
-    if (services && (index < [services count]))
+    [services removeAllObjects];
+    
+    latex_mode_t latex_mode = LATEX_MODE_DISPLAY;
+    for(latex_mode = LATEX_MODE_DISPLAY ; latex_mode <= LATEX_MODE_EQNARRAY ; ++latex_mode)
     {
-      if (!shortCut) shortCut = @"";
-      NSDictionary* serviceItemPlist = disable ? [NSDictionary dictionary] :
-        [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSDictionary dictionaryWithObject:shortCut forKey:@"default"], @"NSKeyEquivalent",
-          [NSDictionary dictionaryWithObject:menuItemName forKey:@"default"], @"NSMenuItem",
-          serviceMessage, @"NSMessage",
-          @"LaTeXiT", @"NSPortName",
-          [NSArray arrayWithObjects:@"NSRTFDPboardType", @"NSPDFPboardType", @"NSPostScriptPboardType", @"NSTIFFPboardType", nil], @"NSReturnTypes",
-          [NSArray arrayWithObjects:@"NSStringPboardType", @"NSRTFPboardType", @"NSPDFPboardType", nil], @"NSSendTypes",
-          nil];
-      [services replaceObjectAtIndex:index withObject:serviceItemPlist];
+      unsigned int index = indexOfLatexMode(latex_mode);
+      NSString* menuItemName = (latex_mode == LATEX_MODE_EQNARRAY) ? @"LaTeXiT/Typeset LaTeX Maths eqnarray" :
+                               (latex_mode == LATEX_MODE_DISPLAY)  ? @"LaTeXiT/Typeset LaTeX Maths display"  :
+                               (latex_mode == LATEX_MODE_INLINE)   ? @"LaTeXiT/Typeset LaTeX Maths inline"   :
+                               (latex_mode == LATEX_MODE_TEXT)     ? @"LaTeXiT/Typeset LaTeX Text"     : @"";
+      NSString* serviceMessage = (latex_mode == LATEX_MODE_EQNARRAY) ? @"serviceLatexisationEqnarray" :
+                                 (latex_mode == LATEX_MODE_DISPLAY)  ? @"serviceLatexisationDisplay"  :
+                                 (latex_mode == LATEX_MODE_INLINE)   ? @"serviceLatexisationInline"   :
+                                 (latex_mode == LATEX_MODE_TEXT)     ? @"serviceLatexisationText"     : @"";
+      NSArray* shortcutStrings = [userDefaults arrayForKey:ServiceShortcutStringsKey];
+      NSArray* shortcutEnabled = [userDefaults arrayForKey:ServiceShortcutEnabledKey];
+      unsigned int count = MIN([shortcutStrings count], [shortcutEnabled count]);
+      if (index<count)
+      {
+        NSString* shortcut =  (NSString*) [shortcutStrings objectAtIndex:index];
+        BOOL      disable  = ![[shortcutEnabled objectAtIndex:index] boolValue];
+        
+        NSDictionary* serviceItemPlist = disable ? [NSDictionary dictionary] :
+          [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSDictionary dictionaryWithObject:shortcut forKey:@"default"], @"NSKeyEquivalent",
+            [NSDictionary dictionaryWithObject:menuItemName forKey:@"default"], @"NSMenuItem",
+            serviceMessage, @"NSMessage",
+            @"LaTeXiT", @"NSPortName",
+            [NSArray arrayWithObjects:@"NSRTFDPboardType", @"NSPDFPboardType", @"NSPostScriptPboardType", @"NSTIFFPboardType", nil], @"NSReturnTypes",
+            [NSArray arrayWithObjects:@"NSStringPboardType", @"NSRTFPboardType", @"NSPDFPboardType", nil], @"NSSendTypes",
+            nil];
+        [services insertObject:serviceItemPlist atIndex:latex_mode];
+      }//end if index<count
       [infoPlist writeToURL:infoPlistURL atomically:YES];
-    }
-  }
+    }//end for each latex mode
+  }//end if infoPlist
   CFRelease(cfInfoPlist);
 }
 

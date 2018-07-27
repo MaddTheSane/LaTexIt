@@ -12,8 +12,6 @@
 				<string>pdf</string>
 				<string>tex</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string></string>
 			<key>CFBundleTypeName</key>
 			<string>MyDocumentType</string>
 			<key>CFBundleTypeRole</key>
@@ -57,7 +55,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.7.0 (Tiger version)</string>
+	<string>1.7.1 (Panther version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -68,35 +66,6 @@
 	<string>NSApplication</string>
 	<key>NSServices</key>
 	<array>
-		<dict>
-			<key>NSKeyEquivalent</key>
-			<dict>
-				<key>default</key>
-				<string>/</string>
-			</dict>
-			<key>NSMenuItem</key>
-			<dict>
-				<key>default</key>
-				<string>LaTeXiT/Typeset LaTeX Maths eqnarray</string>
-			</dict>
-			<key>NSMessage</key>
-			<string>serviceLatexisationEqnarray</string>
-			<key>NSPortName</key>
-			<string>LaTeXiT</string>
-			<key>NSReturnTypes</key>
-			<array>
-				<string>NSRTFDPboardType</string>
-				<string>NSPDFPboardType</string>
-				<string>NSPostScriptPboardType</string>
-				<string>NSTIFFPboardType</string>
-			</array>
-			<key>NSSendTypes</key>
-			<array>
-				<string>NSStringPboardType</string>
-				<string>NSRTFPboardType</string>
-				<string>NSPDFPboardType</string>
-			</array>
-		</dict>
 		<dict>
 			<key>NSKeyEquivalent</key>
 			<dict>
@@ -168,6 +137,35 @@
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceLatexisationText</string>
+			<key>NSPortName</key>
+			<string>LaTeXiT</string>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSRTFDPboardType</string>
+				<string>NSPDFPboardType</string>
+				<string>NSPostScriptPboardType</string>
+				<string>NSTIFFPboardType</string>
+			</array>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+				<string>NSRTFPboardType</string>
+				<string>NSPDFPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string>,</string>
+			</dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>LaTeXiT/Typeset LaTeX Maths eqnarray</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>serviceLatexisationEqnarray</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>

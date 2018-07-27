@@ -97,15 +97,22 @@
     [super mouseDown:theEvent];
 }
 
+-(void) scrollWheel:(NSEvent*)event
+{
+  [super scrollWheel:event];
+  [self mouseMoved:event];//to trigger preview display
+}
+
 -(void) mouseMoved:(NSEvent*)event
 {
   LibraryController* libraryController = (LibraryController*)[[self window] windowController];
-  NSPoint locationInWindow = [event locationInWindow];
-  NSPoint location = [self convertPoint:locationInWindow fromView:nil];
-  if (!NSPointInRect(location, [self frame]))
+  NSClipView*   clipView   = (NSClipView*)   [self superview];
+  NSPoint location = [clipView convertPoint:[event locationInWindow] fromView:nil];
+  if (!NSPointInRect(location, [clipView bounds]))
     [libraryController displayPreviewImage:nil];
   else
   {
+    location = [self convertPoint:location fromView:clipView];
     int row = [self rowAtPoint:location];
     id item = (row >= 0) && (row < [self numberOfRows]) ? [self itemAtRow:row] : nil;
     NSImage* image = [item isKindOfClass:[LibraryFile class]] ? [[(LibraryFile*)item value] pdfImage] : nil;

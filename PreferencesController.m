@@ -149,7 +149,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
                                                defaultFontAsData, DefaultFontKey,
                                                [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
-                                               [NSArray arrayWithObjects:@"/", @"", @".", @"", nil], ServiceShortcutStringsKey,
+                                               [NSArray arrayWithObjects:@"", @"", @"", @"", nil], ServiceShortcutStringsKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
@@ -1027,9 +1027,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       [userDefaults setObject:shorcutStrings forKey:ServiceShortcutStringsKey];
     }
 
-    NSNumber* currentEnabled  = [[userDefaults objectForKey:ServiceShortcutEnabledKey] objectAtIndex:index];
-    NSString* currentShortcut = [[userDefaults objectForKey:ServiceShortcutStringsKey] objectAtIndex:index];
-    [[AppController appController] changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
+    [[AppController appController] changeServiceShortcuts];
   
     [serviceWarningShortcutConflict setHidden:YES];
     [aTableView reloadData];    
