@@ -1456,13 +1456,6 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end panel:shouldEnableURL:
 
--(BOOL) panel:(id)sender shouldShowFilename:(NSString *)filename
-{
-  BOOL result = [self panel:sender shouldEnableURL:[NSURL fileURLWithPath:filename]];
-  return result;
-}
-//end panel:shouldShowFilename:
-
 -(IBAction) closeBackSync:(id)sender
 {
   MyDocument* document = (MyDocument*) [self currentDocument];

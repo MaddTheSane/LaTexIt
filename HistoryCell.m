@@ -105,7 +105,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:imageDrawRect.origin.x yBy:imageDrawRect.origin.y];
     [transform translateXBy:0 yBy:imageDrawRect.size.height/2];
-    [transform scaleXBy:1.0 yBy:[image isFlipped] ^ [controlView isFlipped] ? -1.0 : 1.0];
+    [transform scaleXBy:1.0 yBy:[controlView isFlipped] ? -1.0 : 1.0];
     [transform translateXBy:0 yBy:-imageDrawRect.size.height/2];
     [transform concat];
     [imageRep drawInRect:NSMakeRect(0, 0, imageDrawRect.size.width, imageDrawRect.size.height)];

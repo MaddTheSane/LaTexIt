@@ -310,20 +310,15 @@ static LaTeXProcessor* sharedInstance = nil;
         CGContextSetTextDrawingMode(cgPDFContext, kCGTextFill);
         CGContextSetTextPosition(cgPDFContext, CGRectGetMaxX(mediaBox)+1, CGRectGetMaxY(mediaBox)+1);
         NSFont* font = [NSFont fontWithName:@"Courier" size:1];
-        size_t charactersCount = [annotationContentBase64CompleteString length];
-        unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
-        CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
-        if (unichars && glyphs)
-        {
-          [annotationContentBase64CompleteString getCharacters:unichars];
-          bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
-          if (ok)
-            CGContextShowGlyphs(cgPDFContext, glyphs, charactersCount);
-        }//end if (unichars && glyphs)
-        if (unichars)
-          free(unichars);
-        if (glyphs)
-          free(glyphs);
+        NSAttributedString *attrAnno = [[NSAttributedString alloc] initWithString:annotationContentBase64CompleteString attributes:@{NSFontAttributeName: font}];
+        CTLineRef line = CTLineCreateWithAttributedString((CFAttributedStringRef)attrAnno);
+        CFArrayRef lineArr = CTLineGetGlyphRuns(line);
+        const CFIndex lineCount = CFArrayGetCount(lineArr);
+        for (NSInteger i = 0; i < lineCount; i++) {
+          CTRunRef currentRun = CFArrayGetValueAtIndex(lineArr, i);
+          CTRunDraw(currentRun, cgPDFContext, CFRangeMake(0, 0));
+        }
+        CFRelease(line);
         CGPDFContextEndPage(cgPDFContext);
         CGContextFlush(cgPDFContext);
         CGContextRelease(cgPDFContext);
