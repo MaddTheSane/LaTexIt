@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -217,7 +217,7 @@
 		932CF45F0826C5A500434128 /* icon-file.png in Resources */ = {isa = PBXBuildFile; fileRef = 932CF45E0826C5A500434128 /* icon-file.png */; };
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
 		932E60930F5DA3BC002B3136 /* LatexitEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 935784510E9D21FB00736F31 /* LatexitEquation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		932E60B20F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
+		932E60B20F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		932E60B30F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		932FAEA4115CB3B000221D6D /* locked.png in Resources */ = {isa = PBXBuildFile; fileRef = 932FAEA2115CB3B000221D6D /* locked.png */; };
@@ -275,7 +275,7 @@
 		934951BE10BDD10B00931D51 /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AB92088CEAE20062A340 /* NSWorkspaceExtended.m */; };
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
-		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
+		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
 		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
@@ -379,7 +379,7 @@
 		939D4E041A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; };
 		939D4E051A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		939D6588194457DA008A29AB /* PropertyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6587194457DA008A29AB /* PropertyStorage.m */; };
-		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
+		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */; };
 		93A35B84137EB4470006DC07 /* IsInTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937FF30FA58788007BEAC0 /* IsInTransformer.m */; };
 		93A35B89137EB4580006DC07 /* BoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 939380DA0FA5B0E8007BEAC0 /* BoolTransformer.m */; };
@@ -2235,7 +2235,7 @@
 				LastUpgradeCheck = 1000;
 			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
