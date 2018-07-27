@@ -51,6 +51,19 @@
   return string;
 }
 
+-(BOOL) endsWith:(NSString*)substring
+{
+  BOOL ok = NO;
+  unsigned int selfLength = [self length];
+  unsigned int subLength = [substring length];
+  if (selfLength >= subLength)
+  {
+    NSRange rangeOfEnd = NSMakeRange(selfLength-subLength, subLength);
+    ok = [[self substringWithRange:rangeOfEnd] isEqualToString:substring];
+  }
+  return ok;
+}
+
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag
 {
   NSMutableData* data = [NSMutableData dataWithData:[self dataUsingEncoding:encoding allowLossyConversion:flag]];

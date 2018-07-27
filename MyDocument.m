@@ -494,7 +494,7 @@ static NSString* yenString = nil;
   {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   
-    NSString* directory      = NSTemporaryDirectory();
+    NSString* directory      = [AppController latexitTemporaryPath];
 
     NSTask* boundingBoxTask  = [[NSTask alloc] init];
     NSPipe* gs2awkPipe       = [NSPipe pipe];
@@ -696,7 +696,7 @@ static NSString* yenString = nil;
   composition_mode_t compositionMode = (composition_mode_t) [userDefaults integerForKey:CompositionModeKey];
 
   //prepare file names
-  NSString* directory      = NSTemporaryDirectory();
+  NSString* directory      = [AppController latexitTemporaryPath];
   NSString* filePrefix     = [NSString stringWithFormat:@"latexit-%u", uniqueId]; //file name, related to the current document
 
   //latex files for step 1 (simple latex file useful to report errors, log file and pdf result)
@@ -737,6 +737,23 @@ static NSString* yenString = nil;
   [fileManager removeFileAtPath:latexAuxBaselineFilePath handler:nil];
   [fileManager removeFileAtPath:pdfBaselineFilePath      handler:nil];
   [fileManager removeFileAtPath:sizesFilePath            handler:nil];
+  //trash *.*pk, *.mf, *.tfm
+  NSArray* files = [fileManager directoryContentsAtPath:directory];
+  NSEnumerator* enumerator = [files objectEnumerator];
+  NSString* file = nil;
+  while((file = [enumerator nextObject]))
+  {
+    file = [directory stringByAppendingPathComponent:file];
+    BOOL isDirectory = NO;
+    if ([fileManager fileExistsAtPath:file isDirectory:&isDirectory] && !isDirectory)
+    {
+      NSString* extension = [[file pathExtension] lowercaseString];
+      BOOL mustDelete = [extension isEqualToString:@"mf"] || [extension isEqualToString:@"tfm"] ||
+                        [extension endsWith:@"pk"];
+      if (mustDelete)
+        [fileManager removeFileAtPath:file handler:NULL];
+    }
+  }
 
   //some tuning due to parameters; note that \[...\] is replaced by $\displaystyle because of
   //incompatibilities with the magical boxes

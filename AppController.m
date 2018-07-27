@@ -89,7 +89,7 @@ static NSMutableArray*      unixBins = nil;
   [PreferencesController initialize];
   
   NSString* temporaryPathFileName = @"latexit-paths";
-  NSString* temporaryPathFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:temporaryPathFileName];
+  NSString* temporaryPathFilePath = [[AppController latexitTemporaryPath] stringByAppendingPathComponent:temporaryPathFileName];
   NSString* systemCall =
     [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" > %@",
       temporaryPathFilePath, temporaryPathFilePath];
@@ -246,6 +246,31 @@ static NSMutableArray*      unixBins = nil;
   return [[self class] currentDocument];
 }
 
++(NSString*) latexitTemporaryPath
+{
+  NSString* thisVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+  if (!thisVersion)
+    thisVersion = @"";
+  NSArray* components = [thisVersion componentsSeparatedByString:@" "];
+  if (components && [components count])
+    thisVersion = [components objectAtIndex:0];
+
+  NSString* temporaryPath =
+    [NSTemporaryDirectory() stringByAppendingPathComponent:
+      [NSString stringWithFormat:@"latexit-%@", thisVersion]];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  BOOL isDirectory = NO;
+  BOOL exists = [fileManager fileExistsAtPath:temporaryPath isDirectory:&isDirectory];
+  if (exists && !isDirectory)
+  {
+    [fileManager removeFileAtPath:temporaryPath handler:NULL];
+    exists = NO;
+  }
+  if (!exists)
+    [fileManager createDirectoryAtPath:temporaryPath attributes:nil];
+  return temporaryPath;
+}
+
 +(NSDocument*) currentDocument
 {
   NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
@@ -356,7 +381,8 @@ static NSMutableArray*      unixBins = nil;
 
 -(IBAction) makeDonation:(id)sender//display info panel
 {
-  [donationPanel center];
+  if (![donationPanel isVisible])
+    [donationPanel center];
   [donationPanel orderFront:sender];
 }
 
@@ -652,8 +678,13 @@ static NSMutableArray*      unixBins = nil;
 //ask for LaTeXiT's web site
 -(IBAction) openWebSite:(id)sender
 {
-	NSURL* webSiteURL = [NSURL URLWithString:NSLocalizedString(@"http://ktd.club.fr/programmation/latexit_en.php",
-                                                             @"http://ktd.club.fr/programmation/latexit_en.php")];
+  NSMutableString* urlString =
+    [NSMutableString stringWithString:NSLocalizedString(@"http://ktd.club.fr/programmation/latexit_en.php",
+                                                        @"http://ktd.club.fr/programmation/latexit_en.php")];
+  if ([sender respondsToSelector:@selector(tag)] && ([sender tag] == 1))
+    [urlString appendString:@"#donation"];
+  NSURL* webSiteURL = [NSURL URLWithString:urlString];
+
   BOOL ok = [[NSWorkspace sharedWorkspace] openURL:webSiteURL];
   if (!ok)
   {
@@ -1085,7 +1116,7 @@ static NSMutableArray*      unixBins = nil;
     if (ok)
     {
       NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-      NSString* directory       = NSTemporaryDirectory();
+      NSString* directory       = [AppController latexitTemporaryPath];
       [checkTask setCurrentDirectoryPath:directory];
       [checkTask setLaunchPath:kpseWhichPath];
       [checkTask setArguments:[NSArray arrayWithObject:@"color.sty"]];
@@ -1112,7 +1143,7 @@ static NSMutableArray*      unixBins = nil;
       @try
       {
         NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
-        NSString* directory      = NSTemporaryDirectory();
+        NSString* directory      = [AppController latexitTemporaryPath];
         NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
         NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
         [checkTask setCurrentDirectoryPath:directory];
@@ -1527,7 +1558,7 @@ static NSMutableArray*      unixBins = nil;
         if (pdfData)
         {
           //we will create the image file that will be attached to the rtfd
-          NSString* directory          = NSTemporaryDirectory();
+          NSString* directory          = [AppController latexitTemporaryPath];
           NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
           export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
@@ -1801,7 +1832,8 @@ static NSMutableArray*      unixBins = nil;
     NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"Read Me") ofType:@"rtfd"];
     [readmeTextView readRTFDFromFile:file];
   }
-  [readmeWindow center];
+  if (![readmeWindow isVisible])
+    [readmeWindow center];
   [readmeWindow makeKeyAndOrderFront:self];
 }
 
@@ -1858,7 +1890,7 @@ static NSMutableArray*      unixBins = nil;
   @synchronized(self) //only one person may ask that service at a time
   {
     //prepare file names
-    NSString* directory      = NSTemporaryDirectory();
+    NSString* directory      = [AppController latexitTemporaryPath];
     NSString* filePrefix     = [NSString stringWithFormat:@"latexit-controller"];
     NSString* pdfFile        = [NSString stringWithFormat:@"%@.pdf", filePrefix];
     NSString* pdfFilePath    = [directory stringByAppendingPathComponent:pdfFile];

@@ -14,5 +14,6 @@
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
 +(id) stringWithContentsOfFile:(NSString *)path guessEncoding:(NSStringEncoding *)enc error:(NSError **)error;
 
+-(BOOL) endsWith:(NSString*)substring;
 -(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag;
 @end

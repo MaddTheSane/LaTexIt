@@ -16,6 +16,7 @@
 #import "LineCountRulerView.h"
 #import "MyDocument.h"
 #import "NSColorExtended.h"
+#import "NSFontExtended.h"
 #import "SMLSyntaxColouring.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
@@ -266,6 +267,10 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
     [(id)[self nextResponder] paste:sender];
   else
     [super paste:sender];
+  NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];
+  currentFont = [NSFont fontWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultFontKey]];
+  if (currentFont)
+    [self setFont:currentFont range:NSMakeRange(0, [[self textStorage] length])];
 }
 
 -(void) keyDown:(NSEvent*)theEvent
