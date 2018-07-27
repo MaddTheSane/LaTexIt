@@ -52,7 +52,7 @@ static NSMutableArray* freeIds = nil;
 +(void) _releaseId:(unsigned long)anId; //releases an id
 
 //compose latex and returns pdf data. the options may specify to use pdflatex or latex+dvipdf
--(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
+-(NSData*) _composeLaTeX:(NSString*)filePath customLog:(NSString**)customLog stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
                                        compositionMode:(composition_mode_t)compositionMode;
 
 //returns an array of the errors. Each case will contain an error string
@@ -561,7 +561,8 @@ static NSString* yenString = nil;
 }
 
 //compose latex and returns pdf data. the options may specify to use pdflatex or latex+dvipdf
--(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
+-(NSData*) _composeLaTeX:(NSString*)filePath customLog:(NSString**)customLog
+                                           stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
                                        compositionMode:(composition_mode_t)compositionMode
 {
   NSData* pdfData = nil;
@@ -575,11 +576,12 @@ static NSString* yenString = nil;
   [fileManager removeFileAtPath:dviFile handler:nil];
   [fileManager removeFileAtPath:pdfFile handler:nil];
   
+  NSMutableString* customString = [NSMutableString string];
   NSMutableString* stdoutString = [NSMutableString string];
   NSMutableString* stderrString = [NSMutableString string];
 
   NSString* source = [NSString stringWithContentsOfFile:texFile];
-  [stdoutString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
+  [customString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
 
   //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
   NSString* executablePath =
@@ -590,16 +592,17 @@ static NSString* yenString = nil;
          : [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey];
   NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ -file-line-error -interaction nonstopmode %@ 1> %@ 2>%@", 
                           directory, executablePath, texFile, errFile, errFile];
-  [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
+  [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @"processing"),
                                                         [executablePath lastPathComponent],
                                                         systemCall]];
   BOOL failed = (system([systemCall UTF8String]) != 0) && ![fileManager fileExistsAtPath:pdfFile];
   NSString* errors = [NSString stringWithContentsOfFile:errFile];
+  [customString appendString:errors ? errors : @""];
   [stdoutString appendString:errors ? errors : @""];
   
   if (failed)
-    [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
+    [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
                                NSLocalizedString(@"error while processing", @"error while processing"),
                                [executablePath lastPathComponent]]];
 
@@ -618,7 +621,7 @@ static NSString* yenString = nil;
 
     @try
     {
-      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
+      [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                             NSLocalizedString(@"processing", @"processing"),
                                                             [[dvipdfTask launchPath] lastPathComponent],
                                                             [dvipdfTask commandLine]]];
@@ -629,16 +632,22 @@ static NSString* yenString = nil;
       NSString* tmp = nil;
       tmp = stdoutData ? [[[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding] autorelease] : nil;
       if (tmp)
+      {
+        [customString appendString:tmp];
         [stdoutString appendString:tmp];
+      }
       tmp = stderrData ? [[[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding] autorelease] : nil;
       if (tmp)
+      {
+        [customString appendString:tmp];
         [stderrString appendString:tmp];
+      }
       failed = ([dvipdfTask terminationStatus] != 0);
     }
     @catch(NSException* e)
     {
       failed = YES;
-      [stdoutString appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
+      [customString appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
     }
     @finally
     {
@@ -646,12 +655,14 @@ static NSString* yenString = nil;
     }
     
     if (failed)
-      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
+      [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
                                  NSLocalizedString(@"error while processing", @"error while processing"),
                                  [[dvipdfTask launchPath] lastPathComponent]]];
 
   }//end of dvipdf call
   
+  if (customLog)
+    *customLog = customString;
   if (stdoutLog)
     *stdoutLog = stdoutString;
   if (stderrLog)
@@ -835,11 +846,13 @@ static NSString* yenString = nil;
   NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
   BOOL failed = ![latexData writeToFile:latexFilePath atomically:NO];
   
+  NSString* customLog = nil;
   NSString* stdoutLog = nil;
   NSString* stderrLog = nil;
-  failed |= ![self _composeLaTeX:latexFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:compositionMode];
-  if (stdoutLog)
-    [fullLog appendString:stdoutLog];
+  failed |= ![self _composeLaTeX:latexFilePath customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
+                 compositionMode:compositionMode];
+  if (customLog)
+    [fullLog appendString:customLog];
   [logTextView setString:fullLog];
 
   NSArray* errors = [self _filterLatexErrors:[stdoutLog stringByAppendingString:stderrLog] shiftLinesBy:errorLineShift];
@@ -915,7 +928,8 @@ static NSString* yenString = nil;
       NSData* latexData = [magicSourceToFindBaseLine dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexBaselineFilePath atomically:NO];
       if (!failed)
-        pdfData = [self _composeLaTeX:latexBaselineFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:compositionMode];
+        pdfData = [self _composeLaTeX:latexBaselineFilePath customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
+                      compositionMode:compositionMode];
       failed |= !pdfData;
     }//end of step 2
     
@@ -980,7 +994,8 @@ static NSString* yenString = nil;
       NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexFilePath2 atomically:NO];
       if (!failed)
-        pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:COMPOSITION_MODE_PDFLATEX];
+        pdfData = [self _composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
+                      compositionMode:COMPOSITION_MODE_PDFLATEX];
       failed |= !pdfData;
     }//end STEP 3
     
