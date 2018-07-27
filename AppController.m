@@ -1474,7 +1474,7 @@ static NSMutableArray*      unixBins = nil;
 
           //LinkBack data
           HistoryItem* historyItem =
-            [HistoryItem historyItemWithPdfData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
+            [HistoryItem historyItemWithPDFData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
                                      sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
                                           color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:[NSColor whiteColor]];
           NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
@@ -1567,7 +1567,7 @@ static NSMutableArray*      unixBins = nil;
                 
           //LinkBack data
           HistoryItem* historyItem =
-          [HistoryItem historyItemWithPdfData:pdfData
+          [HistoryItem historyItemWithPDFData:pdfData
                                      preamble:preamble
                                    sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
                                         color:[NSColor blackColor]

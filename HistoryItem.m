@@ -26,7 +26,7 @@
 NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification";
 
 @interface HistoryItem (PrivateAPI)
--(void) _reannotatePdfData;
+-(void) _reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 @end
 
 @implementation HistoryItem
@@ -39,22 +39,22 @@ static NSLock* strangeLock = nil;
     strangeLock = [[NSLock alloc] init];
 }
 
-+(id) historyItemWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
++(id) historyItemWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor
 {
-  id instance = [[[self class] alloc] initWithPdfData:someData preamble:aPreamble sourceText:aSourceText
+  id instance = [[[self class] alloc] initWithPDFData:someData preamble:aPreamble sourceText:aSourceText
                                               color:aColor pointSize:aPointSize date:aDate mode:aMode
                                               backgroundColor:backgroundColor];
   return [instance autorelease];
 }
 
-+(id) historyItemWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults
++(id) historyItemWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
-  return [[[[self class] alloc] initWithPdfData:someData useDefaults:useDefaults] autorelease];
+  return [[[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults] autorelease];
 }
 
--(id) initWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
+-(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
               backgroundColor:(NSColor*)aBackgroundColor
 {
@@ -72,7 +72,7 @@ static NSLock* strangeLock = nil;
   return self;
 }
 
--(id) initWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults
+-(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
   if (![super init])
     return nil;
@@ -252,7 +252,7 @@ static NSLock* strangeLock = nil;
     [text retain];
     [preamble release];
     preamble = text;
-    [self _reannotatePdfData];
+    [self _reannotatePDFDataUsingPDFKeywords:YES];
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
@@ -266,14 +266,14 @@ static NSLock* strangeLock = nil;
     NSColor* greyLevelColor = [aColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
     //we retain aColor twice...
     backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [aColor retain];
-    [self _reannotatePdfData];
+    [self _reannotatePDFDataUsingPDFKeywords:YES];
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.5.4"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.5.5"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -334,7 +334,7 @@ static NSLock* strangeLock = nil;
   
   //for versions < 1.5.4, we must reannotate the pdfData to retreive the accentuated characters
   if (!version || [version compare:@"1.5.4" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
-    [self _reannotatePdfData];
+    [self _reannotatePDFDataUsingPDFKeywords:NO];
   return self;
 }
 
@@ -397,15 +397,15 @@ static NSLock* strangeLock = nil;
 
 //useful to resynchronize the pdfData with the actual parameters (background color...)
 //its use if VERY rare, so that it is not automatic for the sake of efficiency
--(void) _reannotatePdfData
+-(void) _reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
-  NSData* newData = [self annotatedPdfData];
+  NSData* newData = [self annotatedPDFDataUsingPDFKeywords:usingPDFKeywords];
   [newData retain];
   [pdfData release];
   pdfData = newData;
 }
 
--(NSData*) annotatedPdfData
+-(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
   NSData* newData = pdfData;
 
@@ -414,7 +414,6 @@ static NSLock* strangeLock = nil;
 
   NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
   NSArray* testArray = nil;
-
   NSMutableString* baselineAsString = @"0";
   testArray = [dataAsString componentsSeparatedByString:@"/Type (EEbas"];
   if (testArray && ([testArray count] >= 2))
@@ -425,17 +424,20 @@ static NSLock* strangeLock = nil;
     [baselineAsString deleteCharactersInRange:range];
   }
   baseline = [baselineAsString doubleValue];
-  
+
   //then, we rewrite the pdfData
   #ifndef PANTHER
-  PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-  NSDictionary* attributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-       [NSApp applicationName], PDFDocumentCreatorAttribute,
-       nil];
-  [pdfDocument setDocumentAttributes:attributes];
-  newData = [pdfDocument dataRepresentation];
-  [pdfDocument release];
+  if (usingPDFKeywords)
+  {
+    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+    NSDictionary* attributes =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+         [NSApp applicationName], PDFDocumentCreatorAttribute,
+         nil];
+    [pdfDocument setDocumentAttributes:attributes];
+    newData = [pdfDocument dataRepresentation];
+    [pdfDocument release];
+  }
   #endif
 
   //annotate in LEE format

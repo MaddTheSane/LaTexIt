@@ -30,12 +30,12 @@ extern NSString* HistoryItemDidChangeNotification;
 }
 
 //constructors
-+(id) historyItemWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults;
-+(id) historyItemWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
++(id) historyItemWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
++(id) historyItemWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor;
--(id) initWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults;
--(id) initWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
+-(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
+-(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
                                             mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
 
@@ -65,6 +65,6 @@ extern NSString* HistoryItemDidChangeNotification;
          lazyDataProvider:(id)lazyDataProvider;
          
 //returns reannotated pdfData before returning it. Very rare. Only needed to resynchronize because of some backgroundColor change.
--(NSData*) annotatedPdfData;
+-(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 
 @end

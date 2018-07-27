@@ -417,7 +417,7 @@ static NSString* yenString = nil;
   
   if (mustProcess)
   {
-    [imageView setPdfData:nil cachedImage:nil];       //clears current image
+    [imageView setPDFData:nil cachedImage:nil];       //clears current image
     [imageView setNeedsDisplay:YES];
     [imageView displayIfNeeded];      //refresh it
     [progressIndicator setHidden:NO]; //shows the progress indicator
@@ -439,7 +439,7 @@ static NSString* yenString = nil;
     if (!failed)
     {
       //if it is ok, updates the image view
-      [imageView setPdfData:pdfData cachedImage:[self _checkEasterEgg]];
+      [imageView setPDFData:pdfData cachedImage:[self _checkEasterEgg]];
 
       //and insert a new element into the history
       HistoryItem* newHistoryItem = [self historyItemWithCurrentState];
@@ -1010,14 +1010,14 @@ static NSString* yenString = nil;
   int selectedSegment = [typeOfTextControl selectedSegment];
   int tag = [[typeOfTextControl cell] tagForSegment:selectedSegment];
   latex_mode_t mode = (latex_mode_t) tag;
-  return [HistoryItem historyItemWithPdfData:[imageView pdfData]  preamble:[preambleTextView textStorage]
+  return [HistoryItem historyItemWithPDFData:[imageView pdfData]  preamble:[preambleTextView textStorage]
                                   sourceText:[sourceTextView textStorage] color:[colorWell color]
                                    pointSize:[sizeText doubleValue] date:[NSDate date] mode:mode backgroundColor:[imageView backgroundColor]];
 }
 
 -(void) applyPdfData:(NSData*)pdfData
 {
-  [self applyHistoryItem:[HistoryItem historyItemWithPdfData:pdfData useDefaults:YES]];
+  [self applyHistoryItem:[HistoryItem historyItemWithPDFData:pdfData useDefaults:YES]];
 }
 
 //sets the state of the document according to the given history item
@@ -1026,7 +1026,7 @@ static NSString* yenString = nil;
   if (historyItem)
   {
     [self _setLogTableViewVisible:NO];
-    [imageView setPdfData:[historyItem pdfData] cachedImage:[historyItem pdfImage]];
+    [imageView setPDFData:[historyItem pdfData] cachedImage:[historyItem pdfImage]];
     [self setPreamble:[historyItem preamble]];
     [self setSourceText:[historyItem sourceText]];
     [colorWell setColor:[historyItem color]];
@@ -1038,7 +1038,7 @@ static NSString* yenString = nil;
   {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     [self _setLogTableViewVisible:NO];
-    [imageView setPdfData:nil cachedImage:nil];
+    [imageView setPDFData:nil cachedImage:nil];
     NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
     [preambleTextView setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
     [sourceTextView   setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];

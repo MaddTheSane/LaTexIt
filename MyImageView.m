@@ -78,7 +78,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
   [self setNeedsDisplay:YES];
   if (updateHistoryItem && pdfData)
-    [self setPdfData:[[document historyItemWithCurrentState] annotatedPdfData] cachedImage:[self image]];
+    [self setPDFData:[[document historyItemWithCurrentState] annotatedPDFDataUsingPDFKeywords:YES] cachedImage:[self image]];
 }
 
 //zooms the image, but does not modify it (drag'n drop will be with original image size)
@@ -110,7 +110,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 //when you set the pdfData encapsulated by the imageView, it creates an NSImage with this data.
 //but if you specify a non-nil cachedImage, it will use this cachedImage to be faster
 //the data is full pdfdata (that may contain meta-data like keywords, creator...)
--(void) setPdfData:(NSData*)someData cachedImage:(NSImage*)cachedImage
+-(void) setPDFData:(NSData*)someData cachedImage:(NSImage*)cachedImage
 {
   [someData retain];
   [pdfData release];
