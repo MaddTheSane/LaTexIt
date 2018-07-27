@@ -10,11 +10,8 @@
 
 @interface HistoryController : NSArrayController
 
--(id) initWithContent:(id)content;
+-(instancetype) initWithContent:(id)content;
 
 -(void) addObject:(id)object;
-
--(BOOL) automaticallyRearrangesObjects;
--(void) setAutomaticallyRearrangesObjects:(BOOL)value;
 
 @end

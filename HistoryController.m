@@ -47,20 +47,6 @@
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
--(BOOL) automaticallyRearrangesObjects
-{
-  BOOL result = NO;
-  result = [super automaticallyRearrangesObjects];
-  return result;
-}
-//end automaticallyRearrangesObjects
-
--(void) setAutomaticallyRearrangesObjects:(BOOL)value
-{
-  [super setAutomaticallyRearrangesObjects:value];
-}
-//end setAutomaticallyRearrangesObjects:
-
 -(void) addObject:(id)object
 {
   [super addObject:object];
