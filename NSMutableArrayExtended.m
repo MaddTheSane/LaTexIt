@@ -14,38 +14,17 @@
 -(void) insertObjectsFromArray:(NSArray *)array atIndex:(int)index
 {
   NSEnumerator* enumerator = [array objectEnumerator];
-  NSObject* entry = [enumerator nextObject];
-  while (entry)
-  {
+  NSObject* entry = nil;
+  while ((entry = [enumerator nextObject]))
     [self insertObject:entry atIndex:index++];
-    entry = [enumerator nextObject];
-  }
 }
-
-//checks if indexOfObjectIdenticalTo returns a valid index
--(BOOL) containsObjectIdenticalTo:(id)object
-{ 
-  return ([self indexOfObjectIdenticalTo:object] != NSNotFound);
-}
-
-//this method does exist in Tiger
-#ifdef PANTHER
--(void) removeObjectsAtIndexes:(NSIndexSet *)indexes
-{
-  unsigned int index = [indexes lastIndex];
-  while(index != NSNotFound)
-  {
-    [self removeObjectAtIndex:index];
-    index = [indexes indexLessThanIndex:index];
-  }
-}
-#endif
+//end insertObjectsFromArray:atIndex:
 
 -(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
 {
   NSArray* objectsToMove = [self objectsAtIndexes:indices];
-  unsigned int shift = 0;
-  unsigned int i = [indices firstIndex];
+  NSUInteger shift = 0;
+  NSUInteger i = [indices firstIndex];
   while((i != NSNotFound) && i<index)
   {
     ++shift;

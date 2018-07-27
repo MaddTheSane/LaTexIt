@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>shortcuts</key>
@@ -11,8 +11,8 @@
 			<string>\</string>
 			<key>right</key>
 			<string></string>
-                        <key>enabled</key>
-                        <false/>
+			<key>enabled</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>input</key>
@@ -21,8 +21,8 @@
 			<string>{</string>
 			<key>right</key>
 			<string>}</string>
-                        <key>enabled</key>
-                        <false/>
+			<key>enabled</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>input</key>
@@ -31,11 +31,11 @@
 			<string>\begin{eqnarray}</string>
 			<key>right</key>
 			<string>\end{eqnarray}</string>
-                        <key>enabled</key>
-                        <false/>
+			<key>enabled</key>
+			<false/>
 		</dict>
 	</array>
 	<key>version</key>
-	<string>1.11.2</string>
+	<string>2.0.0</string>
 </dict>
 </plist>

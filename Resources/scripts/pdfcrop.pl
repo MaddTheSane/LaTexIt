@@ -5,7 +5,7 @@ $^W=1; # turn warning on
 #
 # pdfcrop.pl
 #
-# Copyright (C) 2002, 2004, 2005, 2008 Heiko Oberdiek.
+# Copyright (C) 2002, 2004, 2005, 2008, 2009 Heiko Oberdiek.
 #
 # This program may be distributed and/or modified under the
 # conditions of the LaTeX Project Public License, either version 1.2
@@ -22,10 +22,10 @@ $^W=1; # turn warning on
 #
 my $file        = "pdfcrop.pl";
 my $program     = uc($&) if $file =~ /^\w+/;
-my $version     = "1.14";
-my $date        = "2008/09/12";
+my $version     = "1.20";
+my $date        = "2009/10/06";
 my $author      = "Heiko Oberdiek";
-my $copyright   = "Copyright (c) 2002-2008 by $author.";
+my $copyright   = "Copyright (c) 2002-2009 by $author.";
 #
 # Reqirements: Perl5, Ghostscript
 # History:
@@ -50,6 +50,20 @@ my $copyright   = "Copyright (c) 2002-2008 by $author.";
 #                     Input files with unsafe file names are linked/copied
 #                     to temporary file with safe file name.
 #   2008/09/12 v1.14: Error detection for invalid Bounding Boxes.
+#   2009/07/14 v1.15: Fix for negative coordinates in Bounding Boxes
+#                     (David Menestrina).
+#   2009/07/16 v1.16: Security fixes:
+#                     * -dSAFER added for Ghostscript,
+#                     * -no-shell-escape added for pdfTeX/XeTeX.
+#   2009/07/17 v1.17: Security fixes:
+#                     * Backticks and whitespace are forbidden
+#                       for options --(gs|pdftex|xetex)cmd.
+#                     * Validation of options --papersize and --resolution.
+#   2009/07/18 v1.18: * Restricted mode added.
+#                     * Option --version added.
+#   2009/09/24 v1.19: * Ghostscript detection rewritten.
+#                     * Cygwin: `gs' is preferred to `gswin32c'.
+#   2009/10/06 v1.20: * File name sanitizing in .tex file.
 
 ### program identification
 my $title = "$program $version, $date - $copyright\n";
@@ -57,20 +71,75 @@ my $title = "$program $version, $date - $copyright\n";
 ### error strings
 my $Error = "!!! Error:"; # error prefix
 
+### make ENV safer
+delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
+
 ### string constants for Ghostscript run
 # get Ghostscript command name
-my $GS = "gs";
-$GS = "gs386"    if $^O =~ /dos/i;
-$GS = "gsos2"    if $^O =~ /os2/i;
-$GS = "gswin32c" if $^O =~ /mswin32/i;
-$GS = "gswin32c" if $^O =~ /cygwin/i;
-$GS = "mgs"      if defined($ENV{"TEXSYSTEM"}) and
-                    $ENV{"TEXSYSTEM"} =~ /miktex/i;
+$::opt_gscmd = '';
+sub find_ghostscript () {
+    return if $::opt_gscmd;
+    my $system = 'unix';
+    $system = "dos" if $^O =~ /dos/i;
+    $system = "os2" if $^O =~ /os2/i;
+    $system = "win" if $^O =~ /mswin32/i;
+    $system = "cygwin" if $^O =~ /cygwin/i;
+    $system = "miktex" if defined($ENV{"TEXSYSTEM"}) and
+                          $ENV{"TEXSYSTEM"} =~ /miktex/i;
+    print "* System: $system\n" if $::opt_debug;
+    my %candidates = (
+        'unix' => [qw|gs gsc|],
+        'dos' => [qw|gs386 gs|],
+        'os2' => [qw|gsos2 gs|],
+        'win' => [qw|gswin32c gs|],
+        'cygwin' => [qw|gs gswin32c|],
+        'miktex' => [qw|mgs gswin32c gs|]
+    );
+    my %ext = (
+        'unix' => '',
+        'dos' => '.exe',
+        'os2' => '.exe',
+        'win' => '.exe',
+        'cygwin' => '.exe',
+        'miktex' => '.exe'
+    );
+    my $candidates_ref = $candidates{$system};
+    my $ext = $ext{$system};
+    use File::Spec;
+    my @path = File::Spec->path();
+    my $found = 0;
+    foreach my $candidate (@$candidates_ref) {
+        foreach my $dir (@path) {
+            my $file = File::Spec->catfile($dir, "$candidate$ext");
+            if (-x $file) {
+                $::opt_gscmd = $candidate;
+                $found = 1;
+                print "* Found ($candidate): $file\n" if $::opt_debug;
+                last;
+            }
+            print "* Not found ($candidate): $file\n" if $::opt_debug;
+        }
+        last if $found;
+    }
+    if ($found) {
+        print "* Autodetected ghostscript command: $::opt_gscmd\n" if $::opt_debug;
+    }
+    else {
+        $::opt_gscmd = $$candidates_ref[0];
+        print "* Default ghostscript command: $::opt_gscmd\n" if $::opt_debug;
+    }
+}
 
 # Windows detection (no SIGHUP)
 my $Win = 0;
 $Win = 1 if $^O =~ /mswin32/i;
 $Win = 1 if $^O =~ /cygwin/i;
+
+# restricted mode
+my $restricted = 0;
+if ($0 =~ /rpdfcrop/ or $0 =~ /restricted/) {
+    $restricted = 1;
+}
 
 # "null" device
 use File::Spec::Functions qw(devnull);
@@ -81,12 +150,29 @@ my $inputfile   = "";
 my $outputfile  = "";
 my $tmp = "tmp-\L$program\E-$$";
 
+### paper sizes
+
+my @papersizes = qw[
+  11x17 ledger legal letter lettersmall
+  archE archD archC archB archA
+  a0 a1 a2 a3 a4 a4small a5 a6 a7 a8 a9 a10
+  isob0 isob1 isob2 isob3 isob4 isob5 isob6
+  c0 c1 c2 c3 c4 c5 c6
+  jisb0 jisb1 jisb2 jisb3 jisb4 jisb5 jisb6
+  b0 b1 b2 b3 b4 b5
+  flsa flse halfletter
+];
+my %papersizes;
+foreach (@papersizes) {
+    $papersizes{$_} = 1;
+}
+
 ### option variables
 my @bool = ("false", "true");
+$::opt_version    = 0;
 $::opt_help       = 0;
 $::opt_debug      = 0;
 $::opt_verbose    = 0;
-$::opt_gscmd      = $GS;
 $::opt_pdftexcmd  = "pdftex";
 $::opt_xetexcmd   = "xetex";
 $::opt_tex        = "pdftex";
@@ -97,11 +183,15 @@ $::opt_papersize  = "";
 $::opt_resolution = "";
 $::opt_bbox       = "";
 
-my $usage = <<"END_OF_USAGE";
+sub usage ($) {
+    my $ret = shift;
+    find_ghostscript();
+    my $usage = <<"END_OF_USAGE";
 ${title}Syntax:   \L$program\E [options] <input[.pdf]> [output file]
 Function: Margins are calculated and removed for each page in the file.
 Options:                                                    (defaults:)
   --help              print usage
+  --version           print version number
   --(no)verbose       verbose printing                      ($bool[$::opt_verbose])
   --(no)debug         debug informations                    ($bool[$::opt_debug])
   --gscmd <name>      call of ghostscript                   ($::opt_gscmd)
@@ -117,6 +207,7 @@ Options:                                                    (defaults:)
   --(no)hires         using `%%HiResBoundingBox'            ($bool[$::opt_hires])
                       instead of `%%BoundingBox'
 Expert options:
+  --restricted        turn on restricted mode               ($bool[$restricted])
   --papersize <foo>   parameter for gs's -sPAPERSIZE=<foo>,
                       use only with older gs versions <7.32 ($::opt_papersize)
   --resolution <xres>x<yres>                                ()
@@ -132,12 +223,21 @@ In case of errors:
 In case of bugs:
   Please, use option --debug for bug reports.
 END_OF_USAGE
+    if ($ret) {
+        die $usage;
+    }
+    else {
+        print $usage;
+        exit(0);
+    }
+}
 
 ### process options
 my @OrgArgv = @ARGV;
 use Getopt::Long;
 GetOptions(
   "help!",
+  "version!",
   "debug!",
   "verbose!",
   "gscmd=s",
@@ -151,14 +251,22 @@ GetOptions(
   "papersize=s",
   "resolution=s",
   "bbox=s",
-) or die $usage;
-!$::opt_help or die $usage;
+  "restricted" => sub { $restricted = 1; },
+) or usage(1);
+!$::opt_help or usage(0);
+
+if ($::opt_version) {
+    print "$version\n";
+    exit(0);
+}
 
 $::opt_verbose = 1 if $::opt_debug;
 
-@ARGV >= 1 or die $usage;
+@ARGV >= 1 or usage(1);
 
 print $title;
+
+find_ghostscript();
 
 if ($::opt_bbox) {
     $::opt_bbox =~ s/^\s+//;
@@ -224,6 +332,55 @@ else {
     }
 }
 print "* Margins: $llx $lly $urx $ury\n" if $::opt_debug;
+
+### papersize validation (security)
+if ($::opt_papersize ne '') {
+    $::opt_papersize =~ /^[0-9A-Za-z]+$/
+            or die "$Error Invalid papersize ($::opt_papersize)!\n";
+    $papersizes{$::opt_papersize}
+            or die "$Error Unknown papersize ($::opt_papersize),"
+                   . " see ghostscript's documentation for option `-r'!\n";
+}
+
+### resolution validation (security)
+if ($::opt_resolution ne '') {
+    $::opt_resolution =~ /^\d+(x\d+)?$/
+            or die "$Error Invalid resolution ($::opt_resolution),"
+                   . " see ghostscript's documentation!\n";
+}
+
+### command name validation (security)
+my %cmd = (
+    'gscmd' => \$::opt_gscmd,
+    'pdftexcmd' => \$::opt_pdftexcmd,
+    'xetexcmd' => \$::opt_xetexcmd
+);
+foreach my $cmd (keys %cmd) {
+    my $val = ${$cmd{$cmd}};
+    next unless $val;
+    $val =~ s/^\s+//;
+    $val =~ s/\s+$//;
+    next unless $val;
+    if ($val =~ /`/) {
+        die "$Error Forbidden backtick for option `--$cmd' ($val)!\n";
+    }
+    if ($val =~ /\s/) {
+        die "$Error Forbidden whitespace for option `--$cmd' ($val)!\n";
+    }
+}
+if ($restricted) {
+    if ($::opt_pdftexcmd and $::opt_pdftexcmd ne 'pdftex') {
+        die "$Error pdfTeX program name must not be changed in restricted mode!\n";
+    }
+    if ($::opt_xetexcmd and $::opt_xetexcmd ne 'xetex') {
+        die "$Error XeTeX program name must not be changed in restricted mode!\n";
+    }
+    if ($::opt_gscmd) {
+        $::opt_gscmd =~ /^(gs|mgs|gswin32c|gs386|gsos2)$/
+        or $::opt_gscmd =~ /^gs[\-_]?(\d|\d[\.-_]?\d\d)c?$/
+        or die "$Error: Invalid Ghostscript program name in restricted mode!\n";
+    }
+}
 
 ### cleanup system
 my @unlink_files = ();
@@ -292,6 +449,13 @@ push @unlink_files, $tmpfile;
 open(TMP, ">$tmpfile") or
     die "$Error Cannot write tmp file `$tmpfile'!\n";
 print TMP "\\def\\pdffile{$inputfilesafe}\n";
+print TMP <<'END_TMP';
+\def\stripprefix#1>{}
+\def\onelevelsanitize#1{%
+  \edef#1{\expandafter\stripprefix\meaning#1}%
+}
+\onelevelsanitize\pdffile
+END_TMP
 if ($::opt_tex eq 'pdftex') {
     print TMP <<'END_TMP_HEAD';
 \csname pdfmapfile\endcsname{}
@@ -391,7 +555,7 @@ if ($::opt_bbox) {
      @bbox = ($1, $2, $3, $4);
 }
 my $page = 0;
-my $gs_pipe = "$::opt_gscmd @gsargs 2>&1";
+my $gs_pipe = "$::opt_gscmd -dSAFER @gsargs 2>&1";
 $gs_pipe .= " 1>$null" unless $::opt_verbose;
 $gs_pipe .= "|";
 
@@ -401,7 +565,7 @@ my $bb = ($::opt_hires) ? "%%HiResBoundingBox" : "%%BoundingBox";
 while (<GS>) {
     print $_ if $::opt_verbose;
     next unless
-        /^$bb:\s*([\.\d]+) ([\.\d]+) ([\.\d]+) ([\.\d]+)/o;
+        /^$bb:\s*(-?[\.\d]+) (-?[\.\d]+) (-?[\.\d]+) (-?[\.\d]+)/o;
     @bbox = ($1, $2, $3, $4) unless $::opt_bbox;
     $page++;
 
@@ -452,11 +616,11 @@ END_WARNING
 close(GS);
 
 if ($? & 127) {
-    die sprintf  "!!! Error: Ghostscript died with signal %d!\n",
+    die sprintf  "$Error Ghostscript died with signal %d!\n",
                  ($? & 127);
 }
 elsif ($? != 0) {
-    die sprintf "!!! Error: Ghostscript exited with error code %d!\n",
+    die sprintf "$Error Ghostscript exited with error code %d!\n",
                 $? >> 8;
 }
 
@@ -464,7 +628,7 @@ print TMP "\\csname \@\@end\\endcsname\n\\end\n";
 close(TMP);
 
 if ($page == 0) {
-    die "!!! Error: Ghostscript does not report bounding boxes!\n";
+    die "$Error Ghostscript does not report bounding boxes!\n";
 }
 
 ### Run pdfTeX/XeTeX
@@ -480,6 +644,7 @@ else {
     $cmd = $::opt_xetexcmd;
     $texname = 'XeTeX';
 }
+$cmd .= ' -no-shell-escape';
 if ($::opt_verbose) {
     $cmd .= " -interaction=nonstopmode $tmp";
 }

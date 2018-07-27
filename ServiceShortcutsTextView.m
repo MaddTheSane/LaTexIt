@@ -14,7 +14,7 @@
 
 -(id) initWithFrame:(NSRect)frame
 {
-  if (![super initWithFrame:frame])
+  if ((!(self = [super initWithFrame:frame])))
     return nil;
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
                                         name:NSTextDidChangeNotification object:self];

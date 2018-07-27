@@ -20,13 +20,15 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 
 @interface LineCountTextView : NSTextView {
   SMLSyntaxColouring* syntaxColouring;
-  NSMutableArray* lineRanges;      //contains the ranges of each line
-  NSMutableSet*   forbiddenLines;  //lines that cannot be edited
+  NSMutableArray*     lineRanges;      //contains the ranges of each line
+  NSMutableSet*       forbiddenLines;  //lines that cannot be edited
   LineCountRulerView* lineCountRulerView;
-  int lineShift; //the displayed numerotation of the lines may start at a value different from 1
-  NSDragOperation acceptDrag;
-  BOOL            spellCheckerHasBeenInitialized;
+  int                 lineShift; //the displayed numerotation of the lines may start at a value different from 1
+  NSDragOperation     acceptDrag;
+  BOOL                spellCheckerHasBeenInitialized;
 }
+
+-(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
 
 -(LineCountRulerView*) lineCountRulerView;
 -(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line

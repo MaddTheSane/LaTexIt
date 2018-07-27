@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" content="text/html; charset=utf-8">
     <channel>
         <title>LaTeXiT Changelog</title>
-        <link>http://ktd.club.fr/programmation/latexit_en.php</link>
+        <link>http://pierre.chachatelier.fr/programmation/latexit_en.php</link>
         <description>Updates und Download-Links.</description>
         <language>en</language>
         <item> 
@@ -22,9 +22,9 @@
                 <li>Neues Programm-Icon von Jacob Bandes-Storch</li>
               </ul>
             </description>
-            <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-de.html</sparkle:releaseNotesLink>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-de.html</sparkle:releaseNotesLink>
             <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
-            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
+            <enclosure url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
         </item>
         <item> 
             <title>Version 1.16.0</title>
@@ -43,28 +43,55 @@
                 <li>Beheben einiger kleiner Fehler.</li>
               </ul>
             </description>
-            <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-en.html</sparkle:releaseNotesLink>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-en.html</sparkle:releaseNotesLink>
             <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
-            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
+            <enclosure url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
         </item>
         <item>
-              <title>Version 1.16.1</title>
-              <description>
-                <ul>
-                  <li>Verbesserte Kompatibilität mit älteren Versionen von pdflatex/ghostscript;</li>
-                  <li>Behebung eines Fehlers der Automator-Aktion der zu einem Fehler beim Sichern führte;</li>
-                  <li>Behebung eines Fehlers bezüglich der Übertragung von Umgebungsvariablen in benutzereigenen Skripten.</li>
-                </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-de.html#version-1.16.1</sparkle:releaseNotesLink>
-              <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
-              <enclosure
-                url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_1.dmg"
-                sparkle:version="1.16.1"
-                type="application/octet-stream"
-                length="6355038"
-                sparkle:dsaSignature="MC4CFQCRTa5irB/NMrD6lUcow4yZxGPURgIVAJp73lYAEGtV/lPKWbVzUzA2ABAJ"
-              />
-          </item>
+            <title>Version 1.16.1</title>
+            <description>
+              <ul>
+                <li>Verbesserte Kompatibilität mit älteren Versionen von pdflatex/ghostscript;</li>
+                <li>Behebung eines Fehlers der Automator-Aktion der zu einem Fehler beim Sichern führte;</li>
+                <li>Behebung eines Fehlers bezüglich der Übertragung von Umgebungsvariablen in benutzereigenen Skripten.</li>
+              </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-de.html#version-1.16.1</sparkle:releaseNotesLink>
+            <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
+            <enclosure
+              url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-1_16_1.dmg"
+              sparkle:version="1.16.1"
+              type="application/octet-stream"
+              length="6355132"
+              sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+            />
+        </item>
+        <item>
+            <title>Version 2.0.0</title>
+            <description>
+              <ul>
+                <li>viele interne Erweiterungen für eine bessere Flexibilität;</li>
+                <li>LaTeX body Vorlage;</li>
+                <li>Verlauf und Bibliothek sind nun von Core Data verarbeitet, behandelt, für eine bessere Leistung;</li>
+                <li>Argumente können nun auf die zugrunde liegenden Programm ruft gegeben werden (pdflatex...);</li>
+                <li>LaTeXiT Dokuments haben jetzt ein &quot;Mini-Fenster&quot;, wie iTunes;</li>
+                <li>Kompatibilität mit G3-Prozessoren wiederhergestellt;</li>
+                <li>Verkürzte Startzeit des Programms;</li>
+                <li>Fehler im LaTeXiT-Dienst behoben;</li>
+                <li>kleinere Fehlerbehebungen;</li>
+                <li>Japanische Übersetzung;</li>
+                <li>Der Entwickler selbst wurde auf Version 2.0 aktualisiert durch Heirat seiner heißgeliebten Frau. Wohltätige Spenden zur Unterstützung der Flitterwochen werden gerne angenommen!</li>
+              </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
+            <pubDate>Wed, 4 Nov 2009 22:00:00 +0100</pubDate>
+            <enclosure
+              url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
+              sparkle:version="2.0.0"
+              type="application/octet-stream"
+              length="6167930"
+              sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+            />
+        </item>
     </channel> 
 </rss>

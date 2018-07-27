@@ -14,342 +14,219 @@
 
 #import "LibraryItem.h"
 
-#import "LibraryFile.h"
-#import "LibraryFolder.h"
+#import "LaTeXProcessor.h"
+#import "LatexitEquation.h"
+#import "LibraryEquation.h"
+#import "LibraryGroupItem.h"
+#import "LibraryManager.h"
+#import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "Utils.h"
 
-@interface LibraryItem (PrivateAPI)
--(void) _removeChildrenIdenticalTo:(NSArray*)children;
-@end
+static NSEntityDescription* cachedEntity = nil;
 
 @implementation LibraryItem
 
--(id) init
++(NSEntityDescription*) entity
 {
-  if (![super init])
+  if (!cachedEntity)
+  {
+    @synchronized(self)
+    {
+      if (!cachedEntity)
+        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+    }//end @synchronized(self)
+  }//end if (!cachedEntity)
+  return cachedEntity;
+}
+//end entity
+
+-(id) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
+{
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
-  title    = [[NSString alloc] initWithString:NSLocalizedString(@"Untitled", @"Untitled")];
-  children = [[NSMutableArray alloc] init];
+  [self setParent:aParent];
   return self;
 }
-//end init
-
--(void) dealloc
-{
-  [title    release];
-  [children release];
-  [super    dealloc];
-}
-//end dealloc
-
--(void) setExpanded:(BOOL)expanded
-{
-  isExpanded = expanded;
-}
-//end setExpanded:
-
--(BOOL) isExpanded
-{
-  return isExpanded;
-}
-//end isExpanded
+//end initWithParent:insertIntoManagedObjectContext:
 
 -(id) copyWithZone:(NSZone*)zone
 {
-  LibraryItem* item = [[[self class] alloc] init];
-  if (item)
-  {
-    [item->title release];
-    [item->children release];    
-    item->parent = parent;
-    item->title = [title retain];
-    item->children = [children mutableCopy];
-    unsigned int i = 0;
-    for(i= 0 ; i<[item->children count] ; ++i)
-    {
-      id object = [item->children objectAtIndex:i];
-      [item->children replaceObjectAtIndex:i withObject:[[object copy] autorelease]];
-    }
-  }
-  return item;
+  id clone = [[[self class] allocWithZone:zone] initWithParent:[self parent] insertIntoManagedObjectContext:[self managedObjectContext]];
+  [clone setTitle:[self title]];
+  [clone setSortIndex:[self sortIndex]];
+  return clone;
 }
 //end copyWithZone:
 
--(void) setParent:(LibraryItem*)aParent
+-(BOOL) dummyPropertyToForceUIRefresh
 {
-  parent = aParent; //weak link to prevent cycling
+  return YES;
 }
-//end setParent:
-
--(LibraryItem*) parent
-{
-  return parent;
-}
-//end parent
-
--(void) setTitle:(NSString*)aTitle
-{
-  [aTitle retain];
-  [title release];
-  title = aTitle;
-  if ([self isKindOfClass:[LibraryFile class]])
-    [[(LibraryFile*)self value] setTitle:title];
-}
-//end setTitle:
+//end dummyPropertyToForceUIRefresh
 
 -(NSString*) title
 {
-  return title;
+  NSString* result = nil;
+  [self willAccessValueForKey:@"title"];
+  result = [self primitiveValueForKey:@"title"];
+  [self didAccessValueForKey:@"title"];
+  return result;
 }
 //end title
 
--(BOOL) updateTitle//try to change the name so that no brother has the same; rretusn YES if it has changed
+-(void) setTitle:(NSString*)value
 {
-  BOOL hasChangedTitle = NO;
-  
-  NSMutableArray* brothers = [NSMutableArray arrayWithArray:[parent children]];
-  [brothers removeObject:self];
-  NSMutableArray* titles = [NSMutableArray arrayWithCapacity:[brothers count]];
+  NSString* oldTitle = [self title];
+  if ((value != oldTitle) && ![value isEqualToString:oldTitle])
+  {
+    [self willChangeValueForKey:@"title"];
+    [self setPrimitiveValue:value forKey:@"title"];
+    [self didChangeValueForKey:@"title"];
+  }//end if ((value != oldTitle) && ![value isEqualToString:oldTitle])
+}
+//end setTitle:
+
+-(unsigned int) sortIndex
+{
+  unsigned int result = 0;
+  [self willAccessValueForKey:@"sortIndex"];
+  result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntValue];
+  [self didAccessValueForKey:@"sortIndex"];
+  return result;
+}
+//end sortIndex
+
+-(void) setSortIndex:(unsigned int)value
+{
+  if (value != [self sortIndex])
+  {
+    [self willChangeValueForKey:@"sortIndex"];
+    [self setPrimitiveValue:[NSNumber numberWithUnsignedInt:value] forKey:@"sortIndex"];
+    [self didChangeValueForKey:@"sortIndex"];
+  }//end if (value != [self sortIndex])
+}
+//end setSortIndex:
+
+-(LibraryItem*) parent
+{
+  LibraryItem* result = nil;
+  [self willAccessValueForKey:@"parent"];
+  result = [self primitiveValueForKey:@"parent"];
+  [self didAccessValueForKey:@"parent"];
+  return result;
+}
+//end parent
+
+-(void) setParent:(LibraryItem*)value
+{
+  [self willChangeValueForKey:@"parent"];
+  [[value managedObjectContext] safeInsertObject:self];
+  [self setPrimitiveValue:value forKey:@"parent"];
+  [self didChangeValueForKey:@"parent"];
+}
+//end setParent:
+
+-(NSArray*) brothersIncludingMe:(BOOL)includingMe
+{
+  NSMutableArray* result = nil;
+  LibraryGroupItem* theParent = (LibraryGroupItem*)[self parent];
+  if (theParent)
+    result = [NSMutableArray arrayWithArray:[theParent childrenOrdered]];
+  else//if (!theParent)
+  {
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[LibraryItem entity]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == nil"]];
+    result = [NSMutableArray arrayWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:nil]];
+    [fetchRequest release];
+  }//end if (!theParent)
+  if (!includingMe)
+    [result removeObject:self];
+  return result;
+}
+//end brothersIncludingMe:
+
+-(void) setBestTitle//computes best title in current context
+{
+  NSString* itemTitle = [self title];
+  NSArray* brothers = [self brothersIncludingMe:NO];
+  NSMutableArray* brothersTitles = [[NSMutableArray alloc] initWithCapacity:[brothers count]];
   NSEnumerator* enumerator = [brothers objectEnumerator];
-  LibraryItem* item = [enumerator nextObject];
-  while(item)
+  LibraryItem* brother = nil;
+  while((brother = [enumerator nextObject]))
   {
-    [titles addObject:[item title]];
-    item = [enumerator nextObject];
-  }
-  
-  unsigned int indexOfIdenticTitle = [titles indexOfObject:title];
-  if (indexOfIdenticTitle != NSNotFound)
-  {
-    [titles removeObjectAtIndex:indexOfIdenticTitle];
-    unsigned int delta = 2;
-    NSString* proposition = [[NSString alloc] initWithFormat:@"%@-%d", title, delta++];
-    indexOfIdenticTitle = [titles indexOfObject:proposition];
-    while(delta && (indexOfIdenticTitle != NSNotFound))
-    {
-      [titles removeObjectAtIndex:indexOfIdenticTitle];
-      [proposition release];
-      proposition = [[NSString alloc] initWithFormat:@"%@-%d", title, delta++];
-      indexOfIdenticTitle = [titles indexOfObject:proposition];
-    }
-    [self setTitle:proposition];
-    [proposition release];
-    hasChangedTitle = YES;
-  }
-  
-  return hasChangedTitle;
+    NSString* brotherTitle = [brother title];
+    if (brotherTitle)
+      [brothersTitles addObject:brotherTitle];
+  }//end for each brother
+  NSString* libraryItemTitle = makeStringDifferent(itemTitle, brothersTitles, 0);
+  [self setTitle:libraryItemTitle];//sets current and equation
+  [brothersTitles release];
 }
-//end updateTitle
-
-//Structuring methods
-
--(void) insertChild:(LibraryItem*)child //inserts at the end
-{
-  [self insertChild:child atIndex:[children count]];
-}
-//end insertChild:
-
--(void) insertChild:(LibraryItem*)child atIndex:(int)index
-{
-  [children insertObject:child atIndex:index];
-  [child setParent:self];
-}
-//end insertChild:atIndex:
-
--(void) insertChildren:(NSArray*)someChildren atIndex:(int)index
-{
-  [children insertObjectsFromArray:someChildren atIndex:index];
-  [children makeObjectsPerformSelector:@selector(setParent:) withObject:self];
-}
-//end insertChildren:atIndex:
-
--(void) _removeChildrenIdenticalTo:(NSArray*)someChildren
-{
-  [someChildren makeObjectsPerformSelector:@selector(setParent:) withObject:nil];
-  NSEnumerator* childEnumerator = [someChildren objectEnumerator];
-  LibraryItem* child = [childEnumerator nextObject];
-  while (child)
-  {
-    [children removeObjectIdenticalTo:child];
-    child = [childEnumerator nextObject];
-  }
-}
-//end _removeChildrenIdenticalTo:
-
--(void) removeChild:(LibraryItem*)child
-{
-  int index = [self indexOfChild:child];
-  if (index != NSNotFound)
-    [self _removeChildrenIdenticalTo:[NSArray arrayWithObject:[self childAtIndex:index]]];
-}
-//end removeChild:
-
--(void) removeChildren:(NSArray*)someChildren
-{
-  NSEnumerator* enumerator = [someChildren objectEnumerator];
-  LibraryItem* child = [enumerator nextObject];
-  while(child)
-  {
-    [self removeChild:child];
-    child = [enumerator nextObject];
-  }
-}
-//end removeChildren:
-
--(void) removeFromParent
-{
-  [[self parent] removeChild:self];
-}
-
--(int) indexOfChild:(LibraryItem*)child
-{
-  return [children indexOfObject:child];
-}
-//end indexOfChild:
-
--(int) numberOfChildren
-{
-  return [children count];
-}
-//end numberOfChildren
-
--(NSArray*) children
-{
-  return [NSArray arrayWithArray:children];
-}
-//end children
-
--(LibraryItem*) childAtIndex:(int)index
-{
-  return [children objectAtIndex:index];
-}
-
--(void) encodeWithCoder:(NSCoder*)coder
-{
-  [coder encodeObject:title    forKey:@"title"];
-  [coder encodeObject:children forKey:@"children"];
-  [coder encodeBool:isExpanded forKey:@"isExpanded"];
-  //we do not encode the parent, it is useless
-}
-//end encodeWithCoder:
+//end setBestTitle
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super init])
+  NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
-  title      = [[coder decodeObjectForKey:@"title"] retain];
-  children   = [[coder decodeObjectForKey:@"children"] retain];
-  isExpanded = [coder decodeBoolForKey:@"isExpanded"];
-  //the parent is not encoded, so we must ensure to set it manually in the children
-  [children makeObjectsPerformSelector:@selector(setParent:) withObject:self];
+  [self setTitle:[coder decodeObjectForKey:@"title"]];
+  [self setSortIndex:[coder decodeIntForKey:@"sortIndex"]];
   return self;
 }
 //end initWithCoder:
 
--(NSImage*) icon
+-(void) encodeWithCoder:(NSCoder*)coder
 {
-  return nil;
+  [coder encodeObject:@"2.0.0" forKey:@"version"];
+  [coder encodeObject:[self title] forKey:@"title"];
+  [coder encodeInt:[self sortIndex] forKey:@"sortIndex"];
 }
-//end icon
+//end encodeWithCoder:
 
-// returns YES if 'item' is an ancestor.
-// Walk up the tree, to see if any of our ancestors is 'item'.
--(BOOL) isDescendantOfItem:(LibraryItem*)item
-{
-  BOOL isDescendant = NO;
-  LibraryItem* tmpParent = self;
-  while(tmpParent && !isDescendant)
-  {
-    isDescendant |= (tmpParent == item);
-    tmpParent = [tmpParent parent];
-  }
-  return isDescendant;
-}
-//end isDescendantOfItem:
-
-// returns YES if any 'item' in the array 'items' is an ancestor of ours.
-// For each item in items, if item is an ancestor return YES.  If none is an
-// ancestor, return NO
--(BOOL) isDescendantOfItemInArray:(NSArray*)items
-{
-  BOOL isDescendant  = NO;
-  NSEnumerator* enumerator = [items objectEnumerator];
-  LibraryItem*  item = [enumerator nextObject];
-  while(item && !isDescendant)
-  {
-    isDescendant |= [self isDescendantOfItem:item];
-    item = [enumerator nextObject];
-  }
-  return isDescendant;
-}
-//end isDescendantOfItemInArray:
-
--(LibraryItem*) nextSibling
-{
-  LibraryItem* cur = self;
-  LibraryItem* nextSibling = nil;
-  LibraryItem* tmpParent = parent;
-  while(tmpParent && !nextSibling)
-  {
-    int index = [tmpParent indexOfChild:cur];
-    if ((index != NSNotFound) && (index+1 < [tmpParent numberOfChildren]))
-      nextSibling = [tmpParent childAtIndex:index+1];
-    else
-    {
-      cur = parent;
-      tmpParent = [tmpParent parent];
-    }
-  }
-  return nextSibling;
-}
-//end nextSibling
-
-//Difficult method : returns a simplified array, to be sure that no item of the array has an ancestor
-//in this array. This is useful, when several items are selected, to factorize the work in a common
-//ancestor. It solves many problems.
-
-// Returns the minimum nodes from 'allNodes' required to cover the nodes in 'allNodes'.
-// This methods returns an array containing nodes from 'allNodes' such that no node in
-// the returned array has an ancestor in the returned array.
-
-// There are better ways to compute this, but this implementation should be efficient for our app.
-+(NSArray*) minimumNodeCoverFromItemsInArray:(NSArray*)allItems
-{
-  NSMutableArray* minimumCover = [NSMutableArray array];
-  NSMutableArray* itemQueue = [NSMutableArray arrayWithArray:allItems];
-  LibraryItem *item = nil;
-  while ([itemQueue count])
-  {
-    item = [itemQueue objectAtIndex:0];
-    [itemQueue removeObjectAtIndex:0];
-    while ([item parent] && [itemQueue containsObjectIdenticalTo:[item parent]])
-    {
-      [itemQueue removeObjectIdenticalTo:item];
-      item = [item parent];
-    }
-    if (![item isDescendantOfItemInArray:minimumCover])
-      [minimumCover addObject:item];
-    [itemQueue removeObjectIdenticalTo:item];
-  }
-  return minimumCover;
-}
-//end minimumNodeCoverFromItemsInArray:
-
-//for readable export
 -(id) plistDescription
 {
-  NSMutableArray* childDescriptions = [NSMutableArray arrayWithCapacity:[children count]];
-  NSEnumerator* enumerator = [children objectEnumerator];
-  LibraryItem* child = nil;
-  while((child = [enumerator nextObject]))
-    [childDescriptions addObject:[child plistDescription]];
-  
-  return [NSDictionary dictionaryWithObjectsAndKeys:
-    @"1.16.1", @"version",
-    [self title], @"title",
-    childDescriptions, @"content",
-    nil];
+  NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+     @"2.0.0", @"version",
+     [self title], @"title",
+     [NSNumber numberWithUnsignedInt:[self sortIndex]], @"sortIndex",
+     nil];
+  return plist;
 }
 //end plistDescription
+
+-(id) initWithDescription:(id)description
+{
+  NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+    return nil;
+  if (![description isKindOfClass:[NSDictionary class]])
+  {
+    [self release];
+    return nil;
+  }
+  [self setTitle:[description objectForKey:@"title"]];
+  [self setSortIndex:[[description objectForKey:@"sortIndex"] unsignedIntValue]];
+  return self;
+}
+//end initWithDescription:
+
++(LibraryItem*) libraryItemWithDescription:(id)description
+{
+  LibraryItem* result = nil;
+  BOOL ok = [description isKindOfClass:[NSDictionary class]];
+  NSString* version = !ok ? nil : [description objectForKey:@"version"];
+  BOOL isOldLibraryItem = (ok && ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending));
+  BOOL isGroupItem = ok && ((!isOldLibraryItem && [description objectForKey:@"children"]) || (isOldLibraryItem && [description objectForKey:@"content"]));
+  BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && [description objectForKey:@"equation"]));
+  Class instanceClass = !ok ? 0 :
+    isGroupItem ? [LibraryGroupItem class] :
+    isEquation ? [LibraryEquation class] :
+    [LibraryItem class];
+  result = !instanceClass ? nil : [[instanceClass alloc] initWithDescription:description];
+  return [result autorelease];
+}
+//end libraryItemWithDescription:
 
 @end

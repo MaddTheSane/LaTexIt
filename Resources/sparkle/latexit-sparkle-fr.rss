@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" content="text/html; charset=utf-8">
     <channel>
         <title>Historique de LaTeXiT</title>
-        <link>http://ktd.club.fr/programmation/latexit_fr.php</link>
+        <link>http://pierre.chachatelier.fr/programmation/latexit_fr.php</link>
         <description>Mises à jour et liens de téléchargement.</description>
         <language>fr</language>
         <item> 
@@ -22,9 +22,9 @@
                 <li>nouvelle icône de Jacob Bandes-Storch.</li>
               </ul>
             </description>
-            <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-fr.html</sparkle:releaseNotesLink>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html</sparkle:releaseNotesLink>
             <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
-            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
+            <enclosure url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
         </item> 
         <item> 
             <title>Version 1.16.0</title>
@@ -42,9 +42,9 @@
                 <li>correction de bugs mineurs.</li>
               </ul>
             </description>
-            <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-fr.html</sparkle:releaseNotesLink>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html</sparkle:releaseNotesLink>
             <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
-            <enclosure url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
+            <enclosure url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
         </item> 
         <item>
               <title>Version 1.16.1</title>
@@ -55,14 +55,41 @@
                   <li>correction d'un bug dans la propagation des variables d'environnement pour les scripts personnalisés.</li>
                 </ul>
               </description>
-              <sparkle:releaseNotesLink>http://ktd.club.fr/programmation/fichiers/latexit-changelog-fr.html#version-1.16.1</sparkle:releaseNotesLink>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-1.16.1</sparkle:releaseNotesLink>
               <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
               <enclosure
-                url="http://ktd.club.fr/programmation/fichiers/LaTeXiT-1_16_1.dmg"
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-1_16_1.dmg"
                 sparkle:version="1.16.1"
                 type="application/octet-stream"
-                length="6355038"
-                sparkle:dsaSignature="MC4CFQCRTa5irB/NMrD6lUcow4yZxGPURgIVAJp73lYAEGtV/lPKWbVzUzA2ABAJ"
+                length="6355132"
+                sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+              />
+        </item>
+        <item>
+              <title>Version 2.0.0</title>
+              <description>
+              <ul>
+                <li>revue du code avec de nombreux changements internes pour une meilleure flexibilité;</li>
+                <li>ajout des &quot;modèles de corps&quot;;</li>
+                <li>historique et bibliothèque sont maintenant gérées par CoreData, ce qui améliore la gestion des ressources (mémoire...);</li>
+                <li>on peut maintenant donner des arguments supplémentaires aux programmes sous-jacents (pdlatex...);</li>
+                <li>les fenêtres de documents de LaTeXiT ont maintenant un mode &quot;mini fenêtre&quot; comme iTunes;</li>
+                <li>restauration de la compatibilité avec les processeurs G3;</li>
+                <li>amélioration du temps de démarrage;</li>
+                <li>correction de bugs dans les services;</li>
+                <li>correction de bugs mineurs;</li>
+                <li>traduction en Japonais;</li>
+                <li>le développeur lui-même est passé en version 2.0 en épousant sa femme bien aimée. Les dons sont bienvenus pour participer au voyage de noces !</li>
+              </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
+              <pubDate>Wed, 4 Nov 2009 22:00:00 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
+                sparkle:version="2.0.0"
+                type="application/octet-stream"
+                length="6167930"
+                sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
               />
           </item>
       </channel> 

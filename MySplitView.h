@@ -1,0 +1,20 @@
+//
+//  MySplitView.h
+//  LaTeXiT
+//
+//  Created by Pierre Chatelier on 12/06/09.
+//  Copyright 2009 LAIC. All rights reserved.
+//
+
+#import <Cocoa/Cocoa.h>
+
+
+@interface MySplitView : NSSplitView {
+  BOOL  isCustomThickness;
+  CGFloat thickness;
+}
+
+-(CGFloat) dividerThickness;
+-(void)    setDividerThickness:(CGFloat)value;
+
+@end

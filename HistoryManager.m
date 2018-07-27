@@ -12,39 +12,29 @@
 
 #import "HistoryManager.h"
 
-#import "AppController.h"
 #import "Compressor.h"
 #import "HistoryItem.h"
 #import "LatexitEquation.h"
-#import "LatexProcessor.h"
-#import "NSApplicationExtended.h"
+#import "LaTeXProcessor.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSIndexSetExtended.h"
+#import "NSManagedObjectContextExtended.h"
+#import "NSUndoManagerDebug.h"
 #import "NSWorkspaceExtended.h"
-#import "PreferencesController.h"
 #import "Utils.h"
 
-#ifdef PANTHER
-#import <LinkBack-panther/LinkBack.h>
-#else
 #import <LinkBack/LinkBack.h>
-#endif
-
-NSString* HistoryDidChangeNotification = @"HistoryDidChangeNotification";
-NSString* HistoryItemsPboardType = @"HistoryItemsPboardType";
 
 @interface HistoryManager (PrivateAPI)
+-(NSString*) defaultHistoryPath;
+-(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves history when quitting
--(void) _saveHistory;
--(void) _loadHistory;
--(void) _loadCachedHistoryImages:(NSArray*)historyItemsCopy; //loads the historyItems cached images in the background
--(void) _automaticBackgroundSaving:(id)unusedArg;//automatically and regularly saves the history on disk
--(void) _historyDidChange:(NSNotification*)notification;
--(void) _historyItemDidChange:(NSNotification*)notification;
--(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard;
--(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
+-(void) saveHistory;
+-(void) createHistoryMigratingIfNeeded;
+-(BOOL) tableView:(NSTableView*)tableView writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard;
+-(BOOL) tableView:(NSTableView*)aTableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard;
 @end
 
 @implementation HistoryManager
@@ -53,11 +43,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 +(HistoryManager*) sharedManager //access the unique instance of HistoryManager
 {
-  @synchronized(self)
+  if (!sharedManagerInstance)
   {
-    if (!sharedManagerInstance)
-      sharedManagerInstance = [[self  alloc] init];
-  }
+    @synchronized(self)
+    {
+      if (!sharedManagerInstance)
+        sharedManagerInstance = [[self  alloc] init];
+    }//end @synchronized(self)
+  }//end if (!sharedManagerInstance)
   return sharedManagerInstance;
 }
 
@@ -100,595 +93,222 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 {
   if (self && (self != sharedManagerInstance))  //do not recreate an instance
   {
-    if (![super init])
+    if ((!(self = [super init])))
       return nil;
-    mainThread = [NSThread currentThread];
     sharedManagerInstance = self;
-    undoManager = [[NSUndoManager alloc] init];
-    historyItems = [[NSMutableArray alloc] init];
-    [[AppController appController] startMessageProgress:NSLocalizedString(@"Loading History", @"Loading History")];
-    [self _loadHistory];
-    [[AppController appController] stopMessageProgress];
+
+    [self createHistoryMigratingIfNeeded];
     
-    #warning preparing migration to Core Data
-    #ifdef USE_COREDATA
-    NSManagedObjectModel* managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:[NSBundle mainBundle]]];
-    NSPersistentStoreCoordinator* persistentStoreCoordinator =
-      [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel] autorelease];
-    //load from ~/Library/LaTeXiT/Application Support/history.dat
-    NSArray* historyPathComponents = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-    historyPathComponents = [historyPathComponents count] ? [historyPathComponents subarrayWithRange:NSMakeRange(0, 1)] : nil;
-    historyPathComponents = [historyPathComponents arrayByAddingObjectsFromArray:
-      [NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.db", nil]];
-    NSString* historyPath = [NSString pathWithComponents:historyPathComponents];
-    if (![[NSFileManager defaultManager] isReadableFileAtPath:historyPath])
-      [[NSFileManager defaultManager] createDirectoryPath:[historyPath stringByDeletingLastPathComponent] attributes:nil];
-    NSURL* storeURL = [NSURL fileURLWithPath:historyPath];
-    NSError* error = nil;
-    id persistentStore =
-      [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
-    NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
-    if ([version compare:@"1.0.0" options:NSNumericSearch] > 0){
-    }
-    if (persistentStore)
-      [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"1.0.0", @"version", nil]
-                           forPersistentStore:persistentStore];
-    managedObjectContext = [[NSManagedObjectContext alloc] init];
-    [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-    [managedObjectContext setRetainsRegisteredObjects:YES];
-    
-    latexitEquationsController = [[NSArrayController alloc] initWithContent:nil];
-    [latexitEquationsController setEntityName:[LatexitEquation className]];
-    [latexitEquationsController setManagedObjectContext:managedObjectContext];
-    [latexitEquationsController setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO] autorelease]]];
-    [latexitEquationsController prepareContent];
-    [latexitEquationsController setAutomaticallyPreparesContent:YES];
-    #endif
-    
-    //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
-                                             name:NSApplicationDidFinishLaunchingNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:)
-                                             name:NSApplicationWillTerminateNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_historyDidChange:)
-                                             name:HistoryDidChangeNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_historyItemDidChange:)
-                                             name:HistoryItemDidChangeNotification object:nil];
-  }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
+                                                 name:NSApplicationWillTerminateNotification object:nil];
+  }//end if (self && (self != sharedManagerInstance))  //do not recreate an instance
   return self;
 }
+//end init
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [undoManager release];
-  [historyItems release];
-  [latexitEquationsController release];
-  [managedObjectContext release];
+  [self->managedObjectContext       release];
   [super dealloc];
 }
+//end dealloc
 
--(NSArrayController*) latexitEquationsController
+-(NSString*) defaultHistoryPath
 {
-  return latexitEquationsController;
+  NSString* result = nil;
+  NSString* userLibraryPath =
+    [[NSWorkspace sharedWorkspace] getBestStandardPast:NSLibraryDirectory domain:NSAllDomainsMask
+                                          defaultValue:[NSHomeDirectory() stringByAppendingString:@"Library"]];
+  NSString* userLibraryApplicationSupportPath =
+    [[NSWorkspace sharedWorkspace] getBestStandardPast:NSApplicationSupportDirectory domain:NSAllDomainsMask
+                                          defaultValue:[userLibraryPath stringByAppendingString:@"Application Support"]];
+  NSArray* libraryPathComponents =
+    [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName],
+                              @"history.db", nil];
+  result = [NSString pathWithComponents:libraryPathComponents];
+  return result;
 }
-//end latexitEquationsController
+//end defaultHistoryPath
+
+-(NSManagedObjectContext*) managedObjectContext
+{
+  return self->managedObjectContext;
+}
+//end managedObjectContext
 
 -(NSUndoManager*) undoManager
 {
-  return undoManager;
+  return [[self managedObjectContext] undoManager];
 }
-
--(BOOL) historyShouldBeSaved
-{
-  BOOL status = NO;
-  @synchronized(historyItems)
-  {
-    status = historyShouldBeSaved;
-  }
-  return status;
-}
-
--(void) setHistoryShouldBeSaved:(BOOL)state
-{
-  @synchronized(historyItems)
-  {
-    historyShouldBeSaved = state;
-  }
-}
-
-//migrating to Core-Data
-#warning preparing migration to Core Data
--(void) addItemWithPDFData:(NSData*)pdfData preamble:(NSAttributedString*)preamble sourceText:(NSAttributedString*)sourceText
-                     color:(NSColor*)color pointSize:(double)pointSize date:(NSDate*)date mode:(latex_mode_t)mode
-                     backgroundColor:(NSColor*)backgroundColor;
-{
-  [LatexitEquation latexitEquationWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize
-                                         date:date mode:mode backgroundColor:backgroundColor managedObjectContext:managedObjectContext];
-}
-//end addItemWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor
+//end undoManager
 
 //Management methods, undo-aware
 
--(void) addItem:(HistoryItem*)item
+-(void) saveHistory
 {
-  @synchronized(historyItems)
-  {
-    [historyItems insertObject:item atIndex:0];
-  }
-  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
+  NSError* error = nil;
+  [self->managedObjectContext save:&error];
+  if (error)
+    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
 }
+//end saveHistory
 
--(void) clearAll
+-(void) createHistoryMigratingIfNeeded
 {
-  [undoManager removeAllActionsWithTarget:self];
-  @synchronized(historyItems)
-  {
-    [historyItems removeAllObjects];
-  }
-  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-}
+  NSWindowController* migratingWindowController = nil;
+  NSModalSession      modalSession              = 0;
+  NSProgressIndicator* progressIndicator        = nil;
 
--(NSArray*) itemsAtIndexes:(NSIndexSet*)indexSet tableView:(NSTableView*)tableView
-{
-  NSMutableArray* array = [NSMutableArray arrayWithCapacity:[indexSet count]];
-  @synchronized(historyItems)
-  {
-    unsigned int index = [indexSet firstIndex];
-    while(index != NSNotFound)
-    {
-      [array addObject:[historyItems objectAtIndex:index]];
-      index = [indexSet indexGreaterThanIndex:index];
-    }
-  }//end @synchronized(historyItems)
-  return array;
-}
-
--(void) removeItemsAtIndexes:(NSIndexSet*)indexSet tableView:(NSTableView*)tableView
-{
-  unsigned int index = [indexSet lastIndex];
-  if (index != NSNotFound)
-  {
-    id nextItemToSelect = nil;
-    NSMutableArray* removedItems = nil;
-    @synchronized(historyItems)
-    {
-      //We will remember deleted items to allow undoing
-      nextItemToSelect = ((index+1) < [historyItems count]) ? [historyItems objectAtIndex:index+1] : nil;
-      removedItems = [NSMutableArray arrayWithCapacity:[indexSet count]];
-      while(index != NSNotFound)
-      {
-        [removedItems addObject:[historyItems objectAtIndex:index]];
-        [historyItems removeObjectAtIndex:index];
-        index = [indexSet indexLessThanIndex:index];
-      }
-
-      [[undoManager prepareWithInvocationTarget:self] insertItems:[removedItems reversed] atIndexes:[indexSet array]
-                                                        tableView:tableView];
-      if (![undoManager isUndoing])
-      {
-        if ([indexSet count] > 1)
-          [undoManager setActionName:NSLocalizedString(@"Delete History items", @"Delete History items")];
-        else
-          [undoManager setActionName:NSLocalizedString(@"Delete History item", @"Delete History item")];
-      }
-      [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-
-      //user friendly : we update the selection in the tableview
-      [tableView deselectAll:self];
-      if (!nextItemToSelect && [historyItems count])
-        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[historyItems count]-1] byExtendingSelection:NO];          
-      else if (nextItemToSelect)
-        [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[historyItems indexOfObject:nextItemToSelect]]
-               byExtendingSelection:NO];
-    }//end @synchronized(historyItems)
-  }//end if index != NSNotFound
-}
-
--(void) insertItems:(NSArray*)items atIndexes:(NSArray*)indexes tableView:(NSTableView*)tableView
-{
-  NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
-
-  const unsigned int count = MIN([items count], [indexes count]);
-  unsigned int i = 0;
-  @synchronized(historyItems)
-  {
-    for(i = 0 ; i < count ; ++i)
-    {
-      HistoryItem* item = [items objectAtIndex:i];
-      unsigned int index = [[indexes objectAtIndex:i] unsignedIntValue];
-      [indexSet addIndex:index];
-      [historyItems insertObject:item atIndex:index];
-    }
-  }//end @synchronized(historyItems)
-  
-  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-  [[undoManager prepareWithInvocationTarget:self] removeItemsAtIndexes:indexSet tableView:tableView];
-
-  //user friendly : we update the selection in the tableview
-  [tableView selectRowIndexes:indexSet byExtendingSelection:NO];
-}
-
--(HistoryItem*) itemAtIndex:(unsigned int)index tableView:(NSTableView*)tableView
-{
-  HistoryItem* item = nil;
-  @synchronized(historyItems)
-  {
-    if (index < [historyItems count])
-      item = [historyItems objectAtIndex:index];
-  }
-  return item;
-}
-
-//getting the history items
--(NSArray*) historyItems
-{
-  return historyItems;
-}
-
-//automatically and regularly saves the history on disk
--(void) _automaticBackgroundSaving:(id)unusedArg
-{
-  NSAutoreleasePool* threadAutoreleasePool = [[NSAutoreleasePool alloc] init];
-  [NSThread setThreadPriority:0];//this thread has a very low priority
-  while(YES)
-  {
-    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
-    [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:5*60]];//wakes up every five minutes
-    [self _saveHistory];
-    [ap release];
-  }
-  [threadAutoreleasePool release];
-}
-
-//saves the history on disk
--(void) _saveHistory
-{
-  @synchronized(historyItems) //to prevent concurrent saving, and conflicts, if historyItems is modified in another thread
-  {
-    if (historyShouldBeSaved)
-    {
-      if ([NSThread currentThread] == mainThread)
-        [[AppController appController] startMessageProgress:NSLocalizedString(@"Saving History", @"Saving History")];
-      NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:historyItems];
-      NSData* compressedData = [Compressor zipcompress:uncompressedData];
-      
-      //we will create history.dat file inside ~/Library/Application Support/LaTeXiT/history.dat, so we must ensure that these folders exist
-      NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-      paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
-      paths = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.dat", nil]];
-      NSString* historyFilePath = [NSString pathWithComponents:paths];
-      [[NSFileManager defaultManager] createDirectoryPath:[historyFilePath stringByDeletingLastPathComponent] attributes:nil];
-
-      //Then save the data
-      NSDictionary* plist =
-        [NSDictionary dictionaryWithObjectsAndKeys:@"1.16.1", @"version", compressedData, @"data", nil];
-      NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
-      historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
-
-      if ([NSThread currentThread] == mainThread)
-        [[AppController appController] stopMessageProgress];
-
-      #warning preparing migration to Core Data
-      #ifdef USE_COREDATA
-      NSError* error = nil;
-      [managedObjectContext save:&error];
-      NSLog(@"error = %@", error);
-      #endif
-    }//end if historyShouldBeSaved
-  }//end @synchronized(historyItems)
-}
-
--(void) _loadHistory
-{
   NSFileManager* fileManager = [NSFileManager defaultManager];
 
-  //note that there is no @synchronization here, since no other threads will exist before _loadHistory is complete
   @try
   {
-    [historyItems removeAllObjects];
-
-    //load from ~/Library/LaTeXiT/history.dat
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-    paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
     //from LaTeXiT 1.13.0, use Application Support
-    NSArray* oldPath = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:[NSApp applicationName], @"history.dat", nil]];
-    NSArray* newPath = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.dat", nil]];
+    NSString* userLibraryPath = [[NSWorkspace sharedWorkspace] getBestStandardPast:NSLibraryDirectory domain:NSAllDomainsMask defaultValue:[NSHomeDirectory() stringByAppendingString:@"Library"]];
+    NSString* userLibraryApplicationSupportPath = [[NSWorkspace sharedWorkspace] getBestStandardPast:NSApplicationSupportDirectory domain:NSAllDomainsMask defaultValue:[userLibraryPath stringByAppendingString:@"Application Support"]];
 
-    NSString* oldFilePath = [NSString pathWithComponents:oldPath];
-    NSString* newFilePath = [NSString pathWithComponents:newPath];
-    if (![fileManager isReadableFileAtPath:newFilePath] && [fileManager isReadableFileAtPath:oldFilePath])
+    NSString* newFilePath  = [self defaultHistoryPath];
+    NSString* oldFilePath = nil;
+    if (!oldFilePath)
     {
-      [[NSFileManager defaultManager] createDirectoryPath:[newFilePath stringByDeletingLastPathComponent] attributes:nil];
-      [fileManager copyPath:oldFilePath toPath:newFilePath handler:NULL];
+      NSArray* pathComponents =
+        [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat", nil];
+      NSString* filePath = [NSString pathWithComponents:pathComponents];
+      if ([fileManager isReadableFileAtPath:filePath])
+        oldFilePath = filePath;
+    }
+    if (!oldFilePath)
+    {
+      NSArray* pathComponents =
+        [NSArray arrayWithObjects:userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat", nil];
+      NSString* filePath = [NSString pathWithComponents:pathComponents];
+      if ([fileManager isReadableFileAtPath:filePath])
+        oldFilePath = filePath;
     }
 
-    NSData* fileData = [NSData dataWithContentsOfFile:newFilePath];
-    NSPropertyListFormat format;
-    id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
-    NSData* compressedData = nil;
-    if (!plist)
-      compressedData = fileData;
-    else
-      compressedData = [plist objectForKey:@"data"];
-    NSData* uncompressedData = [Compressor zipuncompress:compressedData];
-    if (uncompressedData)
+    BOOL shouldMigrateHistory = ![fileManager isReadableFileAtPath:newFilePath] && oldFilePath;
+    BOOL shouldDisplayMigrationProgression = shouldMigrateHistory && [[NSApp class] isEqual:[NSApplication class]];
+    if (shouldDisplayMigrationProgression)
     {
-      [historyItems release];
-      historyItems = nil;
-      historyItems = [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] retain];
-    }
+      NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
+      migratingWindowController = [[[NSWindowController alloc] initWithWindow:migratingWindow] autorelease];
+      [migratingWindow center];
+      [migratingWindow setTitle:NSLocalizedString(@"Migrating history to new format", @"Migrating history to new format")];
+      NSRect contentView = [[migratingWindow contentView] frame];
+      progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSInsetRect(contentView, 8, 8)];
+      [[migratingWindow contentView] addSubview:progressIndicator];
+      [progressIndicator setMinValue:0.];
+      [progressIndicator setUsesThreadedAnimation:YES];
+      [progressIndicator startAnimation:self];
+      [progressIndicator release];
+      [migratingWindowController showWindow:migratingWindow];
+      modalSession = [NSApp beginModalSessionForWindow:migratingWindow];
+    }//end if ([[NSApp class] isEqual:[NSApplication class]])
+
+    BOOL isDirectory = NO;
+    BOOL exists = [fileManager fileExistsAtPath:newFilePath isDirectory:&isDirectory] && !isDirectory &&
+                  [fileManager isReadableFileAtPath:newFilePath];
+    if (!exists)
+      [fileManager createDirectoryPath:[newFilePath stringByDeletingLastPathComponent] attributes:nil];
+
+    self->managedObjectContext = [[self managedObjectContextAtPath:newFilePath] retain];
+    
+    if (shouldMigrateHistory)
+    {
+      BOOL migrationError = NO;
+      NSError* error = nil;
+      NSData* legacyHistoryData = [NSData dataWithContentsOfFile:oldFilePath options:NSUncachedRead error:&error];
+      if (error) {DebugLog(0, @"error : %@", error);}
+      NSPropertyListFormat format;
+      id plist = [NSPropertyListSerialization propertyListFromData:legacyHistoryData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      NSData* compressedData = nil;
+      if (!plist)
+        compressedData = legacyHistoryData;
+      else
+        compressedData = [plist objectForKey:@"data"];
+
+      NSData* uncompressedData = [Compressor zipuncompress:compressedData];
+      if (uncompressedData)
+      {
+        NSArray* historyItems = nil;
+        @try{
+          historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData];
+        }
+        @catch(NSException* e){
+          migrationError = YES;
+          DebugLog(0, @"exception : %@", e);
+        }
+        unsigned int count = [historyItems count];
+        [progressIndicator setIndeterminate:NO];
+        [progressIndicator setMaxValue:1.*count];
+        HistoryItem* historyItem = nil;
+        NSEnumerator* enumerator = [historyItems objectEnumerator];
+        unsigned int progression = 0;
+        [[self->managedObjectContext undoManager] removeAllActions];
+        [self->managedObjectContext disableUndoRegistration];
+        while((historyItem = [enumerator nextObject]))
+        {
+          [self->managedObjectContext safeInsertObject:historyItem];
+          [self->managedObjectContext safeInsertObject:[historyItem equation]];
+          [progressIndicator setDoubleValue:1.*(++progression)/count];
+        }//end for each historyItem
+        [self->managedObjectContext enableUndoRegistration];
+      }//end if (uncompressedData)
+      migrationError |= (error != nil);
+      if (!migrationError)
+        [[NSFileManager defaultManager] removeFileAtPath:oldFilePath handler:0];
+    }//end if (shouldMigrateHistory)
   }
   @catch(NSException* e) //reading may fail for some reason
   {
+    DebugLog(0, @"exception : %@", e);
   }
   @finally //if the history could not be created, make it (empty) now
   {
-    if (!historyItems)
-      historyItems = [[NSMutableArray alloc] init];
-    [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
   }
-  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-
-  NSArray* historyItemsCopy = [historyItems copy];//WARNING ! THE THREAD WILL BE RESPONSIBLE OF RELEASING THAT OBJECT
-  [NSThread detachNewThreadSelector:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
+  
+  if (modalSession) [NSApp endModalSession:modalSession];
+  [[migratingWindowController window] close]; 
 }
-
-//loads, in the background, the historyItems cached images
--(void) _loadCachedHistoryImages:(NSArray*)historyItemsCopy
-{
-  NSAutoreleasePool* threadAutoreleasePool = [[NSAutoreleasePool alloc] init];
-  [NSThread setThreadPriority:0];//the current thread has a LOW priority, and won't use too much processor time
-  NSEnumerator* enumerator = [historyItemsCopy objectEnumerator];
-  HistoryItem* item = [enumerator nextObject];
-  while(item)
-  {
-    if([item retainCount] > 1)
-      [item image];//computes the pdfImage. there is an @synchronized inside to prevent conflicts
-    item = [enumerator nextObject];
-  }
-  [historyItemsCopy release];
-  [threadAutoreleasePool release];
-}
+//end createHistoryMigratingIfNeeded
 
 //When the application quits, the notification is caught to perform saving
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
-  [self _saveHistory];
+  [self saveHistory];
 }
+//end applicationWillTerminate:
 
-//NSTableViewDataSource protocol
--(int) numberOfRowsInTableView:(NSTableView *)aTableView
+-(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path
 {
-  int count = 0;
-  @synchronized(historyItems)
-  {
-    count = [historyItems count];
+  NSManagedObjectContext* result = nil;
+  NSPersistentStoreCoordinator* persistentStoreCoordinator = !path ? nil :
+    [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
+  NSURL* storeURL = [NSURL fileURLWithPath:path];
+  NSError* error = nil;
+  id persistentStore = nil;
+  @try{
+    persistentStore =
+      [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
   }
-  return count;
-}
-
--(id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
-{
-  #warning preparing migration to Core Data
-  #ifdef USE_COREDATA
-  return nil;
-  #else
-  id item = nil;
-  @synchronized(historyItems)
-  {
-    item = [historyItems objectAtIndex:rowIndex];
+  @catch(NSException* e){
+    DebugLog(0, @"exception : %@", e);
   }
-  return [item image];
-  #endif
-}
-
-//NSTableView delegate
-
--(void) tableViewSelectionDidChange:(NSNotification*)notification
-{
-}
-
--(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
-             row:(int)rowIndex
-{
-  #warning preparing migration to Core Data
-  #ifdef USE_COREDATA
-  LatexitEquation* latexitEquation = [[latexitEquationsController arrangedObjects] objectAtIndex:rowIndex];
-  [aCell setBackgroundColor:[latexitEquation backgroundColor]];
-  [aCell setRepresentedObject:latexitEquation];
-  #else
-  HistoryItem* historyItem = nil;
-  @synchronized(historyItem)
-  {
-    historyItem = [historyItems objectAtIndex:rowIndex];
+  if (error)
+    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+  NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
+  if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
-  [aCell setBackgroundColor:[historyItem backgroundColor]];
-  [aCell setRepresentedObject:historyItem];
-  #endif
+  if (persistentStore)
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.0.0", @"version", nil] forPersistentStore:persistentStore];
+  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
+  [result setPersistentStoreCoordinator:persistentStoreCoordinator];
+  [persistentStoreCoordinator release];
+  [result setRetainsRegisteredObjects:YES];
+  return [result autorelease];
 }
-
-//drag'n drop
-
-//this one is deprecated in OS 10.4, calls the next one
--(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard
-{
-  NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
-  NSEnumerator* enumerator = [rows objectEnumerator];
-  NSNumber* row = [enumerator nextObject];
-  while(row)
-  {
-    [indexSet addIndex:[row unsignedIntValue]];
-    row = [enumerator nextObject];
-  }
-  return [self tableView:tableView writeRowsWithIndexes:indexSet toPasteboard:pboard];
-}
-
-//this one is for OS 10.4
--(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
-{
-  @synchronized(historyItems)
-  {
-    if ([rowIndexes count])
-    {
-      //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
-      [pboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-      [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
-
-      //stores the array of selected history items in the HistoryItemsPboardType
-      NSMutableArray* selectedItems = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
-      unsigned int index = [rowIndexes firstIndex];
-      while(index != NSNotFound)
-      {
-        [selectedItems addObject:[historyItems objectAtIndex:index]];
-        index = [rowIndexes indexGreaterThanIndex:index];
-      }
-      [pboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
-      [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:selectedItems] forType:HistoryItemsPboardType];
-      
-      //Get the last selected item
-      int lastSelectedRow = [aTableView selectedRow];
-      if ((lastSelectedRow < 0) || (![rowIndexes containsIndex:lastSelectedRow]))
-        lastSelectedRow = [rowIndexes lastIndex];
-      HistoryItem* historyItem = [historyItems objectAtIndex:lastSelectedRow];
-      
-      //bonus : we can also feed other pasteboards with one of the selected items
-      //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-      [historyItem writeToPasteboard:pboard isLinkBackRefresh:NO lazyDataProvider:nil];
-    }//end if ([rowIndexes count])
-  }//end @synchronized(historyItems)
-
-  return YES;
-}
-
-//triggered when dropping to the finder. It will create the files and return the filenames
--(NSArray*) tableView:(NSTableView*)tableView namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination
-                                                             forDraggedRowsWithIndexes:(NSIndexSet *)indexSet
-{
-  NSMutableArray* names = [NSMutableArray arrayWithCapacity:1];
-  
-  NSString* dropPath = [dropDestination path];
-  NSFileManager* fileManager = [NSFileManager defaultManager];
-  
-  //the problem will be to avoid overwritting files when they already exist
-  NSString* filePrefix = @"latex-image";
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
-  NSString* extension = nil;
-  switch(exportFormat)
-  {
-    case EXPORT_FORMAT_PDF:
-    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-      extension = @"pdf";
-      break;
-    case EXPORT_FORMAT_EPS:
-      extension = @"eps";
-      break;
-    case EXPORT_FORMAT_TIFF:
-      extension = @"tiff";
-      break;
-    case EXPORT_FORMAT_PNG:
-      extension = @"png";
-      break;
-    case EXPORT_FORMAT_JPEG:
-      extension = @"jpeg";
-      break;
-  }
-  
-  NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
-  float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
-
-  NSString* fileName = nil;
-  NSString* filePath = nil;
-  
-  //To avoid overwritting, and not bother the user with a dialog box, a number will be added to the filename.
-  //this number is <i>. It will begin at 1 and will be increased as long as we do not find a "free" file name.
-  unsigned long i = 1;
-
-  @synchronized(historyItems)
-  {
-    unsigned int index = [indexSet firstIndex]; //we will have to do that for each item of the pasteboard
-    while (index != NSNotFound) 
-    {
-      do
-      {
-        fileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
-        filePath = [dropPath stringByAppendingPathComponent:fileName];
-      } while (i && [fileManager fileExistsAtPath:filePath]);
-      
-      //now, we may have found a proper filename to save our data
-      if (![fileManager fileExistsAtPath:filePath])
-      {
-        HistoryItem* historyItem = [historyItems objectAtIndex:index];
-        NSData* pdfData = [historyItem pdfData];
-        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
-                                                   scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
-        [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                                   atPath:filePath];
-        unsigned int options = 0;
-        #ifndef PANTHER
-        options = NSExclude10_4ElementsIconCreationOption;
-        #endif
-        NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-        [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
-                                       forFile:filePath options:options];
-        [names addObject:fileName];
-      }
-      index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item
-    }
-  }//end @synchronized(historyItems)
-  return names;
-}
-
-//we can drop a color on a history item cell, to change its background color
--(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info
-                proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
-{
-  NSPasteboard* pboard = [info draggingPasteboard];
-  //we only accept drops on items, not above them.
-  BOOL ok = pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] &&
-            [pboard propertyListForType:NSColorPboardType] &&
-            (operation == NSTableViewDropOn);
-  return ok ? NSDragOperationGeneric : NSDragOperationNone;
-}
-
-//accepts dropping a color on an element
--(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row
-                                        dropOperation:(NSTableViewDropOperation)operation
-{
-  NSPasteboard* pboard = [info draggingPasteboard];
-  BOOL ok = pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] &&
-            [pboard propertyListForType:NSColorPboardType] &&
-            (operation == NSTableViewDropOn);
-  if (ok)
-  {
-    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
-    HistoryItem* historyItem = [historyItems objectAtIndex:row];
-    [historyItem setBackgroundColor:color];
-  }
-  return ok;
-}
-
-//should be triggered for each change in history
--(void) _historyDidChange:(NSNotification*)notification
-{
-  @synchronized(historyItems)
-  {
-    historyShouldBeSaved = YES;
-  }
-}
-
-//should be triggered for each changing historyItem
--(void) _historyItemDidChange:(NSNotification*)notification
-{
-  @synchronized(historyItems)
-  {
-    historyShouldBeSaved = YES;
-  }
-}
+//end managedObjectContextAtPath:
 
 @end

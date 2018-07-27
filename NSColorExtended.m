@@ -13,14 +13,16 @@
 //creates a color from data
 +(NSColor*) colorWithData:(NSData*)data
 {
-  return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  NSColor* result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  return result;
 }
 //end colorWithData:
 
 //returns the color as data
 -(NSData*) colorAsData
 {
-  return [NSKeyedArchiver archivedDataWithRootObject:self];
+  NSData* result = [NSKeyedArchiver archivedDataWithRootObject:self];
+  return result;
 }
 //end colorAsData
 
@@ -46,7 +48,7 @@
 }
 //end rgbaString
 
--(float) grayLevel
+-(CGFloat) grayLevel
 {
   return [[self colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] whiteComponent];
 }

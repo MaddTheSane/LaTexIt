@@ -8,16 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface PreamblesController : NSArrayController {
 
 }
 
-+(id) defaultLocalizedPreambleDictionary;
-+(id) encodePreamble:(NSDictionary*)preambleDictionary;
-+(id) decodePreamble:(NSDictionary*)preambleAsPlist;
++(NSAttributedString*)  defaultLocalizedPreambleValueAttributedString;
++(NSMutableDictionary*) defaultLocalizedPreambleDictionary;
++(NSMutableDictionary*) defaultLocalizedPreambleDictionaryEncoded;
 
--(id) newObject; //redefined
+-(void) ensureDefaultPreamble;
+
+-(id)   newObject; //redefined
 -(BOOL) canRemove; //redefined
+-(void) add:(id)sender; //redefined
 
 @end

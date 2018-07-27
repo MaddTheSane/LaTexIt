@@ -16,4 +16,6 @@
 +(NSFont*) fontWithData:(NSData*)data;
 -(NSData*) data;
 
+-(NSString*) displayNameWithPointSize;
+
 @end

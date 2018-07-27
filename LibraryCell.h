@@ -10,15 +10,17 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface LibraryCell : NSTextFieldCell <NSCopying> {
-  NSImage* image;
-  NSColor* backgroundColor;
+#import "ImageAndTextCell.h"
+
+@interface LibraryCell : ImageAndTextCell <NSCopying> {
+  NSColor* textBackgroundColor;
 }
 
--(NSImage*) image;
--(void) setImage:(NSImage *)anImage;
+-(NSColor*) textBackgroundColor;
+-(void) setTextBackgroundColor:(NSColor*)color;
 
--(NSSize) cellSize;
--(void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
+-(void) editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent;
+-(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength;
+-(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 
 @end

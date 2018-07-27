@@ -14,51 +14,34 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface LibraryItem : NSObject <NSCoding, NSCopying> {
-  LibraryItem*     parent;   //structuring data
-  NSMutableArray*  children; //structuring data
-  NSString*        title; //the title under which the item is displayed
-  BOOL             isExpanded;
+@class LibraryGroupItem;
+
+@interface LibraryItem : NSManagedObject <NSCopying, NSCoding> {
+  NSString*    title;//seems to be needed on Tiger
+  LibraryItem* parent;//seems to be needed on Tiger
+  NSSet*       children;//seems to be needed on Tiger
+  unsigned int sortIndex;//seems to be needed on Tiger
 }
 
-//the title under which the item is displayed
--(void) setTitle:(NSString*)title;
--(NSString*) title;
--(BOOL) updateTitle;//try to change the name so that no brother has the same; rretusn YES if it has changed
++(NSEntityDescription*) entity;
 
--(NSImage*) icon; //the icon used to display the item. Should be pure virtual
+-(id) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
--(void) setExpanded:(BOOL)expanded;
--(BOOL) isExpanded;
+-(BOOL) dummyPropertyToForceUIRefresh;
 
-//Structuring methods
--(void) setParent:(LibraryItem*)parent; //thge aprent is a weak link (not retained) to prevent cycling
+-(NSString*)    title;
+-(void)         setTitle:(NSString*)value;
+-(void)         setBestTitle;//computes best title in current context
 -(LibraryItem*) parent;
+-(void)         setParent:(LibraryItem*)parent;
+-(unsigned int) sortIndex;
+-(void)         setSortIndex:(unsigned int)value;
 
--(void) insertChild:(LibraryItem*)child;//inserts at the end
--(void) insertChild:(LibraryItem*)child   atIndex:(int)index;
--(void) insertChildren:(NSArray*)children atIndex:(int)index;
--(void) removeChild:(LibraryItem*)child;
--(void) removeChildren:(NSArray*)children;
--(void) removeFromParent;
-
--(int) indexOfChild:(LibraryItem*)child;
--(int) numberOfChildren;
-
--(NSArray*) children;
--(LibraryItem*) childAtIndex:(int)index;
-
--(BOOL) isDescendantOfItem:(LibraryItem*)item;
--(BOOL) isDescendantOfItemInArray:(NSArray*)items;
-
--(LibraryItem*) nextSibling;
-
-//Difficult method : returns a simplified array, to be sure that no item of the array has an ancestor
-//in this array. This is useful, when several items are selected, to factorize the work in a common
-//ancestor. It solves many problems.
-+(NSArray*) minimumNodeCoverFromItemsInArray:(NSArray*)allItems;
+-(NSArray*) brothersIncludingMe:(BOOL)includingMe;
 
 //for readable export
 -(id) plistDescription;
++(LibraryItem*) libraryItemWithDescription:(id)description;
+-(id) initWithDescription:(id)description;
 
 @end

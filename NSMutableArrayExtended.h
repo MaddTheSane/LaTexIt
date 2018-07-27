@@ -13,14 +13,6 @@
 //inserts another array's content at a given index
 -(void) insertObjectsFromArray:(NSArray *)array atIndex:(int)index;
 
-//checks if indexOfObjectIdenticalTo returns a valid index
--(BOOL) containsObjectIdenticalTo:(id)object;
-
-//this method does exist in Tiger
-#ifdef PANTHER
--(void) removeObjectsAtIndexes:(NSIndexSet *)indexes;
-#endif
-
 -(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
 
 @end

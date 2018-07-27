@@ -1,6 +1,7 @@
-"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX-Zeichensatz in Gleichung umwandeln";
-"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/LaTeX-Zeichensatz in Darstellung umwandeln \\[...\\]";
-"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/LaTeX-Zeichensatz in Inline umwandeln $...$";
-"LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/LaTeX-Zeichensatz in Text umwandeln";
-"LaTeXiT/Detect and typeset equations" = "LaTeXiT/Gleichung detektieren und umwandeln";
-"LaTeXiT/Un-latexize equations" = "LaTeXiT/Von der Gleichung zum LaTeX-Kode zurückkehren";
+﻿"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX-Mathe als Eqnarray setzen";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/LaTeX-Mathe in Display-Form setzen";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/LaTeX-Mathe in Inline-Form setzen";
+"LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/LaTeX-Text setzen";
+"LaTeXiT/Detect and typeset equations" = "LaTeXiT/Gleichung detektieren und setzen";
+"LaTeXiT/Un-latexize the equations" = "LaTeXiT/Von der Gleichung zum LaTeX-Kode zurückkehren";
+"SERVICE_DESCRIPTION"="The LaTeXiT service can transform some text to an equation (as image), as processed by a LaTeX engine. It can also revert the equations to their original text source, if the equations have been configured in LaTeXiT to be exported as PDF. The service will work if the requesting application supports replacing some text by an image.";

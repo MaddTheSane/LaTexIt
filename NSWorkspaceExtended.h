@@ -12,8 +12,14 @@
 
 @interface NSWorkspace (Extended)
 
-//this method does exist under Tiger
-#ifdef PANTHER
--(BOOL) setIcon:(NSImage*)image forFile:(NSString*)fullPath options:(unsigned)options;
-#endif
+-(NSString*) applicationName;
+-(NSString*) applicationVersion;
+-(NSString*) temporaryDirectory;
+-(NSString*) getBestStandardPast:(NSSearchPathDirectory)searchPathDirectory domain:(NSSearchPathDomainMask)domain defaultValue:(NSString*)defaultValue;
+@end
+
+@interface NSWorkspace (Bridge10_5)
+
+-(BOOL) filenameExtension:(NSString*)filenameExtension isValidForType:(NSString *)typeName;
+
 @end

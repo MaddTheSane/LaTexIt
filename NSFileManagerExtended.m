@@ -10,7 +10,63 @@
 
 #include <unistd.h>
 
+static NSMutableSet* createdTemporaryPaths = nil;
+
+
+@interface NSFileManager (Bridge10_5_declareonly)
+-(BOOL) createSymbolicLinkAtPath:(NSString*)path withDestinationPath:(NSString*)destPath error:(NSError**)error;//only on 10.5
+-(NSString*) destinationOfSymbolicLinkAtPath:(NSString*)path error:(NSError**)error;//only on 10.5
+-(NSArray*) contentsOfDirectoryAtPath:(NSString *)path error:(NSError**)error;//only on 10.5
+@end
+
+@interface NSFileManager (Extended_Private)
+-(void) registerTemporaryPath:(NSString*)path;
+@end
+
+@implementation NSFileManager (Bridge10_5)
+
+-(BOOL) bridge_createSymbolicLinkAtPath:(NSString*)path withDestinationPath:(NSString*)destPath error:(NSError**)error;
+{
+  BOOL result = NO;
+  if ([self respondsToSelector:@selector(createSymbolicLinkAtPath:withDestinationPath:error:)])
+    result = [self createSymbolicLinkAtPath:path withDestinationPath:destPath error:error];
+  else
+    result = [self createSymbolicLinkAtPath:path pathContent:destPath] || !symlink([destPath UTF8String], [path UTF8String]);
+  return result;
+}
+//end bridge_createSymbolicLinkAtPath:withDestinationPath:error:
+
+-(NSString*) bridge_destinationOfSymbolicLinkAtPath:(NSString*)path error:(NSError**)error
+{
+  NSString* result = nil;
+  if ([self respondsToSelector:@selector(destinationOfSymbolicLinkAtPath:error:)])
+    result = [self destinationOfSymbolicLinkAtPath:path error:error];
+  else
+    result = [self pathContentOfSymbolicLinkAtPath:path];
+  return result;
+}
+//end bridge_destinationOfSymbolicLinkAtPath:error:
+
+-(NSArray*) bridge_contentsOfDirectoryAtPath:(NSString *)path error:(NSError**)error
+{
+  NSArray* result = nil;
+  if ([self respondsToSelector:@selector(contentsOfDirectoryAtPath:error:)])
+    result = [self contentsOfDirectoryAtPath:path error:error];
+  else
+    result = [self directoryContentsAtPath:path];
+  return result;
+}
+//end bridge_contentsOfDirectoryAtPath:error:
+
+@end
+
 @implementation NSFileManager (Extended)
+
+-(NSSet*) createdTemporaryPaths
+{
+  return createdTemporaryPaths;
+}
+//end createdTemporaryPaths
 
 -(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes
 {
@@ -54,41 +110,76 @@
     NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
                                         ? [templateString stringByAppendingPathExtension:extension] : templateString;
     NSString* tempFilenameTemplate = [workingDirectory stringByAppendingPathComponent:fileNameWithExtension];
-    #ifdef PANTHER
-    unsigned int length = [tempFilenameTemplate length];
-    #else
     unsigned int length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    #endif
     char* tmpString = (char*)calloc(length+1, sizeof(char));
     memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
     int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);
     if (fd != -1)
       fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
+
+    NSString* createdPath = [NSString stringWithUTF8String:tmpString];
+    if (createdPath)
+      [self registerTemporaryPath:createdPath];
     if (outFilePath)
-      *outFilePath = [NSString stringWithUTF8String:tmpString];
+      *outFilePath = createdPath;
     free(tmpString);
   }
   return [fileHandle autorelease];
 }
 //end temporaryFileWithTemplate:extension:outFilePath:
 
--(BOOL) createLinkInDirectory:(NSString*)directoryPath toTarget:(NSString*)targetPath linkName:(NSString*)linkName
+-(BOOL) createLinkInDirectory:(NSString*)directoryPath toTarget:(NSString*)targetPath linkName:(NSString*)linkName outLinkPath:(NSString**)outLinkPath
 {
   BOOL result = NO;
   NSString* linkPath = [directoryPath stringByAppendingPathComponent:(linkName ? linkName : [targetPath lastPathComponent])];
   if (![self fileExistsAtPath:linkPath])
-    result = [self createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
+    result = [self bridge_createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
   else
   {
     NSDictionary* attributes = [self fileAttributesAtPath:linkPath traverseLink:NO];
     if ([[attributes objectForKey:NSFileType] isEqualToString:NSFileTypeSymbolicLink])
-      result = [[self destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
+      result = [[self bridge_destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
     if (!result)
       result = [self removeFileAtPath:linkPath handler:nil] &&
-               [self createLinkInDirectory:directoryPath toTarget:targetPath linkName:linkName];
+               [self createLinkInDirectory:directoryPath toTarget:targetPath linkName:linkName outLinkPath:outLinkPath];
   }
+  if (outLinkPath)
+    *outLinkPath = !result ? nil : linkPath;
   return result;
 }
-//end createLinkInDirectory:toTarget:linkName:
+//end createLinkInDirectory:toTarget:linkName:outLinkPath:
+
+-(void) registerTemporaryPath:(NSString*)path
+{
+  if (!createdTemporaryPaths)
+  {
+    @synchronized(self)
+    {
+      if (!createdTemporaryPaths)
+        createdTemporaryPaths = [[NSMutableSet alloc] init];
+    }//end @synchronized(self)
+  }//end if (!createdTemporaryPaths)
+  if (path && createdTemporaryPaths)
+  {
+    @synchronized(self)
+    {
+      [createdTemporaryPaths addObject:path];
+    }//end @synchronized(self)
+  }//end if (createdTemporaryPaths)
+}
+//end registerTemporaryPath
+
+-(void) removeAllCreatedTemporaryPaths
+{
+  @synchronized(self)
+  {
+    NSEnumerator* enumerator = [createdTemporaryPaths objectEnumerator];
+    NSString* filePath = nil;
+    while((filePath = [enumerator nextObject]))
+      [self removeFileAtPath:filePath handler:0];
+    [createdTemporaryPaths removeAllObjects];
+  }//end @synchronized(self)
+}
+//end removeAllCreatedTemporaryPaths
 
 @end

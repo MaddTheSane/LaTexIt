@@ -10,39 +10,49 @@
 
 @implementation NSArray (Extended)
 
+-(id) firstObject
+{
+  id result = [self count] ? [self objectAtIndex:0] : nil;
+  return result;
+}
+//end firstObject
+
+//checks if the array contains an object, based on adress comparison, not isEqual:
+-(BOOL) containsObjectIdenticalTo:(id)object
+{ 
+  BOOL result = ([self indexOfObjectIdenticalTo:object] != NSNotFound);
+  return result;
+}
+//end containsObjectIdenticalTo:
+
 //returns a copy of the receiver in the reversed order
 -(NSArray*) reversed
 {
-  NSMutableArray* reversed = [NSMutableArray arrayWithCapacity:[self count]];
+  NSMutableArray* result = [NSMutableArray arrayWithCapacity:[self count]];
   NSEnumerator* enumerator = [self reverseObjectEnumerator];
   id object = [enumerator nextObject];
   while(object)
   {
-    [reversed addObject:object];
+    [result addObject:object];
     object = [enumerator nextObject];
   }
-  return reversed;
+  return result;
 }
+//end reversed
 
-#ifdef PANTHER
--(NSArray*) objectsAtIndexes:(NSIndexSet *)indexes //does exist in Tiger
+-(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index
 {
-  NSMutableArray* subArray = [NSMutableArray arrayWithCapacity:[indexes count]];
-  unsigned int index = [indexes firstIndex];
-  while(index != NSNotFound)
-  {
-    [subArray addObject:[self objectAtIndex:index]];
-    index = [indexes indexGreaterThanIndex:index];
-  }
-  return subArray;
+  NSMutableArray* result = [[self mutableCopy] autorelease];
+  [result insertObject:object atIndex:index];
+  return result;
 }
-#endif
+//end arrayByAddingObject:atIndex:
 
 -(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
 {
-  NSMutableArray* array = [[self mutableCopy] autorelease];
-  [array moveObjectsAtIndices:indices toIndex:index];
-  return array;
+  NSMutableArray* result = [[self mutableCopy] autorelease];
+  [result moveObjectsAtIndices:indices toIndex:index];
+  return result;
 }
 //end arrayByMovingObjectsAtIndices:toIndex:
 

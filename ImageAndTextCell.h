@@ -10,10 +10,14 @@
 
 @interface ImageAndTextCell : NSTextFieldCell <NSCopying> {
   NSImage* image;
+  NSColor* imageBackgroundColor;
 }
 
 -(NSImage*) image;
 -(void)     setImage:(NSImage*)image;
+
+-(NSColor*) imageBackgroundColor;
+-(void) setImageBackgroundColor:(NSColor*)color;
 
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView;
 -(NSSize) cellSize;

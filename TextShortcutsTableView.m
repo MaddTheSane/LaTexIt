@@ -8,39 +8,44 @@
 //TextShortcutsTableView presents custom text shortcuts from an text shortcuts manager. I has user friendly capabilities
 
 #import "TextShortcutsTableView.h"
-#import "TextShortcutsManager.h"
+
 #import "PreferencesController.h"
+
+static NSString* EditionTextShortcutsPboardType = @"EditionTextShortcutsPboardType";
 
 @interface TextShortcutsTableView (PrivateAPI)
 -(void) textDidEndEditing:(NSNotification *)aNotification;
--(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
 @end
 
 @implementation TextShortcutsTableView
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  if ((!(self = [super initWithCoder:coder])))
     return nil;
-  cachedTextShortcuts = [[NSMutableArray alloc] init];
   return self;
 }
+//end initWithCoder:
+
+-(void) dealloc
+{
+  [super dealloc];
+}
+//end dealloc
 
 -(void) awakeFromNib
 {
   [self setDelegate:self];
-  [self setDataSource:[TextShortcutsManager sharedManager]];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:TextShortcutsPboardType]];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_userDefaultsDidChangeNotification:)
-                                               name:NSUserDefaultsDidChangeNotification object:nil];
+  NSArrayController* editionTextShortcutsController = [[PreferencesController sharedController] editionTextShortcutsController];
+  NSArray* tableColumns = [self tableColumns];
+  NSEnumerator* enumerator = [tableColumns objectEnumerator];
+  NSTableColumn* tableColumn = nil;
+  while((tableColumn = [enumerator nextObject]))
+    [tableColumn bind:NSValueBinding toObject:editionTextShortcutsController
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", [tableColumn identifier]] options:nil];
+  [self registerForDraggedTypes:[NSArray arrayWithObject:EditionTextShortcutsPboardType]];
 }
-
--(void) dealloc
-{
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [cachedTextShortcuts release];
-  [super dealloc];
-}
+//end awakeFromNib
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
@@ -49,7 +54,7 @@
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
-
+//end acceptsFirstMouse
 
 -(void) keyDown:(NSEvent*)theEvent
 {
@@ -57,6 +62,7 @@
   if (([theEvent keyCode] == 36) || ([theEvent keyCode] == 52) || ([theEvent keyCode] == 49))//Enter, space or ?? What did I do ???
     [self edit:self];
 }
+//end keyDown:
 
 //edit selected row
 -(IBAction) edit:(id)sender
@@ -65,21 +71,24 @@
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
+//end edit:
 
 -(IBAction) undo:(id)sender
 {
-  [[[TextShortcutsManager sharedManager] undoManager] undo];
+  [[[PreferencesController sharedController] undoManager] undo];
 }
+//end undo:
 
 -(IBAction) redo:(id)sender
 {
-  [[[TextShortcutsManager sharedManager] undoManager] redo];
+  [[[PreferencesController sharedController] undoManager] redo];
 }
+//end redo:
 
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
-  NSUndoManager* undoManager = [[TextShortcutsManager sharedManager] undoManager];
+  NSUndoManager* undoManager = [[PreferencesController sharedController] undoManager];
   if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
@@ -92,11 +101,13 @@
   }
   return ok;
 }
+//end validateMenuItem:
 
 -(void) deleteBackward:(id)sender
 {
-  [[TextShortcutsManager sharedManager] removeTextShortcutsIndexes:[self selectedRowIndexes]];
+  [[[PreferencesController sharedController] editionTextShortcutsController] remove:sender];
 }
+//end deleteBackward:
 
 -(void) moveUp:(id)sender
 {
@@ -106,6 +117,7 @@
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
 }
+//end moveUp:
 
 -(void) moveDown:(id)sender
 {
@@ -115,6 +127,7 @@
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
 }
+//end moveDown:
 
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification *)aNotification
@@ -123,6 +136,7 @@
   [super textDidEndEditing:aNotification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }
+//end textDidEndEditing:
 
 //delegate methods
 -(void) tableViewSelectionDidChange:(NSNotification *)aNotification
@@ -130,18 +144,6 @@
   unsigned int lastIndex = [[self selectedRowIndexes] lastIndex];
   [self scrollRowToVisible:lastIndex];
 }
-
--(void) _userDefaultsDidChangeNotification:(NSNotification*)notification
-{
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-
-  //we keep a cache to avoid reloading data at each user defaults change notification
-  NSArray* textShortcuts = [userDefaults objectForKey:TextShortcutsKey];
-  if (![cachedTextShortcuts isEqualToArray:textShortcuts])
-  {
-    [cachedTextShortcuts setArray:textShortcuts];
-    [self reloadData];
-  }
-}
+//end tableViewSelectionDidChange:
 
 @end

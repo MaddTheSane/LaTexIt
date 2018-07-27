@@ -11,6 +11,8 @@
 
 @interface NSDictionary (Extended)
 
+-(NSDictionary*) dictionaryByAddingDictionary:(NSDictionary*)dictionary;
+-(NSDictionary*) dictionaryByAddingObjectsAndKeys:(id)firstObject, ...;
 -(NSDictionary*) subDictionaryWithKeys:(NSArray*)keys;
 
 -(id) deepCopy;

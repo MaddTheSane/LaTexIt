@@ -16,7 +16,7 @@
               type:(latex_item_type_t)aType numberOfArguments:(unsigned int)aNumberOfArguments
               latexCode:(NSString*)aLatexCode requires:(NSString*)package
 {
-  if (![super init] || !aName)
+  if ((!(self = [super init])) || !aName)
     return nil;
 
   name              = [aName copy];

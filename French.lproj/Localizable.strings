@@ -19,17 +19,25 @@
 "Show History" = "Afficher l'historique";
 "Hide Library" = "Masquer la bibliothèque";
 "Show Library" = "Afficher la bibliothèque";
+"Apply History item" = "Appliquer une entrée de l'historique";
 "Delete History item" = "Supprimer une entrée de l'historique";
 "Delete History items" = "Supprimer plusieurs entrées de l'historique";
+"Change History item background color" = "Changer la couleur de fond d'un item de l'historique";
+"Apply Library item" = "Appliquer une entrée de la bibliothèque";
 "Add Library folder" = "Ajouter un dossier à la bibliothèque";
 "Add Library item" = "Ajouter une entrée à la bibliothèque";
+"Add Library items" = "Ajouter des entrées à la bibliothèque";
 "Delete Library item" = "Supprimer une entrée de la bibliothèque";
 "Delete Library items" = "Supprimer plusieurs entrées de la bibliothèque";
 "Move Library items" = "Déplacer des entrées de la bibliothèque";
 "Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
 "Change Library item background color" = "Changer la couleur de fond d'un item de la bibliothèque";
+"Change Library items background color" = "Changer la couleur de fond d'items de la bibliothèque";
 "Import library..." = "Importer une bibliothèque...";
 "Export library..." = "Exporter la bibliothèque...";
+"Loading error" = "Erreur de chargement";
+"An error occured while saving" = "Une erreur est survenue lors de l'enregistrement";
+"The file does not appear to be a valid format" = "Le fichier semble ne pas être au bon format";
 "New encapsulation" = "Nouvelle encapsulation";
 "Change the encapsulation" = "Changer l'encapsulation";
 "Remove encapsulation items" = "Supprimer des encapsulations";
@@ -66,7 +74,7 @@
 "You did not type any text in the body. The result will certainly be empty." = "Vous n'avez pas tapé de corps au document LaTeX. Le résultat sera sans doute vide.";
 "An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Une erreur est survenue lors de la création du fichier avec la commande:\n%@";
-"http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_fr.php";
+"http://pierre.chachatelier.fr/programmation/latexit_en.php" = "http://pierre.chachatelier.fr/programmation/latexit_fr.php";
 "Equation linked with another application" = "Équation liée à une autre application";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT ne peut être exécuté normalement; veuillez vérifier sa configuration";
 "Do you want to load the library <%@> ?" = "Voulez-vous charger la bibliothèque <%@> ?";
@@ -80,6 +88,7 @@
 "General" = "Général";
 "Edition" = "Édition";
 "Preambles" = "Préambules";
+"Body templates" = "Modèles de corps";
 "Composition" = "Composition";
 "Service" = "Service";
 "Advanced" = "Avancé";
@@ -113,6 +122,8 @@
 "Body" = "Corps";
 "File" = "Fichier";
 "Content" = "Contenu";
+"Define a script" = "Définir un script";
+"Use existing script" = "Utiliser un script existant";
 "Script failed" = "Le script a échoué";
 "Script too long : timeout reached" = "Script trop long : durée maximale atteinte";
 "Palette installation" = "Installation de palette";
@@ -145,6 +156,64 @@
 "LaTeXiT library" = "Bibliothèque LaTeXiT";
 "LaTeX Equation Editor library" = "Bibliothèque LaTeX Equation Editor";
 "LaTeXiT LaTeX Palette" = "Palette LaTeX LaTeXiT";
-"Additional files" = "Fichiers supplémentaires";
+"Additional files" = "Fichiers additionnels";
 "Default Format" = "Format par défaut";
 "PDF with outlined fonts" = "PDF sans polices";
+"Migrating history to new format" = "Migration de l'historique vers un nouveau format";
+"Migrating library to new format" = "Migration de la bibliothèque vers un nouveau format";
+
+/* Preferences */
+"Edit the configurations..." = "Modifier les configurations...";
+
+/* document */
+"Text" = "Texte";
+"Font size :" = "Taille :";
+"Color :" = "Couleur :";
+"LaTeX it!" = "LaTeXiser";
+"Copy the image as" = "Copier l'image en tant que";
+"Switch to mini-window" = "Activer la mini-fenêtre";
+"Switch to normal window" = "Désactiver la mini-fenêtre";
+
+
+/* document extra panels */
+"Execution log" = "Rapport d'exécution";
+
+/* Library */
+"Library" = "Bibliothèque";
+"Reach default library" = "Atteindre la bibliothèque par défaut";
+"Add to current library" = "Ajouter à la bibliothèque";
+"Overwrite current library" = "Écraser la bibliothèque";
+"Change library in use" = "Changer de bibliothèque";
+"Export the selection only" = "N'exporter que la sélection";
+"Format :" = "Format :";
+"Add a folder" = "Ajouter un dossier";
+"Add current equation" = "Ajouter l'équation courante";
+"Rename selection" = "Renommer la sélection";
+"Remove selection" = "Supprimer la sélection";
+"Refresh current equation" = "Rafraîchir l'équation courante";
+"Import..." = "Importer...";
+"Export..." = "Exporter...";
+"Display the equations in real size on mouse over" = "Affiche les équations en taille réelle lors d'un passage de la souris";
+
+/* palette : additional files */
+"Open defaults" = "Ouvrir la configuration par défaut";
+"Save as defaults" = "Enregistrer comme configuration par défaut";
+
+/* palette : composition */
+"Composition configurations" = "Configurations de composition";
+
+/* palette : encapsulations */
+"Encapsulations" = "Encapsulations";
+
+/* palette : LaTeX */
+"LaTeX Palette" = "Palette LaTeX";
+"Details" = "Détails";
+"LaTeX Code :" = "Code LaTeX :";
+"Requires :" = "Nécessite :";
+
+/* palette : margins */
+"Custom margins" = "Marges personnalisées";
+"Save as default margins" = "Enregistrer comme marges par défaut";
+
+/* automator */
+"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "Erreur inconnue. Veuillez vous assurer que LaTeXiT a été lancé au moins une fois et fonctionne normalement.";

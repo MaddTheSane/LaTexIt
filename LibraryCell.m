@@ -9,23 +9,27 @@
 //in the developer documentation
 
 #import "LibraryCell.h"
-#import "LibraryTableView.h"
+
+#import "LibraryView.h"
+#import "NSImageExtended.h"
+
+#import "CGExtras.h"
+#import "Utils.h"
 
 @implementation LibraryCell
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  if ((!(self = [super initWithCoder:coder])))
     return nil;
-  backgroundColor = nil;//there may be no color
+  self->textBackgroundColor = nil;//there may be no color
   return self;
 }
 //end initWithCoder:
 
 -(void) dealloc
 {
-  [image release];
-  image = nil;
+  [self->textBackgroundColor release];
   [super dealloc];
 }
 //end dealloc
@@ -34,186 +38,120 @@
 {
   LibraryCell* cell = (LibraryCell*) [super copyWithZone:zone];
   if (cell)
-  {
-    cell->image = [image retain];
-    cell->backgroundColor = [backgroundColor copy];
-  }
+    cell->textBackgroundColor = [self->textBackgroundColor copy];
   return cell;
 }
 //end copyWithZone:
 
--(void) setBackgroundColor:(NSColor*)color
+-(void) setTextBackgroundColor:(NSColor*)color
 {
   [color retain];
-  [backgroundColor release];
-  backgroundColor = color;
+  [self->textBackgroundColor release];
+  self->textBackgroundColor = color;
 }
-//end setBackgroundColor:
+//end setTextBackgroundColor:
 
--(NSColor*) backgroundColor
+-(NSColor*) textBackgroundColor
 {
-  return backgroundColor;
+  return self->textBackgroundColor;
 }
-//end backgroundColor
+//end textBackgroundColor
 
--(void) setImage:(NSImage*)anImage
+-(void) editWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject event:(NSEvent*)theEvent
 {
-  [anImage retain];
-  [image release];
-  image = anImage;
-}
-//end setImage:
-
--(NSImage*) image
-{
-  return image;
-}
-//end image
-
--(NSRect) imageFrameForCellFrame:(NSRect)cellFrame
-{
-  NSRect rect = NSZeroRect;
-  if (image)
-  {
-    rect.size = [image size];
-    rect.origin = cellFrame.origin;
-    rect.origin.x += 3;
-    rect.origin.y += ceil((cellFrame.size.height - rect.size.height) / 2);
-  }
-  return rect;
-}
-//end imageFrameForCellFrame:
-
--(void) editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
-{
-  LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+  LibraryView* libraryTableView = (LibraryView*)controlView;
   library_row_t libraryRowType = [libraryTableView libraryRowType];
-  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
-       #ifndef PANTHER
-       || (aRect.size.height < 30)
-       #endif
-     )
-  {
-    NSRect textFrame  = NSZeroRect;
-    NSRect imageFrame = NSZeroRect;
-    NSDivideRect(aRect, &imageFrame, &textFrame, 3 + [image size].width, NSMinXEdge);
-    [super editWithFrame:textFrame inView:controlView editor:textObj delegate:anObject event: theEvent];
-  }
+  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) || (aRect.size.height < 30))
+    [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event: theEvent];
 }
 //end editWithFrame:inView:editor:delegate:event:
 
--(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
+-(void) selectWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
 {
-  LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+  LibraryView* libraryTableView = (LibraryView*)controlView;
   library_row_t libraryRowType = [libraryTableView libraryRowType];
-  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
-        #ifndef PANTHER
-        || (aRect.size.height < 30)
-        #endif
-       )
-  {
-    NSRect textFrame  = NSZeroRect;
-    NSRect imageFrame = NSZeroRect;
-    NSDivideRect (aRect, &imageFrame, &textFrame, 3 + [image size].width, NSMinXEdge);
-    [super selectWithFrame:textFrame inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
-  }
+  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) || (aRect.size.height < 30))
+    [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
 }
 //end selectWithFrame:inView:editor:delegate:start:length
 
--(void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
-{
-  NSString* savTitle = [[self title] retain];//if displaying only image, we will temporarily reset the title
-  if (image)
-  {
-    NSSize imageSize = [image size];
-    NSRect imageFrame = NSZeroRect;
-    
-    LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
-    library_row_t libraryRowType = [libraryTableView libraryRowType];
-    if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
-        #ifndef PANTHER
-        || (cellFrame.size.height < 30)
-        #endif
-       )
-      NSDivideRect(cellFrame, &imageFrame, &cellFrame, 3 + imageSize.width, NSMinXEdge);
-    else// if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
-    {
-      imageFrame = NSMakeRect(0, 0, imageSize.width, imageSize.height);
-      float factor = imageSize.height ? cellFrame.size.height/imageSize.height : 0;
-      cellFrame.size.width = imageSize.width*factor;
-    }
-
-    if ([self drawsBackground] && !(libraryRowType == LIBRARY_ROW_IMAGE_LARGE))
-    {
-      [[super backgroundColor] set];//calls super backgroundColor to get the original background color
-      NSRectFill(imageFrame);
-    }
-
-    if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) && [self backgroundColor] && [self drawsBackground])
-    {
-      [[self backgroundColor] set];
-      NSRectFill(cellFrame);
-    }
-
-    
-    if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
-        #ifndef PANTHER
-        || (cellFrame.size.height < 30)
-        #endif
-       )
-    {
-      imageFrame.origin.x += 3;
-      imageFrame.size = imageSize;
-      if ([controlView isFlipped])
-	imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
-      else
-	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
-      [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
-    }
-    else// if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
-    {
-      [self setTitle:@""];
-      NSSize savSize = imageFrame.size;
-      [image setScalesWhenResized:YES];
-      [image setSize:cellFrame.size];
-      imageFrame = cellFrame;
-      if ([controlView isFlipped])
-	imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
-      else
-	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
-      [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
-      [image setSize:savSize];
-    }
-  }
-  [super drawWithFrame:cellFrame inView:controlView];
-  
-  //restores the title that may have been reset
-  [self setTitle:savTitle];
-  [savTitle release];
-}
-//end drawWithFrame:inView:
-
--(NSSize) cellSize
-{
-  NSSize cellSize = [super cellSize];
-  cellSize.width += (image ? [image size].width : 0) + 3;
-  return cellSize;
-}
-//end cellSize
-
 -(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-  LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+  LibraryView* libraryTableView = (LibraryView*)controlView;
   library_row_t libraryRowType = [libraryTableView libraryRowType];
-  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
-      #ifndef PANTHER
-      || (cellFrame.size.height < 30)
-      #endif
-     )
+  if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
   {
-    cellFrame.origin.x += 8;
-    [super drawInteriorWithFrame:cellFrame inView:controlView];
+    BOOL saveDrawsBackground = [self drawsBackground];
+    [self setDrawsBackground:NO];
+    [super drawInteriorWithFrame:cellFrame inView:controlView]; //the image is displayed in a subrect of the cell
+    [self setDrawsBackground:saveDrawsBackground];
   }
+  else//if (libraryRowType != LIBRARY_ROW_IMAGE_LARGE)
+  {
+    CGFloat pillCorner = cellFrame.size.height/2;
+    CGRect pillRect = CGRectZero;
+    /*if (![self isHighlighted])
+      pillRect = CGRectMake(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width-pillCorner, cellFrame.size.height);
+    else*/
+      pillRect = CGRectMake(NSMaxX(cellFrame)-2*pillCorner, cellFrame.origin.y, 2*pillCorner, cellFrame.size.height);
+
+    //if ([self isHighlighted])
+    {
+      BOOL saveDrawsBackground = [self drawsBackground];
+      [self setDrawsBackground:NO];
+      [super drawInteriorWithFrame:cellFrame inView:controlView];
+      [self setDrawsBackground:saveDrawsBackground];
+    }//end if (![self isHighlighted])
+
+    if (self->textBackgroundColor)
+    {
+      CGContextRef cgContext = [[NSGraphicsContext currentContext] graphicsPort];
+
+      NSColor* rgbaColor = [self->textBackgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+      CGFloat hsba[4] = {[rgbaColor hueComponent], [rgbaColor saturationComponent], [rgbaColor brightnessComponent], [rgbaColor alphaComponent]};
+      hsba[1] = MIN(1., 0.5*hsba[1]);
+      hsba[2] = MIN(1., 1.5*hsba[2]);
+      NSColor* lighterColor = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];
+      
+      CGFloat rgba[4] = {0};
+      CGFloat lighterRgba[4] = {0};
+      [rgbaColor    getRed:&rgba[0]        green:&rgba[1]        blue:&rgba[2]        alpha:&rgba[3]];
+      [lighterColor getRed:&lighterRgba[0] green:&lighterRgba[1] blue:&lighterRgba[2] alpha:&lighterRgba[3]];
+      CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+      CGColorRef color1 = CGColorCreate(colorSpace, lighterRgba);
+      CGColorRef color2 = CGColorCreate(colorSpace, rgba);
+      CGColorRef colors[2] = {color1, color2};
+      CGBlendColorsRef blendColors = CGBlendColorsCreate(colors, 2, &CGBlendLinear, 0);
+      const CGFloat domainAndRange[8] = {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0};
+      CGFunctionRef blendFunction = CGFunctionCreate(blendColors, 1, domainAndRange, 4, domainAndRange, &CGBlendColorsFunctionCallBacks);
+      
+      CGContextSaveGState(cgContext);
+
+      CGContextBeginPath(cgContext);
+      /*if (![self isHighlighted])
+        CGContextAddRoundedRect(cgContext, pillRect, pillCorner, pillCorner);
+      else*/
+        CGContextAddEllipseInRect(cgContext, pillRect);
+      
+      CGContextClip(cgContext);
+      CGShadingRef cgShading = CGShadingCreateAxial(colorSpace,
+        pillRect.origin, CGPointMake(pillRect.origin.x, pillRect.origin.y+pillRect.size.height),
+        blendFunction, NO, NO);
+      CGContextDrawShading(cgContext, cgShading);
+      CGContextRestoreGState(cgContext);      
+      CGShadingRelease(cgShading);
+      CGFunctionRelease(blendFunction);
+      CGColorSpaceRelease(colorSpace);
+    }//end if (self->textBackgroundColor)
+    
+    /*if (![self isHighlighted])
+    {
+      BOOL saveDrawsBackground = [self drawsBackground];
+      [self setDrawsBackground:NO];
+      [super drawInteriorWithFrame:cellFrame inView:controlView];
+      [self setDrawsBackground:saveDrawsBackground];
+    }//end if ([self isHighlighted])*/
+  }//end if (libraryRowType != LIBRARY_ROW_IMAGE_LARGE)
 }
 //end drawInteriorWithFrame:inView:
 

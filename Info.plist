@@ -75,13 +75,31 @@
 			<key>NSPersistentStoreTypeKey</key>
 			<string>InMemory</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>plist</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>latexit-lib.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>LibraryType2</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>InMemory</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>LaTeXiT</string>
 	<key>CFBundleIconFile</key>
 	<string>latexit.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.club.ktd.LaTeXiT</string>
+	<string>fr.chachatelier.pierre.LaTeXiT</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -89,9 +107,9 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.16.1</string>
+	<string>2.0.0</string>
 	<key>LinkBackApplicationURL</key>
-	<string>http://ktd.club.fr/programmation/latexit.php</string>
+	<string>http://pierre.chachatelier.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
 	<string>LaTeXiT</string>
 	<key>NSMainNibFile</key>
@@ -101,6 +119,10 @@
 	<key>NSServices</key>
 	<array>
 		<dict>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -119,12 +141,15 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
 				<string>com.adobe.encapsulated-postscript</string>
+				<string>NSPasteboardTypeTIFF</string>
 				<string>NSTIFFPboardType</string>
 				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
@@ -133,17 +158,24 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTF</string>
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
+				<string>NSPasteboardTypeString</string>
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSTimeOut</key>
-			<integer>30000</integer>
+			<string>30000</string>
 		</dict>
 		<dict>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -162,12 +194,15 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
 				<string>com.adobe.encapsulated-postscript</string>
+				<string>NSPasteboardTypeTIFF</string>
 				<string>NSTIFFPboardType</string>
 				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
@@ -176,17 +211,24 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTF</string>
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
+				<string>NSPasteboardTypeString</string>
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSTimeOut</key>
-			<integer>30000</integer>
+			<string>30000</string>
 		</dict>
 		<dict>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -205,12 +247,15 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
 				<string>com.adobe.encapsulated-postscript</string>
+				<string>NSPasteboardTypeTIFF</string>
 				<string>NSTIFFPboardType</string>
 				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
@@ -219,17 +264,24 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTF</string>
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
+				<string>NSPasteboardTypeString</string>
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSTimeOut</key>
-			<integer>30000</integer>
+			<string>30000</string>
 		</dict>
 		<dict>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -248,12 +300,15 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
 				<string>NSPostScriptPboardType</string>
 				<string>com.adobe.encapsulated-postscript</string>
+				<string>NSPasteboardTypeTIFF</string>
 				<string>NSTIFFPboardType</string>
 				<string>public.tiff</string>
 				<string>NSPNGPboardType</string>
@@ -262,17 +317,24 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTF</string>
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
+				<string>NSPasteboardTypeString</string>
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSTimeOut</key>
-			<integer>30000</integer>
+			<string>30000</string>
 		</dict>
 		<dict>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -291,20 +353,27 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypeRTF</string>
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
 			</array>
 			<key>NSTimeOut</key>
-			<integer>30000</integer>
+			<string>30000</string>
 		</dict>
 		<dict>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -315,7 +384,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Un-latexize equations</string>
+				<string>LaTeXiT/Un-latexize the equations</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceDeLatexisation</string>
@@ -323,26 +392,31 @@
 			<string>LaTeXiT</string>
 			<key>NSReturnTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
+				<string>NSPasteboardTypeRTF</string>
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
+				<string>NSPasteboardTypeRTFD</string>
 				<string>NSRTFDPboardType</string>
 				<string>com.apple.flat-rtfd</string>
+				<string>NSPasteboardTypePDF</string>
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
 			</array>
 			<key>NSTimeOut</key>
-			<integer>30000</integer>
+			<string>30000</string>
 		</dict>
 	</array>
 	<key>SUFeedURL</key>
-	<string>http://ktd.club.fr/programmation/fichiers/latexit-sparkle-en.rss</string>
+	<string>http://pierre.chachatelier.fr/programmation/fichiers/latexit-sparkle-en.rss</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_sparkle_latexit_pub.pem</string>
 </dict>

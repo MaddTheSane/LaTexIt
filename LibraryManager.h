@@ -12,54 +12,31 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* LibraryDidChangeNotification;
-extern NSString* LibraryItemsPboardType;
+extern NSString* LibraryItemsArchivedPboardType;
+extern NSString* LibraryItemsWrappedPboardType;
 
 typedef enum {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN} library_import_option_t;
 typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST} library_export_format_t;
 
-@class HistoryItem;
-@class LibraryFile;
-@class LibraryFolder;
 @class LibraryItem;
+@class LibraryGroupItem;
 
 @interface LibraryManager : NSObject {
-  LibraryFolder* library; //the root of the library; note that it will be @syncronized
-  NSArray*       draggedItems; //a very volatile variable used during drag'n drop
-  BOOL libraryShouldBeSaved; //becomes YES is a modification occurs, returns to NO after saving
-  
-  NSUndoManager* undoManager;
-  
-  NSThread* mainThread;
-  
-  NSString* libraryPath;
-  
   NSManagedObjectContext* managedObjectContext;
-  NSArrayController*      latexitEquationsRootController;
+  NSArray*                draggedItems; //a very volatile variable used during drag'n drop
 }
 
 +(LibraryManager*) sharedManager; //the library manager singleton
 
+-(NSString*) defaultLibraryPath;
+
+-(NSManagedObjectContext*) managedObjectContext;
 -(NSUndoManager*) undoManager;
 
--(BOOL) libraryShouldBeSaved;
--(void) setLibraryShouldBeSaved:(BOOL)state;//marks if library needs being saved
-
--(NSArray*) allItems;
--(NSArray*) allValues;//returns all the values contained in LibraryFile items
-
-//undo-aware methods to manage the library.
-
--(LibraryItem*) newFolder:(NSOutlineView*)outlineView;//creates a new folder
--(LibraryItem*) addItem:(LibraryItem*)libraryItem outlineView:(NSOutlineView*)outlineView;//adds a new item at the end
-//The <historyItem>, as a parameter, will be the value of the LibraryFile that will be created
--(LibraryItem*) newFile:(HistoryItem*)historyItem outlineView:(NSOutlineView*)outlineView;
--(void) removeItems:(NSArray*)items;
--(void) refreshFileItem:(LibraryFile*)item withValue:(HistoryItem*)value;
-
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)selection selection:(NSArray*)selectedItems format:(library_export_format_t)format;
--(BOOL) loadFrom:(NSString*)path option:(library_import_option_t)option;
+-(BOOL) loadFrom:(NSString*)path option:(library_import_option_t)option parent:(LibraryItem*)parent;
 
--(NSString*) defaultLibraryPath;
+-(void) fixChildrenSortIndexesForParent:(LibraryGroupItem*)parent recursively:(BOOL)recursively;
+-(NSArray*) libraryEquations;
 
 @end

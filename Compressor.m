@@ -9,6 +9,8 @@
 #import "Compressor.h"
 #import <zlib.h>
 
+#import "Utils.h"
+
 @implementation Compressor
 
 // compress the data of an NSData object.
@@ -50,11 +52,7 @@
   if(data)
   {
     uLongf sourceLen = [data length];
-    #ifndef PANTHER
     uLongf destLen   = compressBound(sourceLen);
-    #else
-    uLongf destLen   = sourceLen * 1.001 + 12;
-    #endif
     NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:sizeof(unsigned int)+destLen];
     unsigned int bigSourceLen = EndianUI_NtoB(sourceLen);
     [compData appendBytes:&bigSourceLen length:sizeof(unsigned int)];
@@ -67,7 +65,7 @@
         result = [compData copy];
         break;
       default:
-        NSLog(@"Error while compressing data");
+        DebugLog(0, @"Error while compressing data");
         break;
     }
     [compData release];
@@ -99,10 +97,10 @@
         result = [decompData copy];
         break;
       case Z_DATA_ERROR:
-        NSLog(@"Error while decompressing data : data seems corrupted");
+        DebugLog(0, @"Error while decompressing data : data seems corrupted");
         break;
       default:
-        NSLog(@"Error while decompressing data : Insufficient memory" );
+        DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         break;
     }
     if (error != Z_OK)
@@ -122,10 +120,10 @@
           result = [decompData copy];
           break;
         case Z_DATA_ERROR:
-          NSLog(@"Error while decompressing data : data seems corrupted");
+          DebugLog(0, @"Error while decompressing data : data seems corrupted");
           break;
         default:
-          NSLog(@"Error while decompressing data : Insufficient memory" );
+          DebugLog(0, @"Error while decompressing data : Insufficient memory" );
           break;
       }
     }
@@ -146,18 +144,18 @@
     unsigned int destLen = EndianUI_BtoN(bigDestLen);
     uLongf destLenf = destLen;
     NSMutableData* decompData = [[NSMutableData alloc] initWithLength:destLen];
-    int error = uncompress( [decompData mutableBytes], &destLenf,
-                            [data bytes]+sizeof(unsigned int), [data length]-sizeof(unsigned int) );
+    int error = uncompress([decompData mutableBytes], &destLenf,
+                           [data bytes]+sizeof(unsigned int), [data length]-sizeof(unsigned int));
     switch(error)
     {
       case Z_OK:
         result = [decompData copy];
         break;
       case Z_DATA_ERROR:
-        NSLog(@"Error while decompressing data : data seems corrupted");
+        DebugLog(0, @"Error while decompressing data : data seems corrupted");
         break;
       default:
-        NSLog(@"Error while decompressing data : Insufficient memory" );
+        DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         break;
     }
     [decompData release];

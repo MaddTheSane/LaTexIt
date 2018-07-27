@@ -19,7 +19,7 @@
 +(NSColor*) colorWithRgbaString:(NSString*)string;
 -(NSString*) rgbaString;
 
--(float) grayLevel;
+-(CGFloat) grayLevel;
 -(BOOL)  isRGBEqualTo:(NSColor*)other;
 
 @end

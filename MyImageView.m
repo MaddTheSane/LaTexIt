@@ -13,33 +13,29 @@
 #import "AppController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
-#import "LatexProcessor.h"
-#import "LibraryFile.h"
+#import "LatexitEquation.h"
+#import "LaTeXProcessor.h"
+#import "LibraryEquation.h"
 #import "LibraryManager.h"
 #import "MyDocument.h"
-#import "NSApplicationExtended.h"
 #import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
+#import "NSManagedObjectContextExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
-#ifdef PANTHER
-#import <LinkBack-panther/LinkBack.h>
-#else
+#import "CGExtras.h"
+
 #import <LinkBack/LinkBack.h>
-#endif
-
-#ifndef PANTHER
 #import <Quartz/Quartz.h>
-#endif
-
-#import "rects.h"
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 @interface MyImageView (PrivateAPI)
+-(NSMenu*) lazyCopyAsContextualMenu;
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(void) _copyCurrentImageNotification:(NSNotification*)notification;
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard;
@@ -49,8 +45,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  if ((!(self = [super initWithCoder:coder])))
     return nil;
+  self->zoomLevel = 1.f;
+  [self setMenu:[self lazyCopyAsContextualMenu]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
                                                name:CopyCurrentImageNotification object:nil];
   [self registerForDraggedTypes:
@@ -58,47 +56,100 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
                               NSRTFDPboardType, nil]];
   return self;
 }
+//end initWithCoder:
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [backgroundColor release];
+  [self->copyAsContextualMenu release];
+  [self->backgroundColor release];
   [super dealloc];
 }
+//end dealloc
 
 -(BOOL) acceptsFirstMouse:(NSEvent*)theEvent//we can start a drag without selecting the window first
 {
   return YES;
 }
+//end acceptsFirstMouse
+
+-(NSMenu*) lazyCopyAsContextualMenu
+{
+  //connect contextual copy As menu to imageView
+  NSMenu* result = self->copyAsContextualMenu;
+  if (!result)
+  {
+    self->copyAsContextualMenu = [[NSMenu alloc] init];
+    NSMenuItem* superItem = [self->copyAsContextualMenu addItemWithTitle:NSLocalizedString(@"Copy the image as", @"Copy the image as") action:nil keyEquivalent:@""];
+    NSMenu* subMenu = [[NSMenu alloc] init];
+    NSMenuItem* item = nil;
+    item = [subMenu addItemWithTitle:NSLocalizedString(@"Default format", @"Default format") action:@selector(copy:) keyEquivalent:@"c"];
+    [item setKeyEquivalentModifierMask:NSAlternateKeyMask];
+    [item setTarget:self];
+    [item setTag:-1];
+    [subMenu addItem:[NSMenuItem separatorItem]];
+    item = [subMenu addItemWithTitle:@"PDF" action:@selector(copy:) keyEquivalent:@""];
+    [item setTarget:self];
+    [item setTag:0];
+    item = [subMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts") action:@selector(copy:) keyEquivalent:@""];
+    [item setTarget:self];
+    [item setTag:1];
+    item = [subMenu addItemWithTitle:@"EPS" action:@selector(copy:) keyEquivalent:@""];
+    [item setTarget:self];
+    [item setTag:2];
+    item = [subMenu addItemWithTitle:@"TIFF" action:@selector(copy:) keyEquivalent:@""];
+    [item setTarget:self];
+    [item setTag:3];
+    item = [subMenu addItemWithTitle:@"PNG" action:@selector(copy:) keyEquivalent:@""];
+    [item setTarget:self];
+    [item setTag:4];
+    item = [subMenu addItemWithTitle:@"JPEG" action:@selector(copy:) keyEquivalent:@""];
+    [item setTarget:self];
+    [item setTag:5];
+    [self->copyAsContextualMenu setSubmenu:subMenu forItem:superItem];
+    [subMenu release];
+    result = self->copyAsContextualMenu;
+  }//end if (!result)
+  return result;
+}
+//end lazyCopyAsContextualMenu
+
+-(CGFloat) zoomLevel
+{
+  return self->zoomLevel;
+}
+//end zoomLevel
+
+-(void) setZoomLevel:(CGFloat)value
+{
+  if (self->zoomLevel != value)
+  {
+    self->zoomLevel = value;
+    [self setNeedsDisplay:YES];
+  }//end if (self->zoomLevel != value)
+}
+//end setZoomLevel:
 
 -(NSColor*) backgroundColor
 {
-  return backgroundColor;
+  return self->backgroundColor;
 }
+//end backgroundColor:
 
 -(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem
 {
   //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
-  [backgroundColor autorelease];
+  [self->backgroundColor autorelease];
   NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
-  backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
-  //NSColor* colorFromUserDefaults = [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:DefaultImageViewBackgroundKey]];
-  //if (!backgroundColor && ![newColor isRGBEqualTo:colorFromUserDefaults])
-  //  backgroundColor = [colorFromUserDefaults retain];
-    
-  [self setNeedsDisplay:YES];
-  if (updateHistoryItem && pdfData)
-    [self setPDFData:[[document historyItemWithCurrentState] annotatedPDFDataUsingPDFKeywords:YES] cachedImage:[self image]];
-}
+  self->backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
 
-//zooms the image, but does not modify it (drag'n drop will be with original image size)
--(IBAction) zoom:(id)sender
-{
   [self setNeedsDisplay:YES];
+  if (updateHistoryItem && self->pdfData)
+    [self setPDFData:[[document latexitEquationWithCurrentState] annotatedPDFDataUsingPDFKeywords:YES] cachedImage:[self image]];
 }
 
 //used to trigger latexisation using Command-T
--(BOOL) performKeyEquivalent:(NSEvent *)theEvent
+-(BOOL) performKeyEquivalent:(NSEvent*)theEvent
 {
   BOOL handlesEvent = NO;
   NSString* charactersIgnoringModifiers = [theEvent charactersIgnoringModifiers];
@@ -109,15 +160,17 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
                    ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask) && ([theEvent modifierFlags] & NSShiftKeyMask)) ||
                    ((character == 'L') && ([theEvent modifierFlags] & NSCommandKeyMask) && ([theEvent modifierFlags] & NSShiftKeyMask));
     if (handlesEvent)
-      [[document makeLatexButton] performClick:self];
+      [[document lowerBoxLatexizeButton] performClick:self];
   }
   return handlesEvent;
 }
+//end performKeyEquivalent:
 
 -(NSData*) pdfData //full pdfdata (that may contain meta-data like keywords, creator...)
 {
-  return pdfData;
+  return self->pdfData;
 }
+//end pdfData:
 
 //when you set the pdfData encapsulated by the imageView, it creates an NSImage with this data.
 //but if you specify a non-nil cachedImage, it will use this cachedImage to be faster
@@ -145,14 +198,15 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }
   [self setImage:image];
 }
+//end setPDFData:cachedImage:
 
 -(void) setImage:(NSImage*)image
 {
   [image setScalesWhenResized:YES];
   [super setImage:image];
-  [self zoom:zoomSlider];
   [[NSNotificationCenter defaultCenter] postNotificationName:ImageDidChangeNotification object:self];
 }
+//end setImage:
 
 //used to update the pasteboard content for a live Linkback link
 -(void) updateLinkBackLink:(LinkBack*)link
@@ -164,11 +218,13 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [link sendEdit];
   }
 }
+//end updateLinkBackLink:
 
 -(unsigned int) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
   return [self image] ? NSDragOperationCopy : NSDragOperationNone;
 }
+//end draggingSourceOperationMaskForLocal:
 
 //begins a drag operation
 -(void) mouseDown:(NSEvent*)theEvent
@@ -188,6 +244,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     }
   }
 }
+//end mouseDown:
 
 -(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
@@ -203,12 +260,13 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
   [super dragImage:draggedImage at:p offset:offset event:event pasteboard:pasteboard source:object slideBack:YES];
 }
-
+//end dragImage:at:offset:event:pasteboard:source:slideBack:
 
 -(void) concludeDragOperation:(id <NSDraggingInfo>)sender
 {
   //overwritten to avoid some strange additional "setImage" that would occur...
 }
+//end concludeDragOperation:
 
 //creates the promised file of the drag
 -(NSArray*) namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination
@@ -220,8 +278,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSString* filePrefix = @"latex-image";
     
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+    PreferencesController* preferencesController = [PreferencesController sharedController];
+    export_format_t exportFormat = [preferencesController exportFormat];
     NSString* extension = nil;
     switch(exportFormat)
     {
@@ -243,11 +301,11 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         break;
     }
 
-    NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
-    float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
-    NSData* data   = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality
-                                                 scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
-
+    NSColor*   color = [preferencesController exportJpegBackgroundColor];
+    CGFloat  quality = [preferencesController exportJpegQualityPercent];
+    NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData jpegColor:color
+                                                  jpegQuality:quality scaleAsPercent:[preferencesController exportScalePercent]
+                                                  compositionConfiguration:[preferencesController compositionConfigurationDocument]];
     if (extension)
     {
       NSString* fileName = nil;
@@ -266,38 +324,37 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                                    atPath:filePath];
-        unsigned int options = 0;
-        #ifndef PANTHER
-        options = NSExclude10_4ElementsIconCreationOption;
-        #endif
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-        [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
-                                       forFile:filePath options:options];
+        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
+                                       forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
         [names addObject:fileName];
       }
     }
   }
   return names;
 }
+//end namesOfPromisedFilesDroppedAtDestination:
 
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
-  HistoryItem* historyItem = [document historyItemWithCurrentState];
-  [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
-  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:historyItem]] forType:HistoryItemsPboardType];
-  [historyItem writeToPasteboard:pasteboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  LatexitEquation* equation = [document latexitEquationWithCurrentState];
+  [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
+  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:equation]] forType:LatexitEquationsPboardType];
+  [equation writeToPasteboard:pasteboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
 }
+//end _writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
 //provides lazy data to a pasteboard
 -(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString *)type
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSData* data = [[AppController appController] dataForType:[userDefaults integerForKey:DragExportTypeKey] pdfData:pdfData
-                                                  jpegColor:[NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]]
-                                                jpegQuality:[userDefaults floatForKey:DragExportJpegQualityKey]
-                                             scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
+    dataForType:[preferencesController exportFormat] pdfData:pdfData jpegColor:[preferencesController exportJpegBackgroundColor]
+    jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
+    compositionConfiguration:[preferencesController compositionConfigurationDocument]];
   [pasteboard setData:data forType:type];
 }
+//end pasteboard:provideDataForType:
 
 //We can drop on the imageView only if the PDF has been made by LaTeXiT (as "creator" document attribute)
 //So, the keywords of the PDF contain the whole document state
@@ -332,11 +389,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (plist && [plist count])
     {
       NSString* filename = [plist objectAtIndex:0];
-      //on Panther, we rely on the extension to see if it is valid pdf. On Tiger, we will use PDFDocument
-      #ifdef PANTHER
-      if ([[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"])
-      #endif
-      data = [NSData dataWithContentsOfFile:filename];
+      data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
     }
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
@@ -363,38 +416,30 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   if (shouldBePDFData)
   {
     ok = (data != nil);
-    #ifndef PANTHER
     if (ok)
     {
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
       ok &= (pdfDocument != nil);
       [pdfDocument release];
     }
-    #endif
   }
 
   return ok ? NSDragOperationCopy : NSDragOperationNone;
 }
-
-//this fixes a bug of panther http://lists.apple.com/archives/cocoa-dev/2005/Jan/msg02129.html
-#ifdef PANTHER
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
-{
-  [[NSPasteboard pasteboardWithName:NSDragPboard] declareTypes:nil owner:nil];
-}
-#endif
+//end draggingEntered:
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
   return [self _applyDataFromPasteboard:[sender draggingPasteboard]];
 }
+//end performDragOperation:
 
 -(BOOL) validateMenuItem:(id)sender
 {
   BOOL ok = YES;
   if ([sender tag] == -1)//default
   {
-    export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
+    export_format_t exportFormat = [[PreferencesController sharedController] exportFormat];
     [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
       NSLocalizedString(@"Default Format", @"Default Format"),
       [[AppController appController] nameOfType:exportFormat]]];
@@ -402,32 +447,33 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   if ([sender tag] == EXPORT_FORMAT_EPS)
     ok = [[AppController appController] isGsAvailable];
   else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
-    ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPs2PdfAvailable];
+    ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPsToPdfAvailable];
   if ([sender action] == @selector(copy:))
     ok = ok && ([self image] != nil);
   return ok;
 }
+//end validateMenuItem:
 
 -(IBAction) copy:(id)sender
 {
   int tag = sender ? [sender tag] : -1;
-  export_format_t exportFormat = (export_format_t)
-                                    ((tag == -1) ? [[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey]
-                                                 : tag);
+  export_format_t exportFormat = ((tag == -1) ? [[PreferencesController sharedController] exportFormat] : (export_format_t) tag);
   [self copyAsFormat:exportFormat];
 }
+//end copy:
 
 -(void) copyAsFormat:(export_format_t)exportFormat
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  export_format_t savExportFormat = [userDefaults integerForKey:DragExportTypeKey];
-  [userDefaults setInteger:exportFormat forKey:DragExportTypeKey];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  export_format_t savExportFormat = [preferencesController exportFormat];
+  [preferencesController setExportFormat:exportFormat];
   //lazyDataProvider to nil to force immediate computation of the pdf with outlined fonts
   [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:nil];
-  [userDefaults setInteger:savExportFormat forKey:DragExportTypeKey];
+  [preferencesController setExportFormat:savExportFormat];
 }
+//end copyAsFormat:
 
 //In my opinion, this paste: is triggered only programmatically from the paste: of LineCountTextView
 -(IBAction) paste:(id)sender
@@ -446,21 +492,36 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:type]] updateHistoryItem:YES];
     done = YES;
   }
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]]))
+  {
+    NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
+    unsigned int count = [libraryItemsWrappedArray count];
+    LibraryEquation* libraryEquation = nil;
+    while(count-- && !libraryEquation)
+    {
+      NSString* objectIDAsString = [libraryItemsWrappedArray objectAtIndex:count];
+      NSManagedObject* libraryItem = [[[LibraryManager sharedManager] managedObjectContext] managedObjectForURIRepresentation:[NSURL URLWithString:objectIDAsString]];
+      libraryEquation = ![libraryItem isKindOfClass:[LibraryEquation class]] ? nil : (LibraryEquation*)libraryItem;
+    }
+    if (libraryEquation)
+      [document applyLibraryEquation:libraryEquation];
+    done = YES;
+  }
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]]))
   {
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
     unsigned int count = [libraryItemsArray count];
-    LibraryFile* libraryFile = nil;
-    while(count-- && !libraryFile)
-      libraryFile = [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryFile class]] ? [libraryItemsArray objectAtIndex:count] : nil;
-    if (libraryFile)
-      [document applyLibraryFile:libraryFile];
+    LibraryEquation* libraryEquation = nil;
+    while(count-- && !libraryEquation)
+      libraryEquation = [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryEquation class]] ? [libraryItemsArray objectAtIndex:count] : nil;
+    if (libraryEquation)
+      [document applyLibraryEquation:libraryEquation];
     done = YES;
   }
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]]))
   {
-    NSArray* historyItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-    [document applyHistoryItem:[historyItemsArray lastObject]];
+    NSArray* latexitEquationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+    [document applyLatexitEquation:[latexitEquationsArray lastObject]];
     done = YES;
   }
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]]))
@@ -470,7 +531,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   {
     NSArray* plist = [pboard propertyListForType:type];
-    NSData* data = (plist && [plist count]) ? [NSData dataWithContentsOfFile:[plist objectAtIndex:0]] : nil;
+    NSData* data = (plist && [plist count]) ? [NSData dataWithContentsOfFile:[plist objectAtIndex:0] options:NSUncachedRead error:nil] : nil;
     done = [document applyPdfData:data];
   }
   
@@ -506,11 +567,13 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     ok = NO;
   return ok;
 }
+//end _applyDataFromPasteboard:
 
 -(void) _copyCurrentImageNotification:(NSNotification*)notification
 {
   [self copy:self];
 }
+//end _copyCurrentImageNotification:
 
 -(void) drawRect:(NSRect)rect
 {
@@ -521,37 +584,34 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSRect inRect = NSInsetRect(bounds, 7, 7);
   CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
   CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  fillRoundedRect(cgContext, *((CGRect*)&inRoundedRect1), 2.f, 2.f);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+  CGContextFillPath(cgContext);
   CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
-  mystrokeRoundedRect(cgContext, *((CGRect*)&inRoundedRect3), 2.f, 2.f);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+  CGContextStrokePath(cgContext);
   CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  mystrokeRoundedRect(cgContext, *((CGRect*)&inRoundedRect1), 2.f, 2.f);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+  CGContextStrokePath(cgContext);
   CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-  mystrokeRoundedRect(cgContext, *((CGRect*)&inRoundedRect2), 2.f, 2.f);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+  CGContextStrokePath(cgContext);
 
   NSImage* image = [self image];
   NSSize naturalImageSize = image ? [image size] : NSZeroSize;
-  float factor = exp(3*([zoomSlider floatValue]-1));
+  CGFloat factor = exp(3*(self->zoomLevel-1));
   NSSize newSize = naturalImageSize;
   newSize.width *= factor;
   newSize.height *= factor;
 
   NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
-  float factorX = (destRect.size.width  > inRect.size.width)  ? inRect.size.width /destRect.size.width  : 1;
-  destRect.size.width  *= factorX;
-  destRect.size.height *= factorX;
-  float factorY = (destRect.size.height > inRect.size.height) ? inRect.size.height/destRect.size.height : 1;
-  destRect.size.width  *= factorY;
-  destRect.size.height *= factorY;
-  destRect.origin.x = inRect.origin.x+inRect.size.width /2-destRect.size.width /2;
-  destRect.origin.y = inRect.origin.y+inRect.size.height/2-destRect.size.height/2;
-
+  destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
   if (backgroundColor)
   {
     [backgroundColor set];
     NSRectFill(inRect);
   }
-  [image drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)  operation:NSCompositeSourceOver fraction:1.0];
+  [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+  [[image bestRepresentationForDevice:nil] drawInRect:destRect];
 }
 //end drawRect:
 

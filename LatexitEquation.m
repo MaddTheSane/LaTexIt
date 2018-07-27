@@ -8,21 +8,25 @@
 
 #import "LatexitEquation.h"
 
-#import "AppController.h"
-#import "LaTeXiTPreferencesKeys.h"
-#import "LatexProcessor.h"
-#import "NSApplicationExtended.h"
+#import "LaTeXProcessor.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
+#import "NSImageExtended.h"
+#import "NSManagedObjectContextExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
 
 #import <LinkBack/LinkBack.h>
+#import <Quartz/Quartz.h>
 
-NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotification";
+NSString* LatexitEquationsPboardType = @"LatexitEquationsPboardType";
+
+static NSEntityDescription* cachedEntity = nil;
+static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 @interface LatexitEquation (PrivateAPI)
--(void) _reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
++(NSMutableArray*) managedObjectContextStack;
 -(void) beginUpdate;
 -(void) endUpdate;
 -(BOOL) isUpdating;
@@ -30,46 +34,101 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 
 @implementation LatexitEquation
 
++(NSEntityDescription*) entity
+{
+  if (!cachedEntity)
+  {
+    @synchronized(self)
+    {
+      if (!cachedEntity)
+        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+    }//end @synchronized(self)
+  }//end if (!cachedEntity)
+  return cachedEntity;
+}
+//end entity
+
++(NSMutableArray*) managedObjectContextStack
+{
+  if (!managedObjectContextStackInstance)
+  {
+    @synchronized(self)
+    {
+      if (!managedObjectContextStackInstance)
+        managedObjectContextStackInstance = [[NSMutableArray alloc] init];
+    }
+  }
+  return managedObjectContextStackInstance;
+}
+//end managedObjectContextStack
+
++(void) pushManagedObjectContext:(NSManagedObjectContext*)context
+{
+  @synchronized([self managedObjectContextStack])
+  {
+    [managedObjectContextStackInstance addObject:context];
+  }
+
+}
+//end pushManagedObjectContext:
+
++(NSManagedObjectContext*) currentManagedObjectContext
+{
+  NSManagedObjectContext* result = nil;
+  @synchronized([self managedObjectContextStack])
+  {
+    result = [managedObjectContextStackInstance lastObject];
+  }
+  return result;
+}
+//end currentManagedObjectContext
+
++(NSManagedObjectContext*) popManagedObjectContext
+{
+  NSManagedObjectContext* result = nil;
+  @synchronized([self managedObjectContextStack])
+  {
+    result = [managedObjectContextStackInstance lastObject];
+    [managedObjectContextStackInstance removeLastObject];
+  }
+  return result;
+}
+//end popManagedObjectContext
+
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
                  backgroundColor:(NSColor*)backgroundColor
-            managedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
   id instance = [[[self class] alloc] initWithPDFData:someData preamble:aPreamble sourceText:aSourceText
                                               color:aColor pointSize:aPointSize date:aDate mode:aMode
-                                              backgroundColor:backgroundColor managedObjectContext:managedObjectContext];
+                                              backgroundColor:backgroundColor];
   return [instance autorelease];
 }
 //end historyItemWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
 
 +(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
-            managedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
-  return [[[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults managedObjectContext:managedObjectContext] autorelease];
+  return [[[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults] autorelease];
 }
 //end historyItemWithPDFData:useDefaults:
 
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
               backgroundColor:(NSColor*)aBackgroundColor
-         managedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
-  NSEntityDescription* entity = [NSEntityDescription entityForName:[self className] inManagedObjectContext:managedObjectContext];
-  NSLog(@"1: %p", self);
-  if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:managedObjectContext])))
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
-  NSLog(@"2: %p", self);
   [self beginUpdate];
   [self setPdfData:someData];
   [self setPreamble:aPreamble];
   [self setSourceText:aSourceText];
   [self setColor:aColor];
   [self setPointSize:aPointSize];
-  [self setDate:aDate ? [aDate copy] : [NSDate date]];
+  [self setDate:aDate ? [[aDate copy] autorelease] : [NSDate date]];
   [self setMode:aMode];
   [self setTitle:nil];
     
-  if (!aBackgroundColor && [[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey])
+  if (!aBackgroundColor && [[PreferencesController sharedController] documentUseAutomaticHighContrastedPreviewBackground])
     aBackgroundColor = ([aColor grayLevel] > .5) ? [NSColor blackColor] : nil;
   [self setBackgroundColor:aBackgroundColor];
   [self endUpdate];
@@ -77,28 +136,20 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 }
 //end initWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
 
--(void) dealloc
+-(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
-  NSLog(@"dealloc");
-  [super dealloc];
-}
-
--(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults managedObjectContext:(NSManagedObjectContext*)managedObjectContext
-{
-  NSEntityDescription* entity = [NSEntityDescription entityForName:[self className] inManagedObjectContext:managedObjectContext];
-  if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:managedObjectContext])))
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
-
   [self setPdfData:someData];
   NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding] autorelease];
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSArray*  testArray    = nil;
   
   BOOL isLaTeXiTPDF = NO;
 
-  NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSFont* defaultFont = [preferencesController editionFont];
   NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
-  NSAttributedString* defaultPreambleAttributedString = [[PreferencesController sharedController] preambleForLatexisation];
+  NSAttributedString* defaultPreambleAttributedString = [[PreferencesController sharedController] preambleDocumentAttributedString];
   NSMutableString* preambleString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
   if (testArray && ([testArray count] >= 2))
@@ -123,7 +174,6 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   if (testArray && ([testArray count] >= 2))
   {
     isLaTeXiTPDF |= YES;
-    [preamble autorelease];
     preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
     NSRange range = [preambleString rangeOfString:@"ESannoepend"];
     range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
@@ -161,10 +211,9 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   if (testArray && ([testArray count] >= 2))
   {
     isLaTeXiTPDF |= YES;
-    [sourceText autorelease];
     [sourceString setString:@""];
     [sourceString appendString:[testArray objectAtIndex:1]];
-    NSRange range = [sourceString rangeOfString:@"ESannoesend"];
+    NSRange range = !sourceString ? NSMakeRange(0, 0) : [sourceString rangeOfString:@"ESannoesend"];
     range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
     [sourceString deleteCharactersInRange:range];
     NSString* unescapedSource =
@@ -188,8 +237,7 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
     range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
     [pointSizeAsString deleteCharactersInRange:range];
   }
-  [self setPointSize:pointSizeAsString ? [pointSizeAsString doubleValue]
-                                       : (useDefaults ? [[userDefaults objectForKey:DefaultPointSizeKey] doubleValue] : 0)];
+  [self setPointSize:pointSizeAsString ? [pointSizeAsString doubleValue] : (useDefaults ? [preferencesController latexisationFontSize] : 0)];
 
   NSMutableString* modeAsString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
@@ -202,11 +250,11 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
     [modeAsString deleteCharactersInRange:range];
   }
   latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
-                      : (latex_mode_t) (useDefaults ? [userDefaults integerForKey:DefaultModeKey] : 0);
+                      : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
   mode = validateLatexMode(mode); //Added starting from version 1.7.0
   [self setMode:mode];
 
-  NSColor* defaultColor = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
+  NSColor* defaultColor = [preferencesController latexisationFontColor];
   NSMutableString* colorAsString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
   if (testArray && ([testArray count] >= 2))
@@ -250,11 +298,71 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   }
   [self setTitle:titleAsString];
   
+  [self setDate:[NSDate date]];
+  
   if (!isLaTeXiTPDF)
-    [self autorelease];
-  return isLaTeXiTPDF ? self : nil;
+  {
+    [self release];
+    self = nil;
+  }//end if (!isLaTeXiTPDF)
+  
+  return self;
 }
 //end initWithPDFData:useDefaults:
+
+-(id) copyWithZone:(NSZone*)zone
+{
+  id clone = [[[self class] alloc] initWithPDFData:[self pdfData] preamble:[self preamble] sourceText:[self sourceText]
+                                             color:[self color] pointSize:[self pointSize] date:[self date]
+                                            mode:[self mode] backgroundColor:[self backgroundColor]];
+  [[self managedObjectContext] safeInsertObject:clone];
+  return clone;
+}
+//end copyWithZone:
+
+-(id) initWithCoder:(NSCoder*)coder
+{
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+    return nil;
+  [self setPdfData:[coder decodeObjectForKey:@"pdfData"]];
+  [self setPreamble:[coder decodeObjectForKey:@"preamble"]];
+  [self setSourceText:[coder decodeObjectForKey:@"sourceText"]];
+  [self setColor:[coder decodeObjectForKey:@"color"]];
+  [self setPointSize:[coder decodeDoubleForKey:@"pointSize"]];
+  [self setDate:[coder decodeObjectForKey:@"date"]];
+  [self setMode:(latex_mode_t)[coder decodeIntForKey:@"mode"]];
+  [self setBaseline:[coder decodeDoubleForKey:@"baseline"]];
+  [self setBackgroundColor:[coder decodeObjectForKey:@"backgroundColor"]];
+  [self setTitle:[coder decodeObjectForKey:@"title"]];
+  return self;
+}
+//end initWithCoder:
+
+-(void) encodeWithCoder:(NSCoder*)coder
+{
+  [coder encodeObject:@"2.0.0"              forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
+  [coder encodeObject:[self preamble]        forKey:@"preamble"];
+  [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
+  [coder encodeObject:[self color]           forKey:@"color"];
+  [coder encodeDouble:[self pointSize]       forKey:@"pointSize"];
+  [coder encodeObject:[self date]            forKey:@"date"];
+  [coder encodeInt:[self mode]               forKey:@"mode"];
+  [coder encodeDouble:[self baseline]        forKey:@"baseline"];
+  [coder encodeObject:[self backgroundColor] forKey:@"backgroundColor"];
+  [coder encodeObject:[self title]           forKey:@"title"];
+}
+//end encodeWithCoder:
+
+-(void) didTurnIntoFault
+{
+  @synchronized(self)
+  {
+    [self->pdfCachedImage release];
+    self->pdfCachedImage = nil;
+  }//@synchronized(self)
+}
+//end didTurnIntoFault
 
 -(void) beginUpdate
 {
@@ -266,7 +374,7 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 {
   --updateLevel;
   if (![self isUpdating] && annotateDataDirtyState)
-    [self _reannotatePDFDataUsingPDFKeywords:YES];
+    [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end endUpdate
 
@@ -279,7 +387,7 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 -(NSData*) pdfData
 {
   NSData* result = nil;
-  [self willAccessValueForKey:@"pdfData"]; 
+  [self willAccessValueForKey:@"pdfData"];
   result = [self primitiveValueForKey:@"pdfData"];
   [self didAccessValueForKey:@"pdfData"];
   return result;
@@ -288,6 +396,11 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 
 -(void) setPdfData:(NSData*)value
 {
+  @synchronized(self)
+  {
+    [self->pdfCachedImage release];
+    self->pdfCachedImage = nil;
+  }
   [self willChangeValueForKey:@"pdfData"];
   [self setPrimitiveValue:value forKey:@"pdfData"];
   [self didChangeValueForKey:@"pdfData"];
@@ -299,16 +412,14 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   NSAttributedString* result = nil;
   [self willAccessValueForKey:@"preamble"];
   result = [self primitiveValueForKey:@"preamble"];
-  [self didAccessValueForKey:@"preamble"]; 
+  [self didAccessValueForKey:@"preamble"];
   if (!result)
   {
     [self willAccessValueForKey:@"preambleAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"preambleAsData"];
-    result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
     [self didAccessValueForKey:@"preambleAsData"];
-    [self willChangeValueForKey:@"preamble"];
+    result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
     [self setPrimitiveValue:result forKey:@"preamble"];
-    [self didChangeValueForKey:@"preamble"];
   }
   return result;
 } 
@@ -319,11 +430,11 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   [self willChangeValueForKey:@"preamble"];
   [self setPrimitiveValue:value forKey:@"preamble"];
   [self didChangeValueForKey:@"preamble"];
+  NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"preambleAsData"];
-  [self setPrimitiveValue:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:@"preambleAsData"];
+  [self setPrimitiveValue:archivedData forKey:@"preambleAsData"];
   [self didChangeValueForKey:@"preambleAsData"];
-  [self _reannotatePDFDataUsingPDFKeywords:YES];
-  [[NSNotificationCenter defaultCenter] postNotificationName:LatexitEquationDidChangeNotification object:self];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setPreamble:
 
@@ -332,16 +443,14 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   NSAttributedString* result = nil;
   [self willAccessValueForKey:@"sourceText"];
   result = [self primitiveValueForKey:@"sourceText"];
-  [self didAccessValueForKey:@"sourceText"]; 
+  [self didAccessValueForKey:@"sourceText"];
   if (!result)
   {
-    [self willAccessValueForKey:@"sourceTextAsData"]; 
+    [self willAccessValueForKey:@"sourceTextAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"sourceTextAsData"];
+    [self didAccessValueForKey:@"sourceTextAsData"];
     result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-    [self didAccessValueForKey:@"sourceTextAsData"]; 
-    [self willChangeValueForKey:@"sourceText"];
     [self setPrimitiveValue:result forKey:@"sourceText"];
-    [self didChangeValueForKey:@"sourceText"];
   }
   return result;
 } 
@@ -352,8 +461,9 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   [self willChangeValueForKey:@"sourceText"];
   [self setPrimitiveValue:value forKey:@"sourceText"];
   [self didChangeValueForKey:@"sourceText"];
+  NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"sourceTextAsData"];
-  [self setPrimitiveValue:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:@"sourceTextAsData"];
+  [self setPrimitiveValue:archivedData forKey:@"sourceTextAsData"];
   [self didChangeValueForKey:@"sourceTextAsData"];
 }
 //end setSourceText:
@@ -363,18 +473,15 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   NSColor* result = nil;
   [self willAccessValueForKey:@"color"];
   result = [self primitiveValueForKey:@"color"];
-  [self didAccessValueForKey:@"color"]; 
+  [self didAccessValueForKey:@"color"];
   if (!result)
   {
-    [self willAccessValueForKey:@"colorAsData"]; 
+    [self willAccessValueForKey:@"colorAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"colorAsData"];
+    [self didAccessValueForKey:@"colorAsData"];
     result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-    [self didAccessValueForKey:@"colorAsData"]; 
-    [self willChangeValueForKey:@"color"];
     [self setPrimitiveValue:result forKey:@"color"];
-    [self didChangeValueForKey:@"color"];
-
-  }
+  }//end if (!result)
   return result;
 }
 //end color
@@ -384,18 +491,37 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   [self willChangeValueForKey:@"color"];
   [self setPrimitiveValue:value forKey:@"color"];
   [self didChangeValueForKey:@"color"];
+  NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"colorAsData"];
-  [self setPrimitiveValue:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:@"colorAsData"];
+  [self setPrimitiveValue:archivedData forKey:@"colorAsData"];
   [self didChangeValueForKey:@"colorAsData"];
 }
 //end setColor:
 
+-(double) baseline
+{
+  double result = 0;
+  [self willAccessValueForKey:@"baseline"];
+  result = [[self primitiveValueForKey:@"baseline"] doubleValue];
+  [self didAccessValueForKey:@"baseline"];
+  return result;
+}
+//end baseline
+
+-(void) setBaseline:(double)value
+{
+  [self willChangeValueForKey:@"baseline"];
+  [self setPrimitiveValue:[NSNumber numberWithDouble:value] forKey:@"baseline"];
+  [self didChangeValueForKey:@"baseline"];
+}
+//end setBaseline:
+
 -(double) pointSize
 {
   double result = 0;
-  [self willAccessValueForKey:@"pointSize"]; 
+  [self willAccessValueForKey:@"pointSize"];
   result = [[self primitiveValueForKey:@"pointSize"] doubleValue];
-  [self didAccessValueForKey:@"pointSize"]; 
+  [self didAccessValueForKey:@"pointSize"];
   return result;
 }
 //end pointSize
@@ -411,9 +537,9 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 -(NSDate*) date
 {
   NSDate* result = nil;
-  [self willAccessValueForKey:@"date"]; 
+  [self willAccessValueForKey:@"date"];
   result = [self primitiveValueForKey:@"date"];
-  [self didAccessValueForKey:@"date"]; 
+  [self didAccessValueForKey:@"date"];
   return result;
 } 
 //end date
@@ -428,11 +554,11 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 
 -(latex_mode_t)mode
 {
-  double result = 0;
-  [self willAccessValueForKey:@"modeAsInteger"]; 
-  result = [[self primitiveValueForKey:@"modeAsInteger"] intValue];
-  [self didAccessValueForKey:@"modeAsInteger"]; 
-  return (latex_mode_t)result;
+  latex_mode_t result = 0;
+  [self willAccessValueForKey:@"modeAsInteger"];
+  result = (latex_mode_t)[[self primitiveValueForKey:@"modeAsInteger"] intValue];
+  [self didAccessValueForKey:@"modeAsInteger"];
+  return result;
 }
 //end mode
 
@@ -449,17 +575,15 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   NSColor* result = nil;
   [self willAccessValueForKey:@"backgroundColor"];
   result = [self primitiveValueForKey:@"backgroundColor"];
-  [self didAccessValueForKey:@"backgroundColor"]; 
+  [self didAccessValueForKey:@"backgroundColor"];
   if (!result)
   {
-    [self willAccessValueForKey:@"backgroundColorAsData"]; 
+    [self willAccessValueForKey:@"backgroundColorAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"backgroundColorAsData"];
+    [self didAccessValueForKey:@"backgroundColorAsData"];
     result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-    [self didAccessValueForKey:@"backgroundColorAsData"]; 
-    [self willChangeValueForKey:@"backgroundColor"];
     [self setPrimitiveValue:result forKey:@"backgroundColor"];
-    [self didChangeValueForKey:@"backgroundColor"];
-  }
+  }//end if (!result)
   return result;
 }
 //end backgroundColor
@@ -471,76 +595,108 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   [self willChangeValueForKey:@"backgroundColor"];
   [self setPrimitiveValue:value forKey:@"backgroundColor"];
   [self didChangeValueForKey:@"backgroundColor"];
+  NSData* archivedData = !value ? nil : [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"backgroundColorAsData"];
-  [self setPrimitiveValue:!value ? nil : [NSKeyedArchiver archivedDataWithRootObject:value] forKey:@"backgroundColorAsData"];
+  [self setPrimitiveValue:archivedData forKey:@"backgroundColorAsData"];
   [self didChangeValueForKey:@"backgroundColorAsData"];
-  [self _reannotatePDFDataUsingPDFKeywords:YES];
-  [[NSNotificationCenter defaultCenter] postNotificationName:LatexitEquationDidChangeNotification object:self];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setBackgroundColor:
 
 -(NSString*) title
 {
   NSString* result = nil;
-  [self willAccessValueForKey:@"title"]; 
+  [self willAccessValueForKey:@"title"];
   result = [self primitiveValueForKey:@"title"];
-  [self didAccessValueForKey:@"title"]; 
+  [self didAccessValueForKey:@"title"];
   return result;
 }
 //end title
 
 -(void) setTitle:(NSString*)value
 {
-  [self willChangeValueForKey:@"title"];
-  [self setPrimitiveValue:value forKey:@"title"];
-  [self didChangeValueForKey:@"title"];
-  [self _reannotatePDFDataUsingPDFKeywords:YES];
-  [[NSNotificationCenter defaultCenter] postNotificationName:LatexitEquationDidChangeNotification object:self];
+  NSString* oldTitle = [self title];
+  if ((value != oldTitle) && ![value isEqualToString:oldTitle])
+  {
+    [self willChangeValueForKey:@"title"];
+    [self setPrimitiveValue:value forKey:@"title"];
+    [self didChangeValueForKey:@"title"];
+    [self reannotatePDFDataUsingPDFKeywords:YES];
+  }//end if ((value != oldTitle) && ![value isEqualToString:oldTitle])
 }
 //end setTitle:
 
 -(NSImage*) pdfCachedImage
 {
   NSImage* result = nil;
-  [self willAccessValueForKey:@"pdfCachedImage"];
-  result = [self primitiveValueForKey:@"pdfCachedImage"];
-  [self didAccessValueForKey:@"pdfCachedImage"]; 
-  if (!result)
+  @synchronized(self)
   {
-    NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:[self pdfData]];
-    result = [[NSImage alloc] initWithSize:[pdfImageRep size]];
-    [result setCacheMode:NSImageCacheNever];
-    [result setDataRetained:YES];
-    [result setScalesWhenResized:YES];
-    [result addRepresentation:pdfImageRep];
-    [pdfImageRep release];
-    [self setValue:result forKey:@"pdfCachedImage"];
-  }
+    result = self->pdfCachedImage;
+    if (!result)
+    {
+      NSData* pdfData = [self pdfData];
+      NSPDFImageRep* pdfImageRep = !pdfData ? nil : [[NSPDFImageRep alloc] initWithData:pdfData];
+      if (pdfImageRep)
+      {
+        self->pdfCachedImage = [[NSImage alloc] initWithSize:[pdfImageRep size]];
+        [self->pdfCachedImage setCacheMode:NSImageCacheNever];
+        [self->pdfCachedImage setDataRetained:YES];
+        [self->pdfCachedImage setScalesWhenResized:YES];
+        [self->pdfCachedImage addRepresentation:pdfImageRep];
+        if (![self->pdfCachedImage bitmapImageRepresentationWithMaxSize:NSMakeSize(0, 128)])//to help drawing in library
+          [self->pdfCachedImage bitmapImageRepresentation];
+        [pdfImageRep release];
+        result = self->pdfCachedImage;
+      }//end if (pdfImageRep)
+    }//end if (!result)
+  }//end @synchronized(self)
   return result;
 } 
 //end pdfCachedImage
 
 -(NSString*) modeAsString
 {
-  NSString* string = nil;
-  switch([self mode])
-  {
-    case LATEX_MODE_EQNARRAY:
-      string = @"eqnarray";
-      break;
-    case LATEX_MODE_DISPLAY:
-      string = @"display";
-      break;
-    case LATEX_MODE_INLINE:
-      string = @"inline";
-      break;
-    case LATEX_MODE_TEXT:
-      string = @"text";
-      break;
-  }
-  return string;
+  NSString* result = [[self class] latexModeToString:[self mode]];
+  return result;
 }
 //end modeAsString
+
++(NSString*) latexModeToString:(latex_mode_t)mode
+{
+  NSString* result = nil;
+  switch(mode)
+  {
+    case LATEX_MODE_EQNARRAY:
+      result = @"eqnarray";
+      break;
+    case LATEX_MODE_DISPLAY:
+      result = @"display";
+      break;
+    case LATEX_MODE_INLINE:
+      result = @"inline";
+      break;
+    case LATEX_MODE_TEXT:
+      result = @"text";
+      break;
+  }
+  return result;
+}
+//end latexModeToString:
+
++(latex_mode_t) latexModeFromString:(NSString*)modeAsString
+{
+  latex_mode_t result = LATEX_MODE_DISPLAY;
+  if ([modeAsString isEqualToString:@"eqnarray"])
+    result = LATEX_MODE_EQNARRAY;
+  else if ([modeAsString isEqualToString:@"display"])
+    result = LATEX_MODE_DISPLAY;
+  else if ([modeAsString isEqualToString:@"inline"])
+    result = LATEX_MODE_INLINE;
+  else if ([modeAsString isEqualToString:@"text"])
+    result = LATEX_MODE_TEXT;
+  return result;
+}
+//end latexModeFromString:
 
 //latex source code (preamble+body) typed by the user. This WON'T add magnification, auto-bounding, coloring.
 //It is a summary of what the user did effectively type. We just add \begin{document} and \end{document}
@@ -574,9 +730,18 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 }
 //end encapsulatedSource
 
+-(NSString*) titleAuto
+{
+  NSString* result = [[[self sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  unsigned int endIndex = MIN(17U, [result length]);
+  result = [result substringToIndex:endIndex];
+  return result;
+}
+//end titleAuto
+
 //useful to resynchronize the pdfData with the actual parameters (background color...)
 //its use if VERY rare, so that it is not automatic for the sake of efficiency
--(void) _reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
+-(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
   annotateDataDirtyState |= YES;
   if (![self isUpdating])
@@ -585,7 +750,7 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
     [self setPdfData:newData];
   }
 }
-//end _reannotatePDFDataUsingPDFKeywords:
+//end reannotatePDFDataUsingPDFKeywords:
 
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
@@ -607,26 +772,26 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
     [baselineAsString deleteCharactersInRange:range];
   }
   baseline = [baselineAsString doubleValue];
+  
+  [self setBaseline:baseline];
 
   //then, we rewrite the pdfData
-  #ifndef PANTHER
   if (usingPDFKeywords)
   {
     PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
     NSDictionary* attributes =
       [NSDictionary dictionaryWithObjectsAndKeys:
-         [NSApp applicationName], PDFDocumentCreatorAttribute,
+          [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute,
          nil];
     [pdfDocument setDocumentAttributes:attributes];
     newData = [pdfDocument dataRepresentation];
     [pdfDocument release];
   }
-  #endif
 
   //annotate in LEE format
   NSAttributedString* preamble   = [self preamble];
   NSAttributedString* sourceText = [self sourceText];
-  newData = [LatexProcessor annotatePdfDataInLEEFormat:newData
+  newData = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:newData
               preamble:(preamble ? [preamble string] : @"") source:(sourceText ? [sourceText string] : @"")
                  color:[self color] mode:[self mode] magnification:[self pointSize] baseline:baseline
        backgroundColor:[self backgroundColor] title:[self title]];
@@ -639,12 +804,12 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 -(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   //LinkBack pasteboard
-  NSArray* historyItemArray = [NSArray arrayWithObject:self];
-  NSData*  historyItemData  = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
+  NSArray* latexitEquationArray = [NSArray arrayWithObject:self];
+  NSData*  latexitEquationData  = [NSKeyedArchiver archivedDataWithRootObject:latexitEquationArray];
   NSDictionary* linkBackPlist =
-    isLinkBackRefresh ? [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData
+    isLinkBackRefresh ? [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:latexitEquationData
                                       actionName:LinkBackRefreshActionName suggestedRefreshRate:0]
-                      : [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
+                      : [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:latexitEquationData]; 
   
   if (isLinkBackRefresh)
     [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:self];
@@ -655,15 +820,17 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   NSData* pdfData = [self pdfData];
   [pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:self];
   [pboard setData:pdfData forType:NSFileContentsPboardType];
+  
+  PreferencesController* preferencesController = [PreferencesController sharedController];
 
   //Stores the data in the pasteboard corresponding to what the user asked for (pdf, jpeg, tiff...)
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
-  NSColor*  jpegColor      = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
-  float     quality        = [userDefaults floatForKey:DragExportJpegQualityKey];
-  NSData*   data           = lazyDataProvider ? nil :
-                             [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:jpegColor jpegQuality:quality
-                                                         scaleAsPercent:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
+  export_format_t exportFormat = [preferencesController exportFormat];
+  NSData* data = lazyDataProvider ? nil :
+    [[LaTeXProcessor sharedLaTeXProcessor]
+      dataForType:exportFormat pdfData:pdfData
+      jpegColor:[preferencesController exportJpegBackgroundColor] jpegQuality:[preferencesController exportJpegQualityPercent]
+      scaleAsPercent:[preferencesController exportScalePercent]
+      compositionConfiguration:[preferencesController compositionConfigurationDocument]];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   switch(exportFormat)
   {
@@ -703,7 +870,7 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"1.16.1", @"version",
+       @"2.0.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",
@@ -719,5 +886,27 @@ NSString* LatexitEquationDidChangeNotification = @"LatexitEquationDidChangeNotif
   return plist;
 }
 //end plistDescription
+
+-(id) initWithDescription:(id)description
+{
+  NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+    return nil;
+  [self beginUpdate];
+  [self setPdfData:[description objectForKey:@"pdfData"]];
+  NSString* string = [description objectForKey:@"preamble"];
+  [self setPreamble:(!string ? nil : [[[NSAttributedString alloc] initWithString:string] autorelease])];
+  string = [description objectForKey:@"sourceText"];
+  [self setSourceText:(!string ? nil : [[[NSAttributedString alloc] initWithString:string] autorelease])];
+  [self setColor:[NSColor colorWithRgbaString:[description objectForKey:@"color"]]];
+  [self setPointSize:[[description objectForKey:@"pointSize"] doubleValue]];
+  [self setMode:[[self class] latexModeFromString:[description objectForKey:@"mode"]]];
+  [self setDate:[description objectForKey:@"date"]];
+  [self setBackgroundColor:[NSColor colorWithRgbaString:[description objectForKey:@"backgroundColor"]]];
+  [self setTitle:[description objectForKey:@"title"]];
+  [self endUpdate];
+  return self;
+}
+//end initWithDescription:
 
 @end

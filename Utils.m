@@ -8,15 +8,30 @@
 
 #import "Utils.h"
 
+#import "RegexKitLite.h"
+int DebugLogLevel = 0;
+
 static NSString* MyPNGPboardType = nil;
 extern NSString* NSPNGPboardType __attribute__((weak_import));
 static NSString* MyJPEGPboardType = nil;
 
-#define NSAppKitVersionNumber10_4 824
+BOOL isMacOS10_5OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_4);
+  return result;
+}
+//end isMacOS10_5OrAbove()
+
+BOOL isMacOS10_6OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_5);
+  return result;
+}
+//end isMacOS10_6OrAbove()
 
 NSString* GetMyPNGPboardType(void)
 {
-  if (!MyPNGPboardType && (!(floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_4))) //Leopard+
+  if (!MyPNGPboardType && isMacOS10_5OrAbove())
     MyPNGPboardType = @"public.png";
   if (!MyPNGPboardType)  
     MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
@@ -30,7 +45,7 @@ NSString* GetMyPNGPboardType(void)
 
 NSString* GetMyJPEGPboardType(void)
 {
-  if (!MyJPEGPboardType && (!(floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_4))) //Leopard+
+  if (!MyJPEGPboardType && isMacOS10_5OrAbove())
     MyJPEGPboardType = @"public.jpeg";
   if (!MyJPEGPboardType)  
     MyJPEGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1
@@ -75,6 +90,47 @@ latex_mode_t latexModeForIndex(int index)
   return mode;
 }
 //end latexModeForIndex()
+
+NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDidChange)
+{
+  NSString* result = string;
+  NSMutableString* differentString = nil;
+  BOOL didChange = NO;
+
+  NSString* radical =
+    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, [string length])
+                     capture:1 error:nil];
+  NSString* identifierString =
+    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, [string length])
+                     capture:2 error:nil];
+  if (!radical || ![radical length])
+    radical = string;
+  if (!identifierString)
+    identifierString = @"";
+
+  unsigned int identifier = 2;
+  if (radical)
+  {
+    result = radical;
+    identifier = (unsigned)([identifierString intValue]+1);
+  }
+
+  if ([otherStrings containsObject:result])
+  {
+    didChange = YES;
+    differentString = [NSMutableString stringWithFormat:@"%@ (%u)", result, identifier++];
+  }
+  while(identifier && [otherStrings containsObject:differentString])
+  {
+    [differentString setString:@""];
+    [differentString appendFormat:@"%@ (%u)", result, identifier++];
+  }
+  if (didChange)
+    result = differentString;
+  if (pDidChange) *pDidChange = didChange;
+  return result;
+}
+//end makeStringDifferent()
 
 int EndianI_BtoN(int x)
 {
@@ -131,3 +187,32 @@ unsigned long EndianUL_NtoB(unsigned long x)
          (sizeof(x) == sizeof(uint64_t)) ? EndianU64_NtoB(x) :
          x;
 }
+
+NSRect adaptRectangle(NSRect rectangle, NSRect containerRectangle, BOOL allowScaleDown, BOOL allowScaleUp, BOOL integerScale)
+{
+  NSRect result = rectangle;
+  if (allowScaleDown && ((result.size.width>containerRectangle.size.width) ||
+                         (result.size.height>containerRectangle.size.height)))
+  {
+    CGFloat divisor = MAX(!containerRectangle.size.width  ? 0.f : result.size.width/containerRectangle.size.width,
+                          !containerRectangle.size.height ? 0.f : result.size.height/containerRectangle.size.height);
+    if (integerScale)
+      divisor = ceil(divisor);
+    result.size.width /= divisor;
+    result.size.height /= divisor;
+  }
+  if (allowScaleUp && ((rectangle.size.width<containerRectangle.size.width) ||
+                       (rectangle.size.height<containerRectangle.size.height)))
+  {
+    CGFloat factor = MIN(!result.size.width  ? 0.f : containerRectangle.size.width/result.size.width,
+                         !result.size.height ? 0.f : containerRectangle.size.height/result.size.height);
+    if (factor)
+      factor = floor(factor);
+    result.size.width *= factor;
+    result.size.height *= factor;
+  }
+  result.origin.x = (containerRectangle.origin.x+(containerRectangle.size.width-result.size.width)/2);
+  result.origin.y = (containerRectangle.origin.y+(containerRectangle.size.height-result.size.height)/2);
+  return result;
+}
+//end adaptRectangle()

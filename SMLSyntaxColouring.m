@@ -13,6 +13,8 @@
 #import "NSColorExtended.h"
 #import "PreferencesController.h"
 
+#import "Utils.h"
+
 @implementation SMLSyntaxColouring
 
 static NSArray *syntaxDefinitionsArray;
@@ -48,7 +50,7 @@ static NSArray *syntaxDefinitionsArray;
 
 -(id)initWithTextView:(NSTextView*)aTextView
 {
-	if (![super init])
+	if ((!(self = [super init])))
     return nil;
     
   userDefaults = [NSUserDefaults standardUserDefaults];
@@ -92,55 +94,52 @@ static NSArray *syntaxDefinitionsArray;
 
 -(void)setColours
 {
-  BOOL syntaxColoring = [userDefaults boolForKey:SyntaxColoringEnableKey];
-  NSColor* color = nil;
-  [textView setBackgroundColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextBackgroundColorKey]]];
-  
-  color = [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]];
-  [[textView textStorage] setForegroundColor:color];
-  
-  color = [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]];
-	if (commandsColour) {
-		[commandsColour release];
-		commandsColour = nil;
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  BOOL syntaxColoring = [preferencesController editionSyntaxColoringEnabled];
+  [textView setBackgroundColor:[preferencesController editionSyntaxColoringTextBackgroundColor]];
+  [[textView textStorage] setForegroundColor:[preferencesController editionSyntaxColoringTextForegroundColor]];
+	if (self->commandsColour) {
+		[self->commandsColour release];
+		self->commandsColour = nil;
 	}
-  color = syntaxColoring ? [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringCommandColorKey]] : color;
-  commandsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
+  NSColor* color = [preferencesController editionSyntaxColoringTextForegroundColor];
+  color = syntaxColoring ? [preferencesController editionSyntaxColoringCommandColor] : color;
+  self->commandsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
 	
-	if (commentsColour) {
-		[commentsColour release];
-		commentsColour = nil;
+	if (self->commentsColour) {
+		[self->commentsColour release];
+		self->commentsColour = nil;
 	}
-  color = syntaxColoring ? [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringCommentColorKey]] : color;
-  commentsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
+  color = syntaxColoring ? [preferencesController editionSyntaxColoringCommentColor] : color;
+  self->commentsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
 	
-	if (instructionsColour) {
-		[instructionsColour release];
-		instructionsColour = nil;
+	if (self->instructionsColour) {
+		[self->instructionsColour release];
+		self->instructionsColour = nil;
 	}
-  color = syntaxColoring ? [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringCommandColorKey]] : color;
-  instructionsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
+  color = syntaxColoring ? [preferencesController editionSyntaxColoringCommandColor] : color;
+  self->instructionsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
 	
-	if (keywordsColour) {
-		[keywordsColour release];
-		keywordsColour = nil;
+	if (self->keywordsColour) {
+		[self->keywordsColour release];
+		self->keywordsColour = nil;
 	}
-  color = syntaxColoring ? [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringKeywordColorKey]] : color;
-  keywordsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
+  color = syntaxColoring ? [preferencesController editionSyntaxColoringKeywordColor] : color;
+  self->keywordsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
 	
-	if (stringsColour) {
-		[stringsColour release];
-		stringsColour = nil;
+	if (self->stringsColour) {
+		[self->stringsColour release];
+		self->stringsColour = nil;
 	}
-  color = syntaxColoring ? [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringMathsColorKey]] : color;
-  stringsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
+  color = syntaxColoring ? [preferencesController editionSyntaxColoringMathsColor] : color;
+  self->stringsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
 	
-	if (variablesColour) {
-		[variablesColour release];
-		variablesColour = nil;
+	if (self->variablesColour) {
+		[self->variablesColour release];
+		self->variablesColour = nil;
 	}
-  color = syntaxColoring ? [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringKeywordColorKey]] : color;
-  variablesColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
+  color = syntaxColoring ? [preferencesController editionSyntaxColoringKeywordColor] : color;
+  self->variablesColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
 }
 
 -(void)setSyntaxDefinitionsForExtension:(NSString *)extension
@@ -600,7 +599,7 @@ static NSArray *syntaxDefinitionsArray;
 						continue;
 					}
 				}	
-				[layoutManager addTemporaryAttributes:keywordsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, [scanner scanLocation] - beginning)];
+				[layoutManager addTemporaryAttributes:self->keywordsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, [scanner scanLocation] - beginning)];
 			}
 		}
 	}
@@ -622,7 +621,7 @@ static NSArray *syntaxDefinitionsArray;
 					[scanner setScanLocation:[scanner scanLocation] + 1];
 				}
 			}
-			[layoutManager addTemporaryAttributes:variablesColour forCharacterRange:NSMakeRange(beginning + rangeLocation, length)];
+			[layoutManager addTemporaryAttributes:self->variablesColour forCharacterRange:NSMakeRange(beginning + rangeLocation, length)];
 		}
 	}	
 	
@@ -663,7 +662,7 @@ static NSArray *syntaxDefinitionsArray;
 			
 			if (foundMatch) {
 				[scanner setScanLocation:index];
-				[layoutManager addTemporaryAttributes:stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
+				[layoutManager addTemporaryAttributes:self->stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
 			} else {
 				[scanner setScanLocation:beginning + 1];
 			}
@@ -681,7 +680,7 @@ static NSArray *syntaxDefinitionsArray;
 			beginning = [scanner scanLocation];
 			if (beginning >= searchStringLength) break;
 			characterToCheck = [searchString characterAtIndex:beginning - 1];
-			if (characterToCheck == '\\' || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:stringsColour] || [letterCharacterSet characterIsMember:characterToCheck]) {
+			if (characterToCheck == '\\' || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour] || [letterCharacterSet characterIsMember:characterToCheck]) {
 				[scanner setScanLocation:beginning + 1];
 				continue; // to avoid e.g. \" or if it's on a string
 			}
@@ -705,7 +704,7 @@ static NSArray *syntaxDefinitionsArray;
 	
 			if (foundMatch) {
 				[scanner setScanLocation:index];
-				[layoutManager addTemporaryAttributes:stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
+				[layoutManager addTemporaryAttributes:self->stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
 			} else {
 				[scanner setScanLocation:beginning + 1];
 			}
@@ -740,8 +739,8 @@ static NSArray *syntaxDefinitionsArray;
 					}
 				}
 			}
-			if (beginning + rangeLocation + searchSyntaxLength < completeStringLength) {
-				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:stringsColour]) {
+			if (beginning + rangeLocation + searchSyntaxLength < [[scanner string] length]/*completeStringLength*/) {
+				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
 					[scanner setScanLocation:beginning + 1];
 					continue; // if the comment is within a string disregard it
 				}
@@ -782,7 +781,7 @@ static NSArray *syntaxDefinitionsArray;
 				}
 			}
 			if (beginning + rangeLocation + searchSyntaxLength < completeStringLength) {
-				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:stringsColour]) {
+				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
 					[scanner setScanLocation:beginning + 1];
 					continue; // if the comment is within a string disregard it
 				}
@@ -816,7 +815,7 @@ static NSArray *syntaxDefinitionsArray;
 			if (beginning == NSNotFound) break;
 			[completeDocumentScanner setScanLocation:beginning];
 			if (beginning + 1 < completeStringLength) {
-				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning effectiveRange:NULL] isEqualToDictionary:stringsColour]) {
+				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
 					[completeDocumentScanner setScanLocation:beginning + 1];
 					beginLocationInMultiLine++;
 					continue; // if the comment is within a string disregard it
@@ -874,7 +873,7 @@ static NSArray *syntaxDefinitionsArray;
 			if (beginning == NSNotFound) break;
 			[completeDocumentScanner setScanLocation:beginning];
 			if (beginning + 1 < completeStringLength) {
-				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning effectiveRange:NULL] isEqualToDictionary:stringsColour]) {
+				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
 					[completeDocumentScanner setScanLocation:beginning + 1];
 					beginLocationInMultiLine++;
 					continue; // if the comment is within a string disregard it
@@ -919,7 +918,7 @@ static NSArray *syntaxDefinitionsArray;
 			beginning = [scanner scanLocation];
 			if (beginning >= searchStringLength) break;
 			characterToCheck = [searchString characterAtIndex:beginning - 1];
-			if ([letterCharacterSet characterIsMember:characterToCheck] || characterToCheck == '\\' || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:stringsColour] || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:commentsColour]) {
+			if ([letterCharacterSet characterIsMember:characterToCheck] || characterToCheck == '\\' || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour] || [[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:commentsColour]) {
 				[scanner setScanLocation:beginning + 1];
 				continue; // to avoid e.g. \' and if it's on a string or comment 
 			}
@@ -945,7 +944,7 @@ static NSArray *syntaxDefinitionsArray;
 			
 			if (foundMatch) {
 				[scanner setScanLocation:index];
-				[layoutManager addTemporaryAttributes:stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
+				[layoutManager addTemporaryAttributes:self->stringsColour forCharacterRange:NSMakeRange(beginning + rangeLocation, index - beginning)];
 			} else {
 				[scanner setScanLocation:beginning + 1];
 			}
@@ -953,6 +952,7 @@ static NSArray *syntaxDefinitionsArray;
 	}
 	
 	NS_HANDLER // if there are any exceptions raised, just continue and leave it uncoloured
+  DebugLog(0, @"localException : %@", localException);
 	NS_ENDHANDLER	
 	[scanner release];
 	[completeDocumentScanner release];
@@ -1229,43 +1229,43 @@ static NSArray *syntaxDefinitionsArray;
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	[startPageRecolourTimer invalidate];
-	[startPageRecolourTimer release];
-	[startCompleteRecolourTimer invalidate];
-	[startCompleteRecolourTimer release];
+	[self->startPageRecolourTimer invalidate];
+	[self->startPageRecolourTimer release];
+	[self->startCompleteRecolourTimer invalidate];
+	[self->startCompleteRecolourTimer release];
 	
-	[undoManager release];
-	[commandsColour release];
-	[commentsColour release];
-	[instructionsColour release];
-	[keywordsColour release];
-	[stringsColour release];
-	[variablesColour release];
+	[self->undoManager release];
+	[self->commandsColour release];
+	[self->commentsColour release];
+	[self->instructionsColour release];
+	[self->keywordsColour release];
+	[self->stringsColour release];
+	[self->variablesColour release];
 	
-	[highlightColour release];
+	[self->highlightColour release];
 	
-	[wordEnumerator release];
-  [keywords release];
-	[autocompleteWords release];
-	[keywordsAndAutocompleteWords release];
-  [beginCommand release];
-  [endCommand release];
-  [beginInstruction release];
-  [endInstruction release];
-  [beginVariable release];
-  [endVariable release];
-  [firstString release];
-  [secondString release];
-  [firstSingleLineComment release];
-	[secondSingleLineComment release];
-  [beginFirstMultiLineComment release];
-  [endFirstMultiLineComment release];
-  [beginSecondMultiLineComment release];
-  [endSecondMultiLineComment release];
-	[syntaxDefinitionName release];
+	[self->wordEnumerator release];
+  [self->keywords release];
+	[self->autocompleteWords release];
+	[self->keywordsAndAutocompleteWords release];
+  [self->beginCommand release];
+  [self->endCommand release];
+  [self->beginInstruction release];
+  [self->endInstruction release];
+  [self->beginVariable release];
+  [self->endVariable release];
+  [self->firstString release];
+  [self->secondString release];
+  [self->firstSingleLineComment release];
+	[self->secondSingleLineComment release];
+  [self->beginFirstMultiLineComment release];
+  [self->endFirstMultiLineComment release];
+  [self->beginSecondMultiLineComment release];
+  [self->endSecondMultiLineComment release];
+	[self->syntaxDefinitionName release];
 	
-	[keywordStartCharacterSet release];
-	[keywordEndCharacterSet release];
+	[self->keywordStartCharacterSet release];
+	[self->keywordEndCharacterSet release];
   
 	[super dealloc];
 }

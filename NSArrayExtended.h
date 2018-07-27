@@ -9,14 +9,16 @@
 
 @interface NSArray (Extended)
 
+-(id) firstObject;
+
+//checks if the array contains an object, based on adress comparison, not isEqual:
+-(BOOL) containsObjectIdenticalTo:(id)object;
+
 //returns a copy of the receiver in the reversed order
 -(NSArray*) reversed;
 
+-(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index;
 -(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
-
-#ifdef PANTHER
--(NSArray*) objectsAtIndexes:(NSIndexSet *)indexes; //does exist in Tiger
-#endif
 
 -(id) deepCopy;
 -(id) deepCopyWithZone:(NSZone*)zone;

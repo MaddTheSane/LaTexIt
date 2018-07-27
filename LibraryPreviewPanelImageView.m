@@ -12,39 +12,44 @@
 
 -(void) dealloc
 {
-  [backgroundColor release];
+  [self->backgroundColor release];
   [super dealloc];
 }
+//end dealloc
 
 -(void) setBackgroundColor:(NSColor*)color
 {
   [color retain];
-  [backgroundColor release];
-  backgroundColor = color;
+  [self->backgroundColor release];
+  self->backgroundColor = color;
 }
+//end setBackgroundColor:
 
 -(NSColor*) backgroundColor
 {
-  return backgroundColor;
+  return self->backgroundColor;
 }
+//end backgroundColor
 
 -(void) drawRect:(NSRect)rect
 {
   NSImage* image = [[self image] retain];
-  [image setBackgroundColor:backgroundColor];
+  //[image setBackgroundColor:[NSColor clearColor]];
+  [image setBackgroundColor:self->backgroundColor];
   NSSize size = image ? [image size] : NSZeroSize;
   NSRect bounds = [self bounds];
   NSRect reducedBounds = NSMakeRect(bounds.origin.x+5, bounds.origin.y+5, bounds.size.width-10, bounds.size.height-10);
   [self setImage:nil];
   [super drawRect:rect];
-  if (backgroundColor)
+  if (self->backgroundColor)
   {
-    [backgroundColor set];
+    [self->backgroundColor set];
     NSRectFill(reducedBounds);
   }
   [image drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
   [self setImage:image];
   [image release];
 }
+//end drawRect:
 
 @end

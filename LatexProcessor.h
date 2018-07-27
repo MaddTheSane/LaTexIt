@@ -1,5 +1,5 @@
 //
-//  LatexProcessor.h
+//  LaTeXProcessor.h
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
@@ -10,45 +10,66 @@
 
 #import "LaTeXiTSharedTypes.h"
 
-@interface LatexProcessor : NSObject {
-
+@interface LaTeXProcessor : NSObject {
+  NSManagedObjectModel* managedObjectModel;
+  NSMutableArray*       unixBins;
+  NSMutableString*      globalEnvironmentPath;
+  NSMutableDictionary*  globalFullEnvironment;
+  NSMutableDictionary*  globalExtraEnvironment;
+  BOOL                  environmentsInitialized;
 }
 
-+(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
++(LaTeXProcessor*) sharedLaTeXProcessor;
+
+-(NSManagedObjectModel*) managedObjectModel;
+-(NSArray*)      unixBins;
+-(NSString*)     environmentPath;
+-(NSDictionary*) fullEnvironment;
+-(NSDictionary*) extraEnvironment;
+
+-(void) addInEnvironmentPath:(NSString*)path;
+
+-(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
                                  backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
-+(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable;
-+(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
-                    magnification:(double)magnification compositionMode:(composition_mode_t)compositionMode
-                    workingDirectory:(NSString*)workingDirectory uniqueIdentifier:(NSString*)uniqueIdentifier
-                    additionalFilepaths:(NSArray*)additionalFilepaths
-                    fullEnvironment:(NSDictionary*)fullEnvironment
-                    useLoginShell:(BOOL)useLoginShell
-                    pdfLatexPath:(NSString*)pdfLatexPath xeLatexPath:(NSString*)xeLatexPath latexPath:(NSString*)latexPath
-                    dviPdfPath:(NSString*)dviPdfPath gsPath:(NSString*)gsPath ps2PdfPath:(NSString*)ps2PdfPath
-                    leftMargin:(float)leftMargin rightMargin:(float)rightMargin
-                    topMargin:(float)topMargin bottomMargin:(float)bottomMargin
+
+-(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable;
+
+-(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
+                    magnification:(double)magnification compositionConfiguration:(NSDictionary*)compositionConfiguration
                     backgroundColor:(NSColor*)backgroundColor
-                    additionalProcessingScripts:(NSDictionary*)additionalProcessingScripts
+                    leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin
+                    topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin
+                    additionalFilesPaths:(NSArray*)additionalFilesPaths
+                    workingDirectory:(NSString*)workingDirectory fullEnvironment:(NSDictionary*)fullEnvironment
+                    uniqueIdentifier:(NSString*)uniqueIdentifier
                     outFullLog:(NSString**)outFullLog outErrors:(NSArray**)outErrors outPdfData:(NSData**)outPdfData;
-+(NSRect)    computeBoundingBox:(NSString*)filePath workingDirectory:(NSString*)directory
-               fullEnvironment:(NSDictionary*)fullEnvironment useLoginShell:(BOOL)useLoginShell
-                     dviPdfPath:(NSString*)dviPdfPath gsPath:(NSString*)gsPath;
-+(NSData*) composeLaTeX:(NSString*)filePath customLog:(NSString**)customLog
-                                             stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
-                                       compositionMode:(composition_mode_t)compositionMode
-           pdfLatexPath:(NSString*)pdfLatexPath xeLatexPath:(NSString*)xeLatexPath latexPath:(NSString*)latexPath
-           dviPdfPath:(NSString*)dviPdfPath
-           fullEnvironment:(NSDictionary*)fullEnvironment useLoginShell:(BOOL)useLoginShell;
-+(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift;
-+(BOOL) crop:(NSString*)inoutPdfFilePath to:(NSString*)outputPdfFilePath extraArguments:(NSArray*) extraArguments
-  useLoginShell:(BOOL)useLoginShell workingDirectory:(NSString*)workingDirectory environment:(NSDictionary*)environment
-     outPdfData:(NSData**)outPdfData;
-+(NSString*) descriptionForScript:(NSDictionary*)script;
-+(void) executeScript:(NSDictionary*)script setEnvironment:(NSDictionary*)environment logString:(NSMutableString*)logString
-     workingDirectory:(NSString*)directory uniqueIdentifier:(NSString*)uniqueIdentifier useLoginShell:(BOOL)useLoginShell;
+
+-(NSRect) computeBoundingBox:(NSString*)filePath workingDirectory:(NSString*)workingDirectory
+             fullEnvironment:(NSDictionary*)fullEnvironment compositionConfiguration:(NSDictionary*)compositionConfiguration;
+
+-(NSData*) composeLaTeX:(NSString*)filePath customLog:(NSString**)customLog
+              stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
+              compositionConfiguration:(NSDictionary*)compositionConfiguration
+              fullEnvironment:(NSDictionary*)fullEnvironment;
+
+-(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift;
+-(BOOL) crop:(NSString*)inoutPdfFilePath to:(NSString*)outputPdfFilePath canClip:(BOOL)canClip extraArguments:(NSArray*)extraArguments
+        compositionConfiguration:(NSDictionary*)compositionConfiguration
+        workingDirectory:(NSString*)workingDirectory
+        environment:(NSDictionary*)environment
+        outPdfData:(NSData**)outPdfData;
+
+-(NSString*) descriptionForScript:(NSDictionary*)script;
+
+-(void) executeScript:(NSDictionary*)script setEnvironment:(NSDictionary*)environment logString:(NSMutableString*)logString
+        workingDirectory:(NSString*)workingDirectory uniqueIdentifier:(NSString*)uniqueIdentifier
+        compositionConfiguration:(NSDictionary*)compositionConfiguration;
 
 //returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
-+(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
+-(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
 
+-(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
+             jpegColor:(NSColor*)color jpegQuality:(CGFloat)quality scaleAsPercent:(CGFloat)scaleAsPercent
+             compositionConfiguration:(NSDictionary*)compositionConfiguration;
 @end

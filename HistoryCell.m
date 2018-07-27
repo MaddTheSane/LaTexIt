@@ -9,13 +9,15 @@
 
 #import "HistoryCell.h"
 
+#import "Utils.h"
+
 // CoreGraphics gradient helpers
 typedef struct {
-  float red1, green1, blue1, alpha1;
-  float red2, green2, blue2, alpha2;
+  CGFloat red1, green1, blue1, alpha1;
+  CGFloat red2, green2, blue2, alpha2;
 } twoRgba_t;
 
-static void _linearColorBlendFunction(void *info, const float *inData, float *outData)
+static void _linearColorBlendFunction(void *info, const CGFloat *inData, CGFloat *outData)
 {
   twoRgba_t* twoRgbaColors = (twoRgba_t*) info;
   
@@ -41,60 +43,94 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  if ((!(self = [super initWithCoder:coder])))
     return nil;
-  dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%a %d %b %Y, %H:%M:%S" allowNaturalLanguage:YES];
-  backgroundColor = nil;//there may be no color
+  self->dateFormatter = [[NSDateFormatter alloc] init];
+  [self->dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+  self->backgroundColor = nil;//there may be no color
   return self;
 }
+//end initWithCoder:
 
 -(void) dealloc
 {
-  [dateFormatter release];
+  [self->dateFormatter release];
   [super dealloc];
 }
+//end dealloc
 
 -(void) setBackgroundColor:(NSColor*)color
 {
   [color retain];
-  [backgroundColor release];
-  backgroundColor = color;
+  [self->backgroundColor release];
+  self->backgroundColor = color;
 }
+//end setBackgroundColor:
 
 -(id) copyWithZone:(NSZone*)zone
 {
   HistoryCell* cell = (HistoryCell*) [super copyWithZone:zone];
   if (cell)
   {
-    cell->dateFormatter = [dateFormatter retain];
-    cell->backgroundColor = [backgroundColor copy];
+    cell->dateFormatter = [self->dateFormatter retain];
+    cell->backgroundColor = [self->backgroundColor copy];
   }
   return cell;
 }
+//end copyWithZone:
 
--(void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+-(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-  if (backgroundColor)
+  if (self->backgroundColor)
   {
-    [backgroundColor set];
+    [self->backgroundColor set];
     NSRectFill(cellFrame);
   }
   NSRect headerRect = NSMakeRect(cellFrame.origin.x-1, cellFrame.origin.y-1, cellFrame.size.width+3, 16);
   NSRect imageRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+headerRect.size.height,
                                 cellFrame.size.width, cellFrame.size.height-headerRect.size.height);
-  [super drawInteriorWithFrame:imageRect inView:controlView]; //the image is displayed in a subrect of the cell
+  BOOL drawScaled = YES;
+  if (!drawScaled)
+    [super drawInteriorWithFrame:imageRect inView:controlView]; //the image is displayed in a subrect of the cell
+  else
+  {
+    NSImage* image = [self image];
+    NSImageRep* imageRep = [image bestRepresentationForDevice:nil];
+    NSPDFImageRep* pdfImageRep = ![imageRep isKindOfClass:[NSPDFImageRep class]] ? nil : (NSPDFImageRep*)imageRep;
+    NSRect bounds = !pdfImageRep ? NSMakeRect(0.f, 0.f, [imageRep pixelsWide], [imageRep pixelsHigh]) :
+                    [pdfImageRep bounds];
+    NSRect imageDrawRect = adaptRectangle(bounds, imageRect, YES, NO, YES);
+    [NSGraphicsContext saveGraphicsState];
+    NSAffineTransform* transform = [NSAffineTransform transform];
+    [transform translateXBy:imageDrawRect.origin.x yBy:imageDrawRect.origin.y];
+    [transform translateXBy:0 yBy:imageDrawRect.size.height/2];
+    [transform scaleXBy:1.f yBy:[image isFlipped] ^ [controlView isFlipped] ? -1.f : 1.f];
+    [transform translateXBy:0 yBy:-imageDrawRect.size.height/2];
+    [transform concat];
+    [imageRep drawInRect:NSMakeRect(0, 0, imageDrawRect.size.width, imageDrawRect.size.height)];
+    [NSGraphicsContext restoreGraphicsState];
+  }//end if (drawScaled)
 
   //now we add the date
   NSDate* date = [[self representedObject] date];
-  NSString* dateString = [dateFormatter stringForObjectValue:date];
-  NSAttributedString* attrString = [[NSAttributedString alloc] initWithString:dateString attributes:nil];
-  NSSize textSize = [attrString size];
+  [self->dateFormatter setDateStyle:NSDateFormatterNoStyle];
+  [self->dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+  [self->dateFormatter setDateStyle:NSDateFormatterFullStyle];
+  NSString* dateString = [self->dateFormatter stringFromDate:date];
+  [self->dateFormatter setDateStyle:NSDateFormatterNoStyle];
+  [self->dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+  NSString* timeString = [self->dateFormatter stringFromDate:date];
+  [self->dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+  NSString* dateTimeString = [NSString stringWithFormat:@"%@, %@", dateString, timeString];
+  NSAttributedString* attrString = !dateTimeString ? nil :
+    [[NSAttributedString alloc] initWithString:dateTimeString attributes:nil];
+  NSSize textSize = !attrString ? NSZeroSize : [attrString size];
 
   NSRect textRect = NSMakeRect(headerRect.origin.x+(headerRect.size.width  - textSize.width ) / 2, headerRect.origin.y,
                                textSize.width, headerRect.size.height);
   BOOL isSelectedCell = NO;
   NSIndexSet* indexSet = [(NSTableView*)controlView selectedRowIndexes];
-  unsigned int index = [indexSet firstIndex];
+  NSUInteger index = [indexSet firstIndex];
   while(!isSelectedCell && (index != NSNotFound))
   {
     isSelectedCell |= NSIntersectsRect(headerRect, [(NSTableView*)controlView rectOfRow:index]);
@@ -113,12 +149,13 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   [attrString drawInRect:textRect]; //the date is displayed
   [attrString release];
 }
+//end drawInteriorWithFrame:inView:
 
 -(void) drawGradientInRect:(NSRect)rect withColor:(NSColor*)color
 {
   // Take the color apart
   NSColor *alternateSelectedControlColor = color ? color : [NSColor grayColor];
-  float hue, saturation, brightness, alpha;
+  CGFloat hue, saturation, brightness, alpha;
   [[alternateSelectedControlColor
       colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hue
       saturation:&saturation brightness:&brightness alpha:&alpha];
@@ -139,7 +176,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   // immediately. We need for all the data the shading function needs to draw to potentially outlive us.
   [lighterColor getRed:&twoColors->red1 green:&twoColors->green1 blue:&twoColors->blue1 alpha:&twoColors->alpha1];
   [darkerColor  getRed:&twoColors->red2 green:&twoColors->green2 blue:&twoColors->blue2 alpha:&twoColors->alpha2];
-  static const float domainAndRange[8] = {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0};
+  static const CGFloat domainAndRange[8] = {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0};
   CGFunctionRef linearBlendFunctionRef = CGFunctionCreate(twoColors, 1, domainAndRange, 4, domainAndRange, &linearFunctionCallbacks);
   
   // Draw a soft wash underneath it
@@ -155,5 +192,6 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   CGFunctionRelease(linearBlendFunctionRef);
   CGColorSpaceRelease(colorSpace);
 }
+//end drawGradientInRect:withColor:
 
 @end

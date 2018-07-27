@@ -13,7 +13,7 @@
 
 -(id) init
 {
-  if (![super init])
+  if ((!(self = [super init])))
     return nil;
   tDirStatus dirStatus = dsOpenDirService(&gDirRef);
   if (gDirRef)

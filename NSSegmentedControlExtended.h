@@ -2,18 +2,14 @@
 //  NSSegmentedControlExtended.h
 //  LaTeXiT
 //
-//  Created by Pierre Chatelier on 04/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
-
-//this file is an extension of the NSSegmentedControl class
-//It is only useful to compile LaTeXiT for Panther
+//  Created by Pierre Chatelier on 18/04/09.
+//  Copyright 2009 LAIC. All rights reserved.
+//
 
 #import <Cocoa/Cocoa.h>
 
 @interface NSSegmentedControl (Extended)
 
-#ifdef PANTHER
--(BOOL) selectSegmentWithTag:(int)tag; //does exist in MacOS 10.4
-#endif
+-(void) sizeToFitWithSegmentWidth:(CGFloat)segmentWidth useSameSize:(BOOL)useSameSize;
 
 @end

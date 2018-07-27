@@ -8,20 +8,19 @@
 
 #import "Automator_CreateEquations.h"
 
-#import "LaTeXiTPreferencesKeys.h"
+#import "KeyedUnarchiveFromDataTransformer.h"
 #import "LaTeXiTSharedTypes.h"
-
-#import "LatexProcessor.h"
-
-#import "ColorDataTransformer.h"
+#import "LaTeXProcessor.h"
 #import "NSColorExtended.h"
+#import "NSFileManagerExtended.h"
 #import "NSStringExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "PreamblesController.h"
-
-#import <Bridge10_5/Bridge10_5.h>
+#import "PreferencesController.h"
+#import "Utils.h"
 
 #import <OSAKit/OSAKit.h>
-#import <OgreKit/OgreKit.h>
+#import "RegexKitLite.h"
 
 static unsigned long firstFreeUniqueIdentifier = 1;
 static NSMutableSet* freeIds = nil;
@@ -35,7 +34,10 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
   @synchronized(self)
   {
     if (!freeIds)
+    {
       freeIds = [[NSMutableSet alloc] init];
+      [KeyedUnarchiveFromDataTransformer initialize];//seems needed on Tiger
+    }
   }
 }
 //end initialize
@@ -87,7 +89,7 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
 
 -(id) initWithDefinition:(NSDictionary*)dict fromArchive:(BOOL)archived
 {
-  if (![super initWithDefinition:dict fromArchive:archived])
+  if ((!(self = [super initWithDefinition:dict fromArchive:archived])))
     return nil;
   self->fromArchive = archived;
   self->uniqueId = [[self class] getNewIdentifier];
@@ -107,18 +109,15 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
   if (!self->fromArchive) //init from latexit preferences
   {
     NSMutableDictionary* dict = [self parameters];
-    CFStringRef appKey = (CFStringRef)@"fr.club.ktd.LaTeXiT";
-    NSString* latexitVersion = (NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, appKey);
+    PreferencesController* preferencesController = [PreferencesController sharedController];
+    CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
+    NSString* latexitVersion = [preferencesController latexitVersion];
     self->latexitPreferencesAvailable = (latexitVersion != nil);
     [normalView  setHidden:!self->latexitPreferencesAvailable];
     [warningView setHidden:self->latexitPreferencesAvailable];
-    Boolean ok = FALSE;
-    ok = CFPreferencesSynchronize(appKey, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-    latex_mode_t equationMode = CFPreferencesGetAppIntegerValue((CFStringRef)DefaultModeKey, appKey, &ok);
-    if (!ok)     equationMode = LATEX_MODE_EQNARRAY;
-    NSNumber*    fontSizeNumber = (NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DefaultPointSizeKey, appKey);
-    float        fontSize       = !fontSizeNumber ? 36.f : [fontSizeNumber floatValue];
-    NSData*      fontColorData  = (NSData*)CFPreferencesCopyAppValue((CFStringRef)DefaultColorKey, appKey);
+    latex_mode_t equationMode = [preferencesController latexisationLaTeXMode];
+    CGFloat      fontSize       = [preferencesController latexisationFontSize];
+    NSData*      fontColorData  = [preferencesController latexisationFontColorData];
     [dict setObject:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
     [dict setObject:[NSNumber numberWithFloat:fontSize] forKey:@"fontSize"];
     if (fontColorData)
@@ -140,55 +139,30 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
   NSMutableArray* result = [[[NSMutableArray alloc] initWithCapacity:[input count]] autorelease];
   NSDictionary* parameters = [self parameters];
   latex_mode_t equationMode = (latex_mode_t)[[parameters objectForKey:@"equationMode"] intValue];
-  float        fontSize     = [[parameters objectForKey:@"fontSize"] floatValue];
+  CGFloat      fontSize     = [[parameters objectForKey:@"fontSize"] floatValue];
   NSData*      fontColorData = [parameters objectForKey:@"fontColorData"];
   NSColor*     fontColor      = !fontColorData ? [NSColor blackColor] : [NSColor colorWithData:fontColorData];
   equationDestination_t equationDestination = (equationDestination_t) [[parameters objectForKey:@"equationFilesDestination"] intValue];
   NSString*    workingDirectory = [self workingDirectory];
   NSDictionary* fullEnvironment = nil;
-  Boolean ok = NO;
-  CFStringRef appKey = (CFStringRef)@"fr.club.ktd.LaTeXiT";
-  BOOL useLoginShell = CFPreferencesGetAppBooleanValue((CFStringRef)UseLoginShellKey, appKey, &ok);
-  NSArray* compositionConfigurations = (NSArray*)
-    CFPreferencesCopyAppValue((CFStringRef)CompositionConfigurationsKey, appKey);
-  int compositionConfigurationIndex = CFPreferencesGetAppIntegerValue(
-    (CFStringRef)CurrentCompositionConfigurationIndexKey, appKey, &ok);
-  NSDictionary* configuration = (!ok || (compositionConfigurationIndex<0) ||
-                                 ((unsigned)compositionConfigurationIndex >= [compositionConfigurations count])) ? nil :
-                                [compositionConfigurations objectAtIndex:compositionConfigurationIndex];
-  composition_mode_t compositionMode =
-    [[configuration objectForKey:CompositionConfigurationCompositionModeKey] intValue];
-  NSString* pdfLatexPath = [configuration objectForKey:CompositionConfigurationPdfLatexPathKey];
-  NSString* xeLatexPath = [configuration objectForKey:CompositionConfigurationXeLatexPathKey];
-  NSString* latexPath = [configuration objectForKey:CompositionConfigurationLatexPathKey];
-  NSString* dviPdfPath = [configuration objectForKey:CompositionConfigurationDvipdfPathKey];
-  NSString* gsPath = [configuration objectForKey:CompositionConfigurationGsPathKey];
-  NSString* ps2PdfPath = [configuration objectForKey:CompositionConfigurationPs2PdfPathKey];
-  NSDictionary* additionalProcessingScripts =
-    [configuration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
-  float leftMargin   = [(id)CFPreferencesCopyAppValue((CFStringRef)AdditionalLeftMarginKey, appKey) floatValue];
-  float rightMargin  = [(id)CFPreferencesCopyAppValue((CFStringRef)AdditionalRightMarginKey, appKey) floatValue];
-  float bottomMargin = [(id)CFPreferencesCopyAppValue((CFStringRef)AdditionalBottomMarginKey, appKey) floatValue];
-  float topMargin    = [(id)CFPreferencesCopyAppValue((CFStringRef)AdditionalTopMarginKey, appKey) floatValue];
+
+  CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  CGFloat leftMargin   = [preferencesController marginsAdditionalLeft];
+  CGFloat rightMargin  = [preferencesController marginsAdditionalRight];
+  CGFloat bottomMargin = [preferencesController marginsAdditionalBottom];
+  CGFloat topMargin    = [preferencesController marginsAdditionalTop];
   
-  NSArray* preambles = (NSArray*) CFPreferencesCopyAppValue((CFStringRef)PreamblesKey, appKey);
-  int selectedPreambleIndex = CFPreferencesGetAppIntegerValue(
-    (CFStringRef)LatexisationSelectedPreambleIndexKey, appKey, &ok);
-  id defaultPreambleAsPlist = (!ok || (selectedPreambleIndex<0) ||
-                              ((unsigned)selectedPreambleIndex >= [preambles count])) ? nil :
-                              [preambles objectAtIndex:selectedPreambleIndex];
-  NSDictionary* defaultPreambleAsDictionary = [PreamblesController decodePreamble:defaultPreambleAsPlist];
-  NSAttributedString* defaultPreambleAsAttributedString = [defaultPreambleAsDictionary objectForKey:@"value"];
-  NSString* defaultPreamble = [defaultPreambleAsAttributedString string];
+  NSString* defaultPreamble = [[preferencesController preambleDocumentAttributedString] string];
   
 	// Add your code here, returning the data to be passed to the next action.
   NSMutableSet* uniqueIdentifiers = [[NSMutableSet alloc] init];
-  NSFileManager* fileManager = [NSFileManager defaultManager];
-  NSSet*          inputAsSet    = [NSSet setWithArray:input];
-  NSMutableArray* mutableInput  = [NSMutableArray arrayWithArray:input];
-  NSMutableArray* filteredInput = [NSMutableArray arrayWithCapacity:[mutableInput count]];
+  NSFileManager* fileManager      = [NSFileManager defaultManager];
+  NSSet*          inputAsSet      = [NSSet setWithArray:input];
+  NSMutableArray* mutableInput    = [NSMutableArray arrayWithArray:input];
+  NSMutableArray* filteredInput   = [NSMutableArray arrayWithCapacity:[mutableInput count]];
   unsigned int i = 0;
-  for(i = 0 ; configuration && (i<[mutableInput count]) ; ++i)
+  for(i = 0 ; defaultPreamble && (i<[mutableInput count]) ; ++i)
   {
     id object = [mutableInput objectAtIndex:i];
     NSString* string = [object isKindOfClass:[NSString class]] ? (NSString*) object : nil;
@@ -211,7 +185,7 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
           if ([inputAsSet containsObject:object])
           {
             NSError* error = nil;
-            NSArray* directoryContent = [fileManager contentsOfDirectoryAtPath:string error:&error];
+            NSArray* directoryContent = [fileManager bridge_contentsOfDirectoryAtPath:string error:&error];
             NSEnumerator* fileEnumerator = [directoryContent objectEnumerator];
             NSString* filename = nil;
             while((filename = [fileEnumerator nextObject]))
@@ -225,7 +199,7 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
   BOOL didEncounterError = NO;
   NSEnumerator* enumerator = [filteredInput objectEnumerator];
   id object = nil;
-  while(configuration && (object = [enumerator nextObject]))
+  while(defaultPreamble && (object = [enumerator nextObject]))
   {
     NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
     NSString* preamble = nil;
@@ -254,15 +228,12 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
       NSArray*  errors = nil;
       NSData*   pdfData = nil;
       NSString* outFilePath =
-        [LatexProcessor latexiseWithPreamble:preamble body:body color:fontColor mode:latexMode magnification:fontSize
-                           compositionMode:compositionMode workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
-                           additionalFilepaths:nil fullEnvironment:fullEnvironment useLoginShell:useLoginShell
-                                  pdfLatexPath:pdfLatexPath xeLatexPath:xeLatexPath latexPath:latexPath
-                                    dviPdfPath:dviPdfPath gsPath:gsPath ps2PdfPath:ps2PdfPath
-                                    leftMargin:leftMargin rightMargin:rightMargin
-                                     topMargin:topMargin bottomMargin:bottomMargin
-                               backgroundColor:nil additionalProcessingScripts:additionalProcessingScripts
-                                   outFullLog:&outFullLog outErrors:&errors outPdfData:&pdfData];
+        [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:fontColor mode:latexMode magnification:fontSize
+          compositionConfiguration:[preferencesController compositionConfigurationDocument] backgroundColor:nil
+          leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
+          additionalFilesPaths:[preferencesController additionalFilesPaths]
+          workingDirectory:workingDirectory fullEnvironment:fullEnvironment uniqueIdentifier:uniqueIdentifier
+          outFullLog:&outFullLog outErrors:&errors outPdfData:&pdfData];
       if (outFilePath && ![errors count])
       {
         if (isInputFilePath && (equationDestination == ALONGSIDE_INPUT))
@@ -278,24 +249,23 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
         [fileManager changeFileAttributes:
           [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                                    atPath:outFilePath];
-        unsigned int options = 0;
-        #ifndef PANTHER
-        options = NSExclude10_4ElementsIconCreationOption;
-        #endif
-        [[NSWorkspace sharedWorkspace] setIcon:[LatexProcessor makeIconForData:pdfData backgroundColor:nil]
-                                       forFile:outFilePath options:options];
+        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:nil]
+                                       forFile:outFilePath options:NSExclude10_4ElementsIconCreationOption];
         [result addObject:outFilePath];
       }
       else
       {
         NSArray* latexErrors = 
-          [LatexProcessor filterLatexErrors:outFullLog shiftLinesBy:[[preamble componentsSeparatedByString:@"\n"] count]+1];
+          [[LaTeXProcessor sharedLaTeXProcessor] filterLatexErrors:outFullLog shiftLinesBy:[[preamble componentsSeparatedByString:@"\n"] count]+1];
         if (didEncounterError && *errorInfo)
            [*errorInfo release];
         didEncounterError = YES;
+        NSString* errorMessage = [latexErrors count] ? [latexErrors componentsJoinedByString:@"\n"] :
+          NSLocalizedString(@"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.",
+                            @"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.");
         *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
           [NSNumber numberWithInt:errOSAGeneralError], OSAScriptErrorNumber,
-          [latexErrors componentsJoinedByString:@"\n"], OSAScriptErrorMessage, nil];
+          errorMessage, OSAScriptErrorMessage, nil];
       }
     }//end if (!body)
     [ap release];
@@ -344,29 +314,18 @@ typedef enum {ALONGSIDE_INPUT, TEMPORARY_FOLDER} equationDestination_t;
   //analyze fullText
   if (fullText)
   {
-    OGRegularExpression* documentEnclosingWithContextRegexp =
-      [OGRegularExpression regularExpressionWithString:@"(^|\n)[^%\n]*\\\\begin{document}.*\\\\end{document}"];
-    OGRegularExpression* documentEnclosingRegexp =
-      [OGRegularExpression regularExpressionWithString:@"[\n]*(.*)\\\\begin{document}(.*)\\\\end{document}"];
-    NSArray* matches = [documentEnclosingWithContextRegexp allMatchesInString:fullText];
-    if (![matches count])
-    {
-      if (outPeamble) *outPeamble = nil;
-      if (outBody)    *outBody    = fullText;
-    }
-    else//if ([matches count])
-    {
-      NSEnumerator* matchEnumerator = [matches objectEnumerator];
-      OGRegularExpressionMatch* match = nil;
-      while((match = [matchEnumerator nextObject]))
-      {
-        NSString* matchedString = [match matchedString];
-        NSString* preamble = [documentEnclosingRegexp replaceAllMatchesInString:matchedString withString:@"\\1"];
-        NSString* body     = [documentEnclosingRegexp replaceAllMatchesInString:matchedString withString:@"\\2"];
-        if (outPeamble) *outPeamble = preamble;
-        if (outBody)    *outBody    = body;
-      }//end for each match
-    }//end if ([matches count])
+    NSError* error = nil;
+    NSString* preamble =
+      [fullText stringByMatching:@"(.*)[^%\n]*\\\\begin\\{document\\}(.*)[^%\n]*\\\\end\\{document\\}(.*)" options:RKLMultiline|RKLDotAll
+        inRange:NSMakeRange(0, [fullText length]) capture:1 error:&error];
+    NSString* body =
+      [fullText stringByMatching:@"(.*)[^%\n]*\\\\begin\\{document\\}(.*)[^%\n]*\\\\end\\{document\\}(.*)" options:RKLMultiline|RKLDotAll
+        inRange:NSMakeRange(0, [fullText length]) capture:2 error:&error];
+    if ((!preamble || ![preamble length]) && (!body || ![body length]))
+      body = fullText;
+    if (!body)     body     = @"";
+    if (outPeamble) *outPeamble = preamble;
+    if (outBody)    *outBody = body;
   }//end if (fullText)
   return result;
 }

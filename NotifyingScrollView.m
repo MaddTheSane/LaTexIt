@@ -12,10 +12,11 @@ NSString* NotifyingScrollViewDidScrollNotification = @"NotifyingScrollViewDidScr
 
 @implementation NotifyingScrollView
 
-- (void)reflectScrolledClipView:(NSClipView *)aClipView
+-(void) reflectScrolledClipView:(NSClipView *)aClipView
 {
   [super reflectScrolledClipView:aClipView];
   [[NSNotificationCenter defaultCenter] postNotificationName:NotifyingScrollViewDidScrollNotification object:self];
 }
+//end reflectScrolledClipView:
 
 @end

@@ -20,26 +20,26 @@
 
 -(id) initWithWorkingDirectory:(NSString*)aWorkingDirectory
 {
-  if (![super init])
+  if ((!(self = [super init])))
     return nil;
-  workingDirectory = [aWorkingDirectory copy];
-  tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdinFilePath
-                                                                workingDirectory:workingDirectory];
-  [tmpStdinFileHandle retain];
-  [tmpStdinFilePath   retain];
-  tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdoutFilePath
-                                                                workingDirectory:workingDirectory];
-  [tmpStdoutFileHandle retain];
-  [tmpStdoutFilePath   retain];
-  tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStderrFilePath
-                                                                workingDirectory:workingDirectory];
-  [tmpStderrFileHandle retain];
-  [tmpStderrFilePath   retain];
-  tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXXX" extension:@"sh"  outFilePath:&tmpScriptFilePath
-                                                                workingDirectory:workingDirectory];
-  [tmpScriptFileHandle retain];
-  [tmpScriptFilePath   retain];
-  runningLock = [[NSLock alloc] init];
+  self->workingDirectory = [aWorkingDirectory copy];
+  self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdinFilePath
+                                                                workingDirectory:self->workingDirectory];
+  [self->tmpStdinFileHandle retain];
+  [self->tmpStdinFilePath   retain];
+  self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdoutFilePath
+                                                                workingDirectory:self->workingDirectory];
+  [self->tmpStdoutFileHandle retain];
+  [self->tmpStdoutFilePath   retain];
+  self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXXX" extension:@"log"  outFilePath:&self->tmpStderrFilePath
+                                                                workingDirectory:self->workingDirectory];
+  [self->tmpStderrFileHandle retain];
+  [self->tmpStderrFilePath   retain];
+  self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXXX" extension:@"sh"  outFilePath:&self->tmpScriptFilePath
+                                                                workingDirectory:self->workingDirectory];
+  [self->tmpScriptFileHandle retain];
+  [self->tmpScriptFilePath   retain];
+  self->runningLock = [[NSLock alloc] init];
   return self;
 }
 //end initWithWorkingDirectory
@@ -54,24 +54,24 @@
 
 -(void) dealloc
 {
-  [environment          release];
-  [launchPath           release];
-  [arguments            release];
-  [currentDirectoryPath release];
-  unlink([tmpStdinFilePath UTF8String]);
-  unlink([tmpStdoutFilePath UTF8String]);
-  unlink([tmpStderrFilePath UTF8String]);
-  unlink([tmpScriptFilePath UTF8String]);
-  [tmpStdinFilePath   release];
-  [tmpStdoutFilePath   release];
-  [tmpStderrFilePath   release];
-  [tmpScriptFilePath   release];
-  [tmpStdinFileHandle release];
-  [tmpStdoutFileHandle release];
-  [tmpStderrFileHandle release];
-  [tmpScriptFileHandle release];
-  [runningLock release];
-  [workingDirectory release];
+  [self->environment          release];
+  [self->launchPath           release];
+  [self->arguments            release];
+  [self->currentDirectoryPath release];
+  unlink([self->tmpStdinFilePath UTF8String]);
+  unlink([self->tmpStdoutFilePath UTF8String]);
+  unlink([self->tmpStderrFilePath UTF8String]);
+  unlink([self->tmpScriptFilePath UTF8String]);
+  [self->tmpStdinFilePath   release];
+  [self->tmpStdoutFilePath   release];
+  [self->tmpStderrFilePath   release];
+  [self->tmpScriptFilePath   release];
+  [self->tmpStdinFileHandle release];
+  [self->tmpStdoutFileHandle release];
+  [self->tmpStderrFileHandle release];
+  [self->tmpScriptFileHandle release];
+  [self->runningLock release];
+  [self->workingDirectory release];
   [super dealloc];
 }
 //end dealloc
@@ -79,79 +79,79 @@
 -(void) setEnvironment:(NSDictionary*)theEnvironment
 {
   [theEnvironment retain];
-  [environment release];
-  environment = theEnvironment;
+  [self->environment release];
+  self->environment = theEnvironment;
 }
 //end setEnvironment:
 
 -(void) setLaunchPath:(NSString*)path
 {
   [path retain];
-  [launchPath release];
-  launchPath = path;
+  [self->launchPath release];
+  self->launchPath = path;
 }
 //end setEnvironment:
 
 -(void) setArguments:(NSArray*)args
 {
   [args retain];
-  [arguments release];
-  arguments = args;
+  [self->arguments release];
+  self->arguments = args;
 }
 //end setArguments:
 
 -(void) setUsingLoginShell:(BOOL)value
 {
-  isUsingLoginShell = value;
+  self->isUsingLoginShell = value;
 }
 
 -(void) setCurrentDirectoryPath:(NSString*)directoryPath
 {
   [directoryPath retain];
-  [currentDirectoryPath release];
-  currentDirectoryPath = directoryPath;
+  [self->currentDirectoryPath release];
+  self->currentDirectoryPath = directoryPath;
 }
 //end setCurrentDirectoryPath:
 
 -(NSDictionary*) environment
 {
-  return environment;
+  return self->environment;
 }
 //end environment
 
 -(NSString*) launchPath
 {
-  return launchPath;
+  return self->launchPath;
 }
 //end launchPath
 
 -(NSArray*) arguments
 {
-  return arguments;
+  return self->arguments;
 }
 //end arguments
 
 -(BOOL) isUsingLoginShell
 {
-  return isUsingLoginShell;
+  return self->isUsingLoginShell;
 }
 //end isUsingLoginShell
 
 -(NSString*) currentDirectoryPath
 {
-  return currentDirectoryPath;
+  return self->currentDirectoryPath;
 }
 //end currentDirectoryPath
 
 -(void) setTimeOut:(NSTimeInterval)value
 {
-  timeOutLimit = value;
+  self->timeOutLimit = value;
 }
 //end setTimeOut:
 
 -(int) terminationStatus
 {
-  return terminationStatus;
+  return self->terminationStatus;
 }
 //end terminationStatus
 
@@ -159,9 +159,9 @@
 {
   NSMutableString* scriptContent = [NSMutableString stringWithString:@"#!/bin/sh\n"];
   //environment is now inherited with the call to bash -l
-  if (environment && [environment count])
+  if (self->environment && [self->environment count])
   {
-    NSEnumerator* environmentEnumerator = [environment keyEnumerator];
+    NSEnumerator* environmentEnumerator = [self->environment keyEnumerator];
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
     {
@@ -170,15 +170,15 @@
         [scriptContent appendFormat:@"export %@=%@ 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
     }
   }//end if (environment && [environment count])
-  if (currentDirectoryPath)
+  if (self->currentDirectoryPath)
     [scriptContent appendFormat:@"cd %@\n", currentDirectoryPath];
-  if (launchPath)
+  if (self->launchPath)
   {
     [scriptContent appendFormat:@"%@", launchPath];
-    if (arguments)
-      [scriptContent appendFormat:@" %@", [arguments componentsJoinedByString:@" "]];
-    if (tmpStdoutFilePath && tmpStderrFilePath)
-      [scriptContent appendFormat:@" 1>|%@ 2>|%@ <%@\n", tmpStdoutFilePath, tmpStderrFilePath, (stdInputData ? tmpStdinFilePath : @"/dev/null")];
+    if (self->arguments)
+      [scriptContent appendFormat:@" %@", [self->arguments componentsJoinedByString:@" "]];
+    if (self->tmpStdoutFilePath && self->tmpStderrFilePath)
+      [scriptContent appendFormat:@" 1>|%@ 2>|%@ <%@\n", self->tmpStdoutFilePath, self->tmpStderrFilePath, (self->stdInputData ? self->tmpStdinFilePath : @"/dev/null")];
   }//end if (launchPath)
   return scriptContent;
 }
@@ -187,8 +187,8 @@
 -(void) launch
 {
   NSError* error = nil;
-  if (![[self equivalentLaunchCommand] writeToFile:tmpScriptFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error])
-    terminationStatus = -1;
+  if (![[self equivalentLaunchCommand] writeToFile:self->tmpScriptFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error])
+    self->terminationStatus = -1;
   else
   {
     NSString* currentShell = nil;
@@ -201,10 +201,10 @@
     }*/
     if (!currentShell)
       currentShell = @"/bin/bash";
-    NSString* option = (isUsingLoginShell && [currentShell isEqualToString:@"/bin/bash"]) ? @"-l" : @"";
-    int       intTimeOutLimit = (int)timeOutLimit;
+    NSString* option = (self->isUsingLoginShell && [currentShell isEqualToString:@"/bin/bash"]) ? @"-l" : @"";
+    int       intTimeOutLimit = (int)self->timeOutLimit;
     NSString* userScriptCall = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
-    [runningLock lock];
+    [self->runningLock lock];
     //terminationStatus = system([systemCommand UTF8String]);
     NSString* timeLimitedScript = !intTimeOutLimit ?
       [NSString stringWithFormat:@"#!/bin/bash\n%@", userScriptCall] :
@@ -212,13 +212,13 @@
                                  intTimeOutLimit, userScriptCall];
     NSString* timeLimitedScriptPath = nil;
     [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-timelimited.XXXXXXXXX" extension:@"script"
-                                                  outFilePath:&timeLimitedScriptPath workingDirectory:workingDirectory];
+                                                  outFilePath:&timeLimitedScriptPath workingDirectory:self->workingDirectory];
     [timeLimitedScript writeToFile:timeLimitedScriptPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     NSString* systemCall = [NSString stringWithFormat:@"/bin/bash -l %@", timeLimitedScriptPath];
-    terminationStatus = system([systemCall UTF8String]);
-    selfExited        = WIFEXITED(terminationStatus) && !WIFSIGNALED(terminationStatus);
-    terminationStatus = WIFEXITED(terminationStatus) ? WEXITSTATUS(terminationStatus) : -1;
-    [runningLock unlock];
+    self->terminationStatus = system([systemCall UTF8String]);
+    self->selfExited        = WIFEXITED(self->terminationStatus) && !WIFSIGNALED(self->terminationStatus);
+    self->terminationStatus = WIFEXITED(self->terminationStatus) ? WEXITSTATUS(self->terminationStatus) : -1;
+    [self->runningLock unlock];
     [[NSFileManager defaultManager] removeFileAtPath:timeLimitedScriptPath handler:nil];
   }//end if filePath
 }
@@ -226,35 +226,37 @@
 
 -(void) waitUntilExit
 {
-  [runningLock lock];
-  [runningLock unlock];
+  [self->runningLock lock];
+  [self->runningLock unlock];
 }
 //end waitUntilExit
 
 -(void) setStdInputData:(NSData*)data
 {
   [data retain];
-  [stdInputData release];
-  stdInputData = data;
-  [stdInputData writeToFile:tmpStdinFilePath atomically:NO];
+  [self->stdInputData release];
+  self->stdInputData = data;
+  [self->stdInputData writeToFile:self->tmpStdinFilePath atomically:NO];
 }
 //end setStdInputData:
 
 -(NSData*) dataForStdOutput
 {
-  return [NSData dataWithContentsOfFile:tmpStdoutFilePath];
+  NSData* result = [NSData dataWithContentsOfFile:self->tmpStdoutFilePath];
+  return result;
 }
 //end dataForStdOutput
 
 -(NSData*) dataForStdError
 {
-  return [NSData dataWithContentsOfFile:tmpStderrFilePath];
+  NSData* result = [NSData dataWithContentsOfFile:self->tmpStderrFilePath];
+  return result;
 }
 //end dataForStdError
 
 -(BOOL) hasReachedTimeout
 {
-  return !selfExited;
+  return !self->selfExited;
 }
 //end hasReachedTimeout
 

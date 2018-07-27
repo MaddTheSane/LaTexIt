@@ -1,211 +1,244 @@
+//
 //  PreferencesController.h
 //  LaTeXiT
 //
-//  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
-
-//The preferences controller centralizes the management of the preferences pane
+//  Created by Pierre Chatelier on 03/03/09.
+//  Copyright 2009 LAIC. All rights reserved.
+//
 
 #import <Cocoa/Cocoa.h>
 
 #import "LaTeXiTSharedTypes.h"
-#import "LaTeXiTPreferencesKeys.h"
 
-extern NSString* SpellCheckingDidChangeNotification;
+extern NSString* LaTeXiTAppKey;
+extern NSString* Old_LaTeXiTAppKey;
 
-extern NSString* GeneralToolbarItemIdentifier;
-extern NSString* EditionToolbarItemIdentifier;
-extern NSString* PreambleToolbarItemIdentifier;
-extern NSString* CompositionToolbarItemIdentifier;
-extern NSString* ServiceToolbarItemIdentifier;
-extern NSString* AdvancedToolbarItemIdentifier;
-extern NSString* WebToolbarItemIdentifier;
+extern NSString* LaTeXiTVersionKey;
+extern NSString* DocumentStyleKey;
+extern NSString* DragExportTypeKey;
+extern NSString* DragExportJpegColorKey;
+extern NSString* DragExportJpegQualityKey;
+extern NSString* DragExportScaleAsPercentKey;
+extern NSString* DefaultImageViewBackgroundKey;
+extern NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey;
+extern NSString* DefaultColorKey;
+extern NSString* DefaultPointSizeKey;
+extern NSString* DefaultModeKey;
+extern NSString* SpellCheckingEnableKey;
+extern NSString* SyntaxColoringEnableKey;
+extern NSString* SyntaxColoringTextForegroundColorKey;
+extern NSString* SyntaxColoringTextBackgroundColorKey;
+extern NSString* SyntaxColoringCommandColorKey;
+extern NSString* SyntaxColoringMathsColorKey;
+extern NSString* SyntaxColoringKeywordColorKey;
+extern NSString* SyntaxColoringCommentColorKey;
+extern NSString* ReducedTextAreaStateKey;
+extern NSString* DefaultFontKey;
+extern NSString* PreamblesKey;
+extern NSString* LatexisationSelectedPreambleIndexKey;
+extern NSString* BodyTemplatesKey;
+extern NSString* LatexisationSelectedBodyTemplateIndexKey;
+extern NSString* ServiceSelectedPreambleIndexKey;
+extern NSString* ServiceSelectedBodyTemplateIndexKey;
+extern NSString* ServiceShortcutsKey;
+extern NSString* ServiceShortcutEnabledKey;
+extern NSString* ServiceShortcutStringKey;
+extern NSString* ServiceShortcutIdentifierKey;
+extern NSString* ServiceRespectsColorKey;
+extern NSString* ServiceRespectsBaselineKey;
+extern NSString* ServiceRespectsPointSizeKey;
+extern NSString* ServicePointSizeFactorKey;
+extern NSString* ServiceUsesHistoryKey;
+extern NSString* AdditionalTopMarginKey;
+extern NSString* AdditionalLeftMarginKey;
+extern NSString* AdditionalRightMarginKey;
+extern NSString* AdditionalBottomMarginKey;
+extern NSString* EncapsulationsKey;
+extern NSString* CurrentEncapsulationIndexKey;
+extern NSString* TextShortcutsKey;
+extern NSString* CompositionConfigurationsKey;
+extern NSString* CompositionConfigurationDocumentIndexKey;
+extern NSString* LastEasterEggsDatesKey;
 
-@class EncapsulationTableView;
+extern NSString* CompositionConfigurationNameKey;
+extern NSString* CompositionConfigurationIsDefaultKey;
+extern NSString* CompositionConfigurationCompositionModeKey;
+extern NSString* CompositionConfigurationUseLoginShellKey;
+extern NSString* CompositionConfigurationPdfLatexPathKey;
+extern NSString* CompositionConfigurationPsToPdfPathKey;
+extern NSString* CompositionConfigurationXeLatexPathKey;
+extern NSString* CompositionConfigurationLatexPathKey;
+extern NSString* CompositionConfigurationDviPdfPathKey;
+extern NSString* CompositionConfigurationGsPathKey;
+extern NSString* CompositionConfigurationProgramArgumentsKey;
+extern NSString* CompositionConfigurationAdditionalProcessingScriptsKey;
+extern NSString* CompositionConfigurationAdditionalProcessingScriptEnabledKey;
+extern NSString* CompositionConfigurationAdditionalProcessingScriptTypeKey;
+extern NSString* CompositionConfigurationAdditionalProcessingScriptPathKey;
+extern NSString* CompositionConfigurationAdditionalProcessingScriptShellKey;
+extern NSString* CompositionConfigurationAdditionalProcessingScriptContentKey;
+
+extern NSString* CompositionConfigurationsControllerVisibleAtStartupKey;
+extern NSString* EncapsulationsControllerVisibleAtStartupKey;
+extern NSString* HistoryControllerVisibleAtStartupKey;
+extern NSString* LatexPalettesControllerVisibleAtStartupKey;
+extern NSString* LibraryControllerVisibleAtStartupKey;
+extern NSString* MarginControllerVisibleAtStartupKey;
+extern NSString* AdditionalFilesWindowControllerVisibleAtStartupKey;
+
+extern NSString* LibraryPathKey;
+extern NSString* LibraryViewRowTypeKey;
+extern NSString* LibraryDisplayPreviewPanelKey;
+extern NSString* HistoryDisplayPreviewPanelKey;
+
+extern NSString* CheckForNewVersionsKey;
+
+extern NSString* LatexPaletteGroupKey;
+extern NSString* LatexPaletteFrameKey;
+extern NSString* LatexPaletteDetailsStateKey;
+
+extern NSString* ShowWhiteColorWarningKey;
+
+extern NSString* CompositionModeDidChangeNotification;
+extern NSString* CurrentCompositionConfigurationDidChangeNotification;
+
+extern NSString* AdditionalFilesPathsKey;
+
+@class AdditionalFilesController;
+@class CompositionConfigurationsController;
+@class EncapsulationsController;
 @class PreamblesController;
-@class LineCountTextView;
-@class SMLSyntaxColouring;
-@class TextShortcutsTableView;
-@interface PreferencesController : NSWindowController {
-  IBOutlet NSView*        generalView;
-  IBOutlet NSView*        editionView;
-  IBOutlet NSView*        preamblesView;
-  IBOutlet NSView*        compositionView;
-  IBOutlet NSView*        serviceView;
-  IBOutlet NSView*        advancedView;
-  IBOutlet NSView*        webView;
-  IBOutlet NSView*        emptyView;
-  NSMutableDictionary*    toolbarItems;
+@class BodyTemplatesController;
 
-  IBOutlet NSPopUpButton* dragExportPopupFormat;
-  IBOutlet NSButton*      dragExportOptionsButton;
-  IBOutlet NSPanel*       dragExportOptionsPane;
-  IBOutlet NSButton*      dragExportJpegWarning;
-  IBOutlet NSSlider*      dragExportJpegQualitySlider;
-  IBOutlet NSTextField*   dragExportJpegQualityTextField;
-  IBOutlet NSColorWell*   dragExportJpegColorWell;
-  IBOutlet NSTextField*   dragExportScaleAsPercentTextField;
+@interface PreferencesController : NSObject {
+  BOOL      isLaTeXiT;
   
-  IBOutlet NSColorWell*   defaultImageViewBackgroundColorWell;
+  NSUndoManager* undoManager;
 
-  IBOutlet NSSegmentedControl* defaultModeSegmentedControl;
-  IBOutlet NSTextField*        defaultPointSizeTextField;
-  IBOutlet NSColorWell*        defaultColorColorWell;
-  
-  IBOutlet NSButton*          spellCheckingButton;
-
-  IBOutlet NSColorWell*       syntaxColoringTextForegroundColorColorWell;
-  IBOutlet NSColorWell*       syntaxColoringTextBackgroundColorColorWell;
-  IBOutlet NSButton*          enableSyntaxColoringButton;
-  IBOutlet NSColorWell*       syntaxColoringCommandColorColorWell;
-  IBOutlet NSColorWell*       syntaxColoringMathsColorColorWell;
-  IBOutlet NSColorWell*       syntaxColoringKeywordColorColorWell;
-  IBOutlet NSColorWell*       syntaxColoringCommentColorColorWell;
-
-  IBOutlet NSButton*          reduceTextAreaButton;
-
-  IBOutlet NSTextField*       fontTextField;
-  SMLSyntaxColouring*         exampleSyntaxColouring;
-  IBOutlet NSTextView*        exampleTextView;
-  
-  IBOutlet TextShortcutsTableView* textShortcutsTableView;
-  IBOutlet NSButton*               removeTextShortcutsButton;
-
-  IBOutlet NSTableView*       preamblesTableView;
-  IBOutlet LineCountTextView* preambleTextView;
-  IBOutlet NSButton*          addPreambleButton;
-  IBOutlet NSButton*          removePreambleButton;
-
-  IBOutlet NSPopUpButton* compositionSelectionPopUpButton;
-  IBOutlet NSPanel*       compositionSelectionPanel;
-  IBOutlet NSTableView*   compositionConfigurationTableView;
-  IBOutlet NSButton*      compositionConfigurationRemoveButton;
-  IBOutlet NSMatrix*      compositionMatrix;  
-  IBOutlet NSTextField*   pdfLatexTextField;
-  IBOutlet NSTextField*   xeLatexTextField;
-  IBOutlet NSTextField*   latexTextField;
-  IBOutlet NSTextField*   dvipdfTextField;
-  IBOutlet NSTextField*   gsTextField;
-  IBOutlet NSTextField*   ps2pdfTextField;
-  IBOutlet NSButton*      pdfLatexButton;
-  IBOutlet NSButton*      xeLatexButton;
-  IBOutlet NSButton*      latexButton;
-  IBOutlet NSButton*      dvipdfButton;
-  IBOutlet NSButton*      gsButton;
-
-  IBOutlet NSPopUpButton* servicePreamblePopUpButton;
-  IBOutlet NSMatrix*      serviceRespectsPointSizeMatrix;
-  IBOutlet NSMatrix*      serviceRespectsColorMatrix;
-  IBOutlet NSButton*      serviceRespectsBaselineButton;
-  IBOutlet NSButton*      serviceUsesHistoryButton;
-  IBOutlet NSButton*      serviceWarningLinkBackButton;
-  IBOutlet NSTableView*   serviceShortcutsTableView;
-  IBOutlet NSButton*      serviceWarningShortcutConflict;
-  IBOutlet NSTextField*   serviceRelaunchWarning;
-
-  IBOutlet NSTextField* additionalTopMarginTextField;
-  IBOutlet NSTextField* additionalLeftMarginTextField;
-  IBOutlet NSTextField* additionalRightMarginTextField;
-  IBOutlet NSTextField* additionalBottomMarginTextField;
-  
-  IBOutlet EncapsulationTableView* encapsulationTableView;
-  IBOutlet NSButton*               removeEncapsulationButton;
-  
-  IBOutlet NSButton* checkForNewVersionsButton;
-  
-  IBOutlet NSTableView*   scriptsTableView;
-  IBOutlet NSPopUpButton* scriptsSourceTypePopUpButton;
-  IBOutlet NSBox*         scriptsScriptSelectionBox;
-  IBOutlet NSBox*         scriptsScriptDefinitionBox;
-  IBOutlet NSTextField*   scriptsScriptSelectionTextField;
-  IBOutlet NSButton*      scriptsScriptSelectionButton;
-  IBOutlet NSTextField*   scriptsScriptDefinitionShellTextField;
-  IBOutlet NSTextView*    scriptsScriptDefinitionBodyTextView;
-  IBOutlet NSPanel*       scriptsHelpPanel;
-
-  BOOL didChangePdfLatexTextField;
-  BOOL didChangeXeLatexTextField;
-  BOOL didChangeLatexTextField;
-  BOOL didChangeDvipdfTextField;
-  BOOL didChangeGsTextField;
-  BOOL didChangePs2PdfTextField;
-  
-  NSAlert* applyPreambleToLibraryAlert;
-  NSImage* warningImage;
-  
-  NSTextView* shortcutTextView;
-  
-  NSObjectController*  selfController;
-  PreamblesController* preamblesController;
-  NSMutableArray* preambles;
-
-  IBOutlet NSPopUpButton* latexisationSelectedPreamblePopUpButton;
-  IBOutlet NSPopUpButton* serviceSelectedPreamblePopUpButton;
-  NSDictionary*  latexisationSelectedPreamble;
-  NSDictionary*  serviceSelectedPreamble;
-  NSIndexSet*   draggedRowIndexes;
+  NSArrayController*                   editionTextShortcutsController;
+  PreamblesController*                 preamblesController;
+  BodyTemplatesController*             bodyTemplatesController;
+  CompositionConfigurationsController* compositionConfigurationsController;
+  NSArrayController*                   serviceShortcutsController;
+  AdditionalFilesController*           additionalFilesController;
+  EncapsulationsController*            encapsulationsController;
 }
 
 +(PreferencesController*) sharedController;
-+(NSDictionary*) defaultAdditionalScript;
-+(NSDictionary*) defaultAdditionalScripts;
-+(id)   currentCompositionConfigurationObjectForKey:(id)key;
-+(void) currentCompositionConfigurationSetObject:(id)object forKey:(id)key;
 
--(IBAction) nullAction:(id)sender;//useful to avoid some bad connections in Interface builder
--(IBAction) toolbarHit:(id)sender;
--(IBAction) dragExportPopupFormatDidChange:(id)sender;
--(IBAction) dragExportJpegQualitySliderDidChange:(id)sender;
--(IBAction) openOptionsForDragExport:(id)sender;
--(IBAction) closeOptionsPane:(id)sender;
+-(NSUndoManager*) undoManager;
 
--(IBAction) changeDefaultGeneralConfig:(id)sender;
+-(NSString*)    latexitVersion;
 
--(IBAction) changeSpellChecking:(id)sender;
--(IBAction) changeSyntaxColoringConfiguration:(id)sender;
--(IBAction) changeReduceTextArea:(id)sender;
--(IBAction) resetSelectedPreambleToDefault:(id)sender;
--(IBAction) selectFont:(id)sender;
--(IBAction) applyPreambleToOpenDocuments:(id)sender;
--(IBAction) applyPreambleToLibrary:(id)sender;
+-(export_format_t) exportFormat;
+-(void)            setExportFormat:(export_format_t)value;
+-(NSData*)         exportJpegBackgroundColorData;
+-(void)            setExportJpegBackgroundColorData:(NSData*)value;
+-(NSColor*)        exportJpegBackgroundColor;
+-(void)            setExportJpegBackgroundColor:(NSColor*)value;
+-(CGFloat)         exportJpegQualityPercent;
+-(void)            setExportJpegQualityPercent:(CGFloat)value;
+-(CGFloat)         exportScalePercent;
+-(void)            setExportScalePercent:(CGFloat)value;
 
--(IBAction) changeCompositionSelection:(id)sender;
--(IBAction) closeCompositionSelectionPanel:(id)sender;
--(IBAction) changeCompositionMode:(id)sender;
--(IBAction) changePath:(id)sender;
--(IBAction) changeServiceConfiguration:(id)sender;
--(IBAction) gotoPreferencePane:(id)sender;
+-(latex_mode_t) latexisationLaTeXMode;
+-(CGFloat)      latexisationFontSize;
+-(NSData*)      latexisationFontColorData;
+-(NSColor*)     latexisationFontColor;
 
--(IBAction) changeScriptsConfiguration:(id)sender;
--(IBAction) selectScript:(id)sender;
--(IBAction) showScriptHelp:(id)sender;
+-(CGFloat) marginsAdditionalLeft;
+-(void)    setMarginsAdditionalLeft:(CGFloat)value;
+-(CGFloat) marginsAdditionalRight;
+-(void)    setMarginsAdditionalRight:(CGFloat)value;
+-(CGFloat) marginsAdditionalTop;
+-(void)    setMarginsAdditionalTop:(CGFloat)value;
+-(CGFloat) marginsAdditionalBottom;
+-(void)    setMarginsAdditionalBottom:(CGFloat)value;
 
--(IBAction) changeAdditionalMargin:(id)sender;
+-(document_style_t) documentStyle;
+-(void)             setDocumentStyle:(document_style_t)documentStyle;
+-(BOOL)             documentIsReducedTextArea;
+-(NSData*)          documentImageViewBackgroundColorData;
+-(NSColor*)         documentImageViewBackgroundColor;
+-(BOOL)             documentUseAutomaticHighContrastedPreviewBackground;
 
--(IBAction) newEncapsulation:(id)sender;
--(IBAction) removeSelectedEncapsulations:(id)sender;
+-(NSData*)  editionFontData;
+-(void)     setEditionFontData:(NSData*)value;
+-(NSFont*)  editionFont;
+-(void)     setEditionFont:(NSFont*)value;
+-(BOOL)     editionSyntaxColoringEnabled;
+-(NSData*)  editionSyntaxColoringTextForegroundColorData;
+-(NSColor*) editionSyntaxColoringTextForegroundColor;
+-(NSData*)  editionSyntaxColoringTextBackgroundColorData;
+-(NSColor*) editionSyntaxColoringTextBackgroundColor;
+-(NSData*)  editionSyntaxColoringCommandColorData;
+-(NSColor*) editionSyntaxColoringCommandColor;
+-(NSData*)  editionSyntaxColoringCommentColorData;
+-(NSColor*) editionSyntaxColoringCommentColor;
+-(NSData*)  editionSyntaxColoringKeywordColorData;
+-(NSColor*) editionSyntaxColoringKeywordColor;
+-(NSData*)  editionSyntaxColoringMathsColorData;
+-(NSColor*) editionSyntaxColoringMathsColor;
 
--(IBAction) newTextShortcut:(id)sender;
--(IBAction) removeSelectedTextShortcuts:(id)sender;
+-(NSArray*)           editionTextShortcuts;
+-(NSArrayController*) editionTextShortcutsController;
 
--(IBAction) newCompositionConfiguration:(id)sender;
--(IBAction) removeSelectedCompositionConfigurations:(id)sender;
+-(NSArray*)             preambles;
+-(int)                  preambleDocumentIndex;
+-(int)                  preambleServiceIndex;
+-(NSAttributedString*)  preambleDocumentAttributedString;
+-(NSAttributedString*)  preambleServiceAttributedString;
+-(PreamblesController*) preamblesController;
 
--(IBAction) checkForUpdatesChange:(id)sender;
--(IBAction) checkNow:(id)sender;
--(IBAction) gotoWebSite:(id)sender;
+-(NSArray*)                 bodyTemplates;
+-(NSArray*)                 bodyTemplatesWithNone;
+-(int)                      bodyTemplateDocumentIndex;
+-(int)                      bodyTemplateServiceIndex;
+-(NSDictionary*)            bodyTemplateDocumentDictionary;
+-(NSDictionary*)            bodyTemplateServiceDictionary;
+-(BodyTemplatesController*) bodyTemplatesController;
 
--(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;
+-(CompositionConfigurationsController*) compositionConfigurationsController;
+-(NSArray*)           compositionConfigurations;
+-(void)               setCompositionConfigurations:(NSArray*)value;
 
--(NSMutableArray*) preambles;
--(NSAttributedString*) preambleForLatexisation;
--(NSAttributedString*) preambleForService;
+-(int)                compositionConfigurationsDocumentIndex;
+-(void)               setCompositionConfigurationsDocumentIndex:(int)value;
+-(NSDictionary*)      compositionConfigurationDocument;
+-(void)               setCompositionConfigurationDocument:(NSDictionary*)value;
 
--(NSDictionary*) latexisationSelectedPreamble;
--(void)          setLatexisationSelectedPreamble:(NSDictionary*)preamble;
--(NSDictionary*) serviceSelectedPreamble;
--(void)          setServiceSelectedPreamble:(NSDictionary*)preamble;
+-(void)               setCompositionConfigurationDocumentProgramPath:(NSString*)value forKey:(NSString*)key;
 
--(void) commitChanges;
+-(NSString*)          serviceDescriptionForIdentifier:(service_identifier_t)identifier;
+-(NSArray*)           serviceShortcuts;
+-(void)               setServiceShortcuts:(NSArray*)serviceShortcuts;
+-(NSArrayController*) serviceShortcutsController;
+-(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
+                               authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
+
+-(NSArray*)                  encapsulations;
+-(int)                       encapsulationsSelectedIndex;
+-(NSString*)                 encapsulationSelected;
+-(EncapsulationsController*) encapsulationsController;
+
+-(NSArray*)                   additionalFilesPaths;
+-(void)                       setAdditionalFilesPaths:(NSArray*)value;
+-(AdditionalFilesController*) additionalFilesController;
+
+-(int)    paletteLaTeXGroupSelectedTag;
+-(void)   setPaletteLaTeXGroupSelectedTag:(int)value;
+-(NSRect) paletteLaTeXWindowFrame;
+-(void)   setPaletteLaTeXWindowFrame:(NSRect)value;
+-(BOOL)   paletteLaTeXDetailsOpened;
+-(void)   setPaletteLaTeXDetailsOpened:(BOOL)value;
+
+-(BOOL) historyDisplayPreviewPanelState;
+-(void) setHistoryDisplayPreviewPanelState:(BOOL)value;
+
+-(NSString*) libraryPath;
+-(void)      setLibraryPath:(NSString*)libraryPath;
+-(BOOL) libraryDisplayPreviewPanelState;
+-(void) setLibraryDisplayPreviewPanelState:(BOOL)value;
+-(library_row_t) libraryViewRowType;
 
 @end

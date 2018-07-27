@@ -8,9 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* PreamblesPboardType;
-
 @interface PreamblesTableView : NSTableView {
+  NSIndexSet* draggedRowIndexes;//transient, used only during drag'n drop
 }
 
 -(IBAction) edit:(id)sender;

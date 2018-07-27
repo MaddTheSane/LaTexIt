@@ -15,15 +15,13 @@
 +(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
 {
   NSString* string = nil;
-  #ifndef PANTHER
   string = [NSString stringWithContentsOfFile:path usedEncoding:enc error:error];
-  #endif
   if (!string)
   {
     if (error)
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
-    NSData* data = [NSData dataWithContentsOfFile:path];
+    NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;
@@ -55,9 +53,7 @@
 +(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
 {
   NSString* string = nil;
-  #ifndef PANTHER
   string = [NSString stringWithContentsOfURL:url usedEncoding:enc error:error];
-  #endif
   if (!string)
   {
     if (error)
@@ -91,6 +87,12 @@
   return string;
 }
 //end stringWithContentsOfURL:guessEncoding:error:
+
+-(NSString*) string
+{
+  return self;
+}
+//end string
 
 -(NSString*) trim
 {

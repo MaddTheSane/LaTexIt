@@ -10,21 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "LibraryItem.h"
-
-@class HistoryItem;
-@interface LibraryFile : LibraryItem <NSCoding> {
-  HistoryItem* historyItem;
+@interface LibraryFile : NSObject <NSCoding> {
 }
-
--(NSImage*) icon;
-
-//The document's state is called a "value", because the fact that it is represented by a historyItem
-//should not be "public"
--(void) setValue:(HistoryItem*)historyItem setAutomaticTitle:(BOOL)setAutomaticTitle;
--(HistoryItem*) value;
-
-//for readable export
--(id) plistDescription;
 
 @end

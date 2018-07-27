@@ -3,4 +3,5 @@
 "LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Créer l'équation en mode inline $...$";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/Créer l'équation en mode texte";
 "LaTeXiT/Detect and typeset equations" = "LaTeXiT/Détecter et créer les équations";
-"LaTeXiT/Un-latexize equations" = "LaTeXiT/Revenir des équations au code LaTeX";
+"LaTeXiT/Un-latexize the equations" = "LaTeXiT/Revenir des équations au code LaTeX";
+"SERVICE_DESCRIPTION"="Le service LaTeXiT peut transformer du texte en une équation (en tant qu'image), par le biais d'un moteur LaTeX. Il peut aussi revenir de ces équations au texte source, si l'export au sein de LaTeXiT est réglé sur PDF. Le service ne peut fonctionner que si l'application cible peut remplacer du texte par une image.";

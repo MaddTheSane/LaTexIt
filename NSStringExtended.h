@@ -15,6 +15,7 @@
 +(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 +(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 
+-(NSString*) string;//useful for binding
 -(NSString*)trim;
 -(BOOL) startsWith:(NSString*)substring options:(unsigned)mask;
 -(BOOL) endsWith:(NSString*)substring options:(unsigned)mask;

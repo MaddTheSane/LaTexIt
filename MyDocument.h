@@ -8,130 +8,123 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "AppController.h"
+#import "LaTeXiTSharedTypes.h"
 
-@class HistoryItem;
+@class AppController;
+@class DocumentExtraPanelsController;
 @class ImagePopupButton;
-@class LibraryFile;
+@class LatexitEquation;
+@class LibraryEquation;
 @class LineCountTextView;
 @class LinkBack;
 @class LogTableView;
 @class MyImageView;
+@class MySplitView;
 
 @interface MyDocument : NSDocument
 {
   IBOutlet NSBox*               upperBox;
+  IBOutlet NSBox*               upperImageBox;
+  IBOutlet MyImageView*         upperBoxImageView;
+  IBOutlet LogTableView*        upperBoxLogTableView;
+  IBOutlet NSProgressIndicator* upperBoxProgressIndicator;
+  IBOutlet NSBox*               upperBoxZoomBox;
+  IBOutlet NSSlider*            upperBoxZoomBoxSlider;
+
   IBOutlet NSBox*               lowerBox;
-  BOOL                          isReducedTextArea;
+  IBOutlet MySplitView*         lowerBoxSplitView;
+  IBOutlet LineCountTextView*   lowerBoxPreambleTextView;
+  IBOutlet LineCountTextView*   lowerBoxSourceTextView;
+  IBOutlet ImagePopupButton*    lowerBoxChangePreambleButton;
+  IBOutlet ImagePopupButton*    lowerBoxChangeBodyTemplateButton;
+  IBOutlet NSBox*               lowerBoxControlsBox;
+  IBOutlet NSSegmentedControl*  lowerBoxControlsBoxLatexModeSegmentedControl;
+  IBOutlet NSTextField*         lowerBoxControlsBoxFontSizeLabel;
+  IBOutlet NSTextField*         lowerBoxControlsBoxFontSizeTextField;
+  IBOutlet NSTextField*         lowerBoxControlsBoxFontColorLabel;
+  IBOutlet NSColorWell*         lowerBoxControlsBoxFontColorWell;
+  IBOutlet NSButton*            lowerBoxLatexizeButton;
 
-  IBOutlet ImagePopupButton*    changePreambleButton;
-  IBOutlet NSSplitView*         splitView;
-  IBOutlet LineCountTextView*   preambleTextView;
-  IBOutlet LineCountTextView*   sourceTextView;
-  IBOutlet MyImageView*         imageView;
-  IBOutlet NSColorWell*         colorWell;
-  IBOutlet NSTextField*         sizeText;
-  IBOutlet NSButton*            makeLatexButton;
-  IBOutlet LogTableView*        logTableView;
-  IBOutlet NSSegmentedControl*  typeOfTextControl;
-  IBOutlet NSWindow*            logWindow;
-  IBOutlet NSTextView*          logTextView;
-  IBOutlet NSProgressIndicator* progressIndicator;
-  IBOutlet NSMenu*              copyAsContextualMenuItem;
-  
-  IBOutlet NSView*        saveAccessoryView;
-  IBOutlet NSPopUpButton* saveAccessoryViewPopupFormat;
-  IBOutlet NSButton*      saveAccessoryViewOptionsButton;
-  IBOutlet NSPanel*       saveAccessoryViewOptionsPane;
-  IBOutlet NSButton*      saveAccessoryViewJpegWarning;
-  IBOutlet NSSlider*      jpegQualitySlider;
-  IBOutlet NSTextField*   jpegQualityTextField;
-  IBOutlet NSColorWell*   jpegColorWell;
-  IBOutlet NSTextField*   saveAccessoryViewScaleAsPercentTextField;
-  
-  IBOutlet NSProgressIndicator* progressMessageProgressIndicator;
-  IBOutlet NSTextField*         progressMessageTextField;
+  DocumentExtraPanelsController* documentExtraPanelsController;
 
-  NSString*    documentTitle;
+  NSString*        documentTitle;  
+  NSRect           documentFrameSaved;
+  NSRect           unzoomedFrame;
+  NSSize           documentNormalMinimumSize;
+  NSSize           documentMiniMinimumSize;
+  NSSize           lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize;
+  document_style_t documentStyle;
+  unsigned long    uniqueId;
+  NSDictionary*    lastRequestedBodyTemplate;
   
-  NSColor*     jpegColor;
-  float        jpegQuality;
-  NSSavePanel* currentSavePanel;
-  
+  NSMutableString* lastExecutionLog;
+
+  LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
   NSString* initialPreamble;
   NSString* initialBody;
   NSData*   initialPdfData;
   
-  BOOL isBusy;
-  
-  unsigned long uniqueId;
-  
-  LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
-  
-  LibraryFile* lastAppliedLibraryFile;
+  LibraryEquation* lastAppliedLibraryEquation;
+  BOOL             isReducedTextArea;
+  BOOL             isBusy;
 }
 
 //interface changing
 -(BOOL) isReducedTextArea;
 -(void) setReducedTextArea:(BOOL)reduce;
-
-//updates load progress indicator and messages
--(void) startMessageProgress:(NSString*)message;
--(void) stopMessageProgress;
+-(document_style_t) documentStyle;
+-(void) setDocumentStyle:(document_style_t)value;
 
 //actions from menu (through the appController), or from self contained elements
--(IBAction) makeLatex:(id)sender;
--(IBAction) makeLatexAndExport:(id)sender;
+-(IBAction) latexize:(id)sender;
+-(IBAction) latexizeAndExport:(id)sender;
 -(IBAction) displayLastLog:(id)sender;
 
 -(IBAction) exportImage:(id)sender;
 -(IBAction) reexportImage:(id)sender;
--(IBAction) openOptions:(id)sender;
--(IBAction) closeOptionsPane:(id)sender;
--(IBAction) jpegQualitySliderDidChange:(id)sender;
--(IBAction) saveAccessoryViewPopupFormatDidChange:(id)sender;
 -(IBAction) changePreamble:(id)sender;
--(IBAction) nullAction:(id)sender;
+-(IBAction) changeBodyTemplate:(id)sender;
+
+-(MyImageView*) imageView;
+-(NSButton*)    lowerBoxLatexizeButton;
+-(NSResponder*) preferredFirstResponder;
+
+-(void) gotoLine:(int)row;
 
 -(void) setNullId;//useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;
 
-//some accessors useful sometimes
--(LineCountTextView*) sourceTextView;
--(NSButton*) makeLatexButton;
--(MyImageView*) imageView;
-
--(LibraryFile*) lastAppliedLibraryFile;
--(void) setLastAppliedLibraryFile:(LibraryFile*)libraryFile;
+-(LibraryEquation*) lastAppliedLibraryEquation;
+-(void) setLastAppliedLibraryEquation:(LibraryEquation*)value;
 
 -(void) setLatexMode:(latex_mode_t)mode;
 -(void) setColor:(NSColor*)color;
--(void) setMagnification:(float)magnification;
--(void) executeScript:(NSDictionary*)script setEnvironment:(NSDictionary*)environment logString:(NSMutableString*)logString;
+-(void) setMagnification:(CGFloat)magnification;
 
 //updates interface according to whether the latexisation is possible or not
--(void) updateAvailabilities:(NSNotification*)notification;
+-(void) updateGUIfromSystemAvailabilities;
 //tells whether the document is currently performing a latexisation
 -(BOOL) isBusy;
 
--(void) resetSyntaxColoring;//reapply syntax coloring
 -(void) setFont:(NSFont*)font;//changes the font of both preamble and sourceText views
 -(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
 -(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield
 
+-(void) setBodyTemplate:(NSDictionary*)bodyTemplate;
+
 -(BOOL) canReexport;
 -(BOOL) hasImage;
 -(BOOL) isPreambleVisible;
--(void) setPreambleVisible:(BOOL)visible;
+-(void) setPreambleVisible:(BOOL)visible animate:(BOOL)animate;
 
 //text actions in the first responder
 -(NSString*) selectedText;
 -(void) insertText:(NSString*)text;
 
--(HistoryItem*) historyItemWithCurrentState;        //creates a history item with the current state of the document
+-(LatexitEquation*) latexitEquationWithCurrentState;
 -(BOOL) applyPdfData:(NSData*)pdfData;              //updates the document according to the given pdfdata
--(void) applyLibraryFile:(LibraryFile*)libraryFile; //updates the document according to the given library file
--(void) applyHistoryItem:(HistoryItem*)historyItem; //updates the document according to the given history item
+-(void) applyLibraryEquation:(LibraryEquation*)libraryEquation;
+-(void) applyLatexitEquation:(LatexitEquation*)latexitEquation; //updates the document according to the given history item
 -(void) applyString:(NSString*)string;//updates the document according to the given source string, that is to be decomposed in preamble+body
 
 //linkback live link management

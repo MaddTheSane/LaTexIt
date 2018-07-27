@@ -14,7 +14,7 @@
 -(NSArray*) array
 {
   NSMutableArray* array = [NSMutableArray arrayWithCapacity:[self count]];
-  unsigned int index = [self firstIndex];
+  NSUInteger index = [self firstIndex];
   while(index != NSNotFound)
   {
     [array addObject:[NSNumber numberWithUnsignedInt:index]];

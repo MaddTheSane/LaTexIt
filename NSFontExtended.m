@@ -11,16 +11,25 @@
 
 @implementation NSFont (Extended)
 
-//creates a font from data
 +(NSFont*) fontWithData:(NSData*)data
 {
-  return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  NSFont* result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  return result;
 }
+//end fontWithData:
 
-//returns the font as data
 -(NSData*) data
 {
-  return [NSKeyedArchiver archivedDataWithRootObject:self];
+  NSData* result = [NSKeyedArchiver archivedDataWithRootObject:self];
+  return result;
 }
+//end data
+
+-(NSString*) displayNameWithPointSize
+{
+  NSString* result = [NSString stringWithFormat:@"%@ %.1f", [self displayName], [self pointSize]];
+  return result;
+}
+//end displayNameWithPointSize
 
 @end

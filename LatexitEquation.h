@@ -10,9 +10,9 @@
 
 #import "LaTeXiTSharedTypes.h" //for latex_mode_t
 
-extern NSString* LatexitEquationDidChangeNotification;
+extern NSString* LatexitEquationsPboardType;
 
-@interface LatexitEquation : NSManagedObject {
+@interface LatexitEquation : NSManagedObject <NSCopying, NSCoding> {
   //NSData*             pdfData;     //pdf data representing the image. It may contain advanced PDF features like meta-data keywords, creator...
   //NSAttributedString* preamble;    //the user preamble of the latex source code
   //NSAttributedString* sourceText;  //the user body of the latex source code
@@ -27,21 +27,25 @@ extern NSString* LatexitEquationDidChangeNotification;
   //NSString* title;
   int updateLevel;
   BOOL annotateDataDirtyState;
+  NSImage* pdfCachedImage;
 }
 
++(NSEntityDescription*) entity;
+
++(void) pushManagedObjectContext:(NSManagedObjectContext*)context;
++(NSManagedObjectContext*) currentManagedObjectContext;
++(NSManagedObjectContext*) popManagedObjectContext;
+
+
 //constructors
-+(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
-            managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
++(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
-                     backgroundColor:(NSColor*)backgroundColor
-                managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
--(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
-        managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+                     backgroundColor:(NSColor*)backgroundColor;
+-(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
-                                            mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor
-                            managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+                                            mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
 
 //accessors
 -(NSData*) pdfData;
@@ -52,6 +56,8 @@ extern NSString* LatexitEquationDidChangeNotification;
 -(void) setSourceText:(NSAttributedString*)value;
 -(NSColor*) color;
 -(void) setColor:(NSColor*)value;
+-(double) baseline;
+-(void) setBaseline:(double)value;
 -(double) pointSize;
 -(void) setPointSize:(double)value;
 -(NSDate*) date;
@@ -67,12 +73,16 @@ extern NSString* LatexitEquationDidChangeNotification;
 -(NSImage*) pdfCachedImage;
 
 //on the fly
++(NSString*)    latexModeToString:(latex_mode_t)mode;
++(latex_mode_t) latexModeFromString:(NSString*)modeAsString;
 -(NSString*) modeAsString;
 -(NSString*) string;
 -(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
 
-
+//utils
+-(NSString*) titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
+-(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(id) plistDescription;
 

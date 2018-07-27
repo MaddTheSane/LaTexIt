@@ -16,11 +16,12 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  if ((!(self = [super initWithCoder:coder])))
     return nil;
-  errorLines = [[NSMutableArray alloc] init];
+  self->errorLines = [[NSMutableArray alloc] init];
   return self;
 }
+//end initWithCoder:
 
 -(void) dealloc
 {

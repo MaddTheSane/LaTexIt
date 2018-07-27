@@ -18,7 +18,7 @@
   NSPoint origin = cellFrame.origin;
   NSSize size = cellFrame.size;
   NSSize imageSize = [[self image] size];
-  float ratio = imageSize.width/imageSize.height;
+  CGFloat ratio = imageSize.width/imageSize.height;
   NSRect insideRect = NSMakeRect(origin.x, origin.y, size.width/2, size.height/2);
   if (ratio <= 1) //width <= height
     insideRect.size.width *= ratio;

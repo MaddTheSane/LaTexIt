@@ -11,8 +11,10 @@
 
 #import "LineCountTextView.h"
 
+#import "AppController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
+#import "LatexitEquation.h"
 #import "LibraryManager.h"
 #import "LineCountRulerView.h"
 #import "MyDocument.h"
@@ -21,16 +23,19 @@
 #import "NSFontExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSStringExtended.h"
+#import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
 #import "SMLSyntaxColouring.h"
+
+#import "RegexKitLite.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
 @interface LineCountTextView (PrivateAPI)
 -(void) _computeLineRanges;
--(void) _spellCheckingDidChange:(NSNotification*)notification;
 -(void) _initializeSpellChecker;
+-(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
 @end
 
 @implementation LineCountTextView
@@ -46,7 +51,7 @@ static int SpellCheckerDocumentTag = 0;
     if (!WellKnownLatexKeywords)
     {
       NSString*  keywordsPlistPath = [[NSBundle mainBundle] pathForResource:@"latex-keywords" ofType:@"plist"];
-      NSData*    dataKeywordsPlist = [NSData dataWithContentsOfFile:keywordsPlistPath];
+      NSData*    dataKeywordsPlist = [NSData dataWithContentsOfFile:keywordsPlistPath options:NSUncachedRead error:nil];
       NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
       NSString* errorString = nil;
       NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataKeywordsPlist
@@ -65,30 +70,57 @@ static int SpellCheckerDocumentTag = 0;
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  if ((!(self = [super initWithCoder:coder])))
     return nil;
-  lineRanges = [[NSMutableArray alloc] init];
-  forbiddenLines = [[NSMutableSet alloc] init];
+  self->lineRanges = [[NSMutableArray alloc] init];
+  self->forbiddenLines = [[NSMutableSet alloc] init];
   [self setDelegate:self];
 
-  #ifdef PANTHER
-  NSArray* registeredDraggedTypes = [NSArray array];    
-  #else
   NSArray* registeredDraggedTypes = [self registeredDraggedTypes];
-  #endif
 
   //strange fix for splitview
   NSRect frame = [self frame];
   frame.origin.y = MAX(0,   frame.origin.y);
   [self setFrame:frame];
+  
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringEnableKey options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringTextForegroundColorKey options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringTextBackgroundColorKey options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringCommandColorKey options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringMathsColorKey options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringKeywordColorKey options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaults addObserver:self forKeyPath:SyntaxColoringCommentColorKey options:NSKeyValueObservingOptionNew context:nil];
+  
+  [self _computeLineRanges];
 
   NSArray* typesToAdd =
     [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType,
-                              NSRTFDPboardType, HistoryItemsPboardType, nil];
+                              NSRTFDPboardType, LatexitEquationsPboardType, LibraryItemsArchivedPboardType, LibraryItemsWrappedPboardType, nil];
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObjectsFromArray:typesToAdd]];
   return self;
 }
 //end initWithCoder:
+
+-(void) dealloc
+{
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringEnableKey];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringTextForegroundColorKey];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringTextBackgroundColorKey];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringCommandColorKey];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringMathsColorKey];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringKeywordColorKey];
+  [userDefaults removeObserver:self forKeyPath:SyntaxColoringCommentColorKey];
+  [self removeObserver:self forKeyPath:NSAttributedStringBinding];
+  [self->syntaxColouring release];
+  [self->lineRanges release];
+  [self->forbiddenLines release];
+  [self->lineCountRulerView release];
+  [super dealloc];
+}
+//end dealloc
 
 -(void) _initializeSpellChecker:(id)object
 {
@@ -127,42 +159,42 @@ static int SpellCheckerDocumentTag = 0;
   [self setRulerVisible:YES];
   [scrollView setHasHorizontalRuler:NO];
   [scrollView setHasVerticalRuler:YES];
-  lineCountRulerView = [[LineCountRulerView alloc] initWithScrollView:scrollView orientation:NSVerticalRuler];
-  [scrollView setVerticalRulerView:lineCountRulerView];
-  [lineCountRulerView setClientView:self];
-  syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
+  self->lineCountRulerView = [[LineCountRulerView alloc] initWithScrollView:scrollView orientation:NSVerticalRuler];
+  [scrollView setVerticalRulerView:self->lineCountRulerView];
+  [self->lineCountRulerView setClientView:self];
+  self->syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 
-  [self _spellCheckingDidChange:nil];
   [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_initializeSpellChecker:) userInfo:nil repeats:NO];
-    
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_spellCheckingDidChange:)
-                                               name:SpellCheckingDidChangeNotification object:nil];
+  
+  [self bind:@"continuousSpellCheckingEnabled" toObject:[NSUserDefaultsController sharedUserDefaultsController]
+    withKeyPath:[NSUserDefaultsController adaptedKeyPath:SpellCheckingEnableKey] options:nil];
+  [self addObserver:self forKeyPath:NSAttributedStringBinding options:NSKeyValueObservingOptionNew context:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorDidChange:) name:NSColorPanelColorDidChangeNotification object:nil];
 }
 //end awakeFromNib
 
--(void) bind:(NSString*)binding toObject:(id)observableController withKeyPath:(NSString*)keyPath options:(NSDictionary*)options
+-(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-  [super bind:binding toObject:observableController withKeyPath:keyPath options:options];
-  if ([binding isEqualToString:@"attributedString"])
-    [observableController addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
-}
-
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
-{
-  [[self syntaxColouring] recolourCompleteDocument];
+  if ([keyPath isEqualToString:NSAttributedStringBinding])
+    [[self syntaxColouring] recolourCompleteDocument];
+  else if ([keyPath isEqualToString:SyntaxColoringEnableKey] ||
+           [keyPath isEqualToString:SyntaxColoringTextForegroundColorKey] || [keyPath isEqualToString:SyntaxColoringTextBackgroundColorKey] ||
+           [keyPath isEqualToString:SyntaxColoringCommandColorKey] || [keyPath isEqualToString:SyntaxColoringMathsColorKey] ||
+           [keyPath isEqualToString:SyntaxColoringKeywordColorKey] || [keyPath isEqualToString:SyntaxColoringCommentColorKey])
+  {
+    [self->syntaxColouring setColours];
+    [self->syntaxColouring recolourCompleteDocument];
+    [self setNeedsDisplay:YES];
+  }//end if syntax colouring options change
 }
 //end observeValueForKeyPath:
 
--(void) dealloc
+-(void) setAttributedString:(NSAttributedString*)value//triggers recolouring
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [syntaxColouring release];
-  [lineRanges release];
-  [forbiddenLines release];
-  [lineCountRulerView release];
-  [super dealloc];
+  [[self textStorage] setAttributedString:value];
+  [self->syntaxColouring recolourCompleteDocument];
 }
-//end dealloc
+//end setAttributedString:
 
 -(LineCountRulerView*) lineCountRulerView
 {
@@ -186,7 +218,7 @@ static int SpellCheckerDocumentTag = 0;
 //end scrollWheel:
 
 //as its own delegate, only notifications from self are seen
--(void) textDidChange:(NSNotification*)aNotification
+-(void) textDidChange:(NSNotification*)notification
 {
   [self _computeLineRanges]; //line ranges are computed at each change. It is not very efficient and will be very slow
                              //for large texts, but in LaTeXiT, texts are small, and I did not know how to do that simply otherwise
@@ -194,7 +226,7 @@ static int SpellCheckerDocumentTag = 0;
   //normal lines are displayed with the default foregound color
   NSDictionary* normalAttributes =
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:SyntaxColoringTextForegroundColorKey]],
+      [[PreferencesController sharedController] editionSyntaxColoringTextForegroundColor],
       NSForegroundColorAttributeName, nil];
   [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
 
@@ -202,7 +234,7 @@ static int SpellCheckerDocumentTag = 0;
   [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
   
   //syntax colouring
-  [syntaxColouring textDidChange:aNotification];
+  [syntaxColouring textDidChange:notification];
 
   //forbidden lines are displayed in gray
   NSDictionary* forbiddenAttributes =
@@ -327,7 +359,7 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end rulerView:handleMouseDown:
 
--(BOOL) rulerView:(NSRulerView *)aRulerView shouldAddMarker:(NSRulerMarker *)aMarker
+-(BOOL) rulerView:(NSRulerView *)aRulerView shouldAddMarker:(NSRulerMarker*)aMarker
 {
   return NO;
 }
@@ -377,7 +409,11 @@ static int SpellCheckerDocumentTag = 0;
   NSData* data = nil;
   
   NSPasteboard* pboard = [sender draggingPasteboard];
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]])
+    ok = YES;
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]])
+    ok = YES;
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])
     ok = YES;
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
     ok = YES;
@@ -403,11 +439,7 @@ static int SpellCheckerDocumentTag = 0;
     if (plist && [plist count])
     {
       NSString* filename = [plist objectAtIndex:0];
-      //on Panther, we rely on the extension to see if it is valid pdf. On Tiger, we will use PDFDocument
-      #ifdef PANTHER
-      if ([[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"])
-      #endif
-      data = [NSData dataWithContentsOfFile:filename];
+      data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
     }
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
@@ -418,14 +450,12 @@ static int SpellCheckerDocumentTag = 0;
   if (shouldBePDFData)
   {
     ok = (data != nil);
-    #ifndef PANTHER
     if (ok)
     {
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
       ok &= (pdfDocument != nil);
       [pdfDocument release];
     }
-    #endif
   }
   acceptDrag = ok ? NSDragOperationCopy : NSDragOperationNone;
   return acceptDrag;
@@ -449,7 +479,7 @@ static int SpellCheckerDocumentTag = 0;
                        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
   }
   else if ([pboard availableTypeFromArray:
-        [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]])
+        [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]])
     [(id)[self nextResponder] performDragOperation:sender];
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
   {
@@ -493,7 +523,7 @@ static int SpellCheckerDocumentTag = 0;
   BOOL done = NO;
   MyDocument* document = (MyDocument*)[[[self window] windowController] document];
   if ((type = [pasteboard availableTypeFromArray:
-                [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, nil]]))
+                [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, nil]]))
   {
     [(id)[self nextResponder] paste:sender];
     done = YES;
@@ -509,8 +539,8 @@ static int SpellCheckerDocumentTag = 0;
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     [attributedString release];
-    HistoryItem* historyItem = pdfWrapperData ? [HistoryItem historyItemWithPDFData:pdfWrapperData useDefaults:NO] : nil;
-    if (historyItem)
+    LatexitEquation* latexitEquation = !pdfWrapperData ? nil : [[[LatexitEquation alloc] initWithPDFData:pdfWrapperData useDefaults:NO] autorelease];
+    if (latexitEquation)
     {
       [(id)[self nextResponder] paste:sender];
       done = YES;
@@ -534,7 +564,7 @@ static int SpellCheckerDocumentTag = 0;
     [super paste:sender];
 
   NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];
-  currentFont = [NSFont fontWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultFontKey]];
+  currentFont = [[PreferencesController sharedController] editionFont];
   if (currentFont)
     [self setFont:currentFont range:NSMakeRange(0, [[self textStorage] length])];
 }
@@ -561,7 +591,7 @@ static int SpellCheckerDocumentTag = 0;
   if (!isSmallReturn)
   {
     NSString* characters = [theEvent characters];
-    NSArray* textShortcuts = [[NSUserDefaults  standardUserDefaults] objectForKey:TextShortcutsKey];
+    NSArray* textShortcuts = [[PreferencesController  sharedController] editionTextShortcuts];
     NSEnumerator* enumerator = [textShortcuts objectEnumerator];
     NSDictionary* dict = nil;
     NSDictionary* textShortcut = nil;
@@ -590,7 +620,7 @@ static int SpellCheckerDocumentTag = 0;
     }
   }
   else
-    [[(MyDocument*)[AppController currentDocument] makeLatexButton] performClick:self];
+    [[(MyDocument*)[AppController currentDocument] lowerBoxLatexizeButton] performClick:self];
 }
 //end keyDown:
 
@@ -663,7 +693,7 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end rangeForUserCompletion
 
--(NSArray*) completionsForPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+-(NSArray*) completionsForPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
   //first, normal system calling [super completionsForPartialWordRange:...]
   NSMutableArray* propositions =
@@ -687,20 +717,8 @@ static int SpellCheckerDocumentTag = 0;
         [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
     }
   
-    #ifndef PANTHER
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
-    #else
-    unsigned int count = [keywordsToCheck count];
-    unsigned int i = 0;
-    for(i = 0 ; i<count ; ++i)
-    {
-      NSDictionary* typeAndKeyword = [keywordsToCheck objectAtIndex:i];
-      NSString* latexKeyword = [typeAndKeyword objectForKey:@"word"];
-      if ([latexKeyword startsWith:word options:NSCaseInsensitiveSearch])
-        [newPropositions addObject:typeAndKeyword];
-    }
-    #endif
     
     unsigned int nbPropositions = [newPropositions count];
     while(nbPropositions--)
@@ -744,20 +762,8 @@ static int SpellCheckerDocumentTag = 0;
         [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
     }
   
-    #ifndef PANTHER
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
-    #else
-    unsigned int count = [keywordsToCheck count];
-    unsigned int i = 0;
-    for(i = 0 ; i<count ; ++i)
-    {
-      NSDictionary* typeAndKeyword = [keywordsToCheck objectAtIndex:i];
-      NSString* latexKeyword = [typeAndKeyword objectForKey:@"word"];
-      if ([latexKeyword startsWith:word options:NSCaseInsensitiveSearch])
-        [newPropositions addObject:typeAndKeyword];
-    }
-    #endif
     
     unsigned int nbPropositions = [newPropositions count];
     while(nbPropositions--)
@@ -776,10 +782,48 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end completionsForPartialWordRange:indexOfSelectedItem;
 
--(void) _spellCheckingDidChange:(NSNotification*)notification
+-(void) changeColor:(id)sender
 {
-  [self setContinuousSpellCheckingEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:SpellCheckingEnableKey]];
+  //overwritten to do nothing (only black fonr is expected)
 }
-//end _spellCheckingDidChange:
+//end changeColor:
+
+-(void) colorDidChange:(NSNotification*)notification
+{
+  NSColor* color = [[NSColorPanel sharedColorPanel] color];
+  NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
+  NSString* input = !selectedRange.length ? nil : [[[self textStorage] string] substringWithRange:selectedRange];
+  NSString* output = nil;
+  if (input)
+  {
+    NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+    NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
+      [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
+    BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLMultiline
+                                       inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
+    output = !isMatching ? nil :
+      [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
+                                                options:RKLMultiline range:NSMakeRange(0, [input length]) error:nil];
+    if (!output)
+      output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
+                     [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
+    [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
+  }//end if (input)
+}
+//end colorDidChange:
+
+-(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo
+{
+  NSString* input = !range.length ? nil : [[[self textStorage] string] substringWithRange:range];
+  if (input && string)
+  {
+    NSRange newRange = NSMakeRange(range.location, [string length]);
+    if (withUndo)
+      [[[self undoManager] prepareWithInvocationTarget:self] replaceCharactersInRange:newRange withString:input withUndo:withUndo];
+    [self replaceCharactersInRange:range withString:string];
+    [self setSelectedRange:newRange];
+  }//end if (input && string)
+}
+//end replaceCharactersInRange:withString:withUndo:
 
 @end

@@ -11,110 +11,37 @@
 #import "LibraryFile.h"
 
 #import "HistoryItem.h"
+#import "LatexitEquation.h"
+#import "LibraryEquation.h"
+#import "NSManagedObjectContextExtended.h"
 
 @implementation LibraryFile
 
-static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryFile
-
-+(void) initialize
+-(void) encodeWithCoder:(NSCoder*)coder
 {
-  if (!smallFileIcon)
-  {
-    //computes the icon used to represente a LibraryFile item
-    NSBundle* mainBundle = [NSBundle mainBundle];
-    NSString* resourcePath = [mainBundle resourcePath];
-    NSString* fileName = nil;
-    NSImage*  image = nil;
-    fileName = [resourcePath stringByAppendingPathComponent:@"file-icon.png"];
-    image = [[NSImage alloc] initWithContentsOfFile:fileName];
-    NSSize   iconSize = [image size];
-    smallFileIcon = [[NSImage alloc] initWithSize:NSMakeSize(16, 16)];
-    [smallFileIcon lockFocus];
-    [image drawInRect:NSMakeRect(0, 0, 16, 16)
-             fromRect:NSMakeRect(0, 0, iconSize.width, iconSize.height)
-            operation:NSCompositeCopy fraction:1.0];
-    [smallFileIcon unlockFocus];
-    [image release];
-  }
-}
-//end initialize
-
--(void) dealloc
-{
-  [historyItem release];
-  [super dealloc];
-}
-//end dealloc
-
--(id) copyWithZone:(NSZone*) zone
-{
-  LibraryFile* newInstance = (LibraryFile*) [super copyWithZone:zone];
-  if (newInstance)
-    newInstance->historyItem = [historyItem copy];
-  return newInstance;
-}
-//end copyWithZone:
-
--(NSImage*) icon
-{
-  return smallFileIcon; //icon of a LibraryFile
-}
-//end icon
-
-//The document's state contained in the LibraryFile item is called a "value"
-//because the fact that it is represented by a historyItem
-//should not be "public"
-
--(void) setValue:(HistoryItem*)aHistoryItem setAutomaticTitle:(BOOL)setAutomaticTitle
-{
-  [aHistoryItem retain];
-  [historyItem release];
-  historyItem = aHistoryItem;
-  if (!setAutomaticTitle || ([historyItem title] && ![[historyItem title] isEqualToString:@""]))
-    [self setTitle:[historyItem title]];
-  else
-  {
-    NSString* string =
-      [[[historyItem sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    unsigned int endIndex = MIN(17U, [string length]);
-    [self setTitle:[string substringToIndex:endIndex]];
-  }
-}
-//end setValue:setAutomaticTitle:
-
--(HistoryItem*) value
-{
-  return historyItem;
-}
-//end value:
-
-//NSCoding protocol
-
--(void) encodeWithCoder:(NSCoder*) coder
-{
-  [super encodeWithCoder:coder];
-  [coder encodeObject:historyItem forKey:@"value"];
 }
 //end encodeWithCoder:
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (![super initWithCoder:coder])
+  id oldSelf = [super init];
+  NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
+  self = [[LibraryEquation alloc] initWithEntity:[LibraryEquation entity] insertIntoManagedObjectContext:managedObjectContext];
+  [oldSelf autorelease];
+  oldSelf = nil;
+  if (!self)
     return nil;
-  historyItem = [[coder decodeObjectForKey:@"value"] retain];
+  HistoryItem* historyItem = [coder decodeObjectForKey:@"value"];
+  LatexitEquation* latexitEquation = [[historyItem equation] retain];
+  [historyItem setEquation:nil];
+  [managedObjectContext safeInsertObject:latexitEquation];
+  [latexitEquation release];
+  [(LibraryEquation*)self setEquation:latexitEquation];
+  if (![(LibraryEquation*)self title])
+    [(LibraryEquation*)self setBestTitle];
+  [managedObjectContext safeDeleteObject:historyItem];
   return self;
 }
 //end initWithCoder:
-
-//for readable export
--(id) plistDescription
-{
-  NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithDictionary:[[self value] plistDescription]];
-  NSString* theTitle = [self title];
-  if (theTitle)
-    [plist setValue:theTitle forKey:@"title"];
-  return plist;
-}
-//end plistDescription
 
 @end

@@ -1,77 +1,29 @@
-//  HistoryItem.h
+//
+//  HistoryItemCD.h
 //  LaTeXiT
 //
-//  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
-
-//An HistoryItem is a useful structure to hold the info about the generated image
-//It will typically contain the latex source code (preamble+body), the color, the mode (\[...\], $...$ or text)
-//the date, the point size.
-
-#import "LaTeXiTSharedTypes.h" //for latex_mode_t
+//  Created by Pierre Chatelier on 26/02/09.
+//  Copyright 2009 LAIC. All rights reserved.
+//
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* HistoryItemDidChangeNotification;
+@class LatexitEquation;
 
-@interface HistoryItem : NSObject <NSCoding, NSCopying> {
-  NSData*             pdfData;     //pdf data representing the image. It may contain advanced PDF features like meta-data keywords, creator...
-  NSAttributedString* preamble;    //the user preamble of the latex source code
-  NSAttributedString* sourceText;  //the user body of the latex source code
-  NSColor*            color;       //the color chosen for the equation
-  double              pointSize;   //the point size chosen
-  NSDate*             date;        //the date the equation was computed
-  latex_mode_t        mode;        //the mode (EQNARRAY, DISPLAY(\[...\]), INLINE($...$) or TEXT(text))
-  
-  NSImage*     pdfCachedImage; //a cached image to display the pdf data  
-
-  NSColor* backgroundColor;//not really background of the image, just useful when previewing, to prevent text to blend with the background
-
-  NSString* title;
+@interface HistoryItem : NSManagedObject <NSCoding> {
+  //LatexitEquation* equation;
 }
 
-//constructors
-+(id) historyItemWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
-+(id) historyItemWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
-                     color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
-                     backgroundColor:(NSColor*)backgroundColor;
--(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
--(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
-                                           color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
-                                            mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
++(NSEntityDescription*) entity;
++(NSEntityDescription*) wrapperEntity;
 
-//Accessors
--(NSImage*)            image;//triggered for tableView display : may return something else than pdfImage to speedup display
--(NSImage*)            pdfImage;
--(NSData*)             pdfData;
--(NSAttributedString*) preamble;
--(NSAttributedString*) sourceText;
--(NSColor*)            color;
--(double)              pointSize;
--(NSDate*)             date;
--(latex_mode_t)        mode;
--(NSString*)           modeAsString;
--(NSColor*)            backgroundColor;
--(NSString*)           title;
+-(id) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
--(void) setPreamble:(NSAttributedString*)text;
--(void) setBackgroundColor:(NSColor*)backgroundColor;
--(void) setTitle:(NSString*)title;
+-(BOOL) dummyPropertyToForceUIRefresh;
 
-//latex source code (preamble+body) typed by the user. This WON'T add magnification, auto-bounding, coloring.
-//It is a summary of what the user did effectively type.
--(NSString*) string;
+-(LatexitEquation*) equation;
+-(void) setEquation:(LatexitEquation*)equation;
 
--(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
-
-//to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
-//the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)
 -(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
-         
-//returns reannotated pdfData before returning it. Very rare. Only needed to resynchronize because of some backgroundColor change.
--(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
-
-//for readable export
--(id) plistDescription;
 
 @end

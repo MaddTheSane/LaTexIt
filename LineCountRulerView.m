@@ -17,35 +17,34 @@ static NSImage* errorIcon = nil;
 +(void) initialize
 {
   if (!errorIcon)
-  {
-    NSBundle* mainBundle = [NSBundle mainBundle];
-    NSString* resourcePath = [mainBundle resourcePath];
-    NSString* fileName = [resourcePath stringByAppendingPathComponent:@"error.tiff"];
-    errorIcon = [[NSImage alloc] initWithContentsOfFile:fileName];
-  }
+    errorIcon = [[NSImage imageNamed:@"error.tiff"] retain];
 }
+//end initialize
 
 -(id) initWithScrollView:(NSScrollView*)scrollView orientation:(NSRulerOrientation)orientation
 {
-  if (![super initWithScrollView:scrollView orientation:orientation])
+  if ((!(self = [super initWithScrollView:scrollView orientation:orientation])))
     return nil;
   [self setRuleThickness:32];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
                                                name:LineCountDidChangeNotification object:nil];
   return self;
 }
+//end initWithScrollView:orientation:
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
 }
+//end dealloc
 
 -(void) textDidChange:(NSNotification*)aNotification
 {
   if ([aNotification object] == [self clientView])
     [self setNeedsDisplay:YES];
 }
+//end textDidChange:
 
 //the shift allows to start the numeratation at another number than 1
 -(void) setLineShift:(int)aShift
@@ -53,14 +52,16 @@ static NSImage* errorIcon = nil;
   lineShift = aShift;
   [self setNeedsDisplay:YES];
 }
+//end setLineShift:
 
 -(int) lineShift
 {
   return lineShift;
 }
+//end lineShift:
 
 //draws error markers and line numbers
--(void)drawHashMarksAndLabelsInRect:(NSRect)aRect
+-(void) drawHashMarksAndLabelsInRect:(NSRect)aRect
 {
   NSRect visibleRect  = [(NSClipView*)[[self clientView] superview] documentVisibleRect];
   NSLayoutManager* lm = [(NSTextView*)[self clientView] layoutManager];
@@ -85,6 +86,7 @@ static NSImage* errorIcon = nil;
     }
   }
 }
+//end drawHashMarksAndLabelsInRect:
 
 //adds an error marker
 -(void) setErrorAtLine:(int)lineIndex message:(NSString*)message
@@ -108,20 +110,19 @@ static NSImage* errorIcon = nil;
     [self setNeedsDisplay:YES];
   }
 }
+//end setErrorAtLine:message:
 
 //removes error markers
 -(void) clearErrors
 {
   [self removeAllToolTips];
-  NSArray* markers = [self markers];
+  NSArray* markers = [NSArray arrayWithArray:[self markers]];
   NSEnumerator* enumerator = [markers objectEnumerator];
-  NSRulerMarker* marker = [enumerator nextObject];
-  while(marker)
-  {
+  NSRulerMarker* marker = nil;
+  while((marker = [enumerator nextObject]))
     [self removeMarker:marker];
-    marker = [enumerator nextObject];
-  }
   [self setNeedsDisplay:YES];
 }
+//end clearErrors
 
 @end

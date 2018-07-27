@@ -18,17 +18,25 @@
 "Show History" = "Mostrar historial";
 "Hide Library" = "Ocultar librería";
 "Show Library" = "Mostrar librería";
+"Apply History item" = "Aplicar un elemento de la librería";
 "Delete History item" = "Eliminar elemento del historial";
 "Delete History items" = "Eliminar elementos del historial";
+"Change History item background color" = "Cambiar el color de fondo de un elemento del historial";
+"Apply Library item" = "Aplicar un elemento de la librería";
 "Add Library folder" = "Añadir una carpeta a la librería";
 "Add Library item" = "Añadir un elemento a la librería";
+"Add Library items" = "Añadir elementos a la librería";
 "Delete Library item" = "Eliminar elemento de la librería";
 "Delete Library items" = "Eliminar elementos de la librería";
 "Move Library items" = "Mover elementos de la librería";
 "Change Library item name" = "Renombrar elemento de la librería";
 "Change Library item background color" = "Cambiar el color de fondo de un elemento de la librearía";
+"Change Library items background color" = "Cambiar el color de fondo de elementos de la librearía";
 "Import library..." = "Importar librería...";
 "Export library..." = "Exportar librería...";
+"Loading error" = "Error al cargar";
+"An error occured while saving" = "Error al Guardar";
+"The file does not appear to be a valid format" = "El fichero no tiene el formato correcto";
 "New encapsulation" = "Nueva encapsulación";
 "Change the encapsulation" = "Cambiar la encapsulación";
 "Remove encapsulation items" = "Eliminar elementos de encapsulación";
@@ -62,7 +70,7 @@
 "You did not type any text in the body. The result will certainly be empty." = "No ha escrito nada en el cuerpo del documento. Obviamente, no habrá ningún resultado.";
 "An error occured while trying to create the file :\n%@" = "Se produjo un error al crear el archivo:\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Se produjo un error al crear el archivo con comando:\n%@";
-"http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_en.php";
+"http://pierre.chachatelier.fr/programmation/latexit_en.php" = "http://pierre.chachatelier.fr/programmation/latexit_en.php";
 "Equation linked with another application" = "Ecuación enlazada con otra aplicación";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT no puede ejecutarse correctamente, compruebe la configuración por favor";
 "Do you want to load the library <%@> ?" = "¿Quiere cargar la librearía <%@>?";
@@ -76,6 +84,7 @@
 "General" = "General";
 "Edition" = "Edición";
 "Preambles" = "Preámbulos";
+"Body templates" = "Plantillas de contenido";
 "Composition" = "Composición";
 "Service" = "Servicio";
 "Advanced" = "Avanzado";
@@ -113,10 +122,12 @@
 "Body" = "Cuerpo";
 "File" = "Archivo";
 "Content" = "Contenido";
+"Define a script" = "Definir un script";
+"Use existing script" = "Usar un script existent";
 "Script failed" = "El script ha fallado";
 "Script too long : timeout reached" = "Script demasiado largo: tiempo de espera superado";
 "Palette installation" = "Intalación de Paleta";
-"It does not appear to be a valid Latex palette package" = "El paquete de paleta LaTeX no parece válido";
+"It does not appear to be a valid Latex palette package" = "El fichero parece estar dañado";
 "Do you want to install the palette %@ ?" = "¿Desea instalar la paleta %@ ?";
 "This palette will be installed into \n%@" = "Esta paleta se va ha instalar en \n%@";
 "Install palette" = "Instalar paleta";
@@ -148,3 +159,60 @@
 "Additional files" = "Archivos adicionales";
 "Default Format" = "Formato por defecto";
 "PDF with outlined fonts" = "PDF con fuentes trazadas";
+"Migrating history to new format" = "Migrando el historial al nuevo formato";
+"Migrating library to new format" = "Migrando la librería al nuevo formato";
+
+/* Preferences */
+"Edit the configurations..." = "Editar las configuraciones...";
+
+/* document */
+"Text" = "Texto";
+"Font size :" = "Tamaño:";
+"Color :" = "Color:";
+"LaTeX it!" = "LaTeX it!";
+"Copy the image as" = "Copiar imagen como";
+"Switch to mini-window" = "Activar mini-ventana";
+"Switch to normal window" = "Desactivar mini-ventana";
+
+/* document extra panels */
+"Execution log" = "Registro";
+
+/* Library */
+"Library" = "Librería";
+"Reach default library" = "Volver a la librería por defecto";
+"Add to current library" = "Añadir a la librería actual";
+"Overwrite current library" = "Sobreescribir la librería actual";
+"Change library in use" = "Cambiar la librería en uso";
+"Export the selection only" = "Exportar sólo la selección";
+"Format :" = "Format:";
+"Add a folder" = "Añadir una carpeta";
+"Add current equation" = "Añadir la ecuación actual";
+"Rename selection" = "Renombrar la selección";
+"Remove selection" = "Borrar selección";
+"Refresh current equation" = "Refrescar la ecuación actual";
+"Import..." = "Importar...";
+"Export..." = "Exportar...";
+"Display the equations in real size on mouse over" = "Con el ratón encima, mostrar las ecuaciones en tamaño real";
+
+/* palette : additional files */
+"Open defaults" = "Abrir defecto";
+"Save as defaults" = "Guardar como defecto";
+
+/* palette : composition */
+"Composition configurations" = "Configuraciones de composición";
+
+/* palette : encapsulations */
+"Encapsulations" = "Encapsulaciones";
+
+/* palette : LaTeX */
+"LaTeX Palette" = "Paleta LaTeX";
+"Details" = "Detalles";
+"LaTeX Code :" = "Comando:";
+"Requires :" = "Necesita:";
+
+/* palette : margins */
+"Custom margins" = "Márgenes personalizados";
+"Save as default margins" = "Guardar como márgenes por defecto";
+
+/* automator */
+"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "Error desconocido. Por favor, compruebe que LaTeXiT se ha ejecutado al menos una vez y que es completamente funcional.";

@@ -12,43 +12,14 @@
 
 #import "LaTeXiTSharedTypes.h"
 
-extern NSString* HistoryDidChangeNotification;
-extern NSString* HistoryItemsPboardType;
-
 @class HistoryItem;
 @interface HistoryManager : NSObject {
-  //Note that access to historyItem will be @synchronized
-  NSMutableArray* historyItems;
-  BOOL historyShouldBeSaved; //becomes YES is a modification occurs, returns to NO after saving
-  NSUndoManager* undoManager;
-  
-  NSThread* mainThread;
-  
   NSManagedObjectContext* managedObjectContext;
-  NSArrayController*      latexitEquationsController;
 }
 
 +(HistoryManager*) sharedManager; //getting the history manager singleton
 
--(NSArrayController*)      latexitEquationsController;
--(NSUndoManager*) undoManager;
+-(NSManagedObjectContext*) managedObjectContext;
+-(NSUndoManager*)          undoManager;
 
--(BOOL) historyShouldBeSaved;
--(void) setHistoryShouldBeSaved:(BOOL)state;
-
-//getting the history items
--(NSArray*) historyItems;
-
-//inserting, removing, undo-aware
--(void) addItem:(HistoryItem*)item;
--(void) clearAll;
--(NSArray*) itemsAtIndexes:(NSIndexSet*)indexSet tableView:(NSTableView*)tableView;
--(HistoryItem*) itemAtIndex:(unsigned int)index tableView:(NSTableView*)tableView;
--(void) removeItemsAtIndexes:(NSIndexSet*)indexSet tableView:(NSTableView*)tableView;
--(void) insertItems:(NSArray*)items atIndexes:(NSArray*)indexes tableView:(NSTableView*)tableView;
-
-//migrating to Core-Data
--(void) addItemWithPDFData:(NSData*)pdfData preamble:(NSAttributedString*)preamble sourceText:(NSAttributedString*)sourceText
-                     color:(NSColor*)color pointSize:(double)pointSize date:(NSDate*)date mode:(latex_mode_t)mode
-                     backgroundColor:(NSColor*)backgroundColor;
 @end

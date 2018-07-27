@@ -10,82 +10,74 @@
 //the latexisation
 //It is also the LinkBack server
 
-#import "PreferencesController.h"
-
 #import <Cocoa/Cocoa.h>
 
-#ifdef PANTHER
-#import <LinkBack-panther/LinkBack.h>
-#else
 #import <LinkBack/LinkBack.h>
-#endif
 
 #import "LaTeXiTSharedTypes.h"
 
-typedef enum {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
-              CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS,
-              CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS,
-              CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK} change_service_shortcuts_fallback_t;
-
-@class AdditionalFilesController;
-@class CompositionConfigurationController;
-@class EncapsulationController;
-@class HistoryController;
-@class MarginController;
-@class LatexPalettesController;
-@class LibraryController;
+@class AdditionalFilesWindowController;
+@class CompositionConfigurationsWindowController;
+@class EncapsulationsWindowController;
+@class HistoryItem;
+@class HistoryWindowController;
+@class MarginsWindowController;
+@class LatexitEquation;
+@class LaTeXPalettesWindowController;
+@class LibraryWindowController;
 @class MyDocument;
-@class PreferencesController;
-@class Semaphore;
+@class PreferencesWindowController;
 @class SUUpdater;
 
 @interface AppController : NSObject <LinkBackServerDelegate> {  
   IBOutlet NSWindow*      readmeWindow;
   IBOutlet NSTextView*    readmeTextView;
   IBOutlet NSPanel*       donationPanel;
-  IBOutlet NSPanel*       updatesPanel;
   IBOutlet NSTextView*    updatesInformationTextView;
   IBOutlet NSWindow*      whiteColorWarningWindow;
+  IBOutlet NSButton*      whiteColorWarningWindowCheckBox;
   IBOutlet SUUpdater*     sparkleUpdater;
   IBOutlet NSView*        openFileTypeView;
   IBOutlet NSPopUpButton* openFileTypePopUp;
   NSOpenPanel*            openFileTypeOpenPanel;
   
   //some info on current configuration
-  Semaphore* configurationSemaphore;
-  BOOL isPdfLatexAvailable;
+  BOOL isPdfLaTeXAvailable;
+  BOOL isXeLaTeXAvailable;
+  BOOL isLaTeXAvailable;
+  BOOL isDviPdfAvailable;
   BOOL isGsAvailable;
-  BOOL isPs2PdfAvailable;
-  BOOL isDvipdfAvailable;
-  BOOL isXeLatexAvailable;
-  BOOL isLatexAvailable;
+  BOOL isPsToPdfAvailable;
   BOOL isColorStyAvailable;
 
-  AdditionalFilesController* additionalFilesController;
-  CompositionConfigurationController* compositionConfigurationController;
-  EncapsulationController* encapsulationController;
-  HistoryController*       historyController;
-  LatexPalettesController* latexPalettesController;
-  LibraryController*       libraryController;
-  MarginController*        marginController;
+  AdditionalFilesWindowController*           additionalFilesWindowController;
+  CompositionConfigurationsWindowController* compositionConfigurationWindowController;
+  EncapsulationsWindowController*            encapsulationsWindowController;
+  HistoryWindowController*                   historyWindowController;
+  LaTeXPalettesWindowController*             latexPalettesWindowController;
+  LibraryWindowController*                   libraryWindowController;
+  MarginsWindowController*                   marginsWindowController;
+  PreferencesWindowController*               preferencesWindowController;
+  
+  int  checkLevel;
+  BOOL updateGUIFlag;
 }
 
 +(AppController*)           appController; //getting the unique instance of appController
 +(NSDocument*)              currentDocument;
-+(NSString*)                latexitTemporaryPath;
 -(NSDocument*)              currentDocument;
 -(NSWindow*)                whiteColorWarningWindow;
--(AdditionalFilesController*) additionalFilesController;
--(CompositionConfigurationController*) compositionConfigurationController;
--(EncapsulationController*) encapsulationController;
--(HistoryController*)       historyController;
--(LatexPalettesController*) latexPalettesController;
--(LibraryController*)       libraryController;
--(MarginController*)        marginController;
+-(AdditionalFilesWindowController*)           additionalFilesWindowController;
+-(CompositionConfigurationsWindowController*) compositionConfigurationWindowController;
+-(EncapsulationsWindowController*)            encapsulationsWindowController;
+-(HistoryWindowController*)                   historyWindowController;
+-(LaTeXPalettesWindowController*)             latexPalettesWindowController;
+-(LibraryWindowController*)                   libraryWindowController;
+-(MarginsWindowController*)                   marginsWindowController;
+-(PreferencesWindowController*)               preferencesWindowController;
 
-+(NSArray*) unixBins; //usual unix PATH
-+(NSDictionary*) fullEnvironmentDict; //environment useful to call programs on the command line
-+(NSDictionary*) extraEnvironmentDict; //environment useful to call programs on the command line
+-(HistoryItem*) addEquationToHistory:(LatexitEquation*)latexitEquation;
+-(HistoryItem*) addHistoryItemToHistory:(HistoryItem*)latexitEquation;
 
 //the menu actions
 -(IBAction) makeDonation:(id)sender;//display info panel
@@ -129,40 +121,38 @@ typedef enum {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
 -(IBAction) showHelp:(id)sender;
 -(void) showHelp:(id)sender section:(NSString*)section;
 -(IBAction) reduceOrEnlargeTextArea:(id)sender;
+-(IBAction) switchMiniWindow:(id)sender;
 
 -(IBAction) returnFromWhiteColorWarningWindow:(id)sender;
 
-//updates the documents with a loading message
--(void) startMessageProgress:(NSString*)message;
--(void) stopMessageProgress;
-
 //utility : finds a program in the unix environment. You can give an environment, and
 //some "prefixes", that is to say an array of PATH in which the program could be
--(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes
-                 environment:(NSDictionary*)environment;
+-(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes environment:(NSDictionary*)environment useLoginShell:(BOOL)useLoginShell;
 
 //returns the default preamble. If color.sty is not available, it may add % in front of \usepackage{color}
--(NSAttributedString*) preambleForLatexisation;
--(NSAttributedString*) preambleForService;
+-(NSAttributedString*) preambleLatexisationAttributedString;
+-(NSAttributedString*) preambleServiceAttributedString;
 
 //returns some configuration info
--(BOOL) isPdfLatexAvailable;
+-(BOOL) isPdfLaTeXAvailable;
+-(BOOL) isXeLaTeXAvailable;
+-(BOOL) isLaTeXAvailable;
+-(BOOL) isDviPdfAvailable;
 -(BOOL) isGsAvailable;
--(BOOL) isDvipdfAvailable;
--(BOOL) isPs2PdfAvailable;
--(BOOL) isXeLatexAvailable;
--(BOOL) isLatexAvailable;
+-(BOOL) isPsToPdfAvailable;
 -(BOOL) isColorStyAvailable;
 
-//if the marginController is not loaded, just use the user defaults values
--(float) marginControllerTopMargin;
--(float) marginControllerBottomMargin;
--(float) marginControllerLeftMargin;
--(float) marginControllerRightMargin;
+//if the marginWindowController is not loaded, just use the user defaults values
+-(CGFloat) marginsCurrentTopMargin;
+-(CGFloat) marginsCurrentBottomMargin;
+-(CGFloat) marginsCurrentLeftMargin;
+-(CGFloat) marginsCurrentRightMargin;
+
+//if the additionalFilesWindowController is not loaded, just use the user defaults values
+-(NSArray*) additionalFilesPaths;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSString*) nameOfType:(export_format_t)format;
--(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality scaleAsPercent:(float)scaleAsPercent;
 
 //methods for the application service
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
@@ -171,8 +161,6 @@ typedef enum {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceDeLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
--(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
-                               authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
 
 //LinkBackServerDelegateProtocol
 -(void) linkBackDidClose:(LinkBack*)link;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LaTeXiT/Detect and typeset equations</key>
+	<string>LaTeXiT/数式の検出と表示</string>
+	<key>LaTeXiT/Typeset LaTeX Maths display</key>
+	<string>LaTeXiT/LaTeX コード 表示 \[...\]</string>
+	<key>LaTeXiT/Typeset LaTeX Maths eqnarray</key>
+	<string>LaTeXiT/LaTeX 数式表示</string>
+	<key>LaTeXiT/Typeset LaTeX Maths inline</key>
+	<string>LaTeXiT/LaTeX インラインコード $...$</string>
+	<key>LaTeXiT/Typeset LaTeX Text</key>
+	<string>LaTeXiT/LaTeX テキスト表示</string>
+	<key>LaTeXiT/Un-latexize the equations</key>
+	<string>LaTeXiT/LaTeXコードに数式を戻す</string>
+	<key>SERVICE_DESCRIPTION</key>
+	<string>LaTeXiTは、LaTeXエンジンでテキストを数式に変換します。PDFとしてエクスポートするためにLaTeXiTで作成した数式を、元のテキストに戻すこともできます。テキストをイメージに置換できるアプリケーションで、この機能を使うことができます。</string>
+</dict>
+</plist>

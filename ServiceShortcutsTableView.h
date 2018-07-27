@@ -9,8 +9,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ServiceShortcutsTableView : NSTableView {
+#import "DelegatingTransformer.h"
 
+@interface ServiceShortcutsTableView : NSTableView <DelegatingTransformerDelegate> {
+  IBOutlet NSButton* serviceWarningShortcutConflictButton;
 }
+
+-(id) transformer:(DelegatingTransformer*)transformer reverse:(BOOL)reverse value:(id)value context:(id)context;
 
 @end

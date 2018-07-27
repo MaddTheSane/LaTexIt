@@ -27,8 +27,8 @@
 {
   [[self window] makeFirstResponder:self];
   NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-  int row =0;
-  int column = 0;
+  NSInteger row =0;
+  NSInteger column = 0;
   BOOL ok = [self getRow:&row column:&column forPoint:point];
   if (ok)
   {
@@ -45,8 +45,8 @@
   NSString* characters = [event charactersIgnoringModifiers];
   if (selectedCell && ![characters isEqualToString:@""])
   {
-    int row = 0;
-    int column = 0;
+    NSInteger row = 0;
+    NSInteger column = 0;
     [self getRow:&row column:&column ofCell:selectedCell];
     
     unichar c = [characters characterAtIndex:0];

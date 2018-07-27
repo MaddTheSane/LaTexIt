@@ -10,7 +10,6 @@
 #import <Cocoa/Cocoa.h>
 
 @interface TextShortcutsTableView : NSTableView {
-  NSMutableArray* cachedTextShortcuts;
 }
 
 -(IBAction) edit:(id)sender;

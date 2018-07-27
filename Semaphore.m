@@ -13,7 +13,7 @@
 //designated initializer
 -(id) initWithValue:(unsigned int)initialValue
 {
-  if (![super init])
+  if ((!(self = [super init])))
     return nil;
   int error = pthread_condattr_init(&cond_attr);
   error = error ? error : pthread_cond_init(&cond, &cond_attr);
