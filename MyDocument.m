@@ -771,7 +771,7 @@ static NSString* yenString = nil;
           [self _replaceYenSymbol:colouredPreamble], //preamble
           magnification/10.0, //latexitscalefactor = magnification
           addSymbolLeft, [self _replaceYenSymbol:body], addSymbolRight, //source text
-          400*magnification/10000, //little correction
+          800*magnification/10000, //little correction to avoid cropping errors (empirically found)
           [appController marginControllerTopMargin]+[appController marginControllerBottomMargin],//top margin
           [appController marginControllerLeftMargin]+[appController marginControllerRightMargin],//right margin
           [appController marginControllerLeftMargin],400*magnification/10000+[appController marginControllerTopMargin]//for geometry
@@ -831,14 +831,15 @@ static NSString* yenString = nil;
           "\\newwrite\\foo \\immediate\\openout\\foo=\\jobname.sizes \\immediate\\write\\foo{\\the\\latexitdepth (Depth)}\n"\
           "\\immediate\\write\\foo{\\the\\latexitheight (Height)}\n"\
           "\\addtolength{\\latexitheight}{\\latexitdepth}\n"\
-          "\\addtolength{\\latexitheight}{%f pt}\n"\
+          "\\addtolength{\\latexitheight}{%f pt}\n" //little correction
           "\\immediate\\write\\foo{\\the\\latexitheight (TotalHeight)} \\immediate\\write\\foo{\\the\\latexitwidth (Width)}\n"\
           "\\closeout\\foo \\geometry{paperwidth=\\latexitwidth,paperheight=\\latexitheight,margin=0pt}\n"\
           "\\begin{document}\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}\\end{document}\n", 
           [self _replaceYenSymbol:colouredPreamble], magnification/10.0,
           boundingBox.origin.x, boundingBox.origin.y,
           boundingBox.origin.x+boundingBox.size.width, boundingBox.origin.y+boundingBox.size.height,
-          pdfFile, 400*magnification/10000];
+          pdfFile,
+          400*magnification/10000]; //little correction to avoid cropping errors (empirically found)
 
       //Latexisation of step 3. Should never fail. Shoudl always be performed in PDFLatexMode to get a proper bounding box
       NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
