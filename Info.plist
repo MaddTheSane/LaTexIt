@@ -55,7 +55,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.8.3 (Tiger version)</string>
+	<string>1.8.4 (Panther version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -191,7 +191,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Multi-Latexisations on a text</string>
+				<string>LaTeXiT/Detect and typeset equations</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceMultiLatexisation</string>

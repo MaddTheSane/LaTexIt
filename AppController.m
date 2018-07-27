@@ -2494,6 +2494,8 @@ static NSMutableDictionary* cachePaths = nil;
     NSMutableArray* services = [infoPlist objectForKey:@"NSServices"];
     [services removeAllObjects];
     
+    NSArray* shortcutStrings = [userDefaults arrayForKey:ServiceShortcutStringsKey];
+    NSArray* shortcutEnabled = [userDefaults arrayForKey:ServiceShortcutEnabledKey];
     latex_mode_t latex_mode = LATEX_MODE_DISPLAY;
     for(latex_mode = LATEX_MODE_DISPLAY ; latex_mode <= LATEX_MODE_EQNARRAY ; ++latex_mode)
     {
@@ -2506,8 +2508,6 @@ static NSMutableDictionary* cachePaths = nil;
                                  (latex_mode == LATEX_MODE_DISPLAY)  ? @"serviceLatexisationDisplay"  :
                                  (latex_mode == LATEX_MODE_INLINE)   ? @"serviceLatexisationInline"   :
                                  (latex_mode == LATEX_MODE_TEXT)     ? @"serviceLatexisationText"     : @"";
-      NSArray* shortcutStrings = [userDefaults arrayForKey:ServiceShortcutStringsKey];
-      NSArray* shortcutEnabled = [userDefaults arrayForKey:ServiceShortcutEnabledKey];
       unsigned int count = MIN([shortcutStrings count], [shortcutEnabled count]);
       if (index<count)
       {
@@ -2525,21 +2525,22 @@ static NSMutableDictionary* cachePaths = nil;
             nil];
         [services insertObject:serviceItemPlist atIndex:latex_mode];
       }//end if index<count
-      
-      //adds multi latexisation
-      NSDictionary* serviceItemPlist = ![[shortcutEnabled objectAtIndex:4] boolValue] ? [NSDictionary dictionary] :
-        [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSDictionary dictionaryWithObject:[shortcutStrings objectAtIndex:4] forKey:@"default"], @"NSKeyEquivalent",
-          [NSDictionary dictionaryWithObject:@"LaTeXiT/Detect and typeset equations" forKey:@"default"], @"NSMenuItem",
-          @"serviceMultiLatexisation", @"NSMessage",
-          @"LaTeXiT", @"NSPortName",
-          [NSArray arrayWithObject:@"NSRTFDPboardType"], @"NSReturnTypes",
-          [NSArray arrayWithObject:@"NSRTFPboardType"], @"NSSendTypes",
-          nil];
-      [services addObject:serviceItemPlist];
-      
-      [infoPlist writeToURL:infoPlistURL atomically:YES];
     }//end for each latex mode
+      
+    //adds multi latexisation
+    NSDictionary* serviceItemPlist = ![[shortcutEnabled objectAtIndex:4] boolValue] ? [NSDictionary dictionary] :
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSDictionary dictionaryWithObject:[shortcutStrings objectAtIndex:4] forKey:@"default"], @"NSKeyEquivalent",
+        [NSDictionary dictionaryWithObject:@"LaTeXiT/Detect and typeset equations" forKey:@"default"], @"NSMenuItem",
+        @"serviceMultiLatexisation", @"NSMessage",
+        @"LaTeXiT", @"NSPortName",
+        [NSArray arrayWithObject:@"NSRTFDPboardType"], @"NSReturnTypes",
+        [NSArray arrayWithObject:@"NSRTFPboardType"], @"NSSendTypes",
+        nil];
+    [services addObject:serviceItemPlist];
+    
+    [infoPlist writeToURL:infoPlistURL atomically:YES];
+
   }//end if infoPlist
   CFRelease(cfInfoPlist);
 }

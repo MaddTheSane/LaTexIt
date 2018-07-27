@@ -830,10 +830,10 @@
 			isa = PBXGroup;
 			children = (
 				93D7CB1B09D36C6D0001DC5E /* CompositionConfiguration */,
-				9324D3EE08A6453D0010DB95 /* Interface */,
-				93F73E870899091300EFFA5E /* Encapsulation */,
 				93344CB708251C9000F00A49 /* CocoaExtensions */,
+				93F73E870899091300EFFA5E /* Encapsulation */,
 				93EF9D1B07EF7B5C0003FA6E /* History */,
+				9324D3EE08A6453D0010DB95 /* Interface */,
 				93A5972207F479B8001DF900 /* LatexPalettes */,
 				9344D76D08257B1600B17B37 /* Library */,
 				9308E22807EE3ED500DD1B5F /* LineCount */,
