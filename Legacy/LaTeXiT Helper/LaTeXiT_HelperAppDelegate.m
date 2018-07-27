@@ -18,7 +18,7 @@
   if (!published)
     NSLog(@"LaTeXiT_Helper : published server failed");
   NSArray* componentsOfSelfPath = [[[NSBundle mainBundle] bundlePath] pathComponents];
-  unsigned int count = [componentsOfSelfPath count];
+  NSUInteger count = [componentsOfSelfPath count];
   NSArray* componentsOfOwnerPath = (count < 3) ? nil : [componentsOfSelfPath subarrayWithRange:NSMakeRange(0, count-3)];
   NSString* ownerPath = [NSString pathWithComponents:componentsOfOwnerPath];
   if ([[[ownerPath pathExtension] lowercaseString] isEqualToString:@"app"])
@@ -47,11 +47,10 @@
 
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link
 {
-  id oldPeer = [[link valueForKey:@"peer"] retain];
+  id oldPeer = [link valueForKey:@"peer"];
   [oldPeer remoteCloseLink];
   [link connectToServerWithName:@"LaTeXiT" inApplication:@"fr.chachatelier.pierre.LaTeXiT" fallbackURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/latexit/index.php"] appName:@"LaTeXiT"];
   [link setValue:oldPeer forKeyPath:@"peer.peer"];
-  [oldPeer release];
   [link requestEdit];
 }
 //end linkBackClientDidRequestEdit:

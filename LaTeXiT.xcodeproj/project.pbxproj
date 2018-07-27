@@ -216,7 +216,7 @@
 		932CF4230826C2EB00434128 /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4210826C2EB00434128 /* LibraryItem.m */; };
 		932CF45F0826C5A500434128 /* icon-file.png in Resources */ = {isa = PBXBuildFile; fileRef = 932CF45E0826C5A500434128 /* icon-file.png */; };
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
-		932E60930F5DA3BC002B3136 /* LatexitEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 935784510E9D21FB00736F31 /* LatexitEquation.m */; };
+		932E60930F5DA3BC002B3136 /* LatexitEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 935784510E9D21FB00736F31 /* LatexitEquation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		932E60B20F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		932E60B30F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
@@ -247,7 +247,7 @@
 		9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
-		9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
+		9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9344BBA30E8CF5AE00FE90A5 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
 		9344BBA70E8CF5C500FE90A5 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
 		9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
@@ -300,7 +300,7 @@
 		935B8B290FB426C800448B03 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
 		935B8FDD0FB6E5CF00448B03 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 935B8FDC0FB6E5CF00448B03 /* LibraryController.m */; };
 		936091A21087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
-		936091A31087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
+		936091A31087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 936368C91194BA4900C5DE49 /* DragThroughButton.m */; };
 		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
@@ -323,9 +323,9 @@
 		937CFAE11B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
 		937CFB8D1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */; };
 		937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */; };
-		937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; };
+		937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; };
-		937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; };
+		937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; };
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
@@ -377,7 +377,7 @@
 		939846C21945137900FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
 		939A64580800281900AE4486 /* ServicesMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 939A64570800281900AE4486 /* ServicesMenu.strings */; };
 		939D4E041A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; };
-		939D4E051A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; };
+		939D4E051A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		939D6588194457DA008A29AB /* PropertyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6587194457DA008A29AB /* PropertyStorage.m */; };
 		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */; };
@@ -394,7 +394,7 @@
 		93A9FF4D10201DA70061DB60 /* NSObjectTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */; };
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
 		93ABA88D2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
-		93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
+		93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
 		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */; };
 		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
@@ -1227,8 +1227,10 @@
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 				934AAB2E0F343DC20010E384 /* Project Helpers */,
 			);
+			indentWidth = 2;
 			name = LaTeXiT;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
@@ -3145,6 +3147,7 @@
 		9344B9910E8CF38800FE90A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3201,6 +3204,7 @@
 		9344B9920E8CF38800FE90A5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -3303,6 +3307,7 @@
 		938DBE1110BDC2E0002350CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3318,7 +3323,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Legacy/LaTeXiT Helper/LaTeXiT_Helper_Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
@@ -3351,6 +3355,7 @@
 		938DBE1210BDC2E0002350CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
