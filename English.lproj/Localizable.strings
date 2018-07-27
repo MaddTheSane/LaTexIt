@@ -1,5 +1,5 @@
 "current-language" = "en";
-"Ok" = "Ok";
+"OK" = "OK";
 "Cancel" = "Cancel";
 "Error" = "Error";
 "Untitled" = "Untitled";
@@ -87,6 +87,7 @@
 "Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";
 "Typeset LaTeX Text" = "Typeset LaTeX Text";
+"Un-latexize the equations" = "Revert equations back to LaTeX code";
 "Detect and typeset equations" = "Detect and typeset equations";
 "Loading History" = "Loading History";
 "Saving History" = "Saving History";
@@ -108,3 +109,9 @@
 "You may not be updating the good equation" = "You may not be updating the good equation";
 "Update the equation" = "Update the equation";
 "You changed the library selection since the last equation was imported into the editor" = "You changed the library selection since the last equation was imported into the editor";
+"Shell" = "Shell";
+"Body" = "Body";
+"File" = "File";
+"Content" = "Content";
+"Script failed" = "Script failed";
+"Script too long : timeout reached" = "Script too long : timeout reached";

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright Pierre Chatelier 2005 . All rights reserved.
+//  Copyright Pierre Chatelier 2005, 2006, 2007 . All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -76,6 +76,9 @@ static NSMutableArray* freeIds = nil;
 
 -(void) _updateTextField:(NSTimer*)timer; //to fix a refresh bug
 -(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
+
+-(NSString*) descriptionForScript:(NSDictionary*)script;
+-(void) threadKillTaskOnTimeout:(NSDictionary*)taskAndTimeout;
 @end
 
 @implementation MyDocument
@@ -195,7 +198,7 @@ static NSString* yenString = nil;
   [preambleTextView setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
   [sourceTextView   setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
   
-  [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]
+  [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackgroundKey]]
               updateHistoryItem:NO];
               
   //connect contextual copy As menu to imageView
@@ -466,6 +469,8 @@ static NSString* yenString = nil;
   if (mustProcess)
   {
     [imageView setPDFData:nil cachedImage:nil];       //clears current image
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey])
+      [imageView setBackgroundColor:nil updateHistoryItem:NO];
     [imageView setNeedsDisplay:YES];
     [imageView displayIfNeeded];      //refresh it
     NSRect imageViewFrame = [imageView frame];
@@ -505,6 +510,7 @@ static NSString* yenString = nil;
 
       //and insert a new element into the history
       HistoryItem* newHistoryItem = [self historyItemWithCurrentState];
+      [imageView setBackgroundColor:[newHistoryItem backgroundColor] updateHistoryItem:NO];
       [[HistoryManager sharedManager] addItem:newHistoryItem];
       [[[AppController appController] historyController] deselectAll:0];
       
@@ -832,28 +838,10 @@ static NSString* yenString = nil;
   NSMutableString* fullLog = [NSMutableString string];
   
   
-  //PREPROCESSING
-   NSDictionary* environment =
-    [NSDictionary dictionaryWithObjectsAndKeys:latexFilePath, @"INPUTTEXFILE",
-                                                pdfFilePath2, @"OUTPUTPDFFILE",
-                                                (compositionMode == COMPOSITION_MODE_LATEXDVIPDF)
-                                                  ? dviFilePath : nil, @"OUTPUTDVIFILE",
-                                                nil];
-  NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
-  NSDictionary* compositionConfiguration = [compositionConfigurations objectAtIndex:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
-  NSDictionary* additionalProcessingScripts = [compositionConfiguration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
-  NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_PREPROCESSING]];
-  if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
-  {
-    [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing", @"Pre-processing")];
-    [self executeScript:script setEnvironment:environment logString:fullLog];
-    [logTextView setString:fullLog];
-  }
-
   //STEP 1
   //first, creates simple latex source text to compile and report errors (if there are any)
   
-  //the body is trimmed to avoid some latex problems (sometimes, a newline at the end of the equatiosn makes it fail!)
+  //the body is trimmed to avoid some latex problems (sometimes, a newline at the end of the equation makes it fail!)
   NSString* trimmedBody = [body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   //the problem is that now, the error lines must be shifted ! How many new lines have been removed ?
   NSString* firstChar = [trimmedBody length] ? [trimmedBody substringWithRange:NSMakeRange(0, 1)] : @"";
@@ -884,6 +872,33 @@ static NSString* yenString = nil;
   NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
   BOOL failed = ![latexData writeToFile:latexFilePath atomically:NO];
   
+  if (!failed)
+    [fullLog appendFormat:@"Source :\n%@\n", normalSourceToCompile];
+      
+  //PREPROCESSING
+  NSDictionary* sharedEnvironment = [AppController environmentDict];
+  NSDictionary* extraEnvironment =
+    [NSDictionary dictionaryWithObjectsAndKeys:[latexFilePath stringByDeletingLastPathComponent], @"CURRENTDIRECTORY",
+                                                [latexFilePath stringByDeletingPathExtension], @"INPUTFILE",
+                                                latexFilePath, @"INPUTTEXFILE",
+                                                pdfFilePath2, @"OUTPUTPDFFILE",
+                                                (compositionMode == COMPOSITION_MODE_LATEXDVIPDF)
+                                                  ? dviFilePath : nil, @"OUTPUTDVIFILE",
+                                                nil];
+  NSMutableDictionary* environment1 = [NSMutableDictionary dictionaryWithDictionary:sharedEnvironment];
+  [environment1 addEntriesFromDictionary:extraEnvironment];
+  NSArray* compositionConfigurations = [userDefaults arrayForKey:CompositionConfigurationsKey];
+  NSDictionary* compositionConfiguration = [compositionConfigurations objectAtIndex:[userDefaults integerForKey:CurrentCompositionConfigurationIndexKey]];
+  NSDictionary* additionalProcessingScripts = [compositionConfiguration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
+  NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_PREPROCESSING]];
+  if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
+  {
+    [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing", @"Pre-processing")];
+    [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
+    [self executeScript:script setEnvironment:environment1 logString:fullLog];
+    [logTextView setString:fullLog];
+  }
+
   NSString* customLog = nil;
   NSString* stdoutLog = nil;
   NSString* stderrLog = nil;
@@ -909,7 +924,8 @@ static NSString* yenString = nil;
     if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
     {
       [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Middle-processing", @"Middle-processing")];
-      [self executeScript:script setEnvironment:environment logString:fullLog];
+      [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
+      [self executeScript:script setEnvironment:environment1 logString:fullLog];
       [logTextView setString:fullLog];
     }
   }
@@ -1031,7 +1047,7 @@ static NSString* yenString = nil;
           pdfFile,
           400*magnification/10000]; //little correction to avoid cropping errors (empirically found)
 
-      //Latexisation of step 3. Should never fail. Shoudl always be performed in PDFLatexMode to get a proper bounding box
+      //Latexisation of step 3. Should never fail. Should always be performed in PDFLatexMode to get a proper bounding box
       NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexFilePath2 atomically:NO];
       if (!failed)
@@ -1069,7 +1085,8 @@ static NSString* yenString = nil;
       if (script && [[script objectForKey:ScriptEnabledKey] boolValue])
       {
         [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Post-processing", @"Post-processing")];
-        [self executeScript:script setEnvironment:environment logString:fullLog];
+        [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
+        [self executeScript:script setEnvironment:environment1 logString:fullLog];
         [logTextView setString:fullLog];
       }
     }
@@ -1215,9 +1232,12 @@ static NSString* yenString = nil;
   int selectedSegment = [typeOfTextControl selectedSegment];
   int tag = [[typeOfTextControl cell] tagForSegment:selectedSegment];
   latex_mode_t mode = (latex_mode_t) tag;
+  BOOL automaticHighContrastedPreviewBackground =
+    [[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey];
+  NSColor* backgroundColor = automaticHighContrastedPreviewBackground ? nil : [imageView backgroundColor];
   return [HistoryItem historyItemWithPDFData:[imageView pdfData]  preamble:[preambleTextView textStorage]
                                   sourceText:[sourceTextView textStorage] color:[colorWell color]
-                                   pointSize:[sizeText doubleValue] date:[NSDate date] mode:mode backgroundColor:[imageView backgroundColor]];
+                                   pointSize:[sizeText doubleValue] date:[NSDate date] mode:mode backgroundColor:backgroundColor];
 }
 //end historyItemWithCurrentState
 
@@ -1279,7 +1299,7 @@ static NSString* yenString = nil;
     [colorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
     [sizeText setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
     [typeOfTextControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
-    [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]
+    [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackgroundKey]]
                 updateHistoryItem:NO];
   }
 }
@@ -1408,6 +1428,7 @@ static NSString* yenString = nil;
   NSTextField* textField = [timer userInfo];
   [textField drawCellInside:[textField cell]];
 }
+//end _updateTextField:
 
 -(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(int)code contextInfo:(void*)contextInfo
 {
@@ -1436,6 +1457,7 @@ static NSString* yenString = nil;
   }//end if save
   currentSavePanel = nil;
 }
+//end exportChooseFileDidEnd:returnCode:contextInfo:
 
 -(NSString*) selectedText
 {
@@ -1448,6 +1470,7 @@ static NSString* yenString = nil;
   }
   return text;
 }
+//end selectedText
 
 -(void) insertText:(NSString*)text
 {
@@ -1455,11 +1478,13 @@ static NSString* yenString = nil;
   if ((firstResponder == sourceTextView) || (firstResponder == preambleTextView))
     [firstResponder insertText:text];
 }
+//end insertText:
 
 -(BOOL) isBusy
 {
   return isBusy;
 }
+//end isBusy
 
 //teleportation to the faulty lines of the latex code when the user clicks a line in the error tableview
 -(void) _clickErrorLine:(NSNotification*)aNotification
@@ -1489,6 +1514,7 @@ static NSString* yenString = nil;
       [sourceTextView gotoLine:row];
   }
 }
+//end _clickErrorLine:
 
 //hides/display the error log table view
 -(void) _setLogTableViewVisible:(BOOL)status
@@ -1497,12 +1523,14 @@ static NSString* yenString = nil;
   [scrollView setHidden:!status];
   [scrollView setNeedsDisplay:YES];
 }
+//end _setLogTableViewVisible:
 
 //returns the linkBack link
 -(LinkBack*) linkBackLink
 {
   return linkBackLink;
 }
+//end linkBackLink
 
 //sets up a new linkBack link
 -(void) setLinkBackLink:(LinkBack*)newLinkBackLink
@@ -1510,6 +1538,7 @@ static NSString* yenString = nil;
   [self closeLinkBackLink:linkBackLink];
   linkBackLink = newLinkBackLink;
 }
+//end setLinkBackLink:
 
 //if current linkBack link is aLink, then close it. Also close if aLink = nil
 -(void) closeLinkBackLink:(LinkBack*)aLink
@@ -1522,6 +1551,7 @@ static NSString* yenString = nil;
     [self setDocumentTitle:nil];
   }
 }
+//end closeLinkBackLink:
 
 -(NSImage*) _checkEasterEgg
 {
@@ -1556,6 +1586,7 @@ static NSString* yenString = nil;
   }
   return easterEggImage;
 }
+//end _checkEasterEgg:
 
 -(void) executeScript:(NSDictionary*)script setEnvironment:(NSDictionary*)environment logString:(NSMutableString*)logString
 {
@@ -1610,18 +1641,93 @@ static NSString* yenString = nil;
     }
     
     [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
-    [systemCommand appendFormat:@"%@ -c %@ 1> %@ 2> %@", scriptShell, latexScriptPath, logScriptPath, logScriptPath];
+    NSPipe* pipeForOutput = [NSPipe pipe];
+    NSTask* task = [[[NSTask alloc] init] autorelease];
+    [systemCommand appendFormat:@"%@ -c %@", scriptShell, latexScriptPath];
     [logString appendFormat:@"%@\n", systemCommand];
-    system([systemCommand UTF8String]);
-    encoding = NSUTF8StringEncoding;
-    error = nil;
-    [logString appendFormat:@"%@\n",[NSString stringWithContentsOfFile:logScriptPath guessEncoding:&encoding error:&error]];
-    [logString appendString:@"----------------------------------------------------\n\n"];
+    [task setEnvironment:environment];
+    [task setLaunchPath:scriptShell];
+    [task setArguments:[NSArray arrayWithObjects:@"-c", latexScriptPath, nil]];
+    [task setCurrentDirectoryPath:[latexScriptPath stringByDeletingLastPathComponent]];
+    [task setStandardOutput:pipeForOutput];
+    [task setStandardError:pipeForOutput];
+    NSMutableString* timeOutString = [NSMutableString stringWithString:@""];
+    @try {
+      [NSApplication detachDrawingThread:@selector(threadKillTaskOnTimeout:) toTarget:self
+                              withObject:[NSDictionary dictionaryWithObjectsAndKeys:task, @"task", 
+                                            [NSNumber numberWithDouble:15], @"timeInterval",
+                                            timeOutString, @"timeOutString", nil]];
+      [task launch];
+      [task waitUntilExit];
+      @synchronized(timeOutString)
+      {
+        if (![timeOutString isEqualToString:@""])
+          [logString appendFormat:@"%@\n", NSLocalizedString(@"Script too long : timeout reached",
+                                                             @"Script too long : timeout reached")];
+        else if ([task terminationStatus])
+          [logString appendFormat:@"%@\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        else
+        {
+          encoding = NSUTF8StringEncoding;
+          error = nil;
+          NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
+                                                       encoding:encoding] autorelease];
+          [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
+        }
+      }//end @synchronized(timeOutNumber)
+    }//end try task
+    @catch(NSException* e) {
+        [logString appendFormat:@"%@\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
+                                                     encoding:encoding] autorelease];
+        [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
+    }
   }//end if (source != SCRIPT_SOURCE_NONE)
 }
+//end executeScript:setEnvironment:logString:
+
+-(NSString*) descriptionForScript:(NSDictionary*)script
+{
+  NSMutableString* description = [NSMutableString string];
+  if (script)
+  {
+    switch([[script objectForKey:ScriptSourceTypeKey] intValue])
+    {
+      case SCRIPT_SOURCE_STRING :
+        [description appendFormat:@"%@\t: %@\n%@\t:\n%@\n",
+          NSLocalizedString(@"Shell", @"Shell"),
+          [script objectForKey:ScriptShellKey],
+          NSLocalizedString(@"Body", @"Body"),
+          [script objectForKey:ScriptBodyKey]];
+        break;
+      case SCRIPT_SOURCE_FILE :
+        [description appendFormat:@"%@\t: %@\n%@\t:\n%@\n",
+          NSLocalizedString(@"File", @"File"),
+          [script objectForKey:ScriptShellKey],
+          NSLocalizedString(@"Content", @"Content"),
+          [script objectForKey:ScriptFileKey]];
+        break;
+    }//end switch
+  }//end if script
+  return description;
+}
+//end descriptionForScript:
 
 -(IBAction) nullAction:(id)sender
 {
 }
+//end nullAction:
+
+-(void) threadKillTaskOnTimeout:(NSDictionary*)taskAndTimeout
+{
+  NSTask* task = [[taskAndTimeout objectForKey:@"task"] retain];
+  NSMutableString* timeOutString = [[taskAndTimeout objectForKey:@"timeOutString"] retain];
+  [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:[[taskAndTimeout objectForKey:@"timeInterval"] doubleValue]]];
+  [timeOutString setString:@"timedOut"];
+  [task terminate];
+  [task release];
+  [timeOutString release];
+}
+//end end threadKillTaskOnTimeout:
 
 @end

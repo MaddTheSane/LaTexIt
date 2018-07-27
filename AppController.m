@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -31,6 +31,7 @@
 #import "MarginController.h"
 #import "PaletteItem.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
 @interface AppController (PrivateAPI)
 
@@ -70,6 +71,7 @@
 -(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
                        error:(NSString **)error;
 -(void) _serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+-(void) _serviceDeLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 //delegate method to filter file opening                       
 -(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename;
@@ -117,6 +119,7 @@ static NSMutableDictionary* cachePaths = nil;
       @"/sw/usr/bin", @"/sw/usr/sbin",
       @"/sw/local/bin", @"/sw/local/sbin",
       @"/sw/usr/local/bin", @"/sw/usr/local/sbin",
+      @"/opt/local/bin", @"/opt/local/sbin",
       nil];
   [unixBins addObjectsFromArray:usualBins];
   if (!cachePaths)
@@ -151,7 +154,45 @@ static NSMutableDictionary* cachePaths = nil;
       [environmentPath setString:[[pathsSet allObjects] componentsJoinedByString:@":"]];
       [environmentDict setObject:environmentPath forKey:@"PATH"];
     }
-  }
+    
+    //run the "set" command to get the environment variables
+    NSPipe* outputPipe = [NSPipe pipe];
+    NSTask* task = [[[NSTask alloc] init] autorelease];
+    NSData* ouputData = nil;
+    [task setLaunchPath:@"/bin/bash"];
+    [task setArguments:[NSArray arrayWithObjects:@"-l", @"-c", @"set", nil]];
+    [task setStandardOutput:outputPipe];
+    @try{
+      [task launch];
+      [task waitUntilExit];
+    }
+    @catch(NSException* e){
+    }
+    ouputData = [[outputPipe fileHandleForReading] availableData];
+    NSString* outputString = ouputData ? [[[NSString alloc] initWithData:ouputData encoding:NSUTF8StringEncoding] autorelease] : nil;
+    NSEnumerator* linesEnumerator = [[outputString componentsSeparatedByString:@"\n"] objectEnumerator];
+    NSString* line = nil;
+    while((line = [linesEnumerator nextObject]))
+    {
+      NSRange equalCharacter = [line rangeOfString:@"="];
+      if (equalCharacter.location != NSNotFound)
+      {
+        NSString* key   = [line substringWithRange:NSMakeRange(0, equalCharacter.location)];
+        NSString* value = (equalCharacter.location+1 < [line length]) ?
+                            [line substringFromIndex:equalCharacter.location+equalCharacter.length] : @"";
+        if (![key isEqualToString:@"PATH"])
+          [environmentDict setObject:value forKey:key];
+        else
+        {
+          NSString* path1 = [environmentDict objectForKey:@"PATH"];
+          NSArray*  components1 = path1 ? [path1 componentsSeparatedByString:@":"] : [NSArray array];
+          NSArray*  components2 = value ? [value componentsSeparatedByString:@":"] : [NSArray array];
+          NSArray*  allComponents = [components1 arrayByAddingObjectsFromArray:components2];
+          [environmentDict setObject:[allComponents componentsJoinedByString:@":"] forKey:key];
+        }
+      }//end if equalCharacter found
+    }//end for each line
+  }//end if !environmentDict
 }
 //end initialize
 
@@ -416,11 +457,14 @@ static NSMutableDictionary* cachePaths = nil;
 //performs a setenv()
 -(void) _setEnvironment
 {
-  const char* oldPath = getenv("PATH");
-  NSString* oldPathString = oldPath ? [NSString stringWithCString:oldPath] : [NSString string];
-  NSMutableArray* components = [NSMutableArray arrayWithArray:[environmentPath componentsSeparatedByString:@":"]];
-  [components addObject:oldPathString];
-  setenv("PATH", [[components componentsJoinedByString:@":"] cString], 1);
+  NSEnumerator* keyEnumerator = [environmentDict keyEnumerator];
+  NSString* key = nil;
+  while((key = [keyEnumerator nextObject]))
+  {
+    NSString* value = [environmentDict objectForKey:key];
+    if (value)
+      setenv([key UTF8String], [value UTF8String], 1);
+  }//end for each environment key
 }
 //end _setEnvironment
 
@@ -473,18 +517,21 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL ok = data ? [data writeToFile:filepath atomically:YES] : NO;
   if (ok)
   {
-    MyDocument* document =
-      #ifdef PANTHER
-      [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filepath display:NO];
-      #else
-      [[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:NO error:nil];
-      #endif
-    ok = [document readFromFile:filepath ofType:[filepath pathExtension]];
+    #ifdef PANTHER
+    MyDocument* document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filepath display:NO];
+    ok = (document != nil);
+    #else
+    NSError* error = nil;
+    MyDocument* document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filepath] display:NO error:&error];
+    ok = (error == nil) && (document != nil);
+    #endif
     if (!ok)
       [document close];
     else
     {
+      #ifndef PANTHER
       [document makeWindowControllers];
+      #endif
       [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
       [document showWindows];
     }
@@ -838,7 +885,7 @@ static NSMutableDictionary* cachePaths = nil;
                    [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
                                                                 @"An error occured while trying to reach %@.\n You should check your network."),
                                               [webSiteURL absoluteString]],
-                    @"Ok", nil, nil);
+                    @"OK", nil, nil);
   }
 }
 //end openWebSite:
@@ -861,7 +908,7 @@ static NSMutableDictionary* cachePaths = nil;
                    [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\nYou should check your network.",
                                                                 @"An error occured while trying to reach %@.\nYou should check your network."),
                                               [versionsFileURL absoluteString]],
-                    NSLocalizedString(@"Ok", @"Ok"), nil, nil);
+                    NSLocalizedString(@"OK", @"OK"), nil, nil);
   }//end if network error
   else if (plistData)
   {
@@ -890,41 +937,41 @@ static NSMutableDictionary* cachePaths = nil;
       word = [words lastObject];
     }
     selfVersionNumber = [words componentsJoinedByString:@" "];
-    BOOL latestVersionNumberHasBeta = ([latestVersionNumber rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound);
-    BOOL selfVersionNumberHasBeta   = ([selfVersionNumber   rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound);
-    NSString* latestVersionNumberWithoutBeta =
-      latestVersionNumberHasBeta ? [[latestVersionNumber componentsSeparatedByString:@" "] objectAtIndex:0] : latestVersionNumber;
-    NSString* selfVersionNumberWithoutBeta   =
-      selfVersionNumberHasBeta   ? [[selfVersionNumber componentsSeparatedByString:@" "] objectAtIndex:0] : selfVersionNumber;
+    BOOL latestVersionNumberHasbeta = ([latestVersionNumber rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound);
+    BOOL selfVersionNumberHasbeta   = ([selfVersionNumber   rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound);
+    NSString* latestVersionNumberWithoutbeta =
+      latestVersionNumberHasbeta ? [[latestVersionNumber componentsSeparatedByString:@" "] objectAtIndex:0] : latestVersionNumber;
+    NSString* selfVersionNumberWithoutbeta   =
+      selfVersionNumberHasbeta   ? [[selfVersionNumber componentsSeparatedByString:@" "] objectAtIndex:0] : selfVersionNumber;
     NSComparisonResult comparisonResult = [selfVersionNumber compare:latestVersionNumber options:NSCaseInsensitiveSearch|NSNumericSearch];
-    NSComparisonResult comparisonResultWithoutBeta = [selfVersionNumberWithoutBeta compare:latestVersionNumberWithoutBeta
+    NSComparisonResult comparisonResultWithoutbeta = [selfVersionNumberWithoutbeta compare:latestVersionNumberWithoutbeta
                                                                                    options:NSCaseInsensitiveSearch|NSNumericSearch];
-    if ((selfVersionNumberHasBeta && 
+    if ((selfVersionNumberHasbeta && 
          (
-          (comparisonResultWithoutBeta == NSOrderedAscending) ||
-          ((comparisonResultWithoutBeta == NSOrderedSame) && (comparisonResult == NSOrderedAscending)) ||
-          ((comparisonResultWithoutBeta == NSOrderedSame) && !latestVersionNumberHasBeta)
+          (comparisonResultWithoutbeta == NSOrderedAscending) ||
+          ((comparisonResultWithoutbeta == NSOrderedSame) && (comparisonResult == NSOrderedAscending)) ||
+          ((comparisonResultWithoutbeta == NSOrderedSame) && !latestVersionNumberHasbeta)
          )
         ) ||
-        (!selfVersionNumberHasBeta && !latestVersionNumberHasBeta && (comparisonResultWithoutBeta == NSOrderedAscending))
+        (!selfVersionNumberHasbeta && !latestVersionNumberHasbeta && (comparisonResultWithoutbeta == NSOrderedAscending))
        )
     {
       [updatesPanel makeKeyAndOrderFront:self];
       [updatesPanel center];
     }
     else if (sender &&
-             ((selfVersionNumberHasBeta &&
+             ((selfVersionNumberHasbeta &&
                (
-                ((comparisonResultWithoutBeta == NSOrderedSame) && (comparisonResult == NSOrderedDescending)) ||
-                (comparisonResultWithoutBeta == NSOrderedDescending)
+                ((comparisonResultWithoutbeta == NSOrderedSame) && (comparisonResult == NSOrderedDescending)) ||
+                (comparisonResultWithoutbeta == NSOrderedDescending)
                )
-              ) || (!selfVersionNumberHasBeta && (comparisonResultWithoutBeta == NSOrderedDescending))
+              ) || (!selfVersionNumberHasbeta && (comparisonResultWithoutbeta == NSOrderedDescending))
              )
             )
     {
       NSAlert* alert =
         [NSAlert alertWithMessageText:NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date")
-                       defaultButton:NSLocalizedString(@"Ok", @"Ok")
+                       defaultButton:NSLocalizedString(@"OK", @"OK")
                      alternateButton:nil
                          otherButton:nil
            informativeTextWithFormat:NSLocalizedString(@"Your version of LaTeXiT is more recent than the latest one available",
@@ -935,7 +982,7 @@ static NSMutableDictionary* cachePaths = nil;
     {
       NSAlert* alert =
         [NSAlert alertWithMessageText:NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date")
-                       defaultButton:NSLocalizedString(@"Ok", @"Ok")
+                       defaultButton:NSLocalizedString(@"OK", @"OK")
                      alternateButton:nil
                          otherButton:nil
            informativeTextWithFormat:NSLocalizedString(@"Your version of LaTeXiT is the same as the latest one available",
@@ -977,13 +1024,17 @@ static NSMutableDictionary* cachePaths = nil;
   NSDictionary* documentAttributes = nil;
   NSMutableAttributedString* preamble = [[NSMutableAttributedString alloc] initWithRTF:preambleData documentAttributes:&documentAttributes];
   NSString* preambleString = [preamble string];
-  if (!isColorStyAvailable)
+  if (![self isColorStyAvailable])
   {
     NSRange pdftexColorRange = [preambleString rangeOfString:@"{color}"];
     if (pdftexColorRange.location != NSNotFound)
-      [preamble insertAttributedString:[[[NSAttributedString alloc] initWithString:@"%"] autorelease]
-                               atIndex:pdftexColorRange.location];
-  }
+    {
+      NSRange lineRange = [preambleString lineRangeForRange:pdftexColorRange];
+      if (lineRange.location != NSNotFound)
+        [preamble insertAttributedString:[[[NSAttributedString alloc] initWithString:@"%"] autorelease]
+                                 atIndex:lineRange.location];
+    }//end if (pdftexColorRange.location != NSNotFound)
+  }//end if (![self isColorStyAvailable])
   return [preamble autorelease];
 }
 //end preamble
@@ -1720,6 +1771,17 @@ static NSMutableDictionary* cachePaths = nil;
 
   [self _setEnvironment];
 
+  //From LateXiT 1.13.0, move Library/LaTeXiT to Library/ApplicationSupport/LaTeXiT
+  NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+  paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
+  NSArray* oldPaths = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:[NSApp applicationName], nil]];
+  NSArray* newPaths = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], nil]];
+  NSString* oldPath = [NSString pathWithComponents:oldPaths];
+  NSString* newPath = [NSString pathWithComponents:newPaths];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  if (![fileManager fileExistsAtPath:newPath] && [fileManager fileExistsAtPath:oldPath])
+    [fileManager copyPath:oldPath toPath:newPath handler:nil];
+
   //sets visible controllers  
   if ([userDefaults boolForKey:CompositionConfigurationControllerVisibleAtStartupKey])
     [[self compositionConfigurationController] showWindow:self];
@@ -1774,6 +1836,12 @@ static NSMutableDictionary* cachePaths = nil;
   [self _serviceMultiLatexisation:pboard userData:userData error:error];
 }
 //end serviceMultiLatexisation:userData:error:
+
+-(void) serviceDeLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceDeLatexisation:pboard userData:userData error:error];
+}
+//end serviceDeLatexisation:userData:error:
 
 //performs the application service
 -(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
@@ -1934,7 +2002,12 @@ static NSMutableDictionary* cachePaths = nil;
             [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:nil];
             [pboard setData:attachedData forType:NSPostScriptPboardType];
           }
-          else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
+          else if ([extension isEqualToString:@"png"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:GetMyPNGPboardType()] owner:nil];
+            [pboard setData:attachedData forType:GetMyPNGPboardType()];
+          }
+          else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"])
           {
             [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
             [pboard setData:attachedData forType:NSTIFFPboardType];
@@ -2047,7 +2120,12 @@ static NSMutableDictionary* cachePaths = nil;
             [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:nil];
             [pboard setData:data forType:NSPostScriptPboardType];
           }
-          else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
+          else if ([extension isEqualToString:@"png"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:GetMyPNGPboardType()] owner:nil];
+            [pboard setData:data forType:GetMyPNGPboardType()];
+          }
+          else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"])
           {
             [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
             [pboard setData:data forType:NSTIFFPboardType];
@@ -2331,6 +2409,78 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end _serviceMultiLatexisation:userData:mode:error:
 
+-(void) _serviceDeLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
+{
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    HistoryItem* item = [[HistoryItem alloc] initWithPDFData:[pboard dataForType:NSPDFPboardType] useDefaults:YES];
+    NSMutableAttributedString* source = !item ? nil :
+      [[[NSMutableAttributedString alloc] initWithAttributedString:[item sourceText]] autorelease];
+    if (source)
+    {
+      NSFont* font = [[source fontAttributesInRange:NSMakeRange(0, [source length])] objectForKey:NSFontAttributeName];
+      font = font ? font : [NSFont userFontOfSize:[item pointSize]];
+      font = [NSFont fontWithName:[font fontName] size:[item pointSize]];
+      NSDictionary* attributes = 
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          font, NSFontAttributeName,
+          [NSString stringWithFormat:@"%f",  [item pointSize]], NSFontSizeAttribute,
+          [item color], NSForegroundColorAttributeName, nil];
+      [source addAttributes:attributes range:NSMakeRange(0, [source length])];
+      [pboard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, NSRTFPboardType, nil]  owner:nil];
+      [pboard setString:[source string] forType:NSStringPboardType];
+      [pboard setData:[source RTFFromRange:NSMakeRange(0, [source length]) documentAttributes:nil] forType:NSRTFPboardType];
+    }
+    [item release];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSMutableAttributedString* attributedString =
+      [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    unsigned int location = 0;
+    while(location < [attributedString length])
+    {
+      NSRange effectiveRange = NSMakeRange(0, 0);
+      NSDictionary* attributesForCharacter = [attributedString attributesAtIndex:location effectiveRange:&effectiveRange];
+      NSTextAttachment* textAttachment = [attributesForCharacter objectForKey:NSAttachmentAttributeName];
+      if (!textAttachment)
+        location += effectiveRange.length;
+      else
+      {
+        NSData* pdfData = [[textAttachment fileWrapper] regularFileContents];
+        HistoryItem* item = [[HistoryItem alloc] initWithPDFData:pdfData useDefaults:YES];
+        NSMutableAttributedString* source = !item ? nil :
+          [[[NSMutableAttributedString alloc] initWithAttributedString:[item encapsulatedSource]] autorelease];
+        if (!source)
+          location += effectiveRange.length;
+        else
+        {
+          NSFont* font = [[attributedString fontAttributesInRange:effectiveRange] objectForKey:NSFontAttributeName];
+          font = font ? font : [NSFont userFontOfSize:[item pointSize]];
+          font = [NSFont fontWithName:[font fontName] size:[item pointSize]];
+          NSDictionary* attributes = 
+            [NSDictionary dictionaryWithObjectsAndKeys:
+              font, NSFontAttributeName,
+              [NSString stringWithFormat:@"%f",  [item pointSize]], NSFontSizeAttribute,
+              [item color], NSForegroundColorAttributeName, nil];
+          [attributedString replaceCharactersInRange:effectiveRange withAttributedString:source];
+          [attributedString addAttributes:attributes range:NSMakeRange(effectiveRange.location, [source length])];
+          location += [source length];
+        }
+        [item release];
+      }//end if textAttachment
+    }//end while ! at the end of the string
+    [pboard declareTypes:[NSArray arrayWithObjects:NSRTFPboardType, NSRTFDPboardType, nil] owner:nil];
+    [pboard setData:[attributedString RTFFromRange:NSMakeRange(0, [attributedString length])
+                                 documentAttributes:docAttributes] forType:NSRTFDPboardType];
+    [pboard setData:[attributedString RTFDFromRange:NSMakeRange(0, [attributedString length])
+                                 documentAttributes:docAttributes] forType:NSRTFDPboardType];
+    [attributedString release];
+  }
+}
+
 -(IBAction) showPreferencesPane:(id)sender
 {
   if (!preferencesController)
@@ -2349,16 +2499,22 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) showHelp:(id)sender
 {
+  BOOL ok = YES;
   NSString* string = [readmeTextView string];
   if (!string || ![string length])
   {
     NSBundle* mainBundle = [NSBundle mainBundle];
     NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"Read Me") ofType:@"rtfd"];
-    [readmeTextView readRTFDFromFile:file];
+    ok = (file != nil);
+    if (ok)
+      [readmeTextView readRTFDFromFile:file];
   }
-  if (![readmeWindow isVisible])
-    [readmeWindow center];
-  [readmeWindow makeKeyAndOrderFront:self];
+  if (ok)
+  {
+    if (![readmeWindow isVisible])
+      [readmeWindow center];
+    [readmeWindow makeKeyAndOrderFront:self];
+  }
 }
 //end showHelp:
 
@@ -2469,7 +2625,7 @@ static NSMutableDictionary* cachePaths = nil;
                             [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file with command:\n%@",
                                                                          @"An error occured while trying to create the file with command:\n%@"),
                                                        systemCall],
-                            @"Ok", nil, nil);
+                            @"OK", nil, nil);
           }
           else
           {
@@ -2519,7 +2675,7 @@ static NSMutableDictionary* cachePaths = nil;
                             [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
                                                                          @"An error occured while trying to create the file :\n%@"),
                                                        errorString],
-                            @"Ok", nil, nil);
+                            @"OK", nil, nil);
           }
           [gsTask release];
         }
@@ -2535,7 +2691,7 @@ static NSMutableDictionary* cachePaths = nil;
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
-        NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:data];
+        NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
         data = [imageRep representationUsingType:NSPNGFileType properties:nil];
         [image release];
       }
@@ -2666,11 +2822,21 @@ static NSMutableDictionary* cachePaths = nil;
     [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedPreamble length])];
     [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedPreamble length])];
 
+    CFStringRef cfEscapedPreamble =
+      CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)preamble, NULL, NULL, kCFStringEncodingUTF8);
+    NSMutableString* escapedPreamble = [NSMutableString stringWithString:(NSString*)cfEscapedPreamble];
+    CFRelease(cfEscapedPreamble);
+
     NSMutableString* replacedSource = [NSMutableString stringWithString:source];
     [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedSource length])];
     [replacedSource replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedSource length])];
     [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
     [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
+
+    CFStringRef cfEscapedSource =
+      CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)source, NULL, NULL, kCFStringEncodingUTF8);
+    NSMutableString* escapedSource = [NSMutableString stringWithString:(NSString*)cfEscapedSource];
+    CFRelease(cfEscapedSource);
 
     NSString* type = [[NSNumber numberWithInt:mode] stringValue];
 
@@ -2678,7 +2844,9 @@ static NSMutableDictionary* cachePaths = nil;
         [NSMutableString stringWithFormat:
           @"\nobj /Encoding /MacRomanEncoding <<\n"\
            "/Preamble (ESannop%sESannopend)\n"\
+           "/EscapedPreamble (ESannoep%sESannoepend)\n"\
            "/Subject (ESannot%sESannotend)\n"\
+           "/EscapedSubject (ESannoes%sESannoesend)\n"\
            "/Type (EEtype%@EEtypeend)\n"\
            "/Color (EEcol%@EEcolend)\n"\
            "/BKColor (EEbkc%@EEbkcend)\n"\
@@ -2687,7 +2855,9 @@ static NSMutableDictionary* cachePaths = nil;
            "/Baseline (EEbas%fEEbasend)\n"\
            ">> endobj",
           [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
-          [replacedSource   cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
+          [escapedPreamble  cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
+          [replacedSource  cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
+          [escapedSource   cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
           type, colorAsString, bkColorAsString, (title ? title : @""), magnification, baseline];
           
     NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
@@ -2824,7 +2994,7 @@ static NSMutableDictionary* cachePaths = nil;
             [NSDictionary dictionaryWithObject:menuItemName forKey:@"default"], @"NSMenuItem",
             serviceMessage, @"NSMessage",
             @"LaTeXiT", @"NSPortName",
-            [NSArray arrayWithObjects:@"NSRTFDPboardType", @"NSPDFPboardType", @"NSPostScriptPboardType", @"NSTIFFPboardType", nil], @"NSReturnTypes",
+            [NSArray arrayWithObjects:@"NSRTFDPboardType", @"NSPDFPboardType", @"NSPostScriptPboardType", @"NSTIFFPboardType", @"NSPNGPboardType", nil], @"NSReturnTypes",
             [NSArray arrayWithObjects:@"NSStringPboardType", @"NSRTFPboardType", @"NSPDFPboardType", nil], @"NSSendTypes",
             nil];
         [services insertObject:serviceItemPlist atIndex:latex_mode];
@@ -2840,6 +3010,18 @@ static NSMutableDictionary* cachePaths = nil;
         @"LaTeXiT", @"NSPortName",
         [NSArray arrayWithObject:@"NSRTFDPboardType"], @"NSReturnTypes",
         [NSArray arrayWithObject:@"NSRTFPboardType"], @"NSSendTypes",
+        nil];
+    [services addObject:serviceItemPlist];
+
+    //adds de-latexisation
+    serviceItemPlist = ![[shortcutEnabled objectAtIndex:5] boolValue] ? [NSDictionary dictionary] :
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSDictionary dictionaryWithObject:[shortcutStrings objectAtIndex:5] forKey:@"default"], @"NSKeyEquivalent",
+        [NSDictionary dictionaryWithObject:@"LaTeXiT/Un-latexize equations" forKey:@"default"], @"NSMenuItem",
+        @"serviceDeLatexisation", @"NSMessage",
+        @"LaTeXiT", @"NSPortName",
+        [NSArray arrayWithObjects:@"NSPDFPboardType", @"NSRTFPboardType", @"NSRTFDPboardType", nil], @"NSReturnTypes",
+        [NSArray arrayWithObjects:@"NSPDFPboardType", @"NSRTFDPboardType", nil], @"NSSendTypes",
         nil];
     [services addObject:serviceItemPlist];
     

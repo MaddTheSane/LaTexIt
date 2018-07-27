@@ -10,6 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+NSString* GetMyPNGPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
 int indexOfLatexMode(latex_mode_t mode);
 latex_mode_t latexModeForIndex(int index);
@@ -22,3 +23,10 @@ FOUNDATION_EXTERN_INLINE long EndianL_BtoN(long x);
 FOUNDATION_EXTERN_INLINE long EndianL_NtoB(long x);
 FOUNDATION_EXTERN_INLINE unsigned long EndianUL_BtoN(unsigned long x);
 FOUNDATION_EXTERN_INLINE unsigned long EndianUL_NtoB(unsigned long x);
+
+@interface Utils : NSObject {
+}
+
++(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes;
+
+@end

@@ -1,5 +1,5 @@
 "current-language" = "fr";
-"Ok" = "Ok";
+"OK" = "OK";
 "Cancel" = "Annuler";
 "Error" = "Erreur";
 "Untitled" = "Sans Titre";
@@ -92,6 +92,7 @@
 "Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $...$";
 "Typeset LaTeX Text" = "Créer l'équation en mode texte";
+"Un-latexize the equations" = "Revenir des équations au code LaTeX";
 "Detect and typeset equations" = "Détecter et créer les équations";
 "Loading History" = "Chargement de l'historique";
 "Saving History" = "Enregistrement de l'historique";
@@ -108,3 +109,9 @@
 "You may not be updating the good equation" = "Peut-être ne mettez-vous pas à jour la bonne équation";
 "Update the equation" = "Mettre à jour l'équation";
 "You changed the library selection since the last equation was imported into the editor" = "Vous avez changé la sélection de la bibliothèque depuis la dernière équation importée dans l'éditeur";
+"Shell" = "Interpréteur";
+"Body" = "Corps";
+"File" = "Fichier";
+"Content" = "Contenu";
+"Script failed" = "Le script a échoué";
+"Script too long : timeout reached" = "Script trop long : durée maximale atteinte";

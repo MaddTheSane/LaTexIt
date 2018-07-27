@@ -1,5 +1,5 @@
 "current-language" = "de";
-"Ok" = "Ok";
+"OK" = "OK";
 "Cancel" = "Abbrechen";
 "Error" = "Fehler";
 "Untitled" = "Ohne Namen";
@@ -70,7 +70,7 @@
 "Check for new versions" = "Nach Updates suchen";
 "Your version of LaTeXiT is up-to-date" = "Es ist keine neuere Version von LaTeXiT verfügbar";
 "Your version of LaTeXiT is more recent than the latest one available" = "Ihre Version von LaTeXiT ist aktueller als die derzeit verfügbare Version";
-"Your version of LaTeXiT is the same as the latest one available" = "Ihre Version von LaTeXiT ist die selbe wie die derzeit neuste verfügbare Version";
+"Your version of LaTeXiT is the same as the latest one available" = "Ihre Version von LaTeXiT ist auf dem neuesten Stand";
 "Open download page" = "Zur Download-Seite gehen";
 "General" = "Allgemein";
 "Edition" = "Erscheinungsbild";
@@ -86,6 +86,7 @@
 "Typeset LaTeX Maths display" = "LaTeX-Schriftsatz in Darstellung umwandeln \\[...\\]";
 "Typeset LaTeX Maths inline" = "LaTeX-Schriftsatz in Inline umwandeln $...$";
 "Typeset LaTeX Text" = "LaTeX-Schriftsatz in Text umwandeln";
+"Un-latexize the equations" = "Von der Gleichung zum LaTeX Code zurückkehren";
 "Detect and typeset equations" = "Gleichung detektieren und umwandeln";
 "Loading History" = "History laden";
 "Saving History" = "History sichern";
@@ -97,7 +98,7 @@
 "Edit configurations list..." = "Konfigurations-Liste bearbeiten...";
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d Gleichung konnte aufgrund eines Fehlers in ihr nicht bearbeitet werden. Sie sollten auch überprüfen ob sie mit der verwendeten Standard-Einleitung kompatibel ist.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d Gleichungen konnten aufgrund eines Fehlers in ihnen nicht bearbeitet werden. Sie sollten auch überprüfen ob sie mit der verwendeten Standard-Einleitung kompatibel sind.";
-"unexpected error, please see \"LaTeX > Display last log\"" = "unbekannter Fehler, bitte schauen Sie in \"LaTeX > Display last log\"";
+"unexpected error, please see \"LaTeX > Display last log\"" = "unbekannter Fehler, bitte schauen Sie in \"LaTeX > Letzten Log zeigen\"";
 "New text shortcut" = "Neuer Text-Shortcut";
 "Change the text shortcut" = "Den Text-Shortcut ändern";
 "Remove text shortcuts" = "Text-Shortcuts entfernen";
@@ -107,3 +108,9 @@
 "You may not be updating the good equation" = "Sie können möglicherweise nicht die gültige Gleichung aktualisieren.";
 "Update the equation" = "Die Gleichung aktualisieren.";
 "You changed the library selection since the last equation was imported into the editor" = "Die Bibliotheks-Auswahl wurde seit dem Import der letzten Gleichung in den Editor geändert.";
+"Shell" = "Shell";
+"Body" = "Hauptteil";
+"File" = "Datei";
+"Content" = "Inhalt";
+"Script failed" = "Skript Fehler";
+"Script too long : timeout reached" = "Skript zu lang: Abschaltung erreichte";

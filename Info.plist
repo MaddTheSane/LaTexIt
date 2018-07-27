@@ -55,7 +55,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.12.0 (Panther version)</string>
+	<string>1.13.0 (Panther version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -87,6 +87,7 @@
 				<string>NSPDFPboardType</string>
 				<string>NSPostScriptPboardType</string>
 				<string>NSTIFFPboardType</string>
+				<string>NSPNGPboardType</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
@@ -116,6 +117,7 @@
 				<string>NSPDFPboardType</string>
 				<string>NSPostScriptPboardType</string>
 				<string>NSTIFFPboardType</string>
+				<string>NSPNGPboardType</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
@@ -145,6 +147,7 @@
 				<string>NSPDFPboardType</string>
 				<string>NSPostScriptPboardType</string>
 				<string>NSTIFFPboardType</string>
+				<string>NSPNGPboardType</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
@@ -174,6 +177,7 @@
 				<string>NSPDFPboardType</string>
 				<string>NSPostScriptPboardType</string>
 				<string>NSTIFFPboardType</string>
+				<string>NSPNGPboardType</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
@@ -205,6 +209,33 @@
 			<array>
 				<string>NSRTFDPboardType</string>
 				<string>NSRTFPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+			</dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>LaTeXiT/Un-latexize equations</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>serviceDeLatexisation</string>
+			<key>NSPortName</key>
+			<string>LaTeXiT</string>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSPDFPboardType</string>
+				<string>NSRTFPboardType</string>
+				<string>NSRTFDPboardType</string>
+			</array>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSPDFPboardType</string>
+				<string>NSRTFDPboardType</string>
 			</array>
 		</dict>
 	</array>

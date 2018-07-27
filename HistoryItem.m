@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //An HistoryItem is a useful structure to hold the info about the generated image
 //It will typically contain the latex source code (preamble+body), the color, the mode (EQNARRAY, \[...\], $...$ or text)
@@ -63,6 +63,14 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   //pdfCachedImage and bitmapCachedImage are lazily initialized in the "image" methods that returns these cached images
   backgroundColor = [aBackgroundColor copy];
   title = nil;
+  //from 1.13.0, automatic background setting
+  BOOL automaticHighContrastedPreviewBackground =
+    [[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey];
+  if (!backgroundColor && automaticHighContrastedPreviewBackground)
+  {
+    backgroundColor = ([aColor grayLevel] > .5) ? [[NSColor blackColor] retain] : nil;
+    [self _reannotatePDFDataUsingPDFKeywords:YES];
+  }
   return self;
 }
 
@@ -98,6 +106,25 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
                             : (useDefaults ? [defaultPreambleAttributedString retain]
                                            : [[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes]);
 
+  //test escaped preample from version 1.13.0
+  testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    [preamble autorelease];
+    preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [preambleString rangeOfString:@"ESannoepend"];
+    range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
+    [preambleString deleteCharactersInRange:range];
+    NSString* unescapedPreamble =
+      (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                         (CFStringRef)preambleString, CFSTR(""),
+                                                                         kCFStringEncodingUTF8);
+    preambleString = [NSString stringWithString:(NSString*)unescapedPreamble];
+    CFRelease(unescapedPreamble);
+  }
+  preamble = preambleString ? [[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes]
+                            : [preamble retain];
+
   NSMutableString* sourceString = [NSMutableString string];
   testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
   if (testArray && ([testArray count] >= 2))
@@ -111,7 +138,27 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
     [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
     [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
   }
-  sourceText = [[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes];
+  sourceText = sourceString ? [[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] : @"";
+
+  //test escaped source from version 1.13.0
+  testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    [sourceText autorelease];
+    [sourceString setString:@""];
+    [sourceString appendString:[testArray objectAtIndex:1]];
+    NSRange range = [sourceString rangeOfString:@"ESannoesend"];
+    range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
+    [sourceString deleteCharactersInRange:range];
+    NSString* unescapedSource =
+      (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                         (CFStringRef)sourceString, CFSTR(""),
+                                                                         kCFStringEncodingUTF8);
+    [sourceString setString:unescapedSource];
+    CFRelease(unescapedSource);
+  }
+  sourceText = sourceString ? [[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes]
+                            : [sourceText retain];
 
   NSMutableString* pointSizeAsString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
@@ -292,7 +339,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.12.0"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.13.0"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -419,6 +466,30 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   return [NSString stringWithFormat:@"%@\n\\begin{document}\n%@\n\\end{document}", [preamble string], [sourceText string]];
 }
 
+-(NSAttributedString*) encapsulatedSource//the body, with \[...\], $...$ or nothing according to the mode
+{
+  NSMutableAttributedString* result = [[[NSMutableAttributedString alloc] initWithAttributedString:sourceText] autorelease];
+  switch(mode)
+  {
+    case LATEX_MODE_DISPLAY:
+      [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\["] autorelease] atIndex:0];
+      [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\]"] autorelease]];
+      break;
+    case LATEX_MODE_INLINE:
+      [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"$"] autorelease] atIndex:0];
+      [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"$"] autorelease]];
+      break;
+    case LATEX_MODE_EQNARRAY:
+      [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}"] autorelease] atIndex:0];
+      [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\end{eqnarray*}"] autorelease]];
+      break;
+    case LATEX_MODE_TEXT:
+      break;
+  }
+  return result;
+}
+//end encapsulatedSource
+
 //useful to resynchronize the pdfData with the actual parameters (background color...)
 //its use if VERY rare, so that it is not automatic for the sake of efficiency
 -(void) _reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
@@ -514,9 +585,12 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
       [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSPostScriptPboardType];
       break;
-    case EXPORT_FORMAT_TIFF:
     case EXPORT_FORMAT_PNG:
+      [pboard addTypes:[NSArray arrayWithObject:GetMyPNGPboardType()] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:GetMyPNGPboardType()];
+      break;
     case EXPORT_FORMAT_JPEG:
+    case EXPORT_FORMAT_TIFF:
       [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];
       break;

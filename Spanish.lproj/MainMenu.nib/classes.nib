@@ -1,0 +1,151 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                checkUpdates = id; 
+                copyAs = id; 
+                displayLog = id; 
+                exportImage = id; 
+                historyClearHistory = id; 
+                historyRemoveHistoryEntries = id; 
+                latexPalettesClick = id; 
+                libraryImportCurrent = id; 
+                libraryNewFolder = id; 
+                libraryOpen = id; 
+                libraryRefreshItems = id; 
+                libraryRemoveSelectedItems = id; 
+                libraryRenameItem = id; 
+                librarySaveAs = id; 
+                makeDonation = id; 
+                makeLatex = id; 
+                newFromClipboard = id; 
+                openWebSite = id; 
+                showHelp = id; 
+                showOrHideColorInspector = id; 
+                showOrHideCompositionConfiguration = id; 
+                showOrHideEncapsulation = id; 
+                showOrHideHistory = id; 
+                showOrHideLatexPalettes = id; 
+                showOrHideLibrary = id; 
+                showOrHideMargin = id; 
+                showOrHidePreamble = id; 
+                showPreferencesPane = id; 
+            }; 
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                donationPanel = NSPanel; 
+                readmeTextView = NSTextView; 
+                readmeWindow = NSWindow; 
+                updatesInformationTextView = NSTextView; 
+                updatesPanel = NSPanel; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = HistoryCell; LANGUAGE = ObjC; SUPERCLASS = NSImageCell; }, 
+        {
+            ACTIONS = {
+                clearHistory = id; 
+                deselectAll = id; 
+                removeHistoryEntries = id; 
+                showOrHideWindow = id; 
+            }; 
+            CLASS = HistoryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {clearHistoryButton = NSButton; historyTableView = HistoryTableView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = HistoryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {copy = id; redo = id; undo = id; }; 
+            CLASS = HistoryTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {myAction = id; }; 
+            CLASS = IBInspector; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = ImagePopupButton; LANGUAGE = ObjC; SUPERCLASS = NSPopUpButton; }, 
+        {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
+        {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {
+            ACTIONS = {
+                importCurrent = id; 
+                newFolder = id; 
+                open = id; 
+                refreshItems = id; 
+                removeSelectedItems = id; 
+                saveAs = id; 
+                showOrHideWindow = id; 
+            }; 
+            CLASS = LibraryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                actionButton = ImagePopupButton; 
+                actionMenu = NSMenu; 
+                importCurrentButton = NSButton; 
+                libraryTableView = LibraryTableView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = LibraryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {copy = id; redo = id; undo = id; }; 
+            CLASS = LibraryTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSOutlineView; 
+        }, 
+        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {
+                addCurrentEquationToLibrary = id; 
+                addLibraryFolder = id; 
+                clearHistory = id; 
+                closeOptionsPane = id; 
+                colorDidChange = id; 
+                displayLastLog = id; 
+                exportImage = id; 
+                jpegQualitySliderDidChange = id; 
+                makeLatex = id; 
+                openOptions = id; 
+                removeHistoryEntry = id; 
+                removeLibraryItem = id; 
+                saveAccessoryViewPopupFormatDidChange = id; 
+            }; 
+            CLASS = MyDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                clearHistoryButton = NSButton; 
+                colorWell = NSColorWell; 
+                historyDrawer = NSDrawer; 
+                historyView = HistoryView; 
+                imageView = MyImageView; 
+                jpegColorWell = NSColorWell; 
+                jpegQualitySlider = NSSlider; 
+                jpegQualityTextField = NSTextField; 
+                libraryDrawer = NSDrawer; 
+                libraryView = LibraryView; 
+                logTableView = LogTableView; 
+                logTextView = NSTextView; 
+                logWindow = NSWindow; 
+                makeLatexButton = NSButton; 
+                preambleTextView = LineCountTextView; 
+                progressIndicator = NSProgressIndicator; 
+                saveAccessoryView = NSView; 
+                saveAccessoryViewJpegWarning = NSButton; 
+                saveAccessoryViewOptionsButton = NSButton; 
+                saveAccessoryViewOptionsPane = NSPanel; 
+                saveAccessoryViewPopupFormat = NSPopUpButton; 
+                sizeText = NSTextField; 
+                sourceTextView = LineCountTextView; 
+                typeOfTextControl = NSSegmentedControl; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }
+    ); 
+    IBVersion = 1; 
+}

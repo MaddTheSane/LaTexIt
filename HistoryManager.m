@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -21,6 +21,7 @@
 #import "NSIndexSetExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
 #ifdef PANTHER
 #import <LinkBack-panther/LinkBack.h>
@@ -295,32 +296,19 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:historyItems];
       NSData* compressedData = [Compressor zipcompress:uncompressedData];
       
-      //we will create history.dat file inside ~/Library/LaTeXiT/history.dat, so we must ensure that these folders exist
+      //we will create history.dat file inside ~/Library/Application Support/LaTeXiT/history.dat, so we must ensure that these folders exist
       NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-      if ([paths count])
-      {
-        NSString* path = [paths objectAtIndex:0];
-        path = [path stringByAppendingPathComponent:[NSApp applicationName]];
-        
-        //we (try to) create the folders step by step. If they already exist, does nothing
-        NSFileManager* fileManager = [NSFileManager defaultManager];
-        NSArray* pathComponents = [path pathComponents];
-        NSString* subPath = [NSString string];
-        const unsigned int count = [pathComponents count];
-        unsigned int i = 0;
-        for(i = 0 ; i<count ; ++i)
-        {
-          subPath = [subPath stringByAppendingPathComponent:[pathComponents objectAtIndex:i]];
-          [fileManager createDirectoryAtPath:subPath attributes:nil];
-        }
-        
-        //Then save the data
-        NSString* historyFilePath = [path stringByAppendingPathComponent:@"history.dat"];
-        NSDictionary* plist =
-          [NSDictionary dictionaryWithObjectsAndKeys:@"1.12.0", @"version", compressedData, @"data", nil];
-        NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
-        historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
-      }//end if path ok
+      paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
+      paths = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.dat", nil]];
+      NSString* historyFilePath = [NSString pathWithComponents:paths];
+      [Utils createDirectoryPath:[historyFilePath stringByDeletingLastPathComponent] attributes:nil];
+
+      //Then save the data
+      NSDictionary* plist =
+        [NSDictionary dictionaryWithObjectsAndKeys:@"1.13.0", @"version", compressedData, @"data", nil];
+      NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+      historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
+
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] stopMessageProgress];
     }//end if historyShouldBeSaved
@@ -329,6 +317,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(void) _loadHistory
 {
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+
   //note that there is no @synchronization here, since no other threads will exist before _loadHistory is complete
   @try
   {
@@ -336,27 +326,33 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
     //load from ~/Library/LaTeXiT/history.dat
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-    if ([paths count])
-    {
-      NSString* path = [paths objectAtIndex:0];
-      path = [path stringByAppendingPathComponent:[NSApp applicationName]];
+    paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
+    //from LaTeXiT 1.13.0, use Application Support
+    NSArray* oldPath = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:[NSApp applicationName], @"history.dat", nil]];
+    NSArray* newPath = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"history.dat", nil]];
 
-      NSString* filename = [path stringByAppendingPathComponent:@"history.dat"];
-      NSData* fileData = [NSData dataWithContentsOfFile:filename];
-      NSPropertyListFormat format;
-      id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
-      NSData* compressedData = nil;
-      if (!plist)
-        compressedData = fileData;
-      else
-        compressedData = [plist objectForKey:@"data"];
-      NSData* uncompressedData = [Compressor zipuncompress:compressedData];
-      if (uncompressedData)
-      {
-        [historyItems release];
-        historyItems = nil;
-        historyItems = [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] retain];
-      }
+    NSString* oldFilePath = [NSString pathWithComponents:oldPath];
+    NSString* newFilePath = [NSString pathWithComponents:newPath];
+    if (![fileManager isReadableFileAtPath:newFilePath] && [fileManager isReadableFileAtPath:oldFilePath])
+    {
+      [Utils createDirectoryPath:[newFilePath stringByDeletingLastPathComponent] attributes:nil];
+      [fileManager copyPath:oldFilePath toPath:newFilePath handler:NULL];
+    }
+
+    NSData* fileData = [NSData dataWithContentsOfFile:newFilePath];
+    NSPropertyListFormat format;
+    id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+    NSData* compressedData = nil;
+    if (!plist)
+      compressedData = fileData;
+    else
+      compressedData = [plist objectForKey:@"data"];
+    NSData* uncompressedData = [Compressor zipuncompress:compressedData];
+    if (uncompressedData)
+    {
+      [historyItems release];
+      historyItems = nil;
+      historyItems = [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] retain];
     }
   }
   @catch(NSException* e) //reading may fail for some reason

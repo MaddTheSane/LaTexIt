@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //The LibraryFile is a libraryItem (that can appear in the library outlineview)
 //But it represents a "file", that is to say a document state

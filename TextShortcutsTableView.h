@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //TextShortcutsTableView presents custom text shortcuts from an text shortcut manager. I has user friendly capabilities
 

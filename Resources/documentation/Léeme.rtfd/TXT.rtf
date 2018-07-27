@@ -1,0 +1,594 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fnil\fcharset77 LucidaGrande;\f2\fnil\fcharset77 LucidaGrande-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0  {{\NeXTGraphic latexit128.png \width2560 \height2560
+}¬}
+\f1\fs26 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f2\b \cf0 LaTeXiT 1.13.0\
+
+\f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f2\b\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f1\b0 \cf0 \ul \ulc0 Small table of contents
+\f2\b \ulnone \
+\
+
+\f1\b0\fs22 -General Information\
+-System Requirements\
+-Install/Uninstall\
+-What is LaTeXiT ?\
+-Overview\
+-Modify the LaTeX preamble\
+-Using the zoom\
+-Using the history\
+-Using the library\
+-Using the "LaTeXiT Service"\
+-Using LinkBack\
+-Using scripts\
+-FAQ (Frequently Asked Questions )\
+-Known issues\
+-Install LaTeX
+\f2\b\fs26 \
+
+\f1\b0\fs22 -Versions History\
+\
+
+\fs26 \ul General Information\
+
+\fs22 \ulnone \
+LaTeXiT Homepage: \cf3 http://ktd.club.fr/programmation/latexit.php\cf0 \
+Feedback e-mail address: \cf3 pierre.chatelier@club-internet.fr
+\fs26 \cf0 \ul \
+\
+System Requirements\
+
+\fs22 \ulnone \
+LaTeXiT 1.13.0 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+
+\f2\b\fs26 \
+
+\f1\b0 \ul Install/Uninstall\
+
+\fs22 \ulnone \
+Install : Simply drag and drop LaTeXiT from the image disk into your "Applications" folder, or any other place you want on your hard-drive.\
+Uninstall : LaTeXiT creates a folder in Library/Application Support/LaTeXiT of your home folder. If you plan to uninstall LaTeXiT (by dropping its icon in the trash), you might also want to remove this folder.
+\f2\b\fs26 \
+\
+
+\f1\b0 \ul What is LaTeXiT ?\
+
+\fs22 \ulnone \
+LaTeXiT is a little utility designed to quickly typeset LaTeX equations and drag'n drop them into other applications. Its included service also allows to type and transform equations directly in most text editors.\
+\
+It is fair to tell that is is heavily inspired from the remarkable LaTeX Equation Editor by J. McKenzie Alexander. In fact, I missed some features in this application, so I have decided to create a new one. LaTeXiT is not based on Latex Equation Editor, it is simply largely inspired of its basic purpose. However, it is now much more advanced and complete compared to what it was.\
+\
+Main features of LaTeXiT are :\
+\pard\pardeftab720\qj
+
+\f2\b \cf0 	- generated PDFs can be reopened (even with copy/paste) to be modified
+\f1\b0 \
+	- LinkBack support\
+	- syntax colouring and auto-completion of LaTeX keywords\
+	- smart LaTeX errors manager\
+	- LaTeX palette\
+	- automatic history and library management\
+	- included application service \
+	- several export formats (PDF, EPS, TIFF, PNG...)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Overview\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 \ulnone {{\NeXTGraphic keynote-en.jpeg \width12800 \height8540
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \ul \
+
+\fs22 \ulnone In the main text field, type you latex code without bothering with the preamble, the \\begin\{document\} and the \\end\{document\}; they will be added for you. Then, click the "LaTeXise" button and see your image displayed in the image frame. From there, you can save the image, and also drag and drop it in any application that can use it as an illustration. The export format can be set in the preferences. PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality. You can also choose the font size and the font color used for image generation.\
+Once dropped in another application, a (PDF) equation can still be reopened in LaTeXiT by a simple "Copy/Paste". The LaTeX source code and the parameters of generation have been saved.\
+The modes "Display", "Inline" and "Text" match the three LaTeX modes with the same names; please look at a LaTeX documentation to know more about their meaning. The "Eqnarray" mode is a handy shortcut to make multi-lines equations. It automatically uses \\begin\{eqnarray*\}...\\end\{eqnarray*\} around the LaTeX code.\
+You can also use LaTeXiT as a service in text editors (or applications that support text editing) to type and transform equations directly in them, by calling LaTeXiT indirectly. See the section \ul Using the "LaTeXiT Service"\ulnone  to get an example.\
+\
+
+\fs26 \ul Modify the preamble\
+
+\fs22 \ulnone \
+The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usepackage\{...\}, ...) is automatically added. However, you can tune this preamble, just above the main text field, by dragging the handle down. Then you can see it. You can also change this preamble in the Preferences of the application, so that the modifications are kept. You can notice that the first two lines are disabled and cannot be changed; this is because the behaviour of LaTeXiT relies upon these two lines, and you should not have to modify them.\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic handle.png \width7740 \height10580
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+
+\fs26 \ul Using the zoom\
+\
+
+\fs22 \ulnone The little slider allowing to zoom does not modify the real size of the equation. It only changes the preview size, to visually check "small" equations, without altering them.\
+\
+
+\fs26 \ul Using the history\
+\
+
+\fs22 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
+You can delete history items by pressing <Backspace>, or clear the whole history by clicking the appropriate button.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f0\fs24 \cf0 {{\NeXTGraphic history.jpeg \width4260 \height8440
+}¬}\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+
+\fs26 \ul Using the library\
+\
+
+\fs22 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
+The <+> button adds to the library the current equation (that you can rename by double-clicking it)\
+The <action> button proposes more actions.\
+The <refresh> action updates the selected item with the current equation. You cannot update more than one item at a time; it will blink to show that the modification has been taken in account.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f0\fs24 \cf0 {{\NeXTGraphic library.tiff \width4320 \height4060
+}¬}\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f1\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \ul \
+Using the "LaTeXiT Service"\
+\
+
+\fs22 \ulnone LaTeXiT can also be used as an application service. In the Application menu, the LaTeXiT service can be used from any other application that suits. Select a text; than it can be transformed into the corresponding equation.\
+The "Detect and typeset" item is different : it does not typeset the whole text. It looks for blocks delimited by "\\[...\\]" (DISPLAY mode), "$$...$$" (DISPLAY mode) and "$...$" (INLINE mode), and replaces them with the typeset equations (respectively in Display and Inline mode).\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f2\b \cf0 Tip: the inline mode "$...$" tries, when it's possible, to align the equation on the baseline of the text stream.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f1\b0 \cf0 A new service has been introduced in version 1.13.0, thats allows to revert back equations to the LaTeX code.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic latexit-screen-capture-service1-small-en.jpg \width10000 \height7500
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 {{\NeXTGraphic latexit-screen-capture-service2-small-en.jpg \width10000 \height7500
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+\
+
+\fs26 \ul Using LinkBack\
+
+\fs22 \ulnone \
+LinkBack is a technology, integrated into LaTeXiT. If you drop an equation from LaTeXiT to another application supporting LinkBack, you will later be able to reopen the equation into LaTeXiT, usually through the <Edit> menu. For more information about LinkBack, you can visit the URL \cf3 http://www.linkbackproject.org
+\fs26 \cf0 \ul \
+
+\fs22 \ulnone As for now, Nisus Writer Express, OmniGraffle 4 and Keynote 1, 2, 3 (through a plugin), do support LinkBack.\
+\
+
+\fs26 \ul Using scripts\
+
+\fs22 \ulnone \
+From version 1.8.0, LaTeXiT allows the user to use scipts during pre-, middle- and post-processing steps. A help panel is available in the scripts definition Preference pane (Composition). To understand where the scripts are used, it may be interesting to know the internal behaviour of LaTeXiT; here is a workflow chart :\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic latexit-workflow-es.pdf \width9800 \height15020
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 FAQ (Frequently asked questions)\
+
+\fs22 \ulnone \
+(Q) : LaTeXiT crashes on launch.\
+(R) : A corrupted history or library may prevent LaTeXiT from launching. In such a case, just move around the files "history.dat" and "library.latexlib" that lie in the folder "Library/Application Support/LaTeXiT" of your home folder.\
+\
+(Q): where can I get pdflatex, dvipdf and ghostscript ?\
+(A): please see the section "Install Latex" of this document.\
+\
+(Q) : I did install LaTeX the way described, but LaTeXiT seems not be functional either.\
+(R) : If you have installed TeXShop, then LaTeXiT, then LaTeX, the paths of LaTeXiT may point to a pdflatexc of TeXShop that is not sufficient. Just try before to remove LaTeXiT's Preferences (Library/Preferences/fr.club.ktd.LaTeXiT.plist). You can also try to set by hand the paths in the "composition" pane of the LaTeXiT's preferences.\
+\
+(Q): My equation is cut and does not display completely .\
+(A): See the "Known issues" section below.\
+\
+(Q): Which export format should I prefer ?\
+(A): PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality.\
+\
+(Q): changes to the preamble seems not take effect unless I quit and restart the application.\
+(A): Any modification to the default preamble does not affect currently open windows, since their would be the risk to overwrite some modifications the user has made in them. However, you do not have to restart the application; just open a new document like in any application (\uc0\u8984 N).\
+
+\fs26 \ul \
+
+\fs22 \ulnone (Q): LinkBack does not work when I use the LaTeXiT's service.\
+(A): See section "Known issues" for more details. To solve this problem, try to disable the baseline alignment of the equation in the LaTeXiT's service preferences.\
+\
+(Q): I don't understand the "encapsulation" palette.\
+(R): This palette fills a very particular need. Usually, it is useless to drag'n drop an equation (as an image) towards an application that cannot display images. However, if this application is a LaTeX text editor, it may be relevant to drag'n drop some text related to the equation : its source code, a \\ref\{\} with its title.... So, this is customizable in the palette, and will work for drag'n drop from the library.\
+\
+(Q): How can I use the feynmf package with LaTeXiT ?\
+(R):  You should use the feynmp package, in "Text" LaTeX mode, using a "latex+dvipdf" composition. Then, a middle-processing script is needed to compute the metafonts of the labels; you should define the following middle-processing script :\
+				mpost the-name-of-your-feynmf-graph\
+				#but now me must recreate the pdf file\
+				latex $\{INPUTTEXFILE\}\
+				dvipdf $\{OUTPUTDVIFILE\}\
+	Please see the previous section "Using scripts" for enhanced explanations.\
+        You can also check the web page {\field{\*\fldinst{HYPERLINK "http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html"}}{\fldrslt 
+\f0\fs24 \cf4 http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html}} (thanks to T. Yamanaka)\
+\
+(Q) : How can I use some special fonts for the generated equations ?\
+(R) : I am not an expert in LaTeX fonts, but I have been told a manipulation to do that. You have to use 
+\f2\b xelatex
+\f1\b0  eand add in the 
+\f2\b preamble
+\f1\b0  :\
+Here for the Chalkboard font :\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 					\\usepackage\{fontspec,xunicode\}\
+					\\setromanfont\{Chalkboard\}\
+					\\setmathrm\{Chalkboard\}\
+					\\fontspec\{Chalkboard\}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul Known issues\
+
+\fs22 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f2\b \cf0 - if you only have TeXShop, LaTeXiT cannot function properly. You need a real LaTeX installation. You will find more information in the next section "Install LaTeX";\
+- if you ever notice some random font change in the generated images, this seems to occur when the history becomes corrupted. Just clean up your history, this should make the problem disappear. It has also been reported that third-party Open-Type fonts could cause problems;\
+- if you notice that LaTeXiT, even when not used, eats some processor time an consumes more and more memory, just be aware that to speed up its launch time, it loads the images of the history in the background. This task has a very low priority and may take some time; however, it will stabilize. If you really want to avoid it, just think to clean up your history from time to time!\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f1\b0 \cf0 - when the equation color is set to perfect white, the equation seems ill-cropped (left and right parenthesis may disappear for instance). This is a bug of ghostscript, that fails at cropping well with a white equation on a white background. To fix that, use the "Palettes > Margins" menu to increase left and right margins;\
+- syntax colouring does not handle "$$" well;\
+- with very little equations, you may encounter a cropping problem. LaTeX may fail to compute the bounding box of an equation. There are two workarounds : either add margins with the Margin palette, or use $$...$$ in TEXT mode instead of using DISPLAY or INLINE mode (there is an internal difference in LaTeXiT);\
+- custom margins are not taken in account when exporting to EPS; it seems to be a bug of GhostScript;\
+- while evolving from version 1.2 for Panther to 1.3 for Panther, you need to rename the folder ~/Library/LaTeXiT-panther into ~/Library/LaTeXiT, to get back your history and library;\
+- the service does not work with Mail 2.0.0, ..., 2.1 (latest available version at the moment these lines are written);\
+- the service does not work with Keynote 1, 2 & 3, since Keynote cannot insert an image into a block of text;\
+- LinkBack may not work when using LaTeXiT's service. Indeed, to align the equation with the surrounding text, LaTeXiT embbeds the image in an RTFD stream, so that it can tune the baseline. However, it may happen that text editors fails "extracting" the image from the stream. So, even if the display is correct, LinkBack becomes "unreachable". The culprit in this case is the text editor, but it is something difficult. To solve the problem, disable the "alignement of the equation with the surrounding text" in the LaTeXiT's service preferences; this turns off baseline tuning and do not use RTFD streams;\
+- with Pages 1.0.2 and 2.0.1, when using the LaTeXiT service, the automatic shift of the equation, in order to align it on the line ("baseline" management), seems not to work. However, it works well with TextEdit and Nisus Writer Express, so it is certainly a bug of Pages.\
+- with EazyDraw 1.7.1, drag'n dropped equations are displayed upside-down. This is a bug of EazyDraw, that has been fixed in the 1.8 version;\
+- with Adobe Illustrator, if you drag'n drop a PDF equation from LaTeXiT to Illustrator, the font will be changed, because Illustrator can edit each symbol of the PDF generated by LaTeXiT, and uses its own fonts. To avoid that, use a temporary file: drag the equation from LaTeXiT to your desktop, a file is created, and drop this file into your Illustrator's document. It works, but then you won't be able to edit the equation in Illustrator any more. Other possibility: export with another format (see LaTeXiT Preferences), like EPS, or PDF with outlined fonts;\
+- still with Adobe Illustrator, when drag'n dropping in it, a file may be created on the Desktop. It only occurs with Illustrator, and he is mostly responsible, because of its way to handle drag'n drop. Such problems do not occur with OmniGraffle;\
+- still with Adobe Illustrator : many glitches reported by users are solved by upgrading Illustrator to a newer version;\
+- you can notice that in the system console log, a message appears at each latexisation : "WARNING: Type1 font data returned by OFAStreamPSDownload isn't in the correct format required by the Adobe Type 1 Font Format specification". You can safely ignore this warning, which is due to the pdf files generated by pdflatex. In practice there are no problems, and it may even disappear in future versions of pdflatex (but I don't know, in fact).\
+\
+
+\fs26 \ul Install LaTeX\
+
+\fs22 \ulnone \
+LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. So, here are some very basis explanations, as guidance if you need it.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\pardirnatural
+\cf0 LaTeX is not really a single program. It is a bunch of executable files and data files that work together. So, like with Linux, you will find LaTeX *distributions*. A distribution of LaTeX is a set of files that somebody gathered and organized so that once installed, it would work.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 On MacOS, there are three well-known distributions : MacTeX, the Gerben Wierda's i-installer, and Fink. I won't talk about this last one.\
+- MacTeX\
+MacTeX ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex"}}{\fldrslt http://www.tug.org/mactex}}) supplies a straightforward installation through a simple dmg file downloaded on the website (a few hundreds of megabytes, thouh)\
+- The i-installer\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\pardirnatural
+\cf0 On the Gerben Wierda's i-installer page ({\field{\*\fldinst{HYPERLINK "http://www.rna.nl/ii.html"}}{\fldrslt http://www.rna.nl/ii.html}}), you can download the i-installer program ({\field{\*\fldinst{HYPERLINK "http://bloch.ling.yale.edu/volumes/ii2/II2.dmg"}}{\fldrslt http://bloch.ling.yale.edu/volumes/ii2/II2.dmg}})\
+The i-installer is a little program that allows you to install LaTeX (or other things) on your system, by getting all the files you need in a remote location. This is very handy, because you are ensured that the files you get are the most recent ones, and all the installation is made for you.\
+So, just download the i-installer, open the dmg, and install it. Now, you can launch the i-installer.\
+Choose the menu item "i-packages > Known packages i-directory"\
+In the left-panel choose and <Use> the Gerben's i-Directory @ TUG\
+In the right panel, choose "Tex" or "gwTex based on TexLive" and <Open i-package>. Then, follow the instructions, and LaTeX will be installed on your system. You just have to answer yes (choose the default answer) to all questions.\
+Since you're there, you should also install Ghostscript 8 the same way, because it is required for most programs.\
+\
+Now, LaTeX is installed on your computer. But if you were not warned, you would not even notice that ! In fact, LaTeX has no graphical front-end, the programs are Unix-oriented and can only be called on the command line (using the /Application/Utilities/Terminal)\
+However, do not worry : there exists graphical interfaces to use LaTeX in a more user friendly manner. These are third-party software, most of the time free. LaTeXiT is one of them : it allows to typeset  small equations. To write big documents, you would rather use TexShop or iTexMac (for instance), which are designed for that.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+
+\fs26 \ul Versions History\
+\
+
+\fs22 \ulnone v 1.13.0 (25th may 2007)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\qj
+\cf0 - Spanish translation (interface) by \'e7lvaro Lozano;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 - added $\{INPUTFILE\} and $\{CURRENTDIRECTORY\} as script variables;\
+- added a timeout to scripts execution to prevent LaTeXiT from hanging when using ill-formed scripts;\
+- better log output when using scripts;\
+- better support of special characters when saving source code inside the PDF (credits to Nobuo Suematsu);\
+- new service "Revert equations back to LaTeX code";\
+- fixed a bug causing a syntax error in the preamble for systems not supplying color.sty;\
+- moved the LaTeXiT folder from Library/LaTeXiT to Library/Application Support/LaTeXiT;\
+- LaTeXiT now inherits better from the bash shell environment;\
+- added a preference for automatic high-constrasted preview background color;\
+- the background color of the preview pane is no more diluted;\
+- fixed PNG export to work with IgorPro.\
+\
+v 1.12.0 (13th february 2007)\
+- Importing a library can now merge with/replace/change the current library;\
+- Fixed a bug when opening LaTeX files that do not contain \\usepackage\{color\};\
+- Fixed the omicron character of the LaTeX palette.\
+
+\fs26 \ul \
+
+\fs22 \ulnone v 1.11.1 (9th january 2007)\
+- added a notification when the user tries to refresh an equation in the library that is not the one he had previously selected;\
+- fixed a bug in LaTeX error parsing;\
+- updated German translation.\
+\
+v 1.11.0 (7th december 2006)\
+- changed history/library file format, to make it more stable and extensible;\
+- it is now possible to disable spell checking in the preferences;\
+- fixed a rare and erratic bug that could hang LaTeXiT at startup;\
+- added a known bug in the documentation about a random font change.\
+\
+v 1.10.1 (9th november 2006)\
+- tentatively fixed a rare and erratic bug that could hang LaTeXiT at startup;\
+- fixed some localization problems related to decimal point;\
+- fixed some German typos.
+\fs26 \ul \
+
+\fs22 \ulnone \
+v 1.10.0 (7th october 2006)\
+- German localization by Simon L\'8ammle;\
+- the library now requires a double-click to replace a document's content;\
+- the history now requires a double-click to replace a document's content;\
+- you can now drag'n drop a library file on the library window;\
+- you can now drag'n drop folders or pdf files on the library window;\
+- the library now implements smarter import/export;\
+- the history now has a preview pane as the library;\
+- ability to create shortcuts to type some special characters;\
+- better use of spell checker;\
+- fixed accentuated characters display in the log;\
+- some minor interface tweaks.\
+\
+v 1.9.3 (28th august 2006)\
+- fixed (again) the service "Detect and typeset equations" so that it doesn't delete existing images any more in a text to transform;\
+- LaTeXiT can now reopen PDF data embedded in RTF; that means that copy/paste should now work from text editors to reopen equations;\
+- fixed a crash in LaTeXiT that could occur when loading a corrupted history/library.\
+\
+v 1.9.2 (26th july 2006)\
+- fixed a bug that could hang LaTeXiT when trying to open twice the same LinkBack item;\
+- the "PDF with outlined fonts" format can now be reopened in LaTeXiT;\
+- "New from Clipboard" does not forget any more size, color and mode of the equation;\
+- better handling of some LaTeX errors;\
+- fixed typo mistakes.\
+\
+v 1.9.1 (12th july 2006)\
+- added the ability to change the scale of the exports;\
+- fixed a bug that could occur (crash) while loading corrupted images;\
+- fixed a bug where the results of the service "detect and typeset equations" could not be automaticallly saved in the history;\
+- the Service now translates soft-line-breaking (Shift-return) to a simple carriage return, and unbreakable space (Alt-space) into a space, to avoid problems with LaTeX;\
+- an image generated by the service has no more a white background by default in the history;\
+- the service "Detect and typeset equations" can now open erroneous tries in LaTeXiT, to track errors;\
+- the service "Detect and typeset equations" doesn't delete existing images any more in a text to transform.\
+\
+v 1.9.0 (4th june 2006)\
+- added LaTeX keywords in the auto-completion system available through the usual Option-Escape;\
+- added "Copy the image as" contextual menu on the equation area;\
+- fixed a bug when opening, on MacIntels, libraries created on PowerPC;\
+- fixed a bug that could prevent automatic saving of loaded libraries;\
+- fixed a bug that caused scrollbars shifts when using the LaTeX Palette.\
+\
+v 1.8.9 (24th may 2006)\
+- the library now handles the "dummy" background colors of the equations. It was already possible to define them by drag'n dropping a color (useful for equations with a bright font color).\
+\
+v 1.8.8 (12th may 2006)\
+- fixed a bug related to the use of special token "::". This was causing an undesirable error while latexising.\
+\
+v 1.8.7 (11th may 2006)\
+- the "Paste" menu item did not work any more in the English version 1.8.6 (what an improvement!). It was just a localization bug.\
+\
+v 1.8.6 (10th may 2006)\
+- improved behaviour of the "Paste" menu item.\
+\
+v 1.8.5 (29th april 2006)\
+- added "File > New from Clipboard" menu item;\
+- in the english version, the "Paste" menu item could be unavailable in some cases.\
+\
+v 1.8.4 (26th april 2006)\
+- fixed a localization bug in the LaTeXiT services menu.\
+\
+v 1.8.3 (18th april 2006)\
+- added "Edit > Copy the image as..." menu item.\
+\
+v 1.8.2 (8th april 2006)\
+- it could happen that recent changes in the history were not saved;\
+- some pdflatex errors are now handled in a better way.\
+\
+v 1.8.1 (27th march 2006)\
+- added a new service that auto-detects "$$...$$" and "$...$" in a text, and typeset each occurence as an equation (respectively "Display" and "Inline");\
+- fixed some interface bugs, some controls not being refreshed when changing the composition configuration.\
+\
+v 1.8.0 (24th march 2006)\
+- added the ability to use custom scripts during processing;\
+- added the ability to create several "composition configurations";\
+- LaTeX palette a little improved;\
+- improved launch time;\
+- drop a color in a textfield will now drop there the LaTeX code "\\color[rgb]\{\}" of the color.\
+\
+v 1.7.1 (20th march 2006)\
+- changed default shortcuts of service menu items to avoid conflict with MathLab or some user habits regarding \uc0\u8984 +. ;\
+- fixed a bug related to the management of these shortcuts;\
+- fixed a bug where the preview of the library items could be displayed even if the mouse was outside the window.\
+\
+v 1.7.0 (16th march 2006)\
+- added "Eqnarray" mode aside "Display | Inline | Text"; this is a handy shortcut to make multi-lines equations; it automatically uses a "\\begin\{eqnarray*\}...\\end\{eqnarray*\}" encapsulation;\
+- added a magnifying glass in the library to display the equations at real size;\
+- better handling of LaTeXiT's application service items.\
+\
+v 1.6.2 (23th february 2006)\
+- better handling of temporary files, to avoid a problem with the feynmf package;\
+- pasting text in LaTeXiT will now automatically change its font to the one defined in the preferences.\
+\
+v 1.6.1 (16th february 2006)\
+- under popular demand, I have created a Paypal account for those who want to donate; but LaTeXiT is still absolutely freeware!\
+- added "Edit > Copy as outlined PDF" to allow quick copy of the image with the option "PDF with outlined fonts"; that's handy to paste in Illustrator;\
+- under Tiger, the folders of the library remain small in "Preview" mode, to be more readable;\
+- fixed a cosmetic bug: a refresh problem could prevent the loading progress indicator to disappear.\
+\
+v 1.6.0 (12th february 2006)\
+- added a "PDF with outlined fonts" export, that allows exporting to Illustrator without font replacement (thanks to Jens N\'9ackel !);\
+- fixed a bug in the english version; in the preference's composition pane, the choice was not taken into account;\
+- fixed a graphic glitch revealed when updating a library item.\
+\
+v 1.5.6 (7th february 2006)\
+- fixed a regression causing failure of "LaTeX > Display preamble";\
+- added a save/load progress indicator for the history/the library;\
+- the library and the history are not saved any more if they have not been modified.\
+\
+v 1.5.5 (7th february 2006)\
+- speeded up the reindexing process of the history and the library when upgrading from a version of LaTeXiT prior to 1.5.4. This process is rather long and may give the impression that LaTeXiT is buggy.\
+\
+v 1.5.4 (7th february 2006)\
+- accentuated characters of the LaTeX code were not saved in the PDF meta-data. Now they are saved.\
+\
+v 1.5.3 (4th february 2006)\
+- fixed a bug related to version update checking;\
+- fixed a bug related to pdflatex path discovery on MacIntels.\
+\
+v 1.5.2 (2nd february 2006)\
+- fixed a bug related to aliasing for some symbols of the LaTeX palette;\
+- fixed a bug introduced in the 1.5.1 version where the text view did not resize correctly;\
+- fixed a bug that could cause right and top margin to be ignored;\
+- fixed a bug in the library, where the "+" button could unexpectedly be disabled.\
+\
+v 1.5.1 (26th january 2006)\
+- handle pdflatex bug that may return an error even if it succeeds;\
+- the library can now display equation previews;\
+- fixed cosmetic bugs :\
+	- the first two lines of the preamble view cannot be modified : they are now grayed in the document window\
+	- strange display of line numbers when scrolling the preamble view;\
+	- scrollwheel was disabled in the main text view;\
+  	- executable paths were not recoloured when changing composition mode;
+\fs26 \ul \
+
+\fs22 \ulnone \
+v 1.5.0 (4th january 2006)\
+- some editing enhancement (syntax colouring...) thanks to the use of some parts of Smultron source code, by Peter Borg (http://smultron.sourceforge.net); syntax colouring is not yet perfect;\
+- fixed a bug affecting error detection during a "latexisation";\
+- added customizable shortcuts for the application service;\
+- nicer LaTeX palette;\
+- nicer preferences pane;\
+- minor refinments.\
+\
+v 1.4.4 (10th october 2005)\
+- yet another bounding box adjustment.\
+\
+v 1.4.3 (7th october 2005)\
+- in the preference pane, the user is now allowed to modify the first two line of the preamble (for those who *really* know what they are doing);\
+- better behaviour in "latex+dvipdf" mode (now really uses "latex" instead of "pdflatex -progname latex");\
+- the equations computed by the service can now be saved in the history;\
+- better bounding box adjustment (that tries to crop the equation);\
+- improved documentation.\
+\
+v 1.4.2 (9th september 2005)\
+- fixed a bug causing a crash during LaTeXIT's launch on machines that do not have pdflatex or dvipdf installed;\
+- fixed some typo mistakes.\
+  \
+v 1.4.1\
+- preliminary xelatex support;\
+- fixed a bug in line counting;\
+- fixed a bug where the "path" of the "composition" preferences were not saved;\
+- under Tiger, the LaTeXiT service can now be used with PDF text data as input;\
+- new shortcut to copy the image in the pasteboard;\
+- better color.sty checking.\
+\
+\
+v 1.4.0 (14th august 2005)\
+- interface changes (history, library) to be more logical and respects Apple guidelines;\
+- fixed a bug under Tiger, while importing equations containing commas;\
+- you can now compose using pdflatex or latex+dvipdf - it is useful for some packages;\
+- you can now export library items as "encapsulated" (or "decorated") text;\
+- added a color inspector useful for drag'n drop on the preview pane, history drawer, or the text areas;\
+- some new copy/paste capabilities, inside the library and from other applications;\
+- you can now check for new versions;\
+- the default font is now monaco (constant spacing);\
+- minor bug fixes.\
+\
+v 1.3.1\
+- it is now possible to save/load libraries;\
+- you can now hide/show the preamble though the Latex menu. Rather handy fot those who do not read the documentation... ;-)\
+- changes to the default preamble can be applied to open documents and to library;\
+- the files created by LaTeXiT have now an icon matching their content;\
+- PDF files created by LaTeXiT are now open by LaTeXiT from the Finder;\
+- now, using different fonts than the default LaTeX's ones should be taken in account;\
+- in text mode, \\newline and others \\\\ are now allowed;\
+- fixed a bug of import from LaTeX Equation Editor;\
+- fixed a bug where the preview pane could be blurred, when dropping a PDF on LaTeXiT's dock icon;\
+- fixed a bug where the menu could "forget" whether the library was visible or not;\
+- removed "PDF (Illustrator)" export option, which was actually existing only during LaTeXiT early development (and did not work properly);\
+- fixed a bug that could make LaTeXiT crash on Panther;\
+- fixed a bug that would make the baseline wrong when adding a margin below the equation;\
+- minor bug fixes.\
+\
+v 1.3\
+- added compatibility between the PDF files from LaTeXiT and from LaTeX Equation Editor;\
+- the application service was not working properly under Panther.\
+\
+v 1.2\
+- the software has now two distributions : one for Panther, one for Tiger - the Tiger version has more capabilities;\
+- (Tiger version) ready for Mac-Intel (compiled using Universal Binary); but even if the Intel version should not contain specific bugs, it could not be tested anyway. So it is considered "experimental", and bug reports (for those who own a Mac-Intel) are welcome;\
+- (Tiger version) you can now repoen with LaTeXiT a PDF file created by it;\
+- (Tiger version) you can now drop on the Finder items from the history or from the library;\
+- (Tiger version) more drag'n drop abilities within LaTeXiT itself (from history to library, for instance);\
+- the software is now under the CeCILL license (open source, GPL compatible);\
+- improved speed;\
+- better LinkBack support (you can now "refresh" an equation dropped into another application);\
+- the export format, by drag'n drop or through the service, is now customizable;\
+- better application service configurability;\
+- the LaTeXiT service now tries to align the equation with the surrounding text;\
+- the LaTeXiT service can now use the same color as the source text;\
+- you can now update a library item without deleting/recreating it;\
+- japanese users can now use the " 
+\f0\fs24 \'b4 " (yen) symbol instead of " \\ " (backslash);
+\f1\fs22 \
+- updated palettes;\
+- corrected tooltips in the palette;\
+- the latexisation can now be triggered with \uc0\u8984 L, \u8679 \u8984 L or \u8679 \u8984 T (to please TeXShop users);\
+- added a zoom on the image preview;\
+- when drag'n dropping from the library to a destination that cannot display images, the label of the equation (as defined in the library) may be used;\
+- added a little palette to increase the margins;\
+- you can now change font/size of text areas, just to get better user experience; it has nothing to do with generated text;\
+- some minor bugs fixed.\
+\
+v 1.1.1\
+- disabled a feature that allowed applications that do not understand PDF to be drag'n drop targets anyway, by receiving the LaTeX source code: in fact, applications like Word were ignoring the PDF in this case;\
+- fixed a bug that could occur while adding something to the library;\
+- tentatively fix LaTeXiT service under Tiger (I cannot test since I do not yet own it).\
+\
+v 1.1\
+- LinkBack support: it is now possible, from application supporting LinkBack, to reopen an equation into LaTeXiT (usually through the <Edit> menu);\
+- added a library to archive equations;\
+- better compatibility with Microsoft Office;\
+- it is now possible to select more than one item at a time in the history.\
+\
+v 1.0\
+- First public release\
+}

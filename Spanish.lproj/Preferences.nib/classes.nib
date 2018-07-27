@@ -1,0 +1,168 @@
+{
+    IBClasses = (
+        {
+            CLASS = CompositionConfigurationTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {addEncapsulation = id; removeEncapsulations = id; }; 
+            CLASS = EncapsulationManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                encapsulationTableView = EncapsulationView; 
+                removeEncapsulationButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {edit = id; redo = id; undo = id; }; 
+            CLASS = EncapsulationTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = LineCountTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {
+                applyPreambleToLibrary = id; 
+                applyPreambleToOpenDocuments = id; 
+                changeAdditionalMargin = id; 
+                changeCompositionMode = id; 
+                changeCompositionSelection = id; 
+                changeDefaultGeneralConfig = id; 
+                changePath = id; 
+                changeScriptsConfiguration = id; 
+                changeServiceConfiguration = id; 
+                changeSpellChecking = id; 
+                changeSyntaxColoringConfiguration = id; 
+                checkForUpdatesChange = id; 
+                checkNow = id; 
+                closeCompositionSelectionPanel = id; 
+                closeOptionsPane = id; 
+                dragExportJpegQualitySliderDidChange = id; 
+                dragExportPopupFormatDidChange = id; 
+                gotoPreferencePane = id; 
+                gotoWebSite = id; 
+                newCompositionConfiguration = id; 
+                newEncapsulation = id; 
+                newTextShortcut = id; 
+                nullAction = id; 
+                openOptionsForDragExport = id; 
+                removeSelectedCompositionConfigurations = id; 
+                removeSelectedEncapsulations = id; 
+                removeSelectedTextShortcuts = id; 
+                resetDefaultPreamble = id; 
+                selectFont = id; 
+                selectScript = id; 
+                showScriptHelp = id; 
+                toolbarHit = id; 
+            }; 
+            CLASS = PreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                additionalBottomMarginTextField = NSTextField; 
+                additionalLeftMarginTextField = NSTextField; 
+                additionalRightMarginTextField = NSTextField; 
+                additionalTopMarginTextField = NSTextField; 
+                advancedView = NSView; 
+                checkForNewVersionsButton = NSButton; 
+                compositionConfigurationRemoveButton = NSButton; 
+                compositionConfigurationTableView = NSTableView; 
+                compositionMatrix = NSMatrix; 
+                compositionSelectionPanel = NSPanel; 
+                compositionSelectionPopUpButton = NSPopUpButton; 
+                compositionView = NSView; 
+                defaultColorColorWell = NSColorWell; 
+                defaultImageViewBackgroundColorWell = NSColorWell; 
+                defaultModeSegmentedControl = NSSegmentedControl; 
+                defaultPointSizeTextField = NSTextField; 
+                dragExportJpegColorWell = NSColorWell; 
+                dragExportJpegQualitySlider = NSSlider; 
+                dragExportJpegQualityTextField = NSTextField; 
+                dragExportJpegWarning = NSButton; 
+                dragExportOptionsButton = NSButton; 
+                dragExportOptionsPane = NSPanel; 
+                dragExportPopupFormat = NSPopUpButton; 
+                dragExportScaleAsPercentTextField = NSTextField; 
+                dvipdfButton = NSButton; 
+                dvipdfTextField = NSTextField; 
+                editionView = NSView; 
+                emptyView = NSView; 
+                enableSyntaxColoringButton = NSButton; 
+                encapsulationTableView = EncapsulationTableView; 
+                exampleTextView = NSTextView; 
+                fontTextField = NSTextField; 
+                generalView = NSView; 
+                gsButton = NSButton; 
+                gsTextField = NSTextField; 
+                latexButton = NSButton; 
+                latexTextField = NSTextField; 
+                pdfLatexButton = NSButton; 
+                pdfLatexTextField = NSTextField; 
+                preambleTextView = LineCountTextView; 
+                preambleView = NSView; 
+                ps2pdfTextField = NSTextField; 
+                removeEncapsulationButton = NSButton; 
+                removeTextShortcutsButton = NSButton; 
+                scriptsHelpPanel = NSPanel; 
+                scriptsScriptDefinitionBodyTextView = NSTextView; 
+                scriptsScriptDefinitionBox = NSBox; 
+                scriptsScriptDefinitionShellTextField = NSTextField; 
+                scriptsScriptSelectionBox = NSBox; 
+                scriptsScriptSelectionButton = NSButton; 
+                scriptsScriptSelectionTextField = NSTextField; 
+                scriptsSourceTypePopUpButton = NSPopUpButton; 
+                scriptsTableView = NSTableView; 
+                serviceRespectsBaselineButton = NSButton; 
+                serviceRespectsColorMatrix = NSMatrix; 
+                serviceRespectsPointSizeMatrix = NSMatrix; 
+                serviceShortcutsTableView = NSTableView; 
+                serviceUsesHistoryButton = NSButton; 
+                serviceView = NSView; 
+                serviceWarningLinkBackButton = NSButton; 
+                serviceWarningShortcutConflict = NSButton; 
+                spellCheckingButton = NSButton; 
+                syntaxColoringCommandColorColorWell = NSColorWell; 
+                syntaxColoringCommentColorColorWell = NSColorWell; 
+                syntaxColoringKeywordColorColorWell = NSColorWell; 
+                syntaxColoringMathsColorColorWell = NSColorWell; 
+                syntaxColoringTextBackgroundColorColorWell = NSColorWell; 
+                syntaxColoringTextForegroundColorColorWell = NSColorWell; 
+                textShortcutsTableView = TextShortcutsTableView; 
+                webView = NSView; 
+                xeLatexButton = NSButton; 
+                xeLatexTextField = NSTextField; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            CLASS = ServiceShortcutsTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {CLASS = ServiceShortcutsTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {
+            ACTIONS = {newTextShortcut = id; removeSelectedTextShortcuts = id; }; 
+            CLASS = TextShortcutsController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {removeButton = NSButton; textShortcutsTableView = TextShortcutsTableView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = TextShortcutsManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {edit = id; redo = id; undo = id; }; 
+            CLASS = TextShortcutsTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

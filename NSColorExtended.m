@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/05/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSColor class
 
@@ -15,12 +15,14 @@
 {
   return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
+//end colorWithData:
 
 //returns the color as data
 -(NSData*) data
 {
   return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
+//end data
 
 //creates a color from an rgba string
 +(NSColor*) colorWithRgbaString:(NSString*)string
@@ -34,6 +36,7 @@
   ok &= [scanner scanFloat:&a];
   return ok ? [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a] : nil;
 }
+//end colorWithRgbaString:
 
 -(NSString*) rgbaString
 {
@@ -41,5 +44,12 @@
   return [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
                                                     [colorRGB blueComponent], [colorRGB alphaComponent]];
 }
+//end rgbaString
+
+-(float) grayLevel
+{
+  return [[self colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] whiteComponent];
+}
+//end grayLevel
 
 @end

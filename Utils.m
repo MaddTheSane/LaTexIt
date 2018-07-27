@@ -8,6 +8,31 @@
 
 #import "Utils.h"
 
+static NSString* MyPNGPboardType = nil;
+
+#ifndef PANTHER
+extern NSString* NSPNGPboardType __attribute__((weak_import));
+#endif
+
+NSString* GetMyPNGPboardType(void)
+{
+  #ifdef PANTHER
+  if (!MyPNGPboardType)
+    MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass((CFStringRef)@"public.png", kUTTagClassNSPboardType);//retain count is 1
+  #else
+  if (!MyPNGPboardType)  
+    MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
+  #endif
+  #ifndef PANTHER
+  if (!MyPNGPboardType && NSPNGPboardType)
+    MyPNGPboardType = [[NSString alloc] initWithString:NSPNGPboardType];
+  #endif
+
+  if (!MyPNGPboardType)
+    MyPNGPboardType = NSTIFFPboardType;
+  return MyPNGPboardType;
+}
+
 latex_mode_t validateLatexMode(latex_mode_t mode)
 {
   return (mode >= LATEX_MODE_DISPLAY) && (mode <= LATEX_MODE_EQNARRAY) ? mode : LATEX_MODE_DISPLAY;
@@ -96,3 +121,25 @@ unsigned long EndianUL_NtoB(unsigned long x)
          (sizeof(x) == sizeof(uint64_t)) ? EndianU64_NtoB(x) :
          x;
 }
+
+@implementation Utils
+
++(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes
+{
+  BOOL ok = YES;
+  BOOL isDirectory = NO;
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  NSArray* components = [path pathComponents];
+  components = components ? components : [NSArray array];
+  unsigned int i = 0;
+  for(i = 1 ; ok && (i <= [components count]) ; ++i)
+  {
+    NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
+    ok &= ([fileManager fileExistsAtPath:subPath isDirectory:&isDirectory] && isDirectory) ||
+           [fileManager createDirectoryAtPath:subPath attributes:attributes];
+  }//end for each subPath
+  return ok;
+}
+//end createDirectoryPath:attributes:
+
+@end

@@ -1,0 +1,6 @@
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Componer ecuación en un entorno eqnarray";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Componer ecuación en modo display, \\[...\\]";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Componer ecuación en modo inline, $...$";
+"LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/Componer texto LaTeX";
+"LaTeXiT/Detect and typeset equations" = "LaTeXiT/Detectar y componer ecuaciones";
+"LaTeXiT/Un-latexize equations" = "LaTeXiT/Revertir la ecuación a código LaTeX";

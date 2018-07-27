@@ -3,3 +3,4 @@
 "LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Créer l'équation en mode inline $...$";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/Créer l'équation en mode texte";
 "LaTeXiT/Detect and typeset equations" = "LaTeXiT/Détecter et créer les équations";
+"LaTeXiT/Un-latexize equations" = "LaTeXiT/Revenir des équations au code LaTeX";

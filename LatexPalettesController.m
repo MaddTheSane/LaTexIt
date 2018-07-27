@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //The LatexPalettesController controller is responsible for loading and initializing the palette
 
@@ -251,10 +251,11 @@
   PaletteItem* searrow           = [PaletteItem paletteItemWithName:@"searrow"          requires:@""];
   PaletteItem* swarrow           = [PaletteItem paletteItemWithName:@"swarrow"          requires:@""];
   PaletteItem* uparrow           = [PaletteItem paletteItemWithName:@"uparrow"          requires:@""];
+  PaletteItem* rightleftarrows   = [PaletteItem paletteItemWithName:@"rightleftarrows"  requires:@"amssymb"];
   arrowsItems = [[NSArray alloc] initWithObjects:leftarrow, uparrow, rightarrow, downarrow, nwarrow, nearrow, searrow, swarrow,
                                                  leftharpoonup, leftharpoondown, rightharpoonup, rightharpoondown,
-                                                 hookleftarrow, hookrightarrow, looparrowleft, looparrowright, Leftarrow, Rightarrow,
-                                                 Leftrightarrow, leftrightarrow, mapsto, longmapsto, nil];
+                                                 hookleftarrow, hookrightarrow, looparrowleft, looparrowright, mapsto, longmapsto, 
+                                                 rightleftarrows, leftrightarrow, Leftarrow, Rightarrow, Leftrightarrow, nil];
 
   PaletteItem* bar             = [PaletteItem paletteItemWithName:@"bar"             type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
   PaletteItem* dot             = [PaletteItem paletteItemWithName:@"dot"             type:LATEX_ITEM_TYPE_FUNCTION requires:@""];

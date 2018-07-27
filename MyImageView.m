@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -76,7 +76,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
   [backgroundColor autorelease];
-  NSColor* greyLevelColor = [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
+  NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
   backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
   [self setNeedsDisplay:YES];
   if (updateHistoryItem && pdfData)
@@ -457,7 +457,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   //  -we should not modify here the images stored in the history items, this is not what we want
   //  -if we work on copy of images from history items, the requires some time, to copy the image, each time
   //   the history selection changes (and it is rather long when browsing the whole history)
-  
+  NSRect inRect = NSInsetRect([self bounds], 7, 7);
+
   NSImage* image = [self image];
   NSSize naturalImageSize = image ? [image size] : NSZeroSize;
   float factor = exp(3*([zoomSlider floatValue]-1));
@@ -465,15 +466,27 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   newSize.width *= factor;
   newSize.height *= factor;
 
-  /*  
-  NSSize viewSize = [self frame].size;
-  //if is useless to get a newSize greater than the imageView size
-  if (newSize.height > viewSize.height)
-    newSize = NSMakeSize((viewSize.height/newSize.height)*newSize.width, viewSize.height);
-  if (newSize.width > viewSize.width)
-    newSize = NSMakeSize(viewSize.width, (viewSize.width/newSize.width)*newSize.height);*/
+  NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
+  float factorX = (destRect.size.width  > inRect.size.width)  ? inRect.size.width /destRect.size.width  : 1;
+  destRect.size.width  *= factorX;
+  destRect.size.height *= factorX;
+  float factorY = (destRect.size.height > inRect.size.height) ? inRect.size.height/destRect.size.height : 1;
+  destRect.size.width  *= factorY;
+  destRect.size.height *= factorY;
+  destRect.origin.x = inRect.origin.x+inRect.size.width /2-destRect.size.width /2;
+  destRect.origin.y = inRect.origin.y+inRect.size.height/2-destRect.size.height/2;
 
-  [image setSize:newSize];
+  [super setImage:nil];
+  [super drawRect:rect];
+  if (backgroundColor)
+  {
+    [backgroundColor set];
+    NSRectFill(inRect);
+  }
+  [image drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)  operation:NSCompositeSourceOver fraction:1.0];
+  [super setImage:image];
+  
+/*  [image setSize:newSize];
   if (backgroundColor)
   {
     [backgroundColor set];
@@ -481,7 +494,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSRectFill(NSMakeRect(bounds.origin.x+5, bounds.origin.y+5, bounds.size.width-10, bounds.size.height-10));
   }
   [super drawRect:rect];
-  [image setSize:naturalImageSize];
+  [image setSize:naturalImageSize];*/
 }
 
 @end

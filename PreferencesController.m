@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -35,14 +35,15 @@ NSString* ServiceToolbarItemIdentifier     = @"ServiceToolbarItem";
 NSString* AdvancedToolbarItemIdentifier    = @"AdvancedToolbarItem";
 NSString* WebToolbarItemIdentifier         = @"WebToolbarItem";
 
-NSString* DragExportTypeKey            = @"LaTeXiT_DragExportTypeKey";
-NSString* DragExportJpegColorKey       = @"LaTeXiT_DragExportJpegColorKey";
-NSString* DragExportJpegQualityKey     = @"LaTeXiT_DragExportJpegQualityKey";
-NSString* DragExportScaleAsPercentKey  = @"LateXiT_DragExportScaleAsPercentKey";
-NSString* DefaultImageViewBackground   = @"LaTeXiT_DefaultImageViewBackground";
-NSString* DefaultColorKey              = @"LaTeXiT_DefaultColorKey";
-NSString* DefaultPointSizeKey          = @"LaTeXiT_DefaultPointSizeKey";
-NSString* DefaultModeKey               = @"LaTeXiT_DefaultModeKey";
+NSString* DragExportTypeKey             = @"LaTeXiT_DragExportTypeKey";
+NSString* DragExportJpegColorKey        = @"LaTeXiT_DragExportJpegColorKey";
+NSString* DragExportJpegQualityKey      = @"LaTeXiT_DragExportJpegQualityKey";
+NSString* DragExportScaleAsPercentKey   = @"LateXiT_DragExportScaleAsPercentKey";
+NSString* DefaultImageViewBackgroundKey = @"LaTeXiT_DefaultImageViewBackground";
+NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey = @"LaTeXiT_DefaultAutomaticHighContrastedPreviewBackgroundKey";
+NSString* DefaultColorKey               = @"LaTeXiT_DefaultColorKey";
+NSString* DefaultPointSizeKey           = @"LaTeXiT_DefaultPointSizeKey";
+NSString* DefaultModeKey                = @"LaTeXiT_DefaultModeKey";
 
 NSString* SpellCheckingEnableKey               = @"LaTeXiT_SpellCheckingEnableKey";
 NSString* SyntaxColoringEnableKey              = @"LaTeXiT_SyntaxColoringEnableKey";
@@ -233,7 +234,7 @@ static PreferencesController* sharedController = nil;
                                                                      format:&format errorDescription:&errorString];
     NSString* version = [plist objectForKey:@"version"];
     //we can check the version...
-    if (!version || [version compare:@"1.12.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
+    if (!version || [version compare:@"1.13.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
     {
     }
     NSEnumerator* enumerator = [[plist objectForKey:@"shortcuts"] objectEnumerator];
@@ -247,7 +248,8 @@ static PreferencesController* sharedController = nil;
                                                [[NSColor whiteColor] data],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
                                                [NSNumber numberWithFloat:100],   DragExportScaleAsPercentKey,
-                                               [[NSColor whiteColor] data],      DefaultImageViewBackground,
+                                               [[NSColor whiteColor] data],      DefaultImageViewBackgroundKey,
+                                               [NSNumber numberWithBool:NO],     DefaultAutomaticHighContrastedPreviewBackgroundKey,
                                                [[NSColor  blackColor]   data],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
                                                [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], DefaultModeKey,
@@ -261,8 +263,8 @@ static PreferencesController* sharedController = nil;
                                                [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] data], SyntaxColoringCommentColorKey,
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
                                                defaultFontAsData, DefaultFontKey,
-                                               [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
-                                               [NSArray arrayWithObjects:@"", @"", @"", @"", @"", nil], ServiceShortcutStringsKey,
+                                               [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
+                                               [NSArray arrayWithObjects:@"", @"", @"", @"", @"", @"", nil], ServiceShortcutStringsKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
@@ -318,16 +320,21 @@ static PreferencesController* sharedController = nil;
   
   //from version >= 1.7.0, one service has been added at the beginning
   //from version >= 1.8.1, one service has been added at the end
+  //from version >= 1.13.0, one service has been added at the end
   NSMutableArray* serviceShortcutStrings = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:ServiceShortcutStringsKey]];
   while ([serviceShortcutStrings count] < 4)
     [serviceShortcutStrings insertObject:@"" atIndex:0];
   while ([serviceShortcutStrings count] < 5)
+    [serviceShortcutStrings addObject:@""];
+  while ([serviceShortcutStrings count] < 6)
     [serviceShortcutStrings addObject:@""];
   [userDefaults setObject:serviceShortcutStrings forKey:ServiceShortcutStringsKey];
   NSMutableArray* serviceShortcutEnabled = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:ServiceShortcutEnabledKey]];
   while ([serviceShortcutEnabled count] < 4)
     [serviceShortcutEnabled insertObject:numberYes atIndex:0];
   while ([serviceShortcutEnabled count] < 5)
+    [serviceShortcutEnabled addObject:numberYes];
+  while ([serviceShortcutEnabled count] < 6)
     [serviceShortcutEnabled addObject:numberYes];
   [userDefaults setObject:serviceShortcutEnabled forKey:ServiceShortcutEnabledKey];
   
@@ -549,7 +556,7 @@ static PreferencesController* sharedController = nil;
   
   [dragExportScaleAsPercentTextField setFloatValue:[userDefaults floatForKey:DragExportScaleAsPercentKey]];
 
-  [defaultImageViewBackgroundColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultImageViewBackground]]];
+  [defaultImageViewBackgroundColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultImageViewBackgroundKey]]];
   
   [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
   [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
@@ -706,7 +713,7 @@ static PreferencesController* sharedController = nil;
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   if (sender == defaultImageViewBackgroundColorWell)
-    [userDefaults setObject:[[defaultImageViewBackgroundColorWell color] data] forKey:DefaultImageViewBackground];
+    [userDefaults setObject:[[defaultImageViewBackgroundColorWell color] data] forKey:DefaultImageViewBackgroundKey];
   else if (sender == defaultColorColorWell)
     [userDefaults setObject:[[defaultColorColorWell color] data] forKey:DefaultColorKey];
   else if (sender == defaultPointSizeTextField)
@@ -1235,8 +1242,8 @@ static PreferencesController* sharedController = nil;
 -(int) numberOfRowsInTableView:(NSTableView *)aTableView
 {
   int nbRows = 0;
-  if (aTableView == serviceShortcutsTableView)//5 rows for the 5 latex modes
-    nbRows = 5;
+  if (aTableView == serviceShortcutsTableView)//6 rows for the 6 services
+    nbRows = 6;
   else if (aTableView == scriptsTableView)//3 rows for the 3 processings
     nbRows = 3;
   return nbRows;
@@ -1259,6 +1266,7 @@ static PreferencesController* sharedController = nil;
                    NSLocalizedString(@"Typeset LaTeX Maths inline"  , @"Typeset LaTeX Maths inline"),
                    NSLocalizedString(@"Typeset LaTeX Text"          , @"Typeset LaTeX Text"),
                    NSLocalizedString(@"Detect and typeset equations", @"Detect and typeset equations"),
+                   NSLocalizedString(@"Un-latexize the equations"   , @"Un-latexize the equations"),
                    nil] objectAtIndex:rowIndex];
     else if ([identifier isEqualToString:@"shortcut"])
     {

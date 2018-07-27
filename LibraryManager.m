@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -26,6 +26,7 @@
 #import "NSIndexSetExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
 #ifdef PANTHER
 #import <LinkBack-panther/LinkBack.h>
@@ -228,27 +229,15 @@ static NSImage*        libraryFileIcon       = nil;
 -(NSString*) defaultLibraryPath
 {
   NSString* defaultLibraryPath = nil;
-  //we will create library.dat file inside ~/Library/LaTeXiT/library.dat, so we must ensure that these folders exist
+
+  //we will create library.dat file inside ~/Library/Application Support/LaTeXiT/library.dat, so we must ensure that these folders exist
   NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-  if ([paths count])
-  {
-    NSString* path = [paths objectAtIndex:0];
-    path = [path stringByAppendingPathComponent:[NSApp applicationName]];
-        
-    //we (try to) create the folders step by step. If they already exist, does nothing
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-    NSArray* pathComponents = [path pathComponents];
-    NSString* subPath = [NSString string];
-    const unsigned int count = [pathComponents count];
-    unsigned int i = 0;
-    for(i = 0 ; i<count ; ++i)
-    {
-      subPath = [subPath stringByAppendingPathComponent:[pathComponents objectAtIndex:i]];
-      [fileManager createDirectoryAtPath:subPath attributes:nil];
-    }
-    //Then save the data
-    defaultLibraryPath = [path stringByAppendingPathComponent:@"library.latexlib"];
-  }//end if [paths count]
+  paths = [paths count] ? [paths subarrayWithRange:NSMakeRange(0, 1)] : nil;
+  paths = [paths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"library.latexlib", nil]];
+  defaultLibraryPath = [NSString pathWithComponents:paths];
+  BOOL isDirectory = NO;
+  if (![[NSFileManager defaultManager] fileExistsAtPath:defaultLibraryPath isDirectory:&isDirectory] || isDirectory)
+    [Utils createDirectoryPath:[defaultLibraryPath stringByDeletingLastPathComponent] attributes:nil];
   return defaultLibraryPath;
 }
 //end defaultLibraryPath
@@ -305,7 +294,7 @@ static NSImage*        libraryFileIcon       = nil;
     NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
     NSData* compressedData = [Compressor zipcompress:uncompressedData];
     NSDictionary* plist =
-      [NSDictionary dictionaryWithObjectsAndKeys:@"1.12.0", @"version", compressedData, @"data", nil];
+      [NSDictionary dictionaryWithObjectsAndKeys:@"1.13.0", @"version", compressedData, @"data", nil];
     NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     ok = [dataToWrite writeToFile:path atomically:YES];
@@ -327,11 +316,17 @@ static NSImage*        libraryFileIcon       = nil;
 -(void) _loadLibrary
 {
   NSString* defaultLibraryPath = [self libraryPath];
-  NSString* oldDefaultLibraryPath = [[defaultLibraryPath stringByDeletingPathExtension] stringByAppendingPathExtension:@"dat"];
+  NSString* oldDefaultLibraryPath  = [[defaultLibraryPath stringByDeletingPathExtension] stringByAppendingPathExtension:@"dat"];
+  NSMutableArray* oldPath2 = [NSMutableArray arrayWithArray:[defaultLibraryPath pathComponents]];
+  [oldPath2 removeObject:@"Application Support"];
+  NSString* oldDefaultLibraryPath2 = [NSString pathWithComponents:oldPath2];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   if (![fileManager isReadableFileAtPath:defaultLibraryPath] &&
        [fileManager isReadableFileAtPath:oldDefaultLibraryPath])
     [fileManager copyPath:oldDefaultLibraryPath toPath:defaultLibraryPath handler:NULL];
+  if (![fileManager isReadableFileAtPath:defaultLibraryPath] &&
+       [fileManager isReadableFileAtPath:oldDefaultLibraryPath2])
+    [fileManager copyPath:oldDefaultLibraryPath2 toPath:defaultLibraryPath handler:NULL];
   [self loadFrom:defaultLibraryPath option:LIBRARY_IMPORT_OVERWRITE];
   libraryShouldBeSaved = NO; //at LaTeXiT launch, library should not be saved
 }

@@ -27,6 +27,7 @@
 		930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC29907ECBC3C00EEB238 /* AppController.m */; };
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
 		930BFD1C0A245AC6008C586D /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */; };
+		930E518F0C06C89400BF15A8 /* rightleftarrows.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 930E518E0C06C89400BF15A8 /* rightleftarrows.pdf */; };
 		93149F7E089438B10017C83A /* latexit-lib.png in Resources */ = {isa = PBXBuildFile; fileRef = 93149F7D089438B10017C83A /* latexit-lib.png */; };
 		9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9315A45007FD331800AFCCE9 /* Preferences.nib */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesController.m */; };
@@ -276,6 +277,11 @@
 		93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C907F46075001DF900 /* Lisez-moi.rtfd */; };
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
 		93AD08B808A2D2CE0045B7F9 /* EncapsulationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */; };
+		93B2133D0BBC1D6100EFCA2F /* current-version-fr.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93B2133C0BBC1D6100EFCA2F /* current-version-fr.rtf */; };
+		93B213410BBC1D6800EFCA2F /* current-version-en.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93B2133E0BBC1D6800EFCA2F /* current-version-en.rtf */; };
+		93B213420BBC1D6800EFCA2F /* current-version-de.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93B2133F0BBC1D6800EFCA2F /* current-version-de.rtf */; };
+		93B213430BBC1D6800EFCA2F /* current-version-es.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93B213400BBC1D6800EFCA2F /* current-version-es.rtf */; };
+		93B213680BBC1D7D00EFCA2F /* Léeme.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93B213670BBC1D7D00EFCA2F /* Léeme.rtfd */; };
 		93B528B0089FFC2B00F14B77 /* add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AC089FFC2B00F14B77 /* add.tiff */; };
 		93B528B1089FFC2B00F14B77 /* add-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AD089FFC2B00F14B77 /* add-pressed.tiff */; };
 		93B528B2089FFC2B00F14B77 /* remove-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */; };
@@ -367,6 +373,7 @@
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
 		930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LibraryPreviewPanelImageView.m; sourceTree = "<group>"; };
 		930BFD1B0A245AC6008C586D /* LibraryPreviewPanelImageView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LibraryPreviewPanelImageView.h; sourceTree = "<group>"; };
+		930E518E0C06C89400BF15A8 /* rightleftarrows.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rightleftarrows.pdf; path = Resources/symbols/rightleftarrows.pdf; sourceTree = "<group>"; };
 		93149F7D089438B10017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/file-icons/latexit-lib.png"; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
@@ -662,6 +669,24 @@
 		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/documentation/Read Me.rtfd"; sourceTree = "<group>"; };
 		93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93AD08B708A2D2CE0045B7F9 /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
+		93B2133C0BBC1D6100EFCA2F /* current-version-fr.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-fr.rtf"; path = "Resources/documentation/current-version-fr.rtf"; sourceTree = "<group>"; };
+		93B2133E0BBC1D6800EFCA2F /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "Resources/documentation/current-version-en.rtf"; sourceTree = "<group>"; };
+		93B2133F0BBC1D6800EFCA2F /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "Resources/documentation/current-version-de.rtf"; sourceTree = "<group>"; };
+		93B213400BBC1D6800EFCA2F /* current-version-es.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-es.rtf"; path = "Resources/documentation/current-version-es.rtf"; sourceTree = "<group>"; };
+		93B213440BBC1D7200EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/Credits.rtf; sourceTree = "<group>"; };
+		93B213670BBC1D7D00EFCA2F /* Léeme.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Léeme.rtfd"; path = "Resources/documentation/Léeme.rtfd"; sourceTree = "<group>"; };
+		93B213690BBC1D8600EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93B2136C0BBC1D8C00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93B2136F0BBC1D9100EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		93B213720BBC1D9900EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
+		93B213750BBC1DA000EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Library.nib; sourceTree = "<group>"; };
+		93B213760BBC1DA700EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/History.nib; sourceTree = "<group>"; };
+		93B213790BBC1DAE00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
+		93B2137C0BBC1DB400EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Encapsulation.nib; sourceTree = "<group>"; };
+		93B2137F0BBC1DBB00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		93B213800BBC1DC400EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Margin.nib; sourceTree = "<group>"; };
+		93B213810BBC1DCA00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MyDocument.nib; sourceTree = "<group>"; };
+		93B213820BBC1DD000EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Preferences.nib; sourceTree = "<group>"; };
 		93B528AC089FFC2B00F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/interface/add.tiff; sourceTree = "<group>"; };
 		93B528AD089FFC2B00F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/interface/add-pressed.tiff"; sourceTree = "<group>"; };
 		93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/interface/remove-pressed.tiff"; sourceTree = "<group>"; };
@@ -859,10 +884,15 @@
 		93019F15086C765800A2A9E7 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				93B2133C0BBC1D6100EFCA2F /* current-version-fr.rtf */,
+				93B2133E0BBC1D6800EFCA2F /* current-version-en.rtf */,
+				93B2133F0BBC1D6800EFCA2F /* current-version-de.rtf */,
+				93B213400BBC1D6800EFCA2F /* current-version-es.rtf */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				93A592C907F46075001DF900 /* Lisez-moi.rtfd */,
 				93A592CA07F46075001DF900 /* Read Me.rtfd */,
 				9340E8EE0AD166CF00D52E57 /* Lies mich.rtfd */,
+				93B213670BBC1D7D00EFCA2F /* Léeme.rtfd */,
 				93A592C807F46075001DF900 /* Licence.rtf */,
 				935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */,
 				935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */,
@@ -879,8 +909,8 @@
 				9308AC31088CF2850062A340 /* IconFamily.m */,
 				9308AC2E088CF2850062A340 /* NSString+CarbonFSSpecCreation.h */,
 				9308AC2F088CF2850062A340 /* NSString+CarbonFSSpecCreation.m */,
-				93D4E3EF09C821A700736816 /* Utils.m */,
 				93D4E3F009C821A700736816 /* Utils.h */,
+				93D4E3EF09C821A700736816 /* Utils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1103,6 +1133,7 @@
 				932BA54B0960CC82004EECBA /* rightarrow-big.pdf */,
 				932BA5E60960CC82004EECBA /* rightharpoondown.pdf */,
 				932BA5C00960CC82004EECBA /* rightharpoonup.pdf */,
+				930E518E0C06C89400BF15A8 /* rightleftarrows.pdf */,
 				932BA60C0960CC82004EECBA /* searrow.pdf */,
 				932BA5F60960CC82004EECBA /* swarrow.pdf */,
 				932BA56B0960CC82004EECBA /* uparrow.pdf */,
@@ -1423,6 +1454,13 @@
 			isa = PBXProject;
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-panther" */;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Spanish,
+			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
 			targets = (
@@ -1682,6 +1720,12 @@
 				9340E8EF0AD166CF00D52E57 /* Lies mich.rtfd in Resources */,
 				933EBABD0B7FCF3600D84BDB /* home.tiff in Resources */,
 				933EBABE0B7FCF3600D84BDB /* homePressed.tiff in Resources */,
+				93B2133D0BBC1D6100EFCA2F /* current-version-fr.rtf in Resources */,
+				93B213410BBC1D6800EFCA2F /* current-version-en.rtf in Resources */,
+				93B213420BBC1D6800EFCA2F /* current-version-de.rtf in Resources */,
+				93B213430BBC1D6800EFCA2F /* current-version-es.rtf in Resources */,
+				93B213680BBC1D7D00EFCA2F /* Léeme.rtfd in Resources */,
+				930E518F0C06C89400BF15A8 /* rightleftarrows.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1778,6 +1822,7 @@
 				089C1660FE840EACC02AAC07 /* English */,
 				93773C4907FFF713004AAB30 /* French */,
 				9340E8D60AD1667000D52E57 /* German */,
+				93B213690BBC1D8600EFCA2F /* Spanish */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = SOURCE_ROOT;
@@ -1788,6 +1833,7 @@
 				2A37F4B5FDCFA73011CA2CEA /* English */,
 				93773C3307FFF547004AAB30 /* French */,
 				9340E8E00AD166A400D52E57 /* German */,
+				93B213810BBC1DCA00EFCA2F /* Spanish */,
 			);
 			name = MyDocument.nib;
 			sourceTree = "<group>";
@@ -1798,6 +1844,7 @@
 				2A37F4B7FDCFA73011CA2CEA /* English */,
 				93773C3207FFF541004AAB30 /* French */,
 				9340E8DE0AD1669200D52E57 /* German */,
+				93B2137F0BBC1DBB00EFCA2F /* Spanish */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -1808,6 +1855,7 @@
 				2A37F4BAFDCFA73011CA2CEA /* English */,
 				93773C4707FFF704004AAB30 /* French */,
 				9340E8C80AD1661600D52E57 /* German */,
+				93B213440BBC1D7200EFCA2F /* Spanish */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -1818,6 +1866,7 @@
 				930255CD07F0C2A300011996 /* English */,
 				93773C4607FFF6FB004AAB30 /* French */,
 				9340E8DB0AD1668200D52E57 /* German */,
+				93B2136C0BBC1D8C00EFCA2F /* Spanish */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1828,6 +1877,7 @@
 				9315A45107FD331800AFCCE9 /* English */,
 				93773C3407FFF54D004AAB30 /* French */,
 				9340E8E10AD166AA00D52E57 /* German */,
+				93B213820BBC1DD000EFCA2F /* Spanish */,
 			);
 			name = Preferences.nib;
 			sourceTree = "<group>";
@@ -1838,6 +1888,7 @@
 				9372A26A08781EC800A3A645 /* English */,
 				9372A2F50878280700A3A645 /* French */,
 				9340E8DF0AD1669800D52E57 /* German */,
+				93B213800BBC1DC400EFCA2F /* Spanish */,
 			);
 			name = Margin.nib;
 			sourceTree = "<group>";
@@ -1848,6 +1899,7 @@
 				939A644F080027EA00AE4486 /* English */,
 				939A64590800281C00AE4486 /* French */,
 				9340E8E20AD166B900D52E57 /* German */,
+				93B2136F0BBC1D9100EFCA2F /* Spanish */,
 			);
 			name = ServicesMenu.strings;
 			sourceTree = "<group>";
@@ -1858,6 +1910,7 @@
 				93D7CB7709D36DC10001DC5E /* English */,
 				93D7CB7809D36DC10001DC5E /* French */,
 				9340E8C90AD1662E00D52E57 /* German */,
+				93B213720BBC1D9900EFCA2F /* Spanish */,
 			);
 			name = CompositionConfiguration.nib;
 			sourceTree = "<group>";
@@ -1868,6 +1921,7 @@
 				93F16CAC089FC1D800FF7B94 /* English */,
 				93F16CAE089FC1E700FF7B94 /* French */,
 				9340E8D40AD1666300D52E57 /* German */,
+				93B213790BBC1DAE00EFCA2F /* Spanish */,
 			);
 			name = LatexPalettes.nib;
 			sourceTree = "<group>";
@@ -1878,6 +1932,7 @@
 				93F73E9C0899095F00EFFA5E /* English */,
 				93F73E9E0899096A00EFFA5E /* French */,
 				9340E8CB0AD1664600D52E57 /* German */,
+				93B2137C0BBC1DB400EFCA2F /* Spanish */,
 			);
 			name = Encapsulation.nib;
 			sourceTree = "<group>";
@@ -1888,6 +1943,7 @@
 				93F9DEAD08A2D96C005DEBF6 /* English */,
 				93F9DEB208A2D985005DEBF6 /* French */,
 				9340E8D50AD1666A00D52E57 /* German */,
+				93B213750BBC1DA000EFCA2F /* Spanish */,
 			);
 			name = Library.nib;
 			sourceTree = "<group>";
@@ -1898,6 +1954,7 @@
 				93F9DEAF08A2D96C005DEBF6 /* English */,
 				93F9DEB308A2D985005DEBF6 /* French */,
 				9340E8CD0AD1664E00D52E57 /* German */,
+				93B213760BBC1DA700EFCA2F /* Spanish */,
 			);
 			name = History.nib;
 			sourceTree = "<group>";

@@ -1,0 +1,39 @@
+{
+    IBClasses = (
+        {CLASS = BorderlessPanel; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
+        {CLASS = ButtonNotClickThrough; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = HistoryCell; LANGUAGE = ObjC; SUPERCLASS = NSImageCell; }, 
+        {
+            ACTIONS = {
+                changeHistoryPreviewPanelSegmentedControl = id; 
+                clearHistory = id; 
+                deselectAll = id; 
+                removeHistoryEntries = id; 
+            }; 
+            CLASS = HistoryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                clearHistoryButton = NSButton; 
+                historyPreviewPanel = BorderlessPanel; 
+                historyPreviewPanelImageView = LibraryPreviewPanelImageView; 
+                historyPreviewPanelSegmentedControl = NSSegmentedControl; 
+                historyTableView = HistoryTableView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {copy = id; redo = id; undo = id; }; 
+            CLASS = HistoryTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            CLASS = LibraryPreviewPanelImageView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSImageView; 
+        }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
+    ); 
+    IBVersion = 1; 
+}

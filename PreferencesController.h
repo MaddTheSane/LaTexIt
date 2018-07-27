@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -25,7 +25,8 @@ extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
 extern NSString* DragExportJpegQualityKey;
 extern NSString* DragExportScaleAsPercentKey;
-extern NSString* DefaultImageViewBackground;
+extern NSString* DefaultImageViewBackgroundKey;
+extern NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey;
 extern NSString* DefaultColorKey;
 extern NSString* DefaultPointSizeKey;
 extern NSString* DefaultModeKey;
