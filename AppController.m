@@ -216,6 +216,7 @@ static NSMutableDictionary* cachePaths = nil;
     if (![super init])
       return nil;
     appControllerInstance = self;
+    strangeLock = [[NSLock alloc] init];
     [self _setEnvironment];     //performs a setenv()
     [self _findGsPath];
     [self _findPdfLatexPath];
@@ -248,6 +249,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [strangeLock release];
   [compositionConfigurationController release];
   [encapsulationController release];
   [historyController release];
@@ -257,6 +259,8 @@ static NSMutableDictionary* cachePaths = nil;
   [preferencesController release];
   [super dealloc];
 }
+
+-(NSLock*) strangeLock {return strangeLock;}
 
 -(NSDocument*) currentDocument
 {
@@ -1761,9 +1765,10 @@ static NSMutableDictionary* cachePaths = nil;
             //[mutableAttributedStringWithImage appendAttributedString:space];
 
             //finally creates the rtdfData
+            [[self strangeLock] lock];
             NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:NSMakeRange(0, [mutableAttributedStringWithImage length])
                                                             documentAttributes:documentAttributes];
-
+            [[self strangeLock] unlock];
             //RTFd data
             [pboard addTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
             [pboard setData:rtfdData forType:NSRTFDPboardType];
@@ -2052,7 +2057,7 @@ static NSMutableDictionary* cachePaths = nil;
               remainingRange.location = end.location+delimiterRightLength;
               remainingRange.length = [mutableAttrString length]-remainingRange.location;
               
-              //builds a document containg the error
+              //builds a document containing the error
               MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:NO];
               [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//calls windowDidLoad
               [document setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
@@ -2179,8 +2184,10 @@ static NSMutableDictionary* cachePaths = nil;
       }//if there were failures
       
       //Now we must feed the pasteboard
+      [[self strangeLock] lock];
       NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length])
                                        documentAttributes:documentAttributes];
+      [[self strangeLock] unlock];
       [pboard declareTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
       [pboard setData:rtfdData forType:NSRTFDPboardType];
     }//end @synchronized(self)

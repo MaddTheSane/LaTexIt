@@ -254,7 +254,10 @@ static NSImage*        libraryFileIcon       = nil;
         
         //Then save the data
         NSString* libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
-        libraryShouldBeSaved = ![compressedData writeToFile:libraryFilePath atomically:YES];
+        NSDictionary* plist =
+          [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.0", @"version", compressedData, @"data", nil];
+        NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+        libraryShouldBeSaved = ![dataToWrite writeToFile:libraryFilePath atomically:YES];
       }//end if path ok
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] stopMessageProgress];
@@ -281,7 +284,11 @@ static NSImage*        libraryFileIcon       = nil;
     }
     NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
     NSData* compressedData = [Compressor zipcompress:uncompressedData];
-    ok = [compressedData writeToFile:path atomically:YES];
+    NSDictionary* plist =
+      [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.0", @"version", compressedData, @"data", nil];
+    NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+
+    ok = [dataToWrite writeToFile:path atomically:YES];
     if (ok)
     {
       [[NSFileManager defaultManager]
@@ -325,7 +332,14 @@ static NSImage*        libraryFileIcon       = nil;
     LibraryFolder* newLibrary = nil;
     @try
     {
-      NSData* compressedData   = [NSData dataWithContentsOfFile:path];
+      NSData* fileData = [NSData dataWithContentsOfFile:path];
+      NSPropertyListFormat format;
+      id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      NSData* compressedData = nil;
+      if (!plist)
+        compressedData = fileData;
+      else
+        compressedData = [plist objectForKey:@"data"];
       NSData* uncompressedData = [Compressor zipuncompress:compressedData];
       if (uncompressedData)
         newLibrary = [NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData];

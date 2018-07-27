@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.10.1\
+\f2\b \cf0 LaTeXiT 1.11.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -55,7 +55,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.10.1 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.11.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -287,7 +287,10 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \fs22 \cf0 \ulnone \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f2\b \cf0 - si vous n'avez que TeXShop d'install\'8e, LaTeXiT ne peut fonctionner. Il vous faut une v\'8eritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'8fs.\
+\f2\b \cf0 - si vous n'avez que TeXShop d'install\'8e, LaTeXiT ne peut fonctionner. Il vous faut une v\'8eritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'8fs;\
+- Si vous observez des changements al\'8eatoires de police de caract\'8fres dans les images g\'8en\'8er\'8ees, il semble que cela puisse \'90tre d\'9e \'88 un probl\'8fme d'historique corrompue; supprimer votre historique devrait arranger les choses. Il a aussi \'8et\'8e signal\'8e que des polices Open-Type de tierce partie install\'8ees dans le syst\'8fme pouvaient poser des probl\'8fmes;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 - si vous constatez que, m\'90me sans \'90tre utilis\'8e, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'8emoire, sachez simplement que pour acc\'8el\'8erer son temps de d\'8emarrage, il charge les images de l'historique en arri\'8fre plan. Ce travail, de tr\'8fs faible priorit\'8e, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'8eellement l'\'8eviter, pensez simplement \'88 faire le m\'8enage dans votre historique de temps en temps\'ca!\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f1\b0 \cf0 - quand la couleur de l'\'8equation est r\'8egl\'8ee sur blanc pur, elle semble mal d\'8ecoup\'8ee (disparition \'8eventuelle des parenth\'8fses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'8echoue \'88 d\'8ecouper correctement avec une \'8equation blanche sur fond blanc. Pour corriger cela, utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
@@ -304,7 +307,6 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 - avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS, ou PDF sans polices embarqu\'8ees;\
 - toujours avec Adobe Illustrator, y glisser/d\'8eposer un objet peut entra\'94ner la cr\'8eation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'8don de g\'8erer le glisser/d\'8eposer. OmniGraffle ne pose pas ce genre de probl\'8fmes;\
 - toujours avec Adobe Illustrator : de nombreux petits dysfonctionnement remarqu\'8es par les utilisateurs sont r\'8esolus en mettant \'88 jour Illustrator\'ca;\
-- si vous constatez que, m\'90me sans \'90tre utilis\'8e, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'8emoire, sachez simplement que pour acc\'8el\'8erer son temps de d\'8emarrage, il charge les images de l'historique en arri\'8fre plan. Ce travail, de tr\'8fs faible priorit\'8e, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'8eellement l'\'8eviter, pensez simplement \'88 faire le m\'8enage dans votre historique de temps en temps !\
 - vous pouvez remarquer que dans la console syst\'8fme, \'88 chaque latexisation un message appara\'94t : "WARNING: Type1 font data returned by OFAStreamPSDownload isn't in the correct format required by the Adobe Type 1 Font Format specification". Vous pouvez ignorer ce warning, d\'9e \'88 la forme des pdf g\'8en\'8er\'8es par pdflatex. En pratique il n'y a pas de probl\'8fmes, et ce warning dispara\'94tra peut-\'90tre dans les futures versions de pdflatex (mais en fait je n'en sais rien).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 \cf0 \
@@ -335,6 +337,12 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.11.0 (7 d\'8ecembre 2006)\
+- modification du format de fichier de l'historique et de la biblioth\'8fque pour le rendre plus robuste et extensible;\
+- possibilit\'8e de d\'8esactiver la correction orthographique dans les pr\'8ef\'8erences;\
+- correction d'un bug rare et al\'8eatoire pouvant bloquer LaTeXiT au d\'8emarrage;\
+- ajout dans la documentation d'un bug connu sur un changement de police al\'8eatoire.\
+\
 v 1.10.1 (9 novembre 2006)\
 - tentative de correction d'un bug rare et al\'8eatoire pouvant bloquer LaTeXiT au d\'8emarrage;\
 - correction de quelques bugs de localisation par rapport au point d\'8ecimal;\

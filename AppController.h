@@ -53,11 +53,14 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
   LibraryController*       libraryController;
   MarginController*        marginController;
   PreferencesController*   preferencesController;
+  
+  NSLock* strangeLock;
 }
 
 +(AppController*)           appController; //getting the unique instance of appController
 +(NSDocument*)              currentDocument;
 +(NSString*)                latexitTemporaryPath;
+-(NSLock*)                  strangeLock;//strange lock for using service while loading history
 -(NSDocument*)              currentDocument;
 -(CompositionConfigurationController*) compositionConfigurationController;
 -(EncapsulationController*) encapsulationController;

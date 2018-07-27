@@ -32,14 +32,6 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 @implementation HistoryItem
 
-static NSLock* strangeLock = nil;
-
-+(void) initialize
-{
-  if (!strangeLock)
-    strangeLock = [[NSLock alloc] init];
-}
-
 +(id) historyItemWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor
@@ -300,7 +292,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.10.1"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.11.0"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -405,17 +397,16 @@ static NSLock* strangeLock = nil;
       float factor = MIN(1.0f, 256.0f/MAX(1.0f, MAX(realSize.width, realSize.height)));
       NSSize newSize = NSMakeSize(factor*realSize.width, factor*realSize.height);
       //temporarily change size
-      [strangeLock lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
+      [[[AppController appController] strangeLock] lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
       [pdfImage setSize:newSize];
       [pdfImage lockFocus];
       NSBitmapImageRep* bitmapRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, newSize.width, newSize.height)]; 
-      bitmapCachedImage = [[NSImage alloc] initWithSize:newSize];
-      [bitmapCachedImage addRepresentation:bitmapRep];
+      bitmapCachedImage = [[NSImage alloc] initWithData:[bitmapRep TIFFRepresentation]];
       [bitmapRep release];
       //restore size
       [pdfImage unlockFocus];
       [pdfImage setSize:realSize];
-      [strangeLock unlock];
+      [[[AppController appController] strangeLock] unlock];
     }
   }
   return bitmapCachedImage;

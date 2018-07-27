@@ -25,6 +25,8 @@
 #import "TextShortcutsManager.h"
 #import "Utils.h"
 
+NSString* SpellCheckingDidChangeNotification = @"LaTeXiT_SpellCheckingDidChangeNotification";
+
 NSString* GeneralToolbarItemIdentifier     = @"GeneralToolbarItem";
 NSString* EditionToolbarItemIdentifier     = @"EditionToolbarItem";
 NSString* PreambleToolbarItemIdentifier    = @"PreambleToolbarItem";
@@ -42,6 +44,7 @@ NSString* DefaultColorKey              = @"LaTeXiT_DefaultColorKey";
 NSString* DefaultPointSizeKey          = @"LaTeXiT_DefaultPointSizeKey";
 NSString* DefaultModeKey               = @"LaTeXiT_DefaultModeKey";
 
+NSString* SpellCheckingEnableKey               = @"LaTeXiT_SpellCheckingEnableKey";
 NSString* SyntaxColoringEnableKey              = @"LaTeXiT_SyntaxColoringEnableKey";
 NSString* SyntaxColoringTextForegroundColorKey = @"LaTeXiT_SyntaxColoringTextForegroundColorKey";
 NSString* SyntaxColoringTextBackgroundColorKey = @"LaTeXiT_SyntaxColoringTextBackgroundColorKey";
@@ -230,7 +233,7 @@ static PreferencesController* sharedController = nil;
                                                                      format:&format errorDescription:&errorString];
     NSString* version = [plist objectForKey:@"version"];
     //we can check the version...
-    if (!version || [version compare:@"1.10.1" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
+    if (!version || [version compare:@"1.11.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
     {
     }
     NSEnumerator* enumerator = [[plist objectForKey:@"shortcuts"] objectEnumerator];
@@ -248,6 +251,7 @@ static PreferencesController* sharedController = nil;
                                                [[NSColor  blackColor]   data],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
                                                [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], DefaultModeKey,
+                                               [NSNumber numberWithBool:YES], SpellCheckingEnableKey,
                                                [NSNumber numberWithBool:YES], SyntaxColoringEnableKey,
                                                [[NSColor blackColor]   data], SyntaxColoringTextForegroundColorKey,
                                                [[NSColor whiteColor]   data], SyntaxColoringTextBackgroundColorKey,
@@ -555,6 +559,7 @@ static PreferencesController* sharedController = nil;
   [defaultPointSizeTextField setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
   [defaultColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
 
+  [spellCheckingButton setState:([userDefaults boolForKey:SpellCheckingEnableKey] ? NSOnState : NSOffState)];
   [enableSyntaxColoringButton setState:([userDefaults boolForKey:SyntaxColoringEnableKey]  ? NSOnState : NSOffState)];
   [syntaxColoringTextForegroundColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]]];
   [syntaxColoringTextBackgroundColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextBackgroundColorKey]]];
@@ -723,6 +728,16 @@ static PreferencesController* sharedController = nil;
   }
   else if ([aNotification object] == scriptsScriptDefinitionBodyTextView)
     [self changeScriptsConfiguration:scriptsScriptDefinitionBodyTextView];
+}
+
+-(IBAction) changeSpellChecking:(id)sender
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  if (sender == spellCheckingButton)
+  {
+    [userDefaults setBool:([spellCheckingButton state] == NSOnState) forKey:SpellCheckingEnableKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpellCheckingDidChangeNotification object:nil];
+  }
 }
 
 -(IBAction) changeSyntaxColoringConfiguration:(id)sender

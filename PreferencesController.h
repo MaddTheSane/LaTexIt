@@ -11,6 +11,8 @@
 typedef enum {EXPORT_FORMAT_PDF, EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS,
               EXPORT_FORMAT_EPS, EXPORT_FORMAT_TIFF, EXPORT_FORMAT_PNG, EXPORT_FORMAT_JPEG} export_format_t;
 
+extern NSString* SpellCheckingDidChangeNotification;
+
 extern NSString* GeneralToolbarItemIdentifier;
 extern NSString* EditionToolbarItemIdentifier;
 extern NSString* PreambleToolbarItemIdentifier;
@@ -27,6 +29,7 @@ extern NSString* DefaultImageViewBackground;
 extern NSString* DefaultColorKey;
 extern NSString* DefaultPointSizeKey;
 extern NSString* DefaultModeKey;
+extern NSString* SpellCheckingEnableKey;
 extern NSString* SyntaxColoringEnableKey;
 extern NSString* SyntaxColoringTextForegroundColorKey;
 extern NSString* SyntaxColoringTextBackgroundColorKey;
@@ -125,6 +128,8 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   IBOutlet NSSegmentedControl* defaultModeSegmentedControl;
   IBOutlet NSTextField*        defaultPointSizeTextField;
   IBOutlet NSColorWell*        defaultColorColorWell;
+  
+  IBOutlet NSButton*          spellCheckingButton;
 
   IBOutlet NSColorWell*       syntaxColoringTextForegroundColorColorWell;
   IBOutlet NSColorWell*       syntaxColoringTextBackgroundColorColorWell;
@@ -217,6 +222,7 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
 
 -(IBAction) changeDefaultGeneralConfig:(id)sender;
 
+-(IBAction) changeSpellChecking:(id)sender;
 -(IBAction) changeSyntaxColoringConfiguration:(id)sender;
 -(IBAction) resetDefaultPreamble:(id)sender;
 -(IBAction) selectFont:(id)sender;

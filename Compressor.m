@@ -14,9 +14,9 @@
 // compress the data of an NSData object.
 // Needs a buffer 0.1% + 12 bytes larger than the source file.
 // Encodes the original size of the data as the first 4 bytes.
-+(NSData*) zipcompress:(NSData*)data
++(NSData*) zipcompressDeprecated:(NSData*)data
 {
-  NSData *result = nil;
+  NSData* result = nil;
   if( data )
   {
     uLong srcLength = [data length];
@@ -40,9 +40,44 @@
   }
   return [result autorelease];
 }
+//end zipcompressDeprecated:
+
+// compress the data of an NSData object.
+// Encodes the original size of the data as the first 4 bytes.
++(NSData*) zipcompress:(NSData*)data
+{
+  NSData* result = nil;
+  if(data)
+  {
+    uLongf sourceLen = [data length];
+    #ifndef PANTHER
+    uLongf destLen   = compressBound(sourceLen);
+    #else
+    uLongf destLen   = sourceLen * 1.001 + 12;
+    #endif
+    NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:sizeof(unsigned int)+destLen];
+    unsigned int bigSourceLen = EndianUI_NtoB(sourceLen);
+    [compData appendBytes:&bigSourceLen length:sizeof(unsigned int)];
+    [compData increaseLengthBy:destLen];
+    int error = compress([compData mutableBytes]+sizeof(unsigned int), &destLen, [data bytes], sourceLen);
+    switch(error)
+    {
+      case Z_OK:
+        [compData setLength:sizeof(unsigned int)+destLen];
+        result = [compData copy];
+        break;
+      default:
+        NSLog(@"Error while compressing data");
+        break;
+    }
+    [compData release];
+  }
+  return [result autorelease];
+}
+//end zipcompress:
 
 // decompress into a buffer the size in the first 4 bytes of the object (see above).
-+(NSData*) zipuncompress:(NSData*)data
++(NSData*) zipuncompressDeprecated:(NSData*)data
 {
   NSData *result = nil;
   if (data)
@@ -98,5 +133,37 @@
   }
   return [result autorelease];
 }
+//end zipuncompressDeprecated:
+
+// decompress into a buffer the size in the first 4 bytes of the object (see above).
++(NSData*) zipuncompress:(NSData*)data
+{
+  NSData* result = nil;
+  if (data)
+  {
+    unsigned int bigDestLen = 0;
+    [data getBytes:&bigDestLen length:sizeof(unsigned int)];
+    unsigned int destLen = EndianUI_BtoN(bigDestLen);
+    uLongf destLenf = destLen;
+    NSMutableData* decompData = [[NSMutableData alloc] initWithLength:destLen];
+    int error = uncompress( [decompData mutableBytes], &destLenf,
+                            [data bytes]+sizeof(unsigned int), [data length]-sizeof(unsigned int) );
+    switch(error)
+    {
+      case Z_OK:
+        result = [decompData copy];
+        break;
+      case Z_DATA_ERROR:
+        NSLog(@"Error while decompressing data : data seems corrupted");
+        break;
+      default:
+        NSLog(@"Error while decompressing data : Insufficient memory" );
+        break;
+    }
+    [decompData release];
+  }
+  return [result autorelease];
+}
+//end zipuncompress:
 
 @end

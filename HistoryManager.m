@@ -316,7 +316,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         
         //Then save the data
         NSString* historyFilePath = [path stringByAppendingPathComponent:@"history.dat"];
-        historyShouldBeSaved = ![compressedData writeToFile:historyFilePath atomically:YES];
+        NSDictionary* plist =
+          [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.0", @"version", compressedData, @"data", nil];
+        NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+        historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
       }//end if path ok
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] stopMessageProgress];
@@ -339,7 +342,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       path = [path stringByAppendingPathComponent:[NSApp applicationName]];
 
       NSString* filename = [path stringByAppendingPathComponent:@"history.dat"];
-      NSData* compressedData = [NSData dataWithContentsOfFile:filename];
+      NSData* fileData = [NSData dataWithContentsOfFile:filename];
+      NSPropertyListFormat format;
+      id plist = [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      NSData* compressedData = nil;
+      if (!plist)
+        compressedData = fileData;
+      else
+        compressedData = [plist objectForKey:@"data"];
       NSData* uncompressedData = [Compressor zipuncompress:compressedData];
       if (uncompressedData)
       {

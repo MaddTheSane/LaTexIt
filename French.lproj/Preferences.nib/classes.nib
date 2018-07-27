@@ -41,6 +41,7 @@
                 changePath = id; 
                 changeScriptsConfiguration = id; 
                 changeServiceConfiguration = id; 
+                changeSpellChecking = id; 
                 changeSyntaxColoringConfiguration = id; 
                 checkForUpdatesChange = id; 
                 checkNow = id; 
@@ -128,6 +129,7 @@
                 serviceView = NSView; 
                 serviceWarningLinkBackButton = NSButton; 
                 serviceWarningShortcutConflict = NSButton; 
+                spellCheckingButton = NSButton; 
                 syntaxColoringCommandColorColorWell = NSColorWell; 
                 syntaxColoringCommentColorColorWell = NSColorWell; 
                 syntaxColoringKeywordColorColorWell = NSColorWell; 

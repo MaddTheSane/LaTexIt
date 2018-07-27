@@ -11,6 +11,8 @@
 @interface Compressor : NSObject {
 }
 
++(NSData*) zipcompressDeprecated:(NSData*)data;
++(NSData*) zipuncompressDeprecated:(NSData*)data;
 +(NSData*) zipcompress:(NSData*)data;
 +(NSData*) zipuncompress:(NSData*)data;
 

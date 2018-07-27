@@ -21,6 +21,7 @@
 #import "NSFontExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSStringExtended.h"
+#import "PreferencesController.h"
 #import "SMLSyntaxColouring.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
@@ -28,6 +29,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
 @interface LineCountTextView (PrivateAPI)
 -(void) _computeLineRanges;
+-(void) _spellCheckingDidChange:(NSNotification*)notification;
 @end
 
 @implementation LineCountTextView
@@ -58,6 +60,7 @@ static int SpellCheckerDocumentTag = 0;
     }//end if WellKnownLatexKeywords
   }//end @synchronized
 }
+//end initialize
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -84,6 +87,7 @@ static int SpellCheckerDocumentTag = 0;
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObjectsFromArray:typesToAdd]];
   return self;
 }
+//end initWithCoder:
 
 -(void) awakeFromNib
 {
@@ -95,6 +99,8 @@ static int SpellCheckerDocumentTag = 0;
   [scrollView setVerticalRulerView:lineCountRulerView];
   [lineCountRulerView setClientView:self];
   syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
+
+  [self _spellCheckingDidChange:nil];
 
   NSMutableArray* keywordsToCheck = [NSMutableArray array];
   unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
@@ -118,16 +124,22 @@ static int SpellCheckerDocumentTag = 0;
   [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
   if (SpellCheckerDocumentTag == 0)
     [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
+    
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_spellCheckingDidChange:)
+                                               name:SpellCheckingDidChangeNotification object:nil];
 }
+//end awakeFromNib
 
 -(void) dealloc
 {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [syntaxColouring release];
   [lineRanges release];
   [forbiddenLines release];
   [lineCountRulerView release];
   [super dealloc];
 }
+//end dealloc
 
 -(int) spellCheckerDocumentTag
 {
@@ -135,12 +147,14 @@ static int SpellCheckerDocumentTag = 0;
     SpellCheckerDocumentTag = [super spellCheckerDocumentTag];
   return SpellCheckerDocumentTag;
 }
+//end spellCheckerDocumentTag
 
 //since the nextResponder is the imageView (see MyDocument.m), we must override the behaviour for scrollWheel
 -(void) scrollWheel:(NSEvent*)event
 {
   [[[self superview] superview] scrollWheel:event];
 }
+//end scrollWheel:
 
 //as its own delegate, only notifications from self are seen
 -(void) textDidChange:(NSNotification*)aNotification
@@ -179,16 +193,19 @@ static int SpellCheckerDocumentTag = 0;
     numberIndex = [enumerator nextObject];
   }
 }
+//end textDidChange:
 
 -(NSArray*) lineRanges
 {
   return lineRanges;
 }
+//end lineRanges
 
 -(unsigned int) nbLines
 {
   return lineRanges ? [lineRanges count] : 0;
 }
+//end nbLines
 
 -(void) _computeLineRanges
 {
@@ -207,18 +224,21 @@ static int SpellCheckerDocumentTag = 0;
     location += [line length]+1;
   }
 }
+//end _computeLineRanges
 
 //remove error markers
 -(void) clearErrors
 {
   [lineCountRulerView clearErrors];
 }
+//end clearErrors
 
 //add error markers
 -(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message
 {
   [lineCountRulerView setErrorAtLine:lineIndex message:message];
 }
+//end setErrorAtLine:message:
 
 //change the shift in displayed numerotation
 -(void) setLineShift:(int)aShift
@@ -226,12 +246,14 @@ static int SpellCheckerDocumentTag = 0;
   lineShift = aShift;
   [lineCountRulerView setLineShift:aShift];
 }
+//end setLineShift:
 
 //the shift in displayed numerotation
 -(int) lineShift
 {
   return lineShift;
 }
+//end lineShift
 
 //change the status (forbidden or not) of a line (forbidden means : cannot be edited)
 -(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden
@@ -241,6 +263,7 @@ static int SpellCheckerDocumentTag = 0;
   else
     [forbiddenLines removeObject:[NSNumber numberWithUnsignedInt:index]];
 }
+//end setForbiddenLine:forbidden
 
 //checks if the user is typing in a forbiddenLine; if it is the case, it is discarded
 -(BOOL) textView:(NSTextView *)aTextView shouldChangeTextInRange:(NSRange)affectedCharRange
@@ -265,16 +288,19 @@ static int SpellCheckerDocumentTag = 0;
 
   return accepts;
 }
+//end textView:shouldChangeTextInRange:replacementString:
 
 -(void)rulerView:(NSRulerView *)aRulerView handleMouseDown:(NSEvent *)theEvent
 {
   //does nothing but prevents console message error
 }
+//end rulerView:handleMouseDown:
 
 -(BOOL) rulerView:(NSRulerView *)aRulerView shouldAddMarker:(NSRulerMarker *)aMarker
 {
   return NO;
 }
+//end rulerView:shouldAddMarker:
 
 -(BOOL) gotoLine:(int)row
 {
@@ -290,6 +316,7 @@ static int SpellCheckerDocumentTag = 0;
   }
   return ok;
 }
+//end gotoLine:
 
 //responds to the font manager
 -(void) changeFont:(id)sender
@@ -304,6 +331,7 @@ static int SpellCheckerDocumentTag = 0;
   [lineCountRulerView setNeedsDisplay:YES];
   [[NSNotificationCenter defaultCenter] postNotificationName:FontDidChangeNotification object:self];
 }
+//end changeFont:
 
 //We can drop on the imageView only if the PDF has been made by LaTeXiT (as "creator" document attribute)
 //So, the keywords of the PDF contain the whole document state
@@ -362,11 +390,13 @@ static int SpellCheckerDocumentTag = 0;
   acceptDrag = ok ? NSDragOperationCopy : NSDragOperationNone;
   return acceptDrag;
 }
+//end draggingEntered:
 
 -(NSDragOperation) draggingUpdated:(id <NSDraggingInfo>)sender
 {
   return acceptDrag;
 }
+//end draggingUpdated:
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
@@ -400,6 +430,7 @@ static int SpellCheckerDocumentTag = 0;
     [super performDragOperation:sender];
   return YES;
 }
+//end performDragOperation:
 
 -(IBAction) paste:(id)sender
 {
@@ -428,6 +459,7 @@ static int SpellCheckerDocumentTag = 0;
   if (currentFont)
     [self setFont:currentFont range:NSMakeRange(0, [[self textStorage] length])];
 }
+//end paste:
 
 -(BOOL) validateMenuItem:(id)sender
 {
@@ -436,6 +468,7 @@ static int SpellCheckerDocumentTag = 0;
     return YES;
   return ok;
 }
+//end validateMenuItem:
 
 -(void) keyDown:(NSEvent*)theEvent
 {
@@ -480,6 +513,7 @@ static int SpellCheckerDocumentTag = 0;
   else
     [[(MyDocument*)[AppController currentDocument] makeLatexButton] performClick:self];
 }
+//end keyDown:
 
 //method taken from Smultron
 //it allows parenthesis detection for user friendly selection
@@ -531,11 +565,13 @@ static int SpellCheckerDocumentTag = 0;
 	else
 		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
 }
+//end selectionRangeForProposedRange:granularity:
 
 -(SMLSyntaxColouring*) syntaxColouring
 {
   return syntaxColouring;
 }
+//end syntaxColouring
 
 -(NSRange) rangeForUserCompletion
 {
@@ -546,6 +582,7 @@ static int SpellCheckerDocumentTag = 0;
   BOOL isBackslashedWord = ([extendedWord length] && [extendedWord characterAtIndex:0] == '\\');
   return isBackslashedWord ? extendedRange : range;
 }
+//end rangeForUserCompletion
 
 -(NSArray*) completionsForPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
 {
@@ -658,5 +695,12 @@ static int SpellCheckerDocumentTag = 0;
   
   return propositions;
 }
+//end completionsForPartialWordRange:indexOfSelectedItem;
+
+-(void) _spellCheckingDidChange:(NSNotification*)notification
+{
+  [self setContinuousSpellCheckingEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:SpellCheckingEnableKey]];
+}
+//end _spellCheckingDidChange:
 
 @end

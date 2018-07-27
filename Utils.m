@@ -40,3 +40,59 @@ latex_mode_t latexModeForIndex(int index)
   }
   return mode;
 }
+
+int EndianI_BtoN(int x)
+{
+  return (sizeof(x) == sizeof(int32_t)) ? EndianS32_BtoN(x) :
+         (sizeof(x) == sizeof(int64_t)) ? EndianS64_BtoN(x) :
+         x;
+}
+
+int EndianI_NtoB(int x)
+{
+  return (sizeof(x) == sizeof(int32_t)) ? EndianS32_NtoB(x) :
+         (sizeof(x) == sizeof(int64_t)) ? EndianS64_NtoB(x) :
+         x;
+}
+
+unsigned int EndianUI_BtoN(unsigned int x)
+{
+  return (sizeof(x) == sizeof(uint32_t)) ? EndianU32_BtoN(x) :
+         (sizeof(x) == sizeof(uint64_t)) ? EndianU64_BtoN(x) :
+         x;
+}
+
+unsigned int EndianUI_NtoB(unsigned int x)
+{
+  return (sizeof(x) == sizeof(uint32_t)) ? EndianU32_NtoB(x) :
+         (sizeof(x) == sizeof(uint64_t)) ? EndianU64_NtoB(x) :
+         x;
+}
+
+long EndianL_BtoN(long x)
+{
+  return (sizeof(x) == sizeof(int32_t)) ? EndianS32_BtoN(x) :
+         (sizeof(x) == sizeof(int64_t)) ? EndianS64_BtoN(x) :
+         x;
+}
+
+long EndianL_NtoB(long x)
+{
+  return (sizeof(x) == sizeof(int32_t)) ? EndianS32_NtoB(x) :
+         (sizeof(x) == sizeof(int64_t)) ? EndianS64_NtoB(x) :
+         x;
+}
+
+unsigned long EndianUL_BtoN(unsigned long x)
+{
+  return (sizeof(x) == sizeof(uint32_t)) ? EndianU32_BtoN(x) :
+         (sizeof(x) == sizeof(uint64_t)) ? EndianU64_BtoN(x) :
+         x;
+}
+
+unsigned long EndianUL_NtoB(unsigned long x)
+{
+  return (sizeof(x) == sizeof(uint32_t)) ? EndianU32_NtoB(x) :
+         (sizeof(x) == sizeof(uint64_t)) ? EndianU64_NtoB(x) :
+         x;
+}
