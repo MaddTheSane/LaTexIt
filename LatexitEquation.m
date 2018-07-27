@@ -8,6 +8,7 @@
 
 #import "LatexitEquation.h"
 
+#import "CHExportPrefetcher.h"
 #import "Compressor.h"
 #import "LatexitEquationData.h"
 #import "LaTeXProcessor.h"
@@ -640,6 +641,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   self->isModelPrior250 = context &&
     ![[[[context persistentStoreCoordinator] managedObjectModel] entitiesByName]
       objectForKey:NSStringFromClass([LatexitEquationData class])];
+  self->exportPrefetcher = [[CHExportPrefetcher alloc] init];
   return self;
 }
 //end initWithEntity:insertIntoManagedObjectContext:
@@ -1139,12 +1141,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) dispose
 {
   [[self class] cancelPreviousPerformRequestsWithTarget:self];
+  [self->exportPrefetcher release];
+  self->exportPrefetcher = nil;
 }
 //end dispose
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.6.1"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.7.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1580,6 +1584,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end modeAsString
 
+-(CHExportPrefetcher*) exportPrefetcher
+{
+  return self->exportPrefetcher;
+}
+//end exportPrefetcher
+
 +(NSString*) latexModeToString:(latex_mode_t)mode
 {
   NSString* result = nil;
@@ -1798,7 +1808,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
 //the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)
--(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
+-(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   //LinkBack pasteboard
   NSArray* latexitEquationArray = [NSArray arrayWithObject:self];
@@ -1825,7 +1835,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
   //Stores the data in the pasteboard corresponding to what the user asked for (pdf, jpeg, tiff...)
-  export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+  [self->exportPrefetcher invalidateAllData];
+  if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    [self->exportPrefetcher prefetchForFormat:exportFormat pdfData:pdfData];
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
                                  [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
@@ -1835,11 +1847,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
                                  [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
   NSData* data = lazyDataProvider ? nil :
-    [[LaTeXProcessor sharedLaTeXProcessor]
-      dataForType:exportFormat pdfData:pdfData
-      exportOptions:exportOptions
-      compositionConfiguration:[preferencesController compositionConfigurationDocument]
-      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+    (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?
+  [self->exportPrefetcher fetchDataForFormat:exportFormat wait:YES] : 
+      nil;
+  if (!data && !lazyDataProvider)
+    data = 
+      [[LaTeXProcessor sharedLaTeXProcessor]
+        dataForType:exportFormat pdfData:pdfData
+        exportOptions:exportOptions
+        compositionConfiguration:[preferencesController compositionConfigurationDocument]
+        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   switch(exportFormat)
   {
@@ -1907,12 +1924,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
                                  [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
                                  [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
-  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
-    dataForType:[preferencesController exportFormatCurrentSession]
-        pdfData:[self pdfData]
-      exportOptions:exportOptions
-    compositionConfiguration:[preferencesController compositionConfigurationDocument]
-    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+  export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+  NSData* data = (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?
+    [self->exportPrefetcher fetchDataForFormat:exportFormat wait:YES] :
+    nil;
+  if (!data)
+    data = [[LaTeXProcessor sharedLaTeXProcessor]
+            dataForType:[preferencesController exportFormatCurrentSession]
+                pdfData:[self pdfData]
+              exportOptions:exportOptions
+            compositionConfiguration:[preferencesController compositionConfigurationDocument]
+            uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   [pasteboard setData:data forType:type];
 }
 //end pasteboard:provideDataForType:
@@ -1920,7 +1942,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.6.1", @"version",
+       @"2.7.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

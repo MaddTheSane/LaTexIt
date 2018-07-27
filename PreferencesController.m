@@ -10,8 +10,10 @@
 
 #import "AdditionalFilesController.h"
 #import "BodyTemplatesController.h"
+#import "ComposedTransformer.h"
 #import "IndexToIndexesTransformer.h"
 #import "CompositionConfigurationsController.h"
+#import "DictionaryToArrayTransformer.h"
 #import "EncapsulationsController.h"
 #import "MutableTransformer.h"
 #import "NSArrayExtended.h"
@@ -26,6 +28,7 @@
 #import "PreamblesController.h"
 #import "PreferencesControllerMigration.h"
 #import "ServiceRegularExpressionFiltersController.h"
+#import "SynchronizationAdditionalScriptsController.h"
 #import "Utils.h"
 
 #import <Security/Security.h>
@@ -151,6 +154,13 @@ NSString* CompositionConfigurationAdditionalProcessingScriptContentKey = @"body"
 
 NSString* AdditionalFilesPathsKey = @"AdditionalFilesPaths";
 
+NSString* SynchronizationNewDocumentsEnabledKey = @"SynchronizationNewDocumentsEnabled";
+NSString* SynchronizationNewDocumentsSynchronizePreambleKey = @"SynchronizationNewDocumentsSynchronizePreamble";
+NSString* SynchronizationNewDocumentsSynchronizeEnvironmentKey = @"SynchronizationNewDocumentsSynchronizeEnvironment";
+NSString* SynchronizationNewDocumentsSynchronizeBodyKey = @"SynchronizationNewDocumentsSynchronizeBody";
+NSString* SynchronizationNewDocumentsPathKey = @"SynchronizationNewDocumentsPath";
+NSString* SynchronizationAdditionalScriptsKey = @"SynchronizationAdditionalScripts";
+
 @interface PreferencesController (PrivateAPI)
 -(NSArrayController*) lazyEditionTextShortcutsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
 -(NSArray*) editionTextShortcutsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
@@ -166,6 +176,9 @@ NSString* AdditionalFilesPathsKey = @"AdditionalFilesPaths";
 -(NSArray*) serviceRegularExpressionFiltersFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
 -(AdditionalFilesController*) lazyAdditionalFilesControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
 -(NSArray*) additionalFilesPathsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
+-(SynchronizationAdditionalScriptsController*) lazySynchronizationAdditionalScriptsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
+-(NSDictionary*) synchronizationAdditionalScriptsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
++(NSMutableDictionary*) defaultSynchronizationAdditionalScripts;
 -(EncapsulationsController*) lazyEncapsulationsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
 -(NSArray*) encapsulationsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
 @end
@@ -224,6 +237,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     while((dict = [enumerator nextObject]))
       [defaultTextShortcuts addObject:[NSMutableDictionary dictionaryWithDictionary:dict]];
   }
+  
+  NSString* desktopPath = [[NSWorkspace sharedWorkspace]
+                             getBestStandardPast:NSDesktopDirectory
+                             domain:NSUserDomainMask
+                             defaultValue:[NSHomeDirectory() stringByAppendingPathComponent:@"Desktop"]];
 
   NSString* currentVersion = ![[self class] isLaTeXiT] ? nil : [[NSWorkspace sharedWorkspace] applicationVersion];
   NSDictionary* defaults =
@@ -379,6 +397,12 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                NSStringFromRect(NSMakeRect(235, 624, 200, 170)), LatexPaletteFrameKey,
                                                [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
                                                [NSNumber numberWithBool:YES], ShowWhiteColorWarningKey,
+                                               [NSNumber numberWithBool:NO], SynchronizationNewDocumentsEnabledKey,
+                                               [NSNumber numberWithBool:YES], SynchronizationNewDocumentsSynchronizePreambleKey,
+                                               [NSNumber numberWithBool:YES], SynchronizationNewDocumentsSynchronizeEnvironmentKey,
+                                               [NSNumber numberWithBool:YES], SynchronizationNewDocumentsSynchronizeBodyKey,
+                                               desktopPath, SynchronizationNewDocumentsPathKey,
+                                               [self defaultSynchronizationAdditionalScripts], SynchronizationAdditionalScriptsKey,
                                                nil];
                                                
   //read old LaTeXiT preferences if any
@@ -1604,6 +1628,209 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   return result;
 }
 //end additionalFilesController
+
+#pragma mark synchronization additional scripts
+
+-(BOOL) synchronizationNewDocumentsEnabled
+{
+  BOOL result = NO;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsEnabledKey];
+  else
+    result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationNewDocumentsEnabledKey, (CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
+  return result;
+}
+//end synchronizationNewDocumentsEnabled
+
+-(void) setSynchronizationNewDocumentsEnabled:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsEnabledKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)SynchronizationNewDocumentsEnabledKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setSynchronizationNewDocumentsEnabled:
+
+-(BOOL) synchronizationNewDocumentsSynchronizePreamble
+{
+  BOOL result = NO;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsSynchronizePreambleKey];
+  else
+    result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
+  return result;
+}
+//end synchronizationNewDocumentsSynchronizePreamble
+
+-(void) setSynchronizationNewDocumentsSynchronizePreamble:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsSynchronizePreambleKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setSynchronizationNewDocumentsSynchronizePreamble:
+
+-(BOOL) synchronizationNewDocumentsSynchronizeEnvironment
+{
+  BOOL result = NO;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsSynchronizeEnvironmentKey];
+  else
+    result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, (CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
+  return result;
+}
+//end synchronizationNewDocumentsSynchronizeEnvironment
+
+-(void) setSynchronizationNewDocumentsSynchronizeEnvironment:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsSynchronizeEnvironmentKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setSynchronizationNewDocumentsSynchronizeEnvironment:
+
+-(BOOL) synchronizationNewDocumentsSynchronizeBody
+{
+  BOOL result = NO;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsSynchronizeBodyKey];
+  else
+    result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, (CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
+  return result;
+}
+//end synchronizationNewDocumentsSynchronizeBody
+
+-(void) setSynchronizationNewDocumentsSynchronizeBody:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsSynchronizeBodyKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setSynchronizationNewDocumentsSynchronizeBody:
+
+-(NSString*) synchronizationNewDocumentsPath
+{
+  NSString* result = nil;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] stringForKey:SynchronizationNewDocumentsPathKey];
+  else
+    result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationNewDocumentsPathKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  return result;
+}
+//end synchronizationNewDocumentsPath
+
+-(void) setSynchronizationNewDocumentsPath:(NSString*)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:SynchronizationNewDocumentsPathKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)SynchronizationNewDocumentsPathKey, value, (CFStringRef)LaTeXiTAppKey);
+}
+//end setSynchronizationNewDocumentsPath:
+
+-(NSDictionary*) synchronizationAdditionalScripts
+{
+  NSDictionary* result = [self synchronizationAdditionalScriptsFromControllerIfPossible:YES createControllerIfNeeded:YES];
+  return result;
+}
+//end synchronizationAdditionalScripts
+
+-(SynchronizationAdditionalScriptsController*) synchronizationAdditionalScriptsController
+{
+  SynchronizationAdditionalScriptsController* result = [self lazySynchronizationAdditionalScriptsControllerWithCreationIfNeeded:YES];
+  return result;
+}
+//end synchronizationAdditionalScriptsController
+
+-(SynchronizationAdditionalScriptsController*) lazySynchronizationAdditionalScriptsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded
+{
+  SynchronizationAdditionalScriptsController* result = self->synchronizationAdditionalScriptsController;
+  if (!self->synchronizationAdditionalScriptsController && creationOptionIfNeeded)
+  {
+    if (self->isLaTeXiT)
+    {
+      self->synchronizationAdditionalScriptsController = [[SynchronizationAdditionalScriptsController alloc] initWithContent:nil];
+      [self->synchronizationAdditionalScriptsController setAvoidsEmptySelection:NO];
+      [self->synchronizationAdditionalScriptsController setAutomaticallyPreparesContent:YES];
+      [self->synchronizationAdditionalScriptsController setObjectClass:[NSMutableDictionary class]];
+      [self->synchronizationAdditionalScriptsController setPreservesSelection:YES];
+      [self->synchronizationAdditionalScriptsController bind:NSContentArrayBinding
+                                                    toObject:[NSUserDefaultsController sharedUserDefaultsController]
+                                                 withKeyPath:[NSUserDefaultsController adaptedKeyPath:SynchronizationAdditionalScriptsKey]
+                                                     options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                               [DictionaryToArrayTransformer transformerWithDescriptors:nil], NSValueTransformerBindingOption,
+                                                               [NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption,
+                                                               nil]];
+    }
+    else
+    {
+      NSDictionary* synchronizationAdditionalScripts = [NSMakeCollectable((NSDictionary*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationAdditionalScriptsKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+      NSArray* array = [[DictionaryToArrayTransformer transformerWithDescriptors:nil] transformedValue:synchronizationAdditionalScripts];
+      self->synchronizationAdditionalScriptsController = [[NSArrayController alloc] initWithContent:array];
+    }
+    result = self->synchronizationAdditionalScriptsController;
+  }//end if (!self->synchronizationAdditionalScriptsController && creationOptionIfNeeded)
+  return result;
+}
+//end lazySynchronizationAdditionalScriptsControllerWithCreationIfNeeded:
+
+-(NSDictionary*) synchronizationAdditionalScriptsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded
+{
+  NSDictionary* result = nil;
+  if (fromControllerIfPossible)
+  {
+    NSArray* array = [[self lazySynchronizationAdditionalScriptsControllerWithCreationIfNeeded:createControllerIfNeeded] arrangedObjects];
+    result = [[DictionaryToArrayTransformer transformerWithDescriptors:nil] reverseTransformedValue:array];
+  }//end if (fromControllerIfPossible)
+  if (!result)
+  {
+    if (self->isLaTeXiT)
+      result = [[NSUserDefaults standardUserDefaults] dictionaryForKey:SynchronizationAdditionalScriptsKey];
+    else
+      result = [NSMakeCollectable((NSDictionary*)CFPreferencesCopyAppValue((CFStringRef)SynchronizationAdditionalScriptsKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  }//end if (!result)
+  return result;
+}
+//end synchronizationAdditionalScriptsFromControllerIfPossible:createControllerIfNeeded:
+
++(NSMutableDictionary*) defaultSynchronizationAdditionalScripts
+{
+  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      [NSNumber numberWithInt:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+      @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+      nil], [[NSNumber numberWithInt:SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING] stringValue],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      [NSNumber numberWithInt:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+      @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+      nil], [[NSNumber numberWithInt:SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING] stringValue],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      [NSNumber numberWithInt:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+      @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+      nil], [[NSNumber numberWithInt:SYNCHRONIZATION_SCRIPT_PLACE_SAVING_PREPROCESSING] stringValue],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      [NSNumber numberWithInt:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+      @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+      @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+      nil], [[NSNumber numberWithInt:SYNCHRONIZATION_SCRIPT_PLACE_SAVING_POSTPROCESSING] stringValue],
+    nil];
+  return result;
+}
+//end defaultSynchronizationAdditionalScripts
 
 #pragma mark Palette LaTeX
 

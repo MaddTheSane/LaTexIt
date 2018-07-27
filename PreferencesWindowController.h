@@ -134,6 +134,7 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSButton*      compositionConfigurationsCurrentPsToPdfAdvancedButton;
   IBOutlet NSButton*      compositionConfigurationsCurrentPsToPdfPathChangeButton;
   IBOutlet NSButton*      compositionConfigurationsCurrentLoginShellUsedButton;
+  IBOutlet NSButton*      compositionConfigurationsCurrentResetButton;
 
   IBOutlet NSPanel*       compositionConfigurationsProgramArgumentsPanel;
   IBOutlet CompositionConfigurationsProgramArgumentsTableView* compositionConfigurationsProgramArgumentsTableView;
@@ -155,7 +156,7 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSBox*         compositionConfigurationsAdditionalScriptsDefiningBox;
   IBOutlet NSTextField*   compositionConfigurationsAdditionalScriptsDefiningShellTextField;
   IBOutlet NSTextView*    compositionConfigurationsAdditionalScriptsDefiningContentTextView;
-  IBOutlet NSPanel*       compositionConfigurationsAdditionalScriptsHelpPanel;
+           NSPanel*       compositionConfigurationsAdditionalScriptsHelpPanel;
   
   IBOutlet NSButton*    historySaveServiceResultsCheckbox;
   IBOutlet NSButton*    historyDeleteOldEntriesCheckbox;
@@ -186,6 +187,22 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSButton*                 additionalFilesAddButton;
   IBOutlet NSButton*                 additionalFilesRemoveButton;
   IBOutlet NSButton*                 additionalFilesHelpButton;
+  
+  IBOutlet NSButton*      synchronizationNewDocumentsEnabledButton;
+  IBOutlet NSButton*      synchronizationNewDocumentsSynchronizePreambleCheckBox;
+  IBOutlet NSButton*      synchronizationNewDocumentsSynchronizeEnvironmentCheckBox;
+  IBOutlet NSButton*      synchronizationNewDocumentsSynchronizeBodyCheckBox;
+  IBOutlet NSTextField*   synchronizationNewDocumentsPathTextField;
+  IBOutlet NSButton*      synchronizationNewDocumentsPathChangeButton;
+  IBOutlet NSTableView*   synchronizationAdditionalScriptsTableView;
+  IBOutlet NSPopUpButton* synchronizationAdditionalScriptsTypePopUpButton;
+  IBOutlet NSBox*         synchronizationAdditionalScriptsExistingBox;
+  IBOutlet NSTextField*   synchronizationAdditionalScriptsExistingPathTextField;
+  IBOutlet NSButton*      synchronizationAdditionalScriptsExistingPathChangeButton;
+  IBOutlet NSBox*         synchronizationAdditionalScriptsDefiningBox;
+  IBOutlet NSTextField*   synchronizationAdditionalScriptsDefiningShellTextField;
+  IBOutlet NSTextView*    synchronizationAdditionalScriptsDefiningContentTextView;
+           NSPanel*       synchronizationAdditionalScriptsHelpPanel;
   
   IBOutlet NSButton*                encapsulationsEnabledCheckBox;
   IBOutlet NSTextField*             encapsulationsLabel1;
@@ -224,12 +241,13 @@ extern NSString* PluginsToolbarItemIdentifier;
 
 -(IBAction) compositionConfigurationsManagerOpen:(id)sender;
 -(IBAction) compositionConfigurationsManagerClose:(id)sender;
--(IBAction) compositionConfigurationsChangePath:(id)sender;
 -(IBAction) compositionConfigurationsAdditionalScriptsOpenHelp:(id)sender;
+-(IBAction) compositionConfigurationsCurrentReset:(id)sender;
 
 -(IBAction) serviceRegularExpressionsHelpOpen:(id)sender;
 
 -(IBAction) additionalFilesHelpOpen:(id)sender;
+-(IBAction) synchronizationAdditionalScriptsOpenHelp:(id)sender;
 
 -(IBAction) updatesCheckNow:(id)sender;
 -(IBAction) updatesGotoWebSite:(id)sender;

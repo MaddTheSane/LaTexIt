@@ -31,7 +31,7 @@
 
 +(BOOL) allowsReverseTransformation
 {
-  return NO;
+  return YES;
 }
 //end allowsReverseTransformation
 
@@ -71,6 +71,16 @@
   result = !self->valueTransformer           ? result : [self->valueTransformer           transformedValue:result];
   result = !self->additionalValueTransformer ? result : [self->additionalValueTransformer transformedValue:result];
   result = !self->additionalKeyPath          ? result : [result valueForKeyPath:self->additionalKeyPath];
+  return result;
+}
+//end transformedValue:
+
+-(id) reverseTransformedValue:(id)value
+{
+  id result = value;
+  result = !self->additionalKeyPath          ? result : [result valueForKeyPath:self->additionalKeyPath];
+  result = !self->additionalValueTransformer ? result : [self->additionalValueTransformer reverseTransformedValue:result];
+  result = !self->valueTransformer           ? result : [self->valueTransformer           reverseTransformedValue:result];
   return result;
 }
 //end transformedValue:

@@ -9,9 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 #import "LaTeXiTSharedTypes.h"
+#import "UKKQueue.h"
 
 @class AppController;
 @class DocumentExtraPanelsController;
+@class ExportFormatOptionsPanes;
 @class ImagePopupButton;
 @class LatexitEquation;
 @class LibraryEquation;
@@ -20,6 +22,7 @@
 @class LogTableView;
 @class MyImageView;
 @class MySplitView;
+@class PropertyStorage;
 
 @interface MyDocument : NSDocument
 {
@@ -87,6 +90,13 @@
   NSResponder*     lastFirstResponder;
   
   BOOL shouldApplyToPasteboardAfterLatexization;
+  
+  UKKQueue* backSyncUkkQueue;
+  NSString* backSyncFilePath;
+  BOOL      backSyncFilePathLinkHasBeenBroken;
+  NSDate*   backSyncFileLastModificationDate;
+  PropertyStorage* backSyncOptions;
+  BOOL      backSyncIsSaving;
 }
 
 //interface changing
@@ -162,6 +172,7 @@
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation;
 -(void) applyLatexitEquation:(LatexitEquation*)latexitEquation isRecentLatexisation:(BOOL)isRecentLatexisation; //updates the document according to the given history item
 -(void) applyString:(NSString*)string;//updates the document according to the given source string, that is to be decomposed in preamble+body
+-(void) updateDocumentFromString:(NSString*)string updatePreamble:(BOOL)updatePreamble updateEnvironment:(BOOL)updateEnvironment updateBody:(BOOL)updateBody;
 
 -(void) triggerSmartHistoryFeature;
 
@@ -179,6 +190,13 @@
 -(void) windowDidResize:(NSNotification*)notification;
 //NSSplitViewDelegate
 -(void) splitViewDidResizeSubviews:(NSNotification*)notification;
+
+//backsync file
+-(BOOL) hasBackSyncFile;
+-(void) closeBackSyncFile;
+-(void) openBackSyncFile:(NSString*)path options:(NSDictionary*)options;
+-(IBAction) save:(id)sender;
+-(IBAction) saveAs:(id)sender;
 
 @end
 

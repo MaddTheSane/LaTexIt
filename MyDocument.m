@@ -13,6 +13,7 @@
 #import "BoolTransformer.h"
 #import "CGPDFExtras.h"
 #import "DocumentExtraPanelsController.h"
+#import "ExportFormatOptionsPanes.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "ImagePopupButton.h"
@@ -43,6 +44,7 @@
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "PreferencesWindowController.h"
+#import "PropertyStorage.h"
 #import "SMLSyntaxColouring.h"
 #import "SystemTask.h"
 #import "Utils.h"
@@ -178,6 +180,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [self closeBackSyncFile];
+  [self->backSyncOptions release];
   [MyDocument _releaseId:self->uniqueId];
   [self->documentExtraPanelsController release];
   [self setLinkBackLink:nil];
@@ -406,6 +410,32 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [self splitViewDidResizeSubviews:nil];  
   [window makeFirstResponder:[self preferredFirstResponder]];
   [self setDocumentStyle:preferredDocumentStyle];
+  
+  PreferencesController* preferenceController = [PreferencesController sharedController];
+  if ([preferenceController synchronizationNewDocumentsEnabled] && ![self fileURL])
+  {
+    NSString* path =
+      [[preferenceController synchronizationNewDocumentsPath]
+        stringByAppendingPathComponent:[[self displayName] stringByAppendingPathExtension:@"tex"]];
+    BOOL isDirectory = NO;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory])
+    {
+      NSString* defaultFileContent =
+        [NSString stringWithFormat:@"%@\n\\begin{document}\n\\end{document}\n",
+          [[preferenceController preambleDocumentAttributedString] string]];
+      NSData* defaultFileContentData = [defaultFileContent dataUsingEncoding:NSUTF8StringEncoding];
+      [defaultFileContentData writeToFile:path atomically:NO];
+    }//end if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory])
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] && !isDirectory)
+    {
+      [self openBackSyncFile:path options:
+        [NSDictionary dictionaryWithObjectsAndKeys:
+           [NSNumber numberWithBool:[preferenceController synchronizationNewDocumentsSynchronizePreamble]], @"synchronizePreamble",
+           [NSNumber numberWithBool:[preferenceController synchronizationNewDocumentsSynchronizeEnvironment]], @"synchronizeEnvironment",
+           [NSNumber numberWithBool:[preferenceController synchronizationNewDocumentsSynchronizeBody]], @"synchronizeBody",
+         nil]];
+    }//end if ([[NSFileManager defaultManager] fileExists:path isDirectory:&isDirectory] && !isDirectory)
+  }//end if ([preferenceController synchronizationNewDocumentsEnabled])
 }
 //end windowControllerDidLoadNib:
 
@@ -754,7 +784,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 //automatically called by Cocoa. The name of the document has nothing to do with a represented file
 -(NSString*) displayName
 {
-  NSString* title = documentTitle;
+  NSString* title = self->documentTitle;
   if ([self fileURL])
     title = [super displayName];
   else if (!title)
@@ -852,23 +882,21 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end readFromURL:ofType:error:
 
--(void) _decomposeString:(NSString*)string preamble:(NSString**)preamble body:(NSString**)body
+-(void) _decomposeString:(NSString*)string preamble:(NSString**)outPreamble body:(NSString**)outBody
 {
   //if a text document is opened, try to split it into preamble+body
   if (string)
   {
-    NSRange beginDocument = [string rangeOfString:@"\\begin{document}" options:NSCaseInsensitiveSearch];
-    NSRange endDocument   = [string rangeOfString:@"\\end{document}" options:NSCaseInsensitiveSearch];
-    *preamble = (beginDocument.location == NSNotFound) ? nil :
-                   [[string substringWithRange:NSMakeRange(0, beginDocument.location)] copy];
-    *body = (beginDocument.location == NSNotFound) ? [string copy] :
-               (endDocument.location == NSNotFound) ?
-                 [[string substringWithRange:
-                    NSMakeRange(beginDocument.location+beginDocument.length,
-                                [string length]-(beginDocument.location+beginDocument.length))] copy] :
-                 [[string substringWithRange:
-                    NSMakeRange(beginDocument.location+beginDocument.length,
-                                endDocument.location-(beginDocument.location+beginDocument.length))] copy];
+    NSArray* components =
+    [string captureComponentsMatchedByRegex:@"^\\s*(.*)\\s*\\\\begin\\{document\\}\\s*(.*)\\s*\\\\end\\{document\\}.*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [string length]) error:nil];
+    BOOL hasPreambleAndBody = ([components count] == 3);
+    NSString* preamble = !hasPreambleAndBody ? nil : [components objectAtIndex:1];
+    NSString* body = !hasPreambleAndBody ? string : [components objectAtIndex:2];
+    if (outPreamble)
+      *outPreamble = [preamble copy];
+    if (outBody)
+      *outBody = [body copy];
   }//end if string
 }
 //end _decomposeString:preamble:body:
@@ -891,7 +919,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) setPreamble:(NSAttributedString*)aString
 {
   [self->lowerBoxPreambleTextView clearErrors];
-  [[self->lowerBoxPreambleTextView textStorage] setAttributedString:(aString ? aString : [[[NSAttributedString alloc] init] autorelease])];
+  [self->lowerBoxPreambleTextView setAttributedString:aString];
   [[self->lowerBoxPreambleTextView syntaxColouring] recolourCompleteDocument];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->lowerBoxPreambleTextView];
   [self->lowerBoxPreambleTextView setNeedsDisplay:YES];
@@ -1439,7 +1467,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   latex_mode_t mode = (latex_mode_t) tag;*/
   PreferencesController* preferencesController = [PreferencesController sharedController];
   BOOL automaticHighContrastedPreviewBackground = [preferencesController documentUseAutomaticHighContrastedPreviewBackground];
-  NSColor* backgroundColor = automaticHighContrastedPreviewBackground ? nil : [self->upperBoxImageView backgroundColor];
+  NSColor* backgroundColor = /*!automaticHighContrastedPreviewBackground ? nil :*/ [self->upperBoxImageView backgroundColor];
   result = //self->linkedLibraryEquation ? [self->linkedLibraryEquation equation] :
       !transient ?
     [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData] useDefaults:YES] autorelease] :
@@ -1448,7 +1476,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                                    sourceText:[[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease]
                                         color:[self->lowerBoxControlsBoxFontColorWell color]
                                     pointSize:[self->lowerBoxControlsBoxFontSizeTextField doubleValue] date:[NSDate date]
-                                         mode:[self latexModeApplied] backgroundColor:backgroundColor] autorelease];
+                                         mode:[self latexModeApplied]
+                              backgroundColor:backgroundColor] autorelease];
   if (backgroundColor)
     [result setBackgroundColor:backgroundColor];
   return result;
@@ -1472,6 +1501,14 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     if (pdfString && ![pdfString isEqualToString:@""])
       [self applyString:pdfString];
   }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")))
+  {
+    NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    ok = (string != nil);
+    if (ok)
+      [self updateDocumentFromString:string updatePreamble:YES updateEnvironment:YES updateBody:YES];
+    [string release];
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")))
   else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
   {
     NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -1487,15 +1524,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) applyString:(NSString*)string
 {
   [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]  isRecentLatexisation:self->currentEquationIsARecentLatexisation];
-  NSString* preamble = nil;
-  NSString* body     = nil;
-  [self _decomposeString:string preamble:&preamble body:&body];
+  NSArray* components =
+    [string captureComponentsMatchedByRegex:@"^\\s*(.*)\\s*\\\\begin\\{document\\}\\s*(.*)\\s*\\\\end\\{document\\}.*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [string length]) error:nil];
+  BOOL hasPreambleAndBody = ([components count] == 3);
+  NSString* preamble = !hasPreambleAndBody ? nil : [components objectAtIndex:1];
+  NSString* body = !hasPreambleAndBody ? string : [components objectAtIndex:2];
   if (preamble)
     [self setPreamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]];
   if (body)
     [self setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
-  [preamble release];
-  [body release];
 }
 //end applyString:
 
@@ -1587,6 +1625,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     if (!latexitEquationBackgroundColor)
       latexitEquationBackgroundColor = colorFromUserDefaults;
     [self->upperBoxImageView setBackgroundColor:latexitEquationBackgroundColor updateHistoryItem:NO];
+    if (self->backSyncFilePath)
+      [self save:self];
   }
   else
   {
@@ -2007,7 +2047,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     self->linkedLibraryEquation = nil;
     [libraryEquation release];
     [self setDocumentTitle:nil];
-  }
+  }//end if (!libraryEquation || (self->linkedLibraryEquation == libraryEquation))
 }
 //end closeLinkedLibraryEquation:
 
@@ -2019,14 +2059,14 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       //[[[self undoManager] prepareWithInvocationTarget:self] setLinkedLibraryEquation:self->linkedLibraryEquation];
       [self closeLinkedLibraryEquation:self->linkedLibraryEquation];
-    }
+    }//end if (![self->linkedLibraryEquation managedObjectContext] || [self->linkedLibraryEquation isDeleted])
     else if ([[[notification userInfo] objectForKey:NSUpdatedObjectsKey] containsObject:self->linkedLibraryEquation])
     {
       [self applyLibraryEquation:self->linkedLibraryEquation];
       [self setDocumentTitle:[self->linkedLibraryEquation title]];
       if (isMacOS10_5OrAbove())
         [[self windowForSheet] setRepresentedFilename:[self->linkedLibraryEquation title]];
-    }
+    }//end if ([[[notification userInfo] objectForKey:NSUpdatedObjectsKey] containsObject:self->linkedLibraryEquation])
   }//end if (self->linkedLibraryEquation)
 }
 //end libraryDidChangeNotification:
@@ -2513,5 +2553,420 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [self->lowerBoxSourceTextView setSelectedRanges:shiftedSelectedRanges];
 }
 //end formatUncomment:
+
+-(BOOL) hasBackSyncFile
+{
+  BOOL result = (self->backSyncFilePath != nil);
+  return result;
+}
+//end hasBackSyncFile
+
+-(void) closeBackSyncFile
+{
+  if (self->backSyncUkkQueue)
+  {
+    if (self->backSyncFilePath)
+    {
+      [self->backSyncUkkQueue removePath:self->backSyncFilePath];
+      [self->backSyncUkkQueue removePath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
+    }//end if (self->backSyncFilePath)
+  }//end if (self->backSyncUkkQueue)
+  [self->backSyncFilePath release];
+  self->backSyncFilePath = nil;
+  [self->backSyncFileLastModificationDate release];
+  self->backSyncFileLastModificationDate = nil;
+  NSString* filePath = [[self fileURL] path];
+  NSImage* icon = !filePath ? nil : [[NSWorkspace sharedWorkspace] iconForFile:filePath];
+  [[[self windowForSheet] standardWindowButton:NSWindowDocumentIconButton] setImage:icon];
+}
+//end closeBackSyncFile
+
+-(void) openBackSyncFile:(NSString*)path options:(NSDictionary*)options
+{
+  if (![path isEqualToString:self->backSyncFilePath])
+    [self closeBackSyncFile];
+  if (path)
+  {
+    if (!self->backSyncOptions)
+      self->backSyncOptions = [[PropertyStorage alloc] initWithDictionary:options];
+    else
+      [self->backSyncOptions setDictionary:options];
+    self->backSyncFilePath = [path copy];
+    self->backSyncFileLastModificationDate =
+      [[[[NSFileManager defaultManager] bridge_attributesOfItemAtPath:self->backSyncFilePath error:nil]
+        fileModificationDate] copy];
+    if (!self->backSyncUkkQueue)
+    {
+      self->backSyncUkkQueue = [[UKKQueue alloc] init];
+      [self->backSyncUkkQueue setDelegate:self];
+    }//end if (!self->backSyncUkkQueue)
+    [self->backSyncUkkQueue addPath:self->backSyncFilePath];
+    [self->backSyncUkkQueue addPath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
+    [self setFileURL:[NSURL fileURLWithPath:self->backSyncFilePath]];
+    NSImage* icon = [NSImage imageNamed:@"backsync"];
+    [[[self windowForSheet] standardWindowButton:NSWindowDocumentIconButton] setImage:icon];
+    [self watcher:nil receivedNotification:UKFileWatcherWriteNotification forPath:self->backSyncFilePath];
+  }//end if (path)
+}
+//end openBackSyncFile:
+
+-(IBAction) save:(id)sender
+{
+  BOOL saveWithoutBackSync = [self fileURL] && !self->backSyncFilePath;
+  BOOL saveWithBackSync = (self->backSyncFilePath != nil);
+  if (saveWithoutBackSync || saveWithBackSync)
+  {
+    NSString* preamble = [[[self->lowerBoxPreambleTextView string] mutableCopy] autorelease];
+    NSString* source = [[[self->lowerBoxSourceTextView string] mutableCopy] autorelease];
+    latex_mode_t latexMode = (latex_mode_t) [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
+    NSString* addSymbolLeft  =
+    (latexMode == LATEX_MODE_ALIGN) ? @"\\begin{align*}" :
+    (latexMode == LATEX_MODE_EQNARRAY) ? @"\\begin{eqnarray*}" :
+    (latexMode == LATEX_MODE_DISPLAY) ? @"\\[" :
+    (latexMode == LATEX_MODE_INLINE) ? @"$" :
+    @"";
+    NSString* addSymbolRight =
+    (latexMode == LATEX_MODE_ALIGN) ? @"\\end{align*}" :
+    (latexMode == LATEX_MODE_EQNARRAY) ? @"\\end{eqnarray*}" :
+    (latexMode == LATEX_MODE_DISPLAY) ? @"\\]" :
+    (latexMode == LATEX_MODE_INLINE) ? @"$" :
+    @"";
+    BOOL synchronizePreamble = saveWithBackSync &&
+      [[[self->backSyncOptions objectForKey:@"synchronizePreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
+    BOOL synchronizeEnvironment = saveWithBackSync &&
+      [[[self->backSyncOptions objectForKey:@"synchronizeEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
+    BOOL synchronizeBody = saveWithBackSync &&
+      [[[self->backSyncOptions objectForKey:@"synchronizeBody"] dynamicCastToClass:[NSNumber class]] boolValue];
+    NSMutableString* string = [NSMutableString string];
+    if (preamble && (saveWithoutBackSync || synchronizePreamble))
+      [string appendString:preamble];
+    if (preamble && source && (saveWithoutBackSync || synchronizeEnvironment || synchronizeBody))
+      [string appendString:@"\\begin{document}\n"];
+    if (addSymbolLeft && (saveWithoutBackSync || synchronizeEnvironment))
+      [string appendString:addSymbolLeft];
+    if (source && (saveWithoutBackSync || synchronizeBody))
+      [string appendString:source];
+    if (addSymbolRight && (saveWithoutBackSync || synchronizeEnvironment))
+      [string appendString:addSymbolRight];
+    if (preamble && source && (saveWithoutBackSync || synchronizeEnvironment || synchronizeBody))
+      [string appendString:@"\n\\end{document}"];
+
+    NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    if (saveWithBackSync)
+      self->backSyncIsSaving = YES;
+    @try{
+      NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-%lu", (unsigned long)self->uniqueId];
+      NSMutableString* fullLog = [NSMutableString string];
+      NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+      NSDictionary* extraEnvironment =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+       [self->backSyncFilePath stringByDeletingLastPathComponent], @"CURRENTDIRECTORY",
+       self->backSyncFilePath, @"INPUTFILE",
+       nil];
+      NSMutableDictionary* environment1 = [NSMutableDictionary dictionaryWithDictionary:fullEnvironment];
+      [environment1 addEntriesFromDictionary:extraEnvironment];
+      PreferencesController* preferencesController = [PreferencesController sharedController];
+      NSDictionary* synchronizationAdditionalScripts = [preferencesController synchronizationAdditionalScripts];
+      LaTeXProcessor* latexProcessor = [LaTeXProcessor sharedLaTeXProcessor];
+      NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+      NSDictionary* compositionConfiguration = [preferencesController compositionConfigurationDocument];
+      
+      NSDictionary* preprocessingscript = [synchronizationAdditionalScripts objectForKey:[NSString stringWithFormat:@"%d",SYNCHRONIZATION_SCRIPT_PLACE_SAVING_PREPROCESSING]];
+      if (saveWithBackSync && preprocessingscript && [[preprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+      {
+        DebugLog(1, @"Pre-processing on save");
+        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing on save", @"Pre-processing on save")];
+        [fullLog appendFormat:@"%@\n", [latexProcessor descriptionForScript:preprocessingscript]];
+        [latexProcessor executeScript:preprocessingscript setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
+             compositionConfiguration:compositionConfiguration];
+      }//end if (saveWithBackSync && preprocessingscript && [[preprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+
+      if (saveWithoutBackSync)
+        [data writeToURL:[self fileURL] atomically:YES];
+      else if (saveWithBackSync)
+        [data writeToFile:self->backSyncFilePath atomically:NO];
+      
+      NSDictionary* postprocessingscript = [synchronizationAdditionalScripts objectForKey:[NSString stringWithFormat:@"%d",SYNCHRONIZATION_SCRIPT_PLACE_SAVING_POSTPROCESSING]];
+      if (saveWithBackSync && postprocessingscript && [[postprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+      {
+        DebugLog(1, @"Post-processing on save");
+        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Post-processing on save", @"Post-processing on save")];
+        [fullLog appendFormat:@"%@\n", [latexProcessor descriptionForScript:postprocessingscript]];
+        [latexProcessor executeScript:postprocessingscript setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
+             compositionConfiguration:compositionConfiguration];
+      }//end if (saveWithBackSync && postprocessingscript && [[postprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+    }
+    @finally {
+      if (saveWithBackSync)
+      {
+        //invoke file watcher notifications before setting backyncIsSaving to NO
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate date]];
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate date]];
+        [self performSelector:@selector(setBackSyncIsSaving:) withObject:[NSNumber numberWithBool:NO] afterDelay:0.1];
+        //self->backSyncIsSaving = NO;
+      }
+    }//end @finally
+  }//end if (saveWithoutBackSync || saveWithBackSync)
+}
+//end saveToBackSyncFile
+
+-(void) setBackSyncIsSaving:(NSNumber*)value
+{
+  self->backSyncIsSaving = [value boolValue];
+}
+//end setBackSyncIsSaving:
+
+-(IBAction) saveAs:(id)sender
+{
+  if (!self->backSyncOptions)
+    self->backSyncOptions =
+      [[PropertyStorage alloc] initWithDictionary:
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          [NSNumber numberWithBool:NO], @"synchronizeEnabled",
+          [NSNumber numberWithBool:YES], @"synchronizePreamble",
+          [NSNumber numberWithBool:YES], @"synchronizeEnvironment",
+          [NSNumber numberWithBool:YES], @"synchronizeBody",
+          nil]];
+  NSBox* accessoryView = [[[NSBox alloc] initWithFrame:NSZeroRect] autorelease];
+  [accessoryView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+  [accessoryView setTitlePosition:NSNoTitle];
+  [accessoryView setBorderType:NSNoBorder];
+  NSButton* synchronizeEnabledCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+  [synchronizeEnabledCheckBox setButtonType:NSSwitchButton];
+  [synchronizeEnabledCheckBox setTitle:NSLocalizedString(@"Continuously synchronize file content", @"Continuously synchronize file content")];
+  [synchronizeEnabledCheckBox sizeToFit];
+  [synchronizeEnabledCheckBox bind:NSValueBinding toObject:self->backSyncOptions withKeyPath:@"synchronizeEnabled" options:nil];
+  [accessoryView addSubview:synchronizeEnabledCheckBox];
+  NSButton* synchronizePreambleCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+  [synchronizePreambleCheckBox setButtonType:NSSwitchButton];
+  [synchronizePreambleCheckBox setTitle:NSLocalizedString(@"Synchronize preamble", @"Synchronize preamble")];
+  [synchronizePreambleCheckBox sizeToFit];
+  [synchronizePreambleCheckBox bind:NSValueBinding toObject:self->backSyncOptions withKeyPath:@"synchronizePreamble" options:nil];
+  [synchronizePreambleCheckBox bind:NSEnabledBinding toObject:self->backSyncOptions withKeyPath:@"synchronizeEnabled" options:nil];
+  [accessoryView addSubview:synchronizePreambleCheckBox];
+  NSButton* synchronizeEnvironmentCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+  [synchronizeEnvironmentCheckBox setButtonType:NSSwitchButton];
+  [synchronizeEnvironmentCheckBox setTitle:NSLocalizedString(@"Synchronize environment", @"Synchronize environment")];
+  [synchronizeEnvironmentCheckBox sizeToFit];
+  [synchronizeEnvironmentCheckBox bind:NSValueBinding toObject:self->backSyncOptions withKeyPath:@"synchronizeEnvironment" options:nil];
+  [synchronizeEnvironmentCheckBox bind:NSEnabledBinding toObject:self->backSyncOptions withKeyPath:@"synchronizeEnabled" options:nil];
+  [accessoryView addSubview:synchronizeEnvironmentCheckBox];
+  NSButton* synchronizeBodyCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+  [synchronizeBodyCheckBox setButtonType:NSSwitchButton];
+  [synchronizeBodyCheckBox setTitle:NSLocalizedString(@"Synchronize body", @"Synchronize body")];
+  [synchronizeBodyCheckBox sizeToFit];
+  [synchronizeBodyCheckBox bind:NSValueBinding toObject:self->backSyncOptions withKeyPath:@"synchronizeBody" options:nil];
+  [synchronizeBodyCheckBox bind:NSEnabledBinding toObject:self->backSyncOptions withKeyPath:@"synchronizeEnabled" options:nil];
+  [accessoryView addSubview:synchronizeBodyCheckBox];
+
+  [synchronizeBodyCheckBox setFrameOrigin:NSMakePoint(8+20, 8)];
+  [synchronizeEnvironmentCheckBox setFrameOrigin:NSMakePoint(8+20, CGRectGetMaxY(NSRectToCGRect([synchronizeBodyCheckBox frame]))+4)];
+  [synchronizePreambleCheckBox setFrameOrigin:NSMakePoint(8+20, CGRectGetMaxY(NSRectToCGRect([synchronizeEnvironmentCheckBox frame]))+4)];
+  [synchronizeEnabledCheckBox setFrameOrigin:NSMakePoint(8, CGRectGetMaxY(NSRectToCGRect([synchronizePreambleCheckBox frame]))+4)];
+  [accessoryView sizeToFit];
+  
+  id panel = [[NSSavePanel savePanel] retain];
+  [panel setCanCreateDirectories:YES];
+  [panel setCanSelectHiddenExtension:YES];
+  [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
+  [panel setAllowsOtherFileTypes:YES];
+  [panel setExtensionHidden:NO];
+  [panel setAccessoryView:accessoryView];
+  [panel beginSheetForDirectory:nil
+                           file:[NSLocalizedString(@"Untitled", @"Untitled") stringByAppendingPathExtension:@"tex"]
+                 modalForWindow:[self windowForSheet] modalDelegate:self
+                 didEndSelector:@selector(saveAsDidEnd:returnCode:contextInfo:)
+                    contextInfo:panel];
+}
+//end saveAsDidEnd:
+
+-(void) saveAsDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
+{
+  NSSavePanel* panel = (NSSavePanel*)contextInfo;
+  BOOL synchronizeEnabled =
+    [[[self->backSyncOptions objectForKey:@"synchronizeEnabled"] dynamicCastToClass:[NSNumber class]] boolValue];
+  if (returnCode == NSFileHandlingPanelOKButton)
+  {
+    [self closeBackSyncFile];
+    NSString* filename = [panel filename];
+    [self setFileURL:[NSURL fileURLWithPath:filename]];
+    [self save:self];
+    if (synchronizeEnabled)
+    {
+      [self openBackSyncFile:filename options:[self->backSyncOptions dictionary]];
+      [self watcher:nil receivedNotification:UKFileWatcherWriteNotification forPath:self->backSyncFilePath];
+    }//end if (synchronizeEnabled)
+  }//end if (returnCode == NSFileHandlingPanelOKButton)
+  [panel release];
+}
+//end saveAsDidEnd:returnCode:contextInfo:
+
+-(void) watcher:(id<UKFileWatcher>)kq receivedNotification:(NSString*)nm forPath:(NSString*)fpath
+{
+  DebugLog(1, @"watcher:<%@> <%@>", nm, fpath);
+  @synchronized(self)
+  {
+    BOOL shouldUpdate = NO;
+    if (self->backSyncIsSaving)
+      shouldUpdate = NO;
+    else if ([fpath isEqualToString:[self->backSyncFilePath stringByDeletingLastPathComponent]])
+    {
+      NSDate* newFileModificationDate = 
+        [[[NSFileManager defaultManager] bridge_attributesOfItemAtPath:self->backSyncFilePath error:nil]
+          fileModificationDate];
+      shouldUpdate = newFileModificationDate && 
+        (!self->backSyncFileLastModificationDate || [newFileModificationDate isGreaterThan:self->backSyncFileLastModificationDate]);
+      if (shouldUpdate && self->backSyncFilePathLinkHasBeenBroken)
+      {
+        [self->backSyncUkkQueue addPath:self->backSyncFilePath];
+        self->backSyncFilePathLinkHasBeenBroken = NO;
+      }//end if (shouldUpdate && self->backSyncFilePathLinkHasBeenBroken)
+    }//end if ([fpath isEqualToString:[self->backSyncFilePath stringByDeletingLastPathComponent]])
+    else if ([nm isEqualToString:UKFileWatcherDeleteNotification])
+    {
+      self->backSyncFilePathLinkHasBeenBroken = YES;
+      if (self->backSyncFilePath)
+        [self->backSyncUkkQueue removePath:self->backSyncFilePath];
+      shouldUpdate = NO;
+    }//end if ([nm isEqualToString:UKFileWatcherDeleteNotification])
+    else if ([nm isEqualToString:UKFileWatcherRenameNotification])
+    {
+      self->backSyncFilePathLinkHasBeenBroken = YES;
+      if (self->backSyncFilePath)
+        [self->backSyncUkkQueue removePath:self->backSyncFilePath];
+      shouldUpdate = NO;
+    }//end if ([nm isEqualToString:UKFileWatcherRenameNotification])
+    else if ([nm isEqualToString:UKFileWatcherWriteNotification])
+      shouldUpdate = YES;
+    else if ([nm isEqualToString:UKFileWatcherAttributeChangeNotification])
+      shouldUpdate = YES;
+    if (shouldUpdate)
+    {
+      [self->backSyncFileLastModificationDate release];
+      self->backSyncFileLastModificationDate =
+        [[[[NSFileManager defaultManager] bridge_attributesOfItemAtPath:self->backSyncFilePath error:nil]
+          fileModificationDate] copy];
+      NSStringEncoding encoding;
+      NSError* error = nil;
+
+      BOOL shouldUseScripts = (kq != nil);
+      NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-%lu", (unsigned long)self->uniqueId];
+      NSMutableString* fullLog = [NSMutableString string];
+      NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+      NSDictionary* extraEnvironment =
+        [NSDictionary dictionaryWithObjectsAndKeys:
+           [self->backSyncFilePath stringByDeletingLastPathComponent], @"CURRENTDIRECTORY",
+           self->backSyncFilePath, @"INPUTFILE",
+           nil];
+      NSMutableDictionary* environment1 = [NSMutableDictionary dictionaryWithDictionary:fullEnvironment];
+      [environment1 addEntriesFromDictionary:extraEnvironment];
+      PreferencesController* preferencesController = [PreferencesController sharedController];
+      NSDictionary* synchronizationAdditionalScripts = [preferencesController synchronizationAdditionalScripts];
+      LaTeXProcessor* latexProcessor = [LaTeXProcessor sharedLaTeXProcessor];
+      NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+      NSDictionary* compositionConfiguration = [preferencesController compositionConfigurationDocument];
+
+      NSDictionary* preprocessingscript = [synchronizationAdditionalScripts objectForKey:[NSString stringWithFormat:@"%d",SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING]];
+      if (shouldUseScripts && preprocessingscript && [[preprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+      {
+        DebugLog(1, @"Pre-processing on load");
+        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing on load", @"Pre-processing on load")];
+        [fullLog appendFormat:@"%@\n", [latexProcessor descriptionForScript:preprocessingscript]];
+        [latexProcessor executeScript:preprocessingscript setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
+   compositionConfiguration:compositionConfiguration];
+      }//end if (shouldUseScripts && preprocessingscript && [[preprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+      
+      NSString* string = [NSString stringWithContentsOfFile:self->backSyncFilePath guessEncoding:&encoding error:&error];
+
+      NSDictionary* postprocessingscript = [synchronizationAdditionalScripts objectForKey:[NSString stringWithFormat:@"%d",SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING]];
+      if (shouldUseScripts && postprocessingscript && [[postprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+      {
+        DebugLog(1, @"Post-processing on load");
+        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Post-processing on load", @"Post-processing on load")];
+        [fullLog appendFormat:@"%@\n", [latexProcessor descriptionForScript:preprocessingscript]];
+        [latexProcessor executeScript:postprocessingscript setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
+             compositionConfiguration:compositionConfiguration];
+      }//end if (shouldUseScripts && postprocessingscript && [[postprocessingscript objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
+
+      BOOL synchronizePreamble =
+        [[[self->backSyncOptions objectForKey:@"synchronizePreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
+      BOOL synchronizeEnvironment =
+        [[[self->backSyncOptions objectForKey:@"synchronizeEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
+      BOOL synchronizeBody =
+        [[[self->backSyncOptions objectForKey:@"synchronizeBody"] dynamicCastToClass:[NSNumber class]] boolValue];
+      [self updateDocumentFromString:string updatePreamble:synchronizePreamble updateEnvironment:synchronizeEnvironment updateBody:synchronizeBody];
+    }//end if ([nm isEqualToString:UKFileWatcherRenameNotification])
+  }//end @synchronized(self)
+}
+//end watcher:receivedNotification:
+
+-(void) updateDocumentFromString:(NSString*)string updatePreamble:(BOOL)updatePreamble updateEnvironment:(BOOL)updateEnvironment updateBody:(BOOL)updateBody
+{
+  if (string)
+  {
+    NSArray* components =
+      [string captureComponentsMatchedByRegex:@"^\\s*(.*)\\s*\\\\begin\\{document\\}\\s*(.*)\\s*\\\\end\\{document\\}.*$"
+                                      options:RKLDotAll range:NSMakeRange(0, [string length]) error:nil];
+    BOOL hasPreambleAndBody = ([components count] == 3);
+    NSString* preamble = !hasPreambleAndBody ? nil : [components objectAtIndex:1];
+    NSString* body = !hasPreambleAndBody ? string : [components objectAtIndex:2];
+    components = nil;
+    latex_mode_t latexMode = LATEX_MODE_TEXT;
+    if (updateEnvironment)
+    {
+      components = (latexMode != LATEX_MODE_TEXT) ? nil :
+      [body captureComponentsMatchedByRegex:@"^\\s*\\\\begin\\{align\\*\\}(.*)\\\\end\\{align\\*\\}\\s*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+      if (components && ([components count] == 2))
+      {
+        latexMode = LATEX_MODE_ALIGN;
+        body = [components objectAtIndex:1];
+      }//end if (components && ([components count] == 2))
+      
+      components = (latexMode != LATEX_MODE_TEXT) ? nil :
+      [body captureComponentsMatchedByRegex:@"^\\s*\\$\\$(.*)\\$\\$\\s*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+      if (components && ([components count] == 2))
+      {
+        latexMode = LATEX_MODE_DISPLAY;
+        body = [components objectAtIndex:1];
+      }//end if (components && ([components count] == 2))
+      
+      components = (latexMode != LATEX_MODE_TEXT) ? nil :
+      [body captureComponentsMatchedByRegex:@"^\\s*\\$\\displayStyle(.*)\\$\\$\\s*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+      if (components && ([components count] == 2))
+      {
+        latexMode = LATEX_MODE_DISPLAY;
+        body = [components objectAtIndex:1];
+      }//end if (components && ([components count] == 2))
+      
+      components = (latexMode != LATEX_MODE_TEXT) ? nil :
+      [body captureComponentsMatchedByRegex:@"^\\s*\\\\\\[(.*)\\\\\\]\\s*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+      if (components && ([components count] == 2))
+      {
+        latexMode = LATEX_MODE_DISPLAY;
+        body = [components objectAtIndex:1];
+      }//end if (components && ([components count] == 2))
+      
+      components = (latexMode != LATEX_MODE_TEXT) ? nil :
+      [body captureComponentsMatchedByRegex:@"^\\s*\\$(.*)\\$\\s*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+      if (components && ([components count] == 2))
+      {
+        latexMode = LATEX_MODE_INLINE;
+        body = [components objectAtIndex:1];
+      }//end if (components && ([components count] == 2))
+    }//end if (updateEnvironment)
+    
+    if (updatePreamble && [[preamble trim] length])
+      [self setPreamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]];
+    if (updateBody && body)
+      [self->lowerBoxSourceTextView setString:body];
+    [self setLatexModeApplied:latexMode];
+  }//end if (string)
+}
+//end updateDocumentFromString:updatePreamble:updateEnvironment:updateBody:
 
 @end

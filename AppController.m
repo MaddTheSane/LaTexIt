@@ -23,6 +23,7 @@
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "HistoryView.h"
+#import "IsEqualToTransformer.h"
 #import "LatexitEquation.h"
 #import "LaTeXPalettesWindowController.h"
 #import "LaTeXProcessor.h"
@@ -41,7 +42,9 @@
 #import "NSFileManagerExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMenuExtended.h"
+#import "NSObjectExtended.h"
 #import "NSOutlineViewExtended.h"
+#import "NSSavePanelExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
@@ -51,6 +54,7 @@
 #import "PreferencesController.h"
 #import "PreferencesControllerMigration.h"
 #import "PreferencesWindowController.h"
+#import "PropertyStorage.h"
 #import "RegexKitLite.h"
 #import "Semaphore.h"
 #import "ServiceRegularExpressionFiltersController.h"
@@ -309,6 +313,9 @@ static NSMutableDictionary* cachePaths = nil;
   [self->libraryWindowController release];
   [self->historyWindowController release];
   [self->preferencesWindowController release];
+  [self->openFileOptions release];
+  [self->openFileTypeView release];
+  [self->openFileTypePopUpButton release];
   [super dealloc];
 }
 //end dealloc
@@ -779,6 +786,25 @@ static NSMutableDictionary* cachePaths = nil;
       ok = (data != nil);
     }
   }
+  else if ([sender action] == @selector(open:))
+  {
+    ok = YES;
+  }//end if ([sender action] == @selector(open:))
+  else if ([sender action] == @selector(closeBackSync:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = [myDocument hasBackSyncFile];
+  }//end if ([sender action] == @selector(closeBackSync:))
+  else if ([sender action] == @selector(saveAs:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil);
+  }//end if ([sender action] == @selector(saveAs:))
+  else if ([sender action] == @selector(save:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = ([myDocument fileURL] != nil);
+  }//end if ([sender action] == @selector(save:):))
   else if ([sender action] == @selector(copyAs:))
   {
     if ([sender tag] == -1)//default
@@ -1162,19 +1188,143 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) openFile:(id)sender
 {
-  if (![self->openFileTypePopUp numberOfItems])
+  if (!self->openFileOptions)
+    self->openFileOptions =
+      [[PropertyStorage alloc] initWithDictionary:
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          [NSNumber numberWithBool:NO], @"synchronizeAvailable",
+          [NSNumber numberWithBool:NO], @"synchronizeEnabled",
+          [NSNumber numberWithBool:NO], @"synchronizePreamble",
+          [NSNumber numberWithBool:NO], @"synchronizeEnvironment",
+          [NSNumber numberWithBool:NO], @"synchronizeBody",
+          nil]];
+  if (!self->openFileTypeView)
   {
-    [self->openFileTypePopUp addItemsWithTitles:[NSArray arrayWithObjects:
+    NSString* NSEnabled2Binding = [NSEnabledBinding stringByAppendingString:@"2"];
+
+    self->openFileTypeView = [[NSBox alloc] initWithFrame:NSZeroRect];
+    [self->openFileTypeView setBorderType:NSNoBorder];
+    [self->openFileTypeView setTitlePosition:NSNoTitle];
+
+    NSTextField* openFileTypeLabel = [[[NSTextField alloc] initWithFrame:NSZeroRect] autorelease];
+    [openFileTypeLabel setEditable:NO];
+    [openFileTypeLabel setSelectable:NO];
+    [openFileTypeLabel setBordered:NO];
+    [openFileTypeLabel setBezeled:NO];
+    [openFileTypeLabel setDrawsBackground:NO];
+    [openFileTypeLabel setStringValue:[NSString stringWithFormat:@"%@ :", NSLocalizedString(@"File type", @"File type")]];
+    [openFileTypeLabel sizeToFit];
+    [self->openFileTypeView addSubview:openFileTypeLabel];
+
+    self->openFileTypePopUpButton = [[NSPopUpButton alloc] initWithFrame:NSZeroRect];
+    [self->openFileTypePopUpButton addItemsWithTitles:[NSArray arrayWithObjects:
       NSLocalizedString(@"PDF Equation", @"PDF Equation"),
       NSLocalizedString(@"Text file", @"Text file"),
       NSLocalizedString(@"LaTeXiT library", @"LaTeXiT library"),
       NSLocalizedString(@"LaTeX Equation Editor library", @"LaTeX Equation Editor library"),
       NSLocalizedString(@"LaTeXiT history", @"LaTeXiT history"),
       NSLocalizedString(@"LaTeXiT LaTeX Palette", @"LaTeXiT  LaTeX Palette"), nil]];
-    [self->openFileTypePopUp selectItemAtIndex:0];
-  }
+    [self->openFileTypePopUpButton setTarget:self];
+    [self->openFileTypePopUpButton setAction:@selector(changeOpenFileType:)];
+    [self->openFileTypePopUpButton selectItemAtIndex:0];
+    [self->openFileTypePopUpButton sizeToFit];
+    [self->openFileTypeView addSubview:self->openFileTypePopUpButton];
+    
+    NSButton* openFileSynchronizeCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+    [openFileSynchronizeCheckBox setButtonType:NSSwitchButton];
+    [openFileSynchronizeCheckBox setTitle:NSLocalizedString(@"Continuously synchronize file content", @"Continuously synchronize file content")];
+    [openFileSynchronizeCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
+                          withKeyPath:@"synchronizeAvailable"
+                              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                       NSNegateBooleanTransformerName, NSValueTransformerNameBindingOption,
+                                       nil]];
+    [openFileSynchronizeCheckBox bind:NSEnabledBinding toObject:self->openFileOptions
+                          withKeyPath:@"synchronizeAvailable"
+                              options:nil];
+    [openFileSynchronizeCheckBox bind:NSValueBinding toObject:self->openFileOptions
+                          withKeyPath:@"synchronizeEnabled"
+                              options:nil];
+    [openFileSynchronizeCheckBox sizeToFit];
+    [self->openFileTypeView addSubview:openFileSynchronizeCheckBox];
+
+    NSButton* openFileSynchronizePreambleCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+    [openFileSynchronizePreambleCheckBox setButtonType:NSSwitchButton];
+    [openFileSynchronizePreambleCheckBox setTitle:NSLocalizedString(@"Synchronize preamble", @"Synchronize preamble")];
+    [openFileSynchronizePreambleCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
+                                  withKeyPath:@"synchronizeAvailable"
+                                      options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                NSNegateBooleanTransformerName, NSValueTransformerNameBindingOption,
+                                                nil]];
+    [openFileSynchronizePreambleCheckBox bind:NSEnabledBinding toObject:self->openFileOptions
+                          withKeyPath:@"synchronizeAvailable"
+                              options:nil];
+    [openFileSynchronizePreambleCheckBox bind:NSEnabled2Binding toObject:self->openFileOptions
+                                  withKeyPath:@"synchronizeEnabled"
+                                      options:nil];
+    [openFileSynchronizePreambleCheckBox bind:NSValueBinding toObject:self->openFileOptions
+                          withKeyPath:@"synchronizePreamble"
+                              options:nil];
+    [openFileSynchronizePreambleCheckBox sizeToFit];
+    [self->openFileTypeView addSubview:openFileSynchronizePreambleCheckBox];
+    
+    NSButton* openFileSynchronizeEnvironmentCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+    [openFileSynchronizeEnvironmentCheckBox setButtonType:NSSwitchButton];
+    [openFileSynchronizeEnvironmentCheckBox setTitle:NSLocalizedString(@"Synchronize environment", @"Synchronize environment")];
+    [openFileSynchronizeEnvironmentCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
+                                  withKeyPath:@"synchronizeAvailable"
+                                      options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                               NSNegateBooleanTransformerName, NSValueTransformerNameBindingOption,
+                                               nil]];
+    [openFileSynchronizeEnvironmentCheckBox bind:NSEnabledBinding toObject:self->openFileOptions
+                                  withKeyPath:@"synchronizeAvailable"
+                                      options:nil];
+    [openFileSynchronizeEnvironmentCheckBox bind:NSEnabled2Binding toObject:self->openFileOptions
+                                  withKeyPath:@"synchronizeEnabled"
+                                      options:nil];
+    [openFileSynchronizeEnvironmentCheckBox bind:NSValueBinding toObject:self->openFileOptions
+                                  withKeyPath:@"synchronizeEnvironment"
+                                      options:nil];
+    [openFileSynchronizeEnvironmentCheckBox sizeToFit];
+    [self->openFileTypeView addSubview:openFileSynchronizeEnvironmentCheckBox];
+    
+    NSButton* openFileSynchronizeBodyCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
+    [openFileSynchronizeBodyCheckBox setButtonType:NSSwitchButton];
+    [openFileSynchronizeBodyCheckBox setTitle:NSLocalizedString(@"Synchronize body", @"Synchronize body")];
+    [openFileSynchronizeBodyCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
+                                     withKeyPath:@"synchronizeAvailable"
+                                         options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                  NSNegateBooleanTransformerName, NSValueTransformerNameBindingOption,
+                                                  nil]];
+    [openFileSynchronizeBodyCheckBox bind:NSEnabledBinding toObject:self->openFileOptions
+                                     withKeyPath:@"synchronizeAvailable"
+                                         options:nil];
+    [openFileSynchronizeBodyCheckBox bind:NSEnabled2Binding toObject:self->openFileOptions
+                                     withKeyPath:@"synchronizeEnabled"
+                                         options:nil];
+    [openFileSynchronizeBodyCheckBox bind:NSValueBinding toObject:self->openFileOptions
+                                     withKeyPath:@"synchronizeBody"
+                                         options:nil];
+    [openFileSynchronizeBodyCheckBox sizeToFit];
+    [self->openFileTypeView addSubview:openFileSynchronizeBodyCheckBox];
+    
+    [openFileSynchronizeBodyCheckBox setFrameOrigin:NSMakePoint(8+20, 8)];
+    [openFileSynchronizeEnvironmentCheckBox setFrameOrigin:NSMakePoint(8+20, CGRectGetMaxY(NSRectToCGRect([openFileSynchronizeBodyCheckBox frame]))+4)];
+    [openFileSynchronizePreambleCheckBox setFrameOrigin:NSMakePoint(8+20, CGRectGetMaxY(NSRectToCGRect([openFileSynchronizeEnvironmentCheckBox frame]))+4)];
+    [openFileSynchronizeCheckBox setFrameOrigin:NSMakePoint(8, CGRectGetMaxY(NSRectToCGRect([openFileSynchronizePreambleCheckBox frame]))+4)];
+    [openFileTypeLabel setFrameOrigin:NSMakePoint(8, CGRectGetMaxY(NSRectToCGRect([openFileSynchronizeCheckBox frame]))+4)];
+    [self->openFileTypePopUpButton setFrameOrigin:NSMakePoint(CGRectGetMaxX(NSRectToCGRect([openFileTypeLabel frame]))+8,
+                                                              CGRectGetMinY(NSRectToCGRect([openFileTypeLabel frame]))+
+                                                              ([openFileTypeLabel frame].size.height-[self->openFileTypePopUpButton frame].size.height)/2)];
+    [self->openFileTypeView sizeToFit];
+
+    [self->openFileOptions setObject:[NSNumber numberWithBool:NO] forKey:@"synchronizeEnabled"];
+    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizePreamble"];
+    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizeEnvironment"];
+    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizeBody"];
+  }//end if (!self->openFileTypeView)
+  [self->openFileOptions setObject:[NSNumber numberWithBool:NO] forKey:@"synchronizeEnabled"];
   self->openFileTypeOpenPanel = [NSOpenPanel openPanel];
-  [self changeOpenFileType:self->openFileTypePopUp];
+  [self changeOpenFileType:openFileTypePopUpButton];
   [self->openFileTypeOpenPanel setAllowsMultipleSelection:NO];
   [self->openFileTypeOpenPanel setCanChooseDirectories:NO];
   [self->openFileTypeOpenPanel setCanChooseFiles:YES];
@@ -1186,7 +1336,18 @@ static NSMutableDictionary* cachePaths = nil;
   if (result == NSOKButton)
   {
     NSString* filePath = [[[self->openFileTypeOpenPanel URLs] lastObject] path];
-    [self application:NSApp openFile:filePath];
+    BOOL synchronizeAvailable =
+      [[[self->openFileOptions objectForKey:@"synchronizeAvailable"] dynamicCastToClass:[NSNumber class]] boolValue];
+    BOOL synchronizeEnabled =
+      [[[self->openFileOptions objectForKey:@"synchronizeEnabled"] dynamicCastToClass:[NSNumber class]] boolValue];
+    if (synchronizeAvailable && synchronizeEnabled)
+    {
+      [[NSDocumentController sharedDocumentController] newDocument:nil];
+      MyDocument* document = (MyDocument*) [self currentDocument];
+      [document openBackSyncFile:filePath options:[self->openFileOptions dictionary]];
+    }//end if (synchronizeAvailable && synchronizeEnabled)
+    else
+      [self application:NSApp openFile:filePath];
   }
   self->openFileTypeOpenPanel = nil;
 }
@@ -1194,9 +1355,10 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) changeOpenFileType:(id)sender
 {
-  if (self->openFileTypeOpenPanel && (sender == self->openFileTypePopUp))
+  NSPopUpButton* openFilePopupButton = [sender dynamicCastToClass:[NSPopUpButton class]];
+  if (self->openFileTypeOpenPanel && openFilePopupButton)
   {
-    int selectedIndex = [self->openFileTypePopUp indexOfSelectedItem];
+    int selectedIndex = [openFilePopupButton indexOfSelectedItem];
     if (selectedIndex == 0)
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"com.adobe.pdf", nil]];
     else if (selectedIndex == 1)
@@ -1211,21 +1373,23 @@ static NSMutableDictionary* cachePaths = nil;
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexpalette", nil]];
     else
       [self->openFileTypeOpenPanel setAllowedFileTypes:nil];
-    [self->openFileTypeOpenPanel validateVisibleColumns];
-  }
+    [self->openFileTypeOpenPanel validateVisibleColumns2];
+    [self->openFileOptions setObject:[NSNumber numberWithBool:(selectedIndex == 1)] forKey:@"synchronizeAvailable"];
+  }//end if (self->openFileTypeOpenPanel && openFilePopupButton)
 }
 //end changeOpenFileType:
 
--(BOOL) panel:(id)sender shouldShowFilename:(NSString *)filename
+-(BOOL) panel:(id)sender shouldEnableURL:(NSURL*)url
 {
   BOOL result = YES;
   if (sender == self->openFileTypeOpenPanel)
   {
+    NSString* filename = [url path];
     NSArray* allowedFileTypes = [self->openFileTypeOpenPanel allowedFileTypes];
     BOOL isDirectory = NO;
     result = ([[NSFileManager defaultManager] fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory &&
               ![[NSWorkspace sharedWorkspace] isFilePackageAtPath:filename]) ||
-              [allowedFileTypes containsObject:[filename pathExtension]];
+    [allowedFileTypes containsObject:[filename pathExtension]];
     NSEnumerator* enumerator = [allowedFileTypes objectEnumerator];
     NSString*     uti = nil;
     if (!result)
@@ -1233,14 +1397,42 @@ static NSMutableDictionary* cachePaths = nil;
       FSRef fsRefToItem;
       FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &fsRefToItem, NULL );
       CFTypeRef itemUTI = NULL;
-      LSCopyItemAttribute( &fsRefToItem, kLSRolesAll, kLSItemContentType, &itemUTI );
+      LSCopyItemAttribute( &fsRefToItem, kLSRolesAll, kLSItemContentType, &itemUTI);
       while(!result && ((uti = [enumerator nextObject])))
         result |= UTTypeConformsTo((CFStringRef)itemUTI, (CFStringRef)uti);
-    }
-  }
+    }//end if (!result)
+  }//end if (sender == self->openFileTypeOpenPanel)
+  return result;
+}
+//end panel:shouldEnableURL:
+
+-(BOOL) panel:(id)sender shouldShowFilename:(NSString *)filename
+{
+  BOOL result = [self panel:sender shouldEnableURL:[NSURL fileURLWithPath:filename]];
   return result;
 }
 //end panel:shouldShowFilename:
+
+-(IBAction) closeBackSync:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  [document closeBackSyncFile];
+}
+//end closeBackSync:
+
+-(IBAction) saveAs:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  [document saveAs:sender];
+}
+//end saveAs:
+
+-(IBAction) save:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  [document save:sender];
+}
+//end save:
 
 -(IBAction) copyAs:(id)sender
 {
@@ -1264,7 +1456,7 @@ static NSMutableDictionary* cachePaths = nil;
       default: mode = LATEX_MODE_TEXT; break;
     }
     [document setLatexModeRequested:mode];
-  }
+  }//end if (document)
 }
 //end makeLatexAndExport:
 
@@ -1810,7 +2002,9 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL found = NO;
   while(!found && ((executableName = [executableNameEnumerator nextObject])))
   {
-    if (![fileManager fileExistsAtPath:proposedPath])
+    BOOL isDirectory = NO;
+    if (![fileManager fileExistsAtPath:proposedPath isDirectory:&isDirectory] || isDirectory ||
+        ![fileManager isExecutableFileAtPath:proposedPath])
       proposedPath = [self findUnixProgram:executableName tryPrefixes:prefixes environment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment] useLoginShell:useLoginShell];
     if ([fileManager fileExistsAtPath:proposedPath])
     {
@@ -1857,7 +2051,10 @@ static NSMutableDictionary* cachePaths = nil;
           [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
       }
       BOOL pathProposedIsEmpty = !pathProposed || [pathProposed isEqualToString:@""];
-      BOOL ok = !pathProposedIsEmpty && [[NSFileManager defaultManager] isExecutableFileAtPath:pathProposed];
+      BOOL isDirectory = NO;
+      BOOL ok = !pathProposedIsEmpty &&
+                [[NSFileManager defaultManager] fileExistsAtPath:pathProposed isDirectory:&isDirectory] && !isDirectory &&
+                [[NSFileManager defaultManager] isExecutableFileAtPath:pathProposed];
       //currently, the only check is the option -v, at least to see if the program can be executed
       NSString* options = (!pathKey || [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey]
                                     || [pathKey isEqualToString:CompositionConfigurationPsToPdfPathKey]) ? @"" : @"-v";
@@ -2154,7 +2351,7 @@ static NSMutableDictionary* cachePaths = nil;
     NSArray* windows = [document windowControllers];
     NSWindow* window = [[windows lastObject] window];
     [document setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
-                                                        @"Equation linked with another application")];
+                                                 @"Equation linked with another application")];
     [window makeKeyAndOrderFront:self];
     [window makeFirstResponder:[document preferredFirstResponder]];
   }//end if (document && latexitEquation)

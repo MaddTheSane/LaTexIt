@@ -398,5 +398,29 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       ]]></description>
       <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.6.1</sparkle:releaseNotesLink>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.7.0</guid>
+      <title>Version 2.7.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>nouvelle fonctionnalité &quot;synchronisation en arrière plan&quot; pour partager un fichier avec une application tierce&nbsp;;</li>
+          <li>précalcul du PDF avec polices vectorisées pour un export plus rapide&nbsp;;</li>
+          <li>correction de la gestion de la police de caractère lors d'un glisser/déposer sur la zone de texte&nbsp;;</li>
+          <li>meilleur import de texte&nbsp;;</li>
+          <li>la couleur de fond de l'équation est maintenant conservée lors de l'insertion dans la bibliothèque&nbsp;;</li>
+          <li>correction de bugs mineurs.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.7.0</sparkle:releaseNotesLink>
+			<pubDate>Tue, 02 Sep 2014 11:35:30 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_0.dmg"
+				sparkle:version="2.7.0"
+                   sparkle:shortVersionString="2.7.0"
+				type="application/octet-stream"
+				length="10727575"
+				sparkle:dsaSignature="MCwCFHBbWdYvsnllzIr6Y9Alg8C+Vm0tAhR/4e0JjaH0KYlsG80tVkG+FOt9dA=="
+			/>
+    </item>
   </channel> 
 </rss>

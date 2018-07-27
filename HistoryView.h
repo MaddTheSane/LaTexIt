@@ -14,9 +14,9 @@
 @class MyDocument;
 
 @interface HistoryView : NSTableView {
-  HistoryController* historyItemsController;
-  NSPoint            lastDragStartPointSelfBased;
-  BOOL               shouldRedrag;
+  HistoryController*  historyItemsController;
+  NSPoint             lastDragStartPointSelfBased;
+  BOOL                shouldRedrag;
 }
 
 -(HistoryController*) historyItemsController;

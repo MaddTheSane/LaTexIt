@@ -122,6 +122,17 @@ static NSMutableSet* createdTemporaryPaths = nil;
 }
 //end bridge_attributesOfFileSystemForPath:error:
 
+-(NSDictionary *) bridge_attributesOfItemAtPath:(NSString *)path error:(NSError **)error
+{
+  NSDictionary* result = nil;
+  if ([self respondsToSelector:@selector(attributesOfFileSystemForPath:error:)])
+    result = [self attributesOfItemAtPath:path error:error];
+  else
+    result = [self fileAttributesAtPath:path traverseLink:YES];
+  return result;
+}
+//end bridge_attributesOfItemAtPath:error:
+
 -(BOOL) bridge_setAttributes:(NSDictionary *)attributes ofItemAtPath:(NSString *)path error:(NSError **)error
 {
   BOOL result = NO;

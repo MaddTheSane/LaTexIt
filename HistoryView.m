@@ -297,7 +297,13 @@
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  export_format_t oldExportFormatCurrentSession = [preferencesController exportFormatCurrentSession];
+  [preferencesController setExportFormatCurrentSession:[preferencesController exportFormatPersistent]];
+  [self tableView:self writeRowsWithIndexes:[self selectedRowIndexes] toPasteboard:pasteboard];
+  [preferencesController setExportFormatCurrentSession:oldExportFormatCurrentSession];
   
+  /*
   //LatexitEquationsPboardType
   NSArray* selectedHistoryItems = [self->historyItemsController selectedObjects];
   NSMutableArray* selectedLatexitEquations = [NSMutableArray arrayWithCapacity:[selectedHistoryItems count]];
@@ -316,7 +322,7 @@
     [pasteboard setData:lastLatexitEquationPdfData forType:NSPDFPboardType];
     [pasteboard addTypes:[NSArray arrayWithObject:@"com.adobe.pdf"] owner:self];
     [pasteboard setData:lastLatexitEquationPdfData forType:@"com.adobe.pdf"];
-  }//end if (lastLatexitEquationPdfData)
+  }//end if (lastLatexitEquationPdfData)*/
 }
 //end copy:
 
@@ -512,7 +518,8 @@
     
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-    [historyItem writeToPasteboard:pboard isLinkBackRefresh:NO lazyDataProvider:[historyItem equation]];
+    export_format_t exportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
+    [historyItem writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:[historyItem equation]];
   }//end if ([rowIndexes count])
   return result;
 }
@@ -590,10 +597,12 @@
                                      [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
                                      [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                      nil];
-      NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
-        dataForType:exportFormat pdfData:pdfData exportOptions:exportOptions
-             compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                     uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+      NSData* data = nil;
+      if (!data)
+        data = [[LaTeXProcessor sharedLaTeXProcessor]
+          dataForType:exportFormat pdfData:pdfData exportOptions:exportOptions
+               compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                       uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
       [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                            ofItemAtPath:filePath error:0];

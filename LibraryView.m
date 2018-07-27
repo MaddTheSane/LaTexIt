@@ -557,12 +557,16 @@
 -(IBAction) copy:(id)sender
 {
   NSPasteboard* pasteBoard = [NSPasteboard generalPasteboard];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  export_format_t oldExportFormatCurrentSession = [preferencesController exportFormatCurrentSession];
+  [preferencesController setExportFormatCurrentSession:[preferencesController exportFormatPersistent]];
   NSArray* selectedItems = [self selectedItems];
   if ([selectedItems count])
   {
     [[self dataSource] outlineView:self writeItems:selectedItems toPasteboard:pasteBoard];
     [pasteBoard setPropertyList:nil forType:LibraryItemsWrappedPboardType];//this pboard must be persistent
   }//end if ([selectedItems count])
+  [preferencesController setExportFormatCurrentSession:oldExportFormatCurrentSession];
 }
 //end copy:
 

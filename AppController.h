@@ -28,6 +28,7 @@
 @class LibraryWindowController;
 @class MyDocument;
 @class PreferencesWindowController;
+@class PropertyStorage;
 @class SUUpdater;
 
 @interface AppController : NSObject <LinkBackServerDelegate> {
@@ -39,10 +40,12 @@
   IBOutlet NSWindow*      whiteColorWarningWindow;
   IBOutlet NSButton*      whiteColorWarningWindowCheckBox;
   IBOutlet SUUpdater*     sparkleUpdater;
-  IBOutlet NSView*        openFileTypeView;
-  IBOutlet NSPopUpButton* openFileTypePopUp;
+
+  NSBox*                  openFileTypeView;
   NSOpenPanel*            openFileTypeOpenPanel;
-  
+  NSPopUpButton*          openFileTypePopUpButton;
+  PropertyStorage*        openFileOptions;
+
   //some info on current configuration
   BOOL isPdfLaTeXAvailable;
   BOOL isXeLaTeXAvailable;
@@ -104,6 +107,10 @@
 -(IBAction) makeLatex:(id)sender;
 -(IBAction) makeLatexAndExport:(id)sender;
 -(IBAction) displayLog:(id)sender;
+
+-(IBAction) closeBackSync:(id)sender;
+-(IBAction) saveAs:(id)sender;
+-(IBAction) save:(id)sender;
 
 -(IBAction) formatChangeAlignment:(id)sender;
 -(IBAction) formatComment:(id)sender;
@@ -203,4 +210,7 @@
 //NSApplicationDelegate
 -(BOOL) application:(NSApplication*)theApplication openFile:(NSString*)filename;
 
+//private
+-(void) _findPathWithConfiguration:(id)configuration;
+-(void) _checkPathWithConfiguration:(id)configuration;
 @end

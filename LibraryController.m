@@ -166,6 +166,7 @@
   self->currentlyDraggedItems = nil;
   [pasteBoard declareTypes:[NSArray array] owner:nil];
   
+  PreferencesController* preferencesController = [PreferencesController sharedController];
   BOOL isChangePasteboardOnTheFly = ([pasteBoard dataForType:NSFilesPromisePboardType] != nil);
   if (!isChangePasteboardOnTheFly)
     [pasteBoard declareTypes:[NSArray array] owner:nil];
@@ -211,7 +212,8 @@
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
     LatexitEquation* lastLatexitEquation = [latexitEquations lastObject];
-    [lastLatexitEquation writeToPasteboard:pasteBoard isLinkBackRefresh:NO lazyDataProvider:lastLatexitEquation];
+    export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+    [lastLatexitEquation writeToPasteboard:pasteBoard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:lastLatexitEquation];
   }//end if ([latexitEquations count])
 
   if (count && !isChangePasteboardOnTheFly)
@@ -222,9 +224,9 @@
   }
 
   //NSStringPBoardType may contain some info for LibraryFiles the label of the equations : useful for users that only want to \ref this equation
-  if ([libraryEquations count] && [[PreferencesController sharedController] encapsulationsEnabled])
+  if ([libraryEquations count] && [preferencesController encapsulationsEnabled])
   {
-    NSString*        encapsulation = [[PreferencesController sharedController] encapsulationSelected];
+    NSString*        encapsulation = [preferencesController encapsulationSelected];
     NSMutableString* labels        = [NSMutableString string];
     NSEnumerator*    enumerator    = [libraryEquations objectEnumerator];
     LibraryEquation* libraryEquation = nil;

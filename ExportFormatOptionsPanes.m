@@ -286,6 +286,12 @@
 }
 //end exportFormatOptionsTextPanel
 
+-(NSBox*) exportFormatOptionsTextBox
+{
+  return self->exportFormatOptionsTextBox;
+}
+//end exportFormatOptionsTextBox
+
 -(BOOL) textExportPreamble
 {
   return self->textExportPreamble;

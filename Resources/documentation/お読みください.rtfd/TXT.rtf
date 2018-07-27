@@ -207,8 +207,9 @@ Like with preambles, you can access quickly the body templates with the small po
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f2 \'92\'c7\'89\'c1\'83\'74\'83\'40\'83\'43\'83\'8b
+\f2 \cf0 \'92\'c7\'89\'c1\'83\'74\'83\'40\'83\'43\'83\'8b
 \f1 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
@@ -325,7 +326,22 @@ From version 1.8.0, LaTeXiT allows the user to use scipts during pre-, middle- a
 \f1\fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
-LaTeX 
+File synchronization and additional scripts\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Since version 2.6.2, LaTeXiT can handle the synchronization of an underlying text file. Either this file has been open with the menu "File > Open\'85 > Text file" (and option "continuously synchronize file content"), or, such a file has been created through "File > Save as\'85" and the same option.\
+In both cases:\
+-at each  LaTeXization, the file content is updated by the text defining the current equation\
+-or if the file is externally modified by another program, LaTeXiT is automatically updated with the new content\
+Please note that the synchronization is focused on the file name. If the file is renamed and a new file with the old name is created, then the synchronzation is made with the new file.\
+\
+Moreover, in "Preferences > Advances > Synchronization additional scripts", custom processes can be defined, either when LaTeXiT saves the underlying file content, or when it detects a new content in that file.\
+In those scripts, the variable $INPUTFLE is added in the enviromnent and contains the file name.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul LaTeX 
 \f2 \'83\'70\'83\'8c\'83\'62\'83\'67
 \f1 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -515,6 +531,18 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.7.0 (2014/09/02)
+\f0\b\fs24 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+
+\f1\b0\fs22 \cf0 -new "background synchronization" feature to share a file with another program\'a0;\
+-prefetch PDF w.o.f. for faster export\'a0;\
+-fixed text font when drag'n dropping text in the text area\'a0;\
+-better text import\'a0;\
+-equation background color is now properly kept when inserting equations in the library\'a0;\
+-fixed minor bugs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
 v 2.6.1 (2014/05/19)\
 \pard\pardeftab720\ql\qnatural
 \cf0 - Illustrator
@@ -534,7 +562,6 @@ v 2.6.1 (2014/05/19)\
 - 
 \f2 \'83\'56\'83\'58\'83\'65\'83\'80\'8a\'c2\'8b\'ab\'90\'dd\'92\'e8\'82\'cc\'81\'75\'83\'4c\'81\'5b\'83\'7b\'81\'5b\'83\'68\'81\'76\'82\'c5\'8c\'a9\'82\'e2\'82\'b7\'82\'a2\'82\'e6\'82\'a4\'82\'c9\'83\'54\'81\'5b\'83\'72\'83\'58\'8b\'40\'94\'5c\'82\'cc\'83\'81\'83\'6a\'83\'85\'81\'5b\'83\'5e\'83\'43\'83\'67\'83\'8b\'82\'f0\'92\'5a\'8f\'6b
 \f1 \cf5 \cb6 \
-\pard\pardeftab720\ql\qnatural
 \cf0 \cb1 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 v 2.6.0 (2014/04/17)\

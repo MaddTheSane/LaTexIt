@@ -122,7 +122,7 @@
   [self->saveAccessoryViewSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
     
   [self->saveAccessoryViewPopupFormat setTarget:self];
-  [self->saveAccessoryViewPopupFormat setAction:@selector(nilAction:)];
+  [self->saveAccessoryViewPopupFormat setAction:@selector(changePath:)];
   [self->saveAccessoryViewPopupFormat bind:NSSelectedTagBinding toObject:self
     withKeyPath:@"saveAccessoryViewExportFormat" options:nil];
   [self->saveAccessoryViewScalePercentTextField bind:NSValueBinding toObject:self

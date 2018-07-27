@@ -31,6 +31,7 @@
 -(BOOL)      bridge_removeItemAtPath:(NSString*)path error:(NSError**)error;
 -(BOOL)      bridge_moveItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error;
 -(NSDictionary *) bridge_attributesOfFileSystemForPath:(NSString *)path error:(NSError **)error;
+-(NSDictionary *) bridge_attributesOfItemAtPath:(NSString *)path error:(NSError **)error;
 -(BOOL)      bridge_setAttributes:(NSDictionary *)attributes ofItemAtPath:(NSString *)path error:(NSError **)error;
 @end
 

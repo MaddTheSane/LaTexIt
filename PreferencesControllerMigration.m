@@ -312,7 +312,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     if (!foundEqnarray)
       [localBodyTemplatesController addObject:[[localBodyTemplatesController class] bodyTemplateDictionaryEncodedForEnvironment:@"eqnarray*"]];
   }//end if (!newLatexitVersion || ([newLatexitVersion compare:@"2.1.0" options:NSNumericSearch] == NSOrderedAscending))
-
+  
   if (self->isLaTeXiT)
   {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];

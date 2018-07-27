@@ -12,6 +12,8 @@
 
 extern NSString* LatexitEquationsPboardType;
 
+@class CHExportPrefetcher;
+
 @interface LatexitEquation : NSManagedObject <NSCopying, NSCoding> {
   //NSData*             pdfData;     //pdf data representing the image. It may contain advanced PDF features like meta-data keywords, creator...
   //NSAttributedString* preamble;    //the user preamble of the latex source code
@@ -29,6 +31,8 @@ extern NSString* LatexitEquationsPboardType;
   BOOL annotateDataDirtyState;
   NSImage* pdfCachedImage;
   BOOL isModelPrior250;
+  
+  CHExportPrefetcher* exportPrefetcher;
 }
 
 +(NSEntityDescription*) entity;
@@ -99,8 +103,9 @@ extern NSString* LatexitEquationsPboardType;
 -(NSString*) titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
--(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
+-(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(id) plistDescription;
 -(id) initWithDescription:(id)description;
+-(CHExportPrefetcher*) exportPrefetcher;
 
 @end

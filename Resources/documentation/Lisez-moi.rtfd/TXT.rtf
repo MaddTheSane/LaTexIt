@@ -257,10 +257,23 @@ LinkBack est une technologie, incorpor\'e9e \'e0 LaTeXiT. Si vous d\'e9posez une
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs26 \cf0 \ul \
-Palettes LaTeX\
+Synchronisation de fichiers et scripts additionnels\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+Depuis la version 2.6.2, LaTeXiT g\'e8re la synchronisation d'un fichier texte sous-jacent. Soit ce fichier a \'e9t\'e9 ouvert avec le menu "Fichier > Ouvrir\'85 > Fichier texte" et l'option "Synchroniser en continu le contenu du fichier", soit ce fichier a \'e9t\'e9 cr\'e9\'e9 avec le menu "Fichier > Enregistrer sous\'85" et cette m\'eame option.\
+Dans les deux cas\'a0:\
+-\'e0 chaque LaTeXisation, le contenu du fichier est remplac\'e9 par la d\'e9finition de l'\'e9quation actuelle\
+-si le fichier est modifi\'e9 par un programme tiers, LaTeXiT met automatiquement \'e0 jour son affichage\
+Notez que la synchronisation se focalise sur le nom du fichier. Si le fichier est renomm\'e9, et qu'un nouveau fichier est cr\'e9\'e9 avec l'ancien nom, la synchronisation est faite avec le nouveau fichier.\
+\
+En outre, dans les "Pr\'e9f\'e9rences > Avanc\'e9 > Script additionnels de synchronisation", des traitements personnalis\'e9s peuvent \'eatre configur\'e9s, lors de la sauvegarde (initi\'e9e par LaTeXiT) ou du chargement (d\'fb \'e0 un changement externe) du fichier sous-jacent.\
+Dans ces scripts, la variable $INPUTFILE est ajout\'e9e \'e0 l'environnement et contient le nom du fichier.
+\fs26 \ul \
+\
+Palettes LaTeX\
+
+\fs22 \ulnone \
 Depuis la version 1.14.0, LaTeXiT g\'e8re les palettes LaTeX comme des plugins. Les palettes int\'e9gr\'e9es font partie de l'application, mais des palettes suppl\'e9mentaires peuvent \'eatre ajout\'e9es dans les r\'e9pertoires Biblioth\'e8que, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
 Exemples :\
 /Biblioth\'e8que/Application Support/LaTeXiT/Palettes\
@@ -432,7 +445,18 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone v 2.6.1 (19 mai 2014)\
+\fs22 \cf0 \ulnone v 2.7.0 (2 septembre 2014)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 -nouvelle fonctionnalit\'e9 "synchronisation en arri\'e8re plan" pour partager un fichier avec une application tierce\'a0;\
+-pr\'e9calcul du PDF avec polices vectoris\'e9es pour un export plus rapide\'a0;\
+-correction de la gestion de la police de caract\'e8re lors d'un glisser/d\'e9poser sur la zone de texte\'a0;\
+-meilleur import de texte\'a0;\
+-la couleur de fond de l'\'e9quation est maintenant conserv\'e9e lors de l'insertion dans la biblioth\'e8que\'a0;\
+-corretion de bugs mineurs.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.6.1 (19 mai 2014)\
 \pard\pardeftab720\ql\qnatural
 \cf0 -Correction de la bounding box des "PDF avec polices vectoris\'e9es" pour les rendre compatibles avec Illustrator\'a0;\
 -Ajout du menu "Format>Commenter/D\'e9commenter"\'a0;\

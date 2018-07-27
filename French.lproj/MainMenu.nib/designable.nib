@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1705"/>
+			<integer value="81"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -63,7 +63,7 @@
 								</object>
 								<object class="NSMenuItem" id="144337905">
 									<reference key="NSMenu" ref="272643580"/>
-									<string key="NSTitle">Faire un don...</string>
+									<string key="NSTitle">Faire un don…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="533649799"/>
@@ -71,7 +71,7 @@
 								</object>
 								<object class="NSMenuItem" id="938592206">
 									<reference key="NSMenu" ref="272643580"/>
-									<string key="NSTitle">Vérifier les mises à jour...</string>
+									<string key="NSTitle">Vérifier les mises à jour…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="533649799"/>
@@ -219,7 +219,7 @@
 								</object>
 								<object class="NSMenuItem" id="962379027">
 									<reference key="NSMenu" ref="925704490"/>
-									<string key="NSTitle">Ouvrir un fichier texte...</string>
+									<string key="NSTitle">Ouvrir…</string>
 									<string key="NSKeyEquiv">o</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -228,7 +228,7 @@
 								</object>
 								<object class="NSMenuItem" id="357434888">
 									<reference key="NSMenu" ref="925704490"/>
-									<string key="NSTitle">Exporter l'image...</string>
+									<string key="NSTitle">Exporter l'image…</string>
 									<string key="NSKeyEquiv">e</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -246,6 +246,43 @@
 									<reference key="NSMixedImage" ref="294559507"/>
 								</object>
 								<object class="NSMenuItem" id="169010733">
+									<reference key="NSMenu" ref="925704490"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="533649799"/>
+									<reference key="NSMixedImage" ref="294559507"/>
+								</object>
+								<object class="NSMenuItem" id="77741620">
+									<reference key="NSMenu" ref="925704490"/>
+									<string key="NSTitle">Fermer le lien de synchronisation</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="533649799"/>
+									<reference key="NSMixedImage" ref="294559507"/>
+								</object>
+								<object class="NSMenuItem" id="905465848">
+									<reference key="NSMenu" ref="925704490"/>
+									<string key="NSTitle">Enregister</string>
+									<string key="NSKeyEquiv">s</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="533649799"/>
+									<reference key="NSMixedImage" ref="294559507"/>
+								</object>
+								<object class="NSMenuItem" id="276235289">
+									<reference key="NSMenu" ref="925704490"/>
+									<string key="NSTitle">Enregistrer sous…</string>
+									<string key="NSKeyEquiv">S</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="533649799"/>
+									<reference key="NSMixedImage" ref="294559507"/>
+								</object>
+								<object class="NSMenuItem" id="369751422">
 									<reference key="NSMenu" ref="925704490"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -412,7 +449,7 @@
 										<array class="NSMutableArray" key="NSMenuItems">
 											<object class="NSMenuItem" id="183608577">
 												<reference key="NSMenu" ref="25335806"/>
-												<string key="NSTitle">Rechercher...</string>
+												<string key="NSTitle">Rechercher…</string>
 												<string key="NSKeyEquiv">f</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -832,7 +869,7 @@
 								</object>
 								<object class="NSMenuItem" id="686660519">
 									<reference key="NSMenu" ref="663913412"/>
-									<string key="NSTitle">Importer...</string>
+									<string key="NSTitle">Importer…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -841,7 +878,7 @@
 								</object>
 								<object class="NSMenuItem" id="282040456">
 									<reference key="NSMenu" ref="663913412"/>
-									<string key="NSTitle">Exporter...</string>
+									<string key="NSTitle">Exporter…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -913,7 +950,7 @@
 								</object>
 								<object class="NSMenuItem" id="904993156">
 									<reference key="NSMenu" ref="354648624"/>
-									<string key="NSTitle">Importer...</string>
+									<string key="NSTitle">Importer…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -922,7 +959,7 @@
 								</object>
 								<object class="NSMenuItem" id="280225124">
 									<reference key="NSMenu" ref="354648624"/>
-									<string key="NSTitle">Exporter...</string>
+									<string key="NSTitle">Exporter…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1279,7 +1316,7 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{467, 365}, {388, 162}}</string>
 				<int key="NSWTFlags">1886912512</int>
-				<string key="NSWindowTitle">Faire un don...</string>
+				<string key="NSWindowTitle">Faire un don…</string>
 				<object class="NSMutableString" key="NSWindowClass">
 					<characters key="NS.bytes">NSPanel</characters>
 				</object>
@@ -1335,7 +1372,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 							<object class="NSButtonCell" key="NSCell" id="259749058">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134217728</int>
-								<string key="NSContents"> Aller sur le site Web de LaTeXiT... </string>
+								<string key="NSContents"> Aller sur le site Web de LaTeXiT…</string>
 								<reference key="NSSupport" ref="637230022"/>
 								<reference key="NSControlView" ref="560698224"/>
 								<int key="NSTag">1</int>
@@ -1475,60 +1512,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 			</object>
 			<object class="NSCustomObject" id="916921061">
 				<string key="NSClassName">SUUpdater</string>
-			</object>
-			<object class="NSCustomView" id="7679857">
-				<nil key="NSNextResponder"/>
-				<int key="NSvFlags">268</int>
-				<array class="NSMutableArray" key="NSSubviews">
-					<object class="NSTextField" id="226021795">
-						<reference key="NSNextResponder" ref="7679857"/>
-						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{17, 23}, {106, 17}}</string>
-						<reference key="NSSuperview" ref="7679857"/>
-						<bool key="NSEnabled">YES</bool>
-						<object class="NSTextFieldCell" key="NSCell" id="946066450">
-							<int key="NSCellFlags">68288064</int>
-							<int key="NSCellFlags2">272630784</int>
-							<string key="NSContents">Type de fichier :</string>
-							<reference key="NSSupport" ref="637230022"/>
-							<reference key="NSControlView" ref="226021795"/>
-							<reference key="NSBackgroundColor" ref="649658597"/>
-							<reference key="NSTextColor" ref="560040807"/>
-						</object>
-					</object>
-					<object class="NSPopUpButton" id="1068931198">
-						<reference key="NSNextResponder" ref="7679857"/>
-						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{125, 16}, {253, 26}}</string>
-						<reference key="NSSuperview" ref="7679857"/>
-						<bool key="NSEnabled">YES</bool>
-						<object class="NSPopUpButtonCell" key="NSCell" id="852076671">
-							<int key="NSCellFlags">-2076049856</int>
-							<int key="NSCellFlags2">2048</int>
-							<reference key="NSSupport" ref="637230022"/>
-							<reference key="NSControlView" ref="1068931198"/>
-							<int key="NSButtonFlags">109199615</int>
-							<int key="NSButtonFlags2">1</int>
-							<string key="NSAlternateContents"/>
-							<string key="NSKeyEquivalent"/>
-							<int key="NSPeriodicDelay">400</int>
-							<int key="NSPeriodicInterval">75</int>
-							<nil key="NSMenuItem"/>
-							<bool key="NSMenuItemRespectAlignment">YES</bool>
-							<object class="NSMenu" key="NSMenu" id="576607755">
-								<string key="NSTitle">OtherViews</string>
-								<array class="NSMutableArray" key="NSMenuItems"/>
-							</object>
-							<int key="NSSelectedIndex">-1</int>
-							<int key="NSPreferredEdge">1</int>
-							<bool key="NSUsesItemFromMenu">YES</bool>
-							<bool key="NSAltersState">YES</bool>
-							<int key="NSArrowPosition">2</int>
-						</object>
-					</object>
-				</array>
-				<string key="NSFrameSize">{395, 60}</string>
-				<string key="NSClassName">NSView</string>
 			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -2046,30 +2029,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 					<int key="connectionID">1587</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">openFileTypeView</string>
-						<reference key="source" ref="106613936"/>
-						<reference key="destination" ref="7679857"/>
-					</object>
-					<int key="connectionID">1589</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">openFileTypePopUp</string>
-						<reference key="source" ref="106613936"/>
-						<reference key="destination" ref="1068931198"/>
-					</object>
-					<int key="connectionID">1612</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">changeOpenFileType:</string>
-						<reference key="source" ref="106613936"/>
-						<reference key="destination" ref="1068931198"/>
-					</object>
-					<int key="connectionID">1613</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">showOrHideAdditionalFiles:</string>
 						<reference key="source" ref="106613936"/>
@@ -2260,6 +2219,30 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<reference key="destination" ref="435084431"/>
 					</object>
 					<int key="connectionID">1809</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">closeBackSync:</string>
+						<reference key="source" ref="106613936"/>
+						<reference key="destination" ref="77741620"/>
+					</object>
+					<int key="connectionID">1846</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">saveAs:</string>
+						<reference key="source" ref="106613936"/>
+						<reference key="destination" ref="276235289"/>
+					</object>
+					<int key="connectionID">1847</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">save:</string>
+						<reference key="source" ref="106613936"/>
+						<reference key="destination" ref="905465848"/>
+					</object>
+					<int key="connectionID">1848</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2480,6 +2463,10 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 							<reference ref="208335005"/>
 							<reference ref="419556083"/>
 							<reference ref="622437632"/>
+							<reference ref="369751422"/>
+							<reference ref="276235289"/>
+							<reference ref="77741620"/>
+							<reference ref="905465848"/>
 						</array>
 						<reference key="parent" ref="692545677"/>
 					</object>
@@ -3070,32 +3057,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<string key="objectName">SparkleUpdater</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">1581</int>
-						<reference key="object" ref="7679857"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="226021795"/>
-							<reference ref="1068931198"/>
-						</array>
-						<reference key="parent" ref="0"/>
-						<string key="objectName">openFileType</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1584</int>
-						<reference key="object" ref="226021795"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="946066450"/>
-						</array>
-						<reference key="parent" ref="7679857"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1606</int>
-						<reference key="object" ref="1068931198"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="852076671"/>
-						</array>
-						<reference key="parent" ref="7679857"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">1646</int>
 						<reference key="object" ref="768822977"/>
 						<reference key="parent" ref="147764423"/>
@@ -3124,24 +3085,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<int key="objectID">1651</int>
 						<reference key="object" ref="57845500"/>
 						<reference key="parent" ref="391283004"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1652</int>
-						<reference key="object" ref="946066450"/>
-						<reference key="parent" ref="226021795"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1653</int>
-						<reference key="object" ref="852076671"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="576607755"/>
-						</array>
-						<reference key="parent" ref="1068931198"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1608</int>
-						<reference key="object" ref="576607755"/>
-						<reference key="parent" ref="852076671"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1654</int>
@@ -3305,6 +3248,26 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<reference key="object" ref="435084431"/>
 						<reference key="parent" ref="432887871"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1810</int>
+						<reference key="object" ref="369751422"/>
+						<reference key="parent" ref="925704490"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1813</int>
+						<reference key="object" ref="276235289"/>
+						<reference key="parent" ref="925704490"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1815</int>
+						<reference key="object" ref="905465848"/>
+						<reference key="parent" ref="925704490"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1820</int>
+						<reference key="object" ref="77741620"/>
+						<reference key="parent" ref="925704490"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3457,19 +3420,10 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<boolean value="YES" key="157.ImportedFromIB2"/>
 				<string key="158.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="158.ImportedFromIB2"/>
-				<string key="1581.IBEditorWindowLastContentRect">{{63, 716}, {395, 60}}</string>
-				<string key="1581.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<boolean value="YES" key="1581.ImportedFromIB2"/>
-				<string key="1584.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<boolean value="YES" key="1584.ImportedFromIB2"/>
 				<string key="159.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="159.ImportedFromIB2"/>
 				<string key="160.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="160.ImportedFromIB2"/>
-				<string key="1606.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<boolean value="YES" key="1606.ImportedFromIB2"/>
-				<string key="1608.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<boolean value="YES" key="1608.ImportedFromIB2"/>
 				<string key="161.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="161.ImportedFromIB2"/>
 				<string key="162.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3486,8 +3440,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<string key="1649.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1650.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1651.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1652.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1653.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1654.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1654.IBShouldRemoveOnLegacySave"/>
 				<string key="1655.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3546,6 +3498,14 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<boolean value="YES" key="1803.ImportedFromIB2"/>
 				<string key="1806.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1807.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1810.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1810.ImportedFromIB2"/>
+				<string key="1813.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1813.ImportedFromIB2"/>
+				<string key="1815.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1815.ImportedFromIB2"/>
+				<string key="1820.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1820.ImportedFromIB2"/>
 				<string key="184.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="184.ImportedFromIB2"/>
 				<string key="185.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3592,7 +3552,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<string key="24.IBEditorWindowLastContentRect">{{772, 613}, {333, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
-				<string key="29.IBEditorWindowLastContentRect">{{194, 556}, {791, 20}}</string>
+				<string key="29.IBEditorWindowLastContentRect">{{247, 699}, {791, 20}}</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="29.ImportedFromIB2"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3606,7 +3566,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<boolean value="YES" key="58.ImportedFromIB2"/>
 				<string key="79.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="79.ImportedFromIB2"/>
-				<string key="81.IBEditorWindowLastContentRect">{{255, 563}, {325, 173}}</string>
+				<string key="81.IBEditorWindowLastContentRect">{{391, 456}, {331, 243}}</string>
 				<string key="81.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="81.ImportedFromIB2"/>
 				<string key="82.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3620,7 +3580,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1809</int>
+			<int key="maxID">1848</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3631,6 +3591,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<string key="changeLatexMode:">id</string>
 						<string key="changeOpenFileType:">id</string>
 						<string key="checkUpdates:">id</string>
+						<string key="closeBackSync:">id</string>
 						<string key="closeDocumentLinkBackLink:">id</string>
 						<string key="copyAs:">id</string>
 						<string key="displayLog:">id</string>
@@ -3663,6 +3624,8 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<string key="reduceOrEnlargeTextArea:">id</string>
 						<string key="reexportImage:">id</string>
 						<string key="returnFromWhiteColorWarningWindow:">id</string>
+						<string key="save:">id</string>
+						<string key="saveAs:">id</string>
 						<string key="showHelp:">id</string>
 						<string key="showOrHideAdditionalFiles:">id</string>
 						<string key="showOrHideColorInspector:">id</string>
@@ -3688,6 +3651,10 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						</object>
 						<object class="IBActionInfo" key="checkUpdates:">
 							<string key="name">checkUpdates:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="closeBackSync:">
+							<string key="name">closeBackSync:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="closeDocumentLinkBackLink:">
@@ -3818,6 +3785,14 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 							<string key="name">returnFromWhiteColorWarningWindow:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="save:">
+							<string key="name">save:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveAs:">
+							<string key="name">saveAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="showHelp:">
 							<string key="name">showHelp:</string>
 							<string key="candidateClassName">id</string>
@@ -3874,8 +3849,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="donationPanel">NSPanel</string>
 						<string key="editCopyImageAsMenuItem">NSMenuItem</string>
-						<string key="openFileTypePopUp">NSPopUpButton</string>
-						<string key="openFileTypeView">NSView</string>
 						<string key="readmeTextView">NSTextView</string>
 						<string key="readmeWindow">NSWindow</string>
 						<string key="sparkleUpdater">SUUpdater</string>
@@ -3891,14 +3864,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<object class="IBToOneOutletInfo" key="editCopyImageAsMenuItem">
 							<string key="name">editCopyImageAsMenuItem</string>
 							<string key="candidateClassName">NSMenuItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="openFileTypePopUp">
-							<string key="name">openFileTypePopUp</string>
-							<string key="candidateClassName">NSPopUpButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="openFileTypeView">
-							<string key="name">openFileTypeView</string>
-							<string key="candidateClassName">NSView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="readmeTextView">
 							<string key="name">readmeTextView</string>
@@ -4351,6 +4316,8 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<string key="latexize:">id</string>
 						<string key="latexizeAndExport:">id</string>
 						<string key="reexportImage:">id</string>
+						<string key="save:">id</string>
+						<string key="saveAs:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="changeBodyTemplate:">
@@ -4391,6 +4358,14 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						</object>
 						<object class="IBActionInfo" key="reexportImage:">
 							<string key="name">reexportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="save:">
+							<string key="name">save:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveAs:">
+							<string key="name">saveAs:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
@@ -4824,6 +4799,27 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKFileWatcher.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKKQueue.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKMainThreadProxy.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
 					</object>
@@ -5227,14 +5223,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">NSMenuItemCell</string>
-					<string key="superclassName">NSButtonCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">AppKit.framework/Headers/NSMenuItemCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">NSMovieView</string>
 					<string key="superclassName">NSView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -5594,14 +5582,6 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">AppKit.framework/Headers/NSPopUpButton.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSPopUpButtonCell</string>
-					<string key="superclassName">NSMenuItemCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">AppKit.framework/Headers/NSPopUpButtonCell.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

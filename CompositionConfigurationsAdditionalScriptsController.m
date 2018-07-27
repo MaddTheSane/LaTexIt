@@ -29,7 +29,8 @@
     [[[PreferencesController sharedController] compositionConfigurationsController]
       setValue:[object valueForKeyPath:@"enabled"]
       forKeyPath:[NSString stringWithFormat:@"selection.%@.selection.enabled", CompositionConfigurationAdditionalProcessingScriptsKey]];
-  }
+  }//end if ([keyPath startsWith:@"value." options:0])
 }
+//end observeValueForKeyPath:ofObject:change:context:
 
 @end

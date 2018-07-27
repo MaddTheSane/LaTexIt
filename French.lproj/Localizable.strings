@@ -34,10 +34,10 @@
 "Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
 "Change Library item background color" = "Changer la couleur de fond d'un item de la bibliothèque";
 "Change Library items background color" = "Changer la couleur de fond d'items de la bibliothèque";
-"Import library..." = "Importer une bibliothèque...";
-"Export library..." = "Exporter la bibliothèque...";
-"Import history..." = "Importer une historique...";
-"Export history..." = "Exporter l'historique...";
+"Import library..." = "Importer une bibliothèque…";
+"Export library..." = "Exporter la bibliothèque…";
+"Import history..." = "Importer une historique…";
+"Export history..." = "Exporter l'historique…";
 "Loading error" = "Erreur de chargement";
 "An error occured while saving" = "Une erreur est survenue lors de l'enregistrement";
 "The file does not appear to be a valid format" = "Le fichier semble ne pas être au bon format";
@@ -64,10 +64,10 @@
 "%@ is required" = "%@ est nécessaire";
 "The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "ps2pdf est requis pour activer l'export en \"PDF avec polices vectorisées\"";
-"Find %@..." = "Chercher %@...";
+"Find %@..." = "Chercher %@…";
 "What's that ?" = "Qu'est-ce que c'est ?";
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT se base sur une installation fonctionnelle de LaTeX. Mais si vous ne savez pas ce qu'est LaTeX, vous risquez d'avoir du mal à l'installer. Une section de la documentation est donc dédiée aux explications correspondates.";
-"See help..." = "Voir l'aide...";
+"See help..." = "Voir l'aide…";
 "Install LaTeX" = "Installer LaTeX";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
 "pdflatex, latex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
@@ -123,10 +123,10 @@
 "Typeset LaTeX Maths eqnarray and put result into clipboard" = "Créer l'équation en mode Eqnarray et ajouter au presse-papier";
 "Typeset LaTeX Maths align" = "Créer l'équation en mode Align";
 "Typeset LaTeX Maths align and put result into clipboard" = "Créer l'équation en mode Align et ajouter au presse-papier";
-"Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
-"Typeset LaTeX Maths display and put result into clipboard" = "Créer l'équation en mode display \\[...\\] et ajouter au presse-papier";
-"Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $...$";
-"Typeset LaTeX Maths inline and put result into clipboard" = "Créer l'équation en mode inline $...$ et ajouter au presse-papier";
+"Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[…\\]";
+"Typeset LaTeX Maths display and put result into clipboard" = "Créer l'équation en mode display \\[…\\] et ajouter au presse-papier";
+"Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $…$";
+"Typeset LaTeX Maths inline and put result into clipboard" = "Créer l'équation en mode inline $…$ et ajouter au presse-papier";
 "Typeset LaTeX Text" = "Créer l'équation en mode texte";
 "Typeset LaTeX Text and put result into clipboard" = "Créer l'équation en mode texte et ajouter au presse-papier";
 "Detect and typeset equations" = "Détecter et créer les équations";
@@ -139,7 +139,7 @@
 "Pre-processing" = "Pré-traitement";
 "Middle-processing" = "Traitement intermédiaire";
 "Post-processing" = "Post-traitement";
-"Edit configurations list..." = "Modifier les configurations...";
+"Edit configurations list..." = "Modifier les configurations…";
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d equation n'a pas pu être convertie à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec elle.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations n'ont pas pu être converties à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec ces équations.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "erreur inattendue, veuillez consulter \"LaTeX > Afficher le dernier rapport d'exécution\"";
@@ -202,8 +202,25 @@
 "Migrating history to new format" = "Migration de l'historique vers un nouveau format";
 "Migrating library to new format" = "Migration de la bibliothèque vers un nouveau format";
 
+/* Save / Back sync */
+"File type" = "Type de fichier";
+"Continuously synchronize file content" = "Synchroniser en continu le contenu du fichier";
+"Synchronize preamble" = "Synchroniser le préambule";
+"Synchronize environment" = "Synchroniser l'environment";
+"Synchronize body" = "Synchroniser le corps";
+"Pre-processing on load" = "Pré-traitement au chargement";
+"Post-processing on load" = "Post-traitement au chargement";
+"Pre-processing on save" = "Pré-traitement à la sauvegarde";
+"Post-processing on save" = "Post-traitement à la sauvegarde";
+
 /* Preferences */
-"Edit the configurations..." = "Modifier les configurations...";
+"Edit the configurations..." = "Modifier les configurations…";
+"Help on scripts" = "Aide sur les scripts";
+"Help on synchronization scripts" = "Aide sur les scripts additionnels de synchronization";
+"path to the Unix executable program" = "chemin du programme executable Unix";
+"Reset..." = "Réinitialiser…";
+"Do you really want to reset the paths ?" = "Voulez-vous vraiment réinitialiser les chemins ?";
+"Invalid paths will be replaced by the result of auto-detection" = "Tous les chemins seront remplacés par les résultats de l'auto-détection.";
 
 /* document */
 "clipboard" = "presse-papiers";
@@ -251,8 +268,8 @@
 "Add current equation" = "Ajouter l'équation courante";
 "Rename selection" = "Renommer la sélection";
 "Replace selection by current equation" = "Remplacer la sélection par l'équation courante";
-"Import..." = "Importer...";
-"Export..." = "Exporter...";
+"Import..." = "Importer…";
+"Export..." = "Exporter…";
 "Display the equations in real size on mouse over" = "Affiche les équations en taille réelle lors d'un passage de la souris";
 "Open the equation in a document" = "Ouvrir l'équation dans un document";
 "Open the equation in a linked document" = "Ouvrir l'équation dans un document lié";

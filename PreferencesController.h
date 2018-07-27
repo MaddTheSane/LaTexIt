@@ -121,6 +121,12 @@ extern NSString* CompositionModeDidChangeNotification;
 extern NSString* CurrentCompositionConfigurationDidChangeNotification;
 
 extern NSString* AdditionalFilesPathsKey;
+extern NSString* SynchronizationNewDocumentsEnabledKey;
+extern NSString* SynchronizationNewDocumentsSynchronizePreambleKey;
+extern NSString* SynchronizationNewDocumentsSynchronizeEnvironmentKey;
+extern NSString* SynchronizationNewDocumentsSynchronizeBodyKey;
+extern NSString* SynchronizationNewDocumentsPathKey;
+extern NSString* SynchronizationAdditionalScriptsKey;
 
 @class AdditionalFilesController;
 @class BodyTemplatesController;
@@ -128,20 +134,22 @@ extern NSString* AdditionalFilesPathsKey;
 @class EncapsulationsController;
 @class PreamblesController;
 @class ServiceRegularExpressionFiltersController;
+@class SynchronizationAdditionalScriptsController;
 
 @interface PreferencesController : NSObject {
   BOOL      isLaTeXiT;
   
   NSUndoManager* undoManager;
 
-  NSArrayController*                         editionTextShortcutsController;
-  PreamblesController*                       preamblesController;
-  BodyTemplatesController*                   bodyTemplatesController;
-  CompositionConfigurationsController*       compositionConfigurationsController;
-  NSArrayController*                         serviceShortcutsController;
-  ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController;
-  AdditionalFilesController*                 additionalFilesController;
-  EncapsulationsController*                  encapsulationsController;
+  NSArrayController*                          editionTextShortcutsController;
+  PreamblesController*                        preamblesController;
+  BodyTemplatesController*                    bodyTemplatesController;
+  CompositionConfigurationsController*        compositionConfigurationsController;
+  NSArrayController*                          serviceShortcutsController;
+  ServiceRegularExpressionFiltersController*  serviceRegularExpressionFiltersController;
+  AdditionalFilesController*                  additionalFilesController;
+  EncapsulationsController*                   encapsulationsController;
+  SynchronizationAdditionalScriptsController* synchronizationAdditionalScriptsController;
   
   export_format_t exportFormatCurrentSession;
 }
@@ -273,6 +281,19 @@ extern NSString* AdditionalFilesPathsKey;
 -(NSArray*)                   additionalFilesPaths;
 -(void)                       setAdditionalFilesPaths:(NSArray*)value;
 -(AdditionalFilesController*) additionalFilesController;
+
+-(BOOL)                                        synchronizationNewDocumentsEnabled;
+-(void)                                        setSynchronizationNewDocumentsEnabled:(BOOL)value;
+-(NSString*)                                   synchronizationNewDocumentsPath;
+-(void)                                        setSynchronizationNewDocumentsPath:(NSString*)value;
+-(BOOL)                                        synchronizationNewDocumentsSynchronizePreamble;
+-(void)                                        setSynchronizationNewDocumentsSynchronizePreamble:(BOOL)value;
+-(BOOL)                                        synchronizationNewDocumentsSynchronizeEnvironment;
+-(void)                                        setSynchronizationNewDocumentsSynchronizeEnvironment:(BOOL)value;
+-(BOOL)                                        synchronizationNewDocumentsSynchronizeBody;
+-(void)                                        setSynchronizationNewDocumentsSynchronizeBody:(BOOL)value;
+-(NSDictionary*)                               synchronizationAdditionalScripts;
+-(SynchronizationAdditionalScriptsController*) synchronizationAdditionalScriptsController;
 
 -(int)    paletteLaTeXGroupSelectedTag;
 -(void)   setPaletteLaTeXGroupSelectedTag:(int)value;

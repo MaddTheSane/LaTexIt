@@ -69,6 +69,7 @@
 -(void)      setExportFormatOptionsSvgPanelDelegate:(id)delegate;
 
 -(NSPanel*)  exportFormatOptionsTextPanel;
+-(NSBox*)    exportFormatOptionsTextBox;
 -(BOOL)      textExportPreamble;
 -(void)      setTextExportPreamble:(BOOL)value;
 -(BOOL)      textExportEnvironment;

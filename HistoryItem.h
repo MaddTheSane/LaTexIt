@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "LaTeXiTSharedTypes.h"
+
 @class LatexitEquation;
 
 @interface HistoryItem : NSManagedObject <NSCoding> {
@@ -35,7 +37,7 @@
 -(NSDate*) date;
 -(void) setDate:(NSDate*)value;
 
--(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
+-(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 
 //for readable export
 -(id) plistDescription;

@@ -12,6 +12,7 @@
 
 #import "AppController.h"
 #import "CHDragFileWrapper.h"
+#import "CHExportPrefetcher.h"
 #import "CHProtoBuffers.h"
 #import "DragFilterWindow.h"
 #import "DragFilterWindowController.h"
@@ -56,7 +57,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 @interface MyImageView (PrivateAPI)
 -(NSImage*) imageForDrag;
 -(NSMenu*) lazyCopyAsContextualMenu;
--(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
+-(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(void) _copyCurrentImageNotification:(NSNotification*)notification;
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard sender:(id <NSDraggingInfo>)sender;
 -(void) performProgrammaticDragCancellation:(id)context;
@@ -100,6 +101,7 @@ typedef NSInteger NSDraggingContext;
   [self->imageRep release];
   [self->transientFilesPromisedFilePaths release];
   [self->transientDragData release];
+  [self->transientDragEquation release];
   [super dealloc];
 }
 //end dealloc
@@ -232,6 +234,8 @@ typedef NSInteger NSDraggingContext;
 {
   [self->transientDragData release];
   self->transientDragData = nil;
+  [self->transientDragEquation release];
+  self->transientDragEquation = nil;
 
   [someData retain];
   [self->pdfData release];
@@ -257,7 +261,6 @@ typedef NSInteger NSDraggingContext;
     [image setScalesWhenResized:YES];
     [image addRepresentation:self->imageRep];
   }//end if (!image && self->imageRep)
-  DebugLog(1, @"image = %@", image);
   [self setImage:image];
   [self updateViewSize];
 }
@@ -277,7 +280,8 @@ typedef NSInteger NSDraggingContext;
   //may update linkback link
   if (self->pdfData && link)
   {
-    [self _writeToPasteboard:[link pasteboard] isLinkBackRefresh:YES lazyDataProvider:self];
+    export_format_t exportFormat = [[PreferencesController sharedController] exportFormatPersistent];
+    [self _writeToPasteboard:[link pasteboard] exportFormat:exportFormat isLinkBackRefresh:YES lazyDataProvider:self];
     @try{
       [link sendEdit];
     }
@@ -293,7 +297,6 @@ typedef NSInteger NSDraggingContext;
 -(NSDragOperation) draggingSession:(NSDraggingSession*)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
   NSDragOperation result = [self image] ? NSDragOperationCopy : NSDragOperationNone;
-  DebugLog(1, @"session = %@, context = %ld", session, (unsigned long)context);
   return result;
 }
 //end draggingSession:sourceOperationMaskForDraggingContext:
@@ -301,7 +304,6 @@ typedef NSInteger NSDraggingContext;
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
   NSDragOperation result = [self image] ? NSDragOperationCopy : NSDragOperationNone;
-  DebugLog(1, @"isLocal = %d", isLocal);
   return result;
 }
 //end draggingSourceOperationMaskForLocal:
@@ -338,7 +340,8 @@ typedef NSInteger NSDraggingContext;
       self->isDragging = YES;
       [self->transientDragData release];
       self->transientDragData = nil;
-      DebugLog(1, @"start dragPromisedFilesOfTypes");
+      [self->transientDragEquation release];
+      self->transientDragEquation = nil;
       [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"svg", @"tiff", @"jpeg", @"png", @"html", nil]
                             fromRect:[self frame] source:self slideBack:YES event:event];
       self->isDragging = NO;
@@ -357,7 +360,6 @@ typedef NSInteger NSDraggingContext;
 
 -(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
-  DebugLog(1, @"");
   if (self->isDragging && !self->shouldRedrag)
   {
     [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
@@ -376,7 +378,6 @@ typedef NSInteger NSDraggingContext;
   NSSize   iconSize = [iconDragged size];
   NSPoint p = [self convertPoint:[event locationInWindow] fromView:nil];
 
-  DebugLog(1, @"self->shouldRedrag = %d", self->shouldRedrag);
   if (self->shouldRedrag)
     [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:NO];
   if (!self->shouldRedrag)
@@ -388,10 +389,9 @@ typedef NSInteger NSDraggingContext;
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
 
-  DebugLog(1, @">_writeToPasteboard");
-  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:self];
-  DebugLog(1, @"<_writeToPasteboard");
-
+  export_format_t exportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
+  [self _writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:self];
+  
   p.x -= iconSize.width/2;
   p.y -= iconSize.height/2;
   [super dragImage:iconDragged at:p offset:offset event:event pasteboard:pasteboard source:object slideBack:YES];
@@ -406,14 +406,12 @@ typedef NSInteger NSDraggingContext;
     NSImage* tiffImage = [[[NSImage alloc] initWithData:[result TIFFRepresentation]] autorelease];
     result = tiffImage;
   }//end if (!isMacOS10_5OrAbove())
-  DebugLog(1, @"result = %@", result);
   return result;
 }
 //end imageForDrag
 
 -(void) concludeDragOperation:(id <NSDraggingInfo>)sender
 {
-  DebugLog(1, @"");
   //overridden to avoid some strange additional "setImage" that would occur...
   NSPasteboard* pboard = [sender draggingPasteboard];
   if ([self->transientFilesPromisedFilePaths count] &&
@@ -421,12 +419,13 @@ typedef NSInteger NSDraggingContext;
     [self performSelector:@selector(waitForPromisedFiles:) withObject:[NSDate date] afterDelay:0.];
   [self->transientDragData release];
   self->transientDragData = nil;
+  [self->transientDragEquation release];
+  self->transientDragEquation = nil;
 }
 //end concludeDragOperation:
 
 -(void) waitForPromisedFiles:(id)object
 {
-  DebugLog(1, @"");
   NSDate* beginDate = [object dynamicCastToClass:[NSDate class]];
   BOOL stop = ![self->transientFilesPromisedFilePaths count];
   BOOL done = NO;
@@ -459,14 +458,12 @@ typedef NSInteger NSDraggingContext;
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {
-  DebugLog(1, @"");
   [self performProgrammaticDragCancellation:nil];
 }
 //end dragFilterWindowController:exportFormatDidChange:
 
 -(void) performProgrammaticDragCancellation:(id)context
 {
-  DebugLog(1, @"");
   self->shouldRedrag = YES;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
@@ -531,7 +528,6 @@ typedef NSInteger NSDraggingContext;
 //creates the promised file of the drag
 -(NSArray*) namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination
 {
-  DebugLog(1, @"");
   NSMutableArray* names = [NSMutableArray arrayWithCapacity:1];
   if (self->pdfData)
   {
@@ -579,7 +575,11 @@ typedef NSInteger NSDraggingContext;
                                    [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
                                    [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                    nil];
-    NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData
+    NSData* data = nil;
+    if (!data && self->transientDragEquation)
+      data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
+    if (!data)
+      data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData
                      exportOptions:exportOptions
                      compositionConfiguration:[preferencesController compositionConfigurationDocument]
                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
@@ -615,18 +615,19 @@ typedef NSInteger NSDraggingContext;
 }
 //end namesOfPromisedFilesDroppedAtDestination:
 
--(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
+-(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
-  DebugLog(1, @"");
-  DebugLog(1, @"lazyDataProvider = %@", lazyDataProvider);
   [self->document triggerSmartHistoryFeature];
+
   LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
+  [self->transientDragEquation release];
+  self->transientDragEquation = [equation retain];
+
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
-  [equation writeToPasteboard:pasteboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
   if (self->isDragging && (lazyDataProvider == self))
   {
-    DebugLog(1, @"add types NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType");
     [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*/ NSFilenamesPboardType, NSURLPboardType, nil]
                    owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
@@ -636,12 +637,9 @@ typedef NSInteger NSDraggingContext;
 //provides lazy data to a pasteboard
 -(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString*)type
 {
-  DebugLog(1, @"add types provideDataForType %@", type);
   PreferencesController* preferencesController = [PreferencesController sharedController];
   export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
   BOOL hasAlreadyCachedData = (self->transientDragData != nil) && (exportFormat == self->transientLastExportFormat);
-  DebugLog(1, @"exportFormat = %d", exportFormat);
-  DebugLog(1, @"hasAlreadyCachedData = %d", hasAlreadyCachedData);
   self->transientLastExportFormat = exportFormat;
   
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -652,8 +650,11 @@ typedef NSInteger NSDraggingContext;
                                  [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
                                  [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
-  NSData* data = hasAlreadyCachedData ? self->transientDragData :
-    [[LaTeXProcessor sharedLaTeXProcessor]
+  NSData* data = hasAlreadyCachedData ? self->transientDragData : nil;
+  if (!data && self->transientDragEquation)
+    data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
+  if (!data)
+    data = [[LaTeXProcessor sharedLaTeXProcessor]
       dataForType:exportFormat pdfData:self->pdfData
       exportOptions:exportOptions
       compositionConfiguration:[preferencesController compositionConfigurationDocument]
@@ -663,7 +664,6 @@ typedef NSInteger NSDraggingContext;
     [self->transientDragData release];
     self->transientDragData = [data copy];
   }//end if (!hasAlreadyCachedData)
-  DebugLog(1, @"data = %p (%d)", data, [data length]);
   if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
   {
     NSString* extension = nil;
@@ -704,10 +704,8 @@ typedef NSInteger NSDraggingContext;
         uti = @"public.text";
         break;
     }
-    DebugLog(1, @"uti = %@", uti);
     if (data)
     {
-      DebugLog(1, @"type = %@", type);
       if ([type isEqualToString:NSFileContentsPboardType])
         [pasteboard setData:data forType:NSFileContentsPboardType];
       else if ([type isEqualToString:NSFilenamesPboardType])
@@ -715,13 +713,11 @@ typedef NSInteger NSDraggingContext;
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
         [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
-        DebugLog(1, @"filePath = %@", filePath);
         if (filePath)
         {
           if (!hasAlreadyCachedData)
             [data writeToFile:filePath atomically:YES];
           NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-          DebugLog(1, @"fileURL = %@", fileURL);
           if (isMacOS10_6OrAbove())
             [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
           //else
@@ -733,13 +729,11 @@ typedef NSInteger NSDraggingContext;
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
         [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
-        DebugLog(1, @"filePath = %@", filePath);
         if (filePath)
         {
           if (!hasAlreadyCachedData)
             [data writeToFile:filePath atomically:YES];
           NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-          DebugLog(1, @"fileURL = %@", fileURL);
           if (isMacOS10_6OrAbove())
             [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
           else
@@ -750,7 +744,6 @@ typedef NSInteger NSDraggingContext;
   }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
   else//if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
   {
-    DebugLog(1, @"setData = %p (%d) for Type %@", data, [data length], type);
     [pasteboard setData:data forType:type];
   }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
 }
@@ -775,7 +768,7 @@ typedef NSInteger NSDraggingContext;
     NSArray* plist = [[pboard propertyListForType:NSFilenamesPboardType] dynamicCastToClass:[NSArray class]];
     NSString* filepath = !([plist count] == 1) ? nil : [plist lastObject];
     NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:filepath];
-    ok = [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
+    ok = UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")) || [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]]))
   {
@@ -805,6 +798,8 @@ typedef NSInteger NSDraggingContext;
   BOOL result = [self _applyDataFromPasteboard:[sender draggingPasteboard] sender:sender];
   [self->transientDragData release];
   self->transientDragData = nil;
+  [self->transientDragEquation release];
+  self->transientDragEquation = nil;
   return result;
 }
 //end performDragOperation:
@@ -835,6 +830,8 @@ typedef NSInteger NSDraggingContext;
 {
   [self->transientDragData release];
   self->transientDragData = nil;
+  [self->transientDragEquation release];
+  self->transientDragEquation = nil;
   int tag = sender ? [sender tag] : -1;
   export_format_t copyExportFormat = ((tag == -1) ? [[PreferencesController sharedController] exportFormatCurrentSession] : (export_format_t) tag);
   [self copyAsFormat:copyExportFormat];
@@ -845,13 +842,15 @@ typedef NSInteger NSDraggingContext;
 {
   [self->transientDragData release];
   self->transientDragData = nil;
+  [self->transientDragEquation release];
+  self->transientDragEquation = nil;
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
   PreferencesController* preferencesController = [PreferencesController sharedController];
   export_format_t oldExportFormat = [preferencesController exportFormatCurrentSession];
   [preferencesController setExportFormatCurrentSession:copyExportFormat];
   //lazyDataProvider to nil to force immediate computation of the pdf with outlined fonts
-  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:nil];
+  [self _writeToPasteboard:pasteboard exportFormat:copyExportFormat isLinkBackRefresh:NO lazyDataProvider:nil];
   [preferencesController setExportFormatCurrentSession:oldExportFormat];
 }
 //end copyAsFormat:

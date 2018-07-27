@@ -240,6 +240,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
   LatexitEquation* latexitEquationToStore =
     [LatexitEquation latexitEquationWithPDFData:[currentLatexitEquation pdfData] useDefaults:YES];
+  [latexitEquationToStore setBackgroundColor:[currentLatexitEquation backgroundColor]];
   LibraryEquation* newLibraryEquation =
     [[LibraryEquation alloc] initWithParent:parentOfSelection equation:latexitEquationToStore
              insertIntoManagedObjectContext:managedObjectContext];

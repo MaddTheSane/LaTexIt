@@ -179,6 +179,8 @@
 		9315A59A07FD36BD00AFCCE9 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */; };
 		9318ADBF101DBC3800F808E8 /* NSImageExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9318ADBE101DBC3800F808E8 /* NSImageExtended.m */; };
 		9318AEBD101DCB8E00F808E8 /* CGExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 9318AEBC101DCB8E00F808E8 /* CGExtras.m */; };
+		931B0F991939302B008C64E8 /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; };
+		931B0FA019393053008C64E8 /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		931CB3080801311100CF9D2B /* LaTeXPalettesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 931CB3060801311100CF9D2B /* LaTeXPalettesWindowController.m */; };
 		931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931D94F50E8A252100D9A778 /* DirectoryService.framework */; };
 		931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */; };
@@ -324,10 +326,16 @@
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
+		9387FA9C1930E7D500888628 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA951930E7D500888628 /* UKFileWatcher.m */; };
+		9387FA9D1930E7D500888628 /* UKFNSubscribeFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */; };
+		9387FA9E1930E7D500888628 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA991930E7D500888628 /* UKKQueue.m */; };
+		9387FA9F1930E7D500888628 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */; };
 		9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
 		9388E88016B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
 		938999BD10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		938999BE10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
+		938BAEA71957340B005E3C6B /* FolderExistsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 938BAEA61957340B005E3C6B /* FolderExistsTransformer.m */; };
+		938BAED019573789005E3C6B /* FilePathLocalizedTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 938BAECF19573789005E3C6B /* FilePathLocalizedTransformer.m */; };
 		938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 938DBADA10BD7C19002350CF /* PalettePanel.m */; };
 		938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
 		938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
@@ -336,6 +344,7 @@
 		938E23A60889C382000626E6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
 		938E244B0889C392000626E6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
+		938FF3341955778A00491B00 /* NSSavePanelExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 938FF3331955778A00491B00 /* NSSavePanelExtended.m */; };
 		9390CEFA0FA78CDA0002100B /* DictionaryToArrayTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */; };
 		9390CFA60FA79C500002100B /* ArraySortingTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9390CFA50FA79C500002100B /* ArraySortingTransformer.m */; };
 		9390D05F0FA7A54E0002100B /* ObjectTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9390D05E0FA7A54E0002100B /* ObjectTransformer.m */; };
@@ -357,8 +366,13 @@
 		939380DB0FA5B0E8007BEAC0 /* BoolTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 939380DA0FA5B0E8007BEAC0 /* BoolTransformer.m */; };
 		939485EE1828472D0059522B /* CHDragFileWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 939485ED1828472D0059522B /* CHDragFileWrapper.m */; };
 		939485EF1828472D0059522B /* CHDragFileWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 939485ED1828472D0059522B /* CHDragFileWrapper.m */; };
+		9396B9C3194ED560003CD205 /* additional-files-help.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 9396B9C2194ED560003CD205 /* additional-files-help.rtfd */; };
+		9396BA31194EE345003CD205 /* synchronization-scripts-help.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 9396BA30194EE345003CD205 /* synchronization-scripts-help.rtfd */; };
 		9396E9470EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */; };
+		939846BB194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
+		939846C21945137900FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
 		939A64580800281900AE4486 /* ServicesMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 939A64570800281900AE4486 /* ServicesMenu.strings */; };
+		939D6588194457DA008A29AB /* PropertyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6587194457DA008A29AB /* PropertyStorage.m */; };
 		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */; };
 		93A35B84137EB4470006DC07 /* IsInTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937FF30FA58788007BEAC0 /* IsInTransformer.m */; };
@@ -375,6 +389,7 @@
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
 		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */; };
+		93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; };
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
 		93B583131014704700907B47 /* NSManagedObjectContextExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */; };
 		93B5870C10159CC700907B47 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
@@ -387,6 +402,8 @@
 		93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
 		93C27F9A139A5A1600410595 /* main.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF7C0E9F307F00B08FB0 /* main.xib */; };
+		93C289D81967F5C30087EBBD /* backsync.png in Resources */ = {isa = PBXBuildFile; fileRef = 93C289D61967F5C30087EBBD /* backsync.png */; };
+		93C289D91967F5C30087EBBD /* backsync@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93C289D71967F5C30087EBBD /* backsync@2x.png */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
 		93C531900D9E2781003AF7FC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C5318F0D9E2781003AF7FC /* Security.framework */; };
 		93C531D00D9E310C003AF7FC /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
@@ -889,15 +906,29 @@
 		9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
 		93869F9D1195E3EB00147048 /* DragFilterWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindow.h; sourceTree = "<group>"; };
 		93869F9E1195E3EB00147048 /* DragFilterWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindow.m; sourceTree = "<group>"; };
+		9387FA941930E7D500888628 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKFileWatcher.h; path = UKKQueue/UKFileWatcher.h; sourceTree = "<group>"; };
+		9387FA951930E7D500888628 /* UKFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFileWatcher.m; path = UKKQueue/UKFileWatcher.m; sourceTree = "<group>"; };
+		9387FA961930E7D500888628 /* UKFNSubscribeFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKFNSubscribeFileWatcher.h; path = UKKQueue/UKFNSubscribeFileWatcher.h; sourceTree = "<group>"; };
+		9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFNSubscribeFileWatcher.m; path = UKKQueue/UKFNSubscribeFileWatcher.m; sourceTree = "<group>"; };
+		9387FA981930E7D500888628 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKKQueue.h; path = UKKQueue/UKKQueue.h; sourceTree = "<group>"; };
+		9387FA991930E7D500888628 /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKKQueue.m; path = UKKQueue/UKKQueue.m; sourceTree = "<group>"; };
+		9387FA9A1930E7D500888628 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKMainThreadProxy.h; path = UKKQueue/UKMainThreadProxy.h; sourceTree = "<group>"; };
+		9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKMainThreadProxy.m; path = UKKQueue/UKMainThreadProxy.m; sourceTree = "<group>"; };
 		9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
 		938999BB10159DA000A9E04F /* PreferencesControllerMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesControllerMigration.h; sourceTree = "<group>"; };
 		938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesControllerMigration.m; sourceTree = "<group>"; };
+		938BAEA51957340B005E3C6B /* FolderExistsTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderExistsTransformer.h; sourceTree = "<group>"; };
+		938BAEA61957340B005E3C6B /* FolderExistsTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderExistsTransformer.m; sourceTree = "<group>"; };
+		938BAECE19573789005E3C6B /* FilePathLocalizedTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilePathLocalizedTransformer.h; sourceTree = "<group>"; };
+		938BAECF19573789005E3C6B /* FilePathLocalizedTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilePathLocalizedTransformer.m; sourceTree = "<group>"; };
 		938DBAD910BD7C19002350CF /* PalettePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalettePanel.h; sourceTree = "<group>"; };
 		938DBADA10BD7C19002350CF /* PalettePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PalettePanel.m; sourceTree = "<group>"; };
 		938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LaTeXiT Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		938DBE1810BDC318002350CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Legacy/LaTeXiT Helper/Info.plist"; sourceTree = "<group>"; };
 		938DBE1F10BDC338002350CF /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Legacy/LaTeXiT Helper/main.m"; sourceTree = "<group>"; };
 		938DBE2510BDC390002350CF /* LaTeXiT_Helper_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaTeXiT_Helper_Prefix.pch; path = "Legacy/LaTeXiT Helper/LaTeXiT_Helper_Prefix.pch"; sourceTree = "<group>"; };
+		938FF3321955778A00491B00 /* NSSavePanelExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSavePanelExtended.h; sourceTree = "<group>"; };
+		938FF3331955778A00491B00 /* NSSavePanelExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSavePanelExtended.m; sourceTree = "<group>"; };
 		9390CEF80FA78CDA0002100B /* DictionaryToArrayTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DictionaryToArrayTransformer.h; sourceTree = "<group>"; };
 		9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DictionaryToArrayTransformer.m; sourceTree = "<group>"; };
 		9390CFA40FA79C500002100B /* ArraySortingTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArraySortingTransformer.h; sourceTree = "<group>"; };
@@ -930,9 +961,25 @@
 		939380DA0FA5B0E8007BEAC0 /* BoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoolTransformer.m; sourceTree = "<group>"; };
 		939485EC1828472D0059522B /* CHDragFileWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDragFileWrapper.h; sourceTree = "<group>"; };
 		939485ED1828472D0059522B /* CHDragFileWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHDragFileWrapper.m; sourceTree = "<group>"; };
+		9396B9C0194ED54D003CD205 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = English; path = "English.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
+		9396B9C4194ED5D9003CD205 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = French; path = "French.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
+		9396B9D0194ED61D003CD205 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = German; path = "German.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
+		9396B9D3194ED63C003CD205 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Spanish; path = "Spanish.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
+		9396B9D5194ED659003CD205 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Italian; path = "Italian.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
+		9396B9D7194ED684003CD205 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Japanese; path = "Japanese.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
+		9396BA2E194EE33F003CD205 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = English; path = "English.lproj/synchronization-scripts-help.rtfd"; sourceTree = "<group>"; };
+		9396BA32194EE34D003CD205 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = French; path = "French.lproj/synchronization-scripts-help.rtfd"; sourceTree = "<group>"; };
+		9396BA33194EE350003CD205 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = German; path = "German.lproj/synchronization-scripts-help.rtfd"; sourceTree = "<group>"; };
+		9396BA34194EE352003CD205 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Spanish; path = "Spanish.lproj/synchronization-scripts-help.rtfd"; sourceTree = "<group>"; };
+		9396BA35194EE354003CD205 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Italian; path = "Italian.lproj/synchronization-scripts-help.rtfd"; sourceTree = "<group>"; };
+		9396BA36194EE357003CD205 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Japanese; path = "Japanese.lproj/synchronization-scripts-help.rtfd"; sourceTree = "<group>"; };
 		9396E9460EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_sparkle_latexit_pub.pem; path = Resources/sparkle/dsa_sparkle_latexit_pub.pem; sourceTree = "<group>"; };
+		939846B9194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizationAdditionalScriptsController.h; sourceTree = "<group>"; };
+		939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizationAdditionalScriptsController.m; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		939D6586194457DA008A29AB /* PropertyStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyStorage.h; sourceTree = "<group>"; };
+		939D6587194457DA008A29AB /* PropertyStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyStorage.m; sourceTree = "<group>"; };
 		939D6B2109C7FEEB0076D19E /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		939D6B2209C7FEEB0076D19E /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		939E652C0A23D427009308E4 /* LibraryPreviewPanelImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryPreviewPanelImageView.h; sourceTree = "<group>"; };
@@ -966,6 +1013,8 @@
 		93B212FE0BBC1C8A00EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93B2130C0BBC1CCC00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		93B436631939189400F6BDAC /* CHExportPrefetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHExportPrefetcher.h; sourceTree = "<group>"; };
+		93B436641939189400F6BDAC /* CHExportPrefetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHExportPrefetcher.m; sourceTree = "<group>"; };
 		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
 		93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersController.h; sourceTree = "<group>"; };
 		93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersController.m; sourceTree = "<group>"; };
@@ -974,6 +1023,7 @@
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
+		93BDECD519B5B8FE00F2C4AB /* missing-translations.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "missing-translations.rtf"; sourceTree = "<group>"; };
 		93BEEB551195BDB40060166A /* DragFilterWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = DragFilterWindowController.nib; sourceTree = "<group>"; };
 		93BEEB591195BDF20060166A /* DragFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindowController.h; sourceTree = "<group>"; };
 		93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindowController.m; sourceTree = "<group>"; };
@@ -981,6 +1031,8 @@
 		93C068761697240D00D20F06 /* latexit-changelog-ja.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-ja.html"; path = "Resources/sparkle/latexit-changelog-ja.html"; sourceTree = "<group>"; };
 		93C068781697241400D20F06 /* latexit-sparkle-ja.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "latexit-sparkle-ja.rss"; path = "Resources/sparkle/latexit-sparkle-ja.rss"; sourceTree = "<group>"; };
 		93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "latexit-latex-palette.icns"; path = "Resources/file-icons/latexit-latex-palette.icns"; sourceTree = "<group>"; };
+		93C289D61967F5C30087EBBD /* backsync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backsync.png; path = Resources/interface/backsync.png; sourceTree = "<group>"; };
+		93C289D71967F5C30087EBBD /* backsync@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "backsync@2x.png"; path = "Resources/interface/backsync@2x.png"; sourceTree = "<group>"; };
 		93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableView.h; sourceTree = "<group>"; };
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93C5318F0D9E2781003AF7FC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
@@ -1261,6 +1313,9 @@
 				93A592C807F46075001DF900 /* Licence.rtf */,
 				935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */,
 				935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */,
+				93BDECD519B5B8FE00F2C4AB /* missing-translations.rtf */,
+				9396B9C2194ED560003CD205 /* additional-files-help.rtfd */,
+				9396BA30194EE345003CD205 /* synchronization-scripts-help.rtfd */,
 			);
 			name = Documentation;
 			sourceTree = "<group>";
@@ -1268,11 +1323,14 @@
 		9302548807F0BC7600011996 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				9387FA8F1930E7BC00888628 /* UKKQueue */,
 				9325E1251831944C006BCD30 /* ProtoBuffers */,
 				93D4947110C1050700A0D06A /* NDProcess */,
 				935AE0E40FA1B41F00B361D8 /* Value transformers */,
 				936369DF1194C9BD00C5DE49 /* NSButtonPalette.h */,
 				936369E01194C9BD00C5DE49 /* NSButtonPalette.m */,
+				93B436631939189400F6BDAC /* CHExportPrefetcher.h */,
+				93B436641939189400F6BDAC /* CHExportPrefetcher.m */,
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
 				931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */,
@@ -1285,6 +1343,8 @@
 				939485ED1828472D0059522B /* CHDragFileWrapper.m */,
 				93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */,
 				93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */,
+				939D6586194457DA008A29AB /* PropertyStorage.h */,
+				939D6587194457DA008A29AB /* PropertyStorage.m */,
 				936C315D0C0DEEA90082F86D /* Semaphore.h */,
 				936C315C0C0DEEA90082F86D /* Semaphore.m */,
 				930E51E30C0711C300BF15A8 /* SystemTask.h */,
@@ -1334,6 +1394,7 @@
 				9333DD730FA62E6500157F00 /* Preambles */,
 				93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */,
 				9345E40E0AC9C5120082ADB4 /* ServiceShortcuts */,
+				939846B8194512A600FCCD99 /* Synchronization additional scripts */,
 				9345E3D70AC9C3390082ADB4 /* TextShortcuts */,
 				932E60B00F5DA745002B3136 /* PreferencesController.h */,
 				932E60B10F5DA745002B3136 /* PreferencesController.m */,
@@ -1495,6 +1556,8 @@
 				93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */,
 				93027D3211A67675000E22CF /* NSPopUpButtonExtended.h */,
 				93027D3311A67675000E22CF /* NSPopUpButtonExtended.m */,
+				938FF3321955778A00491B00 /* NSSavePanelExtended.h */,
+				938FF3331955778A00491B00 /* NSSavePanelExtended.m */,
 				9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */,
 				935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */,
 				93EFDB72088FEFA6000156A3 /* NSStringExtended.h */,
@@ -1703,6 +1766,10 @@
 				9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */,
 				93937FFB0FA58873007BEAC0 /* FileExistsTransformer.h */,
 				93937FFC0FA58873007BEAC0 /* FileExistsTransformer.m */,
+				938BAECE19573789005E3C6B /* FilePathLocalizedTransformer.h */,
+				938BAECF19573789005E3C6B /* FilePathLocalizedTransformer.m */,
+				938BAEA51957340B005E3C6B /* FolderExistsTransformer.h */,
+				938BAEA61957340B005E3C6B /* FolderExistsTransformer.m */,
 				939377A30FA23373007BEAC0 /* IndexToIndexesTransformer.h */,
 				939377A40FA23373007BEAC0 /* IndexToIndexesTransformer.m */,
 				93937E360FA4E29C007BEAC0 /* IsEqualToTransformer.h */,
@@ -1781,6 +1848,21 @@
 			name = Margins;
 			sourceTree = "<group>";
 		};
+		9387FA8F1930E7BC00888628 /* UKKQueue */ = {
+			isa = PBXGroup;
+			children = (
+				9387FA941930E7D500888628 /* UKFileWatcher.h */,
+				9387FA951930E7D500888628 /* UKFileWatcher.m */,
+				9387FA961930E7D500888628 /* UKFNSubscribeFileWatcher.h */,
+				9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */,
+				9387FA981930E7D500888628 /* UKKQueue.h */,
+				9387FA991930E7D500888628 /* UKKQueue.m */,
+				9387FA9A1930E7D500888628 /* UKMainThreadProxy.h */,
+				9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */,
+			);
+			name = UKKQueue;
+			sourceTree = "<group>";
+		};
 		938DBD2710BDC2A2002350CF /* LaTeXiT Helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -1825,6 +1907,15 @@
 				93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */,
 			);
 			name = Encapsulations;
+			sourceTree = "<group>";
+		};
+		939846B8194512A600FCCD99 /* Synchronization additional scripts */ = {
+			isa = PBXGroup;
+			children = (
+				939846B9194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.h */,
+				939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */,
+			);
+			name = "Synchronization additional scripts";
 			sourceTree = "<group>";
 		};
 		93A5972207F479B8001DF900 /* LaTeX */ = {
@@ -1892,6 +1983,8 @@
 				93077A83169471C300ADAAA1 /* add-pressed@2x.png */,
 				93077A84169471C300ADAAA1 /* add.png */,
 				93077A85169471C300ADAAA1 /* add@2x.png */,
+				93C289D61967F5C30087EBBD /* backsync.png */,
+				93C289D71967F5C30087EBBD /* backsync@2x.png */,
 				93077A92169471E800ADAAA1 /* button-close.png */,
 				93077A93169471E800ADAAA1 /* button-close@2x.png */,
 				93077A94169471E800ADAAA1 /* button-menu.png */,
@@ -2250,6 +2343,10 @@
 				93EAEF8116989BDB00231560 /* linkback-off@2x.png in Resources */,
 				93EAEF8216989BDB00231560 /* linkback-on.png in Resources */,
 				93EAEF8316989BDB00231560 /* linkback-on@2x.png in Resources */,
+				9396B9C3194ED560003CD205 /* additional-files-help.rtfd in Resources */,
+				9396BA31194EE345003CD205 /* synchronization-scripts-help.rtfd in Resources */,
+				93C289D81967F5C30087EBBD /* backsync.png in Resources */,
+				93C289D91967F5C30087EBBD /* backsync@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2487,6 +2584,16 @@
 				93CFB9AE16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m in Sources */,
 				939485EE1828472D0059522B /* CHDragFileWrapper.m in Sources */,
 				9325E1281831946F006BCD30 /* CHProtoBuffers.mm in Sources */,
+				9387FA9C1930E7D500888628 /* UKFileWatcher.m in Sources */,
+				9387FA9D1930E7D500888628 /* UKFNSubscribeFileWatcher.m in Sources */,
+				9387FA9E1930E7D500888628 /* UKKQueue.m in Sources */,
+				9387FA9F1930E7D500888628 /* UKMainThreadProxy.m in Sources */,
+				93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */,
+				939D6588194457DA008A29AB /* PropertyStorage.m in Sources */,
+				939846BB194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */,
+				938FF3341955778A00491B00 /* NSSavePanelExtended.m in Sources */,
+				938BAEA71957340B005E3C6B /* FolderExistsTransformer.m in Sources */,
+				938BAED019573789005E3C6B /* FilePathLocalizedTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2555,6 +2662,9 @@
 				93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
 				939485EF1828472D0059522B /* CHDragFileWrapper.m in Sources */,
 				93A4221B189AFCD00073481F /* NSMutableArrayExtended.m in Sources */,
+				931B0F991939302B008C64E8 /* CHExportPrefetcher.m in Sources */,
+				931B0FA019393053008C64E8 /* Semaphore.m in Sources */,
+				939846C21945137900FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2654,12 +2764,12 @@
 		930255CF07F0C2A800011996 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				930255CD07F0C2A300011996 /* English */,
 				93773C4607FFF6FB004AAB30 /* French */,
+				930255CD07F0C2A300011996 /* English */,
 				934C03400AD0363B007FEC06 /* German */,
 				93B212FE0BBC1C8A00EFCA2F /* Spanish */,
-				93F874FC1088648500995B12 /* Japanese */,
 				93ADD650144AE97100BA13D9 /* Italian */,
+				93F874FC1088648500995B12 /* Japanese */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2704,6 +2814,33 @@
 				93F874FB1088647D00995B12 /* Japanese */,
 			);
 			name = defaultPreamble.rtf;
+			sourceTree = "<group>";
+		};
+		9396B9C2194ED560003CD205 /* additional-files-help.rtfd */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9396B9C4194ED5D9003CD205 /* French */,
+				9396B9C0194ED54D003CD205 /* English */,
+				9396B9D0194ED61D003CD205 /* German */,
+				9396B9D3194ED63C003CD205 /* Spanish */,
+				9396B9D5194ED659003CD205 /* Italian */,
+				9396B9D7194ED684003CD205 /* Japanese */,
+			);
+			name = "additional-files-help.rtfd";
+			path = "/Volumes/Tardis/Users/chacha/Programmation/Cocoa/Projets/Applications/LaTeXiT-mainline";
+			sourceTree = "<absolute>";
+		};
+		9396BA30194EE345003CD205 /* synchronization-scripts-help.rtfd */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9396BA32194EE34D003CD205 /* French */,
+				9396BA2E194EE33F003CD205 /* English */,
+				9396BA33194EE350003CD205 /* German */,
+				9396BA34194EE352003CD205 /* Spanish */,
+				9396BA35194EE354003CD205 /* Italian */,
+				9396BA36194EE357003CD205 /* Japanese */,
+			);
+			name = "synchronization-scripts-help.rtfd";
 			sourceTree = "<group>";
 		};
 		939A64570800281900AE4486 /* ServicesMenu.strings */ = {

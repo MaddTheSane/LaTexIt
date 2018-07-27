@@ -16,6 +16,7 @@
 extern NSString* CopyCurrentImageNotification;
 extern NSString* ImageDidChangeNotification;
 
+@class LatexitEquation;
 @class LinkBack;
 @class MyDocument;
 
@@ -33,6 +34,7 @@ extern NSString* ImageDidChangeNotification;
   export_format_t transientLastExportFormat;
   NSData*         transientDragData;
   NSArray*        transientFilesPromisedFilePaths;
+  LatexitEquation* transientDragEquation;
 }
 
 -(void) setImage:(NSImage*)image;

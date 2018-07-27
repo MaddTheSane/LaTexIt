@@ -257,7 +257,22 @@ Seit Version 1.8.0 ist es m\'f6glich, Skripte w\'e4hrend Vor-, Mittel- und Nach-
 \f1\fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
-LaTeX-Paletten\
+File synchronization and additional scripts\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+Since version 2.6.2, LaTeXiT can handle the synchronization of an underlying text file. Either this file has been open with the menu "File > Open\'85 > Text file" (and option "continuously synchronize file content"), or, such a file has been created through "File > Save as\'85" and the same option.\
+In both cases:\
+-at each  LaTeXization, the file content is updated by the text defining the current equation\
+-or if the file is externally modified by another program, LaTeXiT is automatically updated with the new content\
+Please note that the synchronization is focused on the file name. If the file is renamed and a new file with the old name is created, then the synchronzation is made with the new file.\
+\
+Moreover, in "Preferences > Advances > Synchronization additional scripts", custom processes can be defined, either when LaTeXiT saves the underlying file content, or when it detects a new content in that file.\
+In those scripts, the variable $INPUTFLE is added in the enviromnent and contains the file name.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul LaTeX-Paletten\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
@@ -451,6 +466,21 @@ Aber seien Sie deshalb nicht traurig: es existieren einige graphische Benutzerob
 
 \fs26 \cf0 \ul Versions-Geschichte\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 2.7.0 (2. September 2014)
+\f0\b\fs24 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qj\pardirnatural
+
+\f1\b0\fs22 \cf0 -new "background synchronization" feature to share a file with another program\'a0;\
+-prefetch PDF w.o.f. for faster export\'a0;\
+-fixed text font when drag'n dropping text in the text area\'a0;\
+-better text import\'a0;\
+-equation background color is now properly kept when inserting equations in the library\'a0;\
+-fixed minor bugs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone v 2.6.1 (19. Mai 2014)\

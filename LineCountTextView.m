@@ -215,7 +215,14 @@ static int SpellCheckerDocumentTag = 0;
 
 -(void) setAttributedString:(NSAttributedString*)value//triggers recolouring
 {
-  [[self textStorage] setAttributedString:value];
+  NSDictionary* attributes =
+    [NSDictionary dictionaryWithObjectsAndKeys:
+     [[PreferencesController sharedController] editionFont], NSFontAttributeName,
+     nil];
+  NSMutableAttributedString* attributedString = [[value mutableCopy] autorelease];
+  [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
+  
+  [[self textStorage] setAttributedString:attributedString];
   [self->syntaxColouring recolourCompleteDocument];
 }
 //end setAttributedString:
@@ -1086,11 +1093,17 @@ static int SpellCheckerDocumentTag = 0;
   unsigned int length = [[self textStorage] length];
   if (index <= length)
   {
-    NSAttributedString* attributedString = [object isKindOfClass:[NSAttributedString class]] ? object :
-      [[[NSAttributedString alloc] initWithString:object] autorelease];
+    NSDictionary* attributes =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        [[PreferencesController sharedController] editionFont], NSFontAttributeName,
+        nil];
+    NSMutableAttributedString* attributedString =
+      [object isKindOfClass:[NSAttributedString class]] ? [[object mutableCopy] autorelease] :
+      [[[NSMutableAttributedString alloc] initWithString:object] autorelease];
+    [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
     [[self textStorage] insertAttributedString:attributedString atIndex:index];
     [self->syntaxColouring recolourCompleteDocument];
-  }
+  }//end if (index <= length)
 }
 //end insertTextAtMousePosition:
 

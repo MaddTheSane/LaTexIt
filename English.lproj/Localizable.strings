@@ -33,10 +33,10 @@
 "Change Library item name" = "Change Library item name";
 "Change Library item background color" = "Change Library item background color";
 "Change Library items background color" = "Change Library items background color";
-"Import library..." = "Import library...";
-"Export library..." = "Export library...";
-"Import history..." = "Import history...";
-"Export history..." = "Export history...";
+"Import library..." = "Import library…";
+"Export library..." = "Export library…";
+"Import history..." = "Import history…";
+"Export history..." = "Export history…";
 "Loading error" = "Loading error";
 "An error occured while saving" = "An error occured while saving";
 "The file does not appear to be a valid format" = "The file does not appear to be a valid format";
@@ -62,10 +62,10 @@
 "%@ is required" = "%@ is required";
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "You need ps2pdf to export as \"PDF with outlined fonts\"";
-"Find %@..." = "Find %@...";
+"Find %@..." = "Find %@…";
 "What's that ?" = "What's that ?";
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.";
-"See help..." = "See help...";
+"See help..." = "See help…";
 "Install LaTeX" = "Install LaTeX";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." = "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
 "color.sty seems to be unavailable" = "color.sty seems to be unavailable";
@@ -117,10 +117,10 @@
 "Typeset LaTeX Maths eqnarray and put result into clipboard" = "Typeset LaTeX Maths Eqnarray and put result into clipboard";
 "Typeset LaTeX Maths align" = "Typeset LaTeX Maths Align";
 "Typeset LaTeX Maths align and put result into clipboard" = "Typeset LaTeX Maths Align and put result into clipboard";
-"Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
-"Typeset LaTeX Maths display and put result into clipboard" = "Typeset LaTeX Maths display \\[...\\] and put result into clipboard";
-"Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";
-"Typeset LaTeX Maths inline and put result into clipboard" = "Typeset LaTeX Maths inline $...$ and put result into clipboard";
+"Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[…\\]";
+"Typeset LaTeX Maths display and put result into clipboard" = "Typeset LaTeX Maths display \\[…\\] and put result into clipboard";
+"Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $…$";
+"Typeset LaTeX Maths inline and put result into clipboard" = "Typeset LaTeX Maths inline $…$ and put result into clipboard";
 "Typeset LaTeX Text" = "Typeset LaTeX Text";
 "Typeset LaTeX Text and put result into clipboard" = "Typeset LaTeX Text and put result into clipboard";
 "Detect and typeset equations" = "Detect and typeset equations";
@@ -133,7 +133,7 @@
 "Pre-processing" = "Pre-processing";
 "Middle-processing" = "Middle-processing";
 "Post-processing" = "Post-processing";
-"Edit configurations list..." = "Edit configurations list...";
+"Edit configurations list..." = "Edit configurations list…";
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "unexpected error, please see \"LaTeX > Display last log\"";
@@ -201,8 +201,25 @@
 "Migrating history to new format" = "Migrating history to new format";
 "Migrating library to new format" = "Migrating library to new format";
 
+/* Save / Back sync */
+"File type" = "File type";
+"Continuously synchronize file content" = "Continuously synchronize file content";
+"Synchronize preamble" = "Synchronize preamble";
+"Synchronize environment" = "Synchronize environment";
+"Synchronize body" = "Synchronize body";
+"Pre-processing on load" = "Pre-processing on load";
+"Post-processing on load" = "Post-processing on load";
+"Pre-processing on save" = "Pre-processing on save";
+"Post-processing on save" = "Post-processing on save";
+
 /* Preferences */
-"Edit the configurations..." = "Edit the configurations...";
+"Edit the configurations..." = "Edit the configurations…";
+"Help on scripts" = "Help on scripts";
+"Help on synchronization scripts" = "Help on synchronization scripts";
+"path to the Unix executable program" = "path to the Unix executable program";
+"Reset..." = "Reset…";
+"Do you really want to reset the paths ?" = "Do you really want to reset the paths ?";
+"Invalid paths will be replaced by the result of auto-detection" = "All paths will be replaced by the result of auto-detection.";
 
 /* document */
 "clipboard" = "clipboard";
@@ -250,8 +267,8 @@
 "Add current equation" = "Add current equation";
 "Rename selection" = "Rename selection";
 "Replace selection by current equation" = "Replace selection by current equation";
-"Import..." = "Import...";
-"Export..." = "Export...";
+"Import..." = "Import…";
+"Export..." = "Export…";
 "Display the equations in real size on mouse over" = "Display the equations in real size on mouse over";
 "Open the equation in a document" = "Open the equation in a document";
 "Open the equation in a linked document" = "Open the equation in a linked document";

@@ -40,7 +40,7 @@
   id result = [[[[self class] alloc] initWithDirectoryAllowed:directoryAllowed] autorelease];
   return result;
 }
-//end transformerWithFalseObject:trueObject:
+//end transformerWithDirectoryAllowed:
 
 -(id) initWithDirectoryAllowed:(BOOL)isDirectoryAllowed
 {
@@ -49,7 +49,7 @@
   self->directoryAllowed = isDirectoryAllowed;
   return self;
 }
-//end transformerWithFalseObject:trueObject:
+//end initWithDirectoryAllowed:
 
 -(id) transformedValue:(id)value
 {
