@@ -216,13 +216,13 @@
             <title>Version 2.4.0</title>
             <description>
               <ul>
-                <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour&nbsp;</li>
-                <li>export MathML (expérimental)&nbsp;;</li>
-                <li>export SVG (nécessite pdf2svg)&nbsp;;</li>
-                <li>action Automator réparée&nbsp;;</li>
-                <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*}&nbsp;;</li>
-                <li>possibilité de remplacer les tabulations par des espaces&nbsp;;</li>
-                <li>traductions améliorées&nbsp;;</li>
+                <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour</li>
+                <li>export MathML (expérimental);</li>
+                <li>export SVG (nécessite pdf2svg);</li>
+                <li>action Automator réparée;</li>
+                <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*};</li>
+                <li>possibilité de remplacer les tabulations par des espaces;</li>
+                <li>traductions améliorées;</li>
                 <li>nombreuses améliorations internes.</li>
               </ul>
             </description>
@@ -235,6 +235,32 @@
               type="application/octet-stream"
               length="7773655"
               sparkle:dsaSignature="MCwCFGhAvUHcLS0t6BVCF779e5la10COAhQ/pNnWFNSje0f0uQ9O7mEEGFWjfg=="
+            />
+          </item>
+          <item>
+            <title>Version 2.4.1</title>
+            <description>
+              <ul>
+                <li>version 2.4.1 : correction d'un bug avec certains PDFs se traduisant par un total dysfonctionnement sur certaines configurations ;</li>
+                <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour</li>
+                <li>export MathML (expérimental);</li>
+                <li>export SVG (nécessite pdf2svg);</li>
+                <li>action Automator réparée;</li>
+                <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*};</li>
+                <li>possibilité de remplacer les tabulations par des espaces;</li>
+                <li>traductions améliorées;</li>
+                <li>nombreuses améliorations internes.</li>
+              </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.1</sparkle:releaseNotesLink>
+            <pubDate>Mon, 13 Jun 2011 23:50:00 +0200</pubDate>
+            <enclosure
+              url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_1.dmg"
+              sparkle:version="2.4.1"
+              sparkle:shortVersionString="2.4.1"
+              type="application/octet-stream"
+              length="7767804"
+              sparkle:dsaSignature="MC4CFQCWlsG2Q8AUyk7ambJRWBA+aQppegIVAKtCfLqGIsQ7WZ++RHuaJeLhr/yG"
             />
           </item>
       </channel> 

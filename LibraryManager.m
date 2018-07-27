@@ -207,7 +207,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.4.0", @"version", nil];
+          @"2.4.1", @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
@@ -585,10 +585,10 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.0", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.1", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
-  [result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
+  //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
   [persistentStoreCoordinator release];
   [result setRetainsRegisteredObjects:YES];
@@ -740,7 +740,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.0", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.1", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }

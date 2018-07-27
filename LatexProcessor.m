@@ -285,7 +285,7 @@ static LaTeXProcessor* sharedInstance = nil;
            "/Title (EEtitle%@EEtitleend)\n"\
            "/Magnification (EEmag%fEEmagend)\n"\
            "/Baseline (EEbas%fEEbasend)\n"\
-           ">>\nendobj",
+           ">>\nendobj\n",
           [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
           [escapedPreamble  cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
           [replacedSource  cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
@@ -304,7 +304,8 @@ static LaTeXProcessor* sharedInstance = nil;
     int byte_count = 0;
     NSScanner* scanner = ([tailarray count]<2) ? nil : [NSScanner scannerWithString:[tailarray objectAtIndex:1]];
     [scanner scanInt:&byte_count];
-    byte_count += [annotation length];
+    if (r1.location != NSNotFound)
+      byte_count += [annotation length];
 
     NSRange r3 = (r2.location == NSNotFound) ? r2 : NSMakeRange(r1.location, r2.location - r1.location);
     NSString* stuff = (r3.location == NSNotFound) ? @"" : [pdfString substringWithRange:r3];
@@ -314,7 +315,10 @@ static LaTeXProcessor* sharedInstance = nil;
     
     NSData* dataToAppend = [annotation dataUsingEncoding:NSMacOSRomanStringEncoding/*NSASCIIStringEncoding*/ allowLossyConversion:YES];
 
-    newData = [NSMutableData dataWithData:[data subdataWithRange:(r1.location == NSNotFound) ? NSMakeRange(0, 0) : NSMakeRange(0, r1.location)]];
+    newData = [NSMutableData dataWithData:[data subdataWithRange:
+      (r1.location != NSNotFound) ? NSMakeRange(0, r1.location) :
+      (r2.location != NSNotFound) ? NSMakeRange(0, r2.location) :
+      NSMakeRange(0, 0)]];
     [newData appendData:dataToAppend];
   }//end if data
   

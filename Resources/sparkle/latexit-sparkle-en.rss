@@ -216,13 +216,13 @@
             <title>Version 2.4.0</title>
             <description>
               <ul>
-                <li>new <a href="http://pierre.chachatelier.fr/latexit">web site</a>, you should really visit it&nbsp;;</li>
-                <li>MathML  export (experimental)&nbsp;;</li>
-                <li>SVG  export (requires pdf2svg)&nbsp;;</li>
-                <li>fixed Automator action&nbsp;;</li>
-                <li>the service now accepts {eqnarray} and {align} and interpret them as {eqnarray*} and {align*}&nbsp;;</li>
-                <li>tabulations can be replaced by spaces&nbsp;;</li>
-                <li>better localizations&nbsp;;</li>
+                <li>new <a href="http://pierre.chachatelier.fr/latexit">web site</a>, you should really visit it;</li>
+                <li>MathML  export (experimental);</li>
+                <li>SVG  export (requires pdf2svg);</li>
+                <li>fixed Automator action;</li>
+                <li>the service now accepts {eqnarray} and {align} and interpret them as {eqnarray*} and {align*};</li>
+                <li>tabulations can be replaced by spaces;</li>
+                <li>better localizations;</li>
                 <li>many internal improvements.</li>
               </ul>
             </description>
@@ -235,6 +235,32 @@
               type="application/octet-stream"
               length="7773655"
               sparkle:dsaSignature="MCwCFGhAvUHcLS0t6BVCF779e5la10COAhQ/pNnWFNSje0f0uQ9O7mEEGFWjfg=="
+            />
+          </item>
+          <item>
+            <title>Version 2.4.1</title>
+            <description>
+              <ul>
+                <li>version 2.4.1 : fixed a bug encountered with some PDFs resulting in something like 'nothing works';</li>
+                <li>new <a href="http://pierre.chachatelier.fr/latexit">web site</a>, you should really visit it;</li>
+                <li>MathML  export (experimental);</li>
+                <li>SVG  export (requires pdf2svg);</li>
+                <li>fixed Automator action;</li>
+                <li>the service now accepts {eqnarray} and {align} and interpret them as {eqnarray*} and {align*};</li>
+                <li>tabulations can be replaced by spaces;</li>
+                <li>better localizations;</li>
+                <li>many internal improvements.</li>
+              </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.4.1</sparkle:releaseNotesLink>
+            <pubDate>Mon, 13 Jun 2011 23:50:00 +0200</pubDate>
+            <enclosure
+              url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_1.dmg"
+              sparkle:version="2.4.1"
+              sparkle:shortVersionString="2.4.1"
+              type="application/octet-stream"
+              length="7767804"
+              sparkle:dsaSignature="MC4CFQCWlsG2Q8AUyk7ambJRWBA+aQppegIVAKtCfLqGIsQ7WZ++RHuaJeLhr/yG"
             />
           </item>
     </channel> 
