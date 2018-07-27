@@ -138,7 +138,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>LaTeXiT</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconFile</key>
 	<string>latexit.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -717,5 +717,27 @@
 	<string>http://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-en.rss</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_sparkle_latexit_pub.pem</string>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.text</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.tex</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tex</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-tex</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

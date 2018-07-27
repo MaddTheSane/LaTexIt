@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr_FR</string>
 	<key>CFBundleExecutable</key>
-	<string>LaTeXiT Helper</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconFile</key>
 	<string>latexit.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -44,7 +44,9 @@
 					<string>tex</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/x-tex</string>
+				<array>
+					<string>application/x-tex</string>
+				</array>
 			</dict>
 		</dict>
 	</array>
