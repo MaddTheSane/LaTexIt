@@ -25,7 +25,6 @@
 #import "LaTeXPalettesWindowController.h"
 #import "LaTeXProcessor.h"
 #import "LibraryWindowController.h"
-#import "LibraryFile.h"
 #import "LibraryManager.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
@@ -579,7 +578,26 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([sender action] == @selector(reexportImage:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
-    ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
+    ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage] && [myDocument canReexport];
+  }
+  else if ([sender action] == @selector(changeLatexMode:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy];
+    latex_mode_t latexMode = [myDocument latexMode];
+    #ifdef MIGRATE_ALIGN
+    if ([sender tag] == 1)
+      [sender setState:(myDocument && (latexMode == LATEX_MODE_ALIGN)) ? NSOnState : NSOffState];
+    #else
+    if ([sender tag] == 1)
+      [sender setState:(myDocument && (latexMode == LATEX_MODE_EQNARRAY)) ? NSOnState : NSOffState];
+    #endif
+    else if ([sender tag] == 2)
+      [sender setState:(myDocument && (latexMode == LATEX_MODE_DISPLAY)) ? NSOnState : NSOffState];
+    else if ([sender tag] == 3)
+      [sender setState:(myDocument && (latexMode == LATEX_MODE_INLINE)) ? NSOnState : NSOffState];
+    else if ([sender tag] == 4)
+      [sender setState:(myDocument && (latexMode == LATEX_MODE_TEXT)) ? NSOnState : NSOffState];
   }
   else if ([sender action] == @selector(makeLatex:))
   {
@@ -881,6 +899,29 @@ static NSMutableDictionary* cachePaths = nil;
   [[(MyDocument*)[self currentDocument] imageView] copy:sender]; 
 }
 //end copyAs:
+
+-(IBAction) changeLatexMode:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  if (document)
+  {
+    latex_mode_t mode = LATEX_MODE_TEXT;
+    switch([sender tag])
+    {
+      #ifdef MIGRATE_ALIGN
+      case 1 : mode = LATEX_MODE_ALIGN; break;
+      #else
+      case 1 : mode = LATEX_MODE_EQNARRAY; break;
+      #endif
+      case 2 : mode = LATEX_MODE_DISPLAY; break;
+      case 3 : mode = LATEX_MODE_INLINE; break;
+      case 4 : mode = LATEX_MODE_TEXT; break;
+      default: mode = LATEX_MODE_TEXT; break;
+    }
+    [document setLatexMode:mode];
+  }
+}
+//end makeLatexAndExport:
 
 -(IBAction) makeLatexAndExport:(id)sender
 {
@@ -1598,17 +1639,22 @@ static NSMutableDictionary* cachePaths = nil;
 //a link back request will create a new document thanks to the available data, as historyItems
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link
 {
-  NSData* historyItemData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
-  NSArray* historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemData];
-  HistoryItem* historyItem = (historyItems && [historyItems count]) ? [historyItems objectAtIndex:0] : nil;
+  NSData* linkbackItemsData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
+  NSArray* linkbackItems = [NSKeyedUnarchiver unarchiveObjectWithData:linkbackItemsData];
+  id firstLinkBackItem = (linkbackItems && [linkbackItems count]) ? [linkbackItems objectAtIndex:0] : nil;
+  HistoryItem* historyItem = [firstLinkBackItem isKindOfClass:[HistoryItem class]] ? firstLinkBackItem : nil;
+  LatexitEquation* latexitEquation =
+    historyItem ? [historyItem equation] :
+    [firstLinkBackItem isKindOfClass:[LatexitEquation class]] ? firstLinkBackItem :
+    nil;
   MyDocument* currentDocument = (MyDocument*) [self currentDocument];
   if (!currentDocument)
     currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
-  if (currentDocument && historyItem)
+  if (currentDocument && latexitEquation)
   {
     if ([currentDocument linkBackLink] != link)
       [currentDocument setLinkBackLink:link];//automatically closes previous links
-    [currentDocument applyLatexitEquation:[historyItem equation]]; //defines the state of the document
+    [currentDocument applyLatexitEquation:latexitEquation]; //defines the state of the document
     [NSApp activateIgnoringOtherApps:YES];
     NSArray* windows = [currentDocument windowControllers];
     NSWindow* window = [[windows lastObject] window];
@@ -1621,6 +1667,12 @@ static NSMutableDictionary* cachePaths = nil;
 //end linkBackClientDidRequestEdit:
 
 #pragma mark service
+
+-(void) serviceLatexisationAlign:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_ALIGN error:error];
+}
+//end serviceLatexisationAlign:userData:error:
 
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
@@ -2181,6 +2233,7 @@ static NSMutableDictionary* cachePaths = nil;
           [NSArray arrayWithObjects:@"\\[", @"\\]", [NSNumber numberWithInt:LATEX_MODE_DISPLAY], nil],
           [NSArray arrayWithObjects:@"$", @"$"    , [NSNumber numberWithInt:LATEX_MODE_INLINE], nil],
           [NSArray arrayWithObjects:@"\\begin{eqnarray*}", @"\\end{eqnarray*}", [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], nil],
+          [NSArray arrayWithObjects:@"\\begin{align*}", @"\\end{align*}", [NSNumber numberWithInt:LATEX_MODE_ALIGN], nil],
           nil];
 
       NSMutableArray* errorDocuments = [NSMutableArray array];

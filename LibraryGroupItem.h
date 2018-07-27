@@ -13,9 +13,8 @@
 #import "LibraryItem.h"
 
 @interface LibraryGroupItem : LibraryItem <NSCopying, NSCoding> {
-  //NSArray* children;
-  //BOOL     expanded;
-  NSArray*   childrenSortDescriptors;
+  BOOL     expanded;//seems to be needed on Tiger
+  NSArray* childrenSortDescriptors;
 }
 
 +(NSEntityDescription*) entity;

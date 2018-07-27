@@ -61,7 +61,7 @@ NSString* ReducedTextAreaStateKey              = @"ReducedTextAreaState";
 NSString* DefaultFontKey               = @"DefaultFont";
 NSString* PreamblesKey                         = @"Preambles";
 NSString* LatexisationSelectedPreambleIndexKey = @"LatexisationSelectedPreambleIndex";
-NSString* BodyTemplatesKey                         = @"BodyTemplatesKey";
+NSString* BodyTemplatesKey                         = @"BodyTemplates";
 NSString* LatexisationSelectedBodyTemplateIndexKey = @"LatexisationSelectedBodyTemplateIndexKey";
 
 NSString* ServiceSelectedPreambleIndexKey     = @"ServiceSelectedPreambleIndex";
@@ -216,7 +216,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                [NSNumber numberWithBool:NO],     DefaultAutomaticHighContrastedPreviewBackgroundKey,
                                                [[NSColor  blackColor]   colorAsData],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
+                                               #ifdef MIGRATE_ALIGN
+                                               [NSNumber numberWithInt:LATEX_MODE_ALIGN], DefaultModeKey,
+                                               #else
                                                [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], DefaultModeKey,
+                                               #endif
                                                [NSNumber numberWithBool:YES], SpellCheckingEnableKey,
                                                [NSNumber numberWithBool:YES], SyntaxColoringEnableKey,
                                                [[NSColor blackColor]   colorAsData], SyntaxColoringTextForegroundColorKey,
@@ -231,38 +235,46 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                factoryDefaultsBodyTemplates, BodyTemplatesKey,
                                                [NSNumber numberWithUnsignedInt:0], LatexisationSelectedPreambleIndexKey,
                                                [NSNumber numberWithUnsignedInt:0], ServiceSelectedPreambleIndexKey,
-                                               [NSNumber numberWithInteger:-1], LatexisationSelectedBodyTemplateIndexKey,//none
-                                               [NSNumber numberWithInteger:-1], ServiceSelectedBodyTemplateIndexKey,//none
+                                               [NSNumber numberWithInt:-1], LatexisationSelectedBodyTemplateIndexKey,//none
+                                               [NSNumber numberWithInt:-1], ServiceSelectedBodyTemplateIndexKey,//none
                                                [NSArray arrayWithObjects:
+                                                 #ifdef MIGRATE_ALIGN
                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], @"enabled",
-                                                   @"", @"string",
-                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY], @"identifier",
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+                                                   nil],
+                                                  #else
+                                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
+                                                   nil],
+                                                  #endif
+                                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY], ServiceShortcutIdentifierKey,
                                                    nil],
                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], @"enabled",
-                                                   @"", @"string",
-                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY], @"identifier",
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE], ServiceShortcutIdentifierKey,
                                                    nil],
                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], @"enabled",
-                                                   @"", @"string",
-                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE], @"identifier",
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT], ServiceShortcutIdentifierKey,
                                                    nil],
                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], @"enabled",
-                                                   @"", @"string",
-                                                   [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT], @"identifier",
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
                                                    nil],
                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], @"enabled",
-                                                   @"", @"string",
-                                                   [NSNumber numberWithInt:SERVICE_MULTILATEXIZE], @"identifier",
-                                                   nil],
-                                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], @"enabled",
-                                                   @"", @"string",
-                                                   [NSNumber numberWithInt:SERVICE_DELATEXIZE], @"identifier",
+                                                   [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                                                   @"", ServiceShortcutStringKey,
+                                                   [NSNumber numberWithInt:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
                                                    nil],
                                                 nil], ServiceShortcutsKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
@@ -511,19 +523,37 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
 -(latex_mode_t) latexisationLaTeXMode
 {
+  #ifdef MIGRATE_ALIGN
+  latex_mode_t result = LATEX_MODE_ALIGN;
+  #else
   latex_mode_t result = LATEX_MODE_EQNARRAY;
+  #endif
   if (self->isLaTeXiT)
     result = (latex_mode_t)[[NSUserDefaults standardUserDefaults] integerForKey:DefaultModeKey];
   else
   {
     Boolean ok = NO;
     result = CFPreferencesGetAppIntegerValue((CFStringRef)DefaultModeKey, (CFStringRef)LaTeXiTAppKey, &ok);
+    #ifdef MIGRATE_ALIGN
+    if (!ok)
+      result = LATEX_MODE_ALIGN;
+    #else
     if (!ok)
       result = LATEX_MODE_EQNARRAY;
+    #endif
   }
   return result;
 }
 //end latexisationLaTeXMode
+
+-(void) setLatexisationLaTeXMode:(latex_mode_t)mode
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setInteger:mode forKey:DefaultModeKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)DefaultModeKey, [NSNumber numberWithInt:mode], (CFStringRef)LaTeXiTAppKey);
+}
+//end setLatexisationLaTeXMode:
 
 -(CGFloat) latexisationFontSize
 {
@@ -866,14 +896,14 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
 -(NSArray*) bodyTemplates
 {
-  NSArray* result = [self bodyTemplatesFromControllerIfPossible:YES createControllerIfNeeded:NO];
+  NSArray* result = [self bodyTemplatesFromControllerIfPossible:YES createControllerIfNeeded:self->isLaTeXiT];
   return result;
 }
 //end bodyTemplates
 
 -(NSArray*) bodyTemplatesWithNone
 {
-  NSArray* result = [self bodyTemplatesFromControllerIfPossible:YES createControllerIfNeeded:NO];
+  NSArray* result = [self bodyTemplatesFromControllerIfPossible:YES createControllerIfNeeded:self->isLaTeXiT];
   result = [result arrayByAddingObject:[BodyTemplatesController noneBodyTemplate] atIndex:0];
   return result;
 }
@@ -1039,6 +1069,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   NSString* result = nil;
   switch(identifier)
   {
+    case SERVICE_LATEXIZE_ALIGN:
+      result = @"Typeset LaTeX Maths align";
+      break;
     case SERVICE_LATEXIZE_EQNARRAY:
       result = @"Typeset LaTeX Maths eqnarray";
       break;
@@ -1495,7 +1528,6 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [self->bodyTemplatesController setAvoidsEmptySelection:YES];
     [self->bodyTemplatesController setAutomaticallyPreparesContent:NO];
     [self->bodyTemplatesController setObjectClass:[NSMutableDictionary class]];
-    [self->bodyTemplatesController ensureDefaultBodyTemplate];
     result = self->bodyTemplatesController;
   }//end if (!self->bodyTemplatesController && creationOptionIfNeeded)
   return result;
@@ -1713,6 +1745,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       NSMutableDictionary* equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict =
         [NSMutableDictionary dictionaryWithObjectsAndKeys:
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
+            @"", ServiceShortcutStringKey,
+            nil], [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN],
+          [NSMutableDictionary dictionaryWithObjectsAndKeys:
             [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
             [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
             @"", ServiceShortcutStringKey,
@@ -1744,8 +1781,13 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
             nil], [NSNumber numberWithInt:SERVICE_DELATEXIZE],
           nil];
 
-      NSDictionary* identifiersByServiceName = [NSDictionary dictionaryWithObjectsAndKeys:
+      NSMutableDictionary* identifiersByServiceName = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], @"serviceLatexisationAlign",
+        #ifdef MIGRATE_ALIGN
+        [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], @"serviceLatexisationEqnarray",//redirection to Align on purpose for migration
+        #else
         [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY], @"serviceLatexisationEqnarray",
+        #endif
         [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY], @"serviceLatexisationDisplay",
         [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE], @"serviceLatexisationInline",
         [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT], @"serviceLatexisationText",
@@ -1757,9 +1799,13 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       NSString* serviceName = nil;
       while((serviceName = [enumerator nextObject]))
         [serviceNameByIdentifier setObject:serviceName forKey:[identifiersByServiceName objectForKey:serviceName]];
+      #ifdef MIGRATE_ALIGN
+      [serviceNameByIdentifier setObject:@"serviceLatexisationAlign" forKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN]];
+      #endif
 
       enumerator = [currentServicesInInfoPlist objectEnumerator];
       NSDictionary* service = nil;
+      BOOL didEncounterEqnarray = NO;
       while((service = [enumerator nextObject]))
       {
         NSString* message  = [service objectForKey:@"NSMessage"];
@@ -1768,18 +1814,26 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         NSNumber* enabled = [NSNumber numberWithBool:
                                (shortcutDefault && (!shortcutWhenEnabled || [shortcutDefault isEqualToString:shortcutWhenEnabled]))];
         NSNumber* identifier = [identifiersByServiceName objectForKey:message];
+        #ifdef MIGRATE_ALIGN
+        didEncounterEqnarray |= [message isEqualToString:@"serviceLatexisationEqnarray"];
+        #endif
         NSMutableDictionary* serviceEntry = !identifier ? nil : [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:identifier];
         [serviceEntry setObject:enabled forKey:ServiceShortcutEnabledKey];
         [serviceEntry setObject:(shortcutDefault ? shortcutDefault : @"") forKey:ServiceShortcutStringKey];
       }//end for each service of info.plist
-      NSArray* equivalentUserDefaultsToCurrentServicesInInfoPlist = [NSArray arrayWithObjects:
-        [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY]],
-        [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY]],
-        [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE]],
-        [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT]],
-        [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_MULTILATEXIZE]],
-        [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_DELATEXIZE]],
-        nil];
+      NSArray* equivalentUserDefaultsToCurrentServicesInInfoPlist =
+        [NSArray arrayWithObjects:
+          #ifdef MIGRATE_ALIGN
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN]],
+          #else
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY]],
+          #endif
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY]],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE]],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT]],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_MULTILATEXIZE]],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInt:SERVICE_DELATEXIZE]],
+          nil];          
 
       //build services as found in user defaults
       NSMutableArray* equivalentServicesToCurrentUserDefaults = [NSMutableArray arrayWithCapacity:6];
@@ -1799,7 +1853,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                                      @"NSPasteboardTypeRTF", @"NSRTFPboardType", @"public.rtf", nil];
       NSArray* deLatexisationSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", @"com.apple.flat-rtfd", @"NSPasteboardTypePDF", @"NSPDFPboardType", @"com.adobe.pdf", nil];
       NSDictionary* returnTypesByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
+        #ifdef MIGRATE_ALIGN
+        standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN],
+        #else
         standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY],
+        #endif
         standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY],
         standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE],
         standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT],
@@ -1807,14 +1865,18 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         deLatexisationReturnTypes, [NSNumber numberWithInt:SERVICE_DELATEXIZE],
         nil];
       NSDictionary* sendTypesByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
+        #ifdef MIGRATE_ALIGN      
+        standardSendTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN],
+        #else
         standardSendTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY],
+        #endif
         standardSendTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY],
         standardSendTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE],
         standardSendTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT],
         multiLatexisationSendTypes, [NSNumber numberWithInt:SERVICE_MULTILATEXIZE],
         deLatexisationSendTypes, [NSNumber numberWithInt:SERVICE_DELATEXIZE],
         nil];
-
+        
       NSArray* currentServiceShortcuts = [self serviceShortcuts];
       enumerator = [currentServiceShortcuts objectEnumerator];
       service = nil;
@@ -1845,7 +1907,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
           [equivalentServicesToCurrentUserDefaults addObject:serviceItemPlist];
       }//end for each service from user preferences
 
-      if (![equivalentUserDefaultsToCurrentServicesInInfoPlist isEqualToArray:currentServiceShortcuts])
+      if (didEncounterEqnarray || ![equivalentUserDefaultsToCurrentServicesInInfoPlist isEqualToArray:currentServiceShortcuts])
       {
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
         {

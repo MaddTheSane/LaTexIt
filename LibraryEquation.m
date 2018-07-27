@@ -8,6 +8,7 @@
 
 #import "LibraryEquation.h"
 
+#import "HistoryItem.h"
 #import "LatexitEquation.h"
 #import "LatexitEquationWrapper.h"
 #import "LaTeXProcessor.h"
@@ -205,7 +206,21 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   if (!((self = [super initWithCoder:coder])))
     return nil;
-  [self setEquation:[coder decodeObjectForKey:@"equation"]];
+  if ([coder containsValueForKey:@"value"])//legacy
+  {
+    NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
+    HistoryItem* historyItem = [coder decodeObjectForKey:@"value"];
+    LatexitEquation* latexitEquation = [[historyItem equation] retain];
+    [historyItem setEquation:nil];
+    [managedObjectContext safeInsertObject:latexitEquation];
+    [latexitEquation release];
+    [self setEquation:latexitEquation];
+    if (![self title])
+      [self setBestTitle];
+    [managedObjectContext safeDeleteObject:historyItem];
+  }//end if ([coder containsValueForKey:@"value"])//legacy
+  else
+    [self setEquation:[coder decodeObjectForKey:@"equation"]];
   return self;
 }
 //end initWithCoder:

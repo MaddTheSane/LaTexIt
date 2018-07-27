@@ -17,9 +17,7 @@
 
 @implementation BodyTemplatesController
 
-static NSAttributedString* defaultLocalizedBodyTemplateHeadAttributedString = nil;
-static NSAttributedString* defaultLocalizedBodyTemplateTailAttributedString = nil;
-static NSDictionary*       noneBodyTemplate = nil;
+static NSDictionary* noneBodyTemplate = nil;
 
 +(void) initialize
 {
@@ -48,58 +46,50 @@ static NSDictionary*       noneBodyTemplate = nil;
 }
 //end noneBodyTemplate
 
-+(NSAttributedString*) defaultLocalizedBodyTemplateHeadAttributedString
++(NSMutableDictionary*) bodyTemplateDictionaryForEnvironment:(NSString*)environment
 {
-  NSAttributedString* result = defaultLocalizedBodyTemplateHeadAttributedString;
-  if (!result)
-  {
-    @synchronized(self)
-    {
-      if (!result)
-      {
-        defaultLocalizedBodyTemplateHeadAttributedString = [[NSAttributedString alloc] initWithString:@"\\begin{align*}"];
-        result = defaultLocalizedBodyTemplateHeadAttributedString;
-      }//end if (!result)
-    }//end @synchronized(self)
-  }//end if (!result)
+  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+           [NSMutableString stringWithString:environment], @"name",
+           [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]] autorelease], @"head",
+           [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]] autorelease], @"tail",
+           nil];
   return result;
 }
-//end defaultLocalizedBodyTemplateHeadAttributedString
+//end bodyTemplateDictionaryForEnvironment:
 
-+(NSAttributedString*) defaultLocalizedBodyTemplateTailAttributedString
++(NSMutableDictionary*) bodyTemplateDictionaryEncodedForEnvironment:(NSString*)environment
 {
-  NSAttributedString* result = defaultLocalizedBodyTemplateTailAttributedString;
-  if (!result)
-  {
-    @synchronized(self)
-    {
-      if (!result)
-      {
-        defaultLocalizedBodyTemplateTailAttributedString = [[NSAttributedString alloc] initWithString:@"\\end{align*}"];
-        result = defaultLocalizedBodyTemplateTailAttributedString;
-      }//end if (!result)
-    }//end @synchronized(self)
-  }//end if (!result)
+  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+           [NSMutableString stringWithString:environment], @"name",
+           [NSKeyedArchiver archivedDataWithRootObject:
+             [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]] autorelease]],
+           @"head",
+           [NSKeyedArchiver archivedDataWithRootObject:
+             [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]] autorelease]],
+           @"tail",
+           nil];
   return result;
 }
-//end defaultLocalizedBodyTemplateTailAttributedString
+//end bodyTemplateDictionaryEncodedForEnvironment:
 
 +(NSMutableDictionary*) defaultLocalizedBodyTemplateDictionary
 {
-  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:@"align*"], @"name",
-           [self defaultLocalizedBodyTemplateHeadAttributedString], @"head",
-           [self defaultLocalizedBodyTemplateTailAttributedString], @"tail", nil];
+  #ifdef MIGRATE_ALIGN
+  NSMutableDictionary* result = [self bodyTemplateDictionaryForEnvironment:@"eqnarray*"];
+  #else
+  NSMutableDictionary* result = [self bodyTemplateDictionaryForEnvironment:@"align*"];
+  #endif
   return result;
 }
 //end defaultLocalizedBodyTemplateDictionary
 
 +(NSMutableDictionary*) defaultLocalizedBodyTemplateDictionaryEncoded
 {
-  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:@"align*"], @"name",
-           [NSKeyedArchiver archivedDataWithRootObject:[self defaultLocalizedBodyTemplateHeadAttributedString]], @"head",
-           [NSKeyedArchiver archivedDataWithRootObject:[self defaultLocalizedBodyTemplateTailAttributedString]], @"tail", nil];
+  #ifdef MIGRATE_ALIGN
+  NSMutableDictionary* result = [self bodyTemplateDictionaryEncodedForEnvironment:@"eqnarray*"];
+  #else
+  NSMutableDictionary* result = [self bodyTemplateDictionaryEncodedForEnvironment:@"align*"];
+  #endif
   return result;
 }
 //end defaultLocalizedBodyTemplateDictionaryEncoded
@@ -157,13 +147,6 @@ static NSDictionary*       noneBodyTemplate = nil;
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
--(void) ensureDefaultBodyTemplate
-{
-  if (![[self arrangedObjects] count])
-    [self addObject:[[self class] defaultLocalizedBodyTemplateDictionary]];
-}
-//end ensureDefaultBodyTemplate
-
 -(id) arrangedObjectsNamesWithNone
 {
   id result = [self valueForKeyPath:@"arrangedObjects.name"];
@@ -188,7 +171,7 @@ static NSDictionary*       noneBodyTemplate = nil;
   id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   if (!modelObject)
-    result = [[[self class] defaultLocalizedBodyTemplateDictionary] deepMutableCopy];
+    result = [[[self class] defaultLocalizedBodyTemplateDictionaryEncoded] deepMutableCopy];
   else
   {
     result = [modelObject deepMutableCopy];

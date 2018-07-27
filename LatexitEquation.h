@@ -19,7 +19,7 @@ extern NSString* LatexitEquationsPboardType;
   //NSColor*            color;       //the color chosen for the equation
   //double              pointSize;   //the point size chosen
   //NSDate*             date;        //the date the equation was computed
-  //latex_mode_t        mode;        //the mode (EQNARRAY, DISPLAY(\[...\]), INLINE($...$) or TEXT(text))
+  //latex_mode_t        mode;        //the mode (ALIGN, EQNARRAY, DISPLAY(\[...\]), INLINE($...$) or TEXT(text))
   
   //NSImage*            pdfCachedImage; //a cached image to display the pdf data  
 

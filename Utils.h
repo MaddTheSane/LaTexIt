@@ -45,8 +45,6 @@ FOUNDATION_STATIC_INLINE         double Clip_d(double inf, double x, double sup)
 NSString* GetMyPNGPboardType(void);
 NSString* GetMyJPEGPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
-int indexOfLatexMode(latex_mode_t mode);
-latex_mode_t latexModeForIndex(int index);
 
 FOUNDATION_EXTERN_INLINE int EndianI_BtoN(int x);
 FOUNDATION_EXTERN_INLINE int EndianI_NtoB(int x);

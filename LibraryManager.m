@@ -205,7 +205,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.0.0", @"version",
+          @"2.0.1", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -288,7 +288,10 @@ static LibraryManager* sharedManagerInstance = nil;
           [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
           NSArray* libraryItemsAdded = nil;
           @try{
+            [NSKeyedUnarchiver setClass:[LibraryEquation class] forClassName:@"LibraryFile"];
+            [NSKeyedUnarchiver setClass:[LibraryGroupItem class] forClassName:@"LibraryFolder"];
             libraryItemsAdded = [NSArray arrayWithObjects:[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData], nil];
+            [self->managedObjectContext processPendingChanges];
           }
           @catch(NSException* e){
             migrationError = YES;
@@ -300,7 +303,7 @@ static LibraryManager* sharedManagerInstance = nil;
           LibraryGroupItem* parentLibraryItem = nil;
           while((parentLibraryItem = [parentEnumerator nextObject]))
           {
-            //remove dummy trop-level group items from legacy data
+            //remove dummy top-level group items from legacy data
             if ([parentLibraryItem isKindOfClass:[LibraryGroupItem class]] && ![parentLibraryItem parent])
             {
               [itemsToRemove addObject:parentLibraryItem];
@@ -519,7 +522,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.0.0", @"version", nil] forPersistentStore:persistentStore];
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.0.1", @"version", nil] forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   [result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];

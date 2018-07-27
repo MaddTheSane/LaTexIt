@@ -609,6 +609,8 @@ static int SpellCheckerDocumentTag = 0;
       NSRange range = [self selectedRange];
       NSString* left = [textShortcut objectForKey:@"left"];
       NSString* right = [textShortcut objectForKey:@"right"];
+      if (!left)  left  = @"";
+      if (!right) right = @"";
       if (range.location == NSNotFound)
         [self insertText:[left stringByAppendingString:right]];
       else

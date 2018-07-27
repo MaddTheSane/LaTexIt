@@ -1,4 +1,5 @@
-﻿"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX-Mathe als Eqnarray setzen";
+﻿"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/LaTeX-Mathe als align setzen";
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX-Mathe als eqnarray setzen";
 "LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/LaTeX-Mathe in Display-Form setzen";
 "LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/LaTeX-Mathe in Inline-Form setzen";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/LaTeX-Text setzen";

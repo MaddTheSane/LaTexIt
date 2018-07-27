@@ -8,6 +8,7 @@
 
 #import "PreferencesControllerMigration.h"
 
+#import "BodyTemplatesController.h"
 #import "NSArrayExtended.h"
 #import "NSMutableDictionaryExtended.h"
 #import "NSWorkspaceExtended.h"
@@ -34,6 +35,7 @@ static NSString* Old_SyntaxColoringKeywordColorKey        = @"LaTeXiT_SyntaxColo
 static NSString* Old_SyntaxColoringCommentColorKey        = @"LaTeXiT_SyntaxColoringCommentColorKey";
 static NSString* Old_ReducedTextAreaStateKey              = @"LaTeXiT_ReducedTextAreaStateKey";
 
+static NSString* Old_BodyTemplatesKey             = @"BodyTemplatesKey";
 static NSString* Old_PreamblesKey                 = @"LaTeXiT_PreamblesKey";
 static NSString* Old_DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
 static NSString* Old_LatexisationSelectedPreambleIndexKey = @"LaTeXiT_LatexisationSelectedPreambleIndexKey";
@@ -127,6 +129,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
             Old_SyntaxColoringKeywordColorKey,
             Old_SyntaxColoringCommentColorKey,
             Old_ReducedTextAreaStateKey,
+            Old_BodyTemplatesKey,
             Old_PreamblesKey,
             Old_DefaultFontKey,
             Old_LatexisationSelectedPreambleIndexKey,
@@ -186,10 +189,18 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
 -(void) migratePreferences
 {
   NSString* oldLatexitVersion = nil;
+  NSString* newLatexitVersion = nil;
   if (self->isLaTeXiT)
+  {
     oldLatexitVersion = [[NSUserDefaults standardUserDefaults] stringForKey:Old_LaTeXiTVersionKey];
+    newLatexitVersion = [[NSUserDefaults standardUserDefaults] stringForKey:LaTeXiTVersionKey];
+  }
   else
+  {
     oldLatexitVersion = [(NSString*)CFPreferencesCopyAppValue((CFStringRef)Old_LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey) autorelease];
+    newLatexitVersion = [(NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey) autorelease];
+  }
+
   
   if ([oldLatexitVersion compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending)
   {//migration
@@ -257,6 +268,52 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
 
     [self replaceKey:Old_LaTeXiTVersionKey withKey:LaTeXiTVersionKey];
   }//end if ([latexitVersion compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending)
+  
+  if (!newLatexitVersion || ([newLatexitVersion compare:@"2.0.1" options:NSNumericSearch] == NSOrderedAscending))
+    [self replaceKey:Old_BodyTemplatesKey withKey:BodyTemplatesKey];
+  
+  if (!newLatexitVersion || ([newLatexitVersion compare:@"2.1.0" options:NSNumericSearch] == NSOrderedAscending))
+  {
+    #ifdef MIGRATE_ALIGN
+    NSMutableArray* servicesItems = nil;
+    if (self->isLaTeXiT)
+      servicesItems = [NSMutableArray arrayWithArray:
+      [[NSUserDefaults standardUserDefaults] objectForKey:ServiceShortcutsKey]];
+    else
+      servicesItems = [NSMutableArray arrayWithArray:
+        [(NSArray*)CFPreferencesCopyAppValue((CFStringRef)ServiceShortcutsKey, (CFStringRef)LaTeXiTAppKey) autorelease]];
+    NSUInteger count = [servicesItems count];
+    while(count--)
+    {
+      NSDictionary* serviceItem = [servicesItems objectAtIndex:count];
+      if ([[serviceItem objectForKey:ServiceShortcutIdentifierKey] intValue] == SERVICE_LATEXIZE_EQNARRAY)
+      {
+        [servicesItems replaceObjectAtIndex:count withObject:
+          [NSDictionary dictionaryWithObjectsAndKeys:
+            [serviceItem objectForKey:ServiceShortcutEnabledKey], ServiceShortcutEnabledKey,
+            [serviceItem objectForKey:ServiceShortcutStringKey], ServiceShortcutStringKey,
+            [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+            nil]];
+      }
+    }//end for each serviceItem
+    if (self->isLaTeXiT)
+      [[NSUserDefaults standardUserDefaults] setObject:servicesItems forKey:ServiceShortcutsKey];
+    else
+      CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, servicesItems, (CFStringRef)LaTeXiTAppKey);
+    if ([self latexisationLaTeXMode] == LATEX_MODE_EQNARRAY)
+      [self setLatexisationLaTeXMode:LATEX_MODE_ALIGN];
+
+    NSArrayController* localBodyTemplatesController = [self bodyTemplatesController];
+    NSEnumerator* enumerator = [[localBodyTemplatesController arrangedObjects] objectEnumerator];
+    NSDictionary* entry = nil;
+    BOOL foundEqnarray = NO;
+    while(!foundEqnarray && ((entry = [enumerator nextObject])))
+      foundEqnarray |= [[entry objectForKey:@"name"] isEqualToString:@"eqnarray*"];
+    if (!foundEqnarray)
+      [localBodyTemplatesController addObject:[[localBodyTemplatesController class] bodyTemplateDictionaryEncodedForEnvironment:@"eqnarray*"]];
+    #endif
+  }//end if (!newLatexitVersion || ([newLatexitVersion compare:@"2.1.0" options:NSNumericSearch] == NSOrderedAscending))
+
   if (self->isLaTeXiT)
   {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];

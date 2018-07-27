@@ -83,14 +83,37 @@
                 <li>Der Entwickler selbst wurde auf Version 2.0 aktualisiert durch Heirat seiner heißgeliebten Frau. Wohltätige Spenden zur Unterstützung der Flitterwochen werden gerne angenommen!</li>
               </ul>
             </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
-            <pubDate>Wed, 4 Nov 2009 22:00:00 +0100</pubDate>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-de.html#version-2.0.0</sparkle:releaseNotesLink>
+              <pubDate>Wed, 04 Nov 2009 21:28:25 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
+                sparkle:version="2.0.0"
+                type="application/octet-stream"
+                length="6167995"
+                sparkle:dsaSignature="MCwCFHaUhz+orUX7o9qUobM+FmicgJfTAhRZJZqjSa9OsyvyIK2lCYHfbv0+fA=="
+              />
+        </item>
+        <item>
+            <title>Version 2.0.1</title>
+            <description>
+            <ul>
+              <li>Einstweilig behobener 64bit-Fehler der aufgrund einer unbekannten Ursache zu einem Crash des AppleTypeServer führt (wohl ein Fehler in ATS);</li>
+              <li>Behebung von Migrationsproblemen der Bibliothek unter bestimmten Umständen;</li>
+              <li>Tiger-Unterstützung verbessert;</li>
+              <li>LinkBack-Unterstützung verbessert;</li>
+              <li>Reparatur des deaktivierten Knopfes um Preambeln auf die Bibliothek anzuwenden;</li>
+              <li>Beheben einiger kleiner Fehler.</li>
+            </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-de.html#version-2.0.1</sparkle:releaseNotesLink>
+            <pubDate>Sun, 15 Nov 2009 20:05:40 +0100</pubDate>
             <enclosure
-              url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
-              sparkle:version="2.0.0"
+              url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_1.dmg"
+              sparkle:version="2.0.1"
+              sparkle:shortVersionString="2.0.1"
               type="application/octet-stream"
-              length="6167930"
-              sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+              length="6179941"
+              sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
             />
         </item>
     </channel> 

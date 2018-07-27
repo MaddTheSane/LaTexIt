@@ -13,12 +13,10 @@
 }
 
 +(NSDictionary*)        noneBodyTemplate;
-+(NSAttributedString*)  defaultLocalizedBodyTemplateHeadAttributedString;
-+(NSAttributedString*)  defaultLocalizedBodyTemplateTailAttributedString;
 +(NSMutableDictionary*) defaultLocalizedBodyTemplateDictionary;
 +(NSMutableDictionary*) defaultLocalizedBodyTemplateDictionaryEncoded;
-
--(void) ensureDefaultBodyTemplate;
++(NSMutableDictionary*) bodyTemplateDictionaryForEnvironment:(NSString*)environment;
++(NSMutableDictionary*) bodyTemplateDictionaryEncodedForEnvironment:(NSString*)environment;
 
 -(id) arrangedObjectsNamesWithNone;
 

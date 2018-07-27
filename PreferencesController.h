@@ -142,6 +142,7 @@ extern NSString* AdditionalFilesPathsKey;
 -(void)            setExportScalePercent:(CGFloat)value;
 
 -(latex_mode_t) latexisationLaTeXMode;
+-(void)         setLatexisationLaTeXMode:(latex_mode_t)mode;
 -(CGFloat)      latexisationFontSize;
 -(NSData*)      latexisationFontColorData;
 -(NSColor*)     latexisationFontColor;

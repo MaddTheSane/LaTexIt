@@ -13,7 +13,8 @@
 @class LatexitEquation;
 @class LibraryGroupItem;
 
-@interface LibraryEquation : LibraryItem <NSCopying, NSCoding> {
+@interface LibraryEquation : LibraryItem <NSCopying, NSCoding>
+{
 }
 
 +(NSEntityDescription*) entity;

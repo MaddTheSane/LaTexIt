@@ -17,9 +17,9 @@
 @class LibraryGroupItem;
 
 @interface LibraryItem : NSManagedObject <NSCopying, NSCoding> {
-  NSString*    title;//seems to be needed on Tiger
   LibraryItem* parent;//seems to be needed on Tiger
-  NSSet*       children;//seems to be needed on Tiger
+  NSSet*   children;//seems to be needed on Tiger
+  NSString*    title;//seems to be needed on Tiger
   unsigned int sortIndex;//seems to be needed on Tiger
 }
 

@@ -97,6 +97,7 @@
 -(LibraryEquation*) lastAppliedLibraryEquation;
 -(void) setLastAppliedLibraryEquation:(LibraryEquation*)value;
 
+-(latex_mode_t) latexMode;
 -(void) setLatexMode:(latex_mode_t)mode;
 -(void) setColor:(NSColor*)color;
 -(void) setMagnification:(CGFloat)magnification;
@@ -110,7 +111,7 @@
 -(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
 -(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield
 
--(void) setBodyTemplate:(NSDictionary*)bodyTemplate;
+-(void) setBodyTemplate:(NSDictionary*)bodyTemplate moveCursor:(BOOL)moveCursor;
 
 -(BOOL) canReexport;
 -(BOOL) hasImage;

@@ -82,14 +82,37 @@
                 <li>el desarrollador también ha sido actualizado a la versión 2.0 al casarse con su amada esposa. Cualquier donación para la luna de miel será bienvenida!</li>
               </ul>
             </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
-            <pubDate>Wed, 4 Nov 2009 22:00:00 +0100</pubDate>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-es.html#version-2.0.0</sparkle:releaseNotesLink>
+              <pubDate>Wed, 04 Nov 2009 21:28:25 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
+                sparkle:version="2.0.0"
+                type="application/octet-stream"
+                length="6167995"
+                sparkle:dsaSignature="MCwCFHaUhz+orUX7o9qUobM+FmicgJfTAhRZJZqjSa9OsyvyIK2lCYHfbv0+fA=="
+              />
+        </item>
+        <item>
+            <title>Version 2.0.1</title>
+            <description>
+            <ul>
+              <li>temporalmente sorteando un bug del modo 64-bits, pues por una razón desconocida, hace fallar el AppleTypeServer (con certeza un bug en el propio ATS);</li>
+              <li>arreglados problemas de migración de Library bajo ciertas condiciones;</li>
+              <li>arreglado soporte para Tiger;</li>
+              <li>arreglado soporte para LinkBack;</li>
+              <li>arreglado el botón desactivado usado para aplicar los preámbulos a la biblioteca;</li>
+              <li>mejorados algunos detalles de la interfaz y arreglo de pequeños bugs.</li>
+            </ul>
+            </description>
+            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-es.html#version-2.0.1</sparkle:releaseNotesLink>
+            <pubDate>Sun, 15 Nov 2009 20:05:40 +0100</pubDate>
             <enclosure
-              url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
-              sparkle:version="2.0.0"
+              url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_1.dmg"
+              sparkle:version="2.0.1"
+              sparkle:shortVersionString="2.0.1"
               type="application/octet-stream"
-              length="6167930"
-              sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+              length="6179941"
+              sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
             />
         </item>
     </channel> 

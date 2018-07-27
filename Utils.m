@@ -57,39 +57,22 @@ NSString* GetMyJPEGPboardType(void)
 
 latex_mode_t validateLatexMode(latex_mode_t mode)
 {
-  return (mode >= LATEX_MODE_DISPLAY) && (mode <= LATEX_MODE_EQNARRAY) ? mode : LATEX_MODE_DISPLAY;
+  #ifdef MIGRATE_ALIGN
+  latex_mode_t result = (mode != LATEX_MODE_ALIGN) &&
+                        (mode != LATEX_MODE_DISPLAY) &&
+                        (mode != LATEX_MODE_INLINE) &&
+                        (mode != LATEX_MODE_TEXT) ? LATEX_MODE_ALIGN :
+                        mode;
+  #else
+  latex_mode_t result = (mode != LATEX_MODE_EQNARRAY) &&
+                        (mode != LATEX_MODE_DISPLAY) &&
+                        (mode != LATEX_MODE_INLINE) &&
+                        (mode != LATEX_MODE_TEXT) ? LATEX_MODE_EQNARRAY :
+                        mode;
+  #endif
+  return result;
 }
 //end validateLatexMode()
-
-int indexOfLatexMode(latex_mode_t mode)
-{
-  int index = 0;
-  switch(mode)
-  {
-    case LATEX_MODE_EQNARRAY:index=0;break;
-    case LATEX_MODE_DISPLAY :index=1;break;
-    case LATEX_MODE_INLINE  :index=2;break;
-    case LATEX_MODE_TEXT    :index=3;break;
-    default: index = mode; break;
-  }
-  return index;
-}
-//end indexOfLatexMode()
-
-latex_mode_t latexModeForIndex(int index)
-{
-  int mode = LATEX_MODE_DISPLAY;
-  switch(index)
-  {
-    case 0:mode = LATEX_MODE_EQNARRAY;break;
-    case 1:mode = LATEX_MODE_DISPLAY ;break;
-    case 2:mode = LATEX_MODE_INLINE  ;break;
-    case 3:mode = LATEX_MODE_TEXT    ;break;
-    default:mode = index ;break;
-  }
-  return mode;
-}
-//end latexModeForIndex()
 
 NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDidChange)
 {

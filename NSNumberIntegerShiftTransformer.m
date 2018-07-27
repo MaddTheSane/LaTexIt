@@ -12,7 +12,7 @@
 
 +(void) initialize
 {
-  [self setValueTransformer:[self transformerWithShift:[NSNumber numberWithInteger:0]] forName:[self name]];
+  [self setValueTransformer:[self transformerWithShift:[NSNumber numberWithInt:0]] forName:[self name]];
 }
 //end initialize
 
@@ -60,14 +60,14 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithInteger:[value integerValue]+[self->shift integerValue]];
+  id result = [NSNumber numberWithInt:[value intValue]+[self->shift intValue]];
   return result;
 }
 //end transformedValue:
 
 -(id) reverseTransformedValue:(id)value
 {
-  id result = [NSNumber numberWithInteger:[value integerValue]-[self->shift integerValue]];
+  id result = [NSNumber numberWithInt:[value intValue]-[self->shift intValue]];
   return result;
 }
 //end reverseTransformedValue:

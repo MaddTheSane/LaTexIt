@@ -179,6 +179,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(void) windowControllerDidLoadNib:(NSWindowController*)aController
 {
   [super windowControllerDidLoadNib:aController];
+  
   NSWindow* window = [self windowForSheet];
   [window setDelegate:self];
   [window setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
@@ -189,7 +190,12 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   self->documentFrameSaved = [window frame];
   
   PreferencesController* preferencesController = [PreferencesController sharedController];
+  #ifdef MIGRATE_ALIGN
+  [self->lowerBoxControlsBoxLatexModeSegmentedControl setLabel:@"Align" forSegment:0];
+  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN forSegment:0];
+  #else
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
+  #endif
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
@@ -284,7 +290,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   }
   else
   {
-    [self setBodyTemplate:[[PreferencesController sharedController] bodyTemplateDocumentDictionary]];
+    [self setBodyTemplate:[[PreferencesController sharedController] bodyTemplateDocumentDictionary] moveCursor:YES];
   }
   
   if (self->initialPdfData)
@@ -503,9 +509,9 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [self->lowerBoxLatexizeButton setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
       [self->lowerBoxLatexizeButton sizeToFit];
       NSRect lowerBoxLatexizeButtonFrame = [self->lowerBoxLatexizeButton frame];
-      [self->lowerBoxLatexizeButton setFrame:NSMakeRect(//superviewFrame.size.width-18-lowerBoxLatexizeButtonFrame.size.width, 5,
-                                                        NSMaxX([self->lowerBoxControlsBoxLatexModeSegmentedControl frame])-
-                                                        lowerBoxLatexizeButtonFrame.size.width, 5,
+      [self->lowerBoxLatexizeButton setFrame:NSMakeRect(MAX(superviewFrame.size.width-18-lowerBoxLatexizeButtonFrame.size.width,
+                                                            NSMaxX([self->lowerBoxControlsBoxLatexModeSegmentedControl frame])-
+                                                            lowerBoxLatexizeButtonFrame.size.width), 5,
                                                         lowerBoxLatexizeButtonFrame.size.width, lowerBoxLatexizeButtonFrame.size.height)];
       if (oldValue != DOCUMENT_STYLE_UNDEFINED)
       {
@@ -553,8 +559,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     self->unzoomedFrame = [window frame];
   else
     proposedFrame = self->unzoomedFrame;
-  BOOL optionIsPressed = ((GetCurrentEventKeyModifiers() & optionKey) != 0);
-  if (optionIsPressed && (self->documentStyle == DOCUMENT_STYLE_NORMAL))
+  //OOL optionIsPressed = ((GetCurrentEventKeyModifiers() & optionKey) != 0);
+  if (/*optionIsPressed &&*/ (self->documentStyle == DOCUMENT_STYLE_NORMAL))
     [self setDocumentStyle:DOCUMENT_STYLE_MINI];
   else if (self->documentStyle == DOCUMENT_STYLE_MINI)
     [self setDocumentStyle:DOCUMENT_STYLE_NORMAL];
@@ -716,7 +722,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end setSourceText:
 
--(void) setBodyTemplate:(NSDictionary*)bodyTemplate
+-(void) setBodyTemplate:(NSDictionary*)bodyTemplate moveCursor:(BOOL)moveCursor
 {
   //get rid of previous bodyTemplate
   NSAttributedString* currentBody = [self->lowerBoxSourceTextView textStorage];
@@ -766,8 +772,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   [typingAttributes setObject:defaultFont forKey:NSFontAttributeName];
   [newBody addAttributes:typingAttributes range:NSMakeRange(0, [newBody length])];
   [self setSourceText:newBody];
+  if (moveCursor)
+    [self->lowerBoxSourceTextView setSelectedRange:NSMakeRange([headString length], 0)];
 }
-//end setBodyTemplate:
+//end setBodyTemplate:moveCursor:
 
 //called by the Latexise button; will launch the latexisation
 -(IBAction) latexize:(id)sender
@@ -816,8 +824,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     //computes the parameters thanks to the value of the GUI elements
     NSString* preamble = [[[self->lowerBoxPreambleTextView string] mutableCopy] autorelease];
     NSColor* color = [[[self->lowerBoxControlsBoxFontColorWell color] copy] autorelease];
-    int selectedSegment = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment];
-    latex_mode_t mode = (latex_mode_t) [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:selectedSegment];
+    latex_mode_t mode = (latex_mode_t) [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
     
     //perform effective latexisation
     NSArray* errors = nil;
@@ -890,6 +897,13 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self reexportImage:sender];
 }
 //end latexizeAndExport:
+
+-(latex_mode_t) latexMode
+{
+  latex_mode_t result = (latex_mode_t)[self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
+  return result;
+}
+//end latexMode
 
 -(void) setLatexMode:(latex_mode_t)mode
 {
@@ -983,18 +997,19 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(LatexitEquation*) latexitEquationWithCurrentState
 {
   LatexitEquation* result = nil;
-  int selectedSegment = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment];
-  int tag = [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:selectedSegment];
-  latex_mode_t mode = (latex_mode_t) tag;
+  /*int tag = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
+  latex_mode_t mode = (latex_mode_t) tag;*/
   BOOL automaticHighContrastedPreviewBackground =
     [[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey];
   NSColor* backgroundColor = automaticHighContrastedPreviewBackground ? nil : [self->upperBoxImageView backgroundColor];
-  result = [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData]
-                  preamble:[[[self->lowerBoxPreambleTextView textStorage] mutableCopy] autorelease]
+  result = [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData] useDefaults:YES] autorelease];
+  if (backgroundColor)
+    [result setBackgroundColor:backgroundColor];
+/*                  preamble:[[[self->lowerBoxPreambleTextView textStorage] mutableCopy] autorelease]
                 sourceText:[[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease]
                      color:[self->lowerBoxControlsBoxFontColorWell color]
                  pointSize:[self->lowerBoxControlsBoxFontSizeTextField doubleValue] date:[NSDate date]
-                mode:mode backgroundColor:backgroundColor] autorelease];
+                mode:mode backgroundColor:backgroundColor] autorelease];*/
   return result;
 }
 //end latexitEquationWithCurrentState
@@ -1073,6 +1088,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [[self->lowerBoxPreambleTextView textStorage] addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
     [[self->lowerBoxSourceTextView textStorage]   addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
 
+    [self->lowerBoxControlsBoxFontColorWell deactivate];
     [self->lowerBoxControlsBoxFontColorWell setColor:[latexitEquation color]];
     [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[latexitEquation pointSize]];
     [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[latexitEquation mode]];
@@ -1114,6 +1130,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self setSourceText:[[[NSAttributedString alloc ] init] autorelease]];
     [[self->lowerBoxPreambleTextView textStorage] addAttributes:typingAttributes range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
     [[self->lowerBoxSourceTextView textStorage]   addAttributes:typingAttributes range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
+    [self->lowerBoxControlsBoxFontColorWell deactivate];
     [self->lowerBoxControlsBoxFontColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
     [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
     [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
@@ -1580,7 +1597,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   {
     bodyTemplate = [sender representedObject];
     if (!bodyTemplate || [bodyTemplate isKindOfClass:[NSDictionary class]])
-      [self setBodyTemplate:bodyTemplate];
+      [self setBodyTemplate:bodyTemplate moveCursor:YES];
   }
   else
     [[AppController appController] showPreferencesPaneWithItemIdentifier:BodyTemplatesToolbarItemIdentifier]; 

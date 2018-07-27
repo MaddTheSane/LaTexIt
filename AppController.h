@@ -91,6 +91,7 @@
 -(IBAction) changeOpenFileType:(id)sender;
 -(IBAction) exportImage:(id)sender;
 -(IBAction) reexportImage:(id)sender;
+-(IBAction) changeLatexMode:(id)sender;
 -(IBAction) makeLatex:(id)sender;
 -(IBAction) makeLatexAndExport:(id)sender;
 -(IBAction) displayLog:(id)sender;
@@ -155,6 +156,7 @@
 -(NSString*) nameOfType:(export_format_t)format;
 
 //methods for the application service
+-(void) serviceLatexisationAlign:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;

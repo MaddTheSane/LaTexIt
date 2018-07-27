@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf110
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf250
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 1.16.0\
+\b \cf0 LaTeXiT 2.0.1\
 
 \b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -136,8 +136,18 @@ Notez que depuis la version 1.16.0, LaTeXiT peut g\'e9rer plusieurs pr\'e9ambule
 }¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
 \f1\fs22 \cf0 \
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 \
+
+\fs26 \cf0 \ul Les "Mod\'e8les de corps document"\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone Depuis la version 2.0.0, LaTeXiT, de la m\'eame fa\'e7on que pour les pr\'e9ambules, permet de d\'e9finir des mod\'e8les de corps de document. Ces mod\'e8les sont compos\'e9s de deux parties : un en-t\'eate et un pied-de-page. Il est ainsi possible :\
+- d'avoir un contenu par d\'e9faut pour les nouveaux documents, constitu\'e9 de l'en-t\'eate et du pied de page;\
+- "d'encadrer" rapidement un contenu existant avec ces morceaux.\
+Comme pour les pr\'e9ambules, il est possible d'acc\'e9der rapidement aux mod\'e8les de corps avec le petit bouton d\'e9roulant en haut \'e0 gauche de la zone de texte.\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs26 \cf0 \ul Les "Fichiers additionnels"\
@@ -392,6 +402,18 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.0.1 (15 novembre 2009)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-m\'eame);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 - correction de probl\'e8mes de migration de la biblioth\'e8que sous certains conditions;\
+- correction du support de Tiger;\
+- correction du support de LinkBack;\
+- correction des boutons inactifs pour appliquer les pr\'e9ambules \'e0 la biblioth\'e8que;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - am\'e9lioration de quelques points d'interface et correction de bugs mineurs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
 v 2.0.0 (4 novembre 2009)\
 - revue du code avec de nombreux changements internes pour une meilleure flexibilit\'e9;\
 - ajout des "mod\'e8les de corps de document";\

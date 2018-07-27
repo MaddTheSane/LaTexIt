@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf110
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf250
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 1.16.0\
+\b \cf0 LaTeXiT 2.0.1\
 
 \b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -137,6 +137,17 @@ The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usep
 \f1\fs22 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul The "Body templates"\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone Since version 2.0.0, LaTeXiT, like with preambles, allows the definition of body templates. These templates are made of two parts : a header and a footer. Thus, you can :\
+- have a default content for new documents, made of the concatenation of the header and the footer;\
+- enclose an exisiting content with these two parts.\
+Like with preambles, you can access quickly the body templates with the small popup button in the upper-left corner of the text area.\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs26 \cf0 \ul The "Archivos adicionales"\
@@ -401,6 +412,16 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.0.1 (15 Noviembre 2009)\
+\pard\pardeftab720\ql\qnatural
+\cf0 - temporalmente sorteando un bug del modo 64-bits, pues por una raz\'f3n desconocida, hace fallar el AppleTypeServer (con certeza un bug en el propio ATS);\
+- arreglados problemas de migraci\'f3n de Library bajo ciertas condiciones;\
+- arreglado soporte para Tiger;\
+- arreglado soporte para LinkBack;\
+- arreglado el bot\'f3n desactivado usado para aplicar los pre\'e1mbulos a la biblioteca;\
+- mejorados algunos detalles de la interfaz y arreglo de peque\'f1os bugs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
 v 2.0.0 (4 Noviembre 2009)\
 \pard\pardeftab720\ql\qnatural
 \cf0 - Revisi\'f3n de c\'f3digo con muchas mejoras internas para una mayor flexibilidad;\
@@ -413,8 +434,7 @@ v 2.0.0 (4 Noviembre 2009)\
 - recuperada la compatibilidad con procesadores G3;\
 - tiempo de arranque mejorado;\
 - corregidos problemas en los servicios;\
-\pard\pardeftab720\ql\qnatural
-\cf0 - corregidos otros problemas menores;\
+- corregidos otros problemas menores;\
 - traducci\'f3n al japon\'e9s;\
 - el desarrollador tambi\'e9n ha sido actualizado a la versi\'f3n 2.0 al casarse con su amada esposa. Cualquier donaci\'f3n para la luna de miel ser\'e1 bienvenida!\
 \

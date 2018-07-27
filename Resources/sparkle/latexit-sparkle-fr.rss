@@ -83,13 +83,36 @@
               </ul>
               </description>
               <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
-              <pubDate>Wed, 4 Nov 2009 22:00:00 +0100</pubDate>
+              <pubDate>Wed, 04 Nov 2009 21:28:25 +0100</pubDate>
               <enclosure
                 url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_0.dmg"
                 sparkle:version="2.0.0"
                 type="application/octet-stream"
-                length="6167930"
-                sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+                length="6167995"
+                sparkle:dsaSignature="MCwCFHaUhz+orUX7o9qUobM+FmicgJfTAhRZJZqjSa9OsyvyIK2lCYHfbv0+fA=="
+              />
+          </item>
+        <item>
+              <title>Version 2.0.1</title>
+              <description>
+              <ul>
+                <li>contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-même)</li>
+                <li>correction de problèmes de migration de la bibliothèque sous certains conditions;</li>
+                <li>correction du support de Tiger;</li>
+                <li>correction du support de LinkBack;</li>
+                <li>correction des boutons inactifs pour appliquer les préambules à la bibliothèque;</li>
+                <li>amélioration de quelques points d'interface et correction de bugs mineurs.</li>
+              </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.0.1</sparkle:releaseNotesLink>
+              <pubDate>Sun, 15 Nov 2009 20:05:40 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_0_1.dmg"
+                sparkle:version="2.0.1"
+                sparkle:shortVersionString="2.0.1"
+                type="application/octet-stream"
+                length="6179941"
+                sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
               />
           </item>
       </channel> 

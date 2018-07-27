@@ -1,3 +1,4 @@
+"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/Componer ecuación en un entorno align";
 "LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Componer ecuación en un entorno eqnarray";
 "LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Componer ecuación en modo display, \\[...\\]";
 "LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Componer ecuación en modo inline, $...$";

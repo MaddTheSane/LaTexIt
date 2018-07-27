@@ -165,6 +165,7 @@ extern NSString* WebToolbarItemIdentifier;
   IBOutlet NSButton*                encapsulationsRemoveButton;
   
   IBOutlet NSButton* updatesCheckUpdatesButton;
+  IBOutlet NSButton* updatesCheckUpdatesNowButton;
   
   NSAlert*           applyPreambleToLibraryAlert;
 }

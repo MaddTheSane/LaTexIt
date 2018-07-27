@@ -40,6 +40,7 @@
 #import "ServiceShortcutsTextView.h"
 #import "Utils.h"
 
+#import "RegexKitLite.h"
 #import <Sparkle/Sparkle.h>
 
 #define NSAppKitVersionNumber10_4 824
@@ -174,7 +175,12 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   [self->generalDummyBackgroundAutoStateButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DefaultAutomaticHighContrastedPreviewBackgroundKey] options:nil];
 
+  #ifdef MIGRATE_ALIGN
+  [self->generalLatexisationLaTeXModeSegmentedControl setLabel:@"Align" forSegment:0];
+  [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN forSegment:0];
+  #else
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
+  #endif
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
@@ -311,7 +317,7 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   [self->bodyTemplatesNamesLatexisationPopUpButton bind:NSSelectedIndexBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:LatexisationSelectedBodyTemplateIndexKey] options:
       [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumberIntegerShiftTransformer transformerWithShift:[NSNumber numberWithInteger:1]],
+        [NSNumberIntegerShiftTransformer transformerWithShift:[NSNumber numberWithInt:1]],
         NSValueTransformerBindingOption, nil]];
 
   //Composition configurations
@@ -722,17 +728,17 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     else if ([itemIdentifier isEqualToString:PreamblesToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"preambleToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"Preambles", @"Preambles") stringByReplacingOccurrencesOfString:@"LaTeX" withString:@""];
+      label = [NSLocalizedString(@"Preambles", @"Preambles") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
     }
     else if ([itemIdentifier isEqualToString:BodyTemplatesToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"bodyTemplateToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"Body templates", @"Body templates") stringByReplacingOccurrencesOfString:@"LaTeX" withString:@""];
+      label = [NSLocalizedString(@"Body templates", @"Body templates") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
     }
     else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"compositionToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"Composition", @"Composition") stringByReplacingOccurrencesOfString:@"LaTeX" withString:@""];
+      label = [NSLocalizedString(@"Composition", @"Composition") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
     }
     else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     {
@@ -811,6 +817,9 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   NSFontManager* fontManager = [NSFontManager sharedFontManager];
   if ([fontManager delegate] == self)
     [fontManager setDelegate:nil];
+    
+  //update from SUUpdater
+  [self->updatesCheckUpdatesNowButton setEnabled:![[[AppController appController] sparkleUpdater] updateInProgress]];
 }
 //end toolbarHit:
 
@@ -954,7 +963,6 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     {
       NSAttributedString* preamble = [[PreferencesController sharedController] preambleDocumentAttributedString];
       [[libraryEquation equation] setPreamble:preamble];
-      [preamble release];
     }//end for each libraryEquation
   }//end if (choice == NSAlertFirstButtonReturn)
 }

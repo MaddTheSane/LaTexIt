@@ -2,16 +2,16 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">10B504</string>
+		<string key="IBDocument.SystemVersion">10C540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">740</string>
-		<string key="IBDocument.AppKitVersion">1038.2</string>
-		<string key="IBDocument.HIToolboxVersion">437.00</string>
+		<string key="IBDocument.AppKitVersion">1038.25</string>
+		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">740</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="9427"/>
+			<integer value="637"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -619,13 +619,13 @@
 									<object class="NSTextField" id="495967126">
 										<reference key="NSNextResponder" ref="403496213"/>
 										<int key="NSvFlags">268</int>
-										<string key="NSFrame">{{170, 165}, {143, 17}}</string>
+										<string key="NSFrame">{{182, 165}, {119, 17}}</string>
 										<reference key="NSSuperview" ref="403496213"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="580586491">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">272629760</int>
-											<string key="NSContents">Marges additionnelles</string>
+											<string key="NSContents">Marges par défaut</string>
 											<reference key="NSSupport" ref="948510726"/>
 											<reference key="NSControlView" ref="495967126"/>
 											<reference key="NSBackgroundColor" ref="161506329"/>
@@ -4405,7 +4405,7 @@ AAAAAAAAAAAAAAAAdGV4dAAAAABDb3B5cmlnaHQgQXBwbGUsIEluYy4sIDIwMDkAA</bytes>
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSCustomView" id="739719386">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSButton" id="243156477">
@@ -4475,6 +4475,7 @@ AAAAAAAAAAAAAAAAdGV4dAAAAABDb3B5cmlnaHQgQXBwbGUsIEluYy4sIDIwMDkAA</bytes>
 					</object>
 				</array>
 				<string key="NSFrameSize">{548, 133}</string>
+				<reference key="NSSuperview"/>
 				<object class="NSMutableString" key="NSClassName">
 					<characters key="NS.bytes">NSView</characters>
 				</object>
@@ -5012,7 +5013,7 @@ bGVzIGNhcmFjdMOocmVzIGFjY2VudHXDqXM</bytes>
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSCustomView" id="232503452">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSScrollView" id="370435937">
@@ -5544,7 +5545,6 @@ bGVzIGNhcmFjdMOocmVzIGFjY2VudHXDqXM</bytes>
 					</object>
 				</array>
 				<string key="NSFrameSize">{548, 292}</string>
-				<reference key="NSSuperview"/>
 				<object class="NSMutableString" key="NSClassName">
 					<characters key="NS.bytes">NSView</characters>
 				</object>
@@ -7708,14 +7708,6 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">preamblesNamesValueApplyToLibraryButton</string>
-						<reference key="source" ref="325915699"/>
-						<reference key="destination" ref="559470920"/>
-					</object>
-					<int key="connectionID">5838</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">compositionConfigurationsManagerTableView</string>
 						<reference key="source" ref="325915699"/>
 						<reference key="destination" ref="258580121"/>
@@ -8393,6 +8385,22 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 						<reference key="destination" ref="236573642"/>
 					</object>
 					<int key="connectionID">9486</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">preamblesValueApplyToLibraryButton</string>
+						<reference key="source" ref="325915699"/>
+						<reference key="destination" ref="559470920"/>
+					</object>
+					<int key="connectionID">9487</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">updatesCheckUpdatesNowButton</string>
+						<reference key="source" ref="325915699"/>
+						<reference key="destination" ref="559763093"/>
+					</object>
+					<int key="connectionID">9488</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -11786,6 +11794,7 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 				<boolean value="YES" key="4917.ImportedFromIB2"/>
 				<string key="5078.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="5078.ImportedFromIB2"/>
+				<string key="573.IBEditorWindowLastContentRect">{{168, 184}, {553, 466}}</string>
 				<string key="573.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="573.ImportedFromIB2"/>
 				<string key="574.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11828,6 +11837,7 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 				<boolean value="YES" key="592.ImportedFromIB2"/>
 				<string key="593.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="593.ImportedFromIB2"/>
+				<string key="599.IBEditorWindowLastContentRect">{{231, 94}, {548, 487}}</string>
 				<string key="599.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="599.ImportedFromIB2"/>
 				<string key="602.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11868,6 +11878,7 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 				<boolean value="YES" key="635.ImportedFromIB2"/>
 				<string key="636.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="636.ImportedFromIB2"/>
+				<string key="637.IBEditorWindowLastContentRect">{{20, 549}, {548, 133}}</string>
 				<string key="637.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="637.ImportedFromIB2"/>
 				<string key="638.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12357,7 +12368,7 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">9486</int>
+			<int key="maxID">9488</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -12759,6 +12770,7 @@ HgAAAAEAAAACAAAALi4QAAAAAAAAAKQBAAACAAAAAQAAAA</bytes>
 						<string key="serviceView">NSView</string>
 						<string key="serviceWarningLinkBackButton">NSButton</string>
 						<string key="updatesCheckUpdatesButton">NSButton</string>
+						<string key="updatesCheckUpdatesNowButton">NSButton</string>
 						<string key="webView">NSView</string>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

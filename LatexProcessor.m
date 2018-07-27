@@ -403,10 +403,12 @@ static LaTeXProcessor* sharedInstance = nil;
 
   //some tuning due to parameters; note that \[...\] is replaced by $\displaystyle because of
   //incompatibilities with the magical boxes
-  NSString* addSymbolLeft  = (latexMode == LATEX_MODE_EQNARRAY) ? @"\\begin{eqnarray*}" :
+  NSString* addSymbolLeft  = (latexMode == LATEX_MODE_ALIGN) ? @"\\begin{align*}" :
+                             (latexMode == LATEX_MODE_EQNARRAY) ? @"\\begin{eqnarray*}" :
                              (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " :
                              (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
-  NSString* addSymbolRight = (latexMode == LATEX_MODE_EQNARRAY) ? @"\\end{eqnarray*}" :
+  NSString* addSymbolRight = (latexMode == LATEX_MODE_ALIGN) ? @"\\end{align*}" :
+                             (latexMode == LATEX_MODE_EQNARRAY) ? @"\\end{eqnarray*}" :
                              (latexMode == LATEX_MODE_DISPLAY) ? @"$" :
                              (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
   id appControllerClass = NSClassFromString(@"AppController");
@@ -528,7 +530,7 @@ static LaTeXProcessor* sharedInstance = nil;
   CGFloat fontColorWhite = [color grayLevel];
   BOOL  fontColorIsWhite = (fontColorWhite == 1.f);
   BOOL shouldTryStep2 = !fontColorIsWhite &&
-                         (latexMode != LATEX_MODE_TEXT) && (latexMode != LATEX_MODE_EQNARRAY) &&
+                         (latexMode != LATEX_MODE_TEXT) && (latexMode != LATEX_MODE_EQNARRAY) && (latexMode != LATEX_MODE_ALIGN) &&
                          (compositionMode != COMPOSITION_MODE_LATEXDVIPDF);
                          //&& (compositionMode != COMPOSITION_MODE_XELATEX);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
@@ -774,7 +776,8 @@ static LaTeXProcessor* sharedInstance = nil;
 
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
-    if (!failed && pdfData)
+    #warning 64bits problem
+    if (!failed && pdfData && (sizeof(NSInteger) == 4))//only in 32 bits mode. It chrashed in 64bits. Why ??
     {
       //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
@@ -816,6 +819,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [fileManager removeFileAtPath:additionalFilePathLinkPath handler:nil];
 
   if (outPdfData) *outPdfData = pdfData;
+  
   //returns the cropped/magnified/coloured image if possible; nil if it has failed. 
   return !pdfData ? nil : pdfFilePath;
 }

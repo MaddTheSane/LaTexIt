@@ -169,7 +169,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.0.0", @"version",
+       @"2.0.1", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -178,7 +178,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.0.0" forKey:@"version"];
+  [coder encodeObject:@"2.0.1" forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:
@@ -201,7 +201,11 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     NSColor* color = nil;
     double pointSize = 0.;
     NSDate* date = nil;
+    #ifdef MIGRATE_ALIGN
+    latex_mode_t mode = LATEX_MODE_ALIGN;
+    #else
     latex_mode_t mode = LATEX_MODE_EQNARRAY;
+    #endif
     NSColor* backgroundColor = nil;
     NSString* title = nil;
     if (!version || [version compare:@"1.2" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)

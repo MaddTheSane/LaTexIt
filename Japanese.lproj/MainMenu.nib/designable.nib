@@ -2,16 +2,16 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10B504</string>
+		<string key="IBDocument.SystemVersion">10C540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">740</string>
-		<string key="IBDocument.AppKitVersion">1038.2</string>
-		<string key="IBDocument.HIToolboxVersion">437.00</string>
+		<string key="IBDocument.AppKitVersion">1038.25</string>
+		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">740</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1339"/>
+			<integer value="215"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -585,6 +585,57 @@
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
 									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
+								<object class="NSMenuItem" id="178121520">
+									<reference key="NSMenu" ref="627182964"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
+								<object class="NSMenuItem" id="259887440">
+									<reference key="NSMenu" ref="627182964"/>
+									<string key="NSTitle">Eqnarray</string>
+									<string key="NSKeyEquiv">1</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+									<int key="NSTag">1</int>
+								</object>
+								<object class="NSMenuItem" id="544118377">
+									<reference key="NSMenu" ref="627182964"/>
+									<string key="NSTitle">Display</string>
+									<string key="NSKeyEquiv">2</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+									<int key="NSTag">2</int>
+								</object>
+								<object class="NSMenuItem" id="373590770">
+									<reference key="NSMenu" ref="627182964"/>
+									<string key="NSTitle">Inline</string>
+									<string key="NSKeyEquiv">3</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+									<int key="NSTag">3</int>
+								</object>
+								<object class="NSMenuItem" id="109148208">
+									<reference key="NSMenu" ref="627182964"/>
+									<string key="NSTitle">テキスト編集</string>
+									<string key="NSKeyEquiv">4</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+									<int key="NSTag">4</int>
 								</object>
 								<object class="NSMenuItem" id="673594568">
 									<reference key="NSMenu" ref="627182964"/>
@@ -2005,6 +2056,38 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 					</object>
 					<int key="connectionID">1592</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeLatexMode:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="259887440"/>
+					</object>
+					<int key="connectionID">1598</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeLatexMode:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="544118377"/>
+					</object>
+					<int key="connectionID">1599</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeLatexMode:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="373590770"/>
+					</object>
+					<int key="connectionID">1600</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeLatexMode:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="109148208"/>
+					</object>
+					<int key="connectionID">1601</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2549,6 +2632,11 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 							<reference ref="673594568"/>
 							<reference ref="673458378"/>
 							<reference ref="794828021"/>
+							<reference ref="178121520"/>
+							<reference ref="259887440"/>
+							<reference ref="544118377"/>
+							<reference ref="373590770"/>
+							<reference ref="109148208"/>
 						</array>
 						<reference key="parent" ref="968479910"/>
 					</object>
@@ -2940,6 +3028,31 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<reference key="object" ref="747113586"/>
 						<reference key="parent" ref="54661141"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1593</int>
+						<reference key="object" ref="178121520"/>
+						<reference key="parent" ref="627182964"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1594</int>
+						<reference key="object" ref="259887440"/>
+						<reference key="parent" ref="627182964"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1595</int>
+						<reference key="object" ref="544118377"/>
+						<reference key="parent" ref="627182964"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1596</int>
+						<reference key="object" ref="373590770"/>
+						<reference key="parent" ref="627182964"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1597</int>
+						<reference key="object" ref="109148208"/>
+						<reference key="parent" ref="627182964"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3136,6 +3249,12 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1590.IBShouldRemoveOnLegacySave"/>
 				<string key="1591.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1591.ImportedFromIB2"/>
+				<string key="1593.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1593.ImportedFromIB2"/>
+				<string key="1594.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1595.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1596.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1597.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="160.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="160.ImportedFromIB2"/>
 				<string key="161.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3186,7 +3305,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<string key="213.IBEditorWindowLastContentRect">{{584, 480}, {180, 73}}</string>
 				<string key="213.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="213.ImportedFromIB2"/>
-				<string key="215.IBEditorWindowLastContentRect">{{1182, 916}, {306, 93}}</string>
+				<string key="215.IBEditorWindowLastContentRect">{{423, 370}, {306, 183}}</string>
 				<string key="215.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="215.ImportedFromIB2"/>
 				<string key="216.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3240,7 +3359,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1592</int>
+			<int key="maxID">1601</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3248,6 +3367,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 					<string key="className">AppController</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="changeLatexMode:">id</string>
 						<string key="changeOpenFileType:">id</string>
 						<string key="checkUpdates:">id</string>
 						<string key="copyAs:">id</string>

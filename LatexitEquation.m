@@ -189,6 +189,25 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
                             : preamble;
   [self setPreamble:preamble];
 
+  NSMutableString* modeAsString = nil;
+  testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    isLaTeXiTPDF |= YES;
+    modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
+    range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
+    [modeAsString deleteCharactersInRange:range];
+  }
+  latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
+                      : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
+  mode = validateLatexMode(mode); //Added starting from version 1.7.0
+  #ifdef MIGRATE_ALIGN
+  [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
+  #else
+  [self setMode:mode];
+  #endif
+
   NSMutableString* sourceString = [NSMutableString string];
   testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
   if (testArray && ([testArray count] >= 2))
@@ -225,6 +244,18 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   }
   sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
                             : sourceText;
+  #ifdef MIGRATE_ALIGN
+  if (mode == LATEX_MODE_EQNARRAY)
+  {
+    NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
+    [sourceText2 appendAttributedString:
+      [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
+    [sourceText2 appendAttributedString:sourceText];
+    [sourceText2 appendAttributedString:
+      [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+    sourceText = sourceText2;
+  }
+  #endif
   [self setSourceText:sourceText];
 
   NSMutableString* pointSizeAsString = nil;
@@ -238,21 +269,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [pointSizeAsString deleteCharactersInRange:range];
   }
   [self setPointSize:pointSizeAsString ? [pointSizeAsString doubleValue] : (useDefaults ? [preferencesController latexisationFontSize] : 0)];
-
-  NSMutableString* modeAsString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
-    range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
-    [modeAsString deleteCharactersInRange:range];
-  }
-  latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
-                      : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
-  mode = validateLatexMode(mode); //Added starting from version 1.7.0
-  [self setMode:mode];
 
   NSColor* defaultColor = [preferencesController latexisationFontColor];
   NSMutableString* colorAsString = nil;
@@ -340,7 +356,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.0.0"              forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.0.1"              forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -353,6 +369,28 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [coder encodeObject:[self title]           forKey:@"title"];
 }
 //end encodeWithCoder:
+
+-(void) awakeFromFetch
+{
+  [super awakeFromFetch];
+  #ifdef MIGRATE_ALIGN
+  if ([self mode] == LATEX_MODE_EQNARRAY)
+  {
+    [self setMode:LATEX_MODE_TEXT];
+    NSAttributedString* oldSourceText = [self sourceText];
+    NSDictionary* attributes = [oldSourceText attributesAtIndex:0 effectiveRange:0];
+    NSMutableAttributedString* newSourceText = [[NSMutableAttributedString alloc] init];
+    [newSourceText appendAttributedString:
+       [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:attributes] autorelease]];
+    [newSourceText appendAttributedString:oldSourceText];
+    [newSourceText appendAttributedString:
+       [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:attributes] autorelease]];
+    [self setSourceText:newSourceText];
+    [newSourceText release];
+  }//end if ([self mode] == LATEX_MODE_EQNARRAY)
+  #endif
+}
+//end awakeFromFetch
 
 -(void) didTurnIntoFault
 {
@@ -473,6 +511,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSColor* result = nil;
   [self willAccessValueForKey:@"color"];
   result = [self primitiveValueForKey:@"color"];
+  DebugLog(0, @"result = %@", result);
   [self didAccessValueForKey:@"color"];
   if (!result)
   {
@@ -666,6 +705,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSString* result = nil;
   switch(mode)
   {
+    case LATEX_MODE_ALIGN:
+      result = @"align";
+      break;
     case LATEX_MODE_EQNARRAY:
       result = @"eqnarray";
       break;
@@ -686,7 +728,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 +(latex_mode_t) latexModeFromString:(NSString*)modeAsString
 {
   latex_mode_t result = LATEX_MODE_DISPLAY;
-  if ([modeAsString isEqualToString:@"eqnarray"])
+  if ([modeAsString isEqualToString:@"align"])
+    result = LATEX_MODE_ALIGN;
+  else if ([modeAsString isEqualToString:@"eqnarray"])
     result = LATEX_MODE_EQNARRAY;
   else if ([modeAsString isEqualToString:@"display"])
     result = LATEX_MODE_DISPLAY;
@@ -722,6 +766,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     case LATEX_MODE_EQNARRAY:
       [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}"] autorelease] atIndex:0];
       [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\end{eqnarray*}"] autorelease]];
+      break;
+    case LATEX_MODE_ALIGN:
+      [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\begin{align*}"] autorelease] atIndex:0];
+      [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\end{align*}"] autorelease]];
       break;
     case LATEX_MODE_TEXT:
       break;
@@ -776,7 +824,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self setBaseline:baseline];
 
   //then, we rewrite the pdfData
-  if (usingPDFKeywords)
+  #warning 64bits problem
+  if (usingPDFKeywords && (sizeof(NSInteger) == 4))//only in 32 bits mode. It chrashed in 64bits. Why ??
   {
     PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
     NSDictionary* attributes =
@@ -870,7 +919,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.0.0", @"version",
+       @"2.0.1", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

@@ -92,6 +92,7 @@
 "Do you really want to apply that preamble to the library items ?" = "Do you really want to apply that preamble to the library items ?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
 "Apply" = "Apply";
+"Typeset LaTeX Maths align" = "Typeset LaTeX Maths align";
 "Typeset LaTeX Maths eqnarray" = "Typeset LaTeX Maths eqnarray";
 "Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";

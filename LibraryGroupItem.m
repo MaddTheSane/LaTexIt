@@ -13,6 +13,8 @@
 #import "LaTeXProcessor.h"
 #import "LibraryManager.h"
 
+#import "Utils.h"
+
 @interface LibraryGroupItem (PrivateAPI)
 -(NSArray*) childrenSortDescriptors;
 @end
@@ -91,10 +93,19 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(NSSet*) children
 {
-  NSSet* result = nil;
-  [self willAccessValueForKey:@"children"];
+  NSSet* result = nil; //on Tiger, calling the primitiveKey does not work
+  NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+  [fetchRequest setEntity:[LibraryItem entity]];
+  [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == %@", self]];
+  NSError* error = nil;
+  result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
+  if (error)
+    {DebugLog(0, @"error = %@", error);}
+  [fetchRequest release];
+  return result;
+/*  [self willAccessValueForKey:@"children"];
   result = [self primitiveValueForKey:@"children"];
-  [self didAccessValueForKey:@"children"];
+  [self didAccessValueForKey:@"children"];*/
   return result;
 }
 //end children
@@ -151,7 +162,10 @@ static NSEntityDescription* cachedEntity = nil;
 {
   if (!((self = [super initWithCoder:coder])))
     return nil;
-  [self setExpanded:[coder decodeBoolForKey:@"expanded"]];
+  if ([coder containsValueForKey:@"isExpanded"])//legacy
+    [self setExpanded:[coder decodeBoolForKey:@"isExpanded"]];  
+  else
+    [self setExpanded:[coder decodeBoolForKey:@"expanded"]];
   NSArray* theChildren = [coder decodeObjectForKey:@"children"];
   [theChildren makeObjectsPerformSelector:@selector(setParent:) withObject:self];
   return self;
