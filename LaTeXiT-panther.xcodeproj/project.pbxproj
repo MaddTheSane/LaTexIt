@@ -26,6 +26,7 @@
 		930AC4E407EDEEF400AC66FA /* LineCountRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */; };
 		930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC29907ECBC3C00EEB238 /* AppController.m */; };
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
+		930BFD1C0A245AC6008C586D /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */; };
 		93149F7E089438B10017C83A /* latexit-lib.png in Resources */ = {isa = PBXBuildFile; fileRef = 93149F7D089438B10017C83A /* latexit-lib.png */; };
 		9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9315A45007FD331800AFCCE9 /* Preferences.nib */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesController.m */; };
@@ -308,88 +309,6 @@
 		93F9DEB108A2D96C005DEBF6 /* History.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F9DEAE08A2D96C005DEBF6 /* History.nib */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		4A9504D0FFE6A4CB11CA0CBA /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = /Users/chacha/Programmation/Frameworks;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_PEDANTIC = NO;
-				GCC_WARN_SHADOW = NO;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = NO;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-lz";
-				PREBINDING = YES;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4A9504D1FFE6A4CB11CA0CBA /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = .;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_FAST_OBJC_DISPATCH = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_UNROLL_LOOPS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_PROFILING_CODE = NO;
-				HEADER_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = "";
-				OTHER_LDFLAGS = "-lz";
-				PREBINDING = YES;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		93126C5C0834966D0021D026 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -438,6 +357,8 @@
 		930BC29907ECBC3C00EEB238 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		930BC2A707ECBD6500EEB238 /* MyImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyImageView.h; sourceTree = "<group>"; };
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
+		930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LibraryPreviewPanelImageView.m; sourceTree = "<group>"; };
+		930BFD1B0A245AC6008C586D /* LibraryPreviewPanelImageView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LibraryPreviewPanelImageView.h; sourceTree = "<group>"; };
 		93149F7D089438B10017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/file-icons/latexit-lib.png"; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
@@ -1038,6 +959,8 @@
 				932CF4210826C2EB00434128 /* LibraryItem.m */,
 				932CF5760826D9E500434128 /* LibraryManager.h */,
 				932CF5770826D9E500434128 /* LibraryManager.m */,
+				930BFD1B0A245AC6008C586D /* LibraryPreviewPanelImageView.h */,
+				930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */,
 				931D5DFF08A15B8600573DD8 /* LibraryTableView.h */,
 				931D5E0008A15B8600573DD8 /* LibraryTableView.m */,
 			);
@@ -1418,20 +1341,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					/Users/chacha/Desktop/LinkBack/Source/build,
-					/Users/chacha/Programmation/LinkBack/Builds,
-					"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT mainline",
-				);
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = LaTeXiT;
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 			);
 			name = LaTeXiT;
@@ -1446,12 +1355,6 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-panther" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4A9504D0FFE6A4CB11CA0CBA /* Development */,
-				4A9504D1FFE6A4CB11CA0CBA /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
@@ -1787,6 +1690,7 @@
 				93D7CB2509D36C870001DC5E /* CompositionConfigurationController.m in Sources */,
 				93D7CB2809D36C870001DC5E /* CompositionConfigurationManager.m in Sources */,
 				93D7CB2A09D36C870001DC5E /* CompositionConfigurationTableView.m in Sources */,
+				930BFD1C0A245AC6008C586D /* LibraryPreviewPanelImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1968,8 +1872,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/chacha/Desktop/LinkBack/Source/build,
 					/Users/chacha/Programmation/LinkBack/Builds,
-					"/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT mainline",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "/Users/chacha/Programmation/Cocoa/Projets/LaTeXiT\\ mainline";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;

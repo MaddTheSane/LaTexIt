@@ -11,6 +11,7 @@
 @class BorderlessPanel;
 @class ImagePopupButton;
 @class LibraryTableView;
+@class LibraryPreviewPanelImageView;
 
 @interface LibraryController : NSWindowController {
   IBOutlet NSButton*           importCurrentButton;
@@ -18,7 +19,7 @@
   IBOutlet LibraryTableView*   libraryTableView;
   IBOutlet NSSegmentedControl* libraryRowTypeSegmentedControl;
   IBOutlet BorderlessPanel*    libraryPreviewPanel;
-  IBOutlet NSImageView*        libraryPreviewPanelImageView;
+  IBOutlet LibraryPreviewPanelImageView* libraryPreviewPanelImageView;
   IBOutlet NSSegmentedControl* libraryPreviewPanelSegmentedControl;
   BOOL enablePreviewImage;
 }
@@ -42,7 +43,7 @@
 -(BOOL)     validateMenuItem:(NSMenuItem*)menuItem;
 -(NSArray*) selectedItems;
 
--(void) displayPreviewImage:(NSImage*)image;
+-(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
 -(void) setEnablePreviewImage:(BOOL)status;
 
 @end

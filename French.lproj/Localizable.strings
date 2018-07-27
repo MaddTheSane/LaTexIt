@@ -22,6 +22,7 @@
 "Delete Library items" = "Supprimer plusieurs entrées de la bibliothèque";
 "Move Library items" = "Déplacer des entrées de la bibliothèque";
 "Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
+"Change Library item background color" = "Changer la couleur de fond d'un item de la bibliothèque";
 "Open library..." = "Ouvrir la bibliothèque...";
 "Save library as..." = "Enregistrer la bibliothèque sous...";
 "New encapsulation" = "Nouvelle encapsulation";

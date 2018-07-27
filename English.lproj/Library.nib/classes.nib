@@ -26,12 +26,17 @@
                 actionButton = ImagePopupButton; 
                 importCurrentButton = NSButton; 
                 libraryPreviewPanel = BorderlessPanel; 
-                libraryPreviewPanelImageView = NSImageView; 
+                libraryPreviewPanelImageView = LibraryPreviewPanelImageView; 
                 libraryPreviewPanelSegmentedControl = NSSegmentedControl; 
                 libraryRowTypeSegmentedControl = NSSegmentedControl; 
                 libraryTableView = LibraryTableView; 
             }; 
             SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            CLASS = LibraryPreviewPanelImageView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSImageView; 
         }, 
         {
             ACTIONS = {copy = id; redo = id; undo = id; }; 

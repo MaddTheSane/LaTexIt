@@ -14,6 +14,7 @@
 #import "LibraryItem.h"
 #import "LibraryFile.h"
 #import "LibraryManager.h"
+#import "LibraryPreviewPanelImageView.h";
 #import "LibraryTableView.h"
 #import "MyDocument.h"
 #import "MyImageView.h"
@@ -26,6 +27,7 @@
 -(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) windowWillClose:(NSNotification*)notification;
+-(void) windowDidResignKey:(NSNotification*)notification;
 @end
 
 @implementation LibraryController
@@ -95,6 +97,7 @@
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:NSWindowDidResignMainNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:ImageDidChangeNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:[self window]];
+  [notificationCenter addObserver:self selector:@selector(windowDidResignKey:) name:NSWindowDidResignKeyNotification object:[self window]];
 }
 
 -(void) dealloc
@@ -294,7 +297,7 @@
   [self setEnablePreviewImage:status];
 }
 
--(void) displayPreviewImage:(NSImage*)image;
+-(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
 {
   if (!image && [libraryPreviewPanel isVisible])
     [libraryPreviewPanel orderOut:self];
@@ -312,6 +315,7 @@
                                  imageSize.width+16, imageSize.height+16);
     if (image != [libraryPreviewPanelImageView image])
       [libraryPreviewPanelImageView setImage:image];
+    [libraryPreviewPanelImageView setBackgroundColor:backgroundColor];
     [libraryPreviewPanel setFrame:newFrame display:image ? YES : NO];
     if (![libraryPreviewPanel isVisible])
       [libraryPreviewPanel orderFront:self];
@@ -324,6 +328,11 @@
 }
 
 -(void) windowWillClose:(NSNotification*)notification
+{
+  [libraryPreviewPanel orderOut:self];
+}
+
+-(void) windowDidResignKey:(NSNotification*)notification
 {
   [libraryPreviewPanel orderOut:self];
 }

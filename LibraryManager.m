@@ -47,6 +47,7 @@ NSString* LibraryItemsPboardType = @"LibraryItemsPboardType";
 -(void) _saveLibrary;
 -(void) _loadLibrary;
 -(void) _automaticBackgroundSaving:(id)unusedArg;//automatically and regularly saves the library on disk
+-(void) _setItemBackgroundColor:(NSColor*)color onItem:(LibraryFile*)item outlineView:(NSOutlineView*)outlineView;
 
 -(NSArray*) _draggedItems; //utility method to access draggedItems when working with pasteboard sender
 @end
@@ -454,6 +455,7 @@ static NSImage*        libraryFileIcon       = nil;
                proposedItem:(id)item proposedChildIndex:(int)childIndex
 {
   BOOL proposedParentIsValid = YES;
+  BOOL isColorDrop = ([[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
   @synchronized(library)
   {
     //This method validates whether or not the proposal is a valid one. Returns NO if the drop should not be allowed.
@@ -475,8 +477,12 @@ static NSImage*        libraryFileIcon       = nil;
       
     //Refuse if we are trying to drop on a LibraryFile
     if ([proposedParent isKindOfClass:[LibraryFile class]] && isOnDropTypeProposal)
+      proposedParentIsValid = isColorDrop;
+    
+    //for color drop, refuse on what is not a library file
+    if (isColorDrop && (![proposedParent isKindOfClass:[LibraryFile class]] || !isOnDropTypeProposal))
       proposedParentIsValid = NO;
-      
+
     //Check to make sure we don't allow a node to be inserted into one of its descendants!
     if (proposedParentIsValid && ([info draggingSource] == outlineView) &&
         [[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
@@ -509,13 +515,34 @@ static NSImage*        libraryFileIcon       = nil;
 -(BOOL) outlineView:(NSOutlineView*)outlineView acceptDrop:(id <NSDraggingInfo>)info
                item:(id)targetItem childIndex:(int)childIndex
 {
-  // Determine the parent to insert into and the child index to insert at.
-  LibraryItem* parent = targetItem;
-  childIndex = (childIndex == NSOutlineViewDropOnItemIndex) ? 0 : childIndex;
-  
-  [self _performDropOperation:info onItem:parent atIndex:childIndex outlineView:outlineView];
+  NSPasteboard* pasteboard = [info draggingPasteboard];
+  BOOL isColorDrop = ([[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
+  if (isColorDrop)
+  {
+    NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSColorPboardType]];
+    LibraryFile* libraryFile = [targetItem isKindOfClass:[LibraryFile class]] ? (LibraryFile*)targetItem : nil;
+    [self _setItemBackgroundColor:color onItem:libraryFile outlineView:outlineView];
+  }
+  else
+  {
+    // Determine the parent to insert into and the child index to insert at.
+    LibraryItem* parent = targetItem;
+    childIndex = (childIndex == NSOutlineViewDropOnItemIndex) ? 0 : childIndex;
+    
+    [self _performDropOperation:info onItem:parent atIndex:childIndex outlineView:outlineView];
+  }
   
   return YES;
+}
+
+-(void) _setItemBackgroundColor:(NSColor*)color onItem:(LibraryFile*)item outlineView:(NSOutlineView*)outlineView
+{
+  HistoryItem* historyItem = [item value];
+  [[undoManager prepareWithInvocationTarget:self] _setItemBackgroundColor:[historyItem backgroundColor] onItem:item outlineView:outlineView];
+  if (![undoManager isUndoing])
+    [undoManager setActionName:NSLocalizedString(@"Change Library item background color", @"Change Library item background color")];
+  [historyItem setBackgroundColor:color];
+  [outlineView setNeedsDisplayInRect:[outlineView frameOfCellAtColumn:0 row:[outlineView rowForItem:item]]];
 }
 
 //Creates the files of the files promised in the pasteboard
@@ -832,7 +859,7 @@ static NSImage*        libraryFileIcon       = nil;
 {
   //disables preview image while editing. See in textDidEndEditin of LibraryView to re-enable it
   LibraryController* libraryController = (LibraryController*)[[outlineView window] windowController];
-  [libraryController displayPreviewImage:nil];
+  [libraryController displayPreviewImage:nil backgroundColor:nil];
   [libraryController setEnablePreviewImage:NO];
   return YES;
 }
@@ -894,15 +921,30 @@ static NSImage*        libraryFileIcon       = nil;
   else if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
   {
     if ([item isKindOfClass:[LibraryFile class]])
-      [cell setImage:[[(LibraryFile*)item value] pdfImage]];
+    {
+      HistoryItem* historyItem = [(LibraryFile*)item value];
+      [cell setImage:[historyItem pdfImage]];
+      NSColor* backgroundColor = [historyItem backgroundColor];
+      NSColor* greyLevelColor  = [backgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
+      [cell setBackgroundColor:backgroundColor];
+      [cell setDrawsBackground:(backgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f)];
+    }
     else if ([item isKindOfClass:[LibraryFolder class]])
+    {
       #ifdef PANTHER //Under Panther, the lines have the same big height, not under Tiger
       [cell setImage:[(LibraryFolder*)item bigIcon]];
       #else
       [cell setImage:[(LibraryFolder*)item icon]];
       #endif
+      [cell setBackgroundColor:nil];
+      [cell setDrawsBackground:NO];
+    }
     else
+    {
       [cell setImage:[item icon]];
+      [cell setBackgroundColor:nil];
+      [cell setDrawsBackground:NO];
+    }
   }
 }
 

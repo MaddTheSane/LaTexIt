@@ -13,6 +13,14 @@
 
 @implementation LibraryCell
 
+-(id) initWithCoder:(NSCoder*)coder
+{
+  if (![super initWithCoder:coder])
+    return nil;
+  backgroundColor = nil;//there may be no color
+  return self;
+}
+
 -(void) dealloc
 {
   [image release];
@@ -24,8 +32,23 @@
 {
   LibraryCell* cell = (LibraryCell*) [super copyWithZone:zone];
   if (cell)
+  {
     cell->image = [image retain];
+    cell->backgroundColor = [backgroundColor copy];
+  }
   return cell;
+}
+
+-(void) setBackgroundColor:(NSColor*)color
+{
+  [color retain];
+  [backgroundColor release];
+  backgroundColor = color;
+}
+
+-(NSColor*) backgroundColor
+{
+  return backgroundColor;
 }
 
 -(void) setImage:(NSImage*)anImage
@@ -89,7 +112,7 @@
 
 -(void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-  NSString* savTitle = [[self title] retain];//if displaying onlyimage, we will temporarily reset the title
+  NSString* savTitle = [[self title] retain];//if displaying only image, we will temporarily reset the title
   if (image)
   {
     NSSize imageSize = [image size];
@@ -110,11 +133,18 @@
       cellFrame.size.width = imageSize.width*factor;
     }
 
-    if ([self drawsBackground])
+    if ([self drawsBackground] && !(libraryRowType == LIBRARY_ROW_IMAGE_LARGE))
     {
-      [[self backgroundColor] set];
+      [[super backgroundColor] set];//calls super backgroundColor to get the original background color
       NSRectFill(imageFrame);
     }
+
+    if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) && [self backgroundColor] && [self drawsBackground])
+    {
+      [[self backgroundColor] set];
+      NSRectFill(cellFrame);
+    }
+
     
     if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
         #ifndef PANTHER

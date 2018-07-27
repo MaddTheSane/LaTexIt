@@ -414,7 +414,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) drawRect:(NSRect)rect
 {
-  //we very temporaryly change the image size, just for drawing
+  //we very temporarily change the image size, just for drawing
   //it is not done permanently in setImage:,  for two reasons:
   //  -we should not modify here the images stored in the history items, this is not what we want
   //  -if we work on copy of images from history items, the requires some time, to copy the image, each time

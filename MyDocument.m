@@ -429,13 +429,13 @@ static NSString* yenString = nil;
   {
     NSAlert* alert = 
       [NSAlert alertWithMessageText:NSLocalizedString(@"Empty LaTeX body", @"Empty LaTeX body")
-                      defaultButton:NSLocalizedString(@"Cancel", @"Cancel")
-                    alternateButton:NSLocalizedString(@"Process anyway", @"Process anyway")
+                      defaultButton:NSLocalizedString(@"Process anyway", @"Process anyway")
+                    alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
                         otherButton:nil
           informativeTextWithFormat:NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.",
                                                       @"You did not type any text in the body. The result will certainly be empty.")];
      int result = [alert runModal];
-     mustProcess = (result == NSAlertAlternateReturn);
+     mustProcess = (result == NSAlertDefaultReturn);
   }
   
   if (mustProcess)

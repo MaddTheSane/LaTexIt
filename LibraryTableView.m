@@ -17,6 +17,7 @@
 #import "LibraryItem.h"
 #import "LibraryManager.h"
 #import "MyImageView.h"
+#import "NSColorExtended.h"
 
 @interface LibraryTableView (PrivateAPI)
 -(void) _libraryDidChange:(NSNotification*)aNotification;
@@ -35,7 +36,7 @@
 -(void) awakeFromNib
 {
   [[self window] setAcceptsMouseMovedEvents:YES]; //to allow library to detect mouse moved events
-  [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, nil]];
+  [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSColorPboardType, nil]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_libraryDidChange:)
                                                name:LibraryDidChangeNotification object:nil];
 }
@@ -109,14 +110,21 @@
   NSClipView*   clipView   = (NSClipView*)   [self superview];
   NSPoint location = [clipView convertPoint:[event locationInWindow] fromView:nil];
   if (!NSPointInRect(location, [clipView bounds]))
-    [libraryController displayPreviewImage:nil];
+    [libraryController displayPreviewImage:nil backgroundColor:nil];
   else
   {
     location = [self convertPoint:location fromView:clipView];
     int row = [self rowAtPoint:location];
     id item = (row >= 0) && (row < [self numberOfRows]) ? [self itemAtRow:row] : nil;
-    NSImage* image = [item isKindOfClass:[LibraryFile class]] ? [[(LibraryFile*)item value] pdfImage] : nil;
-    [libraryController displayPreviewImage:image];
+    NSImage* image = nil;
+    NSColor* backgroundColor = nil;
+    if ([item isKindOfClass:[LibraryFile class]])
+    {
+      HistoryItem* historyItem = [(LibraryFile*)item value];
+      image = [historyItem pdfImage];
+      backgroundColor = [historyItem backgroundColor];
+    }
+    [libraryController displayPreviewImage:image backgroundColor:backgroundColor];
   }
 }
 
@@ -438,5 +446,34 @@
     }
   }
 }
+
+/*
+-(NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
+{
+  BOOL ok = NO;
+  NSPasteboard* pboard = [sender draggingPasteboard];
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+  {
+    NSPoint locationInWindow = [sender draggingLocation];
+    id item = [self itemAtRow:[self rowAtPoint:[self convertPoint:locationInWindow fromView:nil]]];
+    ok = [item isKindOfClass:[LibraryFile class]];
+  }
+  return ok ? NSDragOperationCopy : NSDragOperationNone;
+}
+
+-(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
+{
+  NSPasteboard* pboard = [sender draggingPasteboard];
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+  {
+    NSPoint locationInWindow = [sender draggingLocation];
+    id item = [self itemAtRow:[self rowAtPoint:[self convertPoint:locationInWindow fromView:nil]]];
+    HistoryItem* historyItem = [item isKindOfClass:[LibraryFile class]] ? [(LibraryFile*)item value] : nil;
+    NSColor* backgroundColor = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
+    [historyItem setBackgroundColor:backgroundColor];
+  }
+  return YES;
+}
+*/
 
 @end

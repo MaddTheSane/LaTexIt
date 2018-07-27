@@ -11,7 +11,8 @@
 #import <Cocoa/Cocoa.h>
 
 @interface LibraryCell : NSTextFieldCell <NSCopying> {
-  NSImage	*image;
+  NSImage* image;
+  NSColor* backgroundColor;
 }
 
 -(NSImage*) image;
