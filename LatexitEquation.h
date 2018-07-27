@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -107,5 +107,7 @@ extern NSString* LatexitEquationsPboardType;
 -(id) plistDescription;
 -(id) initWithDescription:(id)description;
 -(CHExportPrefetcher*) exportPrefetcher;
+
++(NSString*) computeFileNameFromContent:(NSString*)content;
 
 @end

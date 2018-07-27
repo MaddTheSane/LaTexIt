@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
@@ -38,8 +38,10 @@ NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
 
 //In MacOS 10.4.0, 10.4.1 and 10.4.2, these constants are declared but not defined in the PDFKit.framework!
 //So I define them myself, but it is ugly. I expect next versions of MacOS to fix that
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 1050
 NSString* PDFDocumentCreatorAttribute = @"Creator"; 
 NSString* PDFDocumentKeywordsAttribute = @"Keywords";
+#endif
 
 @interface LaTeXProcessor (PrivateAPI)
 -(void) initializeEnvironment;
@@ -292,11 +294,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
     NSString* type = [[NSNumber numberWithInt:mode] stringValue];
     
-    BOOL annotateWithTransparentData = NO;
+    BOOL annotateWithTransparentData = YES;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.8.1", @"version",
+        @"2.9.0", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -322,6 +324,7 @@ static LaTeXProcessor* sharedInstance = nil;
         CGDataConsumerCreateWithCFData((CFMutableDataRef)dataConsumerData);
       CGDataProviderRef dataProvider = !data2 ? 0 :
         CGDataProviderCreateWithCFData((CFDataRef)data2);
+      DebugLog(1, @"original pdf data :%u bytes", [data2 length]);
       CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
         CGPDFDocumentCreateWithProvider(dataProvider);
       CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
@@ -336,10 +339,15 @@ static LaTeXProcessor* sharedInstance = nil;
         CGPDFContextBeginPage(cgPDFContext, 0);
         CGContextDrawPDFPage(cgPDFContext, pdfPage);
         CGContextFlush(cgPDFContext);
-        CGContextSetRGBStrokeColor(cgPDFContext, 0, 0, 0, 1);
+        CGContextSetRGBStrokeColor(cgPDFContext, 0, 0, 0, 0.);
+        CGContextSetRGBFillColor(cgPDFContext, 0, 0, 0, 0.);
         CGContextSetTextDrawingMode(cgPDFContext, kCGTextFill);
-        CGContextSetTextPosition(cgPDFContext, CGRectGetMaxX(mediaBox)+1, CGRectGetMaxY(mediaBox)+1);
-        NSFont* font = [NSFont fontWithName:@"Courier" size:1];
+        CGFloat fontSize = 1e-6;
+        CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
+        NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
+        CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
+        CGContextSetFont(cgPDFContext, cgFont);
+        CGContextSetFontSize(cgPDFContext, fontSize);
         size_t charactersCount = [annotationContentBase64CompleteString length];
         unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
         CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
@@ -347,13 +355,20 @@ static LaTeXProcessor* sharedInstance = nil;
         {
           [annotationContentBase64CompleteString getCharacters:unichars];
           bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
+          DebugLog(1, @"ok = %d", ok);
           if (ok)
+          {
+            DebugLog(1, @"Show %d glyphs", charactersCount);
             CGContextShowGlyphs(cgPDFContext, glyphs, charactersCount);
+            NSData* annotationContentBase64CompleteUTF8 = [annotationContentBase64CompleteString dataUsingEncoding:NSUTF8StringEncoding];
+            CGContextShowText(cgPDFContext, [annotationContentBase64CompleteUTF8 bytes], [annotationContentBase64CompleteUTF8 length]);
+          }//end if (ok)
         }//end if (unichars && glyphs)
         if (unichars)
           free(unichars);
         if (glyphs)
           free(glyphs);
+        CGFontRelease(cgFont);
         CGPDFContextEndPage(cgPDFContext);
         CGContextFlush(cgPDFContext);
         CGContextRelease(cgPDFContext);
@@ -366,7 +381,7 @@ static LaTeXProcessor* sharedInstance = nil;
         data2 = dataConsumerData;
      }//end if (annotateWithTransparentData)
     
-    BOOL annotateWithXML = NO;
+    BOOL annotateWithXML = YES;
     if (annotateWithXML)
     {
       NSString* annotationContent =
@@ -585,6 +600,10 @@ static LaTeXProcessor* sharedInstance = nil;
   NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
     [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
   NSMutableString* preamble = [NSMutableString stringWithString:thePreamble];
+  
+  NSString* token = @"%__TEXTCOLOR__";
+  [preamble replaceOccurrencesOfString:token withString:colorString options:0 range:NSMakeRange(0, [preamble length])];
+  
   NSRange colorRange = [preamble rangeOfString:@"{color}"];
   BOOL xcolor = NO;
   if (colorRange.location == NSNotFound)

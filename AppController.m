@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -918,6 +918,11 @@ static NSMutableDictionary* cachePaths = nil;
     else
       [sender setTitle:NSLocalizedString(@"Show preamble", @"Show preamble")];
   }
+  else if ([sender action] == @selector(fontSizeChange:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy];
+  }
   else if ([sender action] == @selector(formatChangeAlignment:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
@@ -1491,6 +1496,16 @@ static NSMutableDictionary* cachePaths = nil;
   }//end if (document)
 }
 //end makeLatexAndExport:
+
+-(IBAction) fontSizeChange:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  if (document)
+  {
+    [document fontSizeChange:sender];
+  }//end if (document)
+}
+//end fontSizeChange:
 
 -(IBAction) formatChangeAlignment:(id)sender
 {

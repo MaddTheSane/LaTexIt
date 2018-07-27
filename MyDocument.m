@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -2345,6 +2345,27 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   return result;
 }
 //end detectLatexMode
+
+-(IBAction) fontSizeChange:(id)sender
+{
+  CGFloat fontSizeDelta = ([sender tag] == 1) ? -1 : 1;
+  NSTextStorage* textStorage = [self->lowerBoxSourceTextView textStorage];
+  NSRange fullRange = NSMakeRange(0, [textStorage length]);
+  NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
+  if (![selectedRanges count])
+    selectedRanges = [NSArray arrayWithObject:[NSValue valueWithRange:fullRange]];
+  NSUInteger i = 0;
+  for(i = 0 ; i<[selectedRanges count] ; ++i)
+  {
+    NSRange range = [[selectedRanges objectAtIndex:i] rangeValue];
+    NSRange effectiveRange = {0};
+    NSFont* font = [[textStorage attribute:NSFontAttributeName atIndex:range.location effectiveRange:&effectiveRange] dynamicCastToClass:[NSFont class]];
+    font = !font ? nil : [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]+fontSizeDelta];
+    if (font)
+      [textStorage addAttribute:NSFontAttributeName value:font range:range];
+  }//end for each range
+}
+//end fontSizeChange:
 
 -(void) formatChangeAlignment:(alignment_mode_t)value
 {

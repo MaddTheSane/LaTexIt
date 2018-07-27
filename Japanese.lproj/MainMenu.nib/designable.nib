@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1129"/>
+			<integer value="1638"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -687,17 +687,50 @@
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="333764875">
 									<reference key="NSMenu" ref="12062190"/>
-									<string key="NSTitle">テキスト</string>
+									<string key="NSTitle">フォント</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
 									<reference key="NSMixedImage" ref="889411723"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="508968193">
-										<string key="NSTitle">テキスト</string>
+										<string key="NSTitle">フォント</string>
 										<array class="NSMutableArray" key="NSMenuItems">
 											<object class="NSMenuItem" id="815050706">
 												<reference key="NSMenu" ref="508968193"/>
+												<string key="NSTitle">大きく</string>
+												<string key="NSKeyEquiv">+</string>
+												<int key="NSKeyEquivModMask">1048576</int>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="791850863"/>
+												<reference key="NSMixedImage" ref="889411723"/>
+											</object>
+											<object class="NSMenuItem" id="1061374483">
+												<reference key="NSMenu" ref="508968193"/>
+												<string key="NSTitle">小さく</string>
+												<string key="NSKeyEquiv">-</string>
+												<int key="NSKeyEquivModMask">1048576</int>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="791850863"/>
+												<reference key="NSMixedImage" ref="889411723"/>
+												<int key="NSTag">1</int>
+											</object>
+										</array>
+									</object>
+								</object>
+								<object class="NSMenuItem" id="825094393">
+									<reference key="NSMenu" ref="12062190"/>
+									<string key="NSTitle">テキスト</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+									<string key="NSAction">submenuAction:</string>
+									<object class="NSMenu" key="NSSubmenu" id="26281366">
+										<string key="NSTitle">テキスト</string>
+										<array class="NSMutableArray" key="NSMenuItems">
+											<object class="NSMenuItem" id="461845371">
+												<reference key="NSMenu" ref="26281366"/>
 												<string key="NSTitle">左揃え</string>
 												<string key="NSKeyEquiv">{</string>
 												<int key="NSKeyEquivModMask">1048576</int>
@@ -706,8 +739,8 @@
 												<reference key="NSMixedImage" ref="889411723"/>
 												<int key="NSTag">2</int>
 											</object>
-											<object class="NSMenuItem" id="1061374483">
-												<reference key="NSMenu" ref="508968193"/>
+											<object class="NSMenuItem" id="51436061">
+												<reference key="NSMenu" ref="26281366"/>
 												<string key="NSTitle">中央揃え</string>
 												<string key="NSKeyEquiv">|</string>
 												<int key="NSKeyEquivModMask">1048576</int>
@@ -716,8 +749,8 @@
 												<reference key="NSMixedImage" ref="889411723"/>
 												<int key="NSTag">3</int>
 											</object>
-											<object class="NSMenuItem" id="350958820">
-												<reference key="NSMenu" ref="508968193"/>
+											<object class="NSMenuItem" id="761613243">
+												<reference key="NSMenu" ref="26281366"/>
 												<string key="NSTitle">右揃え</string>
 												<string key="NSKeyEquiv">}</string>
 												<int key="NSKeyEquivModMask">1048576</int>
@@ -726,8 +759,8 @@
 												<reference key="NSMixedImage" ref="889411723"/>
 												<int key="NSTag">4</int>
 											</object>
-											<object class="NSMenuItem" id="971829408">
-												<reference key="NSMenu" ref="508968193"/>
+											<object class="NSMenuItem" id="406293956">
+												<reference key="NSMenu" ref="26281366"/>
 												<string key="NSTitle">揃えなし</string>
 												<string key="NSKeyEquiv">|</string>
 												<int key="NSKeyEquivModMask">1572864</int>
@@ -2193,38 +2226,6 @@ m+OCk+OAgg</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">formatChangeAlignment:</string>
-						<reference key="source" ref="242078833"/>
-						<reference key="destination" ref="815050706"/>
-					</object>
-					<int key="connectionID">1643</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">formatChangeAlignment:</string>
-						<reference key="source" ref="242078833"/>
-						<reference key="destination" ref="1061374483"/>
-					</object>
-					<int key="connectionID">1644</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">formatChangeAlignment:</string>
-						<reference key="source" ref="242078833"/>
-						<reference key="destination" ref="350958820"/>
-					</object>
-					<int key="connectionID">1645</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">formatChangeAlignment:</string>
-						<reference key="source" ref="242078833"/>
-						<reference key="destination" ref="971829408"/>
-					</object>
-					<int key="connectionID">1646</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">makeLatex:</string>
 						<reference key="source" ref="1061498749"/>
 						<reference key="destination" ref="1047835165"/>
@@ -2278,6 +2279,54 @@ m+OCk+OAgg</string>
 						<reference key="destination" ref="45418356"/>
 					</object>
 					<int key="connectionID">1668</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">formatChangeAlignment:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="761613243"/>
+					</object>
+					<int key="connectionID">1675</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">formatChangeAlignment:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="406293956"/>
+					</object>
+					<int key="connectionID">1676</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">formatChangeAlignment:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="461845371"/>
+					</object>
+					<int key="connectionID">1677</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">formatChangeAlignment:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="51436061"/>
+					</object>
+					<int key="connectionID">1678</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">fontSizeChange:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="815050706"/>
+					</object>
+					<int key="connectionID">1679</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">fontSizeChange:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="1061374483"/>
+					</object>
+					<int key="connectionID">1680</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3228,6 +3277,7 @@ m+OCk+OAgg</string>
 							<reference ref="333764875"/>
 							<reference ref="714641454"/>
 							<reference ref="929087587"/>
+							<reference ref="825094393"/>
 						</array>
 						<reference key="parent" ref="1067102045"/>
 					</object>
@@ -3243,22 +3293,10 @@ m+OCk+OAgg</string>
 						<int key="objectID">1638</int>
 						<reference key="object" ref="508968193"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="971829408"/>
-							<reference ref="350958820"/>
 							<reference ref="1061374483"/>
 							<reference ref="815050706"/>
 						</array>
 						<reference key="parent" ref="333764875"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1639</int>
-						<reference key="object" ref="971829408"/>
-						<reference key="parent" ref="508968193"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1640</int>
-						<reference key="object" ref="350958820"/>
-						<reference key="parent" ref="508968193"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1641</int>
@@ -3315,6 +3353,45 @@ m+OCk+OAgg</string>
 						<reference key="object" ref="45418356"/>
 						<reference key="parent" ref="55124784"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1669</int>
+						<reference key="object" ref="825094393"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="26281366"/>
+						</array>
+						<reference key="parent" ref="12062190"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1670</int>
+						<reference key="object" ref="26281366"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="461845371"/>
+							<reference ref="51436061"/>
+							<reference ref="761613243"/>
+							<reference ref="406293956"/>
+						</array>
+						<reference key="parent" ref="825094393"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1671</int>
+						<reference key="object" ref="461845371"/>
+						<reference key="parent" ref="26281366"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1672</int>
+						<reference key="object" ref="51436061"/>
+						<reference key="parent" ref="26281366"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1673</int>
+						<reference key="object" ref="761613243"/>
+						<reference key="parent" ref="26281366"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1674</int>
+						<reference key="object" ref="406293956"/>
+						<reference key="parent" ref="26281366"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3322,7 +3399,7 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="-3.ImportedFromIB2"/>
 				<string key="103.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="103.ImportedFromIB2"/>
-				<string key="106.IBEditorWindowLastContentRect">{{675, 713}, {171, 23}}</string>
+				<string key="106.IBEditorWindowLastContentRect">{{966, 775}, {171, 23}}</string>
 				<string key="106.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="106.ImportedFromIB2"/>
 				<string key="111.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3378,7 +3455,7 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="131.ImportedFromIB2"/>
 				<string key="1338.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1338.ImportedFromIB2"/>
-				<string key="1339.IBEditorWindowLastContentRect">{{513, 613}, {218, 123}}</string>
+				<string key="1339.IBEditorWindowLastContentRect">{{804, 675}, {218, 123}}</string>
 				<string key="1339.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1339.ImportedFromIB2"/>
 				<string key="134.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3516,15 +3593,13 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="1630.ImportedFromIB2"/>
 				<string key="1633.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1635.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1636.IBEditorWindowLastContentRect">{{323, 773}, {181, 63}}</string>
+				<string key="1636.IBEditorWindowLastContentRect">{{568, 715}, {181, 83}}</string>
 				<string key="1636.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1637.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1638.IBEditorWindowLastContentRect">{{401, 753}, {141, 83}}</string>
+				<string key="1638.IBEditorWindowLastContentRect">{{749, 755}, {119, 43}}</string>
 				<string key="1638.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1639.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="164.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="164.ImportedFromIB2"/>
-				<string key="1640.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1641.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1642.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1647.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3543,11 +3618,18 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="1665.ImportedFromIB2"/>
 				<string key="1666.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1666.ImportedFromIB2"/>
+				<string key="1669.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="167.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="167.ImportedFromIB2"/>
+				<string key="1670.IBEditorWindowLastContentRect">{{749, 695}, {141, 83}}</string>
+				<string key="1670.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1671.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1672.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1673.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1674.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="168.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="168.ImportedFromIB2"/>
-				<string key="169.IBEditorWindowLastContentRect">{{274, 513}, {201, 223}}</string>
+				<string key="169.IBEditorWindowLastContentRect">{{463, 575}, {201, 223}}</string>
 				<string key="169.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="169.ImportedFromIB2"/>
 				<string key="171.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3580,10 +3662,10 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="211.ImportedFromIB2"/>
 				<string key="212.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="212.ImportedFromIB2"/>
-				<string key="213.IBEditorWindowLastContentRect">{{483, 713}, {180, 123}}</string>
+				<string key="213.IBEditorWindowLastContentRect">{{758, 675}, {180, 123}}</string>
 				<string key="213.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="213.ImportedFromIB2"/>
-				<string key="215.IBEditorWindowLastContentRect">{{234, 613}, {303, 223}}</string>
+				<string key="215.IBEditorWindowLastContentRect">{{509, 575}, {303, 223}}</string>
 				<string key="215.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="215.ImportedFromIB2"/>
 				<string key="216.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3602,7 +3684,7 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="23.ImportedFromIB2"/>
 				<string key="231.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="231.ImportedFromIB2"/>
-				<string key="24.IBEditorWindowLastContentRect">{{587, 613}, {232, 123}}</string>
+				<string key="24.IBEditorWindowLastContentRect">{{878, 675}, {232, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
 				<string key="29.IBEditorWindowLastContentRect">{{245, 798}, {793, 20}}</string>
@@ -3612,7 +3694,7 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="5.ImportedFromIB2"/>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="56.ImportedFromIB2"/>
-				<string key="57.IBEditorWindowLastContentRect">{{68, 513}, {230, 223}}</string>
+				<string key="57.IBEditorWindowLastContentRect">{{257, 575}, {230, 223}}</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="57.ImportedFromIB2"/>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3635,7 +3717,7 @@ m+OCk+OAgg</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1668</int>
+			<int key="maxID">1680</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3652,6 +3734,7 @@ m+OCk+OAgg</string>
 						<string key="displayLog:">id</string>
 						<string key="displaySponsors:">id</string>
 						<string key="exportImage:">id</string>
+						<string key="fontSizeChange:">id</string>
 						<string key="formatChangeAlignment:">id</string>
 						<string key="formatComment:">id</string>
 						<string key="formatUncomment:">id</string>
@@ -3731,6 +3814,10 @@ m+OCk+OAgg</string>
 						</object>
 						<object class="IBActionInfo" key="exportImage:">
 							<string key="name">exportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="fontSizeChange:">
+							<string key="name">fontSizeChange:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="formatChangeAlignment:">
@@ -4357,6 +4444,7 @@ m+OCk+OAgg</string>
 						<string key="changePreamble:">id</string>
 						<string key="displayLastLog:">id</string>
 						<string key="exportImage:">id</string>
+						<string key="fontSizeChange:">id</string>
 						<string key="formatComment:">id</string>
 						<string key="formatUncomment:">id</string>
 						<string key="latexize:">id</string>
@@ -4384,6 +4472,10 @@ m+OCk+OAgg</string>
 						</object>
 						<object class="IBActionInfo" key="exportImage:">
 							<string key="name">exportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="fontSizeChange:">
+							<string key="name">fontSizeChange:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="formatComment:">

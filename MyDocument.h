@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -117,6 +117,8 @@
 -(IBAction) reexportImage:(id)sender;
 -(IBAction) changePreamble:(id)sender;
 -(IBAction) changeBodyTemplate:(id)sender;
+
+-(IBAction) fontSizeChange:(id)sender;
 
 -(void) formatChangeAlignment:(alignment_mode_t)value;
 -(void) formatComment:(id)sender;

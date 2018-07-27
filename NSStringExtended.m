@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSWorkspace class
 
@@ -96,6 +96,12 @@
   return string;
 }
 //end stringWithContentsOfURL:guessEncoding:error:
+
+-(NSRange) range
+{
+  return NSMakeRange(0, self.length);
+}
+//end range
 
 -(NSString*) string
 {

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/05/09.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryController.h"
@@ -555,7 +555,8 @@
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //is the name free ?
       {
-        NSData* pdfData = [[libraryEquation equation] pdfData];
+        LatexitEquation* latexitEquation = [libraryEquation equation];
+        NSData* pdfData = [latexitEquation pdfData];
         NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
                          exportOptions:exportOptions
                          compositionConfiguration:[preferencesController compositionConfigurationDocument]
@@ -564,11 +565,16 @@
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                              ofItemAtPath:filePath error:0];
-        NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+        NSColor* autoBackgroundColor = [latexitEquation backgroundColor];
+        NSColor* iconBackgroundColor =
+          (jpegBackgroundColor != nil) ? jpegBackgroundColor :
+          (autoBackgroundColor != nil) ? autoBackgroundColor :
+          nil;
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
             (exportFormat != EXPORT_FORMAT_JPEG))
-          [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:backgroundColor]
+          [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:iconBackgroundColor]
                                          forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
         [names addObject:fileName];
       }
@@ -583,7 +589,8 @@
         //We may have found a name; in this case, create the file
         if (![fileManager fileExistsAtPath:filePath])
         {
-          NSData* pdfData = [[libraryEquation equation] pdfData];
+          LatexitEquation* latexitEquation = [libraryEquation equation];
+          NSData* pdfData = [latexitEquation pdfData];
           NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
                            exportOptions:exportOptions
                            compositionConfiguration:[preferencesController compositionConfigurationDocument]
@@ -592,11 +599,16 @@
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
           [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                                ofItemAtPath:filePath error:0];
-          NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+          NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+          NSColor* autoBackgroundColor = [latexitEquation backgroundColor];
+          NSColor* iconBackgroundColor =
+            (jpegBackgroundColor != nil) ? jpegBackgroundColor :
+            (autoBackgroundColor != nil) ? autoBackgroundColor :
+            nil;
           if ((exportFormat != EXPORT_FORMAT_PNG) &&
               (exportFormat != EXPORT_FORMAT_TIFF) &&
               (exportFormat != EXPORT_FORMAT_JPEG))
-            [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:backgroundColor]
+            [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:iconBackgroundColor]
                                            forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
           [names addObject:fileName];
         }

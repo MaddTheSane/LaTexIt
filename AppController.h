@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -112,6 +112,8 @@
 -(IBAction) closeBackSync:(id)sender;
 -(IBAction) saveAs:(id)sender;
 -(IBAction) save:(id)sender;
+
+-(IBAction) fontSizeChange:(id)sender;
 
 -(IBAction) formatChangeAlignment:(id)sender;
 -(IBAction) formatComment:(id)sender;

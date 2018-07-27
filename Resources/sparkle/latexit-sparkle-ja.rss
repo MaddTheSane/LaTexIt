@@ -6,7 +6,7 @@
     <description><![CDATA[Updates and downoad links.]]></description>
     <language>en</language>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-1.15.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-1.15.0</guid>
       <title>Version 1.15.0</title>
       <description><![CDATA[
         <ul>
@@ -23,12 +23,12 @@
           <li>new icon by Jacob Bandes-Storch</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-1.15.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-1.15.0</sparkle:releaseNotesLink>
       <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
       <enclosure url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
     </item> 
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-1.16.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-1.16.0</guid>
       <title>Version 1.16.0</title>
       <description><![CDATA[
         <ul>
@@ -44,12 +44,12 @@
           <li>fixed some minor bugs.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-1.16.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-1.16.0</sparkle:releaseNotesLink>
       <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
       <enclosure url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-1.16.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-1.16.1</guid>
       <title>Version 1.16.1</title>
       <description><![CDATA[
         <ul>
@@ -58,7 +58,7 @@
           <li>fixed bug regarding environment variables propagation in custom scripts.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-1.16.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-1.16.1</sparkle:releaseNotesLink>
       <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-1_16_1.dmg"
@@ -69,7 +69,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.0.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.0.0</guid>
       <title>Version 2.0.0</title>
       <description><![CDATA[
         <ul>
@@ -86,7 +86,7 @@
           <li>the developer himself has been updated to version 2.0 by marrying his beloved wife. Donations are welcome to participate to the honeymoon !</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.0.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.0.0</sparkle:releaseNotesLink>
         <pubDate>Wed, 04 Nov 2009 21:28:25 +0100</pubDate>
         <enclosure
           url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_0_0.dmg"
@@ -97,7 +97,7 @@
         />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.0.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.0.1</guid>
       <title>Version 2.0.1</title>
       <description><![CDATA[
         <ul>
@@ -109,7 +109,7 @@
           <li>improved some interface details and minor bug fixes.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.0.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.0.1</sparkle:releaseNotesLink>
       <pubDate>Sun, 15 Nov 2009 20:05:40 +0100</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_0_1.dmg"
@@ -121,7 +121,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.1.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.1.0</guid>
         <title>Version 2.1.0</title>
         <description><![CDATA[
           <ul>
@@ -133,7 +133,7 @@
             <li>small interface refinements.</li>
           </ul>
         ]]></description>
-        <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.1.0</sparkle:releaseNotesLink>
+        <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.1.0</sparkle:releaseNotesLink>
         <pubDate>Tue, 09 Mar 2010 19:46:50 +0100</pubDate>
         <enclosure
           url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_1_0.dmg"
@@ -144,7 +144,7 @@
         />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.1.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.1.1</guid>
       <title>Version 2.1.1</title>
       <description><![CDATA[
         <ul>
@@ -152,7 +152,7 @@
           <li>if you want to help me buy a house, you can reconsider that famous donation of a few thousand dollars you have delayed so far.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.1.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.1.1</sparkle:releaseNotesLink>
       <pubDate>Thu, 11 Mar 2010 09:36:48 +0100</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_1_1.dmg"
@@ -164,7 +164,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.2.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.2.0</guid>
       <title>Version 2.2.0</title>
       <description><![CDATA[
         <h3>Unusual note</h3>
@@ -186,7 +186,7 @@
           <li>some bugs fixed.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.2.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.2.0</sparkle:releaseNotesLink>
       <pubDate>Tue, 25 May 2010 07:58:04 +0200</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_2_0.dmg"
@@ -198,7 +198,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.3.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.3.0</guid>
       <title>Version 2.3.0</title>
       <description><![CDATA[
         <ul>
@@ -210,7 +210,7 @@
           <li>updated Sparkle.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.3.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.3.0</sparkle:releaseNotesLink>
       <pubDate>Wed, 01 Sep 2010 19:53:06 +0200</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_3_0.dmg"
@@ -222,7 +222,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.4.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.4.0</guid>
       <title>Version 2.4.0</title>
       <description><![CDATA[
         <ul>
@@ -236,7 +236,7 @@
           <li>many internal improvements.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.4.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.4.0</sparkle:releaseNotesLink>
       <pubDate>Mon, 13 Jun 2011 14:00:00 +0200</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_0.dmg"
@@ -248,7 +248,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.4.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.4.1</guid>
       <title>Version 2.4.1</title>
       <description><![CDATA[
         <ul>
@@ -263,7 +263,7 @@
           <li>many internal improvements.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.4.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.4.1</sparkle:releaseNotesLink>
       <pubDate>Mon, 13 Jun 2011 23:50:00 +0200</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_1.dmg"
@@ -275,7 +275,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.5.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.0</guid>
       <title>Version 2.5.0</title>
       <description><![CDATA[
         <ul>
@@ -288,7 +288,7 @@
           <li>Italian localization.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.5.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.0</sparkle:releaseNotesLink>
       <pubDate>Sat, 16 Jun 2012 09:10:47 +0200</pubDate>
 			<enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_0.dmg"
@@ -300,7 +300,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.5.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.1</guid>
       <title>Version 2.5.1</title>
       <description><![CDATA[
         <ul>
@@ -311,7 +311,7 @@
           <li>ability to close, suspend or resume a Linkback link.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.5.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.1</sparkle:releaseNotesLink>
 			<pubDate>Wed, 16 Jan 2013 22:22:50 +0100</pubDate>
 			<enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_1.dmg"
@@ -323,7 +323,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.5.2</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.2</guid>
       <title>Version 2.5.2</title>
       <description><![CDATA[
         <ul>
@@ -331,7 +331,7 @@
           <li>fixed Retina file icons to make them Mac&nbsp;OS&nbsp;10.5 compatible.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.5.2</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.5.2</sparkle:releaseNotesLink>
       <pubDate>Thu, 31 Jan 2013 19:45:03 +0100</pubDate>
       <enclosure
       url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_2.dmg"
@@ -343,7 +343,7 @@
       />
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.6.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.6.0</guid>
       <title>Version 2.6.0</title>
       <description><![CDATA[
         <ul>
@@ -366,7 +366,7 @@
           <li>Fixed drag'n drop to OmniGraffle.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.6.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.6.0</sparkle:releaseNotesLink>
 			<pubDate>Thu, 17 Apr 2014 22:23:07 +0200</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_6_0.dmg"
@@ -378,7 +378,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.6.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.6.1</guid>
       <title>Version 2.6.1</title>
 			<pubDate>Mon, 19 May 2014 23:14:42 +0200</pubDate>
 			<enclosure
@@ -396,10 +396,10 @@
           <li>Reduced service titles for better appearance in MacOS&nbsp;X keyboard preferences.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.6.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.6.1</sparkle:releaseNotesLink>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.0</guid>
       <title>Version 2.7.0</title>
       <description><![CDATA[
         <ul>
@@ -411,7 +411,7 @@
           <li>fixed minor bugs.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.0</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.0</sparkle:releaseNotesLink>
 			<pubDate>Tue, 02 Sep 2014 11:35:30 +0200</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_0.dmg"
@@ -423,14 +423,14 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.1</guid>
       <title>Version 2.7.1</title>
       <description><![CDATA[
         <ul>
           <li>Fixed Export dialog box.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.1</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.1</sparkle:releaseNotesLink>
 			<pubDate>Tue, 09 Sep 2014 22:13:26 +0200</pubDate>
 			<enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_1.dmg"
@@ -442,7 +442,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.2</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.2</guid>
       <title>Version 2.7.2</title>
       <description><![CDATA[
         <ul>
@@ -450,7 +450,7 @@
           <li>fixed minor bugs.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.2</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.2</sparkle:releaseNotesLink>
 			<pubDate>Fri, 12 Sep 2014 19:35:47 +0200</pubDate>
 			<enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_2.dmg"
@@ -462,14 +462,14 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.3</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.3</guid>
       <title>Version 2.7.3</title>
       <description><![CDATA[
         <ul>
           <li>restored right-click menu on image.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.3</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.3</sparkle:releaseNotesLink>
 			<pubDate>Sun, 14 Sep 2014 11:22:30 +0200</pubDate>
 			<enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_3.dmg"
@@ -481,14 +481,14 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.4</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.4</guid>
       <title>Version 2.7.4</title>
       <description><![CDATA[
         <ul>
           <li>totally broken version just to make a fool out of myself.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.4</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.4</sparkle:releaseNotesLink>
 			<pubDate>Fri, 28 Nov 2014 22:33:42 +0100</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_4.dmg"
@@ -500,7 +500,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.5</guid>
       <title>Version 2.7.5</title>
       <description><![CDATA[
         <ul>
@@ -515,7 +515,7 @@
           </li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.5</sparkle:releaseNotesLink>
 			<pubDate>Sat, 29 Nov 2014 19:10:38 +0100</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_5.dmg"
@@ -527,7 +527,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.8.0</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.8.0</guid>
       <title>Version 2.8.0</title>
       <description><![CDATA[
         <ul>
@@ -539,7 +539,7 @@
           <li>fixed various localizations.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.7.5</sparkle:releaseNotesLink>
 			<pubDate>Mon, 07 Sep 2015 22:46:42 +0200</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_8_0.dmg"
@@ -551,7 +551,7 @@
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.8.1</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.8.1</guid>
       <title>Version 2.8.1</title>
       <description><![CDATA[
         <ul>
@@ -561,7 +561,7 @@
           <li>updated Linkback.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.8.1</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.8.1</sparkle:releaseNotesLink>
       <pubDate>Wed, 13 Jul 2016 22:20:50 +0200</pubDate>
       <enclosure
         url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_8_1.dmg"
@@ -571,6 +571,30 @@
         length="11069861"
         sparkle:dsaSignature="MCwCFBUUeIDsNsYhG1DPyPMA3+/2RxziAhR/zorg7CNEQYoSoQnZBL59GPJ7cQ=="
       />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.9.0</guid>
+      <title>Version 2.9.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Added invisible graphic annotation in PDFs as more robust metadata, to prevent Keynote and Powerpoint from stripping them;</li>
+          <li>try to use a clever file name when dropping a file to the Finder;</li>
+          <li>export SVG as string when the target application is not able to display SVG;</li>
+          <li>any occurrence of %__TEXTCOLOR__ in the preamble will be replaced by the currently selected text color, to circumvent the problem of packages that override the previous settings;</li>
+          <li>more clever background coloring of icon of equations created in the Finder, when the &quot;automatically contrasted background&quot; is enabled;</li>
+          <li>added menu &quot;Font &gt; Bigger/Smaller&quot;.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.9.0</sparkle:releaseNotesLink>
+			<pubDate>Tue, 06 Feb 2018 22:09:49 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_9_0.dmg"
+				sparkle:version="2.9.0"
+                   sparkle:shortVersionString="2.9.0"
+				type="application/octet-stream"
+				length="11670909"
+				sparkle:dsaSignature="MCwCFAU+lVlqWX6BvpC2cBxJ3geN47JbAhRZLIRENi3Lqq6oR3Q4vZ6hEktgjA=="
+			/>
     </item>
   </channel> 
 </rss>
