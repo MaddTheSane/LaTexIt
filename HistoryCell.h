@@ -11,5 +11,9 @@
 
 @interface HistoryCell : NSImageCell <NSCopying> {
   NSDateFormatter* dateFormatter;
+  NSColor*         backgroundColor;
 }
+
+-(void) setBackgroundColor:(NSColor*)color;
+
 @end

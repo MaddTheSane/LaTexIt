@@ -36,12 +36,11 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
   [self setDataSource:self];
 }
 
-//computes the faulty lines thanks to a (filtered) latex log
--(void) setDataWithLog:(NSString*)log
+//updates contents thnaks to the array of error strings
+-(void) setErrors:(NSArray*)errors
 {
   [errorLines removeAllObjects];
-  NSArray* lines = [log componentsSeparatedByString:@"\n"];
-  NSEnumerator* lineEnumerator = [lines objectEnumerator];
+  NSEnumerator* lineEnumerator = [errors objectEnumerator];
   NSString* line = [lineEnumerator nextObject];
   while(line)
   {

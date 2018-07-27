@@ -19,7 +19,7 @@
   [super dealloc];
 }
 
--(id) copyWithZone:(NSZone *)zone
+-(id) copyWithZone:(NSZone*)zone
 {
   LibraryCell* cell = (LibraryCell*) [super copyWithZone:zone];
   if (cell)

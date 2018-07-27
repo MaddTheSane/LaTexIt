@@ -16,6 +16,6 @@ extern NSString* ClickErrorLineNotification;
   NSMutableArray* errorLines;//the lines where the errors are located
 }
 
-//computes the faulty lines thanks to a (filtered) latex log
--(void) setDataWithLog:(NSString*)log;
+//updates contents thnaks to the array of error strings
+-(void) setErrors:(NSArray*)errors;
 @end

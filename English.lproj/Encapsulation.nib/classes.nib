@@ -1,0 +1,28 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {openHelp = id; }; 
+            CLASS = EncapsulationController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {addEncapsulation = id; removeEncapsulations = id; }; 
+            CLASS = EncapsulationManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                encapsulationTableView = EncapsulationView; 
+                removeEncapsulationButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = EncapsulationView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

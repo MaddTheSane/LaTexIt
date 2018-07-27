@@ -33,9 +33,10 @@ extern NSString* LibraryItemsPboardType;
 
 //undo-aware methods to manage the library.
 
--(LibraryItem*) addFolder:(NSOutlineView*)outlineView;
+-(LibraryItem*) newFolder:(NSOutlineView*)outlineView;//creates a new folder
+-(LibraryItem*) addItem:(LibraryItem*)libraryItem outlineView:(NSOutlineView*)outlineView;//adds a new item at the end
 //The <historyItem>, as a parameter, will be the value of the LibraryFile that will be created
--(LibraryItem*) addFile:(HistoryItem*)historyItem outlineView:(NSOutlineView*)outlineView;
+-(LibraryItem*) newFile:(HistoryItem*)historyItem outlineView:(NSOutlineView*)outlineView;
 -(void) removeItems:(NSArray*)items;
 -(void) refreshFileItem:(LibraryFile*)item withValue:(HistoryItem*)value;
 

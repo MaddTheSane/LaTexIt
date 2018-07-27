@@ -81,7 +81,7 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 -(IBAction) saveAccessoryViewPopupFormatDidChange:(id)sender;
 
 -(IBAction) addCurrentEquationToLibrary:(id)sender;
--(IBAction) addLibraryFolder:(id)sender;
+-(IBAction) newLibraryFolder:(id)sender;
 -(IBAction) removeLibraryItems:(id)sender;
 -(IBAction) refreshLibraryItems:(id)sender;
 
@@ -101,6 +101,7 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 //tells whether the document is currently performing a latexisation
 -(BOOL) isBusy;
 
+-(void) setFont:(NSFont*)font;//changes the font of both preamble and sourceText views
 -(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
 -(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield
 

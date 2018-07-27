@@ -16,4 +16,9 @@
 //checks if indexOfObjectIdenticalTo returns a valid index
 -(BOOL) containsObjectIdenticalTo:(id)object;
 
+//this method does exist in Tiger
+#ifdef PANTHER
+-(void) removeObjectsAtIndexes:(NSIndexSet *)indexes;
+#endif
+
 @end

@@ -18,8 +18,9 @@
 #import <LinkBack/LinkBack.h>
 #endif
 
+@class EncapsulationController;
 @class MarginController;
-@class PalettesController;
+@class LatexPalettesController;
 @class PreferencesController;
 
 @interface AppController : NSObject <LinkBackServerDelegate> {
@@ -27,8 +28,6 @@
   IBOutlet NSMenuItem* showPreambleMenuItem;
   IBOutlet NSMenuItem* showHistoryMenuItem;
   IBOutlet NSMenuItem* showLibraryMenuItem;
-  IBOutlet NSMenuItem* marginMenuItem;
-  IBOutlet NSMenuItem* paletteMenuItem;
   
   IBOutlet NSWindow*   readmeWindow;
   IBOutlet NSTextView* readmeTextView;
@@ -36,11 +35,13 @@
   //some info on current configuration
   BOOL isPdfLatexAvailable;
   BOOL isGsAvailable;
+  BOOL isDvipdfAvailable;
   BOOL isColorStyAvailable;
 
-  MarginController*      marginController;
-  PalettesController*    palettesController;
-  PreferencesController* preferencesController;
+  EncapsulationController* encapsulationController;
+  MarginController*        marginController;
+  LatexPalettesController* latexPalettesController;
+  PreferencesController*   preferencesController;
 }
 
 +(AppController*) appController; //getting the unique instance of appController
@@ -50,23 +51,29 @@
 
 //the menu actions
 -(IBAction) openWebSite:(id)sender;//ask for LaTeXiT's web site
+-(IBAction) checkUpdates:(id)sender;//check for updates on LaTeXiT's web site
+
+-(IBAction) paste:(id)sender;
 
 -(IBAction) exportImage:(id)sender;
 -(IBAction) makeLatex:(id)sender;
 -(IBAction) displayLog:(id)sender;
+-(IBAction) showOrHideColorInspector:(id)sender;
 -(IBAction) showOrHidePreamble:(id)sender;
 -(IBAction) showOrHideHistory:(id)sender;
 -(IBAction) showOrHideLibrary:(id)sender;
--(IBAction) showOrHidePalette:(id)sender;
+-(IBAction) showOrHideEncapsulation:(id)sender;
 -(IBAction) showOrHideMargin:(id)sender;
+-(IBAction) showOrHideLatexPalettes:(id)sender;
 -(IBAction) removeHistoryEntries:(id)sender;
 -(IBAction) clearHistory:(id)sender;
--(IBAction) paletteClick:(id)sender;
+-(IBAction) latexPalettesClick:(id)sender;
 -(IBAction) showPreferencesPane:(id)sender;
+-(void)     showPreferencesPaneWithIdentifier:(id)identifier;//showPreferencesPane + select one tab
 -(IBAction) showHelp:(id)sender;
 
 -(IBAction) addCurrentEquationToLibrary:(id)sender;
--(IBAction) addLibraryFolder:(id)sender;
+-(IBAction) newLibraryFolder:(id)sender;
 -(IBAction) removeLibraryItems:(id)sender;
 -(IBAction) refreshLibraryItems:(id)sender;
 -(IBAction) loadLibrary:(id)sender;
@@ -85,6 +92,7 @@
 //returns some configuration info
 -(BOOL) isPdfLatexAvailable;
 -(BOOL) isGsAvailable;
+-(BOOL) isDvipdfAvailable;
 -(BOOL) isColorStyAvailable;
 
 //modifies the \usepackage{color} line of the preamble in order to use the given color
@@ -93,8 +101,13 @@
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality;
 
-//returns a file icon to represent the given PDF data
--(NSImage*) makeIconForData:(NSData*)pdfData;
+//returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
+-(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
+
+//annotates data in LEE format
+-(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
+                                 mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
+                                 backgroundColor:(NSColor*)backgroundColor;
 
 //methods for the application service
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;

@@ -12,7 +12,7 @@
 
 #import "LibraryItem.h"
 
-@interface LibraryFolder : LibraryItem <NSCoding> {
+@interface LibraryFolder : LibraryItem <NSCoding, NSCopying> {
 }
 -(NSImage*) image; //to get an icon
 @end

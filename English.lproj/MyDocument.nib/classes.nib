@@ -49,7 +49,7 @@
         {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
         {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {
-            ACTIONS = {addFolder = id; importCurrent = id; refreshItem = id; removeItem = id; }; 
+            ACTIONS = {importCurrent = id; newFolder = id; refreshItem = id; removeItem = id; }; 
             CLASS = LibraryDrawer; 
             LANGUAGE = ObjC; 
             OUTLETS = {
@@ -78,7 +78,6 @@
         {
             ACTIONS = {
                 addCurrentEquationToLibrary = id; 
-                addLibraryFolder = id; 
                 clearHistory = id; 
                 closeOptionsPane = id; 
                 colorDidChange = id; 
@@ -86,6 +85,7 @@
                 exportImage = id; 
                 jpegQualitySliderDidChange = id; 
                 makeLatex = id; 
+                newLibraryFolder = id; 
                 openOptions = id; 
                 refreshLibraryItems = id; 
                 removeHistoryEntries = id; 

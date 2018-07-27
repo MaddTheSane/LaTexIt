@@ -19,12 +19,15 @@
 NSString* DragExportTypeKey            = @"LaTeXiT_DragExportTypeKey";
 NSString* DragExportJpegColorKey       = @"LaTeXiT_DragExportJpegColorKey";
 NSString* DragExportJpegQualityKey     = @"LaTeXiT_DragExportJpegQualityKey";
+NSString* DefaultImageViewBackground   = @"LaTeXiT_DefaultImageViewBackground";
 NSString* DefaultColorKey              = @"LaTeXiT_DefaultColorKey";
 NSString* DefaultPointSizeKey          = @"LaTeXiT_DefaultPointSizeKey";
 NSString* DefaultModeKey               = @"LaTeXiT_DefaultModeKey";
 NSString* DefaultPreambleAttributedKey = @"LaTeXiT_DefaultPreambleAttributedKey";
 NSString* DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
+NSString* CompositionModeKey           = @"LaTeXiT_CompositionModeKey";
 NSString* PdfLatexPathKey              = @"LaTeXiT_PdfLatexPathKey";
+NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
 NSString* GsPathKey                    = @"LaTeXiT_GsPathKey";
 NSString* ServiceRespectsColorKey      = @"LaTeXiT_ServiceRespectsColorKey";
 NSString* ServiceRespectsBaselineKey   = @"LaTeXiT_ServiceRespectsBaselineKey";
@@ -33,9 +36,8 @@ NSString* AdditionalTopMarginKey       = @"LaTeXiT_AdditionalTopMarginKey";
 NSString* AdditionalLeftMarginKey      = @"LaTeXiT_AdditionalLeftMarginKey";
 NSString* AdditionalRightMarginKey     = @"LaTeXiT_AdditionalRightMarginKey";
 NSString* AdditionalBottomMarginKey    = @"LaTeXiT_AdditionalBottomMarginKey";
-NSString* AdvancedLibraryExportTypeKey              = @"LaTeXiT_AdvancedLibraryExportTypeKey";
-NSString* AdvancedLibraryExportUseEncapsulationKey  = @"LaTeXiT_AdvancedLibraryExportUseEncapsulationKey";
-NSString* AdvancedLibraryExportEncapsulationTextKey = @"LaTeXiT_AdvancedLibraryExportEncapsulationTextKey";
+NSString* EncapsulationsKey            = @"LaTeXiT_EncapsulationsKey";
+NSString* CurrentEncapsulationIndexKey = @"LaTeXiT_CurrentEncapsulationIndexKey";
 
 NSString* SomePathDidChangeNotification = @"SomePathDidChangeNotification"; //changing the path to an executable (like pdflatex)
 
@@ -49,6 +51,11 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 +(void) initialize
 {
+  NSFont* defaultFont = [NSFont fontWithName:@"Monaco" size:12];
+  if (!defaultFont)
+    defaultFont = [NSFont userFontOfSize:0];
+  NSData* defaultFontAsData = [defaultFont data];
+
   if (!factoryDefaultPreamble)
   {
     NSString* factoryDefaultPreambleString = [NSString stringWithFormat:
@@ -60,36 +67,41 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       NSLocalizedString(@"used for font color", @"used for font color"),
       NSLocalizedString(@"useful to type directly accentuated characters",
                         @"useful to type directly accentuated characters")];
-    factoryDefaultPreamble = [[NSAttributedString alloc] initWithString:factoryDefaultPreambleString];
-    NSData* factoryDefaultPreambleData =
-      [factoryDefaultPreamble RTFFromRange:NSMakeRange(0, [factoryDefaultPreamble length]) documentAttributes:nil];
+    NSDictionary* attributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
+    factoryDefaultPreamble = [[NSAttributedString alloc] initWithString:factoryDefaultPreambleString attributes:attributes];
+  }
 
-    NSData* defaultFont = [[NSFont userFontOfSize:0] data];
+  NSData* factoryDefaultPreambleData =
+    [factoryDefaultPreamble RTFFromRange:NSMakeRange(0, [factoryDefaultPreamble length]) documentAttributes:nil];
 
-    NSDictionary* defaults =
-      [NSDictionary dictionaryWithObjectsAndKeys:@"PDF", DragExportTypeKey,
-                                                 [[NSColor whiteColor] data],      DragExportJpegColorKey,
-                                                 [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
-                                                 [[NSColor  blackColor]   data],   DefaultColorKey,
-                                                 [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
-                                                 [NSNumber numberWithInt:DISPLAY], DefaultModeKey,
-                                                 @"", PdfLatexPathKey,
-                                                 @"", GsPathKey,
-                                                 factoryDefaultPreambleData, DefaultPreambleAttributedKey,
-                                                 defaultFont, DefaultFontKey,
-                                                 [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
-                                                 [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
-                                                 [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
-                                                 [NSNumber numberWithFloat:0], AdditionalTopMarginKey,
-                                                 [NSNumber numberWithFloat:0], AdditionalLeftMarginKey,
-                                                 [NSNumber numberWithFloat:0], AdditionalRightMarginKey,
-                                                 [NSNumber numberWithFloat:0], AdditionalBottomMarginKey,
-                                                 [NSNumber numberWithInt:1]   , AdvancedLibraryExportTypeKey,
-                                                 [NSNumber numberWithBool:YES], AdvancedLibraryExportUseEncapsulationKey,
-                                                 @"\\ref{@}"                  , AdvancedLibraryExportEncapsulationTextKey,
-                                                 nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-  }  
+  NSDictionary* defaults =
+    [NSDictionary dictionaryWithObjectsAndKeys:[[NSColor whiteColor] data],      DefaultImageViewBackground,
+                                               @"PDF",                           DragExportTypeKey,
+                                               [[NSColor whiteColor] data],      DragExportJpegColorKey,
+                                               [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
+                                               [[NSColor  blackColor]   data],   DefaultColorKey,
+                                               [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
+                                               [NSNumber numberWithInt:DISPLAY], DefaultModeKey,
+                                               [NSNumber numberWithInt:0], CompositionModeKey,
+                                               @"", PdfLatexPathKey,
+                                               @"", DvipdfPathKey,
+                                               @"", GsPathKey,
+                                               factoryDefaultPreambleData, DefaultPreambleAttributedKey,
+                                               defaultFontAsData, DefaultFontKey,
+                                               [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
+                                               [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
+                                               [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
+                                               [NSNumber numberWithFloat:0], AdditionalTopMarginKey,
+                                               [NSNumber numberWithFloat:0], AdditionalLeftMarginKey,
+                                               [NSNumber numberWithFloat:0], AdditionalRightMarginKey,
+                                               [NSNumber numberWithFloat:0], AdditionalBottomMarginKey,
+                                               [NSArray arrayWithObjects:@"@", @"#", @"\\label{@}", @"\\ref{@}", @"$#$",
+                                                                         @"\\[#\\]", @"\\begin{equation}#\\label{@}\\end{equation}",
+                                                                         nil], EncapsulationsKey,
+                                               [NSNumber numberWithUnsignedInt:0], CurrentEncapsulationIndexKey,
+                                               nil];
+
+  [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 }
 
 -(id) init
@@ -123,6 +135,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
   [dragExportPopupFormat selectItemWithTitle:[userDefaults stringForKey:DragExportTypeKey]];
   [self dragExportPopupFormatDidChange:dragExportPopupFormat];
+
+  [defaultImageViewBackgroundColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultImageViewBackground]]];
   
   [[defaultModeSegmentedControl cell] setTag:DISPLAY forSegment:0];
   [[defaultModeSegmentedControl cell] setTag:INLINE  forSegment:1];
@@ -136,13 +150,17 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [preambleTextView setForbiddenLine:1 forbidden:YES];
   NSData* attributedStringData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
   NSAttributedString* attributedString = [[[NSAttributedString alloc] initWithRTF:attributedStringData documentAttributes:NULL] autorelease];
-  [[preambleTextView layoutManager] replaceTextStorage:[[[NSTextStorage alloc] initWithAttributedString:attributedString] autorelease]];
+  [[preambleTextView textStorage] setAttributedString:attributedString];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
 
   [self changeFont:self];//updates font textfield
   
+  [compositionMatrix selectCellWithTag:[userDefaults integerForKey:CompositionModeKey]];
+  
   [pdfLatexTextField        setStringValue:[userDefaults stringForKey:PdfLatexPathKey]];
   [pdfLatexTextField        setDelegate:self];
+  [dvipdfTextField          setStringValue:[userDefaults stringForKey:DvipdfPathKey]];
+  [dvipdfTextField          setDelegate:self];
   [gsTextField              setStringValue:[userDefaults stringForKey:GsPathKey]];
   [gsTextField              setDelegate:self];
   [serviceRespectsColor     setState:[userDefaults boolForKey:ServiceRespectsColorKey]  ? NSOnState : NSOffState];
@@ -157,12 +175,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [additionalRightMarginTextField setDelegate:self];
   [additionalBottomMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
   [additionalBottomMarginTextField setDelegate:self];
-  
-  [advancedLibraryStringExportMatrix    selectCellWithTag:[userDefaults integerForKey:AdvancedLibraryExportTypeKey]];
-  [advancedLibraryStringExportCheckBox  setState:([userDefaults boolForKey:AdvancedLibraryExportUseEncapsulationKey] ? NSOnState : NSOffState)];
-  [advancedLibraryStringExportTextField setStringValue:[userDefaults objectForKey:AdvancedLibraryExportEncapsulationTextKey]];
-  [advancedLibraryStringExportTextField setDelegate:self];
-  
+    
   [self tabView:preferencesTabView willSelectTabViewItem:[preferencesTabView selectedTabViewItem]];
 }
 
@@ -269,7 +282,9 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 -(IBAction) changeDefaultGeneralConfig:(id)sender
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  if (sender == defaultColorColorWell)
+  if (sender == defaultImageViewBackgroundColorWell)
+    [userDefaults setObject:[[defaultImageViewBackgroundColorWell color] data] forKey:DefaultImageViewBackground];
+  else if (sender == defaultColorColorWell)
     [userDefaults setObject:[[defaultColorColorWell color] data] forKey:DefaultColorKey];
   else if (sender == defaultPointSizeTextField)
     [userDefaults setFloat:[defaultPointSizeTextField doubleValue] forKey:DefaultPointSizeKey];
@@ -293,7 +308,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(IBAction) resetDefaultPreamble:(id)sender
 {
-  [[preambleTextView layoutManager] replaceTextStorage:[[[NSTextStorage alloc] initWithAttributedString:factoryDefaultPreamble] autorelease]];
+  [[preambleTextView textStorage] setAttributedString:factoryDefaultPreamble];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
   [preambleTextView setNeedsDisplay:YES];
 }
@@ -325,14 +340,25 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(IBAction) applyPreambleToOpenDocuments:(id)sender
 {
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSArray* documents = [[NSDocumentController sharedDocumentController] documents];
   [documents makeObjectsPerformSelector:@selector(setPreamble:) withObject:[[[preambleTextView textStorage] mutableCopy] autorelease]];
+  [documents makeObjectsPerformSelector:@selector(setFont:) withObject:[NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]]];
 }
 
 -(IBAction) applyPreambleToLibrary:(id)sender
 {
   NSArray* historyItems = [[LibraryManager sharedManager] allValues];
   [historyItems makeObjectsPerformSelector:@selector(setPreamble:) withObject:[[[preambleTextView textStorage] mutableCopy] autorelease]];
+}
+
+-(IBAction) changeCompositionMode:(id)sender
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  if (sender == compositionMatrix)
+  {
+    [userDefaults setInteger:[[sender selectedCell] tag] forKey:CompositionModeKey];
+  }
 }
 
 //opens a panel to let the user select a file, as the new path
@@ -343,7 +369,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   switch(tag)
   {
     case 0 : textField = pdfLatexTextField; break;
-    case 1 : textField = gsTextField; break;
+    case 1 : textField = dvipdfTextField; break;
+    case 2 : textField = gsTextField; break;
     default: break;
   }
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -369,14 +396,13 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(void) controlTextDidChange:(NSNotification*)aNotification
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSTextField* textField = [aNotification object];
   if (textField == pdfLatexTextField)
     didChangePdfLatexTextField = YES;
+  else if (textField == dvipdfTextField)
+    didChangeDvipdfTextField = YES;
   else if (textField == gsTextField)
     didChangeGsTextField = YES;
-  else if (textField == advancedLibraryStringExportTextField)
-    [userDefaults setObject:[advancedLibraryStringExportTextField stringValue] forKey:AdvancedLibraryExportEncapsulationTextKey];
 }
 
 -(void) controlTextDidEndEditing:(NSNotification*)aNotification
@@ -391,6 +417,15 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
     }
     didChangePdfLatexTextField = NO;
+  }
+  else if (textField == dvipdfTextField)
+  {
+    if (didChangeDvipdfTextField)
+    {
+      [userDefaults setObject:[textField stringValue] forKey:DvipdfPathKey];
+      [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+    }
+    didChangeDvipdfTextField = NO;
   }
   else if (textField == gsTextField)
   {
@@ -434,13 +469,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 -(IBAction) changeAdvancedConfiguration:(id)sender
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  if (sender == advancedLibraryStringExportMatrix)
-    [userDefaults setInteger:[[advancedLibraryStringExportMatrix selectedCell] tag] forKey:AdvancedLibraryExportTypeKey];
-  else if (sender == advancedLibraryStringExportCheckBox)
-    [userDefaults setBool:([advancedLibraryStringExportCheckBox state] == NSOnState) forKey:AdvancedLibraryExportUseEncapsulationKey];
-  else if (sender == advancedLibraryStringExportTextField)
-    [userDefaults setObject:[advancedLibraryStringExportTextField stringValue] forKey:AdvancedLibraryExportEncapsulationTextKey];
-  else if (sender == additionalTopMarginTextField)
+  if (sender == additionalTopMarginTextField)
     [userDefaults setFloat:[additionalTopMarginTextField floatValue] forKey:AdditionalTopMarginKey];
   else if (sender == additionalLeftMarginTextField)
     [userDefaults setFloat:[additionalLeftMarginTextField floatValue] forKey:AdditionalLeftMarginKey];
@@ -448,6 +477,12 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [userDefaults setFloat:[additionalRightMarginTextField floatValue] forKey:AdditionalRightMarginKey];
   else if (sender == additionalBottomMarginTextField)
     [userDefaults setFloat:[additionalBottomMarginTextField floatValue] forKey:AdditionalBottomMarginKey];
+}
+
+
+-(void) selectPreferencesPaneWithIdentifier:(id)identifier
+{
+  [preferencesTabView selectTabViewItemWithIdentifier:identifier];
 }
 
 -(void) _userDefaultsDidChangeNotification:(NSNotification*)notification

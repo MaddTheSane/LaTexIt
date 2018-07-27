@@ -23,4 +23,18 @@
   return reversed;
 }
 
+#ifdef PANTHER
+-(NSArray*) objectsAtIndexes:(NSIndexSet *)indexes //does exist in Tiger
+{
+  NSMutableArray* subArray = [NSMutableArray arrayWithCapacity:[indexes count]];
+  unsigned int index = [indexes firstIndex];
+  while(index != NSNotFound)
+  {
+    [subArray addObject:[self objectAtIndex:index]];
+    index = [indexes indexGreaterThanIndex:index];
+  }
+  return subArray;
+}
+#endif
+
 @end

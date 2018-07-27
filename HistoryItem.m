@@ -19,20 +19,30 @@
 #import <LinkBack-panther/LinkBack.h>
 #else
 #import <LinkBack/LinkBack.h>
+#import <Quartz/Quartz.h>
 #endif
+
+NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification";
+
+@interface HistoryItem (PrivateAPI)
+-(void) _reannotatePdfData;
+@end
 
 @implementation HistoryItem
 
 +(id) historyItemWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
-                     color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode;
+                     color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
+                     backgroundColor:(NSColor*)backgroundColor
 {
   id instance = [[[self class] alloc] initWithPdfData:someData preamble:aPreamble sourceText:aSourceText
-                                              color:aColor pointSize:aPointSize date:aDate mode:aMode];
+                                              color:aColor pointSize:aPointSize date:aDate mode:aMode
+                                              backgroundColor:backgroundColor];
   return [instance autorelease];
 }
 
 -(id) initWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
-              color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode;
+              color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
+              backgroundColor:(NSColor*)aBackgroundColor
 {
   self = [super init];
   if (self)
@@ -45,6 +55,7 @@
     date       = [aDate       copy];
     mode       = aMode;
     //pdfCachedImage and bitmapCachedImage are lazily initialized in the "image" methods that returns these cached images
+    backgroundColor = [aBackgroundColor copy];
   }
   return self;
 }
@@ -57,8 +68,28 @@
   [color             release];
   [date              release];
   [pdfCachedImage    release];
-  [bitmapCachedImage release];  
+  [bitmapCachedImage release];
+  [backgroundColor   release];  
   [super dealloc];
+}
+
+-(id) copyWithZone:(NSZone*) zone
+{
+  HistoryItem* newInstance = (HistoryItem*) [super copy];
+  if (newInstance)
+  {
+    newInstance->pdfData = [pdfData copy];
+    newInstance->preamble = [preamble mutableCopy];
+    newInstance->sourceText = [preamble mutableCopy];
+    newInstance->color = [color copy];
+    newInstance->pointSize = pointSize;
+    newInstance->date = [date copy];
+    newInstance->mode = mode;
+    newInstance->pdfCachedImage = [pdfCachedImage copy];
+    newInstance->bitmapCachedImage = [bitmapCachedImage copy];
+    newInstance->backgroundColor = [backgroundColor copy];
+  }
+  return newInstance;
 }
 
 -(NSData*) pdfData
@@ -96,16 +127,40 @@
   return mode;
 }
 
+-(NSColor*) backgroundColor
+{
+  return backgroundColor;
+}
+
 -(void) setPreamble:(NSAttributedString*)text
 {
-  [text retain];
-  [preamble release];
-  preamble = text;
+  @synchronized(self)
+  {
+    [text retain];
+    [preamble release];
+    preamble = text;
+    [self _reannotatePdfData];
+  }
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
+}
+
+-(void) setBackgroundColor:(NSColor*)aColor
+{
+  @synchronized(self)
+  {
+    [backgroundColor autorelease];
+    //we remove the background color if it is set to white. Useful to display in a table view alternating white/blue rows
+    NSColor* greyLevelColor = [aColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
+    //we retain aColor twice...
+    backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [aColor retain];
+    [self _reannotatePdfData];
+  }
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.3.1"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.3.2"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -113,10 +168,12 @@
   [coder encodeDouble:pointSize  forKey:@"pointSize"];
   [coder encodeObject:date       forKey:@"date"];
   [coder encodeInt:mode          forKey:@"mode"];
+  [coder encodeDouble:mode       forKey:@"baseline"];
   //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
   //initialized in the "image" methods, using the pdfData
   //[coder encodeObject:pdfCachedImage    forKey:@"pdfCachedImage"];
   //[coder encodeObject:bitmapCachedImage forKey:@"bitmapCachedImage"];
+  [coder encodeObject:backgroundColor forKey:@"backgroundColor"];
 }
 
 -(id) initWithCoder:(NSCoder*)coder
@@ -151,6 +208,7 @@
       //initialized in the "image" methods, using the pdfData
       //pdfCachedImage    = [[coder decodeObjectForKey:@"pdfCachedImage"]    retain];
       //bitmapCachedImage = [[coder decodeObjectForKey:@"bitmapCachedImage"] retain];
+      backgroundColor = [[coder decodeObjectForKey:@"backgroundColor"] retain];
     }
   }
   return self;
@@ -164,9 +222,9 @@
 
 -(NSImage*) pdfImage
 {
-  if (!pdfCachedImage)
+  @synchronized(self)
   {
-    @synchronized(self)
+    if (!pdfCachedImage)
     {
       pdfCachedImage = [[NSImage alloc] initWithData:pdfData];
       //we need to redefine the cache policy so that zoom of imageView will scale PDF and not cached bitmap
@@ -180,11 +238,14 @@
 
 -(NSImage*) bitmapImage
 {
-  if (!bitmapCachedImage)
+  @synchronized(self)
   {
-    NSData* bitmapData = [[self pdfImage] TIFFRepresentation];//may trigger pdfCachedImage computation, in its own @synchronized{} block
-    @synchronized(self)
+    if (!bitmapCachedImage)
     {
+      NSImage* pdfImage = [self pdfImage];
+      [pdfImage lockFocus];//this lockfocus seems necessary to avoid erratic AppKit deadlock when loading history in the background
+      NSData* bitmapData = [pdfImage TIFFRepresentation];//may trigger pdfCachedImage computation, in its own @synchronized{} block
+      [pdfImage unlockFocus];
       bitmapCachedImage = [[NSImage alloc] initWithData:bitmapData];
     }
   }
@@ -196,6 +257,81 @@
 -(NSString*) string
 {
   return [NSString stringWithFormat:@"%@\n\\begin{document}\n%@\n\\end{document}", [preamble string], [sourceText string]];
+}
+
+//useful to resynchronize the pdfData with the actual parameters (background color...)
+//its use if VERY rare, so that it is not automatic for the sake of efficiency
+-(void) _reannotatePdfData
+{
+  NSData* newData = [self annotatedPdfData];
+  [newData retain];
+  [pdfData release];
+  pdfData = newData;
+}
+
+-(NSData*) annotatedPdfData
+{
+  NSData* newData = pdfData;
+
+  //first, we retreive the baseline if possible
+  double baseline = 0;
+
+  BOOL needsToCheckLEEAnnotations = YES;
+  #ifndef PANTHER
+  PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+  NSString* creator  = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentCreatorAttribute]  : nil;
+  NSArray*  keywords = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute] : nil;
+  //if the meta-data tells that the creator is LaTeXiT, then use it !
+  needsToCheckLEEAnnotations = !(creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 7));
+  if (!needsToCheckLEEAnnotations)
+    baseline = [[keywords objectAtIndex:5] doubleValue];
+  [pdfDocument release];
+  #endif
+
+  if (needsToCheckLEEAnnotations) //either we are on panther, or we failed to find meta-data keywords
+  {
+    NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+    NSArray* testArray = nil;
+  
+    NSMutableString* baselineAsString = @"0";
+    testArray = [dataAsString componentsSeparatedByString:@"/Type (EEbas"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [baselineAsString setString:[testArray objectAtIndex:1]];
+      NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
+      range.length = (range.location != NSNotFound) ? [baselineAsString length]-range.location : 0;
+      [baselineAsString deleteCharactersInRange:range];
+    }
+    baseline = [baselineAsString doubleValue];
+  }
+  
+  //then, we rewrite the pdfData
+  #ifndef PANTHER
+  pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+  NSDictionary* attributes =
+    [NSDictionary dictionaryWithObjectsAndKeys:
+       [NSArray arrayWithObjects:
+          preamble ? [preamble string]: [NSString string],
+          sourceText ? [sourceText string]: [NSString string],
+          [color rgbaString],
+          [NSString stringWithFormat:@"%f", pointSize],
+          [NSString stringWithFormat:@"%d", mode],
+          [NSString stringWithFormat:@"%f", baseline],
+          backgroundColor ? [backgroundColor rgbaString] : [[NSColor whiteColor] rgbaString],
+          nil], PDFDocumentKeywordsAttribute,
+       [NSApp applicationName], PDFDocumentCreatorAttribute,
+       nil];
+  [pdfDocument setDocumentAttributes:attributes];
+  newData = [pdfDocument dataRepresentation];
+  [pdfDocument release];
+  #endif
+
+  //annotate in LEE format
+  newData = [[AppController appController]
+                annotatePdfDataInLEEFormat:newData
+                                  preamble:(preamble ? [preamble string] : @"") source:(sourceText ? [sourceText string] : @"")
+                                     color:color mode:mode magnification:pointSize baseline:baseline backgroundColor:backgroundColor];
+  return newData;
 }
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data

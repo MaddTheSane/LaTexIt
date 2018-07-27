@@ -73,6 +73,7 @@ static MarginController* sharedControllerInstance = nil; //the (private) singlet
 //initializes the controls with default values
 -(void) windowDidLoad
 {
+  [[self window] setFrameAutosaveName:@"Margins"];
   [self updateWithUserDefaults];
 }
 

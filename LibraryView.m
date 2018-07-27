@@ -209,7 +209,23 @@
   return selectedItems;
 }
 
-//prevents to select next line when finished editing
+//selected items which are only LibraryFiles
+-(NSArray*) selectedFileItems
+{
+  NSIndexSet* selectedRowIndexes = [self selectedRowIndexes];
+  NSMutableArray* selectedFileItems = [NSMutableArray arrayWithCapacity:[selectedRowIndexes count]];
+  unsigned int index = [selectedRowIndexes firstIndex];
+  while(index != NSNotFound)
+  {
+    LibraryItem* libraryItem = [self itemAtRow:index];
+    if ([libraryItem isKindOfClass:[LibraryFile class]])
+      [selectedFileItems addObject:libraryItem];
+    index = [selectedRowIndexes indexGreaterThanIndex:index];
+  }
+  return selectedFileItems;
+}
+
+//prevents from selecting next line when finished editing
 -(void)textDidEndEditing:(NSNotification *)aNotification
 {
   int selectedRow = [self selectedRow];
@@ -223,9 +239,82 @@
   return isLocal ? NSDragOperationEvery : NSDragOperationCopy;
 }
 
+//copy current document state
 -(IBAction) copy:(id)sender
 {
-  [[NSNotificationCenter defaultCenter] postNotificationName:CopyCurrentImageNotification object:nil];
+  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard declareTypes:[NSArray array] owner:self];
+  
+  //LibraryItemsPboardType
+  NSArray* libraryItems = [LibraryItem minimumNodeCoverFromItemsInArray:[self selectedItems]];
+  [pasteboard addTypes:[NSArray arrayWithObject:LibraryItemsPboardType] owner:self];
+  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:libraryItems] forType:LibraryItemsPboardType];
+  
+  //HistoryItemsPboardType
+  NSArray* selectedFileItems = [self selectedFileItems];
+  NSMutableArray* historyItems = [NSMutableArray arrayWithCapacity:[selectedFileItems count]];
+  NSEnumerator* enumerator = [selectedFileItems objectEnumerator];
+  LibraryFile* libraryFileItem = [enumerator nextObject];
+  while(libraryFileItem)
+  {
+    [historyItems addObject:[libraryFileItem value]];
+    libraryFileItem = [enumerator nextObject];
+  }
+  [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
+  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:historyItems] forType:HistoryItemsPboardType];
+
+  //NSPDFPboardType
+  HistoryItem* lastItem = [historyItems lastObject];  
+  if (lastItem)
+  {
+    [pasteboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:self];
+    [pasteboard setData:[lastItem pdfData] forType:NSPDFPboardType];
+  }
+}
+
+//may paste data in the document
+-(IBAction) paste:(id)sender
+{
+  NSPasteboard* pboard = [NSPasteboard generalPasteboard];
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+  {
+    NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
+    NSEnumerator* enumerator = [libraryItems objectEnumerator];
+    LibraryItem* libraryItem = [enumerator nextObject];
+    while (libraryItem)
+    {
+      [[LibraryManager sharedManager] addItem:libraryItem outlineView:self];
+      libraryItem = [enumerator nextObject];
+    }
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+  {
+    NSArray* historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:HistoryItemsPboardType]];
+    NSEnumerator* enumerator = [historyItems objectEnumerator];
+    HistoryItem* historyItem = [enumerator nextObject];
+    while(historyItem)
+    {
+      [[LibraryManager sharedManager] newFile:historyItem outlineView:self];
+      historyItem = [enumerator nextObject];
+    }
+    HistoryItem* lastItem = [historyItems lastObject];
+    if (lastItem)
+    {
+      [document applyHistoryItem:lastItem];
+      [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:lastItem]] byExtendingSelection:NO];
+    }
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+    if (pdfData)
+    {
+      [document applyPdfData:pdfData];
+      HistoryItem* item = [document historyItemWithCurrentState];
+      LibraryItem* libraryItem = [[LibraryManager sharedManager] newFile:item outlineView:self];
+      [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:libraryItem]] byExtendingSelection:NO];
+    }
+  }
 }
 
 @end

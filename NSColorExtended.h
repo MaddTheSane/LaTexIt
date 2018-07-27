@@ -16,7 +16,7 @@
 -(NSData*) data;
 
 //same thing for color as rgba string (%f %f %f %f)
-+(NSColor*) rgbaColorWithString:(NSString*)string;
++(NSColor*) colorWithRgbaString:(NSString*)string;
 -(NSString*) rgbaString;
 
 @end

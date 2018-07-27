@@ -14,7 +14,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface LibraryItem : NSObject <NSCoding> {
+@interface LibraryItem : NSObject <NSCoding, NSCopying> {
   LibraryItem*     parent;   //structuring data
   NSMutableArray*  children; //structuring data
   NSString*        title; //the title under which the item is displayed
@@ -30,7 +30,7 @@
 -(void) setParent:(LibraryItem*)parent; //thge aprent is a weak link (not retained) to prevent cycling
 -(LibraryItem*) parent;
 
--(void) insertChild:(LibraryItem*)child;
+-(void) insertChild:(LibraryItem*)child;//inserts at the end
 -(void) insertChild:(LibraryItem*)child   atIndex:(int)index;
 -(void) insertChildren:(NSArray*)children atIndex:(int)index;
 -(void) removeChild:(LibraryItem*)child;

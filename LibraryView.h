@@ -17,6 +17,7 @@
 
 -(IBAction) copy:(id)sender;
 
+-(NSArray*) selectedFileItems;
 -(NSArray*) selectedItems;
 -(void) removeSelectedItems;
 

@@ -36,6 +36,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 @interface MyImageView (PrivateAPI)
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh;
 -(void) _copyCurrentImageNotification:(NSNotification*)notification;
+-(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard;
 @end
 
 @implementation MyImageView
@@ -45,17 +46,35 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   self = [super initWithCoder:coder];
   if (self)
   {
+    [self setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
                                                  name:CopyCurrentImageNotification object:nil];
-    [self registerForDraggedTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType, nil]];
+    [self registerForDraggedTypes:
+      [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType, nil]];
   }
   return self;
 }
 
 -(void) dealloc
 {
+  [backgroundColor release];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
+}
+
+-(NSColor*) backgroundColor
+{
+  return backgroundColor;
+}
+
+-(void) setBackgroundColor:(NSColor*)newColor
+{
+  //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
+  [backgroundColor autorelease];
+  NSColor* greyLevelColor = [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
+  backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
+  [self setNeedsDisplay:YES];
+  [self setPdfData:[[document historyItemWithCurrentState] annotatedPdfData] cachedImage:[self image]];
 }
 
 //zooms the image, but does not modify it (drag'n drop will be with original image size)
@@ -105,7 +124,6 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 
 -(void) setImage:(NSImage*)image
 {
-  //naturalImageSize = image ? [image size] : NSMakeSize(0,0);
   [image setScalesWhenResized:YES];
   [super setImage:image];
   [self zoom:zoomSlider];
@@ -197,8 +215,9 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
         #ifndef PANTHER
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
-        if (![dragExportType isEqualTo:@"jpeg"])
-          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData] forFile:filePath options:options];
+        NSColor* jpegBackgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
+                                       forFile:filePath options:options];
         [names addObject:fileName];
       }
     }
@@ -209,6 +228,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh
 {
   HistoryItem* historyItem = [document historyItemWithCurrentState];
+  [pdfData writeToFile:@"/Users/chacha/Desktop/toto.pdf" atomically:NO];
   [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:historyItem]] forType:HistoryItemsPboardType];
   [historyItem writeToPasteboard:pasteboard forDocument:document isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:self];
@@ -235,15 +255,26 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 //So, the keywords of the PDF contain the whole document state
 -(NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
 {
-  NSDragOperation dragOperation = NSDragOperationNone;
-  NSPasteboard* pboard = [sender draggingPasteboard];
+  BOOL ok = NO;
+  BOOL shouldBePDFData = NO;
   NSData* data = nil;
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  
+  NSPasteboard* pboard = [sender draggingPasteboard];
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+    ok = YES;
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    shouldBePDFData = YES;
     data = [pboard dataForType:NSPDFPboardType];
+  }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
+  {
+    shouldBePDFData = YES;
     data = [pboard dataForType:NSPDFPboardType];
+  }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
   {
+    shouldBePDFData = YES;
     NSArray* plist = [pboard propertyListForType:NSFilenamesPboardType];
     if (plist && [plist count])
     {
@@ -252,24 +283,24 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
       #ifdef PANTHER
       if ([[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"])
       #endif
-        data = [NSData dataWithContentsOfFile:filename];
+      data = [NSData dataWithContentsOfFile:filename];
     }
   }
   
-  #ifdef PANTHER
-  if (data)
-    dragOperation = NSDragOperationCopy;
-  #else
-  if (data)
+  if (shouldBePDFData)
   {
-    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
-    if (pdfDocument)
-      dragOperation = NSDragOperationCopy;
-    [pdfDocument release];
+    ok = (data != nil);
+    #ifndef PANTHER
+    if (ok)
+    {
+      PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
+      ok &= (pdfDocument != nil);
+      [pdfDocument release];
+    }
+    #endif
   }
-  #endif
 
-  return dragOperation;
+  return ok ? NSDragOperationCopy : NSDragOperationNone;
 }
 
 //this fixes a bug of panther http://lists.apple.com/archives/cocoa-dev/2005/Jan/msg02129.html
@@ -282,9 +313,27 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
+  return [self _applyDataFromPasteboard:[sender draggingPasteboard]];
+}
+
+-(IBAction) copy:(id)sender
+{
+  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO];
+}
+
+//In my opinion, this paste: is triggered only programmatically from the paste: of LineCountTextView
+-(IBAction) paste:(id)sender
+{
+  [self _applyDataFromPasteboard:[NSPasteboard generalPasteboard]];
+}
+
+-(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard
+{
   BOOL ok = YES;
-  NSPasteboard* pboard = [sender draggingPasteboard];
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+    [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:NSColorPboardType]]];
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
   {
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
     [document applyHistoryItem:(HistoryItem*)[[libraryItemsArray lastObject] value]];
@@ -306,14 +355,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   }
   else
     ok = NO;
-
   return ok;
-}
-
--(IBAction) copy:(id)sender
-{
-  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO];
 }
 
 -(void) _copyCurrentImageNotification:(NSNotification*)notification
@@ -344,6 +386,12 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
     newSize = NSMakeSize(viewSize.width, (viewSize.width/newSize.width)*newSize.height);
 
   [image setSize:newSize];
+  if (backgroundColor)
+  {
+    [backgroundColor set];
+    NSRect bounds = [self bounds];
+    NSRectFill(NSMakeRect(bounds.origin.x+5, bounds.origin.y+5, bounds.size.width-10, bounds.size.height-10));
+  }
   [super drawRect:rect];
   [image setSize:naturalImageSize];
 }

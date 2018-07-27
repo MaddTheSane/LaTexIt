@@ -1,24 +1,24 @@
-//  PalettesController.m
+//  LatexPalettesController.m
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
 //  Copyright 2005 Pierre Chatelier. All rights reserved.
 
-//The palette controller is responsible for loading and initializing the palette
+//The LatexPalettesController controller is responsible for loading and initializing the palette
 
-#import "PalettesController.h"
+#import "LatexPalettesController.h"
 
 #import "AppController.h"
 
-@interface PalettesController (PrivateAPI)
+@interface LatexPalettesController (PrivateAPI)
 -(void) _initMatrices;
 @end
 
-@implementation PalettesController
+@implementation LatexPalettesController
 
 -(id) init
 {
-  self = [super initWithWindowNibName:@"Palettes"];
+  self = [super initWithWindowNibName:@"LatexPalettes"];
   if (self)
   {
   }
@@ -27,15 +27,16 @@
 
 -(void) windowDidLoad
 {
+  [[self window] setFrameAutosaveName:@"LatexPalettes"];
   [[self window] setAspectRatio:[[self window] frame].size];
   [self _initMatrices];
   [[self window] setDelegate:self];
 }
 
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document
--(IBAction) paletteClick:(id)sender
+-(IBAction) latexPalettesClick:(id)sender
 {
-  [[AppController appController] paletteClick:sender];
+  [[AppController appController] latexPalettesClick:sender];
 }
 
 -(void) _initMatrices

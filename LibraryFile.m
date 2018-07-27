@@ -44,6 +44,14 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
   [super dealloc];
 }
 
+-(id) copyWithZone:(NSZone*) zone
+{
+  LibraryFile* newInstance = (LibraryFile*) [super copy];
+  if (newInstance)
+    newInstance->historyItem = [historyItem copy];
+  return newInstance;
+}
+
 -(NSImage*) image
 {
   return smallFileIcon; //icon of a LibraryFile

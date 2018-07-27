@@ -11,6 +11,8 @@
 
 #import "LineCountTextView.h"
 
+#import "HistoryManager.h"
+#import "LibraryManager.h"
 #import "LineCountRulerView.h"
 #import "NSColorExtended.h"
 
@@ -238,6 +240,16 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
     [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:NSColorPboardType]]];
   return YES;
+}
+
+-(IBAction) paste:(id)sender
+{
+  //if this view is the first responder, it may allow pasting rich LaTeXiT data, but delegates that elsewhere
+  if ([[NSPasteboard generalPasteboard] availableTypeFromArray:
+        [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]])
+    [(id)[self nextResponder] paste:sender];
+  else
+    [super paste:sender];
 }
 
 @end

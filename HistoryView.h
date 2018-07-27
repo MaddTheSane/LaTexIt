@@ -18,10 +18,10 @@
 
 -(MyDocument*) document;
 
-//occur when Command-C is pressed
+//occurs when Command-C is pressed
 -(IBAction) copy:(id)sender;
 
-//get an array of the selected items
+//gets an array of the selected items
 -(NSArray*) selectedItems;
 
 @end

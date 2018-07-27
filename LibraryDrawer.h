@@ -19,7 +19,7 @@
 }
 
 -(IBAction) importCurrent:(id)sender; //creates a library item with the current document state
--(IBAction) addFolder:(id)sender;     //creates a folder
+-(IBAction) newFolder:(id)sender;     //creates a folder
 -(IBAction) removeItem:(id)sender;    //removes some items
 -(IBAction) refreshItem:(id)sender;   //refresh an item
 

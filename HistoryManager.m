@@ -38,6 +38,9 @@ NSString* HistoryItemsPboardType = @"HistoryItemsPboardType";
 -(void) _loadHistory;
 -(void) _loadCachedHistoryImages:(NSArray*)historyItemsCopy; //loads the historyItems cached images in the background
 -(void) _automaticBackgroundSaving:(id)unusedArg;//automatically and regularly saves the history on disk
+-(void) _historyItemDidChange:(NSNotification*)notification;
+-(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard;
+-(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
 @end
 
 @implementation HistoryManager
@@ -74,10 +77,13 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     {
       historyItems = [[NSMutableArray alloc] init];
       //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:)
-                                                   name:NSApplicationDidFinishLaunchingNotification object:nil];
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
-                                                   name:NSApplicationWillTerminateNotification object:nil];
+      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+      [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
+                                               name:NSApplicationDidFinishLaunchingNotification object:nil];
+      [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:)
+                                               name:NSApplicationWillTerminateNotification object:nil];
+      [notificationCenter addObserver:self selector:@selector(_historyItemDidChange:)
+                                               name:HistoryItemDidChangeNotification object:nil];
     }
     return self;
   }
@@ -302,9 +308,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!historyItems)
       historyItems = [[NSMutableArray alloc] init];
   }
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
 
   NSArray* historyItemsCopy = [historyItems copy];//WARNING ! THE THREAD WILL BE RESPONSIBLE OF RELEASING THAT OBJECT
-  [NSThread detachNewThreadSelector:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
+  //[NSThread detachNewThreadSelector:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
+  [NSApplication detachDrawingThread:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
 }
 
 //loads, in the background, the historyItems cached images
@@ -366,10 +374,27 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   {
     historyItem = [historyItems objectAtIndex:rowIndex];
   }
+  [aCell setBackgroundColor:[historyItem backgroundColor]];
   [aCell setRepresentedObject:historyItem];
 }
 
 //drag'n drop
+
+//this one is deprecated in OS 10.4, calls the next one
+-(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard
+{
+  NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
+  NSEnumerator* enumerator = [rows objectEnumerator];
+  NSNumber* row = [enumerator nextObject];
+  while(row)
+  {
+    [indexSet addIndex:[row unsignedIntValue]];
+    row = [enumerator nextObject];
+  }
+  return [self tableView:tableView writeRowsWithIndexes:indexSet toPasteboard:pboard];
+}
+
+//this one is for OS 10.4
 -(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
   @synchronized(historyItems)
@@ -456,15 +481,55 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         #ifndef PANTHER
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
-        if (![dragExportType isEqualTo:@"jpeg"])
-          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData]]
-                                         forFile:filePath options:options];
+        NSColor* backgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
+                                       forFile:filePath options:options];
         [names addObject:fileName];
       }
       index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item
     }
   }//end @synchronized(historyItems)
   return names;
+}
+
+//we can drop a color on a history item cell, to change its background color
+-(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info
+                proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
+{
+  NSPasteboard* pboard = [info draggingPasteboard];
+  //we only accept drops on items, not above them.
+  BOOL ok = pboard &&
+            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] &&
+            [pboard propertyListForType:NSColorPboardType] &&
+            (operation == NSTableViewDropOn);
+  return ok ? NSDragOperationGeneric : NSDragOperationNone;
+}
+
+//accepts dropping a color on an element
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row
+                                        dropOperation:(NSTableViewDropOperation)operation
+{
+  NSPasteboard* pboard = [info draggingPasteboard];
+  BOOL ok = pboard &&
+            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] &&
+            [pboard propertyListForType:NSColorPboardType] &&
+            (operation == NSTableViewDropOn);
+  if (ok)
+  {
+    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
+    HistoryItem* historyItem = [historyItems objectAtIndex:row];
+    [historyItem setBackgroundColor:color];
+  }
+  return ok;
+}
+
+//should be triggered for each changing historyItem
+-(void) _historyItemDidChange:(NSNotification*)notification
+{
+  @synchronized(historyItems)
+  {
+    historyShouldBeSaved = YES;
+  }
 }
 
 @end

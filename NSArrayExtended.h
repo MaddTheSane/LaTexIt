@@ -12,4 +12,8 @@
 //returns a copy of the receiver in the reversed order
 -(NSArray*) reversed;
 
+#ifdef PANTHER
+-(NSArray*) objectsAtIndexes:(NSIndexSet *)indexes; //does exist in Tiger
+#endif
+
 @end

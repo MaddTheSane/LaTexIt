@@ -28,4 +28,17 @@
   return ([self indexOfObjectIdenticalTo:object] != NSNotFound);
 }
 
+//this method does exist in Tiger
+#ifdef PANTHER
+-(void) removeObjectsAtIndexes:(NSIndexSet *)indexes
+{
+  unsigned int index = [indexes lastIndex];
+  while(index != NSNotFound)
+  {
+    [self removeObjectAtIndex:index];
+    index = [indexes indexLessThanIndex:index];
+  }
+}
+#endif
+
 @end

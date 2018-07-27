@@ -17,6 +17,7 @@
   if (self)
   {
     dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%a %d %b %Y, %H:%M:%S" allowNaturalLanguage:YES];
+    backgroundColor = nil;//there may be no color
   }
   return self;
 }
@@ -27,16 +28,31 @@
   [super dealloc];
 }
 
--(id) copyWithZone:(NSZone *)zone
+-(void) setBackgroundColor:(NSColor*)color
+{
+  [color retain];
+  [backgroundColor release];
+  backgroundColor = color;
+}
+
+-(id) copyWithZone:(NSZone*)zone
 {
   HistoryCell* cell = (HistoryCell*) [super copyWithZone:zone];
   if (cell)
+  {
     cell->dateFormatter = [dateFormatter retain];
+    cell->backgroundColor = [backgroundColor copy];
+  }
   return cell;
 }
 
 -(void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
+  if (backgroundColor)
+  {
+    [backgroundColor set];
+    NSRectFill(cellFrame);
+  }
   const float margin   = 14; //the margin above to put the date into
   const float sepThick = 1;  //thickness of the separator between the date and the image
   NSRect imageRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+margin+sepThick,

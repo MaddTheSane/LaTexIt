@@ -364,22 +364,20 @@ static NSImage*        libraryFileIcon       = nil;
   if ([libraryFileItems count])
   {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    const int  exportType        = [userDefaults integerForKey:AdvancedLibraryExportTypeKey];
-    const BOOL encapsulation     = [userDefaults boolForKey:AdvancedLibraryExportUseEncapsulationKey];
-    NSString*  encapsulationText = [userDefaults stringForKey:AdvancedLibraryExportEncapsulationTextKey];
+    NSArray*      encapsulations = [userDefaults arrayForKey:EncapsulationsKey];
+    unsigned int    currentIndex = [[userDefaults objectForKey:CurrentEncapsulationIndexKey] unsignedIntValue];
+    NSString*  encapsulationText = (currentIndex < [encapsulations count]) ? [encapsulations objectAtIndex:currentIndex] : @"";
     NSMutableString* labels      = [NSMutableString string];
     NSEnumerator*    enumerator  = [libraryFileItems objectEnumerator];
     LibraryFile*     fileItem    = [enumerator nextObject];
     while(fileItem)
     {
-      NSString* text = (exportType == 0) ? [[[fileItem value] sourceText] string] : [fileItem title];
-      if (encapsulation)
-      {
-        NSMutableString* replacedText = [NSMutableString stringWithString:encapsulationText];
-        [replacedText replaceOccurrencesOfString:@"@" withString:text options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
-        text = replacedText;
-      }
-      [labels appendString:text];
+      NSString* title  = [fileItem title];
+      NSString* source = [[[fileItem value] sourceText] string];
+      NSMutableString* replacedText = [NSMutableString stringWithString:encapsulationText];
+      [replacedText replaceOccurrencesOfString:@"@" withString:title options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
+      [replacedText replaceOccurrencesOfString:@"#" withString:source options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
+      [labels appendString:replacedText];
       fileItem = [enumerator nextObject];
     }
     [pboard addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
@@ -532,9 +530,9 @@ static NSImage*        libraryFileIcon       = nil;
         #ifndef PANTHER
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
-        if (![dragExportType isEqualTo:@"jpeg"])
-          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData]]
-                                         forFile:filePath options:options];
+        NSColor* backgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
+                                       forFile:filePath options:options];
         [names addObject:fileName];
       }
       else //the name is not free, we must compute a new one by adding a number
@@ -559,9 +557,9 @@ static NSImage*        libraryFileIcon       = nil;
           #ifndef PANTHER
           options = NSExclude10_4ElementsIconCreationOption;
           #endif
-          if (![dragExportType isEqualTo:@"jpeg"])
-            [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData]]
-                                           forFile:filePath options:options];
+          NSColor* backgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
+                                         forFile:filePath options:options];
           [names addObject:fileName];
         }
       }//end if item of that title already exists
@@ -720,7 +718,7 @@ static NSImage*        libraryFileIcon       = nil;
   }
 }
 
--(LibraryItem*) addFolder:(NSOutlineView*)outlineView
+-(LibraryItem*) newFolder:(NSOutlineView*)outlineView
 {
   LibraryFolder* newFolder = nil;
   @synchronized(library)
@@ -755,7 +753,7 @@ static NSImage*        libraryFileIcon       = nil;
   return [newFolder autorelease];
 }
 
--(LibraryItem*) addFile:(HistoryItem*)historyItem outlineView:(NSOutlineView*)outlineView
+-(LibraryItem*) newFile:(HistoryItem*)historyItem outlineView:(NSOutlineView*)outlineView
 {
   LibraryFile* newLibraryFile = nil;
   @synchronized(library)
@@ -789,6 +787,40 @@ static NSImage*        libraryFileIcon       = nil;
     libraryShouldBeSaved = YES;
   }//end @synchronized(library)
   return [newLibraryFile autorelease];
+}
+
+-(LibraryItem*) addItem:(LibraryItem*)libraryItem outlineView:(NSOutlineView*)outlineView//adds a new item at the end
+{
+  @synchronized(library)
+  {
+    LibraryItem* parent = nil;
+
+    int selectedRow = [outlineView selectedRow];
+    if (selectedRow >= 0)
+    {
+      LibraryItem* item = [outlineView itemAtRow:selectedRow];
+      parent = [item isKindOfClass:[LibraryFile class]] ? [item parent] : item;
+    }
+    if (parent == nil)
+      parent = library;
+      
+    //add item
+    [parent insertChild:libraryItem];
+    
+    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
+    [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:libraryItem]];
+    if (![undo isUndoing])
+      [undo setActionName:NSLocalizedString(@"Add Library item", "Add Library item")];
+    
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSArray arrayWithObject:parent], @"expand",
+                            [NSArray arrayWithObject:libraryItem], @"scroll", nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LibraryDidChangeNotification
+                                                        object:nil
+                                                      userInfo:dict];
+    libraryShouldBeSaved = YES;
+  }
+  return libraryItem;
 }
 
 -(void) removeItems:(NSArray*)items

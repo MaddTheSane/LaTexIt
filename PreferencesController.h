@@ -11,12 +11,15 @@
 extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
 extern NSString* DragExportJpegQualityKey;
+extern NSString* DefaultImageViewBackground;
 extern NSString* DefaultColorKey;
 extern NSString* DefaultPointSizeKey;
 extern NSString* DefaultModeKey;
 extern NSString* DefaultPreambleAttributedKey;
 extern NSString* DefaultFontKey;
+extern NSString* CompositionModeKey;
 extern NSString* PdfLatexPathKey;
+extern NSString* DvipdfPathKey;
 extern NSString* GsPathKey;
 extern NSString* ServiceRespectsColorKey;
 extern NSString* ServiceRespectsBaselineKey;
@@ -25,9 +28,8 @@ extern NSString* AdditionalTopMarginKey;
 extern NSString* AdditionalLeftMarginKey;
 extern NSString* AdditionalRightMarginKey;
 extern NSString* AdditionalBottomMarginKey;
-extern NSString* AdvancedLibraryExportTypeKey;
-extern NSString* AdvancedLibraryExportUseEncapsulationKey;
-extern NSString* AdvancedLibraryExportEncapsulationTextKey;
+extern NSString* EncapsulationsKey;
+extern NSString* CurrentEncapsulationIndexKey;
 
 extern NSString* SomePathDidChangeNotification;
 
@@ -43,6 +45,8 @@ extern NSString* SomePathDidChangeNotification;
   IBOutlet NSSlider*      dragExportJpegQualitySlider;
   IBOutlet NSTextField*   dragExportJpegQualityTextField;
   IBOutlet NSColorWell*   dragExportJpegColorWell;
+  
+  IBOutlet NSColorWell*   defaultImageViewBackgroundColorWell;
 
   IBOutlet NSSegmentedControl* defaultModeSegmentedControl;
   IBOutlet NSTextField*        defaultPointSizeTextField;
@@ -51,9 +55,12 @@ extern NSString* SomePathDidChangeNotification;
   IBOutlet LineCountTextView* preambleTextView;
   IBOutlet NSButton*    selectFontButton;
   IBOutlet NSTextField* fontTextField;
-  
+
+  IBOutlet NSMatrix*    compositionMatrix;  
   IBOutlet NSTextField* pdfLatexTextField;
+  IBOutlet NSTextField* dvipdfTextField;
   IBOutlet NSTextField* gsTextField;
+
   IBOutlet NSButton*    serviceRespectsColor;
   IBOutlet NSButton*    serviceRespectsBaseline;
   IBOutlet NSButton*    serviceRespectsPointSize;
@@ -62,12 +69,9 @@ extern NSString* SomePathDidChangeNotification;
   IBOutlet NSTextField* additionalLeftMarginTextField;
   IBOutlet NSTextField* additionalRightMarginTextField;
   IBOutlet NSTextField* additionalBottomMarginTextField;
-  
-  IBOutlet NSMatrix*    advancedLibraryStringExportMatrix;
-  IBOutlet NSButton*    advancedLibraryStringExportCheckBox;
-  IBOutlet NSTextField* advancedLibraryStringExportTextField;
-  
+
   BOOL didChangePdfLatexTextField;
+  BOOL didChangeDvipdfTextField;
   BOOL didChangeGsTextField;
 }
 
@@ -83,9 +87,11 @@ extern NSString* SomePathDidChangeNotification;
 -(IBAction) applyPreambleToOpenDocuments:(id)sender;
 -(IBAction) applyPreambleToLibrary:(id)sender;
 
+-(IBAction) changeCompositionMode:(id)sender;
 -(IBAction) changePath:(id)sender;
 -(IBAction) changeServiceConfiguration:(id)sender;
 
 -(IBAction) changeAdvancedConfiguration:(id)sender;
 
+-(void) selectPreferencesPaneWithIdentifier:(id)identifier;
 @end

@@ -1,6 +1,17 @@
 {
     IBClasses = (
         {
+            ACTIONS = {addEncapsulation = id; removeEncapsulations = id; }; 
+            CLASS = EncapsulationManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                encapsulationTableView = EncapsulationView; 
+                removeEncapsulationButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = EncapsulationView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
             ACTIONS = {"" = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
@@ -14,6 +25,7 @@
                 applyPreambleToLibrary = id; 
                 applyPreambleToOpenDocuments = id; 
                 changeAdvancedConfiguration = id; 
+                changeCompositionMode = id; 
                 changeDefaultGeneralConfig = id; 
                 changePath = id; 
                 changeServiceConfiguration = id; 
@@ -31,10 +43,9 @@
                 additionalLeftMarginTextField = NSTextField; 
                 additionalRightMarginTextField = NSTextField; 
                 additionalTopMarginTextField = NSTextField; 
-                advancedLibraryStringExportCheckBox = NSButton; 
-                advancedLibraryStringExportMatrix = NSMatrix; 
-                advancedLibraryStringExportTextField = NSTextField; 
+                compositionMatrix = NSMatrix; 
                 defaultColorColorWell = NSColorWell; 
+                defaultImageViewBackgroundColorWell = NSColorWell; 
                 defaultModeSegmentedControl = NSSegmentedControl; 
                 defaultPointSizeTextField = NSTextField; 
                 dragExportJpegColorWell = NSColorWell; 
@@ -44,6 +55,7 @@
                 dragExportOptionsButton = NSButton; 
                 dragExportOptionsPane = NSPanel; 
                 dragExportPopupFormat = NSPopUpButton; 
+                dvipdfTextField = NSTextField; 
                 fontTextField = NSTextField; 
                 gsTextField = NSTextField; 
                 pdfLatexTextField = NSTextField; 

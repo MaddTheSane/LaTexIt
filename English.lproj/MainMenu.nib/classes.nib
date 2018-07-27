@@ -3,31 +3,33 @@
         {
             ACTIONS = {
                 addCurrentEquationToLibrary = id; 
-                addLibraryFolder = id; 
+                checkUpdates = id; 
                 clearHistory = id; 
                 displayLog = id; 
                 exportImage = id; 
+                latexPalettesClick = id; 
                 loadLibrary = id; 
                 makeLatex = id; 
+                newLibraryFolder = id; 
                 openWebSite = id; 
-                paletteClick = id; 
+                paste = id; 
                 refreshLibraryItems = id; 
                 removeHistoryEntries = id; 
                 removeLibraryItems = id; 
                 saveLibrary = id; 
                 showHelp = id; 
+                showOrHideColorInspector = id; 
+                showOrHideEncapsulation = id; 
                 showOrHideHistory = id; 
+                showOrHideLatexPalettes = id; 
                 showOrHideLibrary = id; 
                 showOrHideMargin = id; 
-                showOrHidePalette = id; 
                 showOrHidePreamble = id; 
                 showPreferencesPane = id; 
             }; 
             CLASS = AppController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                marginMenuItem = NSMenuItem; 
-                paletteMenuItem = NSMenuItem; 
                 readmeTextView = NSTextView; 
                 readmeWindow = NSWindow; 
                 showHistoryMenuItem = NSMenuItem; 
@@ -37,6 +39,12 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {myAction = id; }; 
+            CLASS = IBInspector; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
         {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
         {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
         {

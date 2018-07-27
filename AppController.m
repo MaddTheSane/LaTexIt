@@ -12,8 +12,10 @@
 
 #import "AppController.h"
 
+#import "EncapsulationController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
+#import "LatexPalettesController.h"
 #import "LibraryFile.h"
 #import "LibraryManager.h"
 #import "LineCountTextView.h"
@@ -21,7 +23,6 @@
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
 #import "MarginController.h"
-#import "PalettesController.h"
 #import "PreferencesController.h"
 
 @interface AppController (PrivateAPI)
@@ -36,12 +37,14 @@
 //check the configuration, updates isGsAvailable, isPdfLatexAvailable and isColorStyAvailable
 -(void) _checkConfiguration;
 
--(BOOL) _checkGs;      //called by _checkConfiguration to check gs's presence
--(BOOL) _checkPdfLatex;//called by _checkConfiguration to check pdflatex's presence
--(BOOL) _checkColorSty;//called by _checkConfiguration to check color.sty's presence
+-(BOOL) _checkGs;      //called by _checkConfiguration to check for gs's presence
+-(BOOL) _checkDvipdf;  //called by _checkConfiguration to check for dvipdf's presence
+-(BOOL) _checkPdfLatex;//called by _checkConfiguration to check for pdflatex's presence
+-(BOOL) _checkColorSty;//called by _checkConfiguration to check for color.sty's presence
 
 //helper for the configuration
 -(void) _findGsPath;
+-(void) _findDvipdfPath;
 -(void) _findPdfLatexPath;
 
 //some notifications that trigger some work
@@ -175,8 +178,9 @@ static NSArray* unixBins = nil;
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [encapsulationController release];
   [marginController release];
-  [palettesController release];
+  [latexPalettesController release];
   [preferencesController release];
   [super dealloc];
 }
@@ -224,10 +228,23 @@ static NSArray* unixBins = nil;
   return YES;
 }
 
+-(IBAction) paste:(id)sender
+{
+  [NSApp sendAction:@selector(paste:) to:nil from:sender];//default behaviour (Well... I think so...)
+}
+
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
-  if ([sender action] == @selector(exportImage:))
+  if ([sender action] == @selector(paste:))
+  {
+    //we just allow rich LaTeXiT data to enable the "paste" menu item.
+    //Even if the first responder is a textView that cannot handle it, we will try to drive it to MyImageView
+    ok = [NSApp validateMenuItem:sender] ||
+           [[NSPasteboard generalPasteboard] availableTypeFromArray:
+             [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]];
+  }
+  else if ([sender action] == @selector(exportImage:))
   {
     MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
@@ -273,6 +290,14 @@ static NSArray* unixBins = nil;
   {
     ok = ([[[HistoryManager sharedManager] historyItems] count] > 0);
   }
+  else if ([sender action] == @selector(showOrHideColorInspector:))
+    [sender setState:[[NSColorPanel sharedColorPanel] isVisible] ? NSOnState : NSOffState];
+  else if ([sender action] == @selector(showOrHideEncapsulation:))
+    [sender setState:(encapsulationController && [[encapsulationController window] isVisible]) ? NSOnState : NSOffState];
+  else if ([sender action] == @selector(showOrHideMargin:))
+    [sender setState:(marginController && [[marginController window] isVisible]) ? NSOnState : NSOffState];
+  else if ([sender action] == @selector(showOrHideLatexPalettes:))
+    [sender setState:(latexPalettesController && [[latexPalettesController window] isVisible]) ? NSOnState : NSOffState];
   return ok;
 }
 
@@ -297,18 +322,15 @@ static NSArray* unixBins = nil;
     [showLibraryMenuItem setTitle:NSLocalizedString(@"Hide Library", @"Hide Library")];
   else
     [showLibraryMenuItem setTitle:NSLocalizedString(@"Show Library", @"Show Library")];
+}
 
-  BOOL isMarginVisible = marginController && [[marginController window] isVisible];
-  if (isMarginVisible)
-    [marginMenuItem setTitle:NSLocalizedString(@"Hide Margins", @"Hide Margins")];
+-(IBAction) showOrHideColorInspector:(id)sender
+{
+  NSColorPanel* colorPanel = [NSColorPanel sharedColorPanel];
+  if ([colorPanel isVisible])
+    [colorPanel close];
   else
-    [marginMenuItem setTitle:NSLocalizedString(@"Show Margins", @"Show Margins")];
-  
-  BOOL isPaletteVisible = palettesController && [[palettesController window] isVisible];
-  if (isPaletteVisible)
-    [paletteMenuItem setTitle:NSLocalizedString(@"Hide Palettes", @"Hide Palettes")];
-  else
-    [paletteMenuItem setTitle:NSLocalizedString(@"Show Palettes", @"Show Palettes")];
+    [colorPanel orderFront:self];
 }
 
 -(IBAction) showOrHidePreamble:(id)sender
@@ -344,15 +366,26 @@ static NSArray* unixBins = nil;
   }
 }
 
--(IBAction) showOrHidePalette:(id)sender
+-(IBAction) showOrHideLatexPalettes:(id)sender
 {
-  if (!palettesController)
-    palettesController = [[PalettesController alloc] init];
+  if (!latexPalettesController)
+    latexPalettesController = [[LatexPalettesController alloc] init];
 
-  if ([[palettesController window] isVisible])
-    [palettesController close];
+  if ([[latexPalettesController window] isVisible])
+    [latexPalettesController close];
   else
-    [palettesController showWindow:self];
+    [latexPalettesController showWindow:self];
+}
+
+-(IBAction) showOrHideEncapsulation:(id)sender
+{
+  if (!encapsulationController)
+    encapsulationController = [[EncapsulationController alloc] init];
+
+  if ([[encapsulationController window] isVisible])
+    [encapsulationController close];
+  else
+    [encapsulationController showWindow:self];
 }
 
 -(IBAction) showOrHideMargin:(id)sender
@@ -431,6 +464,7 @@ static NSArray* unixBins = nil;
   return path;
 }
 
+//ask for LaTeXiT's web site
 -(IBAction) openWebSite:(id)sender
 {
 	NSURL* webSiteURL = [NSURL URLWithString:NSLocalizedString(@"http://ktd.club.fr/programmation/latexit_en.php",
@@ -438,12 +472,59 @@ static NSArray* unixBins = nil;
   BOOL ok = [[NSWorkspace sharedWorkspace] openURL:webSiteURL];
   if (!ok)
   {
-    NSRunAlertPanel(@"Error",
-                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@\n. You should check your network.",
-                                                                @"An error occured while trying to reach %@\n. You should check your network."),
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
+                                                                @"An error occured while trying to reach %@.\n You should check your network."),
                                               [webSiteURL absoluteString]],
                     @"Ok", nil, nil);
   }
+}
+
+//check for updates on LaTeXiT's web site
+-(IBAction) checkUpdates:(id)sender
+{
+  NSURL* versionFileURL = [NSURL URLWithString:@"http://localhost/programmation/fichiers/latexit-version-current"];
+  NSString* currentVersion = [NSString stringWithContentsOfURL:versionFileURL];
+  if (!currentVersion)
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
+                                                                @"An error occured while trying to reach %@.\n You should check your network."),
+                                              [versionFileURL absoluteString]],
+                    @"Ok", nil, nil);
+  else
+  {
+    NSArray* components = [currentVersion componentsSeparatedByString:@" "];
+    if (components && [components count])
+      currentVersion = [components objectAtIndex:0];
+
+    NSString* thisVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    if (!thisVersion)
+      thisVersion = @"";
+    components = [thisVersion componentsSeparatedByString:@" "];
+    if (components && [components count])
+      thisVersion = [components objectAtIndex:0];
+
+    NSComparisonResult comparison = [thisVersion compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
+    if (comparison == NSOrderedSame)
+      NSRunAlertPanel(NSLocalizedString(@"Check done", @"Check done"),
+                      NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
+                      @"Ok", nil, nil);
+    else if (comparison == NSOrderedDescending)
+      NSRunAlertPanel(NSLocalizedString(@"Check done", @"Check done"),
+                      NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
+                                        @"Your version of LaTeXiT is more recent than the official available one"),
+                      @"Ok", nil, nil);
+    else
+    {
+      int choice = NSRunAlertPanel(NSLocalizedString(@"Check done", @"Check done"),
+                                   NSLocalizedString(@"A new version of LaTeXiT is available",
+                                                     @"A new version of LaTeXiT is available"),
+                                   NSLocalizedString(@"Open download page", @"Open download page"),
+                                   NSLocalizedString(@"Cancel", @"Cancel"), nil);
+      if (choice == NSAlertDefaultReturn)
+        [self openWebSite:self];
+    }
+  }//end if network ok
 }
 
 -(IBAction) exportImage:(id)sender
@@ -484,9 +565,9 @@ static NSArray* unixBins = nil;
   [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] addCurrentEquationToLibrary:sender];
 }
 
--(IBAction) addLibraryFolder:(id)sender
+-(IBAction) newLibraryFolder:(id)sender
 {
-  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] addLibraryFolder:sender];
+  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] newLibraryFolder:sender];
 }
 
 -(IBAction) removeLibraryItems:(id)sender
@@ -552,6 +633,11 @@ static NSArray* unixBins = nil;
   return isGsAvailable;
 }
 
+-(BOOL) isDvipdfAvailable
+{
+  return isDvipdfAvailable;
+}
+
 -(BOOL) isPdfLatexAvailable
 {
   return isPdfLatexAvailable;
@@ -594,6 +680,24 @@ static NSArray* unixBins = nil;
   if ([fileManager fileExistsAtPath:pdfLatexPath])
   {
     [userDefaults setObject:pdfLatexPath forKey:PdfLatexPathKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+  }
+}
+
+//try to find dvipdf program, searching by its name
+-(void) _findDvipdfPath
+{
+  NSFileManager* fileManager   = [NSFileManager defaultManager];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSString* dvipdfPath         = [userDefaults stringForKey:DvipdfPathKey];
+  NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
+  [prefixes addObjectsFromArray:[NSArray arrayWithObject:[dvipdfPath stringByDeletingLastPathComponent]]];
+
+  if (![fileManager fileExistsAtPath:dvipdfPath])
+    dvipdfPath = [self findUnixProgram:@"dvipdf" tryPrefixes:prefixes environment:environmentDict];
+  if ([fileManager fileExistsAtPath:dvipdfPath])
+  {
+    [userDefaults setObject:dvipdfPath forKey:DvipdfPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -656,6 +760,33 @@ static NSArray* unixBins = nil;
   return ok;
 }
 
+//check if dvipdf works as expected. The user may have given a name different from "pdflatex"
+-(BOOL) _checkDvipdf
+{
+  BOOL ok = YES;
+  NSTask* dvipdfTask = [[NSTask alloc] init];
+  @try
+  {
+    //currently, the only check is the option -v, at least to see if the program can be executed
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+    [dvipdfTask setLaunchPath:[userDefaults stringForKey:DvipdfPathKey]];
+    [dvipdfTask setStandardOutput:nullDevice];
+    [dvipdfTask setStandardError:nullDevice];
+    [dvipdfTask launch];
+    [dvipdfTask waitUntilExit];
+  }
+  @catch(NSException* e)
+  {
+    ok = NO;
+  }
+  @finally
+  {
+    [dvipdfTask release];
+  }
+  return ok;
+}
+
 //checks if color.sty is available, by compiling a simple latex string that uses it
 -(BOOL) _checkColorSty
 {
@@ -689,15 +820,16 @@ static NSArray* unixBins = nil;
 
 -(void) _checkConfiguration
 {
-  isGsAvailable       = [self _checkGs];
-  isPdfLatexAvailable = [self _checkPdfLatex];
-  isColorStyAvailable = isPdfLatexAvailable && [self _checkColorSty];
+  isGsAvailable          = [self _checkGs];
+  isPdfLatexAvailable    = [self _checkPdfLatex];
+  isDvipdfAvailable      = [self _checkDvipdf];
+  isColorStyAvailable    = isPdfLatexAvailable && [self _checkColorSty];
 }
 
-//when the user has clicked a palette element, we must put some text in the current document.
+//when the user has clicked a latexPalettes element, we must put some text in the current document.
 //sometimes, we must add symbols, and sometimes, we must encapsulate the selection into a symbol function
 //The difference is made using the cell tag
--(IBAction) paletteClick:(id)sender
+-(IBAction) latexPalettesClick:(id)sender
 {
   id cell = [sender selectedCell];
   NSString* string = cell ? [cell alternateTitle] : nil;
@@ -820,6 +952,42 @@ static NSArray* unixBins = nil;
       }
     }
   }
+
+  if (!isDvipdfAvailable)
+    [self _findDvipdfPath];
+  retry = YES;
+  while (!isDvipdfAvailable && retry)
+  {
+    int returnCode = NSRunAlertPanel(NSLocalizedString(@"dvipdf not found or not working as expected",
+                                                       @"dvipdf not found or not working as expected"),
+                                     NSLocalizedString(@"Without dvipdf installed the software won't work at all.\n"\
+                                                       @"You should install a LaTeX distribution packaging dvipdf",
+                                                       @"Without dvipdf installed the software won't work at all.\n"\
+                                                       @"You should install a LaTeX distribution packaging dvipdf"),
+                                                       NSLocalizedString(@"Find dvipdf...", @"Find dvipdf..."),
+                                                       @"Cancel",
+                                                       nil);
+    retry &= (returnCode == NSAlertDefaultReturn);
+    if (returnCode == NSAlertDefaultReturn)
+    {
+      NSFileManager* fileManager = [NSFileManager defaultManager];
+      NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+      [openPanel setResolvesAliases:NO];
+      int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
+      BOOL ok = (ret2 == NSOKButton) && ([[openPanel filenames] count]);
+      if (ok)
+      {
+        NSString* filepath = [[openPanel filenames] objectAtIndex:0];
+        if ([fileManager fileExistsAtPath:filepath])
+        {
+          [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
+          [userDefaults setObject:filepath forKey:DvipdfPathKey];
+          [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+          retry &= !isDvipdfAvailable;
+        }
+      }
+    }
+  }
   
   if (isGsAvailable && isPdfLatexAvailable && !isColorStyAvailable)
     NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @"color.sty seems to be unavailable"),
@@ -830,6 +998,8 @@ static NSArray* unixBins = nil;
     [self _addInEnvironmentPath:[[userDefaults stringForKey:GsPathKey] stringByDeletingLastPathComponent]];
   if (isPdfLatexAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:PdfLatexPathKey] stringByDeletingLastPathComponent]];
+  if (isDvipdfAvailable)
+    [self _addInEnvironmentPath:[[userDefaults stringForKey:DvipdfPathKey] stringByDeletingLastPathComponent]];
 
   [self _setEnvironment];
 }
@@ -976,7 +1146,7 @@ static NSArray* unixBins = nil;
           HistoryItem* historyItem =
             [HistoryItem historyItemWithPdfData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
                                      sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
-                                          color:color pointSize:pointSize date:[NSDate date] mode:mode];
+                                          color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:[NSColor whiteColor]];
           NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
           NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
@@ -1052,7 +1222,7 @@ static NSArray* unixBins = nil;
                                      preamble:preamble
                                    sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
                                         color:[NSColor blackColor]
-                                    pointSize:defaultPointSize date:[NSDate date] mode:mode];
+                                    pointSize:defaultPointSize date:[NSDate date] mode:mode backgroundColor:[NSColor whiteColor]];
           NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
           NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
@@ -1106,6 +1276,12 @@ static NSArray* unixBins = nil;
   [window makeKeyAndOrderFront:self];
 }
 
+-(void) showPreferencesPaneWithIdentifier:(id)identifier//showPreferencesPane + select one tab
+{
+  [self showPreferencesPane:self];
+  [preferencesController selectPreferencesPaneWithIdentifier:identifier];
+}
+
 -(IBAction) showHelp:(id)sender
 {
   NSString* string = [readmeTextView string];
@@ -1146,14 +1322,17 @@ static NSArray* unixBins = nil;
   NSRange pdftexColorRange = [preamble rangeOfString:@"\\usepackage[pdftex]{color}"];
   if ([self isColorStyAvailable])
   {
+    NSString* colorMode = [[NSUserDefaults standardUserDefaults] integerForKey:CompositionModeKey] ? @"dvips" : @"pdftex";
     if (pdftexColorRange.location != NSNotFound)
     {
-      int insertionPoint = pdftexColorRange.location+pdftexColorRange.length;
-      [preamble insertString:colorString atIndex:insertionPoint];
+      //int insertionPoint = pdftexColorRange.location+pdftexColorRange.length;
+      //[preamble insertString:colorString atIndex:insertionPoint];
+      colorString = [NSString stringWithFormat:@"\\usepackage[%@]{color}%@", colorMode, colorString];
+      [preamble replaceCharactersInRange:pdftexColorRange withString:colorString];
     }
     else //try to find a good place of insertion
     {
-      colorString = [NSString stringWithFormat:@"\\usepackage[pdftex]{color}%@", colorString];
+      colorString = [NSString stringWithFormat:@"\\usepackage[%@]{color}%@", colorMode, colorString];
       NSRange firstUsePackage = [preamble rangeOfString:@"\\usepackage"];
       if (firstUsePackage.location != NSNotFound)
         [preamble insertString:colorString atIndex:firstUsePackage.location];
@@ -1266,8 +1445,8 @@ static NSArray* unixBins = nil;
   return data;
 }
 
-//returns a file icon to represent the given PDF data
--(NSImage*) makeIconForData:(NSData*)pdfData
+//returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
+-(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor
 {
   NSImage* icon = nil;
   NSImage* image = [[[NSImage alloc] initWithData:pdfData] autorelease];
@@ -1284,7 +1463,8 @@ static NSArray* unixBins = nil;
   float marginX = (srcRect.size.height > srcRect.size.width ) ? ((srcRect.size.height - srcRect.size.width )/2)*128/srcRect.size.height : 0;
   float marginY = (srcRect.size.width  > srcRect.size.height) ? ((srcRect.size.width  - srcRect.size.height)/2)*128/srcRect.size.width  : 0;
   NSRect dstRect = NSMakeRect(marginX, marginY, 128-2*marginX, 128-2*marginY);
-  NSColor* backgroundColor = [NSColor colorWithCalibratedRed:1 green:1 blue:1 alpha:0.25];
+  if (!backgroundColor)
+    backgroundColor = [NSColor colorWithCalibratedRed:1 green:1 blue:1 alpha:0.25];
   [icon lockFocus];
     [backgroundColor set];
     NSRectFill(NSMakeRect(0, 0, 128, 128));
@@ -1330,4 +1510,69 @@ static NSArray* unixBins = nil;
   }
   return ok;
 }
+
+-(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
+                                 mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
+                                 backgroundColor:(NSColor*)backgroundColor
+{
+  NSMutableData* newData = nil;
+  
+  NSString* colorAsString   = [(color ? color : [NSColor blackColor]) rgbaString];
+  NSString* bkColorAsString = [(backgroundColor ? backgroundColor : [NSColor whiteColor]) rgbaString];
+  if (data)
+  {
+    NSMutableString* replacedPreamble = [NSMutableString stringWithString:preamble];
+    [replacedPreamble replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedPreamble length])];
+    [replacedPreamble replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedPreamble length])];
+    [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedPreamble length])];
+    [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedPreamble length])];
+
+    NSMutableString* replacedSource = [NSMutableString stringWithString:source];
+    [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedSource length])];
+    [replacedSource replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedSource length])];
+    [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
+    [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
+
+    NSString *type = (mode == DISPLAY) ? @"0" : (mode == INLINE) ? @"1" : @"2";
+
+    NSMutableString *annotation =
+        [NSMutableString stringWithFormat:
+          @"\nobj <<\n"\
+           "/Preamble (ESannop%@ESannopend)\n"\
+           "/Subject (ESannot%@ESannotend)\n"\
+           "/Type (EEtype%@EEtypeend)\n"\
+           "/Color (EEcol%@EEcolend)\n"
+           "/BKColor (EEbkc%@EEbkcend)\n"
+           "/Magnification (EEmag%fEEmagend)\n"\
+           "/Baseline (EEbas%fEEbasend)\n"\
+           ">> endobj",
+          replacedPreamble, replacedSource, type, colorAsString, bkColorAsString, magnification, baseline];
+          
+    NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+    
+    NSRange r1 = [pdfString rangeOfString:@"\nxref" options:NSBackwardsSearch];
+    NSRange r2 = [pdfString lineRangeForRange:[pdfString rangeOfString:@"startxref" options:NSBackwardsSearch]];
+
+    NSString* tail_of_tail = [pdfString substringFromIndex:r2.location];
+    NSArray*  tailarray    = [tail_of_tail componentsSeparatedByString:@"\n"];
+
+    int byte_count = 0;
+    NSScanner* scanner = [NSScanner scannerWithString:[tailarray objectAtIndex:1]];
+    [scanner scanInt:&byte_count];
+    byte_count += [annotation length];
+
+    NSRange r3 = NSMakeRange(r1.location, r2.location - r1.location);
+    NSString* stuff = [pdfString substringWithRange: r3];
+
+    [annotation appendString:stuff];
+    [annotation appendString:[NSString stringWithFormat: @"startxref\n%d\n%%%%EOF", byte_count]];
+    
+    NSData* dataToAppend = [annotation dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+
+    newData = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(0, r1.location)]];
+    [newData appendData:dataToAppend];
+  }//end if data
+  return newData;
+}
+
 @end

@@ -11,7 +11,10 @@
 
 #import "HistoryCell.h"
 #import "HistoryManager.h"
+#import "LibraryManager.h"
+#import "MyDocument.h"
 #import "MyImageView.h"
+#import "NSColorExtended.h"
 
 @interface HistoryView (PrivateAPI)
 -(void) _historyDidChange:(NSNotification*)aNotification;
@@ -26,8 +29,11 @@
   {
     [self setDataSource:[HistoryManager sharedManager]];
     [self setDelegate:[HistoryManager sharedManager]];
+    
+    [self registerForDraggedTypes:[NSArray arrayWithObject:NSColorPboardType]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_historyDidChange:)
                                                  name:HistoryDidChangeNotification object:nil];
+    [self _historyDidChange:nil];
   }
   return self;
 }
@@ -41,6 +47,12 @@
 -(void) _historyDidChange:(NSNotification*)aNotification
 {
   [self reloadData];
+  int numberOfRows = [self numberOfRows];
+  NSString* title = [NSString stringWithFormat:@"%@ (%d %@)",
+                     NSLocalizedString(@"History", @"History"),
+                     numberOfRows,
+                     [NSLocalizedString(@"item", @"item") stringByAppendingString:((numberOfRows>1) ? @"s": @"")]];
+  [[[self tableColumnWithIdentifier:@"history"] headerCell] setStringValue:title];
 }
 
 -(MyDocument*) document
@@ -131,9 +143,49 @@
   return isLocal ? NSDragOperationEvery : NSDragOperationCopy;
 }
 
+//copy current document stata
 -(IBAction) copy:(id)sender
 {
-  [[NSNotificationCenter defaultCenter] postNotificationName:CopyCurrentImageNotification object:nil];
+  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard declareTypes:[NSArray array] owner:self];
+  
+  //HistoryItemsPboardType
+  NSArray* selectedItems = [self selectedItems];
+  [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
+  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:selectedItems] forType:HistoryItemsPboardType];
+
+  //NSPDFPboardType
+  HistoryItem* lastItem = [selectedItems lastObject];  
+  if (lastItem)
+  {
+    [pasteboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:self];
+    [pasteboard setData:[lastItem pdfData] forType:NSPDFPboardType];
+  }
+}
+
+//paste data in the document
+-(IBAction) paste:(id)sender
+{
+  NSPasteboard* pboard = [NSPasteboard generalPasteboard];
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+  {
+    NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
+    LibraryItem* item = [libraryItems lastObject];
+    if (item && [item isKindOfClass:[LibraryFile class]])
+      [document applyHistoryItem:(HistoryItem*)[item value]];
+  }
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+  {
+    HistoryItem* item = [[NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:HistoryItemsPboardType]] lastObject];
+    if (item)
+      [document applyHistoryItem:item];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+    if (pdfData)
+      [document applyPdfData:pdfData];
+  }
 }
 
 @end

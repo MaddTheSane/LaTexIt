@@ -41,6 +41,24 @@
   [super    dealloc];
 }
 
+-(id) copyWithZone:(NSZone*) zone
+{
+  LibraryItem* item = (LibraryItem*) [super copy];
+  if (item)
+  {
+    item->parent = parent;
+    item->title = [title retain];
+    item->children = [children copy];
+    unsigned int i = 0;
+    for(i= 0 ; i<[item->children count] ; ++i)
+    {
+      id object = [item->children objectAtIndex:i];
+      [item->children replaceObjectAtIndex:i withObject:[[object copy] autorelease]];
+    }
+  }
+  return item;
+}
+
 -(void) setParent:(LibraryItem*)aParent
 {
   parent = aParent; //weak link to prevent cycling
@@ -66,7 +84,7 @@
 
 //Structuring methods
 
--(void) insertChild:(LibraryItem*)child
+-(void) insertChild:(LibraryItem*)child //inserts at the end
 {
   [self insertChild:child atIndex:[children count]];
 }

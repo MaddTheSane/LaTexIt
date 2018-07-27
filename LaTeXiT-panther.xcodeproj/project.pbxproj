@@ -31,8 +31,7 @@
 		93149F7E089438B10017C83A /* latexit-lib.png in Resources */ = {isa = PBXBuildFile; fileRef = 93149F7D089438B10017C83A /* latexit-lib.png */; };
 		9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9315A45007FD331800AFCCE9 /* Preferences.nib */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesController.m */; };
-		931CB3080801311100CF9D2B /* PalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 931CB3060801311100CF9D2B /* PalettesController.m */; };
-		931CB341080132D900CF9D2B /* Palettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 931CB340080132D900CF9D2B /* Palettes.nib */; };
+		9315F80B089A730F00EAE085 /* EncapsulationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315F809089A730F00EAE085 /* EncapsulationManager.m */; };
 		9328604407F4505F009BF03D /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		932CF4230826C2EB00434128 /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4210826C2EB00434128 /* LibraryItem.m */; };
 		932CF4270826C33D00434128 /* LibraryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4250826C33D00434128 /* LibraryFile.m */; };
@@ -60,7 +59,6 @@
 		93A592CB07F46075001DF900 /* Licence.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C807F46075001DF900 /* Licence.rtf */; };
 		93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C907F46075001DF900 /* Lisez-moi.rtfd */; };
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
-		93A5972607F479CC001DF900 /* LatexPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A5972407F479CC001DF900 /* LatexPalette.m */; };
 		93B202C2080EA86C00AB6463 /* widetilde.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AB080EA86C00AB6463 /* widetilde.tiff */; };
 		93B202C3080EA86C00AB6463 /* widehat.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AC080EA86C00AB6463 /* widehat.tiff */; };
 		93B202C4080EA86C00AB6463 /* vec.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B202AD080EA86C00AB6463 /* vec.tiff */; };
@@ -93,6 +91,12 @@
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
 		93EFDB9F088FF163000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB9D088FF163000156A3 /* NSStringExtended.m */; };
+		93F16CAD089FC1D800FF7B94 /* LatexPalettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */; };
+		93F16CD1089FC25200FF7B94 /* LatexPalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */; };
+		93F16CD2089FC25200FF7B94 /* LatexPalettes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F16CCE089FC25200FF7B94 /* LatexPalettes.m */; };
+		93F73E8F0899092A00EFFA5E /* EncapsulationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73E8B0899092A00EFFA5E /* EncapsulationView.m */; };
+		93F73E920899092A00EFFA5E /* EncapsulationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73E8E0899092A00EFFA5E /* EncapsulationController.m */; };
+		93F73E9D0899095F00EFFA5E /* Encapsulation.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73E9B0899095F00EFFA5E /* Encapsulation.nib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -231,11 +235,9 @@
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
+		9315F809089A730F00EAE085 /* EncapsulationManager.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationManager.m; sourceTree = "<group>"; };
+		9315F80A089A730F00EAE085 /* EncapsulationManager.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationManager.h; sourceTree = "<group>"; };
 		93197FB7087D166E00C2E678 /* LinkBack-panther.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "LinkBack-panther.framework"; sourceTree = "<group>"; };
-		931CB3050801311100CF9D2B /* PalettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalettesController.h; sourceTree = "<group>"; };
-		931CB3060801311100CF9D2B /* PalettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PalettesController.m; sourceTree = "<group>"; };
-		931CB32E0801325800CF9D2B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Palettes.nib; sourceTree = "<group>"; };
-		931CB342080132DF00CF9D2B /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Palettes.nib; sourceTree = "<group>"; };
 		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = Resources/latexit.icns; sourceTree = "<group>"; };
 		932CF4200826C2EB00434128 /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
 		932CF4210826C2EB00434128 /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
@@ -272,14 +274,12 @@
 		93773C3407FFF54D004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Preferences.nib; sourceTree = "<group>"; };
 		93773C4607FFF6FB004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
-		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = Resources/Licence.rtf; sourceTree = "<group>"; };
 		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "Resources/Lisez-moi.rtfd"; sourceTree = "<group>"; };
 		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/Read Me.rtfd"; sourceTree = "<group>"; };
-		93A5972307F479CC001DF900 /* LatexPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexPalette.h; sourceTree = "<group>"; };
-		93A5972407F479CC001DF900 /* LatexPalette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatexPalette.m; sourceTree = "<group>"; };
 		93B202AB080EA86C00AB6463 /* widetilde.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = widetilde.tiff; path = Resources/symbols/widetilde.tiff; sourceTree = "<group>"; };
 		93B202AC080EA86C00AB6463 /* widehat.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = widehat.tiff; path = Resources/symbols/widehat.tiff; sourceTree = "<group>"; };
 		93B202AD080EA86C00AB6463 /* vec.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = vec.tiff; path = Resources/symbols/vec.tiff; sourceTree = "<group>"; };
@@ -322,6 +322,18 @@
 		93EF9E9007EF99910003FA6E /* HistoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryView.m; sourceTree = "<group>"; };
 		93EFDB9C088FF163000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB9D088FF163000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; };
+		93F16CAC089FC1D800FF7B94 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
+		93F16CAE089FC1E700FF7B94 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
+		93F16CCC089FC25200FF7B94 /* LatexPalettesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LatexPalettesController.h; sourceTree = "<group>"; };
+		93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LatexPalettesController.m; sourceTree = "<group>"; };
+		93F16CCE089FC25200FF7B94 /* LatexPalettes.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LatexPalettes.m; sourceTree = "<group>"; };
+		93F16CCF089FC25200FF7B94 /* LatexPalettes.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LatexPalettes.h; sourceTree = "<group>"; };
+		93F73E8B0899092A00EFFA5E /* EncapsulationView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationView.m; sourceTree = "<group>"; };
+		93F73E8C0899092A00EFFA5E /* EncapsulationView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationView.h; sourceTree = "<group>"; };
+		93F73E8D0899092A00EFFA5E /* EncapsulationController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationController.h; sourceTree = "<group>"; };
+		93F73E8E0899092A00EFFA5E /* EncapsulationController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationController.m; sourceTree = "<group>"; };
+		93F73E9C0899095F00EFFA5E /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Encapsulation.nib; sourceTree = "<group>"; };
+		93F73E9E0899096A00EFFA5E /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Encapsulation.nib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -382,12 +394,13 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				93F73E870899091300EFFA5E /* Encapsulation */,
 				93344CB708251C9000F00A49 /* CocoaExtensions */,
 				93EF9D1B07EF7B5C0003FA6E /* History */,
 				9344D76D08257B1600B17B37 /* Library */,
 				9308E22807EE3ED500DD1B5F /* LineCount */,
 				9372A1FA08781A0F00A3A645 /* Margins */,
-				93A5972207F479B8001DF900 /* Palettes */,
+				93A5972207F479B8001DF900 /* LatexPalettes */,
 				9315A44A07FD30E800AFCCE9 /* Preferences */,
 				9302548807F0BC7600011996 /* Utils */,
 				930BC29807ECBC3C00EEB238 /* AppController.h */,
@@ -420,10 +433,11 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				930255CF07F0C2A800011996 /* Localizable.strings */,
 				939A64570800281900AE4486 /* ServicesMenu.strings */,
+				93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */,
+				93F73E9B0899095F00EFFA5E /* Encapsulation.nib */,
 				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
 				9372A2F3087827FF00A3A645 /* Margin.nib */,
 				2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */,
-				931CB340080132D900CF9D2B /* Palettes.nib */,
 				9315A45007FD331800AFCCE9 /* Preferences.nib */,
 			);
 			name = Resources;
@@ -587,15 +601,15 @@
 			name = Margins;
 			sourceTree = "<group>";
 		};
-		93A5972207F479B8001DF900 /* Palettes */ = {
+		93A5972207F479B8001DF900 /* LatexPalettes */ = {
 			isa = PBXGroup;
 			children = (
-				93A5972307F479CC001DF900 /* LatexPalette.h */,
-				93A5972407F479CC001DF900 /* LatexPalette.m */,
-				931CB3050801311100CF9D2B /* PalettesController.h */,
-				931CB3060801311100CF9D2B /* PalettesController.m */,
+				93F16CCF089FC25200FF7B94 /* LatexPalettes.h */,
+				93F16CCE089FC25200FF7B94 /* LatexPalettes.m */,
+				93F16CCC089FC25200FF7B94 /* LatexPalettesController.h */,
+				93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */,
 			);
-			name = Palettes;
+			name = LatexPalettes;
 			sourceTree = "<group>";
 		};
 		93EF9D1B07EF7B5C0003FA6E /* History */ = {
@@ -611,6 +625,19 @@
 				93EF9E9007EF99910003FA6E /* HistoryView.m */,
 			);
 			name = History;
+			sourceTree = "<group>";
+		};
+		93F73E870899091300EFFA5E /* Encapsulation */ = {
+			isa = PBXGroup;
+			children = (
+				93F73E8D0899092A00EFFA5E /* EncapsulationController.h */,
+				93F73E8E0899092A00EFFA5E /* EncapsulationController.m */,
+				9315F809089A730F00EAE085 /* EncapsulationManager.m */,
+				9315F80A089A730F00EAE085 /* EncapsulationManager.h */,
+				93F73E8C0899092A00EFFA5E /* EncapsulationView.h */,
+				93F73E8B0899092A00EFFA5E /* EncapsulationView.m */,
+			);
+			name = Encapsulation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -688,7 +715,6 @@
 				9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */,
 				93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */,
 				939A64580800281900AE4486 /* ServicesMenu.strings in Resources */,
-				931CB341080132D900CF9D2B /* Palettes.nib in Resources */,
 				93B202C2080EA86C00AB6463 /* widetilde.tiff in Resources */,
 				93B202C3080EA86C00AB6463 /* widehat.tiff in Resources */,
 				93B202C4080EA86C00AB6463 /* vec.tiff in Resources */,
@@ -720,6 +746,8 @@
 				93D6833E086C45270009A451 /* nparallel.tiff in Resources */,
 				9372A2F4087827FF00A3A645 /* Margin.nib in Resources */,
 				93149F7E089438B10017C83A /* latexit-lib.png in Resources */,
+				93F73E9D0899095F00EFFA5E /* Encapsulation.nib in Resources */,
+				93F16CAD089FC1D800FF7B94 /* LatexPalettes.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -742,9 +770,7 @@
 				93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */,
 				9302548007F0BC6A00011996 /* Compressor.m in Sources */,
 				93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */,
-				93A5972607F479CC001DF900 /* LatexPalette.m in Sources */,
 				9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */,
-				931CB3080801311100CF9D2B /* PalettesController.m in Sources */,
 				93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */,
 				9344D77108257B2400B17B37 /* LibraryView.m in Sources */,
 				9344D7B508257ED600B17B37 /* LibraryDrawer.m in Sources */,
@@ -765,6 +791,11 @@
 				9308AC35088CF2850062A340 /* IconFamily.m in Sources */,
 				9308AD0C088CF3D50062A340 /* NSWorkspaceExtended.m in Sources */,
 				93EFDB9F088FF163000156A3 /* NSStringExtended.m in Sources */,
+				93F73E8F0899092A00EFFA5E /* EncapsulationView.m in Sources */,
+				93F73E920899092A00EFFA5E /* EncapsulationController.m in Sources */,
+				9315F80B089A730F00EAE085 /* EncapsulationManager.m in Sources */,
+				93F16CD1089FC25200FF7B94 /* LatexPalettesController.m in Sources */,
+				93F16CD2089FC25200FF7B94 /* LatexPalettes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -825,15 +856,6 @@
 			name = Preferences.nib;
 			sourceTree = "<group>";
 		};
-		931CB340080132D900CF9D2B /* Palettes.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				931CB32E0801325800CF9D2B /* English */,
-				931CB342080132DF00CF9D2B /* French */,
-			);
-			name = Palettes.nib;
-			sourceTree = "<group>";
-		};
 		9372A2F3087827FF00A3A645 /* Margin.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -850,6 +872,24 @@
 				939A64590800281C00AE4486 /* French */,
 			);
 			name = ServicesMenu.strings;
+			sourceTree = "<group>";
+		};
+		93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93F16CAC089FC1D800FF7B94 /* English */,
+				93F16CAE089FC1E700FF7B94 /* French */,
+			);
+			name = LatexPalettes.nib;
+			sourceTree = "<group>";
+		};
+		93F73E9B0899095F00EFFA5E /* Encapsulation.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				93F73E9C0899095F00EFFA5E /* English */,
+				93F73E9E0899096A00EFFA5E /* French */,
+			);
+			name = Encapsulation.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

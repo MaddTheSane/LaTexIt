@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.3.1\
+\f2\b \cf0 LaTeXiT 1.3.2\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -27,6 +27,7 @@
 -Qu'est-ce que LaTeXiT ?\
 -Comment fonction LaTeXiT ?\
 -Modifier le pr\'8eambule LaTeX\
+-Le "zoom"\
 -Utiliser l'historique\
 -Utiliser la biblioth\'8fque\
 -Utiliser le "Service LaTeXiT"\
@@ -50,7 +51,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.3.1 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs).\
+LaTeXiT 1.3.2 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -90,6 +91,8 @@ Mais avant toutes choses, il est bon de pr\'8eciser que LaTeXiT est tr\'8fs fort
 \fs22 \cf0 \
 Dans le cadre de texte principal, tapez votre code LaTeX, sans vous soucier du pr\'8eambule, du \\begin\{document\} et du \\end\{document\} qui seront rajout\'8es pour vous. Cliquez ensuite sur le bouton"LaTeXiser", et l'image est calcul\'8ee et affich\'8ee dans le cadre d'image. Vous pouvez alors sauvegarder cette image, ou surtout la glisser/d\'8eposer dans toute application o\'9d elle pourra servir d'illustration.\
 La taille de la police ainsi que la couleur utilis\'8ees lors de la g\'8en\'8eration de l'image sont personnalisables.\
+Les modes "Display", "Inline" et "Texte" correspondent aux trois modes de LaTeX du m\'90me nom; voyez une documentation LaTeX pour plus d'informations sur leur signification.\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -111,6 +114,13 @@ Remarque : les deux premi\'8fres lignes du pr\'8eambule sont gris\'8ees et non m
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
 \f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Utiliser le zoom\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone La petite glissi\'8fre permettant de zoomer n'a pas d'incidence sur la taille r\'8eelle de l'\'8equation. Cela ne modifie que l'aper\'8du du panneau, pour permettre de v\'8erifier les \'8equations de "petite taille", mais sans les alt\'8erer.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
@@ -193,6 +203,9 @@ Le bouton <mise \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec 
 (Q) : LinkBack ne marche pas quand j'utilise le service LaTeXiT.\
 (R) : Voyez la section "Bugs/incompatibilit\'8es connues" pour plus de d\'8etails. Pour r\'8esoudre ce probl\'8fme, essayez de d\'8esactiver l'alignement de l'\'8equation sur la ligne de texte, dans les pr\'8ef\'8erences du service LaTeXiT.\
 \
+(Q) : Le fond blanc de l'aper\'8du/des zones de texte n'est pas pratique quand on utilise du texte blanc.\
+(R) : Vous pouvez ouvrir l'inspecteur de couleurs et en glisser/d\'8eposer une sur ces zones.\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs26 \cf0 \ul Bugs/incompatibilit\'8es connues\
@@ -204,7 +217,7 @@ Le bouton <mise \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec 
 - LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'8equations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'8ees par le service dans un flot RTFD. Or, il peut arriver que les \'8editeurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'90me si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'88 l'\'8editeur de texte, mais c'est quelque chose de difficile. Pour r\'8esoudre le probl\'8fme, d\'8esactivez simplement l'alignement de l'\'8equation avec la ligne de base texte dans les pr\'8ef\'8erences du service LaTeXiT; cela d\'8esactive l'utilisation des flots RTFD ;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 - avec Pages 1.0.2 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites), lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages ;\
-- avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, que les d\'8eveloppeurs m'ont dit corriger d\'8fs la prochaine version ;\
+- avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, qui a \'8et\'8e corrig\'8e dans la version 1.8 ;\
 - avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS ;\
 - toujours avec Adobe Illustrator, y glisser/d\'8eposer un objet entra\'94ne la cr\'8eation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'8don de g\'8erer le glisser/d\'8eposer. OmniGraffle ne pose pas ce genre de probl\'8fmes ;\
 - si vous constatez que, m\'90me sans \'90tre utilis\'8e, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'8emoire, sachez simplement que pour acc\'8el\'8erer son temps de d\'8emarrage, il charge les images de l'historique en arri\'8fre plan. Ce travail, de tr\'8fs faible priorit\'8e, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'8eellement l'\'8eviter, pensez simplement \'88 faire le m\'8enage dans votre historique de temps en temps !\
@@ -217,6 +230,14 @@ Le bouton <mise \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec 
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.3.2\
+- on peut maintenant composer en pdflatex ou en latex+dvipdf ; c'est utile pour utiliser certains packages ;\
+- ajout d'une palette pour exporter les \'8el\'8ements de la biblioth\'8fque sous forme de texte "encapsul\'8e" (ou "d\'8ecor\'8e") ;\
+- ajout d'un inspecteur de couleurs, utiles pour glisser/d\'8eposer une couleur sur la zone d'aper\'8du, l'historique, ou sur les zones de texte ;\
+- quelques possibilit\'8es suppl\'8ementaires de copier/coller, dans la biblioth\'8fque, et depuis d'autres applications ;\
+- on peut maintenant v\'8erifier les mises \'88 jour ;\
+- correction de bugs mineurs.\
+\
 v 1.3.1\
 - on peut maintenant sauvegarder/charger les biblioth\'8fques \'88 volont\'8e ;\
 - on peut maintenant afficher/masquer le pr\'8eambule depuis le menu Latex; pratique pour ceux qui ne lisent pas la documentation... ;-)\
@@ -230,8 +251,7 @@ v 1.3.1\
 - correction d'un bug lors duquel le menu ne "savait" plus si la biblioth\'8fque \'8etait visible ou non ;\
 - retrait de l'export "PDF (Illustrator)" qui n'existait qu'en phase de d\'8eveloppement de LaTeXiT (et ne fonctionnait d'ailleurs pas) ;\
 - correction d'un bug pouvant causer un crash de LaTeXiT sous Panther ;\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 - correction d'un bug faussant la ligne de base dans le cas de l'ajout d'une marge sous l'\'8equation ;\
+- correction d'un bug faussant la ligne de base dans le cas de l'ajout d'une marge sous l'\'8equation ;\
 - correction de bugs mineurs.\
 \
 v 1.3\

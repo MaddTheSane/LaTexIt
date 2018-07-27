@@ -15,6 +15,7 @@
 #import "LibraryDrawer.h"
 #import "LibraryFile.h"
 #import "LibraryItem.h"
+#import "LibraryManager.h"
 #import "LibraryView.h"
 #import "LineCountTextView.h"
 #import "LogTableView.h"
@@ -48,16 +49,28 @@ NSString* PDFDocumentKeywordsAttribute = @"Keywords";
 static unsigned long firstFreeId = 1; //increases when documents are created
 
 //if a document is closed, its id becomes free, and we should consider reusing it instead of increasing firstFreeId
-static NSMutableArray* freeIds = nil; 
+static NSMutableArray* freeIds = nil;
+
+const static int ComposeNoOptions = 0;
+const static int ComposeUsingPdfLatex = 0;
+const static int ComposeUsingLatexAndDvipdf = 1;
 
 @interface MyDocument (PrivateAPI)
 
 +(unsigned long) _giveId; //returns a free id and marks it as used
 +(void) _releaseId:(unsigned long)anId; //releases an id
 
--(BOOL) _processLog:(NSString*)log; //analyze the latex log to find errors, and updates the logTableView to report these errors
+//compose latex and returns pdf data. the options may specify to use pdflatex or latex+dvipdf
+-(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog options:(int)options;
 
--(NSRect) _computeBoundingBox:(NSString*)pdfFilePath; //computes the tight bounding box of a pdfFile
+//returns an array of the errors. Each case will contain an error string
+-(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog;
+
+//updates the logTableView to report the errors
+-(void) _analyzeErrors:(NSArray*)errors;
+
+//computes the tight bounding box of a pdfFile
+-(NSRect) _computeBoundingBox:(NSString*)pdfFilePath;
 
 -(void) _lineCountDidChange:(NSNotification*)aNotification;
 -(void) _historyDidChange:(NSNotification*)aNotification;
@@ -69,9 +82,6 @@ static NSMutableArray* freeIds = nil;
 -(void) _setLogTableViewVisible:(BOOL)status;
 
 -(NSString*) _replaceYenSymbol:(NSString*)string; //in Japanese environment, we should replace the Yen symbol by a backslash
-
--(NSData*) _annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSString*)colorAsString
-                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline;
 
 -(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
@@ -167,7 +177,11 @@ static NSString* yenString = nil;
 -(void) windowControllerDidLoadNib:(NSWindowController *) aController
 {
   [super windowControllerDidLoadNib:aController];
+  
   [[self windowForSheet] setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
+
+  //to paste rich LaTeXiT data, we must tune the responder chain  
+  [sourceTextView setNextResponder:imageView];
 
   //useful to avoid conflicts between mouse clicks on imageView and the progressIndicator
   [progressIndicator setNextResponder:imageView];
@@ -181,7 +195,10 @@ static NSString* yenString = nil;
   [typeOfTextControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
   
   [sizeText setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
-  [colorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
+
+  NSColor* initialColor = [[AppController appController] isColorStyAvailable] ?
+                              [NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]] : [NSColor blackColor];
+  [colorWell setColor:initialColor];
 
   NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
   [preambleTextView setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
@@ -352,16 +369,24 @@ static NSString* yenString = nil;
     [sourceTextView setLineShift:[[preambleTextView lineRanges] count]];
 }
 
+-(void) setFont:(NSFont*)font//changes the font of both preamble and sourceText views
+{
+  [[preambleTextView textStorage] setFont:font];
+  [[sourceTextView textStorage] setFont:font];
+}
+
 -(void) setPreamble:(NSAttributedString*)aString
 {
-  [[preambleTextView layoutManager] replaceTextStorage:[[[NSTextStorage alloc] initWithAttributedString:aString] autorelease]];
+  [preambleTextView clearErrors];
+  [[preambleTextView textStorage] setAttributedString:aString];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
   [preambleTextView setNeedsDisplay:YES];
 }
 
 -(void) setSourceText:(NSAttributedString*)aString
 {
-  [[sourceTextView layoutManager] replaceTextStorage:[[[NSTextStorage alloc] initWithAttributedString:aString] autorelease]];
+  [sourceTextView clearErrors];
+  [[sourceTextView textStorage] setAttributedString:aString];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:sourceTextView];
   [sourceTextView setNeedsDisplay:YES];
 }
@@ -405,7 +430,7 @@ static NSString* yenString = nil;
                                    magnification:[sizeText doubleValue]];
 
     //did it work ?
-    BOOL failed = (pdfData == nil);
+    BOOL failed = !pdfData;
     if (!failed)
     {
       //if it is ok, updates the image view
@@ -424,7 +449,7 @@ static NSString* yenString = nil;
     [progressIndicator setHidden:YES];
     
     //hides/how the error view
-    [self _setLogTableViewVisible:failed];
+    [self _setLogTableViewVisible:[logTableView numberOfRows]];
     
     //not busy any more
     isBusy = NO;
@@ -497,10 +522,106 @@ static NSString* yenString = nil;
   return boundingBoxRect;
 }
 
+//compose latex and returns pdf data. the options may specify to use pdflatex or latex+dvipdf
+-(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog options:(int)options
+{
+  NSData* pdfData = nil;
+  
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  
+  NSString* directory = [filePath stringByDeletingLastPathComponent];
+  NSString* texFile   = filePath;
+  NSString* dviFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"dvi"];
+  NSString* pdfFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pdf"];
+  NSString* errFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"err"];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  [fileManager removeFileAtPath:dviFile handler:nil];
+  [fileManager removeFileAtPath:pdfFile handler:nil];
+  
+  NSMutableString* stdoutString = [NSMutableString string];
+  NSMutableString* stderrString = [NSMutableString string];
+
+  NSString* source = [NSString stringWithContentsOfFile:texFile];
+  [stdoutString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
+
+  //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
+  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && pdflatex %@ -file-line-error -interaction nonstopmode %@ > %@", 
+                          directory, (options & ComposeUsingLatexAndDvipdf) ? @"-progname latex" : @"", texFile, errFile];
+  [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n%@\n",
+                                                        NSLocalizedString(@"processing pdflatex", @"processing pdflatex"),
+                                                        systemCall]];
+  BOOL failed = (system([systemCall UTF8String]) != 0);
+  NSString* errors = [NSString stringWithContentsOfFile:errFile];
+  [stdoutString appendString:errors ? errors : @""];
+  
+  if (failed)
+    [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n",
+                               NSLocalizedString(@"error while processing pdflatex", @"error while processing pdflatex")]];
+
+  //if !failed and must call dvipdf...
+  if (!failed && (options & ComposeUsingLatexAndDvipdf))
+  {
+    NSTask* dvipdfTask = [[NSTask alloc] init];
+    [dvipdfTask setCurrentDirectoryPath:directory];
+    [dvipdfTask setEnvironment:[AppController environmentDict]];
+    [dvipdfTask setLaunchPath:[userDefaults stringForKey:DvipdfPathKey]];
+    [dvipdfTask setArguments:[NSArray arrayWithObject:dviFile]];
+    NSPipe* stdoutPipe2 = [NSPipe pipe];
+    NSPipe* stderrPipe2 = [NSPipe pipe];
+    [dvipdfTask setStandardOutput:stdoutPipe2];
+    [dvipdfTask setStandardError:stderrPipe2];
+
+    @try
+    {
+      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n%@\n",
+                                                            NSLocalizedString(@"processing dvipdf", @"processing dvipdf"),
+                                                            [dvipdfTask commandLine]]];
+      [dvipdfTask launch];
+      [dvipdfTask waitUntilExit];
+      NSData* stdoutData = [[stdoutPipe2 fileHandleForReading] availableData];
+      NSData* stderrData = [[stderrPipe2 fileHandleForReading] availableData];
+      NSString* tmp = nil;
+      tmp = stdoutData ? [[[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding] autorelease] : nil;
+      if (tmp)
+        [stdoutString appendString:tmp];
+      tmp = stderrData ? [[[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding] autorelease] : nil;
+      if (tmp)
+        [stderrString appendString:tmp];
+      failed = ([dvipdfTask terminationStatus] != 0);
+    }
+    @catch(NSException* e)
+    {
+      failed = YES;
+      [stdoutString appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
+    }
+    @finally
+    {
+      [dvipdfTask release];
+    }
+    
+    if (failed)
+      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n",
+                                 NSLocalizedString(@"error while processing dvipdf", @"error while processing dvipdf")]];
+
+  }//end of dvipdf call
+  
+  if (stdoutLog)
+    *stdoutLog = stdoutString;
+  if (stderrLog)
+    *stderrLog = stderrString;
+  
+  if (!failed && [[NSFileManager defaultManager] fileExistsAtPath:pdfFile])
+    pdfData = [NSData dataWithContentsOfFile:pdfFile];
+
+  return pdfData;
+}
+
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
 -(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode 
                   magnification:(double)magnification
 {
+  NSData* pdfData = nil;
+
   //this function is rather long, because it is not quite easy to get a tight image (well cropped)
   //and magnification.
   //The principle used is the following one :
@@ -519,6 +640,8 @@ static NSString* yenString = nil;
   //All these steps need many intermediate files, so don't be surprised if you feel a little lost
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  int compositionMode = [userDefaults integerForKey:CompositionModeKey];
+  compositionMode = (compositionMode == 0) ? ComposeUsingPdfLatex : ComposeUsingLatexAndDvipdf;
 
   //prepare file names
   NSString* directory      = NSTemporaryDirectory();
@@ -529,8 +652,6 @@ static NSString* yenString = nil;
   NSString* latexFilePath         = [directory stringByAppendingPathComponent:latexFile];
   NSString* latexAuxFile          = [NSString stringWithFormat:@"%@.aux", filePrefix];
   NSString* latexAuxFilePath      = [directory stringByAppendingPathComponent:latexAuxFile];
-  NSString* latexLogFile          = [NSString stringWithFormat:@"%@.log", filePrefix];
-  NSString* latexLogFilePath      = [directory stringByAppendingPathComponent:latexLogFile];
   NSString* pdfFile               = [NSString stringWithFormat:@"%@.pdf", filePrefix];
   NSString* pdfFilePath           = [directory stringByAppendingPathComponent:pdfFile];
   
@@ -570,7 +691,10 @@ static NSString* yenString = nil;
   NSString* addSymbolLeft  = (mode == DISPLAY) ? @"$\\displaystyle " : (mode == INLINE) ? @"$" : @"";
   NSString* addSymbolRight = (mode == DISPLAY) ? @"$" : (mode == INLINE) ? @"$" : @"";
   NSString* colouredPreamble = [[AppController appController] insertColorInPreamble:preamble color:color];
+  
+  NSMutableString* fullLog = [NSMutableString string];
 
+  //STEP 1
   //first, creates simple latex source text to compile and report errors (if there are any)
   NSString* normalSourceToCompile =
     [NSString stringWithFormat:
@@ -581,114 +705,25 @@ static NSString* yenString = nil;
 
   //creates the corresponding latex file
   NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding];
-  [latexData writeToFile:latexFilePath atomically:NO];
+  BOOL failed = ![latexData writeToFile:latexFilePath atomically:NO];
   
-  //latexise this simple file. It is a long code since our error filtering needs some piping between unix programs
-  NSMutableString* filteredLog = [NSMutableString string];
-  NSMutableString* fullLog = [NSMutableString string];
+  NSString* stdoutLog = nil;
+  NSString* stderrLog = nil;
+  failed |= ![self _composeLaTeX:latexFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog options:compositionMode];
+  if (stdoutLog)
+    [fullLog appendString:stdoutLog];
   [logTextView setString:fullLog];
 
-  //process latex, and creates the log
-  [fullLog appendString:[NSString stringWithFormat:@"------- %@ -------\n",
-                                  NSLocalizedString(@"processing pdflatex", @"processing pdflatex")]];
-  [logTextView setString:fullLog];
+  NSArray* errors = [self _filterLatexErrors:[stdoutLog stringByAppendingString:stderrLog]];
+  [self _analyzeErrors:errors];
+  //STEP 1 is over. If it has failed, it is the fault of the user, and syntax errors will be reported
   
-  NSPipe* pdfLatex2grepPipe = [NSPipe pipe]; //latex output will be piped in grep, that will isolate errors
-  NSPipe* grep2uniqPipe     = [NSPipe pipe]; //then it will be piped to uniq to clean up multiple errors
-  NSPipe* filteredLogPipe   = [NSPipe pipe]; //then it wil generate a filtered log
-  NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-
-  NSTask* pdfLatexTask = [[NSTask alloc] init];
-  [pdfLatexTask setCurrentDirectoryPath:directory];
-  [pdfLatexTask setEnvironment:[AppController environmentDict]];
-  [pdfLatexTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
-  [pdfLatexTask setArguments:[NSArray arrayWithObjects:@"-file-line-error",@"--interaction",@"nonstopmode",latexFile, nil]];
-  [pdfLatexTask setStandardOutput:pdfLatex2grepPipe];
-  [pdfLatexTask setStandardError:nullDevice];
-
-  //latex output will be piped in grep, that will isolate errors
-  NSTask* grepTask = [[NSTask alloc] init];
-  [grepTask setCurrentDirectoryPath:directory];
-  [grepTask setEnvironment:[AppController environmentDict]];
-  [grepTask setLaunchPath:[[AppController appController] findUnixProgram:@"grep" tryPrefixes:[AppController unixBins]
-                           environment:[grepTask environment]]];
-  //[grepTask setArguments:[NSArray arrayWithObject:@".*:[0-9]*:.*"]];
-  [grepTask setArguments:[NSArray arrayWithObject:@"\\(.*:[0-9]*:.*\\)\\|\\(.*! LaTeX Error:.*\\)"]];
-  [grepTask setStandardInput:pdfLatex2grepPipe];
-  [grepTask setStandardOutput:grep2uniqPipe];
-  [grepTask setStandardError:nullDevice];
-
-  //it will be piped to uniq to clean up multiple errors
-  NSTask* uniqTask = [[NSTask alloc] init];
-  [uniqTask setCurrentDirectoryPath:directory];
-  [uniqTask setEnvironment:[AppController environmentDict]];
-  [uniqTask setLaunchPath:[[AppController appController] findUnixProgram:@"uniq" tryPrefixes:[AppController unixBins]
-                          environment:[uniqTask environment]]];
-  [uniqTask setStandardInput:grep2uniqPipe];
-  [uniqTask setStandardOutput:filteredLogPipe];
-  [uniqTask setStandardError:nullDevice];
-  
-  [fullLog appendString:[NSString stringWithFormat:@"$>%@ | %@ | %@\n\n", [pdfLatexTask commandLine],
-                                                   [grepTask commandLine], [uniqTask commandLine]]];
-  [logTextView setString:fullLog];
-
-  BOOL failed = NO;
-  @try
-  {
-    [pdfLatexTask launch];
-    [grepTask     launch];
-    [uniqTask     launch];
-    [pdfLatexTask waitUntilExit];
-    [grepTask     waitUntilExit];
-    [uniqTask     waitUntilExit];
-
-    NSData*   filteredLogData   = [[filteredLogPipe fileHandleForReading] availableData];
-    NSString* filteredLogString = [[[NSString alloc] initWithData:filteredLogData
-                                                         encoding:NSUTF8StringEncoding] autorelease];
-    [filteredLog appendString:filteredLogString];
-
-    failed |= ([pdfLatexTask terminationStatus] != 0);
-  }
-  @catch(NSException* e)
-  {
-    failed |= YES;
-    [fullLog appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
-    [logTextView setString:fullLog];
-  }
-  @finally
-  {
-    [pdfLatexTask release];
-    [grepTask  release];
-    [uniqTask  release];
-  }
-  
-  [fullLog appendString:[NSString stringWithContentsOfFile:latexLogFilePath]];
-  [fullLog appendString:@"\n"];
-  [logTextView setString:fullLog];
-  
-  //the latex | grep | uniq command has been executed. The filteredLog (may be empty) contains the errors
-  //so we process it, and it will tell us if there were any errors
-  failed |= [self _processLog:filteredLog];
-  
-  if (failed)
-  {
-    //oops, there were errors.
-    if (![filteredLog length])
-    {
-      [filteredLog appendString:@"::"];
-      [filteredLog appendString:NSLocalizedString(@"error while processing pdflatex",@"error while processing pdflatex")];
-    }
-    [fullLog appendString:NSLocalizedString(@"error while processing pdflatex",@"error while processing pdflatex")];
-    [fullLog appendString:@"\n"];
-    [logTextView setString:fullLog];
-  }    
-  //First step is over. If it has failed, it is the fault of the user, and syntax errors will be reported
-  
+  //STEP 2
+  BOOL shouldTryStep2 = (mode != TEXT) && (compositionMode != ComposeUsingLatexAndDvipdf);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
-  NSData* pdfData = failed ? nil : [NSData dataWithContentsOfFile:pdfFilePath];
-  if (pdfData)
+  if (!failed)
   {
-    if (mode != TEXT) //we do not even try step2 in TEXT mode, since we will perform step 3 to allow line breakings
+    if (shouldTryStep2) //we do not even try step 2 in TEXT mode, since we will perform step 3 to allow line breakings
     {
       //this magical template uses boxes that scales and automagically find their own geometry
       //But it may fail for some kinds of equation, especially multi-lines equations. However, we try it because it is fast
@@ -729,48 +764,28 @@ static NSString* yenString = nil;
       
       //try to latexise that file
       NSData* latexData = [magicSourceToFindBaseLine dataUsingEncoding:NSUTF8StringEncoding];  
-      [latexData writeToFile:latexBaselineFilePath atomically:NO];
-      NSTask* pdfLatexTask = [[NSTask alloc] init];
-      @try
-      {
-        NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-        [pdfLatexTask setCurrentDirectoryPath:directory];
-        [pdfLatexTask setEnvironment:[AppController environmentDict]];
-        [pdfLatexTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
-        [pdfLatexTask setArguments:[NSArray arrayWithObjects:@"-file-line-error",@"--interaction",@"nonstopmode",latexBaselineFile, nil]];
-        [pdfLatexTask setStandardOutput:nullDevice];
-        [pdfLatexTask setStandardError:nullDevice];
-        [pdfLatexTask launch];
-        [pdfLatexTask waitUntilExit];
-        failed |= ([pdfLatexTask terminationStatus] != 0);
-      }
-      @catch(NSException* e)
-      {
-        [fullLog appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
-        [logTextView setString:fullLog];
-        failed = YES;
-      }
-      @finally
-      {
-        [pdfLatexTask release];
-      }
+      failed |= ![latexData writeToFile:latexBaselineFilePath atomically:NO];
+      
+      if (!failed)
+        pdfData = [self _composeLaTeX:latexBaselineFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog options:compositionMode];
+      failed |= !pdfData;
     }//end of step 2
     
     //Now, step 2 may have failed. We check it. If it has not failed, that's great, the pdf result is the one we wanted !
     float baseline = 0;
-    if (!failed && (mode != TEXT))
+    if (!failed && shouldTryStep2)
     {
       //try to read the baseline in the "sizes" file magically generated
       NSString* sizes = [NSString stringWithContentsOfFile:sizesFilePath];
       NSScanner* scanner = [NSScanner scannerWithString:sizes];
       [scanner scanFloat:&baseline];
-      //and get the pdfData from the file
-      pdfData = [NSData dataWithContentsOfFile:pdfBaselineFilePath];
       //Step 2 is over, it has worked, so step 3 is useless.
     }
+    //STEP 3
     else //if step 2 failed, we must use the heavy method of step 3
     {
       failed = NO; //since step 3 is a resort, step 2 is not a real failure, so we reset <failed> to NO
+      pdfData = nil;
       NSRect boundingBox = [self _computeBoundingBox:pdfFilePath]; //compute the bounding box of the pdf file generated during step 1
       boundingBox.origin.x    -= [MarginController leftMargin]/(magnification/10);
       boundingBox.origin.y    -= [MarginController bottomMargin]/(magnification/10);
@@ -808,45 +823,22 @@ static NSString* yenString = nil;
           boundingBox.origin.x, boundingBox.origin.y, boundingBox.size.width, boundingBox.size.height,
           pdfFile, 200*magnification/10000];
 
-      //Latexisation of step 3. Should never fail.
+      //Latexisation of step 3. Should never fail. Always performed in ComposeUsingPdfLatex mode
       NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding];  
-      [latexData writeToFile:latexFilePath2 atomically:NO];
-      NSTask* pdfLatexTask = [[NSTask alloc] init];
-      @try
-      {
-        NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-        [pdfLatexTask setCurrentDirectoryPath:directory];
-        [pdfLatexTask setEnvironment:[AppController environmentDict]];
-        [pdfLatexTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
-        [pdfLatexTask setArguments:[NSArray arrayWithObjects:@"-file-line-error",@"--interaction",@"nonstopmode",latexFile2, nil]];
-        [pdfLatexTask setStandardOutput:nullDevice];
-        [pdfLatexTask setStandardError:nullDevice];
-        [pdfLatexTask launch];
-        [pdfLatexTask waitUntilExit];
-        failed |= ([pdfLatexTask terminationStatus] != 0);
-        pdfData = [NSData dataWithContentsOfFile:pdfFilePath2];
-      }
-      @catch(NSException* e)
-      {
-        [fullLog appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
-        [logTextView setString:fullLog];
-        pdfData = nil;
-        failed = YES;
-      }
-      @finally
-      {
-        [pdfLatexTask release];
-      }
-      //end of step 3
-    }//end if step 2 failed
+      failed |= ![latexData writeToFile:latexFilePath2 atomically:NO];
+      if (!failed)
+        pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog options:ComposeUsingPdfLatex];
+      failed |= !pdfData;
+    }//end STEP 3
     
     //the baseline is affected by the bottom margin
     baseline += [MarginController bottomMargin];
 
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
-    NSString* colorAsString = [color rgbaString];
     #ifndef PANTHER
+    NSString* colorAsString = [color rgbaString];
+    NSString* bkColorAsString = [imageView backgroundColor] ? [[imageView backgroundColor] rgbaString] : [[NSColor whiteColor] rgbaString];
     if (pdfData)
     {
       //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
@@ -860,6 +852,7 @@ static NSString* yenString = nil;
              [NSString stringWithFormat:@"%f", magnification],
              [NSString stringWithFormat:@"%d", mode],
              [NSString stringWithFormat:@"%f", baseline],
+             bkColorAsString,
              nil], PDFDocumentKeywordsAttribute,
            [NSApp applicationName], PDFDocumentCreatorAttribute, nil];
       [pdfDocument setDocumentAttributes:attributes];
@@ -869,8 +862,10 @@ static NSString* yenString = nil;
     #endif
 
     //adds some meta-data to be compatible with Latex Equation Editor
-    pdfData = [self _annotatePdfDataInLEEFormat:pdfData preamble:preamble source:body color:colorAsString
-                                           mode:mode magnification:magnification baseline:baseline];
+    if (pdfData)
+      pdfData = [[AppController appController]
+                  annotatePdfDataInLEEFormat:pdfData preamble:preamble source:body color:color
+                                        mode:mode magnification:magnification baseline:baseline backgroundColor:[imageView backgroundColor]];
 
     [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
   }//end if latex source could be compiled
@@ -879,16 +874,41 @@ static NSString* yenString = nil;
   return pdfData;
 }
 
-//This will update the error tableview, filling it with the filtered log obtained during the latexisation
--(BOOL) _processLog:(NSString*)log
+//returns an array of the errors. Each case will contain an error string
+-(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog
 {
-  BOOL thereAreErrors = NO;
-  [logTableView setDataWithLog:log];
+  NSArray* errorsNotFiltered = [fullErrorLog componentsSeparatedByString:@"\n"];
+  NSMutableArray* filteredErrors = [NSMutableArray arrayWithCapacity:[errorsNotFiltered count]];
+  NSEnumerator* enumerator = [errorsNotFiltered objectEnumerator];
+  NSString* line = [enumerator nextObject];
+  while(line)
+  {
+    NSArray* components = [line componentsSeparatedByString:@":"];
+    if ((([components count] >= 3) && [[components objectAtIndex:1] intValue]) ||
+        ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
+    {
+      NSMutableString* fullError = [NSMutableString stringWithString:line];
+      while([line length] && ([line characterAtIndex:[line length]-1] != '.'))
+      {
+        line = [enumerator nextObject];
+        [fullError appendString:line];
+      }
+      [filteredErrors addObject:fullError];
+    }
+    line = [enumerator nextObject];
+  }
+  return filteredErrors;
+}
+
+//This will update the error tableview, filling it with the filtered log obtained during the latexisation, and add error markers
+//in the rulertextviews
+-(void) _analyzeErrors:(NSArray*)errors
+{
+  [logTableView setErrors:errors];
   
   [preambleTextView clearErrors];
   [sourceTextView clearErrors];
   int numberOfRows = [logTableView numberOfRows];
-  thereAreErrors = (numberOfRows > 0);
   int i = 0;
   for(i = 0 ; i<numberOfRows ; ++i)
   {
@@ -903,7 +923,6 @@ static NSString* yenString = nil;
     else
       [sourceTextView setErrorAtLine:line message:message];
   }
-  return thereAreErrors;
 }
 
 -(BOOL) hasImage
@@ -1020,63 +1039,7 @@ static NSString* yenString = nil;
   latex_mode_t mode = (latex_mode_t) tag;
   return [HistoryItem historyItemWithPdfData:[imageView pdfData]  preamble:[preambleTextView textStorage]
                                   sourceText:[sourceTextView textStorage] color:[colorWell color]
-                                   pointSize:[sizeText doubleValue]   date:[NSDate date] mode:mode];
-}
-
--(NSData*) _annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSString*)colorAsString
-                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
-{
-  NSMutableData* newData = nil;
-
-  NSMutableString* replacedPreamble = [NSMutableString stringWithString:preamble];
-  [replacedPreamble replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedPreamble length])];
-  [replacedPreamble replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedPreamble length])];
-  [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedPreamble length])];
-  [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedPreamble length])];
-
-  NSMutableString* replacedSource = [NSMutableString stringWithString:source];
-  [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedSource length])];
-  [replacedSource replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedSource length])];
-  [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
-  [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
-
-  NSString *type = (mode == DISPLAY) ? @"0" : (mode == INLINE) ? @"1" : @"2";
-
-  NSMutableString *annotation =
-      [NSMutableString stringWithFormat:
-        @"\nobj <<\n"\
-         "/Preamble (ESannop%@ESannopend)\n"\
-         "/Subject (ESannot%@ESannotend)\n"\
-         "/Type (EEtype%@EEtypeend)\n"\
-         "/Color (EEcol%@EEcolend)\n"
-         "/Magnification (EEmag%fEEmagend)\n"\
-         "/Baseline (EEbas%fEEbasend)\n"\
-         ">> endobj",
-        replacedPreamble, replacedSource, type, colorAsString, magnification, baseline];
-
-  NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
-  NSRange r1 = [pdfString rangeOfString:@"\nxref" options:NSBackwardsSearch];
-  NSRange r2 = [pdfString lineRangeForRange:[pdfString rangeOfString:@"startxref" options:NSBackwardsSearch]];
-
-  NSString* tail_of_tail = [pdfString substringFromIndex:r2.location];
-  NSArray*  tailarray    = [tail_of_tail componentsSeparatedByString:@"\n"];
-
-  int byte_count = 0;
-  NSScanner* scanner = [NSScanner scannerWithString:[tailarray objectAtIndex: 1]];
-  [scanner scanInt:&byte_count];
-  byte_count += [annotation length];
-
-  NSRange r3 = NSMakeRange(r1.location, r2.location - r1.location);
-  NSString* stuff = [pdfString substringWithRange: r3];
-
-  [annotation appendString:stuff];
-  [annotation appendString:[NSString stringWithFormat: @"startxref\n%d\n%%%%EOF", byte_count]];
-  
-  NSData* dataToAppend = [annotation dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-
-  newData = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(0, r1.location)]];
-  [newData appendData:dataToAppend];
-  return newData;
+                                   pointSize:[sizeText doubleValue] date:[NSDate date] mode:mode backgroundColor:[imageView backgroundColor]];
 }
 
 -(void) applyPdfData:(NSData*)pdfData
@@ -1087,7 +1050,7 @@ static NSString* yenString = nil;
   NSString* creator  = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentCreatorAttribute]  : nil;
   NSArray*  keywords = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute] : nil;
   //if the meta-data tells that the creator is LaTeXiT, then use it !
-  needsToCheckLEEAnnotations = !(creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 5));
+  needsToCheckLEEAnnotations = !(creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 7));
   if (!needsToCheckLEEAnnotations)
   {
     [self _setLogTableViewVisible:NO];
@@ -1095,12 +1058,12 @@ static NSString* yenString = nil;
     [self setPreamble:[[[NSAttributedString alloc] initWithString:[keywords objectAtIndex:0]] autorelease]];
     [self setSourceText:[[[NSAttributedString alloc] initWithString:[keywords objectAtIndex:1]] autorelease]];
     NSString* colorAsString = [keywords objectAtIndex:2];
-    [colorWell setColor:[NSColor rgbaColorWithString:colorAsString]];
+    [colorWell setColor:[NSColor colorWithRgbaString:colorAsString]];
     [sizeText setDoubleValue:[[keywords objectAtIndex:3] doubleValue]];
-    NSScanner* scanner = [NSScanner scannerWithString:[keywords objectAtIndex:4]];
-    int i = 0;
-    [scanner scanInt:&i];
-    [typeOfTextControl selectSegmentWithTag:(latex_mode_t)i];
+    [typeOfTextControl selectSegmentWithTag:(latex_mode_t)[[keywords objectAtIndex:4] intValue]];
+    //[keywords objectAtIndex:5] is the baseline
+    NSString* bkColorAsString = [keywords objectAtIndex:6];
+    [imageView setBackgroundColor:[NSColor colorWithRgbaString:bkColorAsString]];
   }
   [pdfDocument release];
   #endif
@@ -1173,13 +1136,24 @@ static NSString* yenString = nil;
       [colorAsString deleteCharactersInRange:range];
     }
 
+    NSMutableString* bkColorAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
+      range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
+      [bkColorAsString deleteCharactersInRange:range];
+    }
+
     [self _setLogTableViewVisible:NO];
     [imageView setPdfData:pdfData cachedImage:nil];
     [self setPreamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]];
     [self setSourceText:[[[NSAttributedString alloc] initWithString:source] autorelease]];
-    [colorWell setColor:[NSColor rgbaColorWithString:colorAsString]];
+    [colorWell setColor:[NSColor colorWithRgbaString:colorAsString]];
     [sizeText setDoubleValue:[pointSizeAsString doubleValue]];
     [typeOfTextControl selectSegmentWithTag:(latex_mode_t)[modeAsString intValue]];
+    [imageView setBackgroundColor:[NSColor colorWithRgbaString:bkColorAsString]];
   }
 }
 
@@ -1195,6 +1169,7 @@ static NSString* yenString = nil;
     [colorWell setColor:[historyItem color]];
     [sizeText setDoubleValue:[historyItem pointSize]];
     [typeOfTextControl selectSegmentWithTag:[historyItem mode]];
+    [imageView setBackgroundColor:[historyItem backgroundColor]];
   }
 }
 
@@ -1251,9 +1226,9 @@ static NSString* yenString = nil;
 }
 
 //action coming from menu through appcontroller
--(IBAction) addLibraryFolder:(id)sender
+-(IBAction) newLibraryFolder:(id)sender
 {
-  [libraryDrawer addFolder:sender];
+  [libraryDrawer newFolder:sender];
 }
 
 //action coming from menu through appcontroller
@@ -1392,8 +1367,9 @@ static NSString* yenString = nil;
       #ifndef PANTHER
       options = NSExclude10_4ElementsIconCreationOption;
       #endif
-      if (![format isEqualTo:@"jpeg"])
-        [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData] forFile:filePath options:options];
+      NSColor* backgroundColor = [format isEqualTo:@"jpeg"] ? [jpegColorWell color] : nil;
+      [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData backgroundColor:backgroundColor]
+                                     forFile:filePath options:options];
     }
   }//end if save
   currentSavePanel = nil;

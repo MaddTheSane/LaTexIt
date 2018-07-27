@@ -35,6 +35,12 @@ static NSImage* smallFolderIcon = nil; //stores the icon of a LibraryFolder
   }
 }
 
+-(id) copyWithZone:(NSZone*) zone
+{
+  LibraryFolder* newInstance = (LibraryFolder*) [super copy];
+  return newInstance;
+}
+
 -(NSImage*) image
 {
   return smallFolderIcon; //icon of a LibraryFolder

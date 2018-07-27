@@ -13,6 +13,7 @@
 
 extern NSString* LineCountDidChangeNotification;
 extern NSString* FontDidChangeNotification;
+extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 
 @class LineCountRulerView;
 

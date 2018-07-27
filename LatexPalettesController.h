@@ -1,14 +1,14 @@
-//  PalettesController.h
+//  LatexPalettesController.h
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
 //  Copyright 2005 Pierre Chatelier. All rights reserved.
 
-//The palette controller is responsible for loading and initializing the palette
+//The LatexPalettesController controller is responsible for loading and initializing the latex palettes
 
 #import <Cocoa/Cocoa.h>
 
-@interface PalettesController : NSWindowController
+@interface LatexPalettesController : NSWindowController
 {
   IBOutlet NSMatrix* greekMatrix;
   IBOutlet NSMatrix* lettersMatrix;
@@ -22,6 +22,6 @@
 -(id) init;
 
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document
--(IBAction) paletteClick:(id)sender;
+-(IBAction) latexPalettesClick:(id)sender;
 
 @end

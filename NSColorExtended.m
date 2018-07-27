@@ -23,15 +23,16 @@
 }
 
 //creates a color from an rgba string
-+(NSColor*) rgbaColorWithString:(NSString*)string
++(NSColor*) colorWithRgbaString:(NSString*)string
 {
   NSScanner* scanner = [NSScanner scannerWithString:string];
   float r = 0, g = 0, b = 0, a = 0;
-  [scanner scanFloat:&r];
-  [scanner scanFloat:&g];
-  [scanner scanFloat:&b];
-  [scanner scanFloat:&a];
-  return [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a];
+  BOOL ok = YES;
+  ok &= [scanner scanFloat:&r];
+  ok &= [scanner scanFloat:&g];
+  ok &= [scanner scanFloat:&b];
+  ok &= [scanner scanFloat:&a];
+  return ok ? [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a] : nil;
 }
 
 -(NSString*) rgbaString

@@ -15,7 +15,7 @@
 #import "MyDocument.h"
 
 @interface LibraryDrawer (PrivateAPI)
--(void) _selectionDidChange:(NSNotification*)aNotification;
+-(void) outlineViewSelectionDidChange:(NSNotification*)aNotification;
 @end
 
 @implementation LibraryDrawer
@@ -25,7 +25,7 @@
   self = [super initWithCoder:coder];
   if (self)
   {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_selectionDidChange:)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelectionDidChange:)
                                                  name:NSOutlineViewSelectionDidChangeNotification object:nil];
   }
   return self;
@@ -42,15 +42,15 @@
 {
   MyDocument*  document = [[[self parentWindow] windowController] document];
   HistoryItem* historyItem = [document historyItemWithCurrentState];
-  LibraryItem* newItem = [[LibraryManager sharedManager] addFile:historyItem outlineView:libraryView];
+  LibraryItem* newItem = [[LibraryManager sharedManager] newFile:historyItem outlineView:libraryView];
   [libraryView selectRowIndexes:[NSIndexSet indexSetWithIndex:[libraryView rowForItem:newItem]]
            byExtendingSelection:NO];
 }
 
 //Creates a folder library item
--(IBAction) addFolder:(id)sender
+-(IBAction) newFolder:(id)sender
 {
-  LibraryItem* newItem = [[LibraryManager sharedManager] addFolder:libraryView];
+  LibraryItem* newItem = [[LibraryManager sharedManager] newFolder:libraryView];
   [libraryView selectRowIndexes:[NSIndexSet indexSetWithIndex:[libraryView rowForItem:newItem]]
            byExtendingSelection:NO];
 }
@@ -98,12 +98,12 @@
 
 
 //updates some buttons state (enabled/disabled for <remove> and <update> buttons) according to selection
--(void) _selectionDidChange:(NSNotification*)aNotification
+-(void) outlineViewSelectionDidChange:(NSNotification*)aNotification
 {
   if ([aNotification object] == libraryView)
   {
     NSIndexSet* selectedRowIndexes = [libraryView selectedRowIndexes];
-    BOOL atLeastOneItemSelected = ([selectedRowIndexes count] >= 0);
+    BOOL atLeastOneItemSelected = ([selectedRowIndexes count] > 0);
     BOOL onlyOneItemSelected = ([selectedRowIndexes count] == 1);
     unsigned int firstIndex = [selectedRowIndexes firstIndex];
     [removeItemButton setEnabled:atLeastOneItemSelected];
