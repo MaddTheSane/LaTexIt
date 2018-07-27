@@ -378,5 +378,26 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MC0CFQCQY0Rv5tom2dSlNsR+2lvvMyNNIwIUQCtLj012+0fZo0lgp+m370kODVo="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.6.1</guid>
+      <title>Version 2.6.1</title>
+			<pubDate>Mon, 19 May 2014 23:14:42 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_6_1.dmg"
+				sparkle:version="2.6.1"
+                   sparkle:shortVersionString="2.6.1"
+				type="application/octet-stream"
+				length="10474295"
+				sparkle:dsaSignature="MC0CFCJcvSSAL3tZs0NSAPIzKaautzCaAhUAnjR99zTfqixYlz61QxCroTrnhYY="
+			/>
+      <description><![CDATA[
+        <ul>
+          <li>Fixed &quot;PDF with outlined fonts&quot; bounding box to make it compatible with Illustrator&nbsp;;</li>
+          <li>Added &quot;Format&gt;Comment/Uncomment&quot;&nbsp;;</li>
+          <li>Reduced service titles for better appearance in MacOS&nbsp;X keyboard preferences.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.6.1</sparkle:releaseNotesLink>
+    </item>
   </channel> 
 </rss>

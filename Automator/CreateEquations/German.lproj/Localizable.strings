@@ -17,6 +17,7 @@
 "PNG bitmap format" = "PNG-Bitmap";
 "JPEG bitmap format" = "JPEG-Bitmap";
 "MathML text format" = "MathML-Text";
+"Text format" = "Text";
 "Options" = "Optionen";
 "Warning : jpeg does not manage transparency" = "Warnung: JPEG unterstützt keine Transparenz";
 "Warning : pdf2svg path is invalid" = "Warning : Der Pfad zu pdf2svg ist ungültig";

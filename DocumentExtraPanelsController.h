@@ -32,6 +32,9 @@
   CGFloat         saveAccessoryViewOptionsJpegQualityPercent;
   NSColor*        saveAccessoryViewOptionsJpegBackgroundColor;
   NSString*       saveAccessoryViewOptionsSvgPdfToSvgPath;
+  BOOL            saveAccessoryViewOptionsTextExportPreamble;
+  BOOL            saveAccessoryViewOptionsTextExportEnvironment;
+  BOOL            saveAccessoryViewOptionsTextExportBody;
 
   NSSavePanel* currentSavePanel;
 }
@@ -53,6 +56,12 @@
 -(void)            setSaveAccessoryViewOptionsJpegBackgroundColor:(NSColor*)value;
 -(NSString*)       saveAccessoryViewOptionsSvgPdfToSvgPath;
 -(void)            setSaveAccessoryViewOptionsSvgPdfToSvgPath:(NSString*)value;
+-(BOOL)            saveAccessoryViewOptionsTextExportPreamble;
+-(void)            setSaveAccessoryViewOptionsTextExportPreamble:(BOOL)value;
+-(BOOL)            saveAccessoryViewOptionsTextExportEnvironment;
+-(void)            setSaveAccessoryViewOptionsTextExportEnvironment:(BOOL)value;
+-(BOOL)            saveAccessoryViewOptionsTextExportBody;
+-(void)            setSaveAccessoryViewOptionsTextExportBody:(BOOL)value;
 
 -(NSSavePanel*) currentSavePanel;
 -(void) setCurrentSavePanel:(NSSavePanel*)value;

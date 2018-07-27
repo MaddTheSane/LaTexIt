@@ -1734,8 +1734,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                   jpegColor:(NSColor*)aJpegColor jpegQuality:(CGFloat)aJpegQuality filePath:(NSString*)filePath
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData jpegColor:aJpegColor
-                                                jpegQuality:aJpegQuality scaleAsPercent:scaleAsPercent
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:aJpegQuality], @"jpegQuality",
+                                 [NSNumber numberWithFloat:scaleAsPercent], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 aJpegColor, @"jpegColor",//at the end for the case it is null
+                                 nil];
+  
+  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData exportOptions:exportOptions
                                                 compositionConfiguration:[preferencesController compositionConfigurationDocument]
                                                 uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   if (data)
@@ -1969,7 +1977,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(BOOL) window:(NSWindow *)window shouldPopUpDocumentPathMenu:(NSMenu*)menu
 {
   BOOL result = NO;
-  if (self->linkedLibraryEquation)
+  if ([self fileURL])
+    result = YES;
+  else if (self->linkedLibraryEquation)
   {
     while([menu numberOfItems])
       [menu removeItemAtIndex:0];
@@ -2380,5 +2390,128 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   }//end while([mutableSelectedRanges count])
 }
 //end formatChangeAlignment:
+
+-(void) formatComment:(id)sender
+{
+  NSMutableAttributedString* textStorage = [[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease];      
+  NSMutableString* string = [[[textStorage string] mutableCopy] autorelease];
+  NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
+  NSMutableArray* newSelectedRanges = [NSMutableArray arrayWithCapacity:[selectedRanges count]];
+  NSEnumerator* rangeEnumerator = [selectedRanges objectEnumerator];
+  NSValue* selectedRangeValue = nil;
+  while((selectedRangeValue = [rangeEnumerator nextObject]))
+  {
+    NSRange selectedRange = [selectedRangeValue rangeValue];
+    BOOL stop = NO;
+    while(!stop)
+    {
+      NSRange newLineRange = [string rangeOfString:@"\n" options:0 range:selectedRange];
+      BOOL hasNewLine = (newLineRange.location != NSNotFound);
+      if (!hasNewLine)
+        [newSelectedRanges addObject:[NSValue valueWithRange:selectedRange]];
+      else//if (hasNewLine)
+      {
+        NSRange subRange = NSMakeRange(selectedRange.location, newLineRange.location-selectedRange.location);
+        if (subRange.length)
+          [newSelectedRanges addObject:[NSValue valueWithRange:subRange]];
+        NSUInteger headLength = newLineRange.location+1-selectedRange.location;
+        selectedRange.location += headLength;
+        selectedRange.length -= headLength;
+      }//end if (hasNewLine)
+      stop |= !selectedRange.length || !hasNewLine;
+    }//end while(!stop)
+  }//end for each selectedRange
+  
+  NSMutableArray* shiftedSelectedRanges = [NSMutableArray arrayWithCapacity:[selectedRanges count]];
+
+  NSUInteger currentShift = 0;
+  NSRange lastLineRange = NSMakeRange(0, 0);
+  rangeEnumerator = [newSelectedRanges objectEnumerator];
+  selectedRangeValue = nil;
+  while((selectedRangeValue = [rangeEnumerator nextObject]))
+  {
+    NSRange selectedRange = [selectedRangeValue rangeValue];
+    NSRange shiftedSelectedRange = selectedRange;
+    shiftedSelectedRange.location += currentShift;
+    NSRange lineRange = [string lineRangeForRange:shiftedSelectedRange];
+    if (!currentShift || !NSEqualRanges(lineRange, lastLineRange))
+    {
+      [string insertString:@"%" atIndex:lineRange.location];
+      ++lineRange.length;
+      ++currentShift;
+      ++shiftedSelectedRange.location;
+    }//end if (![lineRanges count] || !NSEqualRanges(lineRange, lastLineRange))
+    lastLineRange = lineRange;
+    [shiftedSelectedRanges addObject:[NSValue valueWithRange:shiftedSelectedRange]];
+  }//end for each selectedRange
+
+  [textStorage replaceCharactersInRange:NSMakeRange(0, [textStorage length]) withString:string];
+  [self setSourceText:textStorage];
+  [self->lowerBoxSourceTextView setSelectedRanges:shiftedSelectedRanges];
+}
+//end formatComment:
+
+-(void) formatUncomment:(id)sender
+{
+  NSMutableAttributedString* textStorage = [[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease];      
+  NSMutableString* string = [[[textStorage string] mutableCopy] autorelease];
+  NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
+  NSMutableArray* newSelectedRanges = [NSMutableArray arrayWithCapacity:[selectedRanges count]];
+  NSEnumerator* rangeEnumerator = [selectedRanges objectEnumerator];
+  NSValue* selectedRangeValue = nil;
+  while((selectedRangeValue = [rangeEnumerator nextObject]))
+  {
+    NSRange selectedRange = [selectedRangeValue rangeValue];
+    BOOL stop = NO;
+    while(!stop)
+    {
+      NSRange newLineRange = [string rangeOfString:@"\n" options:0 range:selectedRange];
+      BOOL hasNewLine = (newLineRange.location != NSNotFound);
+      if (!hasNewLine)
+        [newSelectedRanges addObject:[NSValue valueWithRange:selectedRange]];
+      else//if (hasNewLine)
+      {
+        NSRange subRange = NSMakeRange(selectedRange.location, newLineRange.location-selectedRange.location);
+        if (subRange.length)
+          [newSelectedRanges addObject:[NSValue valueWithRange:subRange]];
+        NSUInteger headLength = newLineRange.location+1-selectedRange.location;
+        selectedRange.location += headLength;
+        selectedRange.length -= headLength;
+      }//end if (hasNewLine)
+      stop |= !selectedRange.length || !hasNewLine;
+    }//end while(!stop)
+  }//end for each selectedRange
+  
+  NSMutableArray* shiftedSelectedRanges = [NSMutableArray arrayWithCapacity:[selectedRanges count]];
+  
+  NSUInteger currentShift = 0;
+  NSRange lastLineRange = NSMakeRange(0, 0);
+  rangeEnumerator = [newSelectedRanges objectEnumerator];
+  selectedRangeValue = nil;
+  while((selectedRangeValue = [rangeEnumerator nextObject]))
+  {
+    NSRange selectedRange = [selectedRangeValue rangeValue];
+    NSRange shiftedSelectedRange = selectedRange;
+    shiftedSelectedRange.location -= currentShift;
+    NSRange lineRange = [string lineRangeForRange:shiftedSelectedRange];
+    if (!currentShift || !NSEqualRanges(lineRange, lastLineRange))
+    {
+      if ([[string substringWithRange:lineRange] startsWith:@"%" options:0])
+      {
+        [string deleteCharactersInRange:NSMakeRange(lineRange.location, 1)];
+        --lineRange.length;
+        ++currentShift;
+        --shiftedSelectedRange.location;
+      }//end if ([[string substringWithRange:lineRange] startsWith:@"%" options:0])
+    }//end if (![lineRanges count] || !NSEqualRanges(lineRange, lastLineRange))
+    lastLineRange = lineRange;
+    [shiftedSelectedRanges addObject:[NSValue valueWithRange:shiftedSelectedRange]];
+  }//end for each selectedRange
+  
+  [textStorage replaceCharactersInRange:NSMakeRange(0, [textStorage length]) withString:string];
+  [self setSourceText:textStorage];
+  [self->lowerBoxSourceTextView setSelectedRanges:shiftedSelectedRanges];
+}
+//end formatUncomment:
 
 @end

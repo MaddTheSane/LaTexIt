@@ -281,7 +281,7 @@ static LaTeXProcessor* sharedInstance = nil;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.6.0", @"version",
+        @"2.6.1", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -1640,7 +1640,7 @@ static LaTeXProcessor* sharedInstance = nil;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
-             jpegColor:(NSColor*)color jpegQuality:(CGFloat)quality scaleAsPercent:(CGFloat)scaleAsPercent
+             exportOptions:(NSDictionary*)exportOptions
              compositionConfiguration:(NSDictionary*)compositionConfiguration
              uniqueIdentifier:(NSString*)uniqueIdentifier
 {
@@ -1658,6 +1658,13 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* tmpPdfFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpPdfFile];
     NSString* tmpSvgFile     = [NSString stringWithFormat:@"%@-2.svg", filePrefix];
     NSString* tmpSvgFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpSvgFile];
+    
+    NSColor* jpegColor = [[exportOptions objectForKey:@"jpegColor"] dynamicCastToClass:[NSColor class]];
+    CGFloat jpegQuality = [[[exportOptions objectForKey:@"jpegQuality"] dynamicCastToClass:[NSNumber class]] floatValue];
+    CGFloat scaleAsPercent = [[[exportOptions objectForKey:@"scaleAsPercent"] dynamicCastToClass:[NSNumber class]] floatValue];
+    BOOL textExportPreamble = [[[exportOptions objectForKey:@"textExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
+    BOOL textExportEnvironment = [[[exportOptions objectForKey:@"textExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
+    BOOL textExportBody = [[[exportOptions objectForKey:@"textExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
     
     if (pdfData)
     {
@@ -1725,6 +1732,38 @@ static LaTeXProcessor* sharedInstance = nil;
       if (format == EXPORT_FORMAT_PDF)
       {
         data = pdfData;
+        /*CGDataProviderRef pdfOriginalDataProvider = !pdfData ? 0 :
+          CGDataProviderCreateWithCFData((CFDataRef)pdfData);
+        CGPDFDocumentRef pdfOriginalDocument = !pdfOriginalDataProvider ? 0 :
+          CGPDFDocumentCreateWithProvider(pdfOriginalDataProvider);
+        CGPDFPageRef pdfOriginalPage = !pdfOriginalDocument ? 0 :
+          CGPDFDocumentGetPage(pdfOriginalDocument, 1);
+        CGRect pdfOriginalMediaBox = !pdfOriginalPage ? CGRectZero :
+          CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFMediaBox);
+        CGRect pdfOriginalCropBox = !pdfOriginalPage ? CGRectZero :
+        CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFCropBox);
+        
+        NSMutableData* pdfCroppedMutableData = [NSMutableData data];
+        CGDataConsumerRef pdfCroppedDataConsumer = !pdfCroppedMutableData ? 0 :
+          CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfCroppedMutableData);
+        CGRect pdfCroppedMediaBox =
+          CGRectMake(0, 0,
+                     ceil(pdfOriginalMediaBox.size.width),
+                     ceil(pdfOriginalMediaBox.size.height));
+        CGContextRef pdfContext = !pdfCroppedDataConsumer ? 0 :
+          CGPDFContextCreate(pdfCroppedDataConsumer, &pdfCroppedMediaBox, 0);
+        CGPDFContextBeginPage(pdfContext, 0);
+        CGContextTranslateCTM(pdfContext, -pdfOriginalMediaBox.origin.x, -pdfOriginalMediaBox.origin.y);
+        CGContextDrawPDFPage(pdfContext, pdfOriginalPage);
+        CGContextEndPage(pdfContext);
+        CGContextFlush(pdfContext);
+        CGContextRelease(pdfContext);
+        CGDataConsumerRelease(pdfCroppedDataConsumer);
+        
+        CGPDFDocumentRelease(pdfOriginalDocument);
+        CGDataProviderRelease(pdfOriginalDataProvider);
+
+        data = [[pdfCroppedMutableData copy] autorelease];*/
       }//end if (format == EXPORT_FORMAT_PDF)
       else if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       {
@@ -1762,11 +1801,55 @@ static LaTeXProcessor* sharedInstance = nil;
           }//end if (error)
           else//if (!error)
           {
+            CGDataProviderRef pdfOriginalDataProvider = !pdfData ? 0 :
+              CGDataProviderCreateWithCFData((CFDataRef)pdfData);
+            CGPDFDocumentRef pdfOriginalDocument = !pdfOriginalDataProvider ? 0 :
+              CGPDFDocumentCreateWithProvider(pdfOriginalDataProvider);
+            CGPDFPageRef pdfOriginalPage = !pdfOriginalDocument ? 0 :
+              CGPDFDocumentGetPage(pdfOriginalDocument, 1);
+            CGRect pdfOriginalMediaBox = !pdfOriginalPage ? CGRectZero :
+              CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFMediaBox);
+            CGRect pdfOriginalBoundingBox =
+              NSRectToCGRect([self computeBoundingBox:pdfFilePath workingDirectory:temporaryDirectory fullEnvironment:[self fullEnvironment] compositionConfiguration:compositionConfiguration]);
+            CGPDFDocumentRelease(pdfOriginalDocument);
+            CGDataProviderRelease(pdfOriginalDataProvider);
+            
             LatexitEquation* latexitEquation = [LatexitEquation latexitEquationWithPDFData:pdfData useDefaults:YES];
             [self crop:tmpPdfFilePath to:tmpPdfFilePath canClip:YES extraArguments:[NSArray array]
               compositionConfiguration:compositionConfiguration workingDirectory:temporaryDirectory environment:self->globalExtraEnvironment outPdfData:&pdfData];
             data = [NSData dataWithContentsOfFile:tmpPdfFilePath options:NSUncachedRead error:nil];
-            data = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:data
+           
+            CGDataProviderRef pdfUncroppedDataProvider = !data ? 0 :
+              CGDataProviderCreateWithCFData((CFDataRef)data);
+            CGPDFDocumentRef pdfUncroppedDocument = !pdfUncroppedDataProvider ? 0 :
+              CGPDFDocumentCreateWithProvider(pdfUncroppedDataProvider);
+            CGPDFPageRef pdfUncroppedPage = !pdfUncroppedDocument ? 0 :
+              CGPDFDocumentGetPage(pdfUncroppedDocument, 1);
+            
+            //CGRect boundingBox =
+            //  NSRectToCGRect([self computeBoundingBox:tmpPdfFilePath workingDirectory:temporaryDirectory fullEnvironment:[self fullEnvironment] compositionConfiguration:compositionConfiguration]);
+            NSMutableData* pdfCroppedMutableData = [NSMutableData data];
+            CGDataConsumerRef pdfCroppedDataConsumer = !pdfCroppedMutableData ? 0 :
+              CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfCroppedMutableData);
+            CGRect pdfCroppedMediaBox =
+              CGRectMake(0, 0,
+                         ceil(pdfOriginalMediaBox.size.width),
+                         ceil(pdfOriginalMediaBox.size.height));
+            CGContextRef pdfContext = !pdfCroppedDataConsumer ? 0 :
+              CGPDFContextCreate(pdfCroppedDataConsumer, &pdfCroppedMediaBox, 0);
+            CGPDFContextBeginPage(pdfContext, 0);
+            CGContextTranslateCTM(pdfContext,
+              pdfOriginalBoundingBox.origin.x-pdfOriginalMediaBox.origin.x,
+              pdfOriginalBoundingBox.origin.y-pdfOriginalMediaBox.origin.y);
+            CGContextDrawPDFPage(pdfContext, pdfUncroppedPage);
+            CGContextEndPage(pdfContext);
+            CGContextFlush(pdfContext);
+            CGContextRelease(pdfContext);
+            CGDataConsumerRelease(pdfCroppedDataConsumer);
+            CGPDFDocumentRelease(pdfUncroppedDocument);
+            CGDataProviderRelease(pdfUncroppedDataProvider);
+            
+            data = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:pdfCroppedMutableData
                                            preamble:[[latexitEquation preamble] string]
                                              source:[[latexitEquation sourceText] string]
                                               color:[latexitEquation color] mode:[latexitEquation mode]
@@ -1865,7 +1948,7 @@ static LaTeXProcessor* sharedInstance = nil;
         CGImageRef cgImage = 0;
         if (cgContext)
         {
-          NSColor* rgbColor = [color colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+          NSColor* rgbColor = [jpegColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
           CGContextSetRGBFillColor(cgContext,
             [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], [rgbColor alphaComponent]);
           CGContextFillRect(cgContext, CGRectMake(0, 0, width, height));
@@ -1890,7 +1973,7 @@ static LaTeXProcessor* sharedInstance = nil;
         {
           CGImageDestinationAddImage(cgImageDestination, cgImage,
             (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
-              [NSNumber numberWithFloat:quality/100], (NSString*)kCGImageDestinationLossyCompressionQuality,
+              [NSNumber numberWithFloat:jpegQuality/100], (NSString*)kCGImageDestinationLossyCompressionQuality,
               nil]);
           CGImageDestinationFinalize(cgImageDestination);
           CFRelease(cgImageDestination);
@@ -1950,14 +2033,18 @@ static LaTeXProcessor* sharedInstance = nil;
         NSDictionary* metaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES];
         NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
         latex_mode_t latexMode = (latex_mode_t)[[metaData objectForKey:@"mode"] intValue];
-        NSString* addSymbolLeft  = (latexMode == LATEX_MODE_ALIGN) ? @"$\\begin{eqnarray}\n" ://unfortunately, align is not supported
-                                   (latexMode == LATEX_MODE_EQNARRAY) ? @"$\\begin{eqnarray}\n" :
-                                   (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " :
-                                   (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
-        NSString* addSymbolRight = (latexMode == LATEX_MODE_ALIGN) ? @"\n\\end{eqnarray}$" ://unfortunately, align is not supported
-                                   (latexMode == LATEX_MODE_EQNARRAY) ? @"\n\\end{eqnarray}$" :
-                                   (latexMode == LATEX_MODE_DISPLAY) ? @"$" :
-                                   (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
+        NSString* addSymbolLeft  =
+          (latexMode == LATEX_MODE_ALIGN) ? @"$\\begin{eqnarray}\n" ://unfortunately, align is not supported
+          (latexMode == LATEX_MODE_EQNARRAY) ? @"$\\begin{eqnarray}\n" :
+          (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " :
+          (latexMode == LATEX_MODE_INLINE) ? @"$" :
+          @"";
+        NSString* addSymbolRight =
+          (latexMode == LATEX_MODE_ALIGN) ? @"\n\\end{eqnarray}$" ://unfortunately, align is not supported
+          (latexMode == LATEX_MODE_EQNARRAY) ? @"\n\\end{eqnarray}$" :
+          (latexMode == LATEX_MODE_DISPLAY) ? @"$" :
+          (latexMode == LATEX_MODE_INLINE) ? @"$" :
+          @"";
         NSString* sourceString = [sourceText string];
         NSString* escapedSourceString = [sourceString stringByReplacingOccurrencesOfRegex:@"&(?!amp;)" withString:@"&amp;"];
         NSString* inputString = [NSString stringWithFormat:@"<body><blockquote>%@%@%@</blockquote></body>",
@@ -2004,11 +2091,44 @@ static LaTeXProcessor* sharedInstance = nil;
         }//end if (ok)
         [[NSFileManager defaultManager] bridge_removeItemAtPath:inputFile error:0];
       }//end if (format == EXPORT_FORMAT_MATHML)
+      else if (format == EXPORT_FORMAT_TEXT)
+      {
+        NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES];
+        NSString* preamble = [[equationMetaData objectForKey:@"preamble"] string];
+        NSString* source = [[equationMetaData objectForKey:@"sourceText"] string];
+        latex_mode_t latexMode = (latex_mode_t)[[equationMetaData objectForKey:@"mode"] intValue];
+        NSString* addSymbolLeft  =
+          (latexMode == LATEX_MODE_ALIGN) ? @"\\begin{align*}" :
+          (latexMode == LATEX_MODE_EQNARRAY) ? @"\\begin{eqnarray*}" :
+          (latexMode == LATEX_MODE_DISPLAY) ? @"\\[" :
+          (latexMode == LATEX_MODE_INLINE) ? @"$" :
+          @"";
+        NSString* addSymbolRight =
+          (latexMode == LATEX_MODE_ALIGN) ? @"\\end{align*}" :
+          (latexMode == LATEX_MODE_EQNARRAY) ? @"\\end{eqnarray*}" :
+          (latexMode == LATEX_MODE_DISPLAY) ? @"\\]" :
+          (latexMode == LATEX_MODE_INLINE) ? @"$" :
+          @"";
+        NSMutableString* string = [NSMutableString string];
+        if (textExportPreamble && preamble)
+          [string appendString:preamble];
+        if (textExportPreamble && (textExportEnvironment || textExportBody) && preamble && source)
+          [string appendString:@"\\begin{document}\n"];
+        if (textExportEnvironment && addSymbolLeft)
+          [string appendString:addSymbolLeft];
+        if (textExportBody && source)
+          [string appendString:source];
+        if (textExportEnvironment && addSymbolRight)
+          [string appendString:addSymbolRight];
+        if (textExportPreamble && (textExportEnvironment || textExportBody) && preamble && source)
+          [string appendString:@"\n\\end{document}"];
+        data = [string dataUsingEncoding:NSUTF8StringEncoding];
+      }//end if (format == EXPORT_FORMAT_TEXT)
     }//end if pdfData available
   }//end @synchronized
   return data;
 }
-//end dataForType:pdfData:jpegColor:jpegQuality:scaleAsPercent:
+//end dataForType:pdfData:exportOptions:compositionConfiguration:uniqueIdentifier:
 
 -(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData
 {

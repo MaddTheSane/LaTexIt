@@ -198,6 +198,7 @@
 "PNG bitmap format" = "Image bitmap PNG";
 "JPEG bitmap format" = "Image bitmap JPEG";
 "MathML text format" = "Texte MathML";
+"Text format" = "Texte";
 "Migrating history to new format" = "Migration de l'historique vers un nouveau format";
 "Migrating library to new format" = "Migration de la bibliothèque vers un nouveau format";
 
@@ -234,6 +235,9 @@
 "Scale" = "Échelle";
 "Warning : jpeg does not manage transparency" = "Attention : jpeg ne gère pas la transparence";
 "Warning : pdf2svg path is invalid" = "Attention : Le chemin vers pdf2svg est invalide";
+"Export preamble" = "Exporter le préambule";
+"Export environment" = "Exporter l'environnement";
+"Export body" = "Exporter le corps";
 
 /* Library */
 "Library" = "Bibliothèque";

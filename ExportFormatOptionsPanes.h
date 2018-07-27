@@ -34,27 +34,49 @@
   IBOutlet NSButton*    exportFormatOptionsSvgPdfToSvgPathModifyButton;
   IBOutlet NSButton*    exportFormatOptionsSvgOKButton;
   IBOutlet NSButton*    exportFormatOptionsSvgCancelButton;
-
-
+  
   NSString* svgPdfToSvgPath;
   id        exportFormatOptionsSvgPanelDelegate;
+  
+  IBOutlet NSPanel*  exportFormatOptionsTextPanel;
+  IBOutlet NSBox*    exportFormatOptionsTextBox;
+  IBOutlet NSButton* exportFormatOptionsTextExportPreambleButton;
+  IBOutlet NSButton* exportFormatOptionsTextExportEnvironmentButton;
+  IBOutlet NSButton* exportFormatOptionsTextExportBodyButton;
+  IBOutlet NSButton* exportFormatOptionsTextOKButton;
+  IBOutlet NSButton* exportFormatOptionsTextCancelButton;
+
+  BOOL textExportPreamble;
+  BOOL textExportEnvironment;
+  BOOL textExportBody;
+  id   exportFormatOptionsTextPanelDelegate;
 }
 
 -(id) initWithLoadingFromNib;
 
 -(NSPanel*) exportFormatOptionsJpegPanel;
--(CGFloat) jpegQualityPercent;
--(void)    setJpegQualityPercent:(CGFloat)value;
+-(CGFloat)  jpegQualityPercent;
+-(void)     setJpegQualityPercent:(CGFloat)value;
 -(NSColor*) jpegBackgroundColor;
 -(void)     setJpegBackgroundColor:(NSColor*)value;
--(id)   exportFormatOptionsJpegPanelDelegate;
--(void) setExportFormatOptionsJpegPanelDelegate:(id)delegate;
+-(id)       exportFormatOptionsJpegPanelDelegate;
+-(void)     setExportFormatOptionsJpegPanelDelegate:(id)delegate;
 
 -(NSPanel*)  exportFormatOptionsSvgPanel;
 -(NSString*) svgPdfToSvgPath;
 -(void)      setSvgPdfToSvgPath:(NSString*)value;
--(id)   exportFormatOptionsSvgPanelDelegate;
--(void) setExportFormatOptionsSvgPanelDelegate:(id)delegate;
+-(id)        exportFormatOptionsSvgPanelDelegate;
+-(void)      setExportFormatOptionsSvgPanelDelegate:(id)delegate;
+
+-(NSPanel*)  exportFormatOptionsTextPanel;
+-(BOOL)      textExportPreamble;
+-(void)      setTextExportPreamble:(BOOL)value;
+-(BOOL)      textExportEnvironment;
+-(void)      setTextExportEnvironment:(BOOL)value;
+-(BOOL)      textExportBody;
+-(void)      setTextExportBody:(BOOL)value;
+-(id)        exportFormatOptionsTextPanelDelegate;
+-(void)      setExportFormatOptionsTextPanelDelegate:(id)delegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 -(IBAction) close:(id)sender;

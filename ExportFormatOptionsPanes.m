@@ -23,6 +23,9 @@
   [self instantiateNibWithOwner:self topLevelObjects:nil];
   self->jpegQualityPercent  = 90.f;
   self->jpegBackgroundColor = [[NSColor whiteColor] retain];
+  self->textExportPreamble = YES;
+  self->textExportEnvironment = YES;
+  self->textExportBody = YES;
   return self;
 }
 //end initWithLoadingFromNib:
@@ -136,6 +139,28 @@
              additionalValueTransformer:[BoolTransformer transformerWithFalseValue:[NSColor redColor] trueValue:[NSColor controlTextColor]]
              additionalKeyPath:nil], NSValueTransformerBindingOption, nil];
 
+  [self->exportFormatOptionsTextExportPreambleButton setTitle:LocalLocalizedString(@"Export preamble", @"Export preamble")];
+  [self->exportFormatOptionsTextExportPreambleButton sizeToFit];
+  [self->exportFormatOptionsTextExportEnvironmentButton setTitle:LocalLocalizedString(@"Export environment", @"Export environment")];
+  [self->exportFormatOptionsTextExportEnvironmentButton sizeToFit];
+  [self->exportFormatOptionsTextExportBodyButton setTitle:LocalLocalizedString(@"Export body", @"Export body")];
+  [self->exportFormatOptionsTextExportBodyButton sizeToFit];
+  [self->exportFormatOptionsTextOKButton setTitle:LocalLocalizedString(@"OK", @"OK")];
+  [self->exportFormatOptionsTextCancelButton setTitle:LocalLocalizedString(@"Cancel", @"Cancel")];
+  [self->exportFormatOptionsTextOKButton sizeToFit];
+  [self->exportFormatOptionsTextCancelButton sizeToFit];
+  [self->exportFormatOptionsTextCancelButton setFrameSize:
+   NSMakeSize(MAX(90, [self->exportFormatOptionsTextCancelButton frame].size.width),
+              [self->exportFormatOptionsTextCancelButton frame].size.height)];
+  [self->exportFormatOptionsTextOKButton setFrameSize:[self->exportFormatOptionsTextCancelButton frame].size];
+  [self->exportFormatOptionsTextOKButton setFrameOrigin:
+   NSMakePoint(NSMaxX([self->exportFormatOptionsTextBox frame])-[self->exportFormatOptionsTextOKButton frame].size.width,
+               [self->exportFormatOptionsTextOKButton frame].origin.y)];
+  [self->exportFormatOptionsTextCancelButton setFrameOrigin:
+   NSMakePoint([self->exportFormatOptionsTextOKButton frame].origin.x-12-[self->exportFormatOptionsTextCancelButton frame].size.width,
+               [self->exportFormatOptionsTextCancelButton frame].origin.y)];
+  
+
   [self->exportFormatOptionsJpegQualitySlider bind:NSValueBinding toObject:self withKeyPath:@"jpegQualityPercent"
     options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption, nil]];
   [self->exportFormatOptionsJpegQualityTextField bind:NSValueBinding toObject:self withKeyPath:@"jpegQualityPercent"
@@ -144,6 +169,10 @@
   [self->exportFormatOptionsSvgPdfToSvgPathTextField bind:NSValueBinding toObject:self withKeyPath:@"svgPdfToSvgPath" options:nil];
   [self->exportFormatOptionsSvgPdfToSvgPathTextField bind:NSTextColorBinding toObject:self withKeyPath:@"svgPdfToSvgPath"
     options:colorForFileExistsBindingOptions];
+  [self->exportFormatOptionsTextExportPreambleButton bind:NSValueBinding toObject:self withKeyPath:@"textExportPreamble" options:nil];
+  [self->exportFormatOptionsTextExportEnvironmentButton bind:NSValueBinding toObject:self withKeyPath:@"textExportEnvironment" options:nil];
+  [self->exportFormatOptionsTextExportBodyButton bind:NSValueBinding toObject:self withKeyPath:@"textExportBody" options:nil];
+
 }
 //end awakeFromNib
 
@@ -249,7 +278,69 @@
 }
 //end svgPdfToSvgPathModify:
 
-#pragma mark BOTH
+#pragma mark TEXT
+
+-(NSPanel*) exportFormatOptionsTextPanel
+{
+  return self->exportFormatOptionsTextPanel;
+}
+//end exportFormatOptionsTextPanel
+
+-(BOOL) textExportPreamble
+{
+  return self->textExportPreamble;
+}
+//end textExportPreamble
+
+-(void) setTextExportPreamble:(BOOL)value
+{
+  [self willChangeValueForKey:@"textExportPreamble"];
+  self->textExportPreamble = value;
+  [self didChangeValueForKey:@"textExportPreamble"];
+}
+//end setTextExportPreamble:
+
+-(BOOL) textExportEnvironment
+{
+  return self->textExportEnvironment;
+}
+//end textExportEnvironment
+
+-(void) setTextExportEnvironment:(BOOL)value
+{
+  [self willChangeValueForKey:@"textExportEnvironment"];
+  self->textExportEnvironment = value;
+  [self didChangeValueForKey:@"textExportEnvironment"];
+}
+//end setTextExportEnvironment:
+
+-(BOOL) textExportBody
+{
+  return self->textExportBody;
+}
+//end textExportBody
+
+-(void) setTextExportBody:(BOOL)value
+{
+  [self willChangeValueForKey:@"textExportBody"];
+  self->textExportBody = value;
+  [self didChangeValueForKey:@"textExportBody"];
+}
+//end setTextExportBody:
+
+-(id) exportFormatOptionsTextPanelDelegate
+{
+  return self->exportFormatOptionsTextPanelDelegate;
+}
+//end exportFormatOptionsTextPanelDelegate
+
+-(void) setExportFormatOptionsTextPanelDelegate:(id)delegate
+{
+  self->exportFormatOptionsTextPanelDelegate = delegate;
+}
+//end setExportFormatOptionsTextPanelDelegate:
+
+#pragma mark ALL
 
 -(IBAction) close:(id)sender
 {
@@ -258,6 +349,8 @@
     [self exportFormatOptionsPanel:self->exportFormatOptionsJpegPanel didCloseWithOK:(senderTag == 0)];
   else if ((senderTag == 2) || (senderTag == 3))
     [self exportFormatOptionsPanel:self->exportFormatOptionsSvgPanel didCloseWithOK:(senderTag == 2)];
+  else if ((senderTag == 4) || (senderTag == 5))
+    [self exportFormatOptionsPanel:self->exportFormatOptionsTextPanel didCloseWithOK:(senderTag == 4)];
 }
 //end close:
 
@@ -270,6 +363,9 @@
   else if ((exportFormatOptionsPanel == self->exportFormatOptionsSvgPanel) &&
       [self->exportFormatOptionsSvgPanelDelegate respondsToSelector:@selector(exportFormatOptionsPanel:didCloseWithOK:)])
     [self->exportFormatOptionsSvgPanelDelegate exportFormatOptionsPanel:exportFormatOptionsPanel didCloseWithOK:ok];
+  else if ((exportFormatOptionsPanel == self->exportFormatOptionsTextPanel) &&
+           [self->exportFormatOptionsTextPanelDelegate respondsToSelector:@selector(exportFormatOptionsPanel:didCloseWithOK:)])
+    [self->exportFormatOptionsTextPanelDelegate exportFormatOptionsPanel:exportFormatOptionsPanel didCloseWithOK:ok];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:
 

@@ -17,6 +17,7 @@
 "PNG bitmap format" = "Imagen de mapa de bits PNG";
 "JPEG bitmap format" = "Imagen de mapa de bits JPEG";
 "MathML text format" = "MathML text format";
+"Text format" = "Text format";
 "Options" = "Opciones";
 "Warning : jpeg does not manage transparency" = "Atención: JPEG nos soporta la transparencia";
 "Warning : pdf2svg path is invalid" = "Atención : La ruta de pdf2svg no es válida";

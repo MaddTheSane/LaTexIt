@@ -35,6 +35,9 @@
   self->saveAccessoryViewOptionsJpegQualityPercent  = [preferencesController exportJpegQualityPercent];
   self->saveAccessoryViewOptionsJpegBackgroundColor = [[preferencesController exportJpegBackgroundColor] retain];
   self->saveAccessoryViewOptionsSvgPdfToSvgPath     = [[preferencesController exportSvgPdfToSvgPath] retain];
+  self->saveAccessoryViewOptionsTextExportPreamble         = [preferencesController exportTextExportPreamble];
+  self->saveAccessoryViewOptionsTextExportEnvironment      = [preferencesController exportTextExportEnvironment];
+  self->saveAccessoryViewOptionsTextExportBody             = [preferencesController exportTextExportBody];
   [self instantiateNibWithOwner:self topLevelObjects:nil];
   return self;
 }
@@ -76,6 +79,8 @@
     tag:(int)EXPORT_FORMAT_JPEG];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"MathML text format", @"MathML text format")
     tag:(int)EXPORT_FORMAT_MATHML];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
+    tag:(int)EXPORT_FORMAT_TEXT];
   [self->saveAccessoryViewOptionsButton setStringValue:
     [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")]];
   [self->saveAccessoryViewScaleLabel setStringValue:
@@ -234,6 +239,42 @@
 }
 //end setSaveAccessoryViewOptionsSvgPdfToSvgPath:
 
+-(BOOL) saveAccessoryViewOptionsTextExportPreamble
+{
+  return self->saveAccessoryViewOptionsTextExportPreamble;
+}
+//end saveAccessoryViewOptionsTextExportPreamble
+
+-(void) setSaveAccessoryViewOptionsTextExportPreamble:(BOOL)value
+{
+  self->saveAccessoryViewOptionsTextExportPreamble = value;
+}
+//end setSaveAccessoryViewOptionsTextExportPreamble:
+
+-(BOOL) saveAccessoryViewOptionsTextExportEnvironment
+{
+  return self->saveAccessoryViewOptionsTextExportEnvironment;
+}
+//end saveAccessoryViewOptionsTextExportEnvironment
+
+-(void) setSaveAccessoryViewOptionsTextExportEnvironment:(BOOL)value
+{
+  self->saveAccessoryViewOptionsTextExportEnvironment = value;
+}
+//end setSaveAccessoryViewOptionsTextExportEnvironment:
+
+-(BOOL) saveAccessoryViewOptionsTextExportBody
+{
+  return self->saveAccessoryViewOptionsTextExportBody;
+}
+//end saveAccessoryViewOptionsTextExportBody
+
+-(void) setSaveAccessoryViewOptionsTextExportBody:(BOOL)value
+{
+  self->saveAccessoryViewOptionsTextExportBody = value;
+}
+//end setSaveAccessoryViewOptionsTextExportBody:
+
 -(NSSavePanel*) currentSavePanel
 {
   return self->currentSavePanel;
@@ -279,6 +320,9 @@
         break;
       case EXPORT_FORMAT_SVG:
         extension = @"svg";
+        break;
+      case EXPORT_FORMAT_TEXT:
+        extension = @"tex";
         break;
     }
 
@@ -327,10 +371,14 @@
     self->saveAccessoryViewExportFormatOptionsPanes = [[ExportFormatOptionsPanes alloc] initWithLoadingFromNib];
     [self->saveAccessoryViewExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
     [self->saveAccessoryViewExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
+    [self->saveAccessoryViewExportFormatOptionsPanes setExportFormatOptionsTextPanelDelegate:self];
   }//end if (!self->saveAccessoryViewExportFormatOptionsPanes)
   [self->saveAccessoryViewExportFormatOptionsPanes setJpegQualityPercent:self->saveAccessoryViewOptionsJpegQualityPercent];
   [self->saveAccessoryViewExportFormatOptionsPanes setJpegBackgroundColor:self->saveAccessoryViewOptionsJpegBackgroundColor];
   [self->saveAccessoryViewExportFormatOptionsPanes setSvgPdfToSvgPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath];
+  [self->saveAccessoryViewExportFormatOptionsPanes setTextExportPreamble:self->saveAccessoryViewOptionsTextExportPreamble];
+  [self->saveAccessoryViewExportFormatOptionsPanes setTextExportEnvironment:self->saveAccessoryViewOptionsTextExportEnvironment];
+  [self->saveAccessoryViewExportFormatOptionsPanes setTextExportBody:self->saveAccessoryViewOptionsTextExportBody];
   NSPanel* panelToOpen = nil;
   export_format_t exportFormat = [self->saveAccessoryViewPopupFormat selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)

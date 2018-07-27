@@ -106,6 +106,8 @@
 -(IBAction) displayLog:(id)sender;
 
 -(IBAction) formatChangeAlignment:(id)sender;
+-(IBAction) formatComment:(id)sender;
+-(IBAction) formatUncomment:(id)sender;
 
 -(IBAction) historyRemoveHistoryEntries:(id)sender;
 -(IBAction) historyClearHistory:(id)sender;

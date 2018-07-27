@@ -358,13 +358,12 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
           <li>Ajout de la variable d'environnement $OUTPUTPDFFILE2 pour les scripts de traitement&nbsp;;</li>
           <li>Correction d'une incompatibilité entre gs >= 9.09 et l'export &quot;avec polices vectorisées&quot;&nbsp;;</li>
           <li>Omission volontaire de la commande \color insérée aux préambules, lorsque la couleur demandée est noire, pour faciliter la personnalisation&nbsp;;</li>
-          <li>Ajout de la préférence &quot;Ne pas couper l'aperçu&quot;&nbsp;;</li>
+          <li>Ajout de la préférence &quot;Ajuster l'aperçu à la fenêtre&quot;&nbsp;;</li>
           <li>Nouvelles méta-données embarquées dans les PDFs pour que iWork'13 ne l'enlève pas&nbsp;;</li>
           <li>Correction de la boîte de dialogue d'export JPEG&nbsp;;</li>
           <li>Correction d'un bug de gestion des couleurs en mode XeLaTeX&nbsp;;</li>
           <li>Correction de régressions avec l'action Automator&nbsp;;</li>
-          <li>Correction du glisser/déposer vers OmniGraffle&nbsp;;</li>
-          <li>Fixed drag'n drop to OmniGraffle.</li>
+          <li>Correction du glisser/déposer vers OmniGraffle.</li>
         </ul>
       ]]></description>
       <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.6.0</sparkle:releaseNotesLink>
@@ -377,6 +376,27 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				length="10417645"
 				sparkle:dsaSignature="MC0CFQCQY0Rv5tom2dSlNsR+2lvvMyNNIwIUQCtLj012+0fZo0lgp+m370kODVo="
 			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.6.1</guid>
+      <title>Version 2.6.1</title>
+			<pubDate>Mon, 19 May 2014 23:14:42 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_6_1.dmg"
+				sparkle:version="2.6.1"
+                   sparkle:shortVersionString="2.6.1"
+				type="application/octet-stream"
+				length="10474295"
+				sparkle:dsaSignature="MC0CFCJcvSSAL3tZs0NSAPIzKaautzCaAhUAnjR99zTfqixYlz61QxCroTrnhYY="
+			/>
+      <description><![CDATA[
+        <ul>
+          <li>Correction de la bounding box des &quot;PDF avec polices vectorisées&quot; pour les rendre compatibles avec Illustrator&nbsp;;</li>
+          <li>Ajout du menu &quot;Format&gt;Commenter/Décommenter&quot;&nbsp;;</li>
+          <li>Raccourcissement des noms des services LaTeXiT pour les rendre plus lisibles dans les préférences clavier de MacOS&nbsp;X.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.6.1</sparkle:releaseNotesLink>
     </item>
   </channel> 
 </rss>

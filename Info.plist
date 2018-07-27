@@ -150,9 +150,9 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.6.0</string>
+	<string>2.6.1</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.6.0</string>
+	<string>2.6.1</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
@@ -214,7 +214,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_DISPLAY</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -267,7 +267,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -320,7 +320,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_INLINE</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -373,7 +373,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_INLINE_CLIPBOARD</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -426,7 +426,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_TEXT</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -479,7 +479,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_TEXT_CLIPBOARD</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -532,7 +532,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_ALIGN</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -585,7 +585,7 @@
 				<string>public.utf8-plain-text</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_ALIGN_CLIPBOARD</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -624,7 +624,7 @@
 				<string>public.rtf</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_MULTIPLE</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -663,7 +663,7 @@
 				<string>public.rtf</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_MULTIPLE_CLIPBOARD</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
@@ -708,7 +708,7 @@
 				<string>com.adobe.pdf</string>
 			</array>
 			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
+			<string>SERVICE_DESCRIPTION_DELATEXISATION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>

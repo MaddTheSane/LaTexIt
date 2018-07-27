@@ -555,6 +555,9 @@
     case EXPORT_FORMAT_SVG:
       extension = @"svg";
       break;
+    case EXPORT_FORMAT_TEXT:
+      extension = @"tex";
+      break;
   }
   
   NSString* fileName = nil;
@@ -579,16 +582,22 @@
       NSData* pdfData = [[historyItem equation] pdfData];
       
       PreferencesController* preferencesController = [PreferencesController sharedController];
-      NSColor*  color = [preferencesController exportJpegBackgroundColor];
-      CGFloat quality = [preferencesController exportJpegQualityPercent];
+      NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                     [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                     [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                     [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                     [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                     [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                     nil];
       NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
-        dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality scaleAsPercent:[preferencesController exportScalePercent]
+        dataForType:exportFormat pdfData:pdfData exportOptions:exportOptions
              compositionConfiguration:[preferencesController compositionConfigurationDocument]
                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
       [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                            ofItemAtPath:filePath error:0];
-      NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
+      NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
       if ((exportFormat != EXPORT_FORMAT_PNG) &&
           (exportFormat != EXPORT_FORMAT_TIFF) &&
           (exportFormat != EXPORT_FORMAT_JPEG))

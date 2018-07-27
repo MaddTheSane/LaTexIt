@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="215"/>
+			<integer value="1646"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -709,6 +709,24 @@
 											</object>
 										</array>
 									</object>
+								</object>
+								<object class="NSMenuItem" id="464912198">
+									<reference key="NSMenu" ref="13714698"/>
+									<string key="NSTitle">Comment</string>
+									<string key="NSKeyEquiv">'</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="380749168"/>
+									<reference key="NSMixedImage" ref="979262368"/>
+								</object>
+								<object class="NSMenuItem" id="31965112">
+									<reference key="NSMenu" ref="13714698"/>
+									<string key="NSTitle">Uncomment</string>
+									<string key="NSKeyEquiv">'</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="380749168"/>
+									<reference key="NSMixedImage" ref="979262368"/>
 								</object>
 							</array>
 						</object>
@@ -2241,6 +2259,22 @@ IHdheQ</string>
 					</object>
 					<int key="connectionID">1659</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">formatComment:</string>
+						<reference key="source" ref="574030839"/>
+						<reference key="destination" ref="464912198"/>
+					</object>
+					<int key="connectionID">1662</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">formatUncomment:</string>
+						<reference key="source" ref="574030839"/>
+						<reference key="destination" ref="31965112"/>
+					</object>
+					<int key="connectionID">1663</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -3226,6 +3260,8 @@ IHdheQ</string>
 						<reference key="object" ref="13714698"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="306924482"/>
+							<reference ref="464912198"/>
+							<reference ref="31965112"/>
 						</array>
 						<reference key="parent" ref="514177512"/>
 					</object>
@@ -3272,6 +3308,16 @@ IHdheQ</string>
 						<int key="objectID">1657</int>
 						<reference key="object" ref="1020434743"/>
 						<reference key="parent" ref="389609715"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1660</int>
+						<reference key="object" ref="464912198"/>
+						<reference key="parent" ref="13714698"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1661</int>
+						<reference key="object" ref="31965112"/>
+						<reference key="parent" ref="13714698"/>
 					</object>
 				</array>
 			</object>
@@ -3475,7 +3521,7 @@ IHdheQ</string>
 				<boolean value="YES" key="1640.ImportedFromIB2"/>
 				<string key="1643.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1645.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1646.IBEditorWindowLastContentRect">{{344, 713}, {83, 23}}</string>
+				<string key="1646.IBEditorWindowLastContentRect">{{371, 571}, {165, 63}}</string>
 				<string key="1646.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1647.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1648.IBEditorWindowLastContentRect">{{427, 653}, {177, 83}}</string>
@@ -3486,6 +3532,8 @@ IHdheQ</string>
 				<string key="1652.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1657.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1657.ImportedFromIB2"/>
+				<string key="1660.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1661.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="167.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="167.ImportedFromIB2"/>
 				<string key="168.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3550,7 +3598,7 @@ IHdheQ</string>
 				<string key="24.IBEditorWindowLastContentRect">{{547, 613}, {248, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
-				<string key="29.IBEditorWindowLastContentRect">{{55, 736}, {690, 20}}</string>
+				<string key="29.IBEditorWindowLastContentRect">{{82, 634}, {690, 20}}</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="29.ImportedFromIB2"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3580,7 +3628,7 @@ IHdheQ</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1659</int>
+			<int key="maxID">1663</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3597,6 +3645,8 @@ IHdheQ</string>
 						<string key="displaySponsors:">id</string>
 						<string key="exportImage:">id</string>
 						<string key="formatChangeAlignment:">id</string>
+						<string key="formatComment:">id</string>
+						<string key="formatUncomment:">id</string>
 						<string key="historyChangeLock:">id</string>
 						<string key="historyClearHistory:">id</string>
 						<string key="historyOpen:">id</string>
@@ -3670,6 +3720,14 @@ IHdheQ</string>
 						</object>
 						<object class="IBActionInfo" key="formatChangeAlignment:">
 							<string key="name">formatChangeAlignment:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="formatComment:">
+							<string key="name">formatComment:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="formatUncomment:">
+							<string key="name">formatUncomment:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="historyChangeLock:">
@@ -4282,6 +4340,8 @@ IHdheQ</string>
 						<string key="changePreamble:">id</string>
 						<string key="displayLastLog:">id</string>
 						<string key="exportImage:">id</string>
+						<string key="formatComment:">id</string>
+						<string key="formatUncomment:">id</string>
 						<string key="latexize:">id</string>
 						<string key="latexizeAndExport:">id</string>
 						<string key="reexportImage:">id</string>
@@ -4305,6 +4365,14 @@ IHdheQ</string>
 						</object>
 						<object class="IBActionInfo" key="exportImage:">
 							<string key="name">exportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="formatComment:">
+							<string key="name">formatComment:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="formatUncomment:">
+							<string key="name">formatUncomment:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="latexize:">
@@ -4628,17 +4696,20 @@ IHdheQ</string>
 				<object class="IBPartialClassDescription">
 					<string key="className">MyImageView</string>
 					<string key="superclassName">NSImageView</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">copy:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">copy:</string>
-						<object class="IBActionInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="copy:">id</string>
+						<string key="paste:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="copy:">
 							<string key="name">copy:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-					</object>
+						<object class="IBActionInfo" key="paste:">
+							<string key="name">paste:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">document</string>
 						<string key="NS.object.0">MyDocument</string>

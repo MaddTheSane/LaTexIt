@@ -566,14 +566,23 @@ typedef NSInteger NSDraggingContext;
       case EXPORT_FORMAT_SVG:
         extension = @"svg";
         break;
+      case EXPORT_FORMAT_TEXT:
+        extension = @"tex";
+        break;
     }
 
-    NSColor*   color = [preferencesController exportJpegBackgroundColor];
-    CGFloat  quality = [preferencesController exportJpegQualityPercent];
-    NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData jpegColor:color
-                                                  jpegQuality:quality scaleAsPercent:[preferencesController exportScalePercent]
-                                                  compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                                                  uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+    NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                   [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                   [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                   [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                   [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                   [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                   nil];
+    NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData
+                     exportOptions:exportOptions
+                     compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                     uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
     if (extension)
     {
       NSString* fileName = nil;
@@ -592,7 +601,7 @@ typedef NSInteger NSDraggingContext;
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                              ofItemAtPath:filePath error:0];
-        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
+        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
             (exportFormat != EXPORT_FORMAT_JPEG))
@@ -634,10 +643,19 @@ typedef NSInteger NSDraggingContext;
   DebugLog(1, @"exportFormat = %d", exportFormat);
   DebugLog(1, @"hasAlreadyCachedData = %d", hasAlreadyCachedData);
   self->transientLastExportFormat = exportFormat;
+  
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 nil];
   NSData* data = hasAlreadyCachedData ? self->transientDragData :
     [[LaTeXProcessor sharedLaTeXProcessor]
-      dataForType:exportFormat pdfData:self->pdfData jpegColor:[preferencesController exportJpegBackgroundColor]
-      jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
+      dataForType:exportFormat pdfData:self->pdfData
+      exportOptions:exportOptions
       compositionConfiguration:[preferencesController compositionConfigurationDocument]
       uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   if (!hasAlreadyCachedData)
@@ -680,6 +698,10 @@ typedef NSInteger NSDraggingContext;
       case EXPORT_FORMAT_SVG:
         extension = @"svg";
         uti = @"public.svg-image";
+        break;
+      case EXPORT_FORMAT_TEXT:
+        extension = @"tex";
+        uti = @"public.text";
         break;
     }
     DebugLog(1, @"uti = %@", uti);

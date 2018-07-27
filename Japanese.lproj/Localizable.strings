@@ -197,6 +197,7 @@
 "PNG bitmap format" = "PNG";
 "JPEG bitmap format" = "JPEG";
 "MathML text format" = "MathML";
+"Text format" = "Text";
 "Migrating history to new format" = "履歴を新しいフォーマットに移行しています";
 "Migrating library to new format" = "ライブラリを新しいフォーマットに移行しています";
 
@@ -233,6 +234,9 @@
 "Scale" = "スケール";
 "Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
 "Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";
+"Export preamble" = "Export preamble";
+"Export environment" = "Export environment";
+"Export body" = "Export body";
 
 /* Library */
 "Library" = "ライブラリ";

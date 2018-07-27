@@ -203,6 +203,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     tag:(int)EXPORT_FORMAT_JPEG];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"MathML text format", @"MathML text format")
     tag:(int)EXPORT_FORMAT_MATHML];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"Text format", @"Text format")
+    tag:(int)EXPORT_FORMAT_TEXT];
   [self->generalExportFormatPopupButton setTarget:self];
   [self->generalExportFormatPopupButton setAction:@selector(nilAction:)];
   [self->generalExportFormatPopupButton bind:NSSelectedTagBinding toObject:userDefaultsController
@@ -219,7 +221,10 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsInTransformer transformerWithReferences:
-        [NSArray arrayWithObjects:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG], [NSNumber numberWithInt:EXPORT_FORMAT_SVG], nil]],
+        [NSArray arrayWithObjects:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG],
+                                  [NSNumber numberWithInt:EXPORT_FORMAT_SVG],
+                                  [NSNumber numberWithInt:EXPORT_FORMAT_TEXT],
+                                  nil]],
         NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatOptionsButton setTarget:self];
   [self->generalExportFormatOptionsButton setAction:@selector(generalExportFormatOptionsOpen:)];
@@ -1097,10 +1102,15 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     self->generalExportFormatOptionsPanes = [[ExportFormatOptionsPanes alloc] initWithLoadingFromNib];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
+    [self->generalExportFormatOptionsPanes setExportFormatOptionsTextPanelDelegate:self];
   }//end if (!self->generalExportFormatOptionsPanes)
   [self->generalExportFormatOptionsPanes setJpegQualityPercent:[[PreferencesController sharedController] exportJpegQualityPercent]];
   [self->generalExportFormatOptionsPanes setJpegBackgroundColor:[[PreferencesController sharedController] exportJpegBackgroundColor]];
   [self->generalExportFormatOptionsPanes setSvgPdfToSvgPath:[[PreferencesController sharedController] exportSvgPdfToSvgPath]];
+  [self->generalExportFormatOptionsPanes setTextExportPreamble:[[PreferencesController sharedController] exportTextExportPreamble]];
+  [self->generalExportFormatOptionsPanes setTextExportEnvironment:[[PreferencesController sharedController] exportTextExportEnvironment]];
+  [self->generalExportFormatOptionsPanes setTextExportBody:[[PreferencesController sharedController] exportTextExportBody]];
+ 
   
   NSPanel* panelToOpen = nil;
   export_format_t format = [self->generalExportFormatPopupButton selectedTag];
@@ -1108,6 +1118,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
   else if (format == EXPORT_FORMAT_SVG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
+  else if (format == EXPORT_FORMAT_TEXT)
+    panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel];
   if (panelToOpen)
     [NSApp beginSheet:panelToOpen modalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
@@ -1126,6 +1138,12 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     {
       [[PreferencesController sharedController] setExportSvgPdfToSvgPath:[self->generalExportFormatOptionsPanes svgPdfToSvgPath]];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
+    {
+      [[PreferencesController sharedController] setExportTextExportPreamble:[self->generalExportFormatOptionsPanes textExportPreamble]];
+      [[PreferencesController sharedController] setExportTextExportEnvironment:[self->generalExportFormatOptionsPanes textExportEnvironment]];
+      [[PreferencesController sharedController] setExportTextExportBody:[self->generalExportFormatOptionsPanes textExportBody]];
+    }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
   }//end if (ok)
   [NSApp endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];

@@ -351,6 +351,8 @@ static NSMutableDictionary* cachePaths = nil;
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_JPEG];
   [editCopyImageAsMenu addItemWithTitle:@"MathML" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_MATHML];
+  [editCopyImageAsMenu addItemWithTitle:@"Text" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_TEXT];
 }
 //end awakeFromNib
 
@@ -873,6 +875,16 @@ static NSMutableDictionary* cachePaths = nil;
     if ([sender tag] == ALIGNMENT_MODE_NONE)
       [sender setKeyEquivalentModifierMask:[sender keyEquivalentModifierMask]|NSAlternateKeyMask];
   }
+  else if ([sender action] == @selector(formatComment:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy];// && ([myDocument latexModeApplied] == LATEX_MODE_TEXT);
+  }
+  else if ([sender action] == @selector(formatUncomment:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy];// && ([myDocument latexModeApplied] == LATEX_MODE_TEXT);
+  }
   else if ([sender action] == @selector(showOrHideHistory:))
   {
     BOOL isHistoryVisible = [[self->historyWindowController window] isVisible];
@@ -1274,7 +1286,23 @@ static NSMutableDictionary* cachePaths = nil;
     [document formatChangeAlignment:alignment];
   }//end if (document)
 }
-//end formatChangeAlignment
+//end formatChangeAlignment:
+
+-(IBAction) formatComment:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  if (document)
+    [document formatComment:sender];
+}
+//end formatComment:
+
+-(IBAction) formatUncomment:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  if (document)
+    [document formatUncomment:sender];
+}
+//end formatUncomment:
 
 -(IBAction) makeLatexAndExport:(id)sender
 {
@@ -1595,6 +1623,7 @@ static NSMutableDictionary* cachePaths = nil;
     case EXPORT_FORMAT_JPEG : result = @"JPEG"; break;
     case EXPORT_FORMAT_MATHML : result = @"MATHML"; break;
     case EXPORT_FORMAT_SVG : result = @"SVG"; break;
+    case EXPORT_FORMAT_TEXT : result = @"TEXT"; break;
   }//end switch(format)
   return result;
 }
@@ -2331,14 +2360,23 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_SVG:
               extension = @"svg";
               break;
+            case EXPORT_FORMAT_TEXT:
+              extension = @"tex";
+              break;
           }//end switch(exportFormat)
 
+          NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                         [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                         [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                         [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                         [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                         [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                         nil];
           NSString* attachedFile     = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
           NSString* attachedFilePath = [directory stringByAppendingPathComponent:attachedFile];
           NSData*   attachedData     = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
-                                         jpegColor:[preferencesController exportJpegBackgroundColor]
-                                         jpegQuality:[preferencesController exportJpegQualityPercent]
-                                         scaleAsPercent:[preferencesController exportScalePercent]
+                                         exportOptions:exportOptions
                                          compositionConfiguration:[preferencesController compositionConfigurationDocument]
                                          uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
@@ -2573,14 +2611,23 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_SVG:
               extension = @"svg";
               break;
+            case EXPORT_FORMAT_TEXT:
+              extension = @"tex";
+              break;
           }
 
+          NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                         [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                         [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                         [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                         [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                         [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                         nil];
           NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
-                                     jpegColor:[preferencesController exportJpegBackgroundColor]
-                                     jpegQuality:[preferencesController exportJpegQualityPercent]
-                                      scaleAsPercent:[preferencesController exportScalePercent]
-                                      compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+                           exportOptions:exportOptions
+                           compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                           uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           //now feed the pasteboard
           //[pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
@@ -2892,6 +2939,9 @@ static NSMutableDictionary* cachePaths = nil;
                 case EXPORT_FORMAT_SVG:
                   extension = @"svg";
                   break;
+                case EXPORT_FORMAT_TEXT:
+                  extension = @"tex";
+                  break;
               }
 
               if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
@@ -2909,12 +2959,19 @@ static NSMutableDictionary* cachePaths = nil;
                 [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXX", filePrefix]
                                                                 extension:extension
                                                               outFilePath:&attachedFilePath workingDirectory:directory];
+              
+              NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                             [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                             [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                             [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                             [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                             [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                             [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                             nil];
               NSData* attachedData = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
-                                       jpegColor:[preferencesController exportJpegBackgroundColor]
-                                       jpegQuality:[preferencesController exportJpegQualityPercent]
-                                        scaleAsPercent:[preferencesController exportScalePercent]
-                                        compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+                                       exportOptions:exportOptions
+                                       compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                                       uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
               //extracts the baseline of the equation, if possible
               CGFloat newBaseline = [originalBaseline floatValue];

@@ -109,6 +109,8 @@
 -(IBAction) changeBodyTemplate:(id)sender;
 
 -(void) formatChangeAlignment:(alignment_mode_t)value;
+-(void) formatComment:(id)sender;
+-(void) formatUncomment:(id)sender;
 
 -(MyImageView*) imageView;
 -(NSButton*)    lowerBoxLatexizeButton;

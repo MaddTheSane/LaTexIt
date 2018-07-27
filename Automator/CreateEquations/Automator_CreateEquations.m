@@ -149,6 +149,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     CGFloat exportJpegQualityPercent = [preferencesController exportJpegQualityPercent];
     NSData* exportJpegBackgroundColorAsData = [preferencesController exportJpegBackgroundColorData];
     NSString* exportSvgPdfToSvgPath = [preferencesController exportSvgPdfToSvgPath];
+    BOOL exportTextExportPreamble = [preferencesController exportTextExportPreamble];
+    BOOL exportTextExportEnvironment = [preferencesController exportTextExportEnvironment];
+    BOOL exportTextExportBody = [preferencesController exportTextExportBody];
     [dict setObject:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
     [dict setObject:[NSNumber numberWithFloat:fontSize] forKey:@"fontSize"];
     [dict setObject:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
@@ -156,6 +159,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [dict setObject:[NSNumber numberWithDouble:exportJpegQualityPercent] forKey:@"exportJpegQualityPercent"];
     [dict setObject:exportJpegBackgroundColorAsData forKey:@"exportJpegBackgroundColor"];
     [dict setObject:exportSvgPdfToSvgPath forKey:@"exportSvgPdfToSvgPath"];
+    [dict setObject:[NSNumber numberWithBool:exportTextExportPreamble] forKey:@"exportTextExportPreamble"];
+    [dict setObject:[NSNumber numberWithBool:exportTextExportEnvironment] forKey:@"exportTextExportEnvironment"];
+    [dict setObject:[NSNumber numberWithBool:exportTextExportBody] forKey:@"exportTextExportBody"];
     if (fontColorData)
       [dict setObject:fontColorData forKey:@"fontColorData"];
     [self setParameters:dict];
@@ -215,6 +221,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
                                               tag:(int)EXPORT_FORMAT_JPEG];
   [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"MathML text format", @"MathML text format")
                                               tag:(int)EXPORT_FORMAT_MATHML];
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
+                                              tag:(int)EXPORT_FORMAT_TEXT];
   [self->exportFormatPopupButton setTarget:self];
   [self->exportFormatPopupButton setAction:@selector(nilAction:)];
   [self->exportFormatPopupButton sizeToFit];
@@ -312,7 +320,10 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   NSColor* exportJpegBackgroundColor = !exportJpegBackgroundColorData ? [NSColor whiteColor] :
                                        [NSColor colorWithData:exportJpegBackgroundColorData];
   //NSColor* exportSvgPdfToSvgPath = [parameters objectForKey:@"exportSvgPdfToSvgPath"];
-
+  BOOL exportTextExportPreamble = [[[parameters objectForKey:@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
+  BOOL exportTextExportEnvironment = [[[parameters objectForKey:@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
+  BOOL exportTextExportBody = [[[parameters objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
+  
   DebugLog(1, @"parameters = %@", parameters);
   DebugLog(1, @"equationMode = %d", equationMode);
   DebugLog(1, @"fontSize = %f", fontSize);
@@ -434,14 +445,20 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       DebugLog(1, @"errors = %@", errors);
       DebugLog(1, @"pdfData = %p (%ld)", pdfData, [pdfData length]);
       DebugLog(1, @"exportFormat = %d", exportFormat);
+      NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithFloat:exportJpegQualityPercent], @"jpegQuality",
+        [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+        [NSNumber numberWithBool:exportTextExportPreamble], @"textExportPreamble",
+        [NSNumber numberWithBool:exportTextExportEnvironment], @"textExportEnvironment",
+        [NSNumber numberWithBool:exportTextExportBody], @"textExportBody",
+        exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
+        nil];
       NSData* convertedData = [[LaTeXProcessor sharedLaTeXProcessor]
         dataForType:exportFormat
             pdfData:pdfData
-             jpegColor:exportJpegBackgroundColor
-           jpegQuality:exportJpegQualityPercent
-           scaleAsPercent:[preferencesController exportScalePercent]
-             compositionConfiguration:[preferencesController compositionConfigurationDocument]
-             uniqueIdentifier:uniqueIdentifier];
+        exportOptions:exportOptions
+         compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                 uniqueIdentifier:uniqueIdentifier];
       DebugLog(1, @"convertedData = %p (%ld)", convertedData, [convertedData length]);
       if (convertedData)
       {
@@ -469,6 +486,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
             break;
           case EXPORT_FORMAT_SVG:
             extension = @"svg";
+            break;
+          case EXPORT_FORMAT_TEXT:
+            extension = @"tex";
             break;
         }
         NSString* outFilePath2 = [[outFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
@@ -666,6 +686,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     self->generalExportFormatOptionsPanes = [[ExportFormatOptionsPanes alloc] initWithLoadingFromNib];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
+    [self->generalExportFormatOptionsPanes setExportFormatOptionsTextPanelDelegate:self];
   }//end if (!self->generalExportFormatOptionsPanes)
   [self->generalExportFormatOptionsPanes setJpegQualityPercent:
     [[[self parameters] objectForKey:@"exportJpegQualityPercent"] doubleValue]];
@@ -673,6 +694,12 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [NSColor colorWithData:[[self parameters] objectForKey:@"exportJpegBackgroundColor"]]];
   [self->generalExportFormatOptionsPanes setSvgPdfToSvgPath:
     [[self parameters] objectForKey:@"exportSvgPdfToSvgPath"]];
+  [self->generalExportFormatOptionsPanes setTextExportPreamble:
+   [[[[self parameters] objectForKey:@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue]];
+  [self->generalExportFormatOptionsPanes setTextExportEnvironment:
+   [[[[self parameters] objectForKey:@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue]];
+  [self->generalExportFormatOptionsPanes setTextExportBody:
+   [[[[self parameters] objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue]];
   NSPanel* panelToOpen = nil;
   export_format_t exportFormat = [self->exportFormatPopupButton selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
@@ -697,6 +724,12 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     {
       [[self parameters] setObject:[self->generalExportFormatOptionsPanes svgPdfToSvgPath] forKey:@"exportSvgPdfToSvgPath"];
+    }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
+    {
+      [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportPreamble]] forKey:@"exportTextExportPreamble"];
+      [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportEnvironment]] forKey:@"exportTextExportEnvironment"];
+      [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportBody]] forKey:@"exportTextExportBody"];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
   }//end if (ok)
   [NSApp endSheet:exportFormatOptionsPanel];

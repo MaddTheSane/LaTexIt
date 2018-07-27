@@ -17,6 +17,7 @@
 "PNG bitmap format" = "PNG";
 "JPEG bitmap format" = "JPEG";
 "MathML text format" = "MathML";
+"Text format" = "Text";
 "Options" = "オプション";
 "Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
 "Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";

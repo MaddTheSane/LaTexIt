@@ -39,12 +39,15 @@ NSString* LaTeXiTVersionKey = @"version";
 
 NSString* DocumentStyleKey = @"DocumentStyle";
 
-NSString* DragExportTypeKey             = @"DragExportType";
-NSString* DragExportJpegColorKey        = @"DragExportJpegColor";
-NSString* DragExportJpegQualityKey      = @"DragExportJpegQuality";
-NSString* DragExportSvgPdfToSvgPathKey  = @"DragExportSvgPdfToSvgPath";
-NSString* DragExportScaleAsPercentKey   = @"DragExportScaleAsPercent";
-NSString* DefaultImageViewBackgroundKey = @"DefaultImageViewBackground";
+NSString* DragExportTypeKey                  = @"DragExportType";
+NSString* DragExportJpegColorKey             = @"DragExportJpegColor";
+NSString* DragExportJpegQualityKey           = @"DragExportJpegQuality";
+NSString* DragExportSvgPdfToSvgPathKey       = @"DragExportSvgPdfToSvgPath";
+NSString* DragExportTextExportPreambleKey    = @"DragExportTextExportPreambleKey";
+NSString* DragExportTextExportEnvironmentKey = @"DragExportTextExportEnvironmentKey";
+NSString* DragExportTextExportBodyKey        = @"DragExportTextExportBodyKey";
+NSString* DragExportScaleAsPercentKey        = @"DragExportScaleAsPercent";
+NSString* DefaultImageViewBackgroundKey      = @"DefaultImageViewBackground";
 NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey = @"DefaultAutomaticHighContrastedPreviewBackground";
 NSString* DefaultDoNotClipPreviewKey    = @"DefaultDoNotClipPreview";
 NSString* DefaultColorKey               = @"DefaultColor";
@@ -230,6 +233,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                [[NSColor whiteColor] colorAsData],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
                                                @"", DragExportSvgPdfToSvgPathKey,
+                                               [NSNumber numberWithBool:YES], DragExportTextExportPreambleKey,
+                                               [NSNumber numberWithBool:YES], DragExportTextExportEnvironmentKey,
+                                               [NSNumber numberWithBool:YES], DragExportTextExportBodyKey,
                                                [NSNumber numberWithFloat:100],   DragExportScaleAsPercentKey,
                                                [[NSColor whiteColor] colorAsData],      DefaultImageViewBackgroundKey,
                                                [NSNumber numberWithBool:NO],     DefaultAutomaticHighContrastedPreviewBackgroundKey,
@@ -430,6 +436,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_PNG];
     else if ([exportFormat isEqualToString:@"jpeg"])
       exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_JPEG];
+    else if ([exportFormat isEqualToString:@"svg"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_SVG];
+    else if ([exportFormat isEqualToString:@"text"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_TEXT];
     else
       exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_PDF];
     [userDefaults setObject:exportFormat forKey:DragExportTypeKey];
@@ -609,6 +619,72 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     CFPreferencesSetAppValue((CFStringRef)DragExportSvgPdfToSvgPathKey, value, (CFStringRef)LaTeXiTAppKey);
 }
 //end setExportSvgPdfToSvgPath:
+
+-(BOOL) exportTextExportPreamble
+{
+  BOOL result = NO;
+  NSNumber* number = nil;
+  if (self->isLaTeXiT)
+    number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportTextExportPreambleKey];
+  else
+    number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DragExportTextExportPreambleKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  result = !number ? NO : [number boolValue];
+  return result;
+}
+//end exportTextExportPreamble
+
+-(void) setExportTextExportPreamble:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportTextExportPreambleKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)DragExportTextExportPreambleKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setExportTextExportPreamble:
+
+-(BOOL) exportTextExportEnvironment
+{
+  BOOL result = NO;
+  NSNumber* number = nil;
+  if (self->isLaTeXiT)
+    number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportTextExportEnvironmentKey];
+  else
+    number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DragExportTextExportEnvironmentKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  result = !number ? NO : [number boolValue];
+  return result;
+}
+//end exportTextExportEnvironment
+
+-(void) setExportTextExportEnvironment:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportTextExportEnvironmentKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)DragExportTextExportEnvironmentKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setExportTextExportEnvironment:
+
+-(BOOL) exportTextExportBody
+{
+  BOOL result = NO;
+  NSNumber* number = nil;
+  if (self->isLaTeXiT)
+    number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportTextExportBodyKey];
+  else
+    number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DragExportTextExportBodyKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+  result = !number ? NO : [number boolValue];
+  return result;
+}
+//end exportTextExportBody
+
+-(void) setExportTextExportBody:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportTextExportBodyKey];
+  else
+    CFPreferencesSetAppValue((CFStringRef)DragExportTextExportBodyKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+}
+//end setExportTextExportBody:
 
 -(CGFloat) exportScalePercent
 {
@@ -2221,20 +2297,37 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         multiLatexisationSendTypes, [NSNumber numberWithInt:SERVICE_MULTILATEXIZE_CLIPBOARD],
         deLatexisationSendTypes, [NSNumber numberWithInt:SERVICE_DELATEXIZE],
         nil];
-        
+      NSDictionary* serviceDescriptionsByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
+        @"SERVICE_DESCRIPTION_ALIGN", [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN],
+        @"SERVICE_DESCRIPTION_ALIGN_CLIPBOARD", [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN_CLIPBOARD],
+        @"SERVICE_DESCRIPTION_DISPLAY", [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY],
+        @"SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD", [NSNumber numberWithInt:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD],
+        @"SERVICE_DESCRIPTION_INLINE", [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE],
+        @"SERVICE_DESCRIPTION_INLINE_CLIPBOARD", [NSNumber numberWithInt:SERVICE_LATEXIZE_INLINE_CLIPBOARD],
+        @"SERVICE_DESCRIPTION_TEXT", [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT],
+        @"SERVICE_DESCRIPTION_TEXT_CLIPBOARD", [NSNumber numberWithInt:SERVICE_LATEXIZE_TEXT_CLIPBOARD],
+        @"SERVICE_DESCRIPTION_MULTIPLE", [NSNumber numberWithInt:SERVICE_MULTILATEXIZE],
+        @"SERVICE_DESCRIPTION_MULTIPLE_CLIPBOARD", [NSNumber numberWithInt:SERVICE_MULTILATEXIZE_CLIPBOARD],
+        @"SERVICE_DESCRIPTION_DELATEXISATION", [NSNumber numberWithInt:SERVICE_DELATEXIZE],
+        nil];
+      
+      
       NSArray* currentServiceShortcuts = [self serviceShortcuts];
       enumerator = [currentServiceShortcuts objectEnumerator];
       service = nil;
       while((service = [enumerator nextObject]))
       {
-        NSNumber* serviceIdentifier = [service objectForKey:ServiceShortcutIdentifierKey];
-        NSString* serviceTitle      = [self serviceDescriptionForIdentifier:(service_identifier_t)[serviceIdentifier intValue]];
-        NSString* menuItemName      = [@"LaTeXiT/" stringByAppendingString:serviceTitle];
-        NSString* serviceMessage    = [serviceNameByIdentifier objectForKey:serviceIdentifier];
-        NSString* shortcutString    = [service objectForKey:ServiceShortcutStringKey];
-        BOOL      shortcutEnabled   = [[service objectForKey:ServiceShortcutEnabledKey] boolValue];
-        NSArray*  returnTypes       = [returnTypesByServiceIdentifier objectForKey:serviceIdentifier];
-        NSArray*  sendTypes         = [sendTypesByServiceIdentifier objectForKey:serviceIdentifier];
+        NSNumber* serviceIdentifier  = [service objectForKey:ServiceShortcutIdentifierKey];
+        NSString* serviceTitle       = [self serviceDescriptionForIdentifier:(service_identifier_t)[serviceIdentifier intValue]];
+        NSString* menuItemName       = [@"LaTeXiT/" stringByAppendingString:serviceTitle];
+        NSString* serviceMessage     = [serviceNameByIdentifier objectForKey:serviceIdentifier];
+        NSString* shortcutString     = [service objectForKey:ServiceShortcutStringKey];
+        BOOL      shortcutEnabled    = [[service objectForKey:ServiceShortcutEnabledKey] boolValue];
+        NSArray*  returnTypes        = [returnTypesByServiceIdentifier objectForKey:serviceIdentifier];
+        NSArray*  sendTypes          = [sendTypesByServiceIdentifier objectForKey:serviceIdentifier];
+        NSString* serviceDescription = [NSString stringWithFormat:@"%@\n%@",
+                                          @"SERVICE_DESCRIPTION",
+                                          [serviceDescriptionsByServiceIdentifier objectForKey:serviceIdentifier]];
 
         NSDictionary* serviceItemPlist =
           [NSDictionary dictionaryWithObjectsAndKeys:
@@ -2245,7 +2338,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
             [NSDictionary dictionaryWithObjectsAndKeys:menuItemName, @"default", nil], @"NSMenuItem",
             !serviceMessage ? @"" : serviceMessage, @"NSMessage",
             @"LaTeXiT", @"NSPortName",
-            @"SERVICE_DESCRIPTION", @"NSServiceDescription",
+            !serviceDescription ? @"" : serviceDescription, @"NSServiceDescription",
             !returnTypes ? [NSArray array] : returnTypes, @"NSReturnTypes",
             !sendTypes ? [NSArray array] : sendTypes, @"NSSendTypes",
             [[NSNumber numberWithInt:30000] stringValue], @"NSTimeOut",

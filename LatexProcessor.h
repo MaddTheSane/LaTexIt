@@ -74,7 +74,7 @@ extern NSString* LatexizationDidEndNotification;
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
 
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
-             jpegColor:(NSColor*)color jpegQuality:(CGFloat)quality scaleAsPercent:(CGFloat)scaleAsPercent
+             exportOptions:(NSDictionary*)exportOptions
              compositionConfiguration:(NSDictionary*)compositionConfiguration
              uniqueIdentifier:(NSString*)uniqueIdentifier;
 @end

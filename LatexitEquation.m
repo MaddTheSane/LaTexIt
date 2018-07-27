@@ -1144,7 +1144,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.6.0"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.6.1"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1826,11 +1826,18 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
   //Stores the data in the pasteboard corresponding to what the user asked for (pdf, jpeg, tiff...)
   export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 nil];
   NSData* data = lazyDataProvider ? nil :
     [[LaTeXProcessor sharedLaTeXProcessor]
       dataForType:exportFormat pdfData:pdfData
-      jpegColor:[preferencesController exportJpegBackgroundColor] jpegQuality:[preferencesController exportJpegQualityPercent]
-      scaleAsPercent:[preferencesController exportScalePercent]
+      exportOptions:exportOptions
       compositionConfiguration:[preferencesController compositionConfigurationDocument]
       uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
@@ -1879,6 +1886,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (!lazyDataProvider) [pboard setData:data forType:GetMySVGPboardType()];
       if (!lazyDataProvider) [pboard setData:data forType:@"public.svg-image"];
       break;
+    case EXPORT_FORMAT_TEXT:
+      [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, @"public.text", nil] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSStringPboardType];
+      if (!lazyDataProvider) [pboard setData:data forType:@"public.text"];
+      break;
   }//end switch
 }
 //end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
@@ -1887,11 +1899,18 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString*)type
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 nil];
   NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
     dataForType:[preferencesController exportFormatCurrentSession]
         pdfData:[self pdfData]
-      jpegColor:[preferencesController exportJpegBackgroundColor]
-    jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
+      exportOptions:exportOptions
     compositionConfiguration:[preferencesController compositionConfigurationDocument]
     uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   [pasteboard setData:data forType:type];
@@ -1901,7 +1920,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.6.0", @"version",
+       @"2.6.1", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",
