@@ -643,5 +643,24 @@
 				sparkle:dsaSignature="MCwCFFN6ut29qozMdSm/G/7DFAP32mNAAhQWZ3uLh61V8+9jtsy4PBdxfWrxlA=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.10.1</guid>
+      <title>Version 2.10.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>fixed last-minute regression regarding drag'n dropping from the main window.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.10.1</sparkle:releaseNotesLink>
+			<pubDate>Sat, 31 Mar 2018 22:28:02 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_10_1.dmg"
+				sparkle:version="2.10.1"
+                   sparkle:shortVersionString="2.10.1"
+				type="application/octet-stream"
+				length="11806579"
+				sparkle:dsaSignature="MCwCFBFsTPffxx7/NU1WPHRYLQJsluVeAhQhVc07LnpM/SBCoRyfbEpl4LQtlg=="
+			/>
+    </item>
   </channel>
 </rss>
