@@ -20,5 +20,6 @@
 -(NSString*) rgbaString;
 
 -(float) grayLevel;
+-(BOOL)  isRGBEqualTo:(NSColor*)other;
 
 @end

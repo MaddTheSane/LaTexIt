@@ -78,6 +78,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [backgroundColor autorelease];
   NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
   backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
+  //NSColor* colorFromUserDefaults = [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:DefaultImageViewBackgroundKey]];
+  //if (!backgroundColor && ![newColor isRGBEqualTo:colorFromUserDefaults])
+  //  backgroundColor = [colorFromUserDefaults retain];
+    
   [self setNeedsDisplay:YES];
   if (updateHistoryItem && pdfData)
     [self setPDFData:[[document historyItemWithCurrentState] annotatedPDFDataUsingPDFKeywords:YES] cachedImage:[self image]];

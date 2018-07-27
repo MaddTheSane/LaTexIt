@@ -53,6 +53,7 @@ NSString* SyntaxColoringCommandColorKey        = @"LaTeXiT_SyntaxColoringCommand
 NSString* SyntaxColoringMathsColorKey          = @"LaTeXiT_SyntaxColoringMathsColorKey";
 NSString* SyntaxColoringKeywordColorKey        = @"LaTeXiT_SyntaxColoringKeywordColorKey";
 NSString* SyntaxColoringCommentColorKey        = @"LaTeXiT_SyntaxColoringCommentColorKey";
+NSString* ReducedTextAreaStateKey              = @"LaTeXiT_ReducedTextAreaStateKey";
 
 NSString* DefaultPreambleAttributedKey = @"LaTeXiT_DefaultPreambleAttributedKey";
 NSString* DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
@@ -260,6 +261,7 @@ static PreferencesController* sharedController = nil;
                                                [[NSColor blueColor]    data], SyntaxColoringCommandColorKey,
                                                [[NSColor magentaColor] data], SyntaxColoringMathsColorKey,
                                                [[NSColor blueColor]    data], SyntaxColoringKeywordColorKey,
+                                               [NSNumber numberWithInt:NSOffState], ReducedTextAreaStateKey,
                                                [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] data], SyntaxColoringCommentColorKey,
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
                                                defaultFontAsData, DefaultFontKey,
@@ -524,6 +526,7 @@ static PreferencesController* sharedController = nil;
   if ([fontManager delegate] == self)
     [fontManager setDelegate:nil];
 }
+//end toolbarHit:
 
 -(void) awakeFromNib
 {
@@ -575,6 +578,8 @@ static PreferencesController* sharedController = nil;
   [syntaxColoringKeywordColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringKeywordColorKey]]];
   [syntaxColoringCommentColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringCommentColorKey]]];
   [self changeSyntaxColoringConfiguration:enableSyntaxColoringButton];
+  
+  [reduceTextAreaButton setState:[userDefaults integerForKey:ReducedTextAreaStateKey]];
 
   //[preambleTextView setDelegate:self];//No ! preambleTextView's delegate is itself to manage forbidden lines
   //[preambleTextView setForbiddenLine:0 forbidden:YES];//finally, the user is allowed to modify
@@ -713,7 +718,10 @@ static PreferencesController* sharedController = nil;
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   if (sender == defaultImageViewBackgroundColorWell)
-    [userDefaults setObject:[[defaultImageViewBackgroundColorWell color] data] forKey:DefaultImageViewBackgroundKey];
+  {
+    NSColor* color = [defaultImageViewBackgroundColorWell color];
+    [userDefaults setObject:[color data] forKey:DefaultImageViewBackgroundKey];
+  }
   else if (sender == defaultColorColorWell)
     [userDefaults setObject:[[defaultColorColorWell color] data] forKey:DefaultColorKey];
   else if (sender == defaultPointSizeTextField)
@@ -779,6 +787,19 @@ static PreferencesController* sharedController = nil;
   [exampleTextView setNeedsDisplay:YES];
   [[[NSDocumentController sharedDocumentController] documents] makeObjectsPerformSelector:@selector(resetSyntaxColoring)];
 }
+//end changeSyntaxColoringConfiguration:
+
+-(IBAction) changeReduceTextArea:(id)sender
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults setInteger:[sender state] forKey:ReducedTextAreaStateKey];
+  //change the area size
+  NSEnumerator* documentsEnumerator = [[[NSDocumentController sharedDocumentController] documents] objectEnumerator];
+  MyDocument* myDocument = nil;
+  while ((myDocument = [documentsEnumerator nextObject]))
+    [myDocument setReducedTextArea:([userDefaults integerForKey:ReducedTextAreaStateKey] == NSOnState)];
+}
+//end changeReduceTextArea:
 
 -(IBAction) resetDefaultPreamble:(id)sender
 {
@@ -787,6 +808,7 @@ static PreferencesController* sharedController = nil;
   [[preambleTextView syntaxColouring] recolourCompleteDocument];
   [preambleTextView setNeedsDisplay:YES];
 }
+//end resetDefaultPreamble:
 
 -(IBAction) selectFont:(id)sender
 {

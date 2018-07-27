@@ -74,6 +74,7 @@
                 logTableView = LogTableView; 
                 logTextView = NSTextView; 
                 logWindow = NSWindow; 
+                lowerBox = NSBox; 
                 makeLatexButton = NSButton; 
                 preambleTextView = LineCountTextView; 
                 progressIndicator = NSProgressIndicator; 
@@ -89,6 +90,7 @@
                 sourceTextView = LineCountTextView; 
                 splitView = NSSplitView; 
                 typeOfTextControl = NSSegmentedControl; 
+                upperBox = NSBox; 
             }; 
             SUPERCLASS = NSDocument; 
         }, 

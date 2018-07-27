@@ -305,7 +305,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
       //Then save the data
       NSDictionary* plist =
-        [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.2", @"version", compressedData, @"data", nil];
+        [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.3", @"version", compressedData, @"data", nil];
       NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
       historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
 
@@ -380,7 +380,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   while(item)
   {
     if([item retainCount] > 1)
-      [item bitmapImage];//computes the bitmapCachedImage. there is an @synchronized inside to prevent conflicts
+      [item image];//computes the pdfImage. there is an @synchronized inside to prevent conflicts
     item = [enumerator nextObject];
   }
   [historyItemsCopy release];

@@ -52,4 +52,10 @@
 }
 //end grayLevel
 
+-(BOOL) isRGBEqualTo:(NSColor*)other
+{
+  return [[self rgbaString] isEqualToString:[other rgbaString]];
+}
+//end isRGBEqualTo:
+
 @end

@@ -19,6 +19,10 @@
 
 @interface MyDocument : NSDocument
 {
+  IBOutlet NSBox*               upperBox;
+  IBOutlet NSBox*               lowerBox;
+  BOOL                          isReducedTextArea;
+
   IBOutlet NSSplitView*         splitView;
   IBOutlet LineCountTextView*   preambleTextView;
   IBOutlet LineCountTextView*   sourceTextView;
@@ -64,6 +68,10 @@
   
   LibraryFile* lastAppliedLibraryFile;
 }
+
+//interface changing
+-(BOOL) isReducedTextArea;
+-(void) setReducedTextArea:(BOOL)reduce;
 
 //updates load progress indicator and messages
 -(void) startMessageProgress:(NSString*)message;

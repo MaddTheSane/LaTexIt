@@ -60,7 +60,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   pointSize  = aPointSize;
   date       = [aDate       copy];
   mode       = aMode;
-  //pdfCachedImage and bitmapCachedImage are lazily initialized in the "image" methods that returns these cached images
+  //pdfCachedImage is lazily initialized in the "image" methods that returns these cached images
   backgroundColor = [aBackgroundColor copy];
   title = nil;
   //from 1.13.0, automatic background setting
@@ -186,7 +186,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   mode = validateLatexMode(mode); //Added starting from version 1.7.0
 
   NSColor* defaultColor = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
-  NSMutableString* colorAsString = nil;[NSMutableString stringWithString:[defaultColor rgbaString]];
+  NSMutableString* colorAsString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
   if (testArray && ([testArray count] >= 2))
   {
@@ -235,7 +235,6 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   [color             release];
   [date              release];
   [pdfCachedImage    release];
-  [bitmapCachedImage release];
   [backgroundColor   release];
   [title             release];
   [super dealloc];
@@ -248,7 +247,6 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   if (newInstance)
   {
     newInstance->pdfCachedImage = [pdfCachedImage copy];
-    newInstance->bitmapCachedImage = [bitmapCachedImage copy];
     newInstance->title = [title copy];
   }
   return newInstance;
@@ -339,7 +337,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.14.2"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.14.3"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -351,7 +349,6 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
   //initialized in the "image" methods, using the pdfData
   //[coder encodeObject:pdfCachedImage    forKey:@"pdfCachedImage"];
-  //[coder encodeObject:bitmapCachedImage forKey:@"bitmapCachedImage"];
   [coder encodeObject:backgroundColor forKey:@"backgroundColor"];
   [coder encodeObject:title forKey:@"title"];
 }
@@ -386,7 +383,6 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
     //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
     //initialized in the "image" methods, using the pdfData
     //pdfCachedImage    = [[coder decodeObjectForKey:@"pdfCachedImage"]    retain];
-    //bitmapCachedImage = [[coder decodeObjectForKey:@"bitmapCachedImage"] retain];
     backgroundColor = [[coder decodeObjectForKey:@"backgroundColor"] retain];
     title       = [[coder decodeObjectForKey:@"title"]       retain];//may be nil
   }
@@ -406,10 +402,10 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   return self;
 }
 
-//triggered for tableView display : will return [self bitmapImage] get faster display than with [self pdfImage]
+//triggered for tableView display : may return something else than pdfImage to speedup display
 -(NSImage*) image
 {
-  return [self bitmapImage];
+  return [self pdfImage];
 }
 
 -(NSImage*) pdfImage
@@ -429,44 +425,6 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
     }
   }
   return pdfCachedImage;
-}
-
--(NSImage*) bitmapImage
-{
-  @synchronized(self)
-  {
-    if (!bitmapCachedImage)
-    {
-      NSImage* pdfImage = [self pdfImage];//may trigger pdfCachedImage computation, in its own @synchronized{} block
-      //we will compute a bitmap representation. To avoid that it is heavier than the pdf one, we will limit its size
-      NSSize realSize = pdfImage ? [pdfImage size] : NSZeroSize;
-      //we limit the max size to 256, and do nothing if it is already smaller
-      float factor = MIN(1.0f, 256.0f/MAX(1.0f, MAX(realSize.width, realSize.height)));
-      NSSize newSize = NSMakeSize(factor*realSize.width, factor*realSize.height);
-      //temporarily change size
-      NSBitmapImageRep* bitmapRep =
-        [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:newSize.width pixelsHigh:newSize.height
-                                             bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES
-                                                  isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace
-                                               bytesPerRow:0 bitsPerPixel:0];
-      [NSGraphicsContext saveGraphicsState];
-      #ifdef PANTHER
-      NSGraphicsContext* graphicsContext =
-        [NSGraphicsContext graphicsContextWithAttributes:
-          [NSDictionary dictionaryWithObject:bitmapRep forKey:NSGraphicsContextDestinationAttributeName]];
-      #else
-      NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithBitmapImageRep:bitmapRep];
-      #endif
-      [NSGraphicsContext setCurrentContext:graphicsContext];
-      [pdfImage drawInRect:NSMakeRect(0, 0, newSize.width, newSize.height) fromRect:NSMakeRect(0, 0, realSize.width, realSize.height)
-                 operation:NSCompositeCopy fraction:1.0];
-      [NSGraphicsContext restoreGraphicsState];
-      bitmapCachedImage = [[NSImage alloc] initWithSize:newSize];
-      [bitmapCachedImage addRepresentation:bitmapRep];
-      [bitmapRep release];
-    }
-  }
-  return bitmapCachedImage;
 }
 
 //latex source code (preamble+body) typed by the user. This WON'T add magnification, auto-bounding, coloring.

@@ -657,6 +657,16 @@ static NSMutableDictionary* cachePaths = nil;
     [sender setState:(marginController && [[marginController window] isVisible]) ? NSOnState : NSOffState];
   else if ([sender action] == @selector(showOrHideLatexPalettes:))
     [sender setState:(latexPalettesController && [[latexPalettesController window] isVisible]) ? NSOnState : NSOffState];
+  else if ([sender action] == @selector(reduceOrEnlargeTextArea:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    BOOL isReducedTextArea = (myDocument && [myDocument isReducedTextArea]);
+    ok = (myDocument != nil);
+    if (isReducedTextArea)
+      [sender setTitle:NSLocalizedString(@"Enlarge the text area", @"Enlarge the text area")];
+    else
+      [sender setTitle:NSLocalizedString(@"Reduce the text area", @"Reduce the text area")];
+  }
   return ok;
 }
 //end validateMenuItem:
@@ -795,6 +805,12 @@ static NSMutableDictionary* cachePaths = nil;
     [controller showWindow:self];
 }
 //end showOrHideMargin:
+
+-(IBAction) reduceOrEnlargeTextArea:(id)sender
+{
+  [(MyDocument*)[self currentDocument] setReducedTextArea:![(MyDocument*)[self currentDocument] isReducedTextArea]];
+}
+//end reduceOrEnlargeTextArea:
 
 //looks for a programName in the given PATHs. Just tests that the file exists
 -(NSString*) findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes

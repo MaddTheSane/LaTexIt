@@ -20,6 +20,7 @@
                 makeLatex = id; 
                 newFromClipboard = id; 
                 openWebSite = id; 
+                reduceOrEnlargeTextArea = id; 
                 showHelp = id; 
                 showOrHideColorInspector = id; 
                 showOrHideCompositionConfiguration = id; 

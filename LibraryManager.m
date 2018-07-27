@@ -294,7 +294,7 @@ static NSImage*        libraryFileIcon       = nil;
     NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
     NSData* compressedData = [Compressor zipcompress:uncompressedData];
     NSDictionary* plist =
-      [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.2", @"version", compressedData, @"data", nil];
+      [NSDictionary dictionaryWithObjectsAndKeys:@"1.14.3", @"version", compressedData, @"data", nil];
     NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     ok = [dataToWrite writeToFile:path atomically:YES];

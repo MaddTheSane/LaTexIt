@@ -109,6 +109,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(IBAction) showPreferencesPane:(id)sender;
 -(void)     showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;//showPreferencesPane + select one pane
 -(IBAction) showHelp:(id)sender;
+-(IBAction) reduceOrEnlargeTextArea:(id)sender;
 
 -(MyDocument*) dummyDocument;
 

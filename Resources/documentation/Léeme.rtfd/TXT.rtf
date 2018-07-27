@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.14.2\
+\f2\b \cf0 LaTeXiT 1.14.3\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -53,7 +53,7 @@ Feedback e-mail address: \cf3 pierre.chatelier@club-internet.fr
 System Requirements\
 
 \fs22 \ulnone \
-LaTeXiT 1.14.2 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.14.3 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 
 \f2\b\fs26 \
 
@@ -171,7 +171,7 @@ The "Detect and typeset" item is different : it does not typeset the whole text.
 \f2\b \cf0 Tip: the inline mode "$...$" tries, when it's possible, to align the equation on the baseline of the text stream.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f1\b0 \cf0 A new service has been introduced in version 1.14.2, thats allows to revert back equations to the LaTeX code.\
+\f1\b0 \cf0 A new service has been introduced in version 1.14.3, thats allows to revert back equations to the LaTeX code.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
@@ -210,7 +210,7 @@ From version 1.8.0, LaTeXiT allows the user to use scipts during pre-, middle- a
 \cf0 LaTeX Palettes\
 
 \fs22 \ulnone \
-Since version 1.14.2, LaTeXiT handles LaTeX palettes as plugins. Built-in palettes are inside the application, but additional palettes can be installed inside the Library folders, in a sub-folder Application Support/LaTeXiT/Palettes.\
+Since version 1.14.3, LaTeXiT handles LaTeX palettes as plugins. Built-in palettes are inside the application, but additional palettes can be installed inside the Library folders, in a sub-folder Application Support/LaTeXiT/Palettes.\
 Examples :\
 /Library/Application Support/LaTeXiT/Palettes\
 /Users/[your name]/Library/Application Support/LaTeXiT/Palettes\
@@ -362,16 +362,23 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 
 \fs26 \ul Versions History\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone v 1.14.3 (18th june 2007)\
+- It is now possible te reduce the size of the text area (through the Preferences or the Window menu);\
+- The history now displays the PDF instead of a bitmap version of the images. Finally, it seems that the increased display speed does not really balance the additional memory consumption;\
+- Fixed a problem related to the choice of the background color when importing some equations.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \ulc0 \
 
 \fs22 \ulnone v 1.14.2 (6th june 2007)\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 - Fixed a bug where LaTeXiT could hang on some configurations.\
+- Fixed a bug where LaTeXiT could hang on some configurations.\
 \
 v 1.14.1 (2nd june 2007)
 \fs26 \ul \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone - fixed a (rare) bug when accessing Ghostscript during some exports;\
+\fs22 \ulnone - fixed a (rare) bug when accessing Ghostscript during some exports;\
 - fixed a bug when the user has enabled the noclobber option in its shell environment;\
 - a click can now, like with the Finder, be used to rename an item of the library;\
 - improved some error messages;\

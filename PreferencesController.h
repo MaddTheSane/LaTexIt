@@ -38,6 +38,7 @@ extern NSString* SyntaxColoringCommandColorKey;
 extern NSString* SyntaxColoringMathsColorKey;
 extern NSString* SyntaxColoringKeywordColorKey;
 extern NSString* SyntaxColoringCommentColorKey;
+extern NSString* ReducedTextAreaStateKey;
 extern NSString* DefaultPreambleAttributedKey;
 extern NSString* DefaultFontKey;
 extern NSString* ServiceShortcutEnabledKey;
@@ -140,6 +141,8 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   IBOutlet NSColorWell*       syntaxColoringKeywordColorColorWell;
   IBOutlet NSColorWell*       syntaxColoringCommentColorColorWell;
 
+  IBOutlet NSButton*          reduceTextAreaButton;
+
   IBOutlet NSTextField*       fontTextField;
   SMLSyntaxColouring*         exampleSyntaxColouring;
   IBOutlet NSTextView*        exampleTextView;
@@ -225,6 +228,7 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
 
 -(IBAction) changeSpellChecking:(id)sender;
 -(IBAction) changeSyntaxColoringConfiguration:(id)sender;
+-(IBAction) changeReduceTextArea:(id)sender;
 -(IBAction) resetDefaultPreamble:(id)sender;
 -(IBAction) selectFont:(id)sender;
 -(IBAction) applyPreambleToOpenDocuments:(id)sender;

@@ -24,10 +24,9 @@ extern NSString* HistoryItemDidChangeNotification;
   latex_mode_t        mode;        //the mode (EQNARRAY, DISPLAY(\[...\]), INLINE($...$) or TEXT(text))
   
   NSImage*     pdfCachedImage; //a cached image to display the pdf data  
-  NSImage*     bitmapCachedImage; //a bitmap equivalent to allow faster display in some cases
-  
+
   NSColor* backgroundColor;//not really background of the image, just useful when previewing, to prevent text to blend with the background
-  
+
   NSString* title;
 }
 
@@ -42,8 +41,7 @@ extern NSString* HistoryItemDidChangeNotification;
                                             mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
 
 //Accessors
--(NSImage*)            image;//triggered for tableView display : will return [self bitmapImage] get faster display than with [self pdfImage]
--(NSImage*)            bitmapImage;
+-(NSImage*)            image;//triggered for tableView display : may return something else than pdfImage to speedup display
 -(NSImage*)            pdfImage;
 -(NSData*)             pdfData;
 -(NSAttributedString*) preamble;

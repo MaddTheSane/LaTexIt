@@ -39,6 +39,7 @@
                 changeCompositionSelection = id; 
                 changeDefaultGeneralConfig = id; 
                 changePath = id; 
+                changeReduceTextArea = id; 
                 changeScriptsConfiguration = id; 
                 changeServiceConfiguration = id; 
                 changeSpellChecking = id; 
@@ -110,6 +111,7 @@
                 preambleTextView = LineCountTextView; 
                 preambleView = NSView; 
                 ps2pdfTextField = NSTextField; 
+                reduceTextAreaButton = NSButton; 
                 removeEncapsulationButton = NSButton; 
                 removeTextShortcutsButton = NSButton; 
                 scriptsHelpPanel = NSPanel; 

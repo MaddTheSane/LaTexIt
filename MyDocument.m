@@ -168,6 +168,8 @@ static NSString* yenString = nil;
   [super windowControllerDidLoadNib:aController];
   
   [[self windowForSheet] setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
+  
+  [self setReducedTextArea:([[NSUserDefaults standardUserDefaults] integerForKey:ReducedTextAreaStateKey] == NSOnState)];
 
   //to paste rich LaTeXiT data, we must tune the responder chain  
   [sourceTextView setNextResponder:imageView];
@@ -852,8 +854,8 @@ static NSString* yenString = nil;
   NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
   BOOL failed = ![latexData writeToFile:latexFilePath atomically:NO];
   
-  if (!failed)
-    [fullLog appendFormat:@"Source :\n%@\n", normalSourceToCompile];
+  //if (!failed)
+  //  [fullLog appendFormat:@"Source :\n%@\n", normalSourceToCompile];
       
   //PREPROCESSING
   NSDictionary* sharedEnvironment = [AppController environmentDict];
@@ -1264,7 +1266,24 @@ static NSString* yenString = nil;
     [colorWell setColor:[historyItem color]];
     [sizeText setDoubleValue:[historyItem pointSize]];
     [typeOfTextControl selectSegmentWithTag:[historyItem mode]];
-    [imageView setBackgroundColor:[historyItem backgroundColor] updateHistoryItem:NO];
+    NSColor* historyItemBackgroundColor = [historyItem backgroundColor];
+    NSColor* greyLevelHistoryItemBackgroundColor = historyItemBackgroundColor ? [historyItemBackgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
+    historyItemBackgroundColor = ([greyLevelHistoryItemBackgroundColor whiteComponent] == 1.0f) ? nil : historyItemBackgroundColor;
+    NSColor* colorFromUserDefaults = [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:DefaultImageViewBackgroundKey]];
+    if (!historyItemBackgroundColor)
+      historyItemBackgroundColor = colorFromUserDefaults;
+    //at this step, the background color to be used is either the history item (if any) or the default one
+    //but if the background must be contrasted, we must take it in account
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey])
+    {
+      float grayLevelOfBackgroundColorToApply = [historyItemBackgroundColor grayLevel];
+      float grayLevelOfTextColor              = [[historyItem color] grayLevel];
+      if ((grayLevelOfBackgroundColorToApply < .5) && (grayLevelOfTextColor < .5))
+        historyItemBackgroundColor = [NSColor whiteColor];
+      else if ((grayLevelOfBackgroundColorToApply > .5) && (grayLevelOfTextColor > .5))
+        historyItemBackgroundColor = [NSColor blackColor];
+    }
+    [imageView setBackgroundColor:historyItemBackgroundColor updateHistoryItem:NO];
   }
   else
   {
@@ -1677,6 +1696,46 @@ static NSString* yenString = nil;
   return description;
 }
 //end descriptionForScript:
+
+-(BOOL) isReducedTextArea
+{
+  return isReducedTextArea;
+}
+//end isReducedTextArea
+
+-(void) setReducedTextArea:(BOOL)reduce
+{
+  if ((reduce != isReducedTextArea) && upperBox && lowerBox)
+  {
+    NSRect oldUpFrame  = [upperBox frame];
+    NSRect oldLowFrame = [lowerBox frame];
+    float margin = reduce ? [splitView frame].size.height/2 : -[splitView frame].size.height;
+    NSRect newUpFrame  = NSMakeRect(oldUpFrame.origin.x, oldUpFrame.origin.y-margin, oldUpFrame.size.width, oldUpFrame.size.height+margin);
+    NSRect newLowFrame = NSMakeRect(oldLowFrame.origin.x, oldLowFrame.origin.y, oldLowFrame.size.width, oldLowFrame.size.height-margin);
+    #ifdef PANTHER
+    [upperBox setFrame:newUpFrame];
+    [lowerBox setFrame:newLowFrame];
+    #else
+    NSViewAnimation* viewAnimation =
+      [[[NSViewAnimation alloc] initWithViewAnimations:
+        [NSArray arrayWithObjects:
+          [NSDictionary dictionaryWithObjectsAndKeys:upperBox, NSViewAnimationTargetKey,
+                                                     [NSValue valueWithRect:oldUpFrame], NSViewAnimationStartFrameKey,
+                                                     [NSValue valueWithRect:newUpFrame], NSViewAnimationEndFrameKey,
+                                                     nil],
+          [NSDictionary dictionaryWithObjectsAndKeys:lowerBox, NSViewAnimationTargetKey,
+                                                     [NSValue valueWithRect:oldLowFrame], NSViewAnimationStartFrameKey,
+                                                     [NSValue valueWithRect:newLowFrame], NSViewAnimationEndFrameKey,
+                                                     nil],
+          nil]] autorelease];
+    [viewAnimation setDuration:.5];
+    [viewAnimation setAnimationBlockingMode:NSAnimationNonblocking];
+    [viewAnimation startAnimation];
+    #endif
+    isReducedTextArea = reduce;
+  }
+}
+//setReducedTextAreaState:
 
 -(IBAction) nullAction:(id)sender
 {
