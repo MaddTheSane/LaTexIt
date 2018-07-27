@@ -71,6 +71,9 @@ static NSMutableArray* freeIds = nil;
 
 -(NSString*) _replaceYenSymbol:(NSString*)string; //in Japanese environment, we should replace the Yen symbol by a backslash
 
+-(NSData*) _annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSString*)colorAsString
+                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline;
+
 -(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
@@ -817,14 +820,12 @@ static NSString* yenString = nil;
 
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
+    NSString* colorAsString = [color rgbaString];
     #ifndef PANTHER
     if (pdfData)
     {
       //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-      NSColor* colorRGB = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace]; //the color must be RGB
-      NSString* colorAsString = [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
-                                                                           [colorRGB blueComponent], [colorRGB alphaComponent]];
       NSDictionary* attributes =
         [NSDictionary dictionaryWithObjectsAndKeys:
            [NSArray arrayWithObjects:
@@ -837,13 +838,16 @@ static NSString* yenString = nil;
              nil], PDFDocumentKeywordsAttribute,
            [NSApp applicationName], PDFDocumentCreatorAttribute, nil];
       [pdfDocument setDocumentAttributes:attributes];
-      
-      //Recreates the document with the new meta-data
-      [pdfDocument writeToFile:pdfFilePath];
       pdfData = [pdfDocument dataRepresentation];
       [pdfDocument release];
     }
     #endif
+
+    //adds some meta-data to be compatible with Latex Equation Editor
+    pdfData = [self _annotatePdfDataInLEEFormat:pdfData preamble:preamble source:body color:colorAsString
+                                           mode:mode magnification:magnification baseline:baseline];
+
+    [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
   }//end if latex source could be compiled
   
   //returns the cropped/magnified/coloured image if possible; nil if it has failed. 
@@ -975,36 +979,161 @@ static NSString* yenString = nil;
                                    pointSize:[sizeText doubleValue]   date:[NSDate date] mode:mode];
 }
 
-//defines the state of the document with the given pdf data, that may contain meta-data
+-(NSData*) _annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSString*)colorAsString
+                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
+{
+  NSMutableData* newData = nil;
+
+  NSMutableString* replacedPreamble = [NSMutableString stringWithString:preamble];
+  [replacedPreamble replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedPreamble length])];
+  [replacedPreamble replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedPreamble length])];
+  [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedPreamble length])];
+  [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedPreamble length])];
+
+  NSMutableString* replacedSource = [NSMutableString stringWithString:source];
+  [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedSource length])];
+  [replacedSource replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedSource length])];
+  [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
+  [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
+
+  NSString *type = (mode == DISPLAY) ? @"0" : (mode == INLINE) ? @"1" : @"2";
+
+  NSMutableString *annotation =
+      [NSMutableString stringWithFormat:
+        @"\nobj <<\n"\
+         "/Preamble (ESannop%@ESannopend)\n"\
+         "/Subject (ESannot%@ESannotend)\n"\
+         "/Type (EEtype%@EEtypeend)\n"\
+         "/Color (EEcol%@EEcolend)\n"
+         "/Magnification (EEmag%fEEmagend)\n"\
+         "/Baseline (EEbas%fEEbasend)\n"\
+         ">> endobj",
+        replacedPreamble, replacedSource, type, colorAsString, magnification, baseline];
+
+  NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+  NSRange r1 = [pdfString rangeOfString:@"\nxref" options:NSBackwardsSearch];
+  NSRange r2 = [pdfString lineRangeForRange:[pdfString rangeOfString:@"startxref" options:NSBackwardsSearch]];
+
+  NSString* tail_of_tail = [pdfString substringFromIndex:r2.location];
+  NSArray*  tailarray    = [tail_of_tail componentsSeparatedByString:@"\n"];
+
+  int byte_count = 0;
+  NSScanner* scanner = [NSScanner scannerWithString:[tailarray objectAtIndex: 1]];
+  [scanner scanInt:&byte_count];
+  byte_count += [annotation length];
+
+  NSRange r3 = NSMakeRange(r1.location, r2.location - r1.location);
+  NSString* stuff = [pdfString substringWithRange: r3];
+
+  [annotation appendString:stuff];
+  [annotation appendString:[NSString stringWithFormat: @"startxref\n%d\n%%%%EOF", byte_count]];
+  
+  NSData* dataToAppend = [annotation dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+
+  newData = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(0, r1.location)]];
+  [newData appendData:dataToAppend];
+  return newData;
+}
+
 -(void) applyPdfData:(NSData*)pdfData
 {
+  BOOL needsToCheckLEEAnnotations = YES;
   #ifndef PANTHER
   PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
   NSString* creator  = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentCreatorAttribute]  : nil;
   NSArray*  keywords = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute] : nil;
   //if the meta-data tells that the creator is LaTeXiT, then use it !
-  if (creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 5))
+  needsToCheckLEEAnnotations = !(creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 5));
+  if (!needsToCheckLEEAnnotations)
   {
     [self _setLogTableViewVisible:NO];
     [imageView setPdfData:pdfData cachedImage:nil];
     [self _setPreamble:[[[NSAttributedString alloc] initWithString:[keywords objectAtIndex:0]] autorelease]];
     [self _setSourceText:[[[NSAttributedString alloc] initWithString:[keywords objectAtIndex:1]] autorelease]];
     NSString* colorAsString = [keywords objectAtIndex:2];
-    NSScanner* scanner = [NSScanner scannerWithString:colorAsString];
-    float r = 0, g = 0, b = 0, a = 0;
-    [scanner scanFloat:&r];
-    [scanner scanFloat:&g];
-    [scanner scanFloat:&b];
-    [scanner scanFloat:&a];
-    [colorWell setColor:[NSColor colorWithCalibratedRed:r green:g blue:b alpha:a]];
+    [colorWell setColor:[NSColor rgbaColorWithString:colorAsString]];
     [sizeText setDoubleValue:[[keywords objectAtIndex:3] doubleValue]];
-    scanner = [NSScanner scannerWithString:[keywords objectAtIndex:4]];
+    NSScanner* scanner = [NSScanner scannerWithString:[keywords objectAtIndex:4]];
     int i = 0;
     [scanner scanInt:&i];
     [typeOfTextControl selectSegmentWithTag:(latex_mode_t)i];
   }
   [pdfDocument release];
   #endif
+
+  if (needsToCheckLEEAnnotations) //either we are on panther, or we failed to find meta-data keywords
+  {
+    NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray*  testArray    = nil;
+
+    NSMutableString* preamble = [NSMutableString string];
+    testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [preamble appendString:[testArray objectAtIndex:1]];
+      NSRange range = [preamble rangeOfString:@"ESannopend"];
+      range.length = (range.location != NSNotFound) ? [preamble length]-range.location : 0;
+      [preamble deleteCharactersInRange:range];
+      [preamble replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preamble length])];
+      [preamble replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preamble length])];
+      [preamble replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preamble length])];
+      [preamble replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preamble length])];
+    }
+
+    NSMutableString* source = [NSMutableString string];
+    testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [source appendString:[testArray objectAtIndex:1]];
+      NSRange range = [source rangeOfString:@"ESannotend"];
+      range.length = (range.location != NSNotFound) ? [source length]-range.location : 0;
+      [source deleteCharactersInRange:range];
+      [source replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [source length])];
+      [source replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [source length])];
+      [source replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [source length])];
+      [source replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [source length])];
+    }
+
+    NSMutableString* pointSizeAsString = [NSMutableString stringWithString:[[userDefaults objectForKey:DefaultPointSizeKey] stringValue]];
+    testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [pointSizeAsString setString:[testArray objectAtIndex:1]];
+      NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
+      range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
+      [pointSizeAsString deleteCharactersInRange:range];
+    }
+
+    NSMutableString* modeAsString = [NSMutableString stringWithString:[[userDefaults objectForKey:DefaultModeKey] stringValue]];
+    testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [modeAsString setString:[testArray objectAtIndex:1]];
+      NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
+      range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
+      [modeAsString deleteCharactersInRange:range];
+    }
+
+    NSColor* defaultColor = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
+    NSMutableString* colorAsString = [NSMutableString stringWithString:[defaultColor rgbaString]];
+    testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [colorAsString setString:[testArray objectAtIndex:1]];
+      NSRange range = [colorAsString rangeOfString:@"EEcolend"];
+      range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
+      [colorAsString deleteCharactersInRange:range];
+    }
+
+    [self _setLogTableViewVisible:NO];
+    [imageView setPdfData:pdfData cachedImage:nil];
+    [self _setPreamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]];
+    [self _setSourceText:[[[NSAttributedString alloc] initWithString:source] autorelease]];
+    [colorWell setColor:[NSColor rgbaColorWithString:colorAsString]];
+    [sizeText setDoubleValue:[pointSizeAsString doubleValue]];
+    [typeOfTextControl selectSegmentWithTag:(latex_mode_t)[modeAsString intValue]];
+  }
 }
 
 //sets the state of the document according to the given history item

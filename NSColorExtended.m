@@ -22,4 +22,23 @@
   return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
+//creates a color from an rgba string
++(NSColor*) rgbaColorWithString:(NSString*)string
+{
+  NSScanner* scanner = [NSScanner scannerWithString:string];
+  float r = 0, g = 0, b = 0, a = 0;
+  [scanner scanFloat:&r];
+  [scanner scanFloat:&g];
+  [scanner scanFloat:&b];
+  [scanner scanFloat:&a];
+  return [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a];
+}
+
+-(NSString*) rgbaString
+{
+  NSColor* colorRGB = [self colorUsingColorSpaceName:NSCalibratedRGBColorSpace]; //the color must be RGB
+  return [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
+                                                    [colorRGB blueComponent], [colorRGB alphaComponent]];
+}
+
 @end

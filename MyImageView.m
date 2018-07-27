@@ -229,15 +229,25 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
   {
     NSArray* plist = [pboard propertyListForType:NSFilenamesPboardType];
-    data = (plist && [plist count]) ? [NSData dataWithContentsOfFile:[plist objectAtIndex:0]] : nil;
+    if (plist && [plist count])
+    {
+      NSString* filename = [plist objectAtIndex:0];
+      //on Panther, we rely on the extension to see if it is valid pdf. On Tiger, we will use PDFDocument
+      #ifdef PANTHER
+      if ([[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"])
+      #endif
+        data = [NSData dataWithContentsOfFile:filename];
+    }
   }
   
-  #ifndef PANTHER
+  #ifdef PANTHER
+  if (data)
+    dragOperation = NSDragOperationCopy;
+  #else
   if (data)
   {
     PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
-    NSString* creator = [[pdfDocument documentAttributes] objectForKey:PDFDocumentCreatorAttribute];
-    if (creator && [creator isEqualTo:[NSApp applicationName]])
+    if (pdfDocument)
       dragOperation = NSDragOperationCopy;
     [pdfDocument release];
   }

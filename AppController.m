@@ -841,15 +841,29 @@ static NSArray* unixBins = nil;
       [attachedData writeToFile:attachedFilePath atomically:NO];
 
       //extracts the baseline of the equation, if possible
-      #ifdef PANTHER
-      NSString* equationBaselineAsString = @"0";
-      #else
+      NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
+      BOOL needsToCheckLEEAnnotations = YES;
+      #ifndef PANTHER
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
       NSArray* pdfMetaData     = [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute];
-      NSString* equationBaselineAsString =
-        (pdfMetaData && ([pdfMetaData count] >= 6)) ? [pdfMetaData objectAtIndex:5] : [NSString string];
+      needsToCheckLEEAnnotations = !(pdfMetaData && ([pdfMetaData count] >= 6));
+      if (!needsToCheckLEEAnnotations)
+        [equationBaselineAsString setString:[pdfMetaData objectAtIndex:5]];
       [pdfDocument release];
       #endif
+
+      if (needsToCheckLEEAnnotations)
+      {
+        NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+        NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+        if (testArray && ([testArray count] >= 2))
+        {
+          [equationBaselineAsString setString:[testArray objectAtIndex:1]];
+          NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
+          range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
+          [equationBaselineAsString deleteCharactersInRange:range];
+        }
+      }
       
       float newBaseline = [originalBaseline floatValue];
       if (useBaseline)
