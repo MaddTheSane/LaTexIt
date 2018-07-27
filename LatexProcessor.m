@@ -26,6 +26,8 @@
 
 #import <Quartz/Quartz.h>
 
+NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
+
 //In MacOS 10.4.0, 10.4.1 and 10.4.2, these constants are declared but not defined in the PDFKit.framework!
 //So I define them myself, but it is ugly. I expect next versions of MacOS to fix that
 NSString* PDFDocumentCreatorAttribute = @"Creator"; 
@@ -262,25 +264,26 @@ static LaTeXProcessor* sharedInstance = nil;
     NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
     
     NSRange r1 = [pdfString rangeOfString:@"\nxref" options:NSBackwardsSearch];
-    NSRange r2 = [pdfString lineRangeForRange:[pdfString rangeOfString:@"startxref" options:NSBackwardsSearch]];
+    NSRange r2 = [pdfString rangeOfString:@"startxref" options:NSBackwardsSearch];
+    r2 = (r2.location == NSNotFound) ? r2 : [pdfString lineRangeForRange:r2];
 
-    NSString* tail_of_tail = [pdfString substringFromIndex:r2.location];
+    NSString* tail_of_tail = (r2.location == NSNotFound) ? @"" : [pdfString substringFromIndex:r2.location];
     NSArray*  tailarray    = [tail_of_tail componentsSeparatedByString:@"\n"];
 
     int byte_count = 0;
-    NSScanner* scanner = [NSScanner scannerWithString:[tailarray objectAtIndex:1]];
+    NSScanner* scanner = ([tailarray count]<2) ? nil : [NSScanner scannerWithString:[tailarray objectAtIndex:1]];
     [scanner scanInt:&byte_count];
     byte_count += [annotation length];
 
-    NSRange r3 = NSMakeRange(r1.location, r2.location - r1.location);
-    NSString* stuff = [pdfString substringWithRange: r3];
+    NSRange r3 = (r2.location == NSNotFound) ? r2 : NSMakeRange(r1.location, r2.location - r1.location);
+    NSString* stuff = (r3.location == NSNotFound) ? @"" : [pdfString substringWithRange:r3];
 
     [annotation appendString:stuff];
     [annotation appendString:[NSString stringWithFormat: @"startxref\n%d\n%%%%EOF", byte_count]];
     
     NSData* dataToAppend = [annotation dataUsingEncoding:NSMacOSRomanStringEncoding/*NSASCIIStringEncoding*/ allowLossyConversion:YES];
 
-    newData = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(0, r1.location)]];
+    newData = [NSMutableData dataWithData:[data subdataWithRange:(r1.location == NSNotFound) ? NSMakeRange(0, 0) : NSMakeRange(0, r1.location)]];
     [newData appendData:dataToAppend];
   }//end if data
   
@@ -329,6 +332,49 @@ static LaTeXProcessor* sharedInstance = nil;
   return preamble;
 }
 //end insertColorInPreamble:color:isColorStyAvailable:
+
+-(void) latexiseWithConfiguration:(NSMutableDictionary*)configuration
+{
+  [configuration retain];
+  BOOL runInBackgroundThread = [[configuration objectForKey:@"runInBackgroundThread"] boolValue];
+  if (runInBackgroundThread)
+  {
+    [configuration setObject:[NSNumber numberWithBool:NO] forKey:@"runInBackgroundThread"];
+    [NSApplication detachDrawingThread:@selector(latexiseWithConfiguration:) toTarget:self withObject:configuration];
+  }//end if (runInBackgroundThread)
+  else//if (!runInBackgroundThread)
+  {
+    NSMutableDictionary* configuration2 = [configuration deepMutableCopy];//will protect from preferences changes
+    NSString* fullLog = [configuration2 objectForKey:@"outFullLog"];
+    NSArray*  errors  = [configuration2 objectForKey:@"outErrors"];
+    NSData*   pdfData = [configuration2 objectForKey:@"outPdfData"];
+    id backgroundColor = [configuration2 objectForKey:@"backgroundColor"];
+    NSString* result = [self latexiseWithPreamble:[configuration2 objectForKey:@"preamble"]
+                          body:[configuration objectForKey:@"body"] color:[configuration2 objectForKey:@"color"]
+                          mode:(latex_mode_t)[[configuration2 objectForKey:@"mode"] intValue]
+                          magnification:[[configuration2 objectForKey:@"magnification"] doubleValue]
+                          compositionConfiguration:[configuration2 objectForKey:@"compositionConfiguration"]
+                          backgroundColor:(backgroundColor == [NSNull null]) ? nil : backgroundColor
+                          leftMargin:[[configuration2 objectForKey:@"leftMargin"] doubleValue]
+                         rightMargin:[[configuration2 objectForKey:@"rightMargin"] doubleValue]
+                           topMargin:[[configuration2 objectForKey:@"topMargin"] doubleValue]
+                        bottomMargin:[[configuration2 objectForKey:@"bottomMargin"] doubleValue]
+                additionalFilesPaths:[configuration2 objectForKey:@"additionalFilesPaths"]
+                    workingDirectory:[configuration2 objectForKey:@"workingDirectory"]
+                     fullEnvironment:[configuration2 objectForKey:@"fullEnvironment"]
+                    uniqueIdentifier:[configuration2 objectForKey:@"uniqueIdentifier"]
+                    outFullLog:&fullLog outErrors:&errors outPdfData:&pdfData];
+    if (fullLog) [configuration2 setObject:fullLog forKey:@"outFullLog"];
+    if (errors)  [configuration2 setObject:errors  forKey:@"outErrors"];
+    if (pdfData) [configuration2 setObject:pdfData forKey:@"outPdfData"];
+    if (result)  [configuration2 setObject:result  forKey:@"result"];
+    [configuration setDictionary:configuration2];
+    [configuration2 release];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LatexizationDidEndNotification object:configuration];
+  }//end if (!runInBackgroundThread)
+  [configuration autorelease];
+}
+//end latexiseWithConfiguration:
 
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
 -(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
@@ -977,9 +1023,14 @@ static LaTeXProcessor* sharedInstance = nil;
   [systemTask launch];
   BOOL failed = ([systemTask terminationStatus] != 0) && ![fileManager fileExistsAtPath:pdfFile];
   NSData* dataForStdOutput = [systemTask dataForStdOutput];
-  NSString* errors = [[[NSString alloc] initWithData:dataForStdOutput encoding:NSUTF8StringEncoding] autorelease];
-  [customString appendString:errors ? errors : @""];
-  [stdoutString appendString:errors ? errors : @""];
+  NSString* stdOutputErrors = [[[NSString alloc] initWithData:dataForStdOutput encoding:NSUTF8StringEncoding] autorelease];
+  [customString appendString:stdOutputErrors ? stdOutputErrors : @""];
+  [stdoutString appendString:stdOutputErrors ? stdOutputErrors : @""];
+  
+  //NSData* dataForStdError  = [systemTask dataForStdError];
+  //NSString* stdErrors = [[[NSString alloc] initWithData:dataForStdError encoding:NSUTF8StringEncoding] autorelease];
+  //[customString appendString:stdErrors ? stdErrors : @""];
+  //[stdoutString appendString:stdErrors ? stdErrors : @""];
   
   if (failed)
     [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
@@ -1614,12 +1665,14 @@ static LaTeXProcessor* sharedInstance = nil;
   CFStringRef sourceUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
   CGImageDestinationRef imageDestination = !imageSource ? 0 :
     CGImageDestinationCreateWithData((CFMutableDataRef)result, sourceUTI, 1, 0);
+  NSDictionary* propertiesImmutable = nil;
   NSMutableDictionary* properties = nil;
   if (imageSource && imageDestination)
   {
     if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
     {
-      properties = [[(NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0) deepMutableCopy] autorelease];
+      propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
+      properties = [[propertiesImmutable deepMutableCopy] autorelease];
       NSMutableDictionary* tiffDictionary = [properties objectForKey:(NSString*)kCGImagePropertyTIFFDictionary];
       if (!tiffDictionary)
       {
@@ -1630,7 +1683,8 @@ static LaTeXProcessor* sharedInstance = nil;
     }
     else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
     {
-      properties = [[(NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0) deepMutableCopy] autorelease];
+      propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
+      properties = [[propertiesImmutable deepMutableCopy] autorelease];
       NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
       if (!exifDictionary)
       {
@@ -1641,7 +1695,8 @@ static LaTeXProcessor* sharedInstance = nil;
     }
     else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
     {
-      properties = [[(NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0) deepMutableCopy] autorelease];
+      propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
+      properties = [[propertiesImmutable deepMutableCopy] autorelease];
       NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
       if (!exifDictionary)
       {
@@ -1651,6 +1706,7 @@ static LaTeXProcessor* sharedInstance = nil;
       [exifDictionary setObject:@"toto" forKey:(NSString*)kCGImagePropertyExifMakerNote];
     }
   }//end if (imageSource && imageDestination)
+  [propertiesImmutable release];
   CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CFDictionaryRef)properties);
   if (imageDestination) CGImageDestinationFinalize(imageDestination);
   if (imageDestination) CFRelease(imageDestination);

@@ -68,6 +68,7 @@
 "Error" = "エラー";
 "Error message" = "エラーメッセージ";
 "Execution log" = "実行ログ";
+"Drag through areas to change export type" = "Drag through areas to change export type";
 "Export library..." = "ライブラリをエクスポート...";
 "Export history..." = "履歴をエクスポート...";
 "Export the selection only" = "選択項目のみをエクスポート";
@@ -102,6 +103,7 @@
 "Loading History" = "履歴を読み込み中";
 "Loading Library" = "ライブラリを読み込み中";
 "Loading error" = "読み込みエラー";
+"Lock" = "ロックする";
 "Middle-processing" = "プロセスと同時";
 "Migrating history to new format" = "履歴を新しいフォーマットに移行しています";
 "Migrating library to new format" = "ライブラリを新しいフォーマットに移行しています";
@@ -123,7 +125,15 @@
 "Overwrite current library" = "現在のライブラリを上書きする";
 "Overwrite current history" = "現在の履歴を上書きする";
 "PDF Equation" = "PDF 数式";
-"PDF with outlined fonts" = "アウトラインフォント付き PDF";
+"PDF with outlined fonts" = "PDF with outlined fonts";
+"PDF without embedded fonts" = "PDF with outlined fonts";
+"PDF w.o.f." = "PDF w.o.f.";
+"PDF vector format" = "PDF";
+"EPS vector format" = "EPS";
+"TIFF bitmap format" = "TIFF";
+"PNG bitmap format" = "PNG";
+"JPEG bitmap format" = "JPEG";
+
 "Palette installation" = "パレットのインストール";
 "Post-processing" = "プレセスの後";
 "Pre-processing" = "プロセスの前";
@@ -158,6 +168,7 @@
 "Show History" = "履歴を表示";
 "Show Library" = "ライブラリを表示";
 "Show preamble" = "プリアンブルを表示";
+"Stop" = "中止";
 "Switch to mini-window" = "ミニウインドウに切り替え";
 "Switch to normal window" = "ノーマルウインドウに切り替え";
 "Text" = "Text";
@@ -176,6 +187,7 @@
 "Typeset LaTeX Maths inline" = "LaTeX 数式インラインモードでタイプセット";
 "Typeset LaTeX Text" = "LaTeX テキストモードでタイプセット";
 "Un-latexize the equations" = "数式を LaTeX コードに戻す";
+"Unlock" = "ロックを解除する";
 "Untitled" = "名称未設定";
 "Update preferences" = "環境設定をアップデート";
 "Update the equation" = "数式をアップデート";

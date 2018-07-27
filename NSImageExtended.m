@@ -138,19 +138,4 @@
 }
 //end bitmapImageRepresentationWithMaxSize:
 
--(CGImageRef) CGImageRetained
-{
-  CGImageRef cgImage = 0;
-  if (isMacOS10_5OrAbove())
-    cgImage = (CGImageRef)CFRetain([[self bitmapImageRepresentation] CGImage]);
-  else
-  {
-    CGImageSourceRef imageSourceRef = CGImageSourceCreateWithData((CFDataRef)[[self bitmapImageRepresentation] TIFFRepresentation], NULL);
-    cgImage = !imageSourceRef ? 0 : CGImageSourceCreateImageAtIndex(imageSourceRef, 0, NULL);
-    if (imageSourceRef) CFRelease(imageSourceRef);
-  }
-  return cgImage;
-}
-//end CGImageRetained
-
 @end

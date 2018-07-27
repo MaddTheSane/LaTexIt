@@ -13,6 +13,5 @@
 
 -(NSBitmapImageRep*) bitmapImageRepresentation;
 -(NSBitmapImageRep*) bitmapImageRepresentationWithMaxSize:(NSSize)maxSize;
--(CGImageRef) CGImageRetained;
 
 @end

@@ -78,6 +78,10 @@ extern NSString* CompositionConfigurationAdditionalProcessingScriptPathKey;
 extern NSString* CompositionConfigurationAdditionalProcessingScriptShellKey;
 extern NSString* CompositionConfigurationAdditionalProcessingScriptContentKey;
 
+extern NSString* HistoryDeleteOldEntriesEnabledKey;
+extern NSString* HistoryDeleteOldEntriesLimitKey;
+extern NSString* HistorySmartEnabledKey;
+
 extern NSString* CompositionConfigurationsControllerVisibleAtStartupKey;
 extern NSString* EncapsulationsControllerVisibleAtStartupKey;
 extern NSString* HistoryControllerVisibleAtStartupKey;
@@ -122,6 +126,8 @@ extern NSString* AdditionalFilesPathsKey;
   NSArrayController*                   serviceShortcutsController;
   AdditionalFilesController*           additionalFilesController;
   EncapsulationsController*            encapsulationsController;
+  
+  export_format_t exportFormatCurrentSession;
 }
 
 +(PreferencesController*) sharedController;
@@ -130,8 +136,12 @@ extern NSString* AdditionalFilesPathsKey;
 
 -(NSString*)    latexitVersion;
 
--(export_format_t) exportFormat;
--(void)            setExportFormat:(export_format_t)value;
+-(export_format_t) exportFormatPersistent;
+-(void)            setExportFormatPersistent:(export_format_t)value;
+-(export_format_t) exportFormatCurrentSession;
+-(void)            setExportFormatCurrentSession:(export_format_t)value;
+
+
 -(NSData*)         exportJpegBackgroundColorData;
 -(void)            setExportJpegBackgroundColorData:(NSData*)value;
 -(NSColor*)        exportJpegBackgroundColor;
@@ -209,6 +219,11 @@ extern NSString* AdditionalFilesPathsKey;
 -(void)               setCompositionConfigurationDocument:(NSDictionary*)value;
 
 -(void)               setCompositionConfigurationDocumentProgramPath:(NSString*)value forKey:(NSString*)key;
+
+-(BOOL)      historySaveServicesResultsEnabled;
+-(BOOL)      historyDeleteOldEntriesEnabled;
+-(NSNumber*) historyDeleteOldEntriesLimit;
+-(BOOL)      historySmartEnabled;
 
 -(NSString*)          serviceDescriptionForIdentifier:(service_identifier_t)identifier;
 -(NSArray*)           serviceShortcuts;

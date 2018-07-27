@@ -36,6 +36,7 @@ extern NSString* WebToolbarItemIdentifier;
   IBOutlet NSView*        preamblesView;
   IBOutlet NSView*        bodyTemplatesView;
   IBOutlet NSView*        compositionView;
+  IBOutlet NSView*        historyView;
   IBOutlet NSView*        serviceView;
   IBOutlet NSView*        advancedView;
   IBOutlet NSView*        webView;
@@ -139,6 +140,12 @@ extern NSString* WebToolbarItemIdentifier;
   IBOutlet NSTextField*   compositionConfigurationsAdditionalScriptsDefiningShellTextField;
   IBOutlet NSTextView*    compositionConfigurationsAdditionalScriptsDefiningContentTextView;
   IBOutlet NSPanel*       compositionConfigurationsAdditionalScriptsHelpPanel;
+  
+  IBOutlet NSButton*    historySaveServiceResultsCheckbox;
+  IBOutlet NSButton*    historyDeleteOldEntriesCheckbox;
+  IBOutlet NSTextField* historyDeleteOldEntriesLimitTextField;
+  IBOutlet NSStepper*   historyDeleteOldEntriesLimitStepper;
+  IBOutlet NSButton*    historySmartCheckbox;
 
   IBOutlet NSPopUpButton*             servicePreamblePopUpButton;
   IBOutlet NSPopUpButton*             serviceBodyTemplatesPopUpButton;

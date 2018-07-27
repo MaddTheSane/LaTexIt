@@ -28,6 +28,7 @@
 #import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
 #import "SMLSyntaxColouring.h"
+#import "Utils.h"
 
 #import "RegexKitLite.h"
 
@@ -600,6 +601,8 @@ static int SpellCheckerDocumentTag = 0;
       [self insertText:rtfContent];
     else if (plainTextContent)
       [self insertText:plainTextContent];
+    
+    if (uti) CFRelease(uti);
   }
   else
     [super performDragOperation:sender];
@@ -677,11 +680,30 @@ static int SpellCheckerDocumentTag = 0;
 -(BOOL) validateMenuItem:(id)sender
 {
   BOOL ok = YES;
-  if ([sender action] == @selector(paste:))
+  if ([sender action] == @selector(copy:))
+    return [super validateMenuItem:sender];
+  else if ([sender action] == @selector(paste:))
     return YES;
   return ok;
 }
 //end validateMenuItem:
+
+-(BOOL) resignFirstResponder
+{
+  BOOL result = NO;
+  self->previousSelectedRangeLocation = [self selectedRange].location;
+  result = [super resignFirstResponder];
+  return result;
+}
+//end resignFirstResponder
+
+-(void) restorePreviousSelectedRangeLocation
+{
+  NSRange currentTextRange = NSMakeRange(0, [[[self textStorage] string] length]);
+  if (self->previousSelectedRangeLocation <= currentTextRange.length)
+    [self setSelectedRange:NSMakeRange(self->previousSelectedRangeLocation, 0)];
+}
+//end restorePreviousSelectedRangeLocation
 
 -(void) keyDown:(NSEvent*)theEvent
 {

@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf250
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf290
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
@@ -279,19 +279,34 @@ nom.latexpalette\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 \cf0 Le fichier Info.plist d\'e9crit la palette au format plist suivant:\
-[requis]		clef : "version"				valeur : version du format de palette, actuellement 1\
-[requis]		clef : "name"				valeur : le nom de la palette, \'e9ventuellement traduit dans les fichiers Localizable.strings des dossiers lproj\
-[optionnel] 	clef : "author"				valeur : l'auteur de la palette\
-[optionnel] 	clef : "numberOfItemsPerRow"	valeur : le nombre d'\'e9l\'e9ments par ligne dans la palette, par d\'e9faut 4\
-[requis]		clef : "items"     			valeur : un tableau de dictionnaires d\'e9crivant chacun un \'e9l\'e9ment de la palette\
+[requis]		clef : "version"				type:cha\'eene\
+			valeur : version du format de palette, actuellement 1\
+[requis]		clef : "name"				type:cha\'eene\
+			valeur : le nom de la palette, \'e9ventuellement traduit dans les fichiers Localizable.strings des dossiers lproj\
+[optionnel] 	clef : "author"				type:cha\'eene (d\'e9faut : vide)\
+			valeur : l'auteur de la palette\
+[optionnel] 	clef : "numberOfItemsPerRow"	type:entier (d\'e9faut : 4)\
+			valeur : le nombre d'\'e9l\'e9ments par ligne dans la palette\
+[requis]		clef : "items"     			type:tableau\
+			valeur : un tableau de dictionnaires d\'e9crivant chacun un \'e9l\'e9ment de la palette\
 \
-Un \'e9l\'e9ment de palette est form\'e9 ainsi :\
-[requis]		clef : "name"				valeur : un nom pour l'\'e9l\'e9ment (exemple: looparrowleft), \'e9ventuellement traduit dans les Localizable.strings des dossiers lproj\
-[optionnel]	clef : "latexCode"			valeur : le code latex correspondant (exemple: \\looparrowleft), par d\'e9faut identique "name" (non traduit) pr\'e9c\'e9d\'e9 d'un antislash\
-[optionnel]	clef : "resourceName"		valeur : le nom du fichier image correspondant (extension optionnelle). Par d\'e9faut, identique au "name" (non traduit)\
-[optionnel]	clef : "requires"				valeur : nom des packages requis (exemple: amssymb)\
-[optionnel]	clef : "numberOfArguments"	valeur : entier sup\'e9rieur \'e0 1 indiquant le nombre de paires d'accolades \{\} \'e0 rajouter au code latex (utile pour les fonctions)\
-[optionnel]	clef : "isEnvironment"		valeur : bool\'e9en (FAUX par d\'e9faut) indiquant si le mot-clef devrait s'\'e9crire \\begin\{nom\}...\\end\{nom\}\
+Un \'e9l\'e9ment de palette (item) est form\'e9 ainsi (sous forme de dictionnaire) :\
+[requis]		clef : "name"						type:cha\'eene\
+			valeur : un nom pour l'\'e9l\'e9ment (exemple: looparrowleft), \'e9ventuellement traduit dans les Localizable.strings des dossiers lproj\
+[optionnel]	clef : "latexCode"					type:cha\'eene (d\'e9faut : \\"name")\
+			valeur : le code latex correspondant (exemple: \\looparrowleft), par d\'e9faut identique "name" (non traduit) pr\'e9c\'e9d\'e9 d'un antislash\
+[optionnel]	clef : "resourceName"				type:cha\'eene (d\'e9faut : "name")\
+			valeur : le nom du fichier image correspondant (extension optionnelle). Par d\'e9faut, identique au "name" (non traduit)\
+[optionnel]	clef : "requires"						type:cha\'eene (d\'e9faut : vide)\
+			valeur : nom des packages requis (exemple: amssymb)\
+[optionnel]	clef : "numberOfArguments"			type:entier (d\'e9faut : 0)\
+			valeur : indique le nombre de paires d'accolades \{\'85\} que doit avoir le code latex (utile pour les fonctions ayant des arguments)\
+[optionnel]	clef : "argumentToken"				type:cha\'eene (d\'e9faut : vide)\
+			valeur : les occurences de \{argumentToken\} sont remplac\'e9es par \{le texte actuellement s\'e9lectionn\'e9\} ou par \{argumentTokenDefaultReplace\} sinon\
+[optionnel]	clef : "argumentTokenDefaultReplace"	type:cha\'eene (d\'e9faut : vide)\
+			valeur : voir ci-dessus\
+[optionnel]	clef : "isEnvironment"				type:bool\'e9en (d\'e9faut:faux)\
+			valeur : indique si le mot-clef devrait s'\'e9crire \\begin\{name\}...\\end\{name\}\
 \
 Les fichiers images sont dispos\'e9s dans le sous-dossier Resources.\
 Les valeurs des "name" de la palette ou des \'e9l\'e9ments peuvent \'eatre traduits dans des fichiers Localizable.strings de sous-dossiers langue.lproj\
@@ -407,6 +422,25 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.2.0 (25 mai 2010)\
+- les latexisations peuvent maintenant \'eatre interrompues ;\
+- correction d'un cas o\'f9 les pr\'e9f\'e9rences des scripts additionnels pouvaient ne pas \'eatre sauvegard\'e9es ;\
+- ajout d'une barre de progression pour la migration de l'historique si n\'e9cessaire ;\
+- ajout de pr\'e9f\'e9rences pour l'historique ;\
+- l'historique peut maintenant \'eatre import\'e9e/export\'e9e\'a0;\
+- le format d'export peut maintenant \'eatre chang\'e9 \'e0 la vol\'e9e pendant un glisser/d\'e9poser\'a0;\
+\pard\pardeftab720\ql\qnatural
+\cf0 - gestion plus puissante des arguments de fonctions pour les \'e9l\'e9ments de la palette LaTeX\'a0;\
+- am\'e9liorations mineures de l'interface\'a0;\
+- quelques corrections de bugs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 2.1.1 (11 mars 2010)\
+- correction d'un bug emp\'eachant LaTeXiT d'informer l'utilisateur des nouvelles mises \'e0 jour;\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - si vous voulez m'aider \'e0 acheter une maison, vous pouvez reconsid\'e9rer ce fameux don de plusieurs milliers d'euros que vous avez repouss\'e9 jusqu'alors.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
 v 2.1.0 (9 mars 2010)\
 - abandon provisoire du 64 bits \'e0 cause de bugs du AppleTypeServer d\'e9j\'e0 cit\'e9s dans la version 2.0.1;\
 - migration du mode EqnArray \'e0 Align, qui s'utilise de la m\'eame fa\'e7on mais donne de meilleurs r\'e9sultats;\

@@ -8,6 +8,9 @@
 
 #import "CompositionConfigurationsAdditionalScriptsController.h"
 
+#import "PreferencesController.h"
+#import "NSStringExtended.h"
+
 @implementation CompositionConfigurationsAdditionalScriptsController
 
 -(id) selection
@@ -16,5 +19,17 @@
   return result;
 }
 //end selection
+
+-(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+  [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+  if ([keyPath startsWith:@"value." options:0])
+  {
+    //for some reason, needed to trigger observation on all controllers
+    [[[PreferencesController sharedController] compositionConfigurationsController]
+      setValue:[object valueForKeyPath:@"enabled"]
+      forKeyPath:[NSString stringWithFormat:@"selection.%@.selection.enabled", CompositionConfigurationAdditionalProcessingScriptsKey]];
+  }
+}
 
 @end

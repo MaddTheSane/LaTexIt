@@ -3,6 +3,7 @@
 "Cancel" = "Cancelar";
 "Error" = "Error";
 "Untitled" = "Sin Título";
+"Stop" = "Parar";
 "none" = "ninguno";
 "default" = "por defecto";
 "Copy of %@" = "Copia de %@";
@@ -163,6 +164,13 @@
 "Additional files" = "Archivos adicionales";
 "Default Format" = "Formato por defecto";
 "PDF with outlined fonts" = "PDF con fuentes trazadas";
+"PDF without embedded fonts" = "PDF con fuentes trazadas";
+"PDF w.o.f." = "PDF c.f.t.";
+"PDF vector format" = "Imagen vectorial PDF";
+"EPS vector format" = "Imagen vectorial EPS";
+"TIFF bitmap format" = "Imagen de mapa de bits TIFF";
+"PNG bitmap format" = "Imagen de mapa de bits PNG";
+"JPEG bitmap format" = "Imagen de mapa de bits JPEG";
 "Migrating history to new format" = "Migrando el historial al nuevo formato";
 "Migrating library to new format" = "Migrando la librería al nuevo formato";
 
@@ -181,6 +189,7 @@
 
 /* document extra panels */
 "Execution log" = "Registro";
+"Drag through areas to change export type" = "Drag through areas to change export type";
 
 /* Library */
 "Library" = "Librería";
@@ -202,6 +211,8 @@
 /* History */
 "Add to current history" = "Añadir a la historial actual";
 "Overwrite current history" = "Sobreescribir la historial actual";
+"Lock" = "Bloquear";
+"Unlock" = "Desbloquear";
 
 /* palette : additional files */
 "Open defaults" = "Abrir defecto";

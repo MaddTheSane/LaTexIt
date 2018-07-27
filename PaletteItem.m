@@ -9,85 +9,99 @@
 
 #import "PaletteItem.h"
 
+#import <RegexKitLite.h>
 
 @implementation PaletteItem
 
 -(id) initWithName:(NSString*)aName localizedName:(NSString*)aLocalizedName resourcePath:(NSString*)aResourcePath 
-              type:(latex_item_type_t)aType numberOfArguments:(unsigned int)aNumberOfArguments
+              type:(latex_item_type_t)aType numberOfArguments:(NSUInteger)aNumberOfArguments
               latexCode:(NSString*)aLatexCode requires:(NSString*)package
+              argumentToken:(NSString*)anArgumentToken
+              argumentTokenDefaultReplace:(NSString*)anArgumentTokenDefaultReplace
 {
   if ((!(self = [super init])) || !aName)
     return nil;
 
-  name              = [aName copy];
-  localizedName     = aLocalizedName ? [aLocalizedName copy] : [name copy];
-  resourcePath      = aResourcePath  ? [aResourcePath copy]  : [name copy];
-  type              = aType;
-  numberOfArguments = aNumberOfArguments;
-  latexCode         = aLatexCode ? [aLatexCode copy] :
-                        (type == LATEX_ITEM_TYPE_ENVIRONMENT ? [[NSString alloc] initWithFormat:@"\\begin{%@}...\\end{%@}", name, name]
-                                                             : [[NSString alloc] initWithFormat:@"\\%@", name]);
+  self->name              = [aName copy];
+  self->localizedName     = aLocalizedName ? [aLocalizedName copy] : [self->name copy];
+  self->resourcePath      = aResourcePath  ? [aResourcePath copy]  : [self->name copy];
+  self->type              = aType;
+  self->numberOfArguments = aNumberOfArguments;
+  self->latexCode         = aLatexCode ? [aLatexCode copy] :
+                            (self->type == LATEX_ITEM_TYPE_ENVIRONMENT ?
+                              [[NSString alloc] initWithFormat:@"\\begin{%@}...\\end{%@}", name, name] :
+                              [[NSString alloc] initWithFormat:@"\\%@", name]);
+  const unichar bulletChar = 0x2026;
+  NSString* bulletString = [NSString stringWithCharacters:&bulletChar length:1];
+  NSUInteger presetArgsCount = [[self->latexCode componentsMatchedByRegex:@"\\{.*?(\\{.*\\})*\\}"] count];
   NSMutableString* stringOfArguments = [NSMutableString string];
   unsigned int i = 0;
-  for(i = 0 ; i<numberOfArguments ; ++i)
-    [stringOfArguments appendString:@"{}"];
-  if (type == LATEX_ITEM_TYPE_STANDARD)
-    latexCode = [[[latexCode autorelease] stringByAppendingString:stringOfArguments] retain];
+  for(i = presetArgsCount ; i<self->numberOfArguments ; ++i)
+    [stringOfArguments appendFormat:@"{%@}", bulletString];
+  if (self->type == LATEX_ITEM_TYPE_STANDARD)
+    self->latexCode = [[[self->latexCode autorelease] stringByAppendingString:stringOfArguments] retain];
 
-  requires = [package copy];
+  self->requires = [package copy];
+  self->argumentToken               = !anArgumentToken ? @"" : [anArgumentToken copy];
+  self->argumentTokenDefaultReplace = !anArgumentTokenDefaultReplace ? @"" : [anArgumentTokenDefaultReplace copy];
 
-  if (!name || !localizedName || !latexCode || !resourcePath)
+  if (!self->name || !self->localizedName || !self->latexCode || !self->resourcePath)
   {
     [self autorelease];
     return nil;
   }
   
-  image = [[NSImage alloc] initWithContentsOfFile:aResourcePath];
-  [image setCacheMode:NSImageCacheNever];
-  [image setDataRetained:YES];
-  [image recache];
+  self->image = [[NSImage alloc] initWithContentsOfFile:aResourcePath];
+  [self->image setCacheMode:NSImageCacheNever];
+  [self->image setDataRetained:YES];
+  [self->image recache];
   return self;
 }
 //end initWithName:localizedName:resourcePath:type:numberOfArguments:latexCode:requires:
 
 -(void) dealloc
 {
-  [name          release];
-  [localizedName release];
-  [latexCode     release];
-  [requires      release];
-  [resourcePath  release];
-  [image         release];
+  [self->name                        release];
+  [self->localizedName               release];
+  [self->latexCode                   release];
+  [self->requires                    release];
+  [self->argumentToken               release];
+  [self->argumentTokenDefaultReplace release];
+  [self->resourcePath                release];
+  [self->image                       release];
   [super dealloc];
 }
 //end dealloc
 
--(NSString*)         name              {return name;}
--(NSString*)         localizedName     {return localizedName;}
--(latex_item_type_t) type              {return type;}
--(unsigned int)      numberOfArguments {return numberOfArguments;}
--(NSString*)         latexCode         {return latexCode;}
--(NSString*)         requires          {return requires;}
--(NSString*)         resourcePath      {return resourcePath;}
--(NSImage*)          image             {return image;}
+-(NSString*)         name                        {return self->name;}
+-(NSString*)         localizedName               {return self->localizedName;}
+-(latex_item_type_t) type                        {return self->type;}
+-(NSUInteger)        numberOfArguments           {return self->numberOfArguments;}
+-(NSString*)         latexCode                   {return self->latexCode;}
+-(NSString*)         requires                    {return self->requires;}
+-(NSString*)         argumentToken               {return self->argumentToken;}
+-(NSString*)         argumentTokenDefaultReplace {return self->argumentTokenDefaultReplace;}
+-(NSString*)         resourcePath                {return self->resourcePath;}
+-(NSImage*)          image                       {return self->image;}
 
 -(NSString*) toolTip
 {
-  return [latexCode isEqualToString:[NSString stringWithFormat:@"\\%@", name]]
-           ? latexCode : [NSString stringWithFormat:@"%@ : %@", localizedName, latexCode];
+  return [self->latexCode isEqualToString:[NSString stringWithFormat:@"\\%@", self->name]] ?
+           self->latexCode :
+           [NSString stringWithFormat:@"%@ : %@", self->localizedName, self->latexCode];
 }
 //end toolTip
 
--(NSString*) formatStringToInsertText
+-(NSString*) stringWithTextInserted:(NSString*)text
 {
-  NSMutableString* string = [NSMutableString stringWithString:latexCode];
-  if (type == LATEX_ITEM_TYPE_STANDARD)
+  NSMutableString* string = [NSMutableString stringWithString:self->latexCode];
+  if (self->type == LATEX_ITEM_TYPE_STANDARD)
   {
-    NSRange range = [string rangeOfString:@"{}"];
-    if (range.location != NSNotFound)
-      [string replaceCharactersInRange:range withString:@"{%@}"];
+    [string replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", self->argumentToken]
+                            withString:[NSString stringWithFormat:@"{%@}", [text length] ? text : self->argumentTokenDefaultReplace]
+                               options:0 range:NSMakeRange(0, [string length])];
   }
-  else if (type == LATEX_ITEM_TYPE_ENVIRONMENT)
+  else if (self->type == LATEX_ITEM_TYPE_ENVIRONMENT)
   {
     unsigned int length = [string length];
     NSRange beginRange = [string rangeOfString:@"\\begin{"];
@@ -98,10 +112,11 @@
       (endBeginRange.location != NSNotFound) ? [string rangeOfString:@"\\end{" options:0 range:NSMakeRange(endBeginRange.location, length-endBeginRange.location)]
                                              : endBeginRange;
     if ((endRange.location != NSNotFound) && (endBeginRange.location+1 < length) && (endRange.location >= endBeginRange.location+1))
-      [string replaceCharactersInRange:NSMakeRange(endBeginRange.location+1, endRange.location-endBeginRange.location-1)  withString:@"%@"];
+      [string replaceCharactersInRange:NSMakeRange(endBeginRange.location+1, endRange.location-endBeginRange.location-1)
+                            withString:([text length] ? text : self->argumentTokenDefaultReplace)];
   }
   return string;
 }
-//end formatStringToInsertText
+//end stringWithTextInserted:
 
 @end

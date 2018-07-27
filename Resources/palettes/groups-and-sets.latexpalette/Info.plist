@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>items</key>
@@ -72,9 +72,29 @@
 			<key>resourceName</key>
 			<string>supseteq</string>
 		</dict>
+		<dict>
+			<key>latexCode</key>
+			<string>\emptyset</string>
+			<key>name</key>
+			<string>emptyset</string>
+			<key>requires</key>
+			<string>amssymb</string>
+			<key>resourceName</key>
+			<string>emptyset</string>
+		</dict>
+		<dict>
+			<key>latexCode</key>
+			<string>\varnothing</string>
+			<key>name</key>
+			<string>varnothing</string>
+			<key>requires</key>
+			<string>amssymb</string>
+			<key>resourceName</key>
+			<string>varnothing</string>
+		</dict>
 	</array>
 	<key>author</key>
-	<string>Matthew Hutton</string>
+	<string>Matthew Hutton, Pierre Chatelier</string>
 	<key>name</key>
 	<string>groups-and-sets</string>
 	<key>version</key>

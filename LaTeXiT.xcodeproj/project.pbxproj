@@ -89,6 +89,8 @@
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		9302548007F0BC6A00011996 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
 		930255D007F0C2A800011996 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 930255CF07F0C2A800011996 /* Localizable.strings */; };
+		93027CF811A6618E000E22CF /* NSMenuExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93027CF711A6618E000E22CF /* NSMenuExtended.m */; };
+		93027D3411A67675000E22CF /* NSPopUpButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93027D3311A67675000E22CF /* NSPopUpButtonExtended.m */; };
 		9304224D082975ED00F2B555 /* NSIndexSetExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9304224B082975ED00F2B555 /* NSIndexSetExtended.m */; };
 		9305E15A1016E5E5007058BC /* DelegatingTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9305E1591016E5E5007058BC /* DelegatingTransformer.m */; };
 		9308991F0C0A586F00B08453 /* latexit-lib.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9308991E0C0A586F00B08453 /* latexit-lib.icns */; };
@@ -151,6 +153,8 @@
 		932E60B20F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		932E60B30F5DA745002B3136 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
+		932FAEA4115CB3B000221D6D /* locked.png in Resources */ = {isa = PBXBuildFile; fileRef = 932FAEA2115CB3B000221D6D /* locked.png */; };
+		932FAEA5115CB3B000221D6D /* unlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 932FAEA3115CB3B000221D6D /* unlocked.png */; };
 		93310172083D1D6500DE67ED /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		9333458A1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 933345891077322E0022DBEB /* LatexitEquationWrapper.m */; };
 		9333458B1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 933345891077322E0022DBEB /* LatexitEquationWrapper.m */; };
@@ -235,6 +239,9 @@
 		935B8FDD0FB6E5CF00448B03 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 935B8FDC0FB6E5CF00448B03 /* LibraryController.m */; };
 		936091A21087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
 		936091A31087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
+		936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 936368C91194BA4900C5DE49 /* DragThroughButton.m */; };
+		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
+		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		936E319309465EAE0091BEC1 /* advancedToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */; };
@@ -250,6 +257,7 @@
 		937A39870FE2F1AC000BEE6E /* MySplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937A39860FE2F1AC000BEE6E /* MySplitView.m */; };
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
+		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
 		938999BD10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		938999BE10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 938DBADA10BD7C19002350CF /* PalettePanel.m */; };
@@ -298,8 +306,11 @@
 		93B52890089FF95800F14B77 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B5288C089FF95800F14B77 /* remove.tiff */; };
 		93B583131014704700907B47 /* NSManagedObjectContextExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */; };
 		93B5870C10159CC700907B47 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
+		93BCB2E51161D03500ED5DBE /* historyToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93BCB2E41161D03500ED5DBE /* historyToolbarItem.tiff */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
 		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
+		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
+		93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
 		93C531900D9E2781003AF7FC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C5318F0D9E2781003AF7FC /* Security.framework */; };
@@ -475,6 +486,10 @@
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
 		9302547F07F0BC6A00011996 /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
 		930255CD07F0C2A300011996 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93027CF611A6618E000E22CF /* NSMenuExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMenuExtended.h; sourceTree = "<group>"; };
+		93027CF711A6618E000E22CF /* NSMenuExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMenuExtended.m; sourceTree = "<group>"; };
+		93027D3211A67675000E22CF /* NSPopUpButtonExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonExtended.h; sourceTree = "<group>"; };
+		93027D3311A67675000E22CF /* NSPopUpButtonExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonExtended.m; sourceTree = "<group>"; };
 		9304224A082975ED00F2B555 /* NSIndexSetExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSIndexSetExtended.h; sourceTree = "<group>"; };
 		9304224B082975ED00F2B555 /* NSIndexSetExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSIndexSetExtended.m; sourceTree = "<group>"; };
 		9305E1581016E5E5007058BC /* DelegatingTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DelegatingTransformer.h; sourceTree = "<group>"; };
@@ -569,6 +584,8 @@
 		932CF5770826D9E500434128 /* LibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryManager.m; sourceTree = "<group>"; };
 		932E60B00F5DA745002B3136 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		932E60B10F5DA745002B3136 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
+		932FAEA2115CB3B000221D6D /* locked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = locked.png; path = Resources/interface/locked.png; sourceTree = "<group>"; };
+		932FAEA3115CB3B000221D6D /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unlocked.png; path = Resources/interface/unlocked.png; sourceTree = "<group>"; };
 		9331016F083D1D6400DE67ED /* NSColorExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSColorExtended.h; sourceTree = "<group>"; };
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		933345881077322E0022DBEB /* LatexitEquationWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexitEquationWrapper.h; sourceTree = "<group>"; };
@@ -643,8 +660,8 @@
 		9357846A0E9D2A9C00736F31 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		935888E7096048A00068C698 /* ServiceShortcutsTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTextView.h; sourceTree = "<group>"; };
 		935888E8096048A00068C698 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
-		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
-		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
+		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
+		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		935AD8710F9E389700B361D8 /* MyDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MyDocument.nib; sourceTree = "<group>"; };
 		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LibraryWindowController.nib; sourceTree = "<group>"; };
 		935ADD9C0FA0AFF900B361D8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ExportFormatOptionsPanes.nib; sourceTree = "<group>"; };
@@ -660,6 +677,12 @@
 		935B8FDC0FB6E5CF00448B03 /* LibraryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryController.m; sourceTree = "<group>"; };
 		936091A01087084200F4B39A /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = Frameworks/RegexKitLite/RegexKitLite.h; sourceTree = "<group>"; };
 		936091A11087084300F4B39A /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = Frameworks/RegexKitLite/RegexKitLite.m; sourceTree = "<group>"; };
+		936368C81194BA4900C5DE49 /* DragThroughButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragThroughButton.h; sourceTree = "<group>"; };
+		936368C91194BA4900C5DE49 /* DragThroughButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragThroughButton.m; sourceTree = "<group>"; };
+		936369DF1194C9BD00C5DE49 /* NSButtonPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSButtonPalette.h; sourceTree = "<group>"; };
+		936369E01194C9BD00C5DE49 /* NSButtonPalette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSButtonPalette.m; sourceTree = "<group>"; };
+		93636AAB11957D5B00C5DE49 /* DragFilterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterView.h; sourceTree = "<group>"; };
+		93636AAC11957D5B00C5DE49 /* DragFilterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterView.m; sourceTree = "<group>"; };
 		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
 		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
 		936C315C0C0DEEA90082F86D /* Semaphore.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Semaphore.m; sourceTree = "<group>"; };
@@ -692,6 +715,8 @@
 		937D7D270E48F5BA006F04E1 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		937D7D280E48F5CF006F04E1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
+		93869F9D1195E3EB00147048 /* DragFilterWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindow.h; sourceTree = "<group>"; };
+		93869F9E1195E3EB00147048 /* DragFilterWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindow.m; sourceTree = "<group>"; };
 		938999BB10159DA000A9E04F /* PreferencesControllerMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesControllerMigration.h; sourceTree = "<group>"; };
 		938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesControllerMigration.m; sourceTree = "<group>"; };
 		938DBAD910BD7C19002350CF /* PalettePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalettePanel.h; sourceTree = "<group>"; };
@@ -759,9 +784,13 @@
 		93B5288A089FF95800F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/interface/add-pressed.tiff"; sourceTree = "<group>"; };
 		93B5288B089FF95800F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/interface/remove-pressed.tiff"; sourceTree = "<group>"; };
 		93B5288C089FF95800F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/interface/remove.tiff; sourceTree = "<group>"; };
+		93BCB2E41161D03500ED5DBE /* historyToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = historyToolbarItem.tiff; sourceTree = "<group>"; };
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
+		93BEEB551195BDB40060166A /* DragFilterWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = DragFilterWindowController.nib; sourceTree = "<group>"; };
+		93BEEB591195BDF20060166A /* DragFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindowController.h; sourceTree = "<group>"; };
+		93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindowController.m; sourceTree = "<group>"; };
 		93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "latexit-latex-palette.icns"; path = "Resources/file-icons/latexit-latex-palette.icns"; sourceTree = "<group>"; };
 		93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableView.h; sourceTree = "<group>"; };
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
@@ -944,6 +973,7 @@
 			children = (
 				9344B4280E8B7D6600FE90A5 /* Automator */,
 				93344CB708251C9000F00A49 /* CocoaExtensions */,
+				93BEEB581195BDD90060166A /* DragFilterWindow */,
 				93EF9D1B07EF7B5C0003FA6E /* History */,
 				9324D35808A63ED90010DB95 /* Interface */,
 				9344B6E70E8BBDA700FE90A5 /* LaTeX Processor */,
@@ -1034,6 +1064,8 @@
 			children = (
 				93D4947110C1050700A0D06A /* NDProcess */,
 				935AE0E40FA1B41F00B361D8 /* Value transformers */,
+				936369DF1194C9BD00C5DE49 /* NSButtonPalette.h */,
+				936369E01194C9BD00C5DE49 /* NSButtonPalette.m */,
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
 				931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */,
@@ -1111,6 +1143,8 @@
 				9309DCD309C8B17600C5231C /* BorderlessPanel.m */,
 				9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */,
 				9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */,
+				936368C81194BA4900C5DE49 /* DragThroughButton.h */,
+				936368C91194BA4900C5DE49 /* DragThroughButton.m */,
 				934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */,
 				934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */,
 				9311C64208A0C409009AC959 /* ImagePopupButton.h */,
@@ -1178,9 +1212,9 @@
 				93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */,
 				9331016F083D1D6400DE67ED /* NSColorExtended.h */,
 				93310170083D1D6400DE67ED /* NSColorExtended.m */,
-				935AECEB0CB16ECB001A5067 /* NSDictionaryExtended.h */,
 				934A2C9A10B6C4AC00AAA2CD /* NSDataExtended.h */,
 				934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */,
+				935AECEB0CB16ECB001A5067 /* NSDictionaryExtended.h */,
 				935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */,
 				93C531CE0D9E310C003AF7FC /* NSFileManagerExtended.h */,
 				93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */,
@@ -1192,6 +1226,8 @@
 				9304224B082975ED00F2B555 /* NSIndexSetExtended.m */,
 				9309974D1013450200C38C4E /* NSManagedObjectContextExtended.h */,
 				9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */,
+				93027CF611A6618E000E22CF /* NSMenuExtended.h */,
+				93027CF711A6618E000E22CF /* NSMenuExtended.m */,
 				93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */,
 				93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */,
 				9310CDE9101753BF0077E0D5 /* NSMutableDictionaryExtended.h */,
@@ -1200,6 +1236,8 @@
 				9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */,
 				93A9FF4C10201DA70061DB60 /* NSObjectTreeNode.h */,
 				93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */,
+				93027D3211A67675000E22CF /* NSPopUpButtonExtended.h */,
+				93027D3311A67675000E22CF /* NSPopUpButtonExtended.m */,
 				9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */,
 				935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */,
 				93EFDB72088FEFA6000156A3 /* NSStringExtended.h */,
@@ -1257,6 +1295,7 @@
 				934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.nib */,
 				93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.nib */,
 				9324187B0F9CF679006BA13B /* DocumentExtraPanelsController.nib */,
+				93BEEB551195BDB40060166A /* DragFilterWindowController.nib */,
 				935ADD9E0FA0B01000B361D8 /* ExportFormatOptionsPanes.nib */,
 				93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.nib */,
 				93EED7D508A2197500A99BDF /* HistoryWindowController.nib */,
@@ -1449,6 +1488,7 @@
 				936E318E09465EAE0091BEC1 /* compositionToolbarItem.tiff */,
 				936E318F09465EAE0091BEC1 /* editionToolbarItem.tiff */,
 				936E319009465EAE0091BEC1 /* generalToolbarItem.tiff */,
+				93BCB2E41161D03500ED5DBE /* historyToolbarItem.tiff */,
 				93914200094F9A8A00B9F2F9 /* preambleToolbarItem.tiff */,
 				936E319109465EAE0091BEC1 /* serviceToolbarItem.tiff */,
 				936E319209465EAE0091BEC1 /* webToolbarItem.tiff */,
@@ -1527,6 +1567,19 @@
 			name = LaTeX;
 			sourceTree = "<group>";
 		};
+		93BEEB581195BDD90060166A /* DragFilterWindow */ = {
+			isa = PBXGroup;
+			children = (
+				93869F9D1195E3EB00147048 /* DragFilterWindow.h */,
+				93869F9E1195E3EB00147048 /* DragFilterWindow.m */,
+				93BEEB591195BDF20060166A /* DragFilterWindowController.h */,
+				93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */,
+				93636AAB11957D5B00C5DE49 /* DragFilterView.h */,
+				93636AAC11957D5B00C5DE49 /* DragFilterView.m */,
+			);
+			name = DragFilterWindow;
+			sourceTree = "<group>";
+		};
 		93D06AE30990BCAA00C484B8 /* file-icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -1554,10 +1607,12 @@
 				932CF45E0826C5A500434128 /* icon-file.png */,
 				93F0FFC1098847940064888E /* icon-folder-big.tiff */,
 				9344D83C0825818B00B17B37 /* icon-folder-small.png */,
+				932FAEA2115CB3B000221D6D /* locked.png */,
 				9309DEB109C8D09700C5231C /* magnifying-glass.png */,
 				9343D0C808604F430024CDC2 /* refresh.tiff */,
 				93B5288C089FF95800F14B77 /* remove.tiff */,
 				93B5288B089FF95800F14B77 /* remove-pressed.tiff */,
+				932FAEA3115CB3B000221D6D /* unlocked.png */,
 				93F0FFE409884B030064888E /* view-icons.tiff */,
 				93F0FFEB09884BDA0064888E /* view-titles.tiff */,
 				930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */,
@@ -1837,6 +1892,10 @@
 				93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */,
 				9375F95610296C9C00421561 /* NSActionTemplate10_4.png in Resources */,
 				93DD647F106A572E00EDDF82 /* bodyTemplateToolbarItem.tiff in Resources */,
+				932FAEA4115CB3B000221D6D /* locked.png in Resources */,
+				932FAEA5115CB3B000221D6D /* unlocked.png in Resources */,
+				93BCB2E51161D03500ED5DBE /* historyToolbarItem.tiff in Resources */,
+				93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2054,6 +2113,13 @@
 				938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */,
 				93D4947910C1051700A0D06A /* NDProcess.m in Sources */,
 				93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
+				936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */,
+				936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */,
+				93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */,
+				93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */,
+				93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */,
+				93027CF811A6618E000E22CF /* NSMenuExtended.m in Sources */,
+				93027D3411A67675000E22CF /* NSPopUpButtonExtended.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2443,7 +2509,6 @@
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
-				SYMROOT = "/Users/chacha/Temporary/XCode-builds/${PROJECT_NAME}";
 			};
 			name = Development;
 		};

@@ -18,6 +18,7 @@
 
 @class AdditionalFilesWindowController;
 @class CompositionConfigurationsWindowController;
+@class DragFilterWindowController;
 @class EncapsulationsWindowController;
 @class HistoryItem;
 @class HistoryWindowController;
@@ -29,7 +30,8 @@
 @class PreferencesWindowController;
 @class SUUpdater;
 
-@interface AppController : NSObject <LinkBackServerDelegate> {  
+@interface AppController : NSObject <LinkBackServerDelegate> {
+  IBOutlet NSMenuItem*    editCopyImageAsMenuItem;
   IBOutlet NSWindow*      readmeWindow;
   IBOutlet NSTextView*    readmeTextView;
   IBOutlet NSPanel*       donationPanel;
@@ -52,6 +54,7 @@
 
   AdditionalFilesWindowController*           additionalFilesWindowController;
   CompositionConfigurationsWindowController* compositionConfigurationWindowController;
+  DragFilterWindowController*                dragFilterWindowController;
   EncapsulationsWindowController*            encapsulationsWindowController;
   HistoryWindowController*                   historyWindowController;
   LaTeXPalettesWindowController*             latexPalettesWindowController;
@@ -71,6 +74,7 @@
 -(NSWindow*)                whiteColorWarningWindow;
 -(AdditionalFilesWindowController*)           additionalFilesWindowController;
 -(CompositionConfigurationsWindowController*) compositionConfigurationWindowController;
+-(DragFilterWindowController*)                dragFilterWindowController;
 -(EncapsulationsWindowController*)            encapsulationsWindowController;
 -(HistoryWindowController*)                   historyWindowController;
 -(LaTeXPalettesWindowController*)             latexPalettesWindowController;
@@ -82,6 +86,7 @@
 -(HistoryItem*) addHistoryItemToHistory:(HistoryItem*)latexitEquation;
 
 //the menu actions
+-(IBAction) displaySponsors:(id)sender;
 -(IBAction) makeDonation:(id)sender;//display info panel
 -(IBAction) openWebSite:(id)sender;//ask for LaTeXiT's web site
 -(IBAction) checkUpdates:(id)sender;//check for updates on LaTeXiT's web site
@@ -100,6 +105,7 @@
 
 -(IBAction) historyRemoveHistoryEntries:(id)sender;
 -(IBAction) historyClearHistory:(id)sender;
+-(IBAction) historyChangeLock:(id)sender;
 -(IBAction) historyOpen:(id)sender;
 -(IBAction) historySaveAs:(id)sender;
 -(IBAction) showOrHideHistory:(id)sender;

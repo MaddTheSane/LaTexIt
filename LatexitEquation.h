@@ -85,6 +85,7 @@ extern NSString* LatexitEquationsPboardType;
 -(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
 
 //utils
+-(void) checkAndMigrateAlign;
 //+(double) baselineFromData:(NSData*)someData;
 -(NSString*) titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;

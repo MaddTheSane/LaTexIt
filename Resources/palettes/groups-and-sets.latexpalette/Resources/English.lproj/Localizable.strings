@@ -7,3 +7,5 @@
 "supseteq"="Superset";
 "subset"="Strict subset";
 "subseteq"="Subset";
+"emptyset"="Empty set 1";
+"varnothing"="Empty set 2";

@@ -197,8 +197,8 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   else
   {
-    oldLatexitVersion = [(NSString*)CFPreferencesCopyAppValue((CFStringRef)Old_LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey) autorelease];
-    newLatexitVersion = [(NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey) autorelease];
+    oldLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)Old_LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    newLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
   }
 
   
@@ -345,7 +345,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   else//!if (!self->isLaTeXiT)
   {
-    id value = (id)CFPreferencesCopyAppValue((CFStringRef)oldKey, (CFStringRef)LaTeXiTAppKey);
+    id value = NSMakeCollectable((id)CFPreferencesCopyAppValue((CFStringRef)oldKey, (CFStringRef)LaTeXiTAppKey));
     if (value)
     {
       CFPreferencesSetAppValue((CFStringRef)oldKey, 0, (CFStringRef)LaTeXiTAppKey);
@@ -417,8 +417,8 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   else
   {
-    oldServiceShortcutsEnabled = [(NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutEnabledKey, (CFStringRef)LaTeXiTAppKey) autorelease];
-    oldServiceShortcutsStrings = [(NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutStringsKey, (CFStringRef)LaTeXiTAppKey) autorelease];
+    oldServiceShortcutsEnabled = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutEnabledKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    oldServiceShortcutsStrings = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutStringsKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
   }
   
   NSMutableArray* newServiceShortcuts = [NSMutableArray arrayWithCapacity:6];

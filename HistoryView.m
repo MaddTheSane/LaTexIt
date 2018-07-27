@@ -10,6 +10,8 @@
 #import "HistoryView.h"
 
 #import "AppController.h"
+#import "DragFilterWindow.h"
+#import "DragFilterWindowController.h"
 #import "HistoryCell.h"
 #import "HistoryController.h"
 #import "HistoryItem.h"
@@ -137,7 +139,7 @@
     if (equation)
     {
       NSUndoManager* documentUndoManager = [document undoManager];
-      [document applyLatexitEquation:equation];
+      [document applyLatexitEquation:equation isRecentLatexisation:NO];
       [documentUndoManager setActionName:NSLocalizedString(@"Apply History item", @"Apply History item")];
     }
     [[document windowForSheet] makeKeyAndOrderFront:nil];
@@ -323,6 +325,24 @@
 
 #pragma mark drag'n drop
 
+-(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
+       pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
+{
+  [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
+    [[self window] convertBaseToScreen:[event locationInWindow]]];
+  [[[AppController appController] dragFilterWindowController] setDelegate:self];
+  [super dragImage:image at:at offset:offset event:event pasteboard:pasteboard source:object slideBack:slideBack];
+}
+//end dragImage:at:offset:event:pasteboard:source:slideBack:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
+  [[[AppController appController] dragFilterWindowController] setDelegate:nil];
+  [super draggedImage:anImage endedAt:aPoint operation:operation];
+}
+//end draggedImage:endedAt:operation:
+
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender
 {
   NSDragOperation result = NSDragOperationNone;
@@ -364,14 +384,28 @@
 }
 //end draggingSourceOperationMaskForLocal:
 
--(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+-(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
+{
+  NSPasteboard* pasteBoard = [NSPasteboard pasteboardWithName:NSDragPboard];
+  [self tableView:self writeRowsWithIndexes:[self selectedRowIndexes] toPasteboard:pasteBoard];
+}
+//end dragFilterWindowController:exportFormatDidChange:
+
+-(BOOL) tableView:(NSTableView*)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
   BOOL result = YES;
   if ([rowIndexes count])
   {
+    BOOL isChangePasteboardOnTheFly = ([pboard dataForType:NSFilesPromisePboardType] != nil);
+    if (!isChangePasteboardOnTheFly)
+      [pboard declareTypes:[NSArray array] owner:self];
+    
     //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
-    [pboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-    [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
+    if (!isChangePasteboardOnTheFly)
+    {
+      [pboard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
+      [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
+    }
 
     //stores the array of selected history items in the HistoryItemsPboardType
     NSArray* selectedHistoryItems = [[self->historyItemsController arrangedObjects] objectsAtIndexes:rowIndexes];
@@ -406,7 +440,7 @@
   
   //the problem will be to avoid overwritting files when they already exist
   NSString* filePrefix = @"latex-image";
-  export_format_t exportFormat = [[PreferencesController sharedController] exportFormat];
+  export_format_t exportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
   NSString* extension = nil;
   switch(exportFormat)
   {

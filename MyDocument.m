@@ -85,6 +85,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)format scaleAsPercent:(CGFloat)scaleAsPercent
                   jpegColor:(NSColor*)jpegColor jpegQuality:(CGFloat)jpegQuality filePath:(NSString*)filePath;
+                  
+-(void) latexizeCoreRunWithConfiguration:(NSDictionary*)configuration;
+-(void) removeObsoleteFiles;
+-(void) applicationWillTerminate:(NSNotification*)notification;
 @end
 
 @implementation MyDocument
@@ -130,6 +134,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     return nil;
   self->uniqueId = [MyDocument _giveId];
   self->lastExecutionLog = [[NSMutableString alloc] init];
+  self->poolOfObsoleteUniqueIds = [[NSMutableArray alloc] init];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(waitLatexizationDidEnd:)
+                                               name:LatexizationDidEndNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
+                                               name:NSApplicationWillTerminateNotification object:nil];
   return self;
 }
 //end init
@@ -144,9 +153,25 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   [self->lastAppliedLibraryEquation release];
   [self->lastExecutionLog release];
   [self->lastRequestedBodyTemplate release];
+  [self->poolOfObsoleteUniqueIds release];
+  [self->busyIdentifier release];
   [super dealloc];
 }
 //end dealloc
+
+-(void) close
+{
+  @synchronized(self)
+  {
+    if (self->nbBackgroundLatexizations > 0)
+    {
+      self->isClosed = YES;
+      [self retain];
+    }//end if (self->nbBackgroundLatexizations > 0)
+  }
+  [super close];
+}
+//end close
 
 -(DocumentExtraPanelsController*) lazyDocumentExtraPanelsController
 {
@@ -333,6 +358,16 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(MyImageView*) imageView                {return self->upperBoxImageView;}
 -(NSButton*)    lowerBoxLatexizeButton   {return self->lowerBoxLatexizeButton;}
 -(NSResponder*) preferredFirstResponder  {return self->lowerBoxSourceTextView;}
+-(NSResponder*) previousFirstResponder
+{
+  NSResponder* result = self->lastFirstResponder;
+  if (!result)
+    result = [self preferredFirstResponder];
+  if (!result)
+    result = [[self windowForSheet] initialFirstResponder];
+  return result;
+}
+//end previousFirstResponder
 
 //set the document title that will be displayed as window title. There is no represented file associated
 -(void) setDocumentTitle:(NSString*)title
@@ -450,6 +485,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [miniWindow setWindowController:windowController];
       [miniWindow makeKeyAndOrderFront:nil];
       [window close];
+      [window release];
     }//end if (self->documentStyle == DOCUMENT_STYLE_MINI)
     else//if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
     {
@@ -552,6 +588,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         [normalWindow setWindowController:windowController];
         [normalWindow makeKeyAndOrderFront:nil];
         [window close];
+        [window release];
       }//end if (oldValue != DOCUMENT_STYLE_UNDEFINED)
     }//end if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
     [[PreferencesController sharedController] setDocumentStyle:self->documentStyle];
@@ -799,13 +836,107 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end setBodyTemplate:moveCursor:
 
+-(void) applicationWillTerminate:(NSNotification*)notification
+{
+  [self removeObsoleteFiles];
+}
+//end applicationWillTerminate:
+
+-(void) removeObsoleteFiles
+{
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+  NSError* error = nil;
+  NSArray* result = ![self->poolOfObsoleteUniqueIds count] ? nil :
+    [fileManager respondsToSelector:@selector(contentsOfDirectoryAtPath:error:)] ?
+      [fileManager contentsOfDirectoryAtPath:workingDirectory error:&error] :
+      [fileManager directoryContentsAtPath:workingDirectory];
+  unsigned int count = [result count];
+  if (count)
+  {
+    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
+    @synchronized(self->poolOfObsoleteUniqueIds)
+    {
+      while(count--)
+      {
+        NSString* filename = [result objectAtIndex:count];
+        NSEnumerator* enumerator = [self->poolOfObsoleteUniqueIds objectEnumerator];
+        NSString* obsoleteUniqueId = nil;
+        while((obsoleteUniqueId = [enumerator nextObject]))
+        {
+          if ([filename isMatchedByRegex:[NSString stringWithFormat:@"^\\Q%@\\E.*", obsoleteUniqueId]])
+            [fileManager removeFileAtPath:[workingDirectory stringByAppendingPathComponent:filename] handler:nil];
+        }//end for each obsoleteUniqueId
+      }//end for each file
+    }//end @synchronized(self->poolOfObsoleteUniqueIds)
+    [ap release];
+  }//end if (count)
+}
+//end removeObsoleteFiles
+
 //called by the Latexise button; will launch the latexisation
 -(IBAction) latexize:(id)sender
 {
-  NSString* body = [self->lowerBoxSourceTextView string];
-  BOOL mustProcess = (body && [body length]);
+  if ([self isBusy])
+    [self setBusyIdentifier:nil];//will cancel result
+  else//if (![self isBusy])
+  {
+    NSDictionary* configuration =
+      [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"runBegin", nil];
+    [self latexizeCoreRunWithConfiguration:configuration];
+  }//end if (![self isBusy])
+}
+//end latexize:
 
-  if (!mustProcess)
+-(void) waitLatexizationDidEnd:(NSNotification*)notification
+{
+  NSDictionary* configuration = [notification object];
+  id document = [configuration objectForKey:@"document"];
+  if (self == document)
+  {
+    @synchronized(self){
+      --self->nbBackgroundLatexizations;
+    }
+    NSString* previousUniqueId = [configuration objectForKey:@"uniqueIdentifier"];
+    if (previousUniqueId)
+    {
+      @synchronized(self->poolOfObsoleteUniqueIds){
+        [self->poolOfObsoleteUniqueIds addObject:previousUniqueId];
+      }
+    }
+    if (self->isClosed)
+    {
+      @synchronized(self){
+        if (!self->nbBackgroundLatexizations)
+          [self autorelease];
+      }
+    }
+    else//if (!self->isClosed)
+    {
+      @synchronized(self)
+      {
+        if (!previousUniqueId || [self->busyIdentifier isEqualToString:previousUniqueId])
+        {
+          NSMutableDictionary* configuration2 = [[configuration mutableCopy] autorelease];
+          [configuration2 setObject:[NSNumber numberWithBool:NO] forKey:@"runBegin"];
+          [configuration2 setObject:[NSNumber numberWithBool:YES] forKey:@"runEnd"];
+          [self performSelectorOnMainThread:@selector(latexizeCoreRunWithConfiguration:) withObject:configuration2 waitUntilDone:NO];
+        }//end if ([self->busyIdentifier isEqualToString:previousUniqueId])
+      }
+    }//end if (!self->isClosed)
+  }//end if (self == document)
+}
+//end waitLatexizationDidEnd:
+
+-(void) latexizeCoreRunWithConfiguration:(NSDictionary*)configuration
+{
+  BOOL runBegin = [[configuration objectForKey:@"runBegin"] boolValue];
+  BOOL runEnd   = [[configuration objectForKey:@"runEnd"] boolValue];
+
+  NSString* body = [self->lowerBoxSourceTextView string];
+  BOOL mustProcess = runEnd || (body && [body length]);
+
+  if (runBegin && !mustProcess)
   {
     NSAlert* alert = 
       [NSAlert alertWithMessageText:NSLocalizedString(@"Empty LaTeX body", @"Empty LaTeX body")
@@ -816,9 +947,9 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                                                       @"You did not type any text in the body. The result will certainly be empty.")];
      int result = [alert runModal];
      mustProcess = (result == NSAlertDefaultReturn);
-  }
+  }//end if (runBegin && !mustProcess)
   
-  if (mustProcess)
+  if (runBegin && mustProcess)
   {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:ShowWhiteColorWarningKey] &&
         [[self->lowerBoxControlsBoxFontColorWell color] isRGBEqualTo:[NSColor whiteColor]])
@@ -829,10 +960,40 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       if (result == NSCancelButton)
         mustProcess = NO;
     }
-  }
-  
-  if (mustProcess)
+  }//end if (runBegin && mustProcess)
+
+  NSArray*  errors     = [configuration objectForKey:@"outErrors"];
+  NSString* outFullLog = [configuration objectForKey:@"outFullLog"];
+  NSData*   pdfData    = [configuration objectForKey:@"outPdfData"];
+
+  NSString* uniqueIdentifier = nil;
+  if (runBegin && mustProcess)
   {
+    @synchronized(self){
+      if (!self->nbBackgroundLatexizations)
+      {
+        uniqueIdentifier = [NSString stringWithFormat:@"latexit-%u", uniqueId];
+      }
+      else//if (self->nbBackgroundLatexizations)
+      {
+        @synchronized(self->poolOfObsoleteUniqueIds){
+          if ([self->poolOfObsoleteUniqueIds count])
+          {
+            uniqueIdentifier = [[[self->poolOfObsoleteUniqueIds lastObject] retain] autorelease];
+            [self->poolOfObsoleteUniqueIds removeLastObject];
+          }
+          else
+          {
+            CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+            CFStringRef uuidString = CFUUIDCreateString(kCFAllocatorDefault, uuid);
+            if (uuid) CFRelease(uuid);
+            uniqueIdentifier = [NSString stringWithFormat:@"latexit-%u-%@", uniqueId, !uuidString ? @"" : (NSString*)uuidString];
+            if (uuidString) CFRelease(uuidString);
+          }
+        }
+      }//end if (self->isBackgroundLatexizing)
+    }//end @synchronized(self)
+
     PreferencesController* preferencesController = [PreferencesController sharedController];
     [self->upperBoxImageView setPDFData:nil cachedImage:nil];       //clears current image
     [self->upperBoxImageView setBackgroundColor:[preferencesController documentImageViewBackgroundColor]
@@ -840,37 +1001,59 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     if ([preferencesController documentUseAutomaticHighContrastedPreviewBackground])
       [self->upperBoxImageView setBackgroundColor:nil updateHistoryItem:NO];
     [self->upperBoxImageView setNeedsDisplay:YES];
-    [self->upperBoxImageView displayIfNeeded];      //refresh it
-    [self->upperBoxImageView addSubview:self->upperBoxProgressIndicator];
-    [self->upperBoxProgressIndicator centerInSuperviewHorizontally:YES vertically:YES];
-    [self->upperBoxProgressIndicator setHidden:NO]; //shows the progress indicator
-    [self->upperBoxProgressIndicator startAnimation:self];
-    self->isBusy = YES; //marks as busy
-    
+    [self->upperBoxImageView displayIfNeeded]; //refresh it
+    [self setBusyIdentifier:uniqueIdentifier];
+  }//end if (runBegin && mustProcess)
+
+  if (runBegin && mustProcess)
+  {
+    PreferencesController* preferencesController = [PreferencesController sharedController];
+
     //computes the parameters thanks to the value of the GUI elements
     NSString* preamble = [[[self->lowerBoxPreambleTextView string] mutableCopy] autorelease];
     NSColor* color = [[[self->lowerBoxControlsBoxFontColorWell color] copy] autorelease];
     latex_mode_t mode = (latex_mode_t) [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
     
     //perform effective latexisation
-    NSArray* errors = nil;
-    NSData* pdfData = nil;
-    NSString* workingDirectory =  [[NSWorkspace sharedWorkspace] temporaryDirectory];
-    NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-%u", uniqueId];
-    NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+
+    NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+    
+    [self removeObsoleteFiles];
+
+    NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
     
     CGFloat leftMargin   = [[AppController appController] marginsCurrentLeftMargin];
     CGFloat rightMargin  = [[AppController appController] marginsCurrentRightMargin];
     CGFloat bottomMargin = [[AppController appController] marginsCurrentBottomMargin];
     CGFloat topMargin    = [[AppController appController] marginsCurrentTopMargin];
-    NSString* outFullLog = nil;
-    [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:color mode:mode magnification:[self->lowerBoxControlsBoxFontSizeTextField doubleValue]
-                       compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                       backgroundColor:[self->upperBoxImageView backgroundColor]
-                       leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
-                       additionalFilesPaths:[[AppController appController] additionalFilesPaths]
-                       workingDirectory:workingDirectory fullEnvironment:fullEnvironment uniqueIdentifier:uniqueIdentifier
-                       outFullLog:&outFullLog outErrors:&errors outPdfData:&pdfData];
+
+    NSMutableDictionary* configuration = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+      [NSNumber numberWithBool:YES], @"runInBackgroundThread",
+      self, @"document",
+      preamble, @"preamble", body, @"body", color, @"color", [NSNumber numberWithInt:mode], @"mode",
+      [NSNumber numberWithDouble:[self->lowerBoxControlsBoxFontSizeTextField doubleValue]], @"magnification",
+      [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
+      ![self->upperBoxImageView backgroundColor] ? (id)[NSNull null] : (id)[self->upperBoxImageView backgroundColor], @"backgroundColor",
+      [NSNumber numberWithDouble:leftMargin], @"leftMargin",
+      [NSNumber numberWithDouble:rightMargin], @"rightMargin",
+      [NSNumber numberWithDouble:topMargin], @"topMargin",
+      [NSNumber numberWithDouble:bottomMargin], @"bottomMargin",
+      [[AppController appController] additionalFilesPaths], @"additionalFilesPaths",
+      !workingDirectory ? @"" : workingDirectory, @"workingDirectory",
+      !fullEnvironment ? [NSDictionary dictionary] : fullEnvironment, @"fullEnvironment",
+      !uniqueIdentifier ? @"" : uniqueIdentifier, @"uniqueIdentifier",
+      !outFullLog ? @"" : outFullLog, @"outFullLog",
+      !errors ? [NSArray array] : errors, @"outErrors",
+      !pdfData ? [NSData data] : pdfData, @"outPdfData",
+      nil] autorelease];
+    @synchronized(self){
+      ++self->nbBackgroundLatexizations;
+    }
+    [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithConfiguration:configuration];
+  }//end if (runBegin && mustProcess)
+
+  if (runEnd && mustProcess)
+  {
     [self->lastExecutionLog setString:outFullLog];
     [self->documentExtraPanelsController setLog:self->lastExecutionLog];//self->documentExtraPanelsController may be nil
     [self _analyzeErrors:errors];
@@ -890,10 +1073,12 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     {
       //if it is ok, updates the image view
       [self->upperBoxImageView setPDFData:pdfData cachedImage:nil];
+      self->currentEquationIsARecentLatexisation = YES;
 
       //and insert a new element into the history
       LatexitEquation* latexitEquation = [self latexitEquationWithCurrentStateTransient:NO];
       
+      PreferencesController* preferencesController = [PreferencesController sharedController];
       if ([preferencesController documentUseAutomaticHighContrastedPreviewBackground])
       {
         NSColor* latexitEquationBackgroundColor = [latexitEquation backgroundColor];
@@ -907,12 +1092,15 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
           latexitEquationBackgroundColor = [NSColor blackColor];
         [latexitEquation setBackgroundColor:latexitEquationBackgroundColor];
       }
-      
-      HistoryItem* newHistoryItem = [[AppController appController] addEquationToHistory:latexitEquation];
-      [self->upperBoxImageView setBackgroundColor:[[newHistoryItem equation] backgroundColor] updateHistoryItem:NO];
+
+      if (![[PreferencesController sharedController] historySmartEnabled])
+      {
+        [[AppController appController] addEquationToHistory:latexitEquation];
+      }
+      [self->upperBoxImageView setBackgroundColor:[latexitEquation backgroundColor] updateHistoryItem:NO];
       [[[AppController appController] historyWindowController] deselectAll:0];
       [[self undoManager] disableUndoRegistration];
-      [self applyLatexitEquation:latexitEquation];
+      [self applyLatexitEquation:latexitEquation isRecentLatexisation:YES];
       [[self undoManager] enableUndoRegistration];
       
       //reupdate for easter egg
@@ -921,20 +1109,12 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       //updates the pasteboard content for a live Linkback link, and triggers a sendEdit
       [self->upperBoxImageView updateLinkBackLink:self->linkBackLink];
     }
-    
-    //hides progress indicator
-    [self->upperBoxProgressIndicator stopAnimation:self];
-    [self->upperBoxProgressIndicator setHidden:YES];
-    [self->upperBoxProgressIndicator removeFromSuperview];
-    
-    //hides/how the error view
-    [self _setLogTableViewVisible:[self->upperBoxLogTableView numberOfRows]];
-    
+
     //not busy any more
-    isBusy = NO;
-  }//end if mustProcess
+    [self setBusyIdentifier:nil];
+  }//end if (runEnd && mustProcess)
 }
-//end latexize:
+//end latexizeCoreRunBegin:runEnd:
 
 -(IBAction) latexizeAndExport:(id)sender
 {
@@ -1069,7 +1249,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   if (latexitEquation)
   {
     ok = YES;
-    [self applyLatexitEquation:latexitEquation];
+    [self applyLatexitEquation:latexitEquation isRecentLatexisation:NO];
     [latexitEquation release];
   }//end if (latexitEquation)
   return ok;
@@ -1083,7 +1263,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   if (latexitEquation)
   {
     ok = YES;
-    [self applyLatexitEquation:latexitEquation];
+    [self applyLatexitEquation:latexitEquation isRecentLatexisation:NO];
     [latexitEquation release];
   }
   else
@@ -1101,7 +1281,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(void) applyString:(NSString*)string
 {
-  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]];
+  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]  isRecentLatexisation:self->currentEquationIsARecentLatexisation];
   NSString* preamble = nil;
   NSString* body     = nil;
   [self _decomposeString:string preamble:&preamble body:&body];
@@ -1129,19 +1309,26 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 //updates the document according to the given library file
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation
 {
-  [self applyLatexitEquation:[libraryEquation equation]]; //sets lastAppliedLibraryEquation to nil
+  [self applyLatexitEquation:[libraryEquation equation] isRecentLatexisation:NO]; //sets lastAppliedLibraryEquation to nil
   [self setLastAppliedLibraryEquation:libraryEquation];
 }
 //end applyLibraryEquation:
 
 //sets the state of the document
--(void) applyLatexitEquation:(LatexitEquation*)latexitEquation
+-(void) applyLatexitEquation:(LatexitEquation*)latexitEquation isRecentLatexisation:(BOOL)isRecentLatexisation
 {
-  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]];
+  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES] isRecentLatexisation:self->currentEquationIsARecentLatexisation];
   [[[self undoManager] prepareWithInvocationTarget:self] setLastAppliedLibraryEquation:[self lastAppliedLibraryEquation]];
   [self setLastAppliedLibraryEquation:nil];
+  self->currentEquationIsARecentLatexisation = isRecentLatexisation;
   if (latexitEquation)
   {
+    self->lastFirstResponder = [[self windowForSheet] firstResponder];
+    if ((self->lastFirstResponder != self->lowerBoxPreambleTextView) &&
+        (self->lastFirstResponder != self->lowerBoxSourceTextView))
+      self->lastFirstResponder = nil;
+    [[self windowForSheet] makeFirstResponder:self->upperBoxImageView];
+
     [self _setLogTableViewVisible:NO];
     [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:[latexitEquation pdfCachedImage]];
 
@@ -1190,7 +1377,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                               updateHistoryItem:NO];
   }
 }
-//end applyLatexitEquation:
+//end applyLatexitEquation:isRecentLatexisation:
 
 //calls the log window
 -(IBAction) displayLastLog:(id)sender
@@ -1317,9 +1504,20 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     NSColor* backgroundColor = (format == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;
     [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:backgroundColor]
                                    forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
+    [self triggerSmartHistoryFeature];
   }//end if save
 }
 //end exportImageWithData:format:scaleAsPercent:jpegColor:jpegQuality:filePath:
+
+-(void) triggerSmartHistoryFeature
+{
+  if (self->currentEquationIsARecentLatexisation && [[PreferencesController sharedController] historySmartEnabled])
+  {
+    [[AppController appController] addEquationToHistory:[self latexitEquationWithCurrentStateTransient:NO]];
+    self->currentEquationIsARecentLatexisation = NO;
+  }//end if (self->currentEquationIsARecentLatexisation && [[PreferencesController sharedController] historySmartEnabled])
+}
+//end triggerSmartHistoryFeature
 
 -(NSString*) selectedText
 {
@@ -1334,7 +1532,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end selectedText
 
--(void) insertText:(NSString*)text
+-(void) insertText:(id)text
 {
   NSResponder* firstResponder = [[self windowForSheet] firstResponder];
   if ((firstResponder == self->lowerBoxPreambleTextView) || (firstResponder == self->lowerBoxSourceTextView))
@@ -1344,9 +1542,51 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(BOOL) isBusy
 {
-  return isBusy;
+  BOOL result = (self->busyIdentifier != nil);
+  return result;
 }
 //end isBusy
+
+-(void) setBusyIdentifier:(NSString*)value
+{
+  @synchronized(self)
+  {
+    if (![self->busyIdentifier isEqualToString:value])
+    {
+      [self->busyIdentifier release];
+      self->busyIdentifier = [value copy];
+      //[self->upperBoxImageView     setEnabled:!self->busyIdentifier];
+      [self->upperBoxZoomBoxSlider setEnabled:!self->busyIdentifier];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl setEnabled:!self->busyIdentifier];
+      [self->lowerBoxControlsBoxFontSizeTextField setEnabled:!self->busyIdentifier];
+      [self->lowerBoxControlsBoxFontColorWell setEnabled:!self->busyIdentifier];
+      [self->lowerBoxPreambleTextView setEditable:!self->busyIdentifier];
+      [self->lowerBoxChangePreambleButton setEnabled:!self->busyIdentifier];
+      [self->lowerBoxSourceTextView setEditable:!self->busyIdentifier];
+      [self->lowerBoxChangeBodyTemplateButton setEnabled:!self->busyIdentifier];
+      [self->lowerBoxLatexizeButton setTitle:
+        self->busyIdentifier ? NSLocalizedString(@"Stop", @"Stop") : NSLocalizedString(@"LaTeX it!", @"LaTeX it!")];
+      if (self->busyIdentifier)
+      {
+        [self->upperBoxImageView addSubview:self->upperBoxProgressIndicator];
+        [self->upperBoxProgressIndicator centerInSuperviewHorizontally:YES vertically:YES];
+        [self->upperBoxProgressIndicator setHidden:NO]; //shows the progress indicator
+        [self->upperBoxProgressIndicator startAnimation:self];
+      }//end if (self->isBusy)
+      else
+      {
+        //hides progress indicator
+        [self->upperBoxProgressIndicator stopAnimation:self];
+        [self->upperBoxProgressIndicator setHidden:YES];
+        [self->upperBoxProgressIndicator removeFromSuperview];
+
+        //hides/how the error view
+        [self _setLogTableViewVisible:([self->upperBoxLogTableView numberOfRows] > 0)];
+      }
+    }//end if (![self->busyIdentifier isEqualToString:value])
+  }//end @synchronized(self)
+}
+//end setBusy:
 
 //teleportation to the faulty lines of the latex code when the user clicks a line in the error tableview
 -(void) _clickErrorLine:(NSNotification*)aNotification

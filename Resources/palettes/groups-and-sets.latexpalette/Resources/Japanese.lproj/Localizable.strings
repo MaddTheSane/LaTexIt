@@ -20,5 +20,9 @@
 	<string>Strict superset</string>
 	<key>supseteq</key>
 	<string>Superset</string>
+	<key>emptyset</key>
+	<string>空集合 1</string>
+	<key>varnothing</key>
+	<string>空集合 2</string>
 </dict>
 </plist>

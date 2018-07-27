@@ -9,6 +9,7 @@
 #import "HistoryWindowController.h"
 
 #import "AppController.h"
+#import "BoolTransformer.h"
 #import "HistoryController.h"
 #import "HistoryManager.h"
 #import "HistoryView.h"
@@ -55,6 +56,21 @@
   [self->clearHistoryButton setTitle:NSLocalizedString(@"Remove all", @"Remove all")];
   //[window setBecomesKeyOnlyIfNeeded:YES];//we could try that to enable item selecting without activating the window first
   //but this prevents keyDown events
+  
+  NSImage* image = nil;
+  image = [self->historyLockButton image];
+  [image setScalesWhenResized:YES];
+  [image setSize:[self->historyLockButton frame].size];
+  [self->historyLockButton setImage:image];
+  image = [self->historyLockButton alternateImage];
+  [image setScalesWhenResized:YES];
+  [image setSize:[self->historyLockButton frame].size];
+  [self->historyLockButton setAlternateImage:image];
+  [self->historyLockButton setState:[[HistoryManager sharedManager] isLocked] ? NSOnState : NSOffState];
+  [self->historyLockButton bind:NSValueBinding toObject:[[HistoryManager sharedManager] bindController] withKeyPath:@"content.locked"
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
+      NSValueTransformerBindingOption, nil]];
 
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"Add to current history")];
@@ -104,6 +120,12 @@
       forSegment:0];
 }
 //end observeValueForKeyPath:ofObject:change:context:
+
+-(IBAction) changeLockedState:(id)sender
+{
+  [[HistoryManager sharedManager] setLocked:([sender state] == NSOnState)];
+}
+//end changeLockedState:
 
 -(IBAction) changeHistoryDisplayPreviewPanelState:(id)sender
 {

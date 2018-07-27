@@ -3,6 +3,7 @@
 "Cancel" = "Cancel";
 "Error" = "Error";
 "Untitled" = "Untitled";
+"Stop" = "Stop";
 "none" = "none";
 "default" = "default";
 "Copy of %@" = "Copy of %@";
@@ -164,6 +165,13 @@
 "Additional files" = "Additional files";
 "Default Format" = "Default Format";
 "PDF with outlined fonts" = "PDF with outlined fonts";
+"PDF without embedded fonts" = "PDF with outlined fonts";
+"PDF w.o.f." = "PDF w.o.f.";
+"PDF vector format" = "PDF vector format";
+"EPS vector format" = "EPS vector format";
+"TIFF bitmap format" = "TIFF bitmap format";
+"PNG bitmap format" = "PNG bitmap format";
+"JPEG bitmap format" = "JPEG bitmap format";
 "Migrating history to new format" = "Migrating history to new format";
 "Migrating library to new format" = "Migrating library to new format";
 
@@ -182,6 +190,7 @@
 
 /* document extra panels */
 "Execution log" = "Execution log";
+"Drag through areas to change export type" = "Drag through areas to change export type";
 
 /* Library */
 "Library" = "Library";
@@ -203,6 +212,8 @@
 /* History */
 "Add to current history" = "Add to current history";
 "Overwrite current history" = "Overwrite current history";
+"Lock" = "Lock";
+"Unlock" = "Unlock";
 
 /* palette : additional files */
 "Open defaults" = "Open defaults";

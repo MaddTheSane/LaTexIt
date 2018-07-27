@@ -9,6 +9,8 @@
 #import "LibraryView.h"
 
 #import "AppController.h"
+#import "DragFilterWindow.h"
+#import "DragFilterWindowController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LatexitEquation.h"
@@ -154,7 +156,7 @@
       LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentStateTransient:YES];
       NSUndoManager* documentUndoManager = [document undoManager];
       [documentUndoManager beginUndoGrouping];
-      [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState];
+      [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
       [document applyLibraryEquation:(LibraryEquation*)selectedLibraryItem];
       [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
       [documentUndoManager endUndoGrouping];
@@ -662,6 +664,33 @@
 //end pasteContentOfPasteboard:
 
 #pragma mark drag'n drop
+
+-(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
+{
+  NSArray* selectedItems = [self selectedItems];
+  NSPasteboard* pasteBoard = [NSPasteboard pasteboardWithName:NSDragPboard];
+  [[self dataSource] outlineView:self writeItems:selectedItems toPasteboard:pasteBoard];
+  [pasteBoard setPropertyList:nil forType:LibraryItemsWrappedPboardType];//this pboard must be persistent
+}
+//end dragFilterWindowController:exportFormatDidChange:
+
+-(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
+       pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
+{
+  [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
+    [[self window] convertBaseToScreen:[event locationInWindow]]];
+  [[[AppController appController] dragFilterWindowController] setDelegate:self];
+  [super dragImage:image at:at offset:offset event:event pasteboard:pasteboard source:object slideBack:slideBack];
+}
+//end dragImage:at:offset:event:pasteboard:source:slideBack:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
+  [[[AppController appController] dragFilterWindowController] setDelegate:nil];
+  [super draggedImage:anImage endedAt:aPoint operation:operation];
+}
+//end draggedImage:endedAt:operation:
 
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {

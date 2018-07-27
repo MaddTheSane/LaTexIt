@@ -15,6 +15,7 @@
 #import "AdditionalFilesWindowController.h"
 #import "CompositionConfigurationsController.h"
 #import "CompositionConfigurationsWindowController.h"
+#import "DragFilterWindowController.h"
 #import "EncapsulationsWindowController.h"
 #import "HistoryController.h"
 #import "HistoryWindowController.h"
@@ -35,6 +36,7 @@
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSManagedObjectContextExtended.h"
+#import "NSMenuExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
@@ -51,6 +53,20 @@
 #include <sys/wait.h>
 
 #import <Sparkle/Sparkle.h>
+
+@interface MyTextAttachementCell : NSTextAttachmentCell
+@end
+@implementation MyTextAttachementCell
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)aView
+{
+  [[NSColor redColor] set];
+  NSRectFill(cellFrame);
+}
+- (NSSize)cellSize
+{
+  return NSMakeSize(50, 10);
+}
+@end
 
 @interface AppController (PrivateAPI)
 
@@ -222,11 +238,11 @@ static NSMutableDictionary* cachePaths = nil;
 
     //export to EPS needs ghostscript to be available
     PreferencesController* preferencesController = [PreferencesController sharedController];
-    export_format_t exportFormat = [preferencesController exportFormat];
+    export_format_t exportFormat = [preferencesController exportFormatPersistent];
     if (exportFormat == EXPORT_FORMAT_EPS && !self->isGsAvailable)
-      [preferencesController setExportFormat:EXPORT_FORMAT_PDF];
+      [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS && (!self->isGsAvailable || !self->isPsToPdfAvailable))
-      [preferencesController setExportFormat:EXPORT_FORMAT_PDF];
+      [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     [self endCheckUpdates];
 
     CompositionConfigurationsController* compositionConfigurationsController = [[PreferencesController sharedController] compositionConfigurationsController];
@@ -273,14 +289,36 @@ static NSMutableDictionary* cachePaths = nil;
 {
   //migrate to sparkle
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [[self sparkleUpdater] setAutomaticallyChecksForUpdates:[userDefaults boolForKey:Old_CheckForNewVersionsKey]];
-  [userDefaults removeObjectForKey:Old_CheckForNewVersionsKey];
+  if ([userDefaults objectForKey:Old_CheckForNewVersionsKey])
+  {
+    [[self sparkleUpdater] setAutomaticallyChecksForUpdates:[userDefaults boolForKey:Old_CheckForNewVersionsKey]];
+    [userDefaults removeObjectForKey:Old_CheckForNewVersionsKey];
+  }
   //resolve some bindings
   [self->whiteColorWarningWindowCheckBox bind:NSValueBinding
     toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:ShowWhiteColorWarningKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
                   NSNegateBooleanTransformerName, NSValueTransformerNameBindingOption, nil]];
+                  
+  NSMenu* editCopyImageAsMenu = [self->editCopyImageAsMenuItem submenu];
+  [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"Default Format") target:self action:@selector(copyAs:)
+                         keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
+  [editCopyImageAsMenu addItem:[NSMenuItem separatorItem]];
+  [editCopyImageAsMenu addItemWithTitle:@"PDF" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_PDF];
+  [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
+                                 target:self action:@selector(copyAs:)
+                          keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
+                                    tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+  [editCopyImageAsMenu addItemWithTitle:@"EPS" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_EPS];
+  [editCopyImageAsMenu addItemWithTitle:@"TIFF" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_TIFF];
+  [editCopyImageAsMenu addItemWithTitle:@"PNG" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_PNG];
+  [editCopyImageAsMenu addItemWithTitle:@"JPEG" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_JPEG];
 }
 //end awakeFromNib
 
@@ -323,18 +361,25 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(HistoryItem*) addEquationToHistory:(LatexitEquation*)latexitEquation
 {
-  HistoryItem* newHistoryItem = [[[HistoryItem alloc] initWithEquation:latexitEquation insertIntoManagedObjectContext:nil] autorelease];
-  newHistoryItem = [self addHistoryItemToHistory:newHistoryItem];
-  return newHistoryItem;
+  HistoryItem* result = nil;
+  if (![[HistoryManager sharedManager] isLocked])
+    result = [[[HistoryItem alloc] initWithEquation:latexitEquation insertIntoManagedObjectContext:nil] autorelease];
+  if (result)
+    result = [self addHistoryItemToHistory:result];
+  return result;
 }
 //end addEquationToHistory:
 
 -(HistoryItem*) addHistoryItemToHistory:(HistoryItem*)historyItem
 {
-  NSManagedObjectContext* managedObjectContext = [[HistoryManager sharedManager] managedObjectContext];
-  [managedObjectContext disableUndoRegistration];
-  [managedObjectContext safeInsertObject:historyItem];
-  [managedObjectContext enableUndoRegistration];  
+  if (![[HistoryManager sharedManager] isLocked])
+  {
+    NSManagedObjectContext* managedObjectContext = [[HistoryManager sharedManager] managedObjectContext];
+    [managedObjectContext disableUndoRegistration];
+    [managedObjectContext safeInsertObject:historyItem];
+    [managedObjectContext enableUndoRegistration];
+    [[HistoryManager sharedManager] deleteOldEntries];
+  }//end if (![[HistoryManager sharedManager] isLocked])
   return historyItem;
 }
 //end addHistoryItemToHistory:
@@ -579,6 +624,13 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if ([sender action] == @selector(copyAs:))
   {
+    if ([sender tag] == -1)//default
+    {
+      export_format_t defaultExportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
+      [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
+        NSLocalizedString(@"Default Format", @"Default Format"),
+        [[AppController appController] nameOfType:defaultExportFormat]]];
+    }
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
     if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
@@ -629,7 +681,9 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([sender action] == @selector(makeLatex:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
-    ok = (myDocument != nil) && ![myDocument isBusy] && [self isPdfLaTeXAvailable];
+    [sender setTitle:((myDocument != nil) && [myDocument isBusy]) ? NSLocalizedString(@"Stop", @"Stop") :
+                     NSLocalizedString(@"LaTeX it!", @"LaTeX it!")];
+    ok = (myDocument != nil) && [self isPdfLaTeXAvailable];
   }
   else if ([sender action] == @selector(makeLatexAndExport:))
   {
@@ -666,6 +720,12 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([sender action] == @selector(historyClearHistory:))
   {
     ok = ([[[[self->historyWindowController historyView] historyItemsController] arrangedObjects] count] > 0);
+  }
+  else if ([sender action] == @selector(historyChangeLock:))
+  {
+    [sender setTitle:[[HistoryManager sharedManager] isLocked] ?
+                    NSLocalizedString(@"Unlock", @"Unlock") : NSLocalizedString(@"Lock", @"Lock")];
+    ok = YES;
   }
   else if ([sender action] == @selector(historyOpen:))
   {
@@ -747,6 +807,12 @@ static NSMutableDictionary* cachePaths = nil;
   return ok;
 }
 //end validateMenuItem:
+
+-(IBAction) displaySponsors:(id)sender
+{
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/programmation/latexit-sponsors.php"]];
+}
+//end makeDonation:
 
 -(IBAction) makeDonation:(id)sender//display info panel
 {
@@ -1039,6 +1105,12 @@ static NSMutableDictionary* cachePaths = nil;
   [[self historyWindowController] clearHistory:sender];
 }
 //end historyClearHistory:
+
+-(IBAction) historyChangeLock:(id)sender
+{
+  [[HistoryManager sharedManager] setLocked:![[HistoryManager sharedManager] isLocked]];
+}
+//end historyLock:
 
 -(IBAction) historyOpen:(id)sender
 {
@@ -1766,7 +1838,7 @@ static NSMutableDictionary* cachePaths = nil;
   {
     if ([documentForLink linkBackLink] != link)
       [documentForLink setLinkBackLink:link];//automatically closes previous links
-    [documentForLink applyLatexitEquation:latexitEquation]; //defines the state of the document
+    [documentForLink applyLatexitEquation:latexitEquation isRecentLatexisation:NO]; //defines the state of the document
     [NSApp activateIgnoringOtherApps:YES];
     NSArray* windows = [documentForLink windowControllers];
     NSWindow* window = [[windows lastObject] window];
@@ -2011,7 +2083,7 @@ static NSMutableDictionary* cachePaths = nil;
           [latexitEquation release];
           NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
           NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:historyItemData];
-          if ([userDefaults boolForKey:ServiceUsesHistoryKey])//we may add the item to the history
+          if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
             [self addHistoryItemToHistory:historyItem];
         
           //[pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
@@ -2194,7 +2266,7 @@ static NSMutableDictionary* cachePaths = nil;
           if (linkBackPlist)
             [dummyPboard setObject:linkBackPlist forKey:LinkBackPboardType];
 
-          if ([userDefaults boolForKey:ServiceUsesHistoryKey])//we may add the item to the history
+          if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
             [self addHistoryItemToHistory:historyItem];
           
           //additional data according to the export type (pdf, eps, tiff, jpeg, png...)
@@ -2444,8 +2516,7 @@ static NSMutableDictionary* cachePaths = nil;
               //we will create the image file that will be attached to the rtfd
               NSString* directory          = [[NSWorkspace sharedWorkspace] temporaryDirectory];
               NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
-              NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-              export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+              export_format_t exportFormat = [[PreferencesController sharedController] exportFormatPersistent];
               NSString* extension = nil;
               switch(exportFormat)
               {
@@ -2467,7 +2538,7 @@ static NSMutableDictionary* cachePaths = nil;
                   break;
               }
 
-              if ([userDefaults boolForKey:ServiceUsesHistoryKey])//we may add the item to the history
+              if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
               {
                 LatexitEquation* latexitEquation =
                   [LatexitEquation latexitEquationWithPDFData:pdfData
@@ -2690,6 +2761,14 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end compositionConfigurationController
 
+-(DragFilterWindowController*) dragFilterWindowController
+{
+  if (!self->dragFilterWindowController)
+    self->dragFilterWindowController = [[DragFilterWindowController alloc] init];
+  return self->dragFilterWindowController;
+}
+//end dragFilterWindowController
+
 -(EncapsulationsWindowController*) encapsulationsWindowController
 {
   if (!self->encapsulationsWindowController)
@@ -2775,6 +2854,7 @@ static NSMutableDictionary* cachePaths = nil;
 {
   NSArray* result = self->additionalFilesWindowController ? [self->additionalFilesWindowController additionalFilesPaths]
                           : [[NSUserDefaults standardUserDefaults] arrayForKey:AdditionalFilesPathsKey];
+  if (!result) result = [NSArray array];
   return result;
 }
 //end additionalFilesPaths
@@ -2789,10 +2869,10 @@ static NSMutableDictionary* cachePaths = nil;
   MyDocument* myDocument = (MyDocument*) [self currentDocument];
   if (string && myDocument)
   {
-    if (([item numberOfArguments] >= 1) || ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT))
-      string = [NSString stringWithFormat:[item formatStringToInsertText],[myDocument selectedText]];
+    if (([item numberOfArguments] >= 0) || ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT))
+      string = [item stringWithTextInserted:[myDocument selectedText]];
     [myDocument insertText:string];
-  }
+  }//end if (string && myDocument)
 }
 //end latexPalettesClick:
 

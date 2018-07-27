@@ -67,7 +67,13 @@
   
   LibraryEquation* lastAppliedLibraryEquation;
   BOOL             isReducedTextArea;
-  BOOL             isBusy;
+  NSString*        busyIdentifier;
+  int              nbBackgroundLatexizations;
+  BOOL             isClosed;
+  NSMutableArray*  poolOfObsoleteUniqueIds;
+  
+  BOOL             currentEquationIsARecentLatexisation;
+  NSResponder*     lastFirstResponder;
 }
 
 //interface changing
@@ -89,6 +95,7 @@
 -(MyImageView*) imageView;
 -(NSButton*)    lowerBoxLatexizeButton;
 -(NSResponder*) preferredFirstResponder;
+-(NSResponder*) previousFirstResponder;
 
 -(void) gotoLine:(int)row;
 
@@ -107,6 +114,7 @@
 -(void) updateGUIfromSystemAvailabilities;
 //tells whether the document is currently performing a latexisation
 -(BOOL) isBusy;
+-(void) setBusyIdentifier:(NSString*)value;
 
 -(void) setFont:(NSFont*)font;//changes the font of both preamble and sourceText views
 -(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
@@ -121,14 +129,16 @@
 
 //text actions in the first responder
 -(NSString*) selectedText;
--(void) insertText:(NSString*)text;
+-(void) insertText:(id)text;
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient;
 -(BOOL) applyData:(NSData*)data; //updates the document according to the given pdfdata
 -(BOOL) applyPdfData:(NSData*)pdfData; //updates the document according to the given pdfdata
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation;
--(void) applyLatexitEquation:(LatexitEquation*)latexitEquation; //updates the document according to the given history item
+-(void) applyLatexitEquation:(LatexitEquation*)latexitEquation isRecentLatexisation:(BOOL)isRecentLatexisation; //updates the document according to the given history item
 -(void) applyString:(NSString*)string;//updates the document according to the given source string, that is to be decomposed in preamble+body
+
+-(void) triggerSmartHistoryFeature;
 
 //linkback live link management
 -(LinkBack*) linkBackLink;

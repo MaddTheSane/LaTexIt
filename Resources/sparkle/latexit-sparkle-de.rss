@@ -138,5 +138,57 @@
         sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1KU42w=="
               />
           </item>
+        <item>
+              <title>Version 2.1.1</title>
+              <description>
+              <ul>
+                <li>Ein Fehler wurde behoben, der LaTeXiT davon abhielt den Benutzer über Updates zu informieren;</li>
+                <li>if you want to help me buy a house, you can reconsider that famous donation of a few thousand dollars you have delayed so far.</li>
+              </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-de.html#version-2.1.1</sparkle:releaseNotesLink>
+              <pubDate>Thu, 11 Mar 2010 09:36:48 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_1_1.dmg"
+                sparkle:version="2.1.1"
+                sparkle:shortVersionString="2.1.1"
+                type="application/octet-stream"
+                length="6034835"
+                sparkle:dsaSignature="MCwCFBl1Fr32ScHbJmEKLrAWqnXBo34eAhRaC515j75e0PHvE7gP/NLEENyL7A=="
+              />
+          </item>
+        <item>
+              <title>Version 2.2.0</title>
+              <description>
+              <h3>Unusual note</h3>
+              <p>The developer rarely speaks about himself, but exceptionally, I wanted to tell something.</p>
+              <p>I think LaTeXiT has become a great tool along the years, and I am happy to provide it as totally free. That won't change.<br/>
+              However, I am in a part of my life where money is also important for my family life, and it would help me right now to get some reward for the work I have done so far in LaTeXiT.</p>
+              <p><span style="font-weight:bold">If you are an individual, just ignore that</span>. But if you represent a laboratory or a company and think that LaTeXiT is of great value for your day-to-day work, would you consider making a little donation ? I think that I could add a link from within LaTeXiT to a list of sponsors, like &quot;LaTeXiT is supported by…&quot; This would be a good way to thank you (apart from keeping on developing the software, of course).</p>
+              <p>Regards,<br/>Pierre Chatelier</p>
+              <hr/>
+              <ul>
+                <li>Das Umwandeln in LaTeX kann nun unterbrochen werden;</li>
+                <li>Behebung eines Problems bei dem die Einstellungen eines zusätzlichen Skriptes nicht gesichert werden konnten;</li>
+                <li>Integration einer Fortschrittsanzeige für die Migration des Verlaufs, falls benötigt;</li>
+                <li>Integration einer Einstellmöglichkeit für den Verlauf;</li>
+                <li>Der Verlauf kann nun importiert/exportiert werden;</li>
+                <li>Das Exportformat kann nun auf einfachstem Wege beim Drag'n'Drop geändert werden;</li>
+                <li>Verbessertes Management der Argumente einer Funktion der LaTeX Paletten-Einträge;</li>
+                <li>Geringfügige Änderungen der Benutzeroberfläche;</li>
+                <li>Einige Fehlerbehebungen.</li>
+              </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-de.html#version-2.2.0</sparkle:releaseNotesLink>
+              <pubDate>Tue, 25 May 2010 07:58:04 +0200</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_2_0.dmg"
+                sparkle:version="2.2.0"
+                sparkle:shortVersionString="2.2.0"
+                type="application/octet-stream"
+                length="6160401"
+                sparkle:dsaSignature="MC4CFQCZvzbNlxgaiF5F5FOAw1RD8ivRFwIVAIsTo+TY8Al9SopFIGWD9/h9B749"
+              />
+          </item>
     </channel> 
 </rss>

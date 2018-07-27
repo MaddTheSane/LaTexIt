@@ -17,13 +17,21 @@ typedef enum {HISTORY_EXPORT_FORMAT_INTERNAL, HISTORY_EXPORT_FORMAT_PLIST} histo
 
 @class HistoryItem;
 @interface HistoryManager : NSObject {
+  NSObjectController* bindController;
   NSManagedObjectContext* managedObjectContext;
+  BOOL locked;
 }
 
 +(HistoryManager*) sharedManager; //getting the history manager singleton
 
 -(NSManagedObjectContext*) managedObjectContext;
 -(NSUndoManager*)          undoManager;
+
+-(NSObjectController*) bindController;
+-(BOOL) isLocked;
+-(void) setLocked:(BOOL)value;
+
+-(void) deleteOldEntries;
 
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(history_export_format_t)format;
 -(BOOL) loadFrom:(NSString*)path option:(history_import_option_t)option;

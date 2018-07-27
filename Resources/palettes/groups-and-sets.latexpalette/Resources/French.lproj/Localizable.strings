@@ -7,3 +7,5 @@
 "supseteq"="Sur-ensemble";
 "subset"="Sous-ensemble strict";
 "subseteq"="Sous-ensemble";
+"emptyset"="Ensemble vide 1";
+"varnothing"="Ensemble vide 2";

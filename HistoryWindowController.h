@@ -19,6 +19,7 @@
   IBOutlet BorderlessPanel*              historyPreviewPanel;
   IBOutlet LibraryPreviewPanelImageView* historyPreviewPanelImageView;
   IBOutlet NSSegmentedControl*           historyPreviewPanelSegmentedControl;
+  IBOutlet NSButton*                     historyLockButton;
 
   IBOutlet NSView*             importAccessoryView;
   IBOutlet NSPopUpButton*      importOptionPopUpButton;
@@ -33,6 +34,7 @@
 
 -(HistoryView*) historyView;
 
+-(IBAction) changeLockedState:(id)sender;
 -(IBAction) changeHistoryDisplayPreviewPanelState:(id)sender;
 
 -(IBAction) clearHistory:(id)sender;

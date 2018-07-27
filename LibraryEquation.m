@@ -157,7 +157,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) setEquation:(LatexitEquation*)equation
 {
   [[self managedObjectContext] safeInsertObject:equation];
-  if (equation != [self equation])
+  LatexitEquation* oldEquation = [self equation];
+  if (equation != oldEquation)
   {
     LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
     if (equationWrapper)
@@ -172,7 +173,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     }//end if (!equationWrapper)
     [equationWrapper setEquation:equation];
     [equation setValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
-  }//end if (equation != [self equation])
+    [[self managedObjectContext] safeDeleteObject:oldEquation];
+  }//end if (equation != oldEquation)
 }
 //end setEquation:
 

@@ -20,4 +20,6 @@
 -(id) deepMutableCopy;
 -(id) deepMutableCopyWithZone:(NSZone*)zone;
 
+-(id) objectForKey:(id)aKey withClass:(Class)class;
+
 @end

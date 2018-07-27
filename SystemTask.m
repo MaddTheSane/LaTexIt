@@ -12,6 +12,8 @@
 #import "NSFileManagerExtended.h"
 #import "NSStringExtended.h"
 
+#import "RegexKitLite.h"
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -167,7 +169,11 @@
     {
       BOOL isDoubleQuoted = ([variable length] >= 2) && [variable startsWith:@"\"" options:0] && [variable endsWith:@"\"" options:0];
       if ([variable length] && !isDoubleQuoted)
-        [scriptContent appendFormat:@"export %@=%@ 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
+      {
+        //[scriptContent appendFormat:@"export %@=\"%@\" 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
+        NSString* variableValue = [[environment objectForKey:variable] stringByReplacingOccurrencesOfRegex:@"(?<!\\\\)'" withString:@"\\\\'"];
+        [scriptContent appendFormat:@"export %@='%@' 1>/dev/null 2>&1 \n", variable, variableValue];
+      }
     }
   }//end if (environment && [environment count])
   if (self->currentDirectoryPath)

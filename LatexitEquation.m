@@ -491,7 +491,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self setTitle:title];
 
   NSNumber* baseline = [metaData objectForKey:@"baseline"];
-  [self setBaseline:[baseline doubleValue]];
+  [self setBaseline:!baseline ? 0. : [baseline doubleValue]];
 
   NSDate* date = [metaData objectForKey:@"date"];
   if (date)
@@ -872,7 +872,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.1.0"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.2.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -895,6 +895,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) awakeFromFetch2:(id)object//delayed to avoid NSManagedObject context being change-disabled
 {
   #ifdef MIGRATE_ALIGN
+  [self checkAndMigrateAlign];
+  #endif
+}
+//end awakeFromFetch2
+
+-(void) checkAndMigrateAlign
+{
   if ([self mode] == LATEX_MODE_EQNARRAY)
   {
     [[self managedObjectContext] disableUndoRegistration];
@@ -911,9 +918,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [newSourceText release];
     [[self managedObjectContext] enableUndoRegistration];
   }//end if ([self mode] == LATEX_MODE_EQNARRAY)
-  #endif
 }
-//end awakeFromFetch2
+//end checkAndMigrateAlign
 
 -(void) didTurnIntoFault
 {
@@ -1487,7 +1493,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
   //Stores the data in the pasteboard corresponding to what the user asked for (pdf, jpeg, tiff...)
-  export_format_t exportFormat = [preferencesController exportFormat];
+  export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
   NSData* data = lazyDataProvider ? nil :
     [[LaTeXProcessor sharedLaTeXProcessor]
       dataForType:exportFormat pdfData:pdfData
@@ -1498,10 +1504,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   switch(exportFormat)
   {
     case EXPORT_FORMAT_PDF:
-    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
       [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSPDFPboardType];
       if (!lazyDataProvider) [pboard setData:data forType:@"com.adobe.pdf"];
+      break;
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]
+                 owner:lazyDataProvider ? lazyDataProvider : self];
+      if (data && (!lazyDataProvider || (lazyDataProvider != self))) [pboard setData:data forType:NSPDFPboardType];
+      if (data && (!lazyDataProvider || (lazyDataProvider != self))) [pboard setData:data forType:@"com.adobe.pdf"];
       break;
     case EXPORT_FORMAT_EPS:
       [pboard addTypes:[NSArray arrayWithObjects:NSPostScriptPboardType, @"com.adobe.encapsulated-postscript", nil] owner:lazyDataProvider];
@@ -1529,11 +1540,24 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
+//provides lazy data to a pasteboard
+-(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString *)type
+{
+  //only called for EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
+    dataForType:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS pdfData:[self pdfData]
+      jpegColor:[preferencesController exportJpegBackgroundColor]
+    jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
+    compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+  [pasteboard setData:data forType:type];
+}
+//end pasteboard:provideDataForType:
 -(id) plistDescription
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.1.0", @"version",
+       @"2.2.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

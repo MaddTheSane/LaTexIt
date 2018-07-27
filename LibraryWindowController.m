@@ -215,9 +215,10 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [undoManager beginUndoGrouping];
   MyDocument*  document = (MyDocument*) [AppController currentDocument];
   LatexitEquation* currentLatexitEquation = [document latexitEquationWithCurrentStateTransient:YES];
+  [document triggerSmartHistoryFeature];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
   unsigned int nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
-  [[[document undoManager] prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation];
+  [[[document undoManager] prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation isRecentLatexisation:NO];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
   LatexitEquation* latexitEquationToStore =
     [LatexitEquation latexitEquationWithPDFData:[currentLatexitEquation pdfData] useDefaults:YES];
@@ -229,13 +230,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     [newLibraryEquation setSortIndex:nbBrothers];
     [newLibraryEquation setBestTitle];
     [managedObjectContext processPendingChanges];
-    [newLibraryEquation release];
     [undoManager setActionName:NSLocalizedString(@"Add Library item", @"Add Library item")];
   }//end if (newLibraryEquation)
   [undoManager endUndoGrouping];
   [self->libraryView reloadData];
   [self->libraryView sizeLastColumnToFit];
   [self->libraryView selectItem:newLibraryEquation byExtendingSelection:NO];
+  if (newLibraryEquation)
+    [newLibraryEquation release];
 }
 //end importCurrent:
 
@@ -256,13 +258,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     [newLibraryGroupItem setSortIndex:nbBrothers];
     [newLibraryGroupItem setTitle:NSLocalizedString(@"Untitled", @"Untitled")];
     [managedObjectContext processPendingChanges];
-    [newLibraryGroupItem release];
     [undoManager setActionName:NSLocalizedString(@"Add Library folder", @"Add Library folder")];
   }//end if (newLibraryGroupItem)
   [undoManager endUndoGrouping];
   [self->libraryView reloadData];
   [self->libraryView sizeLastColumnToFit];
   [self->libraryView selectItem:newLibraryGroupItem byExtendingSelection:NO];
+  if (newLibraryGroupItem)
+    [newLibraryGroupItem release];
   [self->libraryView performSelector:@selector(edit:) withObject:self afterDelay:0.];
 }
 //end newFolder:

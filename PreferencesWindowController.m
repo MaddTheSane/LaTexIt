@@ -31,6 +31,7 @@
 #import "NSFontExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSNumberIntegerShiftTransformer.h"
+#import "NSPopUpButtonExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "ObjectTransformer.h"
@@ -50,6 +51,7 @@ NSString* EditionToolbarItemIdentifier       = @"EditionToolbarItem";
 NSString* PreamblesToolbarItemIdentifier     = @"PreamblesToolbarItem";
 NSString* BodyTemplatesToolbarItemIdentifier = @"BodyTemplatesToolbarItemIdentifier";
 NSString* CompositionToolbarItemIdentifier   = @"CompositionToolbarItem";
+NSString* HistoryToolbarItemIdentifier       = @"HistoryToolbarItem";
 NSString* ServiceToolbarItemIdentifier       = @"ServiceToolbarItem";
 NSString* AdvancedToolbarItemIdentifier      = @"AdvancedToolbarItem";
 NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
@@ -122,6 +124,7 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     [NSValue valueWithSize:[self->preamblesView frame].size], PreamblesToolbarItemIdentifier,
     [NSValue valueWithSize:[self->bodyTemplatesView frame].size], BodyTemplatesToolbarItemIdentifier,
     [NSValue valueWithSize:[self->compositionView frame].size], CompositionToolbarItemIdentifier,
+    [NSValue valueWithSize:[self->historyView frame].size], HistoryToolbarItemIdentifier,
     [NSValue valueWithSize:[self->serviceView frame].size], ServiceToolbarItemIdentifier,
     [NSValue valueWithSize:[self->advancedView frame].size], AdvancedToolbarItemIdentifier,
     [NSValue valueWithSize:[self->webView frame].size], WebToolbarItemIdentifier,
@@ -153,6 +156,18 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
   //General
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF vector format", @"PDF vector format")
+                                                     tag:(int)EXPORT_FORMAT_PDF];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF without embedded fonts", @"PDF without embedded fonts")
+                                                     tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"EPS vector format", @"EPS vector format")
+                                                     tag:(int)EXPORT_FORMAT_EPS];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
+                                                     tag:(int)EXPORT_FORMAT_TIFF];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
+                                                     tag:(int)EXPORT_FORMAT_PNG];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
+                                                     tag:(int)EXPORT_FORMAT_JPEG];
   [self->generalExportFormatPopupButton bind:NSSelectedTagBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey] options:nil];
   [self->generalExportFormatJpegWarning bind:NSHiddenBinding toObject:userDefaultsController
@@ -507,6 +522,36 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   
   [self updateProgramArgumentsToolTips];
 
+  //history
+  [self->historySaveServiceResultsCheckbox bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:ServiceUsesHistoryKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
+      NSValueTransformerBindingOption, nil]];
+  [self->historyDeleteOldEntriesCheckbox bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesEnabledKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
+      NSValueTransformerBindingOption, nil]];
+  [self->historyDeleteOldEntriesLimitTextField bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesLimitKey]
+    options:nil];
+  [self->historyDeleteOldEntriesLimitTextField bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesEnabledKey]
+    options:nil];
+  [self->historyDeleteOldEntriesLimitStepper setFormatter:[self->historyDeleteOldEntriesLimitTextField formatter]];
+  [self->historyDeleteOldEntriesLimitStepper bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesLimitKey]
+    options:nil];
+  [self->historyDeleteOldEntriesLimitStepper bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesEnabledKey]
+    options:nil];
+  [self->historySmartCheckbox bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:HistorySmartEnabledKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
+      NSValueTransformerBindingOption, nil]];
+
   // additional scripts
   [[self->compositionConfigurationsAdditionalScriptsTableView tableColumnWithIdentifier:@"place"] bind:NSValueBinding
     toObject:[compositionConfigurationsController currentConfigurationScriptsController] withKeyPath:@"arrangedObjects.key"
@@ -531,6 +576,7 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
      toObject:[compositionConfigurationsController currentConfigurationScriptsController]
      withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
      options:nil];
+     
   [self->compositionConfigurationsAdditionalScriptsTypePopUpButton bind:NSEnabledBinding
     toObject:[compositionConfigurationsController currentConfigurationScriptsController]
     withKeyPath:@"selection" options:isNotNilBindingOptions];
@@ -640,7 +686,7 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   [self->encapsulationsRemoveButton setTarget:encapsulationsController];
   [self->encapsulationsRemoveButton setAction:@selector(remove:)];
 
-  //updates 
+  //updates
   [self->updatesCheckUpdatesButton bind:NSValueBinding toObject:[[AppController appController] sparkleUpdater]
     withKeyPath:@"automaticallyChecksForUpdates"
     options:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -689,8 +735,9 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 {
   return [NSArray arrayWithObjects:GeneralToolbarItemIdentifier,  EditionToolbarItemIdentifier,
                                    PreamblesToolbarItemIdentifier, BodyTemplatesToolbarItemIdentifier,
-                                   CompositionToolbarItemIdentifier, ServiceToolbarItemIdentifier,
-                                   AdvancedToolbarItemIdentifier, WebToolbarItemIdentifier, nil];
+                                   CompositionToolbarItemIdentifier, HistoryToolbarItemIdentifier,
+                                   ServiceToolbarItemIdentifier, AdvancedToolbarItemIdentifier,
+                                   WebToolbarItemIdentifier, nil];
 }
 //end toolbarDefaultItemIdentifiers:
 
@@ -740,6 +787,11 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
       imagePath = [[NSBundle mainBundle] pathForResource:@"compositionToolbarItem" ofType:@"tiff"];
       label = [NSLocalizedString(@"Composition", @"Composition") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
     }
+    else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
+    {
+      imagePath = [[NSBundle mainBundle] pathForResource:@"historyToolbarItem" ofType:@"tiff"];
+      label = [NSLocalizedString(@"History", @"History") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
+    }
     else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"serviceToolbarItem" ofType:@"tiff"];
@@ -781,6 +833,8 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     view = self->bodyTemplatesView;
   else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     view = self->compositionView;
+  else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
+    view = self->historyView;
   else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     view = self->serviceView;
   else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])

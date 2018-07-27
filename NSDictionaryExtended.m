@@ -90,9 +90,10 @@
   {
     id object = [self valueForKey:key];
     id copyOfObject =
-      [object respondsToSelector:@selector(deepMutableCopyWithZone:)]
-         ? [object deepMutableCopyWithZone:zone]
-         : ([object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] : [object copyWithZone:zone]);
+      [object respondsToSelector:@selector(deepMutableCopyWithZone:)] ? [object deepMutableCopyWithZone:zone] :
+      [object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] : 
+      [object respondsToSelector:@selector(copyWithZone:)] ? [object copyWithZone:zone] : 
+      [object retain];
     [clone setObject:copyOfObject forKey:key];
     [copyOfObject release];
   }//end for each object
@@ -100,5 +101,13 @@
 }
 //end deepMutableCopyWithZone:
 
+-(id) objectForKey:(id)key withClass:(Class)class
+{
+  id result = [self objectForKey:key];
+  if (![result isKindOfClass:class])
+    result = nil;
+  return result;
+}
+//end objectForKey:withClass:
 
 @end

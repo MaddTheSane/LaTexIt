@@ -11,6 +11,8 @@
 #import "ExportFormatOptionsPanes.h"
 #import "PreferencesController.h"
 
+#import "NSPopupButtonExtended.h"
+
 @implementation DocumentExtraPanelsController
 
 #pragma mark init/load/dealloc
@@ -20,7 +22,7 @@
   if ((!(self = [super initWithNibNamed:@"DocumentExtraPanelsController" bundle:nil])))
     return nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  self->saveAccessoryViewExportFormat               = [preferencesController exportFormat];
+  self->saveAccessoryViewExportFormat               = [preferencesController exportFormatCurrentSession];
   self->saveAccessoryViewExportScalePercent         = [preferencesController exportScalePercent];
   self->saveAccessoryViewOptionsJpegQualityPercent  = [preferencesController exportJpegQualityPercent];
   self->saveAccessoryViewOptionsJpegBackgroundColor = [[preferencesController exportJpegBackgroundColor] retain];
@@ -45,6 +47,18 @@
 {
   [self->saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
   [self->logWindow setTitle:NSLocalizedString(@"Execution log", @"Execution log")];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:NSLocalizedString(@"PDF vector format", @"PDF vector format")
+                                                  tag:(int)EXPORT_FORMAT_PDF];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:NSLocalizedString(@"PDF without embedded fonts", @"PDF without embedded fonts")
+                                                  tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:NSLocalizedString(@"EPS vector format", @"EPS vector format")
+                                                  tag:(int)EXPORT_FORMAT_EPS];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:NSLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
+                                                  tag:(int)EXPORT_FORMAT_TIFF];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:NSLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
+                                                  tag:(int)EXPORT_FORMAT_PNG];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:NSLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
+                                                  tag:(int)EXPORT_FORMAT_JPEG];
   [self->saveAccessoryViewPopupFormat bind:NSSelectedTagBinding toObject:self
     withKeyPath:@"saveAccessoryViewExportFormat" options:nil];
   [self->saveAccessoryViewScalePercentTextField bind:NSValueBinding toObject:self

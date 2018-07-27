@@ -9,6 +9,7 @@
 #import "LaTeXPalettesWindowController.h"
 
 #import "AppController.h"
+#import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
@@ -183,6 +184,10 @@
         NSNumber* numberOfItemsPerRow = [plist objectForKey:@"numberOfItemsPerRow"];
         numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : [NSNumber numberWithUnsignedInt:4];
         NSString* localizedName = paletteName ? [bundle localizedStringForKey:paletteName value:paletteName table:nil] : nil;
+
+        NSDictionary* itemDefault = [plist objectForKey:@"itemDefault"];
+        itemDefault = [itemDefault isKindOfClass:[NSDictionary class]] ? itemDefault : nil;
+
         NSArray*  items = [plist objectForKey:@"items"];
         NSEnumerator* itemsEnumerator = [items isKindOfClass:[NSArray class]] ? [items objectEnumerator] : nil;
         NSDictionary* item = nil;
@@ -191,26 +196,32 @@
         {
           if ([item isKindOfClass:[NSDictionary class]])
           {
-            NSString* itemName      = [item objectForKey:@"name"];
-            itemName = [itemName isKindOfClass:[NSString class]] ? itemName : nil;
+            NSString* itemName = [item objectForKey:@"name" withClass:[NSString class]];
             NSString* localizedItemName = itemName ? [bundle localizedStringForKey:itemName value:itemName table:nil] : nil;
-            NSString* resourceName  = [item objectForKey:@"resourceName"];
-            resourceName = [resourceName isKindOfClass:[NSString class]] ? resourceName : itemName;
+            NSString* resourceName  = [item objectForKey:@"resourceName" withClass:[NSString class]];
+            resourceName = resourceName ? resourceName : itemName;
             NSString* resourcePath  = [bundle pathForImageResource:resourceName];
-            resourcePath = [resourcePath isKindOfClass:[NSString class]] ? resourcePath : nil;
-            NSString* latexCode     = [item objectForKey:@"latexCode"];
-            latexCode = [latexCode isKindOfClass:[NSString class]] ? latexCode : nil;
-            NSString* requires      = [item objectForKey:@"requires"];
-            requires = [requires isKindOfClass:[NSString class]] ? requires : nil;
-            NSNumber* isEnvironment = [item objectForKey:@"isEnvironment"];
-            isEnvironment = [isEnvironment isKindOfClass:[NSNumber class]] ? isEnvironment : nil;
-            NSNumber* numberOfArguments = [item objectForKey:@"numberOfArguments"];
-            numberOfArguments = [numberOfArguments isKindOfClass:[NSNumber class]] ? numberOfArguments : nil;
+            NSString* latexCode     = [item objectForKey:@"latexCode" withClass:[NSString class]];
+            NSString* requires      = [item objectForKey:@"requires" withClass:[NSString class]];
+            NSNumber* isEnvironment = [item objectForKey:@"isEnvironment" withClass:[NSNumber class]];
+            NSNumber* numberOfArguments = [item objectForKey:@"numberOfArguments" withClass:[NSNumber class]];
+            numberOfArguments = numberOfArguments ? numberOfArguments :
+                                [itemDefault objectForKey:@"numberOfArguments" withClass:[NSNumber class]];
+            NSString* argumentToken = [item objectForKey:@"argumentToken" withClass:[NSString class]];
+            argumentToken = argumentToken ? argumentToken :
+                            [itemDefault objectForKey:@"argumentToken" withClass:[NSString class]];
+            NSString* argumentTokenDefaultReplace = [item objectForKey:@"argumentTokenDefaultReplace" withClass:[NSString class]];
+            argumentTokenDefaultReplace = argumentTokenDefaultReplace ? argumentTokenDefaultReplace :
+                            [itemDefault objectForKey:@"argumentTokenDefaultReplace" withClass:[NSString class]];
+
             PaletteItem* paletteItem =
               [[PaletteItem alloc] initWithName:itemName localizedName:localizedItemName resourcePath:resourcePath
                                            type:(isEnvironment && [isEnvironment boolValue] ? LATEX_ITEM_TYPE_ENVIRONMENT : LATEX_ITEM_TYPE_STANDARD)
-                                     numberOfArguments:[numberOfArguments unsignedIntValue] latexCode:latexCode
-                                      requires:requires];
+                                     numberOfArguments:[numberOfArguments unsignedIntValue]
+                                     latexCode:latexCode requires:requires
+                                     argumentToken:argumentToken
+                                     argumentTokenDefaultReplace:argumentTokenDefaultReplace
+                                     ];
             if (paletteItem)
               [palette addObject:paletteItem];
             [paletteItem release];

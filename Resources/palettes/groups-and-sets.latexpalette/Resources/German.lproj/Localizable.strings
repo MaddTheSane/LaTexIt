@@ -7,3 +7,5 @@
 "supseteq"="Obermenge";
 "subset"="Echte Teilmenge";
 "subseteq"="Teilmenge";
+"emptyset"="Leere Menge 1";
+"varnothing"="Leere Menge 2";

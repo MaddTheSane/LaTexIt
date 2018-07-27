@@ -165,7 +165,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
 //the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)
--(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
+-(void) writeToPasteboard:(NSPasteboard*)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   //first, feed with equation
   [[self equation] writeToPasteboard:pboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
@@ -190,7 +190,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.1.0", @"version",
+       @"2.2.0", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -228,7 +228,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.1.0" forKey:@"version"];
+  [coder encodeObject:@"2.2.0" forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:
@@ -239,7 +239,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   NSString* version = [coder decodeObjectForKey:@"version"];
   NSManagedObjectContext* managedObjectContext = ([@"2.0.0" compare:version options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedDescending) ? nil :
     [LatexitEquation currentManagedObjectContext];
-  #warning currentManagedObjectContext ???
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   LatexitEquation* equation = nil;
@@ -300,10 +299,15 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     
     equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor];
 
+    [backgroundColor release];
+    [color release];
+    [date release];
+    [pdfData release];
     [preamble release];
     [sourceText release];
 
     [equation setTitle:title];
+    [title release];
 
     //for versions < 1.5.4, we must reannotate the pdfData to retreive the diacritic characters
     if (!version || [version compare:@"1.5.4" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)

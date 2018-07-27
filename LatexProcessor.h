@@ -10,6 +10,8 @@
 
 #import "LaTeXiTSharedTypes.h"
 
+extern NSString* LatexizationDidEndNotification;
+
 @interface LaTeXProcessor : NSObject {
   NSManagedObjectModel* managedObjectModel;
   NSMutableArray*       unixBins;
@@ -36,6 +38,7 @@
 
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable;
 
+-(void)      latexiseWithConfiguration:(NSMutableDictionary*)configuration;
 -(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
                     magnification:(double)magnification compositionConfiguration:(NSDictionary*)compositionConfiguration
                     backgroundColor:(NSColor*)backgroundColor

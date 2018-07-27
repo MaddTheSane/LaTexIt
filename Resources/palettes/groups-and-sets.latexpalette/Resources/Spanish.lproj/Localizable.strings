@@ -7,3 +7,5 @@
 "supseteq"="Superconjunto";
 "subset"="Subconjunto propio";
 "subseteq"="Subconjunto";
+"emptyset"="Conjunto vacío 1";
+"varnothing"="Conjunto vacío 2";

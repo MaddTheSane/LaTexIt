@@ -38,7 +38,7 @@ NSString* LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
 NSString* LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
 
 @interface LibraryManager (PrivateAPI)
--(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path;
+-(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves library when quitting
 -(void) saveLibrary;
 -(void) createLibraryMigratingIfNeeded;
@@ -185,7 +185,7 @@ static LibraryManager* sharedManagerInstance = nil;
         ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager removeFileAtPath:path handler:nil]));
         if (ok)
         {
-          NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path];
+          NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
           NSData* data = [NSKeyedArchiver archivedDataWithRootObject:rootLibraryItemsToSave];
           [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
           NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -207,8 +207,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.1.0", @"version",
-          nil];
+          @"2.2.0", @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
@@ -257,7 +256,7 @@ static LibraryManager* sharedManagerInstance = nil;
 
   if (option == LIBRARY_IMPORT_OPEN)
   {
-    NSManagedObjectContext* newManagedObjectContext = [self managedObjectContextAtPath:path];
+    NSManagedObjectContext* newManagedObjectContext = [self managedObjectContextAtPath:path setVersion:NO];
     ok = (newManagedObjectContext != nil);
     if (ok)
     {
@@ -270,7 +269,7 @@ static LibraryManager* sharedManagerInstance = nil;
   {
     if ([[path pathExtension] isEqualToString:@"latexlib"] || [[path pathExtension] isEqualToString:@"dat"])
     {
-      NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path];
+      NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path setVersion:NO];
       if (!sourceManagedObjectContext)//maybe it is old format ?
       {
         BOOL migrationError = NO;
@@ -364,7 +363,7 @@ static LibraryManager* sharedManagerInstance = nil;
     }//end if ([[path pathExtension] isEqualToString:@"latexlib"] || [[path pathExtension] isEqualToString:@"dat"])
     else if ([[path pathExtension] isEqualToString:@"latexhist"] )
     {
-      NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path];
+      NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path setVersion:NO];
       NSError* error = nil;
       unsigned int nbRootLibraryItemsBeforeAdding =
         [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
@@ -565,7 +564,7 @@ static LibraryManager* sharedManagerInstance = nil;
 }
 //end libraryEquations
 
--(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path
+-(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion
 {
   NSManagedObjectContext* result = nil;
   NSPersistentStoreCoordinator* persistentStoreCoordinator = !path ? nil :
@@ -585,8 +584,9 @@ static LibraryManager* sharedManagerInstance = nil;
   NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
-  if (persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.1.0", @"version", nil] forPersistentStore:persistentStore];
+  if (setVersion && persistentStore)
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.2.0", @"version", nil]
+                         forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   [result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
@@ -594,7 +594,7 @@ static LibraryManager* sharedManagerInstance = nil;
   [result setRetainsRegisteredObjects:YES];
   return [result autorelease];
 }
-//end managedObjectContextAtPath:
+//end managedObjectContextAtPath:setVersion:
 
 -(void) createLibraryMigratingIfNeeded
 {
@@ -647,8 +647,32 @@ static LibraryManager* sharedManagerInstance = nil;
         oldFilePath = filePath;
     }
 
-    BOOL shouldMigrateLibrary = ![fileManager isReadableFileAtPath:newFilePath] && oldFilePath;
-    BOOL shouldDisplayMigrationProgression = shouldMigrateLibrary && [[NSApp class] isEqual:[NSApplication class]];
+    BOOL shouldMigrateLibraryToCoreData = ![fileManager isReadableFileAtPath:newFilePath] && oldFilePath;
+    
+    NSString* libraryPath = [[PreferencesController sharedController] libraryPath];
+    BOOL isDirectory = NO;
+    BOOL exists = libraryPath && [fileManager fileExistsAtPath:libraryPath isDirectory:&isDirectory] && !isDirectory &&
+                  [fileManager isReadableFileAtPath:libraryPath];
+
+    if (!exists)
+    {
+      libraryPath = [self defaultLibraryPath];
+      if (![fileManager isReadableFileAtPath:libraryPath])
+        [fileManager createDirectoryPath:[libraryPath stringByDeletingLastPathComponent] attributes:nil];
+    }
+    
+    self->managedObjectContext = [[self managedObjectContextAtPath:libraryPath setVersion:NO] retain];
+    NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
+    NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
+    id oldVersionObject =
+      [[persistentStoreCoordinator metadataForPersistentStore:[persistentStores lastObject]] objectForKey:@"version"];
+    NSString* oldVersion = [oldVersionObject isKindOfClass:[NSString class]] ? (NSString*)[[oldVersionObject copy] autorelease] : nil;
+    
+    BOOL shouldMigrateLibraryToAlign = ([oldVersion compare:@"2.1.0"] == NSOrderedAscending);
+
+    BOOL shouldDisplayMigrationProgression = (shouldMigrateLibraryToCoreData && [[NSApp class] isEqual:[NSApplication class]]) ||
+                                             shouldMigrateLibraryToAlign;
+    BOOL migrationError = NO;
     if (shouldDisplayMigrationProgression)
     {
       NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
@@ -667,25 +691,58 @@ static LibraryManager* sharedManagerInstance = nil;
       modalSession = [NSApp beginModalSessionForWindow:migratingWindow];
     }//end if ([[NSApp class] isEqual:[NSApplication class]])
 
-    NSString* libraryPath = [[PreferencesController sharedController] libraryPath];
-    BOOL isDirectory = NO;
-    BOOL exists = libraryPath && [fileManager fileExistsAtPath:libraryPath isDirectory:&isDirectory] && !isDirectory &&
-                  [fileManager isReadableFileAtPath:libraryPath];
-    if (!exists)
-    {
-      libraryPath = [self defaultLibraryPath];
-      if (![fileManager isReadableFileAtPath:libraryPath])
-        [fileManager createDirectoryPath:[libraryPath stringByDeletingLastPathComponent] attributes:nil];
-    }
-    
-    self->managedObjectContext = [[self managedObjectContextAtPath:libraryPath] retain];
-
-    if (shouldMigrateLibrary)
+    if (shouldMigrateLibraryToCoreData)
     {
       BOOL ok = [self loadFrom:oldFilePath option:LIBRARY_IMPORT_OVERWRITE parent:nil];
       if (ok)
         [[NSFileManager defaultManager] removeFileAtPath:oldFilePath handler:0];
     }
+    else if (shouldMigrateLibraryToAlign)
+    {
+      NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+      [fetchRequest setEntity:[LatexitEquation entity]];
+      NSError* error = nil;
+      NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
+      unsigned int progression = 0;
+      unsigned int count = [latexitEquations count];
+      [progressIndicator setIndeterminate:NO];
+      [progressIndicator setMaxValue:1.*count];
+      [progressIndicator setDoubleValue:0.];
+      [progressIndicator display];
+      if (error)
+        DebugLog(0, @"error : %@", error);
+      NSEnumerator* enumerator = [latexitEquations objectEnumerator];
+      LatexitEquation* latexitEquation = nil;
+      @try{
+        while((latexitEquation = [enumerator nextObject]))
+        {
+          [latexitEquation checkAndMigrateAlign];//force fetch and update
+          [progressIndicator setDoubleValue:1.*(progression++)];
+          if (!(progression%25))
+            [progressIndicator display];
+        }//end for each latexitEquation
+      }
+      @catch(NSException* e){
+        DebugLog(0, @"exception : %@", e);
+        migrationError = YES;
+      }
+      @finally{
+      }
+      [fetchRequest release];
+      error = nil;
+      [self->managedObjectContext save:&error];
+      if (error)
+        DebugLog(0, @"error : %@", error);
+    }//end if (shouldMigrateLibraryToAlign)
+    
+    if (!migrationError)
+    {
+      NSEnumerator* enumerator = [persistentStores objectEnumerator];
+      id persistentStore = nil;
+      while((persistentStore = [enumerator nextObject]))
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.2.0", @"version", nil]
+                             forPersistentStore:persistentStore];
+    }//end if (!migrationError)
   }
   @catch(NSException* e) //reading may fail for some reason
   {
@@ -697,8 +754,9 @@ static LibraryManager* sharedManagerInstance = nil;
   
   [self fixChildrenSortIndexesForParent:nil recursively:YES];
 
-  if (modalSession) [NSApp endModalSession:modalSession];
-  [[migratingWindowController window] close]; 
+  if (modalSession)
+    [NSApp endModalSession:modalSession];
+  [migratingWindowController close]; 
 }
 //end createLibraryMigratingIfNeeded
 

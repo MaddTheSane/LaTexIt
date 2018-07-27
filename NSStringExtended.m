@@ -21,7 +21,7 @@
     if (error)
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
-    NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
+    NSData* data = !path ? nil : [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;

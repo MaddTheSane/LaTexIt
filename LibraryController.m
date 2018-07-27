@@ -164,7 +164,11 @@
 {
   self->currentlyDraggedItems = nil;
   [pasteBoard declareTypes:[NSArray array] owner:nil];
-
+  
+  BOOL isChangePasteboardOnTheFly = ([pasteBoard dataForType:NSFilesPromisePboardType] != nil);
+  if (!isChangePasteboardOnTheFly)
+    [pasteBoard declareTypes:[NSArray array] owner:nil];
+  
   NSArray* minimumItemsCover = [NSObject minimumNodeCoverFromItemsInArray:items parentSelector:@selector(parent)];
   unsigned int count = [minimumItemsCover count];
   NSMutableArray* libraryItems     = [NSMutableArray arrayWithCapacity:count];
@@ -209,7 +213,7 @@
     [lastLatexitEquation writeToPasteboard:pasteBoard isLinkBackRefresh:NO lazyDataProvider:nil];
   }
 
-  if (count)
+  if (count && !isChangePasteboardOnTheFly)
   {
     //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
     [pasteBoard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
@@ -441,7 +445,7 @@
 
   NSString* dropPath = [dropDestination path];
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  export_format_t exportFormat = [preferencesController exportFormat];
+  export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
   NSString* extension = nil;
   switch(exportFormat)
   {

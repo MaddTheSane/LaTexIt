@@ -26,6 +26,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   int                 lineShift; //the displayed numerotation of the lines may start at a value different from 1
   NSDragOperation     acceptDrag;
   BOOL                spellCheckerHasBeenInitialized;
+  NSUInteger          previousSelectedRangeLocation;
 }
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
@@ -41,5 +42,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 -(BOOL) gotoLine:(int)row;//scroll to visible line <row>
 
 -(SMLSyntaxColouring*) syntaxColouring;
+
+-(void) restorePreviousSelectedRangeLocation;
 
 @end

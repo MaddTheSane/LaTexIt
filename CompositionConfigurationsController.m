@@ -152,12 +152,13 @@
 {
   if (!self->currentConfigurationScriptsController)
   {
-    self->currentConfigurationScriptsController = [[CompositionConfigurationsAdditionalScriptsController alloc] initWithContent:nil];
+    self->currentConfigurationScriptsController =
+      [[CompositionConfigurationsAdditionalScriptsController alloc] initWithContent:nil];
     [self->currentConfigurationScriptsController setAvoidsEmptySelection:NO];
-    [self->currentConfigurationScriptsController setAutomaticallyPreparesContent:NO];
+    [self->currentConfigurationScriptsController setAutomaticallyPreparesContent:YES];
     [self->currentConfigurationScriptsController setPreservesSelection:YES];
     [self->currentConfigurationScriptsController bind:NSContentArrayBinding toObject:self
-      withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationAdditionalProcessingScriptsKey]
+      withKeyPath:[NSString stringWithFormat:@"selection.%@", CompositionConfigurationAdditionalProcessingScriptsKey]
       options:[NSDictionary dictionaryWithObjectsAndKeys:
         [DictionaryToArrayTransformer transformerWithDescriptors:nil], NSValueTransformerBindingOption,
         [NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption,
