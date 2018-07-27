@@ -13,19 +13,16 @@
 
 extern NSString* EncapsulationPboardType;
 
-@class EncapsulationView;
 @interface EncapsulationManager : NSObject {
-  IBOutlet EncapsulationView* encapsulationTableView;
-  IBOutlet NSButton*          removeEncapsulationButton;
-
   NSMutableArray* encapsulations; //the different custom exports (encaspulations)
-  
-  NSIndexSet* draggedRowIndexes; //very volatile, used for drag'n drop of encapsulationTableView rows
+  NSIndexSet*     draggedRowIndexes; //very volatile, used for drag'n drop of encapsulationTableView rows
+  NSUndoManager*  undoManager;
 }
 
--(IBAction) addEncapsulation:(id)sender;
--(IBAction) removeEncapsulations:(id)sender;//remove selected ones
++(EncapsulationManager*) sharedManager;
+-(NSUndoManager*)        undoManager;
 
--(void) removeSelectedItemsInTableView:(NSTableView*)tableView;
+-(void) newEncapsulation;
+-(void) removeEncapsulationIndexes:(NSIndexSet*)indexes;//remove selected ones
 
 @end

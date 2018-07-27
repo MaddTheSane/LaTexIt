@@ -30,9 +30,11 @@ extern NSString* HistoryItemDidChangeNotification;
 }
 
 //constructors
++(id) historyItemWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 +(id) historyItemWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor;
+-(id) initWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(id) initWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
                                             mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;

@@ -30,9 +30,19 @@ extern NSString* AdditionalRightMarginKey;
 extern NSString* AdditionalBottomMarginKey;
 extern NSString* EncapsulationsKey;
 extern NSString* CurrentEncapsulationIndexKey;
+extern NSString* LastEasterEggsDatesKey;
+
+extern NSString* EncapsulationControllerVisibleAtStartupKey;
+extern NSString* HistoryControllerVisibleAtStartupKey;
+extern NSString* LatexPalettesControllerVisibleAtStartupKey;
+extern NSString* LibraryControllerVisibleAtStartupKey;
+extern NSString* MarginControllerVisibleAtStartupKey;
+
+extern NSString* CheckForNewVersionsKey;
 
 extern NSString* SomePathDidChangeNotification;
 
+@class EncapsulationTableView;
 @class LineCountTextView;
 @interface PreferencesController : NSWindowController {
 
@@ -53,22 +63,27 @@ extern NSString* SomePathDidChangeNotification;
   IBOutlet NSColorWell*        defaultColorColorWell;
 
   IBOutlet LineCountTextView* preambleTextView;
-  IBOutlet NSButton*    selectFontButton;
-  IBOutlet NSTextField* fontTextField;
+  IBOutlet NSButton*          selectFontButton;
+  IBOutlet NSTextField*       fontTextField;
 
   IBOutlet NSMatrix*    compositionMatrix;  
   IBOutlet NSTextField* pdfLatexTextField;
   IBOutlet NSTextField* dvipdfTextField;
   IBOutlet NSTextField* gsTextField;
 
-  IBOutlet NSButton*    serviceRespectsColor;
   IBOutlet NSButton*    serviceRespectsBaseline;
-  IBOutlet NSButton*    serviceRespectsPointSize;
+  IBOutlet NSMatrix*    serviceRespectsPointSize;
+  IBOutlet NSMatrix*    serviceRespectsColor;
 
   IBOutlet NSTextField* additionalTopMarginTextField;
   IBOutlet NSTextField* additionalLeftMarginTextField;
   IBOutlet NSTextField* additionalRightMarginTextField;
   IBOutlet NSTextField* additionalBottomMarginTextField;
+  
+  IBOutlet EncapsulationTableView* encapsulationTableView;
+  IBOutlet NSButton*               removeEncapsulationButton;
+  
+  IBOutlet NSButton* checkForNewVersionsButton;
 
   BOOL didChangePdfLatexTextField;
   BOOL didChangeDvipdfTextField;
@@ -93,5 +108,13 @@ extern NSString* SomePathDidChangeNotification;
 
 -(IBAction) changeAdvancedConfiguration:(id)sender;
 
+-(IBAction) newEncapsulation:(id)sender;
+-(IBAction) removeSelectedEncapsulations:(id)sender;
+
+-(IBAction) checkForUpdatesChange:(id)sender;
+-(IBAction) checkNow:(id)sender;
+-(IBAction) gotoWebSite:(id)sender;
+
 -(void) selectPreferencesPaneWithIdentifier:(id)identifier;
+
 @end

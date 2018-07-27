@@ -11,15 +11,8 @@
 #import "AppController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
-#import "HistoryView.h"
-#import "LibraryDrawer.h"
-#import "LibraryFile.h"
-#import "LibraryItem.h"
-#import "LibraryManager.h"
-#import "LibraryView.h"
 #import "LineCountTextView.h"
 #import "LogTableView.h"
-#import "MarginController.h"
 #import "MyImageView.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
@@ -73,17 +66,15 @@ const static int ComposeUsingLatexAndDvipdf = 1;
 -(NSRect) _computeBoundingBox:(NSString*)pdfFilePath;
 
 -(void) _lineCountDidChange:(NSNotification*)aNotification;
--(void) _historyDidChange:(NSNotification*)aNotification;
--(void) _selectionDidChange:(NSNotification*)aNotification;
 -(void) _clickErrorLine:(NSNotification*)aNotification;
--(void) _historySelectionDidChange;
--(void) _librarySelectionDidChange;
 
 -(void) _setLogTableViewVisible:(BOOL)status;
 
 -(NSString*) _replaceYenSymbol:(NSString*)string; //in Japanese environment, we should replace the Yen symbol by a backslash
 
--(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+-(NSImage*) _checkEasterEgg;//may return an easter egg image
+
+-(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
 @end
 
 @implementation MyDocument
@@ -129,24 +120,11 @@ static NSString* yenString = nil;
 
 -(id) init
 {
-  self = [super init];
-  if (self)
-  {
-    uniqueId = [MyDocument _giveId];
-    jpegQuality = 90;
-    jpegColor = [[NSColor whiteColor] retain];
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(_lineCountDidChange:)
-                               name:LineCountDidChangeNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_selectionDidChange:)
-                               name:NSTableViewSelectionDidChangeNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_selectionDidChange:)
-                               name:NSOutlineViewSelectionDidChangeNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_clickErrorLine:)
-                               name:ClickErrorLineNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_historyDidChange:)
-                               name:HistoryDidChangeNotification object:nil];
-  }
+  if (![super init])
+    return nil;
+  uniqueId = [MyDocument _giveId];
+  jpegQuality = 90;
+  jpegColor = [[NSColor whiteColor] retain];
   return self;
 }
 
@@ -203,6 +181,9 @@ static NSString* yenString = nil;
   NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
   [preambleTextView setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
   [sourceTextView   setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
+  
+  [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]
+              updateHistoryItem:NO];
 
   //the initial... variables has been set into a readFromFile
   if (initialPreamble)
@@ -230,12 +211,13 @@ static NSString* yenString = nil;
     initialPdfData = nil;
   }
 
-  [historyDrawer setDelegate:self];
-  [self _historyDidChange:nil];
-
-  [libraryDrawer setDelegate:self];
-
   [self updateAvailabilities]; //updates interface to allow latexisation or not, according to current configuration
+  
+  NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+  [notificationCenter addObserver:self selector:@selector(_lineCountDidChange:)
+                             name:LineCountDidChangeNotification object:preambleTextView];
+  [notificationCenter addObserver:self selector:@selector(_clickErrorLine:)
+                             name:ClickErrorLineNotification object:logTableView];
 }
 
 //set the document title that will be displayed as window title. There is no represented file associated
@@ -358,15 +340,11 @@ static NSString* yenString = nil;
   return stringWithBackslash;
 }
 
--(IBAction) colorDidChange:(id)sender
-{
-}
-
 //when the linecount changes in the preamble view, the numerotation must change in the body view
 -(void) _lineCountDidChange:(NSNotification*)aNotification
 {
-  if ([aNotification object] == preambleTextView)
-    [sourceTextView setLineShift:[[preambleTextView lineRanges] count]];
+  //registerd only for preambleTextView
+  [sourceTextView setLineShift:[[preambleTextView lineRanges] count]];
 }
 
 -(void) setFont:(NSFont*)font//changes the font of both preamble and sourceText views
@@ -434,11 +412,12 @@ static NSString* yenString = nil;
     if (!failed)
     {
       //if it is ok, updates the image view
-      [imageView setPdfData:pdfData cachedImage:nil];
+      [imageView setPdfData:pdfData cachedImage:[self _checkEasterEgg]];
 
       //and insert a new element into the history
-      [[HistoryManager sharedManager] addItem:[self historyItemWithCurrentState]];
-      [historyView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+      HistoryItem* newHistoryItem = [self historyItemWithCurrentState];
+      [[HistoryManager sharedManager] addItem:newHistoryItem];
+      [[[AppController appController] historyController] deselectAll:0];
       
       //updates the pasteboard content for a live Linkback link, and triggers a sendEdit
       [imageView updateLinkBackLink:linkBackLink];
@@ -545,18 +524,22 @@ static NSString* yenString = nil;
   [stdoutString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
 
   //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
-  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && pdflatex %@ -file-line-error -interaction nonstopmode %@ > %@", 
-                          directory, (options & ComposeUsingLatexAndDvipdf) ? @"-progname latex" : @"", texFile, errFile];
-  [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n%@\n",
-                                                        NSLocalizedString(@"processing pdflatex", @"processing pdflatex"),
+  NSString* executablePath = [[NSUserDefaults standardUserDefaults] stringForKey:PdfLatexPathKey];
+  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && nice -n 0 %@ %@ -file-line-error -interaction nonstopmode %@ > %@", 
+                          directory, executablePath,
+                          (options & ComposeUsingLatexAndDvipdf) ? @"-progname latex" : @"", texFile, errFile];
+  [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
+                                                        NSLocalizedString(@"processing", @"processing"),
+                                                        [executablePath lastPathComponent],
                                                         systemCall]];
   BOOL failed = (system([systemCall UTF8String]) != 0);
   NSString* errors = [NSString stringWithContentsOfFile:errFile];
   [stdoutString appendString:errors ? errors : @""];
   
   if (failed)
-    [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n",
-                               NSLocalizedString(@"error while processing pdflatex", @"error while processing pdflatex")]];
+    [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
+                               NSLocalizedString(@"error while processing", @"error while processing"),
+                               [executablePath lastPathComponent]]];
 
   //if !failed and must call dvipdf...
   if (!failed && (options & ComposeUsingLatexAndDvipdf))
@@ -573,8 +556,9 @@ static NSString* yenString = nil;
 
     @try
     {
-      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n%@\n",
-                                                            NSLocalizedString(@"processing dvipdf", @"processing dvipdf"),
+      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
+                                                            NSLocalizedString(@"processing", @"processing"),
+                                                            [[dvipdfTask launchPath] lastPathComponent],
                                                             [dvipdfTask commandLine]]];
       [dvipdfTask launch];
       [dvipdfTask waitUntilExit];
@@ -600,8 +584,9 @@ static NSString* yenString = nil;
     }
     
     if (failed)
-      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n",
-                                 NSLocalizedString(@"error while processing dvipdf", @"error while processing dvipdf")]];
+      [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
+                                 NSLocalizedString(@"error while processing", @"error while processing"),
+                                 [[dvipdfTask launchPath] lastPathComponent]]];
 
   }//end of dvipdf call
   
@@ -725,6 +710,7 @@ static NSString* yenString = nil;
   {
     if (shouldTryStep2) //we do not even try step 2 in TEXT mode, since we will perform step 3 to allow line breakings
     {
+      AppController* appController = [AppController appController];
       //this magical template uses boxes that scales and automagically find their own geometry
       //But it may fail for some kinds of equation, especially multi-lines equations. However, we try it because it is fast
       //and efficient. This will even generated a baseline if it works !
@@ -758,8 +744,9 @@ static NSString* yenString = nil;
           [self _replaceYenSymbol:colouredPreamble], magnification/10.0,
           addSymbolLeft, [self _replaceYenSymbol:body], addSymbolRight,
           200*magnification/10000,
-          [MarginController topMargin]+[MarginController bottomMargin],[MarginController leftMargin]+[MarginController rightMargin],
-          [MarginController leftMargin],[MarginController topMargin]
+          [appController marginControllerTopMargin]+[appController marginControllerBottomMargin],
+          [appController marginControllerLeftMargin]+[appController marginControllerRightMargin],
+          [appController marginControllerLeftMargin],[appController marginControllerTopMargin]
           ];
       
       //try to latexise that file
@@ -784,13 +771,14 @@ static NSString* yenString = nil;
     //STEP 3
     else //if step 2 failed, we must use the heavy method of step 3
     {
+      AppController* appController = [AppController appController];
       failed = NO; //since step 3 is a resort, step 2 is not a real failure, so we reset <failed> to NO
       pdfData = nil;
       NSRect boundingBox = [self _computeBoundingBox:pdfFilePath]; //compute the bounding box of the pdf file generated during step 1
-      boundingBox.origin.x    -= [MarginController leftMargin]/(magnification/10);
-      boundingBox.origin.y    -= [MarginController bottomMargin]/(magnification/10);
-      boundingBox.size.width  += [MarginController rightMargin]/(magnification/10);
-      boundingBox.size.height += [MarginController topMargin]/(magnification/10);
+      boundingBox.origin.x    -= [appController marginControllerLeftMargin]/(magnification/10);
+      boundingBox.origin.y    -= [appController marginControllerBottomMargin]/(magnification/10);
+      boundingBox.size.width  += [appController marginControllerRightMargin]/(magnification/10);
+      boundingBox.size.height += [appController marginControllerTopMargin]/(magnification/10);
 
       //then use the bounding box and the magnification in the magic-box-template, the body of which will be a mere \includegraphics
       //of the pdf file of step 1
@@ -832,28 +820,17 @@ static NSString* yenString = nil;
     }//end STEP 3
     
     //the baseline is affected by the bottom margin
-    baseline += [MarginController bottomMargin];
+    baseline += [[AppController appController] marginControllerBottomMargin];
 
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
     #ifndef PANTHER
-    NSString* colorAsString = [color rgbaString];
-    NSString* bkColorAsString = [imageView backgroundColor] ? [[imageView backgroundColor] rgbaString] : [[NSColor whiteColor] rgbaString];
     if (pdfData)
     {
       //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
       NSDictionary* attributes =
         [NSDictionary dictionaryWithObjectsAndKeys:
-           [NSArray arrayWithObjects:
-             preamble ? preamble : [NSString string],
-             body ? body : [NSString string],
-             colorAsString,
-             [NSString stringWithFormat:@"%f", magnification],
-             [NSString stringWithFormat:@"%d", mode],
-             [NSString stringWithFormat:@"%f", baseline],
-             bkColorAsString,
-             nil], PDFDocumentKeywordsAttribute,
            [NSApp applicationName], PDFDocumentCreatorAttribute, nil];
       [pdfDocument setDocumentAttributes:attributes];
       pdfData = [pdfDocument dataRepresentation];
@@ -930,44 +907,6 @@ static NSString* yenString = nil;
   return ([imageView image] != nil);
 }
 
--(BOOL) isHistoryVisible
-{
-  int state = [historyDrawer state];
-  return (state == NSDrawerOpenState) || (state == NSDrawerOpeningState);
-}
-
-//manages conflict when the historyDrawer and the libraryDrawer want to open on the same edge
--(void) setHistoryVisible:(BOOL)visible
-{
-  if (!visible)
-    [historyDrawer close];
-  else
-  {
-    [historyDrawer open];
-    if ([self isLibraryVisible] && ([libraryDrawer edge] == [historyDrawer edge]))
-      [libraryDrawer close];
-  }
-}
-
--(BOOL) isLibraryVisible
-{
-  int state = [libraryDrawer state];
-  return (state == NSDrawerOpenState) || (state == NSDrawerOpeningState);
-}
-
-//manage conflict when the historyDrawer and the libraryDrawer want to open on the same edge
--(void) setLibraryVisible:(BOOL)visible
-{
-  if (!visible)
-    [libraryDrawer close];
-  else
-  {
-    [libraryDrawer open];
-    if ([self isHistoryVisible] && ([libraryDrawer edge] == [historyDrawer edge]))
-      [historyDrawer close];
-  }
-}
-
 -(BOOL) isPreambleVisible
 {
   //[[preambleTextView superview] superview] is a scrollview that is a subView of splitView
@@ -992,8 +931,8 @@ static NSString* yenString = nil;
       const float factor = i/10.0f;
       NSRect newPreambleFrame = preambleFrame;
       NSRect newSourceFrame = sourceFrame;
-      newPreambleFrame.size.height = (1-factor)*newPreambleFrame.size.height + factor*newPreambleHeight;
-      newSourceFrame.size.height   = (1-factor)*newSourceFrame.size.height   + factor*newSourceHeight;
+      newPreambleFrame.size.height = (1-factor)*preambleFrame.size.height + factor*newPreambleHeight;
+      newSourceFrame.size.height   = (1-factor)*sourceFrame.size.height   + factor*newSourceHeight;
       [preambleView setFrame:newPreambleFrame]; 
       [sourceView setFrame: newSourceFrame]; 
       [splitView adjustSubviews]; 
@@ -1001,34 +940,6 @@ static NSString* yenString = nil;
       [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:1/100.0f]];
     }
   }//end if there is something to change
-}
-
--(void)splitViewDidResizeSubviews:(NSNotification *)aNotification
-{
-  //if the splitView has been collapsed, we should reconsider the menu bar to affect the show/hide preamble item
-  [[AppController appController] menuNeedsUpdate:nil];
-}
-
--(IBAction) clearHistory:(id)sender
-{
-  NSBeginAlertSheet(NSLocalizedString(@"Clear History",@"Clear History"),
-                    NSLocalizedString(@"Clear History",@"Clear History"),
-                    NSLocalizedString(@"Cancel", @"Cancel"),
-                    nil, [self windowForSheet], self,
-                    @selector(_clearHistorySheetDidEnd:returnCode:contextInfo:), nil, NULL,
-                    NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
-                                      @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."));
-}
-
--(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-  if (returnCode == NSAlertDefaultReturn)
-    [[HistoryManager sharedManager] clearAll];
-}
-
--(IBAction) removeHistoryEntries:(id)sender
-{
-  [historyView deleteBackward:sender];
 }
 
 //creates an historyItem summarizing the current document state
@@ -1044,117 +955,7 @@ static NSString* yenString = nil;
 
 -(void) applyPdfData:(NSData*)pdfData
 {
-  BOOL needsToCheckLEEAnnotations = YES;
-  #ifndef PANTHER
-  PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-  NSString* creator  = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentCreatorAttribute]  : nil;
-  NSArray*  keywords = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute] : nil;
-  //if the meta-data tells that the creator is LaTeXiT, then use it !
-  needsToCheckLEEAnnotations = !(creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 7));
-  if (!needsToCheckLEEAnnotations)
-  {
-    [self _setLogTableViewVisible:NO];
-    [imageView setPdfData:pdfData cachedImage:nil];
-    [self setPreamble:[[[NSAttributedString alloc] initWithString:[keywords objectAtIndex:0]] autorelease]];
-    [self setSourceText:[[[NSAttributedString alloc] initWithString:[keywords objectAtIndex:1]] autorelease]];
-    NSString* colorAsString = [keywords objectAtIndex:2];
-    [colorWell setColor:[NSColor colorWithRgbaString:colorAsString]];
-    [sizeText setDoubleValue:[[keywords objectAtIndex:3] doubleValue]];
-    [typeOfTextControl selectSegmentWithTag:(latex_mode_t)[[keywords objectAtIndex:4] intValue]];
-    //[keywords objectAtIndex:5] is the baseline
-    NSString* bkColorAsString = [keywords objectAtIndex:6];
-    [imageView setBackgroundColor:[NSColor colorWithRgbaString:bkColorAsString]];
-  }
-  [pdfDocument release];
-  #endif
-
-  if (needsToCheckLEEAnnotations) //either we are on panther, or we failed to find meta-data keywords
-  {
-    NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray*  testArray    = nil;
-
-    NSData* defaultPrambleData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
-    NSAttributedString* defaultPrambleAttributedString =
-      [[[NSAttributedString alloc] initWithRTF:defaultPrambleData documentAttributes:NULL] autorelease];
-    NSMutableString* preamble = [NSMutableString stringWithString:[defaultPrambleAttributedString string]];
-    testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      [preamble setString:[testArray objectAtIndex:1]];
-      NSRange range = [preamble rangeOfString:@"ESannopend"];
-      range.length = (range.location != NSNotFound) ? [preamble length]-range.location : 0;
-      [preamble deleteCharactersInRange:range];
-      [preamble replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preamble length])];
-      [preamble replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preamble length])];
-      [preamble replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preamble length])];
-      [preamble replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preamble length])];
-    }
-
-    NSMutableString* source = [NSMutableString string];
-    testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      [source appendString:[testArray objectAtIndex:1]];
-      NSRange range = [source rangeOfString:@"ESannotend"];
-      range.length = (range.location != NSNotFound) ? [source length]-range.location : 0;
-      [source deleteCharactersInRange:range];
-      [source replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [source length])];
-      [source replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [source length])];
-      [source replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [source length])];
-      [source replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [source length])];
-    }
-
-    NSMutableString* pointSizeAsString = [NSMutableString stringWithString:[[userDefaults objectForKey:DefaultPointSizeKey] stringValue]];
-    testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      [pointSizeAsString setString:[testArray objectAtIndex:1]];
-      NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
-      range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
-      [pointSizeAsString deleteCharactersInRange:range];
-    }
-
-    NSMutableString* modeAsString = [NSMutableString stringWithString:[[userDefaults objectForKey:DefaultModeKey] stringValue]];
-    testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      [modeAsString setString:[testArray objectAtIndex:1]];
-      NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
-      range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
-      [modeAsString deleteCharactersInRange:range];
-    }
-
-    NSColor* defaultColor = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
-    NSMutableString* colorAsString = [NSMutableString stringWithString:[defaultColor rgbaString]];
-    testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      [colorAsString setString:[testArray objectAtIndex:1]];
-      NSRange range = [colorAsString rangeOfString:@"EEcolend"];
-      range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
-      [colorAsString deleteCharactersInRange:range];
-    }
-
-    NSMutableString* bkColorAsString = nil;
-    testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-      NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
-      range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
-      [bkColorAsString deleteCharactersInRange:range];
-    }
-
-    [self _setLogTableViewVisible:NO];
-    [imageView setPdfData:pdfData cachedImage:nil];
-    [self setPreamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]];
-    [self setSourceText:[[[NSAttributedString alloc] initWithString:source] autorelease]];
-    [colorWell setColor:[NSColor colorWithRgbaString:colorAsString]];
-    [sizeText setDoubleValue:[pointSizeAsString doubleValue]];
-    [typeOfTextControl selectSegmentWithTag:(latex_mode_t)[modeAsString intValue]];
-    [imageView setBackgroundColor:[NSColor colorWithRgbaString:bkColorAsString]];
-  }
+  [self applyHistoryItem:[HistoryItem historyItemWithPdfData:pdfData useDefaults:YES]];
 }
 
 //sets the state of the document according to the given history item
@@ -1169,84 +970,24 @@ static NSString* yenString = nil;
     [colorWell setColor:[historyItem color]];
     [sizeText setDoubleValue:[historyItem pointSize]];
     [typeOfTextControl selectSegmentWithTag:[historyItem mode]];
-    [imageView setBackgroundColor:[historyItem backgroundColor]];
+    [imageView setBackgroundColor:[historyItem backgroundColor] updateHistoryItem:NO];
   }
-}
-
-//if a selection is made either in the history or in the library, updates the document state
--(void) _selectionDidChange:(NSNotification*)aNotification
-{
-  NSTableView* sender = [aNotification object];
-  if (sender == historyView)
+  else
   {
-    [self _historySelectionDidChange];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [self _setLogTableViewVisible:NO];
+    [imageView setPdfData:nil cachedImage:nil];
+    NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
+    [preambleTextView setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
+    [sourceTextView   setTypingAttributes:[NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName]];
+    [self setPreamble:[[AppController appController] preamble]];
+    [self setSourceText:[[[NSAttributedString alloc ] init] autorelease]];
+    [colorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
+    [sizeText setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
+    [typeOfTextControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
+    [imageView setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]
+                updateHistoryItem:NO];
   }
-  else if (sender == libraryView)
-  {
-    [self _librarySelectionDidChange];
-  }
-}
-
-//if a selection is made in the history, updates the document state
--(void) _historySelectionDidChange
-{
-  int selectedRow = [historyView selectedRow];
-  HistoryItem* historyItem = [[HistoryManager sharedManager] itemAtIndex:selectedRow tableView:historyView];
-  [self applyHistoryItem:historyItem];
-}
-
-//if a selection is made in the library, updates the document state
--(void) _librarySelectionDidChange
-{
-  LibraryItem* libraryItem = [libraryView itemAtRow:[libraryView selectedRow]];
-  if ([libraryItem isKindOfClass:[LibraryFile class]])
-    [self applyHistoryItem:[(LibraryFile*) libraryItem value]];
-}
-
-//updates the clear History button when history is available/unavailable
--(void) _historyDidChange:(NSNotification*)aNotification
-{
-  [clearHistoryButton setEnabled:([[[HistoryManager sharedManager] historyItems] count] > 0)];
-}
-
--(NSArray*) selectedLibraryItems
-{
-  return [self isLibraryVisible] ? [libraryView selectedItems] : [NSArray array];
-}
-
--(NSArray*) selectedHistoryItems
-{
-  return [self isHistoryVisible] ? [historyView selectedItems] : [NSArray array];
-}
-
-//action coming from menu through appcontroller
--(IBAction) addCurrentEquationToLibrary:(id)sender
-{
-  [libraryDrawer importCurrent:sender];
-}
-
-//action coming from menu through appcontroller
--(IBAction) newLibraryFolder:(id)sender
-{
-  [libraryDrawer newFolder:sender];
-}
-
-//action coming from menu through appcontroller
--(IBAction) removeLibraryItems:(id)sender
-{
-  [libraryDrawer removeItem:sender];
-}
-
-//action coming from menu through appcontroller
--(IBAction) refreshLibraryItems:(id)sender
-{
-  [libraryDrawer refreshItem:sender];
-}
-
--(void) deselectItems
-{
-  [historyView deselectAll:self];
-  [libraryView deselectAll:self];
 }
 
 //calls the log window
@@ -1255,34 +996,9 @@ static NSString* yenString = nil;
   [logWindow makeKeyAndOrderFront:self];
 }
 
-//when a drawer has been drawn to 0, it is not automatically marked as closed, so I make it by hand
--(NSSize) drawerWillResizeContents:(NSDrawer *)sender toSize:(NSSize)contentSize
-{
-  if (sender == historyDrawer)
-  {
-    NSRect rect = [clearHistoryButton frame];
-    rect.origin.x = (contentSize.width-rect.size.width)/2;
-    [clearHistoryButton setFrame:rect];
-    if (!contentSize.width || !contentSize.height)
-    {
-      [self setHistoryVisible:NO];
-      [[AppController appController] menuNeedsUpdate:nil];
-    }
-  }
-  else if (sender == libraryDrawer)
-  {
-    if (!contentSize.width || !contentSize.height)
-    {
-      [self setLibraryVisible:NO];
-      [[AppController appController] menuNeedsUpdate:nil];
-    }
-  }
-  return contentSize;
-}
-
-//overloaded to avoid document saving
 -(void) updateChangeCount:(NSDocumentChangeType)changeType
 {
+  //does nothing (prevents dirty flag)
 }
 
 //image exporting
@@ -1402,20 +1118,17 @@ static NSString* yenString = nil;
 //teleportation to the faulty lines of the latex code when the user clicks a line in the error tableview
 -(void) _clickErrorLine:(NSNotification*)aNotification
 {
-  NSTableView* tableView = (NSTableView*) [aNotification object];
-  if (tableView == logTableView)
+  //registerd only for logTableView
+  NSNumber* number = (NSNumber*) [[aNotification userInfo] objectForKey:@"lineError"];
+  if (!number)
+    [self displayLastLog:self];
+  else
   {
-    NSNumber* number = (NSNumber*) [[aNotification userInfo] objectForKey:@"lineError"];
-    if (!number)
-      [self displayLastLog:self];
+    int row = [number intValue];
+    if ([preambleTextView gotoLine:row])
+      [self setPreambleVisible:YES];
     else
-    {
-      int row = [number intValue];
-      if ([preambleTextView gotoLine:row])
-        [self setPreambleVisible:YES];
-      else
-        [sourceTextView gotoLine:row];
-    }
+      [sourceTextView gotoLine:row];
   }
 }
 
@@ -1449,6 +1162,40 @@ static NSString* yenString = nil;
     linkBackLink = nil;
     [self setDocumentTitle:nil];
   }
+}
+
+-(NSImage*) _checkEasterEgg
+{
+  NSImage* easterEggImage = nil;
+  
+  NSCalendarDate* now = [NSCalendarDate date];
+  NSString* easterEggString = nil;
+  if (([now monthOfYear] == 4) && ([now dayOfMonth] == 1))
+    easterEggString = @"aprilfish";
+    
+  if (easterEggString)
+  {
+    NSDictionary* resources = [NSDictionary dictionaryWithObjectsAndKeys:@"poisson.pdf", @"aprilfish", nil];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSData* dataFromUserDefaults = [userDefaults dataForKey:LastEasterEggsDatesKey];
+    NSMutableDictionary* easterEggLastDates = dataFromUserDefaults ?
+      [NSMutableDictionary dictionaryWithDictionary:[NSUnarchiver unarchiveObjectWithData:dataFromUserDefaults]] :
+      [NSMutableDictionary dictionary];
+    if (!easterEggLastDates)
+      easterEggLastDates = [NSMutableDictionary dictionary];
+    NSCalendarDate* easterEggLastDate = [easterEggLastDates objectForKey:easterEggString];
+    if ((!easterEggLastDate) || [now isLessThan:easterEggLastDate] || ([now yearOfCommonEra] != [easterEggLastDate yearOfCommonEra]))
+    {
+      NSString* resource = [resources objectForKey:easterEggString];
+      NSString* filePath = resource ? [[NSBundle mainBundle] pathForResource:[resource stringByDeletingPathExtension]
+                                                                      ofType:[resource pathExtension]] : nil;
+      if (resource && filePath)
+        easterEggImage = [[[NSImage alloc] initWithContentsOfFile:filePath] autorelease];
+      [easterEggLastDates setObject:[NSCalendarDate date] forKey:easterEggString];
+    }
+    [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDates] forKey:LastEasterEggsDatesKey];
+  }
+  return easterEggImage;
 }
 
 @end

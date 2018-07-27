@@ -25,12 +25,10 @@
 
 -(id) init
 {
-  self = [super init];
-  if (self)
-  {
-    title    = [[NSString alloc] initWithString:NSLocalizedString(@"Untitled", @"Untitled")];
-    children = [[NSMutableArray alloc] init];
-  }
+  if (![super init])
+    return nil;
+  title    = [[NSString alloc] initWithString:NSLocalizedString(@"Untitled", @"Untitled")];
+  children = [[NSMutableArray alloc] init];
   return self;
 }
 
@@ -39,6 +37,16 @@
   [title    release];
   [children release];
   [super    dealloc];
+}
+
+-(void) setExpanded:(BOOL)expanded
+{
+  isExpanded = expanded;
+}
+
+-(BOOL) isExpanded
+{
+  return isExpanded;
 }
 
 -(id) copyWithZone:(NSZone*) zone
@@ -81,6 +89,42 @@
   return title;
 }
 
+-(BOOL) updateTitle//try to change the name so that no brother has the same; rretusn YES if it has changed
+{
+  BOOL hasChangedTitle = NO;
+  
+  NSMutableArray* brothers = [NSMutableArray arrayWithArray:[parent children]];
+  [brothers removeObject:self];
+  NSMutableArray* titles = [NSMutableArray arrayWithCapacity:[brothers count]];
+  NSEnumerator* enumerator = [brothers objectEnumerator];
+  LibraryItem* item = [enumerator nextObject];
+  while(item)
+  {
+    [titles addObject:[item title]];
+    item = [enumerator nextObject];
+  }
+  
+  unsigned int indexOfIdenticTitle = [titles indexOfObject:title];
+  if (indexOfIdenticTitle != NSNotFound)
+  {
+    [titles removeObjectAtIndex:indexOfIdenticTitle];
+    unsigned int delta = 2;
+    NSString* proposition = [[NSString alloc] initWithFormat:@"%@-%d", title, delta++];
+    indexOfIdenticTitle = [titles indexOfObject:proposition];
+    while(delta && (indexOfIdenticTitle != NSNotFound))
+    {
+      [titles removeObjectAtIndex:indexOfIdenticTitle];
+      [proposition release];
+      proposition = [[NSString alloc] initWithFormat:@"%@-%d", title, delta++];
+      indexOfIdenticTitle = [titles indexOfObject:proposition];
+    }
+    [self setTitle:proposition];
+    [proposition release];
+    hasChangedTitle = YES;
+  }
+  
+  return hasChangedTitle;
+}
 
 //Structuring methods
 
@@ -160,19 +204,19 @@
 {
   [coder encodeObject:title    forKey:@"title"];
   [coder encodeObject:children forKey:@"children"];
+  [coder encodeBool:isExpanded forKey:@"isExpanded"];
   //we do not encode the parent, it is useless
 }
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  self = [super init];
-  if (self)
-  {
-    title    = [[coder decodeObjectForKey:@"title"] retain];
-    children = [[coder decodeObjectForKey:@"children"] retain];
-    //the parent is not encoded, so we must ensure to set it manually in the children
-    [children makeObjectsPerformSelector:@selector(setParent:) withObject:self];
-  }
+  if (![super init])
+    return nil;
+  title      = [[coder decodeObjectForKey:@"title"] retain];
+  children   = [[coder decodeObjectForKey:@"children"] retain];
+  isExpanded = [coder decodeBoolForKey:@"isExpanded"];
+  //the parent is not encoded, so we must ensure to set it manually in the children
+  [children makeObjectsPerformSelector:@selector(setParent:) withObject:self];
   return self;
 }
 

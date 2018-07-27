@@ -10,63 +10,59 @@
 #import "EncapsulationController.h"
 
 #import "AppController.h"
-#import "EncapsulationView.h"
+#import "EncapsulationManager.h"
+#import "EncapsulationTableView.h"
 #import "PreferencesController.h"
 
 @interface EncapsulationController (PrivateAPI)
--(void) _updateButtonStates;
--(void) _updateCurrentEncapsulation;
+-(void) _updateButtonStates:(NSNotification*)notification;
 @end
 
 @implementation EncapsulationController
 
-static EncapsulationController* sharedControllerInstance = nil; //the (private) singleton
-
-+(void) initialize
-{
-  if (!sharedControllerInstance) //creating the singleton at first time
-    sharedControllerInstance = [[EncapsulationController alloc] init];
-}
-
-//accessing the singleton
-+(EncapsulationController*) encapsulationController
-{
-  return sharedControllerInstance;
-}
-
-//The init method can be called several times, it will only be applied once on the singleton
 -(id) init
 {
-  if (sharedControllerInstance)  //do not recreate an instance
-  {
-    [sharedControllerInstance retain]; //but makes a retain to allow a release
-    return sharedControllerInstance;
-  }
-  else
-  {
-    self = [super initWithWindowNibName:@"Encapsulation"];
-    if (self)
-    {
-    }
-    return self;
-  }
+  if (![super initWithWindowNibName:@"Encapsulation"])
+    return nil;
+  return self;
+}
+
+-(void) windowDidLoad
+{
+  [[self window] setFrameAutosaveName:@"encapsulations"];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_updateButtonStates:)
+                                               name:NSTableViewSelectionDidChangeNotification object:encapsulationTableView];
 }
 
 -(void) dealloc
 {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
 }
 
-//initializes the controls with default values
--(void) windowDidLoad
+-(IBAction) newEncapsulation:(id)sender
 {
-  [[self window] setFrameAutosaveName:@"Encapsulations"];
+  [[EncapsulationManager sharedManager] newEncapsulation];
+  [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[encapsulationTableView numberOfRows]-1]
+                      byExtendingSelection:NO];
+  //[encapsulationTableView edit:self];
+}
+
+-(IBAction) removeSelectedEncapsulations:(id)sender
+{
+  [[EncapsulationManager sharedManager] removeEncapsulationIndexes:[encapsulationTableView selectedRowIndexes]];
 }
 
 //the help button opens the "Advanced" pane of the preferences controller
 -(IBAction) openHelp:(id)sender
 {
   [[AppController appController] showPreferencesPaneWithIdentifier:@"advanced"];
+}
+
+-(void) _updateButtonStates:(NSNotification*)notification
+{
+  //only registered for encapsulationTableView
+  [removeButton setEnabled:([encapsulationTableView selectedRow] >= 0)];
 }
 
 @end

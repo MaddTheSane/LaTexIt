@@ -10,116 +10,68 @@
 
 #import "PreferencesController.h"
 
+@interface MarginController (PrivateAPI)
+-(void) _updateWithUserDefaults;
+@end
+
 @implementation MarginController
 
-static MarginController* sharedControllerInstance = nil; //the (private) singleton
-
-+(void) initialize
-{
-  if (!sharedControllerInstance) //creating the singleton at first time
-  {
-    sharedControllerInstance = [[MarginController alloc] init];
-  }
-}
-
-//accessing the singleton
-+(MarginController*) marginController
-{
-  return sharedControllerInstance;
-}
 
 //The init method can be called several times, it will only be applied once on the singleton
 -(id) init
 {
-  if (sharedControllerInstance)  //do not recreate an instance
-  {
-    [sharedControllerInstance retain]; //but makes a retain to allow a release
-    return sharedControllerInstance;
-  }
-  else
-  {
-    self = [super initWithWindowNibName:@"Margin"];
-    if (self)
-    {
-      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-      [notificationCenter addObserver:self selector:@selector(windowWillClose:)
-                                 name:NSWindowWillCloseNotification object:nil];
-    }
-    return self;
-  }
+  if (![super initWithWindowNibName:@"Margin"])
+    return nil;
+  return self;
 }
 
--(void) dealloc
-{
-  NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-  [notificationCenter removeObserver:self];
-  [super dealloc];
-}
-
-+(void) updateWithUserDefaults
-{
-  [sharedControllerInstance updateWithUserDefaults];
-}
-
--(void) updateWithUserDefaults
+-(void) _updateWithUserDefaults
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [sharedControllerInstance->topMarginButton setFloatValue:[userDefaults floatForKey:AdditionalTopMarginKey]];
-  [sharedControllerInstance->leftMarginButton setFloatValue:[userDefaults floatForKey:AdditionalLeftMarginKey]];
-  [sharedControllerInstance->rightMarginButton setFloatValue:[userDefaults floatForKey:AdditionalRightMarginKey]];
-  [sharedControllerInstance->bottomMarginButton setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
+  [topMarginButton setFloatValue:[userDefaults floatForKey:AdditionalTopMarginKey]];
+  [leftMarginButton setFloatValue:[userDefaults floatForKey:AdditionalLeftMarginKey]];
+  [rightMarginButton setFloatValue:[userDefaults floatForKey:AdditionalRightMarginKey]];
+  [bottomMarginButton setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
+}
+
+-(IBAction) showWindow:(id)sender
+{
+  if (![[self window] isVisible])
+    [self _updateWithUserDefaults];
+  [super showWindow:sender];
 }
 
 //initializes the controls with default values
 -(void) windowDidLoad
 {
-  [[self window] setFrameAutosaveName:@"Margins"];
-  [self updateWithUserDefaults];
+  [[self window] setFrameAutosaveName:@"margins"];
+  [self _updateWithUserDefaults];
 }
 
 //resets the controls with default values
--(void)windowWillClose:(NSNotification *)aNotification
+-(void) windowWillClose:(NSNotification *)aNotification
 {
-  if ([aNotification object] == [self window])
-  {
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    [sharedControllerInstance->topMarginButton setFloatValue:[userDefaults floatForKey:AdditionalTopMarginKey]];
-    [sharedControllerInstance->leftMarginButton setFloatValue:[userDefaults floatForKey:AdditionalLeftMarginKey]];
-    [sharedControllerInstance->rightMarginButton setFloatValue:[userDefaults floatForKey:AdditionalRightMarginKey]];
-    [sharedControllerInstance->bottomMarginButton setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
-  }
+  [self _updateWithUserDefaults];
 }
 
-+(float) topMargin
+-(float) topMargin
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  return sharedControllerInstance->topMarginButton ? 
-                  [sharedControllerInstance->topMarginButton floatValue] :
-                  [userDefaults floatForKey:AdditionalTopMarginKey];
+  return [topMarginButton floatValue];
 }
 
-+(float) leftMargin
+-(float) leftMargin
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  return sharedControllerInstance->leftMarginButton ? 
-                  [sharedControllerInstance->leftMarginButton floatValue] :
-                  [userDefaults floatForKey:AdditionalLeftMarginKey];
+  return [leftMarginButton floatValue];
 }
 
-+(float) rightMargin
+-(float) rightMargin
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  return sharedControllerInstance->rightMarginButton ? 
-                  [sharedControllerInstance->rightMarginButton floatValue] :
-                  [userDefaults floatForKey:AdditionalRightMarginKey];
+  return [rightMarginButton floatValue];
 }
 
-+(float) bottomMargin
+-(float) bottomMargin
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  return sharedControllerInstance->bottomMarginButton ? 
-                  [sharedControllerInstance->bottomMarginButton floatValue] :
-                  [userDefaults floatForKey:AdditionalBottomMarginKey];
+  return [bottomMarginButton floatValue];
 }
 
 -(IBAction) makeDefaultsMargins:(id)sender

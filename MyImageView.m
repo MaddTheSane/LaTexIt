@@ -32,6 +32,7 @@
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
+NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 @interface MyImageView (PrivateAPI)
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh;
@@ -43,23 +44,25 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  self = [super initWithCoder:coder];
-  if (self)
-  {
-    [self setBackgroundColor:[NSColor colorWithData:[[NSUserDefaults standardUserDefaults] objectForKey:DefaultImageViewBackground]]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
-                                                 name:CopyCurrentImageNotification object:nil];
-    [self registerForDraggedTypes:
-      [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType, nil]];
-  }
+  if (![super initWithCoder:coder])
+    return nil;
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
+                                               name:CopyCurrentImageNotification object:nil];
+  [self registerForDraggedTypes:
+    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType, nil]];
   return self;
 }
 
 -(void) dealloc
 {
-  [backgroundColor release];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [backgroundColor release];
   [super dealloc];
+}
+
+-(BOOL) acceptsFirstMouse:(NSEvent*)theEvent//we can start a drag without selecting the window first
+{
+  return YES;
 }
 
 -(NSColor*) backgroundColor
@@ -67,14 +70,15 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   return backgroundColor;
 }
 
--(void) setBackgroundColor:(NSColor*)newColor
+-(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem
 {
   //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
   [backgroundColor autorelease];
   NSColor* greyLevelColor = [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
   backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
   [self setNeedsDisplay:YES];
-  [self setPdfData:[[document historyItemWithCurrentState] annotatedPdfData] cachedImage:[self image]];
+  if (updateHistoryItem && pdfData)
+    [self setPdfData:[[document historyItemWithCurrentState] annotatedPdfData] cachedImage:[self image]];
 }
 
 //zooms the image, but does not modify it (drag'n drop will be with original image size)
@@ -91,7 +95,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   if ([charactersIgnoringModifiers length])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
-    handlesEvent = (character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask);
+    handlesEvent = ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask));
     if (handlesEvent)
       [[document makeLatexButton] performClick:self];
   }
@@ -127,6 +131,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   [image setScalesWhenResized:YES];
   [super setImage:image];
   [self zoom:zoomSlider];
+  [[NSNotificationCenter defaultCenter] postNotificationName:ImageDidChangeNotification object:self];
 }
 
 //used to update the pasteboard content for a live Linkback link
@@ -228,7 +233,6 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh
 {
   HistoryItem* historyItem = [document historyItemWithCurrentState];
-  [pdfData writeToFile:@"/Users/chacha/Desktop/toto.pdf" atomically:NO];
   [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:historyItem]] forType:HistoryItemsPboardType];
   [historyItem writeToPasteboard:pasteboard forDocument:document isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:self];
@@ -332,7 +336,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 {
   BOOL ok = YES;
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
-    [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:NSColorPboardType]]];
+    [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:NSColorPboardType]] updateHistoryItem:YES];
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
   {
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];

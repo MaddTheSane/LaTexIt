@@ -12,6 +12,7 @@
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 extern NSString* CopyCurrentImageNotification;
+extern NSString* ImageDidChangeNotification;
 
 @class LinkBack;
 @class MyDocument;
@@ -33,7 +34,7 @@ extern NSString* CopyCurrentImageNotification;
 -(NSData*) pdfData;
 
 -(NSColor*) backgroundColor;
--(void) setBackgroundColor:(NSColor*)newColor;
+-(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem;
 
 //used to update the pasteboard content for a live Linkback link
 -(void) updateLinkBackLink:(LinkBack*)link;

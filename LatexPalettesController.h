@@ -19,8 +19,6 @@
   IBOutlet NSMatrix* decorationsMatrix;
 }
 
--(id) init;
-
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document
 -(IBAction) latexPalettesClick:(id)sender;
 

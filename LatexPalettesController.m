@@ -18,19 +18,18 @@
 
 -(id) init
 {
-  self = [super initWithWindowNibName:@"LatexPalettes"];
-  if (self)
-  {
-  }
+  if (![super initWithWindowNibName:@"LatexPalettes"])
+    return nil;
   return self;
 }
 
 -(void) windowDidLoad
 {
-  [[self window] setFrameAutosaveName:@"LatexPalettes"];
-  [[self window] setAspectRatio:[[self window] frame].size];
+  NSWindow* window = [self window];
+  [window setFrameAutosaveName:@"latexPalettes"];
+  [window setAspectRatio:[[self window] frame].size];
   [self _initMatrices];
-  [[self window] setDelegate:self];
+  [window setDelegate:self];
 }
 
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document

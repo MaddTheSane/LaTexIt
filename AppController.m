@@ -13,9 +13,11 @@
 #import "AppController.h"
 
 #import "EncapsulationController.h"
+#import "HistoryController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LatexPalettesController.h"
+#import "LibraryController.h"
 #import "LibraryFile.h"
 #import "LibraryManager.h"
 #import "LineCountTextView.h"
@@ -49,7 +51,7 @@
 
 //some notifications that trigger some work
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification;
--(void) windowDidBecomeMain:(NSNotification *)aNotification;
+-(void) _triggerHistoryBackgroundLoading:(id)object;
 -(void) _somePathDidChangeNotification:(NSNotification *)aNotification;
 
 //private method factorizing the work of the different application service calls
@@ -119,10 +121,6 @@ static NSArray* unixBins = nil;
       [environmentDict setObject:environmentPath forKey:@"PATH"];
     }
   }
-
-  //creates the unique instance of AppController
-  if (!appControllerInstance)
-    appControllerInstance = [[[self class] alloc] init];
 }
 
 +(NSDictionary*) environmentDict
@@ -137,52 +135,129 @@ static NSArray* unixBins = nil;
 
 +(AppController*) appController //access the unique instance of appController
 {
+  @synchronized(self)
+  {
+    //creates the unique instance of AppController
+    if (!appControllerInstance)
+      appControllerInstance = [[self  alloc] init];
+  }
   return appControllerInstance;
+}
+
++(id) allocWithZone:(NSZone *)zone
+{
+  @synchronized(self)
+  {
+    if (!appControllerInstance)
+       return [super allocWithZone:zone];
+  }
+  return appControllerInstance;
+}
+
+-(id) copyWithZone:(NSZone *)zone
+{
+  return self;
+}
+
+-(id) retain
+{
+  return self;
+}
+
+-(unsigned) retainCount
+{
+  return UINT_MAX;  //denotes an object that cannot be released
+}
+
+-(void) release
+{
+}
+
+-(id) autorelease
+{
+  return self;
 }
 
 -(id) init
 {
-  if (appControllerInstance) //do not build more than one appController
-    return [appControllerInstance retain]; //but retain to allow release
-  else
+  if (self && (self != appControllerInstance))
   {
-    self = [super init];
-    if (self)
-    {
-      [self _setEnvironment];     //performs a setenv()
-      [self _checkConfiguration]; //mainly, looks for pdflatex program
-      
-      //export to EPS needs ghostscript to be available
-      NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-      NSString* exportType = [userDefaults stringForKey:DragExportTypeKey];
-      if ([exportType isEqualTo:@"EPS"] && !isGsAvailable)
-        [userDefaults setObject:@"PDF" forKey:DragExportTypeKey];
-      
-      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-      [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
-                                               name:NSApplicationDidFinishLaunchingNotification object:nil];
-      [notificationCenter addObserver:self selector:@selector(_somePathDidChangeNotification:)
-                                               name:SomePathDidChangeNotification object:nil];
-      [notificationCenter addObserver:self selector:@selector(windowDidBecomeMain:)
-                                               name:NSWindowDidBecomeMainNotification object:nil];
+    if (![super init])
+      return nil;
+    appControllerInstance = self;
+    [self _setEnvironment];     //performs a setenv()
+    [self _checkConfiguration]; //mainly, looks for pdflatex program
+    
+    //export to EPS needs ghostscript to be available
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString* exportType = [userDefaults stringForKey:DragExportTypeKey];
+    if ([exportType isEqualTo:@"EPS"] && !isGsAvailable)
+      [userDefaults setObject:@"PDF" forKey:DragExportTypeKey];
+    
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(_somePathDidChangeNotification:)
+                                             name:SomePathDidChangeNotification object:nil];
 
-       //declares the service. The service will be called on a dummy document (myDocumentServiceProvider), which is lazily created
-       //when first used
-       [NSApp setServicesProvider:self];
-       NSUpdateDynamicServices();
-    }
-    return self;
+     //declares the service. The service will be called on a dummy document (myDocumentServiceProvider), which is lazily created
+     //when first used
+     [NSApp setServicesProvider:self];
+     NSUpdateDynamicServices();
   }
+  return self;
 }
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [encapsulationController release];
+  [historyController release];
   [marginController release];
   [latexPalettesController release];
+  [libraryController release];
   [preferencesController release];
   [super dealloc];
+}
+
+-(EncapsulationController*) encapsulationController
+{
+  if (!encapsulationController)
+    encapsulationController = [[EncapsulationController alloc] init];
+  return encapsulationController;
+}
+
+-(HistoryController*) historyController
+{
+  if (!historyController)
+    historyController = [[HistoryController alloc] init];
+  return historyController;
+}
+
+-(LatexPalettesController*) latexPalettesController
+{
+  if (!latexPalettesController)
+    latexPalettesController = [[LatexPalettesController alloc] init];
+  return latexPalettesController;
+}
+
+-(LibraryController*) libraryController
+{
+  if (!libraryController)
+    libraryController = [[LibraryController alloc] init];
+  return libraryController;
+}
+
+-(MarginController*) marginController
+{
+  if (!marginController)
+    marginController = [[MarginController alloc] init];
+  return marginController;
+}
+
+-(PreferencesController*) preferencesController
+{
+  if (!preferencesController)
+    preferencesController = [[PreferencesController alloc] init];
+  return preferencesController;
 }
 
 //the dummy document used for application service is lazily created at first use
@@ -228,6 +303,11 @@ static NSArray* unixBins = nil;
   return YES;
 }
 
+-(MyDocument*) dummyDocument
+{
+  return [self _myDocumentServiceProvider];
+}
+
 -(IBAction) paste:(id)sender
 {
   [NSApp sendAction:@selector(paste:) to:nil from:sender];//default behaviour (Well... I think so...)
@@ -257,38 +337,61 @@ static NSArray* unixBins = nil;
   else if ([sender action] == @selector(showOrHidePreamble:))
   {
     MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    BOOL isPreambleVisible = (myDocument && [myDocument isPreambleVisible]);
     ok = (myDocument != nil) && ![myDocument isBusy];
+    if (isPreambleVisible)
+      [sender setTitle:NSLocalizedString(@"Hide preamble", @"Hide preamble")];
+    else
+      [sender setTitle:NSLocalizedString(@"Show preamble", @"Show preamble")];
   }
   else if ([sender action] == @selector(showOrHideHistory:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-    ok = (myDocument != nil) && ![myDocument isBusy];
+    BOOL isHistoryVisible = (historyController && [[historyController window] isVisible]);
+    if (isHistoryVisible)
+      [sender setTitle:NSLocalizedString(@"Hide History", @"Hide History")];
+    else
+      [sender setTitle:NSLocalizedString(@"Show History", @"Show History")];
+  }
+  else if ([sender action] == @selector(historyRemoveHistoryEntries:))
+  {
+    ok = historyController && [[historyController window] isVisible] && [historyController canRemoveEntries];
+  }
+  else if ([sender action] == @selector(historyClearHistory:))
+  {
+    ok = [[[HistoryManager sharedManager] historyItems] count];
   }
   else if ([sender action] == @selector(showOrHideLibrary:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-    ok = (myDocument != nil) && ![myDocument isBusy];
+    BOOL isLibraryVisible = (libraryController && [[libraryController window] isVisible]);
+    if (isLibraryVisible)
+      [sender setTitle:NSLocalizedString(@"Hide Library", @"Hide Library")];
+    else
+      [sender setTitle:NSLocalizedString(@"Show Library", @"Show Library")];
   }
-  else if ([sender action] == @selector(removeHistoryEntries:))
+  else if ([sender action] == @selector(libraryNewFolder:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-    ok = (myDocument != nil) && ([[myDocument selectedHistoryItems] count]) && ![myDocument isBusy];
+    ok = libraryController && [[libraryController window] isVisible];
   }
-  else if ([sender action] == @selector(removeLibraryItems:))
+  else if ([sender action] == @selector(libraryImportCurrent:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-    ok = (myDocument != nil) && ([[myDocument selectedLibraryItems] count]) && ![myDocument isBusy];
+    MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    ok = libraryController && [[libraryController window] isVisible] && document && [document hasImage];
   }
-  else if ([sender action] == @selector(refreshLibraryItems:))
+  else if ([sender action] == @selector(libraryRemoveSelectedItems:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-    NSArray* selectedLibraryItems = [myDocument selectedLibraryItems];
-    BOOL isLibraryFileSelected = ([selectedLibraryItems count] == 1) && ([[selectedLibraryItems lastObject] isKindOfClass:[LibraryFile class]]);
-    ok = (myDocument != nil) && isLibraryFileSelected && ![myDocument isBusy];
+    ok = libraryController && [[libraryController window] isVisible] && [libraryController canRemoveSelectedItems];
   }
-  else if ([sender action] == @selector(clearHistory:))
+  else if ([sender action] == @selector(libraryRefreshItems:))
   {
-    ok = ([[[HistoryManager sharedManager] historyItems] count] > 0);
+    ok = libraryController && [[libraryController window] isVisible] && [libraryController canRefreshItems];
+  }
+  else if ([sender action] == @selector(libraryOpen:))
+  {
+    ok = libraryController && [[libraryController window] isVisible];
+  }
+  else if ([sender action] == @selector(librarySaveAs:))
+  {
+    ok = libraryController && [[libraryController window] isVisible];
   }
   else if ([sender action] == @selector(showOrHideColorInspector:))
     [sender setState:[[NSColorPanel sharedColorPanel] isVisible] ? NSOnState : NSOffState];
@@ -301,27 +404,62 @@ static NSArray* unixBins = nil;
   return ok;
 }
 
--(void) menuNeedsUpdate:(NSMenu*)menu
+-(IBAction) historyRemoveHistoryEntries:(id)sender
 {
-  MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  [[self historyController] removeHistoryEntries:sender];
+}
 
-  BOOL isPreambleVisible = (myDocument && [myDocument isPreambleVisible]);
-  if (isPreambleVisible)
-    [showPreambleMenuItem setTitle:NSLocalizedString(@"Hide preamble", @"Hide preamble")];
-  else
-    [showPreambleMenuItem setTitle:NSLocalizedString(@"Show preamble", @"Show preamble")];
+-(IBAction) historyClearHistory:(id)sender
+{
+  [[self historyController] clearHistory:sender];
+}
 
-  BOOL isHistoryVisible = (myDocument && [myDocument isHistoryVisible]);
-  if (isHistoryVisible)
-    [showHistoryMenuItem setTitle:NSLocalizedString(@"Hide History", @"Hide History")];
+-(IBAction) showOrHideHistory:(id)sender
+{
+  NSWindowController* controller = [self historyController];
+  if ([[controller window] isVisible])
+    [controller close];
   else
-    [showHistoryMenuItem setTitle:NSLocalizedString(@"Show History", @"Show History")];
+    [controller showWindow:self];
+}
 
-  BOOL isLibraryVisible = (myDocument && [myDocument isLibraryVisible]);
-  if (isLibraryVisible)
-    [showLibraryMenuItem setTitle:NSLocalizedString(@"Hide Library", @"Hide Library")];
+-(IBAction) libraryImportCurrent:(id)sender //creates a library item with the current document state
+{
+  [[self libraryController] importCurrent:sender];
+}
+
+-(IBAction) libraryNewFolder:(id)sender     //creates a folder
+{
+  [[self libraryController] newFolder:sender];
+}
+
+-(IBAction) libraryRemoveSelectedItems:(id)sender    //removes some items
+{
+  [[self libraryController] removeSelectedItems:sender];
+}
+
+-(IBAction) libraryRefreshItems:(id)sender   //refresh an item
+{
+  [[self libraryController] refreshItems:sender];
+}
+
+-(IBAction) libraryOpen:(id)sender
+{
+  [[self libraryController] open:sender];
+}
+
+-(IBAction) librarySaveAs:(id)sender
+{
+  [[self libraryController] saveAs:sender];
+}
+
+-(IBAction) showOrHideLibrary:(id)sender
+{
+  NSWindowController* controller = [self libraryController];
+  if ([[controller window] isVisible])
+    [controller close];
   else
-    [showLibraryMenuItem setTitle:NSLocalizedString(@"Show Library", @"Show Library")];
+    [controller showWindow:self];
 }
 
 -(IBAction) showOrHideColorInspector:(id)sender
@@ -340,66 +478,34 @@ static NSArray* unixBins = nil;
   {
     BOOL makePreambleVisible = ![document isPreambleVisible];
     [document setPreambleVisible:makePreambleVisible];
-    [self menuNeedsUpdate:nil];
-  }
-}
-
--(IBAction) showOrHideHistory:(id)sender
-{
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-  if (document)
-  {
-    BOOL makeHistoryVisible = ![document isHistoryVisible];
-    [document setHistoryVisible:makeHistoryVisible];
-    [self menuNeedsUpdate:nil];
-  }
-}
-
--(IBAction) showOrHideLibrary:(id)sender
-{
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-  if (document)
-  {
-    BOOL makeLibraryVisible = ![document isLibraryVisible];
-    [document setLibraryVisible:makeLibraryVisible];
-    [self menuNeedsUpdate:nil];
   }
 }
 
 -(IBAction) showOrHideLatexPalettes:(id)sender
 {
-  if (!latexPalettesController)
-    latexPalettesController = [[LatexPalettesController alloc] init];
-
-  if ([[latexPalettesController window] isVisible])
-    [latexPalettesController close];
+  NSWindowController* controller = [self latexPalettesController];
+  if ([[controller window] isVisible])
+    [controller close];
   else
-    [latexPalettesController showWindow:self];
+    [controller showWindow:self];
 }
 
 -(IBAction) showOrHideEncapsulation:(id)sender
 {
-  if (!encapsulationController)
-    encapsulationController = [[EncapsulationController alloc] init];
-
-  if ([[encapsulationController window] isVisible])
-    [encapsulationController close];
+  NSWindowController* controller = [self encapsulationController];
+  if ([[controller window] isVisible])
+    [controller close];
   else
-    [encapsulationController showWindow:self];
+    [controller showWindow:self];
 }
 
 -(IBAction) showOrHideMargin:(id)sender
 {
-  if (!marginController)
-    marginController = [[MarginController alloc] init];
-
-  if ([[marginController window] isVisible])
-    [marginController close];
+  NSWindowController* controller = [self marginController];
+  if ([[controller window] isVisible])
+    [controller close];
   else
-  {
-    [marginController updateWithUserDefaults];
-    [marginController showWindow:self];
-  }
+    [controller showWindow:self];
 }
 
 //looks for a programName in the given PATHs. Just tests that the file exists
@@ -481,11 +587,12 @@ static NSArray* unixBins = nil;
 }
 
 //check for updates on LaTeXiT's web site
+//if <sender> is nil, it's considered as a background task and will only present a panel if a new version is available.
 -(IBAction) checkUpdates:(id)sender
 {
-  NSURL* versionFileURL = [NSURL URLWithString:@"http://localhost/programmation/fichiers/latexit-version-current"];
+  NSURL* versionFileURL = [NSURL URLWithString:@"http://ktd.club.fr/programmation/fichiers/latexit-version-current"];
   NSString* currentVersion = [NSString stringWithContentsOfURL:versionFileURL];
-  if (!currentVersion)
+  if (sender && !currentVersion)
     NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
                    [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
                                                                 @"An error occured while trying to reach %@.\n You should check your network."),
@@ -505,18 +612,18 @@ static NSArray* unixBins = nil;
       thisVersion = [components objectAtIndex:0];
 
     NSComparisonResult comparison = [thisVersion compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
-    if (comparison == NSOrderedSame)
-      NSRunAlertPanel(NSLocalizedString(@"Check done", @"Check done"),
+    if (sender && (comparison == NSOrderedSame))
+      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
                       NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
                       @"Ok", nil, nil);
-    else if (comparison == NSOrderedDescending)
-      NSRunAlertPanel(NSLocalizedString(@"Check done", @"Check done"),
+    else if (sender && (comparison == NSOrderedDescending))
+      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"CCheck for new versions"),
                       NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
                                         @"Your version of LaTeXiT is more recent than the official available one"),
                       @"Ok", nil, nil);
-    else
+    else if (comparison == NSOrderedAscending)
     {
-      int choice = NSRunAlertPanel(NSLocalizedString(@"Check done", @"Check done"),
+      int choice = NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
                                    NSLocalizedString(@"A new version of LaTeXiT is available",
                                                      @"A new version of LaTeXiT is available"),
                                    NSLocalizedString(@"Open download page", @"Open download page"),
@@ -548,62 +655,6 @@ static NSArray* unixBins = nil;
     [document displayLastLog:sender];
 }
 
--(IBAction) clearHistory:(id)sender
-{
-  int returnCode = NSRunAlertPanel(NSLocalizedString(@"Clear History",@"Clear History"),
-                                   NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
-                                                     @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."),
-                                   NSLocalizedString(@"Clear History",@"Clear History"),
-                                   NSLocalizedString(@"Cancel", @"Cancel"),
-                                   nil);
-  if (returnCode == NSAlertDefaultReturn)
-    [[HistoryManager sharedManager] clearAll];
-}
-
--(IBAction) addCurrentEquationToLibrary:(id)sender
-{
-  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] addCurrentEquationToLibrary:sender];
-}
-
--(IBAction) newLibraryFolder:(id)sender
-{
-  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] newLibraryFolder:sender];
-}
-
--(IBAction) removeLibraryItems:(id)sender
-{
-  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] removeLibraryItems:sender];
-}
-
--(IBAction) refreshLibraryItems:(id)sender
-{
-  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] refreshLibraryItems:sender];
-}
-
--(IBAction) saveLibrary:(id)sender
-{
-  NSSavePanel* savePanel = [NSSavePanel savePanel];
-  [savePanel setTitle:NSLocalizedString(@"Save library as...", @"Save library as...")];
-  [savePanel setRequiredFileType:@"latexlib"];
-  [savePanel setCanSelectHiddenExtension:YES];
-  int ok = [savePanel runModal];
-  if (ok == NSFileHandlingPanelOKButton)
-  {
-    [[LibraryManager sharedManager] saveAs:[[savePanel URL] path]];
-  }
-}
-
--(IBAction) loadLibrary:(id)sender
-{
-  NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setTitle:NSLocalizedString(@"Open library...", @"Open library...")];
-  int ok = [openPanel runModalForTypes:[NSArray arrayWithObject:@"latexlib"]];
-  if (ok == NSOKButton)
-  {
-    [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path]];
-  }
-}
-
 //returns the preamble that should be used, according to the fact that color.sty is available or not
 -(NSAttributedString*) preamble
 {
@@ -613,19 +664,12 @@ static NSArray* unixBins = nil;
   NSString* preambleString = [preamble string];
   if (!isColorStyAvailable)
   {
-    NSRange pdftexColorRange = [preambleString rangeOfString:@"\\usepackage[pdftex]{color}"];
+    NSRange pdftexColorRange = [preambleString rangeOfString:@"\\usepackage{color}"];
     if (pdftexColorRange.location != NSNotFound)
       [preamble insertAttributedString:[[[NSAttributedString alloc] initWithString:@"%"] autorelease]
                                atIndex:pdftexColorRange.location];
   }
   return [preamble autorelease];
-}
-
--(IBAction) removeHistoryEntries:(id)sender
-{
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
-  if (document)
-    [document removeHistoryEntries:sender];
 }
 
 -(BOOL) isGsAvailable
@@ -794,7 +838,7 @@ static NSArray* unixBins = nil;
   NSTask* pdfLatexTask = [[NSTask alloc] init];
   @try
   {
-    NSString* testString = @"\\documentclass[10pt]{article}\\usepackage[pdftex]{color}\\begin{document}\\end{document}";
+    NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
     NSString* directory      = NSTemporaryDirectory();
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
@@ -862,7 +906,6 @@ static NSArray* unixBins = nil;
   {
     [currentDocument setLinkBackLink:link];//automatically closes previous links
     [currentDocument applyHistoryItem:historyItem]; //defines the state of the document
-    [currentDocument deselectItems];
     [NSApp activateIgnoringOtherApps:YES];
     NSArray* windows = [currentDocument windowControllers];
     NSWindow* window = [[windows lastObject] window];
@@ -875,7 +918,8 @@ static NSArray* unixBins = nil;
 
 //when the app is launched, the first document appears, then a dialog box can indicate if pdflatex and gs
 //have been found or not. Then, the user has the ability to manually find them
--(void)applicationDidFinishLaunching:(NSNotification *)aNotification
+//as delegate, no need to register for a notification
+-(void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   [LinkBack publishServerWithName:[NSApp applicationName] delegate:self];
 
@@ -1002,6 +1046,24 @@ static NSArray* unixBins = nil;
     [self _addInEnvironmentPath:[[userDefaults stringForKey:DvipdfPathKey] stringByDeletingLastPathComponent]];
 
   [self _setEnvironment];
+
+  //sets visible controllers  
+  if ([userDefaults boolForKey:EncapsulationControllerVisibleAtStartupKey])
+    [[self encapsulationController] showWindow:self];
+  if ([userDefaults boolForKey:HistoryControllerVisibleAtStartupKey])
+    [[self historyController] showWindow:self];
+  if ([userDefaults boolForKey:LatexPalettesControllerVisibleAtStartupKey])
+    [[self latexPalettesController] showWindow:self];
+  if ([userDefaults boolForKey:LibraryControllerVisibleAtStartupKey])
+    [[self libraryController] showWindow:self];
+  if ([userDefaults boolForKey:MarginControllerVisibleAtStartupKey])
+    [[self marginController] showWindow:self];
+  [[[[NSDocumentController sharedDocumentController] currentDocument] windowForSheet] makeKeyAndOrderFront:self];
+  
+  [NSThread detachNewThreadSelector:@selector(_triggerHistoryBackgroundLoading:) toTarget:self withObject:nil];
+  
+  if ([userDefaults boolForKey:CheckForNewVersionsKey])
+    [NSApplication detachDrawingThread:@selector(checkUpdates:) toTarget:self withObject:nil];
 }
 
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
@@ -1085,27 +1147,14 @@ static NSArray* unixBins = nil;
           {
             //extracts the baseline of the equation, if possible
             NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
-            BOOL needsToCheckLEEAnnotations = YES;
-            #ifndef PANTHER
-            PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-            NSArray* pdfMetaData     = [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute];
-            needsToCheckLEEAnnotations = !(pdfMetaData && ([pdfMetaData count] >= 6));
-            if (!needsToCheckLEEAnnotations)
-              [equationBaselineAsString setString:[pdfMetaData objectAtIndex:5]];
-            [pdfDocument release];
-            #endif
-
-            if (needsToCheckLEEAnnotations)
+            NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+            NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+            if (testArray && ([testArray count] >= 2))
             {
-              NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-              NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
-              if (testArray && ([testArray count] >= 2))
-              {
-                [equationBaselineAsString setString:[testArray objectAtIndex:1]];
-                NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
-                range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
-                [equationBaselineAsString deleteCharactersInRange:range];
-              }
+              [equationBaselineAsString setString:[testArray objectAtIndex:1]];
+              NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
+              range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
+              [equationBaselineAsString deleteCharactersInRange:range];
             }
             
             float newBaseline = [originalBaseline floatValue];
@@ -1294,12 +1343,6 @@ static NSArray* unixBins = nil;
   [readmeWindow makeKeyAndOrderFront:self];
 }
 
-//whenever a document is selected, we should change menuNeedsUpdate to ensure good show/hide state of library and history
--(void) windowDidBecomeMain:(NSNotification *)aNotification
-{
-  [self menuNeedsUpdate:nil];
-}
-
 //if a path has changed in the preferences, pdflatex may become [un]available, so we must update
 //the "Latexise" button of the documents
 -(void) _somePathDidChangeNotification:(NSNotification *)aNotification
@@ -1319,20 +1362,21 @@ static NSArray* unixBins = nil;
   NSString* colorString =
     [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
   NSMutableString* preamble = [NSMutableString stringWithString:thePreamble];
-  NSRange pdftexColorRange = [preamble rangeOfString:@"\\usepackage[pdftex]{color}"];
+  NSRange colorRange = [preamble rangeOfString:@"\\usepackage{color}"];
+  if (colorRange.location == NSNotFound)
+    colorRange = [preamble rangeOfString:@"\\usepackage[pdftex]{color}"]; //because of old versions of LaTeXiT
   if ([self isColorStyAvailable])
   {
-    NSString* colorMode = [[NSUserDefaults standardUserDefaults] integerForKey:CompositionModeKey] ? @"dvips" : @"pdftex";
-    if (pdftexColorRange.location != NSNotFound)
+    if (colorRange.location != NSNotFound)
     {
       //int insertionPoint = pdftexColorRange.location+pdftexColorRange.length;
       //[preamble insertString:colorString atIndex:insertionPoint];
-      colorString = [NSString stringWithFormat:@"\\usepackage[%@]{color}%@", colorMode, colorString];
-      [preamble replaceCharactersInRange:pdftexColorRange withString:colorString];
+      colorString = [NSString stringWithFormat:@"\\usepackage{color}%@", colorString];
+      [preamble replaceCharactersInRange:colorRange withString:colorString];
     }
     else //try to find a good place of insertion
     {
-      colorString = [NSString stringWithFormat:@"\\usepackage[%@]{color}%@", colorMode, colorString];
+      colorString = [NSString stringWithFormat:@"\\usepackage{color}%@", colorString];
       NSRange firstUsePackage = [preamble rangeOfString:@"\\usepackage"];
       if (firstUsePackage.location != NSNotFound)
         [preamble insertString:colorString atIndex:firstUsePackage.location];
@@ -1573,6 +1617,62 @@ static NSArray* unixBins = nil;
     [newData appendData:dataToAppend];
   }//end if data
   return newData;
+}
+
+//as the delegate, no need to register the notification
+//When the application quits, the notification is caught to perform some saving
+-(void) applicationWillTerminate:(NSNotification*)aNotification
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  BOOL visible = NO;
+
+  visible = encapsulationController && [[encapsulationController window] isVisible];
+  [userDefaults setBool:visible forKey:EncapsulationControllerVisibleAtStartupKey];
+
+  visible = latexPalettesController && [[latexPalettesController window] isVisible];
+  [userDefaults setBool:visible forKey:LatexPalettesControllerVisibleAtStartupKey];
+
+  visible = historyController && [[historyController window] isVisible];
+  [userDefaults setBool:visible forKey:HistoryControllerVisibleAtStartupKey];
+
+  visible = libraryController && [[libraryController window] isVisible];
+  [userDefaults setBool:visible forKey:LibraryControllerVisibleAtStartupKey];
+
+  visible = marginController && [[marginController window] isVisible];
+  [userDefaults setBool:visible forKey:MarginControllerVisibleAtStartupKey];
+}
+
+//if the marginController is not loaded, just use the user defaults values
+-(float) marginControllerTopMargin
+{
+  return marginController ? [marginController topMargin]
+                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalTopMarginKey];
+}
+
+-(float) marginControllerBottomMargin
+{
+  return marginController ? [marginController bottomMargin]
+                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalBottomMarginKey];
+}
+
+-(float) marginControllerLeftMargin
+{
+  return marginController ? [marginController leftMargin]
+                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalLeftMarginKey];
+}
+
+-(float) marginControllerRightMargin
+{
+  return marginController ? [marginController rightMargin]
+                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalRightMarginKey];
+}
+
+-(void) _triggerHistoryBackgroundLoading:(id)object //arg not used, but required for thread call
+{
+  NSAutoreleasePool* threadAutoreleasePool = [[NSAutoreleasePool alloc] init];
+  [NSThread setThreadPriority:0];
+  [HistoryManager sharedManager];
+  [threadAutoreleasePool release];
 }
 
 @end

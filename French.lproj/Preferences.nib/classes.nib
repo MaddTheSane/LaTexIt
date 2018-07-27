@@ -10,7 +10,12 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
-        {CLASS = EncapsulationView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {edit = id; redo = id; undo = id; }; 
+            CLASS = EncapsulationTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
         {
             ACTIONS = {"" = id; }; 
             CLASS = FirstResponder; 
@@ -29,10 +34,15 @@
                 changeDefaultGeneralConfig = id; 
                 changePath = id; 
                 changeServiceConfiguration = id; 
+                checkForUpdatesChange = id; 
+                checkNow = id; 
                 closeOptionsPane = id; 
                 dragExportJpegQualitySliderDidChange = id; 
                 dragExportPopupFormatDidChange = id; 
+                gotoWebSite = id; 
+                newEncapsulation = id; 
                 openOptions = id; 
+                removeSelectedEncapsulations = id; 
                 resetDefaultPreamble = id; 
                 selectFont = id; 
             }; 
@@ -43,6 +53,7 @@
                 additionalLeftMarginTextField = NSTextField; 
                 additionalRightMarginTextField = NSTextField; 
                 additionalTopMarginTextField = NSTextField; 
+                checkForNewVersionsButton = NSButton; 
                 compositionMatrix = NSMatrix; 
                 defaultColorColorWell = NSColorWell; 
                 defaultImageViewBackgroundColorWell = NSColorWell; 
@@ -56,15 +67,17 @@
                 dragExportOptionsPane = NSPanel; 
                 dragExportPopupFormat = NSPopUpButton; 
                 dvipdfTextField = NSTextField; 
+                encapsulationTableView = EncapsulationTableView; 
                 fontTextField = NSTextField; 
                 gsTextField = NSTextField; 
                 pdfLatexTextField = NSTextField; 
                 preambleTextView = LineCountTextView; 
                 preferencesTabView = NSTabView; 
+                removeEncapsulationButton = NSButton; 
                 selectFontButton = NSButton; 
                 serviceRespectsBaseline = NSButton; 
-                serviceRespectsColor = NSButton; 
-                serviceRespectsPointSize = NSButton; 
+                serviceRespectsColor = NSMatrix; 
+                serviceRespectsPointSize = NSMatrix; 
             }; 
             SUPERCLASS = NSWindowController; 
         }

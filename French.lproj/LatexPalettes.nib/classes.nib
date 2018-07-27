@@ -1,7 +1,6 @@
 {
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = LatexPalettes; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
         {
             ACTIONS = {latexPalettesClick = id; }; 
             CLASS = LatexPalettesController; 

@@ -1,8 +1,9 @@
+"Cancel" = "Cancel";
 "Error" = "Error";
+"Untitled" = "Untitled";
 "Read Me" = "Read Me";
 "History" = "History";
 "Clear History" = "Clear History";
-"Cancel" = "Cancel";
 "Are you sure you want to clear the whole history ?\nThis operation is irreversible." = "Are you sure you want to clear the whole history ?\nThis operation is irreversible.";
 "Hide preamble" = "Hide preamble";
 "Show preamble" = "Show preamble";
@@ -10,7 +11,6 @@
 "Show History" = "Show History";
 "Hide Library" = "Hide Library";
 "Show Library" = "Show Library";
-"item" = "item";
 "Delete History item" = "Delete History item";
 "Delete History items" = "Delete History items";
 "Add Library folder" = "Add Library folder";
@@ -21,11 +21,14 @@
 "Change Library item name" = "Change Library item name";
 "Open library..." = "Open library...";
 "Save library as..." = "Save library as...";
-"Untitled" = "Untitled";
-"processing pdflatex" = "processing pdflatex";
-"processing dvipdf" = "processing dvipdf";
-"error while processing pdflatex" = "error while processing pdflatex";
-"error while processing dvipdf" = "error while processing dvipdf";
+"New encapsulation" = "New encapsulation";
+"Change the encapsulation" = "Change the encapsulation";
+"Remove encapsulation items" = "Remove encapsulation items";
+"Remove encapsulation item" = "Remove encapsulation item";
+"Move the encapsulation" = "Move the encapsulation";
+"Move encapsulations" = "Move encapsulations";
+"processing" = "processing";
+"error while processing" = "error while processing";
 "used for font color" = "used for font color";
 "no color.sty found" = "no color.sty found";
 "useful to type directly accentuated characters" = "useful to type directly accentuated characters";
@@ -52,7 +55,7 @@
 "The current library will be lost" = "The current library will be lost";
 "Load the library" = "Load the library";
 "Open in LaTeXiT" = "Open in LaTeXiT";
-"Check done" = "Check done";
+"Check for new versions" = "Check for new versions";
 "Your version of LaTeXiT is up-to-date" = "Your version of LaTeXiT is up-to-date";
 "Your version of LaTeXiT is more recent than the official available one" = "Your version of LaTeXiT is more recent than the official available one";
 "A new version of LaTeXiT is available" = "A new version of LaTeXiT is available";

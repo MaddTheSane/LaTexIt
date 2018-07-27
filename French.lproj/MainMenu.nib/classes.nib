@@ -2,21 +2,21 @@
     IBClasses = (
         {
             ACTIONS = {
-                addCurrentEquationToLibrary = id; 
                 checkUpdates = id; 
-                clearHistory = id; 
                 displayLog = id; 
                 exportImage = id; 
+                historyClearHistory = id; 
+                historyRemoveHistoryEntries = id; 
                 latexPalettesClick = id; 
-                loadLibrary = id; 
+                libraryImportCurrent = id; 
+                libraryNewFolder = id; 
+                libraryOpen = id; 
+                libraryRefreshItems = id; 
+                libraryRemoveSelectedItems = id; 
+                librarySaveAs = id; 
                 makeLatex = id; 
-                newLibraryFolder = id; 
                 openWebSite = id; 
                 paste = id; 
-                refreshLibraryItems = id; 
-                removeHistoryEntries = id; 
-                removeLibraryItems = id; 
-                saveLibrary = id; 
                 showHelp = id; 
                 showOrHideColorInspector = id; 
                 showOrHideEncapsulation = id; 
@@ -29,13 +29,7 @@
             }; 
             CLASS = AppController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {
-                readmeTextView = NSTextView; 
-                readmeWindow = NSWindow; 
-                showHistoryMenuItem = NSMenuItem; 
-                showLibraryMenuItem = NSMenuItem; 
-                showPreambleMenuItem = NSMenuItem; 
-            }; 
+            OUTLETS = {readmeTextView = NSTextView; readmeWindow = NSWindow; }; 
             SUPERCLASS = NSObject; 
         }, 
         {
@@ -43,8 +37,69 @@
             LANGUAGE = ObjC; 
             SUPERCLASS = NSWindowController; 
         }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = HistoryCell; LANGUAGE = ObjC; SUPERCLASS = NSImageCell; }, 
+        {
+            ACTIONS = {
+                clearHistory = id; 
+                deselectAll = id; 
+                removeHistoryEntries = id; 
+                showOrHideWindow = id; 
+            }; 
+            CLASS = HistoryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {clearHistoryButton = NSButton; historyTableView = HistoryTableView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = HistoryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {copy = id; redo = id; undo = id; }; 
+            CLASS = HistoryTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {copy = id; }; 
+            CLASS = HistoryView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {document = MyDocument; }; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {CLASS = ImagePopupButton; LANGUAGE = ObjC; SUPERCLASS = NSPopUpButton; }, 
         {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
+        {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {
+            ACTIONS = {
+                importCurrent = id; 
+                newFolder = id; 
+                open = id; 
+                refreshItems = id; 
+                removeSelectedItems = id; 
+                saveAs = id; 
+                showOrHideWindow = id; 
+            }; 
+            CLASS = LibraryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                actionButton = ImagePopupButton; 
+                actionMenu = NSMenu; 
+                importCurrentButton = NSButton; 
+                libraryTableView = LibraryTableView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = LibraryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {copy = id; redo = id; undo = id; }; 
+            CLASS = LibraryTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSOutlineView; 
+        }, 
         {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
         {
             ACTIONS = {

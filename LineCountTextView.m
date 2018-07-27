@@ -14,6 +14,7 @@
 #import "HistoryManager.h"
 #import "LibraryManager.h"
 #import "LineCountRulerView.h"
+#import "MyDocument.h"
 #import "NSColorExtended.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
@@ -27,21 +28,17 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  self = [super initWithCoder:coder];
-  if (self)
-  {
-    lineRanges = [[NSMutableArray alloc] init];
-    forbiddenLines = [[NSMutableSet alloc] init];
-    [self setDelegate:self];
-    #ifdef PANTHER
-    NSArray* registeredDraggedTypes = [NSArray array];    
-    #else
-    NSArray* registeredDraggedTypes = [self registeredDraggedTypes];
-    #endif
-    [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObject:NSColorPboardType]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
-                                                 name:NSTextDidChangeNotification object:nil];
-  }
+  if (![super initWithCoder:coder])
+    return nil;
+  lineRanges = [[NSMutableArray alloc] init];
+  forbiddenLines = [[NSMutableSet alloc] init];
+  [self setDelegate:self];
+  #ifdef PANTHER
+  NSArray* registeredDraggedTypes = [NSArray array];    
+  #else
+  NSArray* registeredDraggedTypes = [self registeredDraggedTypes];
+  #endif
+  [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObject:NSColorPboardType]];
   return self;
 }
 
@@ -58,44 +55,41 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
 -(void) dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [lineRanges release];
   [forbiddenLines release];
   [lineCountRulerView release];
   [super dealloc];
 }
 
+//as its own delegate, only notifications from self are seen
 -(void) textDidChange:(NSNotification*)aNotification
 {
-  if ([aNotification object] == self)
+  [self _computeLineRanges]; //line ranges are computed at each change. It is not very efficient and will be very slow
+                             //for large texts, but in LaTeXiT, texts are small, and I did not know how to do that simply otherwise
+
+  //normal lines are displayed in black
+  NSDictionary* normalAttributes =
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor blackColor], NSForegroundColorAttributeName, nil];
+  [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
+
+  //forbidden lines are displayed in gray
+  NSDictionary* forbiddenAttributes =
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.7 green:0.7 blue:0.7 alpha:1],
+                                               NSForegroundColorAttributeName, nil];
+  
+  //updates text attributes to set the color
+  NSEnumerator* enumerator = [forbiddenLines objectEnumerator];
+  NSNumber*    numberIndex = [enumerator nextObject];
+  while(numberIndex)
   {
-    [self _computeLineRanges]; //line ranges are computed at each change. It is not very efficient and will be very slow
-                               //for large texts, but in LaTeXiT, texts are small, and I did not know how to do that simply otherwise
-
-    //normal lines are displayed in black
-    NSDictionary* normalAttributes =
-      [NSDictionary dictionaryWithObjectsAndKeys:[NSColor blackColor], NSForegroundColorAttributeName, nil];
-    [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
-
-    //forbidden lines are displayed in gray
-    NSDictionary* forbiddenAttributes =
-      [NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.7 green:0.7 blue:0.7 alpha:1],
-                                                 NSForegroundColorAttributeName, nil];
-    
-    //updates text attributes to set the color
-    NSEnumerator* enumerator = [forbiddenLines objectEnumerator];
-    NSNumber*    numberIndex = [enumerator nextObject];
-    while(numberIndex)
-    {
-      unsigned int index = [numberIndex intValue];
-      if (index < [lineRanges count])
-        [[self textStorage] addAttributes:forbiddenAttributes range:NSRangeFromString([lineRanges objectAtIndex:index])];
-      numberIndex = [enumerator nextObject];
-    }
-
-    //line count
-    [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
+    unsigned int index = [numberIndex intValue];
+    if (index < [lineRanges count])
+      [[self textStorage] addAttributes:forbiddenAttributes range:NSRangeFromString([lineRanges objectAtIndex:index])];
+    numberIndex = [enumerator nextObject];
   }
+
+  //line count
+  [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
 }
 
 -(NSArray*) lineRanges
@@ -250,6 +244,21 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
     [(id)[self nextResponder] paste:sender];
   else
     [super paste:sender];
+}
+
+-(void) keyDown:(NSEvent*)theEvent
+{
+  BOOL isSmallReturn = NO;
+  NSString* charactersIgnoringModifiers = [theEvent charactersIgnoringModifiers];
+  if ([charactersIgnoringModifiers length])
+  {
+    unichar character = [charactersIgnoringModifiers characterAtIndex:0];
+    isSmallReturn = (character == 3);//return key
+  }
+  if (!isSmallReturn)
+    [super keyDown:theEvent];
+  else
+    [[(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] makeLatexButton] performClick:self];
 }
 
 @end

@@ -32,12 +32,12 @@ NSString* HistoryDidChangeNotification = @"HistoryDidChangeNotification";
 NSString* HistoryItemsPboardType = @"HistoryItemsPboardType";
 
 @interface HistoryManager (PrivateAPI)
--(void) applicationDidFinishLaunching:(NSNotification*)aNotification; //triggers _automaticBackgroundSaving:
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves history when quitting
 -(void) _saveHistory;
 -(void) _loadHistory;
 -(void) _loadCachedHistoryImages:(NSArray*)historyItemsCopy; //loads the historyItems cached images in the background
 -(void) _automaticBackgroundSaving:(id)unusedArg;//automatically and regularly saves the history on disk
+-(void) _historyDidChange:(NSNotification*)notification;
 -(void) _historyItemDidChange:(NSNotification*)notification;
 -(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard;
 -(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
@@ -47,55 +47,87 @@ NSString* HistoryItemsPboardType = @"HistoryItemsPboardType";
 
 static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
-+(void) initialize
++(HistoryManager*) sharedManager //access the unique instance of HistoryManager
 {
-  if (!sharedManagerInstance) //creating the singleton at first time
+  @synchronized(self)
   {
-    sharedManagerInstance = [[HistoryManager alloc] init];
-    [sharedManagerInstance _loadHistory];
+    if (!sharedManagerInstance)
+      sharedManagerInstance = [[self  alloc] init];
   }
+  return sharedManagerInstance;
 }
 
-//accessing the singleton
-+(HistoryManager*) sharedManager
++(id) allocWithZone:(NSZone *)zone
 {
+  @synchronized(self)
+  {
+    if (!sharedManagerInstance)
+       return [super allocWithZone:zone];
+  }
   return sharedManagerInstance;
+}
+
+-(id) copyWithZone:(NSZone *)zone
+{
+  return self;
+}
+
+-(id) retain
+{
+  return self;
+}
+
+-(unsigned) retainCount
+{
+  return UINT_MAX;  //denotes an object that cannot be released
+}
+
+-(void) release
+{
+}
+
+-(id) autorelease
+{
+  return self;
 }
 
 //The init method can be called several times, it will only be applied once on the singleton
 -(id) init
 {
-  if (sharedManagerInstance)  //do not recreate an instance
+  if (self && (self != sharedManagerInstance))  //do not recreate an instance
   {
-    [sharedManagerInstance retain]; //but makes a retain to allow a release
-    return sharedManagerInstance;
+    if (![super init])
+      return nil;
+    sharedManagerInstance = self;
+    undoManager = [[NSUndoManager alloc] init];
+    historyItems = [[NSMutableArray alloc] init];
+    [self _loadHistory];
+    //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
+                                             name:NSApplicationDidFinishLaunchingNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:)
+                                             name:NSApplicationWillTerminateNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(_historyDidChange:)
+                                             name:HistoryDidChangeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(_historyItemDidChange:)
+                                             name:HistoryItemDidChangeNotification object:nil];
   }
-  else
-  {
-    self = [super init];
-    if (self)
-    {
-      historyItems = [[NSMutableArray alloc] init];
-      //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
-      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-      [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
-                                               name:NSApplicationDidFinishLaunchingNotification object:nil];
-      [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:)
-                                               name:NSApplicationWillTerminateNotification object:nil];
-      [notificationCenter addObserver:self selector:@selector(_historyItemDidChange:)
-                                               name:HistoryItemDidChangeNotification object:nil];
-    }
-    return self;
-  }
+  return self;
 }
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [undoManager release];
   [historyItems release];
   [super dealloc];
 }
 
+-(NSUndoManager*) undoManager
+{
+  return undoManager;
+}
 
 //Management methods, undo-aware
 
@@ -104,19 +136,16 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   @synchronized(historyItems)
   {
     [historyItems insertObject:item atIndex:0];
-    historyShouldBeSaved = YES;
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
 }
 
 -(void) clearAll
 {
-  NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-  [undo removeAllActionsWithTarget:self];
+  [undoManager removeAllActionsWithTarget:self];
   @synchronized(historyItems)
   {
     [historyItems removeAllObjects];
-    historyShouldBeSaved = YES;
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
 }
@@ -155,15 +184,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         index = [indexSet indexLessThanIndex:index];
       }
 
-      NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-      [[undo prepareWithInvocationTarget:self] insertItems:[removedItems reversed] atIndexes:[indexSet array]
-                                                 tableView:tableView];
-      if (![undo isUndoing])
+      [[undoManager prepareWithInvocationTarget:self] insertItems:[removedItems reversed] atIndexes:[indexSet array]
+                                                        tableView:tableView];
+      if (![undoManager isUndoing])
       {
         if ([indexSet count] > 1)
-          [undo setActionName:NSLocalizedString(@"Delete History items", @"Delete History items")];
+          [undoManager setActionName:NSLocalizedString(@"Delete History items", @"Delete History items")];
         else
-          [undo setActionName:NSLocalizedString(@"Delete History item", @"Delete History item")];
+          [undoManager setActionName:NSLocalizedString(@"Delete History item", @"Delete History item")];
       }
       [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
 
@@ -174,8 +202,6 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       else if (nextItemToSelect)
         [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[historyItems indexOfObject:nextItemToSelect]]
                byExtendingSelection:NO];
-               
-      historyShouldBeSaved = YES;
     }//end @synchronized(historyItems)
   }//end if index != NSNotFound
 }
@@ -195,12 +221,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [indexSet addIndex:index];
       [historyItems insertObject:item atIndex:index];
     }
-    historyShouldBeSaved = YES;
   }//end @synchronized(historyItems)
   
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-  NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-  [[undo prepareWithInvocationTarget:self] removeItemsAtIndexes:indexSet tableView:tableView];
+  [[undoManager prepareWithInvocationTarget:self] removeItemsAtIndexes:indexSet tableView:tableView];
 
   //user friendly : we update the selection in the tableview
   [tableView selectRowIndexes:indexSet byExtendingSelection:NO];
@@ -307,12 +331,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   {
     if (!historyItems)
       historyItems = [[NSMutableArray alloc] init];
+    [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
 
   NSArray* historyItemsCopy = [historyItems copy];//WARNING ! THE THREAD WILL BE RESPONSIBLE OF RELEASING THAT OBJECT
-  //[NSThread detachNewThreadSelector:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
-  [NSApplication detachDrawingThread:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
+  [NSThread detachNewThreadSelector:@selector(_loadCachedHistoryImages:) toTarget:self withObject:historyItemsCopy];
 }
 
 //loads, in the background, the historyItems cached images
@@ -330,12 +354,6 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   }
   [historyItemsCopy release];
   [threadAutoreleasePool release];
-}
-
-//When the application launches, the notification is caught to trigger _automaticBackgroundSaving
--(void) applicationDidFinishLaunching:(NSNotification*)aNotification
-{
-  [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
 }
 
 //When the application quits, the notification is caught to perform saving
@@ -366,6 +384,23 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 }
 
 //NSTableView delegate
+
+//if a selection is made in the history, updates the document state
+-(void) tableViewSelectionDidChange:(NSNotification*)notification
+{
+  NSTableView* historyTableView = [notification object];
+  MyDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+  if (document)
+  {
+    int selectedRow = [historyTableView selectedRow];
+    if (selectedRow >= 0)
+    {
+      HistoryItem* historyItem = [self itemAtIndex:selectedRow tableView:historyTableView];
+      [document applyHistoryItem:historyItem];
+    }
+  }
+}
+
 -(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
              row:(int)rowIndex
 {
@@ -424,7 +459,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       
       //bonus : we can also feed other pasteboards with one of the selected items
       //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-      [historyItem writeToPasteboard:pboard forDocument:[(HistoryView*)aTableView document] isLinkBackRefresh:NO lazyDataProvider:nil];
+      [historyItem writeToPasteboard:pboard forDocument:[[AppController appController] dummyDocument]
+                   isLinkBackRefresh:NO lazyDataProvider:nil];
     }//end if ([rowIndexes count])
   }//end @synchronized(historyItems)
 
@@ -521,6 +557,15 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [historyItem setBackgroundColor:color];
   }
   return ok;
+}
+
+//should be triggered for each change in history
+-(void) _historyDidChange:(NSNotification*)notification
+{
+  @synchronized(historyItems)
+  {
+    historyShouldBeSaved = YES;
+  }
 }
 
 //should be triggered for each changing historyItem

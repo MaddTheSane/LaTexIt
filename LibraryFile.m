@@ -87,11 +87,9 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  self = [super initWithCoder:coder];
-  if (self)
-  {
-    historyItem = [[coder decodeObjectForKey:@"value"] retain];
-  }
+  if (![super initWithCoder:coder])
+    return nil;
+  historyItem = [[coder decodeObjectForKey:@"value"] retain];
   return self;
 }
 

@@ -1,8 +1,9 @@
+"Cancel" = "Annuler";
 "Error" = "Erreur";
+"Untitled" = "Sans Titre";
 "Read Me" = "Lisez-moi";
 "History" = "Historique";
 "Clear History" = "Effacer l'historique";
-"Cancel" = "Annuler";
 "Are you sure you want to clear the whole history ?\nThis operation is irreversible." =
 "Voulez-vous vraiment effacer entièrement l'historique ?\nCette operation est irréversible.";
 "Hide preamble" = "Masquer le préambule";
@@ -11,7 +12,6 @@
 "Show History" = "Afficher l'historique";
 "Hide Library" = "Masquer la bibliothèque";
 "Show Library" = "Afficher la bibliothèque";
-"item" = "élément";
 "Delete History item" = "Supprimer une entrée de l'historique";
 "Delete History items" = "Supprimer plusieurs entrées de l'historique";
 "Add Library folder" = "Ajouter un dossier à la bibliothèque";
@@ -22,11 +22,14 @@
 "Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
 "Open library..." = "Ouvrir la bibliothèque...";
 "Save library as..." = "Enregistrer la bibliothèque sous...";
-"Untitled" = "Sans Titre";
-"processing pdflatex" = "exécution de pdflatex";
-"processing dvipdf" = "exécution de dvipdf";
-"error while processing pdflatex" = "erreur à l'exécution de pdflatex";
-"error while processing dvipdf" = "erreur à l'exécution de dvipdf";
+"New encapsulation" = "Nouvelle encapsulation";
+"Change the encapsulation" = "Changer l'encapsulation";
+"Remove encapsulation items" = "Supprimer des encapsulations";
+"Remove encapsulation item" = "Supprimer une encapsulation";
+"Move the encapsulation" = "Déplacer l'encapsulation";
+"Move encapsulations" = "Déplacer les encapsulations";
+"processing" = "exécution de";
+"error while processing" = "erreur à l'exécution de";
 "used for font color" = "pour la couleur";
 "no color.sty found" = "color.sty introuvable";
 "useful to type directly accentuated characters" = "utile pour taper directement les caractères accentués";
@@ -59,7 +62,7 @@
 "The current library will be lost" = "La bibliothèque actuelle sera perdue";
 "Load the library" = "Charger la bibliothèque";
 "Open in LaTeXiT" = "Ouvrir dans LaTeXiT";
-"Check done" = "Vérification effectuée";
+"Check for new versions" = "Vérification des mises à jour";
 "Your version of LaTeXiT is up-to-date" = "Votres version de LaTeXiT est à jour";
 "Your version of LaTeXiT is more recent than the official available one" = "Votre version de LaTeXiT est plus récente que la dernière version officielle";
 "A new version of LaTeXiT is available" = "Une nouvelle version de LaTeXiT est disponible";

@@ -77,34 +77,22 @@
         {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
         {
             ACTIONS = {
-                addCurrentEquationToLibrary = id; 
-                clearHistory = id; 
                 closeOptionsPane = id; 
-                colorDidChange = id; 
                 displayLastLog = id; 
                 exportImage = id; 
                 jpegQualitySliderDidChange = id; 
                 makeLatex = id; 
-                newLibraryFolder = id; 
                 openOptions = id; 
-                refreshLibraryItems = id; 
-                removeHistoryEntries = id; 
-                removeLibraryItems = id; 
                 saveAccessoryViewPopupFormatDidChange = id; 
             }; 
             CLASS = MyDocument; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                clearHistoryButton = NSButton; 
                 colorWell = NSColorWell; 
-                historyDrawer = NSDrawer; 
-                historyView = HistoryView; 
                 imageView = MyImageView; 
                 jpegColorWell = NSColorWell; 
                 jpegQualitySlider = NSSlider; 
                 jpegQualityTextField = NSTextField; 
-                libraryDrawer = LibraryDrawer; 
-                libraryView = LibraryView; 
                 logTableView = LogTableView; 
                 logTextView = NSTextView; 
                 logWindow = NSWindow; 

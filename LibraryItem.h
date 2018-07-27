@@ -18,13 +18,18 @@
   LibraryItem*     parent;   //structuring data
   NSMutableArray*  children; //structuring data
   NSString*        title; //the title under which the item is displayed
+  BOOL             isExpanded;
 }
 
 //the title under which the item is displayed
 -(void) setTitle:(NSString*)title;
 -(NSString*) title;
+-(BOOL) updateTitle;//try to change the name so that no brother has the same; rretusn YES if it has changed
 
 -(NSImage*) image; //the icon used to display the item. Should be pure virtual
+
+-(void) setExpanded:(BOOL)expanded;
+-(BOOL) isExpanded;
 
 //Structuring methods
 -(void) setParent:(LibraryItem*)parent; //thge aprent is a weak link (not retained) to prevent cycling

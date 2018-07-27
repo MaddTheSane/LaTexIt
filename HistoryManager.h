@@ -18,9 +18,12 @@ extern NSString* HistoryItemsPboardType;
   //Note that access to historyItem will be @synchronized
   NSMutableArray* historyItems;
   BOOL historyShouldBeSaved; //becomes YES is a modification occurs, returns to NO after saving
+  NSUndoManager* undoManager;
 }
 
 +(HistoryManager*) sharedManager; //getting the history manager singleton
+
+-(NSUndoManager*) undoManager;
 
 //getting the history items
 -(NSArray*) historyItems;

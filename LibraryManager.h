@@ -4,7 +4,7 @@
 //  Created by Pierre Chatelier on 2/05/05.
 //  Copyright 2005 Pierre Chatelier. All rights reserved.
 
-//This file is the library manager, data source of every libraryView.
+//This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
 //It provides management (insertion/deletion) with undoing, save/load, drag'n drop
 
@@ -24,10 +24,15 @@ extern NSString* LibraryItemsPboardType;
   LibraryFolder* library; //the root of the library; note that it will be @syncronized
   NSArray*       draggedItems; //a very volatile variable used during drag'n drop
   BOOL libraryShouldBeSaved; //becomes YES is a modification occurs, returns to NO after saving
+  
+  NSUndoManager* undoManager;
 }
 
 +(LibraryManager*) sharedManager; //the library manager singleton
 
+-(NSUndoManager*) undoManager;
+
+-(NSArray*) allItems;
 -(NSArray*) allValues;//returns all the values contained in LibraryFile items
 -(void) setNeedsSaving:(BOOL)status;//marks if library needs being saved
 

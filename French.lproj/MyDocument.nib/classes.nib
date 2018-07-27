@@ -39,74 +39,36 @@
         {CLASS = HistoryCell; LANGUAGE = ObjC; SUPERCLASS = NSImageCell; }, 
         {CLASS = HistoryItem; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = HistoryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {copy = id; }; 
-            CLASS = HistoryView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {document = MyDocument; }; 
-            SUPERCLASS = NSTableView; 
-        }, 
+        {CLASS = ImagePopupButton; LANGUAGE = ObjC; SUPERCLASS = NSPopUpButton; }, 
         {CLASS = IsJpegCell; LANGUAGE = ObjC; SUPERCLASS = NSValueTransformer; }, 
         {CLASS = LatexPalette; LANGUAGE = ObjC; SUPERCLASS = NSPanel; }, 
         {CLASS = LibraryButtonCell; LANGUAGE = ObjC; SUPERCLASS = NSButtonCell; }, 
         {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
-        {
-            ACTIONS = {importCurrent = id; newFolder = id; refreshItem = id; removeItem = id; }; 
-            CLASS = LibraryDrawer; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                addFolderButton = NSButton; 
-                importCurrentButton = NSButton; 
-                libraryView = LibraryView; 
-                refreshItemButton = NSButton; 
-                removeItemButton = NSButton; 
-            }; 
-            SUPERCLASS = NSDrawer; 
-        }, 
         {CLASS = LibraryFile; LANGUAGE = ObjC; SUPERCLASS = LibraryItem; }, 
         {CLASS = LibraryFolder; LANGUAGE = ObjC; SUPERCLASS = LibraryItem; }, 
         {CLASS = LibraryItem; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = LibraryManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {copy = id; }; 
-            CLASS = LibraryView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {document = MyDocument; }; 
-            SUPERCLASS = NSOutlineView; 
-        }, 
         {CLASS = LineCountRulerView; LANGUAGE = ObjC; SUPERCLASS = NSRulerView; }, 
         {CLASS = LineCountTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
         {
             ACTIONS = {
-                addCurrentEquationToLibrary = id; 
-                clearHistory = id; 
                 closeOptionsPane = id; 
-                colorDidChange = id; 
                 displayLastLog = id; 
                 exportImage = id; 
                 jpegQualitySliderDidChange = id; 
                 makeLatex = id; 
-                newLibraryFolder = id; 
                 openOptions = id; 
-                refreshLibraryItems = id; 
-                removeHistoryEntries = id; 
-                removeLibraryItems = id; 
                 saveAccessoryViewPopupFormatDidChange = id; 
             }; 
             CLASS = MyDocument; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                clearHistoryButton = NSButton; 
                 colorWell = NSColorWell; 
-                historyDrawer = NSDrawer; 
-                historyView = HistoryView; 
                 imageView = MyImageView; 
                 jpegColorWell = NSColorWell; 
                 jpegQualitySlider = NSSlider; 
                 jpegQualityTextField = NSTextField; 
-                libraryDrawer = LibraryDrawer; 
-                libraryView = LibraryView; 
                 logTableView = LogTableView; 
                 logTextView = NSTextView; 
                 logWindow = NSWindow; 

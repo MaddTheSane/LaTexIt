@@ -19,16 +19,14 @@
 #endif
 
 @class EncapsulationController;
+@class HistoryController;
 @class MarginController;
 @class LatexPalettesController;
+@class LibraryController;
+@class MyDocument;
 @class PreferencesController;
 
-@interface AppController : NSObject <LinkBackServerDelegate> {
-  //Shared Interface elements
-  IBOutlet NSMenuItem* showPreambleMenuItem;
-  IBOutlet NSMenuItem* showHistoryMenuItem;
-  IBOutlet NSMenuItem* showLibraryMenuItem;
-  
+@interface AppController : NSObject <LinkBackServerDelegate> {  
   IBOutlet NSWindow*   readmeWindow;
   IBOutlet NSTextView* readmeTextView;
   
@@ -39,12 +37,20 @@
   BOOL isColorStyAvailable;
 
   EncapsulationController* encapsulationController;
-  MarginController*        marginController;
+  HistoryController*       historyController;
   LatexPalettesController* latexPalettesController;
+  LibraryController*       libraryController;
+  MarginController*        marginController;
   PreferencesController*   preferencesController;
 }
 
-+(AppController*) appController; //getting the unique instance of appController
++(AppController*)           appController; //getting the unique instance of appController
+-(EncapsulationController*) encapsulationController;
+-(HistoryController*)       historyController;
+-(LatexPalettesController*) latexPalettesController;
+-(LibraryController*)       libraryController;
+-(MarginController*)        marginController;
+-(PreferencesController*)   preferencesController;
 
 +(NSArray*) unixBins; //usual unix PATH
 +(NSDictionary*) environmentDict; //environment useful to call programs on the command line
@@ -58,28 +64,30 @@
 -(IBAction) exportImage:(id)sender;
 -(IBAction) makeLatex:(id)sender;
 -(IBAction) displayLog:(id)sender;
+
+-(IBAction) historyRemoveHistoryEntries:(id)sender;
+-(IBAction) historyClearHistory:(id)sender;
+-(IBAction) showOrHideHistory:(id)sender;
+
+-(IBAction) libraryImportCurrent:(id)sender; //creates a library item with the current document state
+-(IBAction) libraryNewFolder:(id)sender;     //creates a folder
+-(IBAction) libraryRemoveSelectedItems:(id)sender;    //removes some items
+-(IBAction) libraryRefreshItems:(id)sender;   //refresh an item
+-(IBAction) libraryOpen:(id)sender;
+-(IBAction) librarySaveAs:(id)sender;
+-(IBAction) showOrHideLibrary:(id)sender;
+
 -(IBAction) showOrHideColorInspector:(id)sender;
 -(IBAction) showOrHidePreamble:(id)sender;
--(IBAction) showOrHideHistory:(id)sender;
--(IBAction) showOrHideLibrary:(id)sender;
 -(IBAction) showOrHideEncapsulation:(id)sender;
 -(IBAction) showOrHideMargin:(id)sender;
 -(IBAction) showOrHideLatexPalettes:(id)sender;
--(IBAction) removeHistoryEntries:(id)sender;
--(IBAction) clearHistory:(id)sender;
 -(IBAction) latexPalettesClick:(id)sender;
 -(IBAction) showPreferencesPane:(id)sender;
 -(void)     showPreferencesPaneWithIdentifier:(id)identifier;//showPreferencesPane + select one tab
 -(IBAction) showHelp:(id)sender;
 
--(IBAction) addCurrentEquationToLibrary:(id)sender;
--(IBAction) newLibraryFolder:(id)sender;
--(IBAction) removeLibraryItems:(id)sender;
--(IBAction) refreshLibraryItems:(id)sender;
--(IBAction) loadLibrary:(id)sender;
--(IBAction) saveLibrary:(id)sender;
-
--(void) menuNeedsUpdate:(NSMenu*)menu;
+-(MyDocument*) dummyDocument;
 
 //utility : finds a program in the unix environment. You can give an environment, and
 //some "prefixes", that is to say an array of PATH in which the program could be
@@ -94,6 +102,12 @@
 -(BOOL) isGsAvailable;
 -(BOOL) isDvipdfAvailable;
 -(BOOL) isColorStyAvailable;
+
+//if the marginController is not loaded, just use the user defaults values
+-(float) marginControllerTopMargin;
+-(float) marginControllerBottomMargin;
+-(float) marginControllerLeftMargin;
+-(float) marginControllerRightMargin;
 
 //modifies the \usepackage{color} line of the preamble in order to use the given color
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor;

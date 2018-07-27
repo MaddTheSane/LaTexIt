@@ -1,0 +1,32 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = ImagePopupButton; LANGUAGE = ObjC; SUPERCLASS = NSPopUpButton; }, 
+        {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {
+            ACTIONS = {
+                importCurrent = id; 
+                newFolder = id; 
+                open = id; 
+                refreshItems = id; 
+                removeSelectedItems = id; 
+                saveAs = id; 
+            }; 
+            CLASS = LibraryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                actionButton = ImagePopupButton; 
+                importCurrentButton = NSButton; 
+                libraryTableView = LibraryTableView; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {copy = id; redo = id; undo = id; }; 
+            CLASS = LibraryTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSOutlineView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

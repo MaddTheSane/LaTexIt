@@ -9,10 +9,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class EncapsulationTableView;
 @interface EncapsulationController : NSWindowController {
+  IBOutlet EncapsulationTableView* encapsulationTableView;
+  IBOutlet NSButton*               removeButton;
 }
 
-+(EncapsulationController*) encapsulationController;
+-(IBAction) newEncapsulation:(id)sender;
+-(IBAction) removeSelectedEncapsulations:(id)sender;
 -(IBAction) openHelp:(id)sender;
 
 @end

@@ -9,6 +9,8 @@
 #import "PreferencesController.h"
 
 #import "AppController.h"
+#import "EncapsulationManager.h"
+#import "EncapsulationTableView.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
 #import "NSSegmentedControlExtended.h"
@@ -29,20 +31,30 @@ NSString* CompositionModeKey           = @"LaTeXiT_CompositionModeKey";
 NSString* PdfLatexPathKey              = @"LaTeXiT_PdfLatexPathKey";
 NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
 NSString* GsPathKey                    = @"LaTeXiT_GsPathKey";
-NSString* ServiceRespectsColorKey      = @"LaTeXiT_ServiceRespectsColorKey";
 NSString* ServiceRespectsBaselineKey   = @"LaTeXiT_ServiceRespectsBaselineKey";
 NSString* ServiceRespectsPointSizeKey  = @"LaTeXiT_ServiceRespectsPointSizeKey";
+NSString* ServiceRespectsColorKey      = @"LaTeXiT_ServiceRespectsColorKey";
 NSString* AdditionalTopMarginKey       = @"LaTeXiT_AdditionalTopMarginKey";
 NSString* AdditionalLeftMarginKey      = @"LaTeXiT_AdditionalLeftMarginKey";
 NSString* AdditionalRightMarginKey     = @"LaTeXiT_AdditionalRightMarginKey";
 NSString* AdditionalBottomMarginKey    = @"LaTeXiT_AdditionalBottomMarginKey";
 NSString* EncapsulationsKey            = @"LaTeXiT_EncapsulationsKey";
 NSString* CurrentEncapsulationIndexKey = @"LaTeXiT_CurrentEncapsulationIndexKey";
+NSString* LastEasterEggsDatesKey       = @"LaTeXiT_LastEasterEggsDatesKey";
+
+NSString* EncapsulationControllerVisibleAtStartupKey = @"EncapsulationControllerVisibleAtStartupKey";
+NSString* HistoryControllerVisibleAtStartupKey = @"HistoryControllerVisibleAtStartupKey";
+NSString* LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartupKey";
+NSString* LibraryControllerVisibleAtStartupKey = @"LibraryControllerVisibleAtStartupKey";
+NSString* MarginControllerVisibleAtStartupKey = @"MarginControllerVisibleAtStartupKey";
+
+NSString* CheckForNewVersionsKey       = @"LaTeXiT_CheckForNewVersionsKey";
 
 NSString* SomePathDidChangeNotification = @"SomePathDidChangeNotification"; //changing the path to an executable (like pdflatex)
 
 @interface PreferencesController (PrivateAPI)
 -(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
+-(void) _updateButtonStates:(NSNotification*)notification;
 @end
 
 @implementation PreferencesController
@@ -60,7 +72,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   {
     NSString* factoryDefaultPreambleString = [NSString stringWithFormat:
       @"\\documentclass[10pt]{article}\n"\
-      @"\\usepackage[pdftex]{color} %%%@\n"\
+      @"\\usepackage{color} %%%@\n"\
       @"\\usepackage{amssymb} %%maths\n"\
       @"\\usepackage{amsmath} %%maths\n"\
       @"\\usepackage[utf8]{inputenc} %%%@\n",
@@ -75,10 +87,10 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [factoryDefaultPreamble RTFFromRange:NSMakeRange(0, [factoryDefaultPreamble length]) documentAttributes:nil];
 
   NSDictionary* defaults =
-    [NSDictionary dictionaryWithObjectsAndKeys:[[NSColor whiteColor] data],      DefaultImageViewBackground,
-                                               @"PDF",                           DragExportTypeKey,
+    [NSDictionary dictionaryWithObjectsAndKeys:@"PDF",                           DragExportTypeKey,
                                                [[NSColor whiteColor] data],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
+                                               [[NSColor whiteColor] data],      DefaultImageViewBackground,
                                                [[NSColor  blackColor]   data],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
                                                [NSNumber numberWithInt:DISPLAY], DefaultModeKey,
@@ -88,9 +100,9 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                @"", GsPathKey,
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
                                                defaultFontAsData, DefaultFontKey,
-                                               [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
+                                               [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
                                                [NSNumber numberWithFloat:0], AdditionalTopMarginKey,
                                                [NSNumber numberWithFloat:0], AdditionalLeftMarginKey,
                                                [NSNumber numberWithFloat:0], AdditionalRightMarginKey,
@@ -99,6 +111,12 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                                          @"\\[#\\]", @"\\begin{equation}#\\label{@}\\end{equation}",
                                                                          nil], EncapsulationsKey,
                                                [NSNumber numberWithUnsignedInt:0], CurrentEncapsulationIndexKey,
+                                               [NSNumber numberWithBool:YES], CheckForNewVersionsKey,
+                                               [NSNumber numberWithBool:NO], EncapsulationControllerVisibleAtStartupKey,
+                                               [NSNumber numberWithBool:NO], HistoryControllerVisibleAtStartupKey,
+                                               [NSNumber numberWithBool:NO], LatexPalettesControllerVisibleAtStartupKey,
+                                               [NSNumber numberWithBool:NO], LibraryControllerVisibleAtStartupKey,
+                                               [NSNumber numberWithBool:NO], MarginControllerVisibleAtStartupKey,
                                                nil];
 
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
@@ -106,19 +124,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(id) init
 {
-  self = [super initWithWindowNibName:@"Preferences"];
-  if (self)
-  {
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(textDidChange:)
-                                                 name:NSTextDidChangeNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(textDidChange:)
-                                                 name:FontDidChangeNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(windowWillClose:)
-                                                 name:NSWindowWillCloseNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_userDefaultsDidChangeNotification:)
-                                                 name:NSUserDefaultsDidChangeNotification object:nil];
-  }
+  if (![super initWithWindowNibName:@"Preferences"])
+    return nil;
   return self;
 }
 
@@ -131,6 +138,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 //initializes the controls with default values
 -(void) windowDidLoad
 {
+  [[self window] setFrameAutosaveName:@"preferences"];
+
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 
   [dragExportPopupFormat selectItemWithTitle:[userDefaults stringForKey:DragExportTypeKey]];
@@ -163,9 +172,9 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [dvipdfTextField          setDelegate:self];
   [gsTextField              setStringValue:[userDefaults stringForKey:GsPathKey]];
   [gsTextField              setDelegate:self];
-  [serviceRespectsColor     setState:[userDefaults boolForKey:ServiceRespectsColorKey]  ? NSOnState : NSOffState];
-  [serviceRespectsBaseline  setState:[userDefaults boolForKey:ServiceRespectsBaselineKey]  ? NSOnState : NSOffState];
-  [serviceRespectsPointSize setState:[userDefaults boolForKey:ServiceRespectsPointSizeKey] ? NSOnState : NSOffState];
+  [serviceRespectsBaseline  setState:([userDefaults boolForKey:ServiceRespectsBaselineKey]  ? NSOnState : NSOffState)];
+  [serviceRespectsPointSize selectCellWithTag:([userDefaults boolForKey:ServiceRespectsPointSizeKey] ? 1 : 0)];
+  [serviceRespectsColor     selectCellWithTag:([userDefaults boolForKey:ServiceRespectsColorKey]     ? 1 : 0)];
   
   [additionalTopMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalTopMarginKey]];
   [additionalTopMarginTextField setDelegate:self];
@@ -175,8 +184,20 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [additionalRightMarginTextField setDelegate:self];
   [additionalBottomMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
   [additionalBottomMarginTextField setDelegate:self];
+  
+  [checkForNewVersionsButton setState:([userDefaults boolForKey:CheckForNewVersionsKey] ? NSOnState : NSOffState)];
     
   [self tabView:preferencesTabView willSelectTabViewItem:[preferencesTabView selectedTabViewItem]];
+  
+  NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+  [notificationCenter addObserver:self selector:@selector(textDidChange:)
+                             name:NSTextDidChangeNotification object:preambleTextView];
+  [notificationCenter addObserver:self selector:@selector(textDidChange:)
+                             name:FontDidChangeNotification object:preambleTextView];
+  [notificationCenter addObserver:self selector:@selector(_userDefaultsDidChangeNotification:)
+                             name:NSUserDefaultsDidChangeNotification object:nil];
+  [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
+                             name:NSTableViewSelectionDidChangeNotification object:encapsulationTableView];
 }
 
 //allows resizing only for preamble tab
@@ -208,14 +229,10 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
 -(void) windowWillClose:(NSNotification *)aNotification
 {
-  NSWindow* window = [aNotification object];
-  if (window == [self window])
-  {
-    //useful for font selection
-    NSFontManager* fontManager = [NSFontManager sharedFontManager];
-    if ([fontManager delegate] == self)
-      [fontManager setDelegate:nil];
-  }
+  //useful for font selection
+  NSFontManager* fontManager = [NSFontManager sharedFontManager];
+  if ([fontManager delegate] == self)
+    [fontManager setDelegate:nil];
 }
 
 //image exporting
@@ -296,14 +313,11 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 //updates the user defaults as the user is typing. Not very efficient, but textDidEndEditing was not working properly
 -(void)textDidChange:(NSNotification *)aNotification
 {
-  id sender = [aNotification object];
-  if (sender == preambleTextView)
-  {
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSAttributedString* attributedString = [preambleTextView textStorage];
-    [userDefaults setObject:[attributedString RTFFromRange:NSMakeRange(0, [attributedString length]) documentAttributes:nil]
-                     forKey:DefaultPreambleAttributedKey];
-  }
+  //only seen for object preambleTextView
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSAttributedString* attributedString = [preambleTextView textStorage];
+  [userDefaults setObject:[attributedString RTFFromRange:NSMakeRange(0, [attributedString length]) documentAttributes:nil]
+                   forKey:DefaultPreambleAttributedKey];
 }
 
 -(IBAction) resetDefaultPreamble:(id)sender
@@ -458,12 +472,12 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 -(IBAction) changeServiceConfiguration:(id)sender
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  if (sender == serviceRespectsColor)
-    [userDefaults setBool:([serviceRespectsColor state] == NSOnState) forKey:ServiceRespectsColorKey];
-  else if (sender == serviceRespectsBaseline)
+  if (sender == serviceRespectsBaseline)
     [userDefaults setBool:([serviceRespectsBaseline state] == NSOnState) forKey:ServiceRespectsBaselineKey];
   else if (sender == serviceRespectsPointSize)
-    [userDefaults setBool:([serviceRespectsPointSize state] == NSOnState) forKey:ServiceRespectsPointSizeKey];
+    [userDefaults setBool:([[serviceRespectsPointSize selectedCell] tag] == 1) forKey:ServiceRespectsPointSizeKey];
+  else if (sender == serviceRespectsColor)
+    [userDefaults setBool:([[serviceRespectsColor selectedCell] tag] == 1) forKey:ServiceRespectsColorKey];
 }
 
 -(IBAction) changeAdvancedConfiguration:(id)sender
@@ -479,6 +493,33 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [userDefaults setFloat:[additionalBottomMarginTextField floatValue] forKey:AdditionalBottomMarginKey];
 }
 
+-(IBAction) newEncapsulation:(id)sender
+{
+  [[EncapsulationManager sharedManager] newEncapsulation];
+  [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[encapsulationTableView numberOfRows]-1]
+                      byExtendingSelection:NO];
+  //[encapsulationTableView edit:self];
+}
+
+-(IBAction) removeSelectedEncapsulations:(id)sender
+{
+  [[EncapsulationManager sharedManager] removeEncapsulationIndexes:[encapsulationTableView selectedRowIndexes]];
+}
+
+-(IBAction) checkForUpdatesChange:(id)sender
+{
+  [[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:CheckForNewVersionsKey];
+}
+
+-(IBAction) checkNow:(id)sender
+{
+  [[AppController appController] checkUpdates:self];
+}
+
+-(IBAction) gotoWebSite:(id)sender
+{
+  [[AppController appController] openWebSite:self];
+}
 
 -(void) selectPreferencesPaneWithIdentifier:(id)identifier
 {
@@ -493,6 +534,12 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [additionalLeftMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalLeftMarginKey]];
   [additionalRightMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalRightMarginKey]];
   [additionalBottomMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
+}
+
+-(void) _updateButtonStates:(NSNotification*)notification
+{
+  //only registered for encapsulationTableView
+  [removeEncapsulationButton setEnabled:([encapsulationTableView selectedRow] >= 0)];
 }
 
 @end

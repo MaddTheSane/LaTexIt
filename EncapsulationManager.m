@@ -11,7 +11,6 @@
 
 #import "EncapsulationManager.h"
 
-#import "EncapsulationView.h"
 #import "NSArrayExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "PreferencesController.h"
@@ -19,146 +18,160 @@
 NSString* EncapsulationPboardType = @"EncapsulationPboardType"; //pboard type for drag'n drop of tableviews rows
 
 @interface EncapsulationManager (PrivateAPI)
--(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
--(void) _updateButtonStates;//when no selection, "remove" button is disabled
+-(void) _removeItemsAtIndexes:(NSIndexSet*)indexes;
+-(void) _insertItems:(NSArray*)items atIndexes:(NSIndexSet*)indexes;
 -(NSIndexSet*) _draggedRowIndexes; //utility method to access draggedItems when working with pasteboard sender
+
+//table source protocole
 -(BOOL)tableView:(NSTableView *)tableView writeRows:(NSArray *)rows toPasteboard:(NSPasteboard *)pboard;
 -(BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
 @end
 
 @implementation EncapsulationManager
 
+static EncapsulationManager* sharedManagerInstance = nil; //the (private) singleton
+
++(EncapsulationManager*) sharedManager //access the unique instance of EncapsulationManager
+{
+  @synchronized(self)
+  {
+    //creates the unique instance of EncapsulationManager
+    if (!sharedManagerInstance)
+      sharedManagerInstance = [[self  alloc] init];
+  }
+  return sharedManagerInstance;
+}
+
++(id) allocWithZone:(NSZone *)zone
+{
+  @synchronized(self)
+  {
+    if (!sharedManagerInstance)
+       return [super allocWithZone:zone];
+  }
+  return sharedManagerInstance;
+}
+
+-(id) copyWithZone:(NSZone *)zone
+{
+  return self;
+}
+
+-(id) retain
+{
+  return self;
+}
+
+-(unsigned) retainCount
+{
+  return UINT_MAX;  //denotes an object that cannot be released
+}
+
+-(void) release
+{
+}
+
+-(id) autorelease
+{
+  return self;
+}
+
 -(id) init
 {
-  self = [super init];
-  if (self)
+  if (self && (self != sharedManagerInstance))  //do not recreate an instance
   {
+    if (![super init])
+      return nil;
+    sharedManagerInstance = self;
     //reads encaspulations and current one in user defaults
+    undoManager = [[NSUndoManager alloc] init];
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     encapsulations = [[NSMutableArray alloc] initWithArray:[userDefaults objectForKey:EncapsulationsKey]];
-    unsigned int    currentIndex = [[userDefaults objectForKey:CurrentEncapsulationIndexKey] unsignedIntValue];
+    unsigned int currentIndex = [[userDefaults objectForKey:CurrentEncapsulationIndexKey] unsignedIntValue];
     if (currentIndex >= [encapsulations count])//should not happen, but we handle it
       currentIndex = [encapsulations count] ? [encapsulations count]-1 : NSNotFound;
     [userDefaults setObject:[NSNumber numberWithUnsignedInt:currentIndex] forKey:CurrentEncapsulationIndexKey];
-
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(_userDefaultsDidChangeNotification:)
-                                                 name:NSUserDefaultsDidChangeNotification object:nil];
   }
   return self;
 }
 
 -(void) dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [undoManager release];
   [encapsulations release];
   [super dealloc];
 }
 
--(void) awakeFromNib
+-(NSUndoManager*) undoManager
 {
-  [encapsulationTableView setDataSource:self];
-  [encapsulationTableView setDelegate:self];
-
-  //selects the good line of tableview
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  unsigned int    currentIndex = [[userDefaults objectForKey:CurrentEncapsulationIndexKey] unsignedIntValue];
-  [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:currentIndex] byExtendingSelection:NO];
+  return undoManager;
 }
 
--(void) _userDefaultsDidChangeNotification:(NSNotification*)notification
+-(void) newEncapsulation
 {
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  
-  //another encaspualtionManager may have changed the user defaults
-  NSArray* newEncapsulations = [userDefaults objectForKey:EncapsulationsKey];
-  if (![encapsulations isEqualToArray:newEncapsulations])
+  [self _insertItems:[NSArray arrayWithObject:@"@"] atIndexes:[NSIndexSet indexSetWithIndex:[encapsulations count]]];
+  if (![undoManager isUndoing])
+    [undoManager setActionName:NSLocalizedString(@"New encapsulation", @"New encapsulation")];
+}
+
+-(void) removeEncapsulationIndexes:(NSIndexSet*)indexes
+{
+  [self _removeItemsAtIndexes:indexes];
+  if (![undoManager isUndoing])
   {
-    [encapsulations setArray:newEncapsulations];
-    [encapsulationTableView reloadData];
-  }
-  
-  unsigned int index = [[userDefaults objectForKey:CurrentEncapsulationIndexKey] unsignedIntValue];
-  if (index != (unsigned int) [encapsulationTableView selectedRow])
-    [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-}
-
-  //if no selection, disable "remove" button
--(void) _updateButtonStates
-{
-  NSIndexSet* selectedRowIndexes = [encapsulationTableView selectedRowIndexes];
-  BOOL atLeastOneItemSelected = [selectedRowIndexes count];
-  [removeEncapsulationButton setEnabled:atLeastOneItemSelected];
-}
-
--(IBAction) addEncapsulation:(id)sender
-{
-  [encapsulations addObject:@"@"];
-  [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
-  [encapsulationTableView reloadData];
-  [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[encapsulations count]-1] byExtendingSelection:NO];
-}
-
--(IBAction) removeEncapsulations:(id)sender
-{
-  [self removeSelectedItemsInTableView:encapsulationTableView];
-}
-
--(void) removeSelectedItemsInTableView:(NSTableView*)tableView
-{
-  if (tableView == encapsulationTableView)
-  {
-    NSIndexSet* indexSet = [tableView selectedRowIndexes];
-    [encapsulations removeObjectsAtIndexes:indexSet];
-    [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
-    [encapsulationTableView noteNumberOfRowsChanged];
-    unsigned int newIndex = [indexSet firstIndex];
-    if ((newIndex != NSNotFound) && (newIndex < [encapsulations count]))
-      [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:newIndex] byExtendingSelection:NO];
-    else if ([encapsulations count])
-      [encapsulationTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[encapsulations count]-1] byExtendingSelection:NO];
+    if ([indexes count] > 1)
+      [undoManager setActionName:NSLocalizedString(@"Remove encapsulation items", @"Remove encapsulation items")];
     else
-      [encapsulationTableView deselectAll:self];
+      [undoManager setActionName:NSLocalizedString(@"Remove encapsulation item", @"Remove encapsulation item")];
   }
+  unsigned int newIndex = MIN([encapsulations count] ? [encapsulations count]-1 : NSNotFound, [indexes firstIndex]);
+  [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedInt:newIndex] forKey:CurrentEncapsulationIndexKey];
+}
+
+-(void) _removeItemsAtIndexes:(NSIndexSet*)indexes
+{
+  NSArray* items = [encapsulations objectsAtIndexes:indexes];
+  [encapsulations removeObjectsAtIndexes:indexes];
+  [[undoManager prepareWithInvocationTarget:self] _insertItems:items atIndexes:indexes];
+  [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
+}
+
+-(void) _insertItems:(NSArray*)items atIndexes:(NSIndexSet*)indexes
+{
+  unsigned int index = [indexes lastIndex];
+  NSEnumerator* enumerator = [items reverseObjectEnumerator];
+  id object = [enumerator nextObject];
+  while(object)
+  {
+    [encapsulations insertObject:object atIndex:index];
+    index = [indexes indexLessThanIndex:index];
+    object = [enumerator nextObject];
+  }
+  [[undoManager prepareWithInvocationTarget:self] _removeItemsAtIndexes:indexes];
+  [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
+  unsigned int newIndex = MIN([encapsulations count] ? [encapsulations count]-1 : NSNotFound, [indexes firstIndex]);
+  [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedInt:newIndex] forKey:CurrentEncapsulationIndexKey];
 }
 
 //encapsulation datasource
 -(int) numberOfRowsInTableView:(NSTableView*)aTableView
 {
-  int nb = 0;
-  if (aTableView == encapsulationTableView)
-    nb = [encapsulations count];
-  return nb;
+  return [encapsulations count];
 }
 
 -(id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex
 {
-  id value = nil;
-  if (aTableView == encapsulationTableView)
-    value = [encapsulations objectAtIndex:rowIndex];
-  return value;
+  return [encapsulations objectAtIndex:rowIndex];
 }
 
 -(void) tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex
 {
-  if (aTableView == encapsulationTableView)
-  {
-    [encapsulations replaceObjectAtIndex:rowIndex withObject:anObject];
-    [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
-  }
-}
-
-//delegate methods
--(void) tableViewSelectionDidChange:(NSNotification *)aNotification
-{
-  //at each selection change, synchronize user defaults
-  if ([aNotification object] == encapsulationTableView)
-  {
-    [self _updateButtonStates];
-    unsigned int lastIndex = [[encapsulationTableView selectedRowIndexes] lastIndex];
-    [encapsulationTableView scrollRowToVisible:lastIndex];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedInt:lastIndex] forKey:CurrentEncapsulationIndexKey];
-  }
+  id oldValue = [encapsulations objectAtIndex:rowIndex];
+  [[undoManager prepareWithInvocationTarget:self] tableView:aTableView setObjectValue:oldValue forTableColumn:aTableColumn row:rowIndex];
+  if (![undoManager isUndoing])
+    [undoManager setActionName:NSLocalizedString(@"Change the encapsulation", @"Change the encapsulation")];
+  [encapsulations replaceObjectAtIndex:rowIndex withObject:anObject];
+  [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
 }
 
 //drag'n drop for moving rows
@@ -197,45 +210,50 @@ NSString* EncapsulationPboardType = @"EncapsulationPboardType"; //pboard type fo
 {
   //we only accept moving inside the table (not between different ones)
   NSPasteboard* pboard = [info draggingPasteboard];
-  BOOL ok = (tableView == encapsulationTableView) && pboard &&
+  NSIndexSet* indexSet =  [[[info draggingSource] dataSource] _draggedRowIndexes];
+  BOOL ok = (tableView == [info draggingSource]) && pboard &&
             [pboard availableTypeFromArray:[NSArray arrayWithObject:EncapsulationPboardType]] &&
             [pboard propertyListForType:EncapsulationPboardType] &&
-            (operation == NSTableViewDropAbove);
+            (operation == NSTableViewDropAbove) &&
+            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 
 -(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)operation
 {
   NSIndexSet* indexSet = [[[info draggingSource] dataSource] _draggedRowIndexes];
-  if (indexSet)
+  NSArray* objectsToMove = [encapsulations objectsAtIndexes:indexSet];
+  [self _removeItemsAtIndexes:indexSet];
+
+  //difficult : we must compute the row of insertion when the objects have been removed from their previous location
+  unsigned int whereToInsert = row;
+  unsigned int index = [indexSet firstIndex];
+  while((index != NSNotFound) && (index < (unsigned int) row))
   {
-    NSArray* objectsToMove = [encapsulations objectsAtIndexes:indexSet];
-    [encapsulations removeObjectsAtIndexes:indexSet];
-
-    //difficult : we must compute the row of insertion when the objects have been removed from their previous location
-    unsigned int whereToInsert = row;
-    unsigned int index = [indexSet firstIndex];
-    while((index != NSNotFound) && (index < (unsigned int) row))
-    {
-      --whereToInsert;
-      index = [indexSet indexGreaterThanIndex:index];
-    }
-
-    //now insert the objects at increasing destination row
-    unsigned int destination = whereToInsert;
-    NSEnumerator* enumerator = [objectsToMove objectEnumerator];
-    NSString* string = [enumerator nextObject];
-    while(string)
-    {
-      [encapsulations insertObject:string atIndex:destination++];
-      string = [enumerator nextObject];
-    }
-
-    //synchronize user defaults
-    [[NSUserDefaults standardUserDefaults] setObject:encapsulations forKey:EncapsulationsKey];
-    [tableView reloadData];
-    [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:whereToInsert] byExtendingSelection:NO];
+    --whereToInsert;
+    index = [indexSet indexGreaterThanIndex:index];
   }
+
+  //now insert the objects at increasing destination row
+  unsigned int destination = whereToInsert;
+  NSMutableIndexSet* destinationIndexes = [NSMutableIndexSet indexSet];
+  NSEnumerator* enumerator = [objectsToMove objectEnumerator];
+  NSString* string = [enumerator nextObject];
+  while(string)
+  {
+    [destinationIndexes addIndex:destination];
+    ++destination;
+    string = [enumerator nextObject];
+  }
+  [self _insertItems:objectsToMove atIndexes:destinationIndexes];
+
+  if ([objectsToMove count] > 1)
+    [undoManager setActionName:NSLocalizedString(@"Move encapsulations", @"Move encapsulations")];
+  else
+    [undoManager setActionName:NSLocalizedString(@"Move the encapsulation", @"Move the encapsulation")];
+
+  [tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:whereToInsert] byExtendingSelection:NO];
+
   return YES;
 }               
 

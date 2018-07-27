@@ -27,14 +27,16 @@ static NSImage* errorIcon = nil;
 
 -(id) initWithScrollView:(NSScrollView*)scrollView orientation:(NSRulerOrientation)orientation
 {
-  self = [super initWithScrollView:scrollView orientation:orientation];
-  if (self)
-  {
-    [self setRuleThickness:32];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
-                                                 name:NSTextDidChangeNotification object:nil];
-  }
+  if (![super initWithScrollView:scrollView orientation:orientation])
+    return nil;
+  [self setRuleThickness:32];
   return self;
+}
+
+-(void) awakeFromNib
+{
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
+                                               name:NSTextDidChangeNotification object:nil];
 }
 
 -(void) dealloc

@@ -9,10 +9,6 @@
 #import <Cocoa/Cocoa.h>
 
 @class HistoryItem;
-@class HistoryView;
-@class LibraryDrawer;
-@class LibraryItem;
-@class LibraryView;
 @class LineCountTextView;
 @class LinkBack;
 @class LogTableView;
@@ -31,11 +27,6 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
   IBOutlet NSTextField*         sizeText;
   IBOutlet NSButton*            makeLatexButton;
   IBOutlet LogTableView*        logTableView;
-  IBOutlet NSDrawer*            historyDrawer;
-  IBOutlet HistoryView*         historyView;
-  IBOutlet NSButton*            clearHistoryButton;
-  IBOutlet LibraryDrawer*       libraryDrawer;
-  IBOutlet LibraryView*         libraryView;
   IBOutlet NSSegmentedControl*  typeOfTextControl;
   IBOutlet NSWindow*            logWindow;
   IBOutlet NSTextView*          logTextView;
@@ -68,10 +59,7 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 }
 
 //actions from menu (through the appController), or from self contained elements
--(IBAction) removeHistoryEntries:(id)sender;
--(IBAction) clearHistory:(id)sender;
 -(IBAction) makeLatex:(id)sender;
--(IBAction) colorDidChange:(id)sender;
 -(IBAction) displayLastLog:(id)sender;
 
 -(IBAction) exportImage:(id)sender;
@@ -79,11 +67,6 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 -(IBAction) closeOptionsPane:(id)sender;
 -(IBAction) jpegQualitySliderDidChange:(id)sender;
 -(IBAction) saveAccessoryViewPopupFormatDidChange:(id)sender;
-
--(IBAction) addCurrentEquationToLibrary:(id)sender;
--(IBAction) newLibraryFolder:(id)sender;
--(IBAction) removeLibraryItems:(id)sender;
--(IBAction) refreshLibraryItems:(id)sender;
 
 -(void) setNullId;//useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;
@@ -105,15 +88,7 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 -(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
 -(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield
 
--(NSArray*) selectedHistoryItems;
--(NSArray*) selectedLibraryItems;
--(void) deselectItems;
-
 -(BOOL) hasImage;
--(BOOL) isHistoryVisible;
--(void) setHistoryVisible:(BOOL)visible;
--(BOOL) isLibraryVisible;
--(void) setLibraryVisible:(BOOL)visible;
 -(BOOL) isPreambleVisible;
 -(void) setPreambleVisible:(BOOL)visible;
 

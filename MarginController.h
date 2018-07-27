@@ -16,14 +16,12 @@
  IBOutlet NSTextField* bottomMarginButton;
 }
 
-+(void) updateWithUserDefaults;
--(void) updateWithUserDefaults;
-
-+(float) topMargin;
-+(float) leftMargin;
-+(float) rightMargin;
-+(float) bottomMargin;
+-(float) topMargin;
+-(float) leftMargin;
+-(float) rightMargin;
+-(float) bottomMargin;
 
 -(IBAction) makeDefaultsMargins:(id)sender;
+-(IBAction) showWindow:(id)sender;
 
 @end

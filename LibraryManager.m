@@ -4,7 +4,7 @@
 //  Created by Pierre Chatelier on 2/05/05.
 //  Copyright 2005 Pierre Chatelier. All rights reserved.
 
-//This file is the library manager, data source of every libraryView.
+//This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
 //It provides management (insertion/deletion) with undoing, save/load, drag'n drop
 
@@ -18,7 +18,7 @@
 #import "HistoryManager.h"
 #import "LibraryFile.h"
 #import "LibraryFolder.h"
-#import "LibraryView.h"
+#import "LibraryTableView.h"
 #import "NSApplicationExtended.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
@@ -36,13 +36,13 @@ NSString* LibraryDidChangeNotification = @"LibraryDidChangeNotification";
 NSString* LibraryItemsPboardType = @"LibraryItemsPboardType";
 
 @interface LibraryManager (PrivateAPI)
--(void) applicationDidFinishLaunching:(NSNotification*)aNotification; //triggers _automaticBackgroundSaving:
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves library when quitting
 
 -(void) _reinsertItems:(NSArray*)items atParents:(NSArray*)parents atIndexes:(NSArray*)indexes; //to perform undo
 -(void) _performDropOperation:(id <NSDraggingInfo>)info onItem:(LibraryItem*)parentItem atIndex:(int)childIndex
                   outlineView:(NSOutlineView*)outlineView;
-                  
+-(void) _setTitle:(NSString*)title onItem:(LibraryItem*)item;
+-(void) _setTitles:(NSArray*)titles onItems:(NSArray*)items;
 -(void) _saveLibrary;
 -(void) _loadLibrary;
 -(void) _automaticBackgroundSaving:(id)unusedArg;//automatically and regularly saves the library on disk
@@ -57,12 +57,6 @@ static NSImage*        libraryFileIcon       = nil;
 
 +(void) initialize
 {
-  //creates the library singleton, shared by all documents
-  if (!sharedManagerInstance)
-  {
-    sharedManagerInstance = [[LibraryManager alloc] init];
-    [sharedManagerInstance _loadLibrary];
-  }
   if (!libraryFileIcon)
   {
     NSBundle* mainBundle = [NSBundle mainBundle];
@@ -72,45 +66,79 @@ static NSImage*        libraryFileIcon       = nil;
   }
 }
 
-+(LibraryManager*) sharedManager //accessing the singleton
++(LibraryManager*) sharedManager //access the unique instance of LibraryManager
 {
+  @synchronized(self)
+  {
+    if (!sharedManagerInstance)
+      sharedManagerInstance = [[self  alloc] init];
+  }
   return sharedManagerInstance;
+}
+
++(id) allocWithZone:(NSZone *)zone
+{
+  @synchronized(self)
+  {
+    if (!sharedManagerInstance)
+       return [super allocWithZone:zone];
+  }
+  return sharedManagerInstance;
+}
+
+-(id) copyWithZone:(NSZone *)zone
+{
+  return self;
+}
+
+-(id) retain
+{
+  return self;
+}
+
+-(unsigned) retainCount
+{
+  return UINT_MAX;  //denotes an object that cannot be released
+}
+
+-(void) release
+{
+}
+
+-(id) autorelease
+{
+  return self;
 }
 
 -(id) init
 {
-  if (sharedManagerInstance) //do not recreate an instance
+  if (self && (self != sharedManagerInstance)) //do not recreate an instance
   {
-    [sharedManagerInstance retain]; //but makes a retain to allow a release
-    return sharedManagerInstance;
+    if (![super init])
+      return nil;
+    sharedManagerInstance = self;
+    undoManager = [[NSUndoManager alloc] init];
+    library = [[LibraryFolder alloc] init];
+    [self _loadLibrary];
+    [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
+    //registers applicationWillTerminate notification to automatically save the library
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
+                                                 name:NSApplicationWillTerminateNotification object:nil];
   }
-  else
-  {
-    self = [super init];
-    if (self)
-    {
-      library = [[LibraryFolder alloc] init];
-      //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the library
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:)
-                                                   name:NSApplicationDidFinishLaunchingNotification object:nil];
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
-                                                   name:NSApplicationWillTerminateNotification object:nil];
-    }
-    return self;
-  }
+  return self;
 }
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [undoManager release];
   [library release];
   [super dealloc];
 }
 
-//When the application launches, the notification is caught to trigger _automaticBackgroundSaving
--(void) applicationDidFinishLaunching:(NSNotification*)aNotification
+-(NSUndoManager*) undoManager
 {
-  [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
+  return undoManager;
 }
 
 //triggers saving when app is quitting
@@ -128,7 +156,23 @@ static NSImage*        libraryFileIcon       = nil;
   }
 }
 
-//returns all the values contained in LibraryFile items
+-(NSArray*) allItems
+{
+  NSMutableArray* items = [NSMutableArray arrayWithCapacity:100];
+  @synchronized(library)
+  {
+    NSMutableArray* remainingItems = [NSMutableArray arrayWithArray:[library children]];
+    while([remainingItems count])
+    {
+      LibraryItem* item = [remainingItems objectAtIndex:0];
+      [remainingItems removeObjectAtIndex:0];
+      [items addObject:item];
+      [remainingItems addObjectsFromArray:[item children]];
+    }
+  }
+  return items;
+}
+
 -(NSArray*) allValues
 {
   NSMutableArray* values = [NSMutableArray arrayWithCapacity:100];
@@ -357,7 +401,7 @@ static NSImage*        libraryFileIcon       = nil;
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
     HistoryItem* historyItem = [historyItems lastObject];
-    [historyItem writeToPasteboard:pboard forDocument:[(LibraryView*)outlineView document] isLinkBackRefresh:NO lazyDataProvider:nil];
+    [historyItem writeToPasteboard:pboard forDocument:[[AppController appController] dummyDocument] isLinkBackRefresh:NO lazyDataProvider:nil];
   }
 
   //NSStringPBoardType may contain some info for LibraryFiles the label of the equations : useful for users that only want to \ref this equation
@@ -388,7 +432,7 @@ static NSImage*        libraryFileIcon       = nil;
 }
 
 //validates a dropping destination in the library view
--(unsigned int) outlineView:(NSOutlineView*)outlineView validateDrop:(id <NSDraggingInfo>)info
+-(NSDragOperation) outlineView:(NSOutlineView*)outlineView validateDrop:(id <NSDraggingInfo>)info
                proposedItem:(id)item proposedChildIndex:(int)childIndex
 {
   BOOL proposedParentIsValid = YES;
@@ -397,18 +441,18 @@ static NSImage*        libraryFileIcon       = nil;
     //This method validates whether or not the proposal is a valid one. Returns NO if the drop should not be allowed.
     LibraryItem* proposedParent = item;
     
-    //if the dragged occured from a LibraryView, the destination can only be the same libraryView, that is to say the current one
+    //if the dragged occured from a LibraryTableView, the destination can only be the same libraryTableView, that is to say the current one
     id draggingSource = [info draggingSource];
-    if ([draggingSource isKindOfClass:[LibraryView class]] && (draggingSource != outlineView))
+    if ([draggingSource isKindOfClass:[LibraryTableView class]] && (draggingSource != outlineView))
       proposedParentIsValid = NO;
     
     BOOL isOnDropTypeProposal = (childIndex==NSOutlineViewDropOnItemIndex);
       
     //Refuse if the dropping occurs "on" the *view* itself, unless we have no data in the view.
-    if ((proposedParent==nil) && (childIndex==NSOutlineViewDropOnItemIndex) && ([library numberOfChildren]!=0))
+    if (isOnDropTypeProposal && !proposedParent)
       proposedParentIsValid = NO;
-      
-    if ((proposedParent==nil) && (childIndex==NSOutlineViewDropOnItemIndex))
+
+    if (isOnDropTypeProposal && !proposedParent && ([library numberOfChildren]!=0))
       proposedParentIsValid = NO;
       
     //Refuse if we are trying to drop on a LibraryFile
@@ -421,6 +465,20 @@ static NSImage*        libraryFileIcon       = nil;
     {
         NSArray* dragged      = [[[info draggingSource] dataSource] _draggedItems];
         proposedParentIsValid = ![proposedParent isDescendantOfItemInArray:dragged];
+    }
+    
+    //we don't want an item to be dropped at the same place (same parent, same child index)
+    if (proposedParentIsValid && !isOnDropTypeProposal && ([info draggingSource] == outlineView))
+    {
+      NSArray* dragged = [[[info draggingSource] dataSource] _draggedItems];
+      LibraryItem* firstItem = [dragged objectAtIndex:0];
+      LibraryItem* firstItemParent = [firstItem parent];
+      if ((firstItemParent == proposedParent) || (!proposedParent && (firstItemParent == library)))
+      {
+        int actualChildIndex  = proposedParent ? [proposedParent indexOfChild:firstItem] : [library indexOfChild:firstItem];
+        if ((actualChildIndex == childIndex) || (actualChildIndex+1 == childIndex))
+          proposedParentIsValid = NO;
+      }
     }
     
     //Sets the item and child index in case we computed a retargeted one.
@@ -583,7 +641,6 @@ static NSImage*        libraryFileIcon       = nil;
     NSMutableArray* itemsToSelect = nil;
     if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
     {
-      NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
       LibraryManager* dragDataSource = [[info draggingSource] dataSource];
       itemsToSelect = [NSMutableArray arrayWithArray:[dragDataSource _draggedItems]];
       NSArray* tmpDraggedItems = [LibraryItem minimumNodeCoverFromItemsInArray:itemsToSelect];
@@ -629,33 +686,47 @@ static NSImage*        libraryFileIcon       = nil;
         [tmpDraggedParent removeChild:tmpDraggedItem];
         tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
       }
-      [[undo prepareWithInvocationTarget:self] _reinsertItems:orderedTmpDraggedItems atParents:parents
-                                                    atIndexes:indexesOfChildren];
+      [[undoManager prepareWithInvocationTarget:self] _reinsertItems:orderedTmpDraggedItems atParents:parents
+                                                           atIndexes:indexesOfChildren];
 
       //then, insertion
       [parentItem insertChildren:orderedTmpDraggedItems atIndex:childIndex];
-      [[undo prepareWithInvocationTarget:self] removeItems:orderedTmpDraggedItems];
-      if (![undo isUndoing])
-        [undo setActionName:NSLocalizedString(@"Move Library items", "Move Library items")];
+      //saves titles
+      NSMutableArray* oldTitles = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
+      NSEnumerator* orderedTmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
+      LibraryItem* item = [orderedTmpDraggedItemsEnumerator nextObject];
+      while(item)
+      {
+        [oldTitles addObject:[item title]];
+        item = [orderedTmpDraggedItemsEnumerator nextObject];
+      }
+      //update titles
+      [orderedTmpDraggedItems makeObjectsPerformSelector:@selector(updateTitle)];
+      [[undoManager prepareWithInvocationTarget:self] _setTitles:oldTitles onItems:orderedTmpDraggedItems];
+      [[undoManager prepareWithInvocationTarget:self] removeItems:orderedTmpDraggedItems];
+      if (![undoManager isUndoing])
+        [undoManager setActionName:NSLocalizedString(@"Move Library items", @"Move Library items")];
     }
     else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
     {
-      NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
       NSData* data = [pboard dataForType:HistoryItemsPboardType];
       NSArray* array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-      NSEnumerator* enumerator = [array objectEnumerator];
-      HistoryItem* historyItem = [enumerator nextObject];
+      NSEnumerator* enumerator  = [array objectEnumerator];
+      HistoryItem* historyItem  = [enumerator nextObject];
       while (historyItem)
       {
         LibraryFile* libraryFile = [[[LibraryFile alloc] init] autorelease];
         [libraryFile setValue:historyItem setAutomaticTitle:YES];
         itemsToSelect = [NSArray arrayWithObject:libraryFile];
         [parentItem insertChild:libraryFile atIndex:childIndex++];
-        [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:libraryFile]];
+        NSString* oldTitle = [libraryFile title];
+        [libraryFile updateTitle];
+        [[undoManager prepareWithInvocationTarget:self] _setTitle:oldTitle onItem:libraryFile];
+        [[undoManager prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:libraryFile]];
         historyItem = [enumerator nextObject];
       }
-      if (![undo isUndoing])
-        [undo setActionName:NSLocalizedString(@"Add Library items", "Add Library items")];
+      if (![undoManager isUndoing])
+        [undoManager setActionName:NSLocalizedString(@"Add Library items", @"Add Library items")];
     }
 
     [[NSNotificationCenter defaultCenter] postNotificationName:LibraryDidChangeNotification object:nil];
@@ -682,7 +753,61 @@ static NSImage*        libraryFileIcon       = nil;
   libraryShouldBeSaved = YES;
 }
 
+-(void) _setTitle:(NSString*)title onItem:(LibraryItem*)item
+{
+  NSString* oldTitle = [item title];
+  [item setTitle:title];
+  [[undoManager prepareWithInvocationTarget:self] _setTitle:oldTitle onItem:item];
+}
+
+-(void) _setTitles:(NSArray*)titles onItems:(NSArray*)items
+{
+  //saves titles
+  NSMutableArray* oldTitles = [NSMutableArray arrayWithCapacity:[items count]];
+  NSEnumerator* enumerator = [items objectEnumerator];
+  NSEnumerator* titleEnumerator = [titles objectEnumerator];
+  LibraryItem* item = [enumerator nextObject];
+  while(item)
+  {
+    [oldTitles addObject:[item title]];
+    [item setTitle:[titleEnumerator nextObject]];
+    item = [enumerator nextObject];
+  }
+  //update titles
+  [[undoManager prepareWithInvocationTarget:self] _setTitles:oldTitles onItems:items];
+}
+
 //outline view delegate methods
+
+-(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
+{
+  [item setExpanded:NO];
+  [self setNeedsSaving:YES];
+  return YES;
+}
+
+-(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
+{
+  [item setExpanded:YES];
+  [self setNeedsSaving:YES];
+  return YES;
+}
+
+-(void) outlineViewSelectionDidChange:(NSNotification*)notification
+{
+  NSOutlineView* outlineView = [notification object];
+  [outlineView scrollRowToVisible:[[outlineView selectedRowIndexes] firstIndex]];
+
+  MyDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+  if (document && ([outlineView selectedRow] >= 0))
+  {
+    LibraryItem* libraryItem = [outlineView itemAtRow:[outlineView selectedRow]];
+    if ([libraryItem isKindOfClass:[LibraryFile class]])
+      [document applyHistoryItem:[(LibraryFile*)libraryItem value]];
+    else if ([libraryItem isKindOfClass:[LibraryFolder class]])
+      [document applyHistoryItem:nil];
+  }
+}
 
 -(id)outlineView:(NSOutlineView*)outlineView
      objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item
@@ -692,11 +817,10 @@ static NSImage*        libraryFileIcon       = nil;
 
 -(void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
-  NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-  [[undo prepareWithInvocationTarget:self] outlineView:outlineView setObjectValue:[item title] 
-                                        forTableColumn:tableColumn byItem:item];
-  if (![undo isUndoing])
-    [undo setActionName:NSLocalizedString(@"Change Library item name", "Change Library item name")];
+  [[undoManager prepareWithInvocationTarget:self] outlineView:outlineView setObjectValue:[item title] 
+                                               forTableColumn:tableColumn byItem:item];
+  if (![undoManager isUndoing])
+    [undoManager setActionName:NSLocalizedString(@"Change Library item name", @"Change Library item name")];
   [item setTitle:object];
   [outlineView reloadItem:item];
   libraryShouldBeSaved = YES;
@@ -729,18 +853,18 @@ static NSImage*        libraryFileIcon       = nil;
     if (selectedRow >= 0)
     {
       LibraryItem* item = [outlineView itemAtRow:selectedRow];
-      parent = [item isKindOfClass:[LibraryFile class]] ? [item parent] : item;
+      parent = [item parent];
     }
     if (parent == nil)
       parent = library;
     
     newFolder = [[LibraryFolder alloc] init];
     [parent insertChild:newFolder];
+    [newFolder updateTitle];
 
-    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-    [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:newFolder]];
-    if (![undo isUndoing])
-      [undo setActionName:NSLocalizedString(@"Add Library folder", "Add Library folder")];
+    [[undoManager prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:newFolder]];
+    if (![undoManager isUndoing])
+      [undoManager setActionName:NSLocalizedString(@"Add Library folder", @"Add Library folder")];
     
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
                             [NSArray arrayWithObject:parent], @"expand",
@@ -772,11 +896,11 @@ static NSImage*        libraryFileIcon       = nil;
     newLibraryFile = [[LibraryFile alloc] init];
     [newLibraryFile setValue:historyItem setAutomaticTitle:YES];
     [parent insertChild:newLibraryFile];
+    [newLibraryFile updateTitle];
 
-    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-    [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:newLibraryFile]];
-    if (![undo isUndoing])
-      [undo setActionName:NSLocalizedString(@"Add Library item", "Add Library item")];
+    [[undoManager prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:newLibraryFile]];
+    if (![undoManager isUndoing])
+      [undoManager setActionName:NSLocalizedString(@"Add Library item", @"Add Library item")];
 
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
       [NSArray arrayWithObject:parent], @"expand",
@@ -806,11 +930,11 @@ static NSImage*        libraryFileIcon       = nil;
       
     //add item
     [parent insertChild:libraryItem];
+    [libraryItem updateTitle];
     
-    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-    [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:libraryItem]];
-    if (![undo isUndoing])
-      [undo setActionName:NSLocalizedString(@"Add Library item", "Add Library item")];
+    [[undoManager prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:libraryItem]];
+    if (![undoManager isUndoing])
+      [undoManager setActionName:NSLocalizedString(@"Add Library item", @"Add Library item")];
     
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
                             [NSArray arrayWithObject:parent], @"expand",
@@ -850,14 +974,13 @@ static NSImage*        libraryFileIcon       = nil;
       itemToRemove = [enumerator nextObject];
     }
 
-    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
-    [[undo prepareWithInvocationTarget:self] _reinsertItems:items atParents:parents atIndexes:indexes];
-    if (![undo isUndoing])
+    [[undoManager prepareWithInvocationTarget:self] _reinsertItems:items atParents:parents atIndexes:indexes];
+    if (![undoManager isUndoing])
     {
       if ([items count] > 1)
-        [undo setActionName:NSLocalizedString(@"Delete Library items", @"Delete Library items")];
+        [undoManager setActionName:NSLocalizedString(@"Delete Library items", @"Delete Library items")];
       else
-        [undo setActionName:NSLocalizedString(@"Delete Library item", @"Delete Library item")];
+        [undoManager setActionName:NSLocalizedString(@"Delete Library item", @"Delete Library item")];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:LibraryDidChangeNotification object:nil];
@@ -890,11 +1013,10 @@ static NSImage*        libraryFileIcon       = nil;
       [parent insertChild:item atIndex:index];
     }
     
-    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
     if ([oldParents count])
-      [[undo prepareWithInvocationTarget:self] _reinsertItems:items atParents:oldParents atIndexes:oldIndexes];
+      [[undoManager prepareWithInvocationTarget:self] _reinsertItems:items atParents:oldParents atIndexes:oldIndexes];
     else
-      [[undo prepareWithInvocationTarget:self] removeItems:items];
+      [[undoManager prepareWithInvocationTarget:self] removeItems:items];
 
     NSMutableArray* itemsToExpand = [NSMutableArray arrayWithCapacity:[items count]];
     NSEnumerator* enumerator = [items objectEnumerator];

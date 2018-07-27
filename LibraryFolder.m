@@ -55,7 +55,9 @@ static NSImage* smallFolderIcon = nil; //stores the icon of a LibraryFolder
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  self = [super initWithCoder:coder];
+  if (![super initWithCoder:coder])
+    return nil;
   return self;
 }
+
 @end

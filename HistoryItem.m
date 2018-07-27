@@ -13,6 +13,7 @@
 #import "AppController.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
+#import "NSFontExtended.h"
 #import "PreferencesController.h"
 
 #ifdef PANTHER
@@ -40,23 +41,127 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   return [instance autorelease];
 }
 
++(id) historyItemWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults
+{
+  return [[[[self class] alloc] initWithPdfData:someData useDefaults:useDefaults] autorelease];
+}
+
 -(id) initWithPdfData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
               backgroundColor:(NSColor*)aBackgroundColor
 {
-  self = [super init];
-  if (self)
+  if (![super init])
+    return nil;
+  pdfData    = [someData    copy];
+  preamble   = [aPreamble   copy];
+  sourceText = [aSourceText copy];
+  color      = [aColor      copy];
+  pointSize  = aPointSize;
+  date       = [aDate       copy];
+  mode       = aMode;
+  //pdfCachedImage and bitmapCachedImage are lazily initialized in the "image" methods that returns these cached images
+  backgroundColor = [aBackgroundColor copy];
+  return self;
+}
+
+-(id) initWithPdfData:(NSData*)someData useDefaults:(BOOL)useDefaults
+{
+  if (![super init])
+    return nil;
+
+  pdfData = [someData retain];
+  NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSASCIIStringEncoding] autorelease];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSArray*  testArray    = nil;
+
+  NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
+  NSData* defaultPrambleData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
+  NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
+  NSAttributedString* defaultPrambleAttributedString =
+    [[[NSAttributedString alloc] initWithRTF:defaultPrambleData documentAttributes:NULL] autorelease];
+  NSMutableString* preambleString = nil;
+  testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
+  if (testArray && ([testArray count] >= 2))
   {
-    pdfData    = [someData    copy];
-    preamble   = [aPreamble   copy];
-    sourceText = [aSourceText copy];
-    color      = [aColor      copy];
-    pointSize  = aPointSize;
-    date       = [aDate       copy];
-    mode       = aMode;
-    //pdfCachedImage and bitmapCachedImage are lazily initialized in the "image" methods that returns these cached images
-    backgroundColor = [aBackgroundColor copy];
+    preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [preambleString rangeOfString:@"ESannopend"];
+    range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
+    [preambleString deleteCharactersInRange:range];
+    [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preambleString length])];
+    [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preambleString length])];
+    [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
+    [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
   }
+  preamble = preambleString ? [[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes]
+                            : (useDefaults ? [defaultPrambleAttributedString retain]
+                                           : [[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes]);
+
+  NSMutableString* sourceString = [NSMutableString string];
+  testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    [sourceString appendString:[testArray objectAtIndex:1]];
+    NSRange range = [sourceString rangeOfString:@"ESannotend"];
+    range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
+    [sourceString deleteCharactersInRange:range];
+    [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [sourceString length])];
+    [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [sourceString length])];
+    [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
+    [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
+  }
+  sourceText = [[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes];
+
+  NSMutableString* pointSizeAsString = nil;
+  testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
+    range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
+    [pointSizeAsString deleteCharactersInRange:range];
+  }
+  pointSize = pointSizeAsString ? [pointSizeAsString doubleValue]
+                                : (useDefaults ? [[userDefaults objectForKey:DefaultPointSizeKey] doubleValue] : 0);
+
+  NSMutableString* modeAsString = nil;
+  testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
+    range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
+    [modeAsString deleteCharactersInRange:range];
+  }
+  mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
+                      : (latex_mode_t) (useDefaults ? [userDefaults integerForKey:DefaultModeKey] : 0);
+
+  NSColor* defaultColor = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
+  NSMutableString* colorAsString = nil;[NSMutableString stringWithString:[defaultColor rgbaString]];
+  testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [colorAsString rangeOfString:@"EEcolend"];
+    range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
+    [colorAsString deleteCharactersInRange:range];
+  }
+  color = colorAsString ? [[NSColor colorWithRgbaString:colorAsString] retain] : nil;
+  if (!color)
+    color = (useDefaults ? [defaultColor retain] : [[NSColor blackColor] retain]);
+
+  NSColor* defaultBkColor = [NSColor whiteColor];
+  NSMutableString* bkColorAsString = nil;
+  testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
+    range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
+    [bkColorAsString deleteCharactersInRange:range];
+  }
+  backgroundColor = bkColorAsString ? [[NSColor colorWithRgbaString:bkColorAsString] retain] : nil;
+  if (!backgroundColor)
+    backgroundColor = (useDefaults ? [defaultBkColor retain] : [[NSColor whiteColor] retain]);
   return self;
 }
 
@@ -160,7 +265,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.3.2"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.4.0"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -178,38 +283,45 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  self = [super init];
-  if (self)
+  if (![super init])
+    return nil;
+  NSString* version = [coder decodeObjectForKey:@"version"];
+  if (!version || [version compare:@"1.2" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
   {
-    NSString* version = [coder decodeObjectForKey:@"version"];
-    if (!version || [version compare:@"1.2" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
-    {
-      pdfData     = [[coder decodeObjectForKey:@"pdfData"]    retain];
-      NSMutableString* tempPreamble = [NSMutableString stringWithString:[coder decodeObjectForKey:@"preamble"]];
-      [tempPreamble replaceOccurrencesOfString:@"\\usepackage[dvips]{color}" withString:@"\\usepackage[pdftex]{color}"
-                                       options:0 range:NSMakeRange(0, [tempPreamble length])];
-      preamble    = [[NSAttributedString alloc] initWithString:tempPreamble];
-      sourceText  = [[NSAttributedString alloc] initWithString:[coder decodeObjectForKey:@"sourceText"]];
-      color       = [[coder decodeObjectForKey:@"color"]      retain];
-      pointSize   = [[coder decodeObjectForKey:@"pointSize"] doubleValue];
-      date        = [[coder decodeObjectForKey:@"date"]       retain];
-      mode        = (latex_mode_t) [coder decodeIntForKey:@"mode"];
-    }
-    else
-    {
-      pdfData     = [[coder decodeObjectForKey:@"pdfData"]    retain];
-      preamble    = [[coder decodeObjectForKey:@"preamble"]   retain];
-      sourceText  = [[coder decodeObjectForKey:@"sourceText"] retain];
-      color       = [[coder decodeObjectForKey:@"color"]      retain];
-      pointSize   = [coder decodeDoubleForKey:@"pointSize"];
-      date        = [[coder decodeObjectForKey:@"date"]       retain];
-      mode        = (latex_mode_t) [coder decodeIntForKey:@"mode"];
-      //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
-      //initialized in the "image" methods, using the pdfData
-      //pdfCachedImage    = [[coder decodeObjectForKey:@"pdfCachedImage"]    retain];
-      //bitmapCachedImage = [[coder decodeObjectForKey:@"bitmapCachedImage"] retain];
-      backgroundColor = [[coder decodeObjectForKey:@"backgroundColor"] retain];
-    }
+    pdfData     = [[coder decodeObjectForKey:@"pdfData"]    retain];
+    NSMutableString* tempPreamble = [NSMutableString stringWithString:[coder decodeObjectForKey:@"preamble"]];
+    [tempPreamble replaceOccurrencesOfString:@"\\usepackage[dvips]{color}" withString:@"\\usepackage{color}"
+                                     options:0 range:NSMakeRange(0, [tempPreamble length])];
+    preamble    = [[NSAttributedString alloc] initWithString:tempPreamble];
+    sourceText  = [[NSAttributedString alloc] initWithString:[coder decodeObjectForKey:@"sourceText"]];
+    color       = [[coder decodeObjectForKey:@"color"]      retain];
+    pointSize   = [[coder decodeObjectForKey:@"pointSize"] doubleValue];
+    date        = [[coder decodeObjectForKey:@"date"]       retain];
+    mode        = (latex_mode_t) [coder decodeIntForKey:@"mode"];
+  }
+  else
+  {
+    pdfData     = [[coder decodeObjectForKey:@"pdfData"]    retain];
+    preamble    = [[coder decodeObjectForKey:@"preamble"]   retain];
+    sourceText  = [[coder decodeObjectForKey:@"sourceText"] retain];
+    color       = [[coder decodeObjectForKey:@"color"]      retain];
+    pointSize   = [coder decodeDoubleForKey:@"pointSize"];
+    date        = [[coder decodeObjectForKey:@"date"]       retain];
+    mode        = (latex_mode_t) [coder decodeIntForKey:@"mode"];
+    //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
+    //initialized in the "image" methods, using the pdfData
+    //pdfCachedImage    = [[coder decodeObjectForKey:@"pdfCachedImage"]    retain];
+    //bitmapCachedImage = [[coder decodeObjectForKey:@"bitmapCachedImage"] retain];
+    backgroundColor = [[coder decodeObjectForKey:@"backgroundColor"] retain];
+  }
+  //old versions of LaTeXiT would use \usepackage[pdftex]{color} in the preamble. [pdftex] is useless, in fact
+  NSRange rangeOfColorPackage = [[preamble string] rangeOfString:@"\\usepackage[pdftex]{color}"];
+  if (rangeOfColorPackage.location != NSNotFound)
+  {
+    NSMutableAttributedString* newPreamble = [[NSMutableAttributedString alloc] initWithAttributedString:preamble];
+    [newPreamble replaceCharactersInRange:rangeOfColorPackage withString:@"\\usepackage{color}"];
+    [preamble release];
+    preamble = newPreamble;
   }
   return self;
 }
@@ -242,11 +354,21 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   {
     if (!bitmapCachedImage)
     {
-      NSImage* pdfImage = [self pdfImage];
+      NSImage* pdfImage = [self pdfImage];//may trigger pdfCachedImage computation, in its own @synchronized{} block
+      //we will compute a bitmap representation. To avoid that it is heavier than the pdf one, we will limit its size
+      NSSize realSize = pdfImage ? [pdfImage size] : NSMakeSize(0, 0);
+      //we limit the max size to 256, and do nothing if it is already smaller
+      float factor = MIN(1.0f, 256.0f/MAX(1.0f, MAX(realSize.width, realSize.height)));
+      NSSize newSize = NSMakeSize(factor*realSize.width, factor*realSize.height);
+      //temporarily change size
+      [pdfImage setScalesWhenResized:YES];
+      [pdfImage setSize:newSize];
       [pdfImage lockFocus];//this lockfocus seems necessary to avoid erratic AppKit deadlock when loading history in the background
-      NSData* bitmapData = [pdfImage TIFFRepresentation];//may trigger pdfCachedImage computation, in its own @synchronized{} block
-      [pdfImage unlockFocus];
+      NSData* bitmapData = [pdfImage TIFFRepresentation];
       bitmapCachedImage = [[NSImage alloc] initWithData:bitmapData];
+      [pdfImage unlockFocus];
+      //restore size
+      [pdfImage setSize:realSize];
     }
   }
   return bitmapCachedImage;
@@ -276,49 +398,25 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
   //first, we retreive the baseline if possible
   double baseline = 0;
 
-  BOOL needsToCheckLEEAnnotations = YES;
-  #ifndef PANTHER
-  PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-  NSString* creator  = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentCreatorAttribute]  : nil;
-  NSArray*  keywords = pdfDocument ? [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute] : nil;
-  //if the meta-data tells that the creator is LaTeXiT, then use it !
-  needsToCheckLEEAnnotations = !(creator && [creator isEqual:[NSApp applicationName]] && keywords && ([keywords count] >= 7));
-  if (!needsToCheckLEEAnnotations)
-    baseline = [[keywords objectAtIndex:5] doubleValue];
-  [pdfDocument release];
-  #endif
+  NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+  NSArray* testArray = nil;
 
-  if (needsToCheckLEEAnnotations) //either we are on panther, or we failed to find meta-data keywords
+  NSMutableString* baselineAsString = @"0";
+  testArray = [dataAsString componentsSeparatedByString:@"/Type (EEbas"];
+  if (testArray && ([testArray count] >= 2))
   {
-    NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-    NSArray* testArray = nil;
-  
-    NSMutableString* baselineAsString = @"0";
-    testArray = [dataAsString componentsSeparatedByString:@"/Type (EEbas"];
-    if (testArray && ([testArray count] >= 2))
-    {
-      [baselineAsString setString:[testArray objectAtIndex:1]];
-      NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
-      range.length = (range.location != NSNotFound) ? [baselineAsString length]-range.location : 0;
-      [baselineAsString deleteCharactersInRange:range];
-    }
-    baseline = [baselineAsString doubleValue];
+    [baselineAsString setString:[testArray objectAtIndex:1]];
+    NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
+    range.length = (range.location != NSNotFound) ? [baselineAsString length]-range.location : 0;
+    [baselineAsString deleteCharactersInRange:range];
   }
+  baseline = [baselineAsString doubleValue];
   
   //then, we rewrite the pdfData
   #ifndef PANTHER
-  pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+  PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
   NSDictionary* attributes =
     [NSDictionary dictionaryWithObjectsAndKeys:
-       [NSArray arrayWithObjects:
-          preamble ? [preamble string]: [NSString string],
-          sourceText ? [sourceText string]: [NSString string],
-          [color rgbaString],
-          [NSString stringWithFormat:@"%f", pointSize],
-          [NSString stringWithFormat:@"%d", mode],
-          [NSString stringWithFormat:@"%f", baseline],
-          backgroundColor ? [backgroundColor rgbaString] : [[NSColor whiteColor] rgbaString],
-          nil], PDFDocumentKeywordsAttribute,
        [NSApp applicationName], PDFDocumentCreatorAttribute,
        nil];
   [pdfDocument setDocumentAttributes:attributes];
