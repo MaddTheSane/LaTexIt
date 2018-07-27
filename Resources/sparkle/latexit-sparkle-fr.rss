@@ -299,5 +299,28 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         sparkle:dsaSignature="MCwCFGTXMCfaf0+KobsF9tWsl7T0nTdfAhRtUvH62WsS6juivkTLc0iaL2bZuw=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.1</guid>
+      <title>Version 2.5.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>correction d'un bug de migration de bibliothèque vers le format 2.5.0&nbsp;;</li>
+          <li>possibilité de scrolling dans la zone image&nbsp;;</li>
+          <li>utilisation de gs-noX11 de préférence à gs&nbsp;;</li>
+          <li>adapté aux écrans rétina&nbsp;;</li>
+          <li>possibilité de fermer, suspendre, reprendre un lien Linkback.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.1</sparkle:releaseNotesLink>
+			<pubDate>Wed, 16 Jan 2013 22:22:50 +0100</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_1.dmg"
+        sparkle:version="2.5.1"
+        sparkle:shortVersionString="2.5.1"
+        type="application/octet-stream"
+        length="9908547"
+        sparkle:dsaSignature="MCwCFHcmgI/y/DOfg/IhNMJC6jY8tHDoAhR8CpD9l/L4+z7tpxOH9qVSVHzhLQ=="
+			/>
+    </item>
   </channel> 
 </rss>

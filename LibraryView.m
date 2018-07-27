@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -87,12 +87,17 @@
 
 -(NSImage*) iconForRepresentedObject:(id)representedObject
 {
-  NSImage* result =
-    [representedObject isKindOfClass:[LibraryEquation class]] ? [NSImage imageNamed:@"icon-file.png"] :
-    [representedObject isKindOfClass:[LibraryGroupItem   class]] ? 
+  NSImage* result = nil;
+  static NSImage* folderIcon = nil;
+  if (!folderIcon)
+    //folderIcon = [[[NSWorkspace sharedWorkspace] iconForFile:[[NSBundle mainBundle] resourcePath]] copy];
+    folderIcon = [[[NSWorkspace sharedWorkspace] iconForFileType:NSFileTypeForHFSTypeCode(kGenericFolderIcon)] copy];
+  result =
+    [representedObject isKindOfClass:[LibraryEquation class]] ? [NSImage imageNamed:@"icon-file"] :
+    [representedObject isKindOfClass:[LibraryGroupItem class]] ? 
       (self->libraryRowType == LIBRARY_ROW_IMAGE_LARGE) ?
-        [NSImage imageNamed:@"icon-folder-big.tiff"] :
-        [NSImage imageNamed:@"icon-folder-small.png"] :
+        folderIcon :
+        folderIcon :
     nil;
   return result;
 }

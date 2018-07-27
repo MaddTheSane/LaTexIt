@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 17/06/11.
-//  Copyright 2011 LAIC. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquationData.h"

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -62,9 +62,7 @@
   LibraryWindowController*                   libraryWindowController;
   MarginsWindowController*                   marginsWindowController;
   PreferencesWindowController*               preferencesWindowController;
-  
-  NSMutableSet* linkbackLinks;
-  
+    
   int  checkLevel;
   BOOL updateGUIFlag;
   BOOL shouldOpenInstallLaTeXHelp;
@@ -94,6 +92,8 @@
 -(IBAction) checkUpdates:(id)sender;//check for updates on LaTeXiT's web site
 
 -(IBAction) newFromClipboard:(id)sender;
+-(IBAction) closeDocumentLinkBackLink:(id)sender;
+-(IBAction) toggleDocumentLinkBackLink:(id)sender;
 -(IBAction) copyAs:(id)sender;
 
 -(IBAction) openFile:(id)sender;

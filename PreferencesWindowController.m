@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -162,7 +162,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSEnumerator* enumerator = [compositionConfigurationsCurrentAdvancedButtons objectEnumerator];
     NSButton* button = nil;
     while((button = [enumerator nextObject]))
-      [button setImage:[NSImage imageNamed:@"NSActionTemplate10_4.png"]];
+      [button setImage:[NSImage imageNamed:@"NSActionTemplate10_4"]];
   }//end if (!isMacOS10_5OrAbove())
   
   NSToolbar* toolbar = [[NSToolbar alloc] initWithIdentifier:@"preferencesToolbar"];
@@ -871,59 +871,59 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     item = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
     
     NSString* label = nil;
-    NSString* imagePath = nil;
+    NSImage* image = nil;
     if ([itemIdentifier isEqualToString:GeneralToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"generalToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"generalToolbarItem"];
       label = NSLocalizedString(@"General", @"General");
     }
     else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"editionToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"editionToolbarItem"];
       label = NSLocalizedString(@"Edition", @"Edition");
     }
     else if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"templatesToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"templatesToolbarItem"];
       label = NSLocalizedString(@"Templates", @"Templates");
     }
     else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"compositionToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"compositionToolbarItem"];
       label = NSLocalizedString(@"Composition", @"Composition");
     }
     else if ([itemIdentifier isEqualToString:LibraryToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"libraryToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"libraryToolbarItem"];
       label = NSLocalizedString(@"Library", @"Library");
     }
     else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"historyToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"historyToolbarItem"];
       label = NSLocalizedString(@"History", @"History");
     }
     else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"serviceToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"serviceToolbarItem"];
       label = NSLocalizedString(@"Service", @"Service");
     }
     else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"advancedToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"advancedToolbarItem"];
       label = NSLocalizedString(@"Advanced", @"Advanced");
     }
     else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"webToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"webToolbarItem"];
       label = NSLocalizedString(@"Web", @"Web");
     }
     else if ([itemIdentifier isEqualToString:PluginsToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"pluginsToolbarItem" ofType:@"tiff"];
+      image = [NSImage imageNamed:@"pluginsToolbarItem"];
       label = NSLocalizedString(@"Plugins", @"Plugins");
     }
     [item setLabel:label];
-    [item setImage:[[[NSImage alloc] initWithContentsOfFile:imagePath] autorelease]];
+    [item setImage:image];
 
     [item setTarget:self];
     [item setAction:@selector(toolbarHit:)];

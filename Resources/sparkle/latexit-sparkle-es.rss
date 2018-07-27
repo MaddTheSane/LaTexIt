@@ -279,12 +279,12 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       <title>Version 2.5.0</title>
       <description><![CDATA[
         <ul>
-          <li>deshabilitado el modo de 64 bits para evitar problemas con versiones antiguas de MacOS X; puede compilarse con este modo habilitado para aquellos realmente lo deseen ;</li>
-          <li>nuevo modelo de datos para el historial y la librería, se reducen así el tiempo de carga y los recursos usados ;</li>
-          <li>corregido el Servicio: el alineamiento con la linea base no funcionaba ;</li>
-          <li>se pide confirmación al restablecer el preámbulo ;</li>
-          <li>para evitar errores, eliminar un elemento de la librería se usa ⌘⌫ (Comando+Retroceso) en vez de solamente ⌫ ;</li>
-          <li>corregidos errores que aparecieron con MacOS 10.7 ;</li>
+          <li>deshabilitado el modo de 64 bits para evitar problemas con versiones antiguas de MacOS X; puede compilarse con este modo habilitado para aquellos realmente lo deseen&nbsp;;</li>
+          <li>nuevo modelo de datos para el historial y la librería, se reducen así el tiempo de carga y los recursos usados&nbsp;;</li>
+          <li>corregido el Servicio: el alineamiento con la linea base no funcionaba&nbsp;;</li>
+          <li>se pide confirmación al restablecer el preámbulo&nbsp;;</li>
+          <li>para evitar errores, eliminar un elemento de la librería se usa ⌘⌫ (Comando+Retroceso) en vez de solamente ⌫&nbsp;;</li>
+          <li>corregidos errores que aparecieron con MacOS 10.7&nbsp;;</li>
           <li>Traducción al Italiana.</li>
         </ul>
       ]]></description>
@@ -297,6 +297,29 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         type="application/octet-stream"
         length="7323537"
         sparkle:dsaSignature="MCwCFGTXMCfaf0+KobsF9tWsl7T0nTdfAhRtUvH62WsS6juivkTLc0iaL2bZuw=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.5.1</guid>
+      <title>Version 2.5.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>corregido un bug en la migración de la libraría al formato 2.5.0&nbsp;;</li>
+          <li>ahora se puede hacer scroll en la zona de la imagen&nbsp;;</li>
+          <li>ahora se usará gs-noX11 en vez de gs, si está disponible&nbsp;;</li>
+          <li>gráficos adaptados a pantallas retina&nbsp;;</li>
+          <li>Es posible cerrar, suspender o continuar con un enlace Linkback.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.5.1</sparkle:releaseNotesLink>
+			<pubDate>Wed, 16 Jan 2013 22:22:50 +0100</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_1.dmg"
+        sparkle:version="2.5.1"
+        sparkle:shortVersionString="2.5.1"
+        type="application/octet-stream"
+        length="9908547"
+        sparkle:dsaSignature="MCwCFHcmgI/y/DOfg/IhNMJC6jY8tHDoAhR8CpD9l/L4+z7tpxOH9qVSVHzhLQ=="
 			/>
     </item>
   </channel> 

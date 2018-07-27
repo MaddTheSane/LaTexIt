@@ -4,7 +4,7 @@
     <title>LaTeXiT Changelog</title>
     <link>http://pierre.chachatelier.fr/latexit/latexit-downloads.php?lang=en</link>
     <description><![CDATA[Updates and downoad links.]]></description>
-    <language>en</language>
+    <language>it</language>
     <item>
       <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-1.15.0</guid>
       <title>Version 1.15.0</title>
@@ -297,6 +297,29 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         type="application/octet-stream"
         length="7323537"
         sparkle:dsaSignature="MCwCFGTXMCfaf0+KobsF9tWsl7T0nTdfAhRtUvH62WsS6juivkTLc0iaL2bZuw=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.5.1</guid>
+      <title>Version 2.5.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>Corretto un bug nella libreria migration al formato 2.5.0;</li>
+          <li>Puoi ora scorrere nell'area immagine;</li>
+          <li>Se presente, gs-noX11 deve preferirsi a gs;</li>
+          <li>Grafica adattata al display retina;</li>
+          <li>Capacità di chiudere, sospendere o riesumare un link Linkback.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.5.1</sparkle:releaseNotesLink>
+			<pubDate>Wed, 16 Jan 2013 22:22:50 +0100</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_1.dmg"
+        sparkle:version="2.5.1"
+        sparkle:shortVersionString="2.5.1"
+        type="application/octet-stream"
+        length="9908547"
+        sparkle:dsaSignature="MCwCFHcmgI/y/DOfg/IhNMJC6jY8tHDoAhR8CpD9l/L4+z7tpxOH9qVSVHzhLQ=="
 			/>
     </item>
   </channel> 

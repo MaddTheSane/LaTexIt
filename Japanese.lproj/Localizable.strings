@@ -7,7 +7,7 @@
 "none" = "なし";
 "default" = "デフォルト";
 "Copy of %@" = "%@ のコピー";
-"Read Me" = "私の記事を読む";
+"Read Me" = "お読みください";
 "History" = "履歴";
 "Clear History" = "履歴を消去";
 "Remove all" = "すべてを削除";
@@ -81,6 +81,10 @@
 "http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "他のアプリケーションとリンクしている数式";
 "Equation linked with library item" = "ライブラリ項目にリンクした数式";
+"The Linkback link is active" = "LinkBackでリンクしています";
+"The Linkback link is suspended" = "LinkBackのリンクを停止しています";
+"Suspend Linkback link" = "LinkBackのリンクを停止する";
+"Resume Linkback link" = "LinkBackのリンクを再開";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT は正しく動作しません。設定を確認してください";
 "Do you want to load the library <%@> ?" = "ライブラリ <%@> をロードしますか？";
 "If you choose <Replace the library>, the current library will be lost" = " <ライブラリを置き換える> を選択すると、現在のライブラリは失われます";

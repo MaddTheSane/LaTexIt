@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -43,6 +43,7 @@
   IBOutlet NSTextField*         lowerBoxControlsBoxFontSizeTextField;
   IBOutlet NSTextField*         lowerBoxControlsBoxFontColorLabel;
   IBOutlet NSColorWell*         lowerBoxControlsBoxFontColorWell;
+  IBOutlet NSButton*            lowerBoxLinkbackButton;
   IBOutlet NSButton*            lowerBoxLatexizeButton;
 
   IBOutlet NSNumberFormatter*   pointSizeFormatter;
@@ -56,14 +57,15 @@
   NSSize           documentMiniMinimumSize;
   NSSize           lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize;
   document_style_t documentStyle;
-  unsigned long    uniqueId;
+  NSUInteger       uniqueId;
   NSDictionary*    lastRequestedBodyTemplate;
   
   NSMutableString* lastExecutionLog;
 
-  LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
+  LinkBack*        linkBackLink;//linkBack link, may be nil (most of the time, in fact)
   LibraryEquation* linkedLibraryEquation;
   BOOL             isObservingLibrary;
+  BOOL             linkBackAllowed;
 
   NSString* initialUTI;
   NSData*   initialData;
@@ -148,7 +150,8 @@
 //linkback live link management
 -(LinkBack*) linkBackLink;
 -(void) setLinkBackLink:(LinkBack*)link;
--(void) closeLinkBackLink:(LinkBack*)link;
+-(BOOL) linkBackAllowed;
+-(void) setLinkBackAllowed:(BOOL)value;
 
 -(LibraryEquation*) linkedLibraryEquation;
 -(void) setLinkedLibraryEquation:(LibraryEquation*)libraryEquation;

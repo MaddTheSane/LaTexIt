@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -117,8 +117,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->libraryPreviewPanel setOpaque:NO];
   [self->libraryPreviewPanel setHasShadow:YES];
 
-  [self->actionButton setImage:[NSImage imageNamed:@"action.tiff"]];
-  [self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed.tiff"]];
+  [self->actionButton setImage:[NSImage imageNamed:@"action"]];
+  [self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed"]];
   
   [self->libraryRowTypeSegmentedControl bind:NSSelectedTagBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryViewRowTypeKey] options:nil];
@@ -622,6 +622,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 //end windowDidResignKey:
 
 #pragma mark menu delegate to fix an interface bug
--(void) menuWillOpen:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed.tiff"]];}
--(void) menuDidClose:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action.tiff"]];}
+-(void) menuWillOpen:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed"]];}
+-(void) menuDidClose:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action"]];}
 @end

@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -27,8 +27,7 @@
 #import <OSAKit/OSAKit.h>
 #import "RegexKitLite.h"
 
-static unsigned long firstFreeUniqueIdentifier = 1;
-static NSMutableSet* freeIds = nil;
+static NSMutableIndexSet* freeIds = nil;
 
 typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORARY_FOLDER} equationDestination_t;
 
@@ -40,40 +39,38 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 
 +(void) initialize
 {
-  @synchronized(self)
+  if (!freeIds)
   {
-    if (!freeIds)
+    @synchronized(self)
     {
-      freeIds = [[NSMutableSet alloc] init];
-      [KeyedUnarchiveFromDataTransformer initialize];//seems needed on Tiger
-    }
-  }
+      if (!freeIds)
+      {
+        freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, NSNotFound-1)];
+        [KeyedUnarchiveFromDataTransformer initialize];//seems needed on Tiger
+      }//end if (!freeIds)
+    }//end @synchronized(self)
+  }//end if (!freeIds)
 }
 //end initialize
 
-+(unsigned long) getNewIdentifier
++(NSUInteger) getNewIdentifier
 {
-  unsigned long result = 0;
+  NSUInteger result = 0;
   @synchronized(freeIds)
   {
-    if ([freeIds count])
-      result = [[freeIds anyObject] unsignedLongValue];
-    else
-      result = firstFreeUniqueIdentifier++;
-  }
+    result = [freeIds firstIndex];
+    [freeIds removeIndex:result];
+  }//end @synchronized(freeIds)
   return result;
 }
 //end getNewIdentifier
 
-+(void) releaseIdentifier:(unsigned long)identifier
++(void) releaseIdentifier:(NSUInteger)identifier
 {
   @synchronized(freeIds)
   {
-    if (identifier+1 == firstFreeUniqueIdentifier)
-      --firstFreeUniqueIdentifier;
-    else
-      [freeIds addObject:[NSNumber numberWithUnsignedLong:identifier]];
-  }
+    [freeIds addIndex:identifier];
+  }//end @synchronized(freeIds)
 }
 //end getNewIdentifier
 

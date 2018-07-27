@@ -4,7 +4,7 @@
     <title>LaTeXiT Changelog</title>
     <link>http://pierre.chachatelier.fr/latexit/latexit-downloads.php?lang=en</link>
     <description><![CDATA[Updates und Download-Links.]]></description>
-    <language>en</language>
+    <language>de</language>
     <item>
       <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-1.15.0</guid>
       <title>Version 1.15.0</title>
@@ -298,6 +298,29 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
         type="application/octet-stream"
         length="7323537"
         sparkle:dsaSignature="MCwCFGTXMCfaf0+KobsF9tWsl7T0nTdfAhRtUvH62WsS6juivkTLc0iaL2bZuw=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.5.1</guid>
+      <title>Version 2.5.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>Fehlerbehebung bei der Migration der Bibliothek in das neue 2.5.0 Format&nbsp;;</li>
+          <li>Es ist nun möglich im Bild zu scrollen&nbsp;;</li>
+          <li>Falls vorhanden, wird nun gs-noX11 gegenüber gs bevorzugt&nbsp;;</li>
+          <li>Die Applikation ist nun angepasst an Macs mit Retina-Display&nbsp;;</li>
+          <li>Die Möglichkeit einen Linkback Link zu schließen, aufzuheben oder fortzusetzen.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-de.html#version-2.5.1</sparkle:releaseNotesLink>
+			<pubDate>Wed, 16 Jan 2013 22:22:50 +0100</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_1.dmg"
+        sparkle:version="2.5.1"
+        sparkle:shortVersionString="2.5.1"
+        type="application/octet-stream"
+        length="9908547"
+        sparkle:dsaSignature="MCwCFHcmgI/y/DOfg/IhNMJC6jY8tHDoAhR8CpD9l/L4+z7tpxOH9qVSVHzhLQ=="
 			/>
     </item>
   </channel> 

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -10,6 +10,7 @@
 
 #import "AdditionalFilesWindowController.h"
 #import "AppController.h"
+#import "BoolTransformer.h"
 #import "CGPDFExtras.h"
 #import "DocumentExtraPanelsController.h"
 #import "HistoryItem.h"
@@ -31,12 +32,14 @@
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSFontExtended.h"
+#import "NSObjectExtended.h"
 #import "NSOutlineViewExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "NSStringExtended.h"
 #import "NSTaskExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSViewExtended.h"
+#import "NSWindowExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "PreferencesWindowController.h"
@@ -49,11 +52,7 @@
 #import <Quartz/Quartz.h>
 #import "RegexKitLite.h"
 
-//useful to assign a unique id to each document
-static unsigned long firstFreeId = 1; //increases when documents are created
-
-//if a document is closed, its id becomes free, and we should consider reusing it instead of increasing firstFreeId
-static NSMutableArray* freeIds = nil;
+static NSMutableIndexSet* freeIds = nil;
 
 double yaxb(double x, double x0, double y0, double x1, double y1);
 double yaxb(double x, double x0, double y0, double x1, double y1)
@@ -66,8 +65,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 @interface MyDocument (PrivateAPI)
 
-+(unsigned long) _giveId; //returns a free id and marks it as used
-+(void) _releaseId:(unsigned long)anId; //releases an id
++(NSUInteger) _giveId; //returns a free id and marks it as used
++(void) _releaseId:(NSUInteger)anId; //releases an id
 
 -(DocumentExtraPanelsController*) lazyDocumentExtraPanelsController;
 
@@ -119,35 +118,36 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 +(void) initialize
 {
   if (!freeIds)
-    freeIds = [[NSMutableArray alloc] init];
+  {
+    @synchronized(self)
+    {
+      if (!freeIds)
+        freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, NSNotFound-1)];
+    }//end @synchronized(self)
+  }//end if (!freeIds)
 }
 //end initialize
 
 //returns a free id and marks it as used
-+(unsigned long) _giveId
++(NSUInteger) _giveId
 {
-  unsigned long anId = firstFreeId;
+  NSUInteger result = 0;
   @synchronized(freeIds)
   {
-    if ([freeIds count]) //first, look into recently released id
-    {
-      anId = [[freeIds lastObject] unsignedLongValue];
-      [freeIds removeLastObject];
-    }
-    else //if not available, use firstFreeId
-      ++firstFreeId;
-  }
-  return anId;
+    result = [freeIds firstIndex];
+    [freeIds removeIndex:result];
+  }//end @synchronized(freeIds)
+  return result;
 }
 //end _giveId
 
 //marks an id as free, and put it into the freeIds array
-+(void) _releaseId:(unsigned long)anId
++(void) _releaseId:(NSUInteger)anId
 {
   @synchronized(freeIds)
   {
-    [freeIds addObject:[NSNumber numberWithUnsignedLong:anId]];
-  }
+    [freeIds addIndex:anId];
+  }//end @synchronized(freeIds)
 }
 //end _releaseId:
 
@@ -171,7 +171,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [MyDocument _releaseId:self->uniqueId];
   [self->documentExtraPanelsController release];
-  [self closeLinkBackLink:self->linkBackLink];
+  [self setLinkBackLink:nil];
   [self closeLinkedLibraryEquation:self->linkedLibraryEquation];
   [self->upperBoxProgressIndicator release];
   [self->lastAppliedLibraryEquation release];
@@ -330,6 +330,18 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   [self->upperBoxZoomBoxSlider bind:NSValueBinding toObject:self->upperBoxImageView withKeyPath:@"zoomLevel" options:
     [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption, nil]];
 
+  [self->lowerBoxLinkbackButton bind:NSValueBinding toObject:self withKeyPath:@"linkBackAllowed" options:
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState]
+                                       trueValue:[NSNumber numberWithInt:NSOnState]], NSValueTransformerBindingOption,
+      nil]];
+  [self->lowerBoxLinkbackButton bind:NSEnabledBinding toObject:self withKeyPath:@"linkBackAllowed" options:
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithBool:NO]
+                                       trueValue:[NSNumber numberWithBool:NO]], NSValueTransformerBindingOption,
+      nil]];
+  [self->lowerBoxLinkbackButton setEnabled:NO];
+
   //the initial... variables has been set into a readFromFile
   if (self->initialPreamble)
   {
@@ -448,7 +460,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       
       [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSMiniControlSize];
       [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSMiniControlSize];
-
+      [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSMiniControlSize];
+      
       superviewFrame = [self->lowerBox frame];
       [self->lowerBoxSplitView setFrame:NSMakeRect(0,  34, superviewFrame.size.width, superviewFrame.size.height-34)];
       [self->lowerBoxSplitView setDividerThickness:0.];
@@ -489,6 +502,13 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [self->lowerBoxLatexizeButton setFrame:NSMakeRect(superviewFrame.size.width-lowerBoxLatexizeButtonFrame.size.width,
                                                  ([self->lowerBoxControlsBoxFontColorWell frame].size.height-lowerBoxLatexizeButtonFrame.size.height)/2,
                                                  lowerBoxLatexizeButtonFrame.size.width, lowerBoxLatexizeButtonFrame.size.height)];
+      lowerBoxLatexizeButtonFrame = [self->lowerBoxLatexizeButton frame];
+      NSRect lowerBoxLinkbackButtonFrame = [self->lowerBoxLinkbackButton frame];
+      [self->lowerBoxLinkbackButton setFrame:NSMakeRect(
+        lowerBoxLatexizeButtonFrame.origin.x-4-lowerBoxLinkbackButtonFrame.size.width,
+        lowerBoxLatexizeButtonFrame.origin.y+1+(lowerBoxLatexizeButtonFrame.size.height-lowerBoxLinkbackButtonFrame.size.height)/2,
+        lowerBoxLinkbackButtonFrame.size.width, lowerBoxLinkbackButtonFrame.size.height)];
+                                                 
       NSPanel* miniWindow =
         [[MyDocumentPanel alloc] initWithContentRect:[[window contentView] frame]
                                    styleMask:NSTitledWindowMask|NSUtilityWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
@@ -513,14 +533,17 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       }
       NSWindowController* windowController = [window windowController];
       [self retain];
+      [window setAnimationEnabled:NO];
       [window retain];
       [windowController setWindow:miniWindow];
       [windowController setDocument:self];
       [self release];
       [miniWindow setWindowController:windowController];
+      [miniWindow setAnimationEnabled:NO];
       [miniWindow makeKeyAndOrderFront:nil];
       [window close];
       [window release];
+      [miniWindow setAnimationEnabled:YES];
     }//end if (self->documentStyle == DOCUMENT_STYLE_MINI)
     else//if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
     {
@@ -544,6 +567,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         
         [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSRegularControlSize];
         [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSRegularControlSize];
+      [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSRegularControlSize];
+
 
         superviewFrame = [self->lowerBox frame];
         NSScrollView* sourceTextScrollView = (NSScrollView*)[[self->lowerBoxSourceTextView superview] superview];
@@ -591,6 +616,14 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                                                             NSMaxX([self->lowerBoxControlsBoxLatexModeSegmentedControl frame])-
                                                             lowerBoxLatexizeButtonFrame.size.width), 5,
                                                         lowerBoxLatexizeButtonFrame.size.width, lowerBoxLatexizeButtonFrame.size.height)];
+
+      lowerBoxLatexizeButtonFrame = [self->lowerBoxLatexizeButton frame];
+      NSRect lowerBoxLinkbackButtonFrame = [self->lowerBoxLinkbackButton frame];
+      [self->lowerBoxLinkbackButton setFrame:NSMakeRect(
+        lowerBoxLatexizeButtonFrame.origin.x+lowerBoxLatexizeButtonFrame.size.width-4,
+        lowerBoxLatexizeButtonFrame.origin.y+2+(lowerBoxLatexizeButtonFrame.size.height-lowerBoxLinkbackButtonFrame.size.height)/2,
+        lowerBoxLinkbackButtonFrame.size.width, lowerBoxLinkbackButtonFrame.size.height)];
+
       if (oldValue != DOCUMENT_STYLE_UNDEFINED)
       {
         NSWindow* normalWindow =
@@ -616,14 +649,17 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         }
         NSWindowController* windowController = [window windowController];
         [self retain];
+        [window setAnimationEnabled:NO];
         [window retain];
         [windowController setWindow:normalWindow];
         [windowController setDocument:self];
         [self release];
         [normalWindow setWindowController:windowController];
+        [normalWindow setAnimationEnabled:NO];
         [normalWindow makeKeyAndOrderFront:nil];
         [window close];
         [window release];
+        [normalWindow setAnimationEnabled:YES];
       }//end if (oldValue != DOCUMENT_STYLE_UNDEFINED)
     }//end if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
     
@@ -632,7 +668,6 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [toolbar setSizeMode:NSToolbarSizeModeSmall];
     [toolbar setVisible:NO];
     [[self windowForSheet] setToolbar:toolbar];
-
     
     [[PreferencesController sharedController] setDocumentStyle:self->documentStyle];
   }//end if (value != self->documentStyle)
@@ -1166,7 +1201,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:[self _checkEasterEgg]];
 
       //updates the pasteboard content for a live Linkback link, and triggers a sendEdit
-      [self->upperBoxImageView updateLinkBackLink:self->linkBackLink];
+      if ([self linkBackAllowed])
+        [self->upperBoxImageView updateLinkBackLink:self->linkBackLink];
     }//end if (!failed)
 
     //not busy any more
@@ -1720,25 +1756,47 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 {
   if (newLinkBackLink != self->linkBackLink)
   {
-    [self closeLinkBackLink:self->linkBackLink];
+    [self willChangeValueForKey:@"linkBackLink"];
+    LinkBack* oldLinkbackLink = self->linkBackLink;
+    self->linkBackLink = nil;
+    [oldLinkbackLink remoteCloseLink];
+    [oldLinkbackLink closeLink];
+    [oldLinkbackLink release];
     self->linkBackLink = [newLinkBackLink retain];
+    [self didChangeValueForKey:@"linkBackLink"];
+    NSWindow* window = [self windowForSheet];
+    if (window)
+    {
+      [self->lowerBoxLinkbackButton setHidden:!self->linkBackLink];
+      [self->lowerBoxLinkbackButton setEnabled:NO];
+      [self setLinkBackAllowed:(self->linkBackLink != nil)];
+      if (!self->linkBackLink)
+        [self setDocumentTitle:nil];
+    }//end if (window)
   }//end if (newLinkBackLink != self->linkBackLink)
 }
 //end setLinkBackLink:
 
-//if current linkBack link is aLink, then close it. Also close if aLink == nil
--(void) closeLinkBackLink:(LinkBack*)aLink
+-(BOOL) linkBackAllowed
 {
-  if (!aLink || (self->linkBackLink == aLink))
-  {
-    aLink = self->linkBackLink;
-    self->linkBackLink = nil;
-    [[AppController appController] closeLinkBackLink:aLink];
-    [aLink release];
-    [self setDocumentTitle:nil];
-  }
+  BOOL result = self->linkBackAllowed;
+  return result;
 }
-//end closeLinkBackLink:
+//end linkBackAllowed
+
+-(void) setLinkBackAllowed:(BOOL)value
+{
+  if (value != self->linkBackAllowed)
+  {
+    [self willChangeValueForKey:@"linkBackAllowed"];
+    self->linkBackAllowed = value;
+    [self didChangeValueForKey:@"linkBackAllowed"];
+    [self->lowerBoxLinkbackButton setToolTip: self->linkBackAllowed ?
+      NSLocalizedString(@"The Linkback link is active", @"The Linkback link is active") :
+      NSLocalizedString(@"The Linkback link is suspended", @"The Linkback link is suspended")];
+  }//end if (value != self->linkBackAllowed)
+}
+//end setLinkBackAllowed:
 
 -(LibraryEquation*) linkedLibraryEquation
 {

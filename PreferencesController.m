@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesController.h"
@@ -933,7 +933,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   int      preambleDocumentIndex = [self preambleDocumentIndex];
   NSDictionary* preamble = (0<=preambleDocumentIndex) && ((unsigned)preambleDocumentIndex<[preambles count]) ?
                            [preambles objectAtIndex:preambleDocumentIndex] : nil;
-  result = [NSKeyedUnarchiver unarchiveObjectWithData:[preamble objectForKey:@"value"]];
+  id preambleValue = [preamble objectForKey:@"value"];
+  result = !preambleValue ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:preambleValue];
+  if (!result)
+    result = [PreamblesController defaultLocalizedPreambleValueAttributedString];
   return result;
 }
 //end preambleDocumentAttributedString
@@ -945,7 +948,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   int      preambleServiceIndex = [self preambleServiceIndex];
   NSDictionary* preamble = (0<=preambleServiceIndex) && ((unsigned)preambleServiceIndex<[preambles count]) ?
                            [preambles objectAtIndex:preambleServiceIndex] : nil;
-  result = [NSKeyedUnarchiver unarchiveObjectWithData:[preamble objectForKey:@"value"]];
+  id preambleValue = [preamble objectForKey:@"value"];
+  result = !preambleValue ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:preambleValue];
+  if (!result)
+    result = [PreamblesController defaultLocalizedPreambleValueAttributedString];
   return result;
 }
 //end preambleServiceAttributedString

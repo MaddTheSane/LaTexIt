@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1129"/>
+			<integer value="81"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -259,6 +259,25 @@
 									<string key="NSTitle"/>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="728256076"/>
+									<reference key="NSMixedImage" ref="653550851"/>
+								</object>
+								<object class="NSMenuItem" id="217768929">
+									<reference key="NSMenu" ref="324556783"/>
+									<string key="NSTitle">Linkback Link schließen</string>
+									<string key="NSKeyEquiv">K</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="728256076"/>
+									<reference key="NSMixedImage" ref="653550851"/>
+								</object>
+								<object class="NSMenuItem" id="314966015">
+									<reference key="NSMenu" ref="324556783"/>
+									<bool key="NSIsAlternate">YES</bool>
+									<string key="NSTitle">Linkback Link aufheben</string>
+									<string key="NSKeyEquiv">K</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="728256076"/>
 									<reference key="NSMixedImage" ref="653550851"/>
@@ -2082,6 +2101,22 @@ dXR6YmFyA</string>
 					</object>
 					<int key="connectionID">1581</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">closeDocumentLinkBackLink:</string>
+						<reference key="source" ref="84392106"/>
+						<reference key="destination" ref="217768929"/>
+					</object>
+					<int key="connectionID">1586</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleDocumentLinkBackLink:</string>
+						<reference key="source" ref="84392106"/>
+						<reference key="destination" ref="314966015"/>
+					</object>
+					<int key="connectionID">1588</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2299,6 +2334,8 @@ dXR6YmFyA</string>
 							<reference ref="173392309"/>
 							<reference ref="259074912"/>
 							<reference ref="252450365"/>
+							<reference ref="217768929"/>
+							<reference ref="314966015"/>
 						</array>
 						<reference key="parent" ref="1019705435"/>
 					</object>
@@ -3040,6 +3077,16 @@ dXR6YmFyA</string>
 						<reference key="object" ref="800196801"/>
 						<reference key="parent" ref="1064276171"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1585</int>
+						<reference key="object" ref="217768929"/>
+						<reference key="parent" ref="324556783"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1587</int>
+						<reference key="object" ref="314966015"/>
+						<reference key="parent" ref="324556783"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3230,6 +3277,10 @@ dXR6YmFyA</string>
 				<boolean value="YES" key="1578.ImportedFromIB2"/>
 				<string key="158.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="158.ImportedFromIB2"/>
+				<string key="1585.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1585.ImportedFromIB2"/>
+				<string key="1587.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1587.ImportedFromIB2"/>
 				<string key="159.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="159.ImportedFromIB2"/>
 				<string key="160.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3301,10 +3352,10 @@ dXR6YmFyA</string>
 				<boolean value="YES" key="23.ImportedFromIB2"/>
 				<string key="231.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="231.ImportedFromIB2"/>
-				<string key="24.IBEditorWindowLastContentRect">{{612, 599}, {270, 123}}</string>
+				<string key="24.IBEditorWindowLastContentRect">{{708, 613}, {270, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
-				<string key="29.IBEditorWindowLastContentRect">{{269, 736}, {658, 20}}</string>
+				<string key="29.IBEditorWindowLastContentRect">{{180, 736}, {658, 20}}</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="29.ImportedFromIB2"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3320,6 +3371,7 @@ dXR6YmFyA</string>
 				<boolean value="YES" key="73.ImportedFromIB2"/>
 				<string key="79.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="79.ImportedFromIB2"/>
+				<string key="81.IBEditorWindowLastContentRect">{{268, 563}, {304, 173}}</string>
 				<string key="81.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="81.ImportedFromIB2"/>
 				<string key="82.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3333,7 +3385,7 @@ dXR6YmFyA</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1581</int>
+			<int key="maxID">1588</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3344,6 +3396,7 @@ dXR6YmFyA</string>
 						<string key="changeLatexMode:">id</string>
 						<string key="changeOpenFileType:">id</string>
 						<string key="checkUpdates:">id</string>
+						<string key="closeDocumentLinkBackLink:">id</string>
 						<string key="copyAs:">id</string>
 						<string key="displayLog:">id</string>
 						<string key="displaySponsors:">id</string>
@@ -3384,6 +3437,7 @@ dXR6YmFyA</string>
 						<string key="showOrHidePreamble:">id</string>
 						<string key="showPreferencesPane:">id</string>
 						<string key="switchMiniWindow:">id</string>
+						<string key="toggleDocumentLinkBackLink:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="changeLatexMode:">
@@ -3396,6 +3450,10 @@ dXR6YmFyA</string>
 						</object>
 						<object class="IBActionInfo" key="checkUpdates:">
 							<string key="name">checkUpdates:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="closeDocumentLinkBackLink:">
+							<string key="name">closeDocumentLinkBackLink:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="copyAs:">
@@ -3556,6 +3614,10 @@ dXR6YmFyA</string>
 						</object>
 						<object class="IBActionInfo" key="switchMiniWindow:">
 							<string key="name">switchMiniWindow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="toggleDocumentLinkBackLink:">
+							<string key="name">toggleDocumentLinkBackLink:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
@@ -4064,9 +4126,11 @@ dXR6YmFyA</string>
 						<string key="lowerBoxControlsBoxFontSizeTextField">NSTextField</string>
 						<string key="lowerBoxControlsBoxLatexModeSegmentedControl">NSSegmentedControl</string>
 						<string key="lowerBoxLatexizeButton">NSButton</string>
+						<string key="lowerBoxLinkbackButton">NSButton</string>
 						<string key="lowerBoxPreambleTextView">LineCountTextView</string>
 						<string key="lowerBoxSourceTextView">LineCountTextView</string>
 						<string key="lowerBoxSplitView">MySplitView</string>
+						<string key="pointSizeFormatter">NSNumberFormatter</string>
 						<string key="upperBox">NSBox</string>
 						<string key="upperBoxImageView">MyImageView</string>
 						<string key="upperBoxLogTableView">LogTableView</string>
@@ -4116,6 +4180,10 @@ dXR6YmFyA</string>
 							<string key="name">lowerBoxLatexizeButton</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxLinkbackButton">
+							<string key="name">lowerBoxLinkbackButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="lowerBoxPreambleTextView">
 							<string key="name">lowerBoxPreambleTextView</string>
 							<string key="candidateClassName">LineCountTextView</string>
@@ -4127,6 +4195,10 @@ dXR6YmFyA</string>
 						<object class="IBToOneOutletInfo" key="lowerBoxSplitView">
 							<string key="name">lowerBoxSplitView</string>
 							<string key="candidateClassName">MySplitView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="pointSizeFormatter">
+							<string key="name">pointSizeFormatter</string>
+							<string key="candidateClassName">NSNumberFormatter</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="upperBox">
 							<string key="name">upperBox</string>
@@ -4540,6 +4612,13 @@ dXR6YmFyA</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSWindowExtended.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">SUUpdater</string>
 					<string key="superclassName">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -4842,6 +4921,14 @@ dXR6YmFyA</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">AppKit.framework/Headers/NSMovieView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSNumberFormatter</string>
+					<string key="superclassName">NSFormatter</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">Foundation.framework/Headers/NSNumberFormatter.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

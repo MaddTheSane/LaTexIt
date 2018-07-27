@@ -82,6 +82,10 @@
 "http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "Ecuación enlazada con otra aplicación";
 "Equation linked with library item" = "Ecuacion enlazada con un elemento de la librería";
+"The Linkback link is active" = "El enlace Linkback está activo";
+"The Linkback link is suspended" = "El enlace Linkback está suspendido";
+"Suspend Linkback link" = "Suspender enlace Linkback";
+"Resume Linkback link" = "Continuar enlace Linkback";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT no puede ejecutarse correctamente, compruebe la configuración por favor";
 "Do you want to load the library <%@> ?" = "¿Quiere cargar la librearía <%@>?";
 "If you choose <Replace the library>, the current library will be lost" = "Si selecciona <Reemplazar librería>, la librería actual se perderá";

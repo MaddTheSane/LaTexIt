@@ -32,6 +32,20 @@ BOOL isMacOS10_6OrAbove(void)
 }
 //end isMacOS10_6OrAbove()
 
+BOOL isMacOS10_7OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6);
+  return result;
+}
+//end isMacOS10_7OrAbove()
+
+BOOL isMacOS10_8OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7);
+  return result;
+}
+//end isMacOS10_8OrAbove()
+
 NSString* GetMySVGPboardType(void)
 {
   return @"public.svg-image";

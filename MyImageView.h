@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -23,6 +23,7 @@ extern NSString* ImageDidChangeNotification;
   IBOutlet    MyDocument* document; //link to the parent document
   CGFloat     zoomLevel;
   NSData*     pdfData; //full pdfdata (that may contain meta-data like keywords, creator...)
+  NSSize      naturalPDFSize;
   NSImageRep* imageRep;
   NSColor*    backgroundColor; //useful to prevent image from blending with background. It is different from [self image] background
   NSMenu*     copyAsContextualMenu;
@@ -44,6 +45,7 @@ extern NSString* ImageDidChangeNotification;
 //the data is full pdfdata (that may contain meta-data like keywords, creator...)
 -(void) setPDFData:(NSData*)someData cachedImage:(NSImage*)cachedImage;
 -(NSData*) pdfData;
+-(NSSize) naturalPDFSize;
 
 -(NSColor*) backgroundColor;
 -(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem;

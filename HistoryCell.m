@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 //This class is the kind of cell used to display history items in the history drawer
 //It may take in account the different fields of an history item (image, date...)
@@ -129,6 +129,8 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
 
   NSRect textRect = NSMakeRect(headerRect.origin.x+(headerRect.size.width  - textSize.width ) / 2, headerRect.origin.y,
                                textSize.width, headerRect.size.height);
+  textRect.origin.x = MAX(headerRect.origin.x, textRect.origin.x);
+    
   BOOL isSelectedCell = NO;
   NSIndexSet* indexSet = [(NSTableView*)controlView selectedRowIndexes];
   NSUInteger index = [indexSet firstIndex];

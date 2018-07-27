@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2013 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -100,6 +100,7 @@
 -(void) _serviceMultiLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 -(void) _serviceDeLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 
+-(MyDocument*) documentForLink:(LinkBack*)link;
 @end
 
 @implementation AppController
@@ -175,7 +176,6 @@ static NSMutableDictionary* cachePaths = nil;
     if ((!(self = [super init])))
       return nil;
     appControllerInstance = self;
-    self->linkbackLinks = [[NSMutableSet alloc] init];
     [self _setEnvironment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment]];//performs a setenv()
 
     [self beginCheckUpdates];
@@ -193,34 +193,35 @@ static NSMutableDictionary* cachePaths = nil;
     */
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                                 @"pdflatex", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                                                 @"xelatex", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                                 @"latex", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                                 @"dvipdf", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                                 @"gs", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                                 @"ghostscript", @"executableDisplayName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                                 @"ps2pdf", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkColorStyWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:@"color.sty", @"path",
                                                                  [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
-                                                                 @"pdf2svg", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
     [configurationSemaphore Z];
     [configurationSemaphore release];
@@ -232,26 +233,27 @@ static NSMutableDictionary* cachePaths = nil;
       [NSNumber numberWithBool:YES], @"allowUIFindOnFailure",
       nil];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                                 @"pdflatex", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                                                 @"xelatex", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                                 @"latex", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                                 @"dvipdf", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                                 @"gs", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                                 @"ghostscript", @"executableDisplayName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                                 @"ps2pdf", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
     [self _checkColorStyWithConfiguration:configuration];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
-                                                                 @"pdf2svg", @"executableName",
+                                                                 [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
                                                                  [NSNumber numberWithBool:NO], @"allowUIAlertOnFailure",
                                                                  [NSNumber numberWithBool:NO], @"allowUIFindOnFailure",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
@@ -298,7 +300,6 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) dealloc
 {
-  [self->linkbackLinks release];
   [self->additionalFilesWindowController release];
   [self->compositionConfigurationWindowController release];
   [self->encapsulationsWindowController release];
@@ -699,19 +700,26 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end applicationDidFinishLaunching:
 
+/*-(NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
+{
+  NSApplicationTerminateReply result = NSTerminateNow;
+  NSEnumerator* enumerator = [[NSApp orderedDocuments] objectEnumerator];
+  MyDocument* document = nil;
+  while((document = [enumerator nextObject]))
+  {
+    [[document linkBackLink] remoteCloseLink];
+    [document setLinkBackLink:nil];
+  }//end for each document
+  return result;
+}
+//end applicationShouldTerminate*/
+
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
   [LinkBack retractServerWithName:[[NSWorkspace sharedWorkspace] applicationName]];
   
   [[NSWorkspace sharedWorkspace] closeApplicationWithBundleIdentifier:@"fr.club.ktd.LaTeXiT"];//LaTeXiT Helper
   
-  //close all linkback links
-  NSArray* allLinkBackLinks = [self->linkbackLinks allObjects];
-  NSEnumerator* enumerator = [allLinkBackLinks objectEnumerator];
-  LinkBack* link = nil;
-  while((link = [[enumerator nextObject] pointerValue]))
-    [self closeLinkBackLink:link];
-
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   BOOL visible = NO;
 
@@ -787,6 +795,19 @@ static NSMutableDictionary* cachePaths = nil;
         NSLocalizedString(@"Default Format", @"Default Format"),
         [self nameOfType:exportFormat]]];
     }
+  }
+  else if ([sender action] == @selector(closeDocumentLinkBackLink:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = ([myDocument linkBackLink] != nil);
+  }
+  else if ([sender action] == @selector(toggleDocumentLinkBackLink:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = ([myDocument linkBackLink] != nil);
+    [sender setTitle:(!ok || [myDocument linkBackAllowed]) ?
+      NSLocalizedString(@"Suspend Linkback link", @"Suspend Linkback link") :
+      NSLocalizedString(@"Resume Linkback link", @"Resume Linkback link")];
   }
   else if ([sender action] == @selector(exportImage:))
   {
@@ -1085,6 +1106,20 @@ static NSMutableDictionary* cachePaths = nil;
   }//end if (ok)
 }
 //end newFromClipboard:
+
+-(IBAction) closeDocumentLinkBackLink:(id)sender
+{
+  MyDocument* myDocument = (MyDocument*) [self currentDocument];
+  [myDocument setLinkBackLink:nil];
+}
+//end closeDocumentLinkBackLink:
+
+-(IBAction) toggleDocumentLinkBackLink:(id)sender
+{
+  MyDocument* myDocument = (MyDocument*) [self currentDocument];
+  [myDocument setLinkBackAllowed:![myDocument linkBackAllowed]];
+}
+//end toggleDocumentLinkBackLink:
 
 -(IBAction) openFile:(id)sender
 {
@@ -1676,30 +1711,37 @@ static NSMutableDictionary* cachePaths = nil;
 -(void) _findPathWithConfiguration:(id)configuration
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSString*      pathKey        = [configuration objectForKey:@"path"];
-  NSString*      executableName = [configuration objectForKey:@"executableName"];
-  NSFileManager* fileManager    = [NSFileManager defaultManager];
-  NSString*      proposedPath   = nil;
-  BOOL           useLoginShell  = NO;
+  NSString*      pathKey         = [configuration objectForKey:@"path"];
+  NSArray*       executableNames = [configuration objectForKey:@"executableNames"];
+  NSFileManager* fileManager     = [NSFileManager defaultManager];
+  NSString*      proposedPath    = nil;
+  BOOL           useLoginShell   = NO;
   @synchronized(preferencesController){
     proposedPath  = !pathKey ? nil : 
                     [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ? [preferencesController exportSvgPdfToSvgPath] :
                     [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
     useLoginShell = [[[preferencesController compositionConfigurationDocument] objectForKey:CompositionConfigurationUseLoginShellKey] boolValue];
-  }
+  }//end @synchronized(preferencesController)
   NSMutableArray* prefixes = [NSMutableArray arrayWithArray:[[LaTeXProcessor sharedLaTeXProcessor] unixBins]];
   [prefixes addObjectsFromArray:[NSArray arrayWithObjects:[proposedPath stringByDeletingLastPathComponent], nil]];
-  if (![fileManager fileExistsAtPath:proposedPath])
-    proposedPath = [self findUnixProgram:executableName tryPrefixes:prefixes environment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment] useLoginShell:useLoginShell];
-  if ([fileManager fileExistsAtPath:proposedPath])
+  NSEnumerator* executableNameEnumerator = [executableNames objectEnumerator];
+  NSString* executableName = nil;
+  BOOL found = NO;
+  while(!found && ((executableName = [executableNameEnumerator nextObject])))
   {
-    @synchronized(preferencesController){
-      if ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey])
-        [preferencesController setExportSvgPdfToSvgPath:proposedPath];
-      else if (pathKey)
-        [preferencesController setCompositionConfigurationDocumentProgramPath:proposedPath forKey:pathKey];
+    if (![fileManager fileExistsAtPath:proposedPath])
+      proposedPath = [self findUnixProgram:executableName tryPrefixes:prefixes environment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment] useLoginShell:useLoginShell];
+    if ([fileManager fileExistsAtPath:proposedPath])
+    {
+      found = YES;
+      @synchronized(preferencesController){
+        if ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey])
+          [preferencesController setExportSvgPdfToSvgPath:proposedPath];
+        else if (pathKey)
+          [preferencesController setCompositionConfigurationDocumentProgramPath:proposedPath forKey:pathKey];
+      }//end @synchronized(preferencesController)
     }//end @synchronized(preferencesController)
-  }//end @synchronized(preferencesController)
+  }//end for each executableName
 }
 //end _findPathWithConfiguration:(id)configuration
 
@@ -1747,7 +1789,8 @@ static NSMutableDictionary* cachePaths = nil;
            ((error < 127) || ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] && (error == ((unsigned char)-2))));
       *monitor = ok;
 
-      NSDictionary* recursiveConfiguration = [configuration subDictionaryWithKeys:[NSArray arrayWithObjects:@"path", @"executableName", @"monitor", nil]];
+      NSDictionary* recursiveConfiguration =
+        [configuration subDictionaryWithKeys:[NSArray arrayWithObjects:@"path", @"executableNames", @"monitor", nil]];
       BOOL allowFindOnFailure = [[configuration objectForKey:@"allowFindOnFailure"] boolValue];
       BOOL shouldFind = !ok && allowFindOnFailure;// && !pathProposedIsEmpty;
       if (shouldFind)
@@ -1762,18 +1805,21 @@ static NSMutableDictionary* cachePaths = nil;
       BOOL allowUIFindOnFailure  =
         !self->shouldOpenInstallLaTeXHelp && [[configuration objectForKey:@"allowUIFindOnFailure"] boolValue];
       BOOL retry = !(*monitor) && allowUIAlertOnFailure;
-      NSString* executableName = !retry ? nil : [configuration objectForKey:@"executableName"];
+      NSArray* executableNames = !retry ? nil : [configuration objectForKey:@"executableNames"];
+      NSString* executableDisplayName = [configuration objectForKey:@"executableDisplayName"];
+      if (!executableDisplayName)
+        executableDisplayName = [executableNames firstObject];
       while (retry)
       {
         retry = NO;
         int returnCode =
           NSRunAlertPanel(
             [NSString stringWithFormat:
-              NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"), executableName],
+              NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"), executableDisplayName],
             [NSString stringWithFormat:
               NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
-                                @"The current configuration of LaTeXiT requires %@ to work."), executableName],
-            !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), executableName],
+                                @"The current configuration of LaTeXiT requires %@ to work."), executableDisplayName],
+            !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), executableDisplayName],
             !allowUIFindOnFailure ? nil : NSLocalizedString(@"Cancel", @"Cancel"),
             !allowUIFindOnFailure ? nil : NSLocalizedString(@"What's that ?", @"What's that ?"),
             nil);
@@ -1973,29 +2019,27 @@ static NSMutableDictionary* cachePaths = nil;
 
 #pragma mark linkback
 
+-(MyDocument*) documentForLink:(LinkBack*)link
+{
+  MyDocument* result = nil;
+  NSEnumerator* enumerator = !link ? nil : [[NSApp orderedDocuments] objectEnumerator];
+  MyDocument* document = nil;
+  while((document = [enumerator nextObject]))
+  {
+    LinkBack* documentLink = [document linkBackLink];
+    if ((documentLink == link) || [[documentLink itemKey] isEqual:[link itemKey]])
+      result = document;
+    if (result)
+      break;
+  }//for each document
+  return result;
+}
+//end documentForLink:
+
 -(void) closeLinkBackLink:(LinkBack*)link
 {
-  [link retain];
-  @try{
-    NSValue* key = [NSValue valueWithPointer:link];
-    if ([self->linkbackLinks containsObject:key])
-    {
-      @try{
-        [self->linkbackLinks removeObject:key];
-        //[link remoteCloseLink];
-        [link closeLink];
-      }
-      @catch (NSException* e){
-        DebugLog(0, @"exception : %@", e);
-      }
-      NSArray* documents = [NSApp orderedDocuments];
-      [documents makeObjectsPerformSelector:@selector(closeLinkBackLink:) withObject:link];
-    }//end if ([self->linkbackLinks containsObject:key])
-  }
-  @catch (NSException* e){
-    DebugLog(0, @"exception : %@", e);
-  }
-  [link release];
+  MyDocument* document = [self documentForLink:link];
+  [document setLinkBackLink:nil];
 }
 //end closeLinkBackLink:
 
@@ -2008,7 +2052,6 @@ static NSMutableDictionary* cachePaths = nil;
 //a link back request will create a new document thanks to the available data, as historyItems
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link
 {
-  [self->linkbackLinks addObject:[NSValue valueWithPointer:link]];
   NSData* linkbackItemsData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
   NSArray* linkbackItems = [NSKeyedUnarchiver unarchiveObjectWithData:linkbackItemsData];
   id firstLinkBackItem = (linkbackItems && [linkbackItems count]) ? [linkbackItems objectAtIndex:0] : nil;
@@ -2018,35 +2061,22 @@ static NSMutableDictionary* cachePaths = nil;
     [firstLinkBackItem isKindOfClass:[LatexitEquation class]] ? firstLinkBackItem :
     nil;
 
-  MyDocument* documentForLink = nil;
-  //documentForLink = (MyDocument*) [self currentDocument];
-  NSEnumerator* enumerator = !link ? nil : [[NSApp orderedDocuments] objectEnumerator];
-  MyDocument* document = nil;
-  while((document = [enumerator nextObject]))
+  MyDocument* document = [self documentForLink:link];
+  if (!document)
+    document = (MyDocument*)[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+  if (document && latexitEquation)
   {
-    LinkBack* documentLink = [document linkBackLink];
-    if ((documentLink == link) || [[documentLink itemKey] isEqual:[link itemKey]])
-    {
-      documentForLink = document;
-      break;
-    }
-  }//for each document
-
-  if (!documentForLink)
-    documentForLink = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
-  if (documentForLink && latexitEquation)
-  {
-    if ([documentForLink linkBackLink] != link)
-      [documentForLink setLinkBackLink:link];//automatically closes previous links
-    [documentForLink applyLatexitEquation:latexitEquation isRecentLatexisation:NO]; //defines the state of the document
+    if ([document linkBackLink] != link)
+      [document setLinkBackLink:link];//automatically closes previous links
+    [document applyLatexitEquation:latexitEquation isRecentLatexisation:NO]; //defines the state of the document
     [NSApp activateIgnoringOtherApps:YES];
-    NSArray* windows = [documentForLink windowControllers];
+    NSArray* windows = [document windowControllers];
     NSWindow* window = [[windows lastObject] window];
-    [documentForLink setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
+    [document setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
                                                         @"Equation linked with another application")];
     [window makeKeyAndOrderFront:self];
-    [window makeFirstResponder:[documentForLink preferredFirstResponder]];
-  }
+    [window makeFirstResponder:[document preferredFirstResponder]];
+  }//end if (document && latexitEquation)
 }
 //end linkBackClientDidRequestEdit:
 
@@ -2124,7 +2154,8 @@ static NSMutableDictionary* cachePaths = nil;
       {
         NSDictionary* documentAttributes = nil;
         NSData* pboardData = [pboard dataForType:NSRTFPboardType];
-        if (!pboardData) pboardData = [pboard dataForType:@"public.rtf"];
+        if (!pboardData)
+          pboardData = [pboard dataForType:@"public.rtf"];
         NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:pboardData
                                                                documentAttributes:&documentAttributes] autorelease];
 

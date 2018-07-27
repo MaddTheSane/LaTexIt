@@ -215,6 +215,7 @@
 																	</array>
 																	<string key="NSFrame">{{1, 17}, {327, 173}}</string>
 																	<reference key="NSSuperview" ref="763887775"/>
+																	<reference key="NSNextKeyView" ref="170265239"/>
 																	<reference key="NSDocView" ref="170265239"/>
 																	<object class="NSColor" key="NSBGColor" id="814303051">
 																		<int key="NSColorSpace">6</int>
@@ -253,6 +254,7 @@
 																	</array>
 																	<string key="NSFrame">{{1, 0}, {327, 17}}</string>
 																	<reference key="NSSuperview" ref="763887775"/>
+																	<reference key="NSNextKeyView" ref="1023917187"/>
 																	<reference key="NSDocView" ref="1023917187"/>
 																	<reference key="NSBGColor" ref="814303051"/>
 																	<int key="NScvFlags">4</int>
@@ -261,6 +263,7 @@
 															</array>
 															<string key="NSFrameSize">{344, 206}</string>
 															<reference key="NSSuperview" ref="121625717"/>
+															<reference key="NSNextKeyView" ref="978084520"/>
 															<int key="NSsFlags">50</int>
 															<reference key="NSVScroller" ref="894818366"/>
 															<reference key="NSHScroller" ref="592838676"/>
@@ -539,6 +542,7 @@
 															<string key="NSFrame">{{1, 1}, {327, 0}}</string>
 															<string key="NSBounds">{{0, -98}, {327, 0}}</string>
 															<reference key="NSSuperview" ref="185973706"/>
+															<reference key="NSNextKeyView" ref="307598423"/>
 															<reference key="NSDocView" ref="307598423"/>
 															<reference key="NSBGColor" ref="896349468"/>
 															<object class="NSCursor" key="NSCursor" id="767769428">
@@ -571,6 +575,7 @@
 													</array>
 													<string key="NSFrameSize">{344, 0}</string>
 													<reference key="NSSuperview" ref="569454359"/>
+													<reference key="NSNextKeyView" ref="429951870"/>
 													<int key="NSsFlags">82</int>
 													<reference key="NSVScroller" ref="120095823"/>
 													<reference key="NSHScroller" ref="295184574"/>
@@ -651,6 +656,7 @@
 															</array>
 															<string key="NSFrame">{{1, 1}, {327, 179}}</string>
 															<reference key="NSSuperview" ref="241629014"/>
+															<reference key="NSNextKeyView" ref="613217641"/>
 															<reference key="NSDocView" ref="613217641"/>
 															<reference key="NSBGColor" ref="896349468"/>
 															<reference key="NSCursor" ref="767769428"/>
@@ -679,6 +685,7 @@
 													</array>
 													<string key="NSFrame">{{0, 9}, {344, 181}}</string>
 													<reference key="NSSuperview" ref="569454359"/>
+													<reference key="NSNextKeyView" ref="290360062"/>
 													<int key="NSsFlags">18</int>
 													<reference key="NSVScroller" ref="385998648"/>
 													<reference key="NSHScroller" ref="195391988"/>
@@ -918,6 +925,34 @@
 																<reference key="NSAlternateImage" ref="190971347"/>
 																<string key="NSAlternateContents"/>
 																<string key="NSKeyEquivalent">l</string>
+																<int key="NSPeriodicDelay">200</int>
+																<int key="NSPeriodicInterval">25</int>
+															</object>
+														</object>
+														<object class="NSButton" id="323430578">
+															<reference key="NSNextResponder" ref="981883202"/>
+															<int key="NSvFlags">-2147483359</int>
+															<string key="NSFrame">{{367, 15}, {16, 16}}</string>
+															<reference key="NSSuperview" ref="981883202"/>
+															<bool key="NSEnabled">YES</bool>
+															<object class="NSButtonCell" key="NSCell" id="501559206">
+																<int key="NSCellFlags">-1543373312</int>
+																<int key="NSCellFlags2">0</int>
+																<string key="NSContents"/>
+																<reference key="NSSupport" ref="190971347"/>
+																<reference key="NSControlView" ref="323430578"/>
+																<int key="NSButtonFlags">-931905281</int>
+																<int key="NSButtonFlags2">2</int>
+																<object class="NSCustomResource" key="NSNormalImage">
+																	<string key="NSClassName">NSImage</string>
+																	<string key="NSResourceName">linkback-off</string>
+																</object>
+																<object class="NSCustomResource" key="NSAlternateImage">
+																	<string key="NSClassName">NSImage</string>
+																	<string key="NSResourceName">linkback-on</string>
+																</object>
+																<string key="NSAlternateContents"/>
+																<string key="NSKeyEquivalent"/>
 																<int key="NSPeriodicDelay">200</int>
 																<int key="NSPeriodicInterval">25</int>
 															</object>
@@ -1454,6 +1489,14 @@
 					</object>
 					<int key="connectionID">1154</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">lowerBoxLinkbackButton</string>
+						<reference key="source" ref="836413771"/>
+						<reference key="destination" ref="323430578"/>
+					</object>
+					<int key="connectionID">1157</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -1609,6 +1652,7 @@
 							<reference ref="116654036"/>
 							<reference ref="971498691"/>
 							<reference ref="546054709"/>
+							<reference ref="323430578"/>
 						</array>
 						<reference key="parent" ref="399680775"/>
 					</object>
@@ -1848,6 +1892,19 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">pointSizeFormatter</string>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1155</int>
+						<reference key="object" ref="323430578"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="501559206"/>
+						</array>
+						<reference key="parent" ref="822388931"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1156</int>
+						<reference key="object" ref="501559206"/>
+						<reference key="parent" ref="323430578"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -1921,6 +1978,11 @@
 				<boolean value="YES" key="1115.ImportedFromIB2"/>
 				<string key="1151.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1151.ImportedFromIB2"/>
+				<string key="1155.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<object class="NSAffineTransform" key="1155.IBViewBoundsToFrameTransform">
+					<bytes key="NSTransformStruct">P4AAAL+AAABDVwAAwfAAAA</bytes>
+				</object>
+				<string key="1156.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="169.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="169.ImportedFromIB2"/>
 				<string key="170.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1980,7 +2042,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1154</int>
+			<int key="maxID">1157</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2104,6 +2166,7 @@
 						<string key="lowerBoxControlsBoxFontSizeTextField">NSTextField</string>
 						<string key="lowerBoxControlsBoxLatexModeSegmentedControl">NSSegmentedControl</string>
 						<string key="lowerBoxLatexizeButton">NSButton</string>
+						<string key="lowerBoxLinkbackButton">NSButton</string>
 						<string key="lowerBoxPreambleTextView">LineCountTextView</string>
 						<string key="lowerBoxSourceTextView">LineCountTextView</string>
 						<string key="lowerBoxSplitView">MySplitView</string>
@@ -2155,6 +2218,10 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="lowerBoxLatexizeButton">
 							<string key="name">lowerBoxLatexizeButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxLinkbackButton">
+							<string key="name">lowerBoxLinkbackButton</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="lowerBoxPreambleTextView">
@@ -2540,6 +2607,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSWindowExtended.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -3306,6 +3380,8 @@
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="NSMenuCheckmark">{9, 8}</string>
 			<string key="NSMenuMixedState">{7, 2}</string>
+			<string key="linkback-off">{16, 16}</string>
+			<string key="linkback-on">{16, 16}</string>
 		</dictionary>
 	</data>
 </archive>
