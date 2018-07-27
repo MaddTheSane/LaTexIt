@@ -406,6 +406,43 @@ static NSMutableDictionary* cachePaths = nil;
   [donationPanel orderFront:sender];
 }
 
+-(IBAction) newFromClipboard:(id)sender
+{
+  NSData* data = nil;
+  NSString* filename = @"clipboard";
+  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    filename = [filename stringByAppendingPathExtension:@"pdf"];
+    data = [pasteboard dataForType:NSPDFPboardType];
+  }
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
+  {
+    filename = [filename stringByAppendingPathExtension:@"tex"];
+    data = [pasteboard dataForType:NSStringPboardType];
+  }
+  NSString* filepath = [[AppController latexitTemporaryPath] stringByAppendingPathComponent:filename];
+  BOOL ok = data ? [data writeToFile:filepath atomically:YES] : NO;
+  if (ok)
+  {
+    MyDocument* document =
+      #ifdef PANTHER
+      [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filepath display:NO];
+      #else
+      [[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:NO error:nil];
+      #endif
+    ok = [document readFromFile:filepath ofType:[filepath pathExtension]];
+    if (!ok)
+      [document close];
+    else
+    {
+      [document makeWindowControllers];
+      [document windowControllerDidLoadNib:[[document windowForSheet] windowController]];
+      [document showWindows];
+    }
+  }
+}
+
 -(IBAction) copyAs:(id)sender
 {
   int tag = [sender tag];
@@ -426,7 +463,12 @@ static NSMutableDictionary* cachePaths = nil;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
-  if ([sender action] == @selector(copyAs:))
+  if ([sender action] == @selector(newFromClipboard:))
+  {
+    ok = ([[NSPasteboard generalPasteboard] availableTypeFromArray:
+            [NSArray arrayWithObjects:NSPDFPboardType, NSStringPboardType, nil]] != nil);
+  }
+  else if ([sender action] == @selector(copyAs:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];

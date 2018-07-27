@@ -75,6 +75,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(IBAction) openWebSite:(id)sender;//ask for LaTeXiT's web site
 -(IBAction) checkUpdates:(id)sender;//check for updates on LaTeXiT's web site
 
+-(IBAction) newFromClipboard:(id)sender;
 -(IBAction) copyAs:(id)sender;
 -(IBAction) paste:(id)sender;
 

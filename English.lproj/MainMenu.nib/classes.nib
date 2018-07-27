@@ -17,6 +17,7 @@
                 librarySaveAs = id; 
                 makeDonation = id; 
                 makeLatex = id; 
+                newFromClipboard = id; 
                 openWebSite = id; 
                 paste = id; 
                 showHelp = id; 
