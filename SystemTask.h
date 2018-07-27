@@ -11,17 +11,17 @@
 
 @interface SystemTask : NSTask {
   NSTimeInterval timeOutLimit;
+  NSString*     tmpStdinFilePath;
   NSString*     tmpStdoutFilePath;
   NSString*     tmpStderrFilePath;
+  NSFileHandle* tmpStdinFileHandle;
   NSFileHandle* tmpStdoutFileHandle;
   NSFileHandle* tmpStderrFileHandle;
+  NSData*       stdInputData;
   NSDictionary* environment;
   NSString*     launchPath;
   NSArray*      arguments;
   NSString*     currentDirectoryPath;
-  id            standardInput;
-  id            standardOutput;
-  id            standardError;
   NSLock*       runningLock;
   int           terminationStatus;
   BOOL          selfExited;
@@ -31,14 +31,19 @@
 -(void) setLaunchPath:(NSString*)launchPath;
 -(void) setArguments:(NSArray*)arguments;
 -(void) setCurrentDirectoryPath:(NSString*)currentDirectoryPath;
--(void) setStandardInput:(id)standardInput;
--(void) setStandardOutput:(id)standardOutput;
--(void) setStandardError:(id)standardError;
+-(NSDictionary*) environment;
+-(NSString*)     launchPath;
+-(NSArray*)      arguments;
+-(NSString*)     currentDirectoryPath;
+
 -(void) setTimeOut:(NSTimeInterval)timeOut;
 -(NSString*) equivalentLaunchCommand;
 -(void) launch;
 -(void) waitUntilExit;
 -(int) terminationStatus;
+-(void) setStdInputData:(NSData*)data;
+-(NSData*) dataForStdOutput;
+-(NSData*) dataForStdError;
 -(BOOL) hasReachedTimeout;
 
 @end

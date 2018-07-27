@@ -339,7 +339,7 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.14.1"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.14.2"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -444,16 +444,26 @@ NSString* HistoryItemDidChangeNotification = @"HistoryItemDidChangeNotification"
       float factor = MIN(1.0f, 256.0f/MAX(1.0f, MAX(realSize.width, realSize.height)));
       NSSize newSize = NSMakeSize(factor*realSize.width, factor*realSize.height);
       //temporarily change size
-      [[[AppController appController] strangeLock] lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
-      [pdfImage setSize:newSize];
-      [pdfImage lockFocus];
-      NSBitmapImageRep* bitmapRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, newSize.width, newSize.height)]; 
-      bitmapCachedImage = [[NSImage alloc] initWithData:[bitmapRep TIFFRepresentation]];
+      NSBitmapImageRep* bitmapRep =
+        [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:newSize.width pixelsHigh:newSize.height
+                                             bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES
+                                                  isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace
+                                               bytesPerRow:0 bitsPerPixel:0];
+      [NSGraphicsContext saveGraphicsState];
+      #ifdef PANTHER
+      NSGraphicsContext* graphicsContext =
+        [NSGraphicsContext graphicsContextWithAttributes:
+          [NSDictionary dictionaryWithObject:bitmapRep forKey:NSGraphicsContextDestinationAttributeName]];
+      #else
+      NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithBitmapImageRep:bitmapRep];
+      #endif
+      [NSGraphicsContext setCurrentContext:graphicsContext];
+      [pdfImage drawInRect:NSMakeRect(0, 0, newSize.width, newSize.height) fromRect:NSMakeRect(0, 0, realSize.width, realSize.height)
+                 operation:NSCompositeCopy fraction:1.0];
+      [NSGraphicsContext restoreGraphicsState];
+      bitmapCachedImage = [[NSImage alloc] initWithSize:newSize];
+      [bitmapCachedImage addRepresentation:bitmapRep];
       [bitmapRep release];
-      //restore size
-      [pdfImage unlockFocus];
-      [pdfImage setSize:realSize];
-      [[[AppController appController] strangeLock] unlock];
     }
   }
   return bitmapCachedImage;

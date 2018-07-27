@@ -120,6 +120,7 @@ static NSMutableDictionary* cachePaths = nil;
     [NSArray arrayWithObjects:@"/bin", @"/sbin",
       @"/usr/bin", @"/usr/sbin",
       @"/usr/local/bin", @"/usr/local/sbin",
+      @"/usr/texbin", @"/usr/local/texbin",
       @"/sw/bin", @"/sw/sbin",
       @"/sw/usr/bin", @"/sw/usr/sbin",
       @"/sw/local/bin", @"/sw/local/sbin",
@@ -161,19 +162,13 @@ static NSMutableDictionary* cachePaths = nil;
     }
     
     //run the "set" command to get the environment variables
-    NSPipe* outputPipe = [NSPipe pipe];
-    NSTask* task = [[[NSTask alloc] init] autorelease];
-    NSData* ouputData = nil;
+    SystemTask* task = [[SystemTask alloc] init];
     [task setLaunchPath:@"/bin/bash"];
     [task setArguments:[NSArray arrayWithObjects:@"-l", @"-c", @"set", nil]];
-    [task setStandardOutput:outputPipe];
-    @try{
-      [task launch];
-      [task waitUntilExit];
-    }
-    @catch(NSException* e){
-    }
-    ouputData = [[outputPipe fileHandleForReading] availableData];
+    [task launch];
+    [task waitUntilExit];
+    NSData* ouputData = [task dataForStdOutput];
+    [task release];
     NSString* outputString = ouputData ? [[[NSString alloc] initWithData:ouputData encoding:NSUTF8StringEncoding] autorelease] : nil;
     NSEnumerator* linesEnumerator = [[outputString componentsSeparatedByString:@"\n"] objectEnumerator];
     NSString* line = nil;
@@ -272,7 +267,6 @@ static NSMutableDictionary* cachePaths = nil;
     if (![super init])
       return nil;
     appControllerInstance = self;
-    strangeLock = [[NSLock alloc] init];
     configurationSemaphore = [[Semaphore alloc] init];
     [self _setEnvironment];     //performs a setenv()
     [self _findGsPath];
@@ -308,7 +302,6 @@ static NSMutableDictionary* cachePaths = nil;
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [configurationSemaphore release];
-  [strangeLock release];
   [compositionConfigurationController release];
   [encapsulationController release];
   [historyController release];
@@ -318,9 +311,7 @@ static NSMutableDictionary* cachePaths = nil;
   [preferencesController release];
   [super dealloc];
 }
-//enddealloc
-
--(NSLock*) strangeLock {return strangeLock;}
+//end dealloc
 
 -(NSDocument*) currentDocument
 {
@@ -837,23 +828,20 @@ static NSMutableDictionary* cachePaths = nil;
   NSString* path = [cachePaths objectForKey:programName];
   if (!path)
     path = [self findUnixProgram:programName inPrefixes:prefixes];
-  
+
   if (!path) //if it is not...
   {
     //try to find it thanks to a "which" command
     NSString* whichPath = [self findUnixProgram:@"which" inPrefixes:unixBins];
-    NSTask* whichTask = [[NSTask alloc] init];
+    SystemTask* whichTask = [[SystemTask alloc] init];
     @try
     {
-      NSPipe* pipe = [NSPipe pipe];
-      NSFileHandle* readHandle = [pipe fileHandleForReading];
       [whichTask setEnvironment:environment];
-      [whichTask setStandardOutput:pipe];
       [whichTask setLaunchPath:whichPath];
       [whichTask setArguments:[NSArray arrayWithObject:programName]];
       [whichTask launch];
       [whichTask waitUntilExit];
-      NSData* data = [readHandle availableData];
+      NSData* data = [whichTask dataForStdOutput];
       path = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
       if ([path length])
       {
@@ -1858,10 +1846,8 @@ static NSMutableDictionary* cachePaths = nil;
             //[mutableAttributedStringWithImage appendAttributedString:space];
 
             //finally creates the rtdfData
-            [[self strangeLock] lock];
             NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:NSMakeRange(0, [mutableAttributedStringWithImage length])
                                                             documentAttributes:documentAttributes];
-            [[self strangeLock] unlock];
             //RTFd data
             [pboard addTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
             [pboard setData:rtfdData forType:NSRTFDPboardType];
@@ -2288,10 +2274,8 @@ static NSMutableDictionary* cachePaths = nil;
       }//if there were failures
       
       //Now we must feed the pasteboard
-      [[self strangeLock] lock];
       NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length])
                                        documentAttributes:documentAttributes];
-      [[self strangeLock] unlock];
       [pboard declareTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
       [pboard setData:rtfdData forType:NSRTFDPboardType];
     }//end @synchronized(self)
@@ -2548,9 +2532,7 @@ static NSMutableDictionary* cachePaths = nil;
       else if (format == EXPORT_FORMAT_EPS)
       {
         [pdfData writeToFile:pdfFilePath atomically:NO];
-        NSFileHandle* nullDevice = [NSFileHandle fileHandleWithNullDevice];
-        NSTask* gsTask = [[NSTask alloc] init];
-        NSPipe* errorPipe = [NSPipe pipe];
+        SystemTask* gsTask = [[SystemTask alloc] init];
         NSMutableString* errorString = [NSMutableString string];
         NSString* gsPath = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey];
         @try
@@ -2561,8 +2543,6 @@ static NSMutableDictionary* cachePaths = nil;
           [gsTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE", @"-dNOCACHE", @"-dBATCH", @"-sDEVICE=epswrite",
                                                          [NSString stringWithFormat:@"-sOutputFile=%@", tmpEpsFilePath],
                                                          pdfFilePath, nil]];
-          [gsTask setStandardOutput:nullDevice];
-          [gsTask setStandardError:errorPipe];
           [gsTask launch];
           [gsTask waitUntilExit];
         }
@@ -2572,7 +2552,7 @@ static NSMutableDictionary* cachePaths = nil;
         }
         @finally
         {
-          NSData*   errorData   = [[errorPipe fileHandleForReading] availableData];
+          NSData* errorData = [gsTask dataForStdError];
           [errorString appendString:[[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding] autorelease]];
 
           if ([gsTask terminationStatus] != 0)

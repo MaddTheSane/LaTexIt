@@ -550,47 +550,21 @@ static NSString* yenString = nil;
   NSFileManager* fileManager = [NSFileManager defaultManager];
   if ([fileManager fileExistsAtPath:pdfFilePath])
   {
-    NSString* directory      = [AppController latexitTemporaryPath];
+    NSString* directory = [AppController latexitTemporaryPath];
 
-    NSTask* boundingBoxTask  = [[NSTask alloc] init];
-    NSPipe* gs2awkPipe       = [NSPipe pipe];
-    NSPipe* outPipe          = [NSPipe pipe];
-    NSFileHandle* nullDevice = [NSFileHandle fileHandleWithNullDevice];
+    SystemTask* boundingBoxTask = [[SystemTask alloc] init];
     [boundingBoxTask setCurrentDirectoryPath:directory];
     [boundingBoxTask setEnvironment:[AppController environmentDict]];
     [boundingBoxTask setLaunchPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]];
     [boundingBoxTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE",@"-sDEVICE=bbox",@"-dBATCH",@"-q", pdfFilePath, nil]];
-    [boundingBoxTask setStandardOutput:gs2awkPipe];
-    [boundingBoxTask setStandardError:gs2awkPipe];
-    
-    NSTask* awkTask = [[NSTask alloc] init];
-    [awkTask setCurrentDirectoryPath:directory];
-    [awkTask setEnvironment:[AppController environmentDict]];
-    [awkTask setLaunchPath:[[AppController appController] findUnixProgram:@"awk" tryPrefixes:[AppController unixBins]
-                             environment:[awkTask environment]]];
-    [awkTask setArguments:[NSArray arrayWithObjects:@"-F:", @"/%%HiResBoundingBox/{printf \"%s\",substr($2, 2, length($2)-1)}", nil]];
-    [awkTask setStandardInput:gs2awkPipe];
-    [awkTask setStandardOutput:outPipe];
-    [awkTask setStandardError:nullDevice];
-
-    @try
-    {
-      [boundingBoxTask launch];
-      [awkTask         launch];
-      [boundingBoxTask waitUntilExit];
-      [awkTask         waitUntilExit];
-    }
-    @catch(NSException* e)
-    {
-    }
-    @finally
-    {
-      [boundingBoxTask release];
-      [awkTask         release];
-    }
-
-    NSData*   boundingBoxData   = [[outPipe fileHandleForReading] availableData];
+    [boundingBoxTask launch];
+    [boundingBoxTask waitUntilExit];
+    NSData*   boundingBoxData = [boundingBoxTask dataForStdError];
+    [boundingBoxTask release];
     NSString* boundingBoxString = [[[NSString alloc] initWithData:boundingBoxData encoding:NSUTF8StringEncoding] autorelease];
+    NSRange range = [boundingBoxString rangeOfString:@"%%HiResBoundingBox:"];
+    if (range.location != NSNotFound)
+      boundingBoxString = [boundingBoxString substringFromIndex:range.location+range.length];
     NSScanner* scanner = [NSScanner scannerWithString:boundingBoxString];
     NSRect tmpRect = NSZeroRect;
     [scanner scanFloat:&tmpRect.origin.x];
@@ -660,16 +634,12 @@ static NSString* yenString = nil;
   //if !failed and must call dvipdf...
   if (!failed && (compositionMode == COMPOSITION_MODE_LATEXDVIPDF))
   {
-    NSTask* dvipdfTask = [[NSTask alloc] init];
+    SystemTask* dvipdfTask = [[SystemTask alloc] init];
     [dvipdfTask setCurrentDirectoryPath:directory];
     [dvipdfTask setEnvironment:[AppController environmentDict]];
     [dvipdfTask setLaunchPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
     [dvipdfTask setArguments:[NSArray arrayWithObject:dviFile]];
-    NSPipe* stdoutPipe2 = [NSPipe pipe];
-    NSPipe* stderrPipe2 = [NSPipe pipe];
-    [dvipdfTask setStandardOutput:stdoutPipe2];
-    [dvipdfTask setStandardError:stderrPipe2];
-
+    NSString* executablePath = [[dvipdfTask launchPath] lastPathComponent];
     @try
     {
       [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
@@ -678,8 +648,8 @@ static NSString* yenString = nil;
                                                             [dvipdfTask commandLine]]];
       [dvipdfTask launch];
       [dvipdfTask waitUntilExit];
-      NSData* stdoutData = [[stdoutPipe2 fileHandleForReading] availableData];
-      NSData* stderrData = [[stderrPipe2 fileHandleForReading] availableData];
+      NSData* stdoutData = [dvipdfTask dataForStdOutput];
+      NSData* stderrData = [dvipdfTask dataForStdError];
       NSString* tmp = nil;
       tmp = stdoutData ? [[[NSString alloc] initWithData:stdoutData encoding:NSUTF8StringEncoding] autorelease] : nil;
       if (tmp)
@@ -708,7 +678,7 @@ static NSString* yenString = nil;
     if (failed)
       [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
                                  NSLocalizedString(@"error while processing", @"error while processing"),
-                                 [[dvipdfTask launchPath] lastPathComponent]]];
+                                 executablePath]];
 
   }//end of dvipdf call
   
@@ -1643,15 +1613,12 @@ static NSString* yenString = nil;
       case SCRIPT_SOURCE_FILE: scriptShell = @"/bin/sh"; break;
     }
 
-    NSPipe* pipeForOutput = [NSPipe pipe];
     SystemTask* task = [[[SystemTask alloc] init] autorelease];
     [task setCurrentDirectoryPath:directory];
     [task setEnvironment:environment];
     [task setLaunchPath:scriptShell];
     [task setArguments:[NSArray arrayWithObjects:@"-c", latexScriptPath, nil]];
     [task setCurrentDirectoryPath:[latexScriptPath stringByDeletingLastPathComponent]];
-    [task setStandardOutput:pipeForOutput];
-    [task setStandardError:pipeForOutput];
 
     [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
     [logString appendFormat:@"%@\n", [task equivalentLaunchCommand]];
@@ -1666,21 +1633,18 @@ static NSString* yenString = nil;
       else if ([task terminationStatus])
       {
         [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
-        NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
-                                                     encoding:encoding] autorelease];
+        NSString* outputLog = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
         [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
       }
       else
       {
-        NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
-                                                     encoding:encoding] autorelease];
+        NSString* outputLog = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
         [logString appendFormat:@"\n%@\n----------------------------------------------------\n", outputLog];
       }
     }//end try task
     @catch(NSException* e) {
         [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
-        NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
-                                                     encoding:encoding] autorelease];
+        NSString* outputLog = [[[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding] autorelease];
         [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
     }
   }//end if (source != SCRIPT_SOURCE_NONE)

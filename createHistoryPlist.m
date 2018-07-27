@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
   
   NSDictionary* newVersionDictionary =
     [NSDictionary dictionaryWithObjectsAndKeys:
-       @"1.14.1", @"number",
+       @"1.14.2", @"number",
        descriptions, @"descriptions",
        nil];
       

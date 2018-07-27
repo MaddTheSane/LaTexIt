@@ -19,6 +19,9 @@
 {
   if (![super init])
     return nil;
+  tmpStdinFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdinFilePath];
+  [tmpStdinFileHandle retain];
+  [tmpStdinFilePath   retain];
   tmpStdoutFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdoutFilePath];
   [tmpStdoutFileHandle retain];
   [tmpStdoutFilePath   retain];
@@ -36,12 +39,13 @@
   [launchPath           release];
   [arguments            release];
   [currentDirectoryPath release];
-  if (unlink([tmpStdoutFilePath UTF8String]))
-    perror("unlink:");
-  if (unlink([tmpStderrFilePath UTF8String]))
-    perror("unlink:");
+  unlink([tmpStdinFilePath UTF8String]);
+  unlink([tmpStdoutFilePath UTF8String]);
+  unlink([tmpStderrFilePath UTF8String]);
+  [tmpStdinFilePath   release];
   [tmpStdoutFilePath   release];
   [tmpStderrFilePath   release];
+  [tmpStdinFileHandle release];
   [tmpStdoutFileHandle release];
   [tmpStderrFileHandle release];
   [runningLock release];
@@ -81,29 +85,29 @@
 }
 //end setCurrentDirectoryPath:
 
--(void) setStandardInput:(id)object
+-(NSDictionary*) environment
 {
-  [object retain];
-  [standardInput release];
-  standardInput = object;
+  return environment;
 }
-//end setStandardInput:
+//end environment
 
--(void) setStandardOutput:(id)object
+-(NSString*) launchPath
 {
-  [object retain];
-  [standardOutput release];
-  standardOutput = object;
+  return launchPath;
 }
-//end setStandardOutput:
+//end launchPath
 
--(void) setStandardError:(id)object
+-(NSArray*) arguments
 {
-  [object retain];
-  [standardError release];
-  standardError = object;
+  return arguments;
 }
-//end setStandardError:
+//end arguments;
+
+-(NSString*) currentDirectoryPath
+{
+  return currentDirectoryPath;
+}
+//end currentDirectoryPath
 
 -(void) setTimeOut:(NSTimeInterval)value
 {
@@ -121,7 +125,7 @@
 {
   NSMutableString* systemCommand = [NSMutableString string];
   if (currentDirectoryPath)
-    [systemCommand appendFormat:@"cd %@ 1>|/dev/null 2>|1;", currentDirectoryPath];
+    [systemCommand appendFormat:@"cd %@ 1>|/dev/null 2>&1;", currentDirectoryPath];
   if (environment)
   {
     NSEnumerator* environmentEnumerator = [environment keyEnumerator];
@@ -129,14 +133,14 @@
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
       [exportedVariables appendFormat:@" %@=\"%@\"", variable, [environment objectForKey:variable]];
-    [systemCommand appendFormat:@"export %@ 1>|/dev/null 2>|1 || echo \"\" 1>|/dev/null 2>|1;", exportedVariables];
+    [systemCommand appendFormat:@"export %@ 1>|/dev/null 2>&1 || echo \"\" 1>|/dev/null 2>&1;", exportedVariables];
   }
   if (launchPath)
     [systemCommand appendFormat:@"%@", launchPath];
   if (arguments)
     [systemCommand appendFormat:@" %@", [arguments componentsJoinedByString:@" "]];
   if (tmpStdoutFilePath && tmpStderrFilePath)
-    [systemCommand appendFormat:@" 1>|%@ 2>|%@ </dev/null", tmpStdoutFilePath, tmpStderrFilePath];
+    [systemCommand appendFormat:@" 1>|%@ 2>|%@ <%@", tmpStdoutFilePath, tmpStderrFilePath, (stdInputData ? tmpStdinFilePath : @"/dev/null")];
   return [NSString stringWithString:systemCommand];
 }
 //end equivalentLaunchCommand
@@ -149,15 +153,6 @@
   {
     [runningLock lock];
     terminationStatus = system([systemCommand UTF8String]);
-    NSFileHandle* stdoutFileHandle =
-      [standardOutput isKindOfClass:[NSFileHandle class]] ? standardOutput :
-      [standardOutput isKindOfClass:[NSPipe class]] ? [standardOutput fileHandleForWriting] : nil;
-    NSFileHandle* stderrFileHandle =
-      [standardError isKindOfClass:[NSFileHandle class]] ? standardError :
-      [standardError isKindOfClass:[NSPipe class]] ? [standardError fileHandleForWriting] : nil;
-      
-    [stdoutFileHandle writeData:[tmpStdoutFileHandle availableData]];
-    [stderrFileHandle writeData:[tmpStderrFileHandle availableData]];
     [runningLock unlock];
   }
   else //if timeOutLimit
@@ -178,16 +173,6 @@
       wait(&status);
       selfExited = WIFEXITED(status) && !WIFSIGNALED(status);
       terminationStatus = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
-      NSFileHandle* stdoutFileHandle =
-        [standardOutput isKindOfClass:[NSFileHandle class]] ? standardOutput :
-        [standardOutput isKindOfClass:[NSPipe class]] ? [standardOutput fileHandleForWriting] : nil;
-      NSFileHandle* stderrFileHandle =
-        [standardError isKindOfClass:[NSFileHandle class]] ? standardError :
-        [standardError isKindOfClass:[NSPipe class]] ? [standardError fileHandleForWriting] : nil;
-      [stdoutFileHandle writeData:[tmpStdoutFileHandle availableData]];
-      [stderrFileHandle writeData:[tmpStderrFileHandle availableData]];
-      [stdoutFileHandle closeFile];
-      [stderrFileHandle closeFile];
     }
     [runningLock unlock];
   }//end if timeOutLimit
@@ -200,6 +185,27 @@
   [runningLock unlock];
 }
 //end waitUntilExit
+
+-(void) setStdInputData:(NSData*)data
+{
+  [data retain];
+  [stdInputData release];
+  stdInputData = data;
+  [stdInputData writeToFile:tmpStdinFilePath atomically:NO];
+}
+//end setStdInputData:
+
+-(NSData*) dataForStdOutput
+{
+  return [NSData dataWithContentsOfFile:tmpStdoutFilePath];
+}
+//end dataForStdOutput
+
+-(NSData*) dataForStdError
+{
+  return [NSData dataWithContentsOfFile:tmpStderrFilePath];
+}
+//end dataForStdError
 
 -(BOOL) hasReachedTimeout
 {

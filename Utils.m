@@ -165,7 +165,7 @@ unsigned long EndianUL_NtoB(unsigned long x)
   {
     NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
                                         ? [templateString stringByAppendingPathExtension:extension] : templateString;
-    NSString* tempFilenameTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:fileNameWithExtension];
+    NSString* tempFilenameTemplate = [[AppController latexitTemporaryPath] stringByAppendingPathComponent:fileNameWithExtension];
     #ifdef PANTHER
     unsigned int length = [tempFilenameTemplate length];
     #else
