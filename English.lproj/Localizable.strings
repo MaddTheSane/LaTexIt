@@ -71,3 +71,7 @@
 "Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";
 "Typeset LaTeX Text" = "Typeset LaTeX Text";
+"Loading History" = "Loading History";
+"Saving History" = "Saving History";
+"Loading Library" = "Loading Library";
+"Saving Library" = "Saving Library";

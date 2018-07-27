@@ -98,10 +98,13 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   {
     if (![super init])
       return nil;
+    mainThread = [NSThread currentThread];
     sharedManagerInstance = self;
     undoManager = [[NSUndoManager alloc] init];
     historyItems = [[NSMutableArray alloc] init];
+    [[AppController appController] startMessageProgress:NSLocalizedString(@"Loading History", @"Loading History")];
     [self _loadHistory];
+    [[AppController appController] stopMessageProgress];
     //registers applicationDidFinishLaunching and applicationWillTerminate notification to automatically save the history items
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)
@@ -127,6 +130,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 -(NSUndoManager*) undoManager
 {
   return undoManager;
+}
+
+-(void) setHistoryShouldBeSaved:(BOOL)state
+{
+  @synchronized(historyItems)
+  {
+    historyShouldBeSaved = state;
+  }
 }
 
 //Management methods, undo-aware
@@ -255,7 +266,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   while(YES)
   {
     NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
-    [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:2*60]];//wakes up every two minutes
+    [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:5*60]];//wakes up every five minutes
     [self _saveHistory];
     [ap release];
   }
@@ -269,6 +280,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   {
     if (historyShouldBeSaved)
     {
+      if ([NSThread currentThread] == mainThread)
+        [[AppController appController] startMessageProgress:NSLocalizedString(@"Saving History", @"Saving History")];
       NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:historyItems];
       NSData* compressedData = [Compressor zipcompress:uncompressedData];
       
@@ -295,13 +308,15 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         NSString* historyFilePath = [path stringByAppendingPathComponent:@"history.dat"];
         historyShouldBeSaved = ![compressedData writeToFile:historyFilePath atomically:YES];
       }//end if path ok
+      if ([NSThread currentThread] == mainThread)
+        [[AppController appController] stopMessageProgress];
     }//end if historyShouldBeSaved
   }//end @synchronized(historyItems)
 }
 
 -(void) _loadHistory
 {
-  //not that there is no @synchronization here, since no other threads will exist before _loadHistory is complete
+  //note that there is no @synchronization here, since no other threads will exist before _loadHistory is complete
   @try
   {
     [historyItems removeAllObjects];

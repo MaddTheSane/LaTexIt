@@ -26,15 +26,18 @@ extern NSString* LibraryItemsPboardType;
   BOOL libraryShouldBeSaved; //becomes YES is a modification occurs, returns to NO after saving
   
   NSUndoManager* undoManager;
+  
+  NSThread* mainThread;
 }
 
 +(LibraryManager*) sharedManager; //the library manager singleton
 
 -(NSUndoManager*) undoManager;
 
+-(void) setLibraryShouldBeSaved:(BOOL)state;//marks if library needs being saved
+
 -(NSArray*) allItems;
 -(NSArray*) allValues;//returns all the values contained in LibraryFile items
--(void) setNeedsSaving:(BOOL)status;//marks if library needs being saved
 
 //undo-aware methods to manage the library.
 

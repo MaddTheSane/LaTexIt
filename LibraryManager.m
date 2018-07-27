@@ -116,10 +116,13 @@ static NSImage*        libraryFileIcon       = nil;
   {
     if (![super init])
       return nil;
+    mainThread = [NSThread currentThread];
     sharedManagerInstance = self;
     undoManager = [[NSUndoManager alloc] init];
     library = [[LibraryFolder alloc] init];
+    [[AppController appController] startMessageProgress:NSLocalizedString(@"Loading Library", @"Loading Library")];
     [self _loadLibrary];
+    [[AppController appController] stopMessageProgress];
     [NSThread detachNewThreadSelector:@selector(_automaticBackgroundSaving:) toTarget:self withObject:nil];
     //registers applicationWillTerminate notification to automatically save the library
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
@@ -148,7 +151,7 @@ static NSImage*        libraryFileIcon       = nil;
 }
 
 //marks if library needs being saved
--(void) setNeedsSaving:(BOOL)status
+-(void) setLibraryShouldBeSaved:(BOOL)status
 {
   @synchronized(library) 
   {
@@ -199,7 +202,7 @@ static NSImage*        libraryFileIcon       = nil;
   while(YES)
   {
     NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
-    [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:2*60]];//wakes up every two minutes
+    [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:5*60]];//wakes up every five minutes
     [self _saveLibrary];
     [ap release];
   }
@@ -213,6 +216,8 @@ static NSImage*        libraryFileIcon       = nil;
   {
     if (libraryShouldBeSaved)
     {
+      if ([NSThread currentThread] == mainThread)
+        [[AppController appController] startMessageProgress:NSLocalizedString(@"Saving Library", @"Saving Library")];
       NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:library];
       NSData* compressedData = [Compressor zipcompress:uncompressedData];
       
@@ -239,6 +244,8 @@ static NSImage*        libraryFileIcon       = nil;
         NSString* libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
         libraryShouldBeSaved = ![compressedData writeToFile:libraryFilePath atomically:YES];
       }//end if path ok
+      if ([NSThread currentThread] == mainThread)
+        [[AppController appController] stopMessageProgress];
     }//end if libraryShouldBeSaved
   }//end @synchronized(library)
 }
@@ -782,14 +789,14 @@ static NSImage*        libraryFileIcon       = nil;
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
   [item setExpanded:NO];
-  [self setNeedsSaving:YES];
+  [self setLibraryShouldBeSaved:YES];
   return YES;
 }
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
   [item setExpanded:YES];
-  [self setNeedsSaving:YES];
+  [self setLibraryShouldBeSaved:YES];
   return YES;
 }
 

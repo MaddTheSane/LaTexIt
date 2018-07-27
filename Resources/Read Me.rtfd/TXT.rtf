@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.5.5\
+\f2\b \cf0 LaTeXiT 1.5.6\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -54,7 +54,7 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.5.5 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.5.6 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -276,8 +276,14 @@ However, do not worry : there exist graphical interfaces to use LaTeX in a more 
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.5.6 (7th february 2006)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 v 1.5.5 (7th february 2006)\
+\cf0 - fixed a regression causing failure of "LaTeX > Display preamble";\
+- added a save/load progress indicator for the history/the library;\
+- the library and the history are not saved any more if they have not been modified.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+v 1.5.5 (7th february 2006)\
 - speeded up the reindexing process of the history and the library when upgrading from a version of LaTeXiT prior to 1.5.4. This process is rather long and may give the impression that LaTeXiT is buggy.\
 \
 v 1.5.4 (7th february 2006)\
@@ -302,9 +308,8 @@ v 1.5.1 (26th january 2006)\
 	- scrollwheel was disabled in the main text view;\
   	- executable paths were not recoloured when changing composition mode;
 \fs26 \ul \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs22 \cf0 \ulnone \
+\fs22 \ulnone \
 v 1.5.0 (4th january 2006)\
 - some editing enhancement (syntax colouring...) thanks to the use of some parts of Smultron source code, by Peter Borg (http://smultron.sourceforge.net); syntax colouring is not yet perfect;\
 - fixed a bug affecting error detection during a "latexisation";\

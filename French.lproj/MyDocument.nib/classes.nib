@@ -75,6 +75,8 @@
                 makeLatexButton = NSButton; 
                 preambleTextView = LineCountTextView; 
                 progressIndicator = NSProgressIndicator; 
+                progressMessageProgressIndicator = NSProgressIndicator; 
+                progressMessageTextField = NSTextField; 
                 saveAccessoryView = NSView; 
                 saveAccessoryViewJpegWarning = NSButton; 
                 saveAccessoryViewOptionsButton = NSButton; 

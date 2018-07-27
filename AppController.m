@@ -2013,4 +2013,14 @@ static NSMutableArray*      unixBins = nil;
   CFRelease(cfInfoPlist);
 }
 
+-(void) startMessageProgress:(NSString*)message
+{
+  [[[NSDocumentController sharedDocumentController] documents] makeObjectsPerformSelector:@selector(startMessageProgress:) withObject:message];
+}
+
+-(void) stopMessageProgress
+{
+  [[[NSDocumentController sharedDocumentController] documents] makeObjectsPerformSelector:@selector(stopMessageProgress)];
+}
+
 @end

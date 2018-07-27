@@ -39,6 +39,9 @@
   IBOutlet NSSlider*      jpegQualitySlider;
   IBOutlet NSTextField*   jpegQualityTextField;
   IBOutlet NSColorWell*   jpegColorWell;
+  
+  IBOutlet NSProgressIndicator* progressMessageProgressIndicator;
+  IBOutlet NSTextField*         progressMessageTextField;
 
   NSString*    documentTitle;
   
@@ -56,6 +59,10 @@
   
   LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
 }
+
+//updates load progress indicator and messages
+-(void) startMessageProgress:(NSString*)message;
+-(void) stopMessageProgress;
 
 //actions from menu (through the appController), or from self contained elements
 -(IBAction) makeLatex:(id)sender;

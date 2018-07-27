@@ -55,6 +55,8 @@
       [libraryTableView expandItem:item];
     item = [enumerator nextObject];
   }
+  //here, we must cancel a side effect of expand item that marks the library as needing saving
+  [[LibraryManager sharedManager] setLibraryShouldBeSaved:NO];
 
   [[importCurrentButton cell] setShowsStateBy:NSChangeGrayCellMask];//fixes a cosmetic bug of Panther
   

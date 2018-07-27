@@ -258,6 +258,24 @@ static NSString* yenString = nil;
   return title;
 }
 
+-(void) startMessageProgress:(NSString*)message
+{
+  [progressMessageProgressIndicator setHidden:NO];
+  [progressMessageProgressIndicator startAnimation:self];
+  [progressMessageProgressIndicator display];
+  [progressMessageTextField setStringValue:message];
+  [progressMessageTextField display];
+}
+
+-(void) stopMessageProgress
+{
+  [progressMessageTextField setStringValue:@""];
+  [progressMessageTextField display];
+  [progressMessageProgressIndicator stopAnimation:self];
+  [progressMessageProgressIndicator setHidden:YES];
+  [progressMessageProgressIndicator display];
+}
+
 //updates interface to allow latexisation or not, according to current configuration
 //may be triggered by a notification
 -(void) updateAvailabilities:(NSNotification*)notification

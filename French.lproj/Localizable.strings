@@ -76,3 +76,7 @@
 "Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $...$";
 "Typeset LaTeX Text" = "Créer l'équation en mode texte";
+"Loading History" = "Chargement de l'historique";
+"Saving History" = "Enregistrement de l'historique";
+"Loading Library" = "Chargement de la bibliothèque";
+"Saving Library" = "Enregistrement de la bibliothèque";

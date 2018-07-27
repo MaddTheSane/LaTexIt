@@ -97,6 +97,10 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
 
 -(MyDocument*) dummyDocument;
 
+//updates the documents with a loading message
+-(void) startMessageProgress:(NSString*)message;
+-(void) stopMessageProgress;
+
 //utility : finds a program in the unix environment. You can give an environment, and
 //some "prefixes", that is to say an array of PATH in which the program could be
 -(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes
