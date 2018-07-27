@@ -36,5 +36,11 @@
 "Format" = "Format";
 "Change" = "Ändern";
 
+"Ghostscript options" = "Ghostscript options";
+"Write engine" = "Write engine";
+"PDF Compatibility level" = "PDF Compatibility level";
+"LaTeXiT medata" = "LaTeXiT medata";
+"Add invisible graphic commands" = "Add invisible graphic commands";
+
 "No preamble found" = "Keine Einleitung gefunden";
 "Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "Unbekannter Fehler. Bitte stellen Sie sicher dass LaTeXiT schon einmal verwendet wurde und voll funktionsfähig ist.";

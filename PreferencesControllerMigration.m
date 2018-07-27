@@ -90,6 +90,7 @@ static NSString* Old_CompositionConfigurationCompositionModeKey             = @"
 static NSString* Old_CompositionConfigurationPdfLatexPathKey                = @"LaTeXiT_CompositionConfigurationPdfLatexPathKey";
 static NSString* Old_CompositionConfigurationPs2PdfPathKey                  = @"LaTeXiT_CompositionConfigurationPs2PdfPathKey";
 static NSString* Old_CompositionConfigurationXeLatexPathKey                 = @"LaTeXiT_CompositionConfigurationXeLatexPathKey";
+static NSString* Old_CompositionConfigurationLuaLatexPathKey                = @"LaTeXiT_CompositionConfigurationLuaLatexPathKey";
 static NSString* Old_CompositionConfigurationLatexPathKey                   = @"LaTeXiT_CompositionConfigurationLatexPathKey";
 static NSString* Old_CompositionConfigurationDvipdfPathKey                  = @"LaTeXiT_CompositionConfigurationDvipdfPathKey";
 static NSString* Old_CompositionConfigurationGsPathKey                      = @"LaTeXiT_CompositionConfigurationGsPathKey";
@@ -173,6 +174,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
             Old_CompositionConfigurationPdfLatexPathKey,
             Old_CompositionConfigurationPs2PdfPathKey,
             Old_CompositionConfigurationXeLatexPathKey,
+            Old_CompositionConfigurationLuaLatexPathKey,
             Old_CompositionConfigurationLatexPathKey,
             Old_CompositionConfigurationDvipdfPathKey,
             Old_CompositionConfigurationGsPathKey,
@@ -403,6 +405,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     [compositionConfiguration replaceKey:Old_CompositionConfigurationPdfLatexPathKey withKey:CompositionConfigurationPdfLatexPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationPs2PdfPathKey withKey:CompositionConfigurationPsToPdfPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationXeLatexPathKey withKey:CompositionConfigurationXeLatexPathKey];
+    [compositionConfiguration replaceKey:Old_CompositionConfigurationLuaLatexPathKey withKey:CompositionConfigurationLuaLatexPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationLatexPathKey withKey:CompositionConfigurationLatexPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationDvipdfPathKey withKey:CompositionConfigurationDviPdfPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationGsPathKey withKey:CompositionConfigurationGsPathKey];

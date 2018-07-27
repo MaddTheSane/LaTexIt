@@ -15,6 +15,7 @@
 -(composition_mode_t) compositionConfigurationCompositionMode;
 -(NSString*)          compositionConfigurationProgramPathPdfLaTeX;
 -(NSString*)          compositionConfigurationProgramPathXeLaTeX;
+-(NSString*)          compositionConfigurationProgramPathLuaLaTeX;
 -(NSString*)          compositionConfigurationProgramPathLaTeX;
 -(NSString*)          compositionConfigurationProgramPathDviPdf;
 -(NSString*)          compositionConfigurationProgramPathGs;
@@ -22,6 +23,7 @@
 -(NSString*)          compositionConfigurationProgramPathForKey:(NSString*)key;
 -(NSArray*)           compositionConfigurationProgramArgumentsPdfLaTeX;
 -(NSArray*)           compositionConfigurationProgramArgumentsXeLaTeX;
+-(NSArray*)           compositionConfigurationProgramArgumentsLuaLaTeX;
 -(NSArray*)           compositionConfigurationProgramArgumentsLaTeX;
 -(NSArray*)           compositionConfigurationProgramArgumentsDviPdf;
 -(NSArray*)           compositionConfigurationProgramArgumentsGs;

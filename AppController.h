@@ -49,6 +49,7 @@
   //some info on current configuration
   BOOL isPdfLaTeXAvailable;
   BOOL isXeLaTeXAvailable;
+  BOOL isLuaLaTeXAvailable;
   BOOL isLaTeXAvailable;
   BOOL isDviPdfAvailable;
   BOOL isGsAvailable;
@@ -166,6 +167,7 @@
 //returns some configuration info
 -(BOOL) isPdfLaTeXAvailable;
 -(BOOL) isXeLaTeXAvailable;
+-(BOOL) isLuaLaTeXAvailable;
 -(BOOL) isLaTeXAvailable;
 -(BOOL) isDviPdfAvailable;
 -(BOOL) isGsAvailable;

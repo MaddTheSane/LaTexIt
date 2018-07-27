@@ -33,7 +33,7 @@ extern NSString* LatexizationDidEndNotification;
 
 -(NSData*) stripPdfData:(NSData*)pdfData;
 -(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData;
--(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
+-(NSData*) annotatePdfDataInLEEFormat:(NSData*)data exportFormat:(export_format_t)exportFormat preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
                                  backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
 

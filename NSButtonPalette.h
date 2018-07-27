@@ -21,6 +21,8 @@
 -(void) remove:(NSButton*)button;
 -(NSButton*) buttonWithTag:(int)tag;
 -(NSButton*) buttonWithState:(int)state;
+-(int) selectedTag;
+-(void) setSelectedTag:(int)tag;
 
 -(id) delegate;
 -(void) setDelegate:(id)delegate;

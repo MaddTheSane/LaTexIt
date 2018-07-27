@@ -6,9 +6,20 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
+<h2><a name="version-2.9.1">Version 2.9.1 (25 février 2018)</a></h2>
+<ul>
+<li>Modification de la gestion des annotations graphiques invisibles dans les PDF (comme meta-données plus robustes, pour éviter que Keynote et PowerPoint ne les éliminent); il y avait des problèmes, notamment avec Adobe Illustrator ;</li>
+<li>modification de l'utilisation de Ghostscript pour la génération du PDF &quot;avec polices vectorielles&quot; ;</li>
+<li>ajout d'options avancées de Ghostscript pour l'export &quot;avec polices vectorielles&quot;, afin de parer à toute éventualité ;</li>
+<li>possibilité de désactiver les annotations graphiques invisibles dans l'export PDF &quot;avec polices vectorielles&quot; ;</li>
+<li>correction de noms de fichiers &quot;intelligents&quot; invalides à cause du slash ;</li>
+<li>possibilité de désactiver la génération de noms de fichiers intelligents en appuyant sur option (⎇) ;</li>
+<li>ajout du support préliminaire de lualatex ;</li>
+<li>modification de l'export MathML pour faciliter son intégration dans Office.</li>
+</ul>
 <h2><a name="version-2.9.0">Version 2.9.0 (6 février 2018)</a></h2>
 <ul>
-<li>Ajout d'annotation graphiques invisibles dans les PDF comme meta-données plus robustes, pour éviter que Keynote et PowerPoint ne les éliminent ;</li>
+<li>Ajout d'annotations graphiques invisibles dans les PDF comme meta-données plus robustes, pour éviter que Keynote et PowerPoint ne les éliminent ;</li>
 <li>tentative de création d'un nom intelligent lors du glisser/déposer d'un fichier dans le Finder ;</li>
 <li>export SVG sous forme de texte si l'application cible ne peut afficher le SVG ;</li>
 <li>toute occurrence de %__TEXTCOLOR__ dans le préambule sera remplacée par la couleur de texte actuellement sélectionnée, pour contourner le problème des packages qui écrasent les réglages les précédant ;</li>

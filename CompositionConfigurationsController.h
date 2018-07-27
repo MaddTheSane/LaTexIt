@@ -29,6 +29,8 @@
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsPdfLaTeXController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsXeLaTeX;
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsXeLaTeXController;
+-(NSArray*)                                              currentConfigurationProgramArgumentsLuaLaTeX;
+-(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLuaLaTeXController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsLaTeX;
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLaTeXController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsDviPdf;

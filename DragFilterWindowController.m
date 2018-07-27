@@ -59,8 +59,6 @@
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS] setTitle:
     NSLocalizedString(@"PDF w.o.f.", @"PDF w.o.f.")];
 
-  [[self->buttonPalette buttonWithTag:[[PreferencesController sharedController] exportFormatCurrentSession]] setState:NSOnState];
-
   BOOL isPdfToSvgAvailable = [[AppController appController] isPdfToSvgAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:isPdfToSvgAvailable ? nil :
@@ -72,6 +70,8 @@
     NSLocalizedString(@"The XML::LibXML perl module must be installed", @"The XML::LibXML perl module must be installed")];
 
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"Text")];
+  
+  [self setExportFormat:[[PreferencesController sharedController] exportFormatCurrentSession]];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:DragThroughButtonStateChangedNotification object:nil];
 }
@@ -94,6 +94,7 @@
 {
   if (visible)
   {
+    [self setExportFormat:[[PreferencesController sharedController] exportFormatCurrentSession]];
     NSWindow* screenWindow = [NSApp keyWindow];
     screenWindow = screenWindow ? screenWindow: [NSApp mainWindow];
     NSRect screenVisibleFrame = [(!screenWindow ? [NSScreen mainScreen] : [screenWindow screen]) visibleFrame];
@@ -181,6 +182,19 @@
   }//end if ([[notification name] isEqualToString:DragThroughButtonStateChangedNotification])
 }
 //end notified:
+
+-(export_format_t) exportFormat
+{
+  export_format_t result = (export_format_t)[self->buttonPalette selectedTag];
+  return result;
+}
+//end exportFormat
+
+-(void) setExportFormat:(export_format_t)value
+{
+  [self->buttonPalette setSelectedTag:(int)value];
+}
+//end setExportFormat:
 
 -(id) delegate
 {

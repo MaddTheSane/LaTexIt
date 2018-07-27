@@ -188,9 +188,14 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   if (!isMacOS10_5OrAbove())
   {
     NSArray* compositionConfigurationsCurrentAdvancedButtons = [NSArray arrayWithObjects:
-      compositionConfigurationsCurrentPdfLaTeXAdvancedButton, compositionConfigurationsCurrentXeLaTeXAdvancedButton,
-      compositionConfigurationsCurrentLaTeXAdvancedButton, compositionConfigurationsCurrentDviPdfAdvancedButton,
-      compositionConfigurationsCurrentGsAdvancedButton, compositionConfigurationsCurrentPsToPdfAdvancedButton, nil];
+      compositionConfigurationsCurrentPdfLaTeXAdvancedButton,
+      compositionConfigurationsCurrentXeLaTeXAdvancedButton,
+      compositionConfigurationsCurrentLuaLaTeXAdvancedButton,
+      compositionConfigurationsCurrentLaTeXAdvancedButton,
+      compositionConfigurationsCurrentDviPdfAdvancedButton,
+      compositionConfigurationsCurrentGsAdvancedButton,
+      compositionConfigurationsCurrentPsToPdfAdvancedButton,
+      nil];
     NSEnumerator* enumerator = [compositionConfigurationsCurrentAdvancedButtons objectEnumerator];
     NSButton* button = nil;
     while((button = [enumerator nextObject]))
@@ -248,6 +253,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
         [NSArray arrayWithObjects:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG],
                                   [NSNumber numberWithInt:EXPORT_FORMAT_SVG],
                                   [NSNumber numberWithInt:EXPORT_FORMAT_TEXT],
+                                  [NSNumber numberWithInt:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS],
                                   nil]],
         NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatOptionsButton setTarget:self];
@@ -506,7 +512,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [NSDictionary dictionaryWithObjectsAndKeys:NSIsNotNilTransformerName, NSValueTransformerNameBindingOption, nil];
   NSString* NSEnabled2Binding = [NSEnabledBinding stringByAppendingString:@"2"];
 
-  [self->compositionConfigurationsCurrentEngineMatrix bind:NSSelectedTagBinding toObject:compositionConfigurationsController
+  [self->compositionConfigurationsCurrentEnginePopUpButton bind:NSSelectedTagBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey] options:nil];
   [self->compositionConfigurationsCurrentLoginShellUsedButton bind:NSEnabledBinding toObject:compositionConfigurationsController
     withKeyPath:@"selection" options:isNotNilBindingOptions];
@@ -577,6 +583,36 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
           [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInt:COMPOSITION_MODE_XELATEX]], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentXeLaTeXPathChangeButton setTarget:self];
   [self->compositionConfigurationsCurrentXeLaTeXPathChangeButton setAction:@selector(changePath:)];
+
+  [[self->compositionConfigurationsCurrentLuaLaTeXPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
+                                                       withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey] options:nil];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
+                                                       withKeyPath:@"selection" options:isNotNilBindingOptions];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSEnabled2Binding toObject:compositionConfigurationsController
+                                                       withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
+                                                           options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                    [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInt:COMPOSITION_MODE_LUALATEX]], NSValueTransformerBindingOption, nil]];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSTextColorBinding toObject:compositionConfigurationsController
+                                                       withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey] options:colorForFileExistsBindingOptions];
+  
+  [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton bind:NSEnabledBinding toObject:compositionConfigurationsController
+                                                        withKeyPath:@"selection" options:isNotNilBindingOptions];
+  [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
+                                                        withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
+                                                            options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                     [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInt:COMPOSITION_MODE_LUALATEX]], NSValueTransformerBindingOption, nil]];
+  [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton setTarget:self];
+  [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton setAction:@selector(compositionConfigurationsProgramArgumentsOpen:)];
+  
+  [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton bind:NSEnabledBinding toObject:compositionConfigurationsController
+                                                          withKeyPath:@"selection" options:isNotNilBindingOptions];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
+                                                          withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
+                                                              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                       [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInt:COMPOSITION_MODE_LUALATEX]], NSValueTransformerBindingOption, nil]];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton setTarget:self];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton setAction:@selector(changePath:)];
 
   [[self->compositionConfigurationsCurrentLaTeXPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
   [self->compositionConfigurationsCurrentLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
@@ -1304,6 +1340,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [self->generalExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsTextPanelDelegate:self];
+    [self->generalExportFormatOptionsPanes setExportFormatOptionsPDFWofPanelDelegate:self];
   }//end if (!self->generalExportFormatOptionsPanes)
   [self->generalExportFormatOptionsPanes setJpegQualityPercent:[[PreferencesController sharedController] exportJpegQualityPercent]];
   [self->generalExportFormatOptionsPanes setJpegBackgroundColor:[[PreferencesController sharedController] exportJpegBackgroundColor]];
@@ -1311,8 +1348,10 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->generalExportFormatOptionsPanes setTextExportPreamble:[[PreferencesController sharedController] exportTextExportPreamble]];
   [self->generalExportFormatOptionsPanes setTextExportEnvironment:[[PreferencesController sharedController] exportTextExportEnvironment]];
   [self->generalExportFormatOptionsPanes setTextExportBody:[[PreferencesController sharedController] exportTextExportBody]];
+  [self->generalExportFormatOptionsPanes setPdfWofGSWriteEngine:[[PreferencesController sharedController] exportPDFWOFGsWriteEngine]];
+  [self->generalExportFormatOptionsPanes setPdfWofGSPDFCompatibilityLevel:[[PreferencesController sharedController] exportPDFWOFGsPDFCompatibilityLevel]];
+  [self->generalExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:[[PreferencesController sharedController] exportPDFWOFMetaDataInvisibleGraphicsEnabled]];
  
-  
   NSPanel* panelToOpen = nil;
   export_format_t format = [self->generalExportFormatPopupButton selectedTag];
   if (format == EXPORT_FORMAT_JPEG)
@@ -1321,6 +1360,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
   else if (format == EXPORT_FORMAT_TEXT)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel];
+  else if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsPDFWofPanel];
   if (panelToOpen)
     [NSApp beginSheet:panelToOpen modalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
@@ -1330,21 +1371,28 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 {
   if (ok)
   {
+    PreferencesController* preferencesController = [PreferencesController sharedController];
     if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel])
     {
-      [[PreferencesController sharedController] setExportJpegQualityPercent:[self->generalExportFormatOptionsPanes jpegQualityPercent]];
-      [[PreferencesController sharedController] setExportJpegBackgroundColor:[self->generalExportFormatOptionsPanes jpegBackgroundColor]];
+      [preferencesController setExportJpegQualityPercent:[self->generalExportFormatOptionsPanes jpegQualityPercent]];
+      [preferencesController setExportJpegBackgroundColor:[self->generalExportFormatOptionsPanes jpegBackgroundColor]];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel])
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     {
-      [[PreferencesController sharedController] setExportSvgPdfToSvgPath:[self->generalExportFormatOptionsPanes svgPdfToSvgPath]];
+      [preferencesController setExportSvgPdfToSvgPath:[self->generalExportFormatOptionsPanes svgPdfToSvgPath]];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
     {
-      [[PreferencesController sharedController] setExportTextExportPreamble:[self->generalExportFormatOptionsPanes textExportPreamble]];
-      [[PreferencesController sharedController] setExportTextExportEnvironment:[self->generalExportFormatOptionsPanes textExportEnvironment]];
-      [[PreferencesController sharedController] setExportTextExportBody:[self->generalExportFormatOptionsPanes textExportBody]];
+      [preferencesController setExportTextExportPreamble:[self->generalExportFormatOptionsPanes textExportPreamble]];
+      [preferencesController setExportTextExportEnvironment:[self->generalExportFormatOptionsPanes textExportEnvironment]];
+      [preferencesController setExportTextExportBody:[self->generalExportFormatOptionsPanes textExportBody]];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
+    else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
+    {
+      [preferencesController setExportPDFWOFGsWriteEngine:[self->generalExportFormatOptionsPanes pdfWofGSWriteEngine]];
+      [preferencesController setExportPDFWOFGsPDFCompatibilityLevel:[self->generalExportFormatOptionsPanes pdfWofGSPDFCompatibilityLevel]];
+      [preferencesController setExportPDFWOFMetaDataInvisibleGraphicsEnabled:[self->generalExportFormatOptionsPanes pdfWofMetaDataInvisibleGraphicsEnabled]];
+    }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
   }//end if (ok)
   [NSApp endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];
@@ -1484,6 +1532,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     controller = [[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationProgramArgumentsPdfLaTeXController];
   else if (sender == self->compositionConfigurationsCurrentXeLaTeXAdvancedButton)
     controller = [[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationProgramArgumentsXeLaTeXController];
+  else if (sender == self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton)
+    controller = [[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationProgramArgumentsLuaLaTeXController];
   else if (sender == self->compositionConfigurationsCurrentLaTeXAdvancedButton)
     controller = [[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationProgramArgumentsLaTeXController];
   else if (sender == self->compositionConfigurationsCurrentDviPdfAdvancedButton)
@@ -1523,6 +1573,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   arguments = [[compositionConfigurationsController currentConfigurationProgramArgumentsForKey:CompositionConfigurationXeLatexPathKey] componentsJoinedByString:@" "];
   [self->compositionConfigurationsCurrentXeLaTeXPathTextField  setToolTip:arguments];
   [self->compositionConfigurationsCurrentXeLaTeXAdvancedButton setToolTip:arguments];
+  arguments = [[compositionConfigurationsController currentConfigurationProgramArgumentsForKey:CompositionConfigurationLuaLatexPathKey] componentsJoinedByString:@" "];
+  [self->compositionConfigurationsCurrentLuaLaTeXPathTextField  setToolTip:arguments];
+  [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton setToolTip:arguments];
   arguments = [[compositionConfigurationsController currentConfigurationProgramArgumentsForKey:CompositionConfigurationLatexPathKey] componentsJoinedByString:@" "];
   [self->compositionConfigurationsCurrentLaTeXPathTextField  setToolTip:arguments];
   [self->compositionConfigurationsCurrentLaTeXAdvancedButton setToolTip:arguments];
@@ -1584,6 +1637,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       self->compositionConfigurationsCurrentXeLaTeXPathTextField, @"textField",
       CompositionConfigurationXeLatexPathKey, @"pathKey",
       nil];
+  else if (sender == self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton)
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                   self->compositionConfigurationsCurrentLuaLaTeXPathTextField, @"textField",
+                   CompositionConfigurationLuaLatexPathKey, @"pathKey",
+                   nil];
   else if (sender == self->compositionConfigurationsCurrentLaTeXPathChangeButton)
     contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
       self->compositionConfigurationsCurrentLaTeXPathTextField, @"textField",
@@ -1715,6 +1773,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     PreferencesController* preferencesController = [PreferencesController sharedController];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationXeLatexPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLuaLatexPathKey];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLatexPathKey];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationDviPdfPathKey];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationGsPathKey];
@@ -1729,6 +1788,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
          nil];
     BOOL isPdfLaTeXAvailable = NO;
     BOOL isXeLaTeXAvailable = NO;
+    BOOL isLuaLaTeXAvailable = NO;
     BOOL isLaTeXAvailable = NO;
     BOOL isDviPdfAvailable = NO;
     BOOL isGsAvailable = NO;
@@ -1748,6 +1808,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
                                                   [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                   [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
+                                                [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                [NSValue valueWithPointer:&isLuaLaTeXAvailable], @"monitor", nil]];
+    if (!isLuaLaTeXAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
+                                                 [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                 [NSValue valueWithPointer:&isLuaLaTeXAvailable], @"monitor", nil]];
     [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                        [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                        [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
@@ -1794,6 +1861,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
                                                 [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
                                                 [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
+                                                [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                [NSValue valueWithPointer:&isLuaLaTeXAvailable], @"monitor", nil]];
     [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                                 [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
                                                 [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];

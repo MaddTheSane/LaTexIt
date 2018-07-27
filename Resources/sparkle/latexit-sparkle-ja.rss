@@ -577,7 +577,7 @@
       <title>Version 2.9.0</title>
       <description><![CDATA[
         <ul>
-          <li>Added invisible graphic annotation in PDFs as more robust metadata, to prevent Keynote and Powerpoint from stripping them;</li>
+          <li>Added invisible graphic annotations in PDFs as more robust metadata, to prevent Keynote and Powerpoint from stripping them;</li>
           <li>try to use a clever file name when dropping a file to the Finder;</li>
           <li>export SVG as string when the target application is not able to display SVG;</li>
           <li>any occurrence of %__TEXTCOLOR__ in the preamble will be replaced by the currently selected text color, to circumvent the problem of packages that override the previous settings;</li>
@@ -596,5 +596,31 @@
 				sparkle:dsaSignature="MCwCFAU+lVlqWX6BvpC2cBxJ3geN47JbAhRZLIRENi3Lqq6oR3Q4vZ6hEktgjA=="
 			/>
     </item>
-  </channel> 
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.9.1</guid>
+      <title>Version 2.9.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>More work on invisible graphic annotations in PDFs (as more robust metadata, to prevent Keynote and Powerpoint from stripping them). There were problems, especially with Adobe Illustrator;</li>
+          <li>change the way Ghostscript is used to generate PDF &quot;with outlined fonts&quot;;</li>
+          <li>added advanced Ghostscript options for export &quot;with outlined fonts&quot;, to circumvent potential problems;</li>
+          <li>added ability to disable invisible graphic annotations in the PDF &quot;with outlined fonts&quot; export;</li>
+          <li>fixed &quot;clever&quot; filenames that were invalid because of the slash character;</li>
+          <li>ability to disable &quot;clever&quot; filenames by pressing option (⎇);</li>
+          <li>added preliminary lualatex support;</li>
+          <li>changed MathML export for easier integration into Office.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.9.1</sparkle:releaseNotesLink>
+			<pubDate>Sun, 25 Feb 2018 14:08:30 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_9_1.dmg"
+				sparkle:version="2.9.1"
+                   sparkle:shortVersionString="2.9.1"
+				type="application/octet-stream"
+				length="11740617"
+				sparkle:dsaSignature="MCwCFH9I3kG1S/vIXkuLpGlCsOwy+PSlAhQ9x6anyjw4Lj3dSP06yNJ4K7lMag=="
+			/>
+    </item>
+  </channel>
 </rss>

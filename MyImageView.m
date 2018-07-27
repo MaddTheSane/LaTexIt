@@ -31,6 +31,7 @@
 #import "NSMutableArrayExtended.h"
 #import "NSMenuExtended.h"
 #import "NSObjectExtended.h"
+#import "NSStringExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "RegexKitLite.h"
@@ -38,6 +39,7 @@
 
 #import "CGExtras.h"
 
+#import <Carbon/Carbon.h>
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 
@@ -556,7 +558,8 @@ typedef NSInteger NSDraggingContext;
     NSString* dropPath = [dropDestination path];
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSString* equationSourceText = [[self->transientDragEquation sourceText] string];
-    NSString* filePrefix = [LatexitEquation computeFileNameFromContent:equationSourceText];
+    BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+    NSString* filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:equationSourceText];
     if (!filePrefix || [filePrefix isEqualToString:@""])
       filePrefix = @"latex-image";
     
@@ -793,9 +796,22 @@ typedef NSInteger NSDraggingContext;
     else//if (exportFormat == EXPORT_FORMAT_MATHML)
     {
       NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-      NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
-      if (blockQuote)
-        [pasteboard setString:blockQuote forType:type];
+      NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
+      if (blockquoteString)
+      {
+        NSError* error = nil;
+        NSString* mathString =
+          [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
+                                                     withString:@"<math$4 style=$2>$3$5</math>"
+                                                        options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
+        if (error)
+          DebugLog(1, @"error = <%@>", error);
+        BOOL isHTML = [type isEqualToString:@"public.html"] || [type isEqualToString:NSHTMLPboardType];
+        if (isHTML)
+          [pasteboard setString:blockquoteString forType:type];
+        else//if (!isHTML)
+          [pasteboard setString:(!mathString ? blockquoteString : mathString) forType:type];
+      }//end if (blockquoteString)
     }//end if (exportFormat == EXPORT_FORMAT_MATHML)
   }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
   DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);

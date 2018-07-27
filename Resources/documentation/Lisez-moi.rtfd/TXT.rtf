@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 2.9.0\
+\b \cf0 LaTeXiT 2.9.1\
 
 \b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -55,7 +55,7 @@ Adresse e-mail (commentaires, suggestions, probl\'e8mes,...): \cf3 pierre@chacha
 Syst\'e8me Requis\
 
 \fs22 \ulnone \
-LaTeXiT 2.9.0 requiert Mac OS X version 10.4 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 2.9.1 requiert Mac OS X version 10.4 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \b\fs26 \cf0 \
@@ -444,9 +444,21 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-v 2.9.0 (2018 6 f\'e9vrier 2018)\
+v 2.9.1 (25 f\'e9vrier 2018)\
+\pard\tx566\pardeftab720\qj
+\cf0 -Modification de la gestion des annotations graphiques invisibles dans les PDF (comme meta-donn\'e9es plus robustes, pour \'e9viter que Keynote et PowerPoint ne les \'e9liminent); il y avait des probl\'e8mes, notamment avec Adobe Illustrator\'a0;\
+-modification de l'utilisation de Ghostscript pour la g\'e9n\'e9ration du PDF "avec polices vectorielles"\'a0;\
+-ajout d'options avanc\'e9es de Ghostscript pour l'export "avec polices vectorielles", afin de parer \'e0 toute \'e9ventualit\'e9\'a0;\
+-possibilit\'e9 de d\'e9sactiver les annotations graphiques invisibles dans l'export PDF "avec polices vectorielles"\'a0;\
+-correction de noms de fichiers "intelligents" invalides \'e0 cause du slash\'a0;\
+-possibilit\'e9 de d\'e9sactiver la g\'e9n\'e9ration de noms de fichiers intelligents en appuyant sur option (\uc0\u9095 )\'a0;\
+-ajout du support pr\'e9liminaire de lualatex\'a0;\
+-modification de l'export MathML pour faciliter son int\'e9gration dans Office.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 v 2.9.0 (6 f\'e9vrier 2018)\
 \pard\tx220\tx720\pardeftab720\li720\fi-720\qj
-\cf0 -ajout d'annotation graphiques invisibles dans les PDF comme meta-donn\'e9es plus robustes, pour \'e9viter que Keynote et PowerPoint ne les \'e9liminent\'a0;\
+\cf0 -ajout d'annotations graphiques invisibles dans les PDF comme meta-donn\'e9es plus robustes, pour \'e9viter que Keynote et PowerPoint ne les \'e9liminent\'a0;\
 \pard\tx560\pardeftab720\qj
 \cf0 -tentative de cr\'e9ation d'un nom intelligent lors du glisser/d\'e9poser d'un fichier dans le Finder\'a0;\
 -export SVG sous forme de texte si l'application cible ne peut afficher le SVG\'a0;\

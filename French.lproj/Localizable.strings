@@ -71,8 +71,8 @@
 "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT se base sur une installation fonctionnelle de LaTeX. Mais si vous ne savez pas ce qu'est LaTeX, vous risquez d'avoir du mal à l'installer. Une section de la documentation est donc dédiée aux explications correspondates.";
 "See help..." = "Voir l'aide…";
 "Install LaTeX" = "Installer LaTeX";
-"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
-"pdflatex, latex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
+"pdflatex, latex, dvipdf, xelatex, lualatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, latex, dvipdf, xelatex, lualatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
 "Without the color.sty package, you won't be able to change the font color" =
 "Sans le package color.sty, vous ne pourrez pas modifier la couleur des équations";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." =
@@ -256,6 +256,12 @@
 "Warning : pdf2svg path is invalid" = "Attention : Le chemin vers pdf2svg est invalide";
 "Warning : pdf2svg was not found" = "Attention : pdf2svg n'a pas été détecté";
 "Warning : the XML::LibXML perl module was not found" = "Attention : le module perl XML::LibXML n'a pas été détecté";
+
+"Ghostscript options" = "Options de Ghostscript";
+"Write engine" = "Moteur d'écriture";
+"PDF Compatibility level" = "Niveau de compatibilité PDF";
+"LaTeXiT medata" = "Méta-données LaTeXiT";
+"Add invisible graphic commands" = "Ajouter les commandes graphiques invisibles";
 
 "Export preamble" = "Exporter le préambule";
 "Export environment" = "Exporter l'environnement";

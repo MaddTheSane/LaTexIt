@@ -29,6 +29,5 @@ extern CGFunctionCallbacks CGBlendColorsFunctionCallBacks;
 void    RGB2HLS(CGFloat r, CGFloat g, CGFloat b, CGFloat* pH, CGFloat* pL, CGFloat* pS);
 void    HLS2RGB(CGFloat h, CGFloat l, CGFloat s, CGFloat* pR, CGFloat* pG, CGFloat* pB);
 CGFloat H2RGB(CGFloat v1, CGFloat v2, CGFloat vH);
-void    HSV2RGB(CGFloat h, CGFloat s, CGFloat v, CGFloat* pR, CGFloat* pG, CGFloat* pB);
 
 #endif
