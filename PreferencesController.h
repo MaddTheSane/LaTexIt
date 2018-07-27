@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef enum {EXPORT_FORMAT_PDF, EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS,
+              EXPORT_FORMAT_EPS, EXPORT_FORMAT_TIFF, EXPORT_FORMAT_PNG, EXPORT_FORMAT_JPEG} export_format_t;
+
 extern NSString* GeneralToolbarItemIdentifier;
 extern NSString* EditionToolbarItemIdentifier;
 extern NSString* PreambleToolbarItemIdentifier;
@@ -34,6 +37,7 @@ extern NSString* DefaultPreambleAttributedKey;
 extern NSString* DefaultFontKey;
 extern NSString* CompositionModeKey;
 extern NSString* PdfLatexPathKey;
+extern NSString* Ps2PdfPathKey;
 extern NSString* XeLatexPathKey;
 extern NSString* LatexPathKey;
 extern NSString* DvipdfPathKey;
@@ -120,6 +124,7 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   IBOutlet NSTextField* latexTextField;
   IBOutlet NSTextField* dvipdfTextField;
   IBOutlet NSTextField* gsTextField;
+  IBOutlet NSTextField* ps2pdfTextField;
   IBOutlet NSButton*    pdfLatexButton;
   IBOutlet NSButton*    xeLatexButton;
   IBOutlet NSButton*    latexButton;
@@ -149,6 +154,7 @@ typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t;
   BOOL didChangeLatexTextField;
   BOOL didChangeDvipdfTextField;
   BOOL didChangeGsTextField;
+  BOOL didChangePs2PdfTextField;
   
   NSAlert* applyPreambleToLibraryAlert;
   NSImage* warningImage;

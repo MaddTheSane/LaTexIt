@@ -42,6 +42,7 @@
 -(void) _checkConfiguration;
 
 -(BOOL) _checkGs;      //called by _checkConfiguration to check for gs's presence
+-(BOOL) _checkPs2pdf;  //called by _checkConfiguration to check for gs's presence
 -(BOOL) _checkDvipdf;  //called by _checkConfiguration to check for dvipdf's presence
 -(BOOL) _checkPdfLatex;//called by _checkConfiguration to check for pdflatex's presence
 -(BOOL) _checkXeLatex; //called by _checkConfiguration to check for pdflatex's presence
@@ -52,6 +53,7 @@
 -(void) _findGsPath;
 -(void) _findDvipdfPath;
 -(void) _findPdfLatexPath;
+-(void) _findPs2PdfPath;
 -(void) _findXeLatexPath;
 -(void) _findLatexPath;
 
@@ -208,9 +210,11 @@ static NSMutableArray*      unixBins = nil;
     
     //export to EPS needs ghostscript to be available
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString* exportType = [userDefaults stringForKey:DragExportTypeKey];
-    if ([exportType isEqualTo:@"EPS"] && !isGsAvailable)
-      [userDefaults setObject:@"PDF" forKey:DragExportTypeKey];
+    export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+    if (exportFormat == EXPORT_FORMAT_EPS && !isGsAvailable)
+      [userDefaults setInteger:EXPORT_FORMAT_PDF forKey:DragExportTypeKey];
+    if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS && (!isGsAvailable || !isPs2PdfAvailable))
+      [userDefaults setInteger:EXPORT_FORMAT_PDF forKey:DragExportTypeKey];
     
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(_somePathDidChangeNotification:)
@@ -744,6 +748,11 @@ static NSMutableArray*      unixBins = nil;
   return isPdfLatexAvailable;
 }
 
+-(BOOL) isPs2PdfAvailable
+{
+  return isPs2PdfAvailable;
+}
+
 -(BOOL) isXeLatexAvailable
 {
   return isXeLatexAvailable;
@@ -791,6 +800,24 @@ static NSMutableArray*      unixBins = nil;
   if ([fileManager fileExistsAtPath:pdfLatexPath])
   {
     [userDefaults setObject:pdfLatexPath forKey:PdfLatexPathKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+  }
+}
+
+//try to find pdflatex program, searching by its name
+-(void) _findPs2PdfPath
+{
+  NSFileManager* fileManager   = [NSFileManager defaultManager];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSString* ps2PdfPath         = [userDefaults stringForKey:Ps2PdfPathKey];
+  NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
+  [prefixes addObjectsFromArray:[NSArray arrayWithObject:[ps2PdfPath stringByDeletingLastPathComponent]]];
+
+  if (![fileManager fileExistsAtPath:ps2PdfPath])
+    ps2PdfPath = [self findUnixProgram:@"ps2pdf" tryPrefixes:prefixes environment:environmentDict];
+  if ([fileManager fileExistsAtPath:ps2PdfPath])
+  {
+    [userDefaults setObject:ps2PdfPath forKey:Ps2PdfPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -903,6 +930,34 @@ static NSMutableArray*      unixBins = nil;
   @finally
   {
     [pdfLatexTask release];
+  }
+  return ok;
+}
+
+//check if ps2pdf works as expected. The user may have given a name different from "ps2pdf"
+-(BOOL) _checkPs2Pdf
+{
+  BOOL ok = YES;
+  NSTask* ps2PdfTask = [[NSTask alloc] init];
+  @try
+  {
+    //currently, the only check is the option -v, at least to see if the program can be executed
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+    [ps2PdfTask setLaunchPath:[userDefaults stringForKey:Ps2PdfPathKey]];
+    [ps2PdfTask setArguments:[NSArray arrayWithObject:@"-v"]];
+    [ps2PdfTask setStandardOutput:nullDevice];
+    [ps2PdfTask setStandardError:nullDevice];
+    [ps2PdfTask launch];
+    [ps2PdfTask waitUntilExit];
+  }
+  @catch(NSException* e)
+  {
+    ok = NO;
+  }
+  @finally
+  {
+    [ps2PdfTask release];
   }
   return ok;
 }
@@ -1060,6 +1115,7 @@ static NSMutableArray*      unixBins = nil;
 {
   isGsAvailable       = [self _checkGs];
   isPdfLatexAvailable = [self _checkPdfLatex];
+  isPs2PdfAvailable   = [self _checkPs2Pdf];
   isXeLatexAvailable  = [self _checkXeLatex];
   isLatexAvailable    = [self _checkLatex];
   isDvipdfAvailable   = [self _checkDvipdf];
@@ -1196,6 +1252,44 @@ static NSMutableArray*      unixBins = nil;
     }
   }
 
+  if (!isPs2PdfAvailable)
+    [self _findPs2PdfPath];
+  retry = YES;
+  while (!isPs2PdfAvailable && retry)
+  {
+    int returnCode =
+      NSRunAlertPanel(
+        [NSString stringWithFormat:
+          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          @"ps2pdf"],
+        [NSString stringWithFormat:
+          NSLocalizedString(@"You need ps2pdf to export as \"PDF with outlined fonts\"",
+                            @"You need ps2pdf to export as \"PDF with outlined fonts\""),
+          @"pdflatex"],
+        [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), @"ps2pdf"],
+        @"Cancel", nil);
+    retry &= (returnCode == NSAlertDefaultReturn);
+    if (returnCode == NSAlertDefaultReturn)
+    {
+      NSFileManager* fileManager = [NSFileManager defaultManager];
+      NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+      [openPanel setResolvesAliases:NO];
+      int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
+      BOOL ok = (ret2 == NSOKButton) && ([[openPanel filenames] count]);
+      if (ok)
+      {
+        NSString* filepath = [[openPanel filenames] objectAtIndex:0];
+        if ([fileManager fileExistsAtPath:filepath])
+        {
+          [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
+          [userDefaults setObject:filepath forKey:Ps2PdfPathKey];
+          [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+          retry &= !isPs2PdfAvailable;
+        }
+      }
+    }
+  }
+
   if (!isDvipdfAvailable)
     [self _findDvipdfPath];
   retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == LATEXDVIPDF);
@@ -1319,6 +1413,8 @@ static NSMutableArray*      unixBins = nil;
     [self _addInEnvironmentPath:[[userDefaults stringForKey:GsPathKey] stringByDeletingLastPathComponent]];
   if (isPdfLatexAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:PdfLatexPathKey] stringByDeletingLastPathComponent]];
+  if (isPs2PdfAvailable)
+    [self _addInEnvironmentPath:[[userDefaults stringForKey:Ps2PdfPathKey] stringByDeletingLastPathComponent]];
   if (isXeLatexAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:XeLatexPathKey] stringByDeletingLastPathComponent]];
   if (isLatexAvailable)
@@ -1410,14 +1506,33 @@ static NSMutableArray*      unixBins = nil;
           NSString* directory          = NSTemporaryDirectory();
           NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-          NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-          NSArray*  components         = [dragExportType componentsSeparatedByString:@" "];
-          NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
+          export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+          NSString* extension = nil;
+          switch(exportFormat)
+          {
+            case EXPORT_FORMAT_PDF:
+            case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+              extension = @"pdf";
+              break;
+            case EXPORT_FORMAT_EPS:
+              extension = @"eps";
+              break;
+            case EXPORT_FORMAT_TIFF:
+              extension = @"tiff";
+              break;
+            case EXPORT_FORMAT_PNG:
+              extension = @"png";
+              break;
+            case EXPORT_FORMAT_JPEG:
+              extension = @"jpeg";
+              break;
+          }
+
           NSColor*  color              = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
           float     quality            = [userDefaults floatForKey:DragExportJpegQualityKey];
           NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
           NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
-          NSData*   attachedData       = [self dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+          NSData*   attachedData       = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
           
           //Now we must feed the pasteboard
           [pboard declareTypes:[NSArray array] owner:nil];
@@ -1555,12 +1670,31 @@ static NSMutableArray*      unixBins = nil;
         {
           //translates the data to the right format
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-          NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-          NSArray* components          = [dragExportType componentsSeparatedByString:@" "];
-          NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
+          export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+          NSString* extension = nil;
+          switch(exportFormat)
+          {
+            case EXPORT_FORMAT_PDF:
+            case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+              extension = @"pdf";
+              break;
+            case EXPORT_FORMAT_EPS:
+              extension = @"eps";
+              break;
+            case EXPORT_FORMAT_TIFF:
+              extension = @"tiff";
+              break;
+            case EXPORT_FORMAT_PNG:
+              extension = @"png";
+              break;
+            case EXPORT_FORMAT_JPEG:
+              extension = @"jpeg";
+              break;
+          }
+
           NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
           float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
-          NSData*   data               = [self dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+          NSData*   data               = [self dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
 
           //now feed the pasteboard
           [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
@@ -1692,7 +1826,7 @@ static NSMutableArray*      unixBins = nil;
 }
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
--(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData
+-(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
              jpegColor:(NSColor*)color jpegQuality:(float)quality
 {
   NSData* data = nil;
@@ -1705,14 +1839,40 @@ static NSMutableArray*      unixBins = nil;
     NSString* pdfFilePath    = [directory stringByAppendingPathComponent:pdfFile];
     NSString* tmpEpsFile     = [NSString stringWithFormat:@"%@-2.eps", filePrefix];
     NSString* tmpEpsFilePath = [directory stringByAppendingPathComponent:tmpEpsFile];
+    NSString* tmpPdfFile     = [NSString stringWithFormat:@"%@-2.pdf", filePrefix];
+    NSString* tmpPdfFilePath = [directory stringByAppendingPathComponent:tmpPdfFile];
 
-     if (pdfData)
+    if (pdfData)
     {
-      if ([format isEqualToString:@"pdf"])
+      if (format == EXPORT_FORMAT_PDF)
       {
         data = pdfData;
       }
-      else if ([format isEqualToString:@"eps"])
+      else if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+      {
+        [pdfData writeToFile:pdfFilePath atomically:NO];
+        NSString* gsPath       = [self findUnixProgram:@"gs" tryPrefixes:unixBins environment:environmentDict];
+        NSString* epstopdfPath = [self findUnixProgram:@"ps2pdf" tryPrefixes:unixBins environment:environmentDict];
+        if (![gsPath isEqualToString:@""] && ![epstopdfPath isEqualToString:@""])
+        {
+          NSString* systemCall =
+            [NSString stringWithFormat:
+              @"%@ -sDEVICE=pswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dQUIET %@ -c quit | %@ - %@",
+              gsPath, pdfFilePath, epstopdfPath, tmpPdfFilePath];
+          int error = system([systemCall UTF8String]);
+          if (error)
+          {
+            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file with command:\n%@",
+                                                                         @"An error occured while trying to create the file with command:\n%@"),
+                                                       systemCall],
+                            @"Ok", nil, nil);
+          }
+          else
+            data = [NSData dataWithContentsOfFile:tmpPdfFilePath];
+        }
+      }
+      else if (format == EXPORT_FORMAT_EPS)
       {
         [pdfData writeToFile:pdfFilePath atomically:NO];
         NSFileHandle* nullDevice = [NSFileHandle fileHandleWithNullDevice];
@@ -1753,13 +1913,13 @@ static NSMutableArray*      unixBins = nil;
         }
         data = [NSData dataWithContentsOfFile:tmpEpsFilePath];
       }
-      else if ([format isEqualToString:@"tiff"])
+      else if (format == EXPORT_FORMAT_TIFF)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentation];
         [image release];
       }
-      else if ([format isEqualToString:@"png"])
+      else if (format == EXPORT_FORMAT_PNG)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
@@ -1767,7 +1927,7 @@ static NSMutableArray*      unixBins = nil;
         data = [imageRep representationUsingType:NSPNGFileType properties:nil];
         [image release];
       }
-      else if ([format isEqualToString:@"jpeg"])
+      else if (format == EXPORT_FORMAT_JPEG)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         NSSize size = [image size];

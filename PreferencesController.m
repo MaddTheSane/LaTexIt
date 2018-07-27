@@ -13,6 +13,7 @@
 #import "EncapsulationTableView.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
+#import "NSPopUpButtonExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "LibraryManager.h"
 #import "LibraryTableView.h"
@@ -49,6 +50,7 @@ NSString* DefaultPreambleAttributedKey = @"LaTeXiT_DefaultPreambleAttributedKey"
 NSString* DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
 NSString* CompositionModeKey           = @"LaTeXiT_CompositionModeKey";
 NSString* PdfLatexPathKey              = @"LaTeXiT_PdfLatexPathKey";
+NSString* Ps2PdfPathKey                = @"LaTeXiT_Ps2PdfPathKey";
 NSString* XeLatexPathKey               = @"LaTeXiT_XeLatexPathKey";
 NSString* LatexPathKey                 = @"LaTeXiT_LatexPathKey";
 NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
@@ -121,7 +123,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
   NSNumber* numberYes = [NSNumber numberWithBool:YES];
   NSDictionary* defaults =
-    [NSDictionary dictionaryWithObjectsAndKeys:@"PDF",                           DragExportTypeKey,
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:EXPORT_FORMAT_PDF], DragExportTypeKey,
                                                [[NSColor whiteColor] data],      DragExportJpegColorKey,
                                                [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
                                                [[NSColor whiteColor] data],      DefaultImageViewBackground,
@@ -134,6 +136,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                @"", LatexPathKey,
                                                @"", DvipdfPathKey,
                                                @"", GsPathKey,
+                                               @"", Ps2PdfPathKey,
                                                [NSNumber numberWithBool:YES], SyntaxColoringEnableKey,
                                                [[NSColor blackColor]   data], SyntaxColoringTextForegroundColorKey,
                                                [[NSColor whiteColor]   data], SyntaxColoringTextBackgroundColorKey,
@@ -169,7 +172,28 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
                                                nil];
 
-  [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults registerDefaults:defaults];
+  
+  //from version >= 1.6.0, the export format is no more stored as a string but with an number
+  id exportFormat = [userDefaults objectForKey:DragExportTypeKey];
+  if ([exportFormat isKindOfClass:[NSString class]])
+  {
+    exportFormat = [exportFormat lowercaseString];
+    if ([exportFormat isEqualToString:@"pdf"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_PDF];
+    else if ([exportFormat isEqualToString:@"eps"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_EPS];
+    else if ([exportFormat isEqualToString:@"tiff"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_TIFF];
+    else if ([exportFormat isEqualToString:@"png"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_PNG];
+    else if ([exportFormat isEqualToString:@"jpeg"])
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_JPEG];
+    else
+      exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_PDF];
+    [userDefaults setObject:exportFormat forKey:DragExportTypeKey];
+  }
 }
 
 -(id) init
@@ -336,7 +360,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 
-  [dragExportPopupFormat selectItemWithTitle:[userDefaults stringForKey:DragExportTypeKey]];
+  [dragExportPopupFormat selectItemWithTag:[userDefaults integerForKey:DragExportTypeKey]];
   [self dragExportPopupFormatDidChange:dragExportPopupFormat];
 
   [defaultImageViewBackgroundColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultImageViewBackground]]];
@@ -380,6 +404,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   [dvipdfTextField          setDelegate:self];
   [gsTextField              setStringValue:[userDefaults stringForKey:GsPathKey]];
   [gsTextField              setDelegate:self];
+  [ps2pdfTextField          setStringValue:[userDefaults stringForKey:Ps2PdfPathKey]];
+  [ps2pdfTextField          setDelegate:self];
   [self changeCompositionMode:compositionMatrix];//to update enable state of the buttons just above (here in the code)
   
   [serviceRespectsPointSizeMatrix selectCellWithTag:([userDefaults boolForKey:ServiceRespectsPointSizeKey] ? 1 : 0)];
@@ -453,11 +479,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 -(IBAction) dragExportPopupFormatDidChange:(id)sender
 {
   BOOL allowOptions = NO;
-  NSString* titleOfSelectedItem = [sender titleOfSelectedItem];
-  NSString* format = [titleOfSelectedItem lowercaseString];
-  NSArray* components = [format componentsSeparatedByString:@" "];
-  format = [components count] ? [components objectAtIndex:0] : @"";
-  if ([format isEqualToString:@"jpeg"])
+  export_format_t exportFormat = [sender selectedTag];
+  if (exportFormat == EXPORT_FORMAT_JPEG)
   {
     allowOptions = YES;
     [dragExportJpegWarning setHidden:NO];
@@ -469,15 +492,16 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   }
   
   [dragExportOptionsButton setEnabled:allowOptions];
-  
-  [[NSUserDefaults standardUserDefaults] setObject:titleOfSelectedItem forKey:DragExportTypeKey];
+  [[NSUserDefaults standardUserDefaults] setInteger:exportFormat forKey:DragExportTypeKey];
 }
 
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok  = YES;
-  if ([[sender title] isEqualToString:@"EPS"])
+  if ([sender tag] == EXPORT_FORMAT_EPS)
     ok = [[AppController appController] isGsAvailable];
+  else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPs2PdfAvailable];
   return ok;
 }
 
@@ -645,11 +669,15 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     case 2 : textField = latexTextField; break;
     case 3 : textField = dvipdfTextField; break;
     case 4 : textField = gsTextField; break;
+    case 5 : textField = ps2pdfTextField; break;
     default: break;
   }
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   [openPanel setResolvesAliases:NO];
-  [openPanel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self
+  NSString* filename = [textField stringValue];
+  NSString* path = filename ? filename : @"";
+  path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? [path stringByDeletingLastPathComponent] : nil;
+  [openPanel beginSheetForDirectory:path file:[filename lastPathComponent] types:nil modalForWindow:[self window] modalDelegate:self
                            didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:) contextInfo:textField];
 }
 
@@ -683,6 +711,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     didChangeDvipdfTextField = YES;
   else if (textField == gsTextField)
     didChangeGsTextField = YES;
+  else if (textField == ps2pdfTextField)
+    didChangePs2PdfTextField = YES;
 }
 
 -(void) controlTextDidEndEditing:(NSNotification*)aNotification
@@ -692,7 +722,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   BOOL isDirectory = NO;
 
   NSArray* pathTextFields =
-    [NSArray arrayWithObjects:pdfLatexTextField, xeLatexTextField, latexTextField, dvipdfTextField, gsTextField, nil];
+    [NSArray arrayWithObjects:pdfLatexTextField, xeLatexTextField, latexTextField, dvipdfTextField, gsTextField, ps2pdfTextField, nil];
 
   //if it is a path textfield, color in red in case of invalid file
   if (!textField)//check all
@@ -757,15 +787,41 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
       
       //export to EPS needs ghostscript to be available
-      NSString* exportType = [userDefaults stringForKey:DragExportTypeKey];
-      if ([exportType isEqualToString:@"EPS"] && ![[AppController appController] isGsAvailable])
+      export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+      if (exportFormat == EXPORT_FORMAT_EPS && ![[AppController appController] isGsAvailable])
       {
-        [userDefaults setObject:@"PDF" forKey:DragExportTypeKey];
-        [dragExportPopupFormat selectItemWithTitle:[userDefaults stringForKey:DragExportTypeKey]];
+        [userDefaults setInteger:EXPORT_FORMAT_PDF forKey:DragExportTypeKey];
+        [dragExportPopupFormat selectItemWithTag:[userDefaults integerForKey:DragExportTypeKey]];
+        [self dragExportPopupFormatDidChange:dragExportPopupFormat];
+      }
+      else if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS &&
+               (![[AppController appController] isGsAvailable] || ![[AppController appController] isPs2PdfAvailable]))
+      {
+        [userDefaults setInteger:EXPORT_FORMAT_PDF forKey:DragExportTypeKey];
+        [dragExportPopupFormat selectItemWithTag:[userDefaults integerForKey:DragExportTypeKey]];
         [self dragExportPopupFormatDidChange:dragExportPopupFormat];
       }
     }
     didChangeGsTextField = NO;
+  }
+  else if (textField == ps2pdfTextField)
+  {
+    if (didChangePs2PdfTextField)
+    {
+      [userDefaults setObject:[textField stringValue] forKey:Ps2PdfPathKey];
+      [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+      
+      //export to PDF_NO_EMBEDDED_FONTS needs ps2Pdf to be available
+      export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+      if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS &&
+          (![[AppController appController] isGsAvailable] || ![[AppController appController] isPs2PdfAvailable]))
+      {
+        [userDefaults setInteger:EXPORT_FORMAT_PDF forKey:DragExportTypeKey];
+        [dragExportPopupFormat selectItemWithTag:[userDefaults integerForKey:DragExportTypeKey]];
+        [self dragExportPopupFormatDidChange:dragExportPopupFormat];
+      }
+    }
+    didChangePs2PdfTextField = NO;
   }
   else if (textField == additionalTopMarginTextField)
     [userDefaults setFloat:[additionalTopMarginTextField floatValue] forKey:AdditionalTopMarginKey];

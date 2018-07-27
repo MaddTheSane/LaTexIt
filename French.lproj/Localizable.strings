@@ -36,6 +36,7 @@
 "color.sty seems to be unavailable" = "color.sty semble indisponible";
 "%@ not found or not working as expected" = "%@ introuvable ou non fonctionnel";
 "The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
+"You need ps2pdf to export as \"PDF with outlined fonts\"" = "ps2pdf est requis pour activer l'export  en \"PDF sans polices embarquées\"";
 "Find %@..." = "Chercher %@...";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
 "pdflatex, latex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
@@ -49,6 +50,7 @@
 "Process anyway" = "Procéder malgré tout";
 "You did not type any text in the body. The result will certainly be empty." = "Vous n'avez pas tapé de corps au document LaTeX. Le résultat sera sans doute vide.";
 "An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
+"An error occured while trying to create the file with command:\n%@" = "Une erreur est survenue lors de la création du fichier avec la commande:\n%@";
 "http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_fr.php";
 "An error occured while trying to reach %@.\n You should check your network." = "Une erreur est survenue en essayant d'atteindre %@.\n Vous devriez vérifier votre réseau.";
 "Equation linked with another application" = "Équation liée à une autre application";

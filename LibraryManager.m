@@ -524,9 +524,28 @@ static NSImage*        libraryFileIcon       = nil;
   NSString* dropPath = [dropDestination path];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-  NSArray* components = [dragExportType componentsSeparatedByString:@" "];
-  NSString* extension = [components count] ? [components objectAtIndex:0] : nil;
+  export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+  NSString* extension = nil;
+  switch(exportFormat)
+  {
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      extension = @"pdf";
+      break;
+    case EXPORT_FORMAT_EPS:
+      extension = @"eps";
+      break;
+    case EXPORT_FORMAT_TIFF:
+      extension = @"tiff";
+      break;
+    case EXPORT_FORMAT_PNG:
+      extension = @"png";
+      break;
+    case EXPORT_FORMAT_JPEG:
+      extension = @"jpeg";
+      break;
+  }
+  
   NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
   float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
 
@@ -586,7 +605,7 @@ static NSImage*        libraryFileIcon       = nil;
       {
         HistoryItem* historyItem = [libraryFile value];
         NSData* pdfData = [historyItem pdfData];
-        NSData* data = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
@@ -595,7 +614,7 @@ static NSImage*        libraryFileIcon       = nil;
         #ifndef PANTHER
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
-        NSColor* backgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+        NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
         [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
                                        forFile:filePath options:options];
         [names addObject:fileName];
@@ -613,7 +632,7 @@ static NSImage*        libraryFileIcon       = nil;
         {
           HistoryItem* historyItem = [libraryFile value];
           NSData* pdfData = [historyItem pdfData];
-          NSData* data = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+          NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
           [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
@@ -622,7 +641,7 @@ static NSImage*        libraryFileIcon       = nil;
           #ifndef PANTHER
           options = NSExclude10_4ElementsIconCreationOption;
           #endif
-          NSColor* backgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+          NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
           [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
                                          forFile:filePath options:options];
           [names addObject:fileName];

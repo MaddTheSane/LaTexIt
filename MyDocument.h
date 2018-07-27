@@ -73,6 +73,7 @@
 -(IBAction) closeOptionsPane:(id)sender;
 -(IBAction) jpegQualitySliderDidChange:(id)sender;
 -(IBAction) saveAccessoryViewPopupFormatDidChange:(id)sender;
+-(IBAction) nullAction:(id)sender;
 
 -(void) setNullId;//useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;

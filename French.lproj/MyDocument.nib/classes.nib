@@ -58,6 +58,7 @@
                 exportImage = id; 
                 jpegQualitySliderDidChange = id; 
                 makeLatex = id; 
+                nullAction = id; 
                 openOptions = id; 
                 saveAccessoryViewPopupFormatDidChange = id; 
             }; 

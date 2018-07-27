@@ -494,9 +494,28 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   //the problem will be to avoid overwritting files when they already exist
   NSString* filePrefix = @"latex-image";
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-  NSArray* components = [dragExportType componentsSeparatedByString:@" "];
-  NSString* extension = [components count] ? [components objectAtIndex:0] : nil;
+  export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+  NSString* extension = nil;
+  switch(exportFormat)
+  {
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      extension = @"pdf";
+      break;
+    case EXPORT_FORMAT_EPS:
+      extension = @"eps";
+      break;
+    case EXPORT_FORMAT_TIFF:
+      extension = @"tiff";
+      break;
+    case EXPORT_FORMAT_PNG:
+      extension = @"png";
+      break;
+    case EXPORT_FORMAT_JPEG:
+      extension = @"jpeg";
+      break;
+  }
+  
   NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
   float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
 
@@ -523,7 +542,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       {
         HistoryItem* historyItem = [historyItems objectAtIndex:index];
         NSData* pdfData = [historyItem pdfData];
-        NSData* data = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+        NSData* data = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
@@ -532,7 +551,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         #ifndef PANTHER
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
-        NSColor* backgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+        NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
         [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData] backgroundColor:backgroundColor]
                                        forFile:filePath options:options];
         [names addObject:fileName];

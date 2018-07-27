@@ -273,7 +273,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.5.6"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.6.0"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -472,29 +472,30 @@ static NSLock* strangeLock = nil;
 
   //Stores the data in the pasteboard corresponding to what the user asked for (pdf, jpeg, tiff...)
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-  NSArray*  components     = [dragExportType componentsSeparatedByString:@" "];
-  NSString* extension      = [components count] ? [components objectAtIndex:0] : nil;
+  export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
   NSColor*  jpegColor      = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
   float     quality        = [userDefaults floatForKey:DragExportJpegQualityKey];
   NSData*   data           = lazyDataProvider ? nil :
-                             [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:jpegColor jpegQuality:quality];
+                             [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:jpegColor jpegQuality:quality];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
-  if ([extension isEqualToString:@"pdf"])
+  switch(exportFormat)
   {
-    [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:lazyDataProvider];
-    if (!lazyDataProvider) [pboard setData:data forType:NSPDFPboardType];
-  }
-  else if ([extension isEqualToString:@"eps"])
-  {
-    [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:lazyDataProvider];
-    if (!lazyDataProvider) [pboard setData:data forType:NSPostScriptPboardType];
-  }
-  else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
-  {
-    [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:lazyDataProvider];
-    if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];
-  }
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSPDFPboardType];
+      break;
+    case EXPORT_FORMAT_EPS:
+      [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSPostScriptPboardType];
+      break;
+    case EXPORT_FORMAT_TIFF:
+    case EXPORT_FORMAT_PNG:
+    case EXPORT_FORMAT_JPEG:
+      [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];
+      break;
+  }//end switch
 }
 
 @end

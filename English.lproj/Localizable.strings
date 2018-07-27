@@ -34,6 +34,7 @@
 "useful to type directly accentuated characters" = "useful to type directly accentuated characters";
 "%@ not found or not working as expected" = "%@ not found or not working as expected";
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
+"You need ps2pdf to export as \"PDF with outlined fonts\"" = "You need ps2pdf to export as \"PDF with outlined fonts\"";
 "Find %@..." = "Find %@...";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
@@ -45,6 +46,7 @@
 "Process anyway" = "Process anyway";
 "You did not type any text in the body. The result will certainly be empty." = "You did not type any text in the body. The result will certainly be empty.";
 "An error occured while trying to create the file :\n%@" = "An error occured while trying to create the file :\n%@";
+"An error occured while trying to create the file with command:\n%@" = "An error occured while trying to create the file with command:\n%@";
 "http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_en.php";
 "An error occured while trying to reach %@.\n You should check your network." = "An error occured while trying to reach %@.\n You should check your network.";
 "Equation linked with another application" = "Equation linked with another application";

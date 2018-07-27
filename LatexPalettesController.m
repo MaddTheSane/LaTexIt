@@ -366,7 +366,7 @@
 
 -(IBAction) changeGroup:(id)sender
 {
-  int group = [[sender selectedItem] tag];
+  int group = [sender selectedTag];
   NSArray* items = [groups objectAtIndex:group];
   unsigned int nbItems = [items count];
   int nbColumns = numberOfItemsPerRow;

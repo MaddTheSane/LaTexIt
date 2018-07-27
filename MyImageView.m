@@ -190,13 +190,31 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSString* filePrefix = @"latex-image";
     
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-    NSArray* components = [dragExportType componentsSeparatedByString:@" "];
-    NSString* extension = [components count] ? [components objectAtIndex:0] : nil;
-    
+    export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+    NSString* extension = nil;
+    switch(exportFormat)
+    {
+      case EXPORT_FORMAT_PDF:
+      case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+        extension = @"pdf";
+        break;
+      case EXPORT_FORMAT_EPS:
+        extension = @"eps";
+        break;
+      case EXPORT_FORMAT_TIFF:
+        extension = @"tiff";
+        break;
+      case EXPORT_FORMAT_PNG:
+        extension = @"png";
+        break;
+      case EXPORT_FORMAT_JPEG:
+        extension = @"jpeg";
+        break;
+    }
+
     NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
     float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
-    NSData* data   = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+    NSData* data   = [[AppController appController] dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality];
 
     if (extension)
     {
@@ -220,7 +238,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         #ifndef PANTHER
         options = NSExclude10_4ElementsIconCreationOption;
         #endif
-        NSColor* jpegBackgroundColor = [dragExportType isEqualTo:@"jpeg"] ? color : nil;
+        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
         [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
                                        forFile:filePath options:options];
         [names addObject:fileName];
@@ -242,16 +260,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString *)type
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  NSData* data = nil;
-  if ([type isEqualTo:NSPDFPboardType])
-    data = pdfData;
-  else
-  {
-    NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-    data = [[AppController appController] dataForType:dragExportType pdfData:pdfData
-                       jpegColor:[NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]]
-                     jpegQuality:[userDefaults floatForKey:DragExportJpegQualityKey]];
-  }
+  NSData* data = [[AppController appController] dataForType:[userDefaults integerForKey:DragExportTypeKey] pdfData:pdfData
+                                                  jpegColor:[NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]]
+                                                jpegQuality:[userDefaults floatForKey:DragExportJpegQualityKey]];
   [pasteboard setData:data forType:type];
 }
 

@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.5.6\
+\f2\b \cf0 LaTeXiT 1.6.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -52,7 +52,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.5.6 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.6.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -228,7 +228,7 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 
 \fs22 \cf0 \ulnone \
 - la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
-- avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer la taille exacte. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
+- avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer sa taille exacte, et l'\'8equation se retrouve alors tronqu\'8ee. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
 - les marges personnalis\'8ees ne sont pas prises en compte lors d'un export en EPS; cela semble \'90tre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque;\
 - le service ne marche pas avec Mail 2.0.0, ..., 2.0.5 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites);\
@@ -237,7 +237,7 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 - avec Pages 1.0.2, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages, apparemment r\'8esolu avec Pages 2.0.\
 - avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, qui a \'8et\'8e corrig\'8e dans la version 1.8;\
-- avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS;\
+- avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS, ou PDF sans polices embarqu\'8ees;\
 - toujours avec Adobe Illustrator, y glisser/d\'8eposer un objet peut entra\'94ner la cr\'8eation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'8don de g\'8erer le glisser/d\'8eposer. OmniGraffle ne pose pas ce genre de probl\'8fmes;\
 - toujours avec Adobe Illustrator : de nombreux petits dysfonctionnement remarqu\'8es par les utilisateurs sont r\'8esolus en mettant \'88 jour Illustrator\'ca;\
 - si vous constatez que, m\'90me sans \'90tre utilis\'8e, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'8emoire, sachez simplement que pour acc\'8el\'8erer son temps de d\'8emarrage, il charge les images de l'historique en arri\'8fre plan. Ce travail, de tr\'8fs faible priorit\'8e, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'8eellement l'\'8eviter, pensez simplement \'88 faire le m\'8enage dans votre historique de temps en temps !\
@@ -271,14 +271,17 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs22 \cf0 \ulnone v 1.5.6 (7 f\'8evrier 2006)\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 - correction d'une r\'8egression emp\'90chant "LaTeX > Afficher le pr\'8eambule" de fonctionner correctement;\
+\fs22 \cf0 \ulnone v 1.6.0 (13 f\'8evrier 2006)\
+- ajout d'un export "PDF sans polices embarqu\'8ees", permettant d'exporter en PDF vers Illustrator sans remplacement des fontes (merci \'88 Jens N\'9ackel !);\
+- correction d'un bug de la version anglaise, dans les pr\'8ef\'8erences de composition (choix non pris en compte);\
+- correction d'un bug graphique survenant apr\'8fs la mise \'88 jour d'un \'8el\'8ement dans la biblioth\'8fque.\
+\
+v 1.5.6 (7 f\'8evrier 2006)\
+- correction d'une r\'8egression emp\'90chant "LaTeX > Afficher le pr\'8eambule" de fonctionner correctement;\
 - ajout d'un indicateur de chargement/sauvegarde de l'historique/la biblioth\'8fque;\
 - la biblioth\'8fque et l'historique ne sont plus sauvegard\'8ees si elles n'ont pas \'8et\'8e modifi\'8ees.\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 v 1.5.5 (7 f\'8evrier 2006)\
+v 1.5.5 (7 f\'8evrier 2006)\
 - acc\'8el\'8eration du r\'8eindexage de l'historique et de la biblioth\'8fque lors de la mise \'88 jour depuis un  LaTeXiT ant\'8erieur \'88 1.5.4; le processus est assez long et peut donner l'impression que LaTeXiT buggue.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 

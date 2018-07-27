@@ -178,7 +178,11 @@
       [libraryTableView reloadItem:item];
       
       //let's make it blink a little to inform the user that it has change
-      [libraryTableView setDelegate:nil];//remove delegate to speed up blinking
+
+      //we un-register the selectionDidChange notification of the delegate to speed up blinking
+      [[NSNotificationCenter defaultCenter] removeObserver:[libraryTableView delegate]
+                                                      name:NSOutlineViewSelectionDidChangeNotification
+                                                    object:libraryTableView];
       BOOL isSelected = YES;
       unsigned int itemIndex   = index;
       NSIndexSet*  itemIndexes = [NSIndexSet indexSetWithIndex:itemIndex];
@@ -190,14 +194,18 @@
         else
           [libraryTableView selectRowIndexes:itemIndexes byExtendingSelection:NO];
         isSelected = !isSelected;
-        [libraryTableView display];
         NSDate* now = [NSDate date];
+        [libraryTableView display];
         NSDate* next = [now addTimeInterval:1./30.];
         [NSThread sleepUntilDate:next];
       }
       [libraryTableView selectRowIndexes:itemIndexes byExtendingSelection:NO];
-      [libraryTableView display];
-      [libraryTableView setDelegate:[LibraryManager sharedManager]];//restore delegate after blinking
+      //we restore the delegate notification receiving
+      [[NSNotificationCenter defaultCenter] addObserver:[libraryTableView delegate]
+                                               selector:@selector(outlineViewSelectionDidChange:)
+                                                   name:NSOutlineViewSelectionDidChangeNotification
+                                                 object:libraryTableView];
+      [libraryTableView setNeedsDisplay:YES];
     }//end if selection is LibraryFile
   }//end if document
 }

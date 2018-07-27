@@ -17,6 +17,7 @@
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
+#import "NSPopUpButtonExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "NSStringExtended.h"
 #import "NSTaskExtended.h"
@@ -1111,10 +1112,29 @@ static NSString* yenString = nil;
 -(IBAction) saveAccessoryViewPopupFormatDidChange:(id)sender
 {
   BOOL allowOptions = NO;
-  NSString* format = [[sender titleOfSelectedItem] lowercaseString];
-  NSArray* components = [format componentsSeparatedByString:@" "];
-  format = [components count] ? [components objectAtIndex:0] : @"";
-  if ([format isEqualToString:@"jpeg"])
+  export_format_t exportFormat = [sender selectedTag];
+  NSString* extension = nil;
+  switch(exportFormat)
+  {
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      extension = @"pdf";
+      break;
+    case EXPORT_FORMAT_EPS:
+      extension = @"eps";
+      break;
+    case EXPORT_FORMAT_TIFF:
+      extension = @"tiff";
+      break;
+    case EXPORT_FORMAT_PNG:
+      extension = @"png";
+      break;
+    case EXPORT_FORMAT_JPEG:
+      extension = @"jpeg";
+      break;
+  }
+
+  if (exportFormat == EXPORT_FORMAT_JPEG)
   {
     allowOptions = YES;
     [currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"jpg", @"jpeg", nil]];
@@ -1123,16 +1143,32 @@ static NSString* yenString = nil;
   else
   {
     [saveAccessoryViewJpegWarning setHidden:YES];
-    [currentSavePanel setRequiredFileType:format];
+    [currentSavePanel setRequiredFileType:extension];
     allowOptions = NO;
   }
   
   [saveAccessoryViewOptionsButton setEnabled:allowOptions];
 }
 
+//enables or disables some exports
+-(BOOL) validateMenuItem:(NSMenuItem*)sender
+{
+  BOOL ok  = YES;
+  if ([sender tag] == EXPORT_FORMAT_EPS)
+    ok = [[AppController appController] isGsAvailable];
+  else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPs2PdfAvailable];
+  return ok;
+}
+
 //asks for a filename and format to export
 -(IBAction) exportImage:(id)sender
 {
+  //first, disables PDF_NOT_EMBEDDED_FONTS if needed
+  if (([saveAccessoryViewPopupFormat selectedTag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) &&
+      (![[AppController appController] isGsAvailable] || ![[AppController appController] isPs2PdfAvailable]))
+    [saveAccessoryViewPopupFormat selectItemWithTag:EXPORT_FORMAT_PDF];
+
   currentSavePanel = [NSSavePanel savePanel];
   [self saveAccessoryViewPopupFormatDidChange:saveAccessoryViewPopupFormat];
   [currentSavePanel setCanSelectHiddenExtension:YES];
@@ -1150,7 +1186,7 @@ static NSString* yenString = nil;
   if ((code == NSOKButton) && [imageView image])
   {
     NSData*  pdfData = [imageView pdfData];
-    NSString* format = [[saveAccessoryViewPopupFormat titleOfSelectedItem] lowercaseString];
+    export_format_t format = [saveAccessoryViewPopupFormat selectedTag];
     NSData*   data   = [[AppController appController] dataForType:format pdfData:pdfData jpegColor:[jpegColorWell color] jpegQuality:jpegQuality/100];
     if (data)
     {
@@ -1163,7 +1199,7 @@ static NSString* yenString = nil;
       #ifndef PANTHER
       options = NSExclude10_4ElementsIconCreationOption;
       #endif
-      NSColor* backgroundColor = [format isEqualTo:@"jpeg"] ? [jpegColorWell color] : nil;
+      NSColor* backgroundColor = (format == EXPORT_FORMAT_JPEG) ? [jpegColorWell color] : nil;
       [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData backgroundColor:backgroundColor]
                                      forFile:filePath options:options];
     }
@@ -1276,6 +1312,10 @@ static NSString* yenString = nil;
     [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDates] forKey:LastEasterEggsDatesKey];
   }
   return easterEggImage;
+}
+
+-(IBAction) nullAction:(id)sender
+{
 }
 
 @end

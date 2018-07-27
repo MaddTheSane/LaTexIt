@@ -10,6 +10,8 @@
 //the latexisation
 //It is also the LinkBack server
 
+#import "PreferencesController.h"
+
 #import <Cocoa/Cocoa.h>
 
 #ifdef PANTHER
@@ -36,6 +38,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
   //some info on current configuration
   BOOL isPdfLatexAvailable;
   BOOL isGsAvailable;
+  BOOL isPs2PdfAvailable;
   BOOL isDvipdfAvailable;
   BOOL isXeLatexAvailable;
   BOOL isLatexAvailable;
@@ -113,6 +116,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
 -(BOOL) isPdfLatexAvailable;
 -(BOOL) isGsAvailable;
 -(BOOL) isDvipdfAvailable;
+-(BOOL) isPs2PdfAvailable;
 -(BOOL) isXeLatexAvailable;
 -(BOOL) isLatexAvailable;
 -(BOOL) isColorStyAvailable;
@@ -127,7 +131,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
--(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality;
+-(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality;
 
 //returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;

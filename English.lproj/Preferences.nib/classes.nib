@@ -89,6 +89,7 @@
                 pdfLatexTextField = NSTextField; 
                 preambleTextView = LineCountTextView; 
                 preambleView = NSView; 
+                ps2pdfTextField = NSTextField; 
                 removeEncapsulationButton = NSButton; 
                 serviceRespectsBaselineButton = NSButton; 
                 serviceRespectsColorMatrix = NSMatrix; 
