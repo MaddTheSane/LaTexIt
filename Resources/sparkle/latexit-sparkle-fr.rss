@@ -422,5 +422,24 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFHBbWdYvsnllzIr6Y9Alg8C+Vm0tAhR/4e0JjaH0KYlsG80tVkG+FOt9dA=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.7.1</guid>
+      <title>Version 2.7.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>correction de la fenêtre de dialogue d'export.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.7.1</sparkle:releaseNotesLink>
+			<pubDate>Tue, 09 Sep 2014 22:13:26 +0200</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_1.dmg"
+        sparkle:version="2.7.1"
+        sparkle:shortVersionString="2.7.1"
+        type="application/octet-stream"
+        length="10725270"
+        sparkle:dsaSignature="MC0CFQCY5JDMY/DNxWYBhDLe4bIoklXS5AIUMQHgLY46YESyNvLsEQN9f/dgSyo="
+			/>
+    </item>
   </channel> 
 </rss>
