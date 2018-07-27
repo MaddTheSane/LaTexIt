@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //this class is the "encapsulation palette", see encaspulationManager for more details
 
@@ -47,7 +47,7 @@
 //the help button opens the "Advanced" pane of the preferences controller
 -(IBAction) openHelp:(id)sender
 {
-  [[AppController appController] showPreferencesPaneWithItemIdentifier:AdvancedToolbarItemIdentifier];
+  [[AppController appController] showPreferencesPaneWithItemIdentifier:AdvancedToolbarItemIdentifier options:nil];
 }
 //end openHelp:
 

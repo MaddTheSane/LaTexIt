@@ -3,7 +3,7 @@
 //  MozoDojo
 //
 //  Created by Pierre Chatelier on 16/03/07.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -11,7 +11,9 @@
 
 @interface NSObject (Extended)
 
--(void) forwardInvocation:(NSInvocation*)anInvocation;
++(Class) dynamicCastToClass:(Class)aClass;
+-(id)    dynamicCastToClass:(Class)aClass;
+-(void)  forwardInvocation:(NSInvocation*)anInvocation;
 
 //Difficult method : returns a simplified array, to be sure that no item of the array has an ancestor
 //in this array. This is useful, when several items are selected, to factorize the work in a common

@@ -3,11 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
 
+#import "Compressor.h"
 #import "LatexitEquation.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
@@ -15,6 +16,7 @@
 #import "NSDictionaryCompositionConfiguration.h"
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSObjectExtended.h"
 #import "NSStringExtended.h"
 #import "NSTaskExtended.h"
 #import "NSWorkspaceExtended.h"
@@ -108,33 +110,53 @@ static LaTeXProcessor* sharedInstance = nil;
             @"/sw/usr/local/bin", @"/sw/usr/local/sbin",
             @"/opt/local/bin", @"/opt/local/sbin",
             nil];
-        [unixBins addObjectsFromArray:usualBins];
-
-        self->globalEnvironmentPath = [[NSMutableString alloc] initWithString:[unixBins componentsJoinedByString:@":"]];
+        [self->unixBins addObjectsFromArray:usualBins];
 
         //add ~/.MacOSX/environment.plist
+        NSMutableArray* macOSXEnvironmentPaths = [NSMutableArray array];
         NSString* filePath = [NSString pathWithComponents:[NSArray arrayWithObjects:NSHomeDirectory(), @".MacOSX", @"environment.plist", nil]];
         NSDictionary* propertyList = [NSDictionary dictionaryWithContentsOfFile:filePath];
         if (propertyList)
         {
-          NSMutableArray* components = [NSMutableArray arrayWithArray:[self->globalEnvironmentPath componentsSeparatedByString:@":"]];
-          [components addObjectsFromArray:[[[propertyList objectForKey:@"PATH"] trim] componentsSeparatedByString:@":"]];
-          [self->globalEnvironmentPath setString:[components componentsJoinedByString:@":"]];
+          NSArray* components =
+            [[[[propertyList objectForKey:@"PATH"] dynamicCastToClass:[NSString class]] trim] componentsSeparatedByString:@":"];
+          if (components)
+            [macOSXEnvironmentPaths setArray:components];
         }//end if (propertyList)
 
+        //process environment
+        NSMutableArray* processEnvironmentPaths = [NSMutableArray array];
         self->globalFullEnvironment  = [[[NSProcessInfo processInfo] environment] mutableCopy];
-        self->globalExtraEnvironment = [[NSMutableDictionary alloc] init];
-        NSString* pathEnv = [[self->globalFullEnvironment objectForKey:@"PATH"] trim];
+        NSString* pathEnv = [[[self->globalFullEnvironment objectForKey:@"PATH"] dynamicCastToClass:[NSString class]] trim];
         if (pathEnv)
         {
-          NSMutableSet* pathsSet = [NSMutableSet setWithCapacity:30];
-          [pathsSet addObjectsFromArray:[self->globalEnvironmentPath componentsSeparatedByString:@":"]];
-          [pathsSet addObjectsFromArray:[pathEnv componentsSeparatedByString:@":"]];
-          [self->globalEnvironmentPath setString:[[pathsSet allObjects] componentsJoinedByString:@":"]];
-          [self->globalFullEnvironment setObject:self->globalEnvironmentPath forKey:@"PATH"];
-          [self->globalExtraEnvironment setObject:self->globalEnvironmentPath forKey:@"PATH"];
+          NSArray* components = [pathEnv componentsSeparatedByString:@":"];
+          if (components)
+            [processEnvironmentPaths setArray:components];
         }//end if (pathEnv)
+
+        NSMutableArray* allBins = [NSMutableArray arrayWithArray:self->unixBins];
+        [allBins addObjectsFromArray:macOSXEnvironmentPaths];
+        [allBins addObjectsFromArray:processEnvironmentPaths];
+        NSMutableArray* allBinsUniqued = [NSMutableArray arrayWithCapacity:[allBins count]];
+        NSMutableSet* allBinsEncountered = [NSMutableSet setWithCapacity:[allBins count]];
+        NSEnumerator* enumerator = [allBins objectEnumerator];
+        NSString* path = nil;
+        while((path = [enumerator nextObject]))
+        {
+          if (![allBinsEncountered containsObject:path])
+          {
+            [allBinsUniqued addObject:path];
+            [allBinsEncountered addObject:path];
+          }//end if (![allBinsEncountered containsObject:path])
+        }//end for each path
+
         
+        self->globalEnvironmentPath  = [[allBinsUniqued componentsJoinedByString:@":"] mutableCopy];
+        [self->globalFullEnvironment setObject:self->globalEnvironmentPath forKey:@"PATH"];
+        self->globalExtraEnvironment = [[NSMutableDictionary alloc] init];
+        [self->globalExtraEnvironment setObject:self->globalEnvironmentPath forKey:@"PATH"];
+
         self->environmentsInitialized = YES;
       }//end if (!self->environmentsInitialized)
     }//@synchronized(self)
@@ -181,36 +203,45 @@ static LaTeXProcessor* sharedInstance = nil;
   source   = !source   ? @"" : source;
 
   #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
   BOOL embeddAsAnnotation = !shouldDenyDueTo64Bitsproblem;
   if (embeddAsAnnotation)
   {
-    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
-    PDFPage* pdfPage = [pdfDocument pageAtIndex:0];
-    PDFAnnotation* pdfAnnotation = !pdfPage ? nil : [[PDFAnnotationText alloc] initWithBounds:NSZeroRect];
-    [pdfAnnotation setShouldDisplay:NO];
-    [pdfAnnotation setShouldPrint:NO];
-    NSData* embeddedData = !pdfAnnotation ? nil :
-      [NSKeyedArchiver archivedDataWithRootObject:
-        [NSDictionary dictionaryWithObjectsAndKeys:
-          preamble, @"preamble",
-          source, @"source",
-          [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
-          [NSNumber numberWithInt:mode], @"mode",
-          [NSNumber numberWithDouble:magnification], @"magnification",
-          [NSNumber numberWithDouble:baseline], @"baseline",
-          [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
-          title, @"title",
-          nil]];
-    NSString* embeddedDataBase64 = [embeddedData encodeBase64];
-    if (isMacOS10_5OrAbove())
-      [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
-    [pdfAnnotation setContents:embeddedDataBase64];
-    [pdfPage addAnnotation:pdfAnnotation];
-    NSData* dataWithAnnotation = [pdfDocument dataRepresentation];
-    data = !dataWithAnnotation ? data : dataWithAnnotation;
-    [pdfAnnotation release];
-    [pdfDocument   release];
+    PDFDocument* pdfDocument = nil;
+    PDFAnnotation* pdfAnnotation = nil;
+    @try{
+      pdfDocument = [[PDFDocument alloc] initWithData:data];
+      PDFPage* pdfPage = [pdfDocument pageAtIndex:0];
+      pdfAnnotation = !pdfPage ? nil : [[PDFAnnotationText alloc] initWithBounds:NSZeroRect];
+      [pdfAnnotation setShouldDisplay:NO];
+      [pdfAnnotation setShouldPrint:NO];
+      NSData* embeddedData = !pdfAnnotation ? nil :
+        [NSKeyedArchiver archivedDataWithRootObject:
+          [NSDictionary dictionaryWithObjectsAndKeys:
+            preamble, @"preamble",
+            source, @"source",
+            [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
+            [NSNumber numberWithInt:mode], @"mode",
+            [NSNumber numberWithDouble:magnification], @"magnification",
+            [NSNumber numberWithDouble:baseline], @"baseline",
+            [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
+            title, @"title",
+            nil]];
+      NSString* embeddedDataBase64 = [embeddedData encodeBase64];
+      if (isMacOS10_5OrAbove())
+        [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
+      [pdfAnnotation setContents:embeddedDataBase64];
+      [pdfPage addAnnotation:pdfAnnotation];
+      NSData* dataWithAnnotation = [pdfDocument dataRepresentation];
+      data = !dataWithAnnotation ? data : dataWithAnnotation;
+    }
+    @catch(NSException* e){
+      DebugLog(0, @"exception : %@", e);
+    }
+    @finally{
+      [pdfAnnotation release];
+      [pdfDocument release];
+    }
   }//end if (embeddAsAnnotation)
 
   NSString* colorAsString   = [(color ? color : [NSColor blackColor]) rgbaString];
@@ -317,7 +348,8 @@ static LaTeXProcessor* sharedInstance = nil;
       //int insertionPoint = pdftexColorRange.location+pdftexColorRange.length;
       //[preamble insertString:colorString atIndex:insertionPoint];
       colorString = xcolor ? [NSString stringWithFormat:@"{xcolor}%@", colorString] : [NSString stringWithFormat:@"{color}%@", colorString];
-      [preamble replaceCharactersInRange:colorRange withString:colorString];
+      if (colorString)
+        [preamble replaceCharactersInRange:colorRange withString:colorString];
     }
     else //try to find a good place of insertion.
     {
@@ -866,18 +898,26 @@ static LaTeXProcessor* sharedInstance = nil;
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
     #warning 64bits problem
-    BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+    BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
     if (!failed && pdfData && !shouldDenyDueTo64Bitsproblem)
     {
-      //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
-      PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-      NSDictionary* attributes =
-        [NSDictionary dictionaryWithObjectsAndKeys:
-            [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
-      [pdfDocument setDocumentAttributes:attributes];
-      pdfData = [pdfDocument dataRepresentation];
-      [pdfDocument release];
-    }
+      PDFDocument* pdfDocument = nil;
+      @try{
+        //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
+        pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+        NSDictionary* attributes =
+          [NSDictionary dictionaryWithObjectsAndKeys:
+              [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
+        [pdfDocument setDocumentAttributes:attributes];
+        pdfData = [pdfDocument dataRepresentation];
+      }
+      @catch(NSException* e){
+        DebugLog(0, @"exception : %@", e);
+      }
+      @finally {
+        [pdfDocument release];
+      }
+    }//end if (!failed && pdfData && !shouldDenyDueTo64Bitsproblem)
 
     if (!failed && pdfData)
     {
@@ -1236,6 +1276,10 @@ static LaTeXProcessor* sharedInstance = nil;
         }//end if error seems ok
       }
     }//end if > 1 component
+    else if ([line rangeOfString:@"! File ended"].location != NSNotFound)
+    {
+      [filteredErrors addObject:[NSString stringWithFormat:@"::%@", line]];
+    }//end if ([line rangeOfString:@"! File ended"].location != NSNotFound)
   }//end while line
   return filteredErrors;
 }
@@ -1452,19 +1496,22 @@ static LaTeXProcessor* sharedInstance = nil;
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
              jpegColor:(NSColor*)color jpegQuality:(CGFloat)quality scaleAsPercent:(CGFloat)scaleAsPercent
              compositionConfiguration:(NSDictionary*)compositionConfiguration
+             uniqueIdentifier:(NSString*)uniqueIdentifier
 {
   NSData* data = nil;
   NSString* temporaryDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
-  @synchronized(self) //only one person may ask that service at a time
+  //@synchronized(self) //only one person may ask that service at a time //now using uniqueidentifier to allow thread safety
   {
     //prepare file names
-    NSString* filePrefix     = [NSString stringWithFormat:@"latexit-controller"];
+    NSString* filePrefix     = [NSString stringWithFormat:@"latexit-controller-%@", uniqueIdentifier];
     NSString* pdfFile        = [NSString stringWithFormat:@"%@.pdf", filePrefix];
     NSString* pdfFilePath    = [temporaryDirectory stringByAppendingPathComponent:pdfFile];
     NSString* tmpEpsFile     = [NSString stringWithFormat:@"%@-2.eps", filePrefix];
     NSString* tmpEpsFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpEpsFile];
     NSString* tmpPdfFile     = [NSString stringWithFormat:@"%@-2.pdf", filePrefix];
     NSString* tmpPdfFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpPdfFile];
+    NSString* tmpSvgFile     = [NSString stringWithFormat:@"%@-2.svg", filePrefix];
+    NSString* tmpSvgFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpSvgFile];
     
     if (pdfData)
     {
@@ -1496,34 +1543,43 @@ static LaTeXProcessor* sharedInstance = nil;
             title:[equationMetaData objectForKey:@"title"]];
             
         #warning 64bits problem
-        BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+        BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
         if (pdfData && !shouldDenyDueTo64Bitsproblem)
         {
           //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
-          PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-          NSDictionary* attributes =
-            [NSDictionary dictionaryWithObjectsAndKeys:
-                [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
-          [pdfDocument setDocumentAttributes:attributes];
-          pdfData = [pdfDocument dataRepresentation];
-          [pdfDocument release];
+          PDFDocument* pdfDocument = nil;
+          @try{
+            pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+            NSDictionary* attributes =
+              [NSDictionary dictionaryWithObjectsAndKeys:
+                  [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
+            [pdfDocument setDocumentAttributes:attributes];
+            pdfData = [pdfDocument dataRepresentation];
+          }
+          @catch(NSException* e) {
+            DebugLog(0, @"exception : %@", e);
+          }
+          @finally{
+            [pdfDocument release];
+          }
         }//end if (pdfData && !shouldDenyDueTo64Bitsproblem)
 
         [imageView release];
         [pdfImage release];
         [pdfImageRep release];
-      }
+      }//end if (scaleAsPercent != 100)
       
       BOOL      useLoginShell    = [compositionConfiguration compositionConfigurationUseLoginShell];
       NSString* gsPath           = [compositionConfiguration compositionConfigurationProgramPathGs];
       NSArray*  gsArguments      = [compositionConfiguration compositionConfigurationProgramArgumentsGs];
       NSString* psToPdfPath      = [compositionConfiguration compositionConfigurationProgramPathPsToPdf];
       NSArray*  psToPdfArguments = [compositionConfiguration compositionConfigurationProgramArgumentsPsToPdf];
+      NSString* pdf2svgPath      = [[PreferencesController sharedController] exportSvgPdfToSvgPath];
     
       if (format == EXPORT_FORMAT_PDF)
       {
         data = pdfData;
-      }
+      }//end if (format == EXPORT_FORMAT_PDF)
       else if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       {
         [pdfData writeToFile:pdfFilePath atomically:NO];
@@ -1557,20 +1613,24 @@ static LaTeXProcessor* sharedInstance = nil;
                                    informativeTextWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, output] runModal];
             }//end if displayError
             unlink([tmpFilePath UTF8String]);
-          }//end if error
-          else
+          }//end if (error)
+          else//if (!error)
           {
             LatexitEquation* latexitEquation = [LatexitEquation latexitEquationWithPDFData:pdfData useDefaults:YES];
             data = [NSData dataWithContentsOfFile:tmpPdfFilePath options:NSUncachedRead error:nil];
-            data = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:data preamble:[[latexitEquation preamble] string]
+            data = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:data
+                                           preamble:[[latexitEquation preamble] string]
                                              source:[[latexitEquation sourceText] string]
                                               color:[latexitEquation color] mode:[latexitEquation mode]
                                       magnification:[latexitEquation pointSize]
                                            baseline:0
                                     backgroundColor:[latexitEquation backgroundColor] title:[latexitEquation title]];
-          }
-        }
-      }
+          }//end if (!error)
+          [[NSFileManager defaultManager] removeFileAtPath:tmpFilePath handler:nil];
+        }//if (gsPath && ![gsPath isEqualToString:@""] && psToPdfPath && ![psToPdfPath isEqualToString:@""])
+        [[NSFileManager defaultManager] removeFileAtPath:pdfFilePath handler:nil];
+        [[NSFileManager defaultManager] removeFileAtPath:tmpPdfFilePath handler:nil];
+      }//end if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       else if (format == EXPORT_FORMAT_EPS)
       {
         [pdfData writeToFile:pdfFilePath atomically:NO];
@@ -1608,14 +1668,19 @@ static LaTeXProcessor* sharedInstance = nil;
           [gsTask release];
         }
         data = [NSData dataWithContentsOfFile:tmpEpsFilePath options:NSUncachedRead error:nil];
-      }
+        [[NSFileManager defaultManager] removeFileAtPath:tmpEpsFilePath handler:nil];
+        [[NSFileManager defaultManager] removeFileAtPath:pdfFilePath handler:nil];
+      }//end if (format == EXPORT_FORMAT_EPS)
       else if (format == EXPORT_FORMAT_TIFF)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentation];
         [image release];
-        data = [self annotateImageData:data withData:pdfData];
-      }
+        NSData* annotationData =
+          [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
+        NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
+        data = [self annotateData:data ofUTI:@"public.tiff" withData:annotationDataCompressed];
+      }//end if (format == EXPORT_FORMAT_TIFF)
       else if (format == EXPORT_FORMAT_PNG)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
@@ -1623,8 +1688,11 @@ static LaTeXProcessor* sharedInstance = nil;
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
         data = [imageRep representationUsingType:NSPNGFileType properties:nil];
         [image release];
-        data = [self annotateImageData:data withData:pdfData];
-      }
+        NSData* annotationData =
+          [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
+        NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
+        data = [self annotateData:data ofUTI:@"public.png" withData:annotationDataCompressed];
+      }//end if (format == EXPORT_FORMAT_PNG)
       else if (format == EXPORT_FORMAT_JPEG)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
@@ -1632,14 +1700,14 @@ static LaTeXProcessor* sharedInstance = nil;
         NSImage* opaqueImage = [[NSImage alloc] initWithSize:size];
         NSRect rect = NSMakeRect(0, 0, size.width, size.height);
         @try{
-        [opaqueImage lockFocus];
+          [opaqueImage lockFocus];
           [color set];
           NSRectFill(rect);
           [image drawInRect:rect fromRect:rect operation:NSCompositeSourceOver fraction:1.0];
         [opaqueImage unlockFocus];
         }
-        @catch(NSException* e)//may occur if lockFocus fails
-        {
+        @catch(NSException* e){//may occur if lockFocus fails
+          DebugLog(0, @"exception: %@", e);
         }
         data = [opaqueImage TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
         [opaqueImage release];
@@ -1649,70 +1717,198 @@ static LaTeXProcessor* sharedInstance = nil;
             [NSNumber numberWithFloat:quality/100], NSImageCompressionFactor, nil];
         data = [opaqueImageRep representationUsingType:NSJPEGFileType properties:properties];
         [image release];
-        data = [self annotateImageData:data withData:pdfData];
-      }
+        NSData* annotationData =
+          [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
+        NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
+        data = [self annotateData:data ofUTI:@"public.jpeg" withData:annotationDataCompressed];
+      }//end if (format == EXPORT_FORMAT_JPEG)
+      else if (format == EXPORT_FORMAT_SVG)
+      {
+        [pdfData writeToFile:pdfFilePath atomically:NO];
+        SystemTask* svgTask = [[SystemTask alloc] initWithWorkingDirectory:temporaryDirectory];
+        NSMutableString* errorString = [NSMutableString string];
+        @try
+        {
+          [svgTask setUsingLoginShell:useLoginShell];
+          [svgTask setCurrentDirectoryPath:temporaryDirectory];
+          [svgTask setEnvironment:self->globalExtraEnvironment];
+          [svgTask setLaunchPath:pdf2svgPath];
+          [svgTask setArguments:[NSArray arrayWithObjects:pdfFilePath, tmpSvgFilePath, nil]];
+          [svgTask launch];
+          [svgTask waitUntilExit];
+        }
+        @catch(NSException* e)
+        {
+          [errorString appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
+        }
+        @finally
+        {
+          NSData* errorData = [svgTask dataForStdError];
+          [errorString appendString:[[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding] autorelease]];
+
+          if ([svgTask terminationStatus] != 0)
+          {
+            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
+                                                                         @"An error occured while trying to create the file :\n%@"),
+                                                       errorString],
+                            @"OK", nil, nil);
+          }//end if ([svgTask terminationStatus] != 0)
+          [svgTask release];
+        }
+        data = [NSData dataWithContentsOfFile:tmpSvgFilePath options:NSUncachedRead error:nil];
+        NSData* annotationData =
+          [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES]];
+        NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
+        data = [self annotateData:data ofUTI:@"public.svg-image" withData:annotationDataCompressed];
+        [[NSFileManager defaultManager] removeFileAtPath:tmpSvgFilePath handler:nil];
+      }//end if (format == EXPORT_FORMAT_SVG)
+      else if (format == EXPORT_FORMAT_MATHML)
+      {
+        NSDictionary* metaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES];
+        NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
+        latex_mode_t latexMode = (latex_mode_t)[[metaData objectForKey:@"mode"] intValue];
+        NSString* addSymbolLeft  = (latexMode == LATEX_MODE_ALIGN) ? @"$\\begin{eqnarray}\n" ://unfortunately, align is not supported
+                                   (latexMode == LATEX_MODE_EQNARRAY) ? @"$\\begin{eqnarray}\n" :
+                                   (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " :
+                                   (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
+        NSString* addSymbolRight = (latexMode == LATEX_MODE_ALIGN) ? @"\n\\end{eqnarray}$" ://unfortunately, align is not supported
+                                   (latexMode == LATEX_MODE_EQNARRAY) ? @"\n\\end{eqnarray}$" :
+                                   (latexMode == LATEX_MODE_DISPLAY) ? @"$" :
+                                   (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
+        NSString* sourceString = [sourceText string];
+        NSString* escapedSourceString = [sourceString stringByReplacingOccurrencesOfRegex:@"&(?!amp;)" withString:@"&amp;"];
+        NSString* inputString = [NSString stringWithFormat:@"<body><blockquote>%@%@%@</blockquote></body>",
+          addSymbolLeft, escapedSourceString, addSymbolRight];
+        NSData* inputData = [inputString dataUsingEncoding:NSUTF8StringEncoding];
+        NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+        NSString* inputFile = [workingDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"input-mathml-%@.html", uniqueIdentifier]];
+        BOOL ok = [inputData writeToFile:inputFile atomically:YES];
+        if (ok)
+        {
+          NSString* outputFile = [workingDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"output-mathml-%@.html", uniqueIdentifier]];
+          NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+          NSString* laTeXMathMLPath  = [[NSBundle bundleForClass:[self class]] pathForResource:@"LaTeXMathML" ofType:@"pl"];
+          NSMutableArray* arguments = [NSMutableArray arrayWithObjects:
+            [NSString stringWithFormat:@"\"%@\"", laTeXMathMLPath], @"inputfile", inputFile, @"outputfile", outputFile, nil];
+          SystemTask* laTeXMathMLTask = [[SystemTask alloc] initWithWorkingDirectory:workingDirectory];
+          BOOL useLoginShell = [compositionConfiguration compositionConfigurationUseLoginShell];
+          [laTeXMathMLTask setUsingLoginShell:useLoginShell];
+          [laTeXMathMLTask setEnvironment:fullEnvironment];
+          [laTeXMathMLTask setLaunchPath:@"perl"];
+          [laTeXMathMLTask setArguments:arguments];
+          [laTeXMathMLTask setCurrentDirectoryPath:workingDirectory];
+          [laTeXMathMLTask launch];
+          [laTeXMathMLTask waitUntilExit];
+          int terminationStatus = [laTeXMathMLTask terminationStatus];
+          ok = (terminationStatus == 0);
+          NSString* logStdOut = ok ? nil :
+            [[[NSString alloc] initWithData:[laTeXMathMLTask dataForStdOutput] encoding:NSUTF8StringEncoding] autorelease];
+          NSString* logStdErr = ok ? nil :
+            [[[NSString alloc] initWithData:[laTeXMathMLTask dataForStdError] encoding:NSUTF8StringEncoding] autorelease];
+          if (!ok)
+          {
+            DebugLog(1, @"command = %@", [laTeXMathMLTask commandLine]);
+            DebugLog(1, @"terminationStatus = %d", terminationStatus);
+            DebugLog(1, @"logStdOut = %@", logStdOut);
+            DebugLog(1, @"logStdErr = %@", logStdErr);
+          }//end if (!ok)
+          [laTeXMathMLTask release];
+          data = [NSData dataWithContentsOfFile:outputFile];
+          NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
+          NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
+          data = [self annotateData:data ofUTI:@"public.html" withData:annotationDataCompressed];
+          [[NSFileManager defaultManager] removeFileAtPath:outputFile handler:nil];
+        }//end if (ok)
+        [[NSFileManager defaultManager] removeFileAtPath:inputFile handler:nil];
+      }//end if (format == EXPORT_FORMAT_MATHML)
     }//end if pdfData available
   }//end @synchronized
   return data;
 }
 //end dataForType:pdfData:jpegColor:jpegQuality:scaleAsPercent:
 
--(NSData*) annotateImageData:(NSData*)inputData withData:(NSData*)annotationData
+-(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData
 {
-  NSMutableData* result = !inputData ? nil : [NSMutableData dataWithCapacity:[inputData length]];
-  CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)inputData, (CFDictionaryRef)
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
-  CFStringRef sourceUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
-  CGImageDestinationRef imageDestination = !imageSource ? 0 :
-    CGImageDestinationCreateWithData((CFMutableDataRef)result, sourceUTI, 1, 0);
-  NSDictionary* propertiesImmutable = nil;
-  NSMutableDictionary* properties = nil;
-  if (imageSource && imageDestination)
+  NSData* result = nil;
+  if (inputData && annotationData)
   {
-    if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
+    if (!sourceUTI ||//may be guessed
+        UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tiff")) ||
+        UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.png")) ||
+        UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.jpeg")))
     {
-      propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
-      properties = [[propertiesImmutable deepMutableCopy] autorelease];
-      NSMutableDictionary* tiffDictionary = [properties objectForKey:(NSString*)kCGImagePropertyTIFFDictionary];
-      if (!tiffDictionary)
+      NSString* annotationDataBase64 = [annotationData encodeBase64];
+      NSMutableData* annotatedData = !annotationDataBase64 ? nil : [[NSMutableData alloc] initWithCapacity:[inputData length]];
+      CGImageSourceRef imageSource = !annotatedData ? 0 :
+        CGImageSourceCreateWithData((CFDataRef)inputData, (CFDictionaryRef)
+          [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+      CFStringRef detectedUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
+      if (( sourceUTI && UTTypeConformsTo(detectedUTI, (CFStringRef)sourceUTI)) ||
+          (!sourceUTI && (UTTypeConformsTo(detectedUTI, CFSTR("public.tiff")) ||
+                          UTTypeConformsTo(detectedUTI, CFSTR("public.png")) || 
+                          UTTypeConformsTo(detectedUTI, CFSTR("public.jpeg")))))
       {
-        tiffDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
-        [properties setObject:tiffDictionary forKey:(NSString*)kCGImagePropertyTIFFDictionary];
-      }
-      [tiffDictionary setObject:[annotationData encodeBase64] forKey:(NSString*)kCGImagePropertyTIFFImageDescription];
-    }
-    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
+        CGImageDestinationRef imageDestination = !imageSource ? 0 :
+          CGImageDestinationCreateWithData((CFMutableDataRef)annotatedData,
+                                           sourceUTI ? (CFStringRef)sourceUTI : detectedUTI, 1, 0);
+        NSDictionary* propertiesImmutable = nil;
+        NSMutableDictionary* properties = nil;
+        if (imageSource && imageDestination)
+        {
+          propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
+          properties = [[propertiesImmutable deepMutableCopy] autorelease];
+          NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+          if (!exifDictionary)
+          {
+            exifDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
+            [properties setObject:exifDictionary forKey:(NSString*)kCGImagePropertyExifDictionary];
+          }//end if (!exifDictionary)
+          [exifDictionary setObject:annotationDataBase64 forKey:(NSString*)kCGImagePropertyExifUserComment];
+        }//if (imageSource && imageDestination)
+        [propertiesImmutable release];
+        CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CFDictionaryRef)properties);
+        if (imageDestination) CGImageDestinationFinalize(imageDestination);
+        if (imageDestination) CFRelease(imageDestination);
+      }//end if (UTTypeConformsTo(detectedUTI, sourceUTI))
+      if (imageSource)
+        CFRelease(imageSource);
+      if (annotatedData)
+        result = [[annotatedData copy] autorelease];
+      [annotatedData release];
+    }//end if (tiff, png, jpeg)
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
     {
-      propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
-      properties = [[propertiesImmutable deepMutableCopy] autorelease];
-      NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
-      if (!exifDictionary)
-      {
-        exifDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
-        [properties setObject:exifDictionary forKey:(NSString*)kCGImagePropertyExifDictionary];
-      }
-      [exifDictionary setObject:[annotationData encodeBase64] forKey:(NSString*)kCGImagePropertyExifMakerNote];
-    }
-    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
+      NSString* annotationDataBase64 = [annotationData encodeBase64];
+      NSMutableString* outputString = !annotationDataBase64 ? nil :
+        [[[NSMutableString alloc] initWithData:inputData encoding:NSUTF8StringEncoding] autorelease];
+      NSError* error = nil;
+      [outputString
+         replaceOccurrencesOfRegex:@"<svg(.*?)>(.*)</svg>"
+         withString:[NSString stringWithFormat:@"<svg$1><!--latexit:%@-->$2</svg>", annotationDataBase64]
+         options:RKLCaseless|RKLDotAll|RKLMultiline range:NSMakeRange(0, [outputString length]) error:&error];
+      if (error)
+        DebugLog(0, @"error : %@", error);
+      result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
     {
-      propertiesImmutable = NSMakeCollectable((NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
-      properties = [[propertiesImmutable deepMutableCopy] autorelease];
-      NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
-      if (!exifDictionary)
-      {
-        exifDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
-        [properties setObject:exifDictionary forKey:(NSString*)kCGImagePropertyExifDictionary];
-      }
-      [exifDictionary setObject:@"toto" forKey:(NSString*)kCGImagePropertyExifMakerNote];
-    }
-  }//end if (imageSource && imageDestination)
-  [propertiesImmutable release];
-  CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CFDictionaryRef)properties);
-  if (imageDestination) CGImageDestinationFinalize(imageDestination);
-  if (imageDestination) CFRelease(imageDestination);
-  if (imageSource)      CFRelease(imageSource);
-  return !result ? inputData : [[result copy] autorelease];
+      NSString* annotationDataBase64 = [annotationData encodeBase64];
+      NSMutableString* outputString = !annotationDataBase64 ? nil :
+        [[[NSMutableString alloc] initWithData:inputData encoding:NSUTF8StringEncoding] autorelease];
+      NSError* error = nil;
+      [outputString replaceOccurrencesOfRegex:@"<blockquote(.*?)>(.*?)</blockquote>"
+         withString:[NSString stringWithFormat:@"<blockquote$1><!--latexit:%@-->$2</blockquote>", annotationDataBase64]
+            options:RKLCaseless|RKLDotAll|RKLMultiline range:NSMakeRange(0, [outputString length]) error:&error];
+      if (error)
+        DebugLog(0, @"error : %@", error);
+      result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+  }//end if (inputData && annotationData)
+  if (!result)
+    result = inputData;
+  return result;
 }
-//end annotateImageData:withData:
+//end annotateData:ofUTI:withData:
 
 @end

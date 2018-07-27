@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -14,9 +14,12 @@
 
 @interface DocumentExtraPanelsController : NSNib {
   IBOutlet NSView*        saveAccessoryView;
+  IBOutlet NSTextField*   saveAccessoryViewFormatLabel;
   IBOutlet NSPopUpButton* saveAccessoryViewPopupFormat;
   IBOutlet NSButton*      saveAccessoryViewOptionsButton;
   IBOutlet NSButton*      saveAccessoryViewJpegWarning;
+  IBOutlet NSButton*      saveAccessoryViewSvgWarning;
+  IBOutlet NSTextField*   saveAccessoryViewScaleLabel;
   IBOutlet NSTextField*   saveAccessoryViewScalePercentTextField;
   
   IBOutlet NSWindow*   logWindow;
@@ -28,6 +31,7 @@
   CGFloat         saveAccessoryViewExportScalePercent;
   CGFloat         saveAccessoryViewOptionsJpegQualityPercent;
   NSColor*        saveAccessoryViewOptionsJpegBackgroundColor;
+  NSString*       saveAccessoryViewOptionsSvgPdfToSvgPath;
 
   NSSavePanel* currentSavePanel;
 }
@@ -47,11 +51,13 @@
 -(void)            setSaveAccessoryViewOptionsJpegQualityPercent:(CGFloat)value;
 -(NSColor*)        saveAccessoryViewOptionsJpegBackgroundColor;
 -(void)            setSaveAccessoryViewOptionsJpegBackgroundColor:(NSColor*)value;
+-(NSString*)       saveAccessoryViewOptionsSvgPdfToSvgPath;
+-(void)            setSaveAccessoryViewOptionsSvgPdfToSvgPath:(NSString*)value;
 
 -(NSSavePanel*) currentSavePanel;
 -(void) setCurrentSavePanel:(NSSavePanel*)value;
 
 -(IBAction) openSaveAccessoryViewOptions:(id)sender;
--(void) exportFormatOptionsJpegPanel:(ExportFormatOptionsPanes*)exportFormatOptionsPanes didCloseWithOK:(BOOL)ok;
+-(void) exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok;
 
 @end

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsController.h"
@@ -84,9 +84,7 @@
 {
   [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
   if ([keyPath isEqualToString:@"arrangedObjects"])
-  {
     [self observeValueForKeyPath:CompositionConfigurationDocumentIndexKey ofObject:nil change:nil context:nil];
-  }
   else if ([keyPath isEqualToString:CompositionConfigurationDocumentIndexKey])
   {
     int curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] intValue];
@@ -100,7 +98,7 @@
     {
       [[NSUserDefaults standardUserDefaults] setInteger:newIndex forKey:keyPath];
       [self setSelectionIndex:newIndex];
-    }
+    }//end if (newIndex != curIndex)
   }//end if ([keyPath isEqualToString:LatexisationSelectedPreambleIndexKey])
 }
 //end observeValueForKeyPath:ofObject:change:context:

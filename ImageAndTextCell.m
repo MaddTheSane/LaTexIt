@@ -3,12 +3,17 @@
 //  MozoDojo
 //
 //  Created by Pierre Chatelier on 12/10/06.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "ImageAndTextCell.h"
 
 #import "NSImageExtended.h"
+#import "Utils.h"
+
+@interface ImageAndTextCell ()
+-(NSRect) imageFrameForCellFrame:(NSRect)cellFrame relativeToCellOrigin:(BOOL)relativeToCellOrigin;
+@end
 
 @implementation ImageAndTextCell
 
@@ -58,34 +63,62 @@
 }
 //end imageBackgroundColor
 
--(NSRect) imageFrameForCellFrame:(NSRect)cellFrame
+-(NSRect) imageFrameForCellFrame:(NSRect)cellFrame relativeToCellOrigin:(BOOL)relativeToCellOrigin
 {
-  NSRect imageFrame = NSZeroRect;
+  NSRect result = relativeToCellOrigin ?
+                    NSMakeRect(0, 0, 0, cellFrame.size.height) :
+                    NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, 0, cellFrame.size.height);
+  result.origin.x += 3;
   if (self->image)
   {
-    imageFrame.size = [self->image size];
-    imageFrame.origin = cellFrame.origin;
-    imageFrame.origin.x += 3;
-    imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
-  }
-  return imageFrame;
+    NSSize imageSize = [self->image size];
+    NSRect imageRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
+    imageRect = adaptRectangle(imageRect, cellFrame, YES, NO, NO);
+    result.origin.y = imageRect.origin.y;
+    result.size = imageRect.size;
+  }//end if (self->image)
+  return result;
 }
-//end imageFrameForCellFrame:
+//end imageFrameForCellFrame:relativeToCellOrigin:
 
 -(void) editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
 {
   NSRect textFrame  = NSZeroRect;
   NSRect imageFrame = NSZeroRect;
-  NSDivideRect (aRect, &imageFrame, &textFrame, 3 + [self->image size].width, NSMinXEdge);
+  NSDivideRect(aRect, &imageFrame, &textFrame, NSMaxX([self imageFrameForCellFrame:aRect relativeToCellOrigin:YES]), NSMinXEdge);
+  CGFloat delta = (!self->image ? 0 : 3);
+  textFrame.origin.x += delta;
+  textFrame.size.width = MAX(0, textFrame.size.width-delta);
+  NSAttributedString* attributedString = [self attributedStringValue];
+  if (attributedString)
+  {
+    NSSize textSize = [attributedString size];
+    NSRect verticallyCenteredTextFrame = adaptRectangle(NSMakeRect(0, 0, textSize.width, textSize.height), textFrame, YES, NO, NO);
+    verticallyCenteredTextFrame.origin.x = textFrame.origin.x;
+    verticallyCenteredTextFrame.size.width = textFrame.size.width;
+    textFrame = verticallyCenteredTextFrame;
+  }//end if (attributedString)
   [super editWithFrame:textFrame inView:controlView editor:textObj delegate:anObject event:theEvent];
 }
 //end editWithFrame:inView:editor:delegate:event:
 
--(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
+-(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
 {
   NSRect textFrame  = NSZeroRect;
   NSRect imageFrame = NSZeroRect;
-  NSDivideRect (aRect, &imageFrame, &textFrame, 3 + [self->image size].width, NSMinXEdge);
+  NSDivideRect(aRect, &imageFrame, &textFrame, NSMaxX([self imageFrameForCellFrame:aRect relativeToCellOrigin:YES]), NSMinXEdge);
+  CGFloat delta = (!self->image ? 0 : 3);
+  textFrame.origin.x += delta;
+  textFrame.size.width = MAX(0, textFrame.size.width-delta);
+  NSAttributedString* attributedString = [self attributedStringValue];
+  if (attributedString)
+  {
+    NSSize textSize = [attributedString size];
+    NSRect verticallyCenteredTextFrame = adaptRectangle(NSMakeRect(0, 0, textSize.width, textSize.height), textFrame, YES, NO, NO);
+    verticallyCenteredTextFrame.origin.x = textFrame.origin.x;
+    verticallyCenteredTextFrame.size.width = textFrame.size.width;
+    textFrame = verticallyCenteredTextFrame;
+  }//end if (attributedString)
   [super selectWithFrame:textFrame inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
 }
 //end selectWithFrame:inView:editor:delegate:start:length:
@@ -95,21 +128,13 @@
   NSRect imageFrame = NSZeroRect;
   NSRect textFrame  = NSZeroRect;
   NSSize imageSize = [self->image size];
-  NSDivideRect(cellFrame, &imageFrame, &textFrame, 3 + imageSize.width, NSMinXEdge);
+  NSDivideRect(cellFrame, &imageFrame, &textFrame, NSMaxX([self imageFrameForCellFrame:cellFrame relativeToCellOrigin:YES]), NSMinXEdge);
+  imageFrame = [self imageFrameForCellFrame:cellFrame relativeToCellOrigin:NO];
+  CGFloat delta = (!self->image ? 0 : 3);
+  textFrame.origin.x += delta;
+  textFrame.size.width = MAX(0, textFrame.size.width-delta);
   if (self->image)
   {
-    imageFrame.origin.x += 3;
-    imageFrame.size = imageSize;
-    
-    if (imageFrame.size.height <= textFrame.size.height)
-      imageFrame.origin.y += (textFrame.size.height-imageFrame.size.height)/2;
-    else
-    {
-      CGFloat aspectRatio = !imageFrame.size.height ? 0 : imageFrame.size.width/imageFrame.size.height;
-      imageFrame.size.height = textFrame.size.height;
-      imageFrame.size.width = aspectRatio*imageFrame.size.height;
-    }
-
     if (self->imageBackgroundColor)
     {
       [self->imageBackgroundColor set];
@@ -132,16 +157,17 @@
     [NSGraphicsContext restoreGraphicsState];
   }//end if image
   
+  NSAttributedString* attributedString = [self attributedStringValue];
+  if (attributedString)
+  {
+    NSSize textSize = [attributedString size];
+    NSRect verticallyCenteredTextFrame = adaptRectangle(NSMakeRect(0, 0, textSize.width, textSize.height), textFrame, YES, NO, NO);
+    verticallyCenteredTextFrame.origin.x = textFrame.origin.x;
+    verticallyCenteredTextFrame.size.width = textFrame.size.width;
+    textFrame = verticallyCenteredTextFrame;
+  }//end if (attributedString)
   [super drawWithFrame:textFrame inView:controlView];
 }
 //end drawWithFrame:inView:
-
--(NSSize) cellSize
-{
-  NSSize cellSize = [super cellSize];
-  cellSize.width += (self->image ? [self->image size].width : 0) + 3;
-  return cellSize;
-}
-//end cellSize
 
 @end

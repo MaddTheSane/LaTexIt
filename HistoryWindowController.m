@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -229,7 +229,7 @@
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setDelegate:self];
+  [openPanel setDelegate:(id)self];
   [openPanel setTitle:NSLocalizedString(@"Import history...", @"Import history...")];
   [openPanel setAccessoryView:[self->importAccessoryView retain]];
   if ([[self window] isVisible])

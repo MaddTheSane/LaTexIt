@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 17/02/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This file is useful to zip-[un]compress NSData
 
@@ -19,7 +19,7 @@
 +(NSData*) zipcompressDeprecated:(NSData*)data
 {
   NSData* result = nil;
-  if( data )
+  if (data)
   {
     uLong srcLength = [data length];
     uLongf buffLength = srcLength * 1.001 + 12;
@@ -37,9 +37,9 @@
       default:
         NSCAssert( YES, @"Error while compressing data: Insufficient memory" );
         break;
-    }
+    }//end switch(error)
     [compData release];
-  }
+  }//end if (data)
   return [result autorelease];
 }
 //end zipcompressDeprecated:
@@ -48,8 +48,14 @@
 // Encodes the original size of the data as the first 4 bytes.
 +(NSData*) zipcompress:(NSData*)data
 {
+  return [self zipcompress:data level:-1];
+}
+//end zipcompress:
+
++(NSData*) zipcompress:(NSData*)data level:(int)level
+{
   NSData* result = nil;
-  if(data)
+  if (data)
   {
     uLongf sourceLen = [data length];
     uLongf destLen   = compressBound(sourceLen);
@@ -57,7 +63,7 @@
     unsigned int bigSourceLen = EndianUI_NtoB(sourceLen);
     [compData appendBytes:&bigSourceLen length:sizeof(unsigned int)];
     [compData increaseLengthBy:destLen];
-    int error = compress([compData mutableBytes]+sizeof(unsigned int), &destLen, [data bytes], sourceLen);
+    int error = compress2([compData mutableBytes]+sizeof(unsigned int), &destLen, [data bytes], sourceLen, level);
     switch(error)
     {
       case Z_OK:
@@ -67,12 +73,12 @@
       default:
         DebugLog(0, @"Error while compressing data");
         break;
-    }
+    }//end switch(error)
     [compData release];
-  }
+  }//end if (data)
   return [result autorelease];
 }
-//end zipcompress:
+//end zipcompress:level:
 
 // decompress into a buffer the size in the first 4 bytes of the object (see above).
 +(NSData*) zipuncompressDeprecated:(NSData*)data
@@ -102,7 +108,7 @@
       default:
         DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         break;
-    }
+    }//end switch(error)
     if (error != Z_OK)
     {
       [decompData release];
@@ -125,10 +131,10 @@
         default:
           DebugLog(0, @"Error while decompressing data : Insufficient memory" );
           break;
-      }
-    }
+      }//end switch(error)
+    }//end if (error != Z_OK)
     [decompData release];
-  }
+  }//end if (data)
   return [result autorelease];
 }
 //end zipuncompressDeprecated:
@@ -157,9 +163,9 @@
       default:
         DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         break;
-    }
+    }//end switch(error)
     [decompData release];
-  }
+  }//end if (data)
   return [result autorelease];
 }
 //end zipuncompress:

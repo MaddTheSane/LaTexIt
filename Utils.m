@@ -32,6 +32,12 @@ BOOL isMacOS10_6OrAbove(void)
 }
 //end isMacOS10_6OrAbove()
 
+NSString* GetMySVGPboardType(void)
+{
+  return @"public.svg-image";
+}
+//end GetMySVGPboardType()
+
 NSString* GetMyPNGPboardType(void)
 {
   if (!MyPNGPboardType && isMacOS10_5OrAbove())
@@ -68,19 +74,11 @@ NSString* GetMyJPEGPboardType(void)
 
 latex_mode_t validateLatexMode(latex_mode_t mode)
 {
-  #ifdef MIGRATE_ALIGN
   latex_mode_t result = (mode != LATEX_MODE_ALIGN) &&
                         (mode != LATEX_MODE_DISPLAY) &&
                         (mode != LATEX_MODE_INLINE) &&
                         (mode != LATEX_MODE_TEXT) ? LATEX_MODE_ALIGN :
                         mode;
-  #else
-  latex_mode_t result = (mode != LATEX_MODE_EQNARRAY) &&
-                        (mode != LATEX_MODE_DISPLAY) &&
-                        (mode != LATEX_MODE_INLINE) &&
-                        (mode != LATEX_MODE_TEXT) ? LATEX_MODE_EQNARRAY :
-                        mode;
-  #endif
   return result;
 }
 //end validateLatexMode()

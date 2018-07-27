@@ -1,0 +1,39 @@
+"You must run LaTeXiT once, to init the configuration" = "LaTeXiT を再起動して下さい";
+
+"Text" = "Text";
+"Font size :" = "フォントサイズ :";
+"Color :" = "カラー :";
+"Create equations :" = "数式ロケーション:";
+"alongside input files" = "入力ファイルの隣";
+"in a temporary folder" = "テンポラリーフォルダに";
+
+"Default format" = "デフォルトフォーマット";
+"PDF with outlined fonts" = "PDF with outlined fonts";
+"PDF without embedded fonts" = "PDF with outlined fonts";
+"PDF w.o.f." = "PDF w.o.f.";
+"PDF vector format" = "PDF";
+"EPS vector format" = "EPS";
+"SVG vector format" = "SVG";
+"TIFF bitmap format" = "TIFF";
+"PNG bitmap format" = "PNG";
+"JPEG bitmap format" = "JPEG";
+"MathML text format" = "MathML";
+"Options" = "オプション";
+"Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
+"Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";
+
+
+"JPEG Quality" = "JPEG 品質";
+"least" = "最低";
+"low" = "低";
+"medium" = "中";
+"high" = "高";
+"maxi" = "最高";
+"Quality" = "品質";
+"Background color" = "背景色";
+"Path to pdf2svg" = "pdf2svg のパス";
+"Format" = "フォーマット";
+"Change" = "変更";
+
+"No preamble found" = "プリアンブルが見つかりません";
+"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "不明のエラー。LaTeXiT が正常に動作しているかを確認してください。";

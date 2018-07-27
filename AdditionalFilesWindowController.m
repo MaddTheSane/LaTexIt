@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/08/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "AdditionalFilesWindowController.h"
@@ -76,7 +76,7 @@
 
 -(IBAction) additionalFilesOpenDefaults:(id)sender
 {
-  [[AppController appController] showPreferencesPaneWithItemIdentifier:AdvancedToolbarItemIdentifier];
+  [[AppController appController] showPreferencesPaneWithItemIdentifier:AdvancedToolbarItemIdentifier options:nil];
 }
 //end additionalFilesOpenDefaults:
 

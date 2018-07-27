@@ -17,9 +17,9 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.2.0</string>
+	<string>2.4.0</string>
 	<key>LinkBackApplicationURL</key>
-	<string>http://pierre.chachatelier.fr/programmation/latexit.php</string>
+	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
 	<string>LaTeXiT</string>
 	<key>NSMainNibFile</key>

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -18,6 +18,7 @@ extern NSString* DocumentStyleKey;
 extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
 extern NSString* DragExportJpegQualityKey;
+extern NSString* DragExportSvgPdfToSvgPathKey;
 extern NSString* DragExportScaleAsPercentKey;
 extern NSString* DefaultImageViewBackgroundKey;
 extern NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey;
@@ -53,12 +54,16 @@ extern NSString* AdditionalTopMarginKey;
 extern NSString* AdditionalLeftMarginKey;
 extern NSString* AdditionalRightMarginKey;
 extern NSString* AdditionalBottomMarginKey;
+extern NSString* EncapsulationsEnabledKey;
 extern NSString* EncapsulationsKey;
 extern NSString* CurrentEncapsulationIndexKey;
 extern NSString* TextShortcutsKey;
 extern NSString* CompositionConfigurationsKey;
 extern NSString* CompositionConfigurationDocumentIndexKey;
 extern NSString* LastEasterEggsDatesKey;
+
+extern NSString* EditionTabKeyInsertsSpacesEnabledKey;
+extern NSString* EditionTabKeyInsertsSpacesCountKey;
 
 extern NSString* CompositionConfigurationNameKey;
 extern NSString* CompositionConfigurationIsDefaultKey;
@@ -148,6 +153,8 @@ extern NSString* AdditionalFilesPathsKey;
 -(void)            setExportJpegBackgroundColor:(NSColor*)value;
 -(CGFloat)         exportJpegQualityPercent;
 -(void)            setExportJpegQualityPercent:(CGFloat)value;
+-(NSString*)       exportSvgPdfToSvgPath;
+-(void)            setExportSvgPdfToSvgPath:(NSString*)value;
 -(CGFloat)         exportScalePercent;
 -(void)            setExportScalePercent:(CGFloat)value;
 
@@ -173,23 +180,25 @@ extern NSString* AdditionalFilesPathsKey;
 -(NSColor*)         documentImageViewBackgroundColor;
 -(BOOL)             documentUseAutomaticHighContrastedPreviewBackground;
 
--(NSData*)  editionFontData;
--(void)     setEditionFontData:(NSData*)value;
--(NSFont*)  editionFont;
--(void)     setEditionFont:(NSFont*)value;
--(BOOL)     editionSyntaxColoringEnabled;
--(NSData*)  editionSyntaxColoringTextForegroundColorData;
--(NSColor*) editionSyntaxColoringTextForegroundColor;
--(NSData*)  editionSyntaxColoringTextBackgroundColorData;
--(NSColor*) editionSyntaxColoringTextBackgroundColor;
--(NSData*)  editionSyntaxColoringCommandColorData;
--(NSColor*) editionSyntaxColoringCommandColor;
--(NSData*)  editionSyntaxColoringCommentColorData;
--(NSColor*) editionSyntaxColoringCommentColor;
--(NSData*)  editionSyntaxColoringKeywordColorData;
--(NSColor*) editionSyntaxColoringKeywordColor;
--(NSData*)  editionSyntaxColoringMathsColorData;
--(NSColor*) editionSyntaxColoringMathsColor;
+-(NSData*)    editionFontData;
+-(void)       setEditionFontData:(NSData*)value;
+-(NSFont*)    editionFont;
+-(void)       setEditionFont:(NSFont*)value;
+-(BOOL)       editionSyntaxColoringEnabled;
+-(NSData*)    editionSyntaxColoringTextForegroundColorData;
+-(NSColor*)   editionSyntaxColoringTextForegroundColor;
+-(NSData*)    editionSyntaxColoringTextBackgroundColorData;
+-(NSColor*)   editionSyntaxColoringTextBackgroundColor;
+-(NSData*)    editionSyntaxColoringCommandColorData;
+-(NSColor*)   editionSyntaxColoringCommandColor;
+-(NSData*)    editionSyntaxColoringCommentColorData;
+-(NSColor*)   editionSyntaxColoringCommentColor;
+-(NSData*)    editionSyntaxColoringKeywordColorData;
+-(NSColor*)   editionSyntaxColoringKeywordColor;
+-(NSData*)    editionSyntaxColoringMathsColorData;
+-(NSColor*)   editionSyntaxColoringMathsColor;
+-(BOOL)       editionTabKeyInsertsSpacesEnabled;
+-(NSUInteger) editionTabKeyInsertsSpacesCount;
 
 -(NSArray*)           editionTextShortcuts;
 -(NSArrayController*) editionTextShortcutsController;
@@ -232,6 +241,7 @@ extern NSString* AdditionalFilesPathsKey;
 -(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
                                authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
 
+-(BOOL)                      encapsulationsEnabled;
 -(NSArray*)                  encapsulations;
 -(int)                       encapsulationsSelectedIndex;
 -(NSString*)                 encapsulationSelected;

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryItem.h"
@@ -190,7 +190,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.2.0", @"version",
+       @"2.4.0", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -228,7 +228,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.2.0" forKey:@"version"];
+  [coder encodeObject:@"2.4.0" forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:
@@ -253,11 +253,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     NSColor* color = nil;
     double pointSize = 0.;
     NSDate* date = nil;
-    #ifdef MIGRATE_ALIGN
     latex_mode_t mode = LATEX_MODE_ALIGN;
-    #else
-    latex_mode_t mode = LATEX_MODE_EQNARRAY;
-    #endif
     NSColor* backgroundColor = nil;
     NSString* title = nil;
     if (!version || [version compare:@"1.2" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)

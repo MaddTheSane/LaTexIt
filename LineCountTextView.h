@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -27,6 +27,9 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   NSDragOperation     acceptDrag;
   BOOL                spellCheckerHasBeenInitialized;
   NSUInteger          previousSelectedRangeLocation;
+  BOOL                tabKeyInsertsSpacesEnabled;
+  NSUInteger          tabKeyInsertsSpacesCount;
+  NSString*           spacesString;
 }
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
@@ -44,5 +47,8 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 -(SMLSyntaxColouring*) syntaxColouring;
 
 -(void) restorePreviousSelectedRangeLocation;
+
+//NSTextDelegate
+-(void) textDidChange:(NSNotification*)notification;
 
 @end

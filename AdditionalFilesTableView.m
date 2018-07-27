@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/08/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "AdditionalFilesTableView.h"
@@ -28,8 +28,8 @@
   if ((!(self = [super initWithCoder:coder])))
     return nil;
   self->previousDefaultsFiles = [[NSMutableArray alloc] init];
-  [self setDelegate:self];
-  [self setDataSource:self];
+  [self setDelegate:(id)self];
+  [self setDataSource:(id)self];
   [self setIsDefaultTableView:YES];
   [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
   return self;
@@ -286,7 +286,7 @@
 
 #pragma mark delegate
 
--(void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex
+-(void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex
 {
   NSArray* objects = [[self filesController] arrangedObjects];
   NSString* filepath = (rowIndex >= 0) && ((unsigned)rowIndex < [objects count]) ? [objects objectAtIndex:rowIndex] : nil;
@@ -302,9 +302,9 @@
 
 #pragma mark dummy datasource (real datasource is a binding, just avoid warnings)
 
--(int)  numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
--(id)   tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex {return nil;}
--(void) tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex {}
+-(NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
+-(id)        tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex {return nil;}
+-(void)      tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex {}
 
 #pragma mark drag'n drop
 
@@ -327,10 +327,10 @@
 //end tableView:writeRowsWithIndexes:toPasteboard:
 
 -(NSDragOperation) tableView:(NSTableView*)tableView validateDrop:(id<NSDraggingInfo>)info
-                 proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
+                 proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation
 {
   NSPasteboard* pboard = [info draggingPasteboard];
-  NSIndexSet* indexSet =  [[[info draggingSource] dataSource] _draggedRowIndexes];
+  NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = pboard &&
             [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]] &&
             [pboard propertyListForType:NSFilenamesPboardType] &&
@@ -340,10 +340,10 @@
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:
 
--(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)operation
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
 {
   NSArrayController* additionalFilesController = [self filesController];
-  NSIndexSet* indexSet = [[[info draggingSource] dataSource] _draggedRowIndexes];
+  NSIndexSet* indexSet = [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   if (indexSet)
     [additionalFilesController moveObjectsAtIndices:indexSet toIndex:row];
   else

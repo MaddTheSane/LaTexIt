@@ -78,7 +78,7 @@ static NSArray *syntaxDefinitionsArray;
   if (YES)//[[SMLDocumentsArray sharedInstance] currentDocumentIsSyntaxColoured])
     [self pageRecolour];
   //[textView setDelegate:self];
-  [[textView textStorage] setDelegate:self];
+  [[textView textStorage] setDelegate:(id)self];
   undoManager = [[NSUndoManager alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkIfCanUndo) name:NSUndoManagerDidUndoChangeNotification
                                              object:undoManager];
@@ -409,7 +409,7 @@ static NSArray *syntaxDefinitionsArray;
 	[layoutManager removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSRangeFromString(sender)];
 }
 
--(void)textDidChange:(NSNotification *)notification
+-(void)textDidChange:(NSNotification*)notification
 {
 	//if ([completeString length] < 2)
 	//	[[SMLMainController sharedInstance] updateStatusBar]; // one needs to call this from here as well because otherwise it won't update the status bar if you write one character and delete it in an empty document, because the textViewDidChangeSelection delegate method won't be called.
@@ -747,6 +747,27 @@ static NSArray *syntaxDefinitionsArray;
 						continue; // to avoid &#
 					}
 				}
+			}
+			else if ([firstSingleLineComment isEqual:@"%"])
+      {
+				if (searchStringLength > 1)
+        {
+					rangeOfLine = [searchString lineRangeForRange:NSMakeRange(beginning, 0)];
+          unsigned int countPrecedingAntiSlashed = 0;
+          unsigned int prevIndex = beginning;
+          while(prevIndex--)
+          {
+            if ([searchString characterAtIndex:prevIndex] == '\\')
+              ++countPrecedingAntiSlashed;
+            else
+              break;
+          }
+          if (countPrecedingAntiSlashed && (countPrecedingAntiSlashed%2))
+          {
+						[scanner setScanLocation:beginning + 1];
+						continue; // to avoid \%
+          }
+        }
 			}
 			if (beginning + rangeLocation + searchSyntaxLength < [[scanner string] length]/*completeStringLength*/) {
 				if ([[layoutManager temporaryAttributesAtCharacterIndex:beginning + rangeLocation effectiveRange:NULL] isEqualToDictionary:self->stringsColour]) {
@@ -1195,7 +1216,7 @@ static NSArray *syntaxDefinitionsArray;
 	return returnString;
 }
 
-- (NSArray *)textView:(NSTextView *)theTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index
+- (NSArray *)textView:(NSTextView *)theTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
 	if ([[self keywordsAndAutocompleteWords] count] == 0) {
 		return words;

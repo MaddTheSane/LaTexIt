@@ -11,5 +11,6 @@
 @interface NSPopUpButton (Extended)
 
 -(id) addItemWithTitle:(NSString*)title tag:(int)tag;
+-(NSMenuItem*) addItemWithTitle:(NSString*)aString target:(id)target action:(SEL)aSelector tag:(int)tag;
 
 @end

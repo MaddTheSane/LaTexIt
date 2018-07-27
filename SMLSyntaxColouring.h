@@ -159,4 +159,7 @@
 
 -(void) pageRecolour;
 
+//NSTextDelegate
+-(void)textDidChange:(NSNotification*)notification;
+
 @end

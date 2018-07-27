@@ -90,7 +90,7 @@
   int selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
   if (!IsBetween_i(1, selectedIndex+1, [compositionConfigurations count]))
   {
-    [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier];
+    [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier options:nil];
     [[[AppController appController] preferencesWindowController] compositionConfigurationsManagerOpen:sender];
   }
   else

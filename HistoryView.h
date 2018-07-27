@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -15,6 +15,8 @@
 
 @interface HistoryView : NSTableView {
   HistoryController* historyItemsController;
+  NSPoint            lastDragStartPointSelfBased;
+  BOOL               shouldRedrag;
 }
 
 -(HistoryController*) historyItemsController;
@@ -26,5 +28,10 @@
 -(IBAction) undo:(id)sender;
 -(IBAction) redo:(id)sender;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender;
+
+//NSTableViewDelegate
+-(BOOL) tableView:(NSTableView*)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation;
+//NSTableViewDataSource
+-(BOOL) tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
 
 @end

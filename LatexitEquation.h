@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -40,12 +40,17 @@ extern NSString* LatexitEquationsPboardType;
 +(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 
 //constructors
-+(id) latexitEquationWithData:(NSData*)someData useDefaults:(BOOL)useDefaults;
++(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti;
++(BOOL) latexitEquationPossibleWithData:(NSData*)data sourceUTI:(NSString*)sourceUTI;
++(NSArray*) latexitEquationsWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
++(id) latexitEquationWithMetaData:(NSDictionary*)someData useDefaults:(BOOL)useDefaults;
++(id) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
 +(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor;
--(id) initWithData:(NSData*)someData useDefaults:(BOOL)useDefaults;
+-(id) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
+-(id) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
 -(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
@@ -76,6 +81,7 @@ extern NSString* LatexitEquationsPboardType;
 
 //transient
 -(NSImage*) pdfCachedImage;
+-(void) resetPdfCachedImage;
 
 //on the fly
 +(NSString*)    latexModeToString:(latex_mode_t)mode;
@@ -85,6 +91,8 @@ extern NSString* LatexitEquationsPboardType;
 -(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
 
 //utils
+-(void) beginUpdate;
+-(void) endUpdate;
 -(void) checkAndMigrateAlign;
 //+(double) baselineFromData:(NSData*)someData;
 -(NSString*) titleAuto;

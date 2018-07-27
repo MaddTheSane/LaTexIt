@@ -3,16 +3,34 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 #import <Automator/AMBundleAction.h>
 
+@class ExportFormatOptionsPanes;
+
 @interface Automator_CreateEquations : AMBundleAction 
 {
-  IBOutlet NSView* normalView;
-  IBOutlet NSView* warningView;
+  IBOutlet NSTabView*   tabView;
+  IBOutlet NSTextField* warningMessage;
+
+  IBOutlet NSView*             parametersView;
+  IBOutlet NSSegmentedControl* latexModeSegmentedControl;
+  IBOutlet NSTextField*        fontSizeLabel;
+  IBOutlet NSTextField*        fontSizeTextField;
+  IBOutlet NSStepper*          fontSizeStepper;
+  IBOutlet NSTextField*        fontColorLabel;
+  IBOutlet NSColorWell*        fontColorWell;
+
+  IBOutlet NSPopUpButton* exportFormatPopupButton;
+  IBOutlet NSButton*      exportFormatOptionsButton;
+  
+  IBOutlet NSTextField*   createEquationsOptionsLabel;
+  IBOutlet NSPopUpButton* createEquationsOptionsPopUpButton;
+
+  ExportFormatOptionsPanes* generalExportFormatOptionsPanes;
   BOOL latexitPreferencesAvailable;
   unsigned int uniqueId;
   BOOL fromArchive;
@@ -21,5 +39,7 @@
 -(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary**)errorInfo;
 -(NSString*) extractFromObject:(id)object preamble:(NSString**)outPeamble body:(NSString**)outBody isFilePath:(BOOL*)isFilePath
                          error:(NSError**)error;
+                         
+-(IBAction) generalExportFormatOptionsOpen:(id)sender;
 
 @end

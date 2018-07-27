@@ -3,7 +3,7 @@
 //  LaTeXiT Helper
 //
 //  Created by Pierre Chatelier on 25/11/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXiT_HelperAppDelegate.h"
@@ -49,7 +49,7 @@
 {
   id oldPeer = [[link valueForKey:@"peer"] retain];
   [oldPeer remoteCloseLink];
-  [link connectToServerWithName:@"LaTeXiT" inApplication:@"fr.chachatelier.pierre.LaTeXiT" fallbackURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/programmation/latexit.php"] appName:@"LaTeXiT"];
+  [link connectToServerWithName:@"LaTeXiT" inApplication:@"fr.chachatelier.pierre.LaTeXiT" fallbackURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/latexit/index.php"] appName:@"LaTeXiT"];
   [link setValue:oldPeer forKeyPath:@"peer.peer"];
   [oldPeer release];
   [link requestEdit];

@@ -2,21 +2,24 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">10D573</string>
-		<string key="IBDocument.InterfaceBuilderVersion">762</string>
-		<string key="IBDocument.AppKitVersion">1038.29</string>
-		<string key="IBDocument.HIToolboxVersion">460.00</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.InterfaceBuilderVersion">851</string>
+		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">762</string>
+			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1366"/>
+			<integer value="1129"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 		</array>
-		<dictionary class="NSMutableDictionary" key="IBDocument.Metadata"/>
+		<object class="NSMutableDictionary" key="IBDocument.Metadata">
+			<string key="NS.key.0">PluginDependencyRecalculationVersion</string>
+			<integer value="1" key="NS.object.0"/>
+		</object>
 		<array class="NSMutableArray" key="IBDocument.RootObjects" id="466021050">
 			<object class="NSCustomObject" id="34778991">
 				<object class="NSMutableString" key="NSClassName">
@@ -60,6 +63,7 @@
 								</object>
 								<object class="NSMenuItem" id="158601911">
 									<reference key="NSMenu" ref="271662970"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Sponsors...</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -622,6 +626,33 @@
 						<object class="NSMenu" key="NSSubmenu" id="777159900">
 							<string key="NSTitle">Library</string>
 							<array class="NSMutableArray" key="NSMenuItems">
+								<object class="NSMenuItem" id="227112031">
+									<reference key="NSMenu" ref="777159900"/>
+									<string key="NSTitle">Open the equation</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="380749168"/>
+									<reference key="NSMixedImage" ref="979262368"/>
+								</object>
+								<object class="NSMenuItem" id="389428719">
+									<reference key="NSMenu" ref="777159900"/>
+									<string key="NSTitle">Open and modify the equation</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="380749168"/>
+									<reference key="NSMixedImage" ref="979262368"/>
+								</object>
+								<object class="NSMenuItem" id="263985835">
+									<reference key="NSMenu" ref="777159900"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="380749168"/>
+									<reference key="NSMixedImage" ref="979262368"/>
+								</object>
 								<object class="NSMenuItem" id="405165126">
 									<reference key="NSMenu" ref="777159900"/>
 									<string key="NSTitle">Add a folder</string>
@@ -2030,6 +2061,30 @@ IHdheQ</string>
 					</object>
 					<int key="connectionID">1627</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">libraryOpenEquation:</string>
+						<reference key="source" ref="574030839"/>
+						<reference key="destination" ref="227112031"/>
+					</object>
+					<int key="connectionID">1631</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">libraryOpenLinkedEquation:</string>
+						<reference key="source" ref="574030839"/>
+						<reference key="destination" ref="389428719"/>
+					</object>
+					<int key="connectionID">1632</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">checkForUpdates:</string>
+						<reference key="source" ref="533307628"/>
+						<reference key="destination" ref="895376756"/>
+					</object>
+					<int key="connectionID">1633</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2585,6 +2640,9 @@ IHdheQ</string>
 							<reference ref="1024608957"/>
 							<reference ref="475678986"/>
 							<reference ref="162921494"/>
+							<reference ref="227112031"/>
+							<reference ref="263985835"/>
+							<reference ref="389428719"/>
 						</array>
 						<reference key="parent" ref="680731515"/>
 					</object>
@@ -2970,6 +3028,21 @@ IHdheQ</string>
 						<reference key="object" ref="951494435"/>
 						<reference key="parent" ref="271662970"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1628</int>
+						<reference key="object" ref="263985835"/>
+						<reference key="parent" ref="777159900"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1629</int>
+						<reference key="object" ref="227112031"/>
+						<reference key="parent" ref="777159900"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1630</int>
+						<reference key="object" ref="389428719"/>
+						<reference key="parent" ref="777159900"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -2993,7 +3066,7 @@ IHdheQ</string>
 				<boolean value="YES" key="1118.ImportedFromIB2"/>
 				<string key="1123.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1123.ImportedFromIB2"/>
-				<string key="1129.IBEditorWindowLastContentRect">{{289, 621}, {252, 193}}</string>
+				<string key="1129.IBEditorWindowLastContentRect">{{592, 493}, {290, 243}}</string>
 				<string key="1129.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1129.ImportedFromIB2"/>
 				<string key="1130.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3160,8 +3233,12 @@ IHdheQ</string>
 				<boolean value="YES" key="162.ImportedFromIB2"/>
 				<string key="1624.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1624.ImportedFromIB2"/>
+				<string key="1628.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1628.ImportedFromIB2"/>
+				<string key="1629.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="163.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="163.ImportedFromIB2"/>
+				<string key="1630.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="164.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="164.ImportedFromIB2"/>
 				<string key="167.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3228,14 +3305,14 @@ IHdheQ</string>
 				<string key="24.IBEditorWindowLastContentRect">{{492, 691}, {248, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
-				<string key="29.IBEditorWindowLastContentRect">{{169, 836}, {624, 20}}</string>
+				<string key="29.IBEditorWindowLastContentRect">{{303, 736}, {624, 20}}</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="29.ImportedFromIB2"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="5.ImportedFromIB2"/>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="56.ImportedFromIB2"/>
-				<string key="57.IBEditorWindowLastContentRect">{{181, 593}, {228, 243}}</string>
+				<string key="57.IBEditorWindowLastContentRect">{{315, 493}, {228, 243}}</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="57.ImportedFromIB2"/>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3257,7 +3334,7 @@ IHdheQ</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1627</int>
+			<int key="maxID">1633</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3281,6 +3358,8 @@ IHdheQ</string>
 						<string key="libraryImportCurrent:">id</string>
 						<string key="libraryNewFolder:">id</string>
 						<string key="libraryOpen:">id</string>
+						<string key="libraryOpenEquation:">id</string>
+						<string key="libraryOpenLinkedEquation:">id</string>
 						<string key="libraryRefreshItems:">id</string>
 						<string key="libraryRemoveSelectedItems:">id</string>
 						<string key="libraryRenameItem:">id</string>
@@ -3307,6 +3386,180 @@ IHdheQ</string>
 						<string key="showPreferencesPane:">id</string>
 						<string key="switchMiniWindow:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="changeLatexMode:">
+							<string key="name">changeLatexMode:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="changeOpenFileType:">
+							<string key="name">changeOpenFileType:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="checkUpdates:">
+							<string key="name">checkUpdates:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="copyAs:">
+							<string key="name">copyAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="displayLog:">
+							<string key="name">displayLog:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="displaySponsors:">
+							<string key="name">displaySponsors:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="exportImage:">
+							<string key="name">exportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="historyChangeLock:">
+							<string key="name">historyChangeLock:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="historyClearHistory:">
+							<string key="name">historyClearHistory:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="historyOpen:">
+							<string key="name">historyOpen:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="historyRemoveHistoryEntries:">
+							<string key="name">historyRemoveHistoryEntries:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="historySaveAs:">
+							<string key="name">historySaveAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="latexPalettesClick:">
+							<string key="name">latexPalettesClick:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryImportCurrent:">
+							<string key="name">libraryImportCurrent:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryNewFolder:">
+							<string key="name">libraryNewFolder:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryOpen:">
+							<string key="name">libraryOpen:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryOpenEquation:">
+							<string key="name">libraryOpenEquation:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryOpenLinkedEquation:">
+							<string key="name">libraryOpenLinkedEquation:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryRefreshItems:">
+							<string key="name">libraryRefreshItems:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryRemoveSelectedItems:">
+							<string key="name">libraryRemoveSelectedItems:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryRenameItem:">
+							<string key="name">libraryRenameItem:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="librarySaveAs:">
+							<string key="name">librarySaveAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="makeDonation:">
+							<string key="name">makeDonation:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="makeLatex:">
+							<string key="name">makeLatex:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="makeLatexAndExport:">
+							<string key="name">makeLatexAndExport:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="newFromClipboard:">
+							<string key="name">newFromClipboard:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="openFile:">
+							<string key="name">openFile:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="openWebSite:">
+							<string key="name">openWebSite:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="reduceOrEnlargeTextArea:">
+							<string key="name">reduceOrEnlargeTextArea:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="reexportImage:">
+							<string key="name">reexportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="returnFromWhiteColorWarningWindow:">
+							<string key="name">returnFromWhiteColorWarningWindow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showHelp:">
+							<string key="name">showHelp:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideAdditionalFiles:">
+							<string key="name">showOrHideAdditionalFiles:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideColorInspector:">
+							<string key="name">showOrHideColorInspector:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideCompositionConfiguration:">
+							<string key="name">showOrHideCompositionConfiguration:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideEncapsulation:">
+							<string key="name">showOrHideEncapsulation:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideHistory:">
+							<string key="name">showOrHideHistory:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideLatexPalettes:">
+							<string key="name">showOrHideLatexPalettes:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideLibrary:">
+							<string key="name">showOrHideLibrary:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHideMargin:">
+							<string key="name">showOrHideMargin:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showOrHidePreamble:">
+							<string key="name">showOrHidePreamble:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showPreferencesPane:">
+							<string key="name">showPreferencesPane:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="switchMiniWindow:">
+							<string key="name">switchMiniWindow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="donationPanel">NSPanel</string>
 						<string key="editCopyImageAsMenuItem">NSMenuItem</string>
@@ -3319,6 +3572,48 @@ IHdheQ</string>
 						<string key="whiteColorWarningWindow">NSWindow</string>
 						<string key="whiteColorWarningWindowCheckBox">NSButton</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="donationPanel">
+							<string key="name">donationPanel</string>
+							<string key="candidateClassName">NSPanel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="editCopyImageAsMenuItem">
+							<string key="name">editCopyImageAsMenuItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="openFileTypePopUp">
+							<string key="name">openFileTypePopUp</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="openFileTypeView">
+							<string key="name">openFileTypeView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="readmeTextView">
+							<string key="name">readmeTextView</string>
+							<string key="candidateClassName">NSTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="readmeWindow">
+							<string key="name">readmeWindow</string>
+							<string key="candidateClassName">NSWindow</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="sparkleUpdater">
+							<string key="name">sparkleUpdater</string>
+							<string key="candidateClassName">SUUpdater</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="updatesInformationTextView">
+							<string key="name">updatesInformationTextView</string>
+							<string key="candidateClassName">NSTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="whiteColorWarningWindow">
+							<string key="name">whiteColorWarningWindow</string>
+							<string key="candidateClassName">NSWindow</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="whiteColorWarningWindowCheckBox">
+							<string key="name">whiteColorWarningWindowCheckBox</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">AppController.h</string>
@@ -3330,6 +3625,13 @@ IHdheQ</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">updatesPanel</string>
 						<string key="NS.object.0">NSPanel</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">updatesPanel</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">updatesPanel</string>
+							<string key="candidateClassName">NSPanel</string>
+						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
@@ -3344,6 +3646,20 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
@@ -3357,6 +3673,24 @@ IHdheQ</string>
 						<string key="edit:">id</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="add:">
+							<string key="name">add:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -3379,6 +3713,20 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">CompositionConfigurationsTableView.h</string>
@@ -3400,6 +3748,20 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
@@ -3412,6 +3774,20 @@ IHdheQ</string>
 						<string key="edit:">id</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -3442,6 +3818,20 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
@@ -3455,6 +3845,24 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="removeSelection:">id</string>
 						<string key="undo:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="removeSelection:">
+							<string key="name">removeSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -3494,6 +3902,24 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
@@ -3510,6 +3936,36 @@ IHdheQ</string>
 						<string key="redo:">id</string>
 						<string key="removeSelection:">id</string>
 						<string key="undo:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="cut:">
+							<string key="name">cut:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="paste:">
+							<string key="name">paste:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="removeSelection:">
+							<string key="name">removeSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -3568,6 +4024,36 @@ IHdheQ</string>
 						<string key="latexizeAndExport:">id</string>
 						<string key="reexportImage:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="changeBodyTemplate:">
+							<string key="name">changeBodyTemplate:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="changePreamble:">
+							<string key="name">changePreamble:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="displayLastLog:">
+							<string key="name">displayLastLog:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="exportImage:">
+							<string key="name">exportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="latexize:">
+							<string key="name">latexize:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="latexizeAndExport:">
+							<string key="name">latexizeAndExport:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="reexportImage:">
+							<string key="name">reexportImage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="lowerBox">NSBox</string>
 						<string key="lowerBoxChangeBodyTemplateButton">ImagePopupButton</string>
@@ -3590,6 +4076,88 @@ IHdheQ</string>
 						<string key="upperBoxZoomBoxSlider">NSSlider</string>
 						<string key="upperImageBox">NSBox</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="lowerBox">
+							<string key="name">lowerBox</string>
+							<string key="candidateClassName">NSBox</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxChangeBodyTemplateButton">
+							<string key="name">lowerBoxChangeBodyTemplateButton</string>
+							<string key="candidateClassName">ImagePopupButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxChangePreambleButton">
+							<string key="name">lowerBoxChangePreambleButton</string>
+							<string key="candidateClassName">ImagePopupButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxControlsBox">
+							<string key="name">lowerBoxControlsBox</string>
+							<string key="candidateClassName">NSBox</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxControlsBoxFontColorLabel">
+							<string key="name">lowerBoxControlsBoxFontColorLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxControlsBoxFontColorWell">
+							<string key="name">lowerBoxControlsBoxFontColorWell</string>
+							<string key="candidateClassName">NSColorWell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxControlsBoxFontSizeLabel">
+							<string key="name">lowerBoxControlsBoxFontSizeLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxControlsBoxFontSizeTextField">
+							<string key="name">lowerBoxControlsBoxFontSizeTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxControlsBoxLatexModeSegmentedControl">
+							<string key="name">lowerBoxControlsBoxLatexModeSegmentedControl</string>
+							<string key="candidateClassName">NSSegmentedControl</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxLatexizeButton">
+							<string key="name">lowerBoxLatexizeButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxPreambleTextView">
+							<string key="name">lowerBoxPreambleTextView</string>
+							<string key="candidateClassName">LineCountTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxSourceTextView">
+							<string key="name">lowerBoxSourceTextView</string>
+							<string key="candidateClassName">LineCountTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lowerBoxSplitView">
+							<string key="name">lowerBoxSplitView</string>
+							<string key="candidateClassName">MySplitView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperBox">
+							<string key="name">upperBox</string>
+							<string key="candidateClassName">NSBox</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperBoxImageView">
+							<string key="name">upperBoxImageView</string>
+							<string key="candidateClassName">MyImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperBoxLogTableView">
+							<string key="name">upperBoxLogTableView</string>
+							<string key="candidateClassName">LogTableView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperBoxProgressIndicator">
+							<string key="name">upperBoxProgressIndicator</string>
+							<string key="candidateClassName">NSProgressIndicator</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperBoxZoomBox">
+							<string key="name">upperBoxZoomBox</string>
+							<string key="candidateClassName">NSBox</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperBoxZoomBoxSlider">
+							<string key="name">upperBoxZoomBoxSlider</string>
+							<string key="candidateClassName">NSSlider</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upperImageBox">
+							<string key="name">upperImageBox</string>
+							<string key="candidateClassName">NSBox</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">MyDocument.h</string>
@@ -3606,6 +4174,36 @@ IHdheQ</string>
 						<string key="nullAction:">id</string>
 						<string key="openOptions:">id</string>
 						<string key="saveAccessoryViewPopupFormatDidChange:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="closeOptionsPane:">
+							<string key="name">closeOptionsPane:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="jpegQualitySliderDidChange:">
+							<string key="name">jpegQualitySliderDidChange:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="makeLatex:">
+							<string key="name">makeLatex:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="makeLatexAndExport:">
+							<string key="name">makeLatexAndExport:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="nullAction:">
+							<string key="name">nullAction:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="openOptions:">
+							<string key="name">openOptions:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveAccessoryViewPopupFormatDidChange:">
+							<string key="name">saveAccessoryViewPopupFormatDidChange:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="changePreambleButton">ImagePopupButton</string>
@@ -3634,6 +4232,108 @@ IHdheQ</string>
 						<string key="splitView">NSSplitView</string>
 						<string key="typeOfTextControl">NSSegmentedControl</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="changePreambleButton">
+							<string key="name">changePreambleButton</string>
+							<string key="candidateClassName">ImagePopupButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="colorWell">
+							<string key="name">colorWell</string>
+							<string key="candidateClassName">NSColorWell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="copyAsContextualMenuItem">
+							<string key="name">copyAsContextualMenuItem</string>
+							<string key="candidateClassName">NSMenu</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="imageView">
+							<string key="name">imageView</string>
+							<string key="candidateClassName">MyImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="jpegColorWell">
+							<string key="name">jpegColorWell</string>
+							<string key="candidateClassName">NSColorWell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="jpegQualitySlider">
+							<string key="name">jpegQualitySlider</string>
+							<string key="candidateClassName">NSSlider</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="jpegQualityTextField">
+							<string key="name">jpegQualityTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="logTableView">
+							<string key="name">logTableView</string>
+							<string key="candidateClassName">LogTableView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="logTextView">
+							<string key="name">logTextView</string>
+							<string key="candidateClassName">NSTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="logWindow">
+							<string key="name">logWindow</string>
+							<string key="candidateClassName">NSWindow</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="makeLatexButton">
+							<string key="name">makeLatexButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="preambleTextView">
+							<string key="name">preambleTextView</string>
+							<string key="candidateClassName">LineCountTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="progressIndicator">
+							<string key="name">progressIndicator</string>
+							<string key="candidateClassName">NSProgressIndicator</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="progressMessageProgressIndicator">
+							<string key="name">progressMessageProgressIndicator</string>
+							<string key="candidateClassName">NSProgressIndicator</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="progressMessageTextField">
+							<string key="name">progressMessageTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveAccessoryView">
+							<string key="name">saveAccessoryView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveAccessoryViewJpegWarning">
+							<string key="name">saveAccessoryViewJpegWarning</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveAccessoryViewOptionsButton">
+							<string key="name">saveAccessoryViewOptionsButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveAccessoryViewOptionsPane">
+							<string key="name">saveAccessoryViewOptionsPane</string>
+							<string key="candidateClassName">NSPanel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveAccessoryViewPopupFormat">
+							<string key="name">saveAccessoryViewPopupFormat</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveAccessoryViewScaleAsPercentTextField">
+							<string key="name">saveAccessoryViewScaleAsPercentTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="sizeText">
+							<string key="name">sizeText</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="sourceTextView">
+							<string key="name">sourceTextView</string>
+							<string key="candidateClassName">LineCountTextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="splitView">
+							<string key="name">splitView</string>
+							<string key="candidateClassName">NSSplitView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="typeOfTextControl">
+							<string key="name">typeOfTextControl</string>
+							<string key="candidateClassName">NSSegmentedControl</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
@@ -3646,9 +4346,23 @@ IHdheQ</string>
 						<string key="NS.key.0">copy:</string>
 						<string key="NS.object.0">id</string>
 					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">copy:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">document</string>
 						<string key="NS.object.0">MyDocument</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">document</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">document</string>
+							<string key="candidateClassName">MyDocument</string>
+						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -3662,9 +4376,23 @@ IHdheQ</string>
 						<string key="NS.key.0">zoom:</string>
 						<string key="NS.object.0">id</string>
 					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">zoom:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">zoom:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">zoomSlider</string>
 						<string key="NS.object.0">NSSlider</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">zoomSlider</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">zoomSlider</string>
+							<string key="candidateClassName">NSSlider</string>
+						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
@@ -3693,6 +4421,13 @@ IHdheQ</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSButton</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSButtonExtended.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -3743,6 +4478,13 @@ IHdheQ</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSPopUpButton</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSPopUpButtonExtended.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -3813,6 +4555,20 @@ IHdheQ</string>
 						<string key="edit:">id</string>
 						<string key="redo:">id</string>
 						<string key="undo:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="edit:">
+							<string key="name">edit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -3955,6 +4711,32 @@ IHdheQ</string>
 						<string key="saveDocumentAs:">id</string>
 						<string key="saveDocumentTo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="printDocument:">
+							<string key="name">printDocument:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="revertDocumentToSaved:">
+							<string key="name">revertDocumentToSaved:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="runPageLayout:">
+							<string key="name">runPageLayout:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveDocument:">
+							<string key="name">saveDocument:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveDocumentAs:">
+							<string key="name">saveDocumentAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveDocumentTo:">
+							<string key="name">saveDocumentTo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">AppKit.framework/Headers/NSDocument.h</string>
@@ -3975,6 +4757,24 @@ IHdheQ</string>
 						<string key="newDocument:">id</string>
 						<string key="openDocument:">id</string>
 						<string key="saveAllDocuments:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="clearRecentDocuments:">
+							<string key="name">clearRecentDocuments:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="newDocument:">
+							<string key="name">newDocument:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="openDocument:">
+							<string key="name">openDocument:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveAllDocuments:">
+							<string key="name">saveAllDocuments:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
@@ -4567,6 +5367,48 @@ IHdheQ</string>
 						<string key="zoomIn:">id</string>
 						<string key="zoomOut:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="goBack:">
+							<string key="name">goBack:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="goForward:">
+							<string key="name">goForward:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="goToFirstPage:">
+							<string key="name">goToFirstPage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="goToLastPage:">
+							<string key="name">goToLastPage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="goToNextPage:">
+							<string key="name">goToNextPage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="goToPreviousPage:">
+							<string key="name">goToPreviousPage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="selectAll:">
+							<string key="name">selectAll:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="takeBackgroundColorFrom:">
+							<string key="name">takeBackgroundColorFrom:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="zoomIn:">
+							<string key="name">zoomIn:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="zoomOut:">
+							<string key="name">zoomOut:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<reference key="sourceIdentifier" ref="144814168"/>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -4576,6 +5418,20 @@ IHdheQ</string>
 						<string key="play:">id</string>
 						<string key="start:">id</string>
 						<string key="stop:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="play:">
+							<string key="name">play:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="start:">
+							<string key="name">start:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="stop:">
+							<string key="name">stop:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
@@ -4589,9 +5445,23 @@ IHdheQ</string>
 						<string key="NS.key.0">checkForUpdates:</string>
 						<string key="NS.object.0">id</string>
 					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">checkForUpdates:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">checkForUpdates:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">delegate</string>
 						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">delegate</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">delegate</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</object>
 					<reference key="sourceIdentifier" ref="751076596"/>
 				</object>

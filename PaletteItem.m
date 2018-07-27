@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/12/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This class is useful to describe a palette item
 
@@ -112,8 +112,12 @@
       (endBeginRange.location != NSNotFound) ? [string rangeOfString:@"\\end{" options:0 range:NSMakeRange(endBeginRange.location, length-endBeginRange.location)]
                                              : endBeginRange;
     if ((endRange.location != NSNotFound) && (endBeginRange.location+1 < length) && (endRange.location >= endBeginRange.location+1))
-      [string replaceCharactersInRange:NSMakeRange(endBeginRange.location+1, endRange.location-endBeginRange.location-1)
-                            withString:([text length] ? text : self->argumentTokenDefaultReplace)];
+    {
+      NSString* replacement = ([text length] ? text : self->argumentTokenDefaultReplace);
+      if (replacement)
+        [string replaceCharactersInRange:NSMakeRange(endBeginRange.location+1, endRange.location-endBeginRange.location-1)
+                              withString:replacement];
+    }//end if ((endRange.location != NSNotFound) && (endBeginRange.location+1 < length) && (endRange.location >= endBeginRange.location+1))
   }
   return string;
 }

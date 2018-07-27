@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -16,10 +16,11 @@
 #import "LibraryItem.h"
 #import "LibraryGroupItem.h"
 #import "LibraryManager.h"
-#import "LibraryPreviewPanelImageView.h";
+#import "LibraryPreviewPanelImageView.h"
 #import "LibraryView.h"
 #import "MyDocument.h"
 #import "MyImageView.h"
+#import "NSArrayExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "NSOutlineViewExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
@@ -80,18 +81,25 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
   
   NSMenu* actionMenu = [[NSMenu alloc] init];
+  NSMenuItem* menuItem = nil;  
+  [actionMenu addItem:[NSMenuItem separatorItem]];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a document", @"Open the equation in a document") action:@selector(openEquation:) keyEquivalent:@""] setTarget:self];
+  menuItem = [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a linked document", @"Open the equation in a linked document") action:@selector(openLinkedEquation:) keyEquivalent:@""];
+  [menuItem setTarget:self];
+  [menuItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
+  [menuItem setAlternate:YES];
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Add a folder", @"Add a folder") action:@selector(newFolder:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Add current equation", @"Add current equation") action:@selector(importCurrent:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"Rename selection") action:@selector(renameItem:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"Remove selection") action:@selector(removeSelectedItems:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Replace current equation", @"Replace current equation") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
   [self->actionButton setMenu:actionMenu];
-  [actionMenu setDelegate:self];
+  [actionMenu setDelegate:(id)self];
   [actionMenu release];
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
   if (!isMacOS10_5OrAbove())//fix an interface bug to refresh the button
@@ -157,6 +165,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 }
 //end showOrHideWindow:
 
+-(LibraryView*) libraryView
+{
+  return self->libraryView;
+}
+//end libraryView
+
 -(BOOL) canRemoveSelectedItems
 {
   return [[self window] isVisible] && ([self->libraryView selectedRow] >= 0);
@@ -191,7 +205,11 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(BOOL) validateMenuItem:(NSMenuItem*)menuItem
 {
   BOOL ok = [[self window] isVisible];
-  if ([menuItem action] == @selector(importCurrent:))
+  if ([menuItem action] == @selector(openEquation:))
+    ok &= ([[[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
+  else if ([menuItem action] == @selector(openLinkedEquation:))
+    ok &= ([[[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
+  else if ([menuItem action] == @selector(importCurrent:))
   {
     MyDocument* document = (MyDocument*) [AppController currentDocument];
     ok &= document && [document hasImage];
@@ -240,6 +258,46 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     [newLibraryEquation release];
 }
 //end importCurrent:
+
+-(IBAction) openEquation:(id)sender
+{
+  BOOL makeLink = NO;
+  NSArray* libraryEquations =
+    [[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO];
+  NSEnumerator* enumerator = [libraryEquations objectEnumerator];
+  id object = nil;
+  while((object = [enumerator nextObject]))
+  {
+    MyDocument* document = (MyDocument*)[AppController currentDocument];
+    if (!document || (makeLink && [document linkedLibraryEquation]))
+    {
+      [[NSDocumentController sharedDocumentController] newDocument:self];
+      document = (MyDocument*)[AppController currentDocument];
+    }
+    [self->libraryView openEquation:(LibraryEquation*)object inDocument:document makeLink:makeLink];
+  }//end for each libraryEquation
+}
+//end openEquation:
+
+-(IBAction) openLinkedEquation:(id)sender
+{
+  BOOL makeLink = YES;
+  NSArray* libraryEquations =
+    [[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO];
+  NSEnumerator* enumerator = [libraryEquations objectEnumerator];
+  id object = nil;
+  while((object = [enumerator nextObject]))
+  {
+    MyDocument* document = (MyDocument*)[AppController currentDocument];
+    if (!document || (makeLink && [document linkedLibraryEquation]))
+    {
+      [[NSDocumentController sharedDocumentController] newDocument:self];
+      document = (MyDocument*)[AppController currentDocument];
+    }
+    [self->libraryView openEquation:(LibraryEquation*)object inDocument:document makeLink:YES];
+  }//end for each libraryEquation
+}
+//end openLinkedEquation:
 
 //Creates a folder library item
 -(IBAction) newFolder:(id)sender
@@ -336,7 +394,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
           NSDate* next = [now addTimeInterval:1./30.];
           [NSThread sleepUntilDate:next];
         }
-        [undoManager setActionName:NSLocalizedString(@"Refresh current equation", @"Refresh current equation")];
+        [undoManager setActionName:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation")];
         [undoManager endUndoGrouping];
         [self->libraryView selectRowIndexes:itemIndexes byExtendingSelection:NO];
         //we restore the delegate notification receiving
@@ -360,7 +418,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setDelegate:self];
+  [openPanel setDelegate:(id)self];
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
   [openPanel setAccessoryView:[importAccessoryView retain]];
   if ([[self window] isVisible])
@@ -521,6 +579,35 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   }
 }
 //end displayPreviewImage:backgroundColor:
+
+-(void) blink:(LibraryEquation*)libraryEquation
+{
+  NSInteger  itemIndex = [self->libraryView rowForItem:libraryEquation];
+  if (itemIndex >= 0)
+  {
+    BOOL isInitiallySelected = [[self->libraryView selectedItems] containsObject:libraryEquation];
+    BOOL isSelected = isInitiallySelected;
+    NSIndexSet* itemIndexAsSet = [NSIndexSet indexSetWithIndex:itemIndex];
+    NSUInteger i = 0;
+    for(i = 0 ; i<7 ; ++i)
+    {
+      if (isSelected)
+        [self->libraryView deselectRow:itemIndex];
+      else
+        [self->libraryView selectRowIndexes:itemIndexAsSet byExtendingSelection:YES];
+      isSelected = !isSelected;
+      NSDate* now = [NSDate date];
+      [self->libraryView display];
+      NSDate* next = [now addTimeInterval:1./30.];
+      [NSThread sleepUntilDate:next];
+    }
+    if (isInitiallySelected)
+      [self->libraryView selectRowIndexes:itemIndexAsSet byExtendingSelection:YES];
+    else
+      [self->libraryView deselectRow:itemIndex];
+  }//end if (itemIndex >= 0)
+}
+//end blink:libraryEquation
 
 -(void) windowWillClose:(NSNotification*)notification
 {

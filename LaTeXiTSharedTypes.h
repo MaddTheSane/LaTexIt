@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 //
 
@@ -11,7 +11,9 @@
 typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE_EQNARRAY, LATEX_MODE_ALIGN} latex_mode_t;
 
 typedef enum {EXPORT_FORMAT_PDF, EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS,
-              EXPORT_FORMAT_EPS, EXPORT_FORMAT_TIFF, EXPORT_FORMAT_PNG, EXPORT_FORMAT_JPEG} export_format_t;
+              EXPORT_FORMAT_EPS, EXPORT_FORMAT_TIFF, EXPORT_FORMAT_PNG, EXPORT_FORMAT_JPEG,
+              EXPORT_FORMAT_MATHML,
+              EXPORT_FORMAT_SVG} export_format_t;
 
 typedef enum {COMPOSITION_MODE_PDFLATEX, COMPOSITION_MODE_LATEXDVIPDF, COMPOSITION_MODE_XELATEX} composition_mode_t;
 typedef enum {SCRIPT_SOURCE_STRING, SCRIPT_SOURCE_FILE} script_source_t;
@@ -28,3 +30,5 @@ typedef enum {CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE,
               
 typedef enum {SERVICE_LATEXIZE_EQNARRAY, SERVICE_LATEXIZE_DISPLAY, SERVICE_LATEXIZE_INLINE, SERVICE_LATEXIZE_TEXT,
               SERVICE_MULTILATEXIZE, SERVICE_DELATEXIZE, SERVICE_LATEXIZE_ALIGN} service_identifier_t;
+
+extern latex_mode_t validateLatexMode(latex_mode_t mode);

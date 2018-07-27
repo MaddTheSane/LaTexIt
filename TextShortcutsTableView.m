@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //TextShortcutsTableView presents custom text shortcuts from an text shortcuts manager. I has user friendly capabilities
 
@@ -35,7 +35,7 @@ static NSString* EditionTextShortcutsPboardType = @"EditionTextShortcutsPboardTy
 
 -(void) awakeFromNib
 {
-  [self setDelegate:self];
+  [self setDelegate:(id)self];
   NSArrayController* editionTextShortcutsController = [[PreferencesController sharedController] editionTextShortcutsController];
   NSArray* tableColumns = [self tableColumns];
   NSEnumerator* enumerator = [tableColumns objectEnumerator];

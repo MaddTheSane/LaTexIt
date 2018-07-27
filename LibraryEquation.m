@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryEquation.h"
@@ -87,6 +87,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     if (self->kvoEnabled)
     {
       [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
+      [self removeObserver:self forKeyPath:@"equationWrapper.equation.pdfData"];
       self->kvoEnabled = NO;
     }
   }//end @synchronized(self)
@@ -105,6 +106,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   @synchronized(self)
   {
     [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+    [self addObserver:self forKeyPath:@"equationWrapper.equation.pdfData" options:0 context:nil];
     self->kvoEnabled = YES;
   }//end @synchronized(self)
 }
@@ -116,6 +118,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   @synchronized(self)
   {
     [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+    [self addObserver:self forKeyPath:@"equationWrapper.equation.pdfData" options:0 context:nil];
     self->kvoEnabled = YES;
   }//end @synchronized(self)
   LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
@@ -135,6 +138,15 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     [self didChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
     [managedObjectContext enableUndoRegistration];
   }//end if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
+  else if ([keyPath isEqualToString:@"equationWrapper.equation.pdfData"])
+  {
+    NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
+    [managedObjectContext disableUndoRegistration];
+    [[self equation] resetPdfCachedImage];
+    [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
+    [self didChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
+    [managedObjectContext enableUndoRegistration];
+  }//end if ([keyPath isEqualToString:@"equationWrapper.equation.pdfData"])
 }
 //end observeValueForKeyPath:ofObject:change:context:
 

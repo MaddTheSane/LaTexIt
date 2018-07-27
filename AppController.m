@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -13,6 +13,7 @@
 #import "AppController.h"
 
 #import "AdditionalFilesWindowController.h"
+#import "CGPDFExtras.h"
 #import "CompositionConfigurationsController.h"
 #import "CompositionConfigurationsWindowController.h"
 #import "DragFilterWindowController.h"
@@ -25,11 +26,14 @@
 #import "LatexitEquation.h"
 #import "LaTeXPalettesWindowController.h"
 #import "LaTeXProcessor.h"
+#import "LibraryEquation.h"
+#import "LibraryView.h"
 #import "LibraryWindowController.h"
 #import "LibraryManager.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
 #import "MyImageView.h"
+#import "NSArrayExtended.h"
 #import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSDictionaryCompositionConfiguration.h"
@@ -37,14 +41,17 @@
 #import "NSFileManagerExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMenuExtended.h"
+#import "NSOutlineViewExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "MarginsWindowController.h"
 #import "PaletteItem.h"
+#import "PluginsManager.h"
 #import "PreferencesController.h"
 #import "PreferencesControllerMigration.h"
 #import "PreferencesWindowController.h"
+#import "RegexKitLite.h"
 #import "Semaphore.h"
 #import "SystemTask.h"
 #import "Utils.h"
@@ -144,7 +151,7 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end retain
 
--(unsigned) retainCount
+-(NSUInteger) retainCount
 {
   return UINT_MAX;  //denotes an object that cannot be released
 }
@@ -180,6 +187,10 @@ static NSMutableDictionary* cachePaths = nil;
       configurationSemaphore, @"semaphore",
       nil];
     [PreferencesController sharedController];//create out of thread
+    /*disabled for now*/
+    /*
+    [PluginsManager sharedManager];//create out of thread
+    */
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
                                                                  @"pdflatex", @"executableName",
@@ -207,6 +218,10 @@ static NSMutableDictionary* cachePaths = nil;
     [NSApplication detachDrawingThread:@selector(_checkColorStyWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:@"color.sty", @"path",
                                                                  [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];
+    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+      withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
+                                                                 @"pdf2svg", @"executableName",
+                                                                 [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
     [configurationSemaphore Z];
     [configurationSemaphore release];
     configurationSemaphore = nil;
@@ -223,25 +238,32 @@ static NSMutableDictionary* cachePaths = nil;
                                                                  @"xelatex", @"executableName",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                                  @"latex", @"executableName",
+                                                                 @"latex", @"executableName",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                                  @"dvipdf", @"executableName",
+                                                                 @"dvipdf", @"executableName",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                                  @"gs", @"executableName",
+                                                                 @"gs", @"executableName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                                  @"ps2pdf", @"executableName",
+                                                                 @"ps2pdf", @"executableName",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
     [self _checkColorStyWithConfiguration:configuration];
+    [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
+                                                                 @"pdf2svg", @"executableName",
+                                                                 [NSNumber numberWithBool:NO], @"allowUIAlertOnFailure",
+                                                                 [NSNumber numberWithBool:NO], @"allowUIFindOnFailure",
+                                                                 [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
 
     //export to EPS needs ghostscript to be available
     PreferencesController* preferencesController = [PreferencesController sharedController];
     export_format_t exportFormat = [preferencesController exportFormatPersistent];
-    if (exportFormat == EXPORT_FORMAT_EPS && !self->isGsAvailable)
+    if ((exportFormat == EXPORT_FORMAT_EPS) && !self->isGsAvailable)
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
-    if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS && (!self->isGsAvailable || !self->isPsToPdfAvailable))
+    if ((exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) && (!self->isGsAvailable || !self->isPsToPdfAvailable))
+      [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
+    if ((exportFormat == EXPORT_FORMAT_SVG) && !self->isPdfToSvgAvailable)
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     [self endCheckUpdates];
 
@@ -260,6 +282,10 @@ static NSMutableDictionary* cachePaths = nil;
       forKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey] options:0 context:nil];
     [compositionConfigurationsController addObserver:self
       forKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey] options:0 context:nil];
+
+    NSUserDefaultsController* userDefaultsController = [NSUserDefaultsController sharedUserDefaultsController];
+    [userDefaultsController addObserver:self
+      forKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey] options:0 context:nil];
 
     //declares the service. The service will be called on a dummy document (myDocumentServiceProvider), which is lazily created
     //when first used
@@ -313,12 +339,16 @@ static NSMutableDictionary* cachePaths = nil;
                                     tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [editCopyImageAsMenu addItemWithTitle:@"EPS" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_EPS];
+  [editCopyImageAsMenu addItemWithTitle:@"SVG" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_SVG];
   [editCopyImageAsMenu addItemWithTitle:@"TIFF" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_TIFF];
   [editCopyImageAsMenu addItemWithTitle:@"PNG" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_PNG];
   [editCopyImageAsMenu addItemWithTitle:@"JPEG" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_JPEG];
+  [editCopyImageAsMenu addItemWithTitle:@"MathML" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_MATHML];
 }
 //end awakeFromNib
 
@@ -415,6 +445,10 @@ static NSMutableDictionary* cachePaths = nil;
     [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey],
     [NSDictionary dictionaryWithObjectsAndKeys:nil],
     [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      DragExportSvgPdfToSvgPathKey, @"path",
+      [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil],
+    DragExportSvgPdfToSvgPathKey,
     nil];
   NSDictionary* configuration = [NSDictionary dictionaryWithObjectsAndKeys:
     [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
@@ -424,7 +458,7 @@ static NSMutableDictionary* cachePaths = nil;
   {
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingDictionary:[dict objectForKey:keyPath]]];
-  }
+  }//end if ([[dict allKeys] containsObject:keyPath])
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
@@ -436,21 +470,23 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end applicationShouldOpenUntitledFile:
 
--(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
+-(BOOL) application:(NSApplication *)application openFile:(NSString*)filename
 {
   BOOL ok = NO;
+  NSURL* fileURL = [NSURL fileURLWithPath:filename];
   NSString* type = [[filename pathExtension] lowercaseString];
   if ([type isEqualTo:@"latexpalette"])
   {
-    ok = [self installLatexPalette:filename];
+    ok = [self installLatexPalette:fileURL];
     if (ok)
       [self->latexPalettesWindowController reloadPalettes];
     ok = YES;
-  }
-  else if ([type isEqualTo:@"latexlib"] || [type isEqualTo:@"library"] || [type isEqualTo:@"latexhist"] || [type isEqualTo:@"plist"])
+  }//end if ([type isEqualTo:@"latexpalette"])
+  else if ([type isEqualTo:@"latexlib"] || [type isEqualTo:@"library"] || [type isEqualTo:@"plist"])
   {
     NSString* title =
-      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @"Do you want to load the library <%@> ?"),
+      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?",
+                                                   @"Do you want to load the library <%@> ?"),
                                  [[filename pathComponents] lastObject]];
     NSAlert* alert = [NSAlert alertWithMessageText:title
                                      defaultButton:NSLocalizedString(@"Add to the library", @"Add to the library")
@@ -464,12 +500,111 @@ static NSMutableDictionary* cachePaths = nil;
       ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_OVERWRITE parent:nil];
     else
       ok = YES;
-  }
-  else //latex document
+  }//end if ([type isEqualTo:@"latexlib", @"library", @"latexhist" or @"plist"])
+  else if ([type isEqualTo:@"latexhist"])
   {
-    MyDocument* document = (MyDocument*)[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filename display:YES];
-    ok = (document != nil);
-  }
+    NSString* title =
+      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the history <%@> ?",
+                                                   @"Do you want to load the history <%@> ?"),
+                                 [[filename pathComponents] lastObject]];
+    NSAlert* alert = [NSAlert alertWithMessageText:title
+                                     defaultButton:NSLocalizedString(@"Add to the history", @"Add to the history")
+                                   alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
+                                       otherButton:NSLocalizedString(@"Replace the history", @"Replace the history")
+                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"If you choose <Replace the history>, the current history will be lost")];
+    int confirm = [alert runModal];
+    if (confirm == NSAlertDefaultReturn)
+      ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_MERGE];
+    else if (confirm == NSAlertOtherReturn)
+      ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_OVERWRITE];
+    else
+      ok = YES;
+  }//end if ([type isEqualTo:@"latexlib", @"library", @"latexhist" or @"plist"])
+  else//latex document
+  {
+    NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
+    NSString* uti = [[NSFileManager defaultManager] UTIFromURL:fileURL];
+    if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.svg-image")))
+    {
+      NSError* error = nil;
+      NSData* data = [NSData dataWithContentsOfURL:fileURL options:NSUncachedRead error:&error];
+      NSString* string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+      NSArray* equations = [string componentsMatchedByRegex:@"<svg(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</svg>"
+                          options:RKLCaseless|RKLMultiline|RKLDotAll
+                             range:NSMakeRange(0, [string length]) capture:0 error:&error];
+      if (error)
+        DebugLog(1, @"error : %@", error);
+      NSUInteger equationsCount = [equations count];
+      if (equationsCount == 1)
+      {
+        MyDocument* document = (MyDocument*)
+          [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
+        if (error)
+          DebugLog(1, @"error : %@", error);
+        ok |= (document != nil);
+      }//end if (equationsCount == 1)
+      else if (equationsCount > 1)
+      {
+        NSEnumerator* enumerator = [equations objectEnumerator];
+        NSString* equation = nil;
+        while((equation = [enumerator nextObject]))
+        {
+          error = nil;
+          MyDocument* document = (MyDocument*)[documentController openUntitledDocumentAndDisplay:YES error:&error];
+          if (error)
+            DebugLog(1, @"error : %@", error);
+          [document applyData:[equation dataUsingEncoding:NSUTF8StringEncoding] sourceUTI:uti];
+          [document setFileURL:fileURL];
+          ok |= (document != nil);
+        }//end for each equation
+      }//end if (equationsCount > 1)
+    }//end if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.html")))
+    {
+      NSError* error = nil;
+      NSData* data = [NSData dataWithContentsOfURL:fileURL options:NSUncachedRead error:&error];
+      NSString* string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+      NSArray* equations = [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
+                          options:RKLCaseless|RKLMultiline|RKLDotAll
+                             range:NSMakeRange(0, [string length]) capture:0 error:&error];
+      if (error)
+        DebugLog(1, @"error : %@", error);
+      NSUInteger equationsCount = [equations count];
+      if (equationsCount == 1)
+      {
+        MyDocument* document = (MyDocument*)
+          [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
+        if (error)
+          DebugLog(1, @"error : %@", error);
+        ok |= (document != nil);
+      }//end if (equationsCount == 1)
+      else if (equationsCount > 1)
+      {
+        NSEnumerator* enumerator = [equations objectEnumerator];
+        NSString* equation = nil;
+        while((equation = [enumerator nextObject]))
+        {
+          error = nil;
+          MyDocument* document = (MyDocument*)[documentController openUntitledDocumentAndDisplay:YES error:&error];
+          if (error)
+            DebugLog(1, @"error : %@", error);
+          [document applyData:[equation dataUsingEncoding:NSUTF8StringEncoding] sourceUTI:uti];
+          [document setFileURL:fileURL];
+          ok |= (document != nil);
+        }//end for each equation
+      }//end if (equationsCount > 1)
+    }//end if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.html")))
+    else
+    {
+      NSError* error = nil;
+      MyDocument* document = (MyDocument*)
+        [[NSDocumentController sharedDocumentController]
+          openDocumentWithContentsOfURL:fileURL display:YES error:&error];
+      if (error)
+        DebugLog(1, @"error : %@", error);
+      ok = (document != nil);
+    }
+  }//end latex document
   return ok;
 }
 //end application:openFile:
@@ -484,7 +619,8 @@ static NSMutableDictionary* cachePaths = nil;
   OSStatus status = LSRegisterURL(latexitHelperURL, true);
   if (status != noErr)
     DebugLog(0, @"LSRegisterURL : %d", status);
-  [[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath];//because Keynote won't find it otherwise
+  [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
+  //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
 
   if (latexitHelperURL) CFRelease(latexitHelperURL);
   [LinkBack publishServerWithName:[[NSWorkspace sharedWorkspace] applicationName] delegate:self];
@@ -566,7 +702,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSArray* allLinkBackLinks = [self->linkbackLinks allObjects];
   NSEnumerator* enumerator = [allLinkBackLinks objectEnumerator];
   LinkBack* link = nil;
-  while((link = [enumerator nextObject]))
+  while((link = [[enumerator nextObject] pointerValue]))
     [self closeLinkBackLink:link];
 
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
@@ -634,7 +770,9 @@ static NSMutableDictionary* cachePaths = nil;
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
     if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
-      ok &= isGsAvailable && isPsToPdfAvailable;
+      ok &= self->isGsAvailable && self->isPsToPdfAvailable;
+    if ([sender tag] == EXPORT_FORMAT_SVG)
+      ok &= self->isPdfToSvgAvailable;
     if ([sender tag] == -1)//default
     {
       export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
@@ -658,19 +796,11 @@ static NSMutableDictionary* cachePaths = nil;
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy];
     latex_mode_t latexMode = [myDocument latexMode];
-    #ifdef MIGRATE_ALIGN
     if ([sender tag] == 1)
     {
       [sender setTitle:@"Align"];
       [sender setState:(myDocument && (latexMode == LATEX_MODE_ALIGN)) ? NSOnState : NSOffState];
     }
-    #else
-    if ([sender tag] == 1)
-    {
-      [sender setTitle:@"Eqnarray"];
-      [sender setState:(myDocument && (latexMode == LATEX_MODE_EQNARRAY)) ? NSOnState : NSOffState];
-    }
-    #endif
     else if ([sender tag] == 2)
       [sender setState:(myDocument && (latexMode == LATEX_MODE_DISPLAY)) ? NSOnState : NSOffState];
     else if ([sender tag] == 3)
@@ -743,6 +873,16 @@ static NSMutableDictionary* cachePaths = nil;
     else
       [sender setTitle:NSLocalizedString(@"Show Library", @"Show Library")];
   }
+  else if ([sender action] == @selector(libraryOpenEquation:))
+  {
+    ok = [[self->libraryWindowController window] isVisible] &&
+         ([[[[self->libraryWindowController libraryView] selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
+  }
+  else if ([sender action] == @selector(libraryOpenLinkedEquation:))
+  {
+    ok = [[self->libraryWindowController window] isVisible] &&
+         ([[[[self->libraryWindowController libraryView] selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
+  }
   else if ([sender action] == @selector(libraryNewFolder:))
   {
     ok = [[self->libraryWindowController window] isVisible];
@@ -810,7 +950,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) displaySponsors:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/programmation/latexit-sponsors.php"]];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/latexit/latexit-sponsors.php"]];
 }
 //end makeDonation:
 
@@ -829,10 +969,10 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end showPreferencesPane:
 
--(void) showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier//showPreferencesPane + select one pane
+-(void) showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier options:(id)options//showPreferencesPane + select one pane
 {
   [self showPreferencesPane:self];
-  [[self preferencesWindowController] selectPreferencesPaneWithItemIdentifier:itemIdentifier];
+  [[self preferencesWindowController] selectPreferencesPaneWithItemIdentifier:itemIdentifier options:options];
 }
 //end showPreferencesPaneWithItemIdentifier:
 
@@ -957,7 +1097,7 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setCanCreateDirectories:NO];
   [self->openFileTypeOpenPanel setResolvesAliases:YES];
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
-  [self->openFileTypeOpenPanel setDelegate:self];//panel:shouldShowFilename:
+  [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
   int result = [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil];
   if (result == NSOKButton)
   {
@@ -1032,11 +1172,7 @@ static NSMutableDictionary* cachePaths = nil;
     latex_mode_t mode = LATEX_MODE_TEXT;
     switch([sender tag])
     {
-      #ifdef MIGRATE_ALIGN
       case 1 : mode = LATEX_MODE_ALIGN; break;
-      #else
-      case 1 : mode = LATEX_MODE_EQNARRAY; break;
-      #endif
       case 2 : mode = LATEX_MODE_DISPLAY; break;
       case 3 : mode = LATEX_MODE_INLINE; break;
       case 4 : mode = LATEX_MODE_TEXT; break;
@@ -1133,6 +1269,18 @@ static NSMutableDictionary* cachePaths = nil;
     [controller showWindow:self];
 }
 //end showOrHideHistory:
+
+-(IBAction) libraryOpenEquation:(id)sender
+{
+  [[self libraryWindowController] openEquation:sender];
+}
+//end libraryImportCurrent:
+
+-(IBAction) libraryOpenLinkedEquation:(id)sender
+{
+  [[self libraryWindowController] openLinkedEquation:sender];
+}
+//end libraryImportCurrent:
 
 -(IBAction) libraryImportCurrent:(id)sender //creates a library item with the current document state
 {
@@ -1274,8 +1422,8 @@ static NSMutableDictionary* cachePaths = nil;
 -(IBAction) openWebSite:(id)sender
 {
   NSMutableString* urlString =
-    [NSMutableString stringWithString:NSLocalizedString(@"http://pierre.chachatelier.fr/programmation/latexit_en.php",
-                                                        @"http://pierre.chachatelier.fr/programmation/latexit_en.php")];
+    [NSMutableString stringWithString:NSLocalizedString(@"http://pierre.chachatelier.fr/latexit/index.php",
+                                                        @"http://pierre.chachatelier.fr/latexit/index.php")];
   if ([sender respondsToSelector:@selector(tag)] && ([sender tag] == 1))
     [urlString appendString:@"#donation"];
   NSURL* webSiteURL = [NSURL URLWithString:urlString];
@@ -1344,6 +1492,8 @@ static NSMutableDictionary* cachePaths = nil;
     case EXPORT_FORMAT_TIFF : result = @"TIFF"; break;
     case EXPORT_FORMAT_PNG : result = @"PNG";   break;
     case EXPORT_FORMAT_JPEG : result = @"JPEG"; break;
+    case EXPORT_FORMAT_MATHML : result = @"MATHML"; break;
+    case EXPORT_FORMAT_SVG : result = @"SVG"; break;
   }//end switch(format)
   return result;
 }
@@ -1462,7 +1612,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(BOOL) isGsAvailable
 {
-  return isGsAvailable;
+  return self->isGsAvailable;
 }
 //end isGsAvailable
 
@@ -1502,6 +1652,12 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end isColorStyAvailable
 
+-(BOOL) isPdfToSvgAvailable
+{
+  return self->isPdfToSvgAvailable;
+}
+//end isPdfToSvgAvailable
+
 //try to find gs program, searching by its name
 -(void) _findPathWithConfiguration:(id)configuration
 {
@@ -1512,7 +1668,9 @@ static NSMutableDictionary* cachePaths = nil;
   NSString*      proposedPath   = nil;
   BOOL           useLoginShell  = NO;
   @synchronized(preferencesController){
-    proposedPath  = [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
+    proposedPath  = !pathKey ? nil : 
+                    [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ? [preferencesController exportSvgPdfToSvgPath] :
+                    [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
     useLoginShell = [[[preferencesController compositionConfigurationDocument] objectForKey:CompositionConfigurationUseLoginShellKey] boolValue];
   }
   NSMutableArray* prefixes = [NSMutableArray arrayWithArray:[[LaTeXProcessor sharedLaTeXProcessor] unixBins]];
@@ -1522,8 +1680,11 @@ static NSMutableDictionary* cachePaths = nil;
   if ([fileManager fileExistsAtPath:proposedPath])
   {
     @synchronized(preferencesController){
-      [preferencesController setCompositionConfigurationDocumentProgramPath:proposedPath forKey:pathKey];
-    }
+      if ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey])
+        [preferencesController setExportSvgPdfToSvgPath:proposedPath];
+      else if (pathKey)
+        [preferencesController setCompositionConfigurationDocumentProgramPath:proposedPath forKey:pathKey];
+    }//end @synchronized(preferencesController)
   }//end @synchronized(preferencesController)
 }
 //end _findPathWithConfiguration:(id)configuration
@@ -1540,6 +1701,8 @@ static NSMutableDictionary* cachePaths = nil;
   NSString* pathKey = [configuration objectForKey:@"path"];
   BOOL checkOnlyIfNecessary = [[configuration objectForKey:@"checkOnlyIfNecessary"] boolValue];
   BOOL shouldCheck =
+    !pathKey ||
+    [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ||
     ([pathKey isEqualToString:CompositionConfigurationPdfLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_PDFLATEX))) ||
     ([pathKey isEqualToString:CompositionConfigurationXeLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_XELATEX))) ||
     ([pathKey isEqualToString:CompositionConfigurationLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_LATEXDVIPDF))) ||
@@ -1552,14 +1715,22 @@ static NSMutableDictionary* cachePaths = nil;
     {
       NSString* pathProposed = nil;
       @synchronized(preferencesController){
-        pathProposed = [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
+        pathProposed = !pathKey ? nil :
+          [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ? [preferencesController exportSvgPdfToSvgPath] :
+          [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
       }
       BOOL pathProposedIsEmpty = !pathProposed || [pathProposed isEqualToString:@""];
       BOOL ok = !pathProposedIsEmpty && [[NSFileManager defaultManager] isExecutableFileAtPath:pathProposed];
       //currently, the only check is the option -v, at least to see if the program can be executed
-      int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1", pathProposed] UTF8String]);
-      error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
-      ok = ok && (error != 127);
+      NSString* options = (!pathKey || [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey]
+                                    || [pathKey isEqualToString:CompositionConfigurationPsToPdfPathKey]) ? @"" : @"-v";
+      NSString* command = [NSString stringWithFormat:@"%@ %@ 1>|/dev/null 2>&1", pathProposed, options];
+      int error = !ok ? 127 : system([command UTF8String]);
+      BOOL useExitStatus = (pathKey != nil);
+      error = (!ok || WIFSIGNALED(error) || !WIFEXITED(error) || WIFSTOPPED(error)) ? 127 :
+              (!useExitStatus ? 0 : WEXITSTATUS(error));
+      ok = ok &&
+           ((error < 127) || ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] && (error == ((unsigned char)-2))));
       *monitor = ok;
 
       NSDictionary* recursiveConfiguration = [configuration subDictionaryWithKeys:[NSArray arrayWithObjects:@"path", @"executableName", @"monitor", nil]];
@@ -1570,7 +1741,7 @@ static NSMutableDictionary* cachePaths = nil;
         [self _findPathWithConfiguration:recursiveConfiguration];
         [self _checkPathWithConfiguration:recursiveConfiguration];
         ok = (*monitor);
-      }
+      }//end if (shouldFind)
 
       BOOL allowUIAlertOnFailure = [[configuration objectForKey:@"allowUIAlertOnFailure"] boolValue];
       BOOL allowUIFindOnFailure  = [[configuration objectForKey:@"allowUIFindOnFailure"] boolValue];
@@ -1604,8 +1775,11 @@ static NSMutableDictionary* cachePaths = nil;
             {
               [[LaTeXProcessor sharedLaTeXProcessor] addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
               @synchronized(preferencesController){
-                [preferencesController setCompositionConfigurationDocumentProgramPath:filepath forKey:pathKey];
-              }
+                if ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey])
+                  [preferencesController setExportSvgPdfToSvgPath:pathKey];
+                else if (pathKey)
+                  [preferencesController setCompositionConfigurationDocumentProgramPath:filepath forKey:pathKey];
+              }//end @synchronized(preferencesController)
               [self _checkPathWithConfiguration:recursiveConfiguration];
               ok = (*monitor);
               retry = !ok;
@@ -1817,8 +1991,7 @@ static NSMutableDictionary* cachePaths = nil;
     nil;
 
   MyDocument* documentForLink = nil;
-  documentForLink = (MyDocument*) [self currentDocument];
-  /*
+  //documentForLink = (MyDocument*) [self currentDocument];
   NSEnumerator* enumerator = !link ? nil : [[NSApp orderedDocuments] objectEnumerator];
   MyDocument* document = nil;
   while((document = [enumerator nextObject]))
@@ -1830,7 +2003,6 @@ static NSMutableDictionary* cachePaths = nil;
       break;
     }
   }//for each document
-  */
 
   if (!documentForLink)
     documentForLink = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
@@ -2006,6 +2178,12 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_JPEG:
               extension = @"jpeg";
               break;
+            case EXPORT_FORMAT_MATHML:
+              extension = @"html";
+              break;
+            case EXPORT_FORMAT_SVG:
+              extension = @"svg";
+              break;
           }
 
           NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
@@ -2014,7 +2192,8 @@ static NSMutableDictionary* cachePaths = nil;
                                            jpegColor:[preferencesController exportJpegBackgroundColor]
                                            jpegQuality:[preferencesController exportJpegQualityPercent]
                                             scaleAsPercent:[preferencesController exportScalePercent]
-                                            compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+                                            compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                                                    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           //Now we must feed the pasteboard
           //[pboard declareTypes:[NSArray array] owner:nil];
@@ -2178,16 +2357,16 @@ static NSMutableDictionary* cachePaths = nil;
         NSString* pboardString = nil;
         if ([types containsObject:NSPDFPboardType])
         {
-          PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:[pboard dataForType:NSPDFPboardType]];
-          pboardString = [pdfDocument string];
-          [pdfDocument release];
-        }
+          NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+          NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfData);
+          pboardString = pdfString;
+        }//end if ([types containsObject:NSPDFPboardType])
         else if ([types containsObject:@"com.adobe.pdf"])
         {
-          PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:[pboard dataForType:@"com.adobe.pdf"]];
-          pboardString = [pdfDocument string];
-          [pdfDocument release];
-        }
+          NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+          NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfData);
+          pboardString = pdfString;
+        }//end if ([types containsObject:@"com.adobe.pdf"])
         if (!pboardString)
           pboardString = [pboard stringForType:NSStringPboardType];
         if (!pboardString)
@@ -2240,13 +2419,20 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_JPEG:
               extension = @"jpeg";
               break;
+            case EXPORT_FORMAT_MATHML:
+              extension = @"html";
+              break;
+            case EXPORT_FORMAT_SVG:
+              extension = @"svg";
+              break;
           }
 
           NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
                                      jpegColor:[preferencesController exportJpegBackgroundColor]
                                      jpegQuality:[preferencesController exportJpegQualityPercent]
                                       scaleAsPercent:[preferencesController exportScalePercent]
-                                      compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+                                      compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                                      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           //now feed the pasteboard
           //[pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
@@ -2407,7 +2593,9 @@ static NSMutableDictionary* cachePaths = nil;
           [NSArray arrayWithObjects:@"$$", @"$$"  , [NSNumber numberWithInt:LATEX_MODE_DISPLAY], nil],
           [NSArray arrayWithObjects:@"\\[", @"\\]", [NSNumber numberWithInt:LATEX_MODE_DISPLAY], nil],
           [NSArray arrayWithObjects:@"$", @"$"    , [NSNumber numberWithInt:LATEX_MODE_INLINE], nil],
+          [NSArray arrayWithObjects:@"\\begin{eqnarray}", @"\\end{eqnarray}", [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], nil],
           [NSArray arrayWithObjects:@"\\begin{eqnarray*}", @"\\end{eqnarray*}", [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], nil],
+          [NSArray arrayWithObjects:@"\\begin{align}", @"\\end{align}", [NSNumber numberWithInt:LATEX_MODE_ALIGN], nil],
           [NSArray arrayWithObjects:@"\\begin{align*}", @"\\end{align*}", [NSNumber numberWithInt:LATEX_MODE_ALIGN], nil],
           nil];
 
@@ -2536,6 +2724,12 @@ static NSMutableDictionary* cachePaths = nil;
                 case EXPORT_FORMAT_JPEG:
                   extension = @"jpeg";
                   break;
+                case EXPORT_FORMAT_MATHML:
+                  extension = @"html";
+                  break;
+                case EXPORT_FORMAT_SVG:
+                  extension = @"svg";
+                  break;
               }
 
               if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
@@ -2557,7 +2751,8 @@ static NSMutableDictionary* cachePaths = nil;
                                        jpegColor:[preferencesController exportJpegBackgroundColor]
                                        jpegQuality:[preferencesController exportJpegQualityPercent]
                                         scaleAsPercent:[preferencesController exportScalePercent]
-                                        compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+                                        compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
               //extracts the baseline of the equation, if possible
               CGFloat newBaseline = [originalBaseline floatValue];
@@ -2591,7 +2786,8 @@ static NSMutableDictionary* cachePaths = nil;
               [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
               [mutableAttributedStringWithImage appendAttributedString:space];
               //inserts the image in the global string
-              [mutableAttrString replaceCharactersInRange:rangeOfEquation withAttributedString:mutableAttributedStringWithImage];
+              if (mutableAttributedStringWithImage)
+                [mutableAttrString replaceCharactersInRange:rangeOfEquation withAttributedString:mutableAttributedStringWithImage];
               
               remainingRange = NSMakeRange(remainingRange.location, [mutableAttrString length]-remainingRange.location);
             }//end if latexisation has worked
@@ -2720,7 +2916,8 @@ static NSMutableDictionary* cachePaths = nil;
                 font, NSFontAttributeName,
                 [NSString stringWithFormat:@"%f",  [latexitEquation pointSize]], NSFontSizeAttribute,
                 [latexitEquation color], NSForegroundColorAttributeName, nil];
-            [attributedString replaceCharactersInRange:effectiveRange withAttributedString:source];
+            if (source)
+              [attributedString replaceCharactersInRange:effectiveRange withAttributedString:source];
             [attributedString addAttributes:attributes range:NSMakeRange(effectiveRange.location, [source length])];
             location += [source length];
           }
@@ -2869,14 +3066,14 @@ static NSMutableDictionary* cachePaths = nil;
   MyDocument* myDocument = (MyDocument*) [self currentDocument];
   if (string && myDocument)
   {
-    if (([item numberOfArguments] >= 0) || ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT))
+    if ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT)
       string = [item stringWithTextInserted:[myDocument selectedText]];
     [myDocument insertText:string];
   }//end if (string && myDocument)
 }
 //end latexPalettesClick:
 
--(BOOL) installLatexPalette:(NSString*)palettePath
+-(BOOL) installLatexPalette:(NSURL*)paletteURL
 {
   BOOL ok = NO;
   NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -2885,6 +3082,7 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL isDirectory  = NO;
   BOOL isDirectory2 = NO;
   BOOL isDirectory3 = NO;
+  NSString* palettePath= [paletteURL path];
   if ([fileManager fileExistsAtPath:palettePath isDirectory:&isDirectory] && isDirectory &&
       [fileManager fileExistsAtPath:[palettePath stringByAppendingPathComponent:@"Info.plist"] isDirectory:&isDirectory2] && !isDirectory2 &&
       [fileManager fileExistsAtPath:[palettePath stringByAppendingPathComponent:@"Resources"] isDirectory:&isDirectory3] && isDirectory3)

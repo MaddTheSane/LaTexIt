@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -60,10 +60,13 @@
   NSMutableString* lastExecutionLog;
 
   LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
+  LibraryEquation* linkedLibraryEquation;
+  BOOL             isObservingLibrary;
+
+  NSString* initialUTI;
+  NSData*   initialData;
   NSString* initialPreamble;
   NSString* initialBody;
-  NSData*   initialPdfData;
-  NSData*   initialData;
   
   LibraryEquation* lastAppliedLibraryEquation;
   BOOL             isReducedTextArea;
@@ -81,6 +84,7 @@
 -(void) setReducedTextArea:(BOOL)reduce;
 -(document_style_t) documentStyle;
 -(void) setDocumentStyle:(document_style_t)value;
+-(void) toggleDocumentStyle;
 
 //actions from menu (through the appController), or from self contained elements
 -(IBAction) latexize:(id)sender;
@@ -132,8 +136,7 @@
 -(void) insertText:(id)text;
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient;
--(BOOL) applyData:(NSData*)data; //updates the document according to the given pdfdata
--(BOOL) applyPdfData:(NSData*)pdfData; //updates the document according to the given pdfdata
+-(BOOL) applyData:(NSData*)data sourceUTI:(NSString*)sourceUTI; //updates the document according to the given data
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation;
 -(void) applyLatexitEquation:(LatexitEquation*)latexitEquation isRecentLatexisation:(BOOL)isRecentLatexisation; //updates the document according to the given history item
 -(void) applyString:(NSString*)string;//updates the document according to the given source string, that is to be decomposed in preamble+body
@@ -144,5 +147,14 @@
 -(LinkBack*) linkBackLink;
 -(void) setLinkBackLink:(LinkBack*)link;
 -(void) closeLinkBackLink:(LinkBack*)link;
+
+-(LibraryEquation*) linkedLibraryEquation;
+-(void) setLinkedLibraryEquation:(LibraryEquation*)libraryEquation;
+-(void) closeLinkedLibraryEquation:(LibraryEquation*)libraryEquation;
+
+//NSWindowDelegate
+-(void) windowDidResize:(NSNotification*)notification;
+//NSSplitViewDelegate
+-(void) splitViewDidResizeSubviews:(NSNotification*)notification;
 
 @end

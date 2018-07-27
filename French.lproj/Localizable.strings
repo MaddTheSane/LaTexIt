@@ -61,6 +61,7 @@
 "useful to type directly accentuated characters" = "utile pour taper directement les caractères accentués";
 "color.sty seems to be unavailable" = "color.sty semble indisponible";
 "%@ not found or does not work as expected" = "%@ est introuvable ou ne fonctionne pas comme attendu";
+"%@ is required" = "%@ est nécessaire";
 "The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "ps2pdf est requis pour activer l'export  en \"PDF sans polices embarquées\"";
 "Find %@..." = "Chercher %@...";
@@ -77,13 +78,18 @@
 "You did not type any text in the body. The result will certainly be empty." = "Vous n'avez pas tapé de corps au document LaTeX. Le résultat sera sans doute vide.";
 "An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Une erreur est survenue lors de la création du fichier avec la commande:\n%@";
-"http://pierre.chachatelier.fr/programmation/latexit_en.php" = "http://pierre.chachatelier.fr/programmation/latexit_fr.php";
+"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=fr";
 "Equation linked with another application" = "Équation liée à une autre application";
+"Equation linked with library item" = "Équation liée à la bibliothèque";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT ne peut être exécuté normalement; veuillez vérifier sa configuration";
 "Do you want to load the library <%@> ?" = "Voulez-vous charger la bibliothèque <%@> ?";
 "If you choose <Replace the library>, the current library will be lost" = "Si vous choisissez <Remplacer la bibliothèque>, la bibliothèque actuelle sera perdue";
 "Add to the library" = "Ajouter à la bibliothèque";
 "Replace the library" = "Remplacer la bibliothèque";
+"Do you want to load the history <%@> ?" = "Voulez-vous charger l'historique <%@> ?";
+"If you choose <Replace the history>, the current history will be lost" = "Si vous choisissez <Remplacer l'historique>, l'historique actuelle sera perdue";
+"Add to the history" = "Ajouter à l'historique";
+"Replace the history" = "Remplacer l'historique";
 "Open in LaTeXiT" = "Ouvrir dans LaTeXiT";
 "Check for new versions" = "Vérification des mises à jour";
 "An error occured while trying to reach %@.\nYou should check your network." = "Une erreur est survenue lors de l'accès à %@.\nVous devriez vérifier le bon fonctionnement de votre réseau.";
@@ -92,15 +98,16 @@
 "Edition" = "Édition";
 "Preambles" = "Préambules";
 "Body templates" = "Modèles de corps";
+"Templates" = "Modèles";
 "Composition" = "Composition";
 "Service" = "Service";
 "Advanced" = "Avancé";
 "Web" = "Web";
+"Plugins" = "Extensions";
 "Do you really want to apply that preamble to the library items ?" = "Voulez-vous vraiment appliquer ce préambule aux éléments de la bibliothèque ?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." =
 "Leur ancien préambule sera écrasé. S'il s'agissait d'un préambule spécial utilisé pour leur génération, il sera perdu.";
 "Apply" = "Appliquer";
-"Typeset LaTeX Maths align" = "Créer l'équation en mode align";
 "Typeset LaTeX Maths eqnarray" = "Créer l'équation en mode Eqnarray";
 "Typeset LaTeX Maths align" = "Créer l'équation en mode Align";
 "Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
@@ -146,7 +153,6 @@
 "Author" = "Auteur";
 "Display the error message" = "Afficher le message d'erreur";
 "Error message" = "Message d'erreur";
-"Error" = "Erreur";
 "Enlarge the text area" = "Agrandir la zone de texte";
 "Reduce the text area" = "Réduire la zone de texte";
 "New Service shortcuts could not be set" = "Les nouveaux raccourcis claviers pour les Services n'ont pu être inscrits.";
@@ -169,9 +175,11 @@
 "PDF w.o.f." = "PDF s.p.";
 "PDF vector format" = "Image vectorielle PDF";
 "EPS vector format" = "Image vectorielle EPS";
+"SVG vector format" = "Image vectorielle SVG";
 "TIFF bitmap format" = "Image bitmap TIFF";
 "PNG bitmap format" = "Image bitmap PNG";
 "JPEG bitmap format" = "Image bitmap JPEG";
+"MathML text format" = "Texte MathML";
 "Migrating history to new format" = "Migration de l'historique vers un nouveau format";
 "Migrating library to new format" = "Migration de la bibliothèque vers un nouveau format";
 
@@ -187,11 +195,26 @@
 "Copy the image as" = "Copier l'image en tant que";
 "Switch to mini-window" = "Activer la mini-fenêtre";
 "Switch to normal window" = "Désactiver la mini-fenêtre";
-
+"line" = "ligne";
 
 /* document extra panels */
 "Execution log" = "Rapport d'exécution";
 "Drag through areas to change export type" = "Passez sur les zones pour changer l'export";
+"JPEG Quality" = "Qualité JPEG";
+"least" = "mini";
+"low" = "faible";
+"medium" = "moyenne";
+"high" = "haute";
+"maxi" = "maxi";
+"Quality" = "Qualité";
+"Background color" = "Couleur de fond";
+"Path to pdf2svg" = "Chemin vers pdf2svg";
+"Format" = "Format";
+"Change" = "Modifier";
+"Options" = "Options";
+"Scale" = "Échelle";
+"Warning : jpeg does not manage transparency" = "Attention : jpeg ne gère pas la transparence";
+"Warning : pdf2svg path is invalid" = "Attention : Le chemin vers pdf2svg est invalide";
 
 /* Library */
 "Library" = "Bibliothèque";
@@ -204,11 +227,12 @@
 "Add a folder" = "Ajouter un dossier";
 "Add current equation" = "Ajouter l'équation courante";
 "Rename selection" = "Renommer la sélection";
-"Remove selection" = "Supprimer la sélection";
-"Replace current equation" = "Remplacer l'équation courante";
+"Replace selection by current equation" = "Remplacer la sélection par l'équation courante";
 "Import..." = "Importer...";
 "Export..." = "Exporter...";
 "Display the equations in real size on mouse over" = "Affiche les équations en taille réelle lors d'un passage de la souris";
+"Open the equation in a document" = "Ouvrir l'équation dans un document";
+"Open the equation in a linked document" = "Ouvrir l'équation dans un document lié";
 
 /* History */
 "Add to current history" = "Ajouter à l'historique";

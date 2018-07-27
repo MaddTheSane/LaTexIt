@@ -3,10 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/11/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDataExtended.h"
+
+#import "Utils.h"
 
 #import <openssl/ssl.h>
 
@@ -57,10 +59,12 @@
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
   mem = BIO_push(b64, mem);
   BIO_write(mem, [self bytes], [self length]);
-  BIO_flush(mem);
+  int error = BIO_flush(mem);
+  if (error != 1)
+    DebugLog(0, @"BIO_flush : %d", error);
   char* base64Pointer = 0;
   long base64Length = BIO_get_mem_data(mem, &base64Pointer);
-  result = [NSString stringWithCString:base64Pointer length:base64Length];
+  result = [[[NSString alloc] initWithBytes:base64Pointer length:base64Length encoding:NSUTF8StringEncoding] autorelease];
   BIO_free_all(mem);
   return result;
 }

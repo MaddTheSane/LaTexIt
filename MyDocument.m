@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -10,13 +10,16 @@
 
 #import "AdditionalFilesWindowController.h"
 #import "AppController.h"
+#import "CGPDFExtras.h"
 #import "DocumentExtraPanelsController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "ImagePopupButton.h"
 #import "LatexitEquation.h"
 #import "LaTeXProcessor.h"
+#import "LibraryManager.h"
 #import "LibraryEquation.h"
+#import "LibraryWindowController.h"
 #import "LineCountTextView.h"
 #import "LogTableView.h"
 #import "MyImageView.h"
@@ -28,6 +31,7 @@
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSFontExtended.h"
+#import "NSOutlineViewExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "NSStringExtended.h"
 #import "NSTaskExtended.h"
@@ -77,18 +81,37 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(NSImage*) _checkEasterEgg;//may return an easter egg image
 
--(void) _updateTextField:(NSTimer*)timer; //to fix a refresh bug
 -(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
 
 -(NSString*) descriptionForScript:(NSDictionary*)script;
 -(void) _decomposeString:(NSString*)string preamble:(NSString**)preamble body:(NSString**)body;
 
--(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)format scaleAsPercent:(CGFloat)scaleAsPercent
+-(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)exportFormat scaleAsPercent:(CGFloat)scaleAsPercent
                   jpegColor:(NSColor*)jpegColor jpegQuality:(CGFloat)jpegQuality filePath:(NSString*)filePath;
                   
 -(void) latexizeCoreRunWithConfiguration:(NSDictionary*)configuration;
 -(void) removeObsoleteFiles;
 -(void) applicationWillTerminate:(NSNotification*)notification;
+
+-(void) selectLibraryItemForCurrentLinkedEquation:(id)sender;
+@end
+
+@interface MyDocumentWindow : NSWindow
+@end
+@implementation MyDocumentWindow
+-(void)toggleToolbarShown:(id)sender
+{
+  [(MyDocument*)[[self windowController] document] toggleDocumentStyle];
+}
+@end
+
+@interface MyDocumentPanel : NSPanel
+@end
+@implementation MyDocumentPanel
+-(void)toggleToolbarShown:(id)sender
+{
+  [(MyDocument*)[[self windowController] document] toggleDocumentStyle];
+}
 @end
 
 @implementation MyDocument
@@ -149,12 +172,17 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   [MyDocument _releaseId:self->uniqueId];
   [self->documentExtraPanelsController release];
   [self closeLinkBackLink:self->linkBackLink];
+  [self closeLinkedLibraryEquation:self->linkedLibraryEquation];
   [self->upperBoxProgressIndicator release];
   [self->lastAppliedLibraryEquation release];
   [self->lastExecutionLog release];
   [self->lastRequestedBodyTemplate release];
   [self->poolOfObsoleteUniqueIds release];
   [self->busyIdentifier release];
+  [self->initialUTI release];
+  [self->initialData release];
+  [self->initialBody release];
+  [self->initialPreamble release];
   [super dealloc];
 }
 //end dealloc
@@ -206,7 +234,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   [super windowControllerDidLoadNib:aController];
   
   NSWindow* window = [self windowForSheet];
-  [window setDelegate:self];
+  
+  [window setDelegate:(id)self];
   [window setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
   [window setTitle:[self displayName]];
   self->lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize = [self->lowerBoxControlsBoxLatexModeSegmentedControl frame].size;
@@ -215,15 +244,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   self->documentFrameSaved = [window frame];
   
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  #ifdef MIGRATE_ALIGN
-  [self->lowerBoxControlsBoxLatexModeSegmentedControl setLabel:@"Align" forSegment:0];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN forSegment:0];
-  #else
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
-  #endif
+  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN   forSegment:0];
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
-  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
+  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setTag:LATEX_MODE_TEXT    forSegment:3];
+  [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setLabel:NSLocalizedString(@"Align", @"Align") forSegment:0];
   [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setLabel:NSLocalizedString(@"Text", @"Text") forSegment:3];
   [self->lowerBoxControlsBoxLatexModeSegmentedControl selectSegmentWithTag:[preferencesController latexisationLaTeXMode]];
   
@@ -271,6 +296,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
   //to paste rich LaTeXiT data, we must tune the responder chain  
   [self->lowerBoxSourceTextView setNextResponder:self->upperBoxImageView];
+  
+  [[[self->upperBoxLogTableView tableColumnWithIdentifier:@"line"] headerCell]
+    setStringValue:NSLocalizedString(@"line", @"line")];
+  [[[self->upperBoxLogTableView tableColumnWithIdentifier:@"message"] headerCell]
+    setStringValue:[NSLocalizedString(@"Error message", @"Error message") lowercaseString]];
 
   //useful to avoid conflicts between mouse clicks on imageView and the progressIndicator
   [self->upperBoxProgressIndicator setNextResponder:self->upperBoxImageView];
@@ -300,36 +330,36 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   {
     //try to insert usepackage{color} inside the preamble
     [self setPreamble:[[[NSAttributedString alloc] initWithString:self->initialPreamble] autorelease]];
+    [self->initialPreamble release];
     self->initialPreamble = nil;
-  }
-  else
+  }//end if (self->initialPreamble)
+  else//if (!self->initialPreamble)
   {
     [self->lowerBoxPreambleTextView setForbiddenLine:0 forbidden:YES];
     [self->lowerBoxPreambleTextView setForbiddenLine:1 forbidden:YES];
     [self setPreamble:[[AppController appController] preambleLatexisationAttributedString]];
-  }
+  }//end if (!self->initialPreamble)
   
   if (self->initialBody)
   {
     [self->lowerBoxControlsBoxLatexModeSegmentedControl setSelectedSegment:[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:LATEX_MODE_TEXT]];
     [self setSourceText:[[[NSAttributedString alloc] initWithString:self->initialBody] autorelease]];
+    [self->initialBody release];
     self->initialBody = nil;
-  }
-  else
+  }//end if (self->initialBody)
+  else//if (!self->initialBody)
   {
     [self setBodyTemplate:[[PreferencesController sharedController] bodyTemplateDocumentDictionary] moveCursor:YES];
-  }
+  }//end if (!self->initialBody)
   
-  if (self->initialPdfData)
+  if (self->initialData)
   {
-    [self applyPdfData:self->initialPdfData];
-    self->initialPdfData = nil;
-  }
-  else if (self->initialData)
-  {
-    [self applyData:self->initialData];
+    [self applyData:self->initialData sourceUTI:self->initialUTI];
+    [self->initialData release];
     self->initialData = nil;
-  }
+    [self->initialUTI release];
+    self->initialUTI = nil;
+  }//end if (self->initialData)
 
   [self updateGUIfromSystemAvailabilities]; //updates interface to allow latexisation or not, according to current configuration
 
@@ -455,11 +485,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
                                                  ([self->lowerBoxControlsBoxFontColorWell frame].size.height-lowerBoxLatexizeButtonFrame.size.height)/2,
                                                  lowerBoxLatexizeButtonFrame.size.width, lowerBoxLatexizeButtonFrame.size.height)];
       NSPanel* miniWindow =
-        [[NSPanel alloc] initWithContentRect:[[window contentView] frame]
+        [[MyDocumentPanel alloc] initWithContentRect:[[window contentView] frame]
                                    styleMask:NSTitledWindowMask|NSUtilityWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
                                      backing:NSBackingStoreBuffered defer:NO];
       [miniWindow setReleasedWhenClosed:YES];
-      [miniWindow setDelegate:self];
+      [miniWindow setDelegate:(id)self];
       [miniWindow setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
       [miniWindow setFrame:[window frame] display:YES];
       [miniWindow setShowsResizeIndicator:NO];
@@ -559,11 +589,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       if (oldValue != DOCUMENT_STYLE_UNDEFINED)
       {
         NSWindow* normalWindow =
-          [[NSWindow alloc] initWithContentRect:[window frame]
+          [[MyDocumentWindow alloc] initWithContentRect:[window frame]
                                      styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
                                        backing:NSBackingStoreBuffered defer:NO];
         [normalWindow setReleasedWhenClosed:YES];
-        [normalWindow setDelegate:self];
+        [normalWindow setDelegate:(id)self];
         [normalWindow setFrameAutosaveName:[NSString stringWithFormat:@"LaTeXiT-window-%u", uniqueId]];
         [normalWindow setFrame:[window frame] display:YES];
         [normalWindow setShowsResizeIndicator:YES];
@@ -591,10 +621,27 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         [window release];
       }//end if (oldValue != DOCUMENT_STYLE_UNDEFINED)
     }//end if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
+    
+    NSToolbar* toolbar = [[[NSToolbar alloc] initWithIdentifier:@""] autorelease];
+    [toolbar setDisplayMode:NSToolbarDisplayModeLabelOnly];
+    [toolbar setSizeMode:NSToolbarSizeModeSmall];
+    [toolbar setVisible:NO];
+    [[self windowForSheet] setToolbar:toolbar];
+
+    
     [[PreferencesController sharedController] setDocumentStyle:self->documentStyle];
   }//end if (value != self->documentStyle)
 }
 //end setDocumentStyle:
+
+-(void) toggleDocumentStyle
+{
+  if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
+    [self setDocumentStyle:DOCUMENT_STYLE_MINI];
+  else
+    [self setDocumentStyle:DOCUMENT_STYLE_NORMAL];
+}
+//end toggleDocumentStyle
 
 -(BOOL) windowShouldZoom:(NSWindow*)window toFrame:(NSRect)proposedFrame
 {
@@ -684,46 +731,52 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 //end dataRepresentationOfType:
 
 //LaTeXiT can open documents
--(BOOL) readFromFile:(NSString *)file ofType:(NSString *)aType
+- (BOOL)readFromURL:(NSURL*)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
-  BOOL ok = YES;
-  //You can also choose to override -loadFileWrapperRepresentation:ofType: or -readFromFile:ofType: instead.
-  if ([aType isEqualToString:@"LatexPalette"])
+  BOOL ok = NO;
+  if ([typeName isEqualToString:@"LatexPalette"])
   {
-    [[AppController appController] installLatexPalette:file];
+    [[AppController appController] installLatexPalette:absoluteURL];
     ok = YES;
-  }
-  else
+  }//end if ([typeName isEqualToString:@"LatexPalette"])
+  else//if (![typeName isEqualToString:@"LatexPalette"])
   {
-    NSData* data = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
-    NSString* type = [[file pathExtension] lowercaseString];
-    NSString* string = nil;
-    if ([type isEqualToString:@"rtf"])
+    self->initialUTI = [[[NSFileManager defaultManager] UTIFromURL:absoluteURL] copy];
+    NSError* error = nil;
+    if (error)
+      DebugLog(1, @"error : %@", error);
+    if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.rtf")))
     {
-      string = [[[[NSAttributedString alloc] initWithRTF:data documentAttributes:nil] autorelease] string];
+      NSData* data = [NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error];
+      NSString* string = [[[[NSAttributedString alloc] initWithRTF:data documentAttributes:nil] autorelease] string];
       [self _decomposeString:string preamble:&self->initialPreamble body:&self->initialBody];
-    }
-    else if ([type isEqualToString:@"pdf"])
-      self->initialPdfData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
-    else if ([type isEqualToString:@"tiff"] || [type isEqualToString:@"tif"])
-      self->initialData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
-    else if ([type isEqualToString:@"png"])
-      self->initialData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
-    else if ([type isEqualToString:@"jpeg"] || [type isEqualToString:@"jpg"])
-      self->initialData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
+    }//end if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.rtf")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("com.adobe.pdf")))
+      self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.tiff")))
+      self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.png")))
+      self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.jpeg")))
+      self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.html")))
+      self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.svg-image")))
+      self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
     else //by default, we suppose that it is a plain text file
     {
       NSStringEncoding encoding = NSMacOSRomanStringEncoding;
       NSError* error = nil;
-      string = [NSString stringWithContentsOfFile:file guessEncoding:&encoding error:&error];
+      NSString* string = [NSString stringWithContentsOfFile:[absoluteURL path] guessEncoding:&encoding error:&error];
       if (error)
         [self presentError:error];
       [self _decomposeString:string preamble:&self->initialPreamble body:&self->initialBody];
     }//end if plain text
-  }//end if (text document)
+    ok = self->initialData || self->initialPreamble || self->initialBody;
+  }//end if (![typeName isEqualToString:@"LatexPalette"])
   return ok;
 }
-//end readFromFile:ofType
+//end readFromURL:ofType:error:
 
 -(void) _decomposeString:(NSString*)string preamble:(NSString**)preamble body:(NSString**)body
 {
@@ -733,15 +786,15 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     NSRange beginDocument = [string rangeOfString:@"\\begin{document}" options:NSCaseInsensitiveSearch];
     NSRange endDocument   = [string rangeOfString:@"\\end{document}" options:NSCaseInsensitiveSearch];
     *preamble = (beginDocument.location == NSNotFound) ? nil :
-                   [string substringWithRange:NSMakeRange(0, beginDocument.location)];
-    *body = (beginDocument.location == NSNotFound) ? string :
+                   [[string substringWithRange:NSMakeRange(0, beginDocument.location)] copy];
+    *body = (beginDocument.location == NSNotFound) ? [string copy] :
                (endDocument.location == NSNotFound) ?
-                 [string substringWithRange:
+                 [[string substringWithRange:
                     NSMakeRange(beginDocument.location+beginDocument.length,
-                                [string length]-(beginDocument.location+beginDocument.length))] :
-                 [string substringWithRange:
+                                [string length]-(beginDocument.location+beginDocument.length))] copy] :
+                 [[string substringWithRange:
                     NSMakeRange(beginDocument.location+beginDocument.length,
-                                endDocument.location-(beginDocument.location+beginDocument.length))];
+                                endDocument.location-(beginDocument.location+beginDocument.length))] copy];
   }//end if string
 }
 //end _decomposeString:preamble:body:
@@ -869,7 +922,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         }//end for each obsoleteUniqueId
       }//end for each file
     }//end @synchronized(self->poolOfObsoleteUniqueIds)
-    [ap release];
+    [ap drain];
   }//end if (count)
 }
 //end removeObsoleteFiles
@@ -881,6 +934,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self setBusyIdentifier:nil];//will cancel result
   else//if (![self isBusy])
   {
+    [self->lowerBoxControlsBoxFontSizeTextField validateEditing];
     NSDictionary* configuration =
       [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"runBegin", nil];
     [self latexizeCoreRunWithConfiguration:configuration];
@@ -1068,8 +1122,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
             [NSString stringWithFormat:@"::%@",
               NSLocalizedString(@"unexpected error, please see \"LaTeX > Display last log\"",
                                 @"unexpected error, please see \"LaTeX > Display last log\"")]]];
-    }
-    else
+    }//end if (failed)
+    else//if (!failed)
     {
       //if it is ok, updates the image view
       [self->upperBoxImageView setPDFData:pdfData cachedImage:nil];
@@ -1108,7 +1162,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
       //updates the pasteboard content for a live Linkback link, and triggers a sendEdit
       [self->upperBoxImageView updateLinkBackLink:self->linkBackLink];
-    }
+    }//end if (!failed)
 
     //not busy any more
     [self setBusyIdentifier:nil];
@@ -1228,7 +1282,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   PreferencesController* preferencesController = [PreferencesController sharedController];
   BOOL automaticHighContrastedPreviewBackground = [preferencesController documentUseAutomaticHighContrastedPreviewBackground];
   NSColor* backgroundColor = automaticHighContrastedPreviewBackground ? nil : [self->upperBoxImageView backgroundColor];
-  result = !transient ?
+  result = //self->linkedLibraryEquation ? [self->linkedLibraryEquation equation] :
+      !transient ?
     [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData] useDefaults:YES] autorelease] :
     [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData]
                                      preamble:[[[self->lowerBoxPreambleTextView textStorage] mutableCopy] autorelease]
@@ -1242,42 +1297,34 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end latexitEquationWithCurrentStateTransient:
 
--(BOOL) applyData:(NSData*)data
+-(BOOL) applyData:(NSData*)data sourceUTI:(NSString*)sourceUTI
 {
   BOOL ok = NO;
-  LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithData:data useDefaults:YES];
+  LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithData:data sourceUTI:sourceUTI useDefaults:YES];
   if (latexitEquation)
   {
     ok = YES;
     [self applyLatexitEquation:latexitEquation isRecentLatexisation:NO];
     [latexitEquation release];
   }//end if (latexitEquation)
-  return ok;
-}
-//end applyData:
-
--(BOOL) applyPdfData:(NSData*)pdfData
-{
-  BOOL ok = NO;
-  LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:YES];
-  if (latexitEquation)
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
   {
-    ok = YES;
-    [self applyLatexitEquation:latexitEquation isRecentLatexisation:NO];
-    [latexitEquation release];
-  }
-  else
+    NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(data);
+    ok = pdfString && ![pdfString isEqualToString:@""];
+    if (pdfString && ![pdfString isEqualToString:@""])
+      [self applyString:pdfString];
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
   {
-    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-    NSString* string = [pdfDocument string];
-    ok = string && ![string isEqualToString:@""];
+    NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    ok = (string != nil);
     if (ok)
       [self applyString:string];
-    [pdfDocument release];
-  }
+    [string release];
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
   return ok;
 }
-//end applyPdfData:
+//end applyData:sourceUTI:
 
 -(void) applyString:(NSString*)string
 {
@@ -1289,6 +1336,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self setPreamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]];
   if (body)
     [self setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
+  [preamble release];
+  [body release];
 }
 //end applyString:
 
@@ -1323,6 +1372,26 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   self->currentEquationIsARecentLatexisation = isRecentLatexisation;
   if (latexitEquation)
   {
+    if (self->linkedLibraryEquation && (latexitEquation != [self->linkedLibraryEquation equation]))
+    {
+      LatexitEquation* linkedEquation = [self->linkedLibraryEquation equation];
+      [linkedEquation beginUpdate];
+      [linkedEquation setPdfData:[latexitEquation pdfData]];
+      [linkedEquation setPreamble:[latexitEquation preamble]];
+      [linkedEquation setSourceText:[latexitEquation sourceText]];
+      [linkedEquation setColor:[latexitEquation color]];
+      [linkedEquation setBaseline:[latexitEquation baseline]];
+      [linkedEquation setPointSize:[latexitEquation pointSize]];
+      [linkedEquation setDate:[latexitEquation date]];
+      [linkedEquation setMode:[latexitEquation mode]];
+      [linkedEquation setBackgroundColor:[latexitEquation backgroundColor]];
+      [linkedEquation setTitle:[latexitEquation title]];
+      [linkedEquation endUpdate];
+      latexitEquation = linkedEquation;
+      LibraryWindowController* libraryWindowController = [[AppController appController] libraryWindowController];
+      [libraryWindowController blink:self->linkedLibraryEquation];
+    }//end if (self->linkedLibraryEquation && (latexitEquation != [self->linkedLibraryEquation equation]))
+
     self->lastFirstResponder = [[self windowForSheet] firstResponder];
     if ((self->lastFirstResponder != self->lowerBoxPreambleTextView) &&
         (self->lastFirstResponder != self->lowerBoxSourceTextView))
@@ -1489,21 +1558,25 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end exportChooseFileDidEnd:returnCode:contextInfo:
 
--(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)format scaleAsPercent:(CGFloat)scaleAsPercent
+-(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)exportFormat scaleAsPercent:(CGFloat)scaleAsPercent
                   jpegColor:(NSColor*)aJpegColor jpegQuality:(CGFloat)aJpegQuality filePath:(NSString*)filePath
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:format pdfData:pdfData jpegColor:aJpegColor
+  NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData jpegColor:aJpegColor
                                                 jpegQuality:aJpegQuality/100 scaleAsPercent:scaleAsPercent
-                                                compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+                                                compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                                                uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   if (data)
   {
     [data writeToFile:filePath atomically:YES];
     [[NSFileManager defaultManager] changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt']
                                                   forKey:NSFileHFSCreatorCode] atPath:filePath];    
-    NSColor* backgroundColor = (format == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;
-    [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:backgroundColor]
-                                   forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
+    NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;
+    if ((exportFormat != EXPORT_FORMAT_PNG) &&
+        (exportFormat != EXPORT_FORMAT_TIFF) &&
+        (exportFormat != EXPORT_FORMAT_JPEG))
+      [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:backgroundColor]
+                                     forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
     [self triggerSmartHistoryFeature];
   }//end if save
 }
@@ -1662,6 +1735,90 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end closeLinkBackLink:
 
+-(LibraryEquation*) linkedLibraryEquation
+{
+  return self->linkedLibraryEquation;
+}
+//end linkedLibraryEquation
+
+-(void) setLinkedLibraryEquation:(LibraryEquation*)libraryEquation
+{
+  if (libraryEquation != self->linkedLibraryEquation)
+  {
+    if (!self->isObservingLibrary && libraryEquation)
+    {
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(libraryDidChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:[[LibraryManager sharedManager] managedObjectContext]];
+      self->isObservingLibrary = YES;
+    }//end if (!self->isObservingLibrary && libraryEquation)
+    [self closeLinkedLibraryEquation:self->linkedLibraryEquation];
+    self->linkedLibraryEquation = [libraryEquation retain];
+    if (!self->linkedLibraryEquation)
+      [self setDocumentTitle:nil];
+    else//if (self->linkedLibraryEquation)
+    {
+      [self setDocumentTitle:[libraryEquation title]];
+      if (isMacOS10_5OrAbove())
+        [[self windowForSheet] setRepresentedFilename:[libraryEquation title]];
+    }//end if (self->linkedLibraryEquation)
+  }//end if (libraryEquation != self->linkedLibraryEquation)
+}
+//end setLinkedLibraryEquation:
+
+-(BOOL) window:(NSWindow *)window shouldPopUpDocumentPathMenu:(NSMenu*)menu
+{
+  BOOL result = NO;
+  if (self->linkedLibraryEquation)
+  {
+    while([menu numberOfItems])
+      [menu removeItemAtIndex:0];
+    NSMenuItem* menuItem =
+      [menu addItemWithTitle:[self->linkedLibraryEquation title] action:@selector(selectLibraryItemForCurrentLinkedEquation:) keyEquivalent:@""];
+    [menuItem setTarget:self];
+    [menuItem setRepresentedObject:self->linkedLibraryEquation];
+    result = YES;
+  }//end if (self->linkedLibraryEquation)
+  return result;
+}
+//end window:shouldPopUpDocumentPathMenu:
+
+-(void) selectLibraryItemForCurrentLinkedEquation:(id)sender
+{
+  [[[[AppController appController] libraryWindowController] libraryView] selectItem:self->linkedLibraryEquation byExtendingSelection:NO];
+}
+//end selectLibraryItemForCurrentLinkedEquation:
+
+-(void) closeLinkedLibraryEquation:(LibraryEquation*)libraryEquation
+{
+  if (!libraryEquation || (self->linkedLibraryEquation == libraryEquation))
+  {
+    libraryEquation = self->linkedLibraryEquation;
+    self->linkedLibraryEquation = nil;
+    [libraryEquation release];
+    [self setDocumentTitle:nil];
+  }
+}
+//end closeLinkedLibraryEquation:
+
+-(void) libraryDidChangeNotification:(NSNotification*)notification
+{
+  if (self->linkedLibraryEquation)
+  {
+    if (![self->linkedLibraryEquation managedObjectContext] || [self->linkedLibraryEquation isDeleted])
+    {
+      //[[[self undoManager] prepareWithInvocationTarget:self] setLinkedLibraryEquation:self->linkedLibraryEquation];
+      [self closeLinkedLibraryEquation:self->linkedLibraryEquation];
+    }
+    else if ([[[notification userInfo] objectForKey:NSUpdatedObjectsKey] containsObject:self->linkedLibraryEquation])
+    {
+      [self applyLibraryEquation:self->linkedLibraryEquation];
+      [self setDocumentTitle:[self->linkedLibraryEquation title]];
+      if (isMacOS10_5OrAbove())
+        [[self windowForSheet] setRepresentedFilename:[self->linkedLibraryEquation title]];
+    }
+  }//end if (self->linkedLibraryEquation)
+}
+//end libraryDidChangeNotification:
+
 -(NSImage*) _checkEasterEgg
 {
   NSImage* easterEggImage = nil;
@@ -1762,7 +1919,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //setReducedTextAreaState:
 
--(void) splitViewDidResizeSubviews:(NSNotification*)aNotification
+-(void) splitViewDidResizeSubviews:(NSNotification*)notification
 {
   [self->lowerBoxChangePreambleButton setHidden://([self documentStyle] == DOCUMENT_STYLE_NORMAL) &&
     (![self isPreambleVisible] || ([[self->lowerBoxPreambleTextView superview] frame].size.height < [self->lowerBoxChangePreambleButton frame].size.height))];
@@ -1820,7 +1977,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
         [item setState:NSOnState];
     }
       
-    [menu setDelegate:self];
+    [menu setDelegate:(id)self];
   }//end if ([notification object] == changePreambleButtonCell)
   if ([notification object] == changeBodyTemplateButtonCell)
   {
@@ -1869,7 +2026,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       if (bodyTemplate == matchingBodyTemplate)
         [item setState:NSOnState];
     }
-    [menu setDelegate:self];
+    [menu setDelegate:(id)self];
   }//end if ([notification object] == changeBodyTemplateButtonCell)
 }
 //end popUpButtonWillPopUp:
@@ -1885,7 +2042,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self setPreamble:preambleAttributedString];
   }
   else
-    [[AppController appController] showPreferencesPaneWithItemIdentifier:PreamblesToolbarItemIdentifier]; 
+    [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInt:0]]; 
 }
 //end changePreamble:
 
@@ -1899,7 +2056,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [self setBodyTemplate:bodyTemplate moveCursor:YES];
   }
   else
-    [[AppController appController] showPreferencesPaneWithItemIdentifier:BodyTemplatesToolbarItemIdentifier]; 
+    [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInt:1]]; 
 }
 //end changeBodyTemplate:
 

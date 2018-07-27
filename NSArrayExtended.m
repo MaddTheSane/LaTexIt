@@ -1,7 +1,7 @@
 //  NSArrayExtended.m
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 
@@ -55,6 +55,31 @@
   return result;
 }
 //end arrayByMovingObjectsAtIndices:toIndex:
+
+-(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass
+{
+  NSMutableArray* result = [NSMutableArray arrayWithCapacity:[self count]];
+  NSEnumerator* enumerator = [self objectEnumerator];
+  id object = nil;
+  if (exactClass)
+  {
+    while((object = [enumerator nextObject]))
+    {
+      if ([object isMemberOfClass:aClass])
+        [result addObject:object];
+    }
+  }//end if (exactClass)
+  else//if (!exactClass)
+  {
+    while((object = [enumerator nextObject]))
+    {
+      if ([object isKindOfClass:aClass])
+        [result addObject:object];
+    }
+  }//end if (!exactClass)
+  return [[result copy] autorelease];
+}
+//end filteredArrayWithItemsOfClass:exactClass:
 
 -(id) deepCopy {return [self deepCopyWithZone:nil];}
 -(id) deepCopyWithZone:(NSZone*)zone

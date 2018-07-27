@@ -186,8 +186,10 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		theOSType = [self type];
 		theSignature = [self signature];
 
-		theOSTypeString = (theOSType) ? [NSString stringWithCString:(char*)&theOSType length:4] : @"NULL";
-		theSignatureString = (theSignature) ? [NSString stringWithCString:(char*)&theSignature length:4] : @"NULL";
+		theOSTypeString = !theOSType ? @"NULL" :
+      [[[NSString alloc] initWithBytes:(char*)&theOSType length:4 encoding:NSUTF8StringEncoding] autorelease];
+		theSignatureString = !theSignature ? @"NULL" :
+      [[[NSString alloc] initWithBytes:(char*)&theSignature length:4 encoding:NSUTF8StringEncoding] autorelease];
 
 		theLaunchTime = [self launchTime];
 		return [NSString stringWithFormat:@"name:\"%@\", procces ID: %i, time:[%ih %im %.1fs], type:'%@', signature:'%@'", [self name], [self processID], (int)theLaunchTime/3600,((int)theLaunchTime/60)%60,fmod(theLaunchTime, 60.0), theOSTypeString, theSignatureString];

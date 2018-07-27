@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "BodyTemplatesController.h"
@@ -74,22 +74,14 @@ static NSDictionary* noneBodyTemplate = nil;
 
 +(NSMutableDictionary*) defaultLocalizedBodyTemplateDictionary
 {
-  #ifdef MIGRATE_ALIGN
   NSMutableDictionary* result = [self bodyTemplateDictionaryForEnvironment:@"eqnarray*"];
-  #else
-  NSMutableDictionary* result = [self bodyTemplateDictionaryForEnvironment:@"align*"];
-  #endif
   return result;
 }
 //end defaultLocalizedBodyTemplateDictionary
 
 +(NSMutableDictionary*) defaultLocalizedBodyTemplateDictionaryEncoded
 {
-  #ifdef MIGRATE_ALIGN
   NSMutableDictionary* result = [self bodyTemplateDictionaryEncodedForEnvironment:@"eqnarray*"];
-  #else
-  NSMutableDictionary* result = [self bodyTemplateDictionaryEncodedForEnvironment:@"align*"];
-  #endif
   return result;
 }
 //end defaultLocalizedBodyTemplateDictionaryEncoded

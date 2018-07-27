@@ -34,6 +34,8 @@
 				<string>png</string>
 				<string>jpeg</string>
 				<string>jpg</string>
+				<string>html</string>
+				<string>svg</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>MyDocumentType</string>
@@ -116,6 +118,24 @@
 			<key>NSPersistentStoreTypeKey</key>
 			<string>InMemory</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>latexitplugin</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>latexit-plugin-icon.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>LaTeXiTPlugin</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>InMemory</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>LaTeXiT</string>
@@ -130,9 +150,9 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.2.0</string>
+	<string>2.4.0</string>
 	<key>LinkBackApplicationURL</key>
-	<string>http://pierre.chachatelier.fr/programmation/latexit.php</string>
+	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
 	<string>LaTeXiT</string>
 	<key>NSMainNibFile</key>
@@ -439,7 +459,7 @@
 		</dict>
 	</array>
 	<key>SUFeedURL</key>
-	<string>http://pierre.chachatelier.fr/programmation/fichiers/latexit-sparkle-en.rss</string>
+	<string>http://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-en.rss</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_sparkle_latexit_pub.pem</string>
 </dict>

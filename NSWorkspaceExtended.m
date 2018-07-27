@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 //this file is an extension of the NSWorkspace class
@@ -53,7 +53,7 @@
     id runningApplication = nil;
     while((runningApplication = [enumerator nextObject]))
     {
-      [runningApplication terminate];
+      [runningApplication performSelector:@selector(terminate)];
       result |= YES;
     }
   }//end if (runningApplicationClass)

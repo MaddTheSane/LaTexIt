@@ -24,8 +24,8 @@ static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"Composi
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
-  [self setDelegate:self];
-  [self setDataSource:self];
+  [self setDelegate:(id)self];
+  [self setDataSource:(id)self];
   [self registerForDraggedTypes:[NSArray arrayWithObject:CompositionConfigurationsProgramArgumentsPboardType]];
   return self;
 }
@@ -165,9 +165,9 @@ static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"Composi
 
 #pragma mark dummy datasource (real datasource is a binding, just avoid warnings)
 
--(int)  numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
--(id)   tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex {return nil;}
--(void) tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex {}
+-(NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
+-(id)        tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex {return nil;}
+-(void)      tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex {}
 
 #pragma mark drag'n drop
 //drag'n drop for moving rows
@@ -191,11 +191,11 @@ static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"Composi
 //end tableView:writeRowsWithIndexes:toPasteboard:
 
 -(NSDragOperation) tableView:(NSTableView*)tableView validateDrop:(id<NSDraggingInfo>)info
-                 proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
+                 proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation
 {
   //we only accept moving inside the table (not between different ones)
   NSPasteboard* pboard = [info draggingPasteboard];
-  NSIndexSet* indexSet =  [[[info draggingSource] dataSource] _draggedRowIndexes];
+  NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = (tableView == [info draggingSource]) && pboard &&
             [pboard availableTypeFromArray:[NSArray arrayWithObject:CompositionConfigurationsProgramArgumentsPboardType]] &&
             [pboard propertyListForType:CompositionConfigurationsProgramArgumentsPboardType] &&
@@ -205,9 +205,9 @@ static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"Composi
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:
 
--(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)operation
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
 {
-  NSIndexSet* indexSet = [[[info draggingSource] dataSource] _draggedRowIndexes];
+  NSIndexSet* indexSet = [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   [self->controller moveObjectsAtIndices:indexSet toIndex:row];
   self->draggedRowIndexes = nil;
   return YES;

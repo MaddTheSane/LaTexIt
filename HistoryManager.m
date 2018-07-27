@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -35,7 +35,7 @@
 -(void) saveHistory;
 -(void) createHistoryMigratingIfNeeded;
 -(BOOL) tableView:(NSTableView*)tableView writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard;
--(BOOL) tableView:(NSTableView*)aTableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard;
+-(BOOL) tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard;
 @end
 
 @implementation HistoryManager
@@ -75,7 +75,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   return self;
 }
 
--(unsigned) retainCount
+-(NSUInteger) retainCount
 {
   return UINT_MAX;  //denotes an object that cannot be released
 }
@@ -361,7 +361,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.2.0", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -408,7 +408,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.2.0", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -466,7 +466,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.2.0", @"version",
+          @"2.4.0", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -513,20 +513,34 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [fetchRequest setEntity:[HistoryItem entity]];
     NSError* error = nil;
     NSArray* historyItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+    if (error)
+    {
+      ok = NO;
+      DebugLog(0, @"error : %@", error);
+    }
     [fetchRequest release];
     
-    NSData* historyItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
-    [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
-    [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
-    [LatexitEquation popManagedObjectContext];
+    NSData* historyItemsToAddAsData = !historyItemsToAdd ? nil :
+      [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
+    if (historyItemsToAddAsData)
+    {
+      [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
+      @try{
+        [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
+        ok = YES;
+      }
+      @catch(NSException* e){
+        DebugLog(0, @"exception : %@", e);
+      }
+      [LatexitEquation popManagedObjectContext];
+    }//end if (historyItemsToAddAsData)
     NSEnumerator* enumerator = [historyItemsToAdd objectEnumerator];
     HistoryItem* historyItem = nil;
     while((historyItem = [enumerator nextObject]))
     {
       [[historyItem equation] dispose];
       [historyItem dispose];
-    }
+    }//end for each historyItem
   }//end if ([[path pathExtension] isEqualToString:@"latexhist"])
   else if ([[path pathExtension] isEqualToString:@"plist"])
   {
@@ -550,17 +564,22 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       if ([content isKindOfClass:[NSArray class]])
       {
         [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
-        NSMutableArray* historyItemsAdded = [NSMutableArray arrayWithCapacity:[content count]];
-        NSEnumerator* enumerator = [content objectEnumerator];
-        id description = nil;
-        while((description = [enumerator nextObject]))
-        {
-          HistoryItem* historyItem = [HistoryItem historyItemWithDescription:description];
-          if (historyItem)
-            [historyItemsAdded addObject:historyItem];
+        @try{
+          NSMutableArray* historyItemsAdded = [NSMutableArray arrayWithCapacity:[content count]];
+          NSEnumerator* enumerator = [content objectEnumerator];
+          id description = nil;
+          while((description = [enumerator nextObject]))
+          {
+            HistoryItem* historyItem = [HistoryItem historyItemWithDescription:description];
+            if (historyItem)
+              [historyItemsAdded addObject:historyItem];
+          }//end for each description
+          ok = YES;
+        }
+        @catch(NSException* e){
+          DebugLog(0, @"exception : %@", e);
         }
         [LatexitEquation popManagedObjectContext];
-        ok = YES;
       }//end if ([content isKindOfClass:[NSArray class]])
     }//end if ([plist isKindOfClass:[NSDictionary class]])
   }//if ([[path pathExtension] isEqualToString:@"plist"])

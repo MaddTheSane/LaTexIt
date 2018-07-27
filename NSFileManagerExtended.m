@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -192,5 +192,38 @@ static NSMutableSet* createdTemporaryPaths = nil;
   }//end @synchronized(self)
 }
 //end removeAllCreatedTemporaryPaths
+
+-(NSString*) UTIFromPath:(NSString*)path
+{
+  NSString* result = nil;
+  OSStatus error = 0;
+  FSRef fsRef = {{0}};
+  Boolean isDirectory = NO;
+  error = FSPathMakeRefWithOptions((const UInt8*)[path fileSystemRepresentation], kFSPathMakeRefDefaultOptions, &fsRef, &isDirectory);
+  if (!error && !isDirectory)
+  {
+    CFStringRef uti = 0;
+    error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
+    result = [(NSString*)uti autorelease];
+  }//end if (!error && !isDirectory)
+  return result;
+};
+//end UTIFromPath:
+
+-(NSString*) UTIFromURL:(NSURL*)url
+{
+  NSString* result = nil;
+  OSStatus error = 0;
+  FSRef fsRef = {{0}};
+  Boolean ok = CFURLGetFSRef((CFURLRef)url, &fsRef);
+  if (ok)
+  {
+    CFStringRef uti = 0;
+    error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
+    result = [(NSString*)uti autorelease];
+  }//end if (ok)
+  return result;
+};
+//end UTIFromURL:
 
 @end

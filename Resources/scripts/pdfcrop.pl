@@ -1,5 +1,4 @@
-eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}' && eval 'exec perl -S $0 $argv:q'
-  if 0;
+#!/usr/bin/env perl
 use strict;
 $^W=1; # turn warning on
 #
@@ -22,8 +21,8 @@ $^W=1; # turn warning on
 #
 my $file        = "pdfcrop.pl";
 my $program     = uc($&) if $file =~ /^\w+/;
-my $version     = "1.23";
-my $date        = "2010/01/09";
+my $version     = "1.31";
+my $date        = "2010/09/17";
 my $author      = "Heiko Oberdiek";
 my $copyright   = "Copyright (c) 2002-2010 by $author.";
 #
@@ -69,6 +68,33 @@ my $copyright   = "Copyright (c) 2002-2010 by $author.";
 #   2009/12/29 v1.22: * Syntax description for option --bbox fixed
 #                       (Lukas Prochazka).
 #   2010/01/09 v1.23: * Options --bbox-odd and -bbox-even added.
+#   2010/08/16 v1.24: * Workaround added for buggy ghostscript ports
+#                       that print the BoundingBox data twice.
+#   2010/08/26 v1.25: * Fix for the case that the PDF file contains
+#                       an entry /CropBox different to /MediaBox.
+#                     * \pageinclude implemented for XeTeX.
+#                     * XeTeX: --clip does not die, but this option
+#                       is ignored, because XeTeX always clip.
+# 2010/08/26 v1.26: * XeTeX's \XeTeXpdffile expects keyword
+#                     `media', not `mediabox'.
+#                   * New option --pdfversion.
+#                     Default is `auto' that means the PDF version
+#                     is inherited from the input file. Before
+#                     pdfcrop has used the TeX engine's default.
+#                   * Option --luatex fixed (extra empty page at end).
+# 2010/09/03 v1.27: * Workaround of v1.24 fixed.
+# 2010/09/06 v1.28: * The Windows registry is searched if Ghostscript
+#                     is not found via PATH.
+#                   * Windows only: support of spaces in command
+#                     names in unrestricted mode.
+# 2010/09/06 v1.29: * Find the latest Ghostscript version in registry.
+# 2010/09/15 v1.30: * Warning of pdfTeX because of \pdfobjcompresslevel
+#                     avoided when reducing \pdfminorversion.
+#                   * Fix for TeX syntax characters in input file names.
+# 2010/09/17 v1.31: * Passing the input file name via hex string to TeX.
+#                   * Again input file names restricted for Ghostscript
+#                     command line, switch then to symbol link/copy
+#                     method.
 
 ### program identification
 my $title = "$program $version, $date - $copyright\n";
@@ -78,6 +104,11 @@ my $Error = "!!! Error:"; # error prefix
 
 ### make ENV safer
 delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
+
+# Windows detection (no SIGHUP)
+my $Win = 0;
+$Win = 1 if $^O =~ /mswin32/i;
+$Win = 1 if $^O =~ /cygwin/i;
 
 ### string constants for Ghostscript run
 # get Ghostscript command name
@@ -126,6 +157,9 @@ sub find_ghostscript () {
         }
         last if $found;
     }
+    if (not $found and $Win) {
+        $found = SearchRegistry();
+    }
     if ($found) {
         print "* Autodetected ghostscript command: $::opt_gscmd\n" if $::opt_debug;
     }
@@ -135,10 +169,83 @@ sub find_ghostscript () {
     }
 }
 
-# Windows detection (no SIGHUP)
-my $Win = 0;
-$Win = 1 if $^O =~ /mswin32/i;
-$Win = 1 if $^O =~ /cygwin/i;
+sub SearchRegistry () {
+    my $found = 0;
+    eval 'use Win32::TieRegistry qw|KEY_READ REG_SZ|;';
+    if ($@) {
+        if ($::opt_debug) {
+            print "* Registry lookup for Ghostscript failed:\n";
+            my $msg = $@;
+            $msg =~ s/\s+$//;
+            foreach (split /\r?\n/, $msg) {
+                print "  $_\n";
+            }
+        }
+        return $found;
+    }
+    my $open_params = {Access => KEY_READ(), Delimiter => '/'};
+    my $key_name_software = 'HKEY_LOCAL_MACHINE/SOFTWARE/';
+    my $current_key = $key_name_software;
+    my $software = new Win32::TieRegistry $current_key, $open_params;
+    if (not $software) {
+        print "* Cannot find or access registry key `$current_key'!\n"
+                if $::opt_verbose;
+        return $found;
+    }
+    print "* Search registry at `$current_key'.\n" if $::opt_debug;
+    my %list;
+    foreach my $key_name_gs (grep /Ghostscript/i, $software->SubKeyNames()) {
+        $current_key = "$key_name_software$key_name_gs/";
+        print "* Registry entry found: $current_key\n" if $::opt_debug;
+        my $key_gs = $software->Open($key_name_gs, $open_params);
+        if (not $key_gs) {
+            print "* Cannot open registry key `$current_key'!\n" if $::opt_debug;
+            next;
+        }
+        foreach my $key_name_version ($key_gs->SubKeyNames()) {
+            $current_key = "$key_name_software$key_name_gs/$key_name_version/";
+            print "* Registry entry found: $current_key\n" if $::opt_debug;
+            if (not $key_name_version =~ /^(\d+)\.(\d+)$/) {
+                print "  The sub key is not a version number!\n" if $::opt_debug;
+                next;
+            }
+            my $version_main = $1;
+            my $version_sub = $2;
+            $current_key = "$key_name_software$key_name_gs/$key_name_version/";
+            my $key_version = $key_gs->Open($key_name_version, $open_params);
+            if (not $key_version) {
+                print "* Cannot open registry key `$current_key'!\n" if $::opt_debug;
+                next;
+            }
+            $key_version->FixSzNulls(1);
+            my ($value, $type) = $key_version->GetValue('GS_DLL');
+            if ($value and $type == REG_SZ()) {
+                print "  GS_DLL = $value\n" if $::opt_debug;
+                $value =~ s|([\\/])([^\\/]+\.dll)$|$1gswin32c.exe|i;
+                if (-f $value) {
+                    print "  EXE found: $value\n" if $::opt_debug;
+                }
+                else {
+                    print "  EXE not found!\n" if $::opt_debug;
+                    next;
+                }
+                my $sortkey = sprintf '%02d.%03d %s',
+                        $version_main, $version_sub, $key_name_gs;
+                $list{$sortkey} = $value;
+            }
+            else {
+                print "  Missing key `GS_DLL' with type `REG_SZ'!\n" if $::opt_debug;
+            }
+        }
+    }
+    foreach my $entry (reverse sort keys %list) {
+        $::opt_gscmd = $list{$entry};
+        print "* Found (via registry): $::opt_gscmd\n" if $::opt_debug;
+        $found = 1;
+        last;
+    }
+    return $found;
+}
 
 # restricted mode
 my $restricted = 0;
@@ -191,6 +298,7 @@ $::opt_bbox       = "";
 $::opt_bbox_odd   = "";
 $::opt_bbox_even  = "";
 $::opt_initex     = 0;
+$::opt_pdfversion = "auto";
 
 sub usage ($) {
     my $ret = shift;
@@ -198,38 +306,46 @@ sub usage ($) {
     my $usage = <<"END_OF_USAGE";
 ${title}Syntax:   \L$program\E [options] <input[.pdf]> [output file]
 Function: Margins are calculated and removed for each page in the file.
-Options:                                                     (defaults:)
+Options:                                                       (defaults:)
   --help              print usage
   --version           print version number
-  --(no)verbose       verbose printing                       ($bool[$::opt_verbose])
-  --(no)debug         debug informations                     ($bool[$::opt_debug])
-  --gscmd <name>      call of ghostscript                    ($::opt_gscmd)
+  --(no)verbose       verbose printing                         ($bool[$::opt_verbose])
+  --(no)debug         debug informations                       ($bool[$::opt_debug])
+  --gscmd <name>      call of ghostscript                      ($::opt_gscmd)
   --pdftex | --xetex | --luatex
-                      use pdfTeX | use XeTeX | use LuaTeX    ($::opt_tex)
-  --pdftexcmd <name>  call of pdfTeX                         ($::opt_pdftexcmd)
-  --xetexcmd <name>   call of XeTeX                          ($::opt_xetexcmd)
-  --luatexcmd <name>  call of LuaTeX                         ($::opt_luatexcmd)
-  --margins "<left> <top> <right> <bottom>"                  ($::opt_margins)
+                      use pdfTeX | use XeTeX | use LuaTeX      ($::opt_tex)
+  --pdftexcmd <name>  call of pdfTeX                           ($::opt_pdftexcmd)
+  --xetexcmd <name>   call of XeTeX                            ($::opt_xetexcmd)
+  --luatexcmd <name>  call of LuaTeX                           ($::opt_luatexcmd)
+  --margins "<left> <top> <right> <bottom>"                    ($::opt_margins)
                       add extra margins, unit is bp. If only one number is
                       given, then it is used for all margins, in the case
                       of two numbers they are also used for right and bottom.
-  --(no)clip          clipping support, if margins are set   ($bool[$::opt_clip])
+  --(no)clip          clipping support, if margins are set     ($bool[$::opt_clip])
                       (not available for --xetex)
-  --(no)hires         using `%%HiResBoundingBox'             ($bool[$::opt_hires])
+  --(no)hires         using `%%HiResBoundingBox'               ($bool[$::opt_hires])
                       instead of `%%BoundingBox'
-  --(no)ini           use iniTeX variant of the TeX compiler ($bool[$::opt_initex])
+  --(no)ini           use iniTeX variant of the TeX compiler   ($bool[$::opt_initex])
 Expert options:
-  --restricted        turn on restricted mode                ($bool[$restricted])
+  --restricted        turn on restricted mode                  ($bool[$restricted])
   --papersize <foo>   parameter for gs's -sPAPERSIZE=<foo>,
-                      use only with older gs versions <7.32  ($::opt_papersize)
-  --resolution <xres>x<yres>                                 ()
+                      use only with older gs versions <7.32    ($::opt_papersize)
+  --resolution <xres>x<yres>                                   ($::opt_resolution)
   --resolution <res>  pass argument to ghostscript's option -r
                       Example: --resolution 72
-  --bbox "<left> <bottom> <right> <top>"                     ()
+  --bbox "<left> <bottom> <right> <top>"                       ($::opt_bbox)
                       override bounding box found by ghostscript
                       with origin at the lower left corner
-  --bbox-odd, --bbox-even                                      ()
-                      Same as --bbox, but for odd, even pages only
+  --bbox-odd          Same as --bbox, but for odd pages only   ($::opt_bbox_odd)
+  --bbox-even         Same as --bbox, but for even pages only  ($::opt_bbox_even)
+  --pdfversion <1.x> | auto | none
+                      Set the PDF version to 1.x, 1 < x < 8.
+                      If `auto' is given as value, then the
+                      PDF version is taken from the header
+                      of the input PDF file.
+                      An empty value or `none' uses the
+                      default of the TeX engine.               ($::opt_pdfversion)
+
 Examples:
   \L$program\E --margins 10 input.pdf output.pdf
   \L$program\E --margins '5 10 5 20' --clip input.pdf output.pdf
@@ -272,6 +388,7 @@ GetOptions(
   "bbox-odd=s" => \$::opt_bbox_odd,
   "bbox-even=s" => \$::opt_bbox_even,
   "restricted" => sub { $restricted = 1; },
+  "pdfversion=s" => \$::opt_pdfversion,
 ) or usage(1);
 !$::opt_help or usage(0);
 
@@ -285,6 +402,15 @@ $::opt_verbose = 1 if $::opt_debug;
 @ARGV >= 1 or usage(1);
 
 print $title;
+
+print "* Restricted mode: ", ($restricted ? "enabled" : "disabled"), "\n"
+        if $::opt_debug;
+
+$::opt_pdfversion =~ /^(|none|auto|1\.([2-7]))$/
+        or die "!!! Error: Invalid value `$::opt_pdfversion' for option `--pdfversion'!\n";
+print "* Option `pdfversion': $::opt_pdfversion\n" if $::opt_debug;
+$::opt_pdfversion = $2 if $2;
+$::opt_pdfversion = '' if $::opt_pdfversion eq 'none';
 
 find_ghostscript();
 
@@ -340,6 +466,24 @@ if (! -f $inputfile) {
 
 print "* Input file: $inputfile\n" if $::opt_debug;
 
+if ($::opt_pdfversion eq 'auto') {
+    open(IN, '<', $inputfile) or die "!!! Error: Cannot open `$inputfile'!\n";
+    my $buf;
+    read(IN, $buf, 1024) or die "!!! Error: Cannot read the header of `$inputfile' failed!\n";
+    close(IN);
+    if ($buf =~ /%PDF-1.([0-7])\s/) {
+        $::opt_pdfversion = $1;
+        print "* PDF header: %PDF-1.$::opt_pdfversion\n" if $::opt_verbose;
+        $::opt_pdfversion = 2 if $::opt_pdfversion < 2;
+    }
+    else {
+        die "!!! Error: Cannot find PDF header of `$inputfile'!\n";
+    }
+}
+print '* Using PDF minor version: ',
+      ($::opt_pdfversion ? $::opt_pdfversion : "engine's default"),
+      "\n" if $::opt_debug;
+
 ### output file
 if (@ARGV) {
     $outputfile = shift @ARGV;
@@ -351,10 +495,6 @@ else {
 }
 
 print "* Output file: $outputfile\n" if $::opt_debug;
-
-if (($::opt_tex eq 'xetex') && $::opt_clip) {
-    die "$Error No clipping support for XeTeX!\n";
-}
 
 ### margins
 my ($llx, $lly, $urx, $ury) = (0, 0, 0, 0);
@@ -401,16 +541,25 @@ my %cmd = (
     'xetexcmd' => \$::opt_xetexcmd
 );
 foreach my $cmd (keys %cmd) {
-    my $val = ${$cmd{$cmd}};
+    my $cmd_ref = $cmd{$cmd};
+    $$cmd_ref =~ s/^\s+//;
+    $$cmd_ref =~ s/\s+$//;
+    my $val = $$cmd_ref;
     next unless $val;
-    $val =~ s/^\s+//;
-    $val =~ s/\s+$//;
     next unless $val;
     if ($val =~ /`/) {
         die "$Error Forbidden backtick for option `--$cmd' ($val)!\n";
     }
     if ($val =~ /\s/) {
-        die "$Error Forbidden whitespace for option `--$cmd' ($val)!\n";
+        my $err = 0;
+        if ($restricted or not $Win) {
+            $err = 1;
+        }
+        else {
+            $err = 1 if $val =~ /\.exe.*\s/i;
+            $err = 1 if $val =~ /\s[-\/@+]/;
+        }
+        die "$Error Forbidden whitespace for option `--$cmd' ($val)!\n" if $err;
     }
 }
 if ($restricted) {
@@ -428,6 +577,9 @@ if ($restricted) {
         or $::opt_gscmd =~ /^gs[\-_]?(\d|\d[\.-_]?\d\d)c?$/
         or die "$Error: Invalid Ghostscript program name in restricted mode!\n";
     }
+}
+if ($Win and $::opt_gscmd =~ /\s/) {
+    $::opt_gscmd = "\"$::opt_gscmd\"";
 }
 
 ### cleanup system
@@ -454,9 +606,9 @@ $SIG{'__DIE__'} = \&clean;
 ### Calculation of BoundingBoxes
 
 # use safe file name for use within cmd line of gs (unknown shell: space, ...)
-# and pdfTeX (dollar, ...)
+# and XeTeX (hash, curly braces, ...)
 my $inputfilesafe = $inputfile;
-if ($inputfile =~ /[\s\$~'"]/) {
+if (not $inputfile =~ /^[\w\d\.\-\:\/@]+$/) { # /[\s\$~'"#{}%]/
     $inputfilesafe = "$tmp-img.pdf";
     push @unlink_files, $inputfilesafe;
     my $symlink_exists = eval { symlink("", ""); 1 };
@@ -497,17 +649,63 @@ push @unlink_files, $tmpfile;
 open(TMP, ">$tmpfile") or
     die "$Error Cannot write tmp file `$tmpfile'!\n";
 print TMP <<'END_TMP';
-\catcode`\{=1 %
-\catcode`\}=2 %
+\catcode37 14 % percent
+\catcode33 12 % exclam
+\catcode34 12 % quote
+\catcode35  6 % hash
+\catcode39 12 % apostrophe
+\catcode40 12 % left parenthesis
+\catcode41 12 % right parenthesis
+\catcode45 12 % minus
+\catcode46 12 % period
+\catcode60 12 % less
+\catcode61 12 % equals
+\catcode62 12 % greater
+\catcode64 12 % at
+\catcode91 12 % left square
+\catcode93 12 % right square
+\catcode96 12 % back tick
+\catcode123 1 % left curly brace
+\catcode125 2 % right curly brace
+\catcode126 12 % tilde
 \catcode`\#=6 %
-END_TMP
-print TMP "\\def\\pdffile{$inputfilesafe}\n";
-print TMP <<'END_TMP';
-\def\stripprefix#1>{}
-\def\onelevelsanitize#1{%
-  \edef#1{\expandafter\stripprefix\meaning#1}%
+\escapechar=92 %
+\def\IfUndefined#1#2#3{%
+  \begingroup\expandafter\expandafter\expandafter\endgroup
+  \expandafter\ifx\csname#1\endcsname\relax
+    #2%
+  \else
+    #3%
+  \fi
 }
-\onelevelsanitize\pdffile
+END_TMP
+my $pdffilehex = unpack 'H*', $inputfilesafe;
+$pdffilehex = "\U$pdffilehex\E";
+print TMP "\\def\\pdffilehex{$pdffilehex}\n";
+print TMP <<'END_TMP';
+\IfUndefined{pdfunescapehex}{%
+  \begingroup
+    \gdef\pdffile{}%
+    \def\do#1#2{%
+      \ifx\relax#2\relax
+        \ifx\relax#1\relax
+        \else
+          \errmessage{Invalid hex string, should not happen!}%
+        \fi
+      \else
+        \lccode`0="#1#2\relax
+        \lowercase{%
+          \xdef\pdffile{\pdffile0}%
+        }%
+        \expandafter\do
+      \fi
+    }%
+    \expandafter\do\pdffilehex\relax\relax
+  \endgroup
+}{%
+  \edef\pdffile{\pdfunescapehex{\pdffilehex}}%
+}
+\immediate\write-1{Input file: \pdffile}
 END_TMP
 if ($::opt_tex eq 'luatex') {
     print TMP <<'END_TMP';
@@ -532,24 +730,28 @@ if ($::opt_tex eq 'luatex') {
               'pdfmapfile',
               'pdfximage',
               'pdflastximage',
-              'pdfrefximage'
+              'pdfrefximage',
+              'pdfminorversion',
+              'pdfobjcompresslevel',
             })
             tex.print('1')
           end
         }%
         \ifx\TESTluatexversion\UnDeFiNeD\else 1\fi %
         =11 %
-      \global\let\luatexversion\luatexversion
-      \global\let\pdfoutput\TESTpdfoutput
-      \global\let\pdfcompresslevel\TESTpdfcompresslevel
-      \global\let\pdfhorigin\TESTpdfhorigin
-      \global\let\pdfvorigin\TESTpdfvorigin
-      \global\let\pdfpagewidth\TESTpdfpagewidth
-      \global\let\pdfpageheight\TESTpdfpageheight
-      \global\let\pdfmapfile\TESTpdfmapfile
-      \global\let\pdfximage\TESTpdfximage
-      \global\let\pdflastximage\TESTpdflastximage
-      \global\let\pdfrefximage\TESTpdfrefximage
+      \global\let\luatexversion\luatexversion %
+      \global\let\pdfoutput\TESTpdfoutput %
+      \global\let\pdfcompresslevel\TESTpdfcompresslevel %
+      \global\let\pdfhorigin\TESTpdfhorigin %
+      \global\let\pdfvorigin\TESTpdfvorigin %
+      \global\let\pdfpagewidth\TESTpdfpagewidth %
+      \global\let\pdfpageheight\TESTpdfpageheight %
+      \global\let\pdfmapfile\TESTpdfmapfile %
+      \global\let\pdfximage\TESTpdfximage %
+      \global\let\pdflastximage\TESTpdflastximage %
+      \global\let\pdfrefximage\TESTpdfrefximage %
+      \global\let\pdfminorversion\TESTpdfminorversion %
+      \global\let\pdfobjcompresslevel\TESTpdfobjcompresslevel %
     \else %
       \errmessage{%
         Missing \string\luatexversion %
@@ -564,10 +766,28 @@ if ($::opt_tex eq 'pdftex' or $::opt_tex eq 'luatex') {
 \pdfoutput=1 %
 \pdfcompresslevel=9 %
 \csname pdfmapfile\endcsname{}
+\def\setpdfversion#1{%
+  \IfUndefined{pdfobjcompresslevel}{%
+  }{%
+    \ifnum#1<5 %
+      \pdfobjcompresslevel=0 %
+    \else
+      \pdfobjcompresslevel=2 %
+    \fi
+  }%
+  \IfUndefined{pdfminorversion}{%
+    \IfUndefined{pdfoptionpdfminorversion}{%
+    }{%
+      \pdfoptionpdfminorversion=#1\relax
+    }%
+  }{%
+    \pdfminorversion=#1\relax
+  }%
+}
 \def\page #1 [#2 #3 #4 #5]{%
   \count0=#1\relax
   \setbox0=\hbox{%
-    \pdfximage page #1{\pdffile}%
+    \pdfximage page #1 mediabox{\pdffile}%
     \pdfrefximage\pdflastximage
   }%
   \pdfhorigin=-#2bp\relax
@@ -585,7 +805,7 @@ if ($::opt_tex eq 'pdftex' or $::opt_tex eq 'luatex') {
   \edef\imagewidth{\the\dimen0}%
   \dimen0=#5bp\relax \advance\dimen0 by -#3bp\relax
   \edef\imageheight{\the\dimen0}%
-  \pdfximage page #1{\pdffile}%
+  \pdfximage page #1 mediabox{\pdffile}%
   \setbox0=\hbox{%
     \kern -#2bp\relax
     \lower #3bp\hbox{\pdfrefximage\pdflastximage}%
@@ -607,7 +827,7 @@ if ($::opt_tex eq 'pdftex' or $::opt_tex eq 'luatex') {
 \def\pageinclude#1{%
   \pdfhorigin=0pt\relax
   \pdfvorigin=0pt\relax
-  \pdfximage page #1{\pdffile}%
+  \pdfximage page #1 mediabox{\pdffile}%
   \setbox0=\hbox{\pdfrefximage\pdflastximage}%
   \pdfpagewidth=\wd0\relax
   \pdfpageheight=\ht0\relax
@@ -617,6 +837,7 @@ if ($::opt_tex eq 'pdftex' or $::opt_tex eq 'luatex') {
   }%
 }
 END_TMP_HEAD
+    print TMP "\\setpdfversion{$::opt_pdfversion}\n" if $::opt_pdfversion;
 }
 else { # XeTeX
     print TMP <<'END_TMP_HEAD';
@@ -626,7 +847,7 @@ else { # XeTeX
 \def\page #1 [#2 #3 #4 #5]{%
   \count0=#1\relax
   \setbox0=\hbox{%
-    \XeTeXpdffile "\pdffile" page #1%
+    \XeTeXpdffile "\pdffile" page #1 media\relax
   }%
   \pdfpagewidth=#4bp\relax
   \advance\pdfpagewidth by -#2bp\relax
@@ -638,6 +859,25 @@ else { # XeTeX
     \vbox{%
       \kern-1in%
       \kern#3bp%
+      \ht0=\pdfpageheight
+      \box0 %
+    }%
+  }%
+}
+\def\pageclip #1 [#2 #3 #4 #5][#6 #7 #8 #9]{%
+  \page {#1} [#2 #3 #4 #5]%
+}
+\def\pageinclude#1{%
+  \setbox0=\hbox{%
+    \XeTeXpdffile "\pdffile" page #1 media\relax
+  }%
+  \pdfpagewidth=\wd0\relax
+  \pdfpageheight=\ht0\relax
+  \advance\pdfpageheight by \dp0\relax
+  \shipout\hbox{%
+    \kern-1in%
+    \vbox{%
+      \kern-1in%
       \ht0=\pdfpageheight
       \box0 %
     }%
@@ -696,10 +936,19 @@ $gs_pipe .= "|";
 open(GS, $gs_pipe) or
         die "$Error Cannot call ghostscript ($::opt_gscmd)!\n";
 my $bb = ($::opt_hires) ? "%%HiResBoundingBox" : "%%BoundingBox";
+my $previous_line = 'Previous line';
+# Ghostscript workaround for buggy ports that prints
+# the bounding box data twice on STDERR.
 while (<GS>) {
     print $_ if $::opt_verbose;
-    next unless
-        /^$bb:\s*(-?[\.\d]+) (-?[\.\d]+) (-?[\.\d]+) (-?[\.\d]+)/o;
+    if (/^$bb:\s*(-?[\.\d]+) (-?[\.\d]+) (-?[\.\d]+) (-?[\.\d]+)/o) {
+    }
+    else {
+        $previous_line = $_;
+        next;
+    }
+    next if $previous_line eq $_;
+    $previous_line = $_;
     $page++;
     @bbox = getbbox($page, $1, $2, $3, $4);
 
@@ -775,13 +1024,14 @@ if ($::opt_tex eq 'pdftex') {
     $texname = 'pdfTeX';
 }
 elsif ($::opt_tex eq 'luatex') {
-    $cmd =$::opt_luatexcmd;
+    $cmd = $::opt_luatexcmd;
     $texname = 'LuaTeX';
 }
 else {
     $cmd = $::opt_xetexcmd;
     $texname = 'XeTeX';
 }
+$cmd = "\"$cmd\"" if $Win and $cmd =~ /\s/;
 $cmd .= ' -no-shell-escape';
 if ($::opt_initex) {
     $cmd .= ' --ini --etex';
@@ -802,6 +1052,21 @@ else {
 }
 if ($?) {
     die "$Error $texname run failed!\n";
+}
+
+### Check pdf version of temp file
+if ($::opt_pdfversion) {
+    open(PDF, '+<', "$tmp.pdf") or die "!!! Error: Cannot open `$tmp.pdf'!\n";
+    my $header;
+    read PDF, $header, 9 or die "!!! Error: Cannot read header of `$tmp.pdf'!\n";
+    $header =~ /^%PDF-1\.(\d)\s$/ or die "!!! Error: Cannot find header of `$tmp.pdf'!\n";
+    if ($1 ne $::opt_pdfversion) {
+        seek PDF, 7, 0 or die "!!! Error: Cannot seek in `$tmp.pdf'!\n";
+        print PDF $::opt_pdfversion or die "!!! Error: Cannot write in `$tmp.pdf'!\n";
+        print "* PDF version correction in output file: 1.$::opt_pdfversion\n"
+                if $::opt_debug;
+    }
+    close(PDF);
 }
 
 ### Move temp file to output

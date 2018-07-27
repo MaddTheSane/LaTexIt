@@ -1,0 +1,38 @@
+"You must run LaTeXiT once, to init the configuration" = "Debe ejecutar LaTeXiT una vez para inicializar la configuración";
+
+"Text" = "Texto";
+"Font size :" = "Tamaño:";
+"Color :" = "Color:";
+"Create equations :" = "Crear ecuaciones:";
+"alongside input files" = "junto con los archivos de entrada";
+"in a temporary folder" = "en una carpeta temporal";
+
+"Default format" = "Formato por defecto";
+"PDF with outlined fonts" = "PDF con fuentes trazadas";
+"PDF without embedded fonts" = "PDF con fuentes trazadas";
+"PDF w.o.f." = "PDF c.f.t.";
+"PDF vector format" = "Imagen vectorial PDF";
+"EPS vector format" = "Imagen vectorial EPS";
+"SVG vector format" = "Imagen vectorial SVG";
+"TIFF bitmap format" = "Imagen de mapa de bits TIFF";
+"PNG bitmap format" = "Imagen de mapa de bits PNG";
+"JPEG bitmap format" = "Imagen de mapa de bits JPEG";
+"MathML text format" = "MathML text format";
+"Options" = "Opciones";
+"Warning : jpeg does not manage transparency" = "Atención: JPEG nos soporta la transparencia";
+"Warning : pdf2svg path is invalid" = "Atención : La ruta de pdf2svg no es válida";
+
+"JPEG Quality" = "JPEG Calitat";
+"least" = "mínima";
+"low" = "baja";
+"medium" = "media";
+"high" = "alta";
+"maxi" = "máxima";
+"Quality" = "Calitat";
+"Background color" = "Color de fondo";
+"Path to pdf2svg" = "Ruta de pdf2svg";
+"Format" = "Formato";
+"Change" = "Cambiar";
+
+"No preamble found" = "No se ha encotrado preámbulo";
+"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional." = "Error desconocido. Por favor, compruebe que LaTeXiT se ha ejecutado al menos una vez y que es completamente funcional.";

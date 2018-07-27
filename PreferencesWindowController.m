@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -19,7 +19,9 @@
 #import "EncapsulationsTableView.h"
 #import "ExportFormatOptionsPanes.h"
 #import "FileExistsTransformer.h"
+#import "ImageAndTextCell.h"
 #import "IsEqualToTransformer.h"
+#import "IsInTransformer.h"
 #import "IsNotEqualToTransformer.h"
 #import "KeyedUnarchiveFromDataTransformer.h"
 #import "LatexitEquation.h"
@@ -27,14 +29,20 @@
 #import "LibraryManager.h"
 #import "LibraryView.h"
 #import "LineCountTextView.h"
+#import "LogicTransformer.h"
+#import "NSButtonExtended.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSNumberIntegerShiftTransformer.h"
+#import "NSObjectExtended.h"
 #import "NSPopUpButtonExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
+#import "NSViewExtended.h"
 #import "ObjectTransformer.h"
+#import "Plugin.h"
+#import "PluginsManager.h"
 #import "PreamblesController.h"
 #import "PreamblesTableView.h"
 #import "ServiceShortcutsTableView.h"
@@ -46,23 +54,24 @@
 
 #define NSAppKitVersionNumber10_4 824
 
-NSString* GeneralToolbarItemIdentifier       = @"GeneralToolbarItem";
-NSString* EditionToolbarItemIdentifier       = @"EditionToolbarItem";
-NSString* PreamblesToolbarItemIdentifier     = @"PreamblesToolbarItem";
-NSString* BodyTemplatesToolbarItemIdentifier = @"BodyTemplatesToolbarItemIdentifier";
-NSString* CompositionToolbarItemIdentifier   = @"CompositionToolbarItem";
-NSString* HistoryToolbarItemIdentifier       = @"HistoryToolbarItem";
-NSString* ServiceToolbarItemIdentifier       = @"ServiceToolbarItem";
-NSString* AdvancedToolbarItemIdentifier      = @"AdvancedToolbarItem";
-NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
+NSString* GeneralToolbarItemIdentifier     = @"GeneralToolbarItemIdentifier";
+NSString* EditionToolbarItemIdentifier     = @"EditionToolbarItemIdentifier";
+NSString* TemplatesToolbarItemIdentifier   = @"TemplatesToolbarItemIdentifier";
+NSString* CompositionToolbarItemIdentifier = @"CompositionToolbarItemIdentifier";
+NSString* LibraryToolbarItemIdentifier     = @"LibraryToolbarItemIdentifier";
+NSString* HistoryToolbarItemIdentifier     = @"HistoryToolbarItemIdentifier";
+NSString* ServiceToolbarItemIdentifier     = @"ServiceToolbarItemIdentifier";
+NSString* AdvancedToolbarItemIdentifier    = @"AdvancedToolbarItemIdentifier";
+NSString* WebToolbarItemIdentifier         = @"WebToolbarItemIdentifier";
+NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 @interface PreferencesWindowController (PrivateAPI)
+-(IBAction) nilAction:(id)sender;
 -(void) updateProgramArgumentsToolTips;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender;
 -(void) tableViewSelectionDidChange:(NSNotification*)notification;
 -(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo;
--(void) exportFormatOptionsJpegPanel:(ExportFormatOptionsPanes*)exportFormatOptionsPanes didCloseWithOK:(BOOL)ok;
 @end
 
 @implementation PreferencesWindowController
@@ -121,11 +130,12 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   self->viewsMinSizes = [[NSDictionary alloc] initWithObjectsAndKeys:
     [NSValue valueWithSize:[self->generalView frame].size], GeneralToolbarItemIdentifier,
     [NSValue valueWithSize:[self->editionView frame].size], EditionToolbarItemIdentifier,
-    [NSValue valueWithSize:[self->preamblesView frame].size], PreamblesToolbarItemIdentifier,
-    [NSValue valueWithSize:[self->bodyTemplatesView frame].size], BodyTemplatesToolbarItemIdentifier,
+    [NSValue valueWithSize:[self->templatesView frame].size], TemplatesToolbarItemIdentifier,
     [NSValue valueWithSize:[self->compositionView frame].size], CompositionToolbarItemIdentifier,
+    [NSValue valueWithSize:[self->libraryView frame].size], LibraryToolbarItemIdentifier,
     [NSValue valueWithSize:[self->historyView frame].size], HistoryToolbarItemIdentifier,
     [NSValue valueWithSize:[self->serviceView frame].size], ServiceToolbarItemIdentifier,
+    [NSValue valueWithSize:[self->pluginsView frame].size], PluginsToolbarItemIdentifier,
     [NSValue valueWithSize:[self->advancedView frame].size], AdvancedToolbarItemIdentifier,
     [NSValue valueWithSize:[self->webView frame].size], WebToolbarItemIdentifier,
     nil];
@@ -143,9 +153,9 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   }//end if (!isMacOS10_5OrAbove())
   
   NSToolbar* toolbar = [[NSToolbar alloc] initWithIdentifier:@"preferencesToolbar"];
-  [toolbar setDelegate:self];
+  [toolbar setDelegate:(id)self];
   NSWindow* window = [self window];
-  [window setDelegate:self];
+  [window setDelegate:(id)self];
   [window setToolbar:toolbar];
   [window setShowsToolbarButton:NO];
   [toolbar setSelectedItemIdentifier:GeneralToolbarItemIdentifier];
@@ -157,30 +167,66 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 
   //General
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF vector format", @"PDF vector format")
-                                                     tag:(int)EXPORT_FORMAT_PDF];
+    tag:(int)EXPORT_FORMAT_PDF];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF without embedded fonts", @"PDF without embedded fonts")
-                                                     tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+    tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"EPS vector format", @"EPS vector format")
-                                                     tag:(int)EXPORT_FORMAT_EPS];
+    tag:(int)EXPORT_FORMAT_EPS];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"SVG vector format", @"SVG vector format")
+    tag:(int)EXPORT_FORMAT_SVG];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
-                                                     tag:(int)EXPORT_FORMAT_TIFF];
+    tag:(int)EXPORT_FORMAT_TIFF];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
-                                                     tag:(int)EXPORT_FORMAT_PNG];
+    tag:(int)EXPORT_FORMAT_PNG];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
-                                                     tag:(int)EXPORT_FORMAT_JPEG];
+    tag:(int)EXPORT_FORMAT_JPEG];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"MathML text format", @"MathML text format")
+    tag:(int)EXPORT_FORMAT_MATHML];
+  [self->generalExportFormatPopupButton setTarget:self];
+  [self->generalExportFormatPopupButton setAction:@selector(nilAction:)];
   [self->generalExportFormatPopupButton bind:NSSelectedTagBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey] options:nil];
+  [self->generalExportScaleLabel bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
+  [self->generalExportScalePercentTextField bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
+  [self->generalExportFormatOptionsButton bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [IsInTransformer transformerWithReferences:
+        [NSArray arrayWithObjects:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG], [NSNumber numberWithInt:EXPORT_FORMAT_SVG], nil]],
+        NSValueTransformerBindingOption, nil]];
+  [self->generalExportFormatOptionsButton setTarget:self];
+  [self->generalExportFormatOptionsButton setAction:@selector(generalExportFormatOptionsOpen:)];
+  [self->generalExportFormatJpegWarning setTitle:
+    NSLocalizedString(@"Warning : jpeg does not manage transparency", @"Warning : jpeg does not manage transparency")];
+  [self->generalExportFormatJpegWarning sizeToFit];
+  [self->generalExportFormatJpegWarning centerInSuperviewHorizontally:YES vertically:NO];
   [self->generalExportFormatJpegWarning bind:NSHiddenBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG]], NSValueTransformerBindingOption, nil]];
-  [self->generalExportFormatOptionsButton bind:NSEnabledBinding toObject:userDefaultsController
+  [self->generalExportFormatSvgWarning setTitle:
+    NSLocalizedString(@"Warning : pdf2svg path is invalid", @"Warning : pdf2svg path is invalid")];
+  [self->generalExportFormatSvgWarning sizeToFit];
+  [self->generalExportFormatSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
+  [self->generalExportFormatSvgWarning setTextColor:[NSColor redColor]];
+  [self->generalExportFormatSvgWarning bind:NSHiddenBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG]], NSValueTransformerBindingOption, nil]];
-  [self->generalExportFormatOptionsButton setTarget:self];
-  [self->generalExportFormatOptionsButton setAction:@selector(generalExportFormatOptionsOpen:)];
-
+      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_SVG]],
+      NSValueTransformerBindingOption, nil]];
+  NSString* NSHidden2Binding = [NSHiddenBinding stringByAppendingString:@"2"];
+  [self->generalExportFormatSvgWarning bind:NSHidden2Binding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [FileExistsTransformer transformerWithDirectoryAllowed:NO],
+      NSValueTransformerBindingOption, nil]];
+  
   [self->generalExportScalePercentTextField bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportScaleAsPercentKey] options:nil];
   
@@ -190,12 +236,8 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   [self->generalDummyBackgroundAutoStateButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DefaultAutomaticHighContrastedPreviewBackgroundKey] options:nil];
 
-  #ifdef MIGRATE_ALIGN
   [self->generalLatexisationLaTeXModeSegmentedControl setLabel:@"Align" forSegment:0];
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN forSegment:0];
-  #else
-  [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
-  #endif
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
   [[self->generalLatexisationLaTeXModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
@@ -253,6 +295,21 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
   [self->editionSpellCheckingStateButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:SpellCheckingEnableKey]
+    options:nil];
+  [self->editionTabKeyInsertsSpacesCheckBox bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesEnabledKey]
+    options:nil];
+  [self->editionTabKeyInsertsSpacesTextField bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesCountKey]
+    options:nil];
+  [self->editionTabKeyInsertsSpacesTextField bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesEnabledKey]
+    options:nil];
+  [self->editionTabKeyInsertsSpacesStepper bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesCountKey]
+    options:nil];
+  [self->editionTabKeyInsertsSpacesStepper bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesEnabledKey]
     options:nil];
   
   [self->editionTextAreaReducedButton bind:NSValueBinding toObject:userDefaultsController
@@ -379,7 +436,7 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     [NSDictionary dictionaryWithObjectsAndKeys:
       [ComposedTransformer
         transformerWithValueTransformer:[FileExistsTransformer transformerWithDirectoryAllowed:NO]
-             additionalValueTransformer:[BoolTransformer transformerWithFalseValue:[NSColor redColor] trueValue:[NSColor blackColor]]
+             additionalValueTransformer:[BoolTransformer transformerWithFalseValue:[NSColor redColor] trueValue:[NSColor controlTextColor]]
              additionalKeyPath:nil], NSValueTransformerBindingOption, nil];
 
   [self->compositionConfigurationsCurrentPdfLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
@@ -663,8 +720,6 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
       NSValueTransformerBindingOption, nil]];
       
   [self->serviceRelaunchWarning setHidden:isMacOS10_5OrAbove()];
-  
-  [self->advancedSplitView setIsPaneSplitter:YES];
 
   //additional files
   AdditionalFilesController* additionalFilesController = [preferencesController additionalFilesController];
@@ -679,10 +734,40 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 
   //encapsulations
   EncapsulationsController* encapsulationsController = [preferencesController encapsulationsController];
-  [self->encapsulationsAddButton bind:NSEnabledBinding toObject:encapsulationsController withKeyPath:@"canAdd" options:nil];
+  [self->encapsulationsEnabledCheckBox bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey]
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
+      NSValueTransformerBindingOption, nil]];
+
+  [self->encapsulationsLabel1 bind:NSTextColorBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey]
+        options:[NSDictionary dictionaryWithObjectsAndKeys:
+          [BoolTransformer transformerWithFalseValue:[NSColor disabledControlTextColor] trueValue:[NSColor controlTextColor]],
+          NSValueTransformerBindingOption, nil]];
+  [self->encapsulationsLabel2 bind:NSTextColorBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey]
+        options:[NSDictionary dictionaryWithObjectsAndKeys:
+          [BoolTransformer transformerWithFalseValue:[NSColor disabledControlTextColor] trueValue:[NSColor controlTextColor]],
+          NSValueTransformerBindingOption, nil]];
+  [self->encapsulationsLabel3 bind:NSTextColorBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey]
+        options:[NSDictionary dictionaryWithObjectsAndKeys:
+          [BoolTransformer transformerWithFalseValue:[NSColor disabledControlTextColor] trueValue:[NSColor controlTextColor]],
+          NSValueTransformerBindingOption, nil]];
+
+  [self->encapsulationsTableView bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey] options:nil];
+
+  [self->encapsulationsAddButton bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey] options:nil];
+  [self->encapsulationsAddButton bind:NSEnabled2Binding toObject:encapsulationsController withKeyPath:@"canAdd" options:nil];
   [self->encapsulationsAddButton setTarget:encapsulationsController];
   [self->encapsulationsAddButton setAction:@selector(add:)];
-  [self->encapsulationsRemoveButton bind:NSEnabledBinding toObject:encapsulationsController withKeyPath:@"canRemove" options:nil];
+
+  [self->encapsulationsRemoveButton bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey] options:nil];
+  [self->encapsulationsRemoveButton bind:NSEnabled2Binding toObject:encapsulationsController withKeyPath:@"canRemove" options:nil];
   [self->encapsulationsRemoveButton setTarget:encapsulationsController];
   [self->encapsulationsRemoveButton setAction:@selector(remove:)];
 
@@ -692,6 +777,17 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
       NSValueTransformerBindingOption, nil]];
+      
+  //plugins
+  /* disabled for now */
+  /* NSArrayController* pluginsController = [[NSArrayController alloc] initWithContent:[[PluginsManager sharedManager] plugins]];
+  [self->pluginsPluginTableView bind:NSContentBinding toObject:pluginsController
+    withKeyPath:@"content" options:nil];
+  [[[self->pluginsPluginTableView tableColumns] lastObject] bind:NSValueBinding toObject:pluginsController
+    withKeyPath:@"content.localizedName" options:nil];
+  [self->pluginsPluginTableView setDelegate:(id)self];
+  [self tableViewSelectionDidChange:[NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:self->pluginsPluginTableView]];
+  [pluginsController release];*/
 }
 //end awakeFromNib
 
@@ -734,10 +830,11 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 -(NSArray*) toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
   return [NSArray arrayWithObjects:GeneralToolbarItemIdentifier,  EditionToolbarItemIdentifier,
-                                   PreamblesToolbarItemIdentifier, BodyTemplatesToolbarItemIdentifier,
-                                   CompositionToolbarItemIdentifier, HistoryToolbarItemIdentifier,
-                                   ServiceToolbarItemIdentifier, AdvancedToolbarItemIdentifier,
-                                   WebToolbarItemIdentifier, nil];
+                                   TemplatesToolbarItemIdentifier, CompositionToolbarItemIdentifier,
+                                   LibraryToolbarItemIdentifier, HistoryToolbarItemIdentifier,
+                                   ServiceToolbarItemIdentifier, //PluginsToolbarItemIdentifier,
+                                   AdvancedToolbarItemIdentifier, WebToolbarItemIdentifier,
+                                   nil];
 }
 //end toolbarDefaultItemIdentifiers:
 
@@ -772,25 +869,25 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
       imagePath = [[NSBundle mainBundle] pathForResource:@"editionToolbarItem" ofType:@"tiff"];
       label = NSLocalizedString(@"Edition", @"Edition");
     }
-    else if ([itemIdentifier isEqualToString:PreamblesToolbarItemIdentifier])
+    else if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
     {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"preambleToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"Preambles", @"Preambles") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
-    }
-    else if ([itemIdentifier isEqualToString:BodyTemplatesToolbarItemIdentifier])
-    {
-      imagePath = [[NSBundle mainBundle] pathForResource:@"bodyTemplateToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"Body templates", @"Body templates") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
+      imagePath = [[NSBundle mainBundle] pathForResource:@"templatesToolbarItem" ofType:@"tiff"];
+      label = NSLocalizedString(@"Templates", @"Templates");
     }
     else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"compositionToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"Composition", @"Composition") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
+      label = NSLocalizedString(@"Composition", @"Composition");
+    }
+    else if ([itemIdentifier isEqualToString:LibraryToolbarItemIdentifier])
+    {
+      imagePath = [[NSBundle mainBundle] pathForResource:@"libraryToolbarItem" ofType:@"tiff"];
+      label = NSLocalizedString(@"Library", @"Library");
     }
     else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"historyToolbarItem" ofType:@"tiff"];
-      label = [NSLocalizedString(@"History", @"History") stringByReplacingOccurrencesOfRegex:@"LaTeX" withString:@""];
+      label = NSLocalizedString(@"History", @"History");
     }
     else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     {
@@ -806,6 +903,11 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     {
       imagePath = [[NSBundle mainBundle] pathForResource:@"webToolbarItem" ofType:@"tiff"];
       label = NSLocalizedString(@"Web", @"Web");
+    }
+    else if ([itemIdentifier isEqualToString:PluginsToolbarItemIdentifier])
+    {
+      imagePath = [[NSBundle mainBundle] pathForResource:@"pluginsToolbarItem" ofType:@"tiff"];
+      label = NSLocalizedString(@"Plugins", @"Plugins");
     }
     [item setLabel:label];
     [item setImage:[[[NSImage alloc] initWithContentsOfFile:imagePath] autorelease]];
@@ -827,16 +929,18 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     view = self->generalView;
   else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
     view = self->editionView;
-  else if ([itemIdentifier isEqualToString:PreamblesToolbarItemIdentifier])
-    view = self->preamblesView;
-  else if ([itemIdentifier isEqualToString:BodyTemplatesToolbarItemIdentifier])
-    view = self->bodyTemplatesView;
+  else if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
+    view = self->templatesView;
   else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     view = self->compositionView;
+  else if ([itemIdentifier isEqualToString:LibraryToolbarItemIdentifier])
+    view = self->libraryView;
   else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
     view = self->historyView;
   else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     view = self->serviceView;
+  else if ([itemIdentifier isEqualToString:PluginsToolbarItemIdentifier])
+    view = self->pluginsView;
   else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])
     view = self->advancedView;
   else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])
@@ -877,8 +981,10 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 }
 //end toolbarHit:
 
--(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier
+-(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier options:(id)options
 {
+  if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
+    [self->templatesTabView selectTabViewItemAtIndex:[options intValue]];
   [[[self window] toolbar] setSelectedItemIdentifier:itemIdentifier];
   [self toolbarHit:[toolbarItems objectForKey:itemIdentifier]];
 }
@@ -891,6 +997,8 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
     ok = [[AppController appController] isGsAvailable];
   else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPsToPdfAvailable];
+  /*else if ([sender tag] == EXPORT_FORMAT_SVG)
+    ok = [[AppController appController] isPdfToSvgAvailable];*/
   return ok;
 }
 //end validateMenuItem:
@@ -901,6 +1009,12 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 }
 //end applicationWillTerminate:
 
+-(IBAction) nilAction:(id)sender
+{
+  //useful for validateMenuItem:
+}
+//end nilAction:
+
 #pragma mark general
 
 -(IBAction) generalExportFormatOptionsOpen:(id)sender
@@ -909,25 +1023,41 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   {
     self->generalExportFormatOptionsPanes = [[ExportFormatOptionsPanes alloc] initWithLoadingFromNib];
     [self->generalExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
-  }
+    [self->generalExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
+  }//end if (!self->generalExportFormatOptionsPanes)
   [self->generalExportFormatOptionsPanes setJpegQualityPercent:[[PreferencesController sharedController] exportJpegQualityPercent]];
   [self->generalExportFormatOptionsPanes setJpegBackgroundColor:[[PreferencesController sharedController] exportJpegBackgroundColor]];
-  [NSApp beginSheet:[self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel]
-     modalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+  [self->generalExportFormatOptionsPanes setSvgPdfToSvgPath:[[PreferencesController sharedController] exportSvgPdfToSvgPath]];
+  
+  NSPanel* panelToOpen = nil;
+  export_format_t format = [self->generalExportFormatPopupButton selectedTag];
+  if (format == EXPORT_FORMAT_JPEG)
+    panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
+  else if (format == EXPORT_FORMAT_SVG)
+    panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
+  if (panelToOpen)
+    [NSApp beginSheet:panelToOpen modalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
 //end openOptionsForDragExport:
 
--(void) exportFormatOptionsJpegPanel:(ExportFormatOptionsPanes*)exportFormatOptionsPanes didCloseWithOK:(BOOL)ok
+-(void) exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok
 {
   if (ok)
   {
-    [[PreferencesController sharedController] setExportJpegQualityPercent:[exportFormatOptionsPanes jpegQualityPercent]];
-    [[PreferencesController sharedController] setExportJpegBackgroundColor:[exportFormatOptionsPanes jpegBackgroundColor]];
+    if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel])
+    {
+      [[PreferencesController sharedController] setExportJpegQualityPercent:[self->generalExportFormatOptionsPanes jpegQualityPercent]];
+      [[PreferencesController sharedController] setExportJpegBackgroundColor:[self->generalExportFormatOptionsPanes jpegBackgroundColor]];
+    }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel])
+    else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    {
+      [[PreferencesController sharedController] setExportSvgPdfToSvgPath:[self->generalExportFormatOptionsPanes svgPdfToSvgPath]];
+    }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
   }//end if (ok)
-  [NSApp endSheet:[exportFormatOptionsPanes exportFormatOptionsJpegPanel]];
-  [[exportFormatOptionsPanes exportFormatOptionsJpegPanel] orderOut:self];
+  [NSApp endSheet:exportFormatOptionsPanel];
+  [exportFormatOptionsPanel orderOut:self];
 }
-//end exportFormatOptionsJpegPanel:didCloseWithOK:
+//end exportFormatOptionsPanel:didCloseWithOK:
 
 #pragma mark edition
 
@@ -1132,26 +1262,46 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   [openPanel setResolvesAliases:YES];
-  NSTextField* textField = nil;
+  NSDictionary* contextInfo = nil;
   if (sender == self->compositionConfigurationsCurrentPdfLaTeXPathChangeButton)
-    textField = self->compositionConfigurationsCurrentPdfLaTeXPathTextField;
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsCurrentPdfLaTeXPathTextField, @"textField",
+      CompositionConfigurationPdfLatexPathKey, @"pathKey",
+      nil];
   else if (sender == self->compositionConfigurationsCurrentXeLaTeXPathChangeButton)
-    textField = self->compositionConfigurationsCurrentXeLaTeXPathTextField;
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsCurrentXeLaTeXPathTextField, @"textField",
+      CompositionConfigurationXeLatexPathKey, @"pathKey",
+      nil];
   else if (sender == self->compositionConfigurationsCurrentLaTeXPathChangeButton)
-    textField = self->compositionConfigurationsCurrentLaTeXPathTextField;
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsCurrentLaTeXPathTextField, @"textField",
+      CompositionConfigurationLatexPathKey, @"pathKey",
+      nil];
   else if (sender == self->compositionConfigurationsCurrentDviPdfPathChangeButton)
-    textField = self->compositionConfigurationsCurrentDviPdfPathTextField;
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsCurrentDviPdfPathTextField, @"textField",
+      CompositionConfigurationDviPdfPathKey, @"pathKey",
+      nil];
   else if (sender == self->compositionConfigurationsCurrentGsPathChangeButton)
-    textField = self->compositionConfigurationsCurrentGsPathTextField;
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsCurrentGsPathTextField, @"textField",
+      CompositionConfigurationGsPathKey, @"pathKey",
+      nil];
   else if (sender == self->compositionConfigurationsCurrentPsToPdfPathChangeButton)
-    textField = self->compositionConfigurationsCurrentPsToPdfPathTextField;
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsCurrentPsToPdfPathTextField, @"textField",
+      CompositionConfigurationPsToPdfPathKey, @"pathKey",
+      nil];
   else if (sender == self->compositionConfigurationsAdditionalScriptsExistingPathChangeButton)
-    textField = self->compositionConfigurationsAdditionalScriptsExistingPathTextField;
-  NSString* filename = [textField stringValue];
+    contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+      self->compositionConfigurationsAdditionalScriptsExistingPathTextField, @"textField",
+      nil];
+  NSString* filename = [[contextInfo objectForKey:@"textField"] stringValue];
   NSString* path = filename ? filename : @"";
   path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? [path stringByDeletingLastPathComponent] : nil;
   [openPanel beginSheetForDirectory:path file:[filename lastPathComponent] types:nil modalForWindow:[self window] modalDelegate:self
-                           didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:) contextInfo:textField];
+                           didEndSelector:@selector(didEndOpenPanel:returnCode:contextInfo:) contextInfo:[contextInfo copy]];
 }
 //end compositionConfigurationsChangePath:
 
@@ -1159,14 +1309,23 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
 {
   if ((returnCode == NSOKButton) && contextInfo)
   {
-    NSTextField* textField = (NSTextField*) contextInfo;
+    NSTextField* textField = [(NSDictionary*)contextInfo objectForKey:@"textField"];
+    NSString*    pathKey   = [(NSDictionary*)contextInfo objectForKey:@"pathKey"];
     NSArray* filenames = [openPanel filenames];
     if (filenames && [filenames count])
     {
       NSString* path = [filenames objectAtIndex:0];
-      [textField setStringValue:path];
+      if (textField == self->compositionConfigurationsAdditionalScriptsExistingPathTextField)
+        [[[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationScriptsController]
+          setValue:path
+          forKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptPathKey]];
+      else if (path && pathKey)
+        [[PreferencesController sharedController] setCompositionConfigurationDocumentProgramPath:path forKey:pathKey];
+      else
+        [textField setStringValue:path];
     }//end if (filenames && [filenames count])
   }//end if ((returnCode == NSOKButton) && contextInfo)
+  [(NSDictionary*)contextInfo release];
 }
 //end didEndOpenPanel:returnCode:contextInfo:
 
@@ -1197,5 +1356,43 @@ NSString* WebToolbarItemIdentifier           = @"WebToolbarItem";
   [[AppController appController] openWebSite:self];
 }
 //end updatesGotoWebSite:
+
+#pragma mark NSTableViewDelegate
+
+-(void) tableView:(NSTableView*)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)rowIndex
+{
+  if (tableView == self->pluginsPluginTableView)
+  {
+    Plugin* plugin = [[[PluginsManager sharedManager] plugins] objectAtIndex:(unsigned)rowIndex];
+    NSImage* image = [plugin icon];
+    if (!image)
+      image = [NSImage imageNamed:@"pluginsToolbarItem"];
+    ImageAndTextCell* imageAndTextCell = [cell dynamicCastToClass:[ImageAndTextCell class]];
+    [imageAndTextCell setImage:image];
+  }//end if (tableView == self->pluginsPluginTableView)
+}
+//end tableView:willDisplayCell:forTableColumn:row:
+
+-(void) tableViewSelectionDidChange:(NSNotification*)notification
+{
+  if ([notification object] == self->pluginsPluginTableView)
+  {
+    NSInteger selectedRow = [self->pluginsPluginTableView selectedRow];
+    if (selectedRow < 0)
+    {
+      [self->pluginCurrentlySelected dropConfigurationPanel];
+      [self->pluginCurrentlySelected release];
+      self->pluginCurrentlySelected = nil;
+    }//end if (selectedRow < 0)
+    else//if (selectedRow >= 0)
+    {
+      Plugin* plugin = [[[PluginsManager sharedManager] plugins] objectAtIndex:(unsigned)selectedRow];
+      [plugin importConfigurationPanelIntoView:[self->pluginsConfigurationBox contentView]];
+      [self->pluginCurrentlySelected release];
+      self->pluginCurrentlySelected = [plugin retain];
+    }//end if (selectedRow >= 0)
+  }//end if (tableView == self->pluginsPluginTableView)
+}
+//end tableViewSelectionDidChange:
 
 @end

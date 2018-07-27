@@ -25,4 +25,14 @@
 }
 //end addItemWithTitle:tag:
 
+-(NSMenuItem*) addItemWithTitle:(NSString*)aString target:(id)target action:(SEL)action tag:(int)tag
+{
+  NSMenuItem* result = [self addItemWithTitle:aString tag:tag];
+  [result setTarget:target];
+  [result setAction:action];
+  return result;
+}
+//end addItemWithTitle:target:action:tag:
+
+
 @end

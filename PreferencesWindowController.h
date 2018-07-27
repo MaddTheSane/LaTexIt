@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -13,12 +13,14 @@
 
 extern NSString* GeneralToolbarItemIdentifier;
 extern NSString* EditionToolbarItemIdentifier;
-extern NSString* PreamblesToolbarItemIdentifier;
-extern NSString* BodyTemplatesToolbarItemIdentifier;
+extern NSString* TemplatesToolbarItemIdentifier;
 extern NSString* CompositionToolbarItemIdentifier;
+extern NSString* LibraryToolbarItemIdentifier;
+extern NSString* HistoryToolbarItemIdentifier;
 extern NSString* ServiceToolbarItemIdentifier;
 extern NSString* AdvancedToolbarItemIdentifier;
 extern NSString* WebToolbarItemIdentifier;
+extern NSString* PluginsToolbarItemIdentifier;
 
 @class AdditionalFilesTableView;
 @class CompositionConfigurationsProgramArgumentsTableView;
@@ -30,16 +32,21 @@ extern NSString* WebToolbarItemIdentifier;
 @class LineCountTextView;
 @class ServiceShortcutsTableView;
 @class TextShortcutsTableView;
+
+@class Plugin;
+
 @interface PreferencesWindowController : NSWindowController {
   IBOutlet NSView*        generalView;
   IBOutlet NSView*        editionView;
-  IBOutlet NSView*        preamblesView;
-  IBOutlet NSView*        bodyTemplatesView;
+  IBOutlet NSView*        templatesView;
+  IBOutlet NSTabView*     templatesTabView;
   IBOutlet NSView*        compositionView;
+  IBOutlet NSView*        libraryView;
   IBOutlet NSView*        historyView;
   IBOutlet NSView*        serviceView;
   IBOutlet NSView*        advancedView;
   IBOutlet NSView*        webView;
+  IBOutlet NSView*        pluginsView;
   IBOutlet NSView*        emptyView;
   NSMutableDictionary*    toolbarItems;
   NSMutableDictionary*    viewsMinSizes;
@@ -48,7 +55,9 @@ extern NSString* WebToolbarItemIdentifier;
   IBOutlet NSPopUpButton*   generalExportFormatPopupButton;
   IBOutlet NSButton*        generalExportFormatOptionsButton;
   IBOutlet NSButton*        generalExportFormatJpegWarning;
+  IBOutlet NSButton*        generalExportFormatSvgWarning;
   ExportFormatOptionsPanes* generalExportFormatOptionsPanes;
+  IBOutlet NSTextField*     generalExportScaleLabel;
   IBOutlet NSTextField*     generalExportScalePercentTextField;
   IBOutlet NSColorWell*     generalDummyBackgroundColorWell;
   IBOutlet NSButton*        generalDummyBackgroundAutoStateButton;
@@ -74,7 +83,10 @@ extern NSString* WebToolbarItemIdentifier;
   IBOutlet NSTextView*        editionSyntaxColouringTextView;
   IBOutlet NSButton*          editionSpellCheckingStateButton;
   IBOutlet NSButton*          editionTextAreaReducedButton;
-
+  IBOutlet NSButton*          editionTabKeyInsertsSpacesCheckBox;
+  IBOutlet NSTextField*       editionTabKeyInsertsSpacesTextField;
+  IBOutlet NSStepper*         editionTabKeyInsertsSpacesStepper;
+  IBOutlet NSTextField*       editionTabKeyInsertsSpacesSpacesTextField;
   
   IBOutlet TextShortcutsTableView* editionTextShortcutsTableView;
   IBOutlet NSButton*               editionTextShortcutsAddButton;
@@ -159,20 +171,26 @@ extern NSString* WebToolbarItemIdentifier;
   IBOutlet NSButton*                  serviceUsesHistoryButton;
   IBOutlet ServiceShortcutsTableView* serviceShortcutsTableView;
   IBOutlet NSTextField*               serviceRelaunchWarning;
-  
-  IBOutlet NSSplitView*              advancedSplitView;
-  
+
   IBOutlet AdditionalFilesTableView* additionalFilesTableView;
   IBOutlet NSButton*                 additionalFilesAddButton;
   IBOutlet NSButton*                 additionalFilesRemoveButton;
   IBOutlet NSButton*                 additionalFilesHelpButton;
   
+  IBOutlet NSButton*                encapsulationsEnabledCheckBox;
+  IBOutlet NSTextField*             encapsulationsLabel1;
+  IBOutlet NSTextField*             encapsulationsLabel2;
+  IBOutlet NSTextField*             encapsulationsLabel3;
   IBOutlet EncapsulationsTableView* encapsulationsTableView;
   IBOutlet NSButton*                encapsulationsAddButton;
   IBOutlet NSButton*                encapsulationsRemoveButton;
-  
+
   IBOutlet NSButton* updatesCheckUpdatesButton;
   IBOutlet NSButton* updatesCheckUpdatesNowButton;
+  
+  IBOutlet NSTableView* pluginsPluginTableView;
+  IBOutlet NSBox*       pluginsConfigurationBox;
+  Plugin*               pluginCurrentlySelected;
   
   NSAlert*           applyPreambleToLibraryAlert;
 }
@@ -180,7 +198,7 @@ extern NSString* WebToolbarItemIdentifier;
 -(IBAction) toolbarHit:(id)sender;
 
 -(IBAction) generalExportFormatOptionsOpen:(id)sender;
--(void)     exportFormatOptionsJpegPanel:(ExportFormatOptionsPanes*)exportFormatOptionsPanes didCloseWithOK:(BOOL)ok;
+-(void)     exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok;
 
 -(IBAction) editionChangeFont:(id)sender;
 -(void)     changeFont:(id)sender;//delegate method
@@ -204,6 +222,6 @@ extern NSString* WebToolbarItemIdentifier;
 -(IBAction) updatesCheckNow:(id)sender;
 -(IBAction) updatesGotoWebSite:(id)sender;
 
--(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;
+-(void) selectPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier options:(id)options;
 
 @end

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 #import "BodyTemplatesTableView.h"
 
@@ -17,8 +17,8 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 
 -(void) awakeFromNib
 {
-  [self setDelegate:self];
-  [self setDataSource:self];
+  [self setDelegate:(id)self];
+  [self setDataSource:(id)self];
   [self setAllowsMultipleSelection:NO];
   [[[self tableColumns] lastObject] bind:NSValueBinding toObject:[[PreferencesController sharedController] bodyTemplatesController]
     withKeyPath:@"arrangedObjects.name" options:nil];
@@ -66,9 +66,9 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 
 #pragma mark dummy datasource (real datasource is a binding, just avoid warnings)
 
--(int)  numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
--(id)   tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex {return nil;}
--(void) tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex {}
+-(NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
+-(id)   tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex {return nil;}
+-(void) tableView:(NSTableView*)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex {}
 
 #pragma mark drag'n drop
 //drag'n drop for moving rows
@@ -92,11 +92,11 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 //end tableView:writeRowsWithIndexes:toPasteboard:
 
 -(NSDragOperation) tableView:(NSTableView*)tableView validateDrop:(id<NSDraggingInfo>)info
-                 proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
+                 proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation
 {
   //we only accept moving inside the table (not between different ones)
   NSPasteboard* pboard = [info draggingPasteboard];
-  NSIndexSet* indexSet =  [[[info draggingSource] dataSource] _draggedRowIndexes];
+  NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = (tableView == [info draggingSource]) && pboard &&
             [pboard availableTypeFromArray:[NSArray arrayWithObject:BodyTemplatesPboardType]] &&
             [pboard propertyListForType:BodyTemplatesPboardType] &&
@@ -106,10 +106,10 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:
 
--(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)operation
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
 {
   BodyTemplatesController* bodyTemplatesController = [[PreferencesController sharedController] bodyTemplatesController];
-  NSIndexSet* indexSet = [[[info draggingSource] dataSource] _draggedRowIndexes];
+  NSIndexSet* indexSet = [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   [bodyTemplatesController moveObjectsAtIndices:indexSet toIndex:row];
   self->draggedRowIndexes = nil;
   return YES;

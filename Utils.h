@@ -11,8 +11,11 @@
 #import "LaTeXiTSharedTypes.h"
 
 extern int DebugLogLevel;
-#define DebugLog(level,log,...) ((DebugLogLevel<level) ? 0 : NSLog(@"[%p : %@ %s] \"%@\"",[NSThread currentThread],[self class],sel_getName(_cmd),[NSString stringWithFormat:log,##__VA_ARGS__]))
-#define DebugLogStatic(level,log,...) ((DebugLogLevel<level) ? 0 : NSLog(@"[%p - static] \"%@\"",[NSThread currentThread], [NSString stringWithFormat:log,##__VA_ARGS__]))
+#define DebugLog(level,log,...) do{if (DebugLogLevel<level) {NSLog(@"[%p : %@ %s] \"%@\"",[NSThread currentThread],[self class],sel_getName(_cmd),[NSString stringWithFormat:log,##__VA_ARGS__]);}}while(0)
+#define DebugLogStatic(level,log,...) do{if (DebugLogLevel<level) {NSLog(@"[%p - static] \"%@\"",[NSThread currentThread], [NSString stringWithFormat:log,##__VA_ARGS__]);}}while(0)
+
+#define LocalLocalizedString(key, comment) \
+	    [[NSBundle bundleForClass:[self class]] localizedStringForKey:(key) value:@"" table:nil]
 
 #define NSAppKitVersionNumber10_4 824
 #define NSAppKitVersionNumber10_5 949
@@ -43,6 +46,7 @@ FOUNDATION_STATIC_INLINE          float Clip_f(float inf, float x, float sup) {r
 FOUNDATION_STATIC_INLINE      CGFloat Clip_cgf(CGFloat inf, CGFloat x, CGFloat sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE         double Clip_d(double inf, double x, double sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 
+NSString* GetMySVGPboardType(void);
 NSString* GetMyPNGPboardType(void);
 NSString* GetMyJPEGPboardType(void);
 NSString* GetWebURLsWithTitlesPboardType(void);

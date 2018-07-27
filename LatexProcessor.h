@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -31,7 +31,7 @@ extern NSString* LatexizationDidEndNotification;
 
 -(void) addInEnvironmentPath:(NSString*)path;
 
--(NSData*) annotateImageData:(NSData*)inputData withData:(NSData*)annotationData;
+-(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData;
 -(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
                                  backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
@@ -75,5 +75,6 @@ extern NSString* LatexizationDidEndNotification;
 
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
              jpegColor:(NSColor*)color jpegQuality:(CGFloat)quality scaleAsPercent:(CGFloat)scaleAsPercent
-             compositionConfiguration:(NSDictionary*)compositionConfiguration;
+             compositionConfiguration:(NSDictionary*)compositionConfiguration
+             uniqueIdentifier:(NSString*)uniqueIdentifier;
 @end

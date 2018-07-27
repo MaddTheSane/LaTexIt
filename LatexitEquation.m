@@ -3,19 +3,23 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
 
+#import "Compressor.h"
 #import "LaTeXProcessor.h"
+#import "NSMutableArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSDataExtended.h"
 #import "NSFontExtended.h"
 #import "NSImageExtended.h"
 #import "NSManagedObjectContextExtended.h"
+#import "NSObjectExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "RegexKitLite.h"
 #import "Utils.h"
 
 #import <LinkBack/LinkBack.h>
@@ -29,8 +33,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 @interface LatexitEquation (PrivateAPI)
 +(NSMutableArray*) managedObjectContextStack;
--(void) beginUpdate;
--(void) endUpdate;
 -(BOOL) isUpdating;
 @end
 
@@ -109,38 +111,48 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSFont* defaultFont = [preferencesController editionFont];
   NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
-  NSAttributedString* defaultPreambleAttributedString = [[PreferencesController sharedController] preambleDocumentAttributedString];
+  NSAttributedString* defaultPreambleAttributedString =
+    [[PreferencesController sharedController] preambleDocumentAttributedString];
 
   BOOL decodedFromAnnotation = NO;
   #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
   BOOL shoudDecodeFromAnnotations = !shouldDenyDueTo64Bitsproblem;
   if (shoudDecodeFromAnnotations)
   {
-    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:someData];
-    PDFPage*     pdfPage     = [pdfDocument pageAtIndex:0];
-    NSArray* annotations     = [pdfPage annotations];
+    PDFDocument* pdfDocument = nil;
     NSDictionary* embeddedInfos = nil;
-    NSUInteger i = 0;
-    for(i = 0 ; !embeddedInfos && (i < [annotations count]) ; ++i)
-    {
-      id annotation = [annotations objectAtIndex:i];
-      if ([annotation isKindOfClass:[PDFAnnotationText class]])
+    @try{
+      pdfDocument = [[PDFDocument alloc] initWithData:someData];
+      PDFPage*     pdfPage     = [pdfDocument pageAtIndex:0];
+      NSArray* annotations     = [pdfPage annotations];
+      NSUInteger i = 0;
+      for(i = 0 ; !embeddedInfos && (i < [annotations count]) ; ++i)
       {
-        PDFAnnotationText* annotationTextCandidate = (PDFAnnotationText*)annotation;
-        if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+        id annotation = [annotations objectAtIndex:i];
+        if ([annotation isKindOfClass:[PDFAnnotationText class]])
         {
-          NSString* contents = [annotationTextCandidate contents];
-          NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
-          @try{
-            embeddedInfos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-          }
-          @catch(NSException* e){
-            DebugLog(0, @"exception : %@", e);
-          }
-        }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
-      }//end if ([annotation isKindOfClass:PDFAnnotationText])
-    }//end for each annotation
+          PDFAnnotationText* annotationTextCandidate = (PDFAnnotationText*)annotation;
+          if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+          {
+            NSString* contents = [annotationTextCandidate contents];
+            NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
+            @try{
+              embeddedInfos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            }
+            @catch(NSException* e){
+              DebugLog(0, @"exception : %@", e);
+            }
+          }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+        }//end if ([annotation isKindOfClass:PDFAnnotationText])
+      }//end for each annotation
+    }
+    @catch(NSException* e) {
+      DebugLog(0, @"exception : %@", e);
+    }
+    @finally{
+      [pdfDocument release];
+    }
     if (embeddedInfos)
     {
       NSString* preambleAsString = [embeddedInfos objectForKey:@"preamble"];
@@ -152,16 +164,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
-      #ifdef MIGRATE_ALIGN
       [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
-      #else
-      [result setObject:[NSNumber numberWithInt:mode] forKey:@"mode"];
-      #endif
 
       NSString* sourceAsString = [embeddedInfos objectForKey:@"source"];
       NSAttributedString* sourceText =
         [[NSAttributedString alloc] initWithString:(!sourceAsString ? @"" : sourceAsString) attributes:defaultAttributes];
-      #ifdef MIGRATE_ALIGN
       if (mode == LATEX_MODE_EQNARRAY)
       {
         NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
@@ -173,7 +180,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [sourceText release];
         sourceText = sourceText2;
       }
-      #endif
       [result setObject:sourceText forKey:@"sourceText"];
       [sourceText release];
       
@@ -203,7 +209,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       
       decodedFromAnnotation = YES;
     }//end if (embeddedInfos)
-    [pdfDocument release];
   }//end if (shoudDecodeFromAnnotations)
   
   if (decodedFromAnnotation)
@@ -265,11 +270,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
                         : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
     mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
-    #ifdef MIGRATE_ALIGN
     [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
-    #else
-    [result setObject:[NSNumber numberWithInt:mode] forKey:@"mode"];
-    #endif
 
     NSMutableString* sourceString = [NSMutableString string];
     testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
@@ -307,7 +308,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     }
     sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
                               : sourceText;
-    #ifdef MIGRATE_ALIGN
     if (mode == LATEX_MODE_EQNARRAY)
     {
       NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
@@ -318,7 +318,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
       sourceText = sourceText2;
     }
-    #endif
     if (sourceText)
       [result setObject:sourceText forKey:@"sourceText"];
 
@@ -400,6 +399,90 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end metaDataFromPDFData:useDefaults:
 
++(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti
+{
+  BOOL result = NO;
+  if (UTTypeConformsTo((CFStringRef)uti, CFSTR("com.adobe.pdf")))
+    result = YES;
+  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.tiff")))
+    result = YES;
+  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.png")))
+    result = YES;
+  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.jpeg")))
+    result = YES;
+  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.svg-image")))
+    result = YES;
+  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.html")))
+    result = YES;
+  return result;
+}
+//end latexitEquationPossibleWithUTI:
+
++(BOOL) latexitEquationPossibleWithData:(NSData*)data sourceUTI:(NSString*)sourceUTI
+{
+  BOOL result = NO;
+  BOOL utiOk = [self latexitEquationPossibleWithUTI:sourceUTI];
+  if (utiOk)
+  {
+    result = YES;
+  }//end if (utiOk)
+  return result;
+}
+//end latexitEquationPossibleWithData:
+
++(NSArray*) latexitEquationsWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults
+{
+  NSArray* result = nil;
+  NSMutableArray* equations = [NSMutableArray arrayWithCapacity:1];
+  if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+    [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tiff")))
+    [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.png")))
+    [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.jpeg")))
+    [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+  {
+    NSError* error = nil;
+    NSString* string = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+    NSArray* descriptions =
+      [string componentsMatchedByRegex:@"<svg(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</svg>"
+                               options:RKLCaseless|RKLMultiline|RKLDotAll
+                                 range:NSMakeRange(0, [string length]) capture:0 error:&error];
+    if (error)
+      DebugLog(1, @"error : %@", error);
+    NSEnumerator* enumerator = [descriptions objectEnumerator];
+    NSString* description = nil;
+    while((description = [enumerator nextObject]))
+    {
+      NSData* subData = [description dataUsingEncoding:NSUTF8StringEncoding];
+      [equations safeAddObject:[self latexitEquationWithData:subData sourceUTI:sourceUTI useDefaults:useDefaults]];
+    }//end for each description
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+  {
+    NSError* error = nil;
+    NSString* string = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+    NSArray* descriptions =
+      [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
+                               options:RKLCaseless|RKLMultiline|RKLDotAll
+                                 range:NSMakeRange(0, [string length]) capture:0 error:&error];
+    if (error)
+      DebugLog(1, @"error : %@", error);
+    NSEnumerator* enumerator = [descriptions objectEnumerator];
+    NSString* description = nil;
+    while((description = [enumerator nextObject]))
+    {
+      NSData* subData = [description dataUsingEncoding:NSUTF8StringEncoding];
+      [equations safeAddObject:[self latexitEquationWithData:subData sourceUTI:sourceUTI useDefaults:useDefaults]];
+    }//end for each description
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+  result = [NSArray arrayWithArray:equations];
+  return result;
+}
+//end latexitEquationsWithData:sourceUTI:useDefaults
+
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
                  backgroundColor:(NSColor*)backgroundColor
@@ -411,11 +494,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end latexitEquationWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
 
-+(id) latexitEquationWithData:(NSData*)someData useDefaults:(BOOL)useDefaults
++(id) latexitEquationWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults
 {
-  return [[[[self class] alloc] initWithData:someData useDefaults:useDefaults] autorelease];
+  return [[[[self class] alloc] initWithMetaData:metaData useDefaults:useDefaults] autorelease];
 }
-//end latexitEquationWithData:useDefaults:
+//end latexitEquationWithData:sourceUTI:useDefaults:
+
++(id) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults
+{
+  return [[[[self class] alloc] initWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults] autorelease];
+}
+//end latexitEquationWithData:sourceUTI:useDefaults:
 
 +(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
@@ -446,6 +535,53 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   return self;
 }
 //end initWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
+
+-(id) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults
+{
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+    return nil;
+
+  [self beginUpdate];
+  NSAttributedString* preamble = [metaData objectForKey:@"preamble"];
+  if (preamble)
+    [self setPreamble:preamble];
+
+  NSNumber* mode = [metaData objectForKey:@"mode"];
+  if (mode)
+    [self setMode:(latex_mode_t)[mode intValue]];
+
+  NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
+  if (sourceText)
+    [self setSourceText:sourceText];
+
+  NSNumber* pointSize = [metaData objectForKey:@"magnification"];
+  if (pointSize)
+    [self setPointSize:[pointSize doubleValue]];
+
+  NSColor* color = [metaData objectForKey:@"color"];
+  if (color)
+    [self setColor:color];
+
+  NSColor* backgroundColor = [metaData objectForKey:@"backgroundColor"];
+  if (backgroundColor)
+    [self setBackgroundColor:backgroundColor];
+
+  NSString* title = [metaData objectForKey:@"title"];
+  if (title)
+    [self setTitle:title];
+
+  NSNumber* baseline = [metaData objectForKey:@"baseline"];
+  [self setBaseline:!baseline ? 0. : [baseline doubleValue]];
+
+  NSDate* date = [metaData objectForKey:@"date"];
+  if (date)
+    [self setDate:date];
+    
+  [self endUpdate];
+  
+  return self;
+}
+//end initWithMetaData:useDefaults:
 
 -(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
@@ -503,7 +639,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   {
     [self release];
     self = nil;
-  }//end if (!isLaTeXiTPDF)*/
+  }//end if (!isLaTeXiTPDF)
 
   /*
   BOOL isLaTeXiTPDF = NO;
@@ -514,7 +650,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
   BOOL decodedFromAnnotation = NO;
   #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
   BOOL shoudDecodeFromAnnotations = !shouldDenyDueTo64Bitsproblem;
   if (shoudDecodeFromAnnotations)
   {
@@ -553,16 +689,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
-      #ifdef MIGRATE_ALIGN
       [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
-      #else
-      [self setMode:mode];
-      #endif
 
       NSString* sourceAsString = [embeddedInfos objectForKey:@"source"];
       NSAttributedString* sourceText =
         [[NSAttributedString alloc] initWithString:(!sourceAsString ? @"" : sourceAsString) attributes:defaultAttributes];
-      #ifdef MIGRATE_ALIGN
       if (mode == LATEX_MODE_EQNARRAY)
       {
         NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
@@ -574,7 +705,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [sourceText release];
         sourceText = sourceText2;
       }
-      #endif
       [self setSourceText:sourceText];
       [sourceText release];
       
@@ -662,11 +792,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
                         : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
     mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
-    #ifdef MIGRATE_ALIGN
     [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
-    #else
-    [self setMode:mode];
-    #endif
 
     NSMutableString* sourceString = [NSMutableString string];
     testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
@@ -704,7 +830,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     }
     sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
                               : sourceText;
-    #ifdef MIGRATE_ALIGN
     if (mode == LATEX_MODE_EQNARRAY)
     {
       NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
@@ -715,7 +840,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
       sourceText = sourceText2;
     }
-    #endif
     [self setSourceText:sourceText];
 
     NSMutableString* pointSizeAsString = nil;
@@ -787,45 +911,61 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end initWithPDFData:useDefaults:
 
--(id) initWithData:(NSData*)someData useDefaults:(BOOL)useDefaults
+-(id) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults
 {
-  CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)someData, (CFDictionaryRef)
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
-  CFStringRef sourceUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
-  NSData* pdfData = nil;
-  if (sourceUTI)
+  id result = nil;
+  if (!sourceUTI)
+    [self release];
+  else//if (sourceUTI)
   {
-    if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"com.adobe.pdf"))
-      pdfData = someData;
-    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
+    if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"com.adobe.pdf"))
+      result = [self initWithPDFData:someData useDefaults:useDefaults];
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.tiff")||
+             UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.png")||
+             UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.jpeg"))
     {
-      CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
-      id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyTIFFDictionary];
-      id metaString = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyTIFFImageDescription];
-      pdfData = ![metaString isKindOfClass:[NSString class]] ? nil : [NSData dataWithBase64:metaString];
-      if (properties) CFRelease(properties);
-    }//end else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
-    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
-    {
+      CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)someData, (CFDictionaryRef)
+        [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
       CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
       id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
-      id metaString = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifMakerNote];
-      pdfData = ![metaString isKindOfClass:[NSString class]] ? nil : [NSData dataWithBase64:metaString];
+      id annotationBase64 = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifUserComment];
+      NSData* annotationData = ![annotationBase64 isKindOfClass:[NSString class]] ? nil :
+        [NSData dataWithBase64:annotationBase64];
+      annotationData = [Compressor zipuncompress:annotationData];
+      NSDictionary* metaData = !annotationData ? nil :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      result = [self initWithMetaData:metaData useDefaults:useDefaults];
       if (properties) CFRelease(properties);
-    }//end else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
-    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
+      if (imageSource) CFRelease(imageSource);
+    }//end if (tiff, png, jpeg)
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.svg-image"))
     {
-      CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
-      id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
-      id metaString = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifMakerNote];
-      pdfData = ![metaString isKindOfClass:[NSString class]] ? nil : [NSData dataWithBase64:metaString];
-      if (properties) CFRelease(properties);
-    }//end else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
+      NSString* svgString = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      NSString* annotationBase64 =
+        [svgString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
+          inRange:NSMakeRange(0, [svgString length]) capture:1 error:0];
+      NSData* annotationData = [NSData dataWithBase64:annotationBase64];
+      annotationData = [Compressor zipuncompress:annotationData];
+      NSDictionary* metaData = !annotationData ? nil :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      result = [self initWithMetaData:metaData useDefaults:useDefaults];
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.svg-image"))
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.html"))
+    {
+      NSString* mathmlString = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      NSString* annotationBase64 =
+        [mathmlString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
+          inRange:NSMakeRange(0, [mathmlString length]) capture:1 error:0];
+      NSData* annotationData = [NSData dataWithBase64:annotationBase64];
+      annotationData = [Compressor zipuncompress:annotationData];
+      NSDictionary* metaData = !annotationData ? nil :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      result = [self initWithMetaData:metaData useDefaults:useDefaults];
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.html"))
+    else
+      [self release];
   }//end if (sourceUTI)
-  if (imageSource) CFRelease(imageSource);
-  if (!((self = [self initWithPDFData:pdfData useDefaults:useDefaults])))
-    return nil;
-  return self;
+  return result;
 }
 //end initWithData:useDefaults:
 
@@ -872,7 +1012,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.2.0"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.4.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -894,9 +1034,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) awakeFromFetch2:(id)object//delayed to avoid NSManagedObject context being change-disabled
 {
-  #ifdef MIGRATE_ALIGN
   [self checkAndMigrateAlign];
-  #endif
 }
 //end awakeFromFetch2
 
@@ -923,13 +1061,19 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) didTurnIntoFault
 {
+  [self resetPdfCachedImage];
+}
+//end didTurnIntoFault
+
+-(void) resetPdfCachedImage
+{
   @synchronized(self)
   {
     [self->pdfCachedImage release];
     self->pdfCachedImage = nil;
   }//@synchronized(self)
 }
-//end didTurnIntoFault
+//end resetPdfCachedImage
 
 -(void) beginUpdate
 {
@@ -1441,7 +1585,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
   //then, we rewrite the pdfData
   #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
   if (usingPDFKeywords && !shouldDenyDueTo64Bitsproblem);
   {
     PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
@@ -1499,7 +1643,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       dataForType:exportFormat pdfData:pdfData
       jpegColor:[preferencesController exportJpegBackgroundColor] jpegQuality:[preferencesController exportJpegQualityPercent]
       scaleAsPercent:[preferencesController exportScalePercent]
-      compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+      compositionConfiguration:[preferencesController compositionConfigurationDocument]
+      uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   switch(exportFormat)
   {
@@ -1536,20 +1681,31 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];
       if (!lazyDataProvider) [pboard setData:data forType:@"public.tiff"];
       break;
+    case EXPORT_FORMAT_MATHML:
+      [pboard addTypes:[NSArray arrayWithObjects:NSHTMLPboardType, @"public.html", nil] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:NSHTMLPboardType];
+      if (!lazyDataProvider) [pboard setData:data forType:@"public.html"];
+      break;
+    case EXPORT_FORMAT_SVG:
+      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", nil] owner:lazyDataProvider];
+      if (!lazyDataProvider) [pboard setData:data forType:GetMySVGPboardType()];
+      if (!lazyDataProvider) [pboard setData:data forType:@"public.svg-image"];
+      break;
   }//end switch
 }
 //end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
 //provides lazy data to a pasteboard
--(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString *)type
+-(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString*)type
 {
-  //only called for EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
-    dataForType:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS pdfData:[self pdfData]
+    dataForType:[preferencesController exportFormatCurrentSession]
+        pdfData:[self pdfData]
       jpegColor:[preferencesController exportJpegBackgroundColor]
     jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
-    compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+    compositionConfiguration:[preferencesController compositionConfigurationDocument]
+    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   [pasteboard setData:data forType:type];
 }
 //end pasteboard:provideDataForType:
@@ -1557,7 +1713,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.2.0", @"version",
+       @"2.4.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

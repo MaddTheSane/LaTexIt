@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/12/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 
 //The ServiceShortcutsTableView is the class used to display the application service shortcut preferences.
@@ -42,7 +42,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 -(void) awakeFromNib
 {
   [self->serviceWarningShortcutConflictButton setHidden:YES];
-  [self setDelegate:self];
+  [self setDelegate:(id)self];
   NSArrayController* serviceShortcutsController = [[PreferencesController sharedController] serviceShortcutsController];
   [serviceShortcutsController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutEnabledKey] options:0 context:0];
   [serviceShortcutsController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutStringKey]  options:0 context:0];

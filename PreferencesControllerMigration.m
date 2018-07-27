@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesControllerMigration.h"
@@ -274,7 +274,6 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   
   if (!newLatexitVersion || ([newLatexitVersion compare:@"2.1.0" options:NSNumericSearch] == NSOrderedAscending))
   {
-    #ifdef MIGRATE_ALIGN
     NSMutableArray* servicesItems = nil;
     if (self->isLaTeXiT)
       servicesItems = [NSMutableArray arrayWithArray:
@@ -311,7 +310,6 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
       foundEqnarray |= [[entry objectForKey:@"name"] isEqualToString:@"eqnarray*"];
     if (!foundEqnarray)
       [localBodyTemplatesController addObject:[[localBodyTemplatesController class] bodyTemplateDictionaryEncodedForEnvironment:@"eqnarray*"]];
-    #endif
   }//end if (!newLatexitVersion || ([newLatexitVersion compare:@"2.1.0" options:NSNumericSearch] == NSOrderedAscending))
 
   if (self->isLaTeXiT)

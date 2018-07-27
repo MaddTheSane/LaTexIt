@@ -1,7 +1,7 @@
 //  NSArrayExtended.h
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 
@@ -19,6 +19,8 @@
 
 -(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index;
 -(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
+
+-(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 
 -(id) deepCopy;
 -(id) deepCopyWithZone:(NSZone*)zone;

@@ -3,13 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
 @class BorderlessPanel;
 @class ImagePopupButton;
+@class LibraryEquation;
 @class LibraryView;
 @class LibraryPreviewPanelImageView;
 
@@ -36,6 +37,8 @@
 
 -(IBAction) changeLibraryDisplayPreviewPanelState:(id)sender;
 
+-(IBAction) openEquation:(id)sender;
+-(IBAction) openLinkedEquation:(id)sender;
 -(IBAction) importCurrent:(id)sender;       //creates a library item with the current document state
 -(IBAction) newFolder:(id)sender;           //creates a folder
 -(IBAction) removeSelectedItems:(id)sender; //removes some items
@@ -48,6 +51,8 @@
 
 -(IBAction) changeLibraryExportFormat:(id)sender;
 
+-(LibraryView*) libraryView;
+
 -(BOOL) canRemoveSelectedItems;
 -(BOOL) canRenameSelectedItems;
 -(BOOL) canRefreshItems;
@@ -56,5 +61,7 @@
 -(BOOL)    validateMenuItem:(NSMenuItem*)menuItem;
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
+
+-(void) blink:(LibraryEquation*)libraryEquation;
 
 @end

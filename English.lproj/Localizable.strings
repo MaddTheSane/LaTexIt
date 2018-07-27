@@ -59,11 +59,11 @@
 "no color.sty found" = "no color.sty found";
 "useful to type directly diacritic characters" = "useful to type directly diacritic characters";
 "%@ not found or does not work as expected" = "%@ not found or does not work as expected";
+"%@ is required" = "%@ is required";
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "You need ps2pdf to export as \"PDF with outlined fonts\"";
 "Find %@..." = "Find %@...";
-"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
-"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
+"pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." = "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
 "color.sty seems to be unavailable" = "color.sty seems to be unavailable";
 "Without the color.sty package, you won't be able to change the font color" = "Without the color.sty package, you won't be able to change the font color";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled.";
@@ -73,13 +73,18 @@
 "You did not type any text in the body. The result will certainly be empty." = "You did not type any text in the body. The result will certainly be empty.";
 "An error occured while trying to create the file :\n%@" = "An error occured while trying to create the file :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "An error occured while trying to create the file with command:\n%@";
-"http://pierre.chachatelier.fr/programmation/latexit_en.php" = "http://pierre.chachatelier.fr/programmation/latexit_en.php";
+"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
 "Equation linked with another application" = "Equation linked with another application";
+"Equation linked with library item" = "Equation linked with library item";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT cannot be run properly, please check its configuration";
 "Do you want to load the library <%@> ?" = "Do you want to load the library <%@> ?";
 "If you choose <Replace the library>, the current library will be lost" = "If you choose <Replace the library>, the current library will be lost";
 "Add to the library" = "Add to the library";
 "Replace the library" = "Replace the library";
+"Do you want to load the history <%@> ?" = "Do you want to load the history <%@> ?";
+"If you choose <Replace the history>, the current history will be lost" = "If you choose <Replace the history>, the current history will be lost";
+"Add to the history" = "Add to the history";
+"Replace the history" = "Replace the history";
 "Open in LaTeXiT" = "Open in LaTeXiT";
 "Check for new versions" = "Check for new versions";
 "An error occured while trying to reach %@.\nYou should check your network." = "An error occured while trying to reach %@.\nYou should check your network.";
@@ -88,14 +93,15 @@
 "Edition" = "Text Editing";
 "Preambles" = "Preambles";
 "Body templates" = "Body templates";
+"Templates" = "Templates";
 "Composition" = "Composition";
 "Service" = "Service";
 "Advanced" = "Advanced";
 "Web" = "Web";
+"Plugins" = "Plugins";
 "Do you really want to apply that preamble to the library items ?" = "Do you really want to apply that preamble to the library items ?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
 "Apply" = "Apply";
-"Typeset LaTeX Maths align" = "Typeset LaTeX Maths align";
 "Typeset LaTeX Maths eqnarray" = "Typeset LaTeX Maths Eqnarray";
 "Typeset LaTeX Maths align" = "Typeset LaTeX Maths Align";
 "Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
@@ -146,7 +152,6 @@
 "Author" = "Author";
 "Display the error message" = "Display the error message";
 "Error message" = "Error message";
-"Error" = "Error";
 "Enlarge the text area" = "Enlarge the text area";
 "Reduce the text area" = "Reduce the text area";
 "New Service shortcuts could not be set" = "New Service shortcuts could not be set";
@@ -169,9 +174,11 @@
 "PDF w.o.f." = "PDF w.o.f.";
 "PDF vector format" = "PDF vector format";
 "EPS vector format" = "EPS vector format";
+"SVG vector format" = "SVG vector format";
 "TIFF bitmap format" = "TIFF bitmap format";
 "PNG bitmap format" = "PNG bitmap format";
 "JPEG bitmap format" = "JPEG bitmap format";
+"MathML text format" = "MathML text format";
 "Migrating history to new format" = "Migrating history to new format";
 "Migrating library to new format" = "Migrating library to new format";
 
@@ -187,10 +194,26 @@
 "Copy the image as" = "Copy the image as";
 "Switch to mini-window" = "Switch to mini-window";
 "Switch to normal window" = "Switch to normal window";
+"line" = "line";
 
 /* document extra panels */
 "Execution log" = "Execution log";
 "Drag through areas to change export type" = "Drag through areas to change export type";
+"JPEG Quality" = "JPEG Quality";
+"least" = "least";
+"low" = "low";
+"medium" = "medium";
+"high" = "high";
+"maxi" = "maxi";
+"Quality" = "Quality";
+"Background color" = "Background color";
+"Path to pdf2svg" = "Path to pdf2svg";
+"Format" = "Format";
+"Change" = "Change";
+"Options" = "Options";
+"Scale" = "Scale";
+"Warning : jpeg does not manage transparency" = "Warning : jpeg does not manage transparency";
+"Warning : pdf2svg path is invalid" = "Warning : pdf2svg path is invalid";
 
 /* Library */
 "Library" = "Library";
@@ -203,11 +226,12 @@
 "Add a folder" = "Add a folder";
 "Add current equation" = "Add current equation";
 "Rename selection" = "Rename selection";
-"Remove selection" = "Remove selection";
-"Replace current equation" = "Replace current equation";
+"Replace selection by current equation" = "Replace selection by current equation";
 "Import..." = "Import...";
 "Export..." = "Export...";
 "Display the equations in real size on mouse over" = "Display the equations in real size on mouse over";
+"Open the equation in a document" = "Open the equation in a document";
+"Open the equation in a linked document" = "Open the equation in a linked document";
 
 /* History */
 "Add to current history" = "Add to current history";

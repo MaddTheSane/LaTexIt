@@ -59,6 +59,7 @@
 "no color.sty found" = "color.sty no encontrado";
 "useful to type directly diacritic characters" = "útil para escribir directamente caracteres acentuados";
 "%@ not found or does not work as expected" = "%@ no encontrado o no funciona como se espera";
+"%@ is required" = "%@ es necesario";
 "The current configuration of LaTeXiT requires %@ to work." = "La configuración actual de LaTeXiT necesita %@ para funcionar.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "Se necesita ps2pdf para exportar como \"PDF con fuentes trazadas\"";
 "Find %@..." = "Buscar %@...";
@@ -73,13 +74,18 @@
 "You did not type any text in the body. The result will certainly be empty." = "No ha escrito nada en el cuerpo del documento. Obviamente, no habrá ningún resultado.";
 "An error occured while trying to create the file :\n%@" = "Se produjo un error al crear el archivo:\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Se produjo un error al crear el archivo con comando:\n%@";
-"http://pierre.chachatelier.fr/programmation/latexit_en.php" = "http://pierre.chachatelier.fr/programmation/latexit_en.php";
+"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
 "Equation linked with another application" = "Ecuación enlazada con otra aplicación";
+"Equation linked with library item" = "Ecuacion enlazada con un elemento de la librería";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT no puede ejecutarse correctamente, compruebe la configuración por favor";
 "Do you want to load the library <%@> ?" = "¿Quiere cargar la librearía <%@>?";
 "If you choose <Replace the library>, the current library will be lost" = "Si selecciona <Reemplazar librería>, la librería actual se perderá";
 "Add to the library" = "Añadir a la librería";
 "Replace the library" = "Reemplazar la librería";
+"Do you want to load the history <%@> ?" = "¿Quiere cargar la historial <%@>?";
+"If you choose <Replace the history>, the current history will be lost" = "Si selecciona <Reemplazar historial>, la historial actual se perderá";
+"Add to the history" = "Añadir a la historial";
+"Replace the history" = "Reemplazar la historial";
 "Open in LaTeXiT" = "Abrir en LaTeXiT";
 "Check for new versions" = "Buscar una nueva versión";
 "An error occured while trying to reach %@.\nYou should check your network." = "Se ha producido un error al conectar con %@.\nCompruebe que tiene conexión de red.";
@@ -88,10 +94,12 @@
 "Edition" = "Edición";
 "Preambles" = "Preámbulos";
 "Body templates" = "Plantillas de contenido";
+"Templates" = "Plantillas";
 "Composition" = "Composición";
 "Service" = "Servicio";
 "Advanced" = "Avanzado";
 "Web" = "Web";
+"Plugins" = "Extensiones";
 "Do you really want to apply that preamble to the library items ?" = "¿Quiere aplicar este preámbulo a lo elementos de la librearía?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Su anterior preámbulo se reemplazará. Si es un preámbulo especial contruido para generarlas se perderá.";
 "Apply" = "Aplicar";
@@ -145,7 +153,6 @@
 "Author" = "Autor";
 "Display the error message" = "Exhibir el mensaje de error";
 "Error message" = "Mensaje de error";
-"Error" = "Error";
 "Enlarge the text area" = "Ampliar el area de texto";
 "Reduce the text area" = "Rededucir el area de texto";
 "New Service shortcuts could not be set" = "No se han podido crear los nuevos menús de Servicios";
@@ -168,9 +175,11 @@
 "PDF w.o.f." = "PDF c.f.t.";
 "PDF vector format" = "Imagen vectorial PDF";
 "EPS vector format" = "Imagen vectorial EPS";
+"SVG vector format" = "Imagen vectorial SVG";
 "TIFF bitmap format" = "Imagen de mapa de bits TIFF";
 "PNG bitmap format" = "Imagen de mapa de bits PNG";
 "JPEG bitmap format" = "Imagen de mapa de bits JPEG";
+"MathML text format" = "MathML text format";
 "Migrating history to new format" = "Migrando el historial al nuevo formato";
 "Migrating library to new format" = "Migrando la librería al nuevo formato";
 
@@ -186,10 +195,26 @@
 "Copy the image as" = "Copiar imagen como";
 "Switch to mini-window" = "Activar mini-ventana";
 "Switch to normal window" = "Desactivar mini-ventana";
+"line" = "linea";
 
 /* document extra panels */
 "Execution log" = "Registro";
-"Drag through areas to change export type" = "Drag through areas to change export type";
+"Drag through areas to change export type" = "Arrastre através de las áreas para cambiar el formato de exportado";
+"JPEG Quality" = "JPEG Calitat";
+"least" = "mínima";
+"low" = "baja";
+"medium" = "media";
+"high" = "alta";
+"maxi" = "máxima";
+"Quality" = "Calitat";
+"Background color" = "Color de fondo";
+"Path to pdf2svg" = "Ruta de pdf2svg";
+"Format" = "Formato";
+"Change" = "Cambiar";
+"Options" = "Opciones";
+"Scale" = "Escala";
+"Warning : jpeg does not manage transparency" = "Atención: JPEG nos soporta la transparencia";
+"Warning : pdf2svg path is invalid" = "Atención : La ruta de pdf2svg no es válida";
 
 /* Library */
 "Library" = "Librería";
@@ -202,11 +227,12 @@
 "Add a folder" = "Añadir una carpeta";
 "Add current equation" = "Añadir la ecuación actual";
 "Rename selection" = "Renombrar la selección";
-"Remove selection" = "Borrar selección";
-"Replace current equation" = "Reemplazar la ecuación actual";
+"Replace selection by current equation" = "Reemplaza la selecciçon con la ecuación actual";
 "Import..." = "Importar...";
 "Export..." = "Exportar...";
 "Display the equations in real size on mouse over" = "Con el ratón encima, mostrar las ecuaciones en tamaño real";
+"Open the equation in a document" = "Abrir la ecuación en un documento";
+"Open the equation in a linked document" = "Abrir la ecuación en un documento enlazado";
 
 /* History */
 "Add to current history" = "Añadir a la historial actual";

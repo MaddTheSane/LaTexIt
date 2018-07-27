@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/10/09.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquationWrapper.h"
@@ -21,6 +21,7 @@
   [self didAccessValueForKey:@"equation"];
   return result;
 }
+//end equation
 
 -(void) setEquation:(LatexitEquation*)value
 {
@@ -28,6 +29,7 @@
   [self setPrimitiveValue:value forKey:@"equation"];
   [self didChangeValueForKey:@"equation"];
 }
+//end setEquation:
 
 @end
 

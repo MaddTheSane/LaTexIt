@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This NSTableView reports errors at certain lines of the latex source code
 
@@ -18,4 +18,8 @@ extern NSString* ClickErrorLineNotification;
 
 //updates contents thanks to the array of error strings
 -(void) setErrors:(NSArray*)errors;
+
+//NSTableViewDataSource
+-(id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(int)rowIndex;
+
 @end

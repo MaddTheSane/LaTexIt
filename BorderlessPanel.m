@@ -11,7 +11,7 @@
 
 @implementation BorderlessPanel
 
--(id) initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)bufferingType
+-(id) initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)bufferingType
                     defer:(BOOL)deferCreation
 {
   if ((!(self = [super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:bufferingType defer:deferCreation])))

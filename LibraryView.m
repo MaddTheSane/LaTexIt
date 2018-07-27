@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -32,10 +32,13 @@
 #import "NSOutlineViewExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
 @interface LibraryView (PrivateAPI)
 -(NSImage*) iconForRepresentedObject:(id)representedObject;
--(void)     activateSelectedItem;
+-(void)     activateSelectedItem:(BOOL)makeLink;
+-(void)     performProgrammaticDragCancellation:(id)context;
+-(void)     performProgrammaticRedrag:(id)context;
 @end
 
 @implementation LibraryView
@@ -53,8 +56,8 @@
 -(void) awakeFromNib
 {
   self->libraryController = [[LibraryController alloc] init];
-  [self setDelegate:self];
-  [self setDataSource:self->libraryController];
+  [self setDelegate:(id)self];
+  [self setDataSource:(id)self->libraryController];
 
   [self bind:@"libraryRowType" toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryViewRowTypeKey] options:nil];
@@ -138,30 +141,42 @@
 }
 //end rightMouseDown:
 
--(void) activateSelectedItem
+-(void) openEquation:(LibraryEquation*)equation inDocument:(MyDocument*)document makeLink:(BOOL)makeLink
+{
+  if (equation && document)
+  {
+    LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentStateTransient:YES];
+    NSUndoManager* documentUndoManager = [document undoManager];
+    [documentUndoManager beginUndoGrouping];
+    if (makeLink)
+    {
+      [[documentUndoManager prepareWithInvocationTarget:document] setLinkedLibraryEquation:nil];
+      [document setLinkedLibraryEquation:equation];
+    }//end if (makeLink)
+    [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
+    [document applyLibraryEquation:equation];
+    [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
+    [documentUndoManager endUndoGrouping];
+    [[document windowForSheet] makeKeyAndOrderFront:nil];
+  }//end if (equation)
+}
+//end openEquation:inDocument:makeLink:
+
+-(void) activateSelectedItem:(BOOL)makeLink
 {
   MyDocument* document = (MyDocument*)[AppController currentDocument];
-  if (!document)
+  if (!document || (makeLink && [document linkedLibraryEquation]))
   {
     [[NSDocumentController sharedDocumentController] newDocument:self];
     document = (MyDocument*)[AppController currentDocument];
   }
 
-  id selectedItem      = !document ? nil : [self selectedItem];
+  id selectedItem = !document ? nil : [self selectedItem];
   if (selectedItem)
   {
     LibraryItem* selectedLibraryItem = selectedItem;
     if ([selectedLibraryItem isKindOfClass:[LibraryEquation class]])
-    {
-      LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentStateTransient:YES];
-      NSUndoManager* documentUndoManager = [document undoManager];
-      [documentUndoManager beginUndoGrouping];
-      [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
-      [document applyLibraryEquation:(LibraryEquation*)selectedLibraryItem];
-      [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
-      [documentUndoManager endUndoGrouping];
-      [[document windowForSheet] makeKeyAndOrderFront:nil];
-    }
+      [self openEquation:(LibraryEquation*)selectedLibraryItem inDocument:document makeLink:makeLink];
     else if ([selectedLibraryItem isKindOfClass:[LibraryGroupItem class]])
     {
       if ([self isItemExpanded:selectedItem])
@@ -171,7 +186,7 @@
     }//end if (selectedItem)
   }//end if selected row
 }
-//end activateSelectedItem
+//end activateSelectedItem:
 
 -(void) mouseDown:(NSEvent*)theEvent
 {
@@ -204,29 +219,43 @@
       NSDivideRect(rect, &imageFrame, &titleFrame, 8+[self rowHeight], NSMinXEdge);
       self->willEdit &= ([previousSelectedItems count] == 1) &&
                         ([previousSelectedItems lastObject] == candidateToSelection) && NSPointInRect(pointInView, titleFrame);
-    }
+    }//end if ([theEvent clickCount] == 1)
     else if ([theEvent clickCount] == 2)
-      [self activateSelectedItem];
+    {
+      [self activateSelectedItem:(([theEvent modifierFlags] & NSAlternateKeyMask) != 0)];
+    }//end if ([theEvent clickCount] == 2)
     else if ([theEvent clickCount] == 3)
     {
       [self edit:self];
       [[self window] makeKeyAndOrderFront:self];
-    }
-    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(delayedEdit:) userInfo:nil repeats:NO];
+    }//end if ([theEvent clickCount] == 3)
+    [self performSelector:@selector(delayedEdit:) withObject:nil afterDelay:.5];
   }//end if click without relevant modifiers
 }
 //end mouseDown:
 
--(void) delayedEdit:(NSTimer*)timer
+-(void) delayedEdit:(id)context;
 {
   if (self->willEdit && [self selectedItem])
   {
     self->willEdit = NO;
     [self edit:self];
     [[self window] makeKeyAndOrderFront:self];
-  }
+  }//end if (self->willEdit && [self selectedItem])
 }
 //end delayedEdit:
+
+-(void) mouseDragged:(NSEvent*)event
+{
+  [super mouseDragged:event];
+}
+//end mouseDragged:
+
+-(void) mouseUp:(NSEvent*)theEvent
+{
+  [super mouseUp:theEvent];
+}
+//end mouseUp:
 
 -(void) scrollWheel:(NSEvent*)event
 {
@@ -285,7 +314,7 @@
       [self edit:self];
   }
   else if (keyCode == 49) //space
-    [self activateSelectedItem];
+    [self activateSelectedItem:(([theEvent modifierFlags] & NSAlternateKeyMask) != 0)];
   else
     [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }
@@ -665,32 +694,124 @@
 
 #pragma mark drag'n drop
 
--(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
-  NSArray* selectedItems = [self selectedItems];
-  NSPasteboard* pasteBoard = [NSPasteboard pasteboardWithName:NSDragPboard];
-  [[self dataSource] outlineView:self writeItems:selectedItems toPasteboard:pasteBoard];
-  [pasteBoard setPropertyList:nil forType:LibraryItemsWrappedPboardType];//this pboard must be persistent
+  if (!self->shouldRedrag)
+  {
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
+    [[[AppController appController] dragFilterWindowController] setDelegate:nil];
+  }//end if (self->shouldRedrag)
+  if (self->shouldRedrag)
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
 }
-//end dragFilterWindowController:exportFormatDidChange:
+//end draggedImage:endedAt:operation:
 
 -(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
 {
-  [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-    [[self window] convertBaseToScreen:[event locationInWindow]]];
-  [[[AppController appController] dragFilterWindowController] setDelegate:self];
+  DragFilterWindowController* dragFilterWindowController = [[AppController appController] dragFilterWindowController];
+  NSRect dragWindowFrame = [[dragFilterWindowController window] frame];
+  NSRect libraryViewWindowFrame = [[self window] frame];
+  NSPoint pointUp = NSMakePoint(libraryViewWindowFrame.origin.x+(libraryViewWindowFrame.size.width-dragWindowFrame.size.width)/2,
+                                NSMaxY(libraryViewWindowFrame));
+  NSPoint pointDown = NSMakePoint(libraryViewWindowFrame.origin.x+(libraryViewWindowFrame.size.width-dragWindowFrame.size.width)/2,
+                                  NSMinY(libraryViewWindowFrame)-dragWindowFrame.size.height);
+  NSPoint eventLocation = [[self window] convertBaseToScreen:[event locationInWindow]];
+  CGFloat distanceUp2 = (eventLocation.x-pointUp.x)*(eventLocation.x-pointUp.x)+
+                        (eventLocation.y-pointUp.y)*(eventLocation.y-pointUp.y);
+  CGFloat distanceDown2 = (eventLocation.x-pointDown.x)*(eventLocation.x-pointDown.x)+
+                          (eventLocation.y-pointDown.y)*(eventLocation.y-pointDown.y);
+  BOOL isHintOnly = NO;
+  if ((distanceUp2 <= distanceDown2) && (pointUp.y+dragWindowFrame.size.height <= NSMaxY([[NSScreen mainScreen] visibleFrame])))
+    eventLocation = pointUp;
+  else if (pointDown.y >= NSMinY([[NSScreen mainScreen] visibleFrame]))
+    eventLocation = pointDown;
+  else
+    isHintOnly = YES;
+
+  if (self->shouldRedrag)
+    [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:NO];
+  if (!self->shouldRedrag)
+  {
+    self->lastDragStartPointSelfBased = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
+      [[self window] convertBaseToScreen:[event locationInWindow]]];
+    [[[AppController appController] dragFilterWindowController] setDelegate:self];
+  }//end if (!self->shouldRedrag)
+  self->shouldRedrag = NO;
+
   [super dragImage:image at:at offset:offset event:event pasteboard:pasteboard source:object slideBack:slideBack];
 }
 //end dragImage:at:offset:event:pasteboard:source:slideBack:
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {
-  [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
-  [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  [super draggedImage:anImage endedAt:aPoint operation:operation];
+  [self performProgrammaticDragCancellation:nil];
 }
-//end draggedImage:endedAt:operation:
+//end dragFilterWindowController:exportFormatDidChange:
+
+-(void) performProgrammaticDragCancellation:(id)context
+{
+  self->shouldRedrag = YES;
+  NSPoint mouseLocation1 = [NSEvent mouseLocation];
+  CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
+  CGEventRef cgEvent0 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
+  if (isMacOS10_5OrAbove())
+    CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
+  else//if (!isMacOS10_5OrAbove())
+  {
+    CGPoint point = CGEventGetLocation(cgEvent0);
+    point.y = [[NSScreen mainScreen] frame].size.height-point.y;
+    CGEventSetLocation(cgEvent0, point);
+  }//if (!isMacOS10_5OrAbove())
+  CGEventPost(kCGHIDEventTap, cgEvent0);
+  CFRelease(cgEvent0);
+}//end performProgrammaticDragCancellation:
+
+-(void) performProgrammaticRedrag:(id)context
+{
+  self->shouldRedrag = YES;
+  [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
+  NSPoint center = self->lastDragStartPointSelfBased;
+  NSPoint mouseLocation1 = [NSEvent mouseLocation];
+  NSPoint mouseLocation2 = [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
+  CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
+  CGEventRef cgEvent1 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseDown, cgMouseLocation2, kCGMouseButtonLeft);
+  CGEventRef cgEvent2 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation2, kCGMouseButtonLeft);
+  CGEventRef cgEvent3 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation1, kCGMouseButtonLeft);
+  if (isMacOS10_5OrAbove())
+  {
+    CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
+    CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
+    CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
+  }//end if (isMacOS10_5OrAbove())
+  else//if (!isMacOS10_5OrAbove())
+  {
+    CGPoint point = CGPointZero;
+    NSRect screenFrame = [[NSScreen mainScreen] frame];
+    point = CGEventGetLocation(cgEvent1);
+    point.y = screenFrame.size.height-point.y;
+    CGEventSetLocation(cgEvent1, point);
+    point = CGEventGetLocation(cgEvent2);
+    point.y = screenFrame.size.height-point.y;
+    CGEventSetLocation(cgEvent2, point);
+    point = CGEventGetLocation(cgEvent3);
+    point.y = screenFrame.size.height-point.y;
+    CGEventSetLocation(cgEvent3, point);
+  }//if (!isMacOS10_5OrAbove())
+  CGEventPost(kCGHIDEventTap, cgEvent1);
+  CGEventPost(kCGHIDEventTap, cgEvent2);
+  CGEventPost(kCGHIDEventTap, cgEvent3);
+  CFRelease(cgEvent1);
+  CFRelease(cgEvent2);
+  CFRelease(cgEvent3);
+}
+//end performProgrammaticRedrag:
 
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {

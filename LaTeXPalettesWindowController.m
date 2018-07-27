@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //The LaTeXPalettesWindowController controller is responsible for loading and initializing the palette
 
@@ -62,6 +62,7 @@
 
 -(void) awakeFromNib
 {
+  self->smallWindowMinSize = [[self window] minSize];
   [self->matrixChoicePopUpButton setFocusRingType:NSFocusRingTypeNone];
   [self->matrixChoicePopUpButton removeAllItems];
   NSString* lastDomain = [self->orderedPalettes count] ? [[self->orderedPalettes objectAtIndex:0] objectForKey:@"domainName"] : nil;
@@ -82,7 +83,7 @@
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:)
                                                name:NSWindowDidResizeNotification object:[self window]];
-  [self->matrix setDelegate:self];
+  [self->matrix setDelegate:(id)self];
   [self->matrixChoicePopUpButton bind:NSSelectedTagBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LatexPaletteGroupKey] options:nil];
   [self->matrixChoicePopUpButton setAction:@selector(changeGroup:)];
@@ -105,7 +106,6 @@
     defaultFrame.origin.y    += [self->detailsBox frame].size.height;
   }
   [window setFrame:defaultFrame display:YES];
-  [window setMinSize:NSMakeSize(200, 170)];
   [detailsButton setState:defaultDetails ? NSOnState : NSOffState];
   
   [window setTitle:NSLocalizedString(@"LaTeX Palette", @"LaTeX Palette")];
@@ -386,7 +386,7 @@
     
     [matrixBox setAutoresizingMask:oldMatrixAutoresizingMask];
     
-    NSSize minSize = [window minSize];
+    NSSize minSize = self->smallWindowMinSize;
     minSize.height += [detailsBox frame].size.height;
     [window setMinSize:minSize];
     
@@ -409,10 +409,7 @@
 
     [matrixBox setAutoresizingMask:oldMatrixAutoresizingMask];
 
-    NSSize minSize = [window minSize];
-    minSize.height -= [detailsBox frame].size.height;
-    [window setMinSize:minSize];
-
+    [window setMinSize:self->smallWindowMinSize];
     [window display];
   }
 }

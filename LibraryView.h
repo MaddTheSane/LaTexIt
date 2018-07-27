@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -11,11 +11,15 @@
 #import "LaTeXiTSharedTypes.h"
 
 @class LibraryController;
+@class LibraryEquation;
+@class MyDocument;
 
 @interface LibraryView : NSOutlineView {
   LibraryController* libraryController;
   library_row_t      libraryRowType;
   BOOL               willEdit;
+  NSPoint            lastDragStartPointSelfBased;
+  BOOL               shouldRedrag;
 }
 
 -(LibraryController*) libraryController;
@@ -34,6 +38,7 @@
 -(BOOL) validateMenuItem:(NSMenuItem*)sender;
 
 -(void) edit:(id)sender;
+-(void) openEquation:(LibraryEquation*)equation inDocument:(MyDocument*)document makeLink:(BOOL)makeLink;
 
 -(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(int)index;
 

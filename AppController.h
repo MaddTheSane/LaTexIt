@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -51,6 +51,7 @@
   BOOL isGsAvailable;
   BOOL isPsToPdfAvailable;
   BOOL isColorStyAvailable;
+  BOOL isPdfToSvgAvailable;
 
   AdditionalFilesWindowController*           additionalFilesWindowController;
   CompositionConfigurationsWindowController* compositionConfigurationWindowController;
@@ -110,6 +111,8 @@
 -(IBAction) historySaveAs:(id)sender;
 -(IBAction) showOrHideHistory:(id)sender;
 
+-(IBAction) libraryOpenEquation:(id)sender;
+-(IBAction) libraryOpenLinkedEquation:(id)sender;
 -(IBAction) libraryImportCurrent:(id)sender; //creates a library item with the current document state
 -(IBAction) libraryNewFolder:(id)sender;     //creates a folder
 -(IBAction) libraryRemoveSelectedItems:(id)sender;    //removes some items
@@ -128,7 +131,7 @@
 -(IBAction) showOrHideLatexPalettes:(id)sender;
 -(IBAction) latexPalettesClick:(id)sender;
 -(IBAction) showPreferencesPane:(id)sender;
--(void)     showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier;//showPreferencesPane + select one pane
+-(void)     showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier options:(id)options;//showPreferencesPane + select one pane
 -(IBAction) showHelp:(id)sender;
 -(void) showHelp:(id)sender section:(NSString*)section;
 -(IBAction) reduceOrEnlargeTextArea:(id)sender;
@@ -152,6 +155,7 @@
 -(BOOL) isGsAvailable;
 -(BOOL) isPsToPdfAvailable;
 -(BOOL) isColorStyAvailable;
+-(BOOL) isPdfToSvgAvailable;
 
 //if the marginWindowController is not loaded, just use the user defaults values
 -(CGFloat) marginsCurrentTopMargin;
@@ -180,9 +184,12 @@
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link;
 
 //LatexPalette installation
--(BOOL) installLatexPalette:(NSString*)palettePath;
+-(BOOL) installLatexPalette:(NSURL*)palettePath;
 
 //Sparkle
 -(SUUpdater*) sparkleUpdater;
+
+//NSApplicationDelegate
+-(BOOL) application:(NSApplication*)theApplication openFile:(NSString*)filename;
 
 @end

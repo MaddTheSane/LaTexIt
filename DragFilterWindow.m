@@ -17,6 +17,7 @@
   if (!(self = [super initWithContentRect:contentRect styleMask:windowStyle backing:bufferingType defer:deferCreation]))
     return nil;
   [self setBackgroundColor:[NSColor clearColor]];
+  [self setLevel:NSFloatingWindowLevel];
   return self;
 }
 //end initWithContentRect:styleMask:backing:defer
@@ -26,7 +27,8 @@
   windowStyle = NSBorderlessWindowMask;
   if (!(self = [super initWithContentRect:contentRect styleMask:windowStyle backing:bufferingType defer:deferCreation screen:screen]))
     return nil;
-  [self setBackgroundColor:[NSColor redColor]];
+  [self setBackgroundColor:[NSColor clearColor]];
+  [self setLevel:NSFloatingWindowLevel];
   return self;
 }
 //end initWithContentRect:styleMask:backing:defer:screen:

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010, 2011 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -28,6 +28,8 @@
 
 @interface HistoryView (PrivateAPI)
 -(void) activateSelectedItem;
+-(void) performProgrammaticDragCancellation:(id)context;
+-(void) performProgrammaticRedrag:(id)context;
 @end
 
 @implementation HistoryView
@@ -36,8 +38,8 @@
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
-  [self setDelegate:self];
-  [self setDataSource:self];
+  [self setDelegate:(id)self];
+  [self setDataSource:(id)self];
   [self registerForDraggedTypes:[NSArray arrayWithObject:NSColorPboardType]];
   return self;
 }
@@ -165,6 +167,18 @@
     [self activateSelectedItem];
 }
 //end mouseDown:
+
+-(void) mouseDragged:(NSEvent*)event
+{
+  [super mouseDragged:event];
+}
+//end mouseDragged:
+
+-(void) mouseUp:(NSEvent*)theEvent
+{
+  [super mouseUp:theEvent];
+}
+//end mouseUp:
 
 -(void) cancelOperation:(id)sender
 {
@@ -310,12 +324,12 @@
 //end paste:
 
 #pragma mark NSTableDataSource (dummy, to avoid warnings. Real data source is handled trough binding to an arrayController)
--(int) numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
--(id)  tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {return nil;}
+-(NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView {return 0;}
+-(id)        tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {return nil;}
 
 #pragma mark NSTableViewDelegate
 
--(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+-(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
   LatexitEquation* latexitEquation = [[[self->historyItemsController arrangedObjects] objectAtIndex:rowIndex] equation];
   [aCell setBackgroundColor:[latexitEquation backgroundColor]];
@@ -325,23 +339,34 @@
 
 #pragma mark drag'n drop
 
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  if (!self->shouldRedrag)
+  {
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
+    [[[AppController appController] dragFilterWindowController] setDelegate:nil];
+  }//end if (self->shouldRedrag)
+  if (self->shouldRedrag)
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
+}
+//end draggedImage:endedAt:operation:
+
 -(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
 {
-  [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-    [[self window] convertBaseToScreen:[event locationInWindow]]];
-  [[[AppController appController] dragFilterWindowController] setDelegate:self];
+  if (self->shouldRedrag)
+    [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:NO];
+  if (!self->shouldRedrag)
+  {
+    self->lastDragStartPointSelfBased = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
+      [[self window] convertBaseToScreen:[event locationInWindow]]];
+    [[[AppController appController] dragFilterWindowController] setDelegate:self];
+  }//end if (!self->shouldRedrag)
+  self->shouldRedrag = NO;
   [super dragImage:image at:at offset:offset event:event pasteboard:pasteboard source:object slideBack:slideBack];
 }
 //end dragImage:at:offset:event:pasteboard:source:slideBack:
-
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
-{
-  [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
-  [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  [super draggedImage:anImage endedAt:aPoint operation:operation];
-}
-//end draggedImage:endedAt:operation:
 
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender
 {
@@ -386,10 +411,72 @@
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {
-  NSPasteboard* pasteBoard = [NSPasteboard pasteboardWithName:NSDragPboard];
-  [self tableView:self writeRowsWithIndexes:[self selectedRowIndexes] toPasteboard:pasteBoard];
+  [self performProgrammaticDragCancellation:nil];
 }
 //end dragFilterWindowController:exportFormatDidChange:
+
+-(void) performProgrammaticDragCancellation:(id)context
+{
+  self->shouldRedrag = YES;
+  NSPoint mouseLocation1 = [NSEvent mouseLocation];
+  CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
+  CGEventRef cgEvent0 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
+  if (isMacOS10_5OrAbove())
+    CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
+  else//if (!isMacOS10_5OrAbove())
+  {
+    CGPoint point = CGEventGetLocation(cgEvent0);
+    point.y = [[NSScreen mainScreen] frame].size.height-point.y;
+    CGEventSetLocation(cgEvent0, point);
+  }//if (!isMacOS10_5OrAbove())
+  CGEventPost(kCGHIDEventTap, cgEvent0);
+  CFRelease(cgEvent0);
+}//end performProgrammaticDragCancellation:
+
+-(void) performProgrammaticRedrag:(id)context
+{
+  self->shouldRedrag = YES;
+  [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
+  NSPoint center = self->lastDragStartPointSelfBased;
+  NSPoint mouseLocation1 = [NSEvent mouseLocation];
+  NSPoint mouseLocation2 = [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
+  CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
+  CGEventRef cgEvent1 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseDown, cgMouseLocation2, kCGMouseButtonLeft);
+  CGEventRef cgEvent2 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation2, kCGMouseButtonLeft);
+  CGEventRef cgEvent3 =
+    CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation1, kCGMouseButtonLeft);
+  if (isMacOS10_5OrAbove())
+  {
+    CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
+    CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
+    CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
+  }//end if (isMacOS10_5OrAbove())
+  else//if (!isMacOS10_5OrAbove())
+  {
+    CGPoint point = CGPointZero;
+    NSRect screenFrame = [[NSScreen mainScreen] frame];
+    point = CGEventGetLocation(cgEvent1);
+    point.y = screenFrame.size.height-point.y;
+    CGEventSetLocation(cgEvent1, point);
+    point = CGEventGetLocation(cgEvent2);
+    point.y = screenFrame.size.height-point.y;
+    CGEventSetLocation(cgEvent2, point);
+    point = CGEventGetLocation(cgEvent3);
+    point.y = screenFrame.size.height-point.y;
+    CGEventSetLocation(cgEvent3, point);
+  }//if (!isMacOS10_5OrAbove())
+  CGEventPost(kCGHIDEventTap, cgEvent1);
+  CGEventPost(kCGHIDEventTap, cgEvent2);
+  CGEventPost(kCGHIDEventTap, cgEvent3);
+  CFRelease(cgEvent1);
+  CFRelease(cgEvent2);
+  CFRelease(cgEvent3);
+}
+//end performProgrammaticRedrag:
 
 -(BOOL) tableView:(NSTableView*)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
@@ -423,7 +510,7 @@
     
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-    [historyItem writeToPasteboard:pboard isLinkBackRefresh:NO lazyDataProvider:nil];
+    [historyItem writeToPasteboard:pboard isLinkBackRefresh:NO lazyDataProvider:[historyItem equation]];
   }//end if ([rowIndexes count])
   return result;
 }
@@ -460,6 +547,12 @@
     case EXPORT_FORMAT_JPEG:
       extension = @"jpeg";
       break;
+    case EXPORT_FORMAT_MATHML:
+      extension = @"html";
+      break;
+    case EXPORT_FORMAT_SVG:
+      extension = @"svg";
+      break;
   }
   
   NSString* fileName = nil;
@@ -488,13 +581,17 @@
       CGFloat quality = [preferencesController exportJpegQualityPercent];
       NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
         dataForType:exportFormat pdfData:pdfData jpegColor:color jpegQuality:quality scaleAsPercent:[preferencesController exportScalePercent]
-             compositionConfiguration:[preferencesController compositionConfigurationDocument]];
+             compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                     uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
       [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                                  atPath:filePath];
       NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-      [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[[historyItem equation] pdfData] backgroundColor:backgroundColor]
-                                     forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
+      if ((exportFormat != EXPORT_FORMAT_PNG) &&
+          (exportFormat != EXPORT_FORMAT_TIFF) &&
+          (exportFormat != EXPORT_FORMAT_JPEG))
+        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[[historyItem equation] pdfData] backgroundColor:backgroundColor]
+                                       forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
       [names addObject:fileName];
     }//end if (![fileManager fileExistsAtPath:filePath])
     index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item
@@ -505,7 +602,7 @@
 
 //we can drop a color on a history item cell, to change its background color
 -(NSDragOperation)tableView:(NSTableView*)tableView validateDrop:(id<NSDraggingInfo>)info
-                proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)operation
+                proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation
 {
   NSDragOperation result = NSDragOperationNone;
   NSPasteboard* pboard = [info draggingPasteboard];
@@ -520,7 +617,7 @@
 //end tableView:validateDrop:proposedRow:proposedDropOperation:
 
 //accepts dropping a color on an element
--(BOOL) tableView:(NSTableView*)tableView acceptDrop:(id<NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)operation
+-(BOOL) tableView:(NSTableView*)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
 {
   BOOL ok = NO;
   NSPasteboard* pboard = [info draggingPasteboard];
