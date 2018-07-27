@@ -90,8 +90,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
 -(NSImage*) _checkEasterEgg;//may return an easter egg image
 
--(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
-
 -(NSString*) descriptionForScript:(NSDictionary*)script;
 -(void) _decomposeString:(NSString*)string preamble:(NSString**)preamble body:(NSString**)body;
 

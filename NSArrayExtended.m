@@ -17,6 +17,37 @@
 }
 //end firstObject
 
+-(id) firstObjectIdenticalTo:(id)object
+{
+  id result = nil;
+  if (object)
+  {
+    id current = nil;
+    NSEnumerator* enumerator = [self objectEnumerator];
+    while(!result && ((current = [enumerator nextObject])))
+    {
+      if ([current isEqual:object])
+        result = current;
+    }//end while(!result && ((current = [enumerator nextObject])))
+  }//end if (object)
+  return result;
+}
+//end firstObjectIdenticalTo:
+
+-(id) firstObjectNotIdenticalTo:(id)object
+{
+  id result = nil;
+  id current = nil;
+  NSEnumerator* enumerator = [self objectEnumerator];
+  while(!result && ((current = [enumerator nextObject])))
+  {
+    if (!object || ![current isEqual:object])
+      result = current;
+  }//end while(!result && ((current = [enumerator nextObject])))
+  return result;
+}
+//end firstObjectNotIdenticalTo:
+
 //checks if the array contains an object, based on adress comparison, not isEqual:
 -(BOOL) containsObjectIdenticalTo:(id)object
 { 

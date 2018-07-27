@@ -103,7 +103,7 @@ extern NSString* LatexitEquationsPboardType;
 -(NSString*) titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
--(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
+-(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider options:(NSDictionary*)options;
 -(id) plistDescription;
 -(id) initWithDescription:(id)description;
 -(CHExportPrefetcher*) exportPrefetcher;

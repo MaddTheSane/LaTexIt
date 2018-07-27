@@ -322,8 +322,8 @@
   {
     [pasteboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:self];
     [pasteboard setData:lastLatexitEquationPdfData forType:NSPDFPboardType];
-    [pasteboard addTypes:[NSArray arrayWithObject:@"com.adobe.pdf"] owner:self];
-    [pasteboard setData:lastLatexitEquationPdfData forType:@"com.adobe.pdf"];
+    [pasteboard addTypes:[NSArray arrayWithObject:kUTTypePDF] owner:self];
+    [pasteboard setData:lastLatexitEquationPdfData forType:kUTTypePDF];
   }//end if (lastLatexitEquationPdfData)*/
 }
 //end copy:

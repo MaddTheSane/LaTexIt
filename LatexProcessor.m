@@ -8,6 +8,7 @@
 
 #import "LaTeXProcessor.h"
 
+#import "AppController.h"
 #import "Compressor.h"
 #import "LatexitEquation.h"
 #import "NSArrayExtended.h"
@@ -22,6 +23,7 @@
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "SystemTask.h"
+#import "TeXItemWrapper.h"
 #import "Utils.h"
 
 #import "RegexKitLite.h"
@@ -366,7 +368,7 @@ static LaTeXProcessor* sharedInstance = nil;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.9.1", @"version",
+        @"2.10.0", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -730,6 +732,66 @@ static LaTeXProcessor* sharedInstance = nil;
   return preamble;
 }
 //end insertColorInPreamble:color:isColorStyAvailable:
+
+-(void) latexiseTeXItems:(NSArray*)teXItems backgroundly:(BOOL)backgroundly delegate:(id)delegate itemDidEndSelector:(SEL)itemDidEndSelector groupDidEndSelector:(SEL)groupDidEndSelector
+{
+  id object = nil;
+  id appControllerClass = NSClassFromString(@"AppController");
+  id appController = [appControllerClass valueForKey:@"appController"];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSEnumerator* enumerator = [teXItems objectEnumerator];
+  while((object = [enumerator nextObject]))
+  {
+    TeXItemWrapper* teXItem = [object dynamicCastToClass:[TeXItemWrapper class]];
+    if (![teXItem equation])
+    {
+      NSDictionary* data = [teXItem data];
+      NSString* preamble = [[data objectForKey:@"preamble"] dynamicCastToClass:[NSString class]];
+      NSString* sourceText = [[data objectForKey:@"sourceText"] dynamicCastToClass:[NSString class]];
+      NSNumber* latexMode = [[data objectForKey:@"mode"] dynamicCastToClass:[NSNumber class]]; 
+      NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+      NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+      CGFloat leftMargin   = [[[appController valueForKey:@"marginsCurrentLeftMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
+      CGFloat rightMargin  = [[[appController valueForKey:@"marginsCurrentRightMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
+      CGFloat bottomMargin = [[[appController valueForKey:@"marginsCurrentBottomMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
+      CGFloat topMargin    = [[[appController valueForKey:@"marginsCurrentTopMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
+      NSMutableDictionary* configuration = !preamble || !sourceText ? nil :
+      [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+        [NSNumber numberWithBool:backgroundly], @"runInBackgroundThread",
+        preamble, @"preamble",
+        sourceText, @"body",
+        [preferencesController latexisationFontColor], @"color",
+        !latexMode ? [NSNumber numberWithInteger:LATEX_MODE_AUTO] : latexMode, @"mode",
+        [NSNumber numberWithDouble:[preferencesController latexisationFontSize]], @"magnification",
+        [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
+        [NSNull null], @"backgroundColor",
+        [NSNumber numberWithDouble:leftMargin], @"leftMargin",
+        [NSNumber numberWithDouble:rightMargin], @"rightMargin",
+        [NSNumber numberWithDouble:topMargin], @"topMargin",
+        [NSNumber numberWithDouble:bottomMargin], @"bottomMargin",
+        [appController valueForKey:@"additionalFilesPaths"], @"additionalFilesPaths",
+        !workingDirectory ? @"" : workingDirectory, @"workingDirectory",
+        !fullEnvironment ? [NSDictionary dictionary] : fullEnvironment, @"fullEnvironment",
+        [NSString stringWithFormat:@"latexit-import-lib-from-text-%p", teXItem], @"uniqueIdentifier",
+        @"", @"outFullLog",
+        [NSArray array], @"outErrors",
+        [NSData data], @"outPdfData",
+        [NSNumber numberWithBool:NO], @"applyToPasteboard",
+        teXItem, @"context",
+        nil] autorelease];
+      if (configuration)
+      {
+        teXItem.importState = 1;
+        [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithConfiguration:configuration];
+        if (delegate && itemDidEndSelector && [delegate respondsToSelector:itemDidEndSelector])
+          [delegate performSelector:itemDidEndSelector withObject:configuration];
+      }//end if (configuration)
+    }//end if (![teXItem equation])
+  }//end for each (teXItem)
+  if (delegate && groupDidEndSelector && [delegate respondsToSelector:groupDidEndSelector])
+    [delegate performSelector:groupDidEndSelector withObject:self];
+}
+//end latexiseTeXItems:backgroundly:delegate:itemDidEndSelector:groupDidEndSelector:
 
 -(void) latexiseWithConfiguration:(NSMutableDictionary*)configuration
 {
@@ -1982,6 +2044,7 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSDictionary* objects = [object dynamicCastToClass:[NSDictionary class]];
   NSString* informativeText1 = [[objects objectForKey:@"informativeText1"] dynamicCastToClass:[NSString class]];
+  DebugLog(1, @"displayAlertError:<%@>", informativeText1);
   int displayError =
     NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), informativeText1,
                     NSLocalizedString(@"OK", @"OK"),
@@ -2181,15 +2244,21 @@ static LaTeXProcessor* sharedInstance = nil;
             #else
             NSString* output = [[[NSString alloc] initWithData:[tmpFileHandle availableData] encoding:NSUTF8StringEncoding] autorelease];
             #endif
-            DebugLog(0, @"error with command <%@> : <%@>", systemCall, output);
-            [self performSelectorOnMainThread:@selector(displayAlertError:)
-                                   withObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file with command:\n%@",
-                                                                                             @"An error occured while trying to create the file with command:\n%@"),
-                                                 systemCall], @"informativeText1",
-                                                [NSString stringWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, output], @"informativeText2",
-                                                nil]
-                                waitUntilDone:YES];
+            NSString* formatString1 = NSLocalizedString(@"An error occured while trying to create the file with command:\n%@", @"");
+            NSString* informativeText1 = [NSString stringWithFormat:formatString1, systemCall];
+            NSString* informativeText2 = [NSString stringWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, !output ? @"" : output];
+            NSDictionary* alertInformation = [NSDictionary dictionaryWithObjectsAndKeys:
+              informativeText1, @"informativeText1",
+              informativeText2, @"informativeText2",
+              nil];
+            NSMutableDictionary* alertInformationWrapper =
+              [[exportOptions objectForKey:@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];
+            if (alertInformationWrapper)
+              [alertInformationWrapper setObject:alertInformation forKey:@"alertInformation"];
+            else
+              [self performSelectorOnMainThread:@selector(displayAlertError:)
+                                     withObject:alertInformation
+                                  waitUntilDone:YES];
             unlink([tmpFilePath UTF8String]);
           }//end if (error)
           else//if (!error)
@@ -2316,7 +2385,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
-        data = [self annotateData:data ofUTI:@"public.tiff" withData:annotationDataCompressed];
+        data = [self annotateData:data ofUTI:(NSString*)kUTTypeTIFF withData:annotationDataCompressed];
         DebugLog(1, @"create TIFF data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_TIFF)
       else if (format == EXPORT_FORMAT_PNG)
@@ -2332,7 +2401,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
-        data = [self annotateData:data ofUTI:@"public.png" withData:annotationDataCompressed];
+        data = [self annotateData:data ofUTI:(NSString*)kUTTypePNG withData:annotationDataCompressed];
         DebugLog(1, @"create PNG data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_PNG)
       else if (format == EXPORT_FORMAT_JPEG)
@@ -2392,7 +2461,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
-        data = [self annotateData:data ofUTI:@"public.jpeg" withData:annotationDataCompressed];
+        data = [self annotateData:data ofUTI:(NSString*)kUTTypeJPEG withData:annotationDataCompressed];
         DebugLog(1, @"create JPEG data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_JPEG)
       else if (format == EXPORT_FORMAT_SVG)
@@ -2524,7 +2593,7 @@ static LaTeXProcessor* sharedInstance = nil;
           data = !fixedResult ? data : [fixedResult dataUsingEncoding:NSUTF8StringEncoding];
           NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
           NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
-          data = [self annotateData:data ofUTI:@"public.html" withData:annotationDataCompressed];
+          data = [self annotateData:data ofUTI:(NSString*)kUTTypeHTML withData:annotationDataCompressed];
           [[NSFileManager defaultManager] bridge_removeItemAtPath:outputFile error:0];
         }//end if (ok)
         [[NSFileManager defaultManager] bridge_removeItemAtPath:inputFile error:0];

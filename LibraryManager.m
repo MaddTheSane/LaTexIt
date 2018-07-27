@@ -32,6 +32,8 @@
 #import "NSUndoManagerDebug.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "RegexKitLite.h"
+#import "TeXItemWrapper.h"
 #import "Utils.h"
 
 #import <LinkBack/LinkBack.h>
@@ -159,6 +161,66 @@ static LibraryManager* sharedManagerInstance = nil;
   [self saveLibrary];
 }
 //end applicationWillTerminate:
+
+-(NSArray*) allItems
+{
+  NSArray* result = nil;
+  NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+  [fetchRequest setEntity:[LibraryItem entity]];
+  NSError* error = nil;
+  NSArray* itemsToRemove = [[self->managedObjectContext executeFetchRequest:fetchRequest error:&error] dynamicCastToClass:[NSArray class]];
+  result = [[itemsToRemove copy] autorelease];
+  if (error)
+    {DebugLog(0, @"error : %@", error);}
+  [fetchRequest release];
+  return result;
+}
+//end allItems
+
+-(void) removeAllItems
+{
+  #ifdef ARC_ENABLED
+  @autoreleasepool {
+  #else
+  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
+  #endif
+  NSArray* itemsToRemove = [self allItems];
+  if ([itemsToRemove count])
+  {
+    [itemsToRemove makeObjectsPerformSelector:@selector(dispose)];
+    [self->managedObjectContext safeDeleteObjects:itemsToRemove];
+    [self->managedObjectContext processPendingChanges];
+  }//end if ([itemsToRemove count])
+  #ifdef ARC_ENABLED
+  }//end @autoreleasepool
+  #else
+  [ap1 release];
+  #endif
+}
+//end removeAllItems
+
+-(void) removeItems:(NSArray*)items
+{
+  #ifdef ARC_ENABLED
+  @autoreleasepool {
+  #else
+  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
+  #endif
+  NSArray* itemsToRemove = [items copy];
+  if ([itemsToRemove count])
+  {
+    [itemsToRemove makeObjectsPerformSelector:@selector(dispose)];
+    [self->managedObjectContext safeDeleteObjects:itemsToRemove];
+    [self->managedObjectContext processPendingChanges];
+  }//end if ([itemsToRemove count])
+    [itemsToRemove release];
+  #ifdef ARC_ENABLED
+  }//end @autoreleasepool
+  #else
+  [ap1 release];
+  #endif
+}
+//end removeItems:
 
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(library_export_format_t)format
        options:(NSDictionary*)options
@@ -306,17 +368,9 @@ static LibraryManager* sharedManagerInstance = nil;
   NSMutableArray* itemsToRemove = [NSMutableArray array];
   if (option == LIBRARY_IMPORT_OVERWRITE)
   {
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[LibraryItem entity]];
-    NSError* error = nil;
-    [itemsToRemove setArray:[self->managedObjectContext executeFetchRequest:fetchRequest error:&error]];
-    if (error) {DebugLog(0, @"error : %@", error);}
-    [fetchRequest release];
-    
-    [itemsToRemove makeObjectsPerformSelector:@selector(dispose)];
-    [self->managedObjectContext safeDeleteObjects:itemsToRemove];
-    [self->managedObjectContext processPendingChanges];
-    [itemsToRemove removeAllObjects];
+    BOOL delayDeletion = ([[path pathExtension] isEqualToString:@"tex"]);
+    if (!delayDeletion)
+      [self removeAllItems];
   }//end if (option == LIBRARY_IMPORT_OVERWRITE)
 
   if (option == LIBRARY_IMPORT_OPEN)
@@ -330,7 +384,7 @@ static LibraryManager* sharedManagerInstance = nil;
       [[PreferencesController sharedController] setLibraryPath:path];
     }//end if (ok)
   }//end if (options == LIBRARY_IMPORT_OPEN)
-  else// if ((option == LIBRARY_IMPORT_MERGE) || (option == LIBRARY_IMPORT_OVERWRITE))
+  else//if ((option == LIBRARY_IMPORT_MERGE) || (option == LIBRARY_IMPORT_OVERWRITE))
   {
     if ([[path pathExtension] isEqualToString:@"latexlib"] || [[path pathExtension] isEqualToString:@"dat"])
     {
@@ -393,7 +447,7 @@ static LibraryManager* sharedManagerInstance = nil;
           migrationError |= (error != nil);
           ok = !migrationError;
         }//end if (uncompressedData)
-      }
+      }//end if (!sourceManagedObjectContext)//maybe it is old format ?
       else
       {
         NSError* error = nil;
@@ -526,6 +580,29 @@ static LibraryManager* sharedManagerInstance = nil;
         }//end if ([content isKindOfClass:[NSArray class]])
       }//end if ([plist isKindOfClass:[NSDictionary class]])
     }
+    else if ([[path pathExtension] isEqualToString:@"tex"])
+    {
+      NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+      [fetchRequest setEntity:[LibraryItem entity]];
+      [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == nil"]];
+      [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:
+                                        [[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease], nil]];
+      NSError* error = nil;
+      id fetchResult = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+      NSArray* rootItems = [fetchResult dynamicCastToClass:[NSArray class]];
+      if (error)
+        {DebugLog(0, @"error : %@", error);}
+      NSUInteger rootItemsCount = [rootItems count];
+      NSArray* teXItems = [self createTeXItemsFromFile:path proposedParentItem:nil proposedChildIndex:rootItemsCount];
+      LibraryWindowController* libraryWindowController = [[AppController appController] libraryWindowController];
+      NSDictionary* options =
+        [[[NSDictionary alloc] initWithObjectsAndKeys:
+          teXItems, @"teXItems",
+          [NSNumber numberWithInteger:option], @"importOption",
+          nil] autorelease];
+      [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
+      ok = YES;
+    }//end if ([[path pathExtension] isEqualToString:@"tex"])
     else if ([[path pathExtension] isEqualToString:@"library"]) //from LEE
     {
       NSString* xmlDescriptionPath = [path stringByAppendingPathComponent:@"library.dict"];
@@ -643,12 +720,15 @@ static LibraryManager* sharedManagerInstance = nil;
   @try{
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
-    NSDictionary* options = nil;
+    NSMutableDictionary* options = [NSMutableDictionary dictionary];
+    if (isMacOS10_5OrAbove())
+    {
+      [options setValue:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
+      NSDictionary* journalMode = [NSDictionary dictionaryWithObjectsAndKeys:@"DELETE", @"journal_mode", nil];
+      [options setValue:journalMode forKey:NSSQLitePragmasOption];
+    }//end if (isMacOS10_5OrAbove())
     if (isMacOS10_6OrAbove())
-      options = [NSDictionary dictionaryWithObjectsAndKeys:
-                  [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                  [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
-                  nil];
+      [options setValue:[NSNumber numberWithBool:YES] forKey:NSInferMappingModelAutomaticallyOption];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];
     if (error)
@@ -672,7 +752,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.9.1", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.10.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -826,7 +906,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.9.1", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.10.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }
@@ -1076,5 +1156,112 @@ static LibraryManager* sharedManagerInstance = nil;
   [windowController close]; 
 }
 //end hideMigratingProgressionWindow:windowController:
+
+-(NSArray*) createTeXItemsFromFile:(NSString*)filename proposedParentItem:(id)proposedParentItem proposedChildIndex:(NSInteger)proposedChildIndex
+{
+  NSArray* result = nil;
+  NSMutableArray* texItems = [NSMutableArray array];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  NSString* fileUti = [fileManager UTIFromPath:filename];
+  BOOL conformsToTex = UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tex")) || UTTypeConformsTo((CFStringRef)fileUti, kUTTypePlainText);
+  if (conformsToTex)
+  {
+    NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename];
+    NSError* error = nil;
+    NSArray* components = [fileContent captureComponentsMatchedByRegex:@"^(.*?)\\s*\\\\begin\\{document\\}(.*)\\\\end\\{document\\}" options:RKLDotAll|RKLMultiline|RKLCaseless range:[fileContent range] error:&error];
+    if (error)
+      DebugLog(0, @"error = <%@>", error);
+    NSString* preamble = ([components count]<2) ? nil : [[components objectAtIndex:1] dynamicCastToClass:[NSString class]];
+    NSString* body = ([components count]<3) ? nil : [[components objectAtIndex:2] dynamicCastToClass:[NSString class]];
+    [fileContent release];
+    if ([body length])
+    {
+      NSString* displayRegex = @"\\$\\$(.+?)\\$\\$|\\\\[(.+?)\\\\]|\\$\\\\displaystyle(.+?)\\$";
+      NSString* inlineRegex = @"[^\\$]\\$(.+?)\\$[^\\$]";
+      NSString* alignRegex = @"\\\\begin\\{align\\}(.+?)\\\\end\\{align\\}|\\\\begin\\{align\\*\\}(.+?)\\\\end\\{align\\*\\}";
+      NSString* eqnarrayRegex = @"\\\\begin\\{eqnarray\\}(.+?)\\\\end\\{eqnarray\\}|\\\\begin\\{eqnarray\\*\\}(.+?)\\\\end\\{eqnarray\\*\\}";
+      NSArray* equationsRegexes = [NSArray arrayWithObjects:displayRegex, inlineRegex, alignRegex, eqnarrayRegex, nil];
+      NSString* equationsRegex = [equationsRegexes componentsJoinedByString:@"|"];
+      NSRange fullRange = [body range];
+      NSRange searchRange = fullRange;
+      NSRange matchRange = [body rangeOfRegex:equationsRegex options:RKLMultiline|RKLDotAll inRange:searchRange capture:0 error:&error];
+      if (error)
+        DebugLog(0, @"error <%@>", error);
+      NSMutableArray* matches = [NSMutableArray array];
+      while(matchRange.location != NSNotFound)
+      {
+        NSString* match = [body substringWithRange:matchRange];
+        [matches addObject:match];
+        searchRange.location = matchRange.location+matchRange.length;
+        searchRange.length = fullRange.location+fullRange.length-searchRange.location;
+        matchRange = [body rangeOfRegex:equationsRegex options:RKLMultiline|RKLDotAll inRange:searchRange capture:0 error:&error];
+      }//end while there is a match
+      NSEnumerator* enumerator = [matches objectEnumerator];
+      NSString* match = nil;
+      while ((match = [enumerator nextObject]))
+      {
+        NSArray* displayCapture = [match captureComponentsMatchedByRegex:displayRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        if (error)
+          DebugLog(0, @"error <%@>", error);
+        NSString* displayMatch = ([displayCapture count]<=1) ? nil :
+        [[displayCapture subarrayWithRange:NSMakeRange(1, [displayCapture count]-1)] firstObjectNotIdenticalTo:@""];
+        NSArray* inlineCapture = [match captureComponentsMatchedByRegex:inlineRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        if (error)
+          DebugLog(0, @"error <%@>", error);
+        NSString* inlineMatch = ([inlineCapture count]<=1) ? nil :
+        [[inlineCapture subarrayWithRange:NSMakeRange(1, [inlineCapture count]-1)] firstObjectNotIdenticalTo:@""];
+        NSArray* alignCapture = [match captureComponentsMatchedByRegex:alignRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        if (error)
+          DebugLog(0, @"error <%@>", error);
+        NSString* alignMatch = ([alignCapture count]<=1) ? nil :
+        [[alignCapture subarrayWithRange:NSMakeRange(1, [alignCapture count]-1)] firstObjectNotIdenticalTo:@""];
+        NSArray* eqnArrayCapture = [match captureComponentsMatchedByRegex:eqnarrayRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        if (error)
+          DebugLog(0, @"error <%@>", error);
+        NSString* eqnArrayMatch = ([eqnArrayCapture count]<=1) ? nil :
+        [[eqnArrayCapture subarrayWithRange:NSMakeRange(1, [eqnArrayCapture count]-1)] firstObjectNotIdenticalTo:@""];
+        
+        latex_mode_t latexMode = LATEX_MODE_AUTO;
+        
+        NSString* sourceText = nil;
+        if (displayMatch && ![displayMatch isEqualToString:@""])
+        {
+          sourceText = displayMatch;
+          latexMode = LATEX_MODE_DISPLAY;
+        }//end if (displayMatch && ![displayMatch isEqualToString:@""])
+        else if (inlineMatch && ![inlineMatch isEqualToString:@""])
+        {
+          sourceText = inlineMatch;
+          latexMode = LATEX_MODE_INLINE;
+        }//end if (inlineMatch && ![inlineMatch isEqualToString:@""])
+        else if (alignMatch && ![alignMatch isEqualToString:@""])
+        {
+          sourceText = alignMatch;
+          latexMode = LATEX_MODE_ALIGN;
+        }//end if (alignMatch && ![alignMatch isEqualToString:@""])
+        else if (eqnArrayMatch && ![eqnArrayMatch isEqualToString:@""])
+        {
+          sourceText = eqnArrayMatch;
+          latexMode = LATEX_MODE_EQNARRAY;
+        }//end if (eqnArrayMatch && ![eqnArrayMatch isEqualToString:@""])
+        
+        NSDictionary* texItem = !preamble || !sourceText ? nil :
+        [[[NSDictionary alloc] initWithObjectsAndKeys:
+          filename, @"filename",
+          preamble, @"preamble",
+          sourceText, @"sourceText",
+          [NSNumber numberWithInt:latexMode], @"mode",
+          !proposedParentItem ? [NSNull null] : proposedParentItem, @"proposedParentItem",
+          [NSNumber numberWithUnsignedInt:proposedChildIndex], @"proposedChildIndex",
+          nil] autorelease];
+        if (texItem)
+          [texItems addObject:texItem];
+      }//end for each match
+    }//end if ([body length])
+  }//end if (conformsToTex)
+  result = [[texItems copy] autorelease];
+  return result;
+}
+//end createTeXItemsFromFile:proposedParentItem:proposedChildIndex:
 
 @end

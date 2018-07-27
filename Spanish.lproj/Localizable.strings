@@ -291,6 +291,14 @@
 "Export user comments" = "Export user comments";
 "Ignore title hierarchy" = "Ignore title hierarchy";
 
+"_IMPORTING_" = "…";
+"_IMPORTED_" = "⎷";
+"\"Inline\" items" = "\"Inline\" items";
+"\"Display\" items" = "\"Display\" items";
+"\"Align\" items" = "\"Align\" items";
+"\"Eqnarray\" items" = "\"Eqnarray\" items";
+"Import selection" = "Import selection";
+
 /* History */
 "Add to current history" = "Añadir a la historial actual";
 "Overwrite current history" = "Sobreescribir la historial actual";

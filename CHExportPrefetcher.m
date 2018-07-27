@@ -55,12 +55,14 @@
      [NSDictionary dictionaryWithObjectsAndKeys:
        [NSNumber numberWithInt:exportFormat], @"exportFormat",
        [pdfData copy], @"pdfData",
+       [NSMutableDictionary dictionary], @"alertInformationWrapper",
        nil]];
   #else
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
      [NSDictionary dictionaryWithObjectsAndKeys:
        [NSNumber numberWithInt:exportFormat], @"exportFormat",
        [[pdfData copy] autorelease], @"pdfData",
+       [NSMutableDictionary dictionary], @"alertInformationWrapper",
        nil]];
   #endif
 }
@@ -119,14 +121,21 @@
   NSData* pdfData = [[configuration objectForKey:@"pdfData"] dynamicCastToClass:[NSData class]];
   export_format_t exportFormat = (export_format_t)[exportFormatNumber intValue];
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
-                                 nil];
+  NSMutableDictionary* alertInformationWrapper =
+    [[configuration objectForKey:@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];
+  NSMutableDictionary* exportOptions =
+    [NSMutableDictionary dictionaryWithObjectsAndKeys:
+       [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+       [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+       [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+       [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+       [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+       nil];
+  if ([preferencesController exportJpegBackgroundColor])
+    [exportOptions setObject:[preferencesController exportJpegBackgroundColor] forKey:@"jpegColor"];
+  if ([preferencesController exportJpegBackgroundColor])
+    [exportOptions setObject:alertInformationWrapper forKey:@"alertInformationWrapper"];
+
   NSData* data = !pdfData ? nil : [[LaTeXProcessor sharedLaTeXProcessor]
     dataForType:exportFormat pdfData:pdfData
     exportOptions:exportOptions
@@ -140,6 +149,12 @@
       [self->cache setObject:data forKey:exportFormatNumber];
   }//end @synchronized(self->cache)
   [self->fetchSemaphore V];
+  NSDictionary* alertInformation =
+    [[alertInformationWrapper objectForKey:@"alertInformation"] dynamicCastToClass:[NSDictionary class]];
+  if (alertInformation)
+    [[LaTeXProcessor sharedLaTeXProcessor] performSelectorOnMainThread:@selector(displayAlertError:)
+                                                            withObject:alertInformation
+                                                         waitUntilDone:YES];
 }
 //end _fetchForFormat:
 

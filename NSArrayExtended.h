@@ -10,6 +10,8 @@
 @interface NSArray (Extended)
 
 -(id) firstObject;
+-(id) firstObjectIdenticalTo:(id)object;
+-(id) firstObjectNotIdenticalTo:(id)object;
 
 //checks if the array contains an object, based on adress comparison, not isEqual:
 -(BOOL) containsObjectIdenticalTo:(id)object;

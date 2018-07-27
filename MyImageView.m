@@ -98,8 +98,8 @@ typedef NSInteger NSDraggingContext;
     [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType,
-                              @"com.adobe.pdf", @"public.tiff", @"public.png", @"public.jpeg", @"public.svg-image",
-                              @"public.html",
+                              kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, @"public.svg-image",
+                              kUTTypeHTML,
                               //@"com.apple.iWork.TSPNativeMetadata",
                               nil]];
   return self;
@@ -665,11 +665,15 @@ typedef NSInteger NSDraggingContext;
 
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
-  [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
+  [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
   if (self->isDragging && (lazyDataProvider == self))
   {
-    [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*//* NSFilenamesPboardType, NSURLPboardType,*/ nil]
-                   owner:lazyDataProvider];
+    [pasteboard addTypes:
+       [NSArray arrayWithObjects:
+         //NSFileContentsPboardType,
+         NSFilenamesPboardType, NSURLPboardType,
+         nil]
+      owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
   DebugLog(1, @"<");
 }
@@ -720,7 +724,7 @@ typedef NSInteger NSDraggingContext;
       case EXPORT_FORMAT_PDF:
       case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
         extension = @"pdf";
-        uti = @"com.adobe.pdf";
+        uti = (NSString*)kUTTypePDF;
         break;
       case EXPORT_FORMAT_EPS:
         extension = @"eps";
@@ -728,19 +732,19 @@ typedef NSInteger NSDraggingContext;
         break;
       case EXPORT_FORMAT_TIFF:
         extension = @"tiff";
-        uti = @"public.tiff";
+        uti = (NSString*)kUTTypeTIFF;
         break;
       case EXPORT_FORMAT_PNG:
         extension = @"png";
-        uti = @"public.png";
+        uti = (NSString*)kUTTypePNG;
         break;
       case EXPORT_FORMAT_JPEG:
         extension = @"jpeg";
-        uti = @"public.jpeg";
+        uti = (NSString*)kUTTypeJPEG;
         break;
       case EXPORT_FORMAT_MATHML:
         extension = @"html";
-        uti = @"public.html";
+        uti = (NSString*)kUTTypeHTML;
         break;
       case EXPORT_FORMAT_SVG:
         extension = @"svg";
@@ -748,9 +752,9 @@ typedef NSInteger NSDraggingContext;
         break;
       case EXPORT_FORMAT_TEXT:
         extension = @"tex";
-        uti = @"public.text";
+        uti = (NSString*)kUTTypeText;
         break;
-    }
+    }//end witch(exportFormat)
     if (data)
     {
       if ([type isEqualToString:NSFileContentsPboardType])
@@ -759,7 +763,7 @@ typedef NSInteger NSDraggingContext;
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
-        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+          [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
         if (filePath)
         {
           if (!hasAlreadyCachedData)
@@ -775,7 +779,7 @@ typedef NSInteger NSDraggingContext;
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
-        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+          [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
         if (filePath)
         {
           if (!hasAlreadyCachedData)
@@ -806,7 +810,7 @@ typedef NSInteger NSDraggingContext;
                                                         options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
         if (error)
           DebugLog(1, @"error = <%@>", error);
-        BOOL isHTML = [type isEqualToString:@"public.html"] || [type isEqualToString:NSHTMLPboardType];
+        BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:(NSString*)NSHTMLPboardType];
         if (isHTML)
           [pasteboard setString:blockquoteString forType:type];
         else//if (!isHTML)
@@ -828,7 +832,7 @@ typedef NSInteger NSDraggingContext;
   NSPasteboard* pboard = [sender draggingPasteboard];
   if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]]))
     ok = YES;
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]]))
     ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]]))
     ok = YES;
@@ -845,7 +849,7 @@ typedef NSInteger NSDraggingContext;
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]]))
     ok = YES;
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -854,7 +858,7 @@ typedef NSInteger NSDraggingContext;
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     ok = attributedString || (pdfWrapperData != nil);//now, allow string
     [attributedString release];
-  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, NSStringPboardType, nil]])
     ok = YES;
   result = ok ? NSDragOperationCopy : NSDragOperationNone;
@@ -980,15 +984,15 @@ typedef NSInteger NSDraggingContext;
     [self->document applyLatexitEquation:[latexitEquationsArray lastObject] isRecentLatexisation:NO];
     done = YES;
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, NSPDFPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]])))
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypePDF];
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:kUTTypePDF, NSPDFPboardType, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    done = [self->document applyData:[pboard dataForType:type] sourceUTI:@"com.adobe.pdf"];
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypePDF];
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])))
   {
@@ -1076,7 +1080,7 @@ typedef NSInteger NSDraggingContext;
         {
           NSData* filePdfData = [NSData dataWithContentsOfFile:pdfFilePath];
           DebugLog(1, @"filePdfData = %p", filePdfData);
-          done = filePdfData && [self->document applyData:filePdfData sourceUTI:@"com.adobe.pdf"];
+          done = filePdfData && [self->document applyData:filePdfData sourceUTI:kUTTypePDF];
         }//end if (pdfFilePath)
       }//end if (pdfFileName && uuid)
     }//end if (data)
@@ -1105,7 +1109,7 @@ typedef NSInteger NSDraggingContext;
       [self->document applyString:concats];
     done = (concats != nil);
   }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfdData = [pboard dataForType:type];
@@ -1114,10 +1118,10 @@ typedef NSInteger NSDraggingContext;
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     if (pdfWrapperData)
-      done = [self->document applyData:pdfWrapperData sourceUTI:@"com.adobe.pdf"];
+      done = [self->document applyData:pdfWrapperData sourceUTI:(NSString*)kUTTypePDF];
     [attributedString release];
-  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.rtf", NSRTFPboardType, nil]])))
+  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfData = [pboard dataForType:type];
@@ -1126,18 +1130,18 @@ typedef NSInteger NSDraggingContext;
     NSString* string = [attributedString string];
     NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
     //[self->document applyString:string];
-    [self->document applyData:data sourceUTI:@"public.text"];
+    [self->document applyData:data sourceUTI:(NSString*)kUTTypeText];
     [attributedString release];
     done = YES;
-  }
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     //NSString* string = [pboard stringForType:type];
     //[self->document applyString:string];
-    [self->document applyData:[pboard dataForType:type] sourceUTI:@"public.text"];
+    [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypeText];
     done = YES;
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
   if (!done)
     ok = NO;
   return ok;

@@ -395,6 +395,8 @@
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
 		93A9FF4D10201DA70061DB60 /* NSObjectTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */; };
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
+		93ABA88D2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
+		93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
 		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */; };
 		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
@@ -443,6 +445,8 @@
 		93DD6397106A393400EDDF82 /* BodyTemplatesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DD6396106A393400EDDF82 /* BodyTemplatesTableView.m */; };
 		93DD6398106A393400EDDF82 /* BodyTemplatesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DD6396106A393400EDDF82 /* BodyTemplatesTableView.m */; };
 		93E25B171231A1B200D65279 /* LaTeXMathML.js in Resources */ = {isa = PBXBuildFile; fileRef = 932BD079122BAFAE003C312C /* LaTeXMathML.js */; };
+		93E6EF882058702700725C6E /* view-icons-adjust@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93E6EF862058702700725C6E /* view-icons-adjust@2x.png */; };
+		93E6EF892058702700725C6E /* view-icons-adjust.png in Resources */ = {isa = PBXBuildFile; fileRef = 93E6EF872058702700725C6E /* view-icons-adjust.png */; };
 		93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
 		93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
 		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
@@ -1012,6 +1016,8 @@
 		93A9FF4C10201DA70061DB60 /* NSObjectTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectTreeNode.h; sourceTree = "<group>"; };
 		93A9FF741020436D0061DB60 /* NSOutlineViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOutlineViewExtended.h; sourceTree = "<group>"; };
 		93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOutlineViewExtended.m; sourceTree = "<group>"; };
+		93ABA88B2053D44100E60612 /* TeXItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeXItemWrapper.h; sourceTree = "<group>"; };
+		93ABA88C2053D44100E60612 /* TeXItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeXItemWrapper.m; sourceTree = "<group>"; };
 		93ADD64A144AE92500BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/Italian.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93ADD64C144AE93000BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/Italian.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93ADD64D144AE94A00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = Italian.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -1078,6 +1084,8 @@
 		93DD6392106A392300EDDF82 /* BodyTemplatesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BodyTemplatesController.m; sourceTree = "<group>"; };
 		93DD6395106A393400EDDF82 /* BodyTemplatesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyTemplatesTableView.h; sourceTree = "<group>"; };
 		93DD6396106A393400EDDF82 /* BodyTemplatesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BodyTemplatesTableView.m; sourceTree = "<group>"; };
+		93E6EF862058702700725C6E /* view-icons-adjust@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "view-icons-adjust@2x.png"; path = "Resources/interface/view-icons-adjust@2x.png"; sourceTree = "<group>"; };
+		93E6EF872058702700725C6E /* view-icons-adjust.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "view-icons-adjust.png"; path = "Resources/interface/view-icons-adjust.png"; sourceTree = "<group>"; };
 		93E81A9F087978AD0081B897 /* NSFontExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFontExtended.h; sourceTree = "<group>"; };
 		93E81AA0087978AD0081B897 /* NSFontExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFontExtended.m; sourceTree = "<group>"; };
 		93E9CF760E9F305B00B08FB0 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Automator/CreateEquations/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1612,6 +1620,8 @@
 				933345891077322E0022DBEB /* LatexitEquationWrapper.m */,
 				9344B6E80E8BBDCC00FE90A5 /* LaTeXProcessor.h */,
 				939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */,
+				93ABA88B2053D44100E60612 /* TeXItemWrapper.h */,
+				93ABA88C2053D44100E60612 /* TeXItemWrapper.m */,
 			);
 			name = "LaTeX Processor";
 			sourceTree = "<group>";
@@ -2041,6 +2051,8 @@
 				93077AB91694724100ADAAA1 /* unlocked@2x.png */,
 				93077ABA1694724100ADAAA1 /* view-icons.png */,
 				93077ABB1694724100ADAAA1 /* view-icons@2x.png */,
+				93E6EF862058702700725C6E /* view-icons-adjust@2x.png */,
+				93E6EF872058702700725C6E /* view-icons-adjust.png */,
 				93077ABC1694724100ADAAA1 /* view-titles.png */,
 				93077ABD1694724100ADAAA1 /* view-titles@2x.png */,
 				93077ABE1694724100ADAAA1 /* warning-triangle.png */,
@@ -2372,6 +2384,8 @@
 				93C289D81967F5C30087EBBD /* backsync.png in Resources */,
 				93C289D91967F5C30087EBBD /* backsync@2x.png in Resources */,
 				93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */,
+				93E6EF882058702700725C6E /* view-icons-adjust@2x.png in Resources */,
+				93E6EF892058702700725C6E /* view-icons-adjust.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2622,6 +2636,7 @@
 				937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
 				937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */,
 				937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */,
+				93ABA88D2053D44100E60612 /* TeXItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2697,6 +2712,7 @@
 				937CFB8D1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
 				937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */,
 				937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */,
+				93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
