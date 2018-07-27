@@ -361,5 +361,24 @@
       sparkle:dsaSignature="MCwCFBsouhH+yCdgjfxPbATHzuilEmMfAhRewrILtDeZ+6c8V3cvyQ5DXixNHQ=="
       />
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.4</guid>
+      <title>Version 2.5.4</title>
+      <description><![CDATA[
+        <ul>
+          <li>fixed Preferences bug.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.4</sparkle:releaseNotesLink>
+      <pubDate>Sat, 07 Sep 2013 19:26:13 +0200</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_4.dmg"
+        sparkle:version="2.5.4"
+        sparkle:shortVersionString="2.5.4"
+        type="application/octet-stream"
+        length="9682722"
+        sparkle:dsaSignature="MC0CFGMVnvutKBuvVdx3a0NpK4s97SfUAhUAhox2Iz+xb82IQ6/D6kZAN2gIxO4="
+      />
+    </item>
   </channel> 
 </rss>

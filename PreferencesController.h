@@ -50,10 +50,6 @@ extern NSString* ServiceRespectsBaselineKey;
 extern NSString* ServiceRespectsPointSizeKey;
 extern NSString* ServicePointSizeFactorKey;
 extern NSString* ServiceUsesHistoryKey;
-extern NSString* ServiceRegularExpressionFiltersKey;
-extern NSString* ServiceRegularExpressionFilterEnabledKey;
-extern NSString* ServiceRegularExpressionFilterInputPatternKey;
-extern NSString* ServiceRegularExpressionFilterOutputPatternKey;
 extern NSString* AdditionalTopMarginKey;
 extern NSString* AdditionalLeftMarginKey;
 extern NSString* AdditionalRightMarginKey;
@@ -122,7 +118,6 @@ extern NSString* AdditionalFilesPathsKey;
 @class CompositionConfigurationsController;
 @class EncapsulationsController;
 @class PreamblesController;
-@class ServiceRegularExpressionFiltersController;
 
 @interface PreferencesController : NSObject {
   BOOL      isLaTeXiT;
@@ -134,7 +129,6 @@ extern NSString* AdditionalFilesPathsKey;
   BodyTemplatesController*                   bodyTemplatesController;
   CompositionConfigurationsController*       compositionConfigurationsController;
   NSArrayController*                         serviceShortcutsController;
-  ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController;
   AdditionalFilesController*                 additionalFilesController;
   EncapsulationsController*                  encapsulationsController;
   
@@ -246,9 +240,6 @@ extern NSString* AdditionalFilesPathsKey;
 -(NSArrayController*) serviceShortcutsController;
 -(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
                                authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
--(NSArray*)           serviceRegularExpressionFilters;
--(void)               setServiceRegularExpressionFilters:(NSArray*)value;
--(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController;
 
 -(BOOL)                      encapsulationsEnabled;
 -(NSArray*)                  encapsulations;

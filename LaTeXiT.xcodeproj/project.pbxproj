@@ -374,9 +374,6 @@
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
 		93B583131014704700907B47 /* NSManagedObjectContextExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */; };
 		93B5870C10159CC700907B47 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
-		93B5ECCF16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
-		93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
-		93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
 		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
 		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
@@ -937,10 +934,6 @@
 		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93B2130C0BBC1CCC00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
-		93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersController.h; sourceTree = "<group>"; };
-		93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersController.m; sourceTree = "<group>"; };
-		93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceRegularExpressionFiltersTableView.h; sourceTree = "<group>"; };
-		93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceRegularExpressionFiltersTableView.m; sourceTree = "<group>"; };
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Automator/CreateEquations/Info.plist; sourceTree = "<group>"; };
@@ -1296,7 +1289,6 @@
 				93D7CA5309D362D40001DC5E /* CompositionConfiguration */,
 				9390D3300FA8D4BF0002100B /* Encapsulations */,
 				9333DD730FA62E6500157F00 /* Preambles */,
-				93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */,
 				9345E40E0AC9C5120082ADB4 /* ServiceShortcuts */,
 				9345E3D70AC9C3390082ADB4 /* TextShortcuts */,
 				932E60B00F5DA745002B3136 /* PreferencesController.h */,
@@ -1785,17 +1777,6 @@
 				932BA4CF0960C6CD004EECBA /* PaletteMatrix.m */,
 			);
 			name = LaTeX;
-			sourceTree = "<group>";
-		};
-		93B5ECB116B6F1D100ECBB7B /* ServiceRegularExpressionFilters */ = {
-			isa = PBXGroup;
-			children = (
-				93B5ECCD16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.h */,
-				93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */,
-				93B5ECD116B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.h */,
-				93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */,
-			);
-			name = ServiceRegularExpressionFilters;
 			sourceTree = "<group>";
 		};
 		93BEEB581195BDD90060166A /* DragFilterWindow */ = {
@@ -2440,8 +2421,6 @@
 				93362C0D15BF500A00EA0679 /* NSWindowExtended.m in Sources */,
 				93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */,
 				9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */,
-				93B5ECCF16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
-				93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2507,7 +2486,6 @@
 				9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */,
 				93155CB216AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */,
 				9388E88016B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */,
-				93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

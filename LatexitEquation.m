@@ -1023,7 +1023,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.5.3"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.5.4"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1775,7 +1775,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.5.3", @"version",
+       @"2.5.4", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",
