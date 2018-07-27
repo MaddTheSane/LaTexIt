@@ -84,10 +84,10 @@ static NSLock* strangeLock = nil;
   NSArray*  testArray    = nil;
 
   NSFont* defaultFont = [NSFont fontWithData:[userDefaults dataForKey:DefaultFontKey]];
-  NSData* defaultPrambleData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
+  NSData* defaultPreambleData = [userDefaults objectForKey:DefaultPreambleAttributedKey];
   NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
-  NSAttributedString* defaultPrambleAttributedString =
-    [[[NSAttributedString alloc] initWithRTF:defaultPrambleData documentAttributes:NULL] autorelease];
+  NSAttributedString* defaultPreambleAttributedString =
+    [[[NSAttributedString alloc] initWithRTF:defaultPreambleData documentAttributes:NULL] autorelease];
   NSMutableString* preambleString = nil;
   testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
   if (testArray && ([testArray count] >= 2))
@@ -102,7 +102,7 @@ static NSLock* strangeLock = nil;
     [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
   }
   preamble = preambleString ? [[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes]
-                            : (useDefaults ? [defaultPrambleAttributedString retain]
+                            : (useDefaults ? [defaultPreambleAttributedString retain]
                                            : [[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes]);
 
   NSMutableString* sourceString = [NSMutableString string];
@@ -275,7 +275,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.9.1"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.9.2"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];

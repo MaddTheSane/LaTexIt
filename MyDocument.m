@@ -1106,6 +1106,24 @@ static NSString* yenString = nil;
         [filteredErrors addObject:fullError];
       }//end if error seems ok
     }//end if >=3 components
+    else if ([components count] > 1) //if 1 < < 3 components
+    {
+      if ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound)
+      {
+        NSString* fileComponent = @"";
+        NSString* lineComponent = @"";
+        NSString* errorComponent = [[components subarrayWithRange:NSMakeRange(1, [components count]-1)] componentsJoinedByString:@":"];
+        NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
+        NSString* fixedError = [fixedErrorComponents componentsJoinedByString:@":"];
+        NSMutableString* fullError = [NSMutableString stringWithString:fixedError];
+        while([line length] && ([line characterAtIndex:[line length]-1] != '.'))
+        {
+          line = [enumerator nextObject];
+          [fullError appendString:line];
+        }//end if error message on multiple lines
+        [filteredErrors addObject:fullError];
+      }//end if error seems ok
+    }//end if > 1 component
     line = [enumerator nextObject];
   }//end while line
   return filteredErrors;
@@ -1404,10 +1422,22 @@ static NSString* yenString = nil;
 //teleportation to the faulty lines of the latex code when the user clicks a line in the error tableview
 -(void) _clickErrorLine:(NSNotification*)aNotification
 {
-  //registerd only for logTableView
+  //registered only for logTableView
   NSNumber* number = (NSNumber*) [[aNotification userInfo] objectForKey:@"lineError"];
   if (!number)
+  {
     [self displayLastLog:self];
+    NSString* message = [[aNotification userInfo] objectForKey:@"message"];
+    if (!message)
+      message = @"";
+    NSString* logText = [logTextView string];
+    NSRange errorRange = [logText rangeOfString:message options:NSCaseInsensitiveSearch];
+    if (errorRange.location != NSNotFound)
+    {
+      [logTextView setSelectedRange:errorRange];
+      [logTextView scrollRangeToVisible:errorRange];
+    }
+  }
   else
   {
     int row = [number intValue];
@@ -1444,8 +1474,9 @@ static NSString* yenString = nil;
 {
   if (!aLink || (linkBackLink == aLink))
   {
-    [linkBackLink closeLink];
+    aLink = linkBackLink;
     linkBackLink = nil;
+    [aLink closeLink];
     [self setDocumentTitle:nil];
   }
 }

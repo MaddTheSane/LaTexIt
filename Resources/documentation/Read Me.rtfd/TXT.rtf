@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.9.1\
+\f2\b \cf0 LaTeXiT 1.9.2\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -25,6 +25,7 @@
 
 \f1\b0\fs22 \cf0 -General Information\
 -System Requirements\
+-Install/Uninstall\
 -What is LaTeXiT ?\
 -Overview\
 -Modify the LaTeX preamble\
@@ -56,17 +57,18 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.9.1 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.9.2 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
 
-\f1\b0 \ul Installation\
+\f1\b0 \ul Install/Uninstall\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 Simply drag and drop LaTeXiT from the image disk into your "Applications" folder, or any other place you want on your hard-drive.
+\cf0 Install : Simply drag and drop LaTeXiT from the image disk into your "Applications" folder, or any other place you want on your hard-drive.\
+Uninstall : LaTeXiT creates a folder in Library/LaTeXiT of your home folder. If you plan to uninstall LaTeXiT (by dropping its icon in the trash), you might also want to remove this folder.
 \f2\b\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 \cf0 \
@@ -76,9 +78,9 @@ LaTeXiT 1.9.1 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or abov
 
 \fs22 \cf0 \ulnone \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 LaTeXiT is a little utility designed to quickly typeset LaTeX equations and drag'n drop them into other applications.\
+\cf0 LaTeXiT is a little utility designed to quickly typeset LaTeX equations and drag'n drop them into other applications. Its included service also allows to type and transform equations directly in most text editors.\
 \
-However, it is fair to tell that is is heavily inspired from the remarkable LaTeX Equation Editor by J. McKenzie Alexander. In fact, I missed some features in this application, so I have decided to create a new one. LaTeXiT is not based on Latex Equation Editor, it is simply largely inspired of its basic purpose.\
+It is fair to tell that is is heavily inspired from the remarkable LaTeX Equation Editor by J. McKenzie Alexander. In fact, I missed some features in this application, so I have decided to create a new one. LaTeXiT is not based on Latex Equation Editor, it is simply largely inspired of its basic purpose. However, it is now much more advanced and complete compared to what it was.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 \cf0 \
 Main features of LaTeXiT are :\
@@ -112,12 +114,12 @@ Main features of LaTeXiT are :\
 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone In the main text field, type you latex code without bothering with the preamble, the \\begin\{document\} and the \\end\{document\}; they will be added for you. Then, click the "LaTeXise" button and see your image displayed in the image frame. From there, you can save the image, and also drag and drop it in any application that can use it as an illustration. The export format can be set in the preferences. PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality.\
-You can also choose the font size and the font color used for image generation.\
-The modes "Display", "Inline" and "Text" match the three LaTeX modes with the same names; please look at a LaTeX documentation to know more about their meaning.\
+\fs22 \cf0 \ulnone In the main text field, type you latex code without bothering with the preamble, the \\begin\{document\} and the \\end\{document\}; they will be added for you. Then, click the "LaTeXise" button and see your image displayed in the image frame. From there, you can save the image, and also drag and drop it in any application that can use it as an illustration. The export format can be set in the preferences. PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality. You can also choose the font size and the font color used for image generation.\
+Once dropped in another application, a (PDF) equation can still be reopened in LaTeXiT by a simple "Copy/Paste". The LaTeX source code and the parameters of generation have been saved.\
+The modes "Display", "Inline" and "Text" match the three LaTeX modes with the same names; please look at a LaTeX documentation to know more about their meaning. The "Eqnarray" mode is a handy shortcut to make multi-lines equations. It automatically uses \\begin\{eqnarray*\}...\\end\{eqnarray*\} around the LaTeX code.\
+You can also use LaTeXiT as a service in text editors (or applications that support text editing) to type and transform equations directly in them, by calling LaTeXiT indirectly. See the section \ul Using the "LaTeXiT Service"\ulnone  to get an example.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 The "Eqnarray" mode is a handy shortcut to make multi-lines equations. It automatically uses \\begin\{eqnarray*\}...\\end\{eqnarray*\} around the LaTeX code.\
-\
+\cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs26 \cf0 \ul Modify the preamble\
@@ -140,7 +142,7 @@ The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usep
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone The little slider allowing to zoom does not modify the real size of the equation. It only change the preview size, to visually check "small" equations, without altering them.\
+\fs22 \cf0 \ulnone The little slider allowing to zoom does not modify the real size of the equation. It only changes the preview size, to visually check "small" equations, without altering them.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -229,7 +231,7 @@ The <refresh> action updates the selected item with the current equation. You ca
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-From version 1.8.0, LaTeXiT allows the user to use scipts during pre-, middle- and post-processing steps. A help panel is available in the scripts definition  Preference pane (Composition). To understand where the scripts are used, it may be interesting to know the internal behaviour of LaTeXiT; here is a workflow chart :\
+From version 1.8.0, LaTeXiT allows the user to use scipts during pre-, middle- and post-processing steps. A help panel is available in the scripts definition Preference pane (Composition). To understand where the scripts are used, it may be interesting to know the internal behaviour of LaTeXiT; here is a workflow chart :\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
 \f0\fs24 \cf0 {{\NeXTGraphic latexit-workflow-en.pdf \width9800 \height15020
@@ -295,7 +297,7 @@ FAQ (Frequently asked questions)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 - with Pages 1.0.2, when using the LaTeXiT service, the automatic shift of the equation, in order to align it on the line ("baseline" management), seems not to work. However, it works well with TextEdit and Nisus Writer Express, so it is certainly a bug of Pages, that seems to be fixed with Pages 2.0.\
 - with EazyDraw 1.7.1, drag'n dropped equations are displayed upside-down. This is a bug of EazyDraw, that has been fixed in the 1.8 version;\
-- with Adobe Illustrator, if you drag'n drop a PDF equation from LaTeXiT to illustrator, the font will be changed, because Illustrator can edit each symbol of the PDF generated by LaTeXiT, and uses its own fonts. To avoid that, use a temporary file: drag the equation from LaTeXiT to your desktop, a file is created, and drop this file into your Illustrator's document. It works, but then you won't be able to edit the equation in Illustrator any more. Other possibility: export with another format (see LaTeXiT Preferences), like EPS, or PDF with outlined fonts;\
+- with Adobe Illustrator, if you drag'n drop a PDF equation from LaTeXiT to Illustrator, the font will be changed, because Illustrator can edit each symbol of the PDF generated by LaTeXiT, and uses its own fonts. To avoid that, use a temporary file: drag the equation from LaTeXiT to your desktop, a file is created, and drop this file into your Illustrator's document. It works, but then you won't be able to edit the equation in Illustrator any more. Other possibility: export with another format (see LaTeXiT Preferences), like EPS, or PDF with outlined fonts;\
 - still with Adobe Illustrator, when drag'n dropping in it, a file may be created on the Desktop. It only occurs with Illustrator, and he is mostly responsible, because of its way to handle drag'n drop. Such problems do not occur with OmniGraffle;\
 - still with Adobe Illustrator : many glitches reported by users are solved by upgrading Illustrator to a newer version;\
 - if you notice that LaTeXiT, even when not used, eats some processor time an consumes more and more memory, just be aware that to speed up its launch time, it loads the images of the history in the background. This task has a very low priority and may take some time; however, it will stabilize. If you really want to avoid it, just think to clean up your history from time to time!\
@@ -311,7 +313,7 @@ LaTeXiT relies on a functional LaTeX installation. But if you do not know what L
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 LaTeX is not really a single program. It is a bunch of executable files and data files that work together. So, like with Linux, you will find LaTeX *distributions*. A distribution of LaTeX is a set of files that somebody gathered and organized so that once installed, it would work.\
-On MacOS, there are two well-known distributions : Gerben Wierda's distribution through the i-installer, and the Fink  distribution. I will only talk about Gerben Wierda's installation, but keep in mind that it is just a way among others.\
+On MacOS, there are two well-known distributions : Gerben Wierda's distribution through the i-installer, and the Fink distribution. I will only talk about Gerben Wierda's installation, but keep in mind that it is just a way among others.\
 On the Gerben Wierda's i-installer page ({\field{\*\fldinst{HYPERLINK "http://www.rna.nl/ii.html"}}{\fldrslt http://www.rna.nl/ii.html}}), you can download the i-installer program ({\field{\*\fldinst{HYPERLINK "http://bloch.ling.yale.edu/volumes/ii2/II2.dmg"}}{\fldrslt http://bloch.ling.yale.edu/volumes/ii2/II2.dmg}})\
 The i-installer is a little program that allows you to install LaTeX (or other things) on your system, by getting all the files you need in a remote location. This is very handy, because you are ensured that the files you get are the most recent ones, and all the installation is made for you.\
 So, just download the i-installer, open the dmg, and install it. Now, you can launch the i-installer.\
@@ -321,7 +323,7 @@ In the right panel, choose "Tex" and <Open i-package>. Then, follow the instruct
 Since you're there, you should also install Ghostscript 8 the same way, because it is required for most programs.\
 \
 Now, LaTeX is installed on your computer. But if you were not warned, you would not even notice that ! In fact, LaTeX has no graphical front-end, the programs are Unix-oriented and can only be called on the command line (using the /Application/Utilities/Terminal)\
-However, do not worry : there exist graphical interfaces to use LaTeX in a more user friendly manner. These are third-party software, most of the time free. LaTeXiT is one of them : it allows to typeset  small equations. To write big documents, you would rather use TexShop or iTexMac (for instance), which are designed for that.\
+However, do not worry : there exists graphical interfaces to use LaTeX in a more user friendly manner. These are third-party software, most of the time free. LaTeXiT is one of them : it allows to typeset  small equations. To write big documents, you would rather use TexShop or iTexMac (for instance), which are designed for that.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -330,6 +332,13 @@ However, do not worry : there exist graphical interfaces to use LaTeX in a more 
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.9.2 (26th july 2006)\
+- fixed a bug that could hang LaTeXiT when trying to open twice the same LinkBack item;\
+- the "PDF with outlined fonts" format can now be reopened in LaTeXiT;\
+- "New from Clipboard" does not forget any more size, color and mode of the equation;\
+- better handling of some LaTeX errors;\
+- fixed typo mistakes.\
+\
 v 1.9.1 (12th july 2006)\
 - added the ability to change the scale of the exports;\
 - fixed a bug that could occur (crash) while loading corrupted images;\
@@ -337,7 +346,7 @@ v 1.9.1 (12th july 2006)\
 - the Service now translates soft-line-breaking (Shift-return) to a simple carriage return, and unbreakable space (Alt-space) into a space, to avoid problems with LaTeX;\
 - an image generated by the service has no more a white background by default in the history;\
 - the service "Detect and typeset equations" can now open erroneous tries in LaTeXiT, to track errors;\
-- the service "Detect and typeset equations" don't delete existing images any more in a text to transform.\
+- the service "Detect and typeset equations" doesn't delete existing images any more in a text to transform.\
 \
 v 1.9.0 (4th june 2006)\
 - added LaTeX keywords in the auto-completion system available through the usual Option-Escape;\

@@ -78,7 +78,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 -(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
   id object = [[errorLines objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
-  //if the line number is equalt to 0, do not display it
+  //if the line number is equal to 0, do not display it
   if ([[aTableColumn identifier] isEqualToString:@"line"] && ![object intValue])
     object = nil;
   return object;
@@ -92,8 +92,10 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
   if (row >= 0)
   {
     NSNumber* lineError = [self tableView:self objectValueForTableColumn:[self tableColumnWithIdentifier:@"line"] row:row];
+    NSString* message = [self tableView:self objectValueForTableColumn:[self tableColumnWithIdentifier:@"message"] row:row];
     [[NSNotificationCenter defaultCenter] postNotificationName:ClickErrorLineNotification object:self
-       userInfo:lineError ? [NSDictionary dictionaryWithObject:lineError forKey:@"lineError"] : [NSDictionary dictionary]];
+       userInfo:lineError ? [NSDictionary dictionaryWithObjectsAndKeys:lineError, @"lineError", message, @"message", nil]
+                          : [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", nil]];
   }
 }
 

@@ -439,7 +439,7 @@ static NSMutableDictionary* cachePaths = nil;
     else
     {
       [document makeWindowControllers];
-      [document windowControllerDidLoadNib:[[document windowForSheet] windowController]];
+      [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
       [document showWindows];
     }
   }
@@ -1284,7 +1284,8 @@ static NSMutableDictionary* cachePaths = nil;
     currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
   if (currentDocument && historyItem)
   {
-    [currentDocument setLinkBackLink:link];//automatically closes previous links
+    if ([currentDocument linkBackLink] != link)
+      [currentDocument setLinkBackLink:link];//automatically closes previous links
     [currentDocument applyHistoryItem:historyItem]; //defines the state of the document
     [NSApp activateIgnoringOtherApps:YES];
     NSArray* windows = [currentDocument windowControllers];
@@ -2287,7 +2288,16 @@ static NSMutableDictionary* cachePaths = nil;
                             @"Ok", nil, nil);
           }
           else
+          {
+            HistoryItem* historyItem = [HistoryItem historyItemWithPDFData:pdfData useDefaults:YES];
             data = [NSData dataWithContentsOfFile:tmpPdfFilePath];
+            data = [self annotatePdfDataInLEEFormat:data preamble:[[historyItem preamble] string]
+                                             source:[[historyItem sourceText] string]
+                                              color:[historyItem color] mode:[historyItem mode]
+                                      magnification:[historyItem pointSize]
+                                           baseline:0
+                                    backgroundColor:[historyItem backgroundColor]];
+          }
         }
       }
       else if (format == EXPORT_FORMAT_EPS)
