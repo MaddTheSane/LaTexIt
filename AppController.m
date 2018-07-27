@@ -492,7 +492,7 @@ static NSMutableDictionary* cachePaths = nil;
       CompositionConfigurationPsToPdfPathKey, @"path",
       [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil],
     [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey],
-    [NSDictionary dictionaryWithObjectsAndKeys:nil],
+    [NSDictionary dictionary],
     [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey],
     [NSDictionary dictionaryWithObjectsAndKeys:
       DragExportSvgPdfToSvgPathKey, @"path",
@@ -542,7 +542,7 @@ static NSMutableDictionary* cachePaths = nil;
                                    alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
                                        otherButton:NSLocalizedString(@"Replace the library", @"Replace the library")
                          informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"If you choose <Replace the library>, the current library will be lost")];
-    int confirm = [alert runModal];
+    NSInteger confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
       ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_MERGE parent:nil];
     else if (confirm == NSAlertOtherReturn)
@@ -561,7 +561,7 @@ static NSMutableDictionary* cachePaths = nil;
                                    alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
                                        otherButton:NSLocalizedString(@"Replace the history", @"Replace the history")
                          informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"If you choose <Replace the history>, the current history will be lost")];
-    int confirm = [alert runModal];
+    NSInteger confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
       ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_MERGE];
     else if (confirm == NSAlertOtherReturn)
@@ -1396,7 +1396,7 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setResolvesAliases:YES];
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
   [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
-  int result = [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil];
+  NSInteger result = [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil];
   if (result == NSOKButton)
   {
     NSString* filePath = [[[self->openFileTypeOpenPanel URLs] lastObject] path];
@@ -2205,7 +2205,7 @@ static NSMutableDictionary* cachePaths = nil;
           [NSString stringWithFormat:@"\n%@",
             NSLocalizedString(@"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).",
                               @"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).")];
-        int returnCode =
+        NSInteger returnCode =
           NSRunAlertPanel(
             [NSString stringWithFormat:
               NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"), executableDisplayName],
@@ -2563,7 +2563,7 @@ static NSMutableDictionary* cachePaths = nil;
     NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration",
                                           @"LaTeXiT cannot be run properly, please check its configuration");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), @"%@", @"OK", nil, nil, message);
   }
   else
   {
@@ -3700,9 +3700,8 @@ static NSMutableDictionary* cachePaths = nil;
           BOOL success = [fileManager bridge_copyItemAtPath:palettePath toPath:destinationPath error:0];
           if (!success)
             NSRunAlertPanel(NSLocalizedString(@"Installation failed", @"Installation failed"),
-                            [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @"%@ could not be installed as %@"),
-                                                                         [palettePath lastPathComponent], destinationPath],
-                            NSLocalizedString(@"OK", @"OK"), nil, nil);
+                            NSLocalizedString(@"%@ could not be installed as %@", @"%@ could not be installed as %@"),
+                            NSLocalizedString(@"OK", @"OK"), nil, nil, [palettePath lastPathComponent], destinationPath);
           ok = success;
         }//end if overwrite
       }//end if install palette

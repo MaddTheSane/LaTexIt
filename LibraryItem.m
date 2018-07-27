@@ -93,22 +93,22 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end setTitle:
 
--(unsigned int) sortIndex
+-(NSUInteger) sortIndex
 {
-  unsigned int result = 0;
+  NSUInteger result = 0;
   [self willAccessValueForKey:@"sortIndex"];
-  result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntValue];
+  result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntegerValue];
   [self didAccessValueForKey:@"sortIndex"];
   return result;
 }
 //end sortIndex
 
--(void) setSortIndex:(unsigned int)value
+-(void) setSortIndex:(NSUInteger)value
 {
   if (value != [self sortIndex])
   {
     [self willChangeValueForKey:@"sortIndex"];
-    [self setPrimitiveValue:[NSNumber numberWithUnsignedInt:value] forKey:@"sortIndex"];
+    [self setPrimitiveValue:[NSNumber numberWithUnsignedInteger:value] forKey:@"sortIndex"];
     [self didChangeValueForKey:@"sortIndex"];
   }//end if (value != [self sortIndex])
 }

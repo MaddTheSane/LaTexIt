@@ -36,8 +36,8 @@
 -(void)         setBestTitle;//computes best title in current context
 -(LibraryItem*) parent;
 -(void)         setParent:(LibraryItem*)parent;
--(unsigned int) sortIndex;
--(void)         setSortIndex:(unsigned int)value;
+-(NSUInteger)   sortIndex;
+-(void)         setSortIndex:(NSUInteger)value;
 -(NSString*)    comment;
 -(void)         setComment:(NSString*)value;
 
