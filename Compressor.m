@@ -74,9 +74,13 @@
     {
       [decompData release];
       destLen = MAX(swappedDestLen, unswappedDestLen);
-      decompData = [[NSMutableData alloc] initWithLength:destLen];
-      error = uncompress( [decompData mutableBytes], &destLen,
-                          [data bytes]+sizeof(uLong), [data length]-sizeof(uLong) );
+      void* test = malloc(destLen);
+      BOOL ok = (test != 0);
+      if (test)
+        free(test);
+      decompData = ok ? [[NSMutableData alloc] initWithLength:destLen] : nil;
+      error = !decompData ? -1 : uncompress( [decompData mutableBytes], &destLen,
+                                             [data bytes]+sizeof(uLong), [data length]-sizeof(uLong) );
       switch(error)
       {
         case Z_OK:

@@ -11,10 +11,12 @@
 
 #import "LineCountTextView.h"
 
+#import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LibraryManager.h"
 #import "LineCountRulerView.h"
 #import "MyDocument.h"
+#import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
 #import "NSMutableArrayExtended.h"
@@ -74,7 +76,10 @@ static NSArray* WellKnownLatexKeywords = nil;
   frame.origin.y = MAX(0,   frame.origin.y);
   [self setFrame:frame];
 
-  [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObject:NSColorPboardType]];
+  NSArray* typesToAdd =
+    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType,
+                              NSRTFDPboardType, HistoryItemsPboardType, nil];
+  [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObjectsFromArray:typesToAdd]];
   return self;
 }
 
@@ -272,11 +277,63 @@ static NSArray* WellKnownLatexKeywords = nil;
 //So, the keywords of the PDF contain the whole document state
 -(NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
 {
-  NSDragOperation dragOperation = NSDragOperationNone;
+  BOOL ok = NO;
+  BOOL shouldBePDFData = NO;
+  NSData* data = nil;
+  
   NSPasteboard* pboard = [sender draggingPasteboard];
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
-    dragOperation = NSDragOperationCopy;
-  return dragOperation;
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
+    ok = YES;
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+    ok = YES;
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  {
+    shouldBePDFData = YES;
+    data = [pboard dataForType:NSPDFPboardType];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
+  {
+    shouldBePDFData = YES;
+    data = [pboard dataForType:NSFileContentsPboardType];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
+  {
+    shouldBePDFData = YES;
+    NSArray* plist = [pboard propertyListForType:NSFilenamesPboardType];
+    if (plist && [plist count])
+    {
+      NSString* filename = [plist objectAtIndex:0];
+      //on Panther, we rely on the extension to see if it is valid pdf. On Tiger, we will use PDFDocument
+      #ifdef PANTHER
+      if ([[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"])
+      #endif
+      data = [NSData dataWithContentsOfFile:filename];
+    }
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    ok = YES;
+  }
+
+  if (shouldBePDFData)
+  {
+    ok = (data != nil);
+    #ifndef PANTHER
+    if (ok)
+    {
+      PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
+      ok &= (pdfDocument != nil);
+      [pdfDocument release];
+    }
+    #endif
+  }
+  acceptDrag = ok ? NSDragOperationCopy : NSDragOperationNone;
+  return acceptDrag;
+}
+
+-(NSDragOperation) draggingUpdated:(id <NSDraggingInfo>)sender
+{
+  return acceptDrag;
 }
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
@@ -289,15 +346,49 @@ static NSArray* WellKnownLatexKeywords = nil;
     [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
                        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
   }
+  else if ([pboard availableTypeFromArray:
+        [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]])
+    [(id)[self nextResponder] performDragOperation:sender];
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+    if (pdfWrapperData)
+      [(id)[self nextResponder] performDragOperation:sender];
+    else
+      [super performDragOperation:sender];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, NSFileContentsPboardType, nil]])
+    [(id)[self nextResponder] performDragOperation:sender];
+  else
+    [super performDragOperation:sender];
   return YES;
 }
 
 -(IBAction) paste:(id)sender
 {
   //if this view is the first responder, it may allow pasting rich LaTeXiT data, but delegates that elsewhere
-  if ([[NSPasteboard generalPasteboard] availableTypeFromArray:
+  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  if ([pasteboard availableTypeFromArray:
         [NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSPDFPboardType, nil]])
     [(id)[self nextResponder] paste:sender];
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+    if (pdfWrapperData)
+      [(id)[self nextResponder] paste:sender];
+    else
+      [super paste:sender];
+  }
   else
     [super paste:sender];
   NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];

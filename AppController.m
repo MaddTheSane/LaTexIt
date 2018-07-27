@@ -25,6 +25,7 @@
 #import "MyDocument.h"
 #import "MyImageView.h"
 #import "NSApplicationExtended.h"
+#import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSStringExtended.h"
 #import "MarginController.h"
@@ -418,6 +419,16 @@ static NSMutableDictionary* cachePaths = nil;
     filename = [filename stringByAppendingPathExtension:@"pdf"];
     data = [pasteboard dataForType:NSPDFPboardType];
   }
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    filename = [filename stringByAppendingPathExtension:@"pdf"];
+    NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    data = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+  }
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
   {
     filename = [filename stringByAppendingPathExtension:@"tex"];
@@ -455,8 +466,19 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL ok = YES;
   if ([sender action] == @selector(newFromClipboard:))
   {
-    ok = ([[NSPasteboard generalPasteboard] availableTypeFromArray:
-            [NSArray arrayWithObjects:NSPDFPboardType, NSStringPboardType, nil]] != nil);
+    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+    ok = ([pasteboard availableTypeFromArray:
+            [NSArray arrayWithObjects:NSPDFPboardType, NSRTFDPboardType, NSStringPboardType, nil]] != nil);
+    if (![pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, NSStringPboardType, nil]])//RTFD
+    {
+      NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
+      NSDictionary* docAttributes = nil;
+      NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+      NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+      NSData* data = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+      [attributedString release];
+      ok = (data != nil);
+    }
   }
   else if ([sender action] == @selector(copyAs:))
   {
@@ -2099,9 +2121,9 @@ static NSMutableDictionary* cachePaths = nil;
               //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
               //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
               //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-              //NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
-              //[space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-              //[mutableAttributedStringWithImage appendAttributedString:space];
+              NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@""] autorelease];
+              [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
+              [mutableAttributedStringWithImage appendAttributedString:space];
 
               //inserts the image in the global string
               [mutableAttrString replaceCharactersInRange:rangeOfEquation withAttributedString:mutableAttributedStringWithImage];

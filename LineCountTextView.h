@@ -24,6 +24,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   NSMutableSet*   forbiddenLines;  //lines that cannot be edited
   LineCountRulerView* lineCountRulerView;
   int lineShift; //the displayed numerotation of the lines may start at a value different from 1
+  NSDragOperation acceptDrag;
 }
 
 -(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line

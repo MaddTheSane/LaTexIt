@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.9.2\
+\f2\b \cf0 LaTeXiT 1.9.3\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -57,7 +57,7 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.9.2 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.9.3 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -244,8 +244,14 @@ FAQ (Frequently asked questions)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+(Q) : LaTeXiT crashes on launch.\
+(R) : A corrupted history or library may prevent LaTeXiT from launching. In such a case, just move around the files "history.dat" and "library.dat" that lie in the folder "Library/LaTeXiT" of your home folder.\
+\
 (Q): where can I get pdflatex, dvipdf and ghostscript ?\
 (A): please see the section "Install Latex" of this document.\
+\
+(Q) : I did install LaTeX the way described, but LaTeXiT seems not be functional either.\
+(R) : If you have installed TeXShop, then LaTeXiT, then LaTeX, the paths of LaTeXiT may point to a pdflatexc of TeXShop that is not sufficient. Just try before to remove LaTeXiT's Preferences (Library/Preferences/fr.club.ktd.LaTeXiT.plist). You can also try to set by hand the paths in the "composition" pane of the LaTeXiT's preferences.\
 \
 (Q): My equation is cut and does not display completely .\
 (A): See the "Known issues" section below.\
@@ -287,7 +293,8 @@ FAQ (Frequently asked questions)\
 \f2\b \cf0 - if you only have TeXShop, LaTeXiT cannot function properly. You need a real LaTeX installation. You will find more information in the next section "Install LaTeX";\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f1\b0 \cf0 - syntax colouring does not handle "$$" well;\
+\f1\b0 \cf0 - when the equation color is set to perfect white, the equation seems ill-cropped (left and right parenthesis may disappear for instance). This is a bug of ghostscript, that fails at cropping well with a white equation on a white background. To fix that, use the "Palettes > Margins" menu to increase left and right margins;\
+- syntax colouring does not handle "$$" well;\
 - with very little equations, you may encounter a cropping problem. LaTeX may fail to compute the bounding box of an equation. There are two workarounds : either add margins with the Margin palette, or use $$...$$ in TEXT mode instead of using DISPLAY or INLINE mode (there is an internal difference in LaTeXiT);\
 - custom margins are not taken in account when exporting to EPS; it seems to be a bug of GhostScript;\
 - while evolving from version 1.2 for Panther to 1.3 for Panther, you need to rename the folder ~/Library/LaTeXiT-panther into ~/Library/LaTeXiT, to get back your history and library;\
@@ -332,6 +339,11 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.9.3 (28th august 2006)\
+- fixed (again) the service "Detect and typeset equations" so that it doesn't delete existing images any more in a text to transform;\
+- LaTeXiT can now reopen PDF data embedded in RTF; that means that copy/paste should now work from text editors to reopen equations;\
+- fixed a crash in LaTeXiT that could occur when loading a corrupted history/library.\
+\
 v 1.9.2 (26th july 2006)\
 - fixed a bug that could hang LaTeXiT when trying to open twice the same LinkBack item;\
 - the "PDF with outlined fonts" format can now be reopened in LaTeXiT;\

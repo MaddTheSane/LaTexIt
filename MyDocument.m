@@ -904,7 +904,8 @@ static NSString* yenString = nil;
 
   //STEP 2
   BOOL shouldTryStep2 = (latexMode != LATEX_MODE_TEXT) && (latexMode != LATEX_MODE_EQNARRAY) &&
-                        (compositionMode != COMPOSITION_MODE_LATEXDVIPDF) && (compositionMode != COMPOSITION_MODE_XELATEX);
+                         (compositionMode != COMPOSITION_MODE_LATEXDVIPDF) &&
+                         (compositionMode != COMPOSITION_MODE_XELATEX);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
   if (!failed)
   {

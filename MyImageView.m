@@ -16,6 +16,7 @@
 #import "LibraryManager.h"
 #import "MyDocument.h"
 #import "NSApplicationExtended.h"
+#import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
@@ -49,7 +50,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
                                                name:CopyCurrentImageNotification object:nil];
   [self registerForDraggedTypes:
-    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType, nil]];
+    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType,
+                              NSRTFDPboardType, nil]];
   return self;
 }
 
@@ -306,7 +308,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
   {
     shouldBePDFData = YES;
-    data = [pboard dataForType:NSPDFPboardType];
+    data = [pboard dataForType:NSFileContentsPboardType];
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
   {
@@ -321,6 +323,16 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       #endif
       data = [NSData dataWithContentsOfFile:filename];
     }
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+    ok = (pdfWrapperData != nil);
   }
   
   if (shouldBePDFData)
@@ -411,6 +423,17 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSArray* plist = [pboard propertyListForType:NSFilenamesPboardType];
     NSData* data = (plist && [plist count]) ? [NSData dataWithContentsOfFile:[plist objectAtIndex:0]] : nil;
     [document applyPdfData:data];
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSDictionary* docAttributes = nil;
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
+    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
+    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    [attributedString release];
+    if (pdfWrapperData)
+      [document applyPdfData:pdfWrapperData];
   }
   else
     ok = NO;

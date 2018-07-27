@@ -284,6 +284,7 @@
 		93B52890089FF95800F14B77 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B5288C089FF95800F14B77 /* remove.tiff */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
 		93CD21DE0827E9230079C367 /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
+		93D19DB20AA2E41C00DFBEE8 /* NSAttributedStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		93D7CA5709D362FC0001DC5E /* CompositionConfigurationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CA5509D362FC0001DC5E /* CompositionConfigurationController.m */; };
 		93D7CB5A09D36D6D0001DC5E /* CompositionConfiguration.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93D7CB5909D36D6D0001DC5E /* CompositionConfiguration.nib */; };
@@ -649,6 +650,8 @@
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
 		93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArrayExtended.m; sourceTree = "<group>"; };
+		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
+		93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringExtended.m; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
 		93D6BA1C082941900081D58A /* NSArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtended.m; sourceTree = "<group>"; };
 		93D7CA5409D362FC0001DC5E /* CompositionConfigurationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationController.h; sourceTree = "<group>"; };
@@ -750,8 +753,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				93D7CA5309D362D40001DC5E /* CompositionConfiguration */,
 				93344CB708251C9000F00A49 /* CocoaExtensions */,
+				93D7CA5309D362D40001DC5E /* CompositionConfiguration */,
 				93F73CF10898E26000EFFA5E /* Encapsulation */,
 				93EF9D1B07EF7B5C0003FA6E /* History */,
 				9324D35808A63ED90010DB95 /* Interface */,
@@ -1151,6 +1154,8 @@
 				935A834A084EFF11005724CE /* NSApplicationExtended.m */,
 				93D6BA1B082941900081D58A /* NSArrayExtended.h */,
 				93D6BA1C082941900081D58A /* NSArrayExtended.m */,
+				93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */,
+				93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */,
 				9331016F083D1D6400DE67ED /* NSColorExtended.h */,
 				93310170083D1D6400DE67ED /* NSColorExtended.m */,
 				93E81A9F087978AD0081B897 /* NSFontExtended.h */,
@@ -1699,6 +1704,7 @@
 				93FE050A09D2F32C00B8B34E /* CompositionConfigurationManager.m in Sources */,
 				93D7CA5709D362FC0001DC5E /* CompositionConfigurationController.m in Sources */,
 				939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */,
+				93D19DB20AA2E41C00DFBEE8 /* NSAttributedStringExtended.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

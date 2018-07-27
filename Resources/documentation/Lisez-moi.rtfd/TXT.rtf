@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.9.2\
+\f2\b \cf0 LaTeXiT 1.9.3\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -55,7 +55,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.9.2 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.9.3 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -243,8 +243,14 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-(Q): O\'9d trouver pdflatex, dvipdf et Ghoscript pour les installer ?\
+(Q) : LaTeXiT plante au d\'8emarrage.\
+(R) : En cas d'historique ou de biblioth\'8fque corrompue, il peut arriver que LaTeXiT ne puisse se lancer. D\'8eplacez simplement les fichiers "history.dat" et "library.dat" qui se trouve dans "Biblioth\'8fque/LaTeXiT" de votre dossier utilisateur.\
+\
+(Q) : O\'9d trouver pdflatex, dvipdf et Ghoscript pour les installer ?\
 (R) : Voyez la section "Installer LaTeX" de ce document.\
+\
+(Q) : J'ai install\'8e LaTeX correctement mais LaTeXiT semble ne pas fonctionner malgr\'8e tout.\
+(R) : Si vous avez install\'8e TexShop, puis LaTeXiT, puis LaTeX, les chemins de LaTeXiT peuvent pointer vers un pdflatexc de TeXShop qui ne suffit pas. Essayez d'abord de supprimer les pr\'8ef\'8erences de LaTeXiT (Biblioth\'8fque/Pr\'8ef\'8erences/fr.club.ktd.LaTeXiT.plist). Essayez aussi de r\'8egler les chemins \'88 la main dans le panneau "Composition" des pr\'8ef\'8erences de LaTeXiT.\
 \
 (Q) : Mon \'8equation appara\'94t tronqu\'8ee.\
 (R) : Voyez la section "Bugs/incompatibilit\'8es connues" ci-dessous.\
@@ -284,7 +290,9 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \f2\b \cf0 - si vous n'avez que TeXShop d'install\'8e, LaTeXiT ne peut fonctionner. Il vous faut une v\'8eritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'8fs.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f1\b0 \cf0 - la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
+\f1\b0 \cf0 - quand la couleur de l'\'8equation est r\'8egl\'8ee sur blanc pur, elle semble mal d\'8ecoup\'8ee (disparition \'8eventuelle des parenth\'8fses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'8echoue \'88 d\'8ecouper correctement avec une \'8equation blanche sur fond blanc. Pour corriger cela, utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 - la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
 - avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer sa taille exacte, et l'\'8equation se retrouve alors tronqu\'8ee. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
 - les marges personnalis\'8ees ne sont pas prises en compte lors d'un export en EPS; cela semble \'90tre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque;\
@@ -328,6 +336,11 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.9.3 (28 ao\'9et 2006)\
+- correction (encore) du service "D\'8etecter et cr\'8eer les \'8equations" pour qu'il ne supprime plus les images d\'8ej\'88 ins\'8er\'8ees dans un texte \'88 convertir;\
+- LaTeXiT peut maintenant r\'8eouvrir le PDF embarqu\'8e dans du RTF; cela signifie que le copier/coller devrait maintenant fonctionner depuis les \'8editeurs de texte pour r\'8eouvrir les \'8equations;\
+- correction d'un bug pouvant provoquer un crash de LaTeXiT au chargement d'une historique/biblioth\'8fque corrompue.\
+\
 v 1.9.2 (26 juillet 2006)\
 - correction d'un bug pouvant bloquer LaTeXiT en essayant d'ouvrir plusieurs fois le m\'90me item LinkBack;\
 - le format "PDF with outlined fonts" peut maintenant \'90tre r\'8eouvert dans LaTeXiT;\
