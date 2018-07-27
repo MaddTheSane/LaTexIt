@@ -30,6 +30,7 @@
 #import "LibraryView.h"
 #import "LineCountTextView.h"
 #import "LogicTransformer.h"
+#import "MyDocument.h"
 #import "NSButtonExtended.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
@@ -72,6 +73,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(void) tableViewSelectionDidChange:(NSNotification*)notification;
 -(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 -(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo;
+-(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 @implementation PreferencesWindowController
@@ -127,7 +129,18 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(void) awakeFromNib
 {
-  self->viewsMinSizes = [[NSDictionary alloc] initWithObjectsAndKeys:
+  //get rid of formatter localization problems
+  [self->generalPointSizeFormatter setLocale:[NSLocale currentLocale]];
+  [self->marginsAdditionalPointSizeFormatter setLocale:[NSLocale currentLocale]];
+  [self->servicePointSizeFactorFormatter setLocale:[NSLocale currentLocale]];
+  [self->generalPointSizeFormatter setZeroSymbol:
+    [NSString stringWithFormat:@"0%@%0*d", [self->generalPointSizeFormatter decimalSeparator], 2, 0]];
+  [self->marginsAdditionalPointSizeFormatter setZeroSymbol:
+    [NSString stringWithFormat:@"0%@%0*d", [self->marginsAdditionalPointSizeFormatter decimalSeparator], 2, 0]];
+  [self->servicePointSizeFactorFormatter setZeroSymbol:
+    [NSString stringWithFormat:@"0%@%0*d", [self->servicePointSizeFactorFormatter decimalSeparator], 2, 0]];
+
+  self->viewsMinSizes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
     [NSValue valueWithSize:[self->generalView frame].size], GeneralToolbarItemIdentifier,
     [NSValue valueWithSize:[self->editionView frame].size], EditionToolbarItemIdentifier,
     [NSValue valueWithSize:[self->templatesView frame].size], TemplatesToolbarItemIdentifier,
@@ -1107,12 +1120,27 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(IBAction) preamblesValueResetDefault:(id)sender
 {
-  [self->preamblesValueTextView setValue:[PreamblesController defaultLocalizedPreambleValueAttributedString] forKey:NSAttributedStringBinding];
-  [[[PreferencesController sharedController] preamblesController]
-    setValue:[NSKeyedArchiver archivedDataWithRootObject:[PreamblesController defaultLocalizedPreambleValueAttributedString]]
-    forKeyPath:@"selection.value"];
+    NSBeginAlertSheet(NSLocalizedString(@"Reset preamble",@"Reset preamble"),
+                      NSLocalizedString(@"Reset preamble",@"Reset preamble"),
+                      NSLocalizedString(@"Cancel", @"Cancel"),
+                      nil, [self window], self,
+                      @selector(_preamblesValueResetDefault:returnCode:contextInfo:), nil, NULL,
+                      NSLocalizedString(@"Are you sure you want to reset the preamble ?\nThis operation is irreversible.",
+                                        @"Are you sure you want to reset the preamble ?\nThis operation is irreversible."));
 }
 //end preamblesValueResetDefault:
+
+-(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+  if (returnCode == NSAlertDefaultReturn)
+  {
+    [self->preamblesValueTextView setValue:[PreamblesController defaultLocalizedPreambleValueAttributedString] forKey:NSAttributedStringBinding];
+    [[[PreferencesController sharedController] preamblesController]
+      setValue:[NSKeyedArchiver archivedDataWithRootObject:[PreamblesController defaultLocalizedPreambleValueAttributedString]]
+      forKeyPath:@"selection.value"];
+  }//end if (returnCode == NSAlertDefaultReturn)
+}
+//end _clearHistorySheetDidEnd:returnCode:contextInfo:
 
 -(IBAction) preamblesValueApplyToOpenedDocuments:(id)sender
 {
@@ -1159,8 +1187,12 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) bodyTemplatesApplyToOpenedDocuments:(id)sender
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSDictionary* bodyTemplatesDictionary = [preferencesController bodyTemplateDocumentDictionary];
   NSArray* documents = [[NSDocumentController sharedDocumentController] documents];
-  [documents makeObjectsPerformSelector:@selector(setBodyTemplate:) withObject:[preferencesController bodyTemplateDocumentDictionary]];
+  NSEnumerator* enumerator = [documents objectEnumerator];
+  MyDocument* document = nil;
+  while((document = [enumerator nextObject]))
+    [document setBodyTemplate:bodyTemplatesDictionary moveCursor:YES];
 }
 //end bodyTemplatesApplyToOpenedDocuments:
 
@@ -1261,7 +1293,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) compositionConfigurationsChangePath:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setResolvesAliases:YES];
+  [openPanel setResolvesAliases:NO];
   NSDictionary* contextInfo = nil;
   if (sender == self->compositionConfigurationsCurrentPdfLaTeXPathChangeButton)
     contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1311,10 +1343,10 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   {
     NSTextField* textField = [(NSDictionary*)contextInfo objectForKey:@"textField"];
     NSString*    pathKey   = [(NSDictionary*)contextInfo objectForKey:@"pathKey"];
-    NSArray* filenames = [openPanel filenames];
-    if (filenames && [filenames count])
+    NSArray* urls = [openPanel URLs];
+    if (urls && [urls count])
     {
-      NSString* path = [filenames objectAtIndex:0];
+      NSString* path = [[urls objectAtIndex:0] path];
       if (textField == self->compositionConfigurationsAdditionalScriptsExistingPathTextField)
         [[[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationScriptsController]
           setValue:path

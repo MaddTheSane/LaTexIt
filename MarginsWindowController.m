@@ -29,6 +29,11 @@
 //initializes the controls with default values
 -(void) windowDidLoad
 {
+  //get rid of formatter localization problems
+  [self->pointSizeFormatter setLocale:[NSLocale currentLocale]];
+  [self->pointSizeFormatter setZeroSymbol:
+    [NSString stringWithFormat:@"0%@%0*d", [self->pointSizeFormatter decimalSeparator], 2, 0]];
+
   [[self window] setFrameAutosaveName:@"margins"];
   [[self window] setTitle:NSLocalizedString(@"Custom margins", @"Custom margins")];
   [self->saveAsDefaultButton setTitle:NSLocalizedString(@"Save as default margins", @"Save as default margins")];

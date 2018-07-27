@@ -28,6 +28,7 @@ extern NSString* LatexitEquationsPboardType;
   int updateLevel;
   BOOL annotateDataDirtyState;
   NSImage* pdfCachedImage;
+  BOOL isModelPrior250;
 }
 
 +(NSEntityDescription*) entity;
@@ -100,5 +101,6 @@ extern NSString* LatexitEquationsPboardType;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(id) plistDescription;
+-(id) initWithDescription:(id)description;
 
 @end

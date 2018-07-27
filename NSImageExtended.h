@@ -13,5 +13,7 @@
 
 -(NSBitmapImageRep*) bitmapImageRepresentation;
 -(NSBitmapImageRep*) bitmapImageRepresentationWithMaxSize:(NSSize)maxSize;
+-(NSPDFImageRep*)    pdfImageRepresentation;
+-(NSImageRep*)       bestImageRepresentationInContext:(NSGraphicsContext*)context;
 
 @end

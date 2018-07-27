@@ -2,17 +2,15 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.SystemVersion">10K549</string>
 		<string key="IBDocument.InterfaceBuilderVersion">851</string>
-		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">851</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="963"/>
-		</array>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 		</array>
@@ -202,7 +200,7 @@
 						<object class="NSButtonCell" key="NSCell" id="991594411">
 							<int key="NSCellFlags">-2080244224</int>
 							<int key="NSCellFlags2">134217728</int>
-							<string key="NSContents">Warning : pdf2svg path is invalid</string>
+							<string key="NSContents">Atención: pdf2svg ruta no es válida</string>
 							<reference key="NSSupport" ref="607265908"/>
 							<reference key="NSControlView" ref="1001857656"/>
 							<int key="NSButtonFlags">138166527</int>
@@ -799,7 +797,7 @@
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSCustomView" id="468818174">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSTabView" id="54545674">
@@ -1776,7 +1774,6 @@ b21lbnRhcmlvClxlbmR7dGFidWxhcn0</bytes>
 					</object>
 				</array>
 				<string key="NSFrameSize">{600, 487}</string>
-				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 				<string key="NSExtension">NSResponder</string>
 			</object>
@@ -4289,7 +4286,7 @@ bGVzIGNhcmFjdMOocmVzIGFjY2VudHXDqXM</bytes>
 																<object class="NSTableHeaderCell" key="NSHeaderCell">
 																	<int key="NSCellFlags">75628096</int>
 																	<int key="NSCellFlags2">2048</int>
-																	<string key="NSContents">Choisissez un export</string>
+																	<string key="NSContents">seleccionar una exportación</string>
 																	<reference key="NSSupport" ref="26"/>
 																	<object class="NSColor" key="NSBackgroundColor">
 																		<int key="NSColorSpace">3</int>
@@ -5146,8 +5143,8 @@ DQdCZEOGgPishzDwG2NgchsxzjsHKN4cY6xtDkXGNodw9R/jmHuQJchAhyEDUWQJ0pJyDAWNKAAD6UDT
 EDheACFqdobEHICAAA8BAAADAAAAAQARAAABAQADAAAAAQARAAABAgADAAAABAAABMIBAwADAAAAAQAF
 AAABBgADAAAAAQACAAABEQAEAAAAAQAAAAgBEgADAAAAAQABAAABFQADAAAAAQAEAAABFgADAAAAAQAR
 AAABFwAEAAAAAQAABAABHAADAAAAAQABAAABPQADAAAAAQACAAABUgADAAAAAQABAAABUwADAAAABAAA
-BMqHcwAHAAAZ7AAABNIAAAAAAAgACAAIAAgAAQABAAEAAQAAGexhcHBsAhAAAG1udHJSR0IgWFlaIAfb
-AAQAEAAJAAoALmFjc3BBUFBMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD21gABAAAAANMtYXBwbAAA
+BMqHcwAHAAAZ7AAABNIAAAAAAAgACAAIAAgAAQABAAEAAQAAGexhcHBsAhAAAG1udHJSR0IgWFlaIAfc
+AAEAAgARAB0AImFjc3BBUFBMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD21gABAAAAANMtYXBwbAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEWRlc2MAAAFQAAAAYmRz
 Y20AAAG0AAACQmNwcnQAAAP4AAAA0Hd0cHQAAATIAAAAFHJYWVoAAATcAAAAFGdYWVoAAATwAAAAFGJY
 WVoAAAUEAAAAFHJUUkMAAAUYAAAIDGFhcmcAAA0kAAAAIHZjZ3QAAA1EAAAGEm5kaW4AABNYAAAGPmNo
@@ -5164,7 +5161,7 @@ AGwAbwByAGkAZABvAEwAQwBEACAAYQAgAEMAbwByAGUAc19pgnIAIABMAEMARABMAEMARAAgAGMAbwBs
 AG8AcjCrMOkw/AAgAEwAQwBEBCYEMgQ1BEIEPQQ+BDkAIAQWBBoALQQ0BDgEQQQ/BDsENQQ5AEYA5ABy
 AGcALQBMAEMARF9pgnJtsmZ2mG95OlZoAEYAYQByAGIALQBMAEMARABWAOQAcgBpAC0ATABDAEQATABD
 AEQAIABjAG8AbABvAHIAac7st+wAIABMAEMARAAAdGV4dAAAAABDb3B5cmlnaHQgQXBwbGUsIEluYy4s
-IDIwMTEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+IDIwMTIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFhZ
 WiAAAAAAAADzUgABAAAAARbPWFlaIAAAAAAAAFyNAAA1PwAABstYWVogAAAAAAAAcKQAAK40AAAeKlhZ
@@ -8578,6 +8575,14 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 						<reference key="destination" ref="1001857656"/>
 					</object>
 					<int key="connectionID">9355</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">generalPointSizeFormatter</string>
+						<reference key="source" ref="68591814"/>
+						<reference key="destination" ref="636307491"/>
+					</object>
+					<int key="connectionID">9356</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -12029,7 +12034,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="1058920882"/>
-						<string key="toolTip">Pour la lisibilité des équations de couleur claire, le fond de l'aperçu est assombri</string>
+						<string key="toolTip">Para mejorar la visibilidad de ecuaciones en colores claros, se oscurece el fondo</string>
 					</object>
 				</object>
 				<string key="1213.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12099,7 +12104,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="194200696"/>
-						<string key="toolTip">Utilise un véritable shell de login prenant en compte les fichiers de configuration comme .bashrc et .profile</string>
+						<string key="toolTip">Use a real login shell taking in account configuration files like .bashrc and .profile</string>
 					</object>
 				</object>
 				<string key="4917.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12339,7 +12344,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="32983405"/>
-						<string key="toolTip">Mode display : \[...\], mode inline : $...$</string>
+						<string key="toolTip">Modo display: \[...\], modo en linea: $...$</string>
 					</object>
 				</object>
 				<string key="9081.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12614,7 +12619,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="820440872"/>
-						<string key="toolTip">ajouter un élément</string>
+						<string key="toolTip">añadir un elemento</string>
 					</object>
 				</object>
 				<string key="9303.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12624,7 +12629,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="560951817"/>
-						<string key="toolTip">supprimer l'élément sélectionné</string>
+						<string key="toolTip">eliminar el elemento seleccionado</string>
 					</object>
 				</object>
 				<string key="9304.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12707,7 +12712,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">9355</int>
+			<int key="maxID">9356</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -13243,6 +13248,7 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 						<string key="generalLatexisationFontColorWell">NSColorWell</string>
 						<string key="generalLatexisationFontSizeTextField">NSTextField</string>
 						<string key="generalLatexisationLaTeXModeSegmentedControl">NSSegmentedControl</string>
+						<string key="generalPointSizeFormatter">NSNumberFormatter</string>
 						<string key="generalView">NSView</string>
 						<string key="historyDeleteOldEntriesCheckbox">NSButton</string>
 						<string key="historyDeleteOldEntriesLimitStepper">NSStepper</string>
@@ -13650,6 +13656,10 @@ eGl0LXdvcmtmbG93LWVzLnBkZgEAAAAeAAAAAQAAAAIAAAAuLhAAAAAAAAAApAEAAAIAAAABAAAAA</b
 						<object class="IBToOneOutletInfo" key="generalLatexisationLaTeXModeSegmentedControl">
 							<string key="name">generalLatexisationLaTeXModeSegmentedControl</string>
 							<string key="candidateClassName">NSSegmentedControl</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="generalPointSizeFormatter">
+							<string key="name">generalPointSizeFormatter</string>
+							<string key="candidateClassName">NSNumberFormatter</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="generalView">
 							<string key="name">generalView</string>

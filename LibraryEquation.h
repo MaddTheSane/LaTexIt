@@ -15,14 +15,20 @@
 
 @interface LibraryEquation : LibraryItem <NSCopying, NSCoding>
 {
-  BOOL kvoEnabled;
+  BOOL customKVOEnabled;
+  BOOL customKVOInhibited;
 }
 
 +(NSEntityDescription*) entity;
 +(NSEntityDescription*) wrapperEntity;
 
 -(id) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+
 -(void) dispose;
+-(BOOL) customKVOEnabled;
+-(void) setCustomKVOEnabled:(BOOL)value;
+-(BOOL) customKVOInhibited;
+-(void) setCustomKVOInhibited:(BOOL)value;
 
 -(void) setTitle:(NSString*)value;//redefined to set title of equation with the same value
 

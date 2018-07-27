@@ -171,7 +171,12 @@ static LaTeXProcessor* sharedInstance = nil;
     @synchronized(self)
     {
       if (!self->managedObjectModel)
-        self->managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+      {
+        //NSString* modelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Latexit-2.4.0" ofType:@"mom"];
+        NSString* modelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Latexit" ofType:@"mom"];
+        NSURL* modelURL = [NSURL fileURLWithPath:modelPath];
+        self->managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+      }//end if (!self->managedObjectModel)
     }//end @synchronized(self)
   }//end if (!self->managedObjectModel)
   return self->managedObjectModel;
@@ -698,7 +703,7 @@ static LaTeXProcessor* sharedInstance = nil;
           "\\immediate\\write\\foo{\\the\\latexitdepth (Depth)}\n"
           "\\closeout\\foo\n"
           "\\begin{document}\\includegraphics*[scale=%f,clip=%@,viewport=%fbp %fbp %fbp %fbp]{%@}\n\\end{document}\n", 
-          [colouredPreamble replaceYenSymbol], //preamble
+          @"\\documentclass[10pt]{article}",//,[colouredPreamble replaceYenSymbol], //preamble
           ceil((boundingBox.origin.x+boundingBox.size.width)*magnification/ptSizeBase),
           ceil((boundingBox.origin.y+boundingBox.size.height)*magnification/ptSizeBase),
           0.f,
@@ -1398,9 +1403,13 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* scriptShell = nil;
     switch(source)
     {
-      case SCRIPT_SOURCE_STRING: scriptShell = [script objectForKey:CompositionConfigurationAdditionalProcessingScriptShellKey]; break;
-      case SCRIPT_SOURCE_FILE: scriptShell = @"/bin/sh"; break;
-    }
+      case SCRIPT_SOURCE_STRING:
+        scriptShell = [script objectForKey:CompositionConfigurationAdditionalProcessingScriptShellKey];
+        break;
+      case SCRIPT_SOURCE_FILE:
+        scriptShell = @"/bin/bash";
+        break;
+    }//end switch(source)
     
     BOOL useLoginShell = [compositionConfiguration compositionConfigurationUseLoginShell];
 
@@ -1409,7 +1418,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [task setCurrentDirectoryPath:workingDirectory];
     [task setEnvironment:environment];
     [task setLaunchPath:scriptShell];
-    [task setArguments:[NSArray arrayWithObjects:@"-c", latexScriptPath, nil]];
+    [task setArguments:[NSArray arrayWithObjects:useLoginShell ? @"" : @"-l", @"-c", latexScriptPath, nil]];
     [task setCurrentDirectoryPath:[latexScriptPath stringByDeletingLastPathComponent]];
 
     [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
@@ -1590,7 +1599,7 @@ static LaTeXProcessor* sharedInstance = nil;
         if (gsPath && ![gsPath isEqualToString:@""] && psToPdfPath && ![psToPdfPath isEqualToString:@""])
         {
           NSString* tmpFilePath = nil;
-          NSFileHandle* tmpFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"export.XXXXXXXXX" extension:@"log" outFilePath:&tmpFilePath
+          NSFileHandle* tmpFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"export.XXXXXXXX" extension:@"log" outFilePath:&tmpFilePath
                                                                                 workingDirectory:temporaryDirectory];
           if (!tmpFilePath)
             tmpFilePath = @"/dev/null";

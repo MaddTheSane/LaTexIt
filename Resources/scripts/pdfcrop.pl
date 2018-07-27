@@ -4,7 +4,7 @@ $^W=1; # turn warning on
 #
 # pdfcrop.pl
 #
-# Copyright (C) 2002, 2004, 2005, 2008-2010 Heiko Oberdiek.
+# Copyright (C) 2002, 2004, 2005, 2008-2012 Heiko Oberdiek.
 #
 # This program may be distributed and/or modified under the
 # conditions of the LaTeX Project Public License, either version 1.2
@@ -19,12 +19,13 @@ $^W=1; # turn warning on
 # This file "pdfcrop.pl" may be renamed to "pdfcrop"
 # for installation purposes.
 #
-my $file        = "pdfcrop.pl";
+my $prj         = 'pdfcrop';
+my $file        = "$prj.pl";
 my $program     = uc($&) if $file =~ /^\w+/;
-my $version     = "1.31";
-my $date        = "2010/09/17";
+my $version     = "1.33";
+my $date        = "2012/02/01";
 my $author      = "Heiko Oberdiek";
-my $copyright   = "Copyright (c) 2002-2010 by $author.";
+my $copyright   = "Copyright (c) 2002-2012 by $author.";
 #
 # Reqirements: Perl5, Ghostscript
 # History:
@@ -95,6 +96,11 @@ my $copyright   = "Copyright (c) 2002-2010 by $author.";
 #                   * Again input file names restricted for Ghostscript
 #                     command line, switch then to symbol link/copy
 #                     method.
+# 2011/08/10 v1.32: * Detection for gswin64c.exe added.
+# 2012/02/01 v1.33: * Input file can be `-' (standard input).
+# 2012/04/18 v1.34: * Format of --version changed
+#                     from naked version number to a line with
+#                     program name, date and version.
 
 ### program identification
 my $title = "$program $version, $date - $copyright\n";
@@ -109,6 +115,9 @@ delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
 my $Win = 0;
 $Win = 1 if $^O =~ /mswin32/i;
 $Win = 1 if $^O =~ /cygwin/i;
+use Config;
+my $archname = $Config{'archname'};
+$archname = 'unknown' unless defined $Config{'archname'};
 
 ### string constants for Ghostscript run
 # get Ghostscript command name
@@ -122,6 +131,8 @@ sub find_ghostscript () {
     $system = "cygwin" if $^O =~ /cygwin/i;
     $system = "miktex" if defined($ENV{"TEXSYSTEM"}) and
                           $ENV{"TEXSYSTEM"} =~ /miktex/i;
+    print "* OS name: $^O\n" if $::opt_debug;
+    print "* Arch name: $archname\n" if $::opt_debug;
     print "* System: $system\n" if $::opt_debug;
     my %candidates = (
         'unix' => [qw|gs gsc|],
@@ -131,6 +142,16 @@ sub find_ghostscript () {
         'cygwin' => [qw|gs gswin32c|],
         'miktex' => [qw|mgs gswin32c gs|]
     );
+    if ($system eq 'win' or $system eq 'cygwin' or $system eq 'miktex') {
+        if ($archname =~ /mswin32-x64/i) {
+            my @a = ();
+            foreach my $name (@{$candidates{$system}}) {
+                push @a, 'gswin64c' if $name eq 'gswin32c';
+                push @a, $name;
+            }
+            $candidates{$system} = \@a;
+        }
+    }
     my %ext = (
         'unix' => '',
         'dos' => '.exe',
@@ -140,7 +161,8 @@ sub find_ghostscript () {
         'miktex' => '.exe'
     );
     my $candidates_ref = $candidates{$system};
-    my $ext = $ext{$system};
+    my $ext = $Config{'_exe'};
+    $ext = $ext{$system} unless defined $ext;
     use File::Spec;
     my @path = File::Spec->path();
     my $found = 0;
@@ -222,6 +244,11 @@ sub SearchRegistry () {
             if ($value and $type == REG_SZ()) {
                 print "  GS_DLL = $value\n" if $::opt_debug;
                 $value =~ s|([\\/])([^\\/]+\.dll)$|$1gswin32c.exe|i;
+                my $value64 = $value;
+                $value64 =~ s/gswin32c\.exe$/gswin64c.exe/;
+                if ($archname =~ /mswin32-x64/i and -f $value64) {
+                    $value = $value64;
+                }
                 if (-f $value) {
                     print "  EXE found: $value\n" if $::opt_debug;
                 }
@@ -346,6 +373,8 @@ Expert options:
                       An empty value or `none' uses the
                       default of the TeX engine.               ($::opt_pdfversion)
 
+Input file: If the name is `-', then the standard input is used and
+  the output file name must be explicitly given.
 Examples:
   \L$program\E --margins 10 input.pdf output.pdf
   \L$program\E --margins '5 10 5 20' --clip input.pdf output.pdf
@@ -393,7 +422,7 @@ GetOptions(
 !$::opt_help or usage(0);
 
 if ($::opt_version) {
-    print "$version\n";
+    print "$prj $date v$version\n";
     exit(0);
 }
 
@@ -455,34 +484,21 @@ if ($::opt_bbox_even) {
 ### input file
 $inputfile = shift @ARGV;
 
-if (! -f $inputfile) {
-    if (-f "$inputfile.pdf") {
-        $inputfile .= ".pdf";
-    }
-    else {
-        die "$Error Input file `$inputfile' not found!\n";
-    }
+if ($inputfile eq '-') {
+    @ARGV == 1 or die "$Error Missing output file name!\n";
+    print "* Input file: <stdin>\n" if $::opt_debug;
 }
-
-print "* Input file: $inputfile\n" if $::opt_debug;
-
-if ($::opt_pdfversion eq 'auto') {
-    open(IN, '<', $inputfile) or die "!!! Error: Cannot open `$inputfile'!\n";
-    my $buf;
-    read(IN, $buf, 1024) or die "!!! Error: Cannot read the header of `$inputfile' failed!\n";
-    close(IN);
-    if ($buf =~ /%PDF-1.([0-7])\s/) {
-        $::opt_pdfversion = $1;
-        print "* PDF header: %PDF-1.$::opt_pdfversion\n" if $::opt_verbose;
-        $::opt_pdfversion = 2 if $::opt_pdfversion < 2;
+else {
+    if (! -f $inputfile) {
+        if (-f "$inputfile.pdf") {
+            $inputfile .= ".pdf";
+        }
+        else {
+            die "$Error Input file `$inputfile' not found!\n";
+        }
     }
-    else {
-        die "!!! Error: Cannot find PDF header of `$inputfile'!\n";
-    }
+    print "* Input file: $inputfile\n" if $::opt_debug;
 }
-print '* Using PDF minor version: ',
-      ($::opt_pdfversion ? $::opt_pdfversion : "engine's default"),
-      "\n" if $::opt_debug;
 
 ### output file
 if (@ARGV) {
@@ -608,7 +624,31 @@ $SIG{'__DIE__'} = \&clean;
 # use safe file name for use within cmd line of gs (unknown shell: space, ...)
 # and XeTeX (hash, curly braces, ...)
 my $inputfilesafe = $inputfile;
-if (not $inputfile =~ /^[\w\d\.\-\:\/@]+$/) { # /[\s\$~'"#{}%]/
+if ($inputfile eq '-') {
+    $inputfilesafe = "$tmp-stdin.pdf";
+    print "* Temporary input file: $inputfilesafe\n" if $::opt_debug;
+    push @unlink_files, $inputfilesafe;
+    open(OUT, '>', $inputfilesafe) or die "$Error Cannot write `$inputfilesafe'!\n";
+    binmode(OUT);
+    my $size = 0;
+    my $len = 0;
+    my $buf = '';
+    my $buf_size = 65536;
+    do {
+        $len = read STDIN, $buf, $buf_size;
+        if (not defined $len) {
+            my $msg = $!;
+            chomp $msg;
+            die "$Error Reading standard input ($msg)!\n";
+        }
+        print OUT $buf or die "$Error Writing `$inputfilesafe'!\n";
+        $size += $len;
+    }
+    while ($len);
+    close(OUT);
+    print "* File size (STDIN): $size\n" if $::opt_debug;
+}
+elsif (not $inputfile =~ /^[\w\d\.\-\:\/@]+$/) { # /[\s\$~'"#{}%]/
     $inputfilesafe = "$tmp-img.pdf";
     push @unlink_files, $inputfilesafe;
     my $symlink_exists = eval { symlink("", ""); 1 };
@@ -628,6 +668,24 @@ if (not $inputfile =~ /^[\w\d\.\-\:\/@]+$/) { # /[\s\$~'"#{}%]/
                        . " `$inputfilesafe' failed: $!\n";
     }
 }
+
+if ($::opt_pdfversion eq 'auto') {
+    open(IN, '<', $inputfilesafe) or die "!!! Error: Cannot open `$inputfilesafe'!\n";
+    my $buf;
+    read(IN, $buf, 1024) or die "!!! Error: Cannot read the header of `$inputfilesafe' failed!\n";
+    close(IN);
+    if ($buf =~ /%PDF-1.([0-7])\s/) {
+        $::opt_pdfversion = $1;
+        print "* PDF header: %PDF-1.$::opt_pdfversion\n" if $::opt_verbose;
+        $::opt_pdfversion = 2 if $::opt_pdfversion < 2;
+    }
+    else {
+        die "!!! Error: Cannot find PDF header of `$inputfilesafe'!\n";
+    }
+}
+print '* Using PDF minor version: ',
+      ($::opt_pdfversion ? $::opt_pdfversion : "engine's default"),
+      "\n" if $::opt_debug;
 
 my @gsargs = (
     "-sDEVICE=bbox",

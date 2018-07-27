@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;\f2\fnil\fcharset0 Menlo-Regular;
 }
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
@@ -65,7 +65,7 @@ LaTeXiT 2.4.1 requiert Mac OS X version 10.4 ou sup\'e9rieure, ainsi qu'une inst
 
 \fs22 \cf0 \ulnone \
 Installation : D\'e9placez simplement l'application LaTeXiT depuis l'image disque vers le dossier "Applications", ou n'importe quel autre emplacement de votre disque dur.\
-D\'e9sinstallation : LaTeXiT cr\'e9e un dossier \'e0 l'emplacement Biblioth\'e8que/Application Support/LaTeXiT de votre dossier utilisateur, pour stocker l'historique et la biblioth\'e8que. Si vous d\'e9cidez de supprimer LaTeXiT (en le glissant dans la corbeille), vous pouvez aussi supprimer ce dossier.\
+D\'e9sinstallation : LaTeXiT cr\'e9e un dossier \'e0 l'emplacement ~/Biblioth\'e8que/Application Support/LaTeXiT de votre dossier utilisateur, pour stocker l'historique et la biblioth\'e8que. Si vous d\'e9cidez de supprimer LaTeXiT (en le glissant dans la corbeille), vous pouvez aussi supprimer ce dossier.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
@@ -320,17 +320,25 @@ En voici un exemple :\
 FAQ (Foire aux questions)\
 
 \fs22 \ulnone \
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 (Q) : LaTeXiT ne marche pas sous MacOS 10.7 Lion.\
+(R) : LaTeXiT est parfaitement fonctionnel sous MacOS 10.7 Lion. Mais il peut arriver la chose suivante\'a0: sans le savoir, vous avez peut-\'eatre, il y a longtemps, configur\'e9 LaTeXiT pour utiliser une version PowerPC du moteur LaTeX. Or, Lion n'autorise plus l'ex\'e9cution de code PowerPC. V\'e9rifiez votre installation de LaTeX, et les chemins vers pdflatex dans les pr\'e9f\'e9rences de LaTeXiT (panneau "Composition").\
+\
+(Q) : LaTeXiT plante d\'e8s que je proc\'e8de \'e0 une latexisation.\
+(R) : LaTeXiT est th\'e9oriquement parfaitement fonctionnel en version 64 bits, mais certains composants 64 bits bugg\'e9s de MacOS 10.4, 10.5 et 10.6 sont parfois responsables de ces plantages. Dans le Finder, "Affichez les informations" (Command-i) de LaTeXiT et cochez "Ouvrir en mode 32 bits". Si cela ne resout rien, envoyez-moi le rapport de crash.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
 (Q) : O\'f9 trouver pdflatex, dvipdf et Ghoscript pour les installer ?\
 (R) : Voyez la section "Installer LaTeX" de ce document.\
 \
 (Q) : J'ai install\'e9 LaTeX correctement mais LaTeXiT semble ne pas fonctionner malgr\'e9 tout.\
-(R) : Si vous avez install\'e9 TexShop, puis LaTeXiT, puis LaTeX, les chemins de LaTeXiT peuvent pointer vers un pdflatexc de TeXShop qui ne suffit pas. Essayez d'abord de supprimer les pr\'e9f\'e9rences de LaTeXiT (Biblioth\'e8que/Pr\'e9f\'e9rences/fr.chachatelier.pierre.LaTeXiT.plist). Essayez aussi de r\'e9gler les chemins \'e0 la main dans le panneau "Composition" des pr\'e9f\'e9rences de LaTeXiT.\
+(R) : Si vous avez install\'e9 TexShop, puis LaTeXiT, puis LaTeX, les chemins de LaTeXiT peuvent pointer vers un pdflatexc de TeXShop qui ne suffit pas. Essayez d'abord de supprimer les pr\'e9f\'e9rences de LaTeXiT (~/Biblioth\'e8que/Pr\'e9f\'e9rences/fr.chachatelier.pierre.LaTeXiT.plist). Essayez aussi de r\'e9gler les chemins \'e0 la main dans le panneau "Composition" des pr\'e9f\'e9rences de LaTeXiT.\
 \
 (Q) : Mon \'e9quation appara\'eet tronqu\'e9e.\
 (R) : Voyez la section "Bugs/incompatibilit\'e9s connues" ci-dessous.\
 \
 (Q): Comment d\'e9finir un arri\'e8re-plan color\'e9 ?\
-(A): Si vous voulez d\'e9finir un arri\'e8re-plan non transparent \'e0 vos \'e9quations, vous devez vous pencher sur les commandes LaTeX idoines. Avec les anciennes versions de Ghostscript (<= 8.63), utiliser \\pagecolor\{la couleur\} pouvait fonctionner, mais cela s'appuyait sur un bug de la d\'e9tection automatique des dimensions de l'\'e9quation. Il faut maintenant envisager d'autres solutions, comme\\colorbox\{...\}\{...\}.\
+(R): Si vous voulez d\'e9finir un arri\'e8re-plan non transparent \'e0 vos \'e9quations, vous devez vous pencher sur les commandes LaTeX idoines. Avec les anciennes versions de Ghostscript (<= 8.63), utiliser \\pagecolor\{la couleur\} pouvait fonctionner, mais cela s'appuyait sur un bug de la d\'e9tection automatique des dimensions de l'\'e9quation. Il faut maintenant envisager d'autres solutions, comme\\colorbox\{...\}\{...\}.\
 \
 (Q) : Le service ne fonctionne pas avec Keynote\
 (R) : Le service ne marche pas avec Keynote 1, 2, 3, 4, 5, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement.\
@@ -423,8 +431,19 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.5.0 (16 juin 2012)\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 - d\'e9sactivation du mode 64 bits pour \'e9viter des probl\'e8mes d\'fbs \'e0 des bogues dans d'anciennes versions de MacOS X ; il reste compilable et utilisable pour ceux qui veulent l'activer ;\
+-\'a0nouveau mod\'e8le de donn\'e9es permettant un chargement plus rapide de l'historique et de la biblioth\'e8que, ainsi qu'une consommation de ressources diminu\'e9e ;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab280\qj
+\cf0 -\'a0correction du service : l'alignement de l'\'e9quation sur la ligne de base ne fonctionnait plus ;\
+- r\'e9initaliser le pr\'e9ambule demande maintenant confirmation ;\
+- pour minimiser les fausses manipulations, supprimer un \'e9l\'e9ment de la biblioth\'e8que se fait maintenant avec \uc0\u8984 \u9003  (Command+Backspace) au lieu d'un simple\'a0\u9003 \
+- correction de bugs apparus avec MacOS 10.7\'a0;\
+- traduction en Italien.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 v 2.4.1 (13 juin 2011)\
+\cf0 \
+v 2.4.1 (13 juin 2011)\
 \pard\tx280\pardeftab280\ql\qnatural\pardirnatural
 
 \b \cf0 - version 2.4.1\'a0: correction d'un bug avec certains PDFs se traduisant par un total dysfonctionnement sur certaines configurations ;
@@ -443,8 +462,7 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \cf0 -\'a0traductions am\'e9lior\'e9es\'a0;\
 -\'a0nombreuses am\'e9liorations internes.\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 v 2.4.0 (13 juin 2011)\
+v 2.4.0 (13 juin 2011)\
 \pard\tx280\pardeftab280\ql\qnatural\pardirnatural
 \cf0 -\'a0nouveau {\field{\*\fldinst{HYPERLINK "http://pierre.chachatelier.fr/latexit"}}{\fldrslt site web}}, m\'e9ritant le d\'e9tour\'a0;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj

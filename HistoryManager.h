@@ -31,6 +31,7 @@ typedef enum {HISTORY_EXPORT_FORMAT_INTERNAL, HISTORY_EXPORT_FORMAT_PLIST} histo
 -(BOOL) isLocked;
 -(void) setLocked:(BOOL)value;
 
+-(NSUInteger) numberOfItems;
 -(void) deleteOldEntries;
 
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(history_export_format_t)format;

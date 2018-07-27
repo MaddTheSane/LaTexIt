@@ -147,8 +147,8 @@
 		9328D1180F8FDC0C008AC6B3 /* NSObjectExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */; };
 		93291FB20F57434400F47078 /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93291FB10F57434400F47078 /* HistoryItem.m */; };
 		93291FB30F57434400F47078 /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93291FB10F57434400F47078 /* HistoryItem.m */; };
-		9329229A0F57CD1A00F47078 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit.xcdatamodel */; };
-		9329229B0F57CD1A00F47078 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit.xcdatamodel */; };
+		9329229A0F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */; };
+		9329229B0F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */; };
 		932AE79012606230004422CA /* latexit-plugin-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 932AE78F12606230004422CA /* latexit-plugin-icon.icns */; };
 		932BA15609609A3D004EECBA /* PaletteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA15409609A3D004EECBA /* PaletteCell.m */; };
 		932BA4D10960C6CD004EECBA /* PaletteMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA4CF0960C6CD004EECBA /* PaletteMatrix.m */; };
@@ -170,10 +170,14 @@
 		9333DD950FA62F8A00157F00 /* CompositionConfigurationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9333DD940FA62F8A00157F00 /* CompositionConfigurationsController.m */; };
 		9333DDEA0FA6327300157F00 /* CompositionConfigurationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9333DD940FA62F8A00157F00 /* CompositionConfigurationsController.m */; };
 		93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
+		933A1248156C055A00DCC7D4 /* current-version-ja.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933A1247156C055A00DCC7D4 /* current-version-ja.rtf */; };
+		933A1249156C055A00DCC7D4 /* current-version-ja.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933A1247156C055A00DCC7D4 /* current-version-ja.rtf */; };
 		933A73CD0F9B29AE00DFA78B /* NSViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */; };
 		933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 930255CF07F0C2A800011996 /* Localizable.strings */; };
-		933B5F470F5F10060069E5B4 /* Latexit.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit.xcdatamodel */; };
+		933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */; };
 		933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9357846A0E9D2A9C00736F31 /* CoreData.framework */; };
+		933C72FA13A951FC0097D2EF /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */; };
+		933C72FB13A9520C0097D2EF /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */; };
 		933EBA920B7FCDD900D84BDB /* home.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBA900B7FCDD900D84BDB /* home.tiff */; };
 		933EBA930B7FCDD900D84BDB /* homePressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBA910B7FCDD900D84BDB /* homePressed.tiff */; };
 		933F2ED908A0B86F004C7A31 /* action-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933F2ED708A0B86F004C7A31 /* action-pressed.tiff */; };
@@ -258,6 +262,8 @@
 		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
+		9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
+		9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
 		936B925213898EDE007C8AF4 /* LaTeXMathML.pl in Resources */ = {isa = PBXBuildFile; fileRef = 932BD008122BA6F3003C312C /* LaTeXMathML.pl */; };
 		936B925313898EE3007C8AF4 /* LaTeXMathML.js in Resources */ = {isa = PBXBuildFile; fileRef = 932BD079122BAFAE003C312C /* LaTeXMathML.js */; };
 		936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
@@ -384,6 +390,14 @@
 		93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */; };
 		93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.nib */; };
 		93F9DFD008A38ECA005DEBF6 /* poisson.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */; };
+		93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
+		93FA9A30156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
+		93FA9A321569280000268E55 /* current-version-it.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A311569280000268E55 /* current-version-it.rtf */; };
+		93FA9A331569280000268E55 /* current-version-it.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A311569280000268E55 /* current-version-it.rtf */; };
+		93FA9A351569282300268E55 /* latexit-changelog-it.html in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A341569282300268E55 /* latexit-changelog-it.html */; };
+		93FA9A361569282300268E55 /* latexit-changelog-it.html in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A341569282300268E55 /* latexit-changelog-it.html */; };
+		93FA9A381569282F00268E55 /* latexit-sparkle-it.rss in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */; };
+		93FA9A391569282F00268E55 /* latexit-sparkle-it.rss in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */; };
 		93FD513611C809A60063C578 /* libraryToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93FD513511C809A60063C578 /* libraryToolbarItem.tiff */; };
 		93FD515911C81B350063C578 /* templatesToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93FD515811C81B350063C578 /* templatesToolbarItem.tiff */; };
 		93FE04E809D2F22600B8B34E /* CompositionConfigurationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FE04E609D2F22600B8B34E /* CompositionConfigurationsTableView.m */; };
@@ -607,7 +621,7 @@
 		9328D1170F8FDC0C008AC6B3 /* NSObjectExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectExtended.h; sourceTree = "<group>"; };
 		93291FB00F57434400F47078 /* HistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryItem.h; sourceTree = "<group>"; };
 		93291FB10F57434400F47078 /* HistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryItem.m; sourceTree = "<group>"; };
-		932922990F57CD1A00F47078 /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
+		932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.4.0.xcdatamodel"; sourceTree = "<group>"; };
 		932AE78F12606230004422CA /* latexit-plugin-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "latexit-plugin-icon.icns"; path = "Resources/file-icons/latexit-plugin-icon.icns"; sourceTree = "<group>"; };
 		932BA15309609A3D004EECBA /* PaletteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteCell.h; sourceTree = "<group>"; };
 		932BA15409609A3D004EECBA /* PaletteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteCell.m; sourceTree = "<group>"; };
@@ -632,8 +646,10 @@
 		9333DD940FA62F8A00157F00 /* CompositionConfigurationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompositionConfigurationsController.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
+		933A1247156C055A00DCC7D4 /* current-version-ja.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-ja.rtf"; path = "Resources/documentation/current-version-ja.rtf"; sourceTree = "<group>"; };
 		933A73CB0F9B29AE00DFA78B /* NSViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSViewExtended.h; sourceTree = "<group>"; };
 		933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewExtended.m; sourceTree = "<group>"; };
+		933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
 		933EBA900B7FCDD900D84BDB /* home.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = home.tiff; path = Resources/interface/home.tiff; sourceTree = "<group>"; };
 		933EBA910B7FCDD900D84BDB /* homePressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = homePressed.tiff; path = Resources/interface/homePressed.tiff; sourceTree = "<group>"; };
 		933F2ED708A0B86F004C7A31 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/interface/action-pressed.tiff"; sourceTree = "<group>"; };
@@ -729,6 +745,8 @@
 		93636AAC11957D5B00C5DE49 /* DragFilterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterView.m; sourceTree = "<group>"; };
 		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
 		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
+		9369017713ABEF32006B3BDD /* LatexitEquationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatexitEquationData.h; sourceTree = "<group>"; };
+		9369017813ABEF32006B3BDD /* LatexitEquationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatexitEquationData.m; sourceTree = "<group>"; };
 		936C315C0C0DEEA90082F86D /* Semaphore.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Semaphore.m; sourceTree = "<group>"; };
 		936C315D0C0DEEA90082F86D /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; };
 		936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = advancedToolbarItem.tiff; sourceTree = "<group>"; };
@@ -819,6 +837,15 @@
 		93A9FF4C10201DA70061DB60 /* NSObjectTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectTreeNode.h; sourceTree = "<group>"; };
 		93A9FF741020436D0061DB60 /* NSOutlineViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOutlineViewExtended.h; sourceTree = "<group>"; };
 		93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOutlineViewExtended.m; sourceTree = "<group>"; };
+		93ADD64A144AE92500BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/Italian.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93ADD64C144AE93000BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/Italian.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93ADD64D144AE94A00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = Italian.lproj/Credits.rtf; sourceTree = "<group>"; };
+		93ADD64E144AE95D00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = Italian.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
+		93ADD64F144AE96700BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93ADD650144AE97100BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93ADD651144AE97A00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		93ADD652144AE98300BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		93ADD653144AE98D00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93AFF5B71381941F00054033 /* NSButtonExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSButtonExtended.h; sourceTree = "<group>"; };
 		93AFF5B81381941F00054033 /* NSButtonExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSButtonExtended.m; sourceTree = "<group>"; };
 		93B212C80BBC1BF400EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -899,7 +926,7 @@
 		93F78449101770AE005BC2B6 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F7844C101770B6005BC2B6 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F874F9108863D900995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Japanese; path = Japanese.lproj/Credits.rtf; sourceTree = "<group>"; };
-		93F874FA1088645700995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93F874FA1088645700995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F874FB1088647D00995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Japanese; path = Japanese.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		93F874FC1088648500995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93F874FD108864A100995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
@@ -907,6 +934,10 @@
 		93F87502108864D100995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Japanese; path = Japanese.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F875031088650400995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Automator/CreateEquations/Japanese.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = poisson.pdf; path = Resources/easterEggs/poisson.pdf; sourceTree = "<group>"; };
+		93FA9A2E156927ED00268E55 /* Leggimi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Leggimi.rtfd; path = Resources/documentation/Leggimi.rtfd; sourceTree = "<group>"; };
+		93FA9A311569280000268E55 /* current-version-it.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-it.rtf"; path = "Resources/documentation/current-version-it.rtf"; sourceTree = "<group>"; };
+		93FA9A341569282300268E55 /* latexit-changelog-it.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "latexit-changelog-it.html"; path = "Resources/sparkle/latexit-changelog-it.html"; sourceTree = "<group>"; };
+		93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "latexit-sparkle-it.rss"; path = "Resources/sparkle/latexit-sparkle-it.rss"; sourceTree = "<group>"; };
 		93FD513511C809A60063C578 /* libraryToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = libraryToolbarItem.tiff; sourceTree = "<group>"; };
 		93FD515811C81B350063C578 /* templatesToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = templatesToolbarItem.tiff; sourceTree = "<group>"; };
 		93FE04E509D2F22600B8B34E /* CompositionConfigurationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationsTableView.h; sourceTree = "<group>"; };
@@ -1093,10 +1124,13 @@
 				93A592CA07F46075001DF900 /* Read Me.rtfd */,
 				934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */,
 				934069D90C058FFB0012A8DB /* Léeme.rtfd */,
+				93FA9A2E156927ED00268E55 /* Leggimi.rtfd */,
 				93A0FF9D0DABA17800DDBAF4 /* current-version-fr.rtf */,
 				93A0FF9E0DABA17800DDBAF4 /* current-version-en.rtf */,
 				93A0FFAA0DABA1B500DDBAF4 /* current-version-de.rtf */,
 				93A0FFA90DABA1B500DDBAF4 /* current-version-es.rtf */,
+				93FA9A311569280000268E55 /* current-version-it.rtf */,
+				933A1247156C055A00DCC7D4 /* current-version-ja.rtf */,
 				93A592C807F46075001DF900 /* Licence.rtf */,
 				935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */,
 				935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */,
@@ -1188,10 +1222,12 @@
 				931725B20DA111F5001E036F /* latexit-sparkle-en.rss */,
 				931725B00DA111F5001E036F /* latexit-sparkle-de.rss */,
 				931725B10DA111F5001E036F /* latexit-sparkle-es.rss */,
+				93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */,
 				931725AD0DA111F5001E036F /* latexit-changelog-fr.html */,
 				931725AB0DA111F5001E036F /* latexit-changelog-en.html */,
 				931725AF0DA111F5001E036F /* latexit-changelog-de.html */,
 				931725AE0DA111F5001E036F /* latexit-changelog-es.html */,
+				93FA9A341569282300268E55 /* latexit-changelog-it.html */,
 			);
 			name = Sparkle;
 			sourceTree = "<group>";
@@ -1336,6 +1372,8 @@
 			children = (
 				935784500E9D21FB00736F31 /* LatexitEquation.h */,
 				935784510E9D21FB00736F31 /* LatexitEquation.m */,
+				9369017713ABEF32006B3BDD /* LatexitEquationData.h */,
+				9369017813ABEF32006B3BDD /* LatexitEquationData.m */,
 				933345881077322E0022DBEB /* LatexitEquationWrapper.h */,
 				933345891077322E0022DBEB /* LatexitEquationWrapper.m */,
 				9344B6E80E8BBDCC00FE90A5 /* LaTeXProcessor.h */,
@@ -1488,7 +1526,8 @@
 		935784940E9D39A700736F31 /* Data models */ = {
 			isa = PBXGroup;
 			children = (
-				932922990F57CD1A00F47078 /* Latexit.xcdatamodel */,
+				932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */,
+				933D3A6E13A7D9C1001EBCED /* Latexit.xcdatamodel */,
 			);
 			name = "Data models";
 			sourceTree = "<group>";
@@ -1883,6 +1922,7 @@
 				German,
 				Spanish,
 				JA,
+				Italian,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
@@ -1977,6 +2017,11 @@
 				9310A99D124931D1007EFF23 /* pluginsToolbarItem.tiff in Resources */,
 				932AE79012606230004422CA /* latexit-plugin-icon.icns in Resources */,
 				931873311278930900151977 /* button-close.png in Resources */,
+				93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */,
+				93FA9A321569280000268E55 /* current-version-it.rtf in Resources */,
+				93FA9A351569282300268E55 /* latexit-changelog-it.html in Resources */,
+				93FA9A381569282F00268E55 /* latexit-sparkle-it.rss in Resources */,
+				933A1248156C055A00DCC7D4 /* current-version-ja.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1989,12 +2034,17 @@
 				934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */,
 				932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */,
 				933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */,
-				933B5F470F5F10060069E5B4 /* Latexit.xcdatamodel in Resources */,
+				933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
 				9341922E1281C70C009D3E97 /* Localizable.strings in Resources */,
 				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */,
 				936B925313898EE3007C8AF4 /* LaTeXMathML.js in Resources */,
 				936B925213898EDE007C8AF4 /* LaTeXMathML.pl in Resources */,
+				93FA9A30156927ED00268E55 /* Leggimi.rtfd in Resources */,
+				93FA9A331569280000268E55 /* current-version-it.rtf in Resources */,
+				93FA9A361569282300268E55 /* latexit-changelog-it.html in Resources */,
+				93FA9A391569282F00268E55 /* latexit-sparkle-it.rss in Resources */,
+				933A1249156C055A00DCC7D4 /* current-version-ja.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2084,6 +2134,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9329229A0F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel in Sources */,
+				933C72FB13A9520C0097D2EF /* Latexit.xcdatamodel in Sources */,
 				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */,
@@ -2145,7 +2197,6 @@
 				935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */,
 				93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */,
 				93291FB20F57434400F47078 /* HistoryItem.m in Sources */,
-				9329229A0F57CD1A00F47078 /* Latexit.xcdatamodel in Sources */,
 				932E60B20F5DA745002B3136 /* PreferencesController.m in Sources */,
 				93D49E6F0F6EDB290024087A /* LibraryEquation.m in Sources */,
 				9328D1180F8FDC0C008AC6B3 /* NSObjectExtended.m in Sources */,
@@ -2213,6 +2264,7 @@
 				93A35BA5137EB6FE0006DC07 /* LogicTransformer.m in Sources */,
 				93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */,
 				9350FC19139CB1A30016B2E8 /* CGPDFExtras.m in Sources */,
+				9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2220,6 +2272,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9329229B0F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel in Sources */,
+				933C72FA13A951FC0097D2EF /* Latexit.xcdatamodel in Sources */,
 				9344BBA00E8CF59A00FE90A5 /* NSColorExtended.m in Sources */,
 				9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */,
 				9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */,
@@ -2230,7 +2284,6 @@
 				9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */,
 				93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */,
 				93291FB30F57434400F47078 /* HistoryItem.m in Sources */,
-				9329229B0F57CD1A00F47078 /* Latexit.xcdatamodel in Sources */,
 				932E60930F5DA3BC002B3136 /* LatexitEquation.m in Sources */,
 				932E60B30F5DA745002B3136 /* PreferencesController.m in Sources */,
 				939377A90FA23431007BEAC0 /* IndexToIndexesTransformer.m in Sources */,
@@ -2274,6 +2327,7 @@
 				93A35B8B137EB4580006DC07 /* FileExistsTransformer.m in Sources */,
 				93A35BA4137EB6FE0006DC07 /* LogicTransformer.m in Sources */,
 				9350FC18139CB1A30016B2E8 /* CGPDFExtras.m in Sources */,
+				9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2339,6 +2393,7 @@
 				934C03410AD03648007FEC06 /* German */,
 				93B212FB0BBC1C8100EFCA2F /* Spanish */,
 				93F874FA1088645700995B12 /* Japanese */,
+				93ADD64F144AE96700BA13D9 /* Italian */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2351,6 +2406,7 @@
 				934C03390AD03600007FEC06 /* German */,
 				93B2130C0BBC1CCC00EFCA2F /* Spanish */,
 				93F87500108864C000995B12 /* Japanese */,
+				93ADD652144AE98300BA13D9 /* Italian */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -2363,6 +2419,7 @@
 				934C034D0AD0368D007FEC06 /* German */,
 				93B212C80BBC1BF400EFCA2F /* Spanish */,
 				93F874F9108863D900995B12 /* Japanese */,
+				93ADD64D144AE94A00BA13D9 /* Italian */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -2375,6 +2432,7 @@
 				934C03400AD0363B007FEC06 /* German */,
 				93B212FE0BBC1C8A00EFCA2F /* Spanish */,
 				93F874FC1088648500995B12 /* Japanese */,
+				93ADD650144AE97100BA13D9 /* Italian */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2387,6 +2445,7 @@
 				934192301281C714009D3E97 /* German */,
 				934192311281C716009D3E97 /* Spanish */,
 				934192321281C718009D3E97 /* Japanese */,
+				93ADD64C144AE93000BA13D9 /* Italian */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2415,6 +2474,7 @@
 				937D7D270E48F5BA006F04E1 /* German */,
 				937D7D280E48F5CF006F04E1 /* Spanish */,
 				93F874FB1088647D00995B12 /* Japanese */,
+				93ADD64E144AE95D00BA13D9 /* Italian */,
 			);
 			name = defaultPreamble.rtf;
 			sourceTree = "<group>";
@@ -2427,6 +2487,7 @@
 				934C033F0AD03632007FEC06 /* German */,
 				93B212FF0BBC1C9800EFCA2F /* Spanish */,
 				93F874FD108864A100995B12 /* Japanese */,
+				93ADD651144AE97A00BA13D9 /* Italian */,
 			);
 			name = ServicesMenu.strings;
 			sourceTree = "<group>";
@@ -2439,6 +2500,7 @@
 				93E9CF790E9F306400B08FB0 /* German */,
 				93E9CF7A0E9F306800B08FB0 /* Spanish */,
 				93F875031088650400995B12 /* Japanese */,
+				93ADD64A144AE92500BA13D9 /* Italian */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2451,6 +2513,7 @@
 				93F7844C101770B6005BC2B6 /* German */,
 				93F78449101770AE005BC2B6 /* Spanish */,
 				93F87502108864D100995B12 /* Japanese */,
+				93ADD653144AE98D00BA13D9 /* Italian */,
 			);
 			name = PreferencesWindowController.nib;
 			sourceTree = "<group>";
@@ -2593,9 +2656,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
+					"$(ARCHS_STANDARD_32_BIT)",
 					ppc,
-					ppc64,
 				);
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -2627,6 +2689,7 @@
 				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				VALID_ARCHS = "i386 ppc ppc7400 ppc970";
 			};
 			name = Deployment;
 		};

@@ -61,7 +61,8 @@
   [self->historyItemsController setEntityName:[HistoryItem className]];
   [self->historyItemsController setManagedObjectContext:[[HistoryManager sharedManager] managedObjectContext]];
   [self->historyItemsController setSortDescriptors:
-    [NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"equationWrapper.equation.date" ascending:NO] autorelease], nil]];
+    //[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"equationWrapper.equation.date" ascending:NO] autorelease], nil]];
+    [NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"self.date" ascending:NO] autorelease], nil]];
   [self->historyItemsController prepareContent];
   NSTableColumn* tableColumn = [[self tableColumns] objectAtIndex:0];
   NSDictionary* bindingOptions = nil;

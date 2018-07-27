@@ -12,19 +12,28 @@
 
 @interface HistoryItem : NSManagedObject <NSCoding> {
   //LatexitEquation* equation;
-  BOOL kvoEnabled;
+  BOOL customKVOEnabled;
+  BOOL customKVOInhibited;
+  BOOL isModelPrior250;
 }
 
 +(NSEntityDescription*) entity;
 +(NSEntityDescription*) wrapperEntity;
 
 -(id) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+
 -(void) dispose;
+-(BOOL) customKVOEnabled;
+-(void) setCustomKVOEnabled:(BOOL)value;
+-(BOOL) customKVOInhibited;
+-(void) setCustomKVOInhibited:(BOOL)value;
 
 -(BOOL) dummyPropertyToForceUIRefresh;
 
 -(LatexitEquation*) equation;
 -(void) setEquation:(LatexitEquation*)equation;
+-(NSDate*) date;
+-(void) setDate:(NSDate*)value;
 
 -(void) writeToPasteboard:(NSPasteboard *)pboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 

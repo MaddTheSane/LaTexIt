@@ -29,14 +29,19 @@
 //creates a color from an rgba string
 +(NSColor*) colorWithRgbaString:(NSString*)string
 {
-  NSScanner* scanner = [NSScanner scannerWithString:string];
-  float r = 0, g = 0, b = 0, a = 0;
-  BOOL ok = YES;
-  ok &= [scanner scanFloat:&r];
-  ok &= [scanner scanFloat:&g];
-  ok &= [scanner scanFloat:&b];
-  ok &= [scanner scanFloat:&a];
-  return ok ? [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a] : nil;
+  NSColor* result = nil;
+  if (string)
+  {
+    NSScanner* scanner = [NSScanner scannerWithString:string];
+    float r = 0, g = 0, b = 0, a = 0;
+    BOOL ok = YES;
+    ok &= [scanner scanFloat:&r];
+    ok &= [scanner scanFloat:&g];
+    ok &= [scanner scanFloat:&b];
+    ok &= [scanner scanFloat:&a];
+    result = !ok ? nil : [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a];
+  }//end if (string)
+  return result;
 }
 //end colorWithRgbaString:
 

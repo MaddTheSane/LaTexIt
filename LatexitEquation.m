@@ -9,6 +9,7 @@
 #import "LatexitEquation.h"
 
 #import "Compressor.h"
+#import "LatexitEquationData.h"
 #import "LaTeXProcessor.h"
 #import "NSMutableArrayExtended.h"
 #import "NSColorExtended.h"
@@ -75,7 +76,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     else
       [managedObjectContextStackInstance addObject:context];
   }
-
 }
 //end pushManagedObjectContext:
 
@@ -366,7 +366,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [result setObject:backgroundColor forKey:@"backgroundColor"];
       
     NSMutableString* baselineAsString = nil;
-    testArray = [baselineAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+    testArray = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
     if (testArray && ([testArray count] >= 2))
     {
       isLaTeXiTPDF |= YES;
@@ -512,11 +512,22 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end latexitEquationWithPDFData:useDefaults:
 
+-(id) initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
+{
+  if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:context])))
+    return nil;
+  self->isModelPrior250 = context &&
+    ![[[[context persistentStoreCoordinator] managedObjectModel] entitiesByName]
+      objectForKey:NSStringFromClass([LatexitEquationData class])];
+  return self;
+}
+//end initWithEntity:insertIntoManagedObjectContext:
+
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
               backgroundColor:(NSColor*)aBackgroundColor
 {
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
   [self beginUpdate];
   [self setPdfData:someData];
@@ -538,7 +549,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(id) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults
 {
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
 
   [self beginUpdate];
@@ -585,7 +596,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
   [self setPdfData:someData];
   NSDictionary* metaData = [[self class] metaDataFromPDFData:someData useDefaults:useDefaults];
@@ -981,7 +992,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
   [self setPdfData:[coder decodeObjectForKey:@"pdfData"]];
   [self setPreamble:[coder decodeObjectForKey:@"preamble"]];
@@ -1012,7 +1023,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.4.1"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.5.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1038,6 +1049,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end awakeFromFetch2
 
+-(void) awakeFromInsert
+{
+  [super awakeFromInsert];
+  NSManagedObject* equationData = [self valueForKey:@"equationData"];
+  [[self managedObjectContext] safeInsertObject:equationData];
+}
+//end awakeFromInsert
+
 -(void) checkAndMigrateAlign
 {
   if ([self mode] == LATEX_MODE_EQNARRAY)
@@ -1062,6 +1081,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) didTurnIntoFault
 {
   [self resetPdfCachedImage];
+  [super didTurnIntoFault];
 }
 //end didTurnIntoFault
 
@@ -1077,44 +1097,84 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) beginUpdate
 {
-  ++updateLevel;
+  ++self->updateLevel;
 }
 //end beginUpdate
 
 -(void) endUpdate
 {
-  --updateLevel;
-  if (![self isUpdating] && annotateDataDirtyState)
+  --self->updateLevel;
+  if (![self isUpdating] && self->annotateDataDirtyState)
     [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end endUpdate
 
 -(BOOL) isUpdating
 {
-  return (updateLevel > 0);
+  return (self->updateLevel > 0);
 }
 //end isUpdating
 
 -(NSData*) pdfData
 {
   NSData* result = nil;
-  [self willAccessValueForKey:@"pdfData"];
-  result = [self primitiveValueForKey:@"pdfData"];
-  [self didAccessValueForKey:@"pdfData"];
+  if (!self->isModelPrior250)
+  {
+    [self willAccessValueForKey:@"equationData"];
+    LatexitEquationData* equationData = [self primitiveValueForKey:@"equationData"];
+    result = [equationData pdfData];
+    [self didAccessValueForKey:@"equationData"];
+  }//end if (!self->isModelPrior250)
+  else//if (self->isModelPrior250)
+  {
+    [self willAccessValueForKey:@"pdfData"];
+    result = [self primitiveValueForKey:@"pdfData"];
+    [self didAccessValueForKey:@"pdfData"];
+  }//end if (self->isModelPrior250)
   return result;
 } 
 //end pdfData
 
 -(void) setPdfData:(NSData*)value
 {
+  [self willChangeValueForKey:@"pdfCachedImage"];
   @synchronized(self)
   {
     [self->pdfCachedImage release];
     self->pdfCachedImage = nil;
-  }
-  [self willChangeValueForKey:@"pdfData"];
-  [self setPrimitiveValue:value forKey:@"pdfData"];
-  [self didChangeValueForKey:@"pdfData"];
+  }//end @synchronized(self)
+  if (value != [self pdfData])
+  {
+    if (self->isModelPrior250)
+    {
+      [self willChangeValueForKey:@"pdfData"];
+      [self setPrimitiveValue:value forKey:@"pdfData"];
+      [self didChangeValueForKey:@"pdfData"];
+    }//end if (self->isModelPrior250)
+    else//if (!self->isModelPrior250)
+    {
+      [self willAccessValueForKey:@"equationData"];
+      LatexitEquationData* equationData = [self primitiveValueForKey:@"equationData"];
+      [self didAccessValueForKey:@"equationData"];
+      if (!equationData)
+      {
+        equationData = [[LatexitEquationData alloc]
+          initWithEntity:[LatexitEquationData entity] insertIntoManagedObjectContext:[self managedObjectContext]];
+        if (equationData)
+        {
+          [self willChangeValueForKey:@"equationData"];
+          [self setPrimitiveValue:equationData forKey:@"equationData"];
+          [self didChangeValueForKey:@"equationData"];
+          [equationData willChangeValueForKey:@"equation"];
+          [equationData setPrimitiveValue:self forKey:@"equation"];//if managedObjectContext is nil, this is necessary
+          [equationData didChangeValueForKey:@"equation"];
+        }//end if (equationData)
+        [equationData release];
+      }//end if (!equationData)
+      [equationData setPdfData:value];
+    }//end //if (!self->isModelPrior250)
+  }//end if (value != [self pdfData])
+  [self didChangeValueForKey:@"pdfCachedImage"];
 }
 //end setPdfData:
 
@@ -1345,6 +1405,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(NSImage*) pdfCachedImage
 {
   NSImage* result = nil;
+  [self willAccessValueForKey:@"pdfCachedImage"];
   @synchronized(self)
   {
     result = self->pdfCachedImage;
@@ -1360,13 +1421,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         hasPdfOrBitmapImageRep |=
           [representation isKindOfClass:[NSPDFImageRep class]] |
           [representation isKindOfClass:[NSBitmapImageRep class]];
-      }
+      }//end for each representation
       if (!hasPdfOrBitmapImageRep)
       {
         [self->pdfCachedImage release];
         result = nil;
-      }
-    }
+      }//end if (!hasPdfOrBitmapImageRep)
+    }//end if (result)
     
     if (!result)
     {
@@ -1386,6 +1447,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end if (pdfImageRep)
     }//end if (!result)
   }//end @synchronized(self)
+  [self didAccessValueForKey:@"pdfCachedImage"];
   return result;
 } 
 //end pdfCachedImage
@@ -1555,7 +1617,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   {
     NSData* newData = [self annotatedPDFDataUsingPDFKeywords:usingPDFKeywords];
     [self setPdfData:newData];
-  }
+  }//end if (![self isUpdating])
 }
 //end reannotatePDFDataUsingPDFKeywords:
 
@@ -1713,7 +1775,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.4.1", @"version",
+       @"2.5.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",
@@ -1733,7 +1795,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(id) initWithDescription:(id)description
 {
   NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   [self beginUpdate];
   [self setPdfData:[description objectForKey:@"pdfData"]];

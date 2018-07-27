@@ -1,0 +1,8 @@
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Modalità LaTeX Eqnarray (\\begin{eqnarray*}...\\end{eqnarray*})";
+"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/Modalità LaTeX Align (\\begin{align*}...\\end{align*})";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Modalità LaTeX Display (\\[...\\])";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Modalità LaTeX Inline ($...$)";
+"LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/Modalità LaTeX Testo";
+"LaTeXiT/Detect and typeset equations" = "LaTeXiT/Trova e crea le equazioni";
+"LaTeXiT/Un-latexize the equations" = "LaTeXiT/Riconverte le equazioni al codice LaTeX";
+"SERVICE_DESCRIPTION"="Con il l'utilizzo di LaTeXiT si può transformare del testo in un equazione (come immagine), processato dal motore LaTeX. Si può anche ritrasformare le equazioni nella loro forma originale di sorgente testo, se le equazioni sono stato configurate in LaTeXit per essere esportate in PDF. Il servizio funzionerà se l'applicazione richiedente supporta il rimpiazzo di testo con un immagine.";

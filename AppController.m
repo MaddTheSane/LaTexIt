@@ -622,7 +622,8 @@ static NSMutableDictionary* cachePaths = nil;
   [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
   //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
 
-  if (latexitHelperURL) CFRelease(latexitHelperURL);
+  if (latexitHelperURL)
+    CFRelease(latexitHelperURL);
   [LinkBack publishServerWithName:[[NSWorkspace sharedWorkspace] applicationName] delegate:self];
 
   if (self->isGsAvailable && (self->isPdfLaTeXAvailable || self->isLaTeXAvailable || self->isXeLaTeXAvailable) && !self->isColorStyAvailable)
@@ -686,6 +687,12 @@ static NSMutableDictionary* cachePaths = nil;
   //initialize system services
   [preferencesController changeServiceShortcutsWithDiscrepancyFallback:CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK
                                                 authenticationFallback:CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK];
+                                                
+  if (self->shouldOpenInstallLaTeXHelp)
+  {
+    self->shouldOpenInstallLaTeXHelp = NO;
+    [self showHelp:self section:[NSString stringWithFormat:@"\n%@\n", NSLocalizedString(@"Install LaTeX", @"Install LaTeX")]];
+  }//end if (self->shouldOpenInstallLaTeXHelp)
 
   if ([self->sparkleUpdater automaticallyChecksForUpdates])
     [self->sparkleUpdater checkForUpdatesInBackground];
@@ -849,7 +856,10 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if ([sender action] == @selector(historyClearHistory:))
   {
-    ok = ([[[[self->historyWindowController historyView] historyItemsController] arrangedObjects] count] > 0);
+    if (isMacOS10_5OrAbove())
+      ok = ([[HistoryManager sharedManager] numberOfItems] > 0);
+    else
+      ok = ([[[[self->historyWindowController historyView] historyItemsController] arrangedObjects] count] > 0);
   }
   else if ([sender action] == @selector(historyChangeLock:))
   {
@@ -1071,8 +1081,8 @@ static NSMutableDictionary* cachePaths = nil;
       [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
       if (color) [document setColor:color];
       [document showWindows];
-    }
-  }
+    }//end if (ok)
+  }//end if (ok)
 }
 //end newFromClipboard:
 
@@ -1101,7 +1111,7 @@ static NSMutableDictionary* cachePaths = nil;
   int result = [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil];
   if (result == NSOKButton)
   {
-    NSString* filePath = [[self->openFileTypeOpenPanel filenames] lastObject];
+    NSString* filePath = [[[self->openFileTypeOpenPanel URLs] lastObject] path];
     [self application:NSApp openFile:filePath];
   }
   self->openFileTypeOpenPanel = nil;
@@ -1425,7 +1435,9 @@ static NSMutableDictionary* cachePaths = nil;
     [NSMutableString stringWithString:NSLocalizedString(@"http://pierre.chachatelier.fr/latexit/index.php",
                                                         @"http://pierre.chachatelier.fr/latexit/index.php")];
   if ([sender respondsToSelector:@selector(tag)] && ([sender tag] == 1))
-    [urlString appendString:@"#donation"];
+    urlString =
+      [NSMutableString stringWithString:NSLocalizedString(@"http://pierre.chachatelier.fr/latexit/latexit-donations.php",
+                                                          @"http://pierre.chachatelier.fr/latexit/latexit-donations.php")];
   NSURL* webSiteURL = [NSURL URLWithString:urlString];
 
   BOOL ok = [[NSWorkspace sharedWorkspace] openURL:webSiteURL];
@@ -1454,28 +1466,30 @@ static NSMutableDictionary* cachePaths = nil;
 -(IBAction) showHelp:(id)sender
 {
   BOOL ok = YES;
-  NSString* string = [readmeTextView string];
+  NSString* string = [self->readmeTextView string];
   if (!string || ![string length])
   {
     NSBundle* mainBundle = [NSBundle mainBundle];
     NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"Read Me") ofType:@"rtfd"];
     ok = (file != nil);
     if (ok)
-      [readmeTextView readRTFDFromFile:file];
-  }
+      [self->readmeTextView readRTFDFromFile:file];
+  }//end if (!string || ![string length])
   if (ok)
   {
-    if (![readmeWindow isVisible])
-      [readmeWindow center];
-    [readmeWindow makeKeyAndOrderFront:self];
-  }
+    if (![self->readmeWindow isVisible])
+      [self->readmeWindow center];
+    [self->readmeWindow makeKeyAndOrderFront:self];
+  }//end if (ok)
 }
 //end showHelp:
 
 -(void) showHelp:(id)sender section:(NSString*)section
 {
   [self showHelp:sender];
-  [readmeTextView scrollRangeToVisible:[[readmeTextView string] rangeOfString:section]];
+  NSString* helpString = [self->readmeTextView string];
+  NSRange sectionRange = [helpString rangeOfString:section];
+  [self->readmeTextView scrollRangeToVisible:sectionRange];
 }
 //end showHelp:section:
 
@@ -1743,8 +1757,10 @@ static NSMutableDictionary* cachePaths = nil;
         ok = (*monitor);
       }//end if (shouldFind)
 
-      BOOL allowUIAlertOnFailure = [[configuration objectForKey:@"allowUIAlertOnFailure"] boolValue];
-      BOOL allowUIFindOnFailure  = [[configuration objectForKey:@"allowUIFindOnFailure"] boolValue];
+      BOOL allowUIAlertOnFailure =
+        !self->shouldOpenInstallLaTeXHelp && [[configuration objectForKey:@"allowUIAlertOnFailure"] boolValue];
+      BOOL allowUIFindOnFailure  =
+        !self->shouldOpenInstallLaTeXHelp && [[configuration objectForKey:@"allowUIFindOnFailure"] boolValue];
       BOOL retry = !(*monitor) && allowUIAlertOnFailure;
       NSString* executableName = !retry ? nil : [configuration objectForKey:@"executableName"];
       while (retry)
@@ -1758,17 +1774,29 @@ static NSMutableDictionary* cachePaths = nil;
               NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
                                 @"The current configuration of LaTeXiT requires %@ to work."), executableName],
             !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), executableName],
-            !allowUIFindOnFailure ? nil : @"Cancel", nil);
-        if (allowUIFindOnFailure && (returnCode == NSAlertDefaultReturn))
+            !allowUIFindOnFailure ? nil : NSLocalizedString(@"Cancel", @"Cancel"),
+            !allowUIFindOnFailure ? nil : NSLocalizedString(@"What's that ?", @"What's that ?"),
+            nil);
+        if (allowUIFindOnFailure && (returnCode == NSAlertOtherReturn))
+        {
+          returnCode = NSRunAlertPanel(
+            NSLocalizedString(@"What's that ?", @"What's that ?"),
+            NSLocalizedString(@"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.", @"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part."),
+            NSLocalizedString(@"See help...", @"See help..."),
+            NSLocalizedString(@"Cancel", @"Cancel"),
+            nil);
+          self->shouldOpenInstallLaTeXHelp |= (returnCode == NSAlertDefaultReturn);
+        }//end if (allowUIFindOnFailure && (returnCode == NSAlertOtherReturn))
+        else if (allowUIFindOnFailure && (returnCode == NSAlertDefaultReturn))
         {
           NSFileManager* fileManager = [NSFileManager defaultManager];
           NSOpenPanel* openPanel = [NSOpenPanel openPanel];
           [openPanel setResolvesAliases:NO];
           int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
-          ok = (ret2 == NSOKButton) && ([[openPanel filenames] count]);
+          ok = (ret2 == NSOKButton) && ([[openPanel URLs] count]);
           if (ok)
           {
-            NSString* filepath = [[openPanel filenames] objectAtIndex:0];
+            NSString* filepath = [[[openPanel URLs] objectAtIndex:0] path];
             if (![fileManager fileExistsAtPath:filepath])
               retry = YES;
             else
@@ -2142,15 +2170,15 @@ static NSMutableDictionary* cachePaths = nil;
         CGFloat rightMargin  = [self marginsCurrentRightMargin];
         CGFloat bottomMargin = [self marginsCurrentBottomMargin];
         CGFloat topMargin    = [self marginsCurrentTopMargin];
-        [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:color mode:mode magnification:magnification
-                           compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                           backgroundColor:nil
-                           leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
-                           additionalFilesPaths:[self additionalFilesPaths]
-                           workingDirectory:workingDirectory fullEnvironment:fullEnvironment
-                           uniqueIdentifier:uniqueIdentifier
-                           outFullLog:nil outErrors:nil outPdfData:&pdfData];
-
+        [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:color mode:mode
+          magnification:magnification
+          compositionConfiguration:[preferencesController compositionConfigurationDocument]
+          backgroundColor:nil
+          leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
+          additionalFilesPaths:[self additionalFilesPaths]
+          workingDirectory:workingDirectory fullEnvironment:fullEnvironment
+          uniqueIdentifier:uniqueIdentifier
+          outFullLog:nil outErrors:nil outPdfData:&pdfData];
         //if it has worked, put back data in the service pasteboard
         if (pdfData)
         {
@@ -2184,16 +2212,16 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_SVG:
               extension = @"svg";
               break;
-          }
+          }//end switch(exportFormat)
 
-          NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
-          NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
-          NSData*   attachedData       = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
-                                           jpegColor:[preferencesController exportJpegBackgroundColor]
-                                           jpegQuality:[preferencesController exportJpegQualityPercent]
-                                            scaleAsPercent:[preferencesController exportScalePercent]
-                                            compositionConfiguration:[preferencesController compositionConfigurationDocument]
-                                                    uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
+          NSString* attachedFile     = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
+          NSString* attachedFilePath = [directory stringByAppendingPathComponent:attachedFile];
+          NSData*   attachedData     = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
+                                         jpegColor:[preferencesController exportJpegBackgroundColor]
+                                         jpegQuality:[preferencesController exportJpegQualityPercent]
+                                         scaleAsPercent:[preferencesController exportScalePercent]
+                                         compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                                         uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           //Now we must feed the pasteboard
           //[pboard declareTypes:[NSArray array] owner:nil];
@@ -2226,7 +2254,8 @@ static NSMutableDictionary* cachePaths = nil;
             //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
             unichar invisibleSpace = 0xFEFF;
             NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
-            NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
+            NSMutableAttributedString* space =
+              [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
             [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
             [space addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:newBaseline]
                           range:NSMakeRange(0, [space length])];
@@ -2691,7 +2720,7 @@ static NSMutableDictionary* cachePaths = nil;
               remainingRange.length = [mutableAttrString length]-remainingRange.location;
               
               //builds a document containing the error
-              MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:NO];
+              MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
               [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//calls windowDidLoad
               [document setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
               [document setLatexMode:mode];
@@ -2744,7 +2773,7 @@ static NSMutableDictionary* cachePaths = nil;
 
               NSString* attachedFilePath = nil;//[NSString stringWithFormat:@"%@-%d.%@", filePrefix, attachedFileId++, extension];              
               NSFileHandle* fileHandle =
-                [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXXX", filePrefix]
+                [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXX", filePrefix]
                                                                 extension:extension
                                                               outFilePath:&attachedFilePath workingDirectory:directory];
               NSData* attachedData = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
@@ -2823,7 +2852,7 @@ static NSMutableDictionary* cachePaths = nil;
             [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
             [document latexize:self];
           }
-        }
+        }//end if (choice == NSAlertAlternateReturn)
       }//if there were failures
       
       //Now we must feed the pasteboard
@@ -2876,9 +2905,9 @@ static NSMutableDictionary* cachePaths = nil;
       NSData* rtfData = [source RTFFromRange:NSMakeRange(0, [source length]) documentAttributes:nil];
       [pboard setData:rtfData forType:NSRTFPboardType];
       [pboard setData:rtfData forType:@"public.rtf"];
-    }
+    }//end if (source)
     [latexitEquation release];
-  }
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, @"com.adobe.pdf", nil]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
@@ -2895,10 +2924,15 @@ static NSMutableDictionary* cachePaths = nil;
         location += effectiveRange.length;
       else
       {
-        NSString* filename = [[textAttachment fileWrapper] filename];
-        if (![[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"])
+        NSFileWrapper* fileWrapper = [textAttachment fileWrapper];
+        NSString* filename = [fileWrapper filename];
+        NSString* textAttachmentUTI = ![fileWrapper isRegularFile] ? nil :
+          [[NSFileManager defaultManager] UTIFromPath:filename];
+        BOOL canBeEquation = (textAttachmentUTI && UTTypeConformsTo((CFStringRef)textAttachmentUTI, CFSTR("com.adobe.pdf"))) ||
+                             (!textAttachmentUTI && [[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"]);
+        if (!canBeEquation)
           location += effectiveRange.length;
-        else
+        else//if (canBeEquation)
         {
           NSData* pdfData = [[textAttachment fileWrapper] regularFileContents];
           LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:YES];
@@ -2906,7 +2940,7 @@ static NSMutableDictionary* cachePaths = nil;
             [[[NSMutableAttributedString alloc] initWithAttributedString:[latexitEquation encapsulatedSource]] autorelease];
           if (!source)
             location += effectiveRange.length;
-          else
+          else//if (source)
           {
             NSFont* font = [[attributedString fontAttributesInRange:effectiveRange] objectForKey:NSFontAttributeName];
             font = font ? font : [NSFont userFontOfSize:[latexitEquation pointSize]];
@@ -2916,13 +2950,29 @@ static NSMutableDictionary* cachePaths = nil;
                 font, NSFontAttributeName,
                 [NSString stringWithFormat:@"%f",  [latexitEquation pointSize]], NSFontSizeAttribute,
                 [latexitEquation color], NSForegroundColorAttributeName, nil];
+            NSString* currentString = [attributedString string];
+            const unichar invisibleSpace = 0xFEFF;
+            BOOL hasInvisibleSpaceBefore =
+              effectiveRange.location &&
+              ([currentString characterAtIndex:effectiveRange.location-1] == invisibleSpace);
+            BOOL hasInvisibleSpaceAfter =
+              (effectiveRange.location+effectiveRange.length < [currentString length]) &&
+              ([currentString characterAtIndex:effectiveRange.location+effectiveRange.length] == invisibleSpace);
+            if (hasInvisibleSpaceBefore)
+            {
+              --location;
+              --effectiveRange.location;
+              ++effectiveRange.length;
+            }//end if (hasInvisibleSpaceBefore)
+            if (hasInvisibleSpaceAfter)
+              ++effectiveRange.length;
             if (source)
               [attributedString replaceCharactersInRange:effectiveRange withAttributedString:source];
             [attributedString addAttributes:attributes range:NSMakeRange(effectiveRange.location, [source length])];
             location += [source length];
-          }
+          }//end if (source)
           [latexitEquation release];
-        }//end if is pdf
+        }//end if (canBeEquation)
       }//end if textAttachment
     }//end while ! at the end of the string
     [pboard declareTypes:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd",
@@ -2936,7 +2986,7 @@ static NSMutableDictionary* cachePaths = nil;
     [pboard setData:outRtfData forType:NSRTFPboardType];
     [pboard setData:outRtfData forType:@"public.rtf"];
     [attributedString release];
-  }
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
 }
 //end _serviceDeLatexisation:userData:error:
 

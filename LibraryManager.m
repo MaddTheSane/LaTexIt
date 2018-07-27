@@ -26,6 +26,7 @@
 #import "NSFileManagerExtended.h"
 #import "NSIndexSetExtended.h"
 #import "NSManagedObjectContextExtended.h"
+#import "NSObjectExtended.h"
 #import "NSObjectTreeNode.h"
 #import "NSUndoManagerDebug.h"
 #import "NSWorkspaceExtended.h"
@@ -38,10 +39,13 @@ NSString* LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
 NSString* LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
 
 @interface LibraryManager (PrivateAPI)
+-(void) _migrateLatexitManagedModel:(NSString*)path;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves library when quitting
 -(void) saveLibrary;
 -(void) createLibraryMigratingIfNeeded;
+-(NSModalSession) showMigratingProgressionWindow:(NSWindowController**)outMigratingWindowController progressIndicator:(NSProgressIndicator**)outProgressIndicator;
+-(void) hideMigratingProgressionWindow:(NSModalSession)modalSession windowController:(NSWindowController*)windowController;
 @end
 
 @implementation LibraryManager
@@ -207,7 +211,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.4.1", @"version", nil];
+          @"2.5.0", @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
@@ -350,13 +354,15 @@ static LibraryManager* sharedManagerInstance = nil;
           [[libraryItemsAdded objectAtIndex:i] setSortIndex:nbRootLibraryItemsBeforeAdding+i];
           
         NSEnumerator* enumerator = [libraryItemsToAdd objectEnumerator];
-        HistoryItem* libraryItem = nil;
+        LibraryItem* libraryItem = nil;
         while((libraryItem = [enumerator nextObject]))
         {
           if ([libraryItem isKindOfClass:[LibraryEquation class]])
+          {
             [[(LibraryEquation*)libraryItem equation] dispose];
-          [libraryItem dispose];
-        }
+            [libraryItem dispose];
+          }//end if ([libraryItem isKindOfClass:[LibraryEquation class]])
+        }//end for each libraryItem
 
         ok = YES;
       }//end if (ok)
@@ -390,7 +396,7 @@ static LibraryManager* sharedManagerInstance = nil;
         [libraryEquation release];
         [[historyItem managedObjectContext] safeDeleteObject:historyItem];
         [libraryEquation setSortIndex:nbRootLibraryItemsBeforeAdding+i];
-      }
+      }//end for each historyItemAdded
 
       //dispose objets of sourceManagedObjectContext
       NSEnumerator* enumerator = [historyItemsToAdd objectEnumerator];
@@ -447,7 +453,7 @@ static LibraryManager* sharedManagerInstance = nil;
             }
             if (wasHistory)
               [libraryItem setBestTitle];
-          }
+          }//end for each libraryItemDescription
           [LatexitEquation popManagedObjectContext];
           unsigned int i = 0;
           unsigned int count = [libraryItemsAdded count];
@@ -567,42 +573,53 @@ static LibraryManager* sharedManagerInstance = nil;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion
 {
   NSManagedObjectContext* result = nil;
-  NSPersistentStoreCoordinator* persistentStoreCoordinator = !path ? nil :
-    [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
-  NSURL* storeURL = [NSURL fileURLWithPath:path];
-  NSError* error = nil;
+  NSPersistentStoreCoordinator* persistentStoreCoordinator =
+    [[NSPersistentStoreCoordinator alloc]
+      initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
   id persistentStore = nil;
   @try{
-    persistentStore =
-      [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
-  }
+    NSURL* storeURL = [NSURL fileURLWithPath:path];
+    NSError* error = nil;
+    persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                        configuration:nil URL:storeURL options:nil error:&error];
+    if (error)
+      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+    if (!persistentStore)
+    {
+      NSError* error = nil;
+      [self _migrateLatexitManagedModel:path];
+      persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                          configuration:nil URL:storeURL options:nil error:&error];
+      if (error)
+        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+    }//end if (!persistentStore)
+  }//end @try
   @catch(NSException* e){
     DebugLog(0, @"exception : %@", e);
-  }
-  if (error)
-    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+  }//end @catch
+  @finally{
+  }//end @finally
   NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.1", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
-  [persistentStoreCoordinator release];
   [result setRetainsRegisteredObjects:YES];
+  [persistentStoreCoordinator release];
   return [result autorelease];
 }
 //end managedObjectContextAtPath:setVersion:
 
 -(void) createLibraryMigratingIfNeeded
 {
-  NSWindowController*  migratingWindowController = nil;
-  NSModalSession       modalSession              = 0;
-  NSProgressIndicator* progressIndicator         = nil;
-
   NSFileManager* fileManager = [NSFileManager defaultManager];
+  NSModalSession migratingModalSession = 0;
+  NSWindowController* migratingWindowController = nil;
+  NSProgressIndicator* migratingProgressIndicator = nil;
 
   @try
   {
@@ -674,22 +691,8 @@ static LibraryManager* sharedManagerInstance = nil;
                                              shouldMigrateLibraryToAlign;
     BOOL migrationError = NO;
     if (shouldDisplayMigrationProgression)
-    {
-      NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
-      migratingWindowController = [[[NSWindowController alloc] initWithWindow:migratingWindow] autorelease];
-      [migratingWindow center];
-      [migratingWindow setTitle:NSLocalizedString(@"Migrating library to new format", @"Migrating library to new format")];
-      NSRect contentView = [[migratingWindow contentView] frame];
-      progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSInsetRect(contentView, 8, 8)];
-      [[migratingWindow contentView] addSubview:progressIndicator];
-      [progressIndicator setMinValue:0.];
-      [progressIndicator setUsesThreadedAnimation:YES];
-      [progressIndicator startAnimation:self];
-      [progressIndicator setIndeterminate:YES];
-      [progressIndicator release];
-      [migratingWindowController showWindow:migratingWindow];
-      modalSession = [NSApp beginModalSessionForWindow:migratingWindow];
-    }//end if ([[NSApp class] isEqual:[NSApplication class]])
+      migratingModalSession =
+        [self showMigratingProgressionWindow:&migratingWindowController progressIndicator:&migratingProgressIndicator];
 
     if (shouldMigrateLibraryToCoreData)
     {
@@ -705,10 +708,10 @@ static LibraryManager* sharedManagerInstance = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
       unsigned int progression = 0;
       unsigned int count = [latexitEquations count];
-      [progressIndicator setIndeterminate:NO];
-      [progressIndicator setMaxValue:1.*count];
-      [progressIndicator setDoubleValue:0.];
-      [progressIndicator display];
+      [migratingProgressIndicator setIndeterminate:NO];
+      [migratingProgressIndicator setMaxValue:1.*count];
+      [migratingProgressIndicator setDoubleValue:0.];
+      [migratingProgressIndicator display];
       if (error)
         DebugLog(0, @"error : %@", error);
       NSEnumerator* enumerator = [latexitEquations objectEnumerator];
@@ -717,9 +720,9 @@ static LibraryManager* sharedManagerInstance = nil;
         while((latexitEquation = [enumerator nextObject]))
         {
           [latexitEquation checkAndMigrateAlign];//force fetch and update
-          [progressIndicator setDoubleValue:1.*(progression++)];
+          [migratingProgressIndicator setDoubleValue:1.*(progression++)];
           if (!(progression%25))
-            [progressIndicator display];
+            [migratingProgressIndicator display];
         }//end for each latexitEquation
       }
       @catch(NSException* e){
@@ -740,7 +743,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.4.1", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.5.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }
@@ -748,16 +751,223 @@ static LibraryManager* sharedManagerInstance = nil;
   {
     DebugLog(0, @"exception : %@", e);
   }
-  @finally //if the history could not be created, make it (empty) now
+  @finally //if the library could not be created, make it (empty) now
   {
   }
-  
   [self fixChildrenSortIndexesForParent:nil recursively:YES];
-
-  if (modalSession)
-    [NSApp endModalSession:modalSession];
-  [migratingWindowController close]; 
+  [self hideMigratingProgressionWindow:migratingModalSession windowController:migratingWindowController];
 }
 //end createLibraryMigratingIfNeeded
+
+-(void) _migrateLatexitManagedModel:(NSString*)path
+{
+  BOOL isManagedObjectModelPrevious250 = NO;
+
+  NSString* oldManagedObjectModelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Latexit-2.4.0" ofType:@"mom"];
+  NSURL*    oldManagedObjectModelURL  = [NSURL fileURLWithPath:oldManagedObjectModelPath];
+  NSManagedObjectModel* oldManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
+  NSPersistentStoreCoordinator* oldPersistentStoreCoordinator =
+    [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
+  NSString* oldPath = [[path copy] autorelease];
+  NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
+  id oldPersistentStore = nil;
+  @try{
+    NSError* error = nil;
+    oldPersistentStore = !oldStoreURL ? nil :
+      [oldPersistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldStoreURL
+                                                        options:nil error:&error];
+    isManagedObjectModelPrevious250 = oldPersistentStore && !error;
+    if (error)
+      {DebugLog(0, @"error : %@", error);}
+  }
+  @catch (NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }
+  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  [oldManagedObjectContext setUndoManager:nil];
+  [oldManagedObjectContext setPersistentStoreCoordinator:oldPersistentStoreCoordinator];
+
+  NSManagedObjectModel* newManagedObjectModel = !isManagedObjectModelPrevious250 ? nil :
+    [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel];
+  NSPersistentStoreCoordinator* newPersistentStoreCoordinator =
+    [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:newManagedObjectModel];
+  NSString* newPath = nil;
+  NSFileHandle* newPathFileHandle = !newPersistentStoreCoordinator ? nil :
+    [[NSFileManager defaultManager]
+      temporaryFileWithTemplate:[NSString stringWithFormat:@"%@.XXXXXXXX", [oldPath lastPathComponent]] extension:@"db"
+                    outFilePath:&newPath workingDirectory:[[NSWorkspace sharedWorkspace] temporaryDirectory]];
+  newPathFileHandle = nil;
+  NSURL* newStoreURL = !newPath ? nil : [NSURL fileURLWithPath:newPath];
+
+  id newPersistentStore = nil;
+  @try{
+    NSError* error = nil;
+    newPersistentStore = !newStoreURL ? nil :
+      [newPersistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:newStoreURL
+                                                        options:nil error:&error];
+    if (error)
+      {DebugLog(0, @"error : %@", error);}
+  }
+  @catch(NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }
+
+  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  [newManagedObjectContext setUndoManager:nil];
+  [newManagedObjectContext setPersistentStoreCoordinator:newPersistentStoreCoordinator];
+
+  NSModalSession migratingModalSession = 0;
+  NSWindowController* migratingWindowController = nil;
+  NSProgressIndicator* migratingProgressIndicator = nil;
+  BOOL shouldDisplayMigrationProgression = (oldManagedObjectContext && newManagedObjectContext);
+  if (shouldDisplayMigrationProgression)
+    migratingModalSession =
+      [self showMigratingProgressionWindow:&migratingWindowController progressIndicator:&migratingProgressIndicator];
+  @try{
+    BOOL migrationOK = NO;
+    if (oldManagedObjectContext && newManagedObjectContext)
+    {
+      NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
+      NSEntityDescription* oldLibraryItemEntityDescription = !oldManagedObjectContext ? nil :
+        [NSEntityDescription entityForName:NSStringFromClass([LibraryItem class])
+                    inManagedObjectContext:oldManagedObjectContext];
+      NSFetchRequest* oldFetchRequest = !oldLibraryItemEntityDescription ? nil : [[NSFetchRequest alloc] init];
+      [oldFetchRequest setEntity:oldLibraryItemEntityDescription];
+      NSError* error = nil;
+      NSArray* oldLibraryItems = !oldFetchRequest ? nil :
+        [oldManagedObjectContext executeFetchRequest:oldFetchRequest error:&error]; 
+      [oldFetchRequest release];
+      if (error)
+        {DebugLog(0, @"error : %@", error);}
+
+      NSEnumerator* oldEnumerator = [oldLibraryItems objectEnumerator];
+      LibraryItem* oldLibraryItem = nil;
+      [LatexitEquation pushManagedObjectContext:newManagedObjectContext];
+      @try{
+        NSUInteger progression = 0;
+        [migratingProgressIndicator setIndeterminate:NO];
+        [migratingProgressIndicator setMinValue:0];
+        [migratingProgressIndicator setMaxValue:[oldLibraryItems count]];
+        [migratingProgressIndicator setDoubleValue:0.];
+        [migratingProgressIndicator display];
+        while((oldLibraryItem = [oldEnumerator nextObject]))
+        {
+          NSAutoreleasePool* ap2 = [[NSAutoreleasePool alloc] init];
+          LibraryEquation* oldLibraryEquation = [oldLibraryItem dynamicCastToClass:[LibraryEquation class]];
+          [oldLibraryEquation setCustomKVOInhibited:YES];
+          id oldLibraryItemDescription = [oldLibraryItem plistDescription];
+          [[oldLibraryEquation equation] dispose];
+          [oldLibraryItem dispose];//disables KVO
+          LibraryItem* newLibraryItem = !oldLibraryItemDescription ? nil :
+            [LibraryItem libraryItemWithDescription:oldLibraryItemDescription];
+          [newLibraryItem dispose];
+          [migratingProgressIndicator setDoubleValue:1.*(progression++)];
+          if (!(progression%25))
+            [migratingProgressIndicator display];
+          [ap2 drain];
+        }//end for each oldLibraryItem
+        error = nil;
+        [newManagedObjectContext save:&error];
+        if (!error)
+          migrationOK = YES;
+        else
+          {DebugLog(0, @"error : %@", error);}
+      }//end for each libraryItem
+      @catch(NSException* e){
+        DebugLog(0, @"exception : %@", e);
+      }
+      [LatexitEquation popManagedObjectContext];
+      [ap1 drain];
+    }//end if (oldManagedObjectContext && newManagedObjectContext)
+    [oldManagedObjectContext release];
+    oldManagedObjectContext = nil;
+    [oldPersistentStoreCoordinator release];
+    oldPersistentStoreCoordinator = nil;
+    [oldManagedObjectModel release];
+    oldManagedObjectModel = nil;
+    [newManagedObjectContext release];
+    newManagedObjectContext = nil;
+    [newPersistentStoreCoordinator release];
+    newPersistentStoreCoordinator = nil;
+
+    if (!migrationOK)
+    {
+      NSError* error = nil;
+      [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+      if (error)
+        {DebugLog(0, @"error : %@", error);}
+    }//end if (!migrationOK)
+    else if (migrationOK)
+    {
+      NSError* error = nil;
+      NSFileManager* fileManager = [NSFileManager defaultManager];
+      BOOL removedOldStore = [fileManager bridge_removeItemAtPath:oldPath error:&error];
+      if (error)
+        {DebugLog(0, @"error : %@", error);}
+      if (!removedOldStore || error)
+      {
+        error = nil;
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+        if (error)
+          {DebugLog(0, @"error : %@", error);}
+      }//end if (!removedOldStore || error)
+      else//if (removedOldStore && !error)
+      {
+        BOOL movedNewStore = [fileManager bridge_moveItemAtPath:newPath toPath:oldPath error:&error];
+        if (error)
+          {DebugLog(0, @"error : %@", error);}
+        if (!movedNewStore)
+        {
+          error = nil;
+          [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+          if (error)
+            {DebugLog(0, @"error : %@", error);}
+        }//end if (!movedNewStore)
+      }//end if (removedOldStore)
+    }//end if (migrationOK)
+  }//end @try
+  @catch(NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }
+  @finally //if the library could not be created, make it (empty) now
+  {
+  }
+  [self hideMigratingProgressionWindow:migratingModalSession windowController:migratingWindowController];
+}
+//end _migrateLatexitManagedModel:
+
+-(NSModalSession) showMigratingProgressionWindow:(NSWindowController**)outMigratingWindowController
+                               progressIndicator:(NSProgressIndicator**)outProgressIndicator
+{
+  NSModalSession result = 0;
+  NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
+  NSWindowController* migratingWindowController =
+    [[[NSWindowController alloc] initWithWindow:migratingWindow] autorelease];
+  [migratingWindow center];
+  [migratingWindow setTitle:NSLocalizedString(@"Migrating library to new format", @"Migrating library to new format")];
+  NSRect contentView = [[migratingWindow contentView] frame];
+  NSProgressIndicator* progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSInsetRect(contentView, 8, 8)];
+  [[migratingWindow contentView] addSubview:progressIndicator];
+  [progressIndicator setMinValue:0.];
+  [progressIndicator setUsesThreadedAnimation:YES];
+  [progressIndicator startAnimation:self];
+  [progressIndicator release];
+  [migratingWindowController showWindow:migratingWindow];
+  if (outMigratingWindowController)
+    *outMigratingWindowController = migratingWindowController;
+  if (outProgressIndicator)
+    *outProgressIndicator = progressIndicator;
+  result = [NSApp beginModalSessionForWindow:migratingWindow];
+  return result;
+}
+//end showMigratingProgressionWindow:
+
+-(void) hideMigratingProgressionWindow:(NSModalSession)modalSession windowController:(NSWindowController*)windowController
+{
+  if (modalSession)
+    [NSApp endModalSession:modalSession];
+  [windowController close]; 
+}
+//end hideMigratingProgressionWindow:windowController:
 
 @end

@@ -243,7 +243,7 @@
   int result = [openPanel runModalForDirectory:directory file:filename];
   if (result == NSFileHandlingPanelOKButton)
   {
-    filePath = [openPanel filename];
+    filePath = [[openPanel URL] path];
     [self setSvgPdfToSvgPath:filePath];
   }//end if (result == NSFileHandlingPanelOKButton)
 }

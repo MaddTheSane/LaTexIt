@@ -15,6 +15,7 @@
  IBOutlet NSTextField* rightMarginButton;
  IBOutlet NSTextField* bottomMarginButton;
  IBOutlet NSButton*    saveAsDefaultButton;
+ IBOutlet NSNumberFormatter* pointSizeFormatter;
 }
 
 -(CGFloat) topMargin;

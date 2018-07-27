@@ -8,6 +8,13 @@
 
 #import "LibraryPreviewPanelImageView.h"
 
+#import "NSImageExtended.h"
+
+@interface NSImageRep (Bridge10_6)
+- (BOOL)drawInRect:(NSRect)dstSpacePortionRect fromRect:(NSRect)srcSpacePortionRect operation:(NSCompositingOperation)op fraction:(CGFloat)requestedAlpha respectFlipped:(BOOL)respectContextIsFlipped hints:(NSDictionary *)hints;
+@end
+
+
 @implementation LibraryPreviewPanelImageView
 
 -(void) dealloc
@@ -46,7 +53,10 @@
     [self->backgroundColor set];
     NSRectFill(reducedBounds);
   }
-  [image drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
+  if (![[NSImageRep class] instancesRespondToSelector:@selector(drawInRect:fromRect:operation:fraction:respectFlipped:hints:)])
+    [image drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
+  else
+    [[image bestImageRepresentationInContext:[NSGraphicsContext currentContext]] drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
   [self setImage:image];
   [image release];
 }

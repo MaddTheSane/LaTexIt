@@ -50,7 +50,10 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end initWithParent:insertIntoManagedObjectContext:
 
--(void) dispose {}
+-(void) dispose
+{
+}
+//end dispose
 
 -(id) copyWithZone:(NSZone*)zone
 {
@@ -181,7 +184,7 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.4.1" forKey:@"version"];
+  [coder encodeObject:@"2.5.0" forKey:@"version"];
   [coder encodeObject:[self title] forKey:@"title"];
   [coder encodeInt:[self sortIndex] forKey:@"sortIndex"];
 }
@@ -190,7 +193,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(id) plistDescription
 {
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"2.4.1", @"version",
+     @"2.5.0", @"version",
      [self title], @"title",
      [NSNumber numberWithUnsignedInt:[self sortIndex]], @"sortIndex",
      nil];

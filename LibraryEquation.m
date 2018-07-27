@@ -81,21 +81,21 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) dispose
 {
+  [self setCustomKVOEnabled:NO];
   [super dispose];
-  @synchronized(self)
-  {
-    if (self->kvoEnabled)
-    {
-      [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
-      [self removeObserver:self forKeyPath:@"equationWrapper.equation.pdfData"];
-      self->kvoEnabled = NO;
-    }
-  }//end @synchronized(self)
 }
 //end dispose
 
+-(void) willTurnIntoFault
+{
+  [self setCustomKVOEnabled:NO];
+  [super willTurnIntoFault];
+}
+//end willTurnIntoFault
+
 -(void) didTurnIntoFault
 {
+  [self setCustomKVOEnabled:NO];
   [super didTurnIntoFault];
 }
 //end didTurnIntoFault
@@ -103,24 +103,14 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) awakeFromFetch
 {
   [super awakeFromFetch];
-  @synchronized(self)
-  {
-    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
-    [self addObserver:self forKeyPath:@"equationWrapper.equation.pdfData" options:0 context:nil];
-    self->kvoEnabled = YES;
-  }//end @synchronized(self)
+  [self setCustomKVOEnabled:YES];
 }
 //end awakeFromFetch
 
 -(void) awakeFromInsert
 {
   [super awakeFromInsert];
-  @synchronized(self)
-  {
-    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
-    [self addObserver:self forKeyPath:@"equationWrapper.equation.pdfData" options:0 context:nil];
-    self->kvoEnabled = YES;
-  }//end @synchronized(self)
+  [self setCustomKVOEnabled:YES];
   LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
   [[self managedObjectContext] safeInsertObject:equationWrapper];
   LatexitEquation* equation = [equationWrapper equation];
@@ -133,22 +123,81 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
   {
     NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
-    [managedObjectContext disableUndoRegistration];
+    if (managedObjectContext)
+      [managedObjectContext disableUndoRegistration];
     [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
     [self didChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
-    [managedObjectContext enableUndoRegistration];
+    if (managedObjectContext)
+      [managedObjectContext enableUndoRegistration];
   }//end if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
   else if ([keyPath isEqualToString:@"equationWrapper.equation.pdfData"])
   {
     NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
-    [managedObjectContext disableUndoRegistration];
+    if (managedObjectContext)
+      [managedObjectContext disableUndoRegistration];
     [[self equation] resetPdfCachedImage];
     [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
     [self didChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
-    [managedObjectContext enableUndoRegistration];
+    if (managedObjectContext)
+      [managedObjectContext enableUndoRegistration];
   }//end if ([keyPath isEqualToString:@"equationWrapper.equation.pdfData"])
 }
 //end observeValueForKeyPath:ofObject:change:context:
+
+-(BOOL) customKVOInhibited
+{
+  return self->customKVOInhibited;
+}
+//end customKVOEnabled
+
+-(void) setCustomKVOInhibited:(BOOL)value
+{
+  if (value != self->customKVOInhibited)
+  {
+    @synchronized(self)
+    {
+      if (value != self->customKVOInhibited)
+      {
+        self->customKVOInhibited = value;
+        if (self->customKVOInhibited)
+          [self setCustomKVOEnabled:NO];
+      }//end if (value != self->customKVOEnabled)
+    }//end @synchronized(self)
+  }//end if (value != self->customKVOEnabled)
+}
+//end customKVOInhibited:
+
+-(BOOL) customKVOEnabled
+{
+  return self->customKVOEnabled;
+}
+//end customKVOEnabled
+
+-(void) setCustomKVOEnabled:(BOOL)value
+{
+  if (value != self->customKVOEnabled)
+  {
+    @synchronized(self)
+    {
+      value &= !self->customKVOInhibited;
+      if (value != self->customKVOEnabled)
+      {
+        if (!value)
+        {
+          [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
+          [self removeObserver:self forKeyPath:@"equationWrapper.equation.pdfData"];
+        }//end if (!value)
+        else//if (value)
+        {
+          [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+          [self addObserver:self forKeyPath:@"equationWrapper.equation.pdfData" options:0 context:nil];
+        }//if (value)
+        self->customKVOEnabled = value;
+      }//end if (value != self->customKVOEnabled)
+    }//end @synchronized(self)
+  }//end if (value != self->customKVOEnabled)
+}
+//end setCustomKVOEnabled:
 
 -(void) setTitle:(NSString*)value
 {

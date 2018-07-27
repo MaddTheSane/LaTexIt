@@ -63,6 +63,10 @@
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "You need ps2pdf to export as \"PDF with outlined fonts\"";
 "Find %@..." = "Find %@...";
+"What's that ?" = "What's that ?";
+"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.";
+"See help..." = "See help...";
+"Install LaTeX" = "Install LaTeX";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." = "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
 "color.sty seems to be unavailable" = "color.sty seems to be unavailable";
 "Without the color.sty package, you won't be able to change the font color" = "Without the color.sty package, you won't be able to change the font color";
@@ -74,6 +78,7 @@
 "An error occured while trying to create the file :\n%@" = "An error occured while trying to create the file :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "An error occured while trying to create the file with command:\n%@";
 "http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "Equation linked with another application";
 "Equation linked with library item" = "Equation linked with library item";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT cannot be run properly, please check its configuration";
@@ -94,11 +99,13 @@
 "Preambles" = "Preambles";
 "Body templates" = "Body templates";
 "Templates" = "Templates";
-"Composition" = "Composition";
+"Composition" = "Typesetting";
 "Service" = "Service";
 "Advanced" = "Advanced";
 "Web" = "Web";
 "Plugins" = "Plugins";
+"Reset preamble" = "Reset preamble";
+"Are you sure you want to reset the preamble ?\nThis operation is irreversible." = "Are you sure you want to reset the preamble ?\nThis operation is irreversible.";
 "Do you really want to apply that preamble to the library items ?" = "Do you really want to apply that preamble to the library items ?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
 "Apply" = "Apply";

@@ -70,7 +70,7 @@
     }
     else if ((c == ' ') || (c == 13))//return
       [self sendAction:@selector(latexPalettesClick:) to:[self delegate]];
-    else if ((c == '\t'))
+    else if (c == '\t')
     {
       [[self window] makeFirstResponder:[self nextKeyView]];
     }

@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.SystemVersion">10K549</string>
 		<string key="IBDocument.InterfaceBuilderVersion">851</string>
-		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -685,6 +685,7 @@
 									<reference key="NSMenu" ref="55124784"/>
 									<string key="NSTitle">選択項目を削除</string>
 									<string type="base64-UTF8" key="NSKeyEquiv">CA</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
 									<reference key="NSMixedImage" ref="889411723"/>
@@ -1358,7 +1359,7 @@ m+OCk+OAgg</string>
 				<string key="NSClassName">SUUpdater</string>
 			</object>
 			<object class="NSCustomView" id="679609900">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSTextField" id="972462926">
@@ -1366,7 +1367,6 @@ m+OCk+OAgg</string>
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 22}, {106, 17}}</string>
 						<reference key="NSSuperview" ref="679609900"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="836927056">
 							<int key="NSCellFlags">68288064</int>
@@ -1383,7 +1383,6 @@ m+OCk+OAgg</string>
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{125, 16}, {253, 26}}</string>
 						<reference key="NSSuperview" ref="679609900"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPopUpButtonCell" key="NSCell" id="41830187">
 							<int key="NSCellFlags">-2076049856</int>
@@ -1411,8 +1410,6 @@ m+OCk+OAgg</string>
 					</object>
 				</array>
 				<string key="NSFrameSize">{395, 60}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 		</array>

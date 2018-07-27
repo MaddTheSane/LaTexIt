@@ -16,4 +16,7 @@
 
 -(void) addObject:(id)object;
 
+-(BOOL) automaticallyRearrangesObjects;
+-(void) setAutomaticallyRearrangesObjects:(BOOL)value;
+
 @end

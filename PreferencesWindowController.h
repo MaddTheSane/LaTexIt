@@ -61,6 +61,7 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSTextField*     generalExportScalePercentTextField;
   IBOutlet NSColorWell*     generalDummyBackgroundColorWell;
   IBOutlet NSButton*        generalDummyBackgroundAutoStateButton;
+  IBOutlet NSNumberFormatter* generalPointSizeFormatter;
 
   IBOutlet NSSegmentedControl* generalLatexisationLaTeXModeSegmentedControl;
   IBOutlet NSTextField*        generalLatexisationFontSizeTextField;

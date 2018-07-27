@@ -1,0 +1,11 @@
+"groups-and-sets" = "Gruppi e Insiemi";
+"subgroup"="Sottogruppo";
+"supgroup"="Supergruppo";
+"supnormgroup"="Supergruppo Normale";
+"subnormgroup"="Sottogruppo Normale";
+"supset"="Sovrainsieme Proprio";
+"supseteq"="Sovrainsieme";
+"subset"="Sottoinsieme Proprio";
+"subseteq"="Sottoinsieme";
+"emptyset"="Insieme vuoto 1";
+"varnothing"="Insieme vuoto 2";

@@ -28,5 +28,7 @@
 -(NSString*) bridge_destinationOfSymbolicLinkAtPath:(NSString*)path error:(NSError**)error;
 -(NSArray*) bridge_contentsOfDirectoryAtPath:(NSString *)path error:(NSError**)error;
 -(BOOL)     bridge_copyItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error;
+-(BOOL)     bridge_removeItemAtPath:(NSString*)path error:(NSError**)error;
+-(BOOL)     bridge_moveItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error;
 @end
 

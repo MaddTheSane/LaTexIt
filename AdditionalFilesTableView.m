@@ -267,13 +267,19 @@
 {
   if (returnCode == NSOKButton)
   {
+    NSArray* urls = [panel URLs];
+    NSMutableArray* fileNames = [NSMutableArray arrayWithCapacity:[urls count]];
+    NSEnumerator* enumerator = [urls objectEnumerator];
+    NSURL* url = nil;
+    while((url = [enumerator nextObject]))
+      [fileNames addObject:[url path]];
     if (self->isDefaultTableView)
-      [[[PreferencesController sharedController] additionalFilesController] addObjects:[panel filenames]];
+      [[[PreferencesController sharedController] additionalFilesController] addObjects:fileNames];
     else//if (!self->isDefaultTableView)
     {
       AdditionalFilesController* defaultAdditionalFilesController = [[PreferencesController sharedController] additionalFilesController];
       NSArray* filesInDefaultAdditionalFilesController = [defaultAdditionalFilesController arrangedObjects];
-      NSMutableArray* filesToAdd = [NSMutableArray arrayWithArray:[panel filenames]];
+      NSMutableArray* filesToAdd = [NSMutableArray arrayWithArray:fileNames];
       [filesToAdd removeObjectsInArray:filesInDefaultAdditionalFilesController];
       NSEnumerator* enumerator = [filesToAdd objectEnumerator];
       id object = nil;

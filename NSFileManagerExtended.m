@@ -69,6 +69,28 @@ static NSMutableSet* createdTemporaryPaths = nil;
 }
 //end bridge_copyItemAtPath:toPath:error:
 
+-(BOOL) bridge_removeItemAtPath:(NSString*)path error:(NSError**)error
+{
+  BOOL result = NO;
+  if ([self respondsToSelector:@selector(removeItemAtPath:error:)])
+    result = [self removeItemAtPath:path error:error];
+  else
+    result = [self removeFileAtPath:path handler:0];
+  return result;
+}
+//end bridge_removeItemAtPath:error:
+
+-(BOOL) bridge_moveItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error
+{
+  BOOL result = NO;
+  if ([self respondsToSelector:@selector(moveItemAtPath:toPath:error:)])
+    result = [self moveItemAtPath:srcPath toPath:dstPath error:error];
+  else
+    result = [self movePath:srcPath toPath:dstPath handler:0];
+  return result;
+}
+//end bridge_moveItemAtPath:toPath:error:
+
 @end
 
 @implementation NSFileManager (Extended)

@@ -63,6 +63,10 @@
 "The current configuration of LaTeXiT requires %@ to work." = "現在の LaTeXiT の設定は動作のために %@ を必要とします。";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "“アウトラインフォント付きのPDF”としての書き出しには ps2pdf が必要です";
 "Find %@..." = "%@ を検索...";
+"What's that ?" = "詳しい情報";
+"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT は動作可能な LaTeX のインストールを必要とします。もし LaTeX について知らない場合は、適切な LaTeX を見つけてインストールすることが難しいかもしれません。ドキュメントのヘルプセクションに情報があります。";
+"See help..." = "ヘルプを見る...";
+"Install LaTeX" = "LaTeX をインストール";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." = "pdflatex, latex, dvipdf, xelatex or gs （設定に依存）が利用できないようです。それらのインストールを確認してください。";
 "color.sty seems to be unavailable" = "color.sty が利用できないようです";
 "Without the color.sty package, you won't be able to change the font color" = "フォントの色を変えるには color.sty が必要です";
@@ -74,6 +78,7 @@
 "An error occured while trying to create the file :\n%@" = "次のファイルを作成するときにエラーが発生しました :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "次のコマンドを用いてファイルを作成するときにエラーが発生しました :\n%@";
 "http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "他のアプリケーションとリンクしている数式";
 "Equation linked with library item" = "ライブラリ項目にリンクした数式";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT は正しく動作しません。設定を確認してください";
@@ -99,6 +104,8 @@
 "Advanced" = "詳細";
 "Web" = "ウェブ";
 "Plugins" = "機能拡張";
+"Reset preamble" = "プリアンブルをリセット";
+"Are you sure you want to reset the preamble ?\nThis operation is irreversible." = "プリアンブルを本当にリセットしますか？\nこの操作は取り消せません";
 "Do you really want to apply that preamble to the library items ?" = "本当にこのプリアンブルをライブラリ項目に適用しますか？";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "古いプリアンブルは上書きされます。これまでの変換に必要な特別なプリアンブルだとすると、それが失われます。";
 "Apply" = "適用";

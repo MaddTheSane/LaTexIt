@@ -1,267 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" content="text/html; charset=utf-8">
-    <channel>
-        <title>Historique de LaTeXiT</title>
-        <link>http://pierre.chachatelier.fr/latexit/latexit-downloads.php?lang=fr</link>
-        <description>Mises à jour et liens de téléchargement.</description>
-        <language>fr</language>
-        <item> 
-            <title>Version 1.15.0</title>
-            <description>
-              <ul>
-                <li>la version pour MacOS 10.3 (Panther) ne sera plus maintenue;</li>
-                <li>correction d'une incompatibilité avec le shell de Leopard;</li>
-                <li>les services fonctionnent à nouveau sous Leopard;</li>
-                <li>gestion plus robuste des raccourcis claviers pour les Services;</li>
-                <li>le service &quot;Détecter et créer les équations&quot; comprend maintenant \begin{eqnarray*}...\end{eqnarray*};</li>
-                <li>on peut maintenant importer une bibliothèque provenant de LaTeX Equation Editor;</li>
-                <li>les tabulations ne sont plus arbitrairement limitées en nombre;</li>
-                <li>LaTeXiT utilise maintenant Sparkle pour les mises à jour;</li>
-                <li>la latexisation utilise maintenant le raccourci ⌘T comme TeXShop; ⌘L, ⇧⌘L, ⇧⌘T fonctionnent encore;</li>
-                <li>le préambule par défaut utilise maintenant \usepackage[usenames]{color} au lieu de \usepackage{color}.</li>
-                <li>nouvelle icône de Jacob Bandes-Storch.</li>
-              </ul>
-            </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html</sparkle:releaseNotesLink>
-            <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
-            <enclosure url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
-        </item> 
-        <item> 
-            <title>Version 1.16.0</title>
-            <description>
-              <ul>
-                <li>Ajout d'une action Automator;</li>
-                <li>meilleure gestion de l'environnement Unix, qui corrige un bug rencontré avec certains configurations;</li>
-                <li>gestion de plusieurs préambules;</li>
-                <li>ajout de la palette &quot;Fichiers supplémentaires&quot;;</li>
-                <li>amélioration du découpage automatique des équations;</li>
-                <li>gestion de plusieurs préambules;</li>
-                <li>pour la lisibilité, les icônes des fichiers créés n'ont plus un fond transparent;</li>
-                <li>la détection automatique de la taille des polices par le service est maintenant dotée d'un facteur multiplicatif paramétrable;</li>
-                <li>mise à jour de la traduction Allemande (Peter Dyballa);</li>
-                <li>correction de bugs mineurs.</li>
-              </ul>
-            </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html</sparkle:releaseNotesLink>
-            <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
-            <enclosure url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
-        </item> 
-        <item>
-              <title>Version 1.16.1</title>
-              <description>
-                <ul>
-                  <li>Meilleure compatibilité avec des versions anciennes de pdflatex/ghostscript;</li>
-                  <li>correction d'un bug dans l'action Automator, qui l'empêchait d'être sauvegardée;</li>
-                  <li>correction d'un bug dans la propagation des variables d'environnement pour les scripts personnalisés.</li>
-                </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.16.1</sparkle:releaseNotesLink>
-              <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
-              <enclosure
-                url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-1_16_1.dmg"
-                sparkle:version="1.16.1"
-                type="application/octet-stream"
-                length="6355132"
-                sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
-              />
-        </item>
-        <item>
-              <title>Version 2.0.0</title>
-              <description>
-              <ul>
-                <li>revue du code avec de nombreux changements internes pour une meilleure flexibilité;</li>
-                <li>ajout des &quot;modèles de corps&quot;;</li>
-                <li>historique et bibliothèque sont maintenant gérées par CoreData, ce qui améliore la gestion des ressources (mémoire...);</li>
-                <li>on peut maintenant donner des arguments supplémentaires aux programmes sous-jacents (pdlatex...);</li>
-                <li>les fenêtres de documents de LaTeXiT ont maintenant un mode &quot;mini fenêtre&quot; comme iTunes;</li>
-                <li>restauration de la compatibilité avec les processeurs G3;</li>
-                <li>amélioration du temps de démarrage;</li>
-                <li>correction de bugs dans les services;</li>
-                <li>correction de bugs mineurs;</li>
-                <li>traduction en Japonais;</li>
-                <li>le développeur lui-même est passé en version 2.0 en épousant sa femme bien aimée. Les dons sont bienvenus pour participer au voyage de noces !</li>
-              </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
-              <pubDate>Wed, 04 Nov 2009 21:28:25 +0100</pubDate>
-              <enclosure
-                url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_0_0.dmg"
-                sparkle:version="2.0.0"
-                type="application/octet-stream"
-                length="6167995"
-                sparkle:dsaSignature="MCwCFHaUhz+orUX7o9qUobM+FmicgJfTAhRZJZqjSa9OsyvyIK2lCYHfbv0+fA=="
-              />
-          </item>
-        <item>
-              <title>Version 2.0.1</title>
-              <description>
-              <ul>
-                <li>contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-même);</li>
-                <li>correction de problèmes de migration de la bibliothèque sous certains conditions;</li>
-                <li>correction du support de Tiger;</li>
-                <li>correction du support de LinkBack;</li>
-                <li>correction des boutons inactifs pour appliquer les préambules à la bibliothèque;</li>
-                <li>amélioration de quelques points d'interface et correction de bugs mineurs.</li>
-              </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.0.1</sparkle:releaseNotesLink>
-              <pubDate>Sun, 15 Nov 2009 20:05:40 +0100</pubDate>
-              <enclosure
-                url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_0_1.dmg"
-                sparkle:version="2.0.1"
-                sparkle:shortVersionString="2.0.1"
-                type="application/octet-stream"
-                length="6179941"
-                sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
-              />
-          </item>
-        <item>
-              <title>Version 2.1.0</title>
-              <description>
-              <ul>
-                <li>abandon provisoire du 64 bits à cause de bugs du AppleTypeServer déjà cités dans la version 2.0.1;</li>
-                <li>migration du mode EqnArray à Align, qui s'utilise de la même façon mais donne de meilleurs résultats;</li>
-                <li>correction d'un bug d'export si l'échelle n'était pas 100%;</li>
-                <li>meilleur rétro-compatibilité avec LinkBack;</li>
-                <li>amélioration de la traduction en Japonais, grâce à Ryohei Seto;</li>
-                <li>raffinements d'interface.</li>
-              </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.1.0</sparkle:releaseNotesLink>
-              <pubDate>Tue, 09 Mar 2010 19:46:50 +0100</pubDate>
-              <enclosure
-                url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_1_0.dmg"
-                sparkle:version="2.1.0" sparkle:shortVersionString="2.1.0"
-                type="application/octet-stream"
-                length="6033306"
-        sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1KU42w=="
-              />
-          </item>
-        <item>
-              <title>Version 2.1.1</title>
-              <description>
-              <ul>
-                <li>correction d'un bug empêchant LaTeXiT d'informer l'utilisateur des nouvelles mises à jour;</li>
-                <li>si vous voulez m'aider à acheter une maison, vous pouvez reconsidérer ce fameux don de plusieurs milliers d'euros que vous avez repoussé jusqu'alors.</li>
-              </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.1.1</sparkle:releaseNotesLink>
-              <pubDate>Thu, 11 Mar 2010 09:36:48 +0100</pubDate>
-              <enclosure
-                url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_1_1.dmg"
-                sparkle:version="2.1.1"
-                sparkle:shortVersionString="2.1.1"
-                type="application/octet-stream"
-                length="6034835"
-                sparkle:dsaSignature="MCwCFBl1Fr32ScHbJmEKLrAWqnXBo34eAhRaC515j75e0PHvE7gP/NLEENyL7A=="
-              />
-          </item>
-        <item>
-              <title>Version 2.2.0</title>
-              <description>
-                <h3>Note exceptionnelle</h3>
-                <p>Le développeur d'un logiciel parle rarement de lui, mais je voulais exceptionnellement le faire ici.</p>
-                <p>Je pense que LaTeXiT est devenu un très bon outil au long des années, et je suis heureux de le distribuer totalement gratuitement. Cela ne va d'ailleurs pas changer.<br/>
-                Cependant, j'en suis à un point de ma vie où l'argent est également important pour ma vie de famille, et il me serait plus confortable de bénéficier de quelque compensation pour tout le travail que j'ai effectué jusque là pour LaTeXiT.</p>
-                <p><span style="font-weight:bold">Si vous êtes un particulier, ignorez cette demande</span>. Mais si vous représentez un laboratoire, ou une société, et pensez que LaTeXiT vous aide vraiment pour votre travail au jour le jour, pourriez-vous vous pencher sur la possibilité d'un don ? Je pense que je pourrais ajouter un lien dans LaTeXiT vers une liste de mécènes &quot;LaTeXiT est soutenu par…&quot;. Ce serait une bonne façon de vous remercier (en plus de continuer à travailler sur le logiciel, évidemment).</p>
-                <p>Développement vôtre,<br/>Pierre Chatelier</p>
-                <hr/>
-                <ul>
-                  <li>les latexisations peuvent maintenant être interrompues;</li>
-                  <li>correction d'un cas où les préférences des scripts additionnels pouvaient ne pas être sauvegardées;</li>
-                  <li>ajout d'une barre de progression pour la migration de l'historique si nécessaire;</li>
-                  <li>ajout de préférences pour l'historique;</li>
-                  <li>l'historique peut maintenant être importée/exportée;</li>
-                  <li>le format d'export peut maintenant être changé à la volée pendant un glisser/déposer;</li>
-                  <li>gestion plus puissante des arguments de fonctions pour les éléments de la palette LaTeX;</li>
-                  <li>améliorations mineures de l'interface;</li>
-                  <li>quelques corrections de bugs.</li>
-                </ul>
-              </description>
-              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.2.0</sparkle:releaseNotesLink>
-              <pubDate>Tue, 25 May 2010 07:58:04 +0200</pubDate>
-              <enclosure
-                url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_2_0.dmg"
-                sparkle:version="2.2.0"
-                sparkle:shortVersionString="2.2.0"
-                type="application/octet-stream"
-                length="6160401"
-                sparkle:dsaSignature="MC4CFQCZvzbNlxgaiF5F5FOAw1RD8ivRFwIVAIsTo+TY8Al9SopFIGWD9/h9B749"
-              />
-          </item>
-          <item>
-            <title>Version 2.3.0</title>
-            <description>
-              <ul>
-                <li>correction d'un bug de glisser/Déposer vers PowerPoint;</li>
-                <li>correction d'un bug d'affichage pouvant montrer un cadre noir en lieu et place de l'équation;</li>
-                <li>amélioration des préférences;</li>
-                <li>certaines erreurs du moteur LaTeX étaient ignorées;</li>
-                <li>ajout expérimental de l'export MathML;</li>
-                <li>mise à jour de Sparkle.</li>
-              </ul>
-            </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.3.0</sparkle:releaseNotesLink>
-            <pubDate>Wed, 01 Sep 2010 19:53:06 +0200</pubDate>
-            <enclosure
-              url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_3_0.dmg"
-              sparkle:version="2.3.0"
-              sparkle:shortVersionString="2.3.0"
-              type="application/octet-stream"
-              length="6229671"
-              sparkle:dsaSignature="MCwCFFl7uBQfjJHLwVRLWpXvKIysRZhCAhQRRzXOxXpIdKAzLyX66PFsUA3Vbw=="
-            />
-          </item>
-          <item>
-            <title>Version 2.4.0</title>
-            <description>
-              <ul>
-                <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour</li>
-                <li>export MathML (expérimental);</li>
-                <li>export SVG (nécessite pdf2svg);</li>
-                <li>action Automator réparée;</li>
-                <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*};</li>
-                <li>possibilité de remplacer les tabulations par des espaces;</li>
-                <li>traductions améliorées;</li>
-                <li>nombreuses améliorations internes.</li>
-              </ul>
-            </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.0</sparkle:releaseNotesLink>
-            <pubDate>Mon, 13 Jun 2011 14:00:00 +0200</pubDate>
-            <enclosure
-              url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_0.dmg"
-              sparkle:version="2.4.0"
-              sparkle:shortVersionString="2.4.0"
-              type="application/octet-stream"
-              length="7773655"
-              sparkle:dsaSignature="MCwCFGhAvUHcLS0t6BVCF779e5la10COAhQ/pNnWFNSje0f0uQ9O7mEEGFWjfg=="
-            />
-          </item>
-          <item>
-            <title>Version 2.4.1</title>
-            <description>
-              <ul>
-                <li>version 2.4.1 : correction d'un bug avec certains PDFs se traduisant par un total dysfonctionnement sur certaines configurations ;</li>
-                <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour</li>
-                <li>export MathML (expérimental);</li>
-                <li>export SVG (nécessite pdf2svg);</li>
-                <li>action Automator réparée;</li>
-                <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*};</li>
-                <li>possibilité de remplacer les tabulations par des espaces;</li>
-                <li>traductions améliorées;</li>
-                <li>nombreuses améliorations internes.</li>
-              </ul>
-            </description>
-            <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.1</sparkle:releaseNotesLink>
-            <pubDate>Mon, 13 Jun 2011 23:50:00 +0200</pubDate>
-            <enclosure
-              url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_1.dmg"
-              sparkle:version="2.4.1"
-              sparkle:shortVersionString="2.4.1"
-              type="application/octet-stream"
-              length="7767804"
-              sparkle:dsaSignature="MC4CFQCWlsG2Q8AUyk7ambJRWBA+aQppegIVAKtCfLqGIsQ7WZ++RHuaJeLhr/yG"
-            />
-          </item>
-      </channel> 
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>Historique de LaTeXiT</title>
+    <link>http://pierre.chachatelier.fr/latexit/latexit-downloads.php?lang=fr</link>
+    <description><![CDATA[Mises à jour et liens de téléchargement.]]></description>
+    <language>fr</language>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.15.0</guid>
+      <title>Version 1.15.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>la version pour MacOS 10.3 (Panther) ne sera plus maintenue;</li>
+          <li>correction d'une incompatibilité avec le shell de Leopard;</li>
+          <li>les services fonctionnent à nouveau sous Leopard;</li>
+          <li>gestion plus robuste des raccourcis claviers pour les Services;</li>
+          <li>le service &quot;Détecter et créer les équations&quot; comprend maintenant \begin{eqnarray*}...\end{eqnarray*};</li>
+          <li>on peut maintenant importer une bibliothèque provenant de LaTeX Equation Editor;</li>
+          <li>les tabulations ne sont plus arbitrairement limitées en nombre;</li>
+          <li>LaTeXiT utilise maintenant Sparkle pour les mises à jour;</li>
+          <li>la latexisation utilise maintenant le raccourci ⌘T comme TeXShop; ⌘L, ⇧⌘L, ⇧⌘T fonctionnent encore;</li>
+          <li>le préambule par défaut utilise maintenant \usepackage[usenames]{color} au lieu de \usepackage{color}.</li>
+          <li>nouvelle icône de Jacob Bandes-Storch.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.15.0</sparkle:releaseNotesLink>
+      <pubDate>Wed, 16 Apr 2008 11:00:00 +0000</pubDate>
+      <enclosure url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT_1.15.0.dmg" length="4825693" type="application/octet-stream" sparkle:version="1.15.0"/> 
+    </item> 
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.16.0</guid>
+      <title>Version 1.16.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Ajout d'une action Automator;</li>
+          <li>meilleure gestion de l'environnement Unix, qui corrige un bug rencontré avec certains configurations;</li>
+          <li>gestion de plusieurs préambules;</li>
+          <li>ajout de la palette &quot;Fichiers supplémentaires&quot;;</li>
+          <li>amélioration du découpage automatique des équations;</li>
+          <li>gestion de plusieurs préambules;</li>
+          <li>pour la lisibilité, les icônes des fichiers créés n'ont plus un fond transparent;</li>
+          <li>la détection automatique de la taille des polices par le service est maintenant dotée d'un facteur multiplicatif paramétrable;</li>
+          <li>mise à jour de la traduction Allemande (Peter Dyballa);</li>
+          <li>correction de bugs mineurs.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.16.0</sparkle:releaseNotesLink>
+      <pubDate>Thu, 6 Nov 2008 23:00:00 +0000</pubDate>
+      <enclosure url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-1_16_0.dmg" length="6079432" type="application/octet-stream" sparkle:version="1.16.0"/> 
+    </item> 
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.16.1</guid>
+      <title>Version 1.16.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>Meilleure compatibilité avec des versions anciennes de pdflatex/ghostscript;</li>
+          <li>correction d'un bug dans l'action Automator, qui l'empêchait d'être sauvegardée;</li>
+          <li>correction d'un bug dans la propagation des variables d'environnement pour les scripts personnalisés.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-1.16.1</sparkle:releaseNotesLink>
+      <pubDate>Sat, 31 Jan 2009 09:13:50 +0100</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-1_16_1.dmg"
+        sparkle:version="1.16.1"
+        type="application/octet-stream"
+        length="6355132"
+        sparkle:dsaSignature="MCwCFBgHZp8PhChaxMRfltVHFLy8y5OjAhQvUjuYrhwv17P5M1WRmcA//Zly2A=="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.0.0</guid>
+      <title>Version 2.0.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>revue du code avec de nombreux changements internes pour une meilleure flexibilité;</li>
+          <li>ajout des &quot;modèles de corps&quot;;</li>
+          <li>historique et bibliothèque sont maintenant gérées par CoreData, ce qui améliore la gestion des ressources (mémoire...);</li>
+          <li>on peut maintenant donner des arguments supplémentaires aux programmes sous-jacents (pdlatex...);</li>
+          <li>les fenêtres de documents de LaTeXiT ont maintenant un mode &quot;mini fenêtre&quot; comme iTunes;</li>
+          <li>restauration de la compatibilité avec les processeurs G3;</li>
+          <li>amélioration du temps de démarrage;</li>
+          <li>correction de bugs dans les services;</li>
+          <li>correction de bugs mineurs;</li>
+          <li>traduction en Japonais;</li>
+          <li>le développeur lui-même est passé en version 2.0 en épousant sa femme bien aimée. Les dons sont bienvenus pour participer au voyage de noces !</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.0.0</sparkle:releaseNotesLink>
+      <pubDate>Wed, 04 Nov 2009 21:28:25 +0100</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_0_0.dmg"
+        sparkle:version="2.0.0"
+        type="application/octet-stream"
+        length="6167995"
+        sparkle:dsaSignature="MCwCFHaUhz+orUX7o9qUobM+FmicgJfTAhRZJZqjSa9OsyvyIK2lCYHfbv0+fA=="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.0.1</guid>
+      <title>Version 2.0.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-même);</li>
+          <li>correction de problèmes de migration de la bibliothèque sous certains conditions;</li>
+          <li>correction du support de Tiger;</li>
+          <li>correction du support de LinkBack;</li>
+          <li>correction des boutons inactifs pour appliquer les préambules à la bibliothèque;</li>
+          <li>amélioration de quelques points d'interface et correction de bugs mineurs.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.0.1</sparkle:releaseNotesLink>
+      <pubDate>Sun, 15 Nov 2009 20:05:40 +0100</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_0_1.dmg"
+        sparkle:version="2.0.1"
+        sparkle:shortVersionString="2.0.1"
+        type="application/octet-stream"
+        length="6179941"
+        sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.1.0</guid>
+      <title>Version 2.1.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>abandon provisoire du 64 bits à cause de bugs du AppleTypeServer déjà cités dans la version 2.0.1;</li>
+          <li>migration du mode EqnArray à Align, qui s'utilise de la même façon mais donne de meilleurs résultats;</li>
+          <li>correction d'un bug d'export si l'échelle n'était pas 100%;</li>
+          <li>meilleur rétro-compatibilité avec LinkBack;</li>
+          <li>amélioration de la traduction en Japonais, grâce à Ryohei Seto;</li>
+          <li>raffinements d'interface.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.1.0</sparkle:releaseNotesLink>
+      <pubDate>Tue, 09 Mar 2010 19:46:50 +0100</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_1_0.dmg"
+        sparkle:version="2.1.0" sparkle:shortVersionString="2.1.0"
+        type="application/octet-stream"
+        length="6033306"
+sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1KU42w=="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.1.1</guid>
+      <title>Version 2.1.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>correction d'un bug empêchant LaTeXiT d'informer l'utilisateur des nouvelles mises à jour;</li>
+          <li>si vous voulez m'aider à acheter une maison, vous pouvez reconsidérer ce fameux don de plusieurs milliers d'euros que vous avez repoussé jusqu'alors.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.1.1</sparkle:releaseNotesLink>
+      <pubDate>Thu, 11 Mar 2010 09:36:48 +0100</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_1_1.dmg"
+        sparkle:version="2.1.1"
+        sparkle:shortVersionString="2.1.1"
+        type="application/octet-stream"
+        length="6034835"
+        sparkle:dsaSignature="MCwCFBl1Fr32ScHbJmEKLrAWqnXBo34eAhRaC515j75e0PHvE7gP/NLEENyL7A=="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.2.0</guid>
+      <title>Version 2.2.0</title>
+      <description><![CDATA[
+        <h3>Note exceptionnelle</h3>
+        <p>Le développeur d'un logiciel parle rarement de lui, mais je voulais exceptionnellement le faire ici.</p>
+        <p>Je pense que LaTeXiT est devenu un très bon outil au long des années, et je suis heureux de le distribuer totalement gratuitement. Cela ne va d'ailleurs pas changer.<br/>
+        Cependant, j'en suis à un point de ma vie où l'argent est également important pour ma vie de famille, et il me serait plus confortable de bénéficier de quelque compensation pour tout le travail que j'ai effectué jusque là pour LaTeXiT.</p>
+        <p><span style="font-weight:bold">Si vous êtes un particulier, ignorez cette demande</span>. Mais si vous représentez un laboratoire, ou une société, et pensez que LaTeXiT vous aide vraiment pour votre travail au jour le jour, pourriez-vous vous pencher sur la possibilité d'un don ? Je pense que je pourrais ajouter un lien dans LaTeXiT vers une liste de mécènes &quot;LaTeXiT est soutenu par…&quot;. Ce serait une bonne façon de vous remercier (en plus de continuer à travailler sur le logiciel, évidemment).</p>
+        <p>Développement vôtre,<br/>Pierre Chatelier</p>
+        <hr/>
+        <ul>
+          <li>les latexisations peuvent maintenant être interrompues;</li>
+          <li>correction d'un cas où les préférences des scripts additionnels pouvaient ne pas être sauvegardées;</li>
+          <li>ajout d'une barre de progression pour la migration de l'historique si nécessaire;</li>
+          <li>ajout de préférences pour l'historique;</li>
+          <li>l'historique peut maintenant être importée/exportée;</li>
+          <li>le format d'export peut maintenant être changé à la volée pendant un glisser/déposer;</li>
+          <li>gestion plus puissante des arguments de fonctions pour les éléments de la palette LaTeX;</li>
+          <li>améliorations mineures de l'interface;</li>
+          <li>quelques corrections de bugs.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.2.0</sparkle:releaseNotesLink>
+      <pubDate>Tue, 25 May 2010 07:58:04 +0200</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_2_0.dmg"
+        sparkle:version="2.2.0"
+        sparkle:shortVersionString="2.2.0"
+        type="application/octet-stream"
+        length="6160401"
+        sparkle:dsaSignature="MC4CFQCZvzbNlxgaiF5F5FOAw1RD8ivRFwIVAIsTo+TY8Al9SopFIGWD9/h9B749"
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.3.0</guid>
+      <title>Version 2.3.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>correction d'un bug de glisser/Déposer vers PowerPoint;</li>
+          <li>correction d'un bug d'affichage pouvant montrer un cadre noir en lieu et place de l'équation;</li>
+          <li>amélioration des préférences;</li>
+          <li>certaines erreurs du moteur LaTeX étaient ignorées;</li>
+          <li>ajout expérimental de l'export MathML;</li>
+          <li>mise à jour de Sparkle.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.3.0</sparkle:releaseNotesLink>
+      <pubDate>Wed, 01 Sep 2010 19:53:06 +0200</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_3_0.dmg"
+        sparkle:version="2.3.0"
+        sparkle:shortVersionString="2.3.0"
+        type="application/octet-stream"
+        length="6229671"
+        sparkle:dsaSignature="MCwCFFl7uBQfjJHLwVRLWpXvKIysRZhCAhQRRzXOxXpIdKAzLyX66PFsUA3Vbw=="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.0</guid>
+      <title>Version 2.4.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour</li>
+          <li>export MathML (expérimental);</li>
+          <li>export SVG (nécessite pdf2svg);</li>
+          <li>action Automator réparée;</li>
+          <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*};</li>
+          <li>possibilité de remplacer les tabulations par des espaces;</li>
+          <li>traductions améliorées;</li>
+          <li>nombreuses améliorations internes.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.0</sparkle:releaseNotesLink>
+      <pubDate>Mon, 13 Jun 2011 14:00:00 +0200</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_0.dmg"
+        sparkle:version="2.4.0"
+        sparkle:shortVersionString="2.4.0"
+        type="application/octet-stream"
+        length="7773655"
+        sparkle:dsaSignature="MCwCFGhAvUHcLS0t6BVCF779e5la10COAhQ/pNnWFNSje0f0uQ9O7mEEGFWjfg=="
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.1</guid>
+      <title>Version 2.4.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>version 2.4.1 : correction d'un bug avec certains PDFs se traduisant par un total dysfonctionnement sur certaines configurations ;</li>
+          <li>nouveau <a href="http://pierre.chachatelier.fr/latexit">site web</a>, méritant le détour</li>
+          <li>export MathML (expérimental);</li>
+          <li>export SVG (nécessite pdf2svg);</li>
+          <li>action Automator réparée;</li>
+          <li>le service accepte maintenant {eqnarray} et {align} et les interprète comme {eqnarray*} et {align*};</li>
+          <li>possibilité de remplacer les tabulations par des espaces;</li>
+          <li>traductions améliorées;</li>
+          <li>nombreuses améliorations internes.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.4.1</sparkle:releaseNotesLink>
+      <pubDate>Mon, 13 Jun 2011 23:50:00 +0200</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_4_1.dmg"
+        sparkle:version="2.4.1"
+        sparkle:shortVersionString="2.4.1"
+        type="application/octet-stream"
+        length="7767804"
+        sparkle:dsaSignature="MC4CFQCWlsG2Q8AUyk7ambJRWBA+aQppegIVAKtCfLqGIsQ7WZ++RHuaJeLhr/yG"
+      />
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.0</guid>
+      <title>Version 2.5.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>désactivation du mode 64 bits pour éviter des problèmes dûs à des bogues dans d'anciennes versions de MacOS X ; il reste compilable et utilisable pour ceux qui veulent l'activer ;</li>
+          <li>nouveau modèle de données permettant un chargement plus rapide de l'historique et de la bibliothèque, ainsi qu'une consommation de ressources diminuée ;</li>
+          <li>correction du service : l'alignement de l'équation sur la ligne de base ne fonctionnait plus ;</li>
+          <li>réinitaliser le préambule demande maintenant confirmation ;</li>
+          <li>pour minimiser les fausses manipulations, supprimer un élément de la bibliothèque se fait maintenant avec ⌘⌫ (Command+Backspace) au lieu d'un simple ⌫ ;</li>
+          <li>correction de bugs apparus avec MacOS 10.7 ;</li>
+          <li>traduction en Italien.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.5.0</sparkle:releaseNotesLink>
+      <pubDate>Sat, 16 Jun 2012 09:10:47 +0200</pubDate>
+			<enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_5_0.dmg"
+        sparkle:version="2.5.0"
+        sparkle:shortVersionString="2.5.0"
+        type="application/octet-stream"
+        length="7323537"
+        sparkle:dsaSignature="MCwCFGTXMCfaf0+KobsF9tWsl7T0nTdfAhRtUvH62WsS6juivkTLc0iaL2bZuw=="
+			/>
+    </item>
+  </channel> 
 </rss>

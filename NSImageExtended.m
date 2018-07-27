@@ -15,6 +15,11 @@
 -(id) initWithCGImage:(CGImageRef)cgImage;
 @end
 
+@interface NSImage (Bridge10_6)
+-(NSImageRep*) bestRepresentationForRect:(NSRect)rect context:(NSGraphicsContext*)referenceContext hints:(NSDictionary*)hints;
+@end
+
+
 @implementation NSImage (Extended)
 
 -(NSBitmapImageRep*) bitmapImageRepresentation
@@ -137,5 +142,46 @@
   return result;
 }
 //end bitmapImageRepresentationWithMaxSize:
+
+-(NSPDFImageRep*) pdfImageRepresentation
+{
+  NSPDFImageRep* result = nil;
+  NSImageRep* imageRep = [self bestRepresentationForDevice:nil];
+  if([imageRep isKindOfClass:[NSPDFImageRep class]])
+    result = (NSPDFImageRep*)imageRep;
+  else
+  {
+    NSEnumerator* enumerator = [[self representations] objectEnumerator];
+    NSImageRep* imageRep = nil;
+    while(!result && (imageRep = [enumerator nextObject]))
+    {
+      if([imageRep isKindOfClass:[NSPDFImageRep class]])
+        result = (NSPDFImageRep*)imageRep;
+    }
+  }
+  return result;
+}
+//end pdfImageRepresentation
+
+-(NSImageRep*) bestImageRepresentationInContext:(NSGraphicsContext*)context;
+{
+  NSImageRep* result = nil;
+  if (![self respondsToSelector:@selector(bestRepresentationForRect:context:hints:)])
+    result = [self bestRepresentationForDevice:nil];
+  else
+  {
+    NSSize size = [self size];
+    result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height) 
+                                     context:context hints:nil];
+  }
+  if (![result isKindOfClass:[NSPDFImageRep class]])
+  {
+    result = [self pdfImageRepresentation];
+    if (!result)
+      result = [self bitmapImageRepresentation];
+  }//end if (![result isKindOfClass:[NSPDFImageRep class]])
+  return result;
+}
+//end bestImageRepresentation
 
 @end

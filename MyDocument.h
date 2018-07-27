@@ -45,6 +45,8 @@
   IBOutlet NSColorWell*         lowerBoxControlsBoxFontColorWell;
   IBOutlet NSButton*            lowerBoxLatexizeButton;
 
+  IBOutlet NSNumberFormatter*   pointSizeFormatter;
+
   DocumentExtraPanelsController* documentExtraPanelsController;
 
   NSString*        documentTitle;  

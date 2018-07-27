@@ -67,6 +67,7 @@
   
   int  checkLevel;
   BOOL updateGUIFlag;
+  BOOL shouldOpenInstallLaTeXHelp;
 }
 
 +(AppController*)           appController; //getting the unique instance of appController

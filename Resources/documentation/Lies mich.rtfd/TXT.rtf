@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
@@ -67,7 +67,7 @@ LaTeXiT 2.4.1 ben\'f6tigt Mac OS X Version 10.4 oder h\'f6her und eine funktioni
 
 \fs22 \cf0 \ulnone \
 Installieren: Verschieben Sie einfach die Anwendung LaTeXiT aus dem ge\'f6ffneten Disk-Image (.dmg) in den Ordner "Programme" oder an irgendeinen anderen Ort Ihrer Festplatte.\
-Deinstallieren: LaTeXiT erstellt einen Ordner Library/Application Support/LaTeXiT in Ihrem Benutzer-Ordner. Wenn Sie planen, LaTeXiT zu deinstallieren (durch Bewegen des Programms in den Papierkorb), sollten Sie auch diesen Ordner l\'f6schen. Au\'dferdem erstellt LaTeXiT eine Datei Library/Preferences/fr.chachatelier.pierre.LaTeXiT.plist, in der alle benutzerdefinierten Einstellungen gespeichert werden. Diese kann auch gel\'f6scht werden, es gehen dann aber alle benutzereigenen Einstellungen verloren.
+Deinstallieren: LaTeXiT erstellt einen Ordner ~/Library/Application Support/LaTeXiT in Ihrem Benutzer-Ordner. Wenn Sie planen, LaTeXiT zu deinstallieren (durch Bewegen des Programms in den Papierkorb), sollten Sie auch diesen Ordner l\'f6schen. Au\'dferdem erstellt LaTeXiT eine Datei ~/Library/Preferences/fr.chachatelier.pierre.LaTeXiT.plist, in der alle benutzerdefinierten Einstellungen gespeichert werden. Diese kann auch gel\'f6scht werden, es gehen dann aber alle benutzereigenen Einstellungen verloren.
 \b\fs26 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -329,46 +329,54 @@ Ein Beispiel:\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-(F): Woher bekomme ich pdflatex, dvipdf und Ghostscript ?\
-(A): Bitte lesen Sie dazu "LaTeX installieren" in diesem Dokument.\
+(F)\'a0: Woher bekomme ich pdflatex, dvipdf und Ghostscript ?\
+(A)\'a0: Bitte lesen Sie dazu "LaTeX installieren" in diesem Dokument.\
 \
-(F): Ich habe LaTeX wie beschrieben installiert, aber LaTeXiT funktioniert immer noch nicht.\
-(A): Wenn Sie zuerst TeXShop, dann LaTeXiT und dann LaTeX installiert haben, verweist LaTeXiT zu einem pdflatex von TeXShop welches hier nicht funktioniert. Versuchen Sie, in die Voreinstellungen (Library/Preferences/fr.chachatelier.pierre.LaTeXiT.plist) zu l\'f6schen. Sie k\'f6nnen auch versuchen den Pfad unter "Pfade" in den LaTeXiT-Einstellungen von Hand zu korrigieren.\
+(F)\'a0: Ich habe LaTeX wie beschrieben installiert, aber LaTeXiT funktioniert immer noch nicht.\
+(A)\'a0: Wenn Sie zuerst TeXShop, dann LaTeXiT und dann LaTeX installiert haben, verweist LaTeXiT zu einem pdflatex von TeXShop welches hier nicht funktioniert. Versuchen Sie, in die Voreinstellungen (~/Library/Preferences/fr.chachatelier.pierre.LaTeXiT.plist) zu l\'f6schen. Sie k\'f6nnen auch versuchen den Pfad unter "Pfade" in den LaTeXiT-Einstellungen von Hand zu korrigieren.\
 \
-(F): Meine Gleichung ist abgeschnitten und wird nicht komplett angezeigt.\
-(A): Siehe dazu unter "Bekannte Fehler" weiter unten.\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 (F)\'a0: LaTeXiT does not work under MacOS 10.7 Lion.\
+(A)\'a0: LaTeXiT is fully compatible with MacOS 10.7 Lion. But the following scenario may occur\'a0: you might have, a long time ago, configured LaTeXiT to use a PowerPC vesion of the LaTeX engine. ANd Lion does not allow PowerPC code any more. Please check your LaTeX installation, and the paths to pdflatex in the LaTeXiT's preferences ("Composition" pane).\
+\
+(F)\'a0: LaTeXiT is crashing at each latexization.";\
+(A)\'a0: LaTeXiT is theoretically fully 64 bits compatible. But some buggy 64 bits components of MacOS 10.4, 10.5 and 10.6, are sometimes responsible for those crashes. In the Finder, "Get info"(Command-i) of LaTeXiT and check "Open in 32-bit mode". If it does not solve the problem, send me the crash log.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+(F)\'a0: Meine Gleichung ist abgeschnitten und wird nicht komplett angezeigt.\
+(A)\'a0: Siehe dazu unter "Bekannte Fehler" weiter unten.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 (F): How to set a background color to the equation ?\
-(A): If you want to set a non-transparent background to your equation, you should consider using a LaTeX command for that. With old versions of ghostscript (<= 8.63), using \\pagecolor\{the color\} was a solution, but it was relying on a bug of bounding-box detection. Other solutions should now be considered, like \\colorbox\{...\}\{...\}.\
+\cf0 (F)\'a0: How to set a background color to the equation ?\
+(A)\'a0: If you want to set a non-transparent background to your equation, you should consider using a LaTeX command for that. With old versions of ghostscript (<= 8.63), using \\pagecolor\{the color\} was a solution, but it was relying on a bug of bounding-box detection. Other solutions should now be considered, like \\colorbox\{...\}\{...\}.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 (F): Der LaTeXiT-Dienst funktioniert nicht mit Keynote.\
-(A): Der LaTeXiT-Dienst funktioniert nicht mit Keynote 1, 2, 3, 4, 5,  weil Keynote kein Bild in einen Textblock einf\'fcgen kann; als  Abhilfe k\'f6nnen sie im "Dienste"-Reiter, in den Einstellungen, den Dienst in den Verlauf eintragen. Immer wenn nun das Einf\'fcgen eines Bildes fehlschl\'e4gt, wird es im Verlauf-Fenster verf\'fcgbar.\
+\cf0 (F)\'a0: Der LaTeXiT-Dienst funktioniert nicht mit Keynote.\
+(A)\'a0: Der LaTeXiT-Dienst funktioniert nicht mit Keynote 1, 2, 3, 4, 5,  weil Keynote kein Bild in einen Textblock einf\'fcgen kann; als  Abhilfe k\'f6nnen sie im "Dienste"-Reiter, in den Einstellungen, den Dienst in den Verlauf eintragen. Immer wenn nun das Einf\'fcgen eines Bildes fehlschl\'e4gt, wird es im Verlauf-Fenster verf\'fcgbar.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
 (F) : The service "Revert equations back to LaTeX code" does not work with Pages'09\
 (A) : Unfortunately, Pages'09 totally rewrites the PDFs that are inserted into the text, and strips out the part added by LaTeXiT containing the equation source code... We can only hope that the future version won't keep that behaviour.\
 \
-(F): Welches Export-Format sollte ich bevorzugen?\
-(A): PDF ist f\'fcr gew\'f6hnlich die beste Wahl, denn es ist ein "Vektor"-Format: das Bild kann ohne Qualit\'e4tsverluste in der Gr\'f6\'dfe skaliert werden.\
+(F)\'a0: Welches Export-Format sollte ich bevorzugen?\
+(A)\'a0: PDF ist f\'fcr gew\'f6hnlich die beste Wahl, denn es ist ein "Vektor"-Format: das Bild kann ohne Qualit\'e4tsverluste in der Gr\'f6\'dfe skaliert werden.\
 \
-(F): \'c4nderungen der Pr\'e4ambel scheinen erst dann zu funktionieren, wenn das Programm beendet und erneut gestartet wurde.\
-(A): Jegliche \'c4nderung der Pr\'e4ambel hat keinen Effekt auf momentan ge\'f6ffnete Fenster, da sonst die Gefahr besteht, vom Benutzer vorgenommene Modifikationen zu \'fcberschreiben. Sie m\'fcssen dazu aber nicht das gesamte Programm neu starten, es gen\'fcgt, ein neues Fenster zu \'f6ffnen (\uc0\u8984 N).\
+(F)\'a0: \'c4nderungen der Pr\'e4ambel scheinen erst dann zu funktionieren, wenn das Programm beendet und erneut gestartet wurde.\
+(A)\'a0: Jegliche \'c4nderung der Pr\'e4ambel hat keinen Effekt auf momentan ge\'f6ffnete Fenster, da sonst die Gefahr besteht, vom Benutzer vorgenommene Modifikationen zu \'fcberschreiben. Sie m\'fcssen dazu aber nicht das gesamte Programm neu starten, es gen\'fcgt, ein neues Fenster zu \'f6ffnen (\uc0\u8984 N).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone (F): LinkBack funktioniert nicht, wenn ich den LaTeXiT-Dienst verwende.\
-(A): Siehe dazu unter "Bekannte Fehler" wg. mehr Details. Um dieses Problem zu beheben, versuchen Sie das Angleichen der Gleichung an die Grundlinie in den LaTeXiT-<Dienste>-Einstellungen abzustellen.\
+\fs22 \cf0 \ulnone (F)\'a0: LinkBack funktioniert nicht, wenn ich den LaTeXiT-Dienst verwende.\
+(A)\'a0: Siehe dazu unter "Bekannte Fehler" wg. mehr Details. Um dieses Problem zu beheben, versuchen Sie das Angleichen der Gleichung an die Grundlinie in den LaTeXiT-<Dienste>-Einstellungen abzustellen.\
 \
-(F): Ich verstehe die Palette "Argumente" nicht.\
-(A): Diese Palette ist sehr wichtig. F\'fcr gew\'f6hnlich ist es nutzlos, eine Gleichung (als Bild) in ein Programm zu ziehen, welches keine Bilder darstellen kann. Wann immer dieses Programm ein LaTeX-Texteditor ist, ist es relevant, einen von der Gleichung abh\'e4ngigen Text mit zu verschieben: den Quellkode der Gleichung, ein \\ref\{\} mit seinem Titel.... Dies ist in dieser Palette vom Benutzer definierbar und funktioniert beim Verschieben aus der Bibliothek.\
+(F)\'a0: Ich verstehe die Palette "Argumente" nicht.\
+(A)\'a0: Diese Palette ist sehr wichtig. F\'fcr gew\'f6hnlich ist es nutzlos, eine Gleichung (als Bild) in ein Programm zu ziehen, welches keine Bilder darstellen kann. Wann immer dieses Programm ein LaTeX-Texteditor ist, ist es relevant, einen von der Gleichung abh\'e4ngigen Text mit zu verschieben: den Quellkode der Gleichung, ein \\ref\{\} mit seinem Titel.... Dies ist in dieser Palette vom Benutzer definierbar und funktioniert beim Verschieben aus der Bibliothek.\
 \
-(F): Wie kann ich das feynmf-Paket mit LaTeXiT benutzen?\
-(A): Sie sollten das feynmp-Paket, im "Text"-LaTeX-Modus, als "latex+dvipdf"-Aufstellung verwenden. Dann ist ein Skript f\'fcr die mittlere Bearbeitung n\'f6tig, um die Metafonts der Labels zu verarbeiten; verwenden Sie dazu folgendes Skript f\'fcr die mittlere Bearbeitungsstufe:\
+(F)\'a0: Wie kann ich das feynmf-Paket mit LaTeXiT benutzen?\
+(A)\'a0: Sie sollten das feynmp-Paket, im "Text"-LaTeX-Modus, als "latex+dvipdf"-Aufstellung verwenden. Dann ist ein Skript f\'fcr die mittlere Bearbeitung n\'f6tig, um die Metafonts der Labels zu verarbeiten; verwenden Sie dazu folgendes Skript f\'fcr die mittlere Bearbeitungsstufe:\
 				mpost Name-des-feynmf-Graphen\
 				# jetzt m\'fcssen wir die PDF-Datei rekreieren\
 				latex $\{INPUTTEXFILE\}\
@@ -378,8 +386,8 @@ Ein Beispiel:\
 \f0\fs24 \cf4 http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html}} besuchen (Herzlichen Dank an T. Yamanaka)\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 (F): Wie kann ich f\'fcr die erzeugten Gleichungen spezielle Schriftarten verwenden?\
-(A): Ich bin kein Experte in Bezug auf LaTeX-Schriften, aber mir wurde eine Methode erkl\'e4rt, dies zu tun. Sie m\'fcssen dazu XeLaTeX verwenden und in der Pr\'e4ambel Folgendes hinzuf\'fcgen (hier f\'fcr die Schriftart Chalkboard):\
+\cf0 (F)\'a0: Wie kann ich f\'fcr die erzeugten Gleichungen spezielle Schriftarten verwenden?\
+(A)\'a0: Ich bin kein Experte in Bezug auf LaTeX-Schriften, aber mir wurde eine Methode erkl\'e4rt, dies zu tun. Sie m\'fcssen dazu XeLaTeX verwenden und in der Pr\'e4ambel Folgendes hinzuf\'fcgen (hier f\'fcr die Schriftart Chalkboard):\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\pardirnatural
 \cf0 					\\usepackage\{fontspec,xunicode\}\
 					\\setromanfont\{Chalkboard\}\
@@ -444,6 +452,16 @@ Aber seien Sie deshalb nicht traurig: es existieren einige graphische Benutzerob
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.5.0 (16. Juni 2012)\
+\pard\pardeftab720\ql\qnatural
+\cf0 - 64bit-Modus deaktiviert um Probleme mit \'e4lteren OS X Versionen zu beheben; es kann nach wie vor angestellt werden, falls gew\'fcnscht\'a0;\
+- Ein neues Datenmodel f\'fcr Verlauf und Bibliothek, jetzt mit reduzierter Ladezeit und es werden weniger Ressourcen verwendet\'a0;\
+- Fehlerbehebung im Dienst: Das Angleichen der Grundlinie funktionierte nicht mehr\'a0;\
+- Das Zur\'fccksetzen der Preambel verlangt nun eine Best\'e4tigung\'a0;\
+- Verhinderung von Fehlgebrauch, ein Eintrag in der Bibliothek wird nun mit \uc0\u8984 \u9003  (Command+Backspace) gel\'f6scht, anstatt blo\'df mit\'a0\u9003 \
+- Fehler mit Mac OS 10.7 behoben\'a0;\
+- Italienische Lokalisierung.\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 v 2.4.1 (13. Juni 2011)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab280\qj

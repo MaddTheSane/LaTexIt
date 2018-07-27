@@ -28,11 +28,14 @@
 #import "NSColorExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "NSObjectExtended.h"
 #import "NSObjectTreeNode.h"
 #import "NSOutlineViewExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
+
+#import <Carbon/Carbon.h>
 
 @interface LibraryView (PrivateAPI)
 -(NSImage*) iconForRepresentedObject:(id)representedObject;
@@ -410,7 +413,12 @@
 
 -(void) deleteBackward:(id)sender
 {
-  [self removeSelection:sender];
+  BOOL hasCommandMask =
+    [[NSEvent class] respondsToSelector:@selector(modifierFlags)] ?
+      ((NSUInteger)[(id)[NSEvent class] modifierFlags] & NSCommandKeyMask) :
+      ((GetCurrentEventKeyModifiers() & cmdKey) != 0);
+  if (hasCommandMask)
+    [self removeSelection:sender];
 }
 //end deleteBackward:
 
@@ -457,18 +465,22 @@
 //prevents from selecting next line when finished editing
 -(void)textDidEndEditing:(NSNotification*)notification
 {
-  id newTitle = [[[[notification object] string] copy] autorelease];
-  LibraryItem* selectedItem = [self selectedItem];
-  NSString* oldTitle = [selectedItem title];
-  if (selectedItem && ![newTitle isEqualToString:oldTitle])
+  NSText* fieldEditor = [[notification object] dynamicCastToClass:[NSText class]];
+  if (fieldEditor)
   {
-    [selectedItem setTitle:newTitle];
-    [[self->libraryController undoManager]
-      setActionName:NSLocalizedString(@"Change Library item name", @"Change Library item name")];
-  }//end if (![newTitle isEqualToString:oldTitle])
-  [super textDidEndEditing:notification];
-  if (selectedItem)
-    [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedItem]] byExtendingSelection:NO];
+    id newTitle = [[[fieldEditor string] copy] autorelease];
+    LibraryItem* selectedItem = [self selectedItem];
+    NSString* oldTitle = [selectedItem title];
+    if (selectedItem && ![newTitle isEqualToString:oldTitle])
+    {
+      [selectedItem setTitle:newTitle];
+      [[self->libraryController undoManager]
+        setActionName:NSLocalizedString(@"Change Library item name", @"Change Library item name")];
+    }//end if (![newTitle isEqualToString:oldTitle])
+    [super textDidEndEditing:notification];
+    if (selectedItem)
+      [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedItem]] byExtendingSelection:NO];
+  }//end if (fieldEditor)
 }
 //end textDidEndEditing:
 

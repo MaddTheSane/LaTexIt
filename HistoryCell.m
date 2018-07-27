@@ -9,6 +9,7 @@
 
 #import "HistoryCell.h"
 
+#import "NSImageExtended.h"
 #import "Utils.h"
 
 // CoreGraphics gradient helpers
@@ -95,7 +96,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   else
   {
     NSImage* image = [self image];
-    NSImageRep* imageRep = [image bestRepresentationForDevice:nil];
+    NSImageRep* imageRep = [image bestImageRepresentationInContext:[NSGraphicsContext currentContext]];
     NSPDFImageRep* pdfImageRep = ![imageRep isKindOfClass:[NSPDFImageRep class]] ? nil : (NSPDFImageRep*)imageRep;
     NSRect bounds = !pdfImageRep ? NSMakeRect(0.f, 0.f, [imageRep pixelsWide], [imageRep pixelsHigh]) :
                     [pdfImageRep bounds];

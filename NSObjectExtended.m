@@ -33,4 +33,10 @@
 }
 //end forwardInvocation:
 
+-(id) managedObjectContext
+{
+  id result = nil;
+  return result;
+}
+//end managedObjectContext
 @end

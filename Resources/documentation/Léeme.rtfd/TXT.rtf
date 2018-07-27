@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
@@ -66,7 +66,7 @@ LaTeXiT 2.4.1 requires Mac OS X version 10.4 or above (Tiger version), and a wor
 
 \fs22 \cf0 \ulnone \
 Install : Simply drag and drop LaTeXiT from the image disk into your "Applications" folder, or any other place you want on your hard-drive.\
-Uninstall : LaTeXiT creates a folder in Library/Application Support/LaTeXiT of your home folder. If you plan to uninstall LaTeXiT (by dropping its icon in the trash), you might also want to remove this folder.
+Uninstall : LaTeXiT creates a folder in ~/Library/Application Support/LaTeXiT of your home folder. If you plan to uninstall LaTeXiT (by dropping its icon in the trash), you might also want to remove this folder.
 \b\fs26 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -325,42 +325,50 @@ Here is an example :\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-(Q): where can I get pdflatex, dvipdf and ghostscript ?\
-(A): please see the section "Install Latex" of this document.\
+(Q)\'a0: where can I get pdflatex, dvipdf and ghostscript ?\
+(A)\'a0: please see the section "Install Latex" of this document.\
 \
 (Q) : I did install LaTeX the way described, but LaTeXiT seems not to be functional either.\
-(R) : If you have installed TeXShop, then LaTeXiT, then LaTeX, the paths of LaTeXiT may point to a pdflatexc of TeXShop that is not sufficient. Just try before to remove LaTeXiT's Preferences (Library/Preferences/fr.chachatelier.pierre.LaTeXiT.plist). You can also try to set by hand the paths in the "composition" pane of the LaTeXiT's preferences.\
+(A) : If you have installed TeXShop, then LaTeXiT, then LaTeX, the paths of LaTeXiT may point to a pdflatexc of TeXShop that is not sufficient. Just try before to remove LaTeXiT's Preferences (~/Library/Preferences/fr.chachatelier.pierre.LaTeXiT.plist). You can also try to set by hand the paths in the "composition" pane of the LaTeXiT's preferences.\
 \
-(Q): My equation is cut and does not display completely .\
+\pard\tx280\pardeftab280\ql\qnatural\pardirnatural
+\cf0 (Q)\'a0: LaTeXiT does not work under MacOS 10.7 Lion.\
+(A)\'a0: LaTeXiT is fully compatible with MacOS 10.7 Lion. But the following scenario may occur\'a0: you might have, a long time ago, configured LaTeXiT to use a PowerPC vesion of the LaTeX engine. ANd Lion does not allow PowerPC code any more. Please check your LaTeX installation, and the paths to pdflatex in the LaTeXiT's preferences ("Composition" pane).\
+\
+(Q)\'a0: LaTeXiT is crashing at each latexization.";\
+(A)\'a0: LaTeXiT is theoretically fully 64 bits compatible. But some buggy 64 bits components of MacOS 10.4, 10.5 and 10.6, are sometimes responsible for those crashes. In the Finder, "Get info"(Command-i) of LaTeXiT and check "Open in 32-bit mode". If it does not solve the problem, send me the crash log.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+(Q): My equation is cut and does not display completely.\
 (A): See the "Known issues" section below.\
 \
-(Q): How to set a background color to the equation ?\
-(A): If you want to set a non-transparent background to your equation, you should consider using a LaTeX command for that. With old versions of ghostscript (<= 8.63), using \\pagecolor\{the color\} was a solution, but it was relying on a bug of bounding-box detection. Other solutions should now be considered, like \\colorbox\{...\}\{...\}.\
+(Q)\'a0: How to set a background color to the equation ?\
+(A)\'a0: If you want to set a non-transparent background to your equation, you should consider using a LaTeX command for that. With old versions of ghostscript (<= 8.63), using \\pagecolor\{the color\} was a solution, but it was relying on a bug of bounding-box detection. Other solutions should now be considered, like \\colorbox\{...\}\{...\}.\
 \
-(Q): The service does not work with Keynote.\
-(A): The service does not work with Keynote 1, 2, 3, 4, 5, since Keynote cannot insert an image into a block of text; as a workaround, you can set in the Preferences, pane "Services", to register service calls in the history. That way, even if the service fails at inserting an image, this one becomes available in the history window, that could have been put in some corner for easy access.\
+(Q)\'a0: The service does not work with Keynote.\
+(A)\'a0: The service does not work with Keynote 1, 2, 3, 4, 5, since Keynote cannot insert an image into a block of text; as a workaround, you can set in the Preferences, pane "Services", to register service calls in the history. That way, even if the service fails at inserting an image, this one becomes available in the history window, that could have been put in some corner for easy access.\
 \
 (Q) : The service "Revert equations back to LaTeX code" does not work with Pages'09\
 (A) : Unfortunately, Pages'09 totally rewrites the PDFs that are inserted into the text, and strips out the part added by LaTeXiT containing the equation source code... We can only hope that the future version won't keep that behaviour.\
 \
-(Q): Which export format should I prefer ?\
-(A): PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality.\
+(Q)\'a0: Which export format should I prefer ?\
+(A)\'a0: PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality.\
 \
-(Q): changes to the preamble seems not take effect unless I quit and restart the application.\
-(A): Any modification to the default preamble does not affect currently open windows, since their would be the risk to overwrite some modifications the user has made in them. However, you do not have to restart the application; just open a new document like in any application (\uc0\u8984 N).\
+(Q)\'a0: changes to the preamble seems not take effect unless I quit and restart the application.\
+(A)\'a0: Any modification to the default preamble does not affect currently open windows, since their would be the risk to overwrite some modifications the user has made in them. However, you do not have to restart the application; just open a new document like in any application (\uc0\u8984 N).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone (Q): LinkBack does not work when I use the LaTeXiT's service.\
-(A): See section "Known issues" for more details. To solve this problem, try to disable the baseline alignment of the equation in the LaTeXiT's service preferences.\
+\fs22 \cf0 \ulnone (Q)\'a0: LinkBack does not work when I use the LaTeXiT's service.\
+(A)\'a0: See section "Known issues" for more details. To solve this problem, try to disable the baseline alignment of the equation in the LaTeXiT's service preferences.\
 \
-(Q): I don't understand the "encapsulation" palette.\
-(R): This palette fills a very particular need. Usually, it is useless to drag'n drop an equation (as an image) towards an application that cannot display images. However, if this application is a LaTeX text editor, it may be relevant to drag'n drop some text related to the equation : its source code, a \\ref\{\} with its title.... So, this is customizable in the palette, and will work for drag'n drop from the library.\
+(Q)\'a0: I don't understand the "encapsulation" palette.\
+(A)\'a0: This palette fills a very particular need. Usually, it is useless to drag'n drop an equation (as an image) towards an application that cannot display images. However, if this application is a LaTeX text editor, it may be relevant to drag'n drop some text related to the equation : its source code, a \\ref\{\} with its title.... So, this is customizable in the palette, and will work for drag'n drop from the library.\
 \
-(Q): How can I use the feynmf package with LaTeXiT ?\
-(R):  You should use the feynmp package, in "Text" LaTeX mode, using a "latex+dvipdf" composition. Then, a middle-processing script is needed to compute the metafonts of the labels; you should define the following middle-processing script :\
+(Q)\'a0: How can I use the feynmf package with LaTeXiT ?\
+(A)\'a0:  You should use the feynmp package, in "Text" LaTeX mode, using a "latex+dvipdf" composition. Then, a middle-processing script is needed to compute the metafonts of the labels; you should define the following middle-processing script :\
 				mpost the-name-of-your-feynmf-graph\
 				#but now me must recreate the pdf file\
 				latex $\{INPUTTEXFILE\}\
@@ -369,13 +377,13 @@ Here is an example :\
         You can also check the web page {\field{\*\fldinst{HYPERLINK "http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html"}}{\fldrslt 
 \f0\fs24 \cf4 http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html}} (thanks to T. Yamanaka)\
 \
-(Q) : How can I use some special fonts for the generated equations ?\
-(R) : I am not an expert in LaTeX fonts, but I have been told a manipulation to do that. You have to use 
+(Q)\'a0: How can I use some special fonts for the generated equations ?\
+(A)\'a0: I am not an expert in LaTeX fonts, but I have been told a manipulation to do that. You have to use 
 \b xelatex
-\b0  eand add in the 
+\b0  and tune the 
 \b preamble
-\b0  :\
-Here for the Chalkboard font :\
+\b0 .\
+Here an example for the Chalkboard font :\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 					\\usepackage\{fontspec,xunicode\}\
 					\\fontspec\{Chalkboard\}\
@@ -432,6 +440,16 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.5.0 (17 junio 2012)\
+\pard\pardeftab720\ql\qnatural
+\cf0 - deshabilitado el modo de 64 bits para evitar problemas con versiones antiguas de MacOS X; puede compilarse con este modo habilitado para aquellos realmente lo deseen\'a0;\
+- nuevo modelo de datos para el historial y la librer\'eda, se reducen as\'ed el tiempo de carga y los recursos usados\'a0;\
+- corregido el Servicio: el alineamiento con la linea base no funcionaba\'a0;\
+- se pide confirmaci\'f3n al restablecer el pre\'e1mbulo\'a0;\
+- para evitar errores, eliminar un elemento de la librer\'eda se usa \uc0\u8984 \u9003  (Comando+Retroceso) en vez de solamente\'a0\u9003 \
+- corregidos errores que aparecieron con MacOS 10.7\'a0;\
+- Traducci\'f3n al Italiana.\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 v 2.4.1 (13 junio 2011)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab280\qj
@@ -447,8 +465,9 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 - las tabulaciones pueden reemplazarse por espacios\'a0;\
 - mejores traducciones\'a0;\
 - muchas mejoras internas.\
+\pard\pardeftab720\ql\qnatural
 
-\f0\fs24 \
+\f0\fs24 \cf0 \
 \pard\pardeftab720\ql\qnatural
 
 \f1\fs22 \cf0 v 2.4.0 (13 junio 2011)\

@@ -9,6 +9,7 @@
 #import "HistoryItem.h"
 
 #import "LatexitEquation.h"
+#import "LatexitEquationData.h"
 #import "LatexitEquationWrapper.h"
 #import "LaTeXProcessor.h"
 #import "NSManagedObjectContextExtended.h"
@@ -51,9 +52,20 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 }
 //end wrapperEntity
 
+-(id) initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
+{
+  if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:context])))
+    return nil;
+  self->isModelPrior250 = context &&
+    ![[[[context persistentStoreCoordinator] managedObjectModel] entitiesByName]
+      objectForKey:NSStringFromClass([LatexitEquationData class])];
+  return self;
+}
+//end initWithEntity:insertIntoManagedObjectContext:
+
 -(id) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   [self setEquation:equation];
   return self;
@@ -70,19 +82,20 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) dispose
 {
-  @synchronized(self)
-  {
-    if (self->kvoEnabled)
-    {
-      [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
-      self->kvoEnabled = NO;
-    }
-  }//end @synchronized(self)
+  [self setCustomKVOEnabled:NO];
 }
 //end dispose
 
+-(void) willTurnIntoFault
+{
+  [self setCustomKVOEnabled:NO];
+  [super willTurnIntoFault];
+}
+//end willTurnIntoFault
+
 -(void) didTurnIntoFault
 {
+  [self setCustomKVOEnabled:NO];
   [super didTurnIntoFault];
 }
 //end didTurnIntoFault
@@ -90,22 +103,14 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) awakeFromFetch
 {
   [super awakeFromFetch];
-  @synchronized(self)
-  {
-    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
-    self->kvoEnabled = YES;
-  }//end @synchronized(self)
+  [self setCustomKVOEnabled:YES];
 }
 //end awakeFromFetch
 
 -(void) awakeFromInsert
 {
   [super awakeFromInsert];
-  @synchronized(self)
-  {
-    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
-    self->kvoEnabled = YES;
-  }//end @synchronized(self)
+  [self setCustomKVOEnabled:YES];
   NSManagedObject* equationWrapper = [self valueForKey:@"equationWrapper"];
   [[self managedObjectContext] safeInsertObject:equationWrapper];
   NSManagedObject* equation = [equationWrapper valueForKey:@"equation"];
@@ -124,19 +129,100 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
   {
     NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
-    [managedObjectContext disableUndoRegistration];
+    NSUndoManager* undoManager = [managedObjectContext undoManager];
+    if (undoManager)
+      [managedObjectContext disableUndoRegistration];
     [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
     [self didChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
-    [managedObjectContext enableUndoRegistration];
+    if (undoManager)
+      [managedObjectContext enableUndoRegistration];
   }//end if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
+-(BOOL) customKVOInhibited
+{
+  return self->customKVOInhibited;
+}
+//end customKVOEnabled
+
+-(void) setCustomKVOInhibited:(BOOL)value
+{
+  if (value != self->customKVOInhibited)
+  {
+    @synchronized(self)
+    {
+      if (value != self->customKVOInhibited)
+      {
+        self->customKVOInhibited = value;
+        if (self->customKVOInhibited)
+          [self setCustomKVOEnabled:NO];
+      }//end if (value != self->customKVOEnabled)
+    }//end @synchronized(self)
+  }//end if (value != self->customKVOEnabled)
+}
+//end customKVOInhibited:
+
+-(BOOL) customKVOEnabled
+{
+  return self->customKVOEnabled;
+}
+//end customKVOEnabled
+
+-(void) setCustomKVOEnabled:(BOOL)value
+{
+  if (value != self->customKVOEnabled)
+  {
+    @synchronized(self)
+    {
+      value &= !self->customKVOInhibited;
+      if (value != self->customKVOEnabled)
+      {
+        if (!value)
+          [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
+        else
+          [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+        self->customKVOEnabled = value;
+      }//end if (value != self->customKVOEnabled)
+    }//end @synchronized(self)
+  }//end if (value != self->customKVOEnabled)
+}
+//end setCustomKVOEnabled:
+
+-(NSDate*) date
+{
+  NSDate* result = nil;
+  if (!self->isModelPrior250)
+  {
+    [self willAccessValueForKey:@"date"];
+    result = [self primitiveValueForKey:@"date"];
+    [self didAccessValueForKey:@"date"];
+  }//end if (!self->isModelPrior250)
+  return result;
+} 
+//end date
+
+-(void) setDate:(NSDate*)value
+{
+  if (!self->isModelPrior250)
+  {
+    [self willChangeValueForKey:@"date"];
+    [self setPrimitiveValue:value forKey:@"date"];
+    [self didChangeValueForKey:@"date"];
+  }//end if (!self->isModelPrior250)
+  [[self equation] setDate:value];
+}
+//end setDate:
+
 -(LatexitEquation*) equation
 {
   LatexitEquation* result = nil;
-  LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
+  [self willAccessValueForKey:@"equationWrapper"];
+  LatexitEquationWrapper* equationWrapper = [self primitiveValueForKey:@"equationWrapper"];
+  [equationWrapper willAccessValueForKey:@"equation"];
   result = [equationWrapper equation];
+  [equationWrapper didAccessValueForKey:@"equation"];
+  [self didAccessValueForKey:@"equationWrapper"];
   return result;
 }
 //end equation
@@ -146,19 +232,28 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   if (equation != [self equation])
   {
     [[self managedObjectContext] safeInsertObject:equation];
-    LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
+    [self willAccessValueForKey:@"equationWrapper"];
+    LatexitEquationWrapper* equationWrapper = [self primitiveValueForKey:@"equationWrapper"];
+    [self didAccessValueForKey:@"equationWrapper"];
     if (!equationWrapper)
     {
       equationWrapper = [[LatexitEquationWrapper alloc]
         initWithEntity:[[self class] wrapperEntity] insertIntoManagedObjectContext:[self managedObjectContext]];
-      [equationWrapper setValue:self forKey:@"historyItem"]; //if current managedObjectContext is nil, this is necessary
-      [self setValue:equationWrapper forKey:@"equationWrapper"];
+      [equationWrapper willChangeValueForKey:@"historyItem"];
+      [equationWrapper setPrimitiveValue:self forKey:@"historyItem"]; //if current managedObjectContext is nil, this is necessary
+      [equationWrapper didChangeValueForKey:@"historyItem"];
+      [self willChangeValueForKey:@"equationWrapper"];
+      [self setPrimitiveValue:equationWrapper forKey:@"equationWrapper"];
+      [self didChangeValueForKey:@"equationWrapper"];
       [equationWrapper release];
     }//end if (!equationWrapper)
     else
       [[self managedObjectContext] safeInsertObject:equationWrapper];
     [equationWrapper setEquation:equation];
-    [equation setValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
+    [self setDate:[equation date]];
+    [equation willChangeValueForKey:@"wrapper"];
+    [equation setPrimitiveValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
+    [equation didChangeValueForKey:@"wrapper"];
   }//end if (equation != [self equation])
 }
 //end setEquation:
@@ -190,7 +285,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.4.1", @"version",
+       @"2.5.0", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -200,7 +295,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(id) initWithDescription:(id)description
 {
   NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   NSString* version = [description objectForKey:@"version"];
   BOOL isOldLibraryItem = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
@@ -228,7 +323,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.4.1" forKey:@"version"];
+  [coder encodeObject:@"2.5.0" forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:
@@ -239,7 +334,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   NSString* version = [coder decodeObjectForKey:@"version"];
   NSManagedObjectContext* managedObjectContext = ([@"2.0.0" compare:version options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedDescending) ? nil :
     [LatexitEquation currentManagedObjectContext];
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+  if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   LatexitEquation* equation = nil;
 

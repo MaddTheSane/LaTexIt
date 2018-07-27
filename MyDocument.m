@@ -232,7 +232,12 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 -(void) windowControllerDidLoadNib:(NSWindowController*)aController
 {
   [super windowControllerDidLoadNib:aController];
-  
+
+  //get rid of formatter localization problems
+  [self->pointSizeFormatter setLocale:[NSLocale currentLocale]];
+  [self->pointSizeFormatter setZeroSymbol:
+    [NSString stringWithFormat:@"0%@%0*d", [self->pointSizeFormatter decimalSeparator], 2, 0]];
+
   NSWindow* window = [self windowForSheet];
   
   [window setDelegate:(id)self];
@@ -1552,7 +1557,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     [self exportImageWithData:[self->upperBoxImageView pdfData] format:[controller saveAccessoryViewExportFormat]
                scaleAsPercent:[controller saveAccessoryViewScalePercent]
                     jpegColor:[controller saveAccessoryViewOptionsJpegBackgroundColor] jpegQuality:[controller saveAccessoryViewOptionsJpegQualityPercent]
-                     filePath:[sheet filename]];
+                     filePath:[[sheet URL] path]];
   }//end if save
   [controller setCurrentSavePanel:nil];
 }

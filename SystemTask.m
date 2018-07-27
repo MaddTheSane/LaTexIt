@@ -13,6 +13,7 @@
 #import "NSStringExtended.h"
 
 #import "RegexKitLite.h"
+#import "Utils.h"
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -25,19 +26,19 @@
   if ((!(self = [super init])))
     return nil;
   self->workingDirectory = [aWorkingDirectory copy];
-  self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdinFilePath
+  self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdinFilePath
                                                                 workingDirectory:self->workingDirectory];
   [self->tmpStdinFileHandle retain];
   [self->tmpStdinFilePath   retain];
-  self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdoutFilePath
+  self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdoutFilePath
                                                                 workingDirectory:self->workingDirectory];
   [self->tmpStdoutFileHandle retain];
   [self->tmpStdoutFilePath   retain];
-  self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXXX" extension:@"log"  outFilePath:&self->tmpStderrFilePath
+  self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXX" extension:@"log"  outFilePath:&self->tmpStderrFilePath
                                                                 workingDirectory:self->workingDirectory];
   [self->tmpStderrFileHandle retain];
   [self->tmpStderrFilePath   retain];
-  self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXXX" extension:@"sh"  outFilePath:&self->tmpScriptFilePath
+  self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXX" extension:@"sh"  outFilePath:&self->tmpScriptFilePath
                                                                 workingDirectory:self->workingDirectory];
   [self->tmpScriptFileHandle retain];
   [self->tmpScriptFilePath   retain];
@@ -60,10 +61,13 @@
   [self->launchPath           release];
   [self->arguments            release];
   [self->currentDirectoryPath release];
-  unlink([self->tmpStdinFilePath UTF8String]);
-  unlink([self->tmpStdoutFilePath UTF8String]);
-  unlink([self->tmpStderrFilePath UTF8String]);
-  unlink([self->tmpScriptFilePath UTF8String]);
+  if (DebugLogLevel < 1)
+  {
+    unlink([self->tmpStdinFilePath UTF8String]);
+    unlink([self->tmpStdoutFilePath UTF8String]);
+    unlink([self->tmpStderrFilePath UTF8String]);
+    unlink([self->tmpScriptFilePath UTF8String]);
+  }//end if (DebugLogLevel < 1)
   [self->tmpStdinFilePath   release];
   [self->tmpStdoutFilePath   release];
   [self->tmpStderrFilePath   release];
@@ -170,9 +174,8 @@
       BOOL isDoubleQuoted = ([variable length] >= 2) && [variable startsWith:@"\"" options:0] && [variable endsWith:@"\"" options:0];
       if ([variable length] && !isDoubleQuoted)
       {
-        //[scriptContent appendFormat:@"export %@=\"%@\" 1>/dev/null 2>&1 \n", variable, [environment objectForKey:variable]];
-        NSString* variableValue = [[environment objectForKey:variable] stringByReplacingOccurrencesOfRegex:@"(?<!\\\\)'" withString:@"\\\\'"];
-        [scriptContent appendFormat:@"export %@='%@' 1>/dev/null 2>&1 \n", variable, variableValue];
+        NSString* variableValue = [[environment objectForKey:variable] stringByReplacingOccurrencesOfRegex:@"\"" withString:@"\\\""];
+        [scriptContent appendFormat:@"export %@=\"%@\" 1>/dev/null 2>&1 \n", variable, variableValue];
       }
     }
   }//end if (environment && [environment count])
@@ -207,7 +210,8 @@
     }*/
     if (!currentShell)
       currentShell = @"/bin/bash";
-    NSString* option = (self->isUsingLoginShell && [currentShell isEqualToString:@"/bin/bash"]) ? @"-l" : @"";
+    NSString* option = ![currentShell isEqualToString:@"/bin/bash"] ? @"" :
+                       self->isUsingLoginShell ? @"" : @"-l";
     int       intTimeOutLimit = (int)self->timeOutLimit;
     NSString* userScriptCall = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
     [self->runningLock lock];
@@ -217,10 +221,10 @@
       [NSString stringWithFormat:@"#!/bin/bash\nsleep %d && kill -9 $$&\nKILLPID=$!\n%@\nRETURNCODE=$?\nkill -9 $KILLPID\nexit $RETURNCODE",
                                  intTimeOutLimit, userScriptCall];
     NSString* timeLimitedScriptPath = nil;
-    [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-timelimited.XXXXXXXXX" extension:@"script"
+    [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-timelimited.XXXXXXXX" extension:@"script"
                                                   outFilePath:&timeLimitedScriptPath workingDirectory:self->workingDirectory];
     [timeLimitedScript writeToFile:timeLimitedScriptPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    NSString* systemCall = [NSString stringWithFormat:@"/bin/bash -l %@", timeLimitedScriptPath];
+    NSString* systemCall = [NSString stringWithFormat:@"/bin/sh %@", timeLimitedScriptPath];
     self->terminationStatus = system([systemCall UTF8String]);
     self->selfExited        = WIFEXITED(self->terminationStatus) && !WIFSIGNALED(self->terminationStatus);
     self->terminationStatus = WIFEXITED(self->terminationStatus) ? WEXITSTATUS(self->terminationStatus) : -1;

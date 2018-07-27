@@ -456,7 +456,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) panelSelectionDidChange:(id)sender
 {
-  NSString* selectedFileName = [sender filename];
+  NSString* selectedFileName = [[sender URL] path];
   BOOL isLaTeXiTLibrary = [[selectedFileName pathExtension] isEqualToString:@"latexlib"];
   unsigned int selectedIndex = [self->importOptionPopUpButton indexOfSelectedItem];
   [self->importOptionPopUpButton removeAllItems];

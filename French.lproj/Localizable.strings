@@ -65,6 +65,10 @@
 "The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "ps2pdf est requis pour activer l'export  en \"PDF sans polices embarquées\"";
 "Find %@..." = "Chercher %@...";
+"What's that ?" = "Qu'est-ce que c'est ?";
+"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part." = "LaTeXiT se base sur une installation fonctionnelle de LaTeX. Mais si vous ne savez pas ce qu'est LaTeX, vous risquez d'avoir du mal à l'installer. Une section de la documentation est donc dédiée aux explications correspondates.";
+"See help..." = "Voir l'aide...";
+"Install LaTeX" = "Installer LaTeX";
 "pdflatex, latex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
 "pdflatex, latex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
 "Without the color.sty package, you won't be able to change the font color" =
@@ -79,6 +83,7 @@
 "An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Une erreur est survenue lors de la création du fichier avec la commande:\n%@";
 "http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=fr";
+"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=fr";
 "Equation linked with another application" = "Équation liée à une autre application";
 "Equation linked with library item" = "Équation liée à la bibliothèque";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT ne peut être exécuté normalement; veuillez vérifier sa configuration";
@@ -104,6 +109,8 @@
 "Advanced" = "Avancé";
 "Web" = "Web";
 "Plugins" = "Extensions";
+"Reset preamble" = "Réinitialiser le préambule";
+"Are you sure you want to reset the preamble ?\nThis operation is irreversible." = "Êtes-vous sûr de vouloir réinitialiser le préambule ?\nCette opération est irréversible.";
 "Do you really want to apply that preamble to the library items ?" = "Voulez-vous vraiment appliquer ce préambule aux éléments de la bibliothèque ?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." =
 "Leur ancien préambule sera écrasé. S'il s'agissait d'un préambule spécial utilisé pour leur génération, il sera perdu.";
