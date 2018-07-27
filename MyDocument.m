@@ -11,6 +11,7 @@
 #import "AppController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
+#import "LibraryFile.h"
 #import "LineCountTextView.h"
 #import "LogTableView.h"
 #import "MyImageView.h"
@@ -110,13 +111,14 @@ static NSString* yenString = nil;
 }
 
 //marks an id as free, and put it into the freeIds array
-+(void) _releaseId:(unsigned long) anId
++(void) _releaseId:(unsigned long)anId
 {
   @synchronized(freeIds)
   {
     [freeIds addObject:[NSNumber numberWithUnsignedLong:anId]];
   }
 }
+//end _releaseId:
 
 -(id) init
 {
@@ -127,6 +129,7 @@ static NSString* yenString = nil;
   jpegColor = [[NSColor whiteColor] retain];
   return self;
 }
+//end init
 
 -(void) dealloc
 {
@@ -136,22 +139,26 @@ static NSString* yenString = nil;
   [jpegColor release];
   [self closeLinkBackLink:linkBackLink];
   [progressIndicator release];
+  [lastAppliedLibraryFile release];
   [super dealloc];
 }
+//end dealloc
 
 -(void) setNullId//useful for dummy document of AppController
 {
   [MyDocument _releaseId:uniqueId];
   uniqueId = 0;
 }
+//end setNullId
 
--(NSString *) windowNibName
+-(NSString*) windowNibName
 {
     //Override returning the nib file name of the document
     //If you need to use a subclass of NSWindowController or if your document supports multiple NSWindowControllers,
     //you should remove this method and override -makeWindowControllers instead.
     return @"MyDocument";
 }
+//end windowNibName
 
 -(void) windowControllerDidLoadNib:(NSWindowController *) aController
 {
@@ -1095,7 +1102,7 @@ static NSString* yenString = nil;
     {
       NSString* fileComponent  = [components objectAtIndex:0];
       NSString* lineComponent  = [components objectAtIndex:1];
-      BOOL      lineComponentIsANumber =
+      BOOL      lineComponentIsANumber = ![lineComponent isEqualToString:@""] && 
         [[lineComponent stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""];
       NSString* errorComponent = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)] componentsJoinedByString:@":"];
       if (lineComponentIsANumber)
@@ -1202,7 +1209,7 @@ static NSString* yenString = nil;
 }
 
 //creates an historyItem summarizing the current document state
--(HistoryItem*) historyItemWithCurrentState;
+-(HistoryItem*) historyItemWithCurrentState
 {
   int selectedSegment = [typeOfTextControl selectedSegment];
   int tag = [[typeOfTextControl cell] tagForSegment:selectedSegment];
@@ -1211,16 +1218,42 @@ static NSString* yenString = nil;
                                   sourceText:[sourceTextView textStorage] color:[colorWell color]
                                    pointSize:[sizeText doubleValue] date:[NSDate date] mode:mode backgroundColor:[imageView backgroundColor]];
 }
+//end historyItemWithCurrentState
 
 -(void) applyPdfData:(NSData*)pdfData
 {
   [self applyHistoryItem:[HistoryItem historyItemWithPDFData:pdfData useDefaults:YES]];
 }
+//end applyPdfData:
+
+-(LibraryFile*) lastAppliedLibraryFile
+{
+  return lastAppliedLibraryFile;
+}
+//end lastAppliedLibraryFile
+
+-(void) setLastAppliedLibraryFile:(LibraryFile*)libraryFile
+{
+  [libraryFile retain];
+  [lastAppliedLibraryFile release];
+  lastAppliedLibraryFile = libraryFile;
+}
+//end setLastAppliedLibraryFile:
+
+//updates the document according to the given library file
+-(void) applyLibraryFile:(LibraryFile*)libraryFile
+{
+  [self applyHistoryItem:[libraryFile value]]; //sets lastAppliedLibraryFile to nil
+  [self setLastAppliedLibraryFile:libraryFile];
+}
+//end applyLibraryFile:
 
 //sets the state of the document according to the given history item
 -(void) applyHistoryItem:(HistoryItem*)historyItem
 {
   [[[self undoManager] prepareWithInvocationTarget:self] applyHistoryItem:[self historyItemWithCurrentState]];
+  [[[self undoManager] prepareWithInvocationTarget:self] setLastAppliedLibraryFile:[self lastAppliedLibraryFile]];
+  [self setLastAppliedLibraryFile:nil];
   if (historyItem)
   {
     [self _setLogTableViewVisible:NO];

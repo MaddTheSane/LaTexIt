@@ -103,3 +103,6 @@
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations n'ont pas pu être converties à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec ces équations.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "erreur inattendue, veuillez consulter \"LaTeX > Afficher le dernier rapport d'exécution\"";
 "New text shortcut" = "Nouveau raccourci de texte";
+"You may not be updating the good equation" = "Peut-être ne mettez-vous pas à jour la bonne équation";
+"Update the equation" = "Mettre à jour l'équation";
+"You changed the library selection since the last equation was imported into the editor" = "Vous avez changé la sélection de la bibliothèque depuis la dernière équation importée dans l'éditeur";

@@ -103,3 +103,6 @@
 "Remove text shortcut" = "Remove text shortcut";
 "Move the text shortcut" = "Move the text shortcut";
 "Move text shortcuts" = "Move text shortcuts";
+"You may not be updating the good equation" = "You may not be updating the good equation";
+"Update the equation" = "Update the equation";
+"You changed the library selection since the last equation was imported into the editor" = "You changed the library selection since the last equation was imported into the editor";

@@ -407,7 +407,12 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
   {
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
-    [document applyHistoryItem:(HistoryItem*)[[libraryItemsArray lastObject] value]];
+    unsigned int count = [libraryItemsArray count];
+    LibraryFile* libraryFile = nil;
+    while(count-- && !libraryFile)
+      libraryFile = [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryFile class]] ? [libraryItemsArray objectAtIndex:count] : nil;
+    if (libraryFile)
+      [document applyLibraryFile:libraryFile];
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
   {

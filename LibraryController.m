@@ -198,43 +198,60 @@
   {
     unsigned int index = [[libraryTableView selectedRowIndexes] firstIndex];
     LibraryItem* item = [libraryTableView itemAtRow:index];
+    
     if ([item isKindOfClass:[LibraryFile class]])
     {
-      LibraryFile* fileItem = (LibraryFile*) item;
-      HistoryItem* newValue = [document historyItemWithCurrentState];
-      [newValue setTitle:[fileItem title]];
-      [[LibraryManager sharedManager] refreshFileItem:fileItem withValue:newValue];
-      [libraryTableView reloadItem:item];
-      
-      //let's make it blink a little to inform the user that it has change
-
-      //we un-register the selectionDidChange notification of the delegate to speed up blinking
-      [[NSNotificationCenter defaultCenter] removeObserver:[libraryTableView delegate]
-                                                      name:NSOutlineViewSelectionDidChangeNotification
-                                                    object:libraryTableView];
-      BOOL isSelected = YES;
-      unsigned int itemIndex   = index;
-      NSIndexSet*  itemIndexes = [NSIndexSet indexSetWithIndex:itemIndex];
-      int i = 0;
-      for(i = 0 ; i<7 ; ++i)
+      BOOL cancel = NO;
+      if (item && [document lastAppliedLibraryFile] && (item != [document lastAppliedLibraryFile]))
       {
-        if (isSelected)
-          [libraryTableView deselectRow:itemIndex];
-        else
-          [libraryTableView selectRowIndexes:itemIndexes byExtendingSelection:NO];
-        isSelected = !isSelected;
-        NSDate* now = [NSDate date];
-        [libraryTableView display];
-        NSDate* next = [now addTimeInterval:1./30.];
-        [NSThread sleepUntilDate:next];
+        NSAlert* alert =
+          [NSAlert alertWithMessageText:NSLocalizedString(@"You may not be updating the good equation", @"You may not be updating the good equation")
+                          defaultButton:NSLocalizedString(@"Update the equation", @"Update the equation")
+                        alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
+                            otherButton:nil
+              informativeTextWithFormat:NSLocalizedString(@"You changed the library selection since the last equation was imported into the editor",
+                                                          @"You changed the library selection since the last equation was imported into the editor")];
+         cancel = ([alert runModal] == NSAlertAlternateReturn);
       }
-      [libraryTableView selectRowIndexes:itemIndexes byExtendingSelection:NO];
-      //we restore the delegate notification receiving
-      [[NSNotificationCenter defaultCenter] addObserver:[libraryTableView delegate]
-                                               selector:@selector(outlineViewSelectionDidChange:)
-                                                   name:NSOutlineViewSelectionDidChangeNotification
-                                                 object:libraryTableView];
-      [libraryTableView setNeedsDisplay:YES];
+
+      if (!cancel)
+      {
+        LibraryFile* fileItem = (LibraryFile*) item;
+        HistoryItem* newValue = [document historyItemWithCurrentState];
+        [newValue setTitle:[fileItem title]];
+        [[LibraryManager sharedManager] refreshFileItem:fileItem withValue:newValue];
+        [libraryTableView reloadItem:item];
+        
+        //let's make it blink a little to inform the user that it has change
+
+        //we un-register the selectionDidChange notification of the delegate to speed up blinking
+        [[NSNotificationCenter defaultCenter] removeObserver:[libraryTableView delegate]
+                                                        name:NSOutlineViewSelectionDidChangeNotification
+                                                      object:libraryTableView];
+        BOOL isSelected = YES;
+        unsigned int itemIndex   = index;
+        NSIndexSet*  itemIndexes = [NSIndexSet indexSetWithIndex:itemIndex];
+        int i = 0;
+        for(i = 0 ; i<7 ; ++i)
+        {
+          if (isSelected)
+            [libraryTableView deselectRow:itemIndex];
+          else
+            [libraryTableView selectRowIndexes:itemIndexes byExtendingSelection:NO];
+          isSelected = !isSelected;
+          NSDate* now = [NSDate date];
+          [libraryTableView display];
+          NSDate* next = [now addTimeInterval:1./30.];
+          [NSThread sleepUntilDate:next];
+        }
+        [libraryTableView selectRowIndexes:itemIndexes byExtendingSelection:NO];
+        //we restore the delegate notification receiving
+        [[NSNotificationCenter defaultCenter] addObserver:[libraryTableView delegate]
+                                                 selector:@selector(outlineViewSelectionDidChange:)
+                                                     name:NSOutlineViewSelectionDidChangeNotification
+                                                   object:libraryTableView];
+        [libraryTableView setNeedsDisplay:YES];
+      }//end if !cancel
     }//end if selection is LibraryFile
   }//end if document
 }
@@ -331,9 +348,8 @@
     NSSize screenSize = [[NSScreen mainScreen] frame].size;
     int shiftRight = 24;
     int shiftLeft = -24-imageSize.width-16;
-    int shift = ((locationOnScreen.x+shiftRight+imageSize.width+16 > screenSize.width) && (locationOnScreen.x+shiftLeft > 0)) ?
-                shiftLeft : shiftRight;
-    NSRect newFrame = NSMakeRect(locationOnScreen.x+shift,
+    int shift = (locationOnScreen.x+shiftRight+imageSize.width+16 > screenSize.width) ? shiftLeft : shiftRight;
+    NSRect newFrame = NSMakeRect(MAX(0, locationOnScreen.x+shift),
                                   MIN(locationOnScreen.y-imageSize.height/2, screenSize.height-imageSize.height-16),
                                  imageSize.width+16, imageSize.height+16);
     if (image != [libraryPreviewPanelImageView image])

@@ -255,7 +255,7 @@ static NSImage*        libraryFileIcon       = nil;
         //Then save the data
         NSString* libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
         NSDictionary* plist =
-          [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.0", @"version", compressedData, @"data", nil];
+          [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.1", @"version", compressedData, @"data", nil];
         NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
         libraryShouldBeSaved = ![dataToWrite writeToFile:libraryFilePath atomically:YES];
       }//end if path ok
@@ -285,7 +285,7 @@ static NSImage*        libraryFileIcon       = nil;
     NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
     NSData* compressedData = [Compressor zipcompress:uncompressedData];
     NSDictionary* plist =
-      [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.0", @"version", compressedData, @"data", nil];
+      [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.1", @"version", compressedData, @"data", nil];
     NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     ok = [dataToWrite writeToFile:path atomically:YES];

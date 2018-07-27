@@ -11,6 +11,7 @@
 #import "AppController.h"
 
 @class HistoryItem;
+@class LibraryFile;
 @class LineCountTextView;
 @class LinkBack;
 @class LogTableView;
@@ -60,6 +61,8 @@
   unsigned long uniqueId;
   
   LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
+  
+  LibraryFile* lastAppliedLibraryFile;
 }
 
 //updates load progress indicator and messages
@@ -84,6 +87,9 @@
 -(LineCountTextView*) sourceTextView;
 -(NSButton*) makeLatexButton;
 -(MyImageView*) imageView;
+
+-(LibraryFile*) lastAppliedLibraryFile;
+-(void) setLastAppliedLibraryFile:(LibraryFile*)libraryFile;
 
 -(void) setLatexMode:(latex_mode_t)mode;
 -(void) setColor:(NSColor*)color;
@@ -113,6 +119,7 @@
 
 -(HistoryItem*) historyItemWithCurrentState;        //creates a history item with the current state of the document
 -(void) applyPdfData:(NSData*)pdfData;              //updates the document according to the given pdfdata
+-(void) applyLibraryFile:(LibraryFile*)libraryFile; //updates the document according to the given library file
 -(void) applyHistoryItem:(HistoryItem*)historyItem; //updates the document according to the given history item
 
 //linkback live link management

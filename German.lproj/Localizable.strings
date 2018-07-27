@@ -103,3 +103,6 @@
 "Remove text shortcut" = "TextShortcut entfernen";
 "Move the text shortcut" = "Den Text-Shortcut bewegen";
 "Move text shortcuts" = "Text-Shortcuts bewegen";
+"You may not be updating the good equation" = "Sie können möglicherweise nicht die gültige Gleichung aktualisieren.";
+"Update the equation" = "Die Gleichung aktualisieren.";
+"You changed the library selection since the last equation was imported into the editor" = "Die Bibliotheks-Auswahl wurde seit dem Import der letzten Gleichung in den Editor geändert.";

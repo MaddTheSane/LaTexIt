@@ -93,7 +93,7 @@
     if ([libraryItem isKindOfClass:[LibraryFile class]])
     {
       [[[document undoManager] prepareWithInvocationTarget:document] applyHistoryItem:[document historyItemWithCurrentState]];
-      [document applyHistoryItem:[(LibraryFile*)libraryItem value]];
+      [document applyLibraryFile:(LibraryFile*)libraryItem];
       [[document windowForSheet] makeKeyWindow];
     }
     else if ([libraryItem isKindOfClass:[LibraryFolder class]])

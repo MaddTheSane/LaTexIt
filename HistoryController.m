@@ -170,9 +170,8 @@
     NSSize screenSize = [[NSScreen mainScreen] frame].size;
     int shiftRight = 24;
     int shiftLeft = -24-imageSize.width-16;
-    int shift = ((locationOnScreen.x+shiftRight+imageSize.width+16 > screenSize.width) && (locationOnScreen.x+shiftLeft > 0)) ?
-                shiftLeft : shiftRight;
-    NSRect newFrame = NSMakeRect(locationOnScreen.x+shift,
+    int shift = (locationOnScreen.x+shiftRight+imageSize.width+16 > screenSize.width) ? shiftLeft : shiftRight;
+    NSRect newFrame = NSMakeRect(MAX(0, locationOnScreen.x+shift),
                                   MIN(locationOnScreen.y-imageSize.height/2, screenSize.height-imageSize.height-16),
                                  imageSize.width+16, imageSize.height+16);
     if (image != [historyPreviewPanelImageView image])
