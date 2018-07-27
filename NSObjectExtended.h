@@ -8,12 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface NSObject (Extended)
 
-+(Class) dynamicCastToClass:(Class)aClass;
--(id)    dynamicCastToClass:(Class)aClass;
--(void)  forwardInvocation:(NSInvocation*)anInvocation;
++(nullable Class) dynamicCastToClass:(Class)aClass;
+-(nullable id)    dynamicCastToClass:(Class)aClass;
 
 //Difficult method : returns a simplified array, to be sure that no item of the array has an ancestor
 //in this array. This is useful, when several items are selected, to factorize the work in a common
@@ -24,3 +24,5 @@
 // the returned array has an ancestor in the returned array.
 
 @end
+
+NS_ASSUME_NONNULL_END

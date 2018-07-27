@@ -1,4 +1,4 @@
-﻿"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX als „Eqnarray“ (\\begin{eqnarray*}…\\end{eqnarray*})";
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX als „Eqnarray“ (\\begin{eqnarray*}…\\end{eqnarray*})";
 "LaTeXiT/Typeset LaTeX Maths eqnarray and put result into clipboard" = "LaTeXiT/LaTeX als „Eqnarray“, kopiere in die Zwischenablage";
 "LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/LaTeX als „Align“ (\\begin{align*}…\\end{align*})";
 "LaTeXiT/Typeset LaTeX Maths align and put result into clipboard" = "LaTeXiT/LaTeX als „Align“, kopiere in die Zwischenablage";
