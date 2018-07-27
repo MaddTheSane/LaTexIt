@@ -87,10 +87,19 @@ static NSArray *syntaxDefinitionsArray;
   return self;
 }
 
+-(void) textStorageDidProcessEditing:(NSNotification*)aNotification
+{
+  NSTextStorage* textStorage = [self->layoutManager textStorage];
+  [textStorage removeAttribute:NSLinkAttributeName range:NSMakeRange(0, [textStorage length])];
+}
+//end textStorageDidProcessEditing:
+
+
 -(NSUndoManager*) undoManagerForTextView:(NSTextView*)aTextView
 {
   return [self undoManager];
 }
+//END undoManagerForTextView:
 
 -(void)setColours
 {

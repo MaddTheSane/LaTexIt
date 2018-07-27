@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -15,12 +15,14 @@
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LatexitEquation.h"
+#import "LibraryEquation.h"
 #import "LibraryManager.h"
 #import "LineCountRulerView.h"
 #import "MyDocument.h"
 #import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
+#import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
@@ -29,6 +31,8 @@
 
 #import "RegexKitLite.h"
 
+#import <Carbon/Carbon.h>
+
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
@@ -36,6 +40,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 -(void) _computeLineRanges;
 -(void) _initializeSpellChecker;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
+-(void) insertTextAtMousePosition:(id)object;
 @end
 
 @implementation LineCountTextView
@@ -95,8 +100,10 @@ static int SpellCheckerDocumentTag = 0;
   [self _computeLineRanges];
 
   NSArray* typesToAdd =
-    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType,
-                              NSRTFDPboardType, LatexitEquationsPboardType, LibraryItemsArchivedPboardType, LibraryItemsWrappedPboardType, nil];
+    [NSArray arrayWithObjects:NSStringPboardType, NSColorPboardType, NSPDFPboardType,
+                              NSFilenamesPboardType, NSFileContentsPboardType,
+                              NSRTFDPboardType, LatexitEquationsPboardType, LibraryItemsArchivedPboardType,
+                              LibraryItemsWrappedPboardType, nil];
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObjectsFromArray:typesToAdd]];
   return self;
 }
@@ -329,8 +336,8 @@ static int SpellCheckerDocumentTag = 0;
 //end setForbiddenLine:forbidden
 
 //checks if the user is typing in a forbiddenLine; if it is the case, it is discarded
--(BOOL) textView:(NSTextView *)aTextView shouldChangeTextInRange:(NSRange)affectedCharRange
-                                               replacementString:(NSString *)replacementString
+-(BOOL) textView:(NSTextView*)aTextView shouldChangeTextInRange:(NSRange)affectedCharRange
+                                               replacementString:(NSString*)replacementString
 {
   BOOL accepts = YES;
   affectedCharRange.length = MAX(1U, affectedCharRange.length);
@@ -434,15 +441,20 @@ static int SpellCheckerDocumentTag = 0;
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
   {
-    shouldBePDFData = YES;
+    ok = YES;
+    /*shouldBePDFData = YES;
     NSArray* plist = [pboard propertyListForType:NSFilenamesPboardType];
     if (plist && [plist count])
     {
       NSString* filename = [plist objectAtIndex:0];
       data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
-    }
+    }*/
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  {
+    ok = YES;
+  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
   {
     ok = YES;
   }
@@ -464,13 +476,23 @@ static int SpellCheckerDocumentTag = 0;
 
 -(NSDragOperation) draggingUpdated:(id <NSDraggingInfo>)sender
 {
-  return acceptDrag;
+  NSDragOperation result = acceptDrag ? NSDragOperationCopy : NSDragOperationNone;
+  /*
+  BOOL isAltPressed = NO;
+  CGEventRef event = CGEventCreate(NULL);
+  CGEventFlags mods = CGEventGetFlags(event);
+  isAltPressed = ((mods & kCGEventFlagMaskAlternate) != 0);
+  if (event) CFRelease(event);
+  if (!isAltPressed)*/
+  [super draggingUpdated:sender];
+  return result;
 }
 //end draggingUpdated:
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
   NSPasteboard* pboard = [sender draggingPasteboard];
+  NSString* type = nil;
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
   {
     NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
@@ -478,9 +500,43 @@ static int SpellCheckerDocumentTag = 0;
     [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
                        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
   }
-  else if ([pboard availableTypeFromArray:
-        [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]])
-    [(id)[self nextResponder] performDragOperation:sender];
+  else if ((type = [pboard availableTypeFromArray:
+        [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]]))
+  {
+    LatexitEquation* equation = nil;
+    if ([type isEqualToString:LibraryItemsWrappedPboardType])
+    {
+      NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
+      unsigned int count = [libraryItemsWrappedArray count];
+      while(count-- && !equation)
+      {
+        NSString* objectIDAsString = [libraryItemsWrappedArray objectAtIndex:count];
+        NSManagedObject* libraryItem = [[[LibraryManager sharedManager] managedObjectContext] managedObjectForURIRepresentation:[NSURL URLWithString:objectIDAsString]];
+        LibraryEquation* libraryEquation =
+          ![libraryItem isKindOfClass:[LibraryEquation class]] ? nil : (LibraryEquation*)libraryItem;
+        equation = [libraryEquation equation];
+      }//end while(count-- && !equation)
+    }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
+    else if ([type isEqualToString:LibraryItemsArchivedPboardType])
+    {
+      NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+      unsigned int count = [libraryItemsArray count];
+      while(count-- && !equation)
+      {
+        LibraryEquation* libraryEquation =
+          [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryEquation class]] ? [libraryItemsArray objectAtIndex:count] : nil;
+        equation = [libraryEquation equation];
+      }
+    }//end if ([type isEqualToString:LibraryItemsArchivedPboardType])
+    else if ([type isEqualToString:LatexitEquationsPboardType])
+    {
+      NSArray* latexitEquationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+      equation = [latexitEquationsArray lastObject];
+    }//end if ([type isEqualToString:LatexitEquationsPboardType])
+    NSAttributedString* sourceText = [equation sourceText];
+    if (sourceText && ![[sourceText string] isEqualToString:@""])
+      [self insertTextAtMousePosition:sourceText];
+  }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
   {
     NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
@@ -507,8 +563,44 @@ static int SpellCheckerDocumentTag = 0;
     else
       [super performDragOperation:sender];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, NSFileContentsPboardType, nil]])
-    [(id)[self nextResponder] performDragOperation:sender];
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
+  {
+    NSString* lastFilePath = [[pboard propertyListForType:NSFilenamesPboardType] lastObject];
+    CFStringRef uti = !lastFilePath ? NULL :
+                         UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
+                                                               (CFStringRef)[lastFilePath pathExtension], 
+                                                               NULL);
+    BOOL isPdf = UTTypeConformsTo(uti, CFSTR("com.adobe.pdf"));
+    NSAttributedString* equationSourceAttributedString = nil;
+    if (isPdf)
+    {
+      NSData* pdfContent = [NSData dataWithContentsOfFile:lastFilePath];
+      PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfContent];
+      pdfContent = !pdfDocument ? nil : pdfContent;
+      [pdfDocument release];
+      LatexitEquation* latexitEquation = !pdfContent ? nil :
+        [[[LatexitEquation alloc] initWithPDFData:pdfContent useDefaults:NO] autorelease];
+      equationSourceAttributedString = [latexitEquation sourceText];
+    }//end if (utiPdf)
+
+    BOOL isRtf = !isPdf && !equationSourceAttributedString && UTTypeConformsTo(uti, CFSTR("public.rtf"));
+    NSAttributedString* rtfContent = !isRtf ? nil :
+      [[[NSAttributedString alloc] initWithRTF:[NSData dataWithContentsOfFile:lastFilePath]
+                           documentAttributes:nil] autorelease];
+
+    BOOL isText = !isPdf && !equationSourceAttributedString && !isRtf && !rtfContent && UTTypeConformsTo(uti, CFSTR("public.plain-text"));
+    NSStringEncoding encoding = NSUTF8StringEncoding;
+    NSError* error = nil;
+    NSString* plainTextContent = !isText ? nil :
+      [NSString stringWithContentsOfFile:lastFilePath guessEncoding:&encoding error:&error];
+      
+    if (equationSourceAttributedString)
+      [self insertText:equationSourceAttributedString];
+    else if (rtfContent)
+      [self insertText:rtfContent];
+    else if (plainTextContent)
+      [self insertText:plainTextContent];
+  }
   else
     [super performDragOperation:sender];
   return YES;
@@ -521,15 +613,27 @@ static int SpellCheckerDocumentTag = 0;
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   NSString* type = nil;
   BOOL done = NO;
-  MyDocument* document = (MyDocument*)[[[self window] windowController] document];
+  //MyDocument* document = (MyDocument*)[[[self window] windowController] document];
   if ((type = [pasteboard availableTypeFromArray:
                 [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, nil]]))
   {
-    [(id)[self nextResponder] paste:sender];
-    done = YES;
+    //[(id)[self nextResponder] paste:sender];
+    //done = YES;
+    done = NO;
   }
   else if ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.adobe.pdf", NSPDFPboardType, nil]]))
-    done = [document applyPdfData:[pasteboard dataForType:type]];
+  {
+    //done = [document applyPdfData:[pasteboard dataForType:type]];
+    NSData* pdfData = [pasteboard dataForType:type];
+    LatexitEquation* latexitEquation = [[[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO] autorelease];
+    if (latexitEquation)
+    {
+      [(id)[self nextResponder] paste:sender];
+      done = YES;
+    }
+    else
+      done = NO;
+  }
 
   if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
   {
@@ -827,5 +931,19 @@ static int SpellCheckerDocumentTag = 0;
   }//end if (input && string)
 }
 //end replaceCharactersInRange:withString:withUndo:
+
+-(void) insertTextAtMousePosition:(id)object
+{
+  unsigned int index = [self characterIndexForPoint:[NSEvent mouseLocation]];
+  unsigned int length = [[self textStorage] length];
+  if (index <= length)
+  {
+    NSAttributedString* attributedString = [object isKindOfClass:[NSAttributedString class]] ? object :
+      [[[NSAttributedString alloc] initWithString:object] autorelease];
+    [[self textStorage] insertAttributedString:attributedString atIndex:index];
+    [self->syntaxColouring recolourCompleteDocument];
+  }
+}
+//end insertTextAtMousePosition:
 
 @end

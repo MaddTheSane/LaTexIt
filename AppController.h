@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -59,6 +59,8 @@
   MarginsWindowController*                   marginsWindowController;
   PreferencesWindowController*               preferencesWindowController;
   
+  NSMutableSet* linkbackLinks;
+  
   int  checkLevel;
   BOOL updateGUIFlag;
 }
@@ -98,6 +100,8 @@
 
 -(IBAction) historyRemoveHistoryEntries:(id)sender;
 -(IBAction) historyClearHistory:(id)sender;
+-(IBAction) historyOpen:(id)sender;
+-(IBAction) historySaveAs:(id)sender;
 -(IBAction) showOrHideHistory:(id)sender;
 
 -(IBAction) libraryImportCurrent:(id)sender; //creates a library item with the current document state
@@ -165,6 +169,7 @@
 -(void) serviceDeLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 //LinkBackServerDelegateProtocol
+-(void) closeLinkBackLink:(LinkBack*)link;
 -(void) linkBackDidClose:(LinkBack*)link;
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link;
 

@@ -3,13 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
 
 #import "LaTeXProcessor.h"
 #import "NSColorExtended.h"
+#import "NSDataExtended.h"
 #import "NSFontExtended.h"
 #import "NSImageExtended.h"
 #import "NSManagedObjectContextExtended.h"
@@ -18,6 +19,7 @@
 #import "Utils.h"
 
 #import <LinkBack/LinkBack.h>
+
 #import <Quartz/Quartz.h>
 
 NSString* LatexitEquationsPboardType = @"LatexitEquationsPboardType";
@@ -66,7 +68,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   @synchronized([self managedObjectContextStack])
   {
-    [managedObjectContextStackInstance addObject:context];
+    if (!context)
+      [managedObjectContextStackInstance addObject:[NSNull null]];
+    else
+      [managedObjectContextStackInstance addObject:context];
   }
 
 }
@@ -77,7 +82,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSManagedObjectContext* result = nil;
   @synchronized([self managedObjectContextStack])
   {
-    result = [managedObjectContextStackInstance lastObject];
+    id context = [managedObjectContextStackInstance lastObject];
+    result = (context == [NSNull null]) ? nil : context;
   }
   return result;
 }
@@ -88,12 +94,311 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSManagedObjectContext* result = nil;
   @synchronized([self managedObjectContextStack])
   {
-    result = [managedObjectContextStackInstance lastObject];
+    result = [self currentManagedObjectContext];
     [managedObjectContextStackInstance removeLastObject];
   }
   return result;
 }
 //end popManagedObjectContext
+
++(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
+{
+  NSMutableDictionary* result = [NSMutableDictionary dictionary];
+  
+  BOOL isLaTeXiTPDF = NO;
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSFont* defaultFont = [preferencesController editionFont];
+  NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
+  NSAttributedString* defaultPreambleAttributedString = [[PreferencesController sharedController] preambleDocumentAttributedString];
+
+  BOOL decodedFromAnnotation = NO;
+  #warning 64bits problem
+  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL shoudDecodeFromAnnotations = !shouldDenyDueTo64Bitsproblem;
+  if (shoudDecodeFromAnnotations)
+  {
+    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:someData];
+    PDFPage*     pdfPage     = [pdfDocument pageAtIndex:0];
+    NSArray* annotations     = [pdfPage annotations];
+    NSDictionary* embeddedInfos = nil;
+    NSUInteger i = 0;
+    for(i = 0 ; !embeddedInfos && (i < [annotations count]) ; ++i)
+    {
+      id annotation = [annotations objectAtIndex:i];
+      if ([annotation isKindOfClass:[PDFAnnotationText class]])
+      {
+        PDFAnnotationText* annotationTextCandidate = (PDFAnnotationText*)annotation;
+        if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+        {
+          NSString* contents = [annotationTextCandidate contents];
+          NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
+          @try{
+            embeddedInfos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+          }
+          @catch(NSException* e){
+            DebugLog(0, @"exception : %@", e);
+          }
+        }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+      }//end if ([annotation isKindOfClass:PDFAnnotationText])
+    }//end for each annotation
+    if (embeddedInfos)
+    {
+      NSString* preambleAsString = [embeddedInfos objectForKey:@"preamble"];
+      NSAttributedString* preamble = !preambleAsString ? nil :
+        [[NSAttributedString alloc] initWithString:preambleAsString attributes:defaultAttributes];
+      [result setObject:(!preamble ? defaultPreambleAttributedString : preamble) forKey:@"preamble"];
+      [preamble release];
+
+      NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
+      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
+                                         (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
+      #ifdef MIGRATE_ALIGN
+      [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+      #else
+      [result setObject:[NSNumber numberWithInt:mode] forKey:@"mode"];
+      #endif
+
+      NSString* sourceAsString = [embeddedInfos objectForKey:@"source"];
+      NSAttributedString* sourceText =
+        [[NSAttributedString alloc] initWithString:(!sourceAsString ? @"" : sourceAsString) attributes:defaultAttributes];
+      #ifdef MIGRATE_ALIGN
+      if (mode == LATEX_MODE_EQNARRAY)
+      {
+        NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
+        [sourceText2 appendAttributedString:
+          [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
+        [sourceText2 appendAttributedString:sourceText];
+        [sourceText2 appendAttributedString:
+          [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+        [sourceText release];
+        sourceText = sourceText2;
+      }
+      #endif
+      [result setObject:sourceText forKey:@"sourceText"];
+      [sourceText release];
+      
+      NSNumber* pointSizeAsNumber = [embeddedInfos objectForKey:@"magnification"];
+      [result setObject:(pointSizeAsNumber ? pointSizeAsNumber :
+                         [NSNumber numberWithDouble:(useDefaults ? [preferencesController latexisationFontSize] : 0)])
+                 forKey:@"magnification"];
+
+      NSNumber* baselineAsNumber = [embeddedInfos objectForKey:@"baseline"];
+      [result setObject:(baselineAsNumber ? baselineAsNumber : [NSNumber numberWithDouble:0.])
+                 forKey:@"baseline"];
+
+      NSColor* defaultColor = [preferencesController latexisationFontColor];
+      NSColor* color = [NSColor colorWithData:[embeddedInfos objectForKey:@"color"]];
+      [result setObject:(color ? color : (useDefaults ? defaultColor : [NSColor blackColor]))
+                 forKey:@"color"];
+
+      NSColor* defaultBKColor = [NSColor whiteColor];
+      NSColor* backgroundColor = [NSColor colorWithData:[embeddedInfos objectForKey:@"backgroundColor"]];
+      [result setObject:(backgroundColor ? backgroundColor : (useDefaults ? defaultBKColor : [NSColor whiteColor]))
+                 forKey:@"backgroundColor"];
+
+      NSString* titleAsString = [embeddedInfos objectForKey:@"title"];
+      [result setObject:(!titleAsString ? @"" : titleAsString) forKey:@"title"];
+
+      [result setObject:[NSDate date] forKey:@"date"];
+      
+      decodedFromAnnotation = YES;
+    }//end if (embeddedInfos)
+    [pdfDocument release];
+  }//end if (shoudDecodeFromAnnotations)
+  
+  if (decodedFromAnnotation)
+    isLaTeXiTPDF = YES;
+  else//if (!decodedFromAnnotation)
+  {
+    NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding] autorelease];
+    NSArray*  testArray    = nil;
+    
+    NSMutableString* preambleString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [preambleString rangeOfString:@"ESannopend"];
+      range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
+      [preambleString deleteCharactersInRange:range];
+      [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
+    }
+    NSAttributedString* preamble =
+      preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
+                     : (useDefaults ? defaultPreambleAttributedString
+                                    : [[[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes] autorelease]);
+
+    //test escaped preample from version 1.13.0
+    testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [preambleString rangeOfString:@"ESannoepend"];
+      range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
+      [preambleString deleteCharactersInRange:range];
+      NSString* unescapedPreamble =
+        (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                           (CFStringRef)preambleString, CFSTR(""),
+                                                                           kCFStringEncodingUTF8);
+      preambleString = [NSString stringWithString:(NSString*)unescapedPreamble];
+      CFRelease(unescapedPreamble);
+    }
+    preamble = preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
+                              : preamble;
+    [result setObject:preamble forKey:@"preamble"];
+
+    NSMutableString* modeAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
+      range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
+      [modeAsString deleteCharactersInRange:range];
+    }
+    latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
+                        : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
+    mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
+    #ifdef MIGRATE_ALIGN
+    [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+    #else
+    [result setObject:[NSNumber numberWithInt:mode] forKey:@"mode"];
+    #endif
+
+    NSMutableString* sourceString = [NSMutableString string];
+    testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      [sourceString appendString:[testArray objectAtIndex:1]];
+      NSRange range = [sourceString rangeOfString:@"ESannotend"];
+      range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
+      [sourceString deleteCharactersInRange:range];
+      [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
+    }
+    NSAttributedString* sourceText = sourceString ?
+      [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease] : @"";
+
+    //test escaped source from version 1.13.0
+    testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      [sourceString setString:@""];
+      [sourceString appendString:[testArray objectAtIndex:1]];
+      NSRange range = !sourceString ? NSMakeRange(0, 0) : [sourceString rangeOfString:@"ESannoesend"];
+      range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
+      [sourceString deleteCharactersInRange:range];
+      NSString* unescapedSource =
+        (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                           (CFStringRef)sourceString, CFSTR(""),
+                                                                           kCFStringEncodingUTF8);
+      [sourceString setString:unescapedSource];
+      CFRelease(unescapedSource);
+    }
+    sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
+                              : sourceText;
+    #ifdef MIGRATE_ALIGN
+    if (mode == LATEX_MODE_EQNARRAY)
+    {
+      NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
+      [sourceText2 appendAttributedString:
+        [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
+      [sourceText2 appendAttributedString:sourceText];
+      [sourceText2 appendAttributedString:
+        [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+      sourceText = sourceText2;
+    }
+    #endif
+    if (sourceText)
+      [result setObject:sourceText forKey:@"sourceText"];
+
+    NSMutableString* pointSizeAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
+      range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
+      [pointSizeAsString deleteCharactersInRange:range];
+    }
+    [result setObject:[NSNumber numberWithDouble:(pointSizeAsString ? [pointSizeAsString doubleValue] : (useDefaults ? [preferencesController latexisationFontSize] : 0))] forKey:@"magnification"];
+
+    NSColor* defaultColor = [preferencesController latexisationFontColor];
+    NSMutableString* colorAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [colorAsString rangeOfString:@"EEcolend"];
+      range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
+      [colorAsString deleteCharactersInRange:range];
+    }
+    NSColor* color = colorAsString ? [NSColor colorWithRgbaString:colorAsString] : nil;
+    if (!color)
+      color = (useDefaults ? defaultColor : [NSColor blackColor]);
+    [result setObject:color forKey:@"color"];
+
+    NSColor* defaultBkColor = [NSColor whiteColor];
+    NSMutableString* bkColorAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
+      range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
+      [bkColorAsString deleteCharactersInRange:range];
+    }
+    NSColor* backgroundColor = bkColorAsString ? [NSColor colorWithRgbaString:bkColorAsString] : nil;
+    if (!backgroundColor)
+      backgroundColor = (useDefaults ? defaultBkColor : [NSColor whiteColor]);
+    [result setObject:backgroundColor forKey:@"backgroundColor"];
+      
+    NSMutableString* baselineAsString = nil;
+    testArray = [baselineAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      baselineAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
+      range.length = (range.location != NSNotFound) ? [baselineAsString length]-range.location : 0;
+      [baselineAsString deleteCharactersInRange:range];
+    }
+    [result setObject:[NSNumber numberWithDouble:(baselineAsString ? [baselineAsString doubleValue] : 0.)] forKey:@"baseline"];
+
+    NSMutableString* titleAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
+      range.length = (range.location != NSNotFound) ? [titleAsString length]-range.location : 0;
+      [titleAsString deleteCharactersInRange:range];
+    }
+    [result setObject:(!titleAsString ? @"" : titleAsString) forKey:@"title"];
+    
+    [result setObject:[NSDate date] forKey:@"date"];
+  }//end if (!decodedFromAnnotation)
+  
+  if (!isLaTeXiTPDF)
+    result = nil;
+  
+  return result;
+}
+//end metaDataFromPDFData:useDefaults:
 
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
@@ -104,13 +409,19 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
                                               backgroundColor:backgroundColor];
   return [instance autorelease];
 }
-//end historyItemWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
+//end latexitEquationWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
+
++(id) latexitEquationWithData:(NSData*)someData useDefaults:(BOOL)useDefaults
+{
+  return [[[[self class] alloc] initWithData:someData useDefaults:useDefaults] autorelease];
+}
+//end latexitEquationWithData:useDefaults:
 
 +(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
   return [[[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults] autorelease];
 }
-//end historyItemWithPDFData:useDefaults:
+//end latexitEquationWithPDFData:useDefaults:
 
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
@@ -141,190 +452,382 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
   [self setPdfData:someData];
-  NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding] autorelease];
-  NSArray*  testArray    = nil;
-  
-  BOOL isLaTeXiTPDF = NO;
+  NSDictionary* metaData = [[self class] metaDataFromPDFData:someData useDefaults:useDefaults];
+  BOOL isLaTeXiTPDF = (metaData != nil);
 
+  [self beginUpdate];
+  NSAttributedString* preamble = [metaData objectForKey:@"preamble"];
+  isLaTeXiTPDF &= (preamble != nil);
+  if (preamble)
+    [self setPreamble:preamble];
+
+  NSNumber* mode = [metaData objectForKey:@"mode"];
+  isLaTeXiTPDF &= (mode != nil);
+  if (mode)
+    [self setMode:(latex_mode_t)[mode intValue]];
+
+  NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
+  isLaTeXiTPDF &= (sourceText != nil);
+  if (sourceText)
+    [self setSourceText:sourceText];
+
+  NSNumber* pointSize = [metaData objectForKey:@"magnification"];
+  isLaTeXiTPDF &= (pointSize != nil);
+  if (pointSize)
+    [self setPointSize:[pointSize doubleValue]];
+
+  NSColor* color = [metaData objectForKey:@"color"];
+  isLaTeXiTPDF &= (color != nil);
+  if (color)
+    [self setColor:color];
+
+  NSColor* backgroundColor = [metaData objectForKey:@"backgroundColor"];
+  isLaTeXiTPDF &= (backgroundColor != nil);
+  if (backgroundColor)
+    [self setBackgroundColor:backgroundColor];
+
+  NSString* title = [metaData objectForKey:@"title"];
+  if (title)
+    [self setTitle:title];
+
+  NSNumber* baseline = [metaData objectForKey:@"baseline"];
+  [self setBaseline:[baseline doubleValue]];
+
+  NSDate* date = [metaData objectForKey:@"date"];
+  if (date)
+    [self setDate:date];
+    
+  [self endUpdate];
+
+  if (!isLaTeXiTPDF)
+  {
+    [self release];
+    self = nil;
+  }//end if (!isLaTeXiTPDF)*/
+
+  /*
+  BOOL isLaTeXiTPDF = NO;
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSFont* defaultFont = [preferencesController editionFont];
   NSDictionary* defaultAttributes = [NSDictionary dictionaryWithObject:defaultFont forKey:NSFontAttributeName];
   NSAttributedString* defaultPreambleAttributedString = [[PreferencesController sharedController] preambleDocumentAttributedString];
-  NSMutableString* preambleString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [preambleString rangeOfString:@"ESannopend"];
-    range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
-    [preambleString deleteCharactersInRange:range];
-    [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preambleString length])];
-    [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preambleString length])];
-    [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
-    [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
-  }
-  NSAttributedString* preamble =
-    preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
-                   : (useDefaults ? defaultPreambleAttributedString
-                                  : [[[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes] autorelease]);
 
-  //test escaped preample from version 1.13.0
-  testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
-  if (testArray && ([testArray count] >= 2))
+  BOOL decodedFromAnnotation = NO;
+  #warning 64bits problem
+  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL shoudDecodeFromAnnotations = !shouldDenyDueTo64Bitsproblem;
+  if (shoudDecodeFromAnnotations)
   {
-    isLaTeXiTPDF |= YES;
-    preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [preambleString rangeOfString:@"ESannoepend"];
-    range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
-    [preambleString deleteCharactersInRange:range];
-    NSString* unescapedPreamble =
-      (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                         (CFStringRef)preambleString, CFSTR(""),
-                                                                         kCFStringEncodingUTF8);
-    preambleString = [NSString stringWithString:(NSString*)unescapedPreamble];
-    CFRelease(unescapedPreamble);
-  }
-  preamble = preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
-                            : preamble;
-  [self setPreamble:preamble];
+    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:someData];
+    PDFPage*     pdfPage     = [pdfDocument pageAtIndex:0];
+    NSArray* annotations     = [pdfPage annotations];
+    NSDictionary* embeddedInfos = nil;
+    NSUInteger i = 0;
+    for(i = 0 ; !embeddedInfos && (i < [annotations count]) ; ++i)
+    {
+      id annotation = [annotations objectAtIndex:i];
+      if ([annotation isKindOfClass:[PDFAnnotationText class]])
+      {
+        PDFAnnotationText* annotationTextCandidate = (PDFAnnotationText*)annotation;
+        if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+        {
+          NSString* contents = [annotationTextCandidate contents];
+          NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
+          @try{
+            embeddedInfos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+          }
+          @catch(NSException* e){
+            DebugLog(0, @"exception : %@", e);
+          }
+        }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+      }//end if ([annotation isKindOfClass:PDFAnnotationText])
+    }//end for each annotation
+    if (embeddedInfos)
+    {
+      NSString* preambleAsString = [embeddedInfos objectForKey:@"preamble"];
+      NSAttributedString* preamble = !preambleAsString ? nil :
+        [[NSAttributedString alloc] initWithString:preambleAsString attributes:defaultAttributes];
+      [self setPreamble:!preamble ? defaultPreambleAttributedString : preamble];
+      [preamble release];
 
-  NSMutableString* modeAsString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
-    range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
-    [modeAsString deleteCharactersInRange:range];
-  }
-  latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
-                      : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
-  mode = validateLatexMode(mode); //Added starting from version 1.7.0
-  #ifdef MIGRATE_ALIGN
-  [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
-  #else
-  [self setMode:mode];
-  #endif
+      NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
+      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
+                                         (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
+      #ifdef MIGRATE_ALIGN
+      [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
+      #else
+      [self setMode:mode];
+      #endif
 
-  NSMutableString* sourceString = [NSMutableString string];
-  testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    [sourceString appendString:[testArray objectAtIndex:1]];
-    NSRange range = [sourceString rangeOfString:@"ESannotend"];
-    range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
-    [sourceString deleteCharactersInRange:range];
-    [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [sourceString length])];
-    [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [sourceString length])];
-    [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
-    [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
-  }
-  NSAttributedString* sourceText = sourceString ?
-    [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease] : @"";
+      NSString* sourceAsString = [embeddedInfos objectForKey:@"source"];
+      NSAttributedString* sourceText =
+        [[NSAttributedString alloc] initWithString:(!sourceAsString ? @"" : sourceAsString) attributes:defaultAttributes];
+      #ifdef MIGRATE_ALIGN
+      if (mode == LATEX_MODE_EQNARRAY)
+      {
+        NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
+        [sourceText2 appendAttributedString:
+          [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
+        [sourceText2 appendAttributedString:sourceText];
+        [sourceText2 appendAttributedString:
+          [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+        [sourceText release];
+        sourceText = sourceText2;
+      }
+      #endif
+      [self setSourceText:sourceText];
+      [sourceText release];
+      
+      NSNumber* pointSizeAsNumber = [embeddedInfos objectForKey:@"magnification"];
+      [self setPointSize:pointSizeAsNumber ? [pointSizeAsNumber doubleValue] :
+        (useDefaults ? [preferencesController latexisationFontSize] : 0)];
 
-  //test escaped source from version 1.13.0
-  testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    [sourceString setString:@""];
-    [sourceString appendString:[testArray objectAtIndex:1]];
-    NSRange range = !sourceString ? NSMakeRange(0, 0) : [sourceString rangeOfString:@"ESannoesend"];
-    range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
-    [sourceString deleteCharactersInRange:range];
-    NSString* unescapedSource =
-      (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                         (CFStringRef)sourceString, CFSTR(""),
-                                                                         kCFStringEncodingUTF8);
-    [sourceString setString:unescapedSource];
-    CFRelease(unescapedSource);
-  }
-  sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
-                            : sourceText;
-  #ifdef MIGRATE_ALIGN
-  if (mode == LATEX_MODE_EQNARRAY)
-  {
-    NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
-    [sourceText2 appendAttributedString:
-      [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
-    [sourceText2 appendAttributedString:sourceText];
-    [sourceText2 appendAttributedString:
-      [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
-    sourceText = sourceText2;
-  }
-  #endif
-  [self setSourceText:sourceText];
+      NSNumber* baselineAsNumber = [embeddedInfos objectForKey:@"baseline"];
+      [self setBaseline:[baselineAsNumber doubleValue]];
 
-  NSMutableString* pointSizeAsString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
-    range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
-    [pointSizeAsString deleteCharactersInRange:range];
-  }
-  [self setPointSize:pointSizeAsString ? [pointSizeAsString doubleValue] : (useDefaults ? [preferencesController latexisationFontSize] : 0)];
+      NSColor* defaultColor = [preferencesController latexisationFontColor];
+      NSColor* color = [NSColor colorWithData:[embeddedInfos objectForKey:@"color"]];
+      [self setColor:color ? color : (useDefaults ? defaultColor : [NSColor blackColor])];
 
-  NSColor* defaultColor = [preferencesController latexisationFontColor];
-  NSMutableString* colorAsString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [colorAsString rangeOfString:@"EEcolend"];
-    range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
-    [colorAsString deleteCharactersInRange:range];
-  }
-  NSColor* color = colorAsString ? [NSColor colorWithRgbaString:colorAsString] : nil;
-  if (!color)
-    color = (useDefaults ? defaultColor : [NSColor blackColor]);
-  [self setColor:color];
+      NSColor* defaultBKColor = [NSColor whiteColor];
+      NSColor* backgroundColor = [NSColor colorWithData:[embeddedInfos objectForKey:@"backgroundColor"]];
+      [self setBackgroundColor:backgroundColor ? backgroundColor : (useDefaults ? defaultBKColor : [NSColor whiteColor])];
+ 
+      NSString* titleAsString = [embeddedInfos objectForKey:@"title"];
+      [self setTitle:!titleAsString ? @"" : titleAsString];
 
-  NSColor* defaultBkColor = [NSColor whiteColor];
-  NSMutableString* bkColorAsString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
-    range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
-    [bkColorAsString deleteCharactersInRange:range];
-  }
-  NSColor* backgroundColor = bkColorAsString ? [NSColor colorWithRgbaString:bkColorAsString] : nil;
-  if (!backgroundColor)
-    backgroundColor = (useDefaults ? defaultBkColor : [NSColor whiteColor]);
-  [self setBackgroundColor:backgroundColor];
-    
-  NSMutableString* titleAsString = nil;
-  testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    isLaTeXiTPDF |= YES;
-    titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
-    NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
-    range.length = (range.location != NSNotFound) ? [titleAsString length]-range.location : 0;
-    [titleAsString deleteCharactersInRange:range];
-  }
-  [self setTitle:titleAsString];
+      [self setDate:[NSDate date]];
+      
+      decodedFromAnnotation = YES;
+    }//end if (embeddedInfos)
+    [pdfDocument release];
+  }//end if (shoudDecodeFromAnnotations)
   
-  [self setDate:[NSDate date]];
+  if (decodedFromAnnotation)
+    isLaTeXiTPDF = YES;
+  else//if (!decodedFromAnnotation)
+  {
+    NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding] autorelease];
+    NSArray*  testArray    = nil;
+    
+    NSMutableString* preambleString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [preambleString rangeOfString:@"ESannopend"];
+      range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
+      [preambleString deleteCharactersInRange:range];
+      [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
+    }
+    NSAttributedString* preamble =
+      preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
+                     : (useDefaults ? defaultPreambleAttributedString
+                                    : [[[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes] autorelease]);
+
+    //test escaped preample from version 1.13.0
+    testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [preambleString rangeOfString:@"ESannoepend"];
+      range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
+      [preambleString deleteCharactersInRange:range];
+      NSString* unescapedPreamble =
+        (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                           (CFStringRef)preambleString, CFSTR(""),
+                                                                           kCFStringEncodingUTF8);
+      preambleString = [NSString stringWithString:(NSString*)unescapedPreamble];
+      CFRelease(unescapedPreamble);
+    }
+    preamble = preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
+                              : preamble;
+    [self setPreamble:preamble];
+
+    NSMutableString* modeAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
+      range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
+      [modeAsString deleteCharactersInRange:range];
+    }
+    latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
+                        : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
+    mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
+    #ifdef MIGRATE_ALIGN
+    [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
+    #else
+    [self setMode:mode];
+    #endif
+
+    NSMutableString* sourceString = [NSMutableString string];
+    testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      [sourceString appendString:[testArray objectAtIndex:1]];
+      NSRange range = [sourceString rangeOfString:@"ESannotend"];
+      range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
+      [sourceString deleteCharactersInRange:range];
+      [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
+    }
+    NSAttributedString* sourceText = sourceString ?
+      [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease] : @"";
+
+    //test escaped source from version 1.13.0
+    testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      [sourceString setString:@""];
+      [sourceString appendString:[testArray objectAtIndex:1]];
+      NSRange range = !sourceString ? NSMakeRange(0, 0) : [sourceString rangeOfString:@"ESannoesend"];
+      range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
+      [sourceString deleteCharactersInRange:range];
+      NSString* unescapedSource =
+        (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                           (CFStringRef)sourceString, CFSTR(""),
+                                                                           kCFStringEncodingUTF8);
+      [sourceString setString:unescapedSource];
+      CFRelease(unescapedSource);
+    }
+    sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
+                              : sourceText;
+    #ifdef MIGRATE_ALIGN
+    if (mode == LATEX_MODE_EQNARRAY)
+    {
+      NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
+      [sourceText2 appendAttributedString:
+        [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
+      [sourceText2 appendAttributedString:sourceText];
+      [sourceText2 appendAttributedString:
+        [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+      sourceText = sourceText2;
+    }
+    #endif
+    [self setSourceText:sourceText];
+
+    NSMutableString* pointSizeAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
+      range.length  = (range.location != NSNotFound) ? [pointSizeAsString length]-range.location : 0;
+      [pointSizeAsString deleteCharactersInRange:range];
+    }
+    [self setPointSize:pointSizeAsString ? [pointSizeAsString doubleValue] : (useDefaults ? [preferencesController latexisationFontSize] : 0)];
+
+    NSColor* defaultColor = [preferencesController latexisationFontColor];
+    NSMutableString* colorAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [colorAsString rangeOfString:@"EEcolend"];
+      range.length = (range.location != NSNotFound) ? [colorAsString length]-range.location : 0;
+      [colorAsString deleteCharactersInRange:range];
+    }
+    NSColor* color = colorAsString ? [NSColor colorWithRgbaString:colorAsString] : nil;
+    if (!color)
+      color = (useDefaults ? defaultColor : [NSColor blackColor]);
+    [self setColor:color];
+
+    NSColor* defaultBkColor = [NSColor whiteColor];
+    NSMutableString* bkColorAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
+      range.length = (range.location != NSNotFound) ? [bkColorAsString length]-range.location : 0;
+      [bkColorAsString deleteCharactersInRange:range];
+    }
+    NSColor* backgroundColor = bkColorAsString ? [NSColor colorWithRgbaString:bkColorAsString] : nil;
+    if (!backgroundColor)
+      backgroundColor = (useDefaults ? defaultBkColor : [NSColor whiteColor]);
+    [self setBackgroundColor:backgroundColor];
+      
+    NSMutableString* titleAsString = nil;
+    testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      isLaTeXiTPDF |= YES;
+      titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+      NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
+      range.length = (range.location != NSNotFound) ? [titleAsString length]-range.location : 0;
+      [titleAsString deleteCharactersInRange:range];
+    }
+    [self setTitle:titleAsString];
+    
+    [self setDate:[NSDate date]];
+  }//end if (!decodedFromAnnotation)
   
   if (!isLaTeXiTPDF)
   {
     [self release];
     self = nil;
-  }//end if (!isLaTeXiTPDF)
+  }//end if (!isLaTeXiTPDF)*/
   
   return self;
 }
 //end initWithPDFData:useDefaults:
+
+-(id) initWithData:(NSData*)someData useDefaults:(BOOL)useDefaults
+{
+  CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)someData, (CFDictionaryRef)
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+  CFStringRef sourceUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
+  NSData* pdfData = nil;
+  if (sourceUTI)
+  {
+    if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"com.adobe.pdf"))
+      pdfData = someData;
+    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
+    {
+      CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
+      id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyTIFFDictionary];
+      id metaString = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyTIFFImageDescription];
+      pdfData = ![metaString isKindOfClass:[NSString class]] ? nil : [NSData dataWithBase64:metaString];
+      if (properties) CFRelease(properties);
+    }//end else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
+    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
+    {
+      CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
+      id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+      id metaString = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifMakerNote];
+      pdfData = ![metaString isKindOfClass:[NSString class]] ? nil : [NSData dataWithBase64:metaString];
+      if (properties) CFRelease(properties);
+    }//end else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
+    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
+    {
+      CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
+      id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+      id metaString = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifMakerNote];
+      pdfData = ![metaString isKindOfClass:[NSString class]] ? nil : [NSData dataWithBase64:metaString];
+      if (properties) CFRelease(properties);
+    }//end else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
+  }//end if (sourceUTI)
+  if (imageSource) CFRelease(imageSource);
+  if (!((self = [self initWithPDFData:pdfData useDefaults:useDefaults])))
+    return nil;
+  return self;
+}
+//end initWithData:useDefaults:
 
 -(id) copyWithZone:(NSZone*)zone
 {
@@ -354,9 +857,22 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end initWithCoder:
 
+-(void) dealloc
+{
+  [self dispose];
+  [super dealloc];
+}
+//end dealloc
+
+-(void) dispose
+{
+  [[self class] cancelPreviousPerformRequestsWithTarget:self];
+}
+//end dispose
+
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.0.1"              forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.1.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -373,9 +889,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) awakeFromFetch
 {
   [super awakeFromFetch];
+  [self performSelector:@selector(awakeFromFetch2:) withObject:nil afterDelay:0.];
+}
+
+-(void) awakeFromFetch2:(id)object//delayed to avoid NSManagedObject context being change-disabled
+{
   #ifdef MIGRATE_ALIGN
   if ([self mode] == LATEX_MODE_EQNARRAY)
   {
+    [[self managedObjectContext] disableUndoRegistration];
     [self setMode:LATEX_MODE_TEXT];
     NSAttributedString* oldSourceText = [self sourceText];
     NSDictionary* attributes = [oldSourceText attributesAtIndex:0 effectiveRange:0];
@@ -387,10 +909,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
        [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:attributes] autorelease]];
     [self setSourceText:newSourceText];
     [newSourceText release];
+    [[self managedObjectContext] enableUndoRegistration];
   }//end if ([self mode] == LATEX_MODE_EQNARRAY)
   #endif
 }
-//end awakeFromFetch
+//end awakeFromFetch2
 
 -(void) didTurnIntoFault
 {
@@ -503,6 +1026,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"sourceTextAsData"];
   [self setPrimitiveValue:archivedData forKey:@"sourceTextAsData"];
   [self didChangeValueForKey:@"sourceTextAsData"];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setSourceText:
 
@@ -511,7 +1035,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSColor* result = nil;
   [self willAccessValueForKey:@"color"];
   result = [self primitiveValueForKey:@"color"];
-  DebugLog(0, @"result = %@", result);
   [self didAccessValueForKey:@"color"];
   if (!result)
   {
@@ -534,6 +1057,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"colorAsData"];
   [self setPrimitiveValue:archivedData forKey:@"colorAsData"];
   [self didChangeValueForKey:@"colorAsData"];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setColor:
 
@@ -552,6 +1076,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"baseline"];
   [self setPrimitiveValue:[NSNumber numberWithDouble:value] forKey:@"baseline"];
   [self didChangeValueForKey:@"baseline"];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setBaseline:
 
@@ -570,6 +1095,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"pointSize"];
   [self setPrimitiveValue:[NSNumber numberWithDouble:value] forKey:@"pointSize"];
   [self didChangeValueForKey:@"pointSize"];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setPointSize:
 
@@ -606,6 +1132,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"modeAsInteger"];
   [self setPrimitiveValue:[NSNumber numberWithInt:(int)value] forKey:@"modeAsInteger"];
   [self didChangeValueForKey:@"modeAsInteger"];
+  [self reannotatePDFDataUsingPDFKeywords:YES];
 }
 //end setMode:
 
@@ -671,6 +1198,26 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   @synchronized(self)
   {
     result = self->pdfCachedImage;
+    if (result)
+    {
+      BOOL hasPdfOrBitmapImageRep = NO;
+      NSArray* representations = [result representations];
+      int i = 0;
+      int count = [representations count];
+      for(i = 0 ; !hasPdfOrBitmapImageRep && (i<count) ; ++i)
+      {
+        id representation = [representations objectAtIndex:i];
+        hasPdfOrBitmapImageRep |=
+          [representation isKindOfClass:[NSPDFImageRep class]] |
+          [representation isKindOfClass:[NSBitmapImageRep class]];
+      }
+      if (!hasPdfOrBitmapImageRep)
+      {
+        [self->pdfCachedImage release];
+        result = nil;
+      }
+    }
+    
     if (!result)
     {
       NSData* pdfData = [self pdfData];
@@ -778,6 +1325,68 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end encapsulatedSource
 
+/*
++(double) baselineFromData:(NSData*)someData
+{
+  double result = 0;
+
+  BOOL decodedFromAnnotation = NO;
+  BOOL shoudDecodeFromAnnotations = YES;
+  if (shoudDecodeFromAnnotations)
+  {
+    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:someData];
+    PDFPage*     pdfPage     = [pdfDocument pageAtIndex:0];
+    NSArray* annotations     = [pdfPage annotations];
+    NSDictionary* embeddedInfos = nil;
+    NSUInteger i = 0;
+    for(i = 0 ; !embeddedInfos && (i < [annotations count]) ; ++i)
+    {
+      id annotation = [annotations objectAtIndex:i];
+      if ([annotation isKindOfClass:[PDFAnnotationText class]])
+      {
+        PDFAnnotationText* annotationTextCandidate = (PDFAnnotationText*)annotation;
+        if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+        {
+          NSString* contents = [annotationTextCandidate contents];
+          NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
+          @try{
+            embeddedInfos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+          }
+          @catch(NSException* e){
+            DebugLog(0, @"exception : %@", e);
+          }
+        }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+      }//end if ([annotation isKindOfClass:PDFAnnotationText])
+    }//end for each annotation
+    if (embeddedInfos)
+    {
+      NSNumber* baselineAsNumber = [embeddedInfos objectForKey:@"baseline"];
+      result = [baselineAsNumber doubleValue];
+      decodedFromAnnotation = YES;
+    }//end if (embeddedInfos)
+    [pdfDocument release];
+  }//end if (shoudDecodeFromAnnotations)
+  
+  if (!decodedFromAnnotation)
+  {
+    NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
+    NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSASCIIStringEncoding] autorelease];
+    NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+    if (testArray && ([testArray count] >= 2))
+    {
+      [equationBaselineAsString setString:[testArray objectAtIndex:1]];
+      NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
+      range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
+      [equationBaselineAsString deleteCharactersInRange:range];
+      result = [equationBaselineAsString doubleValue];
+    }
+  }//end if (!decodedFromAnnotation)
+  
+  return result;
+}
+//end baselineFromData
+*/
+
 -(NSString*) titleAuto
 {
   NSString* result = [[[self sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -791,7 +1400,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 //its use if VERY rare, so that it is not automatic for the sake of efficiency
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
-  annotateDataDirtyState |= YES;
+  self->annotateDataDirtyState |= YES;
   if (![self isUpdating])
   {
     NSData* newData = [self annotatedPDFDataUsingPDFKeywords:usingPDFKeywords];
@@ -802,16 +1411,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
-  NSData* newData = [self pdfData];
+  NSData* result = [self pdfData];
 
+   /*
   //first, we retreive the baseline if possible
   double baseline = 0;
 
-  NSData* pdfData = [self pdfData];
+  NSData* pdfData = result;
   NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
   NSArray* testArray = nil;
   NSMutableString* baselineAsString = @"0";
-  testArray = [dataAsString componentsSeparatedByString:@"/Type (EEbas"];
+  testArray = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
   if (testArray && ([testArray count] >= 2))
   {
     [baselineAsString setString:[testArray objectAtIndex:1]];
@@ -825,7 +1435,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
   //then, we rewrite the pdfData
   #warning 64bits problem
-  if (usingPDFKeywords && (sizeof(NSInteger) == 4))//only in 32 bits mode. It chrashed in 64bits. Why ??
+  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  if (usingPDFKeywords && !shouldDenyDueTo64Bitsproblem);
   {
     PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
     NSDictionary* attributes =
@@ -833,18 +1444,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute,
          nil];
     [pdfDocument setDocumentAttributes:attributes];
-    newData = [pdfDocument dataRepresentation];
+    result = [pdfDocument dataRepresentation];
     [pdfDocument release];
   }
+  */
 
   //annotate in LEE format
-  NSAttributedString* preamble   = [self preamble];
-  NSAttributedString* sourceText = [self sourceText];
-  newData = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:newData
-              preamble:(preamble ? [preamble string] : @"") source:(sourceText ? [sourceText string] : @"")
-                 color:[self color] mode:[self mode] magnification:[self pointSize] baseline:baseline
+  result = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:result
+              preamble:[[self preamble] string] source:[[self sourceText] string]
+                 color:[self color] mode:[self mode] magnification:[self pointSize] baseline:[self baseline]
        backgroundColor:[self backgroundColor] title:[self title]];
-  return newData;
+  return result;
 }
 //end annotatedPDFDataUsingPDFKeywords:usingPDFKeywords
 
@@ -869,6 +1479,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSData* pdfData = [self pdfData];
   [pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:self];
   [pboard setData:pdfData forType:NSFileContentsPboardType];
+
+  //no NSStringPboardType because of stupid Pages
+  //[pboard addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+  //[pboard setString:[[self sourceText] string] forType:NSStringPboardType];
   
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
@@ -919,7 +1533,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.0.1", @"version",
+       @"2.1.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

@@ -115,5 +115,27 @@
               sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
             />
         </item>
+        <item>
+              <title>Version 2.1.0</title>
+              <description>
+              <ul>
+                <li>temporalmente descartando el soporte para 64 bits por un problema en el AppleTypeServer ya mencionado en la versión 2.0.1;</li>
+                <li>migrando del entorno Eqnarray a Align, que tiene la misma sintaxis pero proporciona mejores resultados;</li>
+                <li>corregido un problema al exportar si al escala no era 100%;</li>
+                <li>mejor retrocompatibilidad con Linkback;</li>
+                <li>mejor traducción a Japonés, gracias a Ryohei Seto;</li>
+                <li>pequeñas mejoras en el interfaz.</li>
+              </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.1.0</sparkle:releaseNotesLink>
+              <pubDate>Tue, 09 Mar 2010 19:46:50 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_1_0.dmg"
+                sparkle:version="2.1.0" sparkle:shortVersionString="2.1.0"
+                type="application/octet-stream"
+                length="6033306"
+        sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1KU42w=="
+              />
+          </item>
     </channel> 
 </rss>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>beginners</key>
-	<string>初心者</string>
+	<string>基本</string>
 	<key>fraction</key>
 	<string>fraction</string>
 	<key>index</key>

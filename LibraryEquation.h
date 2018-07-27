@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/09.
-//  Copyright 2009 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -15,12 +15,14 @@
 
 @interface LibraryEquation : LibraryItem <NSCopying, NSCoding>
 {
+  BOOL kvoEnabled;
 }
 
 +(NSEntityDescription*) entity;
 +(NSEntityDescription*) wrapperEntity;
 
 -(id) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+-(void) dispose;
 
 -(void) setTitle:(NSString*)value;//redefined to set title of equation with the same value
 

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -235,6 +235,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     selector:@selector(popUpButtonWillPopUp:) name:NSPopUpButtonCellWillPopUpNotification object:[self->lowerBoxChangePreambleButton cell]];
   [[NSNotificationCenter defaultCenter] addObserver:self
     selector:@selector(scrollViewDidScroll:) name:NotifyingScrollViewDidScrollNotification object:[[self->lowerBoxPreambleTextView superview] superview]];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(scrollViewDidScroll:) name:NotifyingScrollViewDidScrollNotification object:[[self->lowerBoxSourceTextView superview] superview]];
   [self->lowerBoxChangeBodyTemplateButton setImage:image];
   [self->lowerBoxChangeBodyTemplateButton setAlternateImage:image];
   [[NSNotificationCenter defaultCenter] addObserver:self
@@ -297,6 +299,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   {
     [self applyPdfData:self->initialPdfData];
     self->initialPdfData = nil;
+  }
+  else if (self->initialData)
+  {
+    [self applyData:self->initialData];
+    self->initialData = nil;
   }
 
   [self updateGUIfromSystemAvailabilities]; //updates interface to allow latexisation or not, according to current configuration
@@ -572,8 +579,17 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(void) scrollViewDidScroll:(NSNotification*)notification
 {
-  [[self->lowerBoxPreambleTextView lineCountRulerView] setNeedsDisplay:YES];
-  [self->lowerBoxChangePreambleButton setNeedsDisplay:YES];
+  id sender = [notification object];
+  if (sender == [[self->lowerBoxPreambleTextView superview] superview])
+  {
+    [[self->lowerBoxPreambleTextView lineCountRulerView] setNeedsDisplay:YES];
+    [self->lowerBoxChangePreambleButton setNeedsDisplay:YES];
+  }
+  else if (sender == [[self->lowerBoxSourceTextView superview] superview])
+  {
+    [[self->lowerBoxSourceTextView lineCountRulerView] setNeedsDisplay:YES];
+    [self->lowerBoxChangeBodyTemplateButton setNeedsDisplay:YES];
+  }
 }
 //end scrollViewDidScroll:
 
@@ -652,6 +668,12 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     }
     else if ([type isEqualToString:@"pdf"])
       self->initialPdfData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
+    else if ([type isEqualToString:@"tiff"] || [type isEqualToString:@"tif"])
+      self->initialData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
+    else if ([type isEqualToString:@"png"])
+      self->initialData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
+    else if ([type isEqualToString:@"jpeg"] || [type isEqualToString:@"jpg"])
+      self->initialData = [NSData dataWithContentsOfFile:file options:NSUncachedRead error:nil];
     else //by default, we suppose that it is a plain text file
     {
       NSStringEncoding encoding = NSMacOSRomanStringEncoding;
@@ -801,6 +823,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     if ([[NSUserDefaults standardUserDefaults] boolForKey:ShowWhiteColorWarningKey] &&
         [[self->lowerBoxControlsBoxFontColorWell color] isRGBEqualTo:[NSColor whiteColor]])
     {
+      [self->lowerBoxControlsBoxFontColorWell deactivate];
       [[[AppController appController] whiteColorWarningWindow] center];
       int result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
       if (result == NSCancelButton)
@@ -810,8 +833,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
   
   if (mustProcess)
   {
+    PreferencesController* preferencesController = [PreferencesController sharedController];
     [self->upperBoxImageView setPDFData:nil cachedImage:nil];       //clears current image
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey])
+    [self->upperBoxImageView setBackgroundColor:[preferencesController documentImageViewBackgroundColor]
+                              updateHistoryItem:NO];
+    if ([preferencesController documentUseAutomaticHighContrastedPreviewBackground])
       [self->upperBoxImageView setBackgroundColor:nil updateHistoryItem:NO];
     [self->upperBoxImageView setNeedsDisplay:YES];
     [self->upperBoxImageView displayIfNeeded];      //refresh it
@@ -833,7 +859,6 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-%u", uniqueId];
     NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
     
-    PreferencesController* preferencesController = [PreferencesController sharedController];
     CGFloat leftMargin   = [[AppController appController] marginsCurrentLeftMargin];
     CGFloat rightMargin  = [[AppController appController] marginsCurrentRightMargin];
     CGFloat bottomMargin = [[AppController appController] marginsCurrentBottomMargin];
@@ -864,16 +889,37 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     else
     {
       //if it is ok, updates the image view
-      [self->upperBoxImageView setPDFData:pdfData cachedImage:[self _checkEasterEgg]];
+      [self->upperBoxImageView setPDFData:pdfData cachedImage:nil];
 
       //and insert a new element into the history
-      LatexitEquation* latexitEquation = [self latexitEquationWithCurrentState];
+      LatexitEquation* latexitEquation = [self latexitEquationWithCurrentStateTransient:NO];
+      
+      if ([preferencesController documentUseAutomaticHighContrastedPreviewBackground])
+      {
+        NSColor* latexitEquationBackgroundColor = [latexitEquation backgroundColor];
+        if (!latexitEquationBackgroundColor)
+          latexitEquationBackgroundColor = [NSColor whiteColor];
+        CGFloat grayLevelOfBackgroundColorToApply = [latexitEquationBackgroundColor grayLevel];
+        CGFloat grayLevelOfTextColor              = [[latexitEquation color] grayLevel];
+        if ((grayLevelOfBackgroundColorToApply < .5) && (grayLevelOfTextColor < .5))
+          latexitEquationBackgroundColor = [NSColor whiteColor];
+        else if ((grayLevelOfBackgroundColorToApply > .5) && (grayLevelOfTextColor > .5))
+          latexitEquationBackgroundColor = [NSColor blackColor];
+        [latexitEquation setBackgroundColor:latexitEquationBackgroundColor];
+      }
+      
       HistoryItem* newHistoryItem = [[AppController appController] addEquationToHistory:latexitEquation];
       [self->upperBoxImageView setBackgroundColor:[[newHistoryItem equation] backgroundColor] updateHistoryItem:NO];
       [[[AppController appController] historyWindowController] deselectAll:0];
+      [[self undoManager] disableUndoRegistration];
+      [self applyLatexitEquation:latexitEquation];
+      [[self undoManager] enableUndoRegistration];
       
+      //reupdate for easter egg
+      [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:[self _checkEasterEgg]];
+
       //updates the pasteboard content for a live Linkback link, and triggers a sendEdit
-      [self->upperBoxImageView updateLinkBackLink:linkBackLink];
+      [self->upperBoxImageView updateLinkBackLink:self->linkBackLink];
     }
     
     //hides progress indicator
@@ -994,25 +1040,41 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end setPreambleVisible:
 
--(LatexitEquation*) latexitEquationWithCurrentState
+-(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient
 {
   LatexitEquation* result = nil;
   /*int tag = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
   latex_mode_t mode = (latex_mode_t) tag;*/
-  BOOL automaticHighContrastedPreviewBackground =
-    [[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  BOOL automaticHighContrastedPreviewBackground = [preferencesController documentUseAutomaticHighContrastedPreviewBackground];
   NSColor* backgroundColor = automaticHighContrastedPreviewBackground ? nil : [self->upperBoxImageView backgroundColor];
-  result = [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData] useDefaults:YES] autorelease];
+  result = !transient ?
+    [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData] useDefaults:YES] autorelease] :
+    [[[LatexitEquation alloc] initWithPDFData:[self->upperBoxImageView pdfData]
+                                     preamble:[[[self->lowerBoxPreambleTextView textStorage] mutableCopy] autorelease]
+                                   sourceText:[[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease]
+                                        color:[self->lowerBoxControlsBoxFontColorWell color]
+                                    pointSize:[self->lowerBoxControlsBoxFontSizeTextField doubleValue] date:[NSDate date]
+                                         mode:[self latexMode] backgroundColor:backgroundColor] autorelease];
   if (backgroundColor)
     [result setBackgroundColor:backgroundColor];
-/*                  preamble:[[[self->lowerBoxPreambleTextView textStorage] mutableCopy] autorelease]
-                sourceText:[[[self->lowerBoxSourceTextView textStorage] mutableCopy] autorelease]
-                     color:[self->lowerBoxControlsBoxFontColorWell color]
-                 pointSize:[self->lowerBoxControlsBoxFontSizeTextField doubleValue] date:[NSDate date]
-                mode:mode backgroundColor:backgroundColor] autorelease];*/
   return result;
 }
-//end latexitEquationWithCurrentState
+//end latexitEquationWithCurrentStateTransient:
+
+-(BOOL) applyData:(NSData*)data
+{
+  BOOL ok = NO;
+  LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithData:data useDefaults:YES];
+  if (latexitEquation)
+  {
+    ok = YES;
+    [self applyLatexitEquation:latexitEquation];
+    [latexitEquation release];
+  }//end if (latexitEquation)
+  return ok;
+}
+//end applyData:
 
 -(BOOL) applyPdfData:(NSData*)pdfData
 {
@@ -1039,6 +1101,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 
 -(void) applyString:(NSString*)string
 {
+  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]];
   NSString* preamble = nil;
   NSString* body     = nil;
   [self _decomposeString:string preamble:&preamble body:&body];
@@ -1071,10 +1134,10 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 }
 //end applyLibraryEquation:
 
-//sets the state of the document according to the given history item
+//sets the state of the document
 -(void) applyLatexitEquation:(LatexitEquation*)latexitEquation
 {
-  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentState]];
+  [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]];
   [[[self undoManager] prepareWithInvocationTarget:self] setLastAppliedLibraryEquation:[self lastAppliedLibraryEquation]];
   [self setLastAppliedLibraryEquation:nil];
   if (latexitEquation)
@@ -1098,17 +1161,6 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     NSColor* colorFromUserDefaults = [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:DefaultImageViewBackgroundKey]];
     if (!latexitEquationBackgroundColor)
       latexitEquationBackgroundColor = colorFromUserDefaults;
-    //at this step, the background color to be used is either the history item (if any) or the default one
-    //but if the background must be contrasted, we must take it in account
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:DefaultAutomaticHighContrastedPreviewBackgroundKey])
-    {
-      CGFloat grayLevelOfBackgroundColorToApply = [latexitEquationBackgroundColor grayLevel];
-      CGFloat grayLevelOfTextColor              = [[latexitEquation color] grayLevel];
-      if ((grayLevelOfBackgroundColorToApply < .5) && (grayLevelOfTextColor < .5))
-        latexitEquationBackgroundColor = [NSColor whiteColor];
-      else if ((grayLevelOfBackgroundColorToApply > .5) && (grayLevelOfTextColor > .5))
-        latexitEquationBackgroundColor = [NSColor blackColor];
-    }
     [self->upperBoxImageView setBackgroundColor:latexitEquationBackgroundColor updateHistoryItem:NO];
   }
   else
@@ -1341,26 +1393,30 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 //returns the linkBack link
 -(LinkBack*) linkBackLink
 {
-  return linkBackLink;
+  return self->linkBackLink;
 }
 //end linkBackLink
 
 //sets up a new linkBack link
 -(void) setLinkBackLink:(LinkBack*)newLinkBackLink
 {
-  [self closeLinkBackLink:linkBackLink];
-  linkBackLink = newLinkBackLink;
+  if (newLinkBackLink != self->linkBackLink)
+  {
+    [self closeLinkBackLink:self->linkBackLink];
+    self->linkBackLink = [newLinkBackLink retain];
+  }//end if (newLinkBackLink != self->linkBackLink)
 }
 //end setLinkBackLink:
 
-//if current linkBack link is aLink, then close it. Also close if aLink = nil
+//if current linkBack link is aLink, then close it. Also close if aLink == nil
 -(void) closeLinkBackLink:(LinkBack*)aLink
 {
-  if (!aLink || (linkBackLink == aLink))
+  if (!aLink || (self->linkBackLink == aLink))
   {
-    aLink = linkBackLink;
-    linkBackLink = nil;
-    [aLink closeLink];
+    aLink = self->linkBackLink;
+    self->linkBackLink = nil;
+    [[AppController appController] closeLinkBackLink:aLink];
+    [aLink release];
     [self setDocumentTitle:nil];
   }
 }
@@ -1370,9 +1426,11 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
 {
   NSImage* easterEggImage = nil;
   
+  BOOL forceEasterEggForDebugging = NO;
+  
   NSCalendarDate* now = [NSCalendarDate date];
   NSString* easterEggString = nil;
-  if (([now monthOfYear] == 4) && ([now dayOfMonth] == 1))
+  if (forceEasterEggForDebugging || (([now monthOfYear] == 4) && ([now dayOfMonth] == 1)))
     easterEggString = @"aprilfish";
     
   if (easterEggString)
@@ -1386,7 +1444,8 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
     if (!easterEggLastDates)
       easterEggLastDates = [NSMutableDictionary dictionary];
     NSCalendarDate* easterEggLastDate = [easterEggLastDates objectForKey:easterEggString];
-    if ((!easterEggLastDate) || [now isLessThan:easterEggLastDate] || ([now yearOfCommonEra] != [easterEggLastDate yearOfCommonEra]))
+    if (forceEasterEggForDebugging || (!easterEggLastDate) || [now isLessThan:easterEggLastDate] ||
+        ([now yearOfCommonEra] != [easterEggLastDate yearOfCommonEra]))
     {
       NSString* resource = [resources objectForKey:easterEggString];
       NSString* filePath = resource ? [[NSBundle mainBundle] pathForResource:[resource stringByDeletingPathExtension]
@@ -1396,7 +1455,7 @@ double yaxb(double x, double x0, double y0, double x1, double y1)
       [easterEggLastDates setObject:[NSCalendarDate date] forKey:easterEggString];
     }
     [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDates] forKey:LastEasterEggsDatesKey];
-  }
+  }//end if (easterEggString)
   return easterEggImage;
 }
 //end _checkEasterEgg:

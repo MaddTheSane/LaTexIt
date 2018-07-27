@@ -96,7 +96,7 @@
               <title>Version 2.0.1</title>
               <description>
               <ul>
-                <li>contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-même)</li>
+                <li>contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-même);</li>
                 <li>correction de problèmes de migration de la bibliothèque sous certains conditions;</li>
                 <li>correction du support de Tiger;</li>
                 <li>correction du support de LinkBack;</li>
@@ -113,6 +113,28 @@
                 type="application/octet-stream"
                 length="6179941"
                 sparkle:dsaSignature="MC0CFB/5zwoi4ZSUrCnNaVN81ogCJWzWAhUAjEAo+Pes8NkP+vMh1IAs22idezQ="
+              />
+          </item>
+        <item>
+              <title>Version 2.1.0</title>
+              <description>
+              <ul>
+                <li>abandon provisoire du 64 bits à cause de bugs du AppleTypeServer déjà cités dans la version 2.0.1;</li>
+                <li>migration du mode EqnArray à Align, qui s'utilise de la même façon mais donne de meilleurs résultats;</li>
+                <li>correction d'un bug d'export si l'échelle n'était pas 100%;</li>
+                <li>meilleur rétro-compatibilité avec LinkBack;</li>
+                <li>amélioration de la traduction en Japonais, grâce à Ryohei Seto;</li>
+                <li>raffinements d'interface.</li>
+              </ul>
+              </description>
+              <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/programmation/fichiers/latexit-changelog-fr.html#version-2.1.0</sparkle:releaseNotesLink>
+              <pubDate>Tue, 09 Mar 2010 19:46:50 +0100</pubDate>
+              <enclosure
+                url="http://pierre.chachatelier.fr/programmation/fichiers/LaTeXiT-2_1_0.dmg"
+                sparkle:version="2.1.0" sparkle:shortVersionString="2.1.0"
+                type="application/octet-stream"
+                length="6033306"
+        sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1KU42w=="
               />
           </item>
       </channel> 

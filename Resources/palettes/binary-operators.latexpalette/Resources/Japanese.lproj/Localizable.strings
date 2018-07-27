@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>binary-operators</key>
-	<string>バイナリー演算子</string>
+	<string>二項演算子</string>
 </dict>
 </plist>

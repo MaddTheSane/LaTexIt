@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -301,7 +301,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.0.1", @"version", nil] forPersistentStore:persistentStore];
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.1.0", @"version", nil] forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
@@ -310,5 +310,160 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   return [result autorelease];
 }
 //end managedObjectContextAtPath:
+
+-(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(history_export_format_t)format
+{
+  BOOL ok = NO;
+  NSArray* itemsToSave = nil;
+  if (onlySelection)
+    itemsToSave = selectedItems;
+  else
+  {
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[HistoryItem entity]];
+    itemsToSave = [[self managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+    [fetchRequest release];
+  }
+  if (!itemsToSave)
+    itemsToSave = [NSArray array];
+
+  switch(format)
+  {
+    case HISTORY_EXPORT_FORMAT_INTERNAL:
+      {
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        BOOL isDirectory = NO;
+        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager removeFileAtPath:path handler:nil]));
+        if (ok)
+        {
+          NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path];
+          NSData* data = [NSKeyedArchiver archivedDataWithRootObject:itemsToSave];
+          [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
+          NSArray* savedItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+          [LatexitEquation popManagedObjectContext];
+          NSError* error = nil;
+          [saveManagedObjectContext save:&error];
+          if (error)
+            {DebugLog(0, @"error : %@", error);}
+          [savedItems makeObjectsPerformSelector:@selector(dispose)];
+        }//end if (ok)
+      }//end case HISTORY_EXPORT_FORMAT_INTERNAL
+      break;
+    case HISTORY_EXPORT_FORMAT_PLIST:
+      {
+        NSMutableArray* descriptions = [NSMutableArray arrayWithCapacity:[itemsToSave count]];
+        NSEnumerator* enumerator = [itemsToSave objectEnumerator];
+        LatexitEquation* equation = nil;
+        while((equation = [enumerator nextObject]))
+          [descriptions addObject:[equation plistDescription]];
+        NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
+          [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
+          @"2.1.0", @"version",
+          nil];
+        NSString* errorDescription = nil;
+        NSData* dataToWrite = !library ? nil :
+          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
+        if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
+        ok = [dataToWrite writeToFile:path atomically:YES];
+        if (ok)
+        {
+          [[NSFileManager defaultManager]
+             changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                                                              atPath:path];
+          [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
+        }//end if file has been created
+      }//end case HISTORY_EXPORT_FORMAT_PLIST
+      break;
+  }
+  return ok;
+}
+//end saveAs:onlySelection:selection:format:
+
+-(BOOL) loadFrom:(NSString*)path option:(history_import_option_t)option
+{
+  BOOL ok = NO;
+
+  NSUndoManager* undoManager = [self->managedObjectContext undoManager];
+  [undoManager removeAllActions];
+  [undoManager disableUndoRegistration];
+
+  NSMutableArray* itemsToRemove = [NSMutableArray array];
+  if (option == HISTORY_IMPORT_OVERWRITE)
+  {
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[HistoryItem entity]];
+    NSError* error = nil;
+    [itemsToRemove setArray:[self->managedObjectContext executeFetchRequest:fetchRequest error:&error]];
+    if (error) {DebugLog(0, @"error : %@", error);}
+    [fetchRequest release];
+  }//end if (option == HISTORY_IMPORT_OVERWRITE)
+
+  if ([[path pathExtension] isEqualToString:@"latexhist"])
+  {
+    NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path];
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[HistoryItem entity]];
+    NSError* error = nil;
+    NSArray* historyItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+    [fetchRequest release];
+    
+    NSData* historyItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
+    [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
+    [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
+    [LatexitEquation popManagedObjectContext];
+    NSEnumerator* enumerator = [historyItemsToAdd objectEnumerator];
+    HistoryItem* historyItem = nil;
+    while((historyItem = [enumerator nextObject]))
+    {
+      [[historyItem equation] dispose];
+      [historyItem dispose];
+    }
+  }//end if ([[path pathExtension] isEqualToString:@"latexhist"])
+  else if ([[path pathExtension] isEqualToString:@"plist"])
+  {
+    NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
+    NSString* errorDescription = nil;
+    NSPropertyListFormat format = 0;
+    id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format
+      errorDescription:&errorDescription];
+    if (errorDescription)
+    {
+      DebugLog(0, @"error : %@", errorDescription);
+    }
+    else if ([plist isKindOfClass:[NSDictionary class]])
+    {
+      NSString* version = [plist objectForKey:@"version"];
+      BOOL isOldLibrary = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
+      id content = isOldLibrary ? nil : [plist objectForKey:@"history"];
+      content = ![content isKindOfClass:[NSDictionary class]] ? nil : [content objectForKey:@"content"];
+      if (isOldLibrary && !content)
+        content = [plist objectForKey:@"content"];
+      if ([content isKindOfClass:[NSArray class]])
+      {
+        [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
+        NSMutableArray* historyItemsAdded = [NSMutableArray arrayWithCapacity:[content count]];
+        NSEnumerator* enumerator = [content objectEnumerator];
+        id description = nil;
+        while((description = [enumerator nextObject]))
+        {
+          HistoryItem* historyItem = [HistoryItem historyItemWithDescription:description];
+          if (historyItem)
+            [historyItemsAdded addObject:historyItem];
+        }
+        [LatexitEquation popManagedObjectContext];
+        ok = YES;
+      }//end if ([content isKindOfClass:[NSArray class]])
+    }//end if ([plist isKindOfClass:[NSDictionary class]])
+  }//if ([[path pathExtension] isEqualToString:@"plist"])
+
+  [self->managedObjectContext safeDeleteObjects:itemsToRemove];
+  [self->managedObjectContext processPendingChanges];
+
+  [undoManager enableUndoRegistration];
+  return ok;
+}
+//end loadFrom:
+
 
 @end

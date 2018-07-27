@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>fr_FR</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -29,6 +29,11 @@
 			<array>
 				<string>pdf</string>
 				<string>tex</string>
+				<string>tiff</string>
+				<string>tif</string>
+				<string>png</string>
+				<string>jpeg</string>
+				<string>jpg</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>MyDocumentType</string>
@@ -56,6 +61,24 @@
 			<string>MyDocument</string>
 			<key>NSPersistentStoreTypeKey</key>
 			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>latexhist</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>latexit-lib.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>HistoryType</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>InMemory</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
@@ -107,7 +130,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.0.1</string>
+	<string>2.1.0</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://pierre.chachatelier.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -119,10 +142,6 @@
 	<key>NSServices</key>
 	<array>
 		<dict>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -139,6 +158,8 @@
 			<string>serviceLatexisationDisplay</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeRTFD</string>
@@ -168,14 +189,12 @@
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
 		<dict>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -192,6 +211,8 @@
 			<string>serviceLatexisationInline</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeRTFD</string>
@@ -221,14 +242,12 @@
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
 		<dict>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -245,6 +264,8 @@
 			<string>serviceLatexisationText</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeRTFD</string>
@@ -274,14 +295,12 @@
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
 		<dict>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -292,12 +311,14 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Typeset LaTeX Maths eqnarray</string>
+				<string>LaTeXiT/Typeset LaTeX Maths align</string>
 			</dict>
 			<key>NSMessage</key>
-			<string>serviceLatexisationEqnarray</string>
+			<string>serviceLatexisationAlign</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeRTFD</string>
@@ -327,14 +348,12 @@
 				<string>NSStringPboardType</string>
 				<string>public.utf8-plain-text</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
 		<dict>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -351,6 +370,8 @@
 			<string>serviceMultiLatexisation</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeRTFD</string>
@@ -366,14 +387,12 @@
 				<string>NSRTFPboardType</string>
 				<string>public.rtf</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>
 		<dict>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSServiceDescription</key>
-			<string>SERVICE_DESCRIPTION</string>
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
@@ -390,6 +409,8 @@
 			<string>serviceDeLatexisation</string>
 			<key>NSPortName</key>
 			<string>LaTeXiT</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeRTFD</string>
@@ -411,6 +432,8 @@
 				<string>NSPDFPboardType</string>
 				<string>com.adobe.pdf</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>SERVICE_DESCRIPTION</string>
 			<key>NSTimeOut</key>
 			<string>30000</string>
 		</dict>

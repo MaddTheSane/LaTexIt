@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 #import "BodyTemplatesTableView.h"
 
@@ -57,6 +57,12 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
 //end edit:
+
+-(void) deleteBackward:(id)sender
+{
+  [[[PreferencesController sharedController] bodyTemplatesController] remove:sender];
+}
+//end deleteBackward:
 
 #pragma mark dummy datasource (real datasource is a binding, just avoid warnings)
 

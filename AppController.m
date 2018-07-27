@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -152,6 +152,7 @@ static NSMutableDictionary* cachePaths = nil;
     if ((!(self = [super init])))
       return nil;
     appControllerInstance = self;
+    self->linkbackLinks = [[NSMutableSet alloc] init];
     [self _setEnvironment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment]];//performs a setenv()
 
     [self beginCheckUpdates];
@@ -255,6 +256,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) dealloc
 {
+  [self->linkbackLinks release];
   [self->additionalFilesWindowController release];
   [self->compositionConfigurationWindowController release];
   [self->encapsulationsWindowController release];
@@ -400,7 +402,7 @@ static NSMutableDictionary* cachePaths = nil;
       [self->latexPalettesWindowController reloadPalettes];
     ok = YES;
   }
-  else if ([type isEqualTo:@"latexlib"] || [type isEqualTo:@"library"] || [type isEqualTo:@"plist"])
+  else if ([type isEqualTo:@"latexlib"] || [type isEqualTo:@"library"] || [type isEqualTo:@"latexhist"] || [type isEqualTo:@"plist"])
   {
     NSString* title =
       [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @"Do you want to load the library <%@> ?"),
@@ -432,6 +434,14 @@ static NSMutableDictionary* cachePaths = nil;
 //as delegate, no need to register for a notification
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+  NSString* latexitHelperFilePath = [[NSBundle mainBundle] pathForResource:@"LaTeXiT Helper" ofType:@"app"];
+  CFURLRef  latexitHelperURL = CFURLCreateWithFileSystemPath(0, (CFStringRef)latexitHelperFilePath, kCFURLPOSIXPathStyle, FALSE);
+  OSStatus status = LSRegisterURL(latexitHelperURL, true);
+  if (status != noErr)
+    DebugLog(0, @"LSRegisterURL : %d", status);
+  [[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath];//because Keynote won't find it otherwise
+
+  if (latexitHelperURL) CFRelease(latexitHelperURL);
   [LinkBack publishServerWithName:[[NSWorkspace sharedWorkspace] applicationName] delegate:self];
 
   if (self->isGsAvailable && (self->isPdfLaTeXAvailable || self->isLaTeXAvailable || self->isXeLaTeXAvailable) && !self->isColorStyAvailable)
@@ -503,6 +513,17 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
+  [LinkBack retractServerWithName:[[NSWorkspace sharedWorkspace] applicationName]];
+  
+  [[NSWorkspace sharedWorkspace] closeApplicationWithBundleIdentifier:@"fr.club.ktd.LaTeXiT"];//LaTeXiT Helper
+  
+  //close all linkback links
+  NSArray* allLinkBackLinks = [self->linkbackLinks allObjects];
+  NSEnumerator* enumerator = [allLinkBackLinks objectEnumerator];
+  LinkBack* link = nil;
+  while((link = [enumerator nextObject]))
+    [self closeLinkBackLink:link];
+
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   BOOL visible = NO;
 
@@ -587,10 +608,16 @@ static NSMutableDictionary* cachePaths = nil;
     latex_mode_t latexMode = [myDocument latexMode];
     #ifdef MIGRATE_ALIGN
     if ([sender tag] == 1)
+    {
+      [sender setTitle:@"Align"];
       [sender setState:(myDocument && (latexMode == LATEX_MODE_ALIGN)) ? NSOnState : NSOffState];
+    }
     #else
     if ([sender tag] == 1)
+    {
+      [sender setTitle:@"Eqnarray"];
       [sender setState:(myDocument && (latexMode == LATEX_MODE_EQNARRAY)) ? NSOnState : NSOffState];
+    }
     #endif
     else if ([sender tag] == 2)
       [sender setState:(myDocument && (latexMode == LATEX_MODE_DISPLAY)) ? NSOnState : NSOffState];
@@ -639,6 +666,14 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([sender action] == @selector(historyClearHistory:))
   {
     ok = ([[[[self->historyWindowController historyView] historyItemsController] arrangedObjects] count] > 0);
+  }
+  else if ([sender action] == @selector(historyOpen:))
+  {
+    ok = [[self->historyWindowController window] isVisible];
+  }
+  else if ([sender action] == @selector(historySaveAs:))
+  {
+    ok = [[self->historyWindowController window] isVisible];
   }
   else if ([sender action] == @selector(showOrHideLibrary:))
   {
@@ -739,7 +774,7 @@ static NSMutableDictionary* cachePaths = nil;
 {
   NSColor* color = nil;
   NSData* data = nil;
-  NSString* filename = @"clipboard";
+  NSString* filename = NSLocalizedString(@"clipboard", @"clipboard");
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
   {
@@ -795,8 +830,28 @@ static NSMutableDictionary* cachePaths = nil;
     filename = [filename stringByAppendingPathExtension:@"tex"];
     data = [pasteboard dataForType:@"public.utf8-plain-text"];
   }
-  NSString* filepath = [[[NSWorkspace sharedWorkspace] temporaryDirectory] stringByAppendingPathComponent:filename];
-  BOOL ok = data ? [data writeToFile:filepath atomically:YES] : NO;
+  
+  NSString* filepath = nil;
+  if (filename)
+  {
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    NSString* folderPath  = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+    NSString* filePrefix  = [filename stringByDeletingPathExtension];
+    NSString* extension   = [filename pathExtension];
+    NSString* newFileName = filename;
+    NSString* newFilePath = [folderPath stringByAppendingPathComponent:newFileName];
+    unsigned long i = 1;
+    //we try to compute a name that is not already in use
+    while (i && [fileManager fileExistsAtPath:newFilePath])
+    {
+      newFileName = [NSString stringWithFormat:@"%@-%u.%@", filePrefix, i++, extension];
+      newFilePath = [folderPath stringByAppendingPathComponent:newFileName];
+    } 
+    filepath = newFilePath;
+    [fileManager registerTemporaryPath:filepath];
+  }//end if (filename)
+
+  BOOL ok = (data && filepath) ? [data writeToFile:filepath atomically:YES] : NO;
   if (ok)
   {
     NSError* error = nil;
@@ -824,6 +879,7 @@ static NSMutableDictionary* cachePaths = nil;
       NSLocalizedString(@"Text file", @"Text file"),
       NSLocalizedString(@"LaTeXiT library", @"LaTeXiT library"),
       NSLocalizedString(@"LaTeX Equation Editor library", @"LaTeX Equation Editor library"),
+      NSLocalizedString(@"LaTeXiT history", @"LaTeXiT history"),
       NSLocalizedString(@"LaTeXiT LaTeX Palette", @"LaTeXiT  LaTeX Palette"), nil]];
     [self->openFileTypePopUp selectItemAtIndex:0];
   }
@@ -860,6 +916,8 @@ static NSMutableDictionary* cachePaths = nil;
     else if (selectedIndex == 3)
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"library", nil]];
     else if (selectedIndex == 4)
+      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexhist", nil]];
+    else if (selectedIndex == 5)
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexpalette", nil]];
     else
       [self->openFileTypeOpenPanel setAllowedFileTypes:nil];
@@ -981,6 +1039,18 @@ static NSMutableDictionary* cachePaths = nil;
   [[self historyWindowController] clearHistory:sender];
 }
 //end historyClearHistory:
+
+-(IBAction) historyOpen:(id)sender
+{
+  [[self historyWindowController] open:sender];
+}
+//end libraryOpen:
+
+-(IBAction) historySaveAs:(id)sender
+{
+  [[self historyWindowController] saveAs:sender];
+}
+//end librarySaveAs:
 
 -(IBAction) showOrHideHistory:(id)sender
 {
@@ -1629,16 +1699,42 @@ static NSMutableDictionary* cachePaths = nil;
 
 #pragma mark linkback
 
+-(void) closeLinkBackLink:(LinkBack*)link
+{
+  [link retain];
+  @try{
+    NSValue* key = [NSValue valueWithPointer:link];
+    if ([self->linkbackLinks containsObject:key])
+    {
+      @try{
+        [self->linkbackLinks removeObject:key];
+        //[link remoteCloseLink];
+        [link closeLink];
+      }
+      @catch (NSException* e){
+        DebugLog(0, @"exception : %@", e);
+      }
+      NSArray* documents = [NSApp orderedDocuments];
+      [documents makeObjectsPerformSelector:@selector(closeLinkBackLink:) withObject:link];
+    }//end if ([self->linkbackLinks containsObject:key])
+  }
+  @catch (NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }
+  [link release];
+}
+//end closeLinkBackLink:
+
 -(void) linkBackDidClose:(LinkBack*)link
 {
-  NSArray* documents = [NSApp orderedDocuments];
-  [documents makeObjectsPerformSelector:@selector(closeLinkBackLink:) withObject:link];
+  [self closeLinkBackLink:link];
 }
 //end linkBackDidClose:
 
 //a link back request will create a new document thanks to the available data, as historyItems
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link
 {
+  [self->linkbackLinks addObject:[NSValue valueWithPointer:link]];
   NSData* linkbackItemsData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
   NSArray* linkbackItems = [NSKeyedUnarchiver unarchiveObjectWithData:linkbackItemsData];
   id firstLinkBackItem = (linkbackItems && [linkbackItems count]) ? [linkbackItems objectAtIndex:0] : nil;
@@ -1647,21 +1743,37 @@ static NSMutableDictionary* cachePaths = nil;
     historyItem ? [historyItem equation] :
     [firstLinkBackItem isKindOfClass:[LatexitEquation class]] ? firstLinkBackItem :
     nil;
-  MyDocument* currentDocument = (MyDocument*) [self currentDocument];
-  if (!currentDocument)
-    currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
-  if (currentDocument && latexitEquation)
+
+  MyDocument* documentForLink = nil;
+  documentForLink = (MyDocument*) [self currentDocument];
+  /*
+  NSEnumerator* enumerator = !link ? nil : [[NSApp orderedDocuments] objectEnumerator];
+  MyDocument* document = nil;
+  while((document = [enumerator nextObject]))
   {
-    if ([currentDocument linkBackLink] != link)
-      [currentDocument setLinkBackLink:link];//automatically closes previous links
-    [currentDocument applyLatexitEquation:latexitEquation]; //defines the state of the document
+    LinkBack* documentLink = [document linkBackLink];
+    if ((documentLink == link) || [[documentLink itemKey] isEqual:[link itemKey]])
+    {
+      documentForLink = document;
+      break;
+    }
+  }//for each document
+  */
+
+  if (!documentForLink)
+    documentForLink = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+  if (documentForLink && latexitEquation)
+  {
+    if ([documentForLink linkBackLink] != link)
+      [documentForLink setLinkBackLink:link];//automatically closes previous links
+    [documentForLink applyLatexitEquation:latexitEquation]; //defines the state of the document
     [NSApp activateIgnoringOtherApps:YES];
-    NSArray* windows = [currentDocument windowControllers];
+    NSArray* windows = [documentForLink windowControllers];
     NSWindow* window = [[windows lastObject] window];
-    [currentDocument setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
+    [documentForLink setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
                                                         @"Equation linked with another application")];
     [window makeKeyAndOrderFront:self];
-    [window makeFirstResponder:[currentDocument preferredFirstResponder]];
+    [window makeFirstResponder:[documentForLink preferredFirstResponder]];
   }
 }
 //end linkBackClientDidRequestEdit:
@@ -1840,20 +1952,9 @@ static NSMutableDictionary* cachePaths = nil;
           if (useBaseline)
           {
             //extracts the baseline of the equation, if possible
-            NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
-            NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-            NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
-            if (testArray && ([testArray count] >= 2))
-            {
-              [equationBaselineAsString setString:[testArray objectAtIndex:1]];
-              NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
-              range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
-              [equationBaselineAsString deleteCharactersInRange:range];
-            }
-            
             CGFloat newBaseline = [originalBaseline floatValue];
             if (useBaseline)
-              newBaseline -= [equationBaselineAsString floatValue];
+              newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
             //creates a mutable attributed string containing the image file
             [attachedData writeToFile:attachedFilePath atomically:NO];
@@ -1872,7 +1973,9 @@ static NSMutableDictionary* cachePaths = nil;
             //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
             //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
             //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-            NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@""] autorelease];
+            unichar invisibleSpace = 0xFEFF;
+            NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
+            NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
             [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
             [space addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:newBaseline]
                           range:NSMakeRange(0, [space length])];
@@ -2386,20 +2489,9 @@ static NSMutableDictionary* cachePaths = nil;
                                         compositionConfiguration:[preferencesController compositionConfigurationDocument]];
 
               //extracts the baseline of the equation, if possible
-              NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
-              NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-              NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
-              if (testArray && ([testArray count] >= 2))
-              {
-                [equationBaselineAsString setString:[testArray objectAtIndex:1]];
-                NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
-                range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
-                [equationBaselineAsString deleteCharactersInRange:range];
-              }
-                
               CGFloat newBaseline = [originalBaseline floatValue];
               if (useBaseline)
-                newBaseline -= [equationBaselineAsString floatValue];
+                newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
               //creates a mutable attributed string containing the image file
               [fileHandle writeData:attachedData];

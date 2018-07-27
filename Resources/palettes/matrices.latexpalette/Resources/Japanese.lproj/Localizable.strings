@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>matrices</key>
-	<string>マトリックス</string>
+	<string>行列</string>
 </dict>
 </plist>

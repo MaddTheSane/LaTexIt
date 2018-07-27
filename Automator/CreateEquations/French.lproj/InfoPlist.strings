@@ -1,27 +1,12 @@
-﻿/* Localized versions of Info.plist keys */
-
-AMName = "Créer des équations avec LaTeXiT";
-
-/*  AMApplication localized strings  */
-/*  e.g. "TextEdit" = "TextEdit";  */
-"LaTeXiT" = "LaTeXiT";
-
-/*  AMCategory localized strings  */
-/*  e.g. "Text" = "Text";  */
-
-/*  AMDefaultParameters localized values  */
-/*  e.g. myDefaultIntegerParameter = 0;  */
-/*  e.g. myDefaultStringParameter = "Default String Value";  */
-
-/*  AMDescription localized strings  */
+﻿AMName = "Créer des équations avec LaTeXiT";
 AMDInput = "URLs et fichiers sont lus pour transmettre leur contenu textuel. Les dossiers de premier niveau sont parcourus. Dans la mesure du possible, seuls les fichiers reconnus comme du texte sont considérés";
 AMDNote = "L'entrée peut être un simple texte. Ce texte est interprété par le moteur de LaTeXiT pour le transformer en une équation. Il doit être écrit en respectant la syntaxe LaTeX. Le préambule, ainsi que \\begin{document}...\\end{document} est automatiquement ajouté autour du texte, qui peut ainsi ne spécifier que la formule de l'équation. Le paramètre \"mode\" indique si elle doit en outre être enrobée de $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray}, ou rien de cela. Si le texte d'entrée contient déjà un préambule, il est utilisé; sinon, c'est le préambule par défaut spécifié dans les préférences de LaTeXiT qui est ajouté.";
 AMDOptions = "";
+AMDRelatedActions = "";
 AMDResult = "Fichiers PDF des équations générées.";
 AMDRequires = "LaTeXiT doit avoir été lancé une fois pour initialiser ses préférences, notamment les chemins vers les éxecutables du panneau Compositions.";
 AMDSummary = "Cette action crée des équations finement découpées à partir du texte d'entrée, en utilisant un moteur LaTeX.";
 AMDWebsite = "http://pierre.chachatelier.fr/programmation/latexit_fr.php";
 
-/*  AMKeyword localized strings  */
-/*  e.g. "Filter" = "Filter";  */
+"LaTeXiT" = "LaTeXiT";
 "equation" = "équation";

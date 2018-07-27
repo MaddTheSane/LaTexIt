@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -22,6 +22,8 @@
 -(void) clearAll:(BOOL)undoable;
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
 -(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+-(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
+-(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo;
 @end
 
 @implementation HistoryWindowController
@@ -53,6 +55,17 @@
   [self->clearHistoryButton setTitle:NSLocalizedString(@"Remove all", @"Remove all")];
   //[window setBecomesKeyOnlyIfNeeded:YES];//we could try that to enable item selecting without activating the window first
   //but this prevents keyDown events
+
+  [self->importOptionPopUpButton removeAllItems];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"Add to current history")];
+  [[self->importOptionPopUpButton lastItem] setTag:(int)HISTORY_IMPORT_MERGE];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"Overwrite current history")];
+  [[self->importOptionPopUpButton lastItem] setTag:(int)HISTORY_IMPORT_OVERWRITE];
+
+  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
+  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
+  NSPoint point = [self->exportFormatPopUpButton frame].origin;
+  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
   
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:HistoryDisplayPreviewPanelKey options:NSKeyValueObservingOptionNew context:nil];
   [self observeValueForKeyPath:HistoryDisplayPreviewPanelKey ofObject:nil change:nil context:nil];
@@ -137,6 +150,97 @@
     [self clearAll:NO];
 }
 //end _clearHistorySheetDidEnd:returnCode:contextInfo:
+
+-(IBAction) saveAs:(id)sender
+{
+  self->savePanel = [[NSSavePanel savePanel] retain];
+  [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"Export history...")];
+  [self changeHistoryExportFormat:self->exportFormatPopUpButton];
+  [self->savePanel setCanSelectHiddenExtension:YES];
+  [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
+  [self->exportOnlySelectedButton setState:NSOffState];
+  [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
+  if ([[self window] isVisible])
+    [self->savePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled") modalForWindow:[self window] modalDelegate:self
+                       didEndSelector:@selector(_savePanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+  else
+    [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
+}
+
+-(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+{
+  if (returnCode == NSFileHandlingPanelOKButton)
+  {
+    BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
+    NSArray* selectedHistoryItems = [[[self->historyView historyItemsController] arrangedObjects] objectsAtIndexes:[self->historyView selectedRowIndexes]];
+    BOOL ok = [[HistoryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedHistoryItems
+                                              format:[exportFormatPopUpButton selectedTag]];
+    if (!ok)
+    {
+      NSAlert* alert = [NSAlert
+        alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
+               defaultButton:NSLocalizedString(@"OK", @"OK")
+             alternateButton:nil otherButton:nil
+   informativeTextWithFormat:nil];
+     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    }//end if (ok)
+  }
+  [self->savePanel release];
+  self->savePanel = nil;
+}
+//end _savePanelDidEnd:returnCode:contextInfo:
+
+-(IBAction) changeHistoryExportFormat:(id)sender
+{
+  switch((history_export_format_t)[sender selectedTag])
+  {
+    case HISTORY_EXPORT_FORMAT_INTERNAL:
+      [self->savePanel setRequiredFileType:@"latexhist"];
+      break;
+    case HISTORY_EXPORT_FORMAT_PLIST:
+      [self->savePanel setRequiredFileType:@"plist"];
+      break;
+  }
+}
+//end changeLibraryExportFormat:
+
+-(IBAction) open:(id)sender
+{
+  NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+  [openPanel setDelegate:self];
+  [openPanel setTitle:NSLocalizedString(@"Import history...", @"Import history...")];
+  [openPanel setAccessoryView:[self->importAccessoryView retain]];
+  if ([[self window] isVisible])
+    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexhist", @"plist", nil] modalForWindow:[self window]
+                        modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+  else
+    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexhist", @"plist", nil]] contextInfo:NULL];
+}
+//end open:
+
+-(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+{
+  history_import_option_t import_option = [self->importOptionPopUpButton selectedTag];
+  if (returnCode == NSOKButton)
+  {
+    BOOL ok = [[HistoryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
+    if (!ok)
+    {
+      NSAlert* alert = [NSAlert
+        alertWithMessageText:NSLocalizedString(@"Loading error", @"Loading error")
+               defaultButton:NSLocalizedString(@"OK", @"OK")
+             alternateButton:nil otherButton:nil
+   informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
+     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    }
+    else
+    {
+      [[[HistoryManager sharedManager] managedObjectContext] processPendingChanges];
+      [self->historyView reloadData];
+    }
+  }//end if (returnCode == NSOKButton)
+}
+//end _openPanelDidEnd:returnCode:contextInfo;
 
 -(BOOL) canRemoveEntries
 {

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2009 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryItem.h"
@@ -62,11 +62,24 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) dealloc
 {
+  [self dispose];
   //in didTurnInToFault, a problem occurs with undo, that does not call any awakeFrom... to reactivate the observer
-  [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
   [super dealloc];
 }
 //end dealloc
+
+-(void) dispose
+{
+  @synchronized(self)
+  {
+    if (self->kvoEnabled)
+    {
+      [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
+      self->kvoEnabled = NO;
+    }
+  }//end @synchronized(self)
+}
+//end dispose
 
 -(void) didTurnIntoFault
 {
@@ -77,14 +90,22 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) awakeFromFetch
 {
   [super awakeFromFetch];
-  [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+  @synchronized(self)
+  {
+    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+    self->kvoEnabled = YES;
+  }//end @synchronized(self)
 }
 //end awakeFromFetch
 
 -(void) awakeFromInsert
 {
   [super awakeFromInsert];
-  [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+  @synchronized(self)
+  {
+    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+    self->kvoEnabled = YES;
+  }//end @synchronized(self)
   NSManagedObject* equationWrapper = [self valueForKey:@"equationWrapper"];
   [[self managedObjectContext] safeInsertObject:equationWrapper];
   NSManagedObject* equation = [equationWrapper valueForKey:@"equation"];
@@ -155,7 +176,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   NSDictionary* linkBackPlist =
     isLinkBackRefresh ? [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:historyItemData
                                       actionName:LinkBackRefreshActionName suggestedRefreshRate:0]
-                      : [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:historyItemData]; 
+                     : [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:historyItemData]; 
   
   if (isLinkBackRefresh)
     [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:self];
@@ -169,16 +190,45 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.0.1", @"version",
+       @"2.1.0", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
 }
 //end plistDescription
 
+-(id) initWithDescription:(id)description
+{
+  NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
+    return nil;
+  NSString* version = [description objectForKey:@"version"];
+  BOOL isOldLibraryItem = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
+  id equationDescription = !isOldLibraryItem ? [description objectForKey:@"equation"] : description;
+  LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithDescription:equationDescription];
+  [self setEquation:latexitEquation];
+  [latexitEquation release];
+  return self;
+}
+//end initWithDescription:
+
++(HistoryItem*) historyItemWithDescription:(id)description
+{
+  HistoryItem* result = nil;
+  BOOL ok = [description isKindOfClass:[NSDictionary class]];
+  NSString* version = !ok ? nil : [description objectForKey:@"version"];
+  BOOL isOldLibraryItem = (ok && ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending));
+  BOOL isGroupItem = ok && ((!isOldLibraryItem && [description objectForKey:@"children"]) || (isOldLibraryItem && [description objectForKey:@"content"]));
+  BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && [description objectForKey:@"equation"]));
+  Class instanceClass = isEquation ? [HistoryItem class] : 0;
+  result = !instanceClass ? nil : [[instanceClass alloc] initWithDescription:description];
+  return [result autorelease];
+}
+//end libraryItemWithDescription:
+
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.0.1" forKey:@"version"];
+  [coder encodeObject:@"2.1.0" forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:
@@ -186,13 +236,16 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 #pragma mark legacy code
 -(id) initWithCoder:(NSCoder*)coder
 {
-  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
+  NSString* version = [coder decodeObjectForKey:@"version"];
+  NSManagedObjectContext* managedObjectContext = ([@"2.0.0" compare:version options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedDescending) ? nil :
+    [LatexitEquation currentManagedObjectContext];
+  #warning currentManagedObjectContext ???
+  if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   LatexitEquation* equation = nil;
 
-  NSString* version = [coder decodeObjectForKey:@"version"];
   if ([version compare:@"2.0.0" options:NSCaseInsensitiveSearch|NSNumericSearch] != NSOrderedAscending)
-    equation = [coder decodeObjectForKey:@"equation"];
+    equation = [[coder decodeObjectForKey:@"equation"] retain];
   else //if version < 2.0.0
   {
     NSData* pdfData = nil;

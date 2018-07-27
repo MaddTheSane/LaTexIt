@@ -325,6 +325,9 @@ Here is an example :\
 (Q): The service does not work with Keynote.\
 (A): The service does not work with Keynote 1, 2, 3, 4, 5, since Keynote cannot insert an image into a block of text; as a workaround, you can set in the Preferences, pane "Services", to register service calls in the history. That way, even if the service fails at inserting an image, this one becomes available in the history window, that could have been put in some corner for easy access.\
 \
+(Q) : The service "Revert equations back to LaTeX code" does not work with Pages'09\
+(A) : Unfortunately, Pages'09 totally rewrites the PDFs that are inserted into the text, and strips out the part added by LaTeXiT containing the equation source code... We can only hope that the future version won't keep that behaviour.\
+\
 (Q): Which export format should I prefer ?\
 (A): PDF is usually the best choice, since it is a "vectorial" format : the image can be resized without loss of quality.\
 \
@@ -364,6 +367,7 @@ Here for the Chalkboard font :\
 					\\setmainfont\{Chalkboard\}\
 					\\SetSymbolFont\{letters\}\{normal\}\{\\encodingdefault\}\{\\rmdefault\}\{m\}\{it\}\
 					\\SetSymbolFont\{letters\}\{bold\}\{\\encodingdefault\}\{\\rmdefault\}\{b\}\{it\}\
+ 	Please also see information on this page : {\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex/2009/fonts/"}}{\fldrslt http://www.tug.org/mactex/2009/fonts/}}\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
@@ -376,6 +380,7 @@ Here for the Chalkboard font :\
 - when the equation color is set to perfect white, the equation seems ill-cropped (left and right parenthesis may disappear for instance). This is a bug of ghostscript, that fails at cropping well with a white equation on a white background. To fix that, use an "almost white" color, or use the "Palettes > Margins" menu to increase left and right margins;\
 - the service does not work with Mail 2.0.0, ..., 3.6 (latest available version at the moment these lines are written);\
 - the service does not work with Keynote 1, 2, 3, 4, 5, since Keynote cannot insert an image into a block of text; as a workaround, you can set in the Preferences, pane "Services", to register service calls in the history. That way, even if the service fails at inserting an image, this one becomes available in the history window, that could have been put in some corner for easy access;\
+- unfortunately, Pages'09 totally rewrites the PDFs that are inserted into the text, and strips out the part added by LaTeXiT containing the equation source code... So, the service "revert  equations back to LaTeX code" cannot work.\
 - LinkBack may not work when using LaTeXiT's service. Indeed, to align the equation with the surrounding text, LaTeXiT embbeds the image in an RTFD stream, so that it can tune the baseline. However, it may happen that text editors fails "extracting" the image from the stream. So, even if the display is correct, LinkBack becomes "unreachable". The culprit in this case is the text editor, but it is something difficult. To solve the problem, disable the "alignement of the equation with the surrounding text" in the LaTeXiT's service preferences; this turns off baseline tuning and do not use RTFD streams;\
 - with Pages 1.0.2 and 2.0.1, when using the LaTeXiT service, the automatic shift of the equation, in order to align it on the line ("baseline" management), seems not to work. However, it works well with TextEdit and Nisus Writer Express, so it is certainly a bug of Pages.\
 - with EazyDraw 1.7.1, drag'n dropped equations are displayed upside-down. This is a bug of EazyDraw, that has been fixed in the 1.8 version;\
@@ -412,6 +417,14 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.1.0 (9 Marzo 2010)\
+- temporalmente descartando el soporte para 64 bits por un problema en el AppleTypeServer ya mencionado en la versi\'f3n 2.0.1;\
+- migrando del entorno Eqnarray a Align, que tiene la misma sintaxis pero proporciona mejores resultados;\
+- corregido un problema al exportar si al escala no era 100%;\
+- mejor retrocompatibilidad con Linkback;\
+- mejor traducci\'f3n a Japon\'e9s, gracias a Ryohei Seto;\
+- peque\'f1as mejoras en el interfaz.\
+\
 v 2.0.1 (15 Noviembre 2009)\
 \pard\pardeftab720\ql\qnatural
 \cf0 - temporalmente sorteando un bug del modo 64-bits, pues por una raz\'f3n desconocida, hace fallar el AppleTypeServer (con certeza un bug en el propio ATS);\

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -14,6 +14,7 @@
 
 #import "AppController.h"
 #import "Compressor.h"
+#import "HistoryItem.h"
 #import "LatexitEquation.h"
 #import "LaTeXProcessor.h"
 #import "LibraryGroupItem.h"
@@ -187,12 +188,13 @@ static LibraryManager* sharedManagerInstance = nil;
           NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path];
           NSData* data = [NSKeyedArchiver archivedDataWithRootObject:rootLibraryItemsToSave];
           [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
-          [NSKeyedUnarchiver unarchiveObjectWithData:data];
+          NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
           [LatexitEquation popManagedObjectContext];
           NSError* error = nil;
           [saveManagedObjectContext save:&error];
           if (error)
             {DebugLog(0, @"error : %@", error);}
+          [libraryItems makeObjectsPerformSelector:@selector(dispose)];
         }//end if (ok)
       }//end case LIBRARY_EXPORT_FORMAT_INTERNAL
       break;
@@ -205,7 +207,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.0.1", @"version",
+          @"2.1.0", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -246,6 +248,11 @@ static LibraryManager* sharedManagerInstance = nil;
     [itemsToRemove setArray:[self->managedObjectContext executeFetchRequest:fetchRequest error:&error]];
     if (error) {DebugLog(0, @"error : %@", error);}
     [fetchRequest release];
+    
+    [itemsToRemove makeObjectsPerformSelector:@selector(dispose)];
+    [self->managedObjectContext safeDeleteObjects:itemsToRemove];
+    [self->managedObjectContext processPendingChanges];
+    [itemsToRemove removeAllObjects];
   }//end if (option == LIBRARY_IMPORT_OVERWRITE)
 
   if (option == LIBRARY_IMPORT_OPEN)
@@ -342,9 +349,60 @@ static LibraryManager* sharedManagerInstance = nil;
         unsigned int count = [libraryItemsAdded count];
         for(i = 0 ; i<count ; ++i)
           [[libraryItemsAdded objectAtIndex:i] setSortIndex:nbRootLibraryItemsBeforeAdding+i];
+          
+        NSEnumerator* enumerator = [libraryItemsToAdd objectEnumerator];
+        HistoryItem* libraryItem = nil;
+        while((libraryItem = [enumerator nextObject]))
+        {
+          if ([libraryItem isKindOfClass:[LibraryEquation class]])
+            [[(LibraryEquation*)libraryItem equation] dispose];
+          [libraryItem dispose];
+        }
+
         ok = YES;
       }//end if (ok)
-    }//end if ([[path pathExtension] isEqualToString:@"latexlib"])
+    }//end if ([[path pathExtension] isEqualToString:@"latexlib"] || [[path pathExtension] isEqualToString:@"dat"])
+    else if ([[path pathExtension] isEqualToString:@"latexhist"] )
+    {
+      NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path];
+      NSError* error = nil;
+      unsigned int nbRootLibraryItemsBeforeAdding =
+        [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+      if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+      NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+      [fetchRequest setEntity:[HistoryItem entity]];
+      error = nil;
+      NSArray* historyItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
+      if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+      [fetchRequest release];
+      NSData* historyItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
+      [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
+      NSArray* historyItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
+      [LatexitEquation popManagedObjectContext];
+      unsigned int i = 0;
+      unsigned int count = [historyItemsAdded count];
+      for(i = 0 ; i<count ; ++i)
+      {
+        HistoryItem* historyItem = [historyItemsAdded objectAtIndex:i];
+        LibraryEquation* libraryEquation =
+          [[LibraryEquation alloc] initWithParent:nil equation:[historyItem equation]
+             insertIntoManagedObjectContext:[historyItem managedObjectContext]];
+        [libraryEquation setBestTitle];
+        [libraryEquation release];
+        [[historyItem managedObjectContext] safeDeleteObject:historyItem];
+        [libraryEquation setSortIndex:nbRootLibraryItemsBeforeAdding+i];
+      }
+
+      //dispose objets of sourceManagedObjectContext
+      NSEnumerator* enumerator = [historyItemsToAdd objectEnumerator];
+      HistoryItem* historyItem = nil;
+      while((historyItem = [enumerator nextObject]))
+      {
+        [[historyItem equation] dispose];
+        [historyItem dispose];
+      }//end for each historyItem
+      ok = YES;
+    }//end if ([[path pathExtension] isEqualToString:@"latexhist"])
     else if ([[path pathExtension] isEqualToString:@"plist"])
     {
       NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
@@ -364,6 +422,12 @@ static LibraryManager* sharedManagerInstance = nil;
         content = ![content isKindOfClass:[NSDictionary class]] ? nil : [content objectForKey:@"content"];
         if (isOldLibrary && !content)
           content = [plist objectForKey:@"content"];
+        BOOL wasHistory = NO;
+        if (!content)
+        {
+          content = [[plist objectForKey:@"history"] objectForKey:@"content"];
+          wasHistory = (content != nil);
+        }
         if ([content isKindOfClass:[NSArray class]])
         {
           NSError* error = nil;
@@ -382,6 +446,8 @@ static LibraryManager* sharedManagerInstance = nil;
               if (isOldLibrary)
                 [libraryItem setSortIndex:sortIndex++];
             }
+            if (wasHistory)
+              [libraryItem setBestTitle];
           }
           [LatexitEquation popManagedObjectContext];
           unsigned int i = 0;
@@ -443,10 +509,8 @@ static LibraryManager* sharedManagerInstance = nil;
     }//end if  ([[path pathExtension] isEqualToString:@"library"]) //from LEE
   }//end if (option != LIBRARY_IMPORT_OPEN)
 
-  NSEnumerator* enumerator = [itemsToRemove objectEnumerator];
-  NSManagedObject* object = nil;
-  while((object = [enumerator nextObject]))
-    [self->managedObjectContext safeDeleteObject:object];
+  [itemsToRemove makeObjectsPerformSelector:@selector(dispose)];
+  [self->managedObjectContext safeDeleteObjects:itemsToRemove];
   [self->managedObjectContext processPendingChanges];
 
   [self->managedObjectContext disableUndoRegistration];
@@ -522,7 +586,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.0.1", @"version", nil] forPersistentStore:persistentStore];
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.1.0", @"version", nil] forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   [result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];

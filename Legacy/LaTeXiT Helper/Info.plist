@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>fr_FR</string>
+	<key>CFBundleExecutable</key>
+	<string>LaTeXiT Helper</string>
+	<key>CFBundleIconFile</key>
+	<string>latexit.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>fr.club.ktd.LaTeXiT</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>LTXt</string>
+	<key>CFBundleVersion</key>
+	<string>2.1.0</string>
+	<key>LinkBackApplicationURL</key>
+	<string>http://pierre.chachatelier.fr/programmation/latexit.php</string>
+	<key>LinkBackServer</key>
+	<string>LaTeXiT</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>LSUIElement</key>
+	<true/>
+</dict>
+</plist>

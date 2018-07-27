@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -63,6 +63,7 @@
   NSString* initialPreamble;
   NSString* initialBody;
   NSData*   initialPdfData;
+  NSData*   initialData;
   
   LibraryEquation* lastAppliedLibraryEquation;
   BOOL             isReducedTextArea;
@@ -122,8 +123,9 @@
 -(NSString*) selectedText;
 -(void) insertText:(NSString*)text;
 
--(LatexitEquation*) latexitEquationWithCurrentState;
--(BOOL) applyPdfData:(NSData*)pdfData;              //updates the document according to the given pdfdata
+-(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient;
+-(BOOL) applyData:(NSData*)data; //updates the document according to the given pdfdata
+-(BOOL) applyPdfData:(NSData*)pdfData; //updates the document according to the given pdfdata
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation;
 -(void) applyLatexitEquation:(LatexitEquation*)latexitEquation; //updates the document according to the given history item
 -(void) applyString:(NSString*)string;//updates the document according to the given source string, that is to be decomposed in preamble+body

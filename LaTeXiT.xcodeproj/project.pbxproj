@@ -60,6 +60,7 @@
 			);
 			dependencies = (
 				93BD65230E8D08FA00DB341B /* PBXTargetDependency */,
+				938DBE3B10BDC460002350CF /* PBXTargetDependency */,
 				93BD65210E8D08F700DB341B /* PBXTargetDependency */,
 			);
 			name = "All compilations";
@@ -200,6 +201,14 @@
 		934882690FB22E8700FFACCE /* NSDictionaryCompositionConfigurationAdditionalProcessingScript.m in Sources */ = {isa = PBXBuildFile; fileRef = 934882670FB22E8700FFACCE /* NSDictionaryCompositionConfigurationAdditionalProcessingScript.m */; };
 		934885BD0FB4217500FFACCE /* HistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934885BC0FB4217500FFACCE /* HistoryController.m */; };
 		934885BE0FB4217500FFACCE /* HistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934885BC0FB4217500FFACCE /* HistoryController.m */; };
+		9349514C10BDCD1600931D51 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9349514A10BDCD0D00931D51 /* InfoPlist.strings */; };
+		9349515310BDCD2800931D51 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9349515110BDCD2800931D51 /* MainMenu.xib */; };
+		9349515D10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9349515C10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m */; };
+		9349518710BDCF0E00931D51 /* LaTeXiT Helper.app in Copy Files (LaTeXiT Helper) */ = {isa = PBXBuildFile; fileRef = 938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */; };
+		934951BE10BDD10B00931D51 /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
+		934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AB92088CEAE20062A340 /* NSWorkspaceExtended.m */; };
+		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
+		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
 		934AA8EE0F3381050010E384 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
 		934AA8F50F33813B0010E384 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
@@ -243,6 +252,13 @@
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		938999BD10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		938999BE10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
+		938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 938DBADA10BD7C19002350CF /* PalettePanel.m */; };
+		938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
+		938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		938DBE0110BDC2E0002350CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
+		938DBE0910BDC2E0002350CF /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
+		938DBE0C10BDC2E0002350CF /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8ED0F3381050010E384 /* LinkBack.framework */; };
+		938DBE4610BDC4B1002350CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 938DBE1F10BDC338002350CF /* main.m */; };
 		938E23A60889C382000626E6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
 		938E244B0889C392000626E6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
@@ -297,6 +313,14 @@
 		93D23257101836B700768782 /* NSObjectExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */; };
 		93D232F11018491C00768782 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
 		93D232F21018492000768782 /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
+		93D4947910C1051700A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
+		93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
+		93D4947E10C1057000A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
+		93D4947F10C1057000A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
+		93D4948010C1057100A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
+		93D4948110C1057100A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
+		93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
+		93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
 		93D49E6F0F6EDB290024087A /* LibraryEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D49E6E0F6EDB290024087A /* LibraryEquation.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		93D7CA5709D362FC0001DC5E /* CompositionConfigurationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CA5509D362FC0001DC5E /* CompositionConfigurationsWindowController.m */; };
@@ -354,6 +378,13 @@
 			remoteGlobalIDString = 934AAA060F3388450010E384;
 			remoteInfo = Packaging;
 		};
+		938DBE3A10BDC460002350CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 938DBD4C10BDC2E0002350CF;
+			remoteInfo = "LaTeXiT Helper";
+		};
 		93BD65200E8D08F700DB341B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -391,6 +422,28 @@
 			files = (
 				932E60900F5DA3A7002B3136 /* LinkBack.framework in CopyFiles */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9349518410BDCEEE00931D51 /* Copy Files (LaTeXiT Helper) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				9349518710BDCF0E00931D51 /* LaTeXiT Helper.app in Copy Files (LaTeXiT Helper) */,
+			);
+			name = "Copy Files (LaTeXiT Helper)";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		938DBE0B10BDC2E0002350CF /* Copy Files (Frameworks) */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				938DBE0C10BDC2E0002350CF /* LinkBack.framework in Copy Files (Frameworks) */,
+			);
+			name = "Copy Files (Frameworks)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		93BD66330E8D095400DB341B /* Copy Files (Automator) */ = {
@@ -562,6 +615,12 @@
 		934882670FB22E8700FFACCE /* NSDictionaryCompositionConfigurationAdditionalProcessingScript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryCompositionConfigurationAdditionalProcessingScript.m; sourceTree = "<group>"; };
 		934885BB0FB4217500FFACCE /* HistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryController.h; sourceTree = "<group>"; };
 		934885BC0FB4217500FFACCE /* HistoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryController.m; sourceTree = "<group>"; };
+		9349514B10BDCD0D00931D51 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = "Legacy/LaTeXiT Helper/English.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		9349515210BDCD2800931D51 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = "Legacy/LaTeXiT Helper/English.lproj/MainMenu.xib"; sourceTree = "<group>"; };
+		9349515B10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaTeXiT_HelperAppDelegate.h; path = "Legacy/LaTeXiT Helper/LaTeXiT_HelperAppDelegate.h"; sourceTree = "<group>"; };
+		9349515C10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LaTeXiT_HelperAppDelegate.m; path = "Legacy/LaTeXiT Helper/LaTeXiT_HelperAppDelegate.m"; sourceTree = "<group>"; };
+		934A2C9A10B6C4AC00AAA2CD /* NSDataExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataExtended.h; sourceTree = "<group>"; };
+		934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataExtended.m; sourceTree = "<group>"; };
 		934AA8A60F3380CD0010E384 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
 		934AA8ED0F3381050010E384 /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LinkBack.framework; path = Frameworks/LinkBack.framework; sourceTree = "<group>"; };
 		934AA8F30F3381210010E384 /* package-as-dmg.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "package-as-dmg.sh"; path = "scripts/package-as-dmg.sh"; sourceTree = "<group>"; };
@@ -635,6 +694,12 @@
 		9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
 		938999BB10159DA000A9E04F /* PreferencesControllerMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesControllerMigration.h; sourceTree = "<group>"; };
 		938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesControllerMigration.m; sourceTree = "<group>"; };
+		938DBAD910BD7C19002350CF /* PalettePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalettePanel.h; sourceTree = "<group>"; };
+		938DBADA10BD7C19002350CF /* PalettePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PalettePanel.m; sourceTree = "<group>"; };
+		938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LaTeXiT Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		938DBE1810BDC318002350CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Legacy/LaTeXiT Helper/Info.plist"; sourceTree = "<group>"; };
+		938DBE1F10BDC338002350CF /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Legacy/LaTeXiT Helper/main.m"; sourceTree = "<group>"; };
+		938DBE2510BDC390002350CF /* LaTeXiT_Helper_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaTeXiT_Helper_Prefix.pch; path = "Legacy/LaTeXiT Helper/LaTeXiT_Helper_Prefix.pch"; sourceTree = "<group>"; };
 		9390CEF80FA78CDA0002100B /* DictionaryToArrayTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DictionaryToArrayTransformer.h; sourceTree = "<group>"; };
 		9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DictionaryToArrayTransformer.m; sourceTree = "<group>"; };
 		9390CFA40FA79C500002100B /* ArraySortingTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArraySortingTransformer.h; sourceTree = "<group>"; };
@@ -707,6 +772,11 @@
 		93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArrayExtended.m; sourceTree = "<group>"; };
 		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
 		93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringExtended.m; sourceTree = "<group>"; };
+		93D4947410C1051700A0D06A /* NDProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDProcess.h; path = Frameworks/NDProcess/NDProcess.h; sourceTree = "<group>"; };
+		93D4947510C1051700A0D06A /* NDProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NDProcess.m; path = Frameworks/NDProcess/NDProcess.m; sourceTree = "<group>"; };
+		93D4947610C1051700A0D06A /* NDSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDSDKCompatibility.h; path = Frameworks/NDProcess/NDSDKCompatibility.h; sourceTree = "<group>"; };
+		93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+NDCarbonUtilities.h"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.h"; sourceTree = "<group>"; };
+		93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+NDCarbonUtilities.m"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.m"; sourceTree = "<group>"; };
 		93D49E6D0F6EDB290024087A /* LibraryEquation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryEquation.h; sourceTree = "<group>"; };
 		93D49E6E0F6EDB290024087A /* LibraryEquation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryEquation.m; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
@@ -757,7 +827,7 @@
 		93F874F9108863D900995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Japanese; path = Japanese.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93F874FA1088645700995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F874FB1088647D00995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Japanese; path = Japanese.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
-		93F874FC1088648500995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93F874FC1088648500995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93F874FD108864A100995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93F874FE108864AE00995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Japanese; path = Japanese.lproj/DocumentExtraPanelsController.nib; sourceTree = "<group>"; };
 		93F874FF108864B700995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Japanese; path = Japanese.lproj/ExportFormatOptionsPanes.nib; sourceTree = "<group>"; };
@@ -801,6 +871,19 @@
 				932E608A0F5DA383002B3136 /* LinkBack.framework in Frameworks */,
 				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
+				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		938DBDFE10BDC2E0002350CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */,
+				938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */,
+				938DBE0110BDC2E0002350CF /* Foundation.framework in Frameworks */,
+				938DBE0910BDC2E0002350CF /* LinkBack.framework in Frameworks */,
+				93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,8 +919,9 @@
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D15AC370486D014006FF6A4 /* LaTeXiT.app */,
 				9344B98F0E8CF38700FE90A5 /* CreateEquations.action */,
+				938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */,
+				8D15AC370486D014006FF6A4 /* LaTeXiT.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -887,6 +971,7 @@
 			isa = PBXGroup;
 			children = (
 				93E9CF880E9F30BE00B08FB0 /* Automator */,
+				938DBE2110BDC363002350CF /* Legacy */,
 				32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 			);
@@ -898,6 +983,7 @@
 			children = (
 				934AAB2B0F343DAA0010E384 /* scripts */,
 				9344BBE20E8CF7D400FE90A5 /* Automator */,
+				938DBD2810BDC2B3002350CF /* Legacy */,
 				9344BBE10E8CF7C600FE90A5 /* LaTeXiT */,
 			);
 			name = Resources;
@@ -946,6 +1032,7 @@
 		9302548807F0BC7600011996 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				93D4947110C1050700A0D06A /* NDProcess */,
 				935AE0E40FA1B41F00B361D8 /* Value transformers */,
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
@@ -1032,6 +1119,8 @@
 				93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */,
 				937A39850FE2F1AC000BEE6E /* MySplitView.h */,
 				937A39860FE2F1AC000BEE6E /* MySplitView.m */,
+				938DBAD910BD7C19002350CF /* PalettePanel.h */,
+				938DBADA10BD7C19002350CF /* PalettePanel.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1090,6 +1179,8 @@
 				9331016F083D1D6400DE67ED /* NSColorExtended.h */,
 				93310170083D1D6400DE67ED /* NSColorExtended.m */,
 				935AECEB0CB16ECB001A5067 /* NSDictionaryExtended.h */,
+				934A2C9A10B6C4AC00AAA2CD /* NSDataExtended.h */,
+				934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */,
 				935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */,
 				93C531CE0D9E310C003AF7FC /* NSFileManagerExtended.h */,
 				93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */,
@@ -1232,6 +1323,15 @@
 			name = ServiceShortcuts;
 			sourceTree = "<group>";
 		};
+		9349515910BDCD9700931D51 /* LaTeXiT Helper */ = {
+			isa = PBXGroup;
+			children = (
+				9349515B10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.h */,
+				9349515C10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m */,
+			);
+			name = "LaTeXiT Helper";
+			sourceTree = "<group>";
+		};
 		934AAB2B0F343DAA0010E384 /* scripts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1325,6 +1425,7 @@
 		935B8CC30FB5A41F00448B03 /* Legacy or retro-compatibility */ = {
 			isa = PBXGroup;
 			children = (
+				9349515910BDCD9700931D51 /* LaTeXiT Helper */,
 				938999BB10159DA000A9E04F /* PreferencesControllerMigration.h */,
 				938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */,
 			);
@@ -1363,6 +1464,41 @@
 				9372A1F3087819EF00A3A645 /* MarginsWindowController.m */,
 			);
 			name = Margins;
+			sourceTree = "<group>";
+		};
+		938DBD2710BDC2A2002350CF /* LaTeXiT Helper */ = {
+			isa = PBXGroup;
+			children = (
+				938DBE1810BDC318002350CF /* Info.plist */,
+				9349514A10BDCD0D00931D51 /* InfoPlist.strings */,
+				9349515110BDCD2800931D51 /* MainMenu.xib */,
+			);
+			name = "LaTeXiT Helper";
+			sourceTree = "<group>";
+		};
+		938DBD2810BDC2B3002350CF /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				938DBD2710BDC2A2002350CF /* LaTeXiT Helper */,
+			);
+			name = Legacy;
+			sourceTree = "<group>";
+		};
+		938DBE1A10BDC32A002350CF /* LaTeXiT Helper */ = {
+			isa = PBXGroup;
+			children = (
+				938DBE2510BDC390002350CF /* LaTeXiT_Helper_Prefix.pch */,
+				938DBE1F10BDC338002350CF /* main.m */,
+			);
+			name = "LaTeXiT Helper";
+			sourceTree = "<group>";
+		};
+		938DBE2110BDC363002350CF /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				938DBE1A10BDC32A002350CF /* LaTeXiT Helper */,
+			);
+			name = Legacy;
 			sourceTree = "<group>";
 		};
 		9390D3300FA8D4BF0002100B /* Encapsulations */ = {
@@ -1427,6 +1563,18 @@
 				930F28FD0E4BBC5F006C207E /* warning-triangle.tiff */,
 			);
 			name = interface;
+			sourceTree = "<group>";
+		};
+		93D4947110C1050700A0D06A /* NDProcess */ = {
+			isa = PBXGroup;
+			children = (
+				93D4947410C1051700A0D06A /* NDProcess.h */,
+				93D4947510C1051700A0D06A /* NDProcess.m */,
+				93D4947610C1051700A0D06A /* NDSDKCompatibility.h */,
+				93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */,
+				93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */,
+			);
+			name = NDProcess;
 			sourceTree = "<group>";
 		};
 		93D7CA5309D362D40001DC5E /* CompositionConfiguration */ = {
@@ -1536,6 +1684,7 @@
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 				93126C5C0834966D0021D026 /* Copy Files (Frameworks) */,
 				93BD66330E8D095400DB341B /* Copy Files (Automator) */,
+				9349518410BDCEEE00931D51 /* Copy Files (LaTeXiT Helper) */,
 			);
 			buildRules = (
 			);
@@ -1569,6 +1718,25 @@
 			productReference = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */;
 			productType = "com.apple.product-type.bundle";
 		};
+		938DBD4C10BDC2E0002350CF /* LaTeXiT Helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 938DBE1010BDC2E0002350CF /* Build configuration list for PBXNativeTarget "LaTeXiT Helper" */;
+			buildPhases = (
+				938DBD4D10BDC2E0002350CF /* Resources */,
+				938DBD8D10BDC2E0002350CF /* Sources */,
+				938DBDFE10BDC2E0002350CF /* Frameworks */,
+				938DBE0B10BDC2E0002350CF /* Copy Files (Frameworks) */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LaTeXiT Helper";
+			productInstallPath = "$(HOME)/Applications";
+			productName = LaTeXiT;
+			productReference = 938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1592,8 +1760,9 @@
 				934AAA120F33887F0010E384 /* All */,
 				93BD651D0E8D08EC00DB341B /* All compilations */,
 				934AAA060F3388450010E384 /* Packaging */,
-				8D15AC270486D014006FF6A4 /* LaTeXiT */,
 				9344B98E0E8CF38700FE90A5 /* Automator-CreateEquations */,
+				938DBD4C10BDC2E0002350CF /* LaTeXiT Helper */,
+				8D15AC270486D014006FF6A4 /* LaTeXiT */,
 				9396E5440EC628C30014C4BD /* Package as DMG */,
 				9396E9680EC843190014C4BD /* Apply Sparkle DSA keys */,
 			);
@@ -1682,6 +1851,16 @@
 				933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */,
 				933B5F470F5F10060069E5B4 /* Latexit.xcdatamodel in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		938DBD4D10BDC2E0002350CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9349514C10BDCD1600931D51 /* InfoPlist.strings in Resources */,
+				9349515310BDCD2800931D51 /* MainMenu.xib in Resources */,
+				934951BE10BDD10B00931D51 /* latexit.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1871,6 +2050,10 @@
 				9333458A1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */,
 				9326550E1080AADE00603657 /* NSNumberIntegerShiftTransformer.m in Sources */,
 				936091A21087084300F4B39A /* RegexKitLite.m in Sources */,
+				934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */,
+				938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */,
+				93D4947910C1051700A0D06A /* NDProcess.m in Sources */,
+				93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1918,6 +2101,21 @@
 				93DD6398106A393400EDDF82 /* BodyTemplatesTableView.m in Sources */,
 				9333458B1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */,
 				936091A31087084300F4B39A /* RegexKitLite.m in Sources */,
+				934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */,
+				93D4947E10C1057000A0D06A /* NDProcess.m in Sources */,
+				93D4947F10C1057000A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		938DBD8D10BDC2E0002350CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				938DBE4610BDC4B1002350CF /* main.m in Sources */,
+				9349515D10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m in Sources */,
+				934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */,
+				93D4948010C1057100A0D06A /* NDProcess.m in Sources */,
+				93D4948110C1057100A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1943,6 +2141,11 @@
 			isa = PBXTargetDependency;
 			target = 934AAA060F3388450010E384 /* Packaging */;
 			targetProxy = 934AAA180F33888A0010E384 /* PBXContainerItemProxy */;
+		};
+		938DBE3B10BDC460002350CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 938DBD4C10BDC2E0002350CF /* LaTeXiT Helper */;
+			targetProxy = 938DBE3A10BDC460002350CF /* PBXContainerItemProxy */;
 		};
 		93BD65210E8D08F700DB341B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2015,6 +2218,22 @@
 				93F874FE108864AE00995B12 /* Japanese */,
 			);
 			name = DocumentExtraPanelsController.nib;
+			sourceTree = "<group>";
+		};
+		9349514A10BDCD0D00931D51 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9349514B10BDCD0D00931D51 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		9349515110BDCD2800931D51 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9349515210BDCD2800931D51 /* English */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		935ADD9E0FA0B01000B361D8 /* ExportFormatOptionsPanes.nib */ = {
@@ -2095,10 +2314,10 @@
 		932388570854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = Frameworks;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -2137,6 +2356,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
+					"-lcrypto",
+					"-lssl",
 				);
 				PREBINDING = YES;
 				PRODUCT_NAME = LaTeXiT;
@@ -2149,11 +2370,11 @@
 		932388580854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = Frameworks;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -2166,6 +2387,7 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = MIGRATE_ALIGN;
 				GCC_STRICT_ALIASING = YES;
 				GCC_UNROLL_LOOPS = YES;
 				GCC_VERSION = 4.0;
@@ -2195,6 +2417,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
+					"-lcrypto",
+					"-lssl",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = LaTeXiT;
@@ -2254,7 +2478,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
-				SYMROOT = "/Users/chacha/Temporary/XCode-builds/${PROJECT_NAME}";
 			};
 			name = Deployment;
 		};
@@ -2264,7 +2487,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = Frameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					Frameworks,
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -2274,6 +2500,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = MIGRATE_ALIGN;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = 4.0;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -2300,6 +2527,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
+					"-lssl",
+					"-lcrypto",
 				);
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
@@ -2317,7 +2546,10 @@
 				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = Frameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					Frameworks,
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -2356,6 +2588,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-licucore",
+					"-lssl",
+					"-lcrypto",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;
@@ -2403,6 +2637,114 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		938DBE1110BDC2E0002350CF /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Legacy/LaTeXiT Helper/LaTeXiT_Helper_Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = NO;
+				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PREBINDING = YES;
+				PRODUCT_NAME = "LaTeXiT Helper";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		938DBE1210BDC2E0002350CF /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Legacy/LaTeXiT Helper/LaTeXiT_Helper_Prefix.pch";
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = NO;
+				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "LaTeXiT Helper";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -2514,6 +2856,15 @@
 			buildConfigurations = (
 				934AAA130F3388800010E384 /* Development */,
 				934AAA150F3388800010E384 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		938DBE1010BDC2E0002350CF /* Build configuration list for PBXNativeTarget "LaTeXiT Helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				938DBE1110BDC2E0002350CF /* Development */,
+				938DBE1210BDC2E0002350CF /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;

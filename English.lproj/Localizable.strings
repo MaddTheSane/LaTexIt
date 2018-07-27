@@ -34,6 +34,8 @@
 "Change Library items background color" = "Change Library items background color";
 "Import library..." = "Import library...";
 "Export library..." = "Export library...";
+"Import history..." = "Import history...";
+"Export history..." = "Export history...";
 "Loading error" = "Loading error";
 "An error occured while saving" = "An error occured while saving";
 "The file does not appear to be a valid format" = "The file does not appear to be a valid format";
@@ -93,7 +95,8 @@
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.";
 "Apply" = "Apply";
 "Typeset LaTeX Maths align" = "Typeset LaTeX Maths align";
-"Typeset LaTeX Maths eqnarray" = "Typeset LaTeX Maths eqnarray";
+"Typeset LaTeX Maths eqnarray" = "Typeset LaTeX Maths Eqnarray";
+"Typeset LaTeX Maths align" = "Typeset LaTeX Maths Align";
 "Typeset LaTeX Maths display" = "Typeset LaTeX Maths display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Typeset LaTeX Maths inline $...$";
 "Typeset LaTeX Text" = "Typeset LaTeX Text";
@@ -155,6 +158,7 @@
 "PDF Equation" = "PDF Equation";
 "Text file" = "Text file";
 "LaTeXiT library" = "LaTeXiT library";
+"LaTeXiT history" = "LaTeXiT history";
 "LaTeX Equation Editor library" = "LaTeX Equation Editor library";
 "LaTeXiT LaTeX Palette" = "LaTeXiT LaTeX Palette";
 "Additional files" = "Additional files";
@@ -167,6 +171,7 @@
 "Edit the configurations..." = "Edit the configurations...";
 
 /* document */
+"clipboard" = "clipboard";
 "Text" = "Text";
 "Font size :" = "Font size :";
 "Color :" = "Color :";
@@ -190,10 +195,14 @@
 "Add current equation" = "Add current equation";
 "Rename selection" = "Rename selection";
 "Remove selection" = "Remove selection";
-"Refresh current equation" = "Refresh current equation";
+"Replace current equation" = "Replace current equation";
 "Import..." = "Import...";
 "Export..." = "Export...";
 "Display the equations in real size on mouse over" = "Display the equations in real size on mouse over";
+
+/* History */
+"Add to current history" = "Add to current history";
+"Overwrite current history" = "Overwrite current history";
 
 /* palette : additional files */
 "Open defaults" = "Open defaults";

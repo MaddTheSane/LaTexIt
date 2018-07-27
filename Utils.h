@@ -12,6 +12,7 @@
 
 extern int DebugLogLevel;
 #define DebugLog(level,log,...) ((DebugLogLevel<level) ? 0 : NSLog(@"[%p : %@ %s] \"%@\"",[NSThread currentThread],[self class],sel_getName(_cmd),[NSString stringWithFormat:log,##__VA_ARGS__]))
+#define DebugLogStatic(level,log,...) ((DebugLogLevel<level) ? 0 : NSLog(@"[%p - static] \"%@\"",[NSThread currentThread], [NSString stringWithFormat:log,##__VA_ARGS__]))
 
 #define NSAppKitVersionNumber10_4 824
 #define NSAppKitVersionNumber10_5 949
@@ -44,6 +45,7 @@ FOUNDATION_STATIC_INLINE         double Clip_d(double inf, double x, double sup)
 
 NSString* GetMyPNGPboardType(void);
 NSString* GetMyJPEGPboardType(void);
+NSString* GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
 
 FOUNDATION_EXTERN_INLINE int EndianI_BtoN(int x);

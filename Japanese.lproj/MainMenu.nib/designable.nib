@@ -3,15 +3,16 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10C540</string>
-		<string key="IBDocument.InterfaceBuilderVersion">740</string>
+		<string key="IBDocument.InterfaceBuilderVersion">761</string>
 		<string key="IBDocument.AppKitVersion">1038.25</string>
 		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">740</string>
+			<string key="NS.object.0">761</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="215"/>
+			<integer value="1511"/>
+			<integer value="213"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -60,7 +61,7 @@
 								</object>
 								<object class="NSMenuItem" id="1040410974">
 									<reference key="NSMenu" ref="320910881"/>
-									<string key="NSTitle">寄付について...</string>
+									<string key="NSTitle">寄付...</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -68,7 +69,7 @@
 								</object>
 								<object class="NSMenuItem" id="998223615">
 									<reference key="NSMenu" ref="320910881"/>
-									<string key="NSTitle">アップデートチェック…</string>
+									<string key="NSTitle">アップデートを確認…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -133,7 +134,7 @@
 								</object>
 								<object class="NSMenuItem" id="925391241">
 									<reference key="NSMenu" ref="320910881"/>
-									<string key="NSTitle">LaTeXiTを隠す</string>
+									<string key="NSTitle">LaTeXiT を隠す</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -171,7 +172,7 @@
 								</object>
 								<object class="NSMenuItem" id="412222383">
 									<reference key="NSMenu" ref="320910881"/>
-									<string key="NSTitle">LaTeXiTを終了</string>
+									<string key="NSTitle">LaTeXiT を終了</string>
 									<string key="NSKeyEquiv">q</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -223,7 +224,7 @@
 								</object>
 								<object class="NSMenuItem" id="140799934">
 									<reference key="NSMenu" ref="811025807"/>
-									<string key="NSTitle">イメージエクスポート...</string>
+									<string key="NSTitle">イメージを書き出す...</string>
 									<string key="NSKeyEquiv">e</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -233,7 +234,7 @@
 								<object class="NSMenuItem" id="162349090">
 									<reference key="NSMenu" ref="811025807"/>
 									<bool key="NSIsAlternate">YES</bool>
-									<string key="NSTitle">もう一度イメージエクスポート...</string>
+									<string key="NSTitle">もう一度イメージを書き出す...</string>
 									<string key="NSKeyEquiv">e</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -324,7 +325,7 @@
 								</object>
 								<object class="NSMenuItem" id="417226403">
 									<reference key="NSMenu" ref="92592331"/>
-									<string key="NSTitle">イメージコピー</string>
+									<string key="NSTitle">イメージをコピー</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -332,7 +333,7 @@
 									<reference key="NSMixedImage" ref="889411723"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="229976186">
-										<string key="NSTitle">イメージコピー</string>
+										<string key="NSTitle">イメージをコピー</string>
 										<array class="NSMutableArray" key="NSMenuItems">
 											<object class="NSMenuItem" id="635257286">
 												<reference key="NSMenu" ref="229976186"/>
@@ -357,7 +358,7 @@
 											</object>
 											<object class="NSMenuItem" id="686924051">
 												<reference key="NSMenu" ref="229976186"/>
-												<string key="NSTitle">PDF</string>
+												<string key="NSTitle">PDF ベクターイメージ</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -365,7 +366,7 @@
 											</object>
 											<object class="NSMenuItem" id="993951598">
 												<reference key="NSMenu" ref="229976186"/>
-												<string key="NSTitle">PDF とアウトラインフォント</string>
+												<string key="NSTitle">アウトラインフォント付き PDF</string>
 												<string key="NSKeyEquiv">C</string>
 												<int key="NSKeyEquivModMask">1572864</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -375,7 +376,7 @@
 											</object>
 											<object class="NSMenuItem" id="911068699">
 												<reference key="NSMenu" ref="229976186"/>
-												<string key="NSTitle">EPS</string>
+												<string key="NSTitle">EPS ベクターイメージ</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -384,7 +385,7 @@
 											</object>
 											<object class="NSMenuItem" id="186515143">
 												<reference key="NSMenu" ref="229976186"/>
-												<string key="NSTitle">TIFF</string>
+												<string key="NSTitle">TIFF ビットマップイメージ</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -393,7 +394,7 @@
 											</object>
 											<object class="NSMenuItem" id="557516174">
 												<reference key="NSMenu" ref="229976186"/>
-												<string key="NSTitle">PNG</string>
+												<string key="NSTitle">PNG ビットマップイメージ</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -402,7 +403,7 @@
 											</object>
 											<object class="NSMenuItem" id="700154857">
 												<reference key="NSMenu" ref="229976186"/>
-												<string key="NSTitle">JPEG</string>
+												<string key="NSTitle">JPEG ビットマップイメージ</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -432,7 +433,7 @@
 								</object>
 								<object class="NSMenuItem" id="808192439">
 									<reference key="NSMenu" ref="92592331"/>
-									<string key="NSTitle">全て選択</string>
+									<string key="NSTitle">すべてを選択</string>
 									<string key="NSKeyEquiv">a</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -494,7 +495,7 @@
 											</object>
 											<object class="NSMenuItem" id="637308399">
 												<reference key="NSMenu" ref="618044702"/>
-												<string key="NSTitle">選択項目を検索</string>
+												<string key="NSTitle">選択部分を検索に使用</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -503,7 +504,7 @@
 											</object>
 											<object class="NSMenuItem" id="862829981">
 												<reference key="NSMenu" ref="618044702"/>
-												<string key="NSTitle">選択箇所内にスクロール</string>
+												<string key="NSTitle">選択部分へジャンプ</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSMnemonicLoc">2147483647</int>
 												<reference key="NSOnImage" ref="791850863"/>
@@ -514,7 +515,7 @@
 								</object>
 								<object class="NSMenuItem" id="464406330">
 									<reference key="NSMenu" ref="92592331"/>
-									<string key="NSTitle">スペル</string>
+									<string key="NSTitle">スペルと文法</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -522,11 +523,11 @@
 									<reference key="NSMixedImage" ref="889411723"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="381891847">
-										<string key="NSTitle">スペル</string>
+										<string key="NSTitle">スペルと文法</string>
 										<array class="NSMutableArray" key="NSMenuItems">
 											<object class="NSMenuItem" id="868894556">
 												<reference key="NSMenu" ref="381891847"/>
-												<string key="NSTitle">スペルウィンドウ…</string>
+												<string key="NSTitle">スペルと文法を表示…</string>
 												<string key="NSKeyEquiv">:</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -535,7 +536,7 @@
 											</object>
 											<object class="NSMenuItem" id="424734931">
 												<reference key="NSMenu" ref="381891847"/>
-												<string key="NSTitle">スペルチェック</string>
+												<string key="NSTitle">書類を今すぐチェック</string>
 												<string key="NSKeyEquiv">;</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -544,7 +545,7 @@
 											</object>
 											<object class="NSMenuItem" id="199010983">
 												<reference key="NSMenu" ref="381891847"/>
-												<string key="NSTitle">入力中に自動スペルチェック</string>
+												<string key="NSTitle">入力中にスペルチェック</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -571,7 +572,7 @@
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="673458378">
 									<reference key="NSMenu" ref="627182964"/>
-									<string key="NSTitle">前書きを表示</string>
+									<string key="NSTitle">プリアンブルを表示</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -579,7 +580,7 @@
 								</object>
 								<object class="NSMenuItem" id="934782545">
 									<reference key="NSMenu" ref="627182964"/>
-									<string key="NSTitle">ログを表示</string>
+									<string key="NSTitle">最後のログを表示</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -599,7 +600,7 @@
 								</object>
 								<object class="NSMenuItem" id="259887440">
 									<reference key="NSMenu" ref="627182964"/>
-									<string key="NSTitle">Eqnarray</string>
+									<string key="NSTitle">Align</string>
 									<string key="NSKeyEquiv">1</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -629,7 +630,7 @@
 								</object>
 								<object class="NSMenuItem" id="109148208">
 									<reference key="NSMenu" ref="627182964"/>
-									<string key="NSTitle">テキスト編集</string>
+									<string key="NSTitle">Text</string>
 									<string key="NSKeyEquiv">4</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -660,7 +661,7 @@
 								<object class="NSMenuItem" id="794828021">
 									<reference key="NSMenu" ref="627182964"/>
 									<bool key="NSIsAlternate">YES</bool>
-									<string key="NSTitle">LaTeX it! ともう一度エクスポート</string>
+									<string key="NSTitle">LaTeX it! と再書き出し</string>
 									<string key="NSKeyEquiv">t</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -672,7 +673,7 @@
 					</object>
 					<object class="NSMenuItem" id="677404131">
 						<reference key="NSMenu" ref="548770543"/>
-						<string key="NSTitle">ライブラリー</string>
+						<string key="NSTitle">ライブラリ</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -680,11 +681,11 @@
 						<reference key="NSMixedImage" ref="889411723"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="55124784">
-							<string key="NSTitle">ライブラリー</string>
+							<string key="NSTitle">ライブラリ</string>
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="778553912">
 									<reference key="NSMenu" ref="55124784"/>
-									<string key="NSTitle">フォルダ追加</string>
+									<string key="NSTitle">フォルダを追加</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -692,7 +693,7 @@
 								</object>
 								<object class="NSMenuItem" id="5181560">
 									<reference key="NSMenu" ref="55124784"/>
-									<string key="NSTitle">現在の数式追加</string>
+									<string key="NSTitle">現在の数式を追加</string>
 									<string key="NSKeyEquiv">d</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -712,7 +713,7 @@
 								</object>
 								<object class="NSMenuItem" id="95107093">
 									<reference key="NSMenu" ref="55124784"/>
-									<string key="NSTitle">選択部分名称変更</string>
+									<string key="NSTitle">選択項目を名称変更</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -720,7 +721,7 @@
 								</object>
 								<object class="NSMenuItem" id="965699144">
 									<reference key="NSMenu" ref="55124784"/>
-									<string key="NSTitle">選択部分削除</string>
+									<string key="NSTitle">選択項目を削除</string>
 									<string type="base64-UTF8" key="NSKeyEquiv">CA</string>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -728,7 +729,7 @@
 								</object>
 								<object class="NSMenuItem" id="625015331">
 									<reference key="NSMenu" ref="55124784"/>
-									<string key="NSTitle">現在の数式再読み込み</string>
+									<string key="NSTitle">現在の数式に置き換え</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -774,7 +775,7 @@
 								</object>
 								<object class="NSMenuItem" id="943281426">
 									<reference key="NSMenu" ref="55124784"/>
-									<string key="NSTitle">ライブラリーを表示</string>
+									<string key="NSTitle">ライブラリを表示</string>
 									<string key="NSKeyEquiv">b</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -786,7 +787,7 @@
 					</object>
 					<object class="NSMenuItem" id="590700280">
 						<reference key="NSMenu" ref="548770543"/>
-						<string key="NSTitle">ヒストリ</string>
+						<string key="NSTitle">履歴</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -794,11 +795,11 @@
 						<reference key="NSMixedImage" ref="889411723"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="334349000">
-							<string key="NSTitle">ヒストリ</string>
+							<string key="NSTitle">履歴</string>
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="610743052">
 									<reference key="NSMenu" ref="334349000"/>
-									<string key="NSTitle">選択部分を削除</string>
+									<string key="NSTitle">選択項目を削除</string>
 									<string type="base64-UTF8" key="NSKeyEquiv">CA</string>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -806,7 +807,7 @@
 								</object>
 								<object class="NSMenuItem" id="903055636">
 									<reference key="NSMenu" ref="334349000"/>
-									<string key="NSTitle">ヒストリを削除</string>
+									<string key="NSTitle">履歴を削除</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -824,9 +825,36 @@
 									<reference key="NSOnImage" ref="791850863"/>
 									<reference key="NSMixedImage" ref="889411723"/>
 								</object>
+								<object class="NSMenuItem" id="235454575">
+									<reference key="NSMenu" ref="334349000"/>
+									<string key="NSTitle">インポート...</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
+								<object class="NSMenuItem" id="16643111">
+									<reference key="NSMenu" ref="334349000"/>
+									<string key="NSTitle">エクスポート...</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
+								<object class="NSMenuItem" id="663815212">
+									<reference key="NSMenu" ref="334349000"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
 								<object class="NSMenuItem" id="654277465">
 									<reference key="NSMenu" ref="334349000"/>
-									<string key="NSTitle">ヒストリを表示</string>
+									<string key="NSTitle">履歴を表示</string>
 									<string key="NSKeyEquiv">r</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -859,7 +887,7 @@
 								</object>
 								<object class="NSMenuItem" id="167527653">
 									<reference key="NSMenu" ref="960062140"/>
-									<string key="NSTitle">追加ファイル</string>
+									<string key="NSTitle">補足ファイル</string>
 									<string key="NSKeyEquiv">a</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -868,7 +896,7 @@
 								</object>
 								<object class="NSMenuItem" id="346101528">
 									<reference key="NSMenu" ref="960062140"/>
-									<string key="NSTitle">LaTeX ツール設定</string>
+									<string key="NSTitle">プログラム構成</string>
 									<string key="NSKeyEquiv">p</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -877,7 +905,7 @@
 								</object>
 								<object class="NSMenuItem" id="698206369">
 									<reference key="NSMenu" ref="960062140"/>
-									<string key="NSTitle">LaTeX ソースコメント</string>
+									<string key="NSTitle">エンカプセレーション</string>
 									<string key="NSKeyEquiv">e</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -886,7 +914,7 @@
 								</object>
 								<object class="NSMenuItem" id="154613580">
 									<reference key="NSMenu" ref="960062140"/>
-									<string key="NSTitle">LaTeX</string>
+									<string key="NSTitle">LaTeX パネル</string>
 									<string key="NSKeyEquiv">l</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -907,7 +935,7 @@
 					</object>
 					<object class="NSMenuItem" id="440962727">
 						<reference key="NSMenu" ref="548770543"/>
-						<string key="NSTitle">ウィンドウ</string>
+						<string key="NSTitle">ウインドウ</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -915,7 +943,7 @@
 						<reference key="NSMixedImage" ref="889411723"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="54661141">
-							<string key="NSTitle">ウィンドウ</string>
+							<string key="NSTitle">ウインドウ</string>
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="720256900">
 									<reference key="NSMenu" ref="54661141"/>
@@ -928,7 +956,7 @@
 								</object>
 								<object class="NSMenuItem" id="525904066">
 									<reference key="NSMenu" ref="54661141"/>
-									<string key="NSTitle">ウィンドウをしまう</string>
+									<string key="NSTitle">ウインドウをしまう</string>
 									<string key="NSKeyEquiv">m</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -937,7 +965,7 @@
 								</object>
 								<object class="NSMenuItem" id="747113586">
 									<reference key="NSMenu" ref="54661141"/>
-									<string key="NSTitle">ミニウィンドウに切り替え</string>
+									<string key="NSTitle">ミニウインドウモード</string>
 									<string key="NSKeyEquiv">M</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -977,7 +1005,7 @@
 								</object>
 								<object class="NSMenuItem" id="569389913">
 									<reference key="NSMenu" ref="54661141"/>
-									<string key="NSTitle">入力ウィンドウを小さく</string>
+									<string key="NSTitle">入力エリアを小さく</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1162,7 +1190,7 @@
 			<object class="NSWindowTemplate" id="916838359">
 				<int key="NSWindowStyleMask">3</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{456, 391}, {354, 167}}</string>
+				<string key="NSWindowRect">{{456, 397}, {370, 161}}</string>
 				<int key="NSWTFlags">-260571136</int>
 				<string key="NSWindowTitle">Make a Donation...</string>
 				<object class="NSMutableString" key="NSWindowClass">
@@ -1180,17 +1208,17 @@
 						<object class="NSTextField" id="547056869">
 							<reference key="NSNextResponder" ref="854148441"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{17, 20}, {320, 127}}</string>
+							<string key="NSFrame">{{17, 20}, {336, 121}}</string>
 							<reference key="NSSuperview" ref="854148441"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="972552784">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">138412032</int>
-								<string type="base64-UTF8" key="NSContents">TGFUZVhpVOOBruOBn+OCgeOBq+WvhOS7mOOCkuOBl+OBpumgguOBkeOCi+OBquOCieOAgeengeOBruOC
-puOCp+ODluOCteOCpOODiOOBi+OCieengeOBrlBheXBhbOOCouOCq+OCpuODs+ODiOOBq+OCouOCr+OC
-u+OCueOBp+OBjeOBvuOBmeOAggoKCkxhVGVYaVTjga/jg5Xjg6rjg7zjgqbjgqfjgqLjgr3jg5Xjg4jj
-gafjgZnjga7jgafjgIHlr4Tku5jjgpLjgZfjgarjgZHjgozjgbDjgarjgonjgarjgYTjgajjgYTjgYbn
-vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
+								<string type="base64-UTF8" key="NSContents">TGFUZVhpVCDjga7jgZ/jgoHjgavlr4Tku5jjgpLjgZfjgabpoILjgZHjgovjgarjgonjgIHjgqbjgqfj
+g5bjgrXjgqTjg4jjgYvjgonnp4Hjga4gUGF5cGFsIOOCouOCq+OCpuODs+ODiOOBq+OCouOCr+OCu+OC
+ueOBl+OBpuOBj+OBoOOBleOBhOOAggoKCgpMYVRlWGlUIOOBr+ODleODquODvOOCpuOCp+OCouOCveOD
+leODiOOBp+OBmeOBruOBp+OCguOBoeOCjeOCk+WvhOS7mOOBr+e+qeWLmeOBp+OBr+OBguOCiuOBvuOB
+m+OCk+OAgg</string>
 								<object class="NSFont" key="NSSupport" id="281636721">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">13</double>
@@ -1214,14 +1242,14 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<object class="NSButton" id="378050297">
 							<reference key="NSNextResponder" ref="854148441"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{82, 71}, {190, 29}}</string>
+							<string key="NSFrame">{{90, 65}, {190, 29}}</string>
 							<reference key="NSSuperview" ref="854148441"/>
 							<int key="NSTag">1</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="839777145">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134217728</int>
-								<string key="NSContents">LaTeXiTウェブサイトへ... </string>
+								<string key="NSContents">LaTeXiT ウェブサイトへ... </string>
 								<reference key="NSSupport" ref="281636721"/>
 								<reference key="NSControlView" ref="378050297"/>
 								<int key="NSTag">1</int>
@@ -1235,7 +1263,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 							</object>
 						</object>
 					</array>
-					<string key="NSFrameSize">{354, 167}</string>
+					<string key="NSFrameSize">{370, 161}</string>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1024, 746}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -1244,7 +1272,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 			<object class="NSWindowTemplate" id="121372641">
 				<int key="NSWindowStyleMask">1</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{448, 510}, {448, 178}}</string>
+				<string key="NSWindowRect">{{448, 556}, {448, 132}}</string>
 				<int key="NSWTFlags">1886912512</int>
 				<string key="NSWindowTitle">Reminder</string>
 				<object class="NSMutableString" key="NSWindowClass">
@@ -1262,7 +1290,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<object class="NSButton" id="868911529">
 							<reference key="NSNextResponder" ref="239285278"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{112, 58}, {224, 18}}</string>
+							<string key="NSFrame">{{18, 21}, {191, 18}}</string>
 							<reference key="NSSuperview" ref="239285278"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="574660737">
@@ -1285,14 +1313,18 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<object class="NSTextField" id="926819840">
 							<reference key="NSNextResponder" ref="239285278"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{17, 90}, {414, 68}}</string>
+							<string key="NSFrame">{{17, 44}, {414, 68}}</string>
 							<reference key="NSSuperview" ref="239285278"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="169085500">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">205520896</int>
-								<string key="NSContents"> あなたは数式用に白色を選択しました。Ghostcriptの不具合が、適切に処理されるのを妨げる可能性があります。メニューのパレット&gt;マージンを使用しマージンを上げてそれを修正するか、又は代わりに「ほとんど白」を使用します。</string>
-								<reference key="NSSupport" ref="281636721"/>
+								<string key="NSContents">数式の色が白に設定されていますが、Ghostcript の不具合で適切に処理されない可能性があります。余白を大きめに設定（パレットメニューの余白）するか、色を「ほとんど白」にすることで問題を回避できます。</string>
+								<object class="NSFont" key="NSSupport" id="979968611">
+									<string key="NSName">HiraKakuProN-W3</string>
+									<double key="NSSize">13</double>
+									<int key="NSfFlags">16</int>
+								</object>
 								<reference key="NSControlView" ref="926819840"/>
 								<reference key="NSBackgroundColor" ref="560195160"/>
 								<reference key="NSTextColor" ref="587018569"/>
@@ -1326,7 +1358,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<object class="NSButton" id="297477144">
 							<reference key="NSNextResponder" ref="239285278"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{258, 12}, {105, 32}}</string>
+							<string key="NSFrame">{{247, 12}, {105, 32}}</string>
 							<reference key="NSSuperview" ref="239285278"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="91617194">
@@ -1347,7 +1379,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 							</object>
 						</object>
 					</array>
-					<string key="NSFrameSize">{448, 178}</string>
+					<string key="NSFrameSize">{448, 132}</string>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1024, 746}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -1364,24 +1396,20 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<string key="NSClassName">SUUpdater</string>
 			</object>
 			<object class="NSCustomView" id="679609900">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSTextField" id="972462926">
 						<reference key="NSNextResponder" ref="679609900"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{17, 23}, {106, 17}}</string>
+						<string key="NSFrame">{{17, 22}, {106, 17}}</string>
 						<reference key="NSSuperview" ref="679609900"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="836927056">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">272630784</int>
 							<string key="NSContents">ファイルタイプ :</string>
-							<object class="NSFont" key="NSSupport">
-								<string key="NSName">HiraKakuProN-W3</string>
-								<double key="NSSize">13</double>
-								<int key="NSfFlags">16</int>
-							</object>
+							<reference key="NSSupport" ref="979968611"/>
 							<reference key="NSControlView" ref="972462926"/>
 							<reference key="NSBackgroundColor" ref="560195160"/>
 							<reference key="NSTextColor" ref="587018569"/>
@@ -1419,6 +1447,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 					</object>
 				</array>
 				<string key="NSFrameSize">{395, 60}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 		</array>
@@ -2088,6 +2117,22 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 					</object>
 					<int key="connectionID">1601</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">historyOpen:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="235454575"/>
+					</object>
+					<int key="connectionID">1607</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">historySaveAs:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="16643111"/>
+					</object>
+					<int key="connectionID">1608</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2592,6 +2637,9 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 							<reference ref="185492527"/>
 							<reference ref="903055636"/>
 							<reference ref="610743052"/>
+							<reference ref="235454575"/>
+							<reference ref="16643111"/>
+							<reference ref="663815212"/>
 						</array>
 						<reference key="parent" ref="590700280"/>
 					</object>
@@ -2854,8 +2902,8 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<int key="objectID">1352</int>
 						<reference key="object" ref="854148441"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="547056869"/>
 							<reference ref="378050297"/>
+							<reference ref="547056869"/>
 						</array>
 						<reference key="parent" ref="916838359"/>
 					</object>
@@ -2888,8 +2936,8 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<int key="objectID">1405</int>
 						<reference key="object" ref="239285278"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="868911529"/>
 							<reference ref="926819840"/>
+							<reference ref="868911529"/>
 							<reference ref="742489738"/>
 							<reference ref="297477144"/>
 						</array>
@@ -3053,6 +3101,21 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<reference key="object" ref="109148208"/>
 						<reference key="parent" ref="627182964"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1602</int>
+						<reference key="object" ref="235454575"/>
+						<reference key="parent" ref="334349000"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1603</int>
+						<reference key="object" ref="16643111"/>
+						<reference key="parent" ref="334349000"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1604</int>
+						<reference key="object" ref="663815212"/>
+						<reference key="parent" ref="334349000"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3060,7 +3123,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="-3.ImportedFromIB2"/>
 				<string key="103.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="103.ImportedFromIB2"/>
-				<string key="106.IBEditorWindowLastContentRect">{{1579, 986}, {171, 23}}</string>
+				<string key="106.IBEditorWindowLastContentRect">{{726, 666}, {171, 23}}</string>
 				<string key="106.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="106.ImportedFromIB2"/>
 				<string key="111.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3069,9 +3132,9 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1115.ImportedFromIB2"/>
 				<string key="1116.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1116.ImportedFromIB2"/>
-				<string key="1117.IBEditorWindowLastContentRect">{{42, 531}, {586, 568}}</string>
+				<string key="1117.IBEditorWindowLastContentRect">{{42, 188}, {586, 568}}</string>
 				<string key="1117.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1117.IBWindowTemplateEditedContentRect">{{42, 531}, {586, 568}}</string>
+				<string key="1117.IBWindowTemplateEditedContentRect">{{42, 188}, {586, 568}}</string>
 				<boolean value="YES" key="1117.ImportedFromIB2"/>
 				<boolean value="YES" key="1117.windowTemplate.hasMinSize"/>
 				<string key="1117.windowTemplate.minSize">{213, 107}</string>
@@ -3079,7 +3142,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1118.ImportedFromIB2"/>
 				<string key="1123.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1123.ImportedFromIB2"/>
-				<string key="1129.IBEditorWindowLastContentRect">{{1241, 816}, {222, 193}}</string>
+				<string key="1129.IBEditorWindowLastContentRect">{{430, 496}, {222, 193}}</string>
 				<string key="1129.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1129.ImportedFromIB2"/>
 				<string key="1130.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3109,14 +3172,14 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1238.ImportedFromIB2"/>
 				<string key="129.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="129.ImportedFromIB2"/>
-				<string key="130.IBEditorWindowLastContentRect">{{415, 447}, {64, 6}}</string>
+				<string key="130.IBEditorWindowLastContentRect">{{383, 447}, {64, 6}}</string>
 				<string key="130.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="130.ImportedFromIB2"/>
 				<string key="131.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="131.ImportedFromIB2"/>
 				<string key="1338.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1338.ImportedFromIB2"/>
-				<string key="1339.IBEditorWindowLastContentRect">{{658, 430}, {235, 123}}</string>
+				<string key="1339.IBEditorWindowLastContentRect">{{564, 566}, {232, 123}}</string>
 				<string key="1339.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1339.ImportedFromIB2"/>
 				<string key="134.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3131,9 +3194,9 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1343.ImportedFromIB2"/>
 				<string key="1350.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1350.ImportedFromIB2"/>
-				<string key="1351.IBEditorWindowLastContentRect">{{0, 978}, {354, 167}}</string>
+				<string key="1351.IBEditorWindowLastContentRect">{{39, 595}, {370, 161}}</string>
 				<string key="1351.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1351.IBWindowTemplateEditedContentRect">{{0, 978}, {354, 167}}</string>
+				<string key="1351.IBWindowTemplateEditedContentRect">{{39, 595}, {370, 161}}</string>
 				<boolean value="YES" key="1351.ImportedFromIB2"/>
 				<boolean value="YES" key="1351.windowTemplate.hasMinSize"/>
 				<string key="1351.windowTemplate.minSize">{213, 107}</string>
@@ -3149,7 +3212,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1363.ImportedFromIB2"/>
 				<string key="1365.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1365.ImportedFromIB2"/>
-				<string key="1366.IBEditorWindowLastContentRect">{{1323, 766}, {288, 153}}</string>
+				<string key="1366.IBEditorWindowLastContentRect">{{526, 446}, {302, 153}}</string>
 				<string key="1366.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1366.ImportedFromIB2"/>
 				<string key="1367.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3178,9 +3241,9 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1401.ImportedFromIB2"/>
 				<string key="1402.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1402.ImportedFromIB2"/>
-				<string key="1404.IBEditorWindowLastContentRect">{{21, 944}, {448, 178}}</string>
+				<string key="1404.IBEditorWindowLastContentRect">{{462, 724}, {448, 132}}</string>
 				<string key="1404.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="1404.IBWindowTemplateEditedContentRect">{{21, 944}, {448, 178}}</string>
+				<string key="1404.IBWindowTemplateEditedContentRect">{{462, 724}, {448, 132}}</string>
 				<boolean value="YES" key="1404.ImportedFromIB2"/>
 				<boolean value="YES" key="1404.windowTemplate.hasMinSize"/>
 				<string key="1404.windowTemplate.minSize">{213, 107}</string>
@@ -3211,13 +3274,14 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="1495.ImportedFromIB2"/>
 				<string key="150.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="150.ImportedFromIB2"/>
-				<string key="1511.IBEditorWindowLastContentRect">{{63, 796}, {395, 60}}</string>
+				<string key="1511.IBEditorWindowLastContentRect">{{180, 431}, {395, 60}}</string>
 				<string key="1511.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1511.ImportedFromIB2"/>
 				<string key="1512.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1512.ImportedFromIB2"/>
 				<string key="1513.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1513.ImportedFromIB2"/>
+				<string key="1516.IBEditorWindowLastContentRect">{{294, 467}, {253, 6}}</string>
 				<string key="1516.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1516.ImportedFromIB2"/>
 				<string key="1536.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3242,7 +3306,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<string key="1588.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1589.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1589.IBShouldRemoveOnLegacySave"/>
-				<string key="159.IBEditorWindowLastContentRect">{{1323, 726}, {244, 103}}</string>
+				<string key="159.IBEditorWindowLastContentRect">{{597, 389}, {230, 103}}</string>
 				<string key="159.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="159.ImportedFromIB2"/>
 				<string key="1590.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3257,6 +3321,12 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<string key="1597.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="160.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="160.ImportedFromIB2"/>
+				<string key="1602.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1602.ImportedFromIB2"/>
+				<string key="1603.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1603.ImportedFromIB2"/>
+				<string key="1604.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1604.ImportedFromIB2"/>
 				<string key="161.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="161.ImportedFromIB2"/>
 				<string key="162.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3269,7 +3339,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="167.ImportedFromIB2"/>
 				<string key="168.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="168.ImportedFromIB2"/>
-				<string key="169.IBEditorWindowLastContentRect">{{1136, 786}, {187, 223}}</string>
+				<string key="169.IBEditorWindowLastContentRect">{{325, 466}, {201, 223}}</string>
 				<string key="169.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="169.ImportedFromIB2"/>
 				<string key="171.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3282,7 +3352,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="174.ImportedFromIB2"/>
 				<string key="184.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="184.ImportedFromIB2"/>
-				<string key="185.IBEditorWindowLastContentRect">{{1323, 746}, {252, 63}}</string>
+				<string key="185.IBEditorWindowLastContentRect">{{597, 409}, {224, 63}}</string>
 				<string key="185.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="185.ImportedFromIB2"/>
 				<string key="187.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3302,10 +3372,10 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="211.ImportedFromIB2"/>
 				<string key="212.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="212.ImportedFromIB2"/>
-				<string key="213.IBEditorWindowLastContentRect">{{584, 480}, {180, 73}}</string>
+				<string key="213.IBEditorWindowLastContentRect">{{621, 652}, {180, 123}}</string>
 				<string key="213.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="213.ImportedFromIB2"/>
-				<string key="215.IBEditorWindowLastContentRect">{{423, 370}, {306, 183}}</string>
+				<string key="215.IBEditorWindowLastContentRect">{{371, 506}, {236, 183}}</string>
 				<string key="215.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="215.ImportedFromIB2"/>
 				<string key="216.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3326,17 +3396,17 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="23.ImportedFromIB2"/>
 				<string key="231.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="231.ImportedFromIB2"/>
-				<string key="24.IBEditorWindowLastContentRect">{{732, 430}, {260, 123}}</string>
+				<string key="24.IBEditorWindowLastContentRect">{{638, 566}, {232, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
-				<string key="29.IBEditorWindowLastContentRect">{{159, 553}, {733, 20}}</string>
+				<string key="29.IBEditorWindowLastContentRect">{{210, 775}, {691, 20}}</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="29.ImportedFromIB2"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="5.ImportedFromIB2"/>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="56.ImportedFromIB2"/>
-				<string key="57.IBEditorWindowLastContentRect">{{171, 330}, {244, 223}}</string>
+				<string key="57.IBEditorWindowLastContentRect">{{119, 466}, {230, 223}}</string>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="57.ImportedFromIB2"/>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3345,7 +3415,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 				<boolean value="YES" key="73.ImportedFromIB2"/>
 				<string key="79.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="79.ImportedFromIB2"/>
-				<string key="81.IBEditorWindowLastContentRect">{{1062, 876}, {301, 133}}</string>
+				<string key="81.IBEditorWindowLastContentRect">{{251, 556}, {287, 133}}</string>
 				<string key="81.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="81.ImportedFromIB2"/>
 				<string key="82.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3359,7 +3429,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1601</int>
+			<int key="maxID">1608</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3374,7 +3444,9 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 						<string key="displayLog:">id</string>
 						<string key="exportImage:">id</string>
 						<string key="historyClearHistory:">id</string>
+						<string key="historyOpen:">id</string>
 						<string key="historyRemoveHistoryEntries:">id</string>
+						<string key="historySaveAs:">id</string>
 						<string key="latexPalettesClick:">id</string>
 						<string key="libraryImportCurrent:">id</string>
 						<string key="libraryNewFolder:">id</string>
@@ -4688,6 +4760,7 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 			</array>
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
+		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
 			<integer value="1050" key="NS.object.0"/>
@@ -4699,5 +4772,9 @@ vqnli5njga/lhajjgY/jgYLjgorjgb7jgZvjgpPjgIIKA</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<string key="IBDocument.LastKnownRelativeProjectPath">../LaTeXiT.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
+		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<string key="NSMenuCheckmark">{9, 8}</string>
+			<string key="NSMenuMixedState">{7, 2}</string>
+		</dictionary>
 	</data>
 </archive>

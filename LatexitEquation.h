@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -36,16 +36,21 @@ extern NSString* LatexitEquationsPboardType;
 +(NSManagedObjectContext*) currentManagedObjectContext;
 +(NSManagedObjectContext*) popManagedObjectContext;
 
+//
++(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 
 //constructors
++(id) latexitEquationWithData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 +(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor;
+-(id) initWithData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
                                             mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
+-(void) dispose;
 
 //accessors
 -(NSData*) pdfData;
@@ -80,6 +85,7 @@ extern NSString* LatexitEquationsPboardType;
 -(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
 
 //utils
+//+(double) baselineFromData:(NSData*)someData;
 -(NSString*) titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;

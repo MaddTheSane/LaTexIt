@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -57,6 +57,17 @@ static NSMutableSet* createdTemporaryPaths = nil;
   return result;
 }
 //end bridge_contentsOfDirectoryAtPath:error:
+
+-(BOOL) bridge_copyItemAtPath:(NSString*)srcPath toPath:(NSString*)dstPath error:(NSError**)error
+{
+  BOOL result = NO;
+  if ([self respondsToSelector:@selector(copyItemAtPath:toPath:error:)])
+    result = [self copyItemAtPath:srcPath toPath:dstPath error:error];
+  else
+    result = [self copyPath:srcPath toPath:dstPath handler:0];
+  return result;
+}
+//end bridge_copyItemAtPath:toPath:error:
 
 @end
 

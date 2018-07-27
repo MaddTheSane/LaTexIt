@@ -1,7 +1,7 @@
-"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/Typeset LaTeX Maths align";
-"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Typeset LaTeX Maths eqnarray";
-"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Typeset LaTeX Maths display \\[...\\]";
-"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Typeset LaTeX Maths inline $...$";
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Typeset LaTeX Maths Eqnarray (\\begin{eqnarray*}...\\end{eqnarray*})";
+"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/Typeset LaTeX Maths Align (\\begin{align*}...\\end{align*})";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Typeset LaTeX Maths Display (\\[...\\])";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Typeset LaTeX Maths Inline ($...$)";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/Typeset LaTeX Text";
 "LaTeXiT/Detect and typeset equations" = "LaTeXiT/Detect and typeset equations";
 "LaTeXiT/Un-latexize the equations" = "LaTeXiT/Revert equations back to LaTeX code";

@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>relations</key>
-	<string>リレーション</string>
+	<string>関係子</string>
 </dict>
 </plist>

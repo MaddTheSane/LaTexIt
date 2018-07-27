@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 #import "PreamblesTableView.h"
 
@@ -48,6 +48,12 @@ static NSString* PreamblesPboardType = @"PreamblesPboardType"; //pboard type for
     [self edit:self];
 }
 //end keyDown:
+
+-(void) deleteBackward:(id)sender
+{
+  [[[PreferencesController sharedController] preamblesController] remove:sender];
+}
+//end deleteBackward:
 
 //edit selected row
 -(IBAction) edit:(id)sender

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/09.
-//  Copyright 2009 LAIC. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryEquation.h"
@@ -63,8 +63,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) dealloc
 {
+  [self dispose];
   //in didTurnInToFault, a problem occurs with undo, that does not call any awakeFrom... to reactivate the observer
-  [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
   [super dealloc];
 }
 //end dealloc
@@ -79,6 +79,20 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 }
 //end copyWithZone:
 
+-(void) dispose
+{
+  [super dispose];
+  @synchronized(self)
+  {
+    if (self->kvoEnabled)
+    {
+      [self removeObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor"];
+      self->kvoEnabled = NO;
+    }
+  }//end @synchronized(self)
+}
+//end dispose
+
 -(void) didTurnIntoFault
 {
   [super didTurnIntoFault];
@@ -88,14 +102,22 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(void) awakeFromFetch
 {
   [super awakeFromFetch];
-  [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+  @synchronized(self)
+  {
+    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+    self->kvoEnabled = YES;
+  }//end @synchronized(self)
 }
 //end awakeFromFetch
 
 -(void) awakeFromInsert
 {
   [super awakeFromInsert];
-  [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+  @synchronized(self)
+  {
+    [self addObserver:self forKeyPath:@"equationWrapper.equation.backgroundColor" options:0 context:nil];
+    self->kvoEnabled = YES;
+  }//end @synchronized(self)
   LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
   [[self managedObjectContext] safeInsertObject:equationWrapper];
   LatexitEquation* equation = [equationWrapper equation];

@@ -35,6 +35,8 @@
 "Change Library items background color" = "Changer la couleur de fond d'items de la bibliothèque";
 "Import library..." = "Importer une bibliothèque...";
 "Export library..." = "Exporter la bibliothèque...";
+"Import history..." = "Importer une historique...";
+"Export history..." = "Exporter l'historique...";
 "Loading error" = "Erreur de chargement";
 "An error occured while saving" = "Une erreur est survenue lors de l'enregistrement";
 "The file does not appear to be a valid format" = "Le fichier semble ne pas être au bon format";
@@ -98,7 +100,8 @@
 "Leur ancien préambule sera écrasé. S'il s'agissait d'un préambule spécial utilisé pour leur génération, il sera perdu.";
 "Apply" = "Appliquer";
 "Typeset LaTeX Maths align" = "Créer l'équation en mode align";
-"Typeset LaTeX Maths eqnarray" = "Créer l'équation en mode eqnarray";
+"Typeset LaTeX Maths eqnarray" = "Créer l'équation en mode Eqnarray";
+"Typeset LaTeX Maths align" = "Créer l'équation en mode Align";
 "Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $...$";
 "Typeset LaTeX Text" = "Créer l'équation en mode texte";
@@ -155,6 +158,7 @@
 "PDF Equation" = "Équation PDF";
 "Text file" = "Fichier texte";
 "LaTeXiT library" = "Bibliothèque LaTeXiT";
+"LaTeXiT history" = "Historique LaTeXiT";
 "LaTeX Equation Editor library" = "Bibliothèque LaTeX Equation Editor";
 "LaTeXiT LaTeX Palette" = "Palette LaTeX LaTeXiT";
 "Additional files" = "Fichiers additionnels";
@@ -167,6 +171,7 @@
 "Edit the configurations..." = "Modifier les configurations...";
 
 /* document */
+"clipboard" = "presse-papiers";
 "Text" = "Texte";
 "Font size :" = "Taille :";
 "Color :" = "Couleur :";
@@ -191,10 +196,14 @@
 "Add current equation" = "Ajouter l'équation courante";
 "Rename selection" = "Renommer la sélection";
 "Remove selection" = "Supprimer la sélection";
-"Refresh current equation" = "Rafraîchir l'équation courante";
+"Replace current equation" = "Remplacer l'équation courante";
 "Import..." = "Importer...";
 "Export..." = "Exporter...";
 "Display the equations in real size on mouse over" = "Affiche les équations en taille réelle lors d'un passage de la souris";
+
+/* History */
+"Add to current history" = "Ajouter à l'historique";
+"Overwrite current history" = "Écraser l'historique";
 
 /* palette : additional files */
 "Open defaults" = "Ouvrir la configuration par défaut";

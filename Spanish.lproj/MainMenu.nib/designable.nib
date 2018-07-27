@@ -3,15 +3,15 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10C540</string>
-		<string key="IBDocument.InterfaceBuilderVersion">740</string>
+		<string key="IBDocument.InterfaceBuilderVersion">761</string>
 		<string key="IBDocument.AppKitVersion">1038.25</string>
 		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">740</string>
+			<string key="NS.object.0">761</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="1549"/>
+			<integer value="213"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -728,7 +728,7 @@
 								</object>
 								<object class="NSMenuItem" id="352530770">
 									<reference key="NSMenu" ref="457219236"/>
-									<string key="NSTitle">Refrescar la ecuación actual</string>
+									<string key="NSTitle">Reemplazar la ecuación actual</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="58468837"/>
@@ -814,6 +814,33 @@
 									<reference key="NSMixedImage" ref="240616805"/>
 								</object>
 								<object class="NSMenuItem" id="589775431">
+									<reference key="NSMenu" ref="91590442"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="58468837"/>
+									<reference key="NSMixedImage" ref="240616805"/>
+								</object>
+								<object class="NSMenuItem" id="340584768">
+									<reference key="NSMenu" ref="91590442"/>
+									<string key="NSTitle">Importar...</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="58468837"/>
+									<reference key="NSMixedImage" ref="240616805"/>
+								</object>
+								<object class="NSMenuItem" id="925637145">
+									<reference key="NSMenu" ref="91590442"/>
+									<string key="NSTitle">Exportar...</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="58468837"/>
+									<reference key="NSMixedImage" ref="240616805"/>
+								</object>
+								<object class="NSMenuItem" id="22045894">
 									<reference key="NSMenu" ref="91590442"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -2090,6 +2117,22 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 					</object>
 					<int key="connectionID">1556</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">historyOpen:</string>
+						<reference key="source" ref="281655836"/>
+						<reference key="destination" ref="340584768"/>
+					</object>
+					<int key="connectionID">1562</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">historySaveAs:</string>
+						<reference key="source" ref="281655836"/>
+						<reference key="destination" ref="925637145"/>
+					</object>
+					<int key="connectionID">1563</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2594,6 +2637,9 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 							<reference ref="589775431"/>
 							<reference ref="615395500"/>
 							<reference ref="944895233"/>
+							<reference ref="340584768"/>
+							<reference ref="925637145"/>
+							<reference ref="22045894"/>
 						</array>
 						<reference key="parent" ref="779815207"/>
 					</object>
@@ -3055,6 +3101,21 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 						<reference key="object" ref="300581716"/>
 						<reference key="parent" ref="297712220"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1557</int>
+						<reference key="object" ref="340584768"/>
+						<reference key="parent" ref="91590442"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1558</int>
+						<reference key="object" ref="925637145"/>
+						<reference key="parent" ref="91590442"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1559</int>
+						<reference key="object" ref="22045894"/>
+						<reference key="parent" ref="91590442"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3078,6 +3139,7 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 				<boolean value="YES" key="1118.ImportedFromIB2"/>
 				<string key="1123.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1123.ImportedFromIB2"/>
+				<string key="1129.IBEditorWindowLastContentRect">{{501, 336}, {288, 193}}</string>
 				<string key="1129.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1129.ImportedFromIB2"/>
 				<string key="1130.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3236,6 +3298,12 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 				<string key="1550.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1551.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1552.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1557.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1557.ImportedFromIB2"/>
+				<string key="1558.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1558.ImportedFromIB2"/>
+				<string key="1559.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1559.ImportedFromIB2"/>
 				<string key="156.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="156.ImportedFromIB2"/>
 				<string key="157.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3291,6 +3359,7 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 				<boolean value="YES" key="211.ImportedFromIB2"/>
 				<string key="212.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="212.ImportedFromIB2"/>
+				<string key="213.IBEditorWindowLastContentRect">{{574, 489}, {194, 123}}</string>
 				<string key="213.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="213.ImportedFromIB2"/>
 				<string key="215.IBEditorWindowLastContentRect">{{442, 346}, {262, 183}}</string>
@@ -3317,7 +3386,7 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 				<string key="24.IBEditorWindowLastContentRect">{{719, 507}, {235, 123}}</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="24.ImportedFromIB2"/>
-				<string key="29.IBEditorWindowLastContentRect">{{161, 529}, {698, 20}}</string>
+				<string key="29.IBEditorWindowLastContentRect">{{164, 612}, {698, 20}}</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="29.ImportedFromIB2"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3345,7 +3414,7 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1556</int>
+			<int key="maxID">1563</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3360,7 +3429,9 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 						<string key="displayLog:">id</string>
 						<string key="exportImage:">id</string>
 						<string key="historyClearHistory:">id</string>
+						<string key="historyOpen:">id</string>
 						<string key="historyRemoveHistoryEntries:">id</string>
+						<string key="historySaveAs:">id</string>
 						<string key="latexPalettesClick:">id</string>
 						<string key="libraryImportCurrent:">id</string>
 						<string key="libraryNewFolder:">id</string>
@@ -4674,6 +4745,7 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 			</array>
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
+		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
 			<integer value="1050" key="NS.object.0"/>
@@ -4685,5 +4757,9 @@ ZXMgZGlzZnJ1dGFyIGFzw60JLg</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<string key="IBDocument.LastKnownRelativeProjectPath">../LaTeXiT.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
+		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<string key="NSMenuCheckmark">{9, 8}</string>
+			<string key="NSMenuMixedState">{7, 2}</string>
+		</dictionary>
 	</data>
 </archive>

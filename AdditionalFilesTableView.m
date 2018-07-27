@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/08/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "AdditionalFilesTableView.h"
@@ -58,7 +58,7 @@
     self->isDefaultTableView = value;
     if (self->isDefaultTableView)
     {
-      [[[PreferencesController sharedController] additionalFilesController] addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];//make sur eit is an observer to avoid an exception
+      [[[PreferencesController sharedController] additionalFilesController] addObserver:self forKeyPath:@"arrangedObjects" options:0 context:nil];//make sure it is an observer to avoid an exception
 
       [[[PreferencesController sharedController] additionalFilesController] removeObserver:self forKeyPath:@"arrangedObjects"];
 

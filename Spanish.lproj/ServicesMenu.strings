@@ -1,7 +1,7 @@
-"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/Componer ecuación en un entorno align";
-"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Componer ecuación en un entorno eqnarray";
-"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Componer ecuación en modo display, \\[...\\]";
-"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Componer ecuación en modo inline, $...$";
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/Componer ecuación en un entorno Eqnarray (\\begin{eqnarray*}...\\end{eqnarray*})";
+"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/Componer ecuación en un entorno Align (\\begin{align*}...\\end{align*})";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/Componer ecuación en modo Display, \\[...\\]";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/Componer ecuación en modo Inline, $...$";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/Componer texto LaTeX";
 "LaTeXiT/Detect and typeset equations" = "LaTeXiT/Detectar y componer ecuaciones";
 "LaTeXiT/Un-latexize the equations" = "LaTeXiT/Revertir la ecuación a código LaTeX";

@@ -3,12 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 //this file is an extension of the NSWorkspace class
 
 #import "NSWorkspaceExtended.h"
+
+#import "NDProcess.h"
 
 @implementation NSWorkspace (Extended)
 
@@ -16,23 +18,98 @@
 {
   NSString* result = nil;
   CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(CFBundleGetMainBundle());
-  result = (NSString*) CFDictionaryGetValue( bundleInfoDict, CFSTR("AMName"));
+  result = (NSString*) CFDictionaryGetValue(bundleInfoDict, CFSTR("AMName"));
   if (!result)
-    result = (NSString*) CFDictionaryGetValue( bundleInfoDict, CFSTR("CFBundleExecutable"));
+    result = (NSString*) CFDictionaryGetValue(bundleInfoDict, kCFBundleExecutableKey);
   return result;
 }
 //end applicationName
 
 -(NSString*) applicationVersion
 {
-  NSString* result = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+  NSString* result = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
   return result;
 }
 //end applicationVersion
 
+-(NSString*) applicationBundleIdentifier
+{
+  NSString* result = nil;
+  CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(CFBundleGetMainBundle());
+  result = (NSString*) CFDictionaryGetValue(bundleInfoDict, kCFBundleIdentifierKey);
+  return result;
+}
+//end applicationName
+
+-(BOOL) closeApplicationWithBundleIdentifier:(NSString*)bundleIdentifier
+{
+  BOOL result = NO;
+  id runningApplicationClass = NSClassFromString(@"NSRunningApplication");//10.6 only
+  if (runningApplicationClass)
+  {
+    NSArray* runningApplications =
+      [runningApplicationClass performSelector:@selector(runningApplicationsWithBundleIdentifier:) withObject:bundleIdentifier];
+    NSEnumerator* enumerator = [runningApplications objectEnumerator];
+    id runningApplication = nil;
+    while((runningApplication = [enumerator nextObject]))
+    {
+      [runningApplication terminate];
+      result |= YES;
+    }
+  }//end if (runningApplicationClass)
+  else//if (!runningApplicationClass)
+  {
+    NSArray* runningApplications = [self launchedApplications];
+    NSEnumerator* enumerator = [runningApplications objectEnumerator];
+    id application = nil;
+    id applicationFound = nil;
+    while((application = [enumerator nextObject]))
+    {
+      NSString* candidateBundleIdentifier = [application objectForKey:@"NSApplicationBundleIdentifier"];
+      if ([candidateBundleIdentifier isEqualToString:bundleIdentifier])
+      {
+        applicationFound = application;
+        break;
+      }//end if ([candidateBundleIdentifier isEqualToString:bundleIdentifier])
+    }//end for each application
+    if (applicationFound)
+    {
+      NSNumber* processId = [application objectForKey:@"NSApplicationProcessIdentifier"];
+      if (processId)
+      {
+        kill([processId intValue], SIGKILL);
+        result = YES;
+      }
+    }//end if (applicationFound)
+    else//if (!applicationFound)
+    {
+      NSString* applicationPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:bundleIdentifier];
+      NDProcess* process = [NDProcess processForApplicationPath:applicationPath];
+      if (process)
+      {
+        kill([process processID], SIGKILL);
+        result = YES;
+      }
+      else
+      {
+        NSArray* processes = [NDProcess everyProcessNamed:@"LaTeXiT Helper"];
+        NSEnumerator* enumerator = [processes objectEnumerator];
+        NDProcess* process = nil;
+        while((process = [enumerator nextObject]))
+        {
+          kill([process processID], SIGKILL);
+          result = YES;
+        }//end for each process
+      }//end if (!process)
+    }//end if (!applicationFound)
+  }//end if (!runningApplicationClass)
+  return result;
+}
+//end closeApplicationWithBundleIdentifier:
+
 -(NSString*) temporaryDirectory
 {
-  NSString* thisVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+  NSString* thisVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
   if (!thisVersion)
     thisVersion = @"";
   NSArray* components = [thisVersion componentsSeparatedByString:@" "];

@@ -1,22 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>LaTeXiT/Detect and typeset equations</key>
-	<string>LaTeXiT/数式の検出と表示</string>
-	<key>LaTeXiT/Typeset LaTeX Maths display</key>
-	<string>LaTeXiT/LaTeX コード 表示 \[...\]</string>
-	<key>LaTeXiT/Typeset LaTeX Maths eqnarray</key>
-	<string>LaTeXiT/LaTeX 数式表示</string>
-	<key>LaTeXiT/Typeset LaTeX Maths align</key>
-	<string>LaTeXiT/LaTeX 数式表示</string>
-	<key>LaTeXiT/Typeset LaTeX Maths inline</key>
-	<string>LaTeXiT/LaTeX インラインコード $...$</string>
-	<key>LaTeXiT/Typeset LaTeX Text</key>
-	<string>LaTeXiT/LaTeX テキスト表示</string>
-	<key>LaTeXiT/Un-latexize the equations</key>
-	<string>LaTeXiT/LaTeXコードに数式を戻す</string>
-	<key>SERVICE_DESCRIPTION</key>
-	<string>LaTeXiTは、LaTeXエンジンでテキストを数式に変換します。PDFとしてエクスポートするためにLaTeXiTで作成した数式を、元のテキストに戻すこともできます。テキストをイメージに置換できるアプリケーションで、この機能を使うことができます。</string>
-</dict>
-</plist>
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/数式 Eqnarray 環境でタイプセット (\\begin{eqnarray*}...\\end{eqnarray*})";
+"LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/数式 Align 環境でタイプセット  (\\begin{align*}...\\end{align*})";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/数式ディスプレイモードでタイプセット (\\[...\\])";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/数式インラインモードでタイプセット ($...$)";
+"LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/テキストモードでタイプセット";
+"LaTeXiT/Detect and typeset equations" = "LaTeXiT/数式を検出してタイプセット";
+"LaTeXiT/Un-latexize the equations" = "LaTeXiT/数式を LaTeX コードに戻す";
+"SERVICE_DESCRIPTION" = "LaTeXiT サービス機能は LaTeX をエンジンとする処理を行いテキストを数式イメージに変換することができます。また PDF フォーマットで書き出された場合、その数式イメージから元のテキストに戻すこともできます。テキストからイメージへの置換をサポートしているアプリケーションでこのサービス機能を使うことができます。";

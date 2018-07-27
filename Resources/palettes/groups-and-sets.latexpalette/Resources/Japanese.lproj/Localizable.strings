@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>groups-and-sets</key>
-	<string>グループとセット</string>
+	<string>群と集合</string>
 	<key>subgroup</key>
 	<string>Subgroup</string>
 	<key>subnormgroup</key>

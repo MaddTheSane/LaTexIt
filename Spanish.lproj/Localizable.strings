@@ -34,6 +34,8 @@
 "Change Library items background color" = "Cambiar el color de fondo de elementos de la librearía";
 "Import library..." = "Importar librería...";
 "Export library..." = "Exportar librería...";
+"Import history..." = "Importar historial...";
+"Export history..." = "Exportar historial...";
 "Loading error" = "Error al cargar";
 "An error occured while saving" = "Error al Guardar";
 "The file does not appear to be a valid format" = "El fichero no tiene el formato correcto";
@@ -92,7 +94,8 @@
 "Do you really want to apply that preamble to the library items ?" = "¿Quiere aplicar este preámbulo a lo elementos de la librearía?";
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." = "Su anterior preámbulo se reemplazará. Si es un preámbulo especial contruido para generarlas se perderá.";
 "Apply" = "Aplicar";
-"Typeset LaTeX Maths eqnarray" = "Componer ecuación de LaTeX en un entorno eqnarray";
+"Typeset LaTeX Maths eqnarray" = "Componer ecuación de LaTeX en un entorno Eqnarray";
+"Typeset LaTeX Maths align" = "Componer ecuación de LaTeX en un entorno Align";
 "Typeset LaTeX Maths display" = "Componer ecuación de LaTeX en modo display, \\[...\\]";
 "Typeset LaTeX Maths inline" = "Componer ecuación de LaTeX en modo inline, $...$";
 "Typeset LaTeX Text" = "Componer texto LaTeX";
@@ -154,6 +157,7 @@
 "PDF Equation" = "PDF Ecuación";
 "Text file" = "Archivo de texto";
 "LaTeXiT library" = "LaTeXiT Librería";
+"LaTeXiT history" = "LaTeXiT Historial";
 "LaTeX Equation Editor library" = "LaTeX Equation Editor Librería";
 "LaTeXiT LaTeX Palette" = "LaTeXiT LaTeX-Paleta";
 "Additional files" = "Archivos adicionales";
@@ -166,6 +170,7 @@
 "Edit the configurations..." = "Editar las configuraciones...";
 
 /* document */
+"clipboard" = "portapapeles";
 "Text" = "Texto";
 "Font size :" = "Tamaño:";
 "Color :" = "Color:";
@@ -189,10 +194,14 @@
 "Add current equation" = "Añadir la ecuación actual";
 "Rename selection" = "Renombrar la selección";
 "Remove selection" = "Borrar selección";
-"Refresh current equation" = "Refrescar la ecuación actual";
+"Replace current equation" = "Reemplazar la ecuación actual";
 "Import..." = "Importar...";
 "Export..." = "Exportar...";
 "Display the equations in real size on mouse over" = "Con el ratón encima, mostrar las ecuaciones en tamaño real";
+
+/* History */
+"Add to current history" = "Añadir a la historial actual";
+"Overwrite current history" = "Sobreescribir la historial actual";
 
 /* palette : additional files */
 "Open defaults" = "Abrir defecto";

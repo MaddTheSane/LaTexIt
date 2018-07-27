@@ -319,6 +319,9 @@ FAQ (Foire aux questions)\
 (Q) : Le service ne fonctionne pas avec Keynote\
 (R) : Le service ne marche pas avec Keynote 1, 2, 3, 4, 5, car Keynote ne peut ins\'e9rer une image dans un bloc de texte; pour pallier cela, vous pouvez configurer dans les Pr\'e9f\'e9rences, onglet Services, de faire en sorte que l'utilisation du service remplisse bien l'historique. De cette fa\'e7on, m\'eame si le service \'e9choue \'e0 ins\'e9rer l'image, cette derni\'e8re devient disponible dans la fen\'eatre d'historique que vous pouvez avoir mise dans un coin pour y acc\'e9der facilement.\
 \
+(Q) : Le service "Revenir des \'e9quations au code LaTeX" ne fonctionne pas avec Pages'09\
+(R) : Pages'09 a la f\'e2cheuse particularit\'e9 de r\'e9\'e9crire les PDFs qui y sont ins\'e9r\'e9s, en enlevant la partie que LaTeXiT y rajoute pour contenir le code LaTeX... Esp\'e9rons que les versions ult\'e9rieures seront moins sectaires.\
+\
 (Q) : Quel format d'export devrais-je choisir ?\
 (R) : PDF est le choix de pr\'e9dilection puisque c'est un format "vectoriel" : on peut redimensionner l'image sans perte de qualit\'e9.\
 \
@@ -356,6 +359,7 @@ Ici pour la police Chalkboard :\
 					\\setmainfont\{Chalkboard\}\
 					\\SetSymbolFont\{letters\}\{normal\}\{\\encodingdefault\}\{\\rmdefault\}\{m\}\{it\}\
 					\\SetSymbolFont\{letters\}\{bold\}\{\\encodingdefault\}\{\\rmdefault\}\{b\}\{it\}\
+ 	Voyez \'e9galement des informations sur cette page : {\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex/2009/fonts/"}}{\fldrslt http://www.tug.org/mactex/2009/fonts/}}\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -371,6 +375,7 @@ Ici pour la police Chalkboard :\
 - le service ne marche pas avec Mail 2.0.0, ..., 3.6 (derni\'e8re version disponible au moment o\'f9 ces lignes sont \'e9crites);\
 - LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'e9quations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'e9es par le service dans un flot RTFD. Or, il peut arriver que les \'e9diteurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'eame si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'e0 l'\'e9diteur de texte, mais c'est quelque chose de difficile. Pour r\'e9soudre le probl\'e8me, d\'e9sactivez simplement l'alignement de l'\'e9quation avec la ligne de base texte dans les pr\'e9f\'e9rences du service LaTeXiT; cela d\'e9sactive l'utilisation des flots RTFD;\
 - avec Pages 1.0.2 et 2.0.1, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'e9quation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'e8s bien avec TextEdit et Nisus Writer Express. Ce doit donc \'eatre un bug de Pages.\
+- Pages'09 a la f\'e2cheuse particularit\'e9 de r\'e9\'e9crire les PDFs qui y sont ins\'e9r\'e9s, en enlevant la partie que LaTeXiT y rajoute pour contenir le code LaTeX... Le service "revenir des \'e9quations au code LaTeX" ne peut donc pas fonctionner.;\
 - avec EazyDraw 1.7.1, les \'e9quations gliss\'e9es/d\'e9pos\'e9es se retrouvent invers\'e9es. C'est un bug de EazyDraw, qui a \'e9t\'e9 corrig\'e9 dans la version 1.8;\
 - avec Adobe Illustrator, si vous glissez/d\'e9posez une \'e9quation PDF de LaTeXiT vers Illustrator, les polices de caract\'e8res seront chang\'e9es, car Illustrator permet l'\'e9dition de chaque symbole du PDF g\'e9n\'e9r\'e9 par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'e9diaire : d\'e9posez l'\'e9quation LaTeXiT sur votre bureau, un fichier est cr\'e9\'e9, puis d\'e9placez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'e9diter cette \'e9quation dans Illustrator. Autre possibilit\'e9 : exporter avec un autre format (voyez les Pr\'e9f\'e9rences de LaTeXiT), comme EPS, ou PDF sans polices embarqu\'e9es;\
 - toujours avec Adobe Illustrator, y glisser/d\'e9poser un objet peut entra\'eener la cr\'e9ation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'e7on de g\'e9rer le glisser/d\'e9poser. OmniGraffle ne pose pas ce genre de probl\'e8mes;\
@@ -402,6 +407,14 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.1.0 (9 mars 2010)\
+- abandon provisoire du 64 bits \'e0 cause de bugs du AppleTypeServer d\'e9j\'e0 cit\'e9s dans la version 2.0.1;\
+- migration du mode EqnArray \'e0 Align, qui s'utilise de la m\'eame fa\'e7on mais donne de meilleurs r\'e9sultats;\
+- correction d'un bug d'export si l'\'e9chelle n'\'e9tait pas 100%;\
+- meilleur r\'e9tro-compatibilit\'e9 avec LinkBack;\
+- am\'e9lioration de la traduction en Japonais, gr\'e2ce \'e0 Ryohei Seto;\
+- raffinements d'interface.\
+\
 v 2.0.1 (15 novembre 2009)\
 \pard\tx280\pardeftab280\ql\qnatural\pardirnatural
 \cf0 - contournement provisoire d'un bug en 64 bits pour le moment, car pour une raison inconnue, le AppleTypeServer semble incompatible avec et plante (sans doute un bug dans le ATS lui-m\'eame);\

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -86,7 +86,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"Rename selection") action:@selector(renameItem:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"Remove selection") action:@selector(removeSelectedItems:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Refresh current equation", @"Refresh current equation") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Replace current equation", @"Replace current equation") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
@@ -214,7 +214,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   NSUndoManager* undoManager = [libraryTreeController undoManager];
   [undoManager beginUndoGrouping];
   MyDocument*  document = (MyDocument*) [AppController currentDocument];
-  LatexitEquation* currentLatexitEquation = [document latexitEquationWithCurrentState];
+  LatexitEquation* currentLatexitEquation = [document latexitEquationWithCurrentStateTransient:YES];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
   unsigned int nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
   [[[document undoManager] prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation];
@@ -304,7 +304,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         NSUndoManager* undoManager = [[[LibraryManager sharedManager] managedObjectContext] undoManager];
         [undoManager beginUndoGrouping];
         LibraryEquation* libraryEquation = (LibraryEquation*)libraryItem;
-        LatexitEquation* newLatexitEquation = [document latexitEquationWithCurrentState];
+        LatexitEquation* newLatexitEquation = [document latexitEquationWithCurrentStateTransient:NO];
         [newLatexitEquation setTitle:[libraryEquation title]];
         [libraryEquation setEquation:newLatexitEquation];
         [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];

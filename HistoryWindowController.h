@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -20,7 +20,15 @@
   IBOutlet LibraryPreviewPanelImageView* historyPreviewPanelImageView;
   IBOutlet NSSegmentedControl*           historyPreviewPanelSegmentedControl;
 
-  BOOL enablePreviewImage;
+  IBOutlet NSView*             importAccessoryView;
+  IBOutlet NSPopUpButton*      importOptionPopUpButton;
+  IBOutlet NSView*             exportAccessoryView;
+  IBOutlet NSButton*           exportOnlySelectedButton;
+  IBOutlet NSTextField*        exportFormatLabel;
+  IBOutlet NSPopUpButton*      exportFormatPopUpButton;
+
+  BOOL         enablePreviewImage;
+  NSSavePanel* savePanel;
 }
 
 -(HistoryView*) historyView;
@@ -28,6 +36,10 @@
 -(IBAction) changeHistoryDisplayPreviewPanelState:(id)sender;
 
 -(IBAction) clearHistory:(id)sender;
+-(IBAction) open:(id)sender;
+-(IBAction) saveAs:(id)sender;
+
+-(IBAction) changeHistoryExportFormat:(id)sender;
 
 -(BOOL) canRemoveEntries;
 -(void) deselectAll:(id)sender;

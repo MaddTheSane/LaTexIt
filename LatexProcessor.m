@@ -3,13 +3,15 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
 
 #import "LatexitEquation.h"
+#import "NSArrayExtended.h"
 #import "NSColorExtended.h"
+#import "NSDataExtended.h"
 #import "NSDictionaryCompositionConfiguration.h"
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
@@ -20,8 +22,9 @@
 #import "SystemTask.h"
 #import "Utils.h"
 
-#import <Quartz/Quartz.h>
 #import "RegexKitLite.h"
+
+#import <Quartz/Quartz.h>
 
 //In MacOS 10.4.0, 10.4.1 and 10.4.2, these constants are declared but not defined in the PDFKit.framework!
 //So I define them myself, but it is ugly. I expect next versions of MacOS to fix that
@@ -172,6 +175,42 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSMutableData* newData = nil;
   
+  preamble = !preamble ? @"" : preamble;
+  source   = !source   ? @"" : source;
+
+  #warning 64bits problem
+  BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+  BOOL embeddAsAnnotation = !shouldDenyDueTo64Bitsproblem;
+  if (embeddAsAnnotation)
+  {
+    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:data];
+    PDFPage* pdfPage = [pdfDocument pageAtIndex:0];
+    PDFAnnotation* pdfAnnotation = !pdfPage ? nil : [[PDFAnnotationText alloc] initWithBounds:NSZeroRect];
+    [pdfAnnotation setShouldDisplay:NO];
+    [pdfAnnotation setShouldPrint:NO];
+    NSData* embeddedData = !pdfAnnotation ? nil :
+      [NSKeyedArchiver archivedDataWithRootObject:
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          preamble, @"preamble",
+          source, @"source",
+          [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
+          [NSNumber numberWithInt:mode], @"mode",
+          [NSNumber numberWithDouble:magnification], @"magnification",
+          [NSNumber numberWithDouble:baseline], @"baseline",
+          [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
+          title, @"title",
+          nil]];
+    NSString* embeddedDataBase64 = [embeddedData encodeBase64];
+    if (isMacOS10_5OrAbove())
+      [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
+    [pdfAnnotation setContents:embeddedDataBase64];
+    [pdfPage addAnnotation:pdfAnnotation];
+    NSData* dataWithAnnotation = [pdfDocument dataRepresentation];
+    data = !dataWithAnnotation ? data : dataWithAnnotation;
+    [pdfAnnotation release];
+    [pdfDocument   release];
+  }//end if (embeddAsAnnotation)
+
   NSString* colorAsString   = [(color ? color : [NSColor blackColor]) rgbaString];
   NSString* bkColorAsString = [(backgroundColor ? backgroundColor : [NSColor whiteColor]) rgbaString];
   if (data)
@@ -244,6 +283,7 @@ static LaTeXProcessor* sharedInstance = nil;
     newData = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(0, r1.location)]];
     [newData appendData:dataToAppend];
   }//end if data
+  
   return newData;
 }
 //end annotatePdfDataInLEEFormat:preamble:source:color:mode:magnification:baseline:backgroundColor:title:
@@ -370,7 +410,8 @@ static LaTeXProcessor* sharedInstance = nil;
   [fileManager removeFileAtPath:latexAuxBaselineFilePath handler:nil];
   [fileManager removeFileAtPath:pdfBaselineFilePath      handler:nil];
   [fileManager removeFileAtPath:sizesFilePath            handler:nil];
-  //trash *.*pk, *.mf, *.tfm, *.mp, *.script
+  
+  //trash *.*pk, *.mf, *.tfm, *.mp, *.script, *.[[:digit:]], *.t[[:digit:]]+
   NSArray* files = [fileManager directoryContentsAtPath:workingDirectory];
   NSEnumerator* enumerator = [files objectEnumerator];
   NSString* file = nil;
@@ -383,7 +424,9 @@ static LaTeXProcessor* sharedInstance = nil;
       NSString* extension = [[file pathExtension] lowercaseString];
       BOOL mustDelete = [extension isEqualToString:@"mf"] ||  [extension isEqualToString:@"mp"] ||
                         [extension isEqualToString:@"tfm"] || [extension endsWith:@"pk" options:NSCaseInsensitiveSearch] ||
-                        [extension isEqualToString:@"script"];
+                        [extension isEqualToString:@"script"] ||
+                        [extension isMatchedByRegex:@"^[[:digit:]]+$"] ||
+                        [extension isMatchedByRegex:@"^t[[:digit:]]+$"];
       if (mustDelete)
         [fileManager removeFileAtPath:file handler:NULL];
     }
@@ -777,7 +820,8 @@ static LaTeXProcessor* sharedInstance = nil;
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
     #warning 64bits problem
-    if (!failed && pdfData && (sizeof(NSInteger) == 4))//only in 32 bits mode. It chrashed in 64bits. Why ??
+    BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+    if (!failed && pdfData && !shouldDenyDueTo64Bitsproblem)
     {
       //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
       PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
@@ -809,7 +853,6 @@ static LaTeXProcessor* sharedInstance = nil;
                                             mode:latexMode magnification:magnification baseline:baseline
                                  backgroundColor:backgroundColor title:nil];
     [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
-    
   }//end if latex source could be compiled
 
   //remove additional files
@@ -1385,10 +1428,36 @@ static LaTeXProcessor* sharedInstance = nil;
         [pdfImage addRepresentation:pdfImageRep];
         NSImageView* imageView =
           [[NSImageView alloc] initWithFrame:
-            NSMakeRect(0, 0, originalSize.width*scaleAsPercent/100,originalSize.height*scaleAsPercent/100)];
+            NSMakeRect(0, 0, ceil(originalSize.width*scaleAsPercent/100), ceil(originalSize.height*scaleAsPercent/100))];
         [imageView setImageScaling:NSScaleToFit];
         [imageView setImage:pdfImage];
-        pdfData = [imageView dataWithPDFInsideRect:[imageView bounds]];
+        NSData* resizedPdfData = [imageView dataWithPDFInsideRect:[imageView bounds]];
+        NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES];
+        pdfData =
+          [self annotatePdfDataInLEEFormat:resizedPdfData
+            preamble:[[equationMetaData objectForKey:@"preamble"] string]
+            source:[[equationMetaData objectForKey:@"sourceText"] string]
+            color:[equationMetaData objectForKey:@"color"]
+            mode:[[equationMetaData objectForKey:@"mode"] intValue]
+            magnification:[[equationMetaData objectForKey:@"magnification"] doubleValue]
+            baseline:[[equationMetaData objectForKey:@"baseline"] doubleValue]
+            backgroundColor:[equationMetaData objectForKey:@"backgroundColor"]
+            title:[equationMetaData objectForKey:@"title"]];
+            
+        #warning 64bits problem
+        BOOL shouldDenyDueTo64Bitsproblem = NO && (sizeof(NSInteger) != 4);
+        if (pdfData && !shouldDenyDueTo64Bitsproblem)
+        {
+          //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
+          PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+          NSDictionary* attributes =
+            [NSDictionary dictionaryWithObjectsAndKeys:
+                [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
+          [pdfDocument setDocumentAttributes:attributes];
+          pdfData = [pdfDocument dataRepresentation];
+          [pdfDocument release];
+        }//end if (pdfData && !shouldDenyDueTo64Bitsproblem)
+
         [imageView release];
         [pdfImage release];
         [pdfImageRep release];
@@ -1494,6 +1563,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentation];
         [image release];
+        data = [self annotateImageData:data withData:pdfData];
       }
       else if (format == EXPORT_FORMAT_PNG)
       {
@@ -1502,6 +1572,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
         data = [imageRep representationUsingType:NSPNGFileType properties:nil];
         [image release];
+        data = [self annotateImageData:data withData:pdfData];
       }
       else if (format == EXPORT_FORMAT_JPEG)
       {
@@ -1527,11 +1598,65 @@ static LaTeXProcessor* sharedInstance = nil;
             [NSNumber numberWithFloat:quality/100], NSImageCompressionFactor, nil];
         data = [opaqueImageRep representationUsingType:NSJPEGFileType properties:properties];
         [image release];
+        data = [self annotateImageData:data withData:pdfData];
       }
     }//end if pdfData available
   }//end @synchronized
   return data;
 }
 //end dataForType:pdfData:jpegColor:jpegQuality:scaleAsPercent:
+
+-(NSData*) annotateImageData:(NSData*)inputData withData:(NSData*)annotationData
+{
+  NSMutableData* result = !inputData ? nil : [NSMutableData dataWithCapacity:[inputData length]];
+  CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)inputData, (CFDictionaryRef)
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+  CFStringRef sourceUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
+  CGImageDestinationRef imageDestination = !imageSource ? 0 :
+    CGImageDestinationCreateWithData((CFMutableDataRef)result, sourceUTI, 1, 0);
+  NSMutableDictionary* properties = nil;
+  if (imageSource && imageDestination)
+  {
+    if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.tiff"))
+    {
+      properties = [[(NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0) deepMutableCopy] autorelease];
+      NSMutableDictionary* tiffDictionary = [properties objectForKey:(NSString*)kCGImagePropertyTIFFDictionary];
+      if (!tiffDictionary)
+      {
+        tiffDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
+        [properties setObject:tiffDictionary forKey:(NSString*)kCGImagePropertyTIFFDictionary];
+      }
+      [tiffDictionary setObject:[annotationData encodeBase64] forKey:(NSString*)kCGImagePropertyTIFFImageDescription];
+    }
+    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.png"))
+    {
+      properties = [[(NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0) deepMutableCopy] autorelease];
+      NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+      if (!exifDictionary)
+      {
+        exifDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
+        [properties setObject:exifDictionary forKey:(NSString*)kCGImagePropertyExifDictionary];
+      }
+      [exifDictionary setObject:[annotationData encodeBase64] forKey:(NSString*)kCGImagePropertyExifMakerNote];
+    }
+    else if (UTTypeConformsTo(sourceUTI, (CFStringRef)@"public.jpeg"))
+    {
+      properties = [[(NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0) deepMutableCopy] autorelease];
+      NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+      if (!exifDictionary)
+      {
+        exifDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
+        [properties setObject:exifDictionary forKey:(NSString*)kCGImagePropertyExifDictionary];
+      }
+      [exifDictionary setObject:@"toto" forKey:(NSString*)kCGImagePropertyExifMakerNote];
+    }
+  }//end if (imageSource && imageDestination)
+  CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CFDictionaryRef)properties);
+  if (imageDestination) CGImageDestinationFinalize(imageDestination);
+  if (imageDestination) CFRelease(imageDestination);
+  if (imageSource)      CFRelease(imageSource);
+  return !result ? inputData : [[result copy] autorelease];
+}
+//end annotateImageData:withData:
 
 @end

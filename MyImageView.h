@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -25,6 +25,7 @@ extern NSString* ImageDidChangeNotification;
   NSData*  pdfData; //full pdfdata (that may contain meta-data like keywords, creator...)
   NSColor* backgroundColor; //useful to prevent image from blending with background. It is different from [self image] background
   NSMenu*  copyAsContextualMenu;
+  BOOL     isDragging;
 }
 
 -(IBAction) copy:(id)sender;//copy the data into clipboard

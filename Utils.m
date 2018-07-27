@@ -11,9 +11,12 @@
 #import "RegexKitLite.h"
 int DebugLogLevel = 0;
 
+#include <AvailabilityMacros.h>
+
 static NSString* MyPNGPboardType = nil;
 extern NSString* NSPNGPboardType __attribute__((weak_import));
 static NSString* MyJPEGPboardType = nil;
+static NSString* MyWebURLsWithTitlesPboardType = nil;
 
 BOOL isMacOS10_5OrAbove(void)
 {
@@ -35,13 +38,21 @@ NSString* GetMyPNGPboardType(void)
     MyPNGPboardType = @"public.png";
   if (!MyPNGPboardType)  
     MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
-  if (!MyPNGPboardType && NSPNGPboardType)
+  if (!MyPNGPboardType && (NSPNGPboardType != 0))
     MyPNGPboardType = [[NSString alloc] initWithString:NSPNGPboardType];
   if (!MyPNGPboardType)
     MyPNGPboardType = NSTIFFPboardType;
   return MyPNGPboardType;
 }
 //end GetMyPNGPboardType()
+
+NSString* GetWebURLsWithTitlesPboardType(void)
+{
+  if (!MyWebURLsWithTitlesPboardType)
+    MyWebURLsWithTitlesPboardType = @"WebURLsWithTitlesPboardType";
+  return MyWebURLsWithTitlesPboardType;
+}
+//end GetWebURLsWithTitlesPboardType()
 
 NSString* GetMyJPEGPboardType(void)
 {

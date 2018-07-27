@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -151,7 +151,7 @@
     LibraryItem* selectedLibraryItem = selectedItem;
     if ([selectedLibraryItem isKindOfClass:[LibraryEquation class]])
     {
-      LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentState];
+      LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentStateTransient:YES];
       NSUndoManager* documentUndoManager = [document undoManager];
       [documentUndoManager beginUndoGrouping];
       [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState];

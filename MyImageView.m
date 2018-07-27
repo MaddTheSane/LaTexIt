@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -53,7 +53,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
                                                name:CopyCurrentImageNotification object:nil];
   [self registerForDraggedTypes:
     [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType, NSFilenamesPboardType, NSFileContentsPboardType,
-                              NSRTFDPboardType, nil]];
+                              NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType, nil]];
   return self;
 }
 //end initWithCoder:
@@ -145,7 +145,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
   [self setNeedsDisplay:YES];
   if (updateHistoryItem && self->pdfData)
-    [self setPDFData:[[document latexitEquationWithCurrentState] annotatedPDFDataUsingPDFKeywords:YES] cachedImage:[self image]];
+    [self setPDFData:[[document latexitEquationWithCurrentStateTransient:NO] annotatedPDFDataUsingPDFKeywords:YES] cachedImage:[self image]];
 }
 
 //used to trigger latexisation using Command-T
@@ -178,12 +178,13 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(void) setPDFData:(NSData*)someData cachedImage:(NSImage*)cachedImage
 {
   [someData retain];
-  [pdfData release];
-  pdfData = someData;
+  [self->pdfData release];
+  self->pdfData = someData;
+
   NSImage* image = cachedImage;
-  if (!image && pdfData)
+  if (!image && self->pdfData)
   {
-    NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
+    NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:self->pdfData];
     image = [[NSImage alloc] initWithSize:[pdfImageRep size]];
     [image setCacheMode:NSImageCacheNever];
     [image setDataRetained:YES];
@@ -212,17 +213,25 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(void) updateLinkBackLink:(LinkBack*)link
 {
   //may update linkback link
-  if (pdfData && link)
+  if (self->pdfData && link)
   {
     [self _writeToPasteboard:[link pasteboard] isLinkBackRefresh:YES lazyDataProvider:self];
-    [link sendEdit];
+    @try{
+      [link sendEdit];
+    }
+    @catch(NSException* e){
+      NSAlert* alert = [NSAlert alertWithError:[NSError errorWithDomain:[e name] code:-1 userInfo:[e userInfo]]];
+      [alert setInformativeText:[e reason]];
+      [alert runModal];
+    }
   }
 }
 //end updateLinkBackLink:
 
 -(unsigned int) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-  return [self image] ? NSDragOperationCopy : NSDragOperationNone;
+  unsigned int result = [self image] ? NSDragOperationCopy : NSDragOperationNone;
+  return result;
 }
 //end draggingSourceOperationMaskForLocal:
 
@@ -233,18 +242,40 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [super mouseDown:theEvent];
   else
   {
-    NSImage* draggedImage = [self image];
-
-    if (draggedImage)
-    {
-      //NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-      //[pasteboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-      [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil]
-                            fromRect:[self frame] source:self slideBack:YES event:theEvent];
-    }
+    [super mouseDown:theEvent];
   }
 }
 //end mouseDown:
+
+-(void) mouseDragged:(NSEvent *)theEvent
+{
+  if (!self->isDragging && !([theEvent modifierFlags] & NSControlKeyMask))
+  {
+    NSImage* draggedImage = [self image];
+    if (draggedImage)
+    {
+      self->isDragging = YES;
+      [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil]
+                            fromRect:[self frame] source:self slideBack:YES event:theEvent];
+      self->isDragging = NO;
+    }
+  }//end if (!self->isDragging)
+  [super mouseDragged:theEvent];
+}
+//end mouseDragged:
+
+-(void) mouseUp:(NSEvent*)theEvent
+{
+  self->isDragging = NO;
+  [super mouseUp:theEvent];
+}
+//end mouseUp:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  self->isDragging = NO;
+}
+//end draggedImage:endedAt:operation:
 
 -(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
@@ -272,7 +303,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(NSArray*) namesOfPromisedFilesDroppedAtDestination:(NSURL*)dropDestination
 {
   NSMutableArray* names = [NSMutableArray arrayWithCapacity:1];
-  if (pdfData)
+  if (self->pdfData)
   {
     NSString* dropPath = [dropDestination path];
     NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -303,7 +334,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
     NSColor*   color = [preferencesController exportJpegBackgroundColor];
     CGFloat  quality = [preferencesController exportJpegQualityPercent];
-    NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData jpegColor:color
+    NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:self->pdfData jpegColor:color
                                                   jpegQuality:quality scaleAsPercent:[preferencesController exportScalePercent]
                                                   compositionConfiguration:[preferencesController compositionConfigurationDocument]];
     if (extension)
@@ -325,21 +356,21 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
                                    atPath:filePath];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? color : nil;
-        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:pdfData backgroundColor:jpegBackgroundColor]
+        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:self->pdfData backgroundColor:jpegBackgroundColor]
                                        forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
         [names addObject:fileName];
-      }
-    }
-  }
+      }//end if (![fileManager fileExistsAtPath:filePath])
+    }//end if (extension)
+  }//end if (self->pdfData)
   return names;
 }
 //end namesOfPromisedFilesDroppedAtDestination:
 
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
-  LatexitEquation* equation = [document latexitEquationWithCurrentState];
+  LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
-  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:equation]] forType:LatexitEquationsPboardType];
+  [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
   [equation writeToPasteboard:pasteboard isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
 }
 //end _writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
@@ -349,7 +380,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSData* data = [[LaTeXProcessor sharedLaTeXProcessor]
-    dataForType:[preferencesController exportFormat] pdfData:pdfData jpegColor:[preferencesController exportJpegBackgroundColor]
+    dataForType:[preferencesController exportFormat] pdfData:self->pdfData jpegColor:[preferencesController exportJpegBackgroundColor]
     jpegQuality:[preferencesController exportJpegQualityPercent] scaleAsPercent:[preferencesController exportScalePercent]
     compositionConfiguration:[preferencesController compositionConfigurationDocument]];
   [pasteboard setData:data forType:type];
@@ -363,6 +394,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   BOOL ok = NO;
   BOOL shouldBePDFData = NO;
   NSData* data = nil;
+  NSString* type = nil;
   
   NSPasteboard* pboard = [sender draggingPasteboard];
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
@@ -392,26 +424,20 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
     }
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])
+    ok = YES;
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, @"com.apple.flat-rtfd", nil]]))
   {
-    NSData* rtfdData = [pboard dataForType:NSRTFDPboardType];
+    NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    ok = attributedString || (pdfWrapperData != nil);//now, allow string
     [attributedString release];
-    ok = (pdfWrapperData != nil);
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:@"com.apple.flat-rtfd"]])
-  {
-    NSData* rtfdData = [pboard dataForType:@"com.apple.flat-rtfd"];
-    NSDictionary* docAttributes = nil;
-    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
-    NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
-    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
-    [attributedString release];
-    ok = (pdfWrapperData != nil);
-  }
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, NSStringPboardType, nil]])
+    ok = YES;
   
   if (shouldBePDFData)
   {
@@ -487,6 +513,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   BOOL ok = YES;
   NSString* type = nil;
   BOOL done = NO;
+  
   if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]]))
   {
     [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:type]] updateHistoryItem:YES];
@@ -534,7 +561,30 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* data = (plist && [plist count]) ? [NSData dataWithContentsOfFile:[plist objectAtIndex:0] options:NSUncachedRead error:nil] : nil;
     done = [document applyPdfData:data];
   }
-  
+
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])))
+  {
+    id plist = [pboard propertyListForType:type];
+    NSArray* array = ![plist isKindOfClass:[NSArray class]] ? nil : (NSArray*)plist;
+    array = [array lastObject];//array of titles
+    NSEnumerator* enumerator = ![plist isKindOfClass:[NSArray class]] ? nil : [array objectEnumerator];
+    NSString* title = nil;
+    NSMutableString* concats = nil;
+    while((title = [enumerator nextObject]))
+    {
+      title = ![title isKindOfClass:[NSString class]] ? nil : title;
+      if (title)
+      {
+        if (!concats)
+          concats = [NSMutableString stringWithString:title];
+        else
+          [concats appendString:title];
+      }
+    }
+    if (concats)
+      [document applyString:concats];
+    done = (concats != nil);
+  }
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.flat-rtfd", NSRTFDPboardType, nil]])))
   {
     NSData* rtfdData = [pboard dataForType:type];
@@ -544,12 +594,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     if (pdfWrapperData)
       done = [document applyPdfData:pdfWrapperData];
-    if (!done)
-      [document applyString:[attributedString string]];
     [attributedString release];
-    done = YES;
   }
-  else if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.rtf", NSRTFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.rtf", NSRTFPboardType, nil]])))
   {
     NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -558,7 +605,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [attributedString release];
     done = YES;
   }
-  else if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
   {
     [document applyString:[pboard stringForType:type]];
     done = YES;

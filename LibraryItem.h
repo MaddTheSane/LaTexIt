@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005, 2006, 2007, 2008, 2009 Pierre Chatelier. All rights reserved.
+//  Copyright 2005, 2006, 2007, 2008, 2009, 2010 Pierre Chatelier. All rights reserved.
 
 //A LibraryItem is similar to an XMLNode, in the way that it has parent (weak link to prevent cycling)
 //and children (strong link)
@@ -26,6 +26,7 @@
 +(NSEntityDescription*) entity;
 
 -(id) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+-(void) dispose;
 
 -(BOOL) dummyPropertyToForceUIRefresh;
 
