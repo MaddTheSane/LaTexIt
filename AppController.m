@@ -42,12 +42,14 @@
 -(BOOL) _checkGs;      //called by _checkConfiguration to check for gs's presence
 -(BOOL) _checkDvipdf;  //called by _checkConfiguration to check for dvipdf's presence
 -(BOOL) _checkPdfLatex;//called by _checkConfiguration to check for pdflatex's presence
+-(BOOL) _checkXeLatex; //called by _checkConfiguration to check for pdflatex's presence
 -(BOOL) _checkColorSty;//called by _checkConfiguration to check for color.sty's presence
 
 //helper for the configuration
 -(void) _findGsPath;
 -(void) _findDvipdfPath;
 -(void) _findPdfLatexPath;
+-(void) _findXeLatexPath;
 
 //some notifications that trigger some work
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification;
@@ -308,6 +310,11 @@ static NSArray* unixBins = nil;
   return [self _myDocumentServiceProvider];
 }
 
+-(IBAction) copyEquation:(id)sender
+{
+  [[[[NSDocumentController sharedDocumentController] currentDocument] imageView] copy:sender];
+}
+
 -(IBAction) paste:(id)sender
 {
   [NSApp sendAction:@selector(paste:) to:nil from:sender];//default behaviour (Well... I think so...)
@@ -316,7 +323,12 @@ static NSArray* unixBins = nil;
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok = YES;
-  if ([sender action] == @selector(paste:))
+  if ([sender action] == @selector(copyEquation:))
+  {
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
+  }
+  else if ([sender action] == @selector(paste:))
   {
     //we just allow rich LaTeXiT data to enable the "paste" menu item.
     //Even if the first responder is a textView that cannot handle it, we will try to drive it to MyImageView
@@ -687,6 +699,11 @@ static NSArray* unixBins = nil;
   return isPdfLatexAvailable;
 }
 
+-(BOOL) isXeLatexAvailable
+{
+  return isXeLatexAvailable;
+}
+
 -(BOOL) isColorStyAvailable
 {
   return isColorStyAvailable;
@@ -724,6 +741,24 @@ static NSArray* unixBins = nil;
   if ([fileManager fileExistsAtPath:pdfLatexPath])
   {
     [userDefaults setObject:pdfLatexPath forKey:PdfLatexPathKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+  }
+}
+
+//try to find xelatex program, searching by its name
+-(void) _findXeLatexPath
+{
+  NSFileManager* fileManager   = [NSFileManager defaultManager];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  NSString* xeLatexPath        = [userDefaults stringForKey:XeLatexPathKey];
+  NSMutableArray* prefixes     = [NSMutableArray arrayWithArray:unixBins];
+  [prefixes addObjectsFromArray:[NSArray arrayWithObject:[xeLatexPath stringByDeletingLastPathComponent]]];
+
+  if (![fileManager fileExistsAtPath:xeLatexPath])
+    xeLatexPath = [self findUnixProgram:@"xelatex" tryPrefixes:prefixes environment:environmentDict];
+  if ([fileManager fileExistsAtPath:xeLatexPath])
+  {
+    [userDefaults setObject:xeLatexPath forKey:XeLatexPathKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
@@ -804,6 +839,35 @@ static NSArray* unixBins = nil;
   return ok;
 }
 
+//check if xelatex works as expected. The user may have given a name different from "pdflatex"
+-(BOOL) _checkXeLatex
+{
+  BOOL ok = YES;
+  NSTask* xeLatexTask = [[NSTask alloc] init];
+  @try
+  {
+    //currently, the only check is the option -v, at least to see if the program can be executed
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+    [xeLatexTask setLaunchPath:[userDefaults stringForKey:XeLatexPathKey]];
+    [xeLatexTask setArguments:[NSArray arrayWithObject:@"-v"]];
+    [xeLatexTask setStandardOutput:nullDevice];
+    [xeLatexTask setStandardError:nullDevice];
+    [xeLatexTask launch];
+    [xeLatexTask waitUntilExit];
+    ok = ([xeLatexTask terminationStatus] == 0);
+  }
+  @catch(NSException* e)
+  {
+    ok = NO;
+  }
+  @finally
+  {
+    [xeLatexTask release];
+  }
+  return ok;
+}
+
 //check if dvipdf works as expected. The user may have given a name different from "pdflatex"
 -(BOOL) _checkDvipdf
 {
@@ -835,30 +899,57 @@ static NSArray* unixBins = nil;
 -(BOOL) _checkColorSty
 {
   BOOL ok = YES;
-  NSTask* pdfLatexTask = [[NSTask alloc] init];
+  NSTask* checkTask = [[NSTask alloc] init];
+  
+  //first try with kpsewhich
   @try
   {
-    NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
-    NSString* directory      = NSTemporaryDirectory();
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [pdfLatexTask setCurrentDirectoryPath:directory];
-    [pdfLatexTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
-    [pdfLatexTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
-    [pdfLatexTask setStandardOutput:nullDevice];
-    [pdfLatexTask setStandardError:nullDevice];
-    [pdfLatexTask launch];
-    [pdfLatexTask waitUntilExit];
-    ok = ([pdfLatexTask terminationStatus] == 0);
+    NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:environmentDict];
+    ok = kpseWhichPath  && [kpseWhichPath length];
+    if (ok)
+    {
+      NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+      NSString* directory       = NSTemporaryDirectory();
+      [checkTask setCurrentDirectoryPath:directory];
+      [checkTask setLaunchPath:kpseWhichPath];
+      [checkTask setArguments:[NSArray arrayWithObject:@"color.sty"]];
+      [checkTask setStandardOutput:nullDevice];
+      [checkTask setStandardError:nullDevice];
+      [checkTask launch];
+      [checkTask waitUntilExit];
+      ok = ([checkTask terminationStatus] == 0);
+    }
   }
   @catch(NSException* e)
   {
     ok = NO;
   }
-  @finally
+  
+  //perhaps second try without kpsewhich
+  if (!ok)
   {
-    [pdfLatexTask release];
+    @try
+    {
+      NSString* testString = @"\\documentclass[10pt]{article}\\usepackage{color}\\begin{document}\\end{document}";
+      NSString* directory      = NSTemporaryDirectory();
+      NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+      NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
+      [checkTask setCurrentDirectoryPath:directory];
+      [checkTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
+      [checkTask setArguments:[NSArray arrayWithObjects:@"--interaction", @"nonstopmode", testString, nil]];
+      [checkTask setStandardOutput:nullDevice];
+      [checkTask setStandardError:nullDevice];
+      [checkTask launch];
+      [checkTask waitUntilExit];
+      ok = ([checkTask terminationStatus] == 0);
+    }
+    @catch(NSException* e)
+    {
+      ok = NO;
+    }
   }
+
+  [checkTask release];
   return ok;
 }
 
@@ -866,8 +957,9 @@ static NSArray* unixBins = nil;
 {
   isGsAvailable          = [self _checkGs];
   isPdfLatexAvailable    = [self _checkPdfLatex];
+  isXeLatexAvailable     = [self _checkXeLatex];
   isDvipdfAvailable      = [self _checkDvipdf];
-  isColorStyAvailable    = isPdfLatexAvailable && [self _checkColorSty];
+  isColorStyAvailable    = [self _checkColorSty];
 }
 
 //when the user has clicked a latexPalettes element, we must put some text in the current document.
@@ -930,15 +1022,17 @@ static NSArray* unixBins = nil;
   BOOL retry = YES;
   while (!isGsAvailable && retry)
   {
-    int returnCode = NSRunAlertPanel(NSLocalizedString(@"gs not found or not working as expected",
-                                                       @"gs not found or not working as expected"),
-                                     NSLocalizedString(@"Without GhostScript (gs) installed the software won't work at all.\n"\
-                                                        "You should install a LaTeX distribution packaging gs",
-                                                       @"Without GhostScript (gs) installed the software won't work at all.\n"\
-                                                        "You should install a LaTeX distribution packaging gs"),
-                                                       NSLocalizedString(@"Find gs...", @"Find gs..."),
-                                                       @"Cancel",
-                                                       nil);
+    int returnCode =
+      NSRunAlertPanel(
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          @"gs"],
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
+                            @"The current configuration of LaTeXiT requires %@ to work."),
+          @"Ghostscript (gs)"],
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"gs"],
+        @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)
     {
@@ -966,15 +1060,17 @@ static NSArray* unixBins = nil;
   retry = YES;
   while (!isPdfLatexAvailable && retry)
   {
-    int returnCode = NSRunAlertPanel(NSLocalizedString(@"pdflatex not found or not working as expected",
-                                                       @"pdflatex not found or not working as expected"),
-                                     NSLocalizedString(@"Without pdflatex installed the software won't work at all.\n"\
-                                                       @"You should install a LaTeX distribution packaging pdflatex",
-                                                       @"Without pdflatex installed the software won't work at all.\n"\
-                                                       @"You should install a LaTeX distribution packaging pdflatex"),
-                                                       NSLocalizedString(@"Find pdflatex...", @"Find pdflatex..."),
-                                                       @"Cancel",
-                                                       nil);
+    int returnCode =
+      NSRunAlertPanel(
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          @"pdflatex"],
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
+                            @"The current configuration of LaTeXiT requires %@ to work."),
+          @"pdflatex"],
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"pdflatex"],
+        @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)
     {
@@ -999,18 +1095,20 @@ static NSArray* unixBins = nil;
 
   if (!isDvipdfAvailable)
     [self _findDvipdfPath];
-  retry = YES;
+  retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == LATEXDVIPDF);
   while (!isDvipdfAvailable && retry)
   {
-    int returnCode = NSRunAlertPanel(NSLocalizedString(@"dvipdf not found or not working as expected",
-                                                       @"dvipdf not found or not working as expected"),
-                                     NSLocalizedString(@"Without dvipdf installed the software won't work at all.\n"\
-                                                       @"You should install a LaTeX distribution packaging dvipdf",
-                                                       @"Without dvipdf installed the software won't work at all.\n"\
-                                                       @"You should install a LaTeX distribution packaging dvipdf"),
-                                                       NSLocalizedString(@"Find dvipdf...", @"Find dvipdf..."),
-                                                       @"Cancel",
-                                                       nil);
+    int returnCode =
+      NSRunAlertPanel(
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          @"dvipdf"],
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
+                            @"The current configuration of LaTeXiT requires %@ to work."),
+          @"dvipdf"],
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"dvipdf"],
+        @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)
     {
@@ -1032,6 +1130,44 @@ static NSArray* unixBins = nil;
       }
     }
   }
+
+  if (!isXeLatexAvailable)
+    [self _findXeLatexPath];
+  retry = ((composition_mode_t)[userDefaults integerForKey:CompositionModeKey] == XELATEX);
+  while (!isXeLatexAvailable && retry)
+  {
+    int returnCode =
+      NSRunAlertPanel(
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          @"xelatex"],
+        [NSString stringWithFormat:@"%@",
+          NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
+                            @"The current configuration of LaTeXiT requires %@ to work."),
+          @"xelatex"],
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"xelatex"],
+        @"Cancel", nil);
+    retry &= (returnCode == NSAlertDefaultReturn);
+    if (returnCode == NSAlertDefaultReturn)
+    {
+      NSFileManager* fileManager = [NSFileManager defaultManager];
+      NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+      [openPanel setResolvesAliases:NO];
+      int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
+      BOOL ok = (ret2 == NSOKButton) && ([[openPanel filenames] count]);
+      if (ok)
+      {
+        NSString* filepath = [[openPanel filenames] objectAtIndex:0];
+        if ([fileManager fileExistsAtPath:filepath])
+        {
+          [self _addInEnvironmentPath:[filepath stringByDeletingLastPathComponent]];
+          [userDefaults setObject:filepath forKey:XeLatexPathKey];
+          [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+          retry &= !isXeLatexAvailable;
+        }
+      }
+    }
+  }
   
   if (isGsAvailable && isPdfLatexAvailable && !isColorStyAvailable)
     NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @"color.sty seems to be unavailable"),
@@ -1042,6 +1178,8 @@ static NSArray* unixBins = nil;
     [self _addInEnvironmentPath:[[userDefaults stringForKey:GsPathKey] stringByDeletingLastPathComponent]];
   if (isPdfLatexAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:PdfLatexPathKey] stringByDeletingLastPathComponent]];
+  if (isXeLatexAvailable)
+    [self _addInEnvironmentPath:[[userDefaults stringForKey:XeLatexPathKey] stringByDeletingLastPathComponent]];
   if (isDvipdfAvailable)
     [self _addInEnvironmentPath:[[userDefaults stringForKey:DvipdfPathKey] stringByDeletingLastPathComponent]];
 
@@ -1240,10 +1378,24 @@ static NSArray* unixBins = nil;
         }//end if pdfData (LaTeXisation has worked)
       }
       //if the input is not RTF but just string, we will use default color and size
-      else if ([types containsObject:NSStringPboardType])
+      else if ([types containsObject:NSStringPboardType]
+               #ifndef PANTHER
+               || [types containsObject:NSPDFPboardType]
+               #endif
+              )
       {
         NSAttributedString* preamble = [self preamble];
-        NSString* pboardString = [pboard stringForType:NSStringPboardType];
+        NSString* pboardString = nil;
+        #ifndef PANTHER
+        if ([types containsObject:NSPDFPboardType])
+        {
+          PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:[pboard dataForType:NSPDFPboardType]];
+          pboardString = [pdfDocument string];
+          [pdfDocument release];
+        }
+        #endif
+        if (!pboardString)
+          [pboard stringForType:NSStringPboardType];
 
         //performs effective latexisation
         NSData* pdfData = [[self _myDocumentServiceProvider] latexiseWithPreamble:[preamble string] body:pboardString
@@ -1349,7 +1501,7 @@ static NSArray* unixBins = nil;
 {
   [self _checkConfiguration];
   NSArray* documents = [NSApp orderedDocuments];
-  [documents makeObjectsPerformSelector:@selector(updateAvailabilities)];
+  [documents makeObjectsPerformSelector:@selector(updateAvailabilities:) withObject:nil];
 }
 
 //modifies the \usepackage{color} line of the preamble to use the given color

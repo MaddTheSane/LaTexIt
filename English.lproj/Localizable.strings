@@ -32,16 +32,14 @@
 "used for font color" = "used for font color";
 "no color.sty found" = "no color.sty found";
 "useful to type directly accentuated characters" = "useful to type directly accentuated characters";
-"gs not found or not working as expected" = "gs not found or not working as expected";
-"pdflatex not found or not working as expected" = "pdflatex not found or not working as expected";
-"Without GhostScript (gs) installed the software won't work at all.\nYou should install a LaTeX distribution packaging gs" = "Without GhostScript (gs) installed the software won't work at all.\nYou should install a LaTeX distribution packaging gs";
-"Without pdflatex installed the software won't work at all.\nYou should install a LaTeX distribution packaging pdflatex" = "Without pdflatex installed the software won't work at all.\nYou should install a LaTeX distribution packaging pdflatex";
+"%@ not found or not working as expected" = "%@ not found or not working as expected";
+"The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
+"Find %@..." = "Find %@...";
+"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.";
 "color.sty seems to be unavailable" = "color.sty seems to be unavailable";
 "Without the color.sty package, you won't be able to change the font color" = "Without the color.sty package, you won't be able to change the font color";
-"pdflatex and/or gs seem unavailable in your system. Please check their installation." = "pdflatex and/or gs seem unavailable in your system. Please check their installation.";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled.";
-"Find gs..." = "Find gs...";
-"Find pdflatex..." = "Find pdflatex...";
 "This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT" = "This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT";
 "Empty LaTeX body" = "Empty LaTeX body";
 "Process anyway" = "Process anyway";

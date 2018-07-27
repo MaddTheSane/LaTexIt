@@ -19,6 +19,7 @@ extern NSString* DefaultPreambleAttributedKey;
 extern NSString* DefaultFontKey;
 extern NSString* CompositionModeKey;
 extern NSString* PdfLatexPathKey;
+extern NSString* XeLatexPathKey;
 extern NSString* DvipdfPathKey;
 extern NSString* GsPathKey;
 extern NSString* ServiceRespectsColorKey;
@@ -41,6 +42,9 @@ extern NSString* MarginControllerVisibleAtStartupKey;
 extern NSString* CheckForNewVersionsKey;
 
 extern NSString* SomePathDidChangeNotification;
+extern NSString* CompositionModeDidChangeNotification;
+
+typedef enum {PDFLATEX, LATEXDVIPDF, XELATEX} composition_mode_t; 
 
 @class EncapsulationTableView;
 @class LineCountTextView;
@@ -68,8 +72,13 @@ extern NSString* SomePathDidChangeNotification;
 
   IBOutlet NSMatrix*    compositionMatrix;  
   IBOutlet NSTextField* pdfLatexTextField;
+  IBOutlet NSTextField* xeLatexTextField;
   IBOutlet NSTextField* dvipdfTextField;
   IBOutlet NSTextField* gsTextField;
+  IBOutlet NSButton*    pdfLatexButton;
+  IBOutlet NSButton*    xeLatexButton;
+  IBOutlet NSButton*    dvipdfButton;
+  IBOutlet NSButton*    gsButton;
 
   IBOutlet NSButton*    serviceRespectsBaseline;
   IBOutlet NSMatrix*    serviceRespectsPointSize;
@@ -85,6 +94,7 @@ extern NSString* SomePathDidChangeNotification;
   
   IBOutlet NSButton* checkForNewVersionsButton;
 
+  BOOL didChangeXeLatexTextField;
   BOOL didChangePdfLatexTextField;
   BOOL didChangeDvipdfTextField;
   BOOL didChangeGsTextField;

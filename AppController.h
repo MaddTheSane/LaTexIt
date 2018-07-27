@@ -34,6 +34,7 @@
   BOOL isPdfLatexAvailable;
   BOOL isGsAvailable;
   BOOL isDvipdfAvailable;
+  BOOL isXeLatexAvailable;
   BOOL isColorStyAvailable;
 
   EncapsulationController* encapsulationController;
@@ -59,6 +60,7 @@
 -(IBAction) openWebSite:(id)sender;//ask for LaTeXiT's web site
 -(IBAction) checkUpdates:(id)sender;//check for updates on LaTeXiT's web site
 
+-(IBAction) copyEquation:(id)sender;
 -(IBAction) paste:(id)sender;
 
 -(IBAction) exportImage:(id)sender;
@@ -101,6 +103,7 @@
 -(BOOL) isPdfLatexAvailable;
 -(BOOL) isGsAvailable;
 -(BOOL) isDvipdfAvailable;
+-(BOOL) isXeLatexAvailable;
 -(BOOL) isColorStyAvailable;
 
 //if the marginController is not loaded, just use the user defaults values

@@ -44,17 +44,14 @@ static unsigned long firstFreeId = 1; //increases when documents are created
 //if a document is closed, its id becomes free, and we should consider reusing it instead of increasing firstFreeId
 static NSMutableArray* freeIds = nil;
 
-const static int ComposeNoOptions = 0;
-const static int ComposeUsingPdfLatex = 0;
-const static int ComposeUsingLatexAndDvipdf = 1;
-
 @interface MyDocument (PrivateAPI)
 
 +(unsigned long) _giveId; //returns a free id and marks it as used
 +(void) _releaseId:(unsigned long)anId; //releases an id
 
 //compose latex and returns pdf data. the options may specify to use pdflatex or latex+dvipdf
--(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog options:(int)options;
+-(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
+                                       compositionMode:(composition_mode_t)compositionMode;
 
 //returns an array of the errors. Each case will contain an error string
 -(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog;
@@ -211,13 +208,18 @@ static NSString* yenString = nil;
     initialPdfData = nil;
   }
 
-  [self updateAvailabilities]; //updates interface to allow latexisation or not, according to current configuration
-  
+  [self updateAvailabilities:nil]; //updates interface to allow latexisation or not, according to current configuration
+
+  [self _lineCountDidChange:nil];//to "shift" the line counter of sourceTextView
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self selector:@selector(_lineCountDidChange:)
                              name:LineCountDidChangeNotification object:preambleTextView];
   [notificationCenter addObserver:self selector:@selector(_clickErrorLine:)
                              name:ClickErrorLineNotification object:logTableView];
+  [notificationCenter addObserver:self selector:@selector(updateAvailabilities:)
+                             name:SomePathDidChangeNotification object:nil];
+  [notificationCenter addObserver:self selector:@selector(updateAvailabilities:)
+                             name:CompositionModeDidChangeNotification object:nil];
 }
 
 //set the document title that will be displayed as window title. There is no represented file associated
@@ -240,6 +242,11 @@ static NSString* yenString = nil;
   return makeLatexButton;
 }
 
+-(MyImageView*) imageView
+{
+  return imageView;
+}
+
 //automatically called by Cocoa. The name of the document has nothing to do with a represented file
 -(NSString*) displayName
 {
@@ -251,18 +258,25 @@ static NSString* yenString = nil;
 }
 
 //updates interface to allow latexisation or not, according to current configuration
--(void) updateAvailabilities
+//may be triggered by a notification
+-(void) updateAvailabilities:(NSNotification*)notification
 {
   AppController* appController = [AppController appController];
-  BOOL makeLatexButtonEnabled = [appController isPdfLatexAvailable] && [appController isGsAvailable];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  composition_mode_t compositionMode = (composition_mode_t) [userDefaults integerForKey:CompositionModeKey];
+  BOOL makeLatexButtonEnabled =
+    (compositionMode == PDFLATEX) ? [appController isPdfLatexAvailable] && [appController isGsAvailable] :
+    (compositionMode == XELATEX)  ? [appController isPdfLatexAvailable] && [appController isXeLatexAvailable] && [appController isGsAvailable] :
+    (compositionMode == LATEXDVIPDF) ? [appController isPdfLatexAvailable] && [appController isDvipdfAvailable] && [appController isGsAvailable] :
+    NO;    
   [makeLatexButton setEnabled:makeLatexButtonEnabled];
   [makeLatexButton setNeedsDisplay:YES];
   if (makeLatexButtonEnabled)
     [makeLatexButton setToolTip:nil];
   else if (![makeLatexButton toolTip])
     [makeLatexButton setToolTip:
-      NSLocalizedString(@"pdflatex and/or gs seem unavailable in your system. Please check their installation.",
-                        @"pdflatex and/or gs seem unavailable in your system. Please check their installation.")];
+      NSLocalizedString(@"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.",
+                        @"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation.")];
   
   BOOL colorStyEnabled = [appController isColorStyAvailable];
   [colorWell setEnabled:colorStyEnabled];
@@ -343,7 +357,7 @@ static NSString* yenString = nil;
 //when the linecount changes in the preamble view, the numerotation must change in the body view
 -(void) _lineCountDidChange:(NSNotification*)aNotification
 {
-  //registerd only for preambleTextView
+  //registered only for preambleTextView
   [sourceTextView setLineShift:[[preambleTextView lineRanges] count]];
 }
 
@@ -491,10 +505,12 @@ static NSString* yenString = nil;
     NSRect tmpRect = NSMakeRect(0, 0, 0, 0);
     [scanner scanFloat:&tmpRect.origin.x];
     [scanner scanFloat:&tmpRect.origin.y];
-    [scanner scanFloat:&tmpRect.size.width];
-    [scanner scanFloat:&tmpRect.size.height];
+    [scanner scanFloat:&tmpRect.size.width];//in fact, we read the right corner, not the width
+    [scanner scanFloat:&tmpRect.size.height];//idem for height
+    tmpRect.size.width  -= tmpRect.origin.x;//so we correct here
+    tmpRect.size.height -= tmpRect.origin.y;
     
-    boundingBoxRect = tmpRect; //here I use a tmpRect because gcc version 4.0.0 (Apple Computer, Inc. build 5026) issues a strange warning
+    boundingBoxRect = tmpRect; //I have used a tmpRect because gcc version 4.0.0 (Apple Computer, Inc. build 5026) issues a strange warning
     //it considers <boundingBoxRect> to be const when the try/catch/finally above is here. If you just comment try/catch/finally, the
     //warning would disappear
   }
@@ -502,7 +518,8 @@ static NSString* yenString = nil;
 }
 
 //compose latex and returns pdf data. the options may specify to use pdflatex or latex+dvipdf
--(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog options:(int)options
+-(NSData*) _composeLaTeX:(NSString*)filePath stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
+                                       compositionMode:(composition_mode_t)compositionMode
 {
   NSData* pdfData = nil;
   
@@ -524,10 +541,10 @@ static NSString* yenString = nil;
   [stdoutString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
 
   //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
-  NSString* executablePath = [[NSUserDefaults standardUserDefaults] stringForKey:PdfLatexPathKey];
-  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && nice -n 0 %@ %@ -file-line-error -interaction nonstopmode %@ > %@", 
+  NSString* executablePath = (compositionMode == XELATEX) ? [userDefaults stringForKey:XeLatexPathKey] : [userDefaults stringForKey:PdfLatexPathKey];
+  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ %@ -file-line-error -interaction nonstopmode %@ > %@", 
                           directory, executablePath,
-                          (options & ComposeUsingLatexAndDvipdf) ? @"-progname latex" : @"", texFile, errFile];
+                          (compositionMode == LATEXDVIPDF) ? @"-progname latex" : @"", texFile, errFile];
   [stdoutString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @"processing"),
                                                         [executablePath lastPathComponent],
@@ -542,7 +559,7 @@ static NSString* yenString = nil;
                                [executablePath lastPathComponent]]];
 
   //if !failed and must call dvipdf...
-  if (!failed && (options & ComposeUsingLatexAndDvipdf))
+  if (!failed && (compositionMode == LATEXDVIPDF))
   {
     NSTask* dvipdfTask = [[NSTask alloc] init];
     [dvipdfTask setCurrentDirectoryPath:directory];
@@ -602,7 +619,7 @@ static NSString* yenString = nil;
 }
 
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
--(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode 
+-(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
                   magnification:(double)magnification
 {
   NSData* pdfData = nil;
@@ -625,8 +642,7 @@ static NSString* yenString = nil;
   //All these steps need many intermediate files, so don't be surprised if you feel a little lost
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  int compositionMode = [userDefaults integerForKey:CompositionModeKey];
-  compositionMode = (compositionMode == 0) ? ComposeUsingPdfLatex : ComposeUsingLatexAndDvipdf;
+  composition_mode_t compositionMode = (composition_mode_t) [userDefaults integerForKey:CompositionModeKey];
 
   //prepare file names
   NSString* directory      = NSTemporaryDirectory();
@@ -673,20 +689,29 @@ static NSString* yenString = nil;
 
   //some tuning due to parameters; note that \[...\] is replaced by $\displaystyle because of
   //incompatibilities with the magical boxes
-  NSString* addSymbolLeft  = (mode == DISPLAY) ? @"$\\displaystyle " : (mode == INLINE) ? @"$" : @"";
-  NSString* addSymbolRight = (mode == DISPLAY) ? @"$" : (mode == INLINE) ? @"$" : @"";
+  NSString* addSymbolLeft  = (latexMode == DISPLAY) ? @"$\\displaystyle " : (latexMode == INLINE) ? @"$" : @"";
+  NSString* addSymbolRight = (latexMode == DISPLAY) ? @"$" : (latexMode == INLINE) ? @"$" : @"";
   NSString* colouredPreamble = [[AppController appController] insertColorInPreamble:preamble color:color];
   
   NSMutableString* fullLog = [NSMutableString string];
 
   //STEP 1
   //first, creates simple latex source text to compile and report errors (if there are any)
+  
+  //xelatex requires to insert the color in the body, so we compute the color as string...
+  color = [(color ? color : [NSColor blackColor]) colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+  float rgba[4] = {0, 0, 0, 0};
+  [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
+  NSString* colorString = [NSString stringWithFormat:@"\\color[rgb]{%1.3f,%1.3f,%1.3f}", rgba[0], rgba[1], rgba[2]];
   NSString* normalSourceToCompile =
     [NSString stringWithFormat:
       @"%@\n\\pagestyle{empty} "\
        "\\begin{document}"\
-       "%@%@%@"\
-       "\\end{document}", [self _replaceYenSymbol:colouredPreamble], addSymbolLeft, [self _replaceYenSymbol:body], addSymbolRight];
+       "%@%@%@%@"\
+       "\\end{document}",
+       [self _replaceYenSymbol:colouredPreamble], addSymbolLeft,
+       ([userDefaults integerForKey:CompositionModeKey] == XELATEX) ? colorString : @"",
+       [self _replaceYenSymbol:body], addSymbolRight];
 
   //creates the corresponding latex file
   NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding];
@@ -694,7 +719,7 @@ static NSString* yenString = nil;
   
   NSString* stdoutLog = nil;
   NSString* stderrLog = nil;
-  failed |= ![self _composeLaTeX:latexFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog options:compositionMode];
+  failed |= ![self _composeLaTeX:latexFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:compositionMode];
   if (stdoutLog)
     [fullLog appendString:stdoutLog];
   [logTextView setString:fullLog];
@@ -704,7 +729,7 @@ static NSString* yenString = nil;
   //STEP 1 is over. If it has failed, it is the fault of the user, and syntax errors will be reported
   
   //STEP 2
-  BOOL shouldTryStep2 = (mode != TEXT) && (compositionMode != ComposeUsingLatexAndDvipdf);
+  BOOL shouldTryStep2 = (latexMode != TEXT) && (compositionMode != LATEXDVIPDF) && (compositionMode != XELATEX);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
   if (!failed)
   {
@@ -754,7 +779,7 @@ static NSString* yenString = nil;
       failed |= ![latexData writeToFile:latexBaselineFilePath atomically:NO];
       
       if (!failed)
-        pdfData = [self _composeLaTeX:latexBaselineFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog options:compositionMode];
+        pdfData = [self _composeLaTeX:latexBaselineFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:compositionMode];
       failed |= !pdfData;
     }//end of step 2
     
@@ -808,14 +833,15 @@ static NSString* yenString = nil;
           "\\closeout\\foo \\geometry{paperwidth=\\latexitwidth,paperheight=\\latexitheight,margin=0pt}\n"\
           "\\begin{document}\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}\\end{document}\n", 
           [self _replaceYenSymbol:colouredPreamble], magnification/10.0,
-          boundingBox.origin.x, boundingBox.origin.y, boundingBox.size.width, boundingBox.size.height,
+          boundingBox.origin.x, boundingBox.origin.y,
+          boundingBox.origin.x+boundingBox.size.width, boundingBox.origin.y+boundingBox.size.height,
           pdfFile, 200*magnification/10000];
 
       //Latexisation of step 3. Should never fail. Always performed in ComposeUsingPdfLatex mode
       NSData* latexData = [magicSourceToProducePDF dataUsingEncoding:NSUTF8StringEncoding];  
       failed |= ![latexData writeToFile:latexFilePath2 atomically:NO];
       if (!failed)
-        pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog options:ComposeUsingPdfLatex];
+        pdfData = [self _composeLaTeX:latexFilePath2 stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:PDFLATEX];
       failed |= !pdfData;
     }//end STEP 3
     
@@ -842,7 +868,8 @@ static NSString* yenString = nil;
     if (pdfData)
       pdfData = [[AppController appController]
                   annotatePdfDataInLEEFormat:pdfData preamble:preamble source:body color:color
-                                        mode:mode magnification:magnification baseline:baseline backgroundColor:[imageView backgroundColor]];
+                                        mode:latexMode magnification:magnification baseline:baseline
+                             backgroundColor:[imageView backgroundColor]];
 
     [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
   }//end if latex source could be compiled

@@ -30,13 +30,9 @@ static NSImage* errorIcon = nil;
   if (![super initWithScrollView:scrollView orientation:orientation])
     return nil;
   [self setRuleThickness:32];
-  return self;
-}
-
--(void) awakeFromNib
-{
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
-                                               name:NSTextDidChangeNotification object:nil];
+                                               name:LineCountDidChangeNotification object:nil];
+  return self;
 }
 
 -(void) dealloc
@@ -70,6 +66,8 @@ static NSImage* errorIcon = nil;
   NSLayoutManager* lm = [(NSTextView*)[self clientView] layoutManager];
   NSTextContainer* tc = [(NSTextView*)[self clientView] textContainer];
   NSArray* lineRanges = [(LineCountTextView*)[self clientView] lineRanges];
+  
+  NSDictionary* attributes = [NSDictionary dictionaryWithObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName];
   unsigned int lineNumber = 0;
   for(lineNumber = 1 ; lineNumber <= [lineRanges count] ; ++lineNumber)
   {
@@ -78,8 +76,6 @@ static NSImage* errorIcon = nil;
     rect.size.width = MAX(rect.size.width, 1);
     if (NSIntersectsRect(rect, visibleRect))
     {
-      NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor grayColor],
-                                                                            NSForegroundColorAttributeName, nil];
       NSString* numberString = [NSString stringWithFormat:@"%d", lineNumber+lineShift];
       NSAttributedString* attrNumberString = [[[NSAttributedString alloc] initWithString:numberString
                                                                           attributes:attributes] autorelease];

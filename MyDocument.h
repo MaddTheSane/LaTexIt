@@ -74,13 +74,14 @@ typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 //some accessors useful sometimes
 -(LineCountTextView*) sourceTextView;
 -(NSButton*) makeLatexButton;
+-(MyImageView*) imageView;
 
 //latexise and returns the pdf result, cropped, magnified, coloured, with pdf meta-data
 -(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode
                   magnification:(double)magnification;
 
 //updates interface according to whether the latexisation is possible or not
--(void) updateAvailabilities;
+-(void) updateAvailabilities:(NSNotification*)notification;
 //tells whether the document is currently performing a latexisation
 -(BOOL) isBusy;
 

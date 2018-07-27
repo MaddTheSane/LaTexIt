@@ -323,6 +323,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(IBAction) copy:(id)sender
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard declareTypes:[NSArray array] owner:self];
   [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO];
 }
 

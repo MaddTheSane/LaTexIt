@@ -3,6 +3,7 @@
         {
             ACTIONS = {
                 checkUpdates = id; 
+                copyEquation = id; 
                 displayLog = id; 
                 exportImage = id; 
                 historyClearHistory = id; 

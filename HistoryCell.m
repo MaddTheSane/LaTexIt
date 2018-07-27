@@ -15,14 +15,14 @@ typedef struct {
   float red2, green2, blue2, alpha2;
 } twoRgba_t;
 
-static void _linearColorBlendFunction(void *info, const float *in, float *out)
+static void _linearColorBlendFunction(void *info, const float *inData, float *outData)
 {
-  twoRgba_t *twoRgbaColors = info;
+  twoRgba_t* twoRgbaColors = (twoRgba_t*) info;
   
-  out[0] = (1.0 - *in) * twoRgbaColors->red1   + *in * twoRgbaColors->red2;
-  out[1] = (1.0 - *in) * twoRgbaColors->green1 + *in * twoRgbaColors->green2;
-  out[2] = (1.0 - *in) * twoRgbaColors->blue1  + *in * twoRgbaColors->blue2;
-  out[3] = (1.0 - *in) * twoRgbaColors->alpha1 + *in * twoRgbaColors->alpha2;
+  outData[0] = (1.0 - *inData) * twoRgbaColors->red1   + (*inData) * twoRgbaColors->red2;
+  outData[1] = (1.0 - *inData) * twoRgbaColors->green1 + (*inData) * twoRgbaColors->green2;
+  outData[2] = (1.0 - *inData) * twoRgbaColors->blue1  + (*inData) * twoRgbaColors->blue2;
+  outData[3] = (1.0 - *inData) * twoRgbaColors->alpha1 + (*inData) * twoRgbaColors->alpha2;
 }
 
 static void _linearColorReleaseInfoFunction(void *info)

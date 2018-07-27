@@ -66,10 +66,13 @@
                 dragExportOptionsButton = NSButton; 
                 dragExportOptionsPane = NSPanel; 
                 dragExportPopupFormat = NSPopUpButton; 
+                dvipdfButton = NSButton; 
                 dvipdfTextField = NSTextField; 
                 encapsulationTableView = EncapsulationTableView; 
                 fontTextField = NSTextField; 
+                gsButton = NSButton; 
                 gsTextField = NSTextField; 
+                pdfLatexButton = NSButton; 
                 pdfLatexTextField = NSTextField; 
                 preambleTextView = LineCountTextView; 
                 preferencesTabView = NSTabView; 
@@ -78,6 +81,8 @@
                 serviceRespectsBaseline = NSButton; 
                 serviceRespectsColor = NSMatrix; 
                 serviceRespectsPointSize = NSMatrix; 
+                xeLatexButton = NSButton; 
+                xeLatexTextField = NSTextField; 
             }; 
             SUPERCLASS = NSWindowController; 
         }

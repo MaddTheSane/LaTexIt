@@ -883,7 +883,7 @@
 				93773C4907FFF713004AAB30 /* French */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */ = {
 			isa = PBXVariantGroup;

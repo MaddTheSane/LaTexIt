@@ -29,6 +29,7 @@ NSString* DefaultPreambleAttributedKey = @"LaTeXiT_DefaultPreambleAttributedKey"
 NSString* DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
 NSString* CompositionModeKey           = @"LaTeXiT_CompositionModeKey";
 NSString* PdfLatexPathKey              = @"LaTeXiT_PdfLatexPathKey";
+NSString* XeLatexPathKey               = @"LaTeXiT_XeLatexPathKey";
 NSString* DvipdfPathKey                = @"LaTeXiT_DvipdfPathKey";
 NSString* GsPathKey                    = @"LaTeXiT_GsPathKey";
 NSString* ServiceRespectsBaselineKey   = @"LaTeXiT_ServiceRespectsBaselineKey";
@@ -51,6 +52,7 @@ NSString* MarginControllerVisibleAtStartupKey = @"MarginControllerVisibleAtStart
 NSString* CheckForNewVersionsKey       = @"LaTeXiT_CheckForNewVersionsKey";
 
 NSString* SomePathDidChangeNotification = @"SomePathDidChangeNotification"; //changing the path to an executable (like pdflatex)
+NSString* CompositionModeDidChangeNotification = @"CompositionModeDidChangeNotification";
 
 @interface PreferencesController (PrivateAPI)
 -(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
@@ -96,6 +98,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [NSNumber numberWithInt:DISPLAY], DefaultModeKey,
                                                [NSNumber numberWithInt:0], CompositionModeKey,
                                                @"", PdfLatexPathKey,
+                                               @"", XeLatexPathKey,
                                                @"", DvipdfPathKey,
                                                @"", GsPathKey,
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
@@ -168,10 +171,14 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   
   [pdfLatexTextField        setStringValue:[userDefaults stringForKey:PdfLatexPathKey]];
   [pdfLatexTextField        setDelegate:self];
+  [xeLatexTextField         setStringValue:[userDefaults stringForKey:XeLatexPathKey]];
+  [xeLatexTextField         setDelegate:self];
   [dvipdfTextField          setStringValue:[userDefaults stringForKey:DvipdfPathKey]];
   [dvipdfTextField          setDelegate:self];
   [gsTextField              setStringValue:[userDefaults stringForKey:GsPathKey]];
   [gsTextField              setDelegate:self];
+  [self changeCompositionMode:compositionMatrix];//to update enable state of the buttons just above (here in the code)
+  
   [serviceRespectsBaseline  setState:([userDefaults boolForKey:ServiceRespectsBaselineKey]  ? NSOnState : NSOffState)];
   [serviceRespectsPointSize selectCellWithTag:([userDefaults boolForKey:ServiceRespectsPointSizeKey] ? 1 : 0)];
   [serviceRespectsColor     selectCellWithTag:([userDefaults boolForKey:ServiceRespectsColorKey]     ? 1 : 0)];
@@ -371,7 +378,13 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   if (sender == compositionMatrix)
   {
-    [userDefaults setInteger:[[sender selectedCell] tag] forKey:CompositionModeKey];
+    composition_mode_t mode = (composition_mode_t) [[sender selectedCell] tag];
+    [xeLatexTextField setEnabled:(mode == XELATEX)];
+    [xeLatexButton    setEnabled:(mode == XELATEX)];
+    [dvipdfTextField  setEnabled:(mode == LATEXDVIPDF)];
+    [dvipdfButton     setEnabled:(mode == LATEXDVIPDF)];
+    [userDefaults setInteger:(int)mode forKey:CompositionModeKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CompositionModeDidChangeNotification object:self];
   }
 }
 
@@ -383,8 +396,9 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   switch(tag)
   {
     case 0 : textField = pdfLatexTextField; break;
-    case 1 : textField = dvipdfTextField; break;
-    case 2 : textField = gsTextField; break;
+    case 1 : textField = xeLatexTextField; break;
+    case 2 : textField = dvipdfTextField; break;
+    case 3 : textField = gsTextField; break;
     default: break;
   }
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -403,7 +417,9 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     {
       NSString* path = [filenames objectAtIndex:0];
       [textField setStringValue:path];
-      [[NSNotificationCenter defaultCenter] postNotificationName:NSControlTextDidEndEditingNotification object:textField];
+      NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+      [notificationCenter postNotificationName:NSControlTextDidChangeNotification object:textField];
+      [notificationCenter postNotificationName:NSControlTextDidEndEditingNotification object:textField];
     }
   }
 }
@@ -413,6 +429,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   NSTextField* textField = [aNotification object];
   if (textField == pdfLatexTextField)
     didChangePdfLatexTextField = YES;
+  if (textField == xeLatexTextField)
+    didChangeXeLatexTextField = YES;
   else if (textField == dvipdfTextField)
     didChangeDvipdfTextField = YES;
   else if (textField == gsTextField)
@@ -431,6 +449,15 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
     }
     didChangePdfLatexTextField = NO;
+  }
+  else if (textField == xeLatexTextField)
+  {
+    if (didChangeXeLatexTextField)
+    {
+      [userDefaults setObject:[textField stringValue] forKey:XeLatexPathKey];
+      [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
+    }
+    didChangeXeLatexTextField = NO;
   }
   else if (textField == dvipdfTextField)
   {

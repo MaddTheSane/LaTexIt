@@ -33,21 +33,16 @@
 "used for font color" = "pour la couleur";
 "no color.sty found" = "color.sty introuvable";
 "useful to type directly accentuated characters" = "utile pour taper directement les caractères accentués";
-"gs not found or not working as expected" = "gs introuvable ou au comportement inattendu";
-"pdflatex not found or not working as expected" = "pdflatex introuvable ou au comportement inattendu";
-"Without GhostScript (gs) installed the software won't work at all.\nYou should install a LaTeX distribution packaging gs" =
-"Sans GhostScript (gs) d'installé, le logiciel ne fonctionnera pas du tout.\nVous devriez installer une distribution de LaTeX contenant gs";
-"Without pdflatex installed the software won't work at all.\nYou should install a LaTeX distribution packaging pdflatex" =
-"Sans pdflatex d'installé, le logiciel ne fonctionnera pas du tout.\nVous devriez installer une distribution de LaTeX contenant pdflatex";
 "color.sty seems to be unavailable" = "color.sty semble indisponible";
+"%@ not found or not working as expected" = "%@ introuvable ou non fonctionnel";
+"The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
+"Find %@..." = "Chercher %@...";
+"pdflatex, dvipdf, xelatex or gs (depending to the current configuration) seems unavailable in your system. Please check their installation." =
+"pdflatex, dvipdf, xelatex ou gs (selon la configuration actuelle) semble introuvable sur votre machine. Veuillez vérifier leur installation.";
 "Without the color.sty package, you won't be able to change the font color" =
 "Sans le package color.sty, vous ne pourrez pas modifier la couleur des équations";
-"pdflatex and/or gs seem unavailable in your system. Please check their installation." =
-"pdflatex et/ou gs semblent indisponibles sur votre système. Veuillez vérifier leur installation.";
 "color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." =
 "le package color.sty semble indisponible dans votre installation de LaTeX. La sélection de couleur est donc désactivée.";
-"Find gs..." = "Rechercher gs...";
-"Find pdflatex..." = "Rechercher pdflatex...";
 "This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT" =
 "Ce texte n'est pas conforme à LaTeX; ou peut-être y a-t-il un problème de préambule ? Vous pouvez le vérifier au sein de LaTeXiT";
 "Empty LaTeX body" = "Pas de corps LaTeX";
