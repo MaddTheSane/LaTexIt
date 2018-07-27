@@ -65,11 +65,11 @@
 
 -(LibraryView*) libraryView;
 
--(BOOL) canRemoveSelectedItems;
--(BOOL) canRenameSelectedItems;
--(BOOL) canRefreshItems;
+@property (readonly) BOOL canRemoveSelectedItems;
+@property (readonly) BOOL canRenameSelectedItems;
+@property (readonly) BOOL canRefreshItems;
 
--(BOOL) isCommentsPaneOpen;
+@property (readonly, getter=isCommentsPaneOpen) BOOL commentsPaneOpen;
 
 -(NSMenu*) actionMenu;
 -(BOOL)    validateMenuItem:(NSMenuItem*)menuItem;

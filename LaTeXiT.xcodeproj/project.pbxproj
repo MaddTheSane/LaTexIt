@@ -91,6 +91,7 @@
 		55EC50971DCD3F6A00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
 		55EC50981DCD3F8C00096CC0 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50961DCD3F6A00096CC0 /* libicucore.tbd */; };
 		55EC50991DCD3F8C00096CC0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EC50941DCD3F6300096CC0 /* libz.tbd */; };
+		55FF53FC210AB9EA002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */ = {isa = PBXBuildFile; fileRef = 9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -471,6 +472,7 @@
 			dstPath = Contents/Library/Spotlight;
 			dstSubfolderSpec = 1;
 			files = (
+				55FF53FC210AB9EA002D5190 /* CHiWorkSpotlightPlugin.mdimporter in Copy Files (Spotlight) */,
 			);
 			name = "Copy Files (Spotlight)";
 			runOnlyForDeploymentPostprocessing = 0;

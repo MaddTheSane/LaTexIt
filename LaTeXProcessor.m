@@ -203,9 +203,7 @@ static LaTeXProcessor* sharedInstance = nil;
   preamble = !preamble ? @"" : preamble;
   source   = !source   ? @"" : source;
 
-  #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
-  BOOL embeddAsAnnotation = !shouldDenyDueTo64Bitsproblem;
+  BOOL embeddAsAnnotation = YES;
   if (embeddAsAnnotation)
   {
     PDFDocument* pdfDocument = nil;
@@ -1095,9 +1093,7 @@ static LaTeXProcessor* sharedInstance = nil;
 
     //Now that we are here, either step 2 passed, or step 3 passed. (But if step 2 failed, step 3 should not have failed)
     //pdfData should contain the cropped/magnified/coloured wanted image
-    #warning 64bits problem
-    BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
-    if (!failed && pdfData && !shouldDenyDueTo64Bitsproblem)
+    if (!failed && pdfData)
     {
       PDFDocument* pdfDocument = nil;
       @try{
@@ -1112,7 +1108,7 @@ static LaTeXProcessor* sharedInstance = nil;
       @catch(NSException* e){
         DebugLog(0, @"exception : %@", e);
       }
-    }//end if (!failed && pdfData && !shouldDenyDueTo64Bitsproblem)
+    }//end if (!failed && pdfData)
 
     if (!failed && pdfData)
     {
@@ -1773,9 +1769,7 @@ static LaTeXProcessor* sharedInstance = nil;
             backgroundColor:[equationMetaData objectForKey:@"backgroundColor"]
             title:[equationMetaData objectForKey:@"title"]];
             
-        #warning 64bits problem
-        BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
-        if (pdfData && !shouldDenyDueTo64Bitsproblem)
+        if (pdfData)
         {
           //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
           PDFDocument* pdfDocument = nil;
@@ -1790,7 +1784,7 @@ static LaTeXProcessor* sharedInstance = nil;
           @catch(NSException* e) {
             DebugLog(0, @"exception : %@", e);
           }
-        }//end if (pdfData && !shouldDenyDueTo64Bitsproblem)
+        }//end if (pdfData)
 
       }//end if (scaleAsPercent != 100)
       

@@ -190,11 +190,11 @@
  */
 @interface NSURL (NDCarbonUtilitiesInfoFlags)
 /*!
-	@method hasCustomIcon
+	@property hasCustomIcon
 	@abstract Test if a file has a custom icon.
 	@discussion Test to see if the file refered to by the receiver has a custom icon. The is equivelent to testing for the <tt>kHasCustomIcon</tt> flag 
 	@result Returns <tt>YES</tt> if the file has a custom icon.
  */
-- (BOOL)hasCustomIcon;
+@property (readonly) BOOL hasCustomIcon;
 
 @end

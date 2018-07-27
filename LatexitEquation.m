@@ -204,9 +204,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [[PreferencesController sharedController] preambleDocumentAttributedString];
 
   BOOL decodedFromAnnotation = NO;
-  #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
-  BOOL shoudDecodeFromAnnotations = !shouldDenyDueTo64Bitsproblem;
+  BOOL shoudDecodeFromAnnotations = YES;
   if (shoudDecodeFromAnnotations)
   {
     PDFDocument* pdfDocument = nil;

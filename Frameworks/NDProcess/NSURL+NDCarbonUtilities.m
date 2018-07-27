@@ -98,7 +98,7 @@
 {
 	CFStringRef	theString = CFURLCopyFileSystemPath((CFURLRef)self, kCFURLHFSPathStyle);
 
-  return CFBridgingRelease(theString);
+	return CFBridgingRelease(theString);
 }
 
 /*
