@@ -1024,14 +1024,14 @@ static NSArray* unixBins = nil;
   {
     int returnCode =
       NSRunAlertPanel(
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
           @"gs"],
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
                             @"The current configuration of LaTeXiT requires %@ to work."),
           @"Ghostscript (gs)"],
-        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"gs"],
+        [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), @"gs"],
         @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)
@@ -1062,14 +1062,14 @@ static NSArray* unixBins = nil;
   {
     int returnCode =
       NSRunAlertPanel(
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
           @"pdflatex"],
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
                             @"The current configuration of LaTeXiT requires %@ to work."),
           @"pdflatex"],
-        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"pdflatex"],
+        [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), @"pdflatex"],
         @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)
@@ -1100,14 +1100,14 @@ static NSArray* unixBins = nil;
   {
     int returnCode =
       NSRunAlertPanel(
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
           @"dvipdf"],
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
                             @"The current configuration of LaTeXiT requires %@ to work."),
           @"dvipdf"],
-        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"dvipdf"],
+        [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), @"dvipdf"],
         @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)
@@ -1138,14 +1138,14 @@ static NSArray* unixBins = nil;
   {
     int returnCode =
       NSRunAlertPanel(
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
           @"xelatex"],
-        [NSString stringWithFormat:@"%@",
+        [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
                             @"The current configuration of LaTeXiT requires %@ to work."),
           @"xelatex"],
-        [NSString stringWithFormat:@"%@", NSLocalizedString(@"Find %@...", @"Find %@..."), @"xelatex"],
+        [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), @"xelatex"],
         @"Cancel", nil);
     retry &= (returnCode == NSAlertDefaultReturn);
     if (returnCode == NSAlertDefaultReturn)

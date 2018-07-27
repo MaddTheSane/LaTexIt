@@ -57,7 +57,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.4.1 (Tiger version)</string>
+	<string>1.4.2 (Tiger version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>
@@ -87,9 +87,9 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSPDFPboardType</string>
 				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>NSPDFPboardType</string>
 			</array>
 		</dict>
 		<dict>
@@ -111,9 +111,9 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSPDFPboardType</string>
 				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>NSPDFPboardType</string>
 			</array>
 		</dict>
 		<dict>
@@ -135,9 +135,9 @@
 			</array>
 			<key>NSSendTypes</key>
 			<array>
-				<string>NSPDFPboardType</string>
 				<string>NSStringPboardType</string>
 				<string>NSRTFPboardType</string>
+				<string>NSPDFPboardType</string>
 			</array>
 		</dict>
 	</array>
