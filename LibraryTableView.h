@@ -12,6 +12,7 @@ typedef enum {LIBRARY_ROW_IMAGE_AND_TEXT, LIBRARY_ROW_IMAGE_LARGE} library_row_t
 
 @interface LibraryTableView : NSOutlineView {
   library_row_t  libraryRowType;
+  BOOL willEdit;
 }
 
 -(IBAction) copy:(id)sender;

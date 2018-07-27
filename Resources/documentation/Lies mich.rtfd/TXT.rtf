@@ -3,6 +3,7 @@
 }
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
 }
+\vieww9000\viewh8400\viewkind0
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
 \f0\fs24 \cf0  {{\NeXTGraphic latexit128.png \width2560 \height2560
@@ -10,7 +11,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.14.0\
+\f2\b \cf0 LaTeXiT 1.14.1\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -34,6 +35,7 @@
 -Benutzung des "LaTeXiT Dienstes"\
 -Benutzung von LinkBack\
 -Benutzung von Skripten\
+-LaTeX Paletten\
 -FAQ (H\'8aufig gestellte Fragen)\
 -Bekannte Fehler\
 -LaTeX installieren
@@ -52,7 +54,7 @@ Feedback E-Mail Adresse (Mails bitte nur in englisch oder franz\'9asisch): \cf3 
 Systemanforderungen\
 
 \fs22 \ulnone \
-LaTeXiT 1.14.0 ben\'9atigt Mac OS X Version 10.3.9 (Panther) oder 10.4 oder h\'9aher (Tiger), und eine funktionierende LaTeX-Installation mit mindestens pdflatex und GhostScript (gs). Wenn Sie nicht wissen, was dies f\'9fr Programme sind, k\'9annen Sie dies im Teil "LaTeX installieren" in dieser Dokumentation nachlesen.\
+LaTeXiT 1.14.1 ben\'9atigt Mac OS X Version 10.3.9 (Panther) oder 10.4 oder h\'9aher (Tiger), und eine funktionierende LaTeX-Installation mit mindestens pdflatex und GhostScript (gs). Wenn Sie nicht wissen, was dies f\'9fr Programme sind, k\'9annen Sie dies im Teil "LaTeX installieren" in dieser Dokumentation nachlesen.\
 
 \f2\b\fs26 \
 
@@ -164,7 +166,7 @@ Den "LaTeXiT Dienst" benutzen\
 \f2\b \cf0 Tipp: Der Inline-Modus "$...$" versucht, wenn m\'9aglich, die Gleichung an die Grundlinie des Textes anzugleichen.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\b0 \cf0 In Version 1.14.0 wurde ein neuer Dienst eingef\'9fhrt, dieser erlaubt es Ihnen von der Gleichung zum LaTeX-Code zur\'9fckzukehren.\
+\f1\b0 \cf0 In Version 1.14.1 wurde ein neuer Dienst eingef\'9fhrt, dieser erlaubt es Ihnen von der Gleichung zum LaTeX-Code zur\'9fckzukehren.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
@@ -208,7 +210,7 @@ LaTeX Paletten\
 
 \fs22 \ulnone \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 Seit Version 1.14.0 kann LaTeXiT LaTeX-Paletten als Plug-In handhaben. Programmeigene Paletten sind im Programm, aber zus\'8atzliche Paletten k\'9annen im Ordner "Library" installiert werden. Und zwar darin in einem Unterordner /Application Support/LaTeXiT/Palettes.\
+\cf0 Seit Version 1.14.1 kann LaTeXiT LaTeX-Paletten als Plug-In handhaben. Programmeigene Paletten sind im Programm, aber zus\'8atzliche Paletten k\'9annen im Ordner "Library" installiert werden. Und zwar darin in einem Unterordner /Application Support/LaTeXiT/Palettes.\
 Beispiele:\
 /Library/Application Support/LaTeXiT/Palettes\
 /Benutzer/[Ihr Nutzername]/Library/Application Support/LaTeXiT/Palettes\
@@ -363,11 +365,20 @@ Aber werden Sie deshalb nicht traurig: Es existieren einige graphische Benutzero
 \fs26 \ul Versions-Geschichte\
 
 \fs22 \ulnone \
-v 1.14.0 (29. May 2007)
-\fs26 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-
-\fs22 \cf0 \ulnone - Behebung eines Fehlers durch eine R\'9fckentwicklung, der einige Skripte am funktionieren gehindert hat;\
+\cf0 v 1.14.1 (2. Juni 2007)\
+- Behebung eines (seltenen) Fehlers beim Zugreifen auf Ghostscript w\'8ahrend dem Exportieren;\
+- Behebung eines seltenen Fehlers wenn der Benutzer die noclobber Option in seiner Shell-Umgebung aktiviert hat;\
+- Es ist nun m\'9aglich, so wie im Finder, mit einem Klick Objekte der Bibliothek umzubenennen;\
+- Verbesserung einiger Fehlermeldungen;\
+- Verbesserte \'86berpr\'9ffung der Anwesenheit von ps2pdf \
+- Hinzuf\'9fgen einer \uc0\u132 Anf\'8anger\u147  Latexpalette;\
+- Verbesserte Startzeit des Programms.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+v 1.14.0 (29. May 2007)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 - Behebung eines Fehlers durch eine R\'9fckentwicklung, der einige Skripte am funktionieren gehindert hat;\
 - Die Farbe des editierten Textes stimmte nicht immer mit der Farbe aus den Einstellungen \'9fberein;\
 - LaTeX-Paletten k\'9annen nun als Plug-In gehandhabt werden; bitte lesen Sie hierzu den Teil "LaTeX Paletten" in der Dokumentation  (Dank an Matthew Hutton). \
 \

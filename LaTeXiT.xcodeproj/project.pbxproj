@@ -27,6 +27,7 @@
 		930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC29907ECBC3C00EEB238 /* AppController.m */; };
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
 		930E51E60C0711C300BF15A8 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
+		931030240C116A2E000BECED /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 93102E960C116A2E000BECED /* palettes */; };
 		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
 		9311C80408A0FA95009AC959 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C80208A0FA95009AC959 /* LibraryController.m */; };
 		9311C8E708A10931009AC959 /* HistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C8E508A10931009AC959 /* HistoryController.m */; };
@@ -75,6 +76,7 @@
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
 		935A8612084F4F27005724CE /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 935A860C084F4F15005724CE /* LinkBack.framework */; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
+		936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		936E319309465EAE0091BEC1 /* advancedToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */; };
 		936E319409465EAE0091BEC1 /* compositionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318E09465EAE0091BEC1 /* compositionToolbarItem.tiff */; };
 		936E319509465EAE0091BEC1 /* editionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318F09465EAE0091BEC1 /* editionToolbarItem.tiff */; };
@@ -85,7 +87,6 @@
 		9372A1F5087819EF00A3A645 /* MarginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9372A1F3087819EF00A3A645 /* MarginController.m */; };
 		9372A2F4087827FF00A3A645 /* Margin.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A2F3087827FF00A3A645 /* Margin.nib */; };
 		93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93773C2107FFF2B6004AAB30 /* warning.tiff */; };
-		938871910C0A2EF8007E93C2 /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 938870330C0A2EF7007E93C2 /* palettes */; };
 		938E23A60889C382000626E6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931AD67508491A8E00E8EE8B /* Quartz.framework */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
 		938E244B0889C392000626E6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
@@ -181,6 +182,7 @@
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
 		930E51E30C0711C300BF15A8 /* SystemTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemTask.h; sourceTree = "<group>"; };
 		930E51E40C0711C300BF15A8 /* SystemTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemTask.m; sourceTree = "<group>"; };
+		93102E960C116A2E000BECED /* palettes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = palettes; path = Resources/palettes; sourceTree = "<group>"; };
 		9311C64208A0C409009AC959 /* ImagePopupButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePopupButton.h; sourceTree = "<group>"; };
 		9311C64308A0C409009AC959 /* ImagePopupButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePopupButton.m; sourceTree = "<group>"; };
 		9311C80108A0FA95009AC959 /* LibraryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryController.h; sourceTree = "<group>"; };
@@ -222,7 +224,7 @@
 		933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "Resources/documentation/current-version-en.rtf"; sourceTree = "<group>"; };
 		933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "Resources/documentation/current-version-de.rtf"; sourceTree = "<group>"; };
 		933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = createHistoryPlist.m; sourceTree = "<group>"; };
-		933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = CreateHistoryPlist; sourceTree = BUILT_PRODUCTS_DIR; };
+		933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CreateHistoryPlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		933EBA900B7FCDD900D84BDB /* home.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = home.tiff; path = Resources/interface/home.tiff; sourceTree = "<group>"; };
 		933EBA910B7FCDD900D84BDB /* homePressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = homePressed.tiff; path = Resources/interface/homePressed.tiff; sourceTree = "<group>"; };
 		933F2ED708A0B86F004C7A31 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/interface/action-pressed.tiff"; sourceTree = "<group>"; };
@@ -268,6 +270,8 @@
 		935A860C084F4F15005724CE /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LinkBack.framework; sourceTree = "<group>"; };
 		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
 		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
+		936C315C0C0DEEA90082F86D /* Semaphore.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Semaphore.m; sourceTree = "<group>"; };
+		936C315D0C0DEEA90082F86D /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; };
 		936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = advancedToolbarItem.tiff; sourceTree = "<group>"; };
 		936E318E09465EAE0091BEC1 /* compositionToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = compositionToolbarItem.tiff; sourceTree = "<group>"; };
 		936E318F09465EAE0091BEC1 /* editionToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = editionToolbarItem.tiff; sourceTree = "<group>"; };
@@ -287,7 +291,6 @@
 		93773C4607FFF6FB004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		938870330C0A2EF7007E93C2 /* palettes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = palettes; path = Resources/palettes; sourceTree = "<group>"; };
 		93914200094F9A8A00B9F2F9 /* preambleToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = preambleToolbarItem.tiff; sourceTree = "<group>"; };
 		9391D8F709607C2100A22F19 /* PaletteItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteItem.h; sourceTree = "<group>"; };
 		9391D8F809607C2100A22F19 /* PaletteItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteItem.m; sourceTree = "<group>"; };
@@ -470,7 +473,7 @@
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
 				9326DEDD0A2E3A1E003A430E /* latex-keywords */,
-				938870330C0A2EF7007E93C2 /* palettes */,
+				93102E960C116A2E000BECED /* palettes */,
 				9345E3350AC9A2620082ADB4 /* textShortcuts.plist */,
 				93B48F5D091FA47C00FDEEB6 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
@@ -534,6 +537,8 @@
 			children = (
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
+				936C315D0C0DEEA90082F86D /* Semaphore.h */,
+				936C315C0C0DEEA90082F86D /* Semaphore.m */,
 				930E51E30C0711C300BF15A8 /* SystemTask.h */,
 				930E51E40C0711C300BF15A8 /* SystemTask.m */,
 				939D6B2109C7FEEB0076D19E /* Utils.h */,
@@ -918,9 +923,9 @@
 				933EBA930B7FCDD900D84BDB /* homePressed.tiff in Resources */,
 				93B212FA0BBC1C6900EFCA2F /* current-version-es.rtf in Resources */,
 				934069DA0C058FFB0012A8DB /* Léeme.rtfd in Resources */,
-				938871910C0A2EF8007E93C2 /* palettes in Resources */,
 				93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */,
 				9308991F0C0A586F00B08453 /* latexit-lib.icns in Resources */,
+				931030240C116A2E000BECED /* palettes in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1005,6 +1010,7 @@
 				9345E42D0AC9C5310082ADB4 /* TextShortcutsTableView.m in Sources */,
 				9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */,
 				930E51E60C0711C300BF15A8 /* SystemTask.m in Sources */,
+				936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

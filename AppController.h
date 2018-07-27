@@ -31,6 +31,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 @class LibraryController;
 @class MyDocument;
 @class PreferencesController;
+@class Semaphore;
 
 @interface AppController : NSObject <LinkBackServerDelegate> {  
   IBOutlet NSWindow*   readmeWindow;
@@ -40,6 +41,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
   IBOutlet NSTextView* updatesInformationTextView;
   
   //some info on current configuration
+  Semaphore* configurationSemaphore;
   BOOL isPdfLatexAvailable;
   BOOL isGsAvailable;
   BOOL isPs2PdfAvailable;

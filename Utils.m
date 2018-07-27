@@ -158,4 +158,30 @@ unsigned long EndianUL_NtoB(unsigned long x)
 }
 //end localizedPath:
 
++(NSFileHandle*) temporaryFileWithTemplate:(NSString*)templateString extension:(NSString*)extension outFilePath:(NSString**)outFilePath
+{
+  NSFileHandle* fileHandle = nil;
+  if (templateString && ![templateString isEqualToString:@""])
+  {
+    NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
+                                        ? [templateString stringByAppendingPathExtension:extension] : templateString;
+    NSString* tempFilenameTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:fileNameWithExtension];
+    #ifdef PANTHER
+    unsigned int length = [tempFilenameTemplate length];
+    #else
+    unsigned int length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    #endif
+    char* tmpString = (char*)calloc(length+1, sizeof(char));
+    memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
+    int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);
+    if (fd != -1)
+      fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
+    if (outFilePath)
+      *outFilePath = [NSString stringWithUTF8String:tmpString];
+    free(tmpString);
+  }
+  return [fileHandle autorelease];
+}
+//end temporaryFileWithTemplate:extension:outFilePath:
+
 @end

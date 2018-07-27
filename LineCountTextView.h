@@ -25,6 +25,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   LineCountRulerView* lineCountRulerView;
   int lineShift; //the displayed numerotation of the lines may start at a value different from 1
   NSDragOperation acceptDrag;
+  BOOL            spellCheckerHasBeenInitialized;
 }
 
 -(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line

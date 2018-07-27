@@ -31,7 +31,12 @@
 #import "MarginController.h"
 #import "PaletteItem.h"
 #import "PreferencesController.h"
+#import "Semaphore.h"
+#import "SystemTask.h"
 #import "Utils.h"
+
+#include <sys/types.h>
+#include <sys/wait.h>
 
 @interface AppController (PrivateAPI)
 
@@ -45,13 +50,13 @@
 //check the configuration, updates isGsAvailable, isPdfLatexAvailable and isColorStyAvailable
 -(void) _checkConfiguration;
 
--(BOOL) _checkGs;      //called by _checkConfiguration to check for gs's presence
--(BOOL) _checkPs2pdf;  //called by _checkConfiguration to check for gs's presence
--(BOOL) _checkDvipdf;  //called by _checkConfiguration to check for dvipdf's presence
--(BOOL) _checkPdfLatex;//called by _checkConfiguration to check for pdflatex's presence
--(BOOL) _checkXeLatex; //called by _checkConfiguration to check for pdflatex's presence
--(BOOL) _checkLatex;   //called by _checkConfiguration to check for pdflatex's presence
--(BOOL) _checkColorSty;//called by _checkConfiguration to check for color.sty's presence
+-(void) _checkGs:(id)object;      //called by _checkConfiguration to check for gs's presence
+-(void) _checkPs2pdf:(id)object;  //called by _checkConfiguration to check for gs's presence
+-(void) _checkDvipdf:(id)object;  //called by _checkConfiguration to check for dvipdf's presence
+-(void) _checkPdfLatex:(id)object;//called by _checkConfiguration to check for pdflatex's presence
+-(void) _checkXeLatex:(id)object; //called by _checkConfiguration to check for pdflatex's presence
+-(void) _checkLatex:(id)object;   //called by _checkConfiguration to check for pdflatex's presence
+-(void) _checkColorSty:(id)object;//called by _checkConfiguration to check for color.sty's presence
 
 //helper for the configuration
 -(void) _findGsPath;
@@ -98,7 +103,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSString* temporaryPathFileName = @"latexit-paths";
   NSString* temporaryPathFilePath = [[AppController latexitTemporaryPath] stringByAppendingPathComponent:temporaryPathFileName];
   NSString* systemCall =
-    [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" > %@",
+    [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" >| %@",
       temporaryPathFilePath, temporaryPathFilePath];
   int error = system([systemCall UTF8String]);
   NSError* nserror = nil;
@@ -268,6 +273,7 @@ static NSMutableDictionary* cachePaths = nil;
       return nil;
     appControllerInstance = self;
     strangeLock = [[NSLock alloc] init];
+    configurationSemaphore = [[Semaphore alloc] init];
     [self _setEnvironment];     //performs a setenv()
     [self _findGsPath];
     [self _findPdfLatexPath];
@@ -301,6 +307,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [configurationSemaphore release];
   [strangeLock release];
   [compositionConfigurationController release];
   [encapsulationController release];
@@ -1190,228 +1197,107 @@ static NSMutableDictionary* cachePaths = nil;
 //end _findDvipdfPath
 
 //check if gs work as expected. The user may have given a name different from "gs"
--(BOOL) _checkGs
+-(void) _checkGs:(id)object
 {
-  BOOL ok = YES;
-  NSTask* gsTask = [[NSTask alloc] init];
-  @try
-  {
-    //currently, the only check is the option -v, at least to see if the program can be executed
-    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
-                   [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]] UTF8String]) == 0);
-    /*
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [gsTask setLaunchPath:[userDefaults stringForKey:GsPathKey]];
-    [gsTask setArguments:[NSArray arrayWithObject:@"-v"]];
-    [gsTask setStandardOutput:nullDevice];
-    [gsTask setStandardError:nullDevice];
-    [gsTask launch];
-    [gsTask waitUntilExit];
-    ok = ([gsTask terminationStatus] == 0);*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  @finally
-  {
-    [gsTask release];
-  }
-  return ok;
+  BOOL ok =
+    [[NSFileManager defaultManager]
+     isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]];
+  int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
+                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey]] UTF8String]);
+  error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
+  isGsAvailable = (error != 127);
+  [configurationSemaphore P];
 }
-//end _checkGs
+//end _checkGs:
 
 //check if pdflatex works as expected. The user may have given a name different from "pdflatex"
--(BOOL) _checkPdfLatex
+-(void) _checkPdfLatex:(id)object
 {
-  BOOL ok = YES;
-  NSTask* pdfLatexTask = [[NSTask alloc] init];
-  @try
-  {
-    //currently, the only check is the option -v, at least to see if the program can be executed
-    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
-                   [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]] UTF8String]) == 0);
-    /*
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [pdfLatexTask setLaunchPath:[userDefaults stringForKey:PdfLatexPathKey]];
-    [pdfLatexTask setArguments:[NSArray arrayWithObject:@"-v"]];
-    [pdfLatexTask setStandardOutput:nullDevice];
-    [pdfLatexTask setStandardError:nullDevice];
-    [pdfLatexTask launch];
-    [pdfLatexTask waitUntilExit];
-    ok = ([pdfLatexTask terminationStatus] == 0);*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  @finally
-  {
-    [pdfLatexTask release];
-  }
-  return ok;
+  //currently, the only check is the option -v, at least to see if the program can be executed
+  BOOL ok =
+    [[NSFileManager defaultManager]
+     isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]];
+  int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
+                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]] UTF8String]);
+  error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
+  isPdfLatexAvailable = (error != 127);
+  [configurationSemaphore P];
 }
-//end _checkPdfLatex
+//end _checkPdfLatex:
 
 //check if ps2pdf works as expected. The user may have given a name different from "ps2pdf"
--(BOOL) _checkPs2Pdf
+-(void) _checkPs2Pdf:(id)object
 {
-  BOOL ok = YES;
-  NSTask* ps2PdfTask = [[NSTask alloc] init];
-  @try
-  {
-    //currently, the only check is the option -v, at least to see if the program can be executed
-    ok = [[NSFileManager defaultManager]
-            isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey]];
-    /*NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [ps2PdfTask setLaunchPath:[userDefaults stringForKey:Ps2PdfPathKey]];
-    [ps2PdfTask setArguments:[NSArray arrayWithObject:@"-v"]];
-    [ps2PdfTask setStandardOutput:nullDevice];
-    [ps2PdfTask setStandardError:nullDevice];
-    [ps2PdfTask launch];
-    [ps2PdfTask waitUntilExit];*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  @finally
-  {
-    [ps2PdfTask release];
-  }
-  return ok;
+  BOOL ok =
+    [[NSFileManager defaultManager]
+     isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey]];
+  int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
+                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey]] UTF8String]);
+  error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
+  isPs2PdfAvailable = (error != 127);
+  [configurationSemaphore P];
 }
-//end _checkPs2Pdf
+//end _checkPs2Pdf:
 
 //check if xelatex works as expected. The user may have given a name different from "pdflatex"
--(BOOL) _checkXeLatex
+-(void) _checkXeLatex:(id)object
 {
-  BOOL ok = YES;
-  NSTask* xeLatexTask = [[NSTask alloc] init];
-  @try
-  {
-    //currently, the only check is the option -v, at least to see if the program can be executed
-    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
-                    [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey]] UTF8String]) == 0);
-    /*
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [xeLatexTask setLaunchPath:[userDefaults stringForKey:XeLatexPathKey]];
-    [xeLatexTask setArguments:[NSArray arrayWithObject:@"-v"]];
-    [xeLatexTask setStandardOutput:nullDevice];
-    [xeLatexTask setStandardError:nullDevice];
-    [xeLatexTask launch];
-    [xeLatexTask waitUntilExit];
-    ok = ([xeLatexTask terminationStatus] == 0);*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  @finally
-  {
-    [xeLatexTask release];
-  }
-  return ok;
+  //currently, the only check is the option -v, at least to see if the program can be executed
+  BOOL ok =
+    [[NSFileManager defaultManager]
+     isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey]];
+  int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
+                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationXeLatexPathKey]] UTF8String]);
+  error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
+  isXeLatexAvailable = (error != 127);
+  [configurationSemaphore P];
 }
-//end _checkXeLatex
+//end _checkXeLatex:
 
 //check if latex works as expected. The user may have given a name different from "pdflatex"
--(BOOL) _checkLatex
+-(void) _checkLatex:(id)object
 {
-  BOOL ok = YES;
-  NSTask* latexTask = [[NSTask alloc] init];
-  @try
-  {
-    //currently, the only check is the option -v, at least to see if the program can be executed
-    ok = (system([[NSString stringWithFormat:@"%@ -v 1>/dev/null 2>/dev/null",
-                   [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey]] UTF8String]) == 0);
-    /*
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [latexTask setLaunchPath:[userDefaults stringForKey:LatexPathKey]];
-    [latexTask setArguments:[NSArray arrayWithObject:@"-v"]];
-    [latexTask setStandardOutput:nullDevice];
-    [latexTask setStandardError:nullDevice];
-    [latexTask launch];
-    [latexTask waitUntilExit];
-    ok = ([latexTask terminationStatus] == 0);*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  @finally
-  {
-    [latexTask release];
-  }
-  return ok;
+  //currently, the only check is the option -v, at least to see if the program can be executed
+  BOOL ok =
+    [[NSFileManager defaultManager]
+     isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey]];
+  int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
+                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey]] UTF8String]);
+  error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
+  isLatexAvailable = (error != 127);
+  [configurationSemaphore P];
 }
-//end _checkLatex
+//end _checkLatex:
 
 //check if dvipdf works as expected. The user may have given a name different from "pdflatex"
--(BOOL) _checkDvipdf
+-(void) _checkDvipdf:(id)object
 {
-  BOOL ok = YES;
-  NSTask* dvipdfTask = [[NSTask alloc] init];
-  @try
-  {
-    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:
-            [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
-    /*    
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-    [dvipdfTask setLaunchPath:[userDefaults stringForKey:DvipdfPathKey]];
-    [dvipdfTask setStandardOutput:nullDevice];
-    [dvipdfTask setStandardError:nullDevice];
-    [dvipdfTask launch];
-    [dvipdfTask waitUntilExit];*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  @finally
-  {
-    [dvipdfTask release];
-  }
-  return ok;
+  //currently, the only check is the option -v, at least to see if the program can be executed
+  BOOL ok =
+    [[NSFileManager defaultManager]
+     isExecutableFileAtPath:[PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]];
+  int error = !ok ? 127 : system([[NSString stringWithFormat:@"%@ -v 1>|/dev/null 2>&1",
+                        [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationDvipdfPathKey]] UTF8String]);
+  error = !ok ? 127 : (WIFEXITED(error) ? WEXITSTATUS(error) : 127);
+  isDvipdfAvailable = (error != 127);
+  [configurationSemaphore P];
 }
-//end _checkDvipdf
+//end _checkDvipdf:
 
 //checks if color.sty is available, by compiling a simple latex string that uses it
--(BOOL) _checkColorSty
+-(void) _checkColorSty:(id)object
 {
   BOOL ok = YES;
-  NSTask* checkTask = [[NSTask alloc] init];
   
   //first try with kpsewhich
-  @try
-  {
-    NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:environmentDict];
-    ok = kpseWhichPath  && [kpseWhichPath length] &&
-         (system([[NSString stringWithFormat:@"%@ %@ 1>/dev/null 2>/dev/null",kpseWhichPath,@"color.sty"] UTF8String]) == 0);
-    /*
-    if (ok)
-    {
-      NSFileHandle* nullDevice  = [NSFileHandle fileHandleWithNullDevice];
-      NSString* directory       = [AppController latexitTemporaryPath];
-      [checkTask setCurrentDirectoryPath:directory];
-      [checkTask setLaunchPath:kpseWhichPath];
-      [checkTask setArguments:[NSArray arrayWithObject:@"color.sty"]];
-      [checkTask setStandardOutput:nullDevice];
-      [checkTask setStandardError:nullDevice];
-      [checkTask launch];
-      [checkTask waitUntilExit];
-      ok = ([checkTask terminationStatus] == 0);
-    }*/
-  }
-  @catch(NSException* e)
-  {
-    ok = NO;
-  }
-  
+  NSString* kpseWhichPath = [self findUnixProgram:@"kpsewhich" tryPrefixes:unixBins environment:environmentDict];
+  ok = kpseWhichPath  && [kpseWhichPath length] &&
+       (system([[NSString stringWithFormat:@"%@ %@ 1>|/dev/null 2>&1",kpseWhichPath,@"color.sty"] UTF8String]) == 0);
+
   //perhaps second try without kpsewhich
   if (!ok)
   {
+    NSTask* checkTask = [[NSTask alloc] init];
     NSArray* latexProgramsPathsKeys =
       [NSArray arrayWithObjects:CompositionConfigurationPdfLatexPathKey,
                                 CompositionConfigurationLatexPathKey,
@@ -1445,22 +1331,26 @@ static NSMutableDictionary* cachePaths = nil;
         ok = NO;
       }
     }//end for each latex executable
+    [checkTask release];
   }//end if kpsewhich failed
 
-  [checkTask release];
-  return ok;
+  isColorStyAvailable = ok;
+  [configurationSemaphore P];
 }
-//end _checkColorSty
+//end _checkColorSty:
 
 -(void) _checkConfiguration
 {
-  isGsAvailable       = [self _checkGs];
-  isPdfLatexAvailable = [self _checkPdfLatex];
-  isPs2PdfAvailable   = [self _checkPs2Pdf];
-  isXeLatexAvailable  = [self _checkXeLatex];
-  isLatexAvailable    = [self _checkLatex];
-  isDvipdfAvailable   = [self _checkDvipdf];
-  isColorStyAvailable = [self _checkColorSty];
+  [NSApplication detachDrawingThread:@selector(sharedSpellChecker) toTarget:[NSSpellChecker class] withObject:nil];//meanwhile... let's not loose time
+  [configurationSemaphore V:7];
+  [NSApplication detachDrawingThread:@selector(_checkGs:)       toTarget:self withObject:nil];
+  [NSApplication detachDrawingThread:@selector(_checkPdfLatex:) toTarget:self withObject:nil];
+  [NSApplication detachDrawingThread:@selector(_checkPs2Pdf:)   toTarget:self withObject:nil];
+  [NSApplication detachDrawingThread:@selector(_checkXeLatex:)  toTarget:self withObject:nil];
+  [NSApplication detachDrawingThread:@selector(_checkLatex:)    toTarget:self withObject:nil];
+  [NSApplication detachDrawingThread:@selector(_checkDvipdf:)   toTarget:self withObject:nil];
+  [NSApplication detachDrawingThread:@selector(_checkColorSty:) toTarget:self withObject:nil];
+  [configurationSemaphore Z];
 }
 //end _checkConfiguration
 
@@ -1530,7 +1420,7 @@ static NSMutableDictionary* cachePaths = nil;
     int returnCode =
       NSRunAlertPanel(
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"),
           @"gs"],
         [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
@@ -1568,7 +1458,7 @@ static NSMutableDictionary* cachePaths = nil;
     int returnCode =
       NSRunAlertPanel(
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"),
           @"pdflatex"],
         [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
@@ -1606,7 +1496,7 @@ static NSMutableDictionary* cachePaths = nil;
     int returnCode =
       NSRunAlertPanel(
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"),
           @"ps2pdf"],
         [NSString stringWithFormat:
           NSLocalizedString(@"You need ps2pdf to export as \"PDF with outlined fonts\"",
@@ -1645,7 +1535,7 @@ static NSMutableDictionary* cachePaths = nil;
     int returnCode =
       NSRunAlertPanel(
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"),
           @"dvipdf"],
         [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
@@ -1683,7 +1573,7 @@ static NSMutableDictionary* cachePaths = nil;
     int returnCode =
       NSRunAlertPanel(
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"),
           @"xelatex"],
         [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
@@ -1721,7 +1611,7 @@ static NSMutableDictionary* cachePaths = nil;
     int returnCode =
       NSRunAlertPanel(
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@ not found or not working as expected", @"%@ not found or not working as expected"),
+          NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"),
           @"latex"],
         [NSString stringWithFormat:
           NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
@@ -2610,23 +2500,38 @@ static NSMutableDictionary* cachePaths = nil;
       else if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       {
         [pdfData writeToFile:pdfFilePath atomically:NO];
-        NSString* gsPath       = [self findUnixProgram:@"gs" tryPrefixes:unixBins environment:environmentDict];
-        NSString* epstopdfPath = [self findUnixProgram:@"ps2pdf" tryPrefixes:unixBins environment:environmentDict];
-        if (![gsPath isEqualToString:@""] && ![epstopdfPath isEqualToString:@""])
+        NSString* gsPath       = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey];
+        NSString* epstopdfPath = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPs2PdfPathKey];
+        if (gsPath && ![gsPath isEqualToString:@""] && epstopdfPath && ![epstopdfPath isEqualToString:@""])
         {
+          NSString* tmpFilePath = nil;
+          NSFileHandle* tmpFileHandle = [Utils temporaryFileWithTemplate:@"export.XXXXXXXXX" extension:@"log" outFilePath:&tmpFilePath];
+          if (!tmpFilePath)
+            tmpFilePath = @"/dev/null";
           NSString* systemCall =
             [NSString stringWithFormat:
-              @"%@ -sDEVICE=pswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dQUIET %@ -c quit | %@ - %@ 1>/dev/null 2>/dev/null",
-              gsPath, pdfFilePath, epstopdfPath, tmpPdfFilePath];
+              @"%@ -sDEVICE=pswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dQUIET %@ -c quit 2>|%@ | %@ - %@ 1>>%@ 2>&1",
+              gsPath, pdfFilePath, tmpFilePath, epstopdfPath, tmpPdfFilePath, tmpFilePath];
           int error = system([systemCall UTF8String]);
           if (error)
           {
-            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file with command:\n%@",
-                                                                         @"An error occured while trying to create the file with command:\n%@"),
-                                                       systemCall],
-                            @"OK", nil, nil);
-          }
+            int displayError =
+              NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                              [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file with command:\n%@",
+                                                                           @"An error occured while trying to create the file with command:\n%@"),
+                                                         systemCall],
+                              NSLocalizedString(@"OK", @"OK"),
+                              NSLocalizedString(@"Display the error message", @"Display the error message"),
+                              nil);
+            if (displayError == NSAlertAlternateReturn)
+            {
+              NSString* output = [[[NSString alloc] initWithData:[tmpFileHandle availableData] encoding:NSUTF8StringEncoding] autorelease];
+              [[NSAlert alertWithMessageText:NSLocalizedString(@"Error message", @"Error message")
+                                               defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil
+                                   informativeTextWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, output] runModal];
+            }//end if displayError
+            unlink([tmpFilePath UTF8String]);
+          }//end if error
           else
           {
             HistoryItem* historyItem = [HistoryItem historyItemWithPDFData:pdfData useDefaults:YES];
@@ -2647,11 +2552,12 @@ static NSMutableDictionary* cachePaths = nil;
         NSTask* gsTask = [[NSTask alloc] init];
         NSPipe* errorPipe = [NSPipe pipe];
         NSMutableString* errorString = [NSMutableString string];
+        NSString* gsPath = [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationGsPathKey];
         @try
         {
           [gsTask setCurrentDirectoryPath:directory];
           [gsTask setEnvironment:environmentDict];
-          [gsTask setLaunchPath:[self findUnixProgram:@"gs" tryPrefixes:unixBins environment:[gsTask environment]]];
+          [gsTask setLaunchPath:gsPath];
           [gsTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE", @"-dNOCACHE", @"-dBATCH", @"-sDEVICE=epswrite",
                                                          [NSString stringWithFormat:@"-sOutputFile=%@", tmpEpsFilePath],
                                                          pdfFilePath, nil]];

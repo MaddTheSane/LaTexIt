@@ -30,6 +30,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 @interface LineCountTextView (PrivateAPI)
 -(void) _computeLineRanges;
 -(void) _spellCheckingDidChange:(NSNotification*)notification;
+-(void) _initializeSpellChecker;
 @end
 
 @implementation LineCountTextView
@@ -89,6 +90,37 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end initWithCoder:
 
+-(void) _initializeSpellChecker:(id)object
+{
+  if (!spellCheckerHasBeenInitialized)
+  {
+    NSMutableArray* keywordsToCheck = [NSMutableArray array];
+    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    while(nbPackages--)
+    {
+      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+      [keywordsToCheck addObject:[package objectForKey:@"name"]];
+      NSArray* kw = [package objectForKey:@"keywords"];
+      unsigned int count = [kw count];
+      while(count--)
+        [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
+    }
+    [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+    unsigned int count = [keywordsToCheck count];
+    while(count--)
+    {
+      NSString* w = [keywordsToCheck objectAtIndex:count];
+      if ([w startsWith:@"\\" options:0])
+        [keywordsToCheck addObject:[w substringFromIndex:1]];
+    }
+    [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+    if (SpellCheckerDocumentTag == 0)
+      [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
+    spellCheckerHasBeenInitialized = YES;
+  }
+}
+//end _initializeSpellChecker:
+
 -(void) awakeFromNib
 {
   NSScrollView* scrollView = (NSScrollView*) [[self superview] superview];
@@ -101,29 +133,7 @@ static int SpellCheckerDocumentTag = 0;
   syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 
   [self _spellCheckingDidChange:nil];
-
-  NSMutableArray* keywordsToCheck = [NSMutableArray array];
-  unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
-  while(nbPackages--)
-  {
-    NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
-    [keywordsToCheck addObject:[package objectForKey:@"name"]];
-    NSArray* kw = [package objectForKey:@"keywords"];
-    unsigned int count = [kw count];
-    while(count--)
-      [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
-  }
-  [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
-  unsigned int count = [keywordsToCheck count];
-  while(count--)
-  {
-    NSString* w = [keywordsToCheck objectAtIndex:count];
-    if ([w startsWith:@"\\" options:0])
-      [keywordsToCheck addObject:[w substringFromIndex:1]];
-  }
-  [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
-  if (SpellCheckerDocumentTag == 0)
-    [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
+  [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_initializeSpellChecker:) userInfo:nil repeats:NO];
     
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_spellCheckingDidChange:)
                                                name:SpellCheckingDidChangeNotification object:nil];

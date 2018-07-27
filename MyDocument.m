@@ -357,7 +357,6 @@ static NSString* yenString = nil;
 {
   BOOL ok = YES;
   //You can also choose to override -loadFileWrapperRepresentation:ofType: or -readFromFile:ofType: instead.
-  NSLog(@"readFromFile");
   if ([aType isEqualToString:@"LatexPalette"])
   {
      NSLog(@"LatexPalette");
@@ -640,7 +639,7 @@ static NSString* yenString = nil;
        : (compositionMode == COMPOSITION_MODE_PDFLATEX)
          ? [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationPdfLatexPathKey]
          : [PreferencesController currentCompositionConfigurationObjectForKey:CompositionConfigurationLatexPathKey];
-  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ -file-line-error -interaction nonstopmode %@ 1> %@ 2>%@", 
+  NSString* systemCall = [NSString stringWithFormat:@"cd %@ && %@ -file-line-error -interaction nonstopmode %@ 1>|%@ 2>|%@", 
                           directory, executablePath, texFile, errFile, errFile];
   [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @"processing"),

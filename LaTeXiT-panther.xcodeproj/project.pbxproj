@@ -29,6 +29,7 @@
 		930BC29B07ECBC3C00EEB238 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC29907ECBC3C00EEB238 /* AppController.m */; };
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
 		930BFD1C0A245AC6008C586D /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */; };
+		931030300C116A5C000BECED /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 9310302F0C116A5C000BECED /* palettes */; };
 		9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9315A45007FD331800AFCCE9 /* Preferences.nib */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesController.m */; };
 		9315F80B089A730F00EAE085 /* EncapsulationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315F809089A730F00EAE085 /* EncapsulationManager.m */; };
@@ -69,11 +70,11 @@
 		935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */; };
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
 		936A2C5E09C9A0CC00310E33 /* BorderlessPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */; };
+		936C331E0C0DF0D10082F86D /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C331C0C0DF0D10082F86D /* Semaphore.m */; };
 		9372A1F5087819EF00A3A645 /* MarginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9372A1F3087819EF00A3A645 /* MarginController.m */; };
 		9372A2F4087827FF00A3A645 /* Margin.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A2F3087827FF00A3A645 /* Margin.nib */; };
 		93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93773C2107FFF2B6004AAB30 /* warning.tiff */; };
 		938875440C0A4FC3007E93C2 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 938875420C0A4FC3007E93C2 /* SystemTask.m */; };
-		938875570C0A4FFA007E93C2 /* palettes in Resources */ = {isa = PBXBuildFile; fileRef = 938875560C0A4FFA007E93C2 /* palettes */; };
 		938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */; };
 		938E244B0889C392000626E6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */; };
 		938E24BA0889C730000626E6 /* LinkBack-panther.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93197FB7087D166E00C2E678 /* LinkBack-panther.framework */; };
@@ -181,6 +182,7 @@
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
 		930BFD1A0A245AC6008C586D /* LibraryPreviewPanelImageView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = LibraryPreviewPanelImageView.m; sourceTree = "<group>"; };
 		930BFD1B0A245AC6008C586D /* LibraryPreviewPanelImageView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LibraryPreviewPanelImageView.h; sourceTree = "<group>"; };
+		9310302F0C116A5C000BECED /* palettes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = palettes; path = Resources/palettes; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
@@ -261,6 +263,8 @@
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		936A2C5B09C9A0CC00310E33 /* BorderlessPanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = BorderlessPanel.h; sourceTree = "<group>"; };
 		936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = BorderlessPanel.m; sourceTree = "<group>"; };
+		936C331C0C0DF0D10082F86D /* Semaphore.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Semaphore.m; sourceTree = "<group>"; };
+		936C331D0C0DF0D10082F86D /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; };
 		9372A1F2087819EF00A3A645 /* MarginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Margin.nib; sourceTree = "<group>"; };
@@ -274,7 +278,6 @@
 		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		938875420C0A4FC3007E93C2 /* SystemTask.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = SystemTask.m; sourceTree = "<group>"; };
 		938875430C0A4FC3007E93C2 /* SystemTask.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = SystemTask.h; sourceTree = "<group>"; };
-		938875560C0A4FFA007E93C2 /* palettes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = palettes; path = Resources/palettes; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = Resources/documentation/Licence.rtf; sourceTree = "<group>"; };
@@ -455,7 +458,7 @@
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
 				93F2C6C20A31A8760009FB59 /* latex-keywords */,
-				938875560C0A4FFA007E93C2 /* palettes */,
+				9310302F0C116A5C000BECED /* palettes */,
 				93F3506C0952B08700DDFD09 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -522,6 +525,8 @@
 				9308AC31088CF2850062A340 /* IconFamily.m */,
 				9308AC2E088CF2850062A340 /* NSString+CarbonFSSpecCreation.h */,
 				9308AC2F088CF2850062A340 /* NSString+CarbonFSSpecCreation.m */,
+				936C331D0C0DF0D10082F86D /* Semaphore.h */,
+				936C331C0C0DF0D10082F86D /* Semaphore.m */,
 				938875430C0A4FC3007E93C2 /* SystemTask.h */,
 				938875420C0A4FC3007E93C2 /* SystemTask.m */,
 				93D4E3F009C821A700736816 /* Utils.h */,
@@ -884,9 +889,9 @@
 				93B213420BBC1D6800EFCA2F /* current-version-de.rtf in Resources */,
 				93B213430BBC1D6800EFCA2F /* current-version-es.rtf in Resources */,
 				93B213680BBC1D7D00EFCA2F /* Léeme.rtfd in Resources */,
-				938875570C0A4FFA007E93C2 /* palettes in Resources */,
 				93089AB30C0A593100B08453 /* latexit-latex-palette.icns in Resources */,
 				93089AB40C0A593100B08453 /* latexit-lib.icns in Resources */,
+				931030300C116A5C000BECED /* palettes in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -972,6 +977,7 @@
 				9340E9340AD1676400D52E57 /* TextShortcutsController.m in Sources */,
 				9340E9360AD1676400D52E57 /* TextShortcutsTableView.m in Sources */,
 				938875440C0A4FC3007E93C2 /* SystemTask.m in Sources */,
+				936C331E0C0DF0D10082F86D /* Semaphore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

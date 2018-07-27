@@ -20,6 +20,7 @@
   backgroundColor = nil;//there may be no color
   return self;
 }
+//end initWithCoder:
 
 -(void) dealloc
 {
@@ -27,6 +28,7 @@
   image = nil;
   [super dealloc];
 }
+//end dealloc
 
 -(id) copyWithZone:(NSZone*)zone
 {
@@ -38,6 +40,7 @@
   }
   return cell;
 }
+//end copyWithZone:
 
 -(void) setBackgroundColor:(NSColor*)color
 {
@@ -45,11 +48,13 @@
   [backgroundColor release];
   backgroundColor = color;
 }
+//end setBackgroundColor:
 
 -(NSColor*) backgroundColor
 {
   return backgroundColor;
 }
+//end backgroundColor
 
 -(void) setImage:(NSImage*)anImage
 {
@@ -57,11 +62,13 @@
   [image release];
   image = anImage;
 }
+//end setImage:
 
 -(NSImage*) image
 {
   return image;
 }
+//end image
 
 -(NSRect) imageFrameForCellFrame:(NSRect)cellFrame
 {
@@ -75,6 +82,7 @@
   }
   return rect;
 }
+//end imageFrameForCellFrame:
 
 -(void) editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
 {
@@ -92,6 +100,7 @@
     [super editWithFrame:textFrame inView:controlView editor:textObj delegate:anObject event: theEvent];
   }
 }
+//end editWithFrame:inView:editor:delegate:event:
 
 -(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
 {
@@ -109,6 +118,7 @@
     [super selectWithFrame:textFrame inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
   }
 }
+//end selectWithFrame:inView:editor:delegate:start:length
 
 -(void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
@@ -181,6 +191,7 @@
   [self setTitle:savTitle];
   [savTitle release];
 }
+//end drawWithFrame:inView:
 
 -(NSSize) cellSize
 {
@@ -188,6 +199,7 @@
   cellSize.width += (image ? [image size].width : 0) + 3;
   return cellSize;
 }
+//end cellSize
 
 -(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
@@ -203,5 +215,6 @@
     [super drawInteriorWithFrame:cellFrame inView:controlView];
   }
 }
+//end drawInteriorWithFrame:inView:
 
 @end

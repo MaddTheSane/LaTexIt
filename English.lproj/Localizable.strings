@@ -44,7 +44,7 @@
 "used for font color" = "used for font color";
 "no color.sty found" = "no color.sty found";
 "useful to type directly accentuated characters" = "useful to type directly accentuated characters";
-"%@ not found or not working as expected" = "%@ not found or not working as expected";
+"%@ not found or does not work as expected" = "%@ not found or does not work as expected";
 "The current configuration of LaTeXiT requires %@ to work." = "The current configuration of LaTeXiT requires %@ to work.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "You need ps2pdf to export as \"PDF with outlined fonts\"";
 "Find %@..." = "Find %@...";
@@ -128,3 +128,6 @@
 "Installation failed" = "Installation failed";
 "%@ could not be installed as %@" = "%@ could not be installed as %@";
 "Author" = "Author";
+"Display the error message" = "Display the error message";
+"Error message" = "Error message";
+"Error" = "Error";

@@ -32,6 +32,7 @@
   libraryRowType = LIBRARY_ROW_IMAGE_AND_TEXT;
   return self;
 }
+//end initWithCoder:
 
 -(void) awakeFromNib
 {
@@ -40,17 +41,20 @@
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_libraryDidChange:)
                                                name:LibraryDidChangeNotification object:nil];
 }
+//end awakeFromNib
 
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
 }
+//end dealloc
 
 -(library_row_t) libraryRowType
 {
   return libraryRowType;
 }
+//end libraryRowType
 
 -(void) setLibraryRowType:(library_row_t)type
 {
@@ -72,17 +76,20 @@
   [self reloadData];
   [self setNeedsDisplay:YES];
 }
+//end setLibraryRowType:
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
   return YES;
 }
+//end acceptsFirstMouse:
 
 -(void) rightMouseDown:(NSEvent*)theEvent
 {
   NSMenu* popupMenu = [(LibraryController*)[[self window] windowController] actionMenu];
   [NSMenu popUpContextMenu:popupMenu withEvent:theEvent forView:self];
 }
+//end rightMouseDown:
 
 -(void) applyItem
 {
@@ -105,9 +112,11 @@
     }//end if folder
   }//end if selected row
 }
+//end applyItem
 
 -(void) mouseDown:(NSEvent*)theEvent
 {
+  willEdit = NO;
   if ([theEvent modifierFlags] & NSControlKeyMask)
   {
     NSMenu* popupMenu = [(LibraryController*)[[self window] windowController] actionMenu];
@@ -117,12 +126,24 @@
     [super mouseDown:theEvent];
   else
   {
+    LibraryItem* previousSelectedItem = (LibraryItem*)[[self selectedItems] lastObject];
     NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     int row = [self rowAtPoint:point];
     [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+    LibraryItem* newSelectedItem = (LibraryItem*)[[self selectedItems] lastObject];
 
     if ([theEvent clickCount] == 1)
+    {
       [super mouseDown:theEvent];
+      NSPoint pointInView = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+      int row = [self rowAtPoint:pointInView];
+      int column = [self columnAtPoint:pointInView];
+      NSRect rect = ((row >= 0) && (column >= 0)) ? [self frameOfCellAtColumn:column row:row] : NSZeroRect;
+      NSRect imageFrame = NSZeroRect;
+      NSRect titleFrame = NSZeroRect;
+      NSDivideRect(rect, &imageFrame, &titleFrame, 8+[self rowHeight], NSMinXEdge);
+      willEdit = (previousSelectedItem == newSelectedItem) && NSPointInRect(pointInView, titleFrame);
+    }
     else if ([theEvent clickCount] == 2)
       [self applyItem];
     else if ([theEvent clickCount] == 3)
@@ -130,14 +151,28 @@
       [self edit:self];
       [[self window] makeKeyAndOrderFront:self];
     }
+    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(delayedEdit:) userInfo:nil repeats:NO];
   }
 }
+//end mouseDown:
+
+-(void) delayedEdit:(NSTimer*)timer
+{
+  LibraryItem* selectedItem = (LibraryItem*)[[self selectedItems] lastObject];
+  if (willEdit && selectedItem)
+  {
+    [self edit:self];
+    [[self window] makeKeyAndOrderFront:self];
+  }
+}
+//end delayedEdit:
 
 -(void) scrollWheel:(NSEvent*)event
 {
   [super scrollWheel:event];
   [self mouseMoved:event];//to trigger preview display
 }
+//end scrollWheel:
 
 -(void) mouseMoved:(NSEvent*)event
 {
@@ -162,6 +197,7 @@
     [libraryController displayPreviewImage:image backgroundColor:backgroundColor];
   }
 }
+//end mouseMoved:
 
 //when the library changes, the userinfo of the notification may contain some directives to
 //expand some items, select some items and scroll to some item
@@ -200,6 +236,7 @@
       [self scrollRowToVisible:[self rowForItem:scrollObject]];
   }
 }
+//end _libraryDidChange:
 
 -(void) cancelOperation:(id)sender
 {
@@ -214,6 +251,7 @@
     [[self window] makeFirstResponder:self];
   }
 }
+//end cancelOperation:
 
 -(void) keyDown:(NSEvent*)theEvent
 {
@@ -228,6 +266,7 @@
   else
     [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }
+//end keyDown:
 
 -(void) edit:(id)sender
 {
@@ -235,6 +274,7 @@
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
+//end edit:
 
 -(void) moveLeft:(id)sender
 {
@@ -244,12 +284,14 @@
   [self collapseItem:item];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:item]] byExtendingSelection:NO];
 }
+//end moveLeft:
 
 -(void) moveRight:(id)sender
 {
   id item = [self itemAtRow:[self selectedRow]];
   [self expandItem:item];
 }
+//end moveRight:(
 
 -(void) moveDownAndModifySelection:(id)sender
 {
@@ -268,6 +310,7 @@
     [self deselectRow:firstIndex];
   }
 }
+//end moveDownAndModifySelection:
 
 -(void) moveUpAndModifySelection:(id)sender
 {
@@ -286,6 +329,7 @@
     [self deselectRow:lastIndex];
   }
 }
+//end moveUpAndModifySelection:
 
 -(void) moveUp:(id)sender
 {
@@ -295,6 +339,7 @@
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
 }
+//end moveUp:
 
 -(void) moveDown:(id)sender
 {
@@ -304,11 +349,13 @@
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
 }
+//end moveDown:
 
 -(void) deleteBackward:(id)sender
 {
   [self removeSelectedItems];
 }
+//end deleteBackward:
 
 -(void) removeSelectedItems
 {
@@ -331,6 +378,7 @@
       [self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self numberOfRows]-1] byExtendingSelection:NO];
   }
 }
+//end removeSelectedItems
 
 -(NSArray*) selectedItems
 {
@@ -344,6 +392,7 @@
   }
   return selectedItems;
 }
+//end selectedItems
 
 //selected items which are only LibraryFiles
 -(NSArray*) selectedFileItems
@@ -360,6 +409,7 @@
   }
   return selectedFileItems;
 }
+//end selectedFileItems
 
 //prevents from selecting next line when finished editing
 -(void)textDidEndEditing:(NSNotification *)aNotification
@@ -371,6 +421,7 @@
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   [libraryController setEnablePreviewImage:[userDefaults boolForKey:LibraryDisplayPreviewPanelKey]];
 }
+//end textDidEndEditing:
 
 //we cannot end editing if a brother has the same name
 -(BOOL) textShouldEndEditing:(NSText *)textObject
@@ -382,12 +433,14 @@
   [item setTitle:oldTitle];
   return !shouldChange;
 }
+//end textShouldEndEditing:
 
 //drag'n drop
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
   return isLocal ? NSDragOperationEvery : NSDragOperationCopy;
 }
+//end draggingSourceOperationMaskForLocal:
 
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
@@ -410,16 +463,19 @@
   }
   return ok;
 }
+//end validateMenuItem:
 
 -(IBAction) undo:(id)sender
 {
   [[[LibraryManager sharedManager] undoManager] undo];
 }
+//end undo:
 
 -(IBAction) redo:(id)sender
 {
   [[[LibraryManager sharedManager] undoManager] redo];
 }
+//end redo:
 
 //copy current document state
 -(IBAction) copy:(id)sender
@@ -453,6 +509,7 @@
     [pasteboard setData:[lastItem pdfData] forType:NSPDFPboardType];
   }
 }
+//end copy:
 
 //may paste data in the document
 -(IBAction) paste:(id)sender
@@ -502,5 +559,6 @@
     }
   }
 }
+//end paste:
 
 @end

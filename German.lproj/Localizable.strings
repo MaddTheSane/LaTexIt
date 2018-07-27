@@ -44,7 +44,7 @@
 "used for font color" = "für Schriftfarbe verwenden";
 "no color.sty found" = "kein color.sty gefunden";
 "useful to type directly accentuated characters" = "es ist sinnvoll direkt betonte Zeichen zu verwenden";
-"%@ not found or not working as expected" = "%@ wurde nicht gefunden oder arbeitet nicht wie gewünscht";
+"%@ not found or does not work as expected" = "%@ wurde nicht gefunden oder arbeitet nicht wie gewünscht";
 "The current configuration of LaTeXiT requires %@ to work." = "Die derzeitige Einstellung von LaTeXiT benötigt %@ um zu arbeiten.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "Es wird ps2pdf benötigt um als \"PDF mit konturierter Schrift exportieren zu können\"";
 "Find %@..." = "%@... finden";
@@ -127,3 +127,6 @@
 "Installation failed" = "Installation Fehler";
 "%@ could not be installed as %@" = "%@ konnte nicht als %@ angebracht werden";
 "Author" = "Autor";
+"Display the error message" = "Anzeigen die Fehlermeldung";
+"Error message" = "Fehlermeldung";
+"Error" = "Fehler";

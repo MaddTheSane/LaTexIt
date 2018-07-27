@@ -29,5 +29,6 @@ FOUNDATION_EXTERN_INLINE unsigned long EndianUL_NtoB(unsigned long x);
 
 +(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes;
 +(NSString*) localizedPath:(NSString*)path;
++(NSFileHandle*) temporaryFileWithTemplate:(NSString*)templateString extension:(NSString*)extension outFilePath:(NSString**)outFilePath;
 
 @end

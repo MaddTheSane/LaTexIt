@@ -8,45 +8,21 @@
 
 #import "SystemTask.h"
 
+#import "Utils.h"
+
 #include <sys/types.h>
 #include <sys/wait.h>
 
 @implementation SystemTask
 
-static NSFileHandle* temporaryFile(NSString* templateString, NSString* extension, NSString** outFilePath)
-{
-  NSFileHandle* fileHandle = nil;
-  if (templateString && ![templateString isEqualToString:@""])
-  {
-    NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
-                                        ? [templateString stringByAppendingPathExtension:extension] : templateString;
-    NSString* tempFilenameTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:fileNameWithExtension];
-    #ifdef PANTHER
-    unsigned int length = [tempFilenameTemplate length];
-    #else
-    unsigned int length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    #endif
-    char* tmpString = (char*)calloc(length+1, sizeof(char));
-    memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
-    int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);
-    if (fd != -1)
-      fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
-    if (outFilePath)
-      *outFilePath = [NSString stringWithUTF8String:tmpString];
-    free(tmpString);
-  }
-  return [fileHandle autorelease];
-}
-//end temporaryFile()
-
 -(id) init
 {
   if (![super init])
     return nil;
-  tmpStdoutFileHandle = temporaryFile(@"latexit-task-stdout.XXXXXXXXX", @"log", &tmpStdoutFilePath);
+  tmpStdoutFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStdoutFilePath];
   [tmpStdoutFileHandle retain];
   [tmpStdoutFilePath   retain];
-  tmpStderrFileHandle = temporaryFile(@"latexit-task-stderr.XXXXXXXXX", @"log", &tmpStderrFilePath);
+  tmpStderrFileHandle = [Utils temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXXX" extension:@"log"  outFilePath:&tmpStderrFilePath];
   [tmpStderrFileHandle retain];
   [tmpStderrFilePath   retain];
   runningLock = [[NSLock alloc] init];
@@ -145,7 +121,7 @@ static NSFileHandle* temporaryFile(NSString* templateString, NSString* extension
 {
   NSMutableString* systemCommand = [NSMutableString string];
   if (currentDirectoryPath)
-    [systemCommand appendFormat:@"cd %@ 1>/dev/null 2>&1;", currentDirectoryPath];
+    [systemCommand appendFormat:@"cd %@ 1>|/dev/null 2>|1;", currentDirectoryPath];
   if (environment)
   {
     NSEnumerator* environmentEnumerator = [environment keyEnumerator];
@@ -153,14 +129,14 @@ static NSFileHandle* temporaryFile(NSString* templateString, NSString* extension
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
       [exportedVariables appendFormat:@" %@=\"%@\"", variable, [environment objectForKey:variable]];
-    [systemCommand appendFormat:@"export %@ 1>/dev/null 2>&1 || echo \"\" 1>/dev/null 2>&1;", exportedVariables];
+    [systemCommand appendFormat:@"export %@ 1>|/dev/null 2>|1 || echo \"\" 1>|/dev/null 2>|1;", exportedVariables];
   }
   if (launchPath)
     [systemCommand appendFormat:@"%@", launchPath];
   if (arguments)
     [systemCommand appendFormat:@" %@", [arguments componentsJoinedByString:@" "]];
   if (tmpStdoutFilePath && tmpStderrFilePath)
-    [systemCommand appendFormat:@" 1>%@ 2>%@ </dev/null", tmpStdoutFilePath, tmpStderrFilePath];
+    [systemCommand appendFormat:@" 1>|%@ 2>|%@ </dev/null", tmpStdoutFilePath, tmpStderrFilePath];
   return [NSString stringWithString:systemCommand];
 }
 //end equivalentLaunchCommand

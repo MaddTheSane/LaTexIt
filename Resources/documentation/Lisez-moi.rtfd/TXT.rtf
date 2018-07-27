@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.14.0\
+\f2\b \cf0 LaTeXiT 1.14.1\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -51,7 +51,7 @@ Adresse e-mail (commentaires, suggestions, probl\'8fmes,...): \cf3 pierre.chatel
 Syst\'8fme Requis\
 
 \fs22 \ulnone \
-LaTeXiT 1.14.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.14.1 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 
 \f2\b\fs26 \
 
@@ -171,7 +171,7 @@ Le service "D\'8etecter et cr\'8eer les \'8equations" est un peu diff\'8erent : 
 \f2\b \cf0 Astuce: le mode "$...$" (inline) essaye quand c'est possible d'aligner l'\'8equation sur la ligne de base du texte.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f1\b0 \cf0 Un nouveau service est disponible depuis la version 1.14.0, permettant d'effectuer la manipulation inverse, c'est-\'88-dire revenir des \'8equations au code LaTeX.\
+\f1\b0 \cf0 Un nouveau service est disponible depuis la version 1.14.1, permettant d'effectuer la manipulation inverse, c'est-\'88-dire revenir des \'8equations au code LaTeX.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
@@ -209,7 +209,7 @@ LinkBack est une technologie, incorpor\'8ee \'88 LaTeXiT. Si vous d\'8eposez une
 Palettes LaTeX\
 
 \fs22 \ulnone \
-Depuis la version 1.14.0, LaTeXiT g\'8fre les palettes LaTeX comme des plugins. Les palettes int\'8egr\'8ees font partie de l'application, mais des palettes suppl\'8ementaires peuvent \'90tre ajout\'8ees dans les r\'8epertoires Biblioth\'8fque, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
+Depuis la version 1.14.1, LaTeXiT g\'8fre les palettes LaTeX comme des plugins. Les palettes int\'8egr\'8ees font partie de l'application, mais des palettes suppl\'8ementaires peuvent \'90tre ajout\'8ees dans les r\'8epertoires Biblioth\'8fque, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
 Exemples :\
 /Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
 /Users/[votre nom]/Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
@@ -358,6 +358,15 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \fs26 \cf0 \ul Historique des versions\
 
 \fs22 \ulnone \
+v 1.14.1 (2 juin 2007)\
+- correction d'un bug (rare) d'acc\'8fs \'88 Ghostscript lors de certains exports;\
+- correction d'un bug si l'utilisateur a activ\'8e l'option noclobber dans son environnement shell;\
+- un clic permet maintenant comme sous Finder de renommer des \'8el\'8ements de la biblioth\'8fque;\
+- am\'8elioration de certains messages d'erreur;\
+- meilleur test de pr\'8esence d'un ps2pdf fonctionnel;\
+- ajout d'une palette LaTeX "d\'8ebutants";\
+- am\'8elioration du temps de d\'8emarrage.\
+\
 v 1.14.0 (29 mai 2007)\
 - correction d'une r\'8egression emp\'90chant certains scripts de s'ex\'8ecuter;\
 - la couleur du texte \'8edit\'8e ne respectait pas toujours celle des pr\'8ef\'8erences;\
