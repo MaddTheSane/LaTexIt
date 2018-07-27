@@ -139,7 +139,7 @@
   MyDocument*  document = (MyDocument*) [AppController currentDocument];
   HistoryItem* historyItem = [document historyItemWithCurrentState];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
-  historyItem = [HistoryItem historyItemWithPdfData:[historyItem pdfData] useDefaults:YES];
+  //historyItem = [HistoryItem historyItemWithPdfData:[historyItem pdfData] useDefaults:YES];
   LibraryItem* newItem = [[LibraryManager sharedManager] newFile:historyItem outlineView:libraryTableView];
   [libraryTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[libraryTableView rowForItem:newItem]]
            byExtendingSelection:NO];

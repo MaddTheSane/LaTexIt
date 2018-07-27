@@ -24,6 +24,7 @@
 #import "MyDocument.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
+#import "NSStringExtended.h"
 #import "MarginController.h"
 #import "PaletteItem.h"
 #import "PreferencesController.h"
@@ -1883,16 +1884,18 @@ static NSMutableArray*      unixBins = nil;
 
     NSMutableString *annotation =
         [NSMutableString stringWithFormat:
-          @"\nobj <<\n"\
-           "/Preamble (ESannop%@ESannopend)\n"\
-           "/Subject (ESannot%@ESannotend)\n"\
+          @"\nobj /Encoding /MacRomanEncoding <<\n"\
+           "/Preamble (ESannop%sESannopend)\n"\
+           "/Subject (ESannot%sESannotend)\n"\
            "/Type (EEtype%@EEtypeend)\n"\
            "/Color (EEcol%@EEcolend)\n"
            "/BKColor (EEbkc%@EEbkcend)\n"
            "/Magnification (EEmag%fEEmagend)\n"\
            "/Baseline (EEbas%fEEbasend)\n"\
            ">> endobj",
-          replacedPreamble, replacedSource, type, colorAsString, bkColorAsString, magnification, baseline];
+          [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
+          [replacedSource   cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
+          type, colorAsString, bkColorAsString, magnification, baseline];
           
     NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
     
@@ -1913,7 +1916,7 @@ static NSMutableArray*      unixBins = nil;
     [annotation appendString:stuff];
     [annotation appendString:[NSString stringWithFormat: @"startxref\n%d\n%%%%EOF", byte_count]];
     
-    NSData* dataToAppend = [annotation dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSData* dataToAppend = [annotation dataUsingEncoding:NSMacOSRomanStringEncoding/*NSASCIIStringEncoding*/ allowLossyConversion:YES];
 
     newData = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(0, r1.location)]];
     [newData appendData:dataToAppend];

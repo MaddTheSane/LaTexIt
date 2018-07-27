@@ -78,7 +78,7 @@ static NSLock* strangeLock = nil;
     return nil;
 
   pdfData = [someData retain];
-  NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSASCIIStringEncoding] autorelease];
+  NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding/*NSASCIIStringEncoding*/] autorelease];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSArray*  testArray    = nil;
 
@@ -273,7 +273,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.5.3"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.5.4"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -331,6 +331,10 @@ static NSLock* strangeLock = nil;
     [preamble release];
     preamble = newPreamble;
   }
+  
+  //for versions < 1.5.4, we must reannotate the pdfData to retreive the accentuated characters
+  if (!version || [version compare:@"1.5.4" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
+    [self _reannotatePdfData];
   return self;
 }
 

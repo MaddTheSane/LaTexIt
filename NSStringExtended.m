@@ -51,4 +51,12 @@
   return string;
 }
 
+-(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag
+{
+  NSMutableData* data = [NSMutableData dataWithData:[self dataUsingEncoding:encoding allowLossyConversion:flag]];
+  const unichar zero = 0;
+  [data appendBytes:&zero length:sizeof(zero)];
+  return [data bytes];
+}
+
 @end
