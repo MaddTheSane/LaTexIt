@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "LogicTransformer.h"
@@ -37,7 +37,11 @@
 
 +(id) transformerWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator
 {
+  #ifdef ARC_ENABLED
+  id result = [[[self class] alloc] initWithTransformers:transformers logicOperator:logicOperator];
+  #else
   id result = [[[[self class] alloc] initWithTransformers:transformers logicOperator:logicOperator] autorelease];
+  #endif
   return result;
 }
 //end transformerWithTransformers:
@@ -54,8 +58,11 @@
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->transformers release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 

@@ -361,6 +361,7 @@
 						<string>decimalSeparator</string>
 						<string>formatterBehavior</string>
 						<string>groupingSeparator</string>
+						<string>locale</string>
 						<string>maximum</string>
 						<string>maximumFractionDigits</string>
 						<string>minimum</string>
@@ -374,7 +375,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<boolean value="YES"/>
 						<boolean value="YES"/>
-						<object class="NSAttributedString" id="224412795">
+						<object class="NSAttributedString">
 							<string key="NSString">0,00 pt</string>
 							<object class="NSDictionary" key="NSAttributes">
 								<bool key="EncodedWithXMLCoder">YES</bool>
@@ -399,8 +400,11 @@
 							</object>
 						</object>
 						<string>,</string>
-						<integer value="1000"/>
+						<integer value="1040"/>
 						<string type="base64-UTF8">wqA</string>
+						<object class="NSLocale">
+							<string key="NS.identifier"/>
+						</object>
 						<object class="NSDecimalNumberPlaceholder" id="789629588">
 							<int key="NS.exponent">3</int>
 							<int key="NS.length">1</int>
@@ -422,10 +426,8 @@
 				<string key="NS.negativeformat">-#,##0.00 pt</string>
 				<nil key="NS.positiveattrs"/>
 				<nil key="NS.negativeattrs"/>
-				<reference key="NS.zero" ref="224412795"/>
-				<object class="NSAttributedString" key="NS.nil">
-					<string key="NSString"/>
-				</object>
+				<nil key="NS.zero"/>
+				<nil key="NS.nil"/>
 				<object class="NSAttributedString" key="NS.nan">
 					<string key="NSString">NaN</string>
 					<object class="NSDictionary" key="NSAttributes">
@@ -440,11 +442,16 @@
 				</object>
 				<real value="-1000" key="NS.min"/>
 				<reference key="NS.max" ref="789629588"/>
-				<nil key="NS.rounding"/>
+				<object class="NSDecimalNumberHandler" key="NS.rounding">
+					<int key="NS.roundingmode">3</int>
+					<bool key="NS.raise.overflow">YES</bool>
+					<bool key="NS.raise.underflow">YES</bool>
+					<bool key="NS.raise.dividebyzero">YES</bool>
+				</object>
 				<string key="NS.decimal">,</string>
 				<string type="base64-UTF8" key="NS.thousand">wqA</string>
 				<bool key="NS.hasthousands">YES</bool>
-				<bool key="NS.localized">YES</bool>
+				<bool key="NS.localized">NO</bool>
 				<bool key="NS.allowsfloats">YES</bool>
 			</object>
 		</object>
@@ -954,7 +961,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<integer value="1000"/>
+					<integer value="1040"/>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -1198,6 +1205,27 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKFileWatcher.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKKQueue.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKMainThreadProxy.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
 					</object>
@@ -1215,6 +1243,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSWindowExtended.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1647,6 +1682,27 @@
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CAAnimation.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CALayer.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">QuartzFilters.framework/Headers/QuartzFilterManager.h</string>
 					</object>
 				</object>
@@ -1787,7 +1843,7 @@
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
-			<integer value="1050" key="NS.object.0"/>
+			<integer value="1060" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.InterfaceBuilder3</string>

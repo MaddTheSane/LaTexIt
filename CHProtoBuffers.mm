@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 11/11/13.
-//  Copyright 2014 LAIC. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "CHProtoBuffers.h"

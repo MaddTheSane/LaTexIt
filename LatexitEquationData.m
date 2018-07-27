@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 17/06/11.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquationData.h"
@@ -20,8 +20,13 @@ static NSEntityDescription* cachedEntity = nil;
   {
     @synchronized(self)
     {
+      #ifdef ARC_ENABLED
+      if (!cachedEntity)
+        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
+      #else
       if (!cachedEntity)
         cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+      #endif
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;

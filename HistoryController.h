@@ -3,13 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
 @interface HistoryController : NSArrayController {
-
 }
 
 -(id) initWithContent:(id)content;
@@ -18,5 +17,8 @@
 
 -(BOOL) automaticallyRearrangesObjects;
 -(void) setAutomaticallyRearrangesObjects:(BOOL)value;
+
+-(NSString*) searchString;
+-(void) setSearchString:(NSString*)value;
 
 @end

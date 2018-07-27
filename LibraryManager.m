@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -26,6 +26,7 @@
 #import "NSFileManagerExtended.h"
 #import "NSIndexSetExtended.h"
 #import "NSManagedObjectContextExtended.h"
+#import "NSStringExtended.h"
 #import "NSObjectExtended.h"
 #import "NSObjectTreeNode.h"
 #import "NSUndoManagerDebug.h"
@@ -90,7 +91,7 @@ static LibraryManager* sharedManagerInstance = nil;
   return UINT_MAX;  //denotes an object that cannot be released
 }
 
--(void) release
+-(oneway void) release
 {
 }
 
@@ -164,6 +165,7 @@ static LibraryManager* sharedManagerInstance = nil;
 //end applicationWillTerminate:
 
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(library_export_format_t)format
+       options:(NSDictionary*)options
 {
   BOOL ok = NO;
   NSArray* rootLibraryItemsToSave = nil;
@@ -211,7 +213,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.7.5", @"version", nil];
+          @"2.8.0", @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
@@ -226,7 +228,70 @@ static LibraryManager* sharedManagerInstance = nil;
         }//end if file has been created
       }//end case LIBRARY_EXPORT_FORMAT_PLIST
       break;
-  }
+    case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
+    {
+      NSMutableString* dataString = [NSMutableString string];
+      NSMutableArray* queue = [NSMutableArray arrayWithArray:rootLibraryItemsToSave];
+      LibraryItem* libraryItem = nil;
+      while((libraryItem = ![queue count] ? nil : [queue objectAtIndex:0]))
+      {
+        [queue removeObjectAtIndex:0];
+        LibraryEquation* libraryEquation = [libraryItem dynamicCastToClass:[LibraryEquation class]];
+        LibraryGroupItem* libraryGroupItem = [libraryItem dynamicCastToClass:[LibraryGroupItem class]];
+        if (libraryGroupItem)
+          [queue addObjectsFromArray:[libraryGroupItem childrenOrdered]];
+        else if (libraryEquation)
+        {
+          BOOL exportCommentedPreambles = [[[options objectForKey:@"exportCommentedPreambles"] dynamicCastToClass:[NSNumber class]] boolValue];
+          BOOL exportUserComments = [[[options objectForKey:@"exportUserComments"] dynamicCastToClass:[NSNumber class]] boolValue];
+          BOOL ignoreTitleHierarchy = [[[options objectForKey:@"ignoreTitleHierarchy"] dynamicCastToClass:[NSNumber class]] boolValue];
+          NSString* titlePath = ignoreTitleHierarchy ? [libraryItem title] : [[[libraryItem titlePath] componentsJoinedByString:@"/"] trim];
+          NSString* titlePathEscaped = [titlePath stringByReplacingOccurrencesOfString:@"$" withString:@"\\$"];
+          LatexitEquation* equation = [libraryEquation equation];
+          NSString* preamble = !exportCommentedPreambles ? nil : [[[equation preamble] string] trim];
+          NSString* source = [[[equation sourceText] string] trim];
+          NSString* comments = !exportUserComments ? nil : [[libraryEquation comment] trim];
+          BOOL hasComments = comments && ![comments isEqualToString:@""];
+          latex_mode_t mode = [equation mode];
+          NSArray* preambleLines = [preamble componentsSeparatedByString:@"\n"];
+          NSString* preambleWithComments = ![preambleLines count] ? @"" :
+            [NSString stringWithFormat:@"%%%@", [preambleLines componentsJoinedByString:@"\n%"]];
+          NSString* beginEnvironment =
+            (mode == LATEX_MODE_DISPLAY) ? @"\\begin{equation*}" :
+            (mode == LATEX_MODE_INLINE) ? @"\\begin{equation*}" :
+            (mode == LATEX_MODE_TEXT) ? @"\\begin{equation*}" :
+            (mode == LATEX_MODE_ALIGN) ? @"\\begin{equation*}\n\\begin{aligned}" :
+            @"";
+          NSString* endEnvironment =
+            (mode == LATEX_MODE_DISPLAY) ? @"\\end{equation*}" :
+            (mode == LATEX_MODE_INLINE) ? @"\\end{equation*}" :
+            (mode == LATEX_MODE_TEXT) ? @"\\end{equation*}" :
+            (mode == LATEX_MODE_ALIGN) ? @"\\end{aligned}\n\\end{equation*}" :
+            @"";
+          NSString* equationWithLabel =
+            [NSString stringWithFormat:
+               @"\\subsection*{%@}\n"
+                "\\label{%@}\n"
+                "%@\n"
+                "%@"
+                "%@\n"
+                "%@\n"
+                "%@\n",
+               titlePath, titlePathEscaped,
+               beginEnvironment,
+               !exportCommentedPreambles ? @"" : [NSString stringWithFormat:@"%%preamble\n%@\n",preambleWithComments],
+               source,
+               endEnvironment,
+               !hasComments ? @"" : [NSString stringWithFormat:@"%@", comments]
+            ];
+          [dataString appendFormat:@"%@%@", ![dataString length] ? @"" : @"\n", equationWithLabel];
+        }//end if (libraryEquation)
+      }//end for each root library item
+      NSData* dataToWrite = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+      ok = [dataToWrite writeToFile:path atomically:YES];
+    }//end case LIBRARY_EXPORT_FORMAT_TEX_SOURCE
+    break;
+  }//end switch(format)
 
   NSError* error = nil;
   [self->managedObjectContext save:&error];
@@ -340,6 +405,8 @@ static LibraryManager* sharedManagerInstance = nil;
         if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
         NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[LibraryItem entity]];
+        [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:
+                                          [NSSortDescriptor sortDescriptorWithKey:@"sortIndex" ascending:YES], nil]];
         error = nil;
         NSArray* libraryItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
@@ -609,7 +676,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.7.5", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -749,7 +816,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.7.5", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }
@@ -769,6 +836,7 @@ static LibraryManager* sharedManagerInstance = nil;
 {
   BOOL isManagedObjectModelPrevious250 = NO;
   BOOL isManagedObjectModelPrevious260 = NO;
+  BOOL isManagedObjectModelPrevious270 = NO;
 
   NSArray* oldDataModelNames = [NSArray arrayWithObjects:/*@"Latexit-2.5.0",*/ @"Latexit-2.4.0", nil];
   NSEnumerator* enumerator = [oldDataModelNames objectEnumerator];

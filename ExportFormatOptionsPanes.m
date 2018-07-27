@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "ExportFormatOptionsPanes.h"
@@ -22,7 +22,11 @@
     return nil;
   [self instantiateNibWithOwner:self topLevelObjects:nil];
   self->jpegQualityPercent  = 90.f;
+  #ifdef ARC_ENABLED
+  self->jpegBackgroundColor = [NSColor whiteColor];
+  #else
   self->jpegBackgroundColor = [[NSColor whiteColor] retain];
+  #endif
   self->textExportPreamble = YES;
   self->textExportEnvironment = YES;
   self->textExportBody = YES;
@@ -32,8 +36,11 @@
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->jpegBackgroundColor release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 
@@ -206,9 +213,15 @@
 
 -(void) setJpegBackgroundColor:(NSColor*)value
 {
+  #ifdef ARC_ENABLED
+  #else
   [value retain];
+  #endif
   [self willChangeValueForKey:@"jpegBackgroundColor"];
+  #ifdef ARC_ENABLED
+  #else
   [self->jpegBackgroundColor release];
+  #endif
   self->jpegBackgroundColor = value;
   [self didChangeValueForKey:@"jpegBackgroundColor"];
 }
@@ -242,9 +255,15 @@
 
 -(void) setSvgPdfToSvgPath:(NSString*)value
 {
+  #ifdef ARC_ENABLED
+  #else
   [value retain];
+  #endif
   [self willChangeValueForKey:@"svgPdfToSvgPath"];
+  #ifdef ARC_ENABLED
+  #else
   [self->svgPdfToSvgPath release];
+  #endif
   self->svgPdfToSvgPath = value;
   [self didChangeValueForKey:@"svgPdfToSvgPath"];
 }

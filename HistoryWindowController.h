@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -13,6 +13,7 @@
 @class LibraryPreviewPanelImageView;
 
 @interface HistoryWindowController : NSWindowController {
+  IBOutlet NSSearchField* historySearchField;
   IBOutlet HistoryView* historyView;
   IBOutlet NSButton*    clearHistoryButton;
   
@@ -33,6 +34,8 @@
 }
 
 -(HistoryView*) historyView;
+
+-(IBAction) historySearchFieldChanged:(id)sender;
 
 -(IBAction) changeLockedState:(id)sender;
 -(IBAction) changeHistoryDisplayPreviewPanelState:(id)sender;

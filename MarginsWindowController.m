@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/07/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "MarginsWindowController.h"
@@ -31,9 +31,14 @@
 {
   //get rid of formatter localization problems
   [self->pointSizeFormatter setLocale:[NSLocale currentLocale]];
-  [self->pointSizeFormatter setZeroSymbol:
-    [NSString stringWithFormat:@"0%@%0*d", [self->pointSizeFormatter decimalSeparator], 2, 0]];
-
+  [self->pointSizeFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+  [self->pointSizeFormatter setDecimalSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
+  NSString* pointSizeZeroSymbol =
+  [NSString stringWithFormat:@"0%@%0*d%@",
+   [self->pointSizeFormatter decimalSeparator], 2, 0, 
+   [self->pointSizeFormatter positiveSuffix]];
+  [self->pointSizeFormatter setZeroSymbol:pointSizeZeroSymbol];
+  
   [[self window] setFrameAutosaveName:@"margins"];
   [[self window] setTitle:NSLocalizedString(@"Custom margins", @"Custom margins")];
   [self->saveAsDefaultButton setTitle:NSLocalizedString(@"Save as default margins", @"Save as default margins")];

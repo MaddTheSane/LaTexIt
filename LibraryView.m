@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -659,7 +659,7 @@
         [[LibraryEquation alloc] initWithParent:nil equation:latexitEquation insertIntoManagedObjectContext:[self->libraryController managedObjectContext]];
       if (libraryEquation)
       {
-        libraryItems = [NSArray arrayWithObject:libraryEquation];
+        libraryItems = [NSMutableArray arrayWithObject:libraryEquation];
         [libraryEquation release];
       }//end if (libraryEquation)
       [latexitEquation release];

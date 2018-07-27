@@ -500,7 +500,7 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 			/>
     </item>
     <item>
-      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</guid>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.7.5</guid>
       <title>Version 2.7.5</title>
       <description><![CDATA[
         <ul>
@@ -515,7 +515,7 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
           </li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.7.5</sparkle:releaseNotesLink>
 			<pubDate>Sat, 29 Nov 2014 19:10:38 +0100</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_5.dmg"
@@ -524,6 +524,30 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				type="application/octet-stream"
 				length="10788473"
 				sparkle:dsaSignature="MCwCFDWqNfg3rsGCZvCW0zamVBDrNi4wAhQ++sZPT5mFEjBA9SeFQ68zyL3BlA=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.8.0</guid>
+      <title>Version 2.8.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Added search feature in history&nbsp;;</li>
+          <li>keep items order when importing a library&nbsp;;</li>
+          <li>added a &quot;TeX Source&quot; export to library&nbsp;;</li>
+          <li>added ability to attach a comment to library equations&nbsp;;</li>
+          <li>better handling of &#x00A5; character in Japanese&nbsp;;</li>
+          <li>fixed various localizations.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.8.0</sparkle:releaseNotesLink>
+			<pubDate>Mon, 07 Sep 2015 22:46:42 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_8_0.dmg"
+				sparkle:version="2.8.0"
+                   sparkle:shortVersionString="2.8.0"
+				type="application/octet-stream"
+				length="11073977"
+				sparkle:dsaSignature="MCwCFGjy7E3eBlRm96Og4l3rotzF26zxAhRe6cSjEouRWlG6qvm21N813R/1aw=="
 			/>
     </item>
   </channel> 

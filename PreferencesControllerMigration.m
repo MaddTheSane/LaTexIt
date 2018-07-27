@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesControllerMigration.h"
@@ -197,8 +197,13 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   else
   {
+    #ifdef ARC_ENABLED
+    oldLatexitVersion = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)Old_LaTeXiTVersionKey, (__bridge CFStringRef)LaTeXiTAppKey);
+    newLatexitVersion = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)LaTeXiTVersionKey, (__bridge CFStringRef)LaTeXiTAppKey);
+    #else
     oldLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)Old_LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
     newLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    #endif
   }
 
   
@@ -279,8 +284,13 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
       servicesItems = [NSMutableArray arrayWithArray:
       [[NSUserDefaults standardUserDefaults] objectForKey:ServiceShortcutsKey]];
     else
+      #ifdef ARC_ENABLED
+      servicesItems = [NSMutableArray arrayWithArray:
+        (__bridge NSArray*)CFPreferencesCopyAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFStringRef)LaTeXiTAppKey) ];
+      #else
       servicesItems = [NSMutableArray arrayWithArray:
         [(NSArray*)CFPreferencesCopyAppValue((CFStringRef)ServiceShortcutsKey, (CFStringRef)LaTeXiTAppKey) autorelease]];
+      #endif
     NSUInteger count = [servicesItems count];
     while(count--)
     {
@@ -299,7 +309,11 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     if (self->isLaTeXiT)
       [[NSUserDefaults standardUserDefaults] setObject:servicesItems forKey:ServiceShortcutsKey];
     else
+      #ifdef ARC_ENABLED
+      CFPreferencesSetAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFPropertyListRef)servicesItems, (__bridge CFStringRef)LaTeXiTAppKey);
+      #else
       CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, servicesItems, (CFStringRef)LaTeXiTAppKey);
+      #endif
     if ([self latexisationLaTeXMode] == LATEX_MODE_EQNARRAY)
       [self setLatexisationLaTeXMode:LATEX_MODE_ALIGN];
 
@@ -344,12 +358,24 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   else//!if (!self->isLaTeXiT)
   {
+    #ifdef ARC_ENABLED
+    id value = (__bridge id)CFPreferencesCopyAppValue((__bridge CFStringRef)oldKey, (__bridge CFStringRef)LaTeXiTAppKey);
+    #else
     id value = NSMakeCollectable((id)CFPreferencesCopyAppValue((CFStringRef)oldKey, (CFStringRef)LaTeXiTAppKey));
+    #endif
     if (value)
     {
       CFPreferencesSetAppValue((CFStringRef)oldKey, 0, (CFStringRef)LaTeXiTAppKey);
+      #ifdef ARC_ENABLED
+      CFPreferencesSetAppValue((__bridge CFStringRef)newKey, (__bridge CFPropertyListRef)value, (__bridge CFStringRef)LaTeXiTAppKey);
+      
+      #else
       CFPreferencesSetAppValue((CFStringRef)newKey, value, (CFStringRef)LaTeXiTAppKey);
+      #endif
+      #ifdef ARC_ENABLED
+      #else
       [value release];
+      #endif
     }
   }//end if (!self->isLaTeXiT)
 }
@@ -361,7 +387,11 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
                        CFPreferencesGetAppBooleanValue((CFStringRef)Old_UseLoginShellKey, (CFStringRef)LaTeXiTAppKey, 0);
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
+  #ifdef ARC_ENABLED
+  NSMutableArray* newCompositionConfigurations = [[self compositionConfigurations] deepMutableCopy];
+  #else
   NSMutableArray* newCompositionConfigurations = [[[self compositionConfigurations] deepMutableCopy] autorelease];
+  #endif
   NSEnumerator* enumerator = [newCompositionConfigurations objectEnumerator];
   NSMutableDictionary* compositionConfiguration = nil;
   while((compositionConfiguration = [enumerator nextObject]))
@@ -416,8 +446,13 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   else
   {
+    #ifdef ARC_ENABLED
+    oldServiceShortcutsEnabled = ((__bridge NSArray*)CFPreferencesCopyAppValue((__bridge CFStringRef)Old_ServiceShortcutEnabledKey, (__bridge CFStringRef)LaTeXiTAppKey));
+    oldServiceShortcutsStrings = ((__bridge NSArray*)CFPreferencesCopyAppValue((__bridge CFStringRef)Old_ServiceShortcutStringsKey, (__bridge CFStringRef)LaTeXiTAppKey));
+    #else
     oldServiceShortcutsEnabled = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutEnabledKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
     oldServiceShortcutsStrings = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutStringsKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    #endif
   }
   
   NSMutableArray* newServiceShortcuts = [NSMutableArray arrayWithCapacity:6];

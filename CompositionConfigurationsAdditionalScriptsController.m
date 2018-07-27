@@ -3,11 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsAdditionalScriptsController.h"
 
+#import "CompositionConfigurationsController.h"
 #import "PreferencesController.h"
 #import "NSStringExtended.h"
 

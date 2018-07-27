@@ -56,8 +56,13 @@ NSString* GetMyPNGPboardType(void)
 {
   if (!MyPNGPboardType && isMacOS10_5OrAbove())
     MyPNGPboardType = @"public.png";
+  #ifdef ARC_ENABLED
+  if (!MyPNGPboardType)  
+    MyPNGPboardType = (__bridge NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
+  #else
   if (!MyPNGPboardType)  
     MyPNGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType);//retain count is 1
+  #endif
   if (!MyPNGPboardType && (NSPNGPboardType != 0))
     MyPNGPboardType = [[NSString alloc] initWithString:NSPNGPboardType];
   if (!MyPNGPboardType)
@@ -78,8 +83,13 @@ NSString* GetMyJPEGPboardType(void)
 {
   if (!MyJPEGPboardType && isMacOS10_5OrAbove())
     MyJPEGPboardType = @"public.jpeg";
+  #ifdef ARC_ENABLED
+  if (!MyJPEGPboardType)  
+    MyJPEGPboardType = (__bridge NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1
+  #else
   if (!MyJPEGPboardType)  
     MyJPEGPboardType = (NSString*)UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType);//retain count is 1
+  #endif
   if (!MyJPEGPboardType)
     MyJPEGPboardType = NSTIFFPboardType;
   return MyJPEGPboardType;

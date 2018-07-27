@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "SystemTask.h"
@@ -25,23 +25,41 @@
 {
   if ((!(self = [super init])))
     return nil;
+  NSString* localString = nil;
   self->workingDirectory = [aWorkingDirectory copy];
-  self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdinFilePath
+  self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXX" extension:@"log"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
+  self->tmpStdinFilePath = localString;
+  #ifdef ARC_ENABLED
+  #else
   [self->tmpStdinFileHandle retain];
   [self->tmpStdinFilePath   retain];
-  self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXX" extension:@"log"  outFilePath:&self->tmpStdoutFilePath
-                                                                workingDirectory:self->workingDirectory];
+  #endif
+  self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXX" extension:@"log"  outFilePath:&localString
+
+                                                        workingDirectory:self->workingDirectory];
+  self->tmpStdoutFilePath = localString;
+  #ifdef ARC_ENABLED
+  #else
   [self->tmpStdoutFileHandle retain];
   [self->tmpStdoutFilePath   retain];
-  self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXX" extension:@"log"  outFilePath:&self->tmpStderrFilePath
+  #endif
+  self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXX" extension:@"log"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
+  self->tmpStderrFilePath = localString;
+  #ifdef ARC_ENABLED
+  #else
   [self->tmpStderrFileHandle retain];
   [self->tmpStderrFilePath   retain];
-  self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXX" extension:@"sh"  outFilePath:&self->tmpScriptFilePath
+  #endif
+  self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXX" extension:@"sh"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
+  self->tmpScriptFilePath = localString;
+  #ifdef ARC_ENABLED
+  #else
   [self->tmpScriptFileHandle retain];
   [self->tmpScriptFilePath   retain];
+  #endif
   self->runningLock = [[NSLock alloc] init];
   return self;
 }
@@ -57,10 +75,13 @@
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->environment          release];
   [self->launchPath           release];
   [self->arguments            release];
   [self->currentDirectoryPath release];
+  #endif
   if (DebugLogLevel < 1)
   {
     unlink([self->tmpStdinFilePath UTF8String]);
@@ -68,6 +89,8 @@
     unlink([self->tmpStderrFilePath UTF8String]);
     unlink([self->tmpScriptFilePath UTF8String]);
   }//end if (DebugLogLevel < 1)
+  #ifdef ARC_ENABLED
+  #else
   [self->tmpStdinFilePath   release];
   [self->tmpStdoutFilePath   release];
   [self->tmpStderrFilePath   release];
@@ -79,29 +102,39 @@
   [self->runningLock release];
   [self->workingDirectory release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 
 -(void) setEnvironment:(NSDictionary*)theEnvironment
 {
+  #ifdef ARC_ENABLED
+  #else
   [theEnvironment retain];
   [self->environment release];
+  #endif
   self->environment = theEnvironment;
 }
 //end setEnvironment:
 
 -(void) setLaunchPath:(NSString*)path
 {
+  #ifdef ARC_ENABLED
+  #else
   [path retain];
   [self->launchPath release];
+  #endif
   self->launchPath = path;
 }
 //end setEnvironment:
 
 -(void) setArguments:(NSArray*)args
 {
+  #ifdef ARC_ENABLED
+  #else
   [args retain];
   [self->arguments release];
+  #endif
   self->arguments = args;
 }
 //end setArguments:
@@ -113,8 +146,11 @@
 
 -(void) setCurrentDirectoryPath:(NSString*)directoryPath
 {
+  #ifdef ARC_ENABLED
+  #else
   [directoryPath retain];
   [self->currentDirectoryPath release];
+  #endif
   self->currentDirectoryPath = directoryPath;
 }
 //end setCurrentDirectoryPath:
@@ -196,6 +232,7 @@
 -(void) launch
 {
   NSError* error = nil;
+  DebugLog(1, @"><%@>", [self equivalentLaunchCommand]);
   if (![[self equivalentLaunchCommand] writeToFile:self->tmpScriptFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error])
     self->terminationStatus = -1;
   else
@@ -238,13 +275,17 @@
 {
   [self->runningLock lock];
   [self->runningLock unlock];
+  DebugLog(1, @"<<%@>", [self equivalentLaunchCommand]);
 }
 //end waitUntilExit
 
 -(void) setStdInputData:(NSData*)data
 {
+  #ifdef ARC_ENABLED
+  #else
   [data retain];
   [self->stdInputData release];
+  #endif
   self->stdInputData = data;
   [self->stdInputData writeToFile:self->tmpStdinFilePath atomically:NO];
 }

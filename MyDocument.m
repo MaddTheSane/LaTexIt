@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -248,8 +248,13 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
   //get rid of formatter localization problems
   [self->pointSizeFormatter setLocale:[NSLocale currentLocale]];
-  [self->pointSizeFormatter setZeroSymbol:
-    [NSString stringWithFormat:@"0%@%0*d", [self->pointSizeFormatter decimalSeparator], 2, 0]];
+  [self->pointSizeFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+  [self->pointSizeFormatter setDecimalSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
+  NSString* pointSizeZeroSymbol =
+    [NSString stringWithFormat:@"0%@%0*d%@",
+       [self->pointSizeFormatter decimalSeparator], 2, 0, 
+       [self->pointSizeFormatter positiveSuffix]];
+  [self->pointSizeFormatter setZeroSymbol:pointSizeZeroSymbol];
 
   NSWindow* window = [self windowForSheet];
   
@@ -1222,7 +1227,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self _analyzeErrors:errors];
 
     //did it work ?
-    BOOL failed = !pdfData || [self->upperBoxLogTableView numberOfRows];
+    BOOL failed = !pdfData || ![pdfData length] || [self->upperBoxLogTableView numberOfRows];
     if (failed)
     {
       if (![self->upperBoxLogTableView numberOfRows] ) //unexpected error...

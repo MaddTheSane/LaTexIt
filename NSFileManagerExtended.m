@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -192,7 +192,11 @@ static NSMutableSet* createdTemporaryPaths = nil;
       *outFilePath = createdPath;
     free(tmpString);
   }
+  #ifdef ARC_ENABLED
+  return fileHandle;
+  #else
   return [fileHandle autorelease];
+  #endif
 }
 //end temporaryFileWithTemplate:extension:outFilePath:
 
@@ -261,7 +265,11 @@ static NSMutableSet* createdTemporaryPaths = nil;
   {
     CFStringRef uti = 0;
     error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
+    #ifdef ARC_ENABLED
+    result = (__bridge NSString*)uti;
+    #else
     result = [(NSString*)uti autorelease];
+    #endif
   }//end if (!error && !isDirectory)
   return result;
 };
@@ -277,7 +285,11 @@ static NSMutableSet* createdTemporaryPaths = nil;
   {
     CFStringRef uti = 0;
     error = error ? error : LSCopyItemAttribute(&fsRef, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&uti);
+    #ifdef ARC_ENABLED
+    result = (__bridge NSString*)uti;
+    #else
     result = [(NSString*)uti autorelease];
+    #endif
   }//end if (ok)
   return result;
 };

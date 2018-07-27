@@ -209,15 +209,15 @@
 "Synchronize preamble" = "Synchronize preamble";
 "Synchronize environment" = "Synchronize environment";
 "Synchronize body" = "Synchronize body";
-"Pre-processing on load" = "Pré-traitement au chargement";
-"Post-processing on load" = "Post-traitement au chargement";
-"Pre-processing on save" = "Pré-traitement à la sauvegarde";
-"Post-processing on save" = "Post-traitement à la sauvegarde";
+"Pre-processing on load" = "ファイルを読み込む前に処理";
+"Post-processing on load" = "ファイルを読み込んだ後に処理";
+"Pre-processing on save" = "ファイルを保存する前に処理";
+"Post-processing on save" = "ファイルを保存した後に処理";
 
 /* Preferences */
 "Edit the configurations..." = "構成を編集…";
 "Help on scripts" = "Help on scripts";
-"Help on synchronization scripts" = "Help on synchronization scripts";
+"Help on synchronization scripts" = "ファイル同期と追加スクリプトについて";
 "path to the Unix executable program" = "path to the Unix executable program";
 "Reset..." = "Reset…";
 "Do you really want to reset the paths ?" = "Do you really want to reset the paths ?";
@@ -268,6 +268,7 @@
 "Change library in use" = "使用するライブラリを変更";
 "Export the selection only" = "選択項目のみをエクスポート";
 "Format :" = "フォーマット :";
+"TeX Source" = "TeX Source";
 "Add a folder" = "フォルダを追加";
 "Add current equation" = "現在の数式を追加";
 "Rename selection" = "選択項目を名称変更";
@@ -277,6 +278,11 @@
 "Display the equations in real size on mouse over" = "マウスオーバーで数式を実際のサイズで表示";
 "Open the equation in a document" = "数式を書類の中で開く";
 "Open the equation in a linked document" = "数式をリンクした書類の中で開く";
+"Show comments pane" = "Show comments pane";
+"Hide comments pane" = "Hide comments pane";
+"Export commented preambles" = "Export commented preambles";
+"Export user comments" = "Export user comments";
+"Ignore title hierarchy" = "Ignore title hierarchy";
 
 /* History */
 "Add to current history" = "現在の履歴に追加";

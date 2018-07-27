@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -74,6 +74,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   return self;
 }
 
+#ifdef ARC_ENABLED
+#else
 -(id) retain
 {
   return self;
@@ -84,7 +86,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   return UINT_MAX;  //denotes an object that cannot be released
 }
 
--(void) release
+-(oneway void) release
 {
 }
 
@@ -92,6 +94,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 {
   return self;
 }
+#endif
 
 //The init method can be called several times, it will only be applied once on the singleton
 -(id) init
@@ -117,9 +120,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  #ifdef ARC_ENABLED
+  #else
   [self->managedObjectContext release];
   [self->bindController release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 
@@ -179,7 +185,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     result = [moc countForFetchRequest:fetchRequest error:&error];
   else
     result = [[moc executeFetchRequest:fetchRequest error:&error] count];
+  #ifdef ARC_ENABLED
+  #else
   [fetchRequest release];
+  #endif
   if (error)
     {DebugLog(0, @"error : %@", error);}
   return result;
@@ -204,7 +213,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (error)
       {DebugLog(0, @"error : %@", error);}
     NSArray* oldHistoryItems = [oldEntries valueForKey:@"wrapper"];
+    #ifdef ARC_ENABLED
+    #else
     [fetchRequest release];
+    #endif
     if ([oldHistoryItems count])
     {
       [self->managedObjectContext disableUndoRegistration];
@@ -264,12 +276,20 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!exists)
       [fileManager bridge_createDirectoryAtPath:[newFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
 
+    #ifdef ARC_ENABLED
+    self->managedObjectContext = [self managedObjectContextAtPath:newFilePath setVersion:NO];
+    #else
     self->managedObjectContext = [[self managedObjectContextAtPath:newFilePath setVersion:NO] retain];
+    #endif
     NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
     NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
     id oldVersionObject =
       [[persistentStoreCoordinator metadataForPersistentStore:[persistentStores lastObject]] objectForKey:@"version"];
+    #ifdef ARC_ENABLED
+    NSString* oldVersion = [oldVersionObject isKindOfClass:[NSString class]] ? (NSString*)[oldVersionObject copy] : nil;
+    #else
     NSString* oldVersion = [oldVersionObject isKindOfClass:[NSString class]] ? (NSString*)[[oldVersionObject copy] autorelease] : nil;
+    #endif
     BOOL shouldMigrateHistoryToAlign = ([oldVersion compare:@"2.1.0"] == NSOrderedAscending);
 
     BOOL shouldDisplayMigrationProgression = (shouldMigrateHistoryToCoreData && [[NSApp class] isEqual:[NSApplication class]]) ||
@@ -358,7 +378,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       }
       @finally{
       }
+      #ifdef ARC_ENABLED
+      #else
       [fetchRequest release];
+      #endif
       error = nil;
       [self->managedObjectContext save:&error];
       if (error)
@@ -370,7 +393,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.7.5", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -433,14 +456,21 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.7.5", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
   [result setRetainsRegisteredObjects:YES];
+  #ifdef ARC_ENABLED
+  #else
   [persistentStoreCoordinator release];
-  return [result autorelease];
+  #endif
+  #ifdef ARC_ENABLED
+  #else
+  [result autorelease];
+  #endif
+  return result;
 }
 //end managedObjectContextAtPath:setVersion:
 
@@ -455,7 +485,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[HistoryItem entity]];
     itemsToSave = [[self managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+    #ifdef ARC_ENABLED
+    #else
     [fetchRequest release];
+    #endif
   }
   if (!itemsToSave)
     itemsToSave = [NSArray array];
@@ -491,7 +524,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.7.5", @"version",
+          @"2.8.0", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -528,7 +561,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSError* error = nil;
     [itemsToRemove setArray:[self->managedObjectContext executeFetchRequest:fetchRequest error:&error]];
     if (error) {DebugLog(0, @"error : %@", error);}
+    #ifdef ARC_ENABLED
+    #else
     [fetchRequest release];
+    #endif
   }//end if (option == HISTORY_IMPORT_OVERWRITE)
 
   if ([[path pathExtension] isEqualToString:@"latexhist"])
@@ -543,7 +579,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       ok = NO;
       DebugLog(0, @"error : %@", error);
     }
+    #ifdef ARC_ENABLED
+    #else
     [fetchRequest release];
+    #endif
     
     NSData* historyItemsToAddAsData = !historyItemsToAdd ? nil :
       [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
@@ -637,7 +676,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     oldManagedObjectModel =
       [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
     oldPersistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
+    #ifdef ARC_ENABLED
+    oldPath = [path copy];
+    #else
     oldPath = [[path copy] autorelease];
+    #endif
     NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
     @try{
       NSError* error = nil;
@@ -654,10 +697,16 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     }
     if (!oldPersistentStore)
     {
+      #ifdef ARC_ENABLED
+      #else
       [oldPersistentStoreCoordinator release];
+      #endif
       oldPersistentStoreCoordinator = nil;
       oldPath = nil;
+      #ifdef ARC_ENABLED
+      #else
       [oldManagedObjectModel release];
+      #endif
       oldManagedObjectModel = nil;
     }//end if (!oldPersistentStore)
   }//end for each oldDataModelName
@@ -705,7 +754,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     BOOL migrationOK = NO;
     if (oldManagedObjectContext && newManagedObjectContext)
     {
+      #ifdef ARC_ENABLED
+      @autoreleasepool {
+      #else
       NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
+      #endif
       NSEntityDescription* oldHistoryItemEntityDescription = !oldManagedObjectContext ? nil :
         [NSEntityDescription entityForName:NSStringFromClass([HistoryItem class])
                     inManagedObjectContext:oldManagedObjectContext];
@@ -713,8 +766,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [oldFetchRequest setEntity:oldHistoryItemEntityDescription];
       NSError* error = nil;
       NSArray* oldHistoryItems = !oldFetchRequest ? nil :
-        [oldManagedObjectContext executeFetchRequest:oldFetchRequest error:&error]; 
+        [oldManagedObjectContext executeFetchRequest:oldFetchRequest error:&error];
+      #ifdef ARC_ENABLED
+      #else
       [oldFetchRequest release];
+      #endif
       if (error)
         {DebugLog(0, @"error : %@", error);}
         
@@ -730,7 +786,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         [migratingProgressIndicator display];
         while((oldHistoryItem = [oldEnumerator nextObject]))
         {
+          #ifdef ARC_ENABLED
+          @autoreleasepool{
+          #else
           NSAutoreleasePool* ap2 = [[NSAutoreleasePool alloc] init];
+          #endif
           [oldHistoryItem setCustomKVOInhibited:YES];
           id oldHistoryItemDescription = [oldHistoryItem plistDescription];
           [[oldHistoryItem equation] dispose];
@@ -742,7 +802,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [migratingProgressIndicator setDoubleValue:1.*(progression++)];
           if (!(progression%25))
             [migratingProgressIndicator display];
+          #ifdef ARC_ENABLED
+          }//end @autoreleasepool
+          #else
           [ap2 drain];
+          #endif
         }//end for each oldHistoryItem
         error = nil;
         [migratingProgressIndicator setIndeterminate:YES];
@@ -757,17 +821,24 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         DebugLog(0, @"exception : %@", e);
       }
       [LatexitEquation popManagedObjectContext];
+      #ifdef ARC_ENABLED
+      }//end @autoreleasepool
+      #else
       [ap1 drain];
+      #endif
     }//end if (oldManagedObjectContext && newManagedObjectContext)
+    #ifdef ARC_ENABLED
+    #else
     [oldManagedObjectContext release];
-    oldManagedObjectContext = nil;
     [oldPersistentStoreCoordinator release];
-    oldPersistentStoreCoordinator = nil;
     [oldManagedObjectModel release];
-    oldManagedObjectModel = nil;
-    [newManagedObjectContext release];
-    newManagedObjectContext = nil;
     [newPersistentStoreCoordinator release];
+    [newManagedObjectContext release];
+    #endif
+    oldManagedObjectContext = nil;
+    oldPersistentStoreCoordinator = nil;
+    oldManagedObjectModel = nil;
+    newManagedObjectContext = nil;
     newPersistentStoreCoordinator = nil;
 
     if (!migrationOK)
@@ -823,8 +894,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 {
   NSModalSession result = 0;
   NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
+  #ifdef ARC_ENABLED
+  NSWindowController* migratingWindowController = [[NSWindowController alloc] initWithWindow:migratingWindow];
+  #else
   NSWindowController* migratingWindowController =
     [[[NSWindowController alloc] initWithWindow:migratingWindow] autorelease];
+  #endif
   [migratingWindow center];
   [migratingWindow setTitle:NSLocalizedString(@"Migrating history to new format", @"Migrating history to new format")];
   NSRect contentView = [[migratingWindow contentView] frame];
@@ -833,7 +908,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   [progressIndicator setMinValue:0.];
   [progressIndicator setUsesThreadedAnimation:YES];
   [progressIndicator startAnimation:self];
+  #ifdef ARC_ENABLED
+  #else
   [progressIndicator release];
+  #endif
+  progressIndicator = nil;
   [migratingWindowController showWindow:migratingWindow];
   if (outMigratingWindowController)
     *outMigratingWindowController = migratingWindowController;

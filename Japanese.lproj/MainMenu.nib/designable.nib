@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="81"/>
+			<integer value="1129"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -256,7 +256,7 @@
 								</object>
 								<object class="NSMenuItem" id="1068321112">
 									<reference key="NSMenu" ref="811025807"/>
-									<string key="NSTitle">Close file synchronization</string>
+									<string key="NSTitle">ファイル同期を終了する</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="791850863"/>
@@ -264,7 +264,7 @@
 								</object>
 								<object class="NSMenuItem" id="894390948">
 									<reference key="NSMenu" ref="811025807"/>
-									<string key="NSTitle">Save</string>
+									<string key="NSTitle">保存</string>
 									<string key="NSKeyEquiv">s</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -273,7 +273,7 @@
 								</object>
 								<object class="NSMenuItem" id="508876052">
 									<reference key="NSMenu" ref="811025807"/>
-									<string key="NSTitle">Save as…</string>
+									<string key="NSTitle">別名で保存…</string>
 									<string key="NSKeyEquiv">S</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -853,6 +853,26 @@
 									<reference key="NSMixedImage" ref="889411723"/>
 								</object>
 								<object class="NSMenuItem" id="988954243">
+									<reference key="NSMenu" ref="55124784"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
+								<object class="NSMenuItem" id="45418356">
+									<reference key="NSMenu" ref="55124784"/>
+									<string key="NSTitle">Show comments pane</string>
+									<string key="NSKeyEquiv">b</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="791850863"/>
+									<reference key="NSMixedImage" ref="889411723"/>
+								</object>
+								<object class="NSMenuItem" id="258067142">
 									<reference key="NSMenu" ref="55124784"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -2251,6 +2271,14 @@ m+OCk+OAgg</string>
 					</object>
 					<int key="connectionID">1664</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">libraryToggleCommentsPane:</string>
+						<reference key="source" ref="242078833"/>
+						<reference key="destination" ref="45418356"/>
+					</object>
+					<int key="connectionID">1668</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2812,6 +2840,8 @@ m+OCk+OAgg</string>
 							<reference ref="182832031"/>
 							<reference ref="359706617"/>
 							<reference ref="958490495"/>
+							<reference ref="258067142"/>
+							<reference ref="45418356"/>
 						</array>
 						<reference key="parent" ref="677404131"/>
 					</object>
@@ -3275,6 +3305,16 @@ m+OCk+OAgg</string>
 						<reference key="object" ref="894390948"/>
 						<reference key="parent" ref="811025807"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1665</int>
+						<reference key="object" ref="258067142"/>
+						<reference key="parent" ref="55124784"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1666</int>
+						<reference key="object" ref="45418356"/>
+						<reference key="parent" ref="55124784"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3301,7 +3341,7 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="1118.ImportedFromIB2"/>
 				<string key="1123.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1123.ImportedFromIB2"/>
-				<string key="1129.IBEditorWindowLastContentRect">{{395, 593}, {222, 243}}</string>
+				<string key="1129.IBEditorWindowLastContentRect">{{670, 525}, {245, 273}}</string>
 				<string key="1129.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1129.ImportedFromIB2"/>
 				<string key="1130.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3499,6 +3539,10 @@ m+OCk+OAgg</string>
 				<boolean value="YES" key="1656.ImportedFromIB2"/>
 				<string key="1657.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1657.ImportedFromIB2"/>
+				<string key="1665.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1665.ImportedFromIB2"/>
+				<string key="1666.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1666.ImportedFromIB2"/>
 				<string key="167.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="167.ImportedFromIB2"/>
 				<string key="168.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3591,7 +3635,7 @@ m+OCk+OAgg</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1664</int>
+			<int key="maxID">1668</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3626,6 +3670,7 @@ m+OCk+OAgg</string>
 						<string key="libraryRemoveSelectedItems:">id</string>
 						<string key="libraryRenameItem:">id</string>
 						<string key="librarySaveAs:">id</string>
+						<string key="libraryToggleCommentsPane:">id</string>
 						<string key="makeDonation:">id</string>
 						<string key="makeLatex:">id</string>
 						<string key="makeLatexAndExport:">id</string>
@@ -3758,6 +3803,10 @@ m+OCk+OAgg</string>
 						</object>
 						<object class="IBActionInfo" key="librarySaveAs:">
 							<string key="name">librarySaveAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryToggleCommentsPane:">
+							<string key="name">libraryToggleCommentsPane:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="makeDonation:">
@@ -5530,6 +5579,27 @@ m+OCk+OAgg</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">QuartzComposer.framework/Headers/QCCompositionPickerView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CAAnimation.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CALayer.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

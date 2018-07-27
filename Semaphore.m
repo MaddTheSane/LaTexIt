@@ -1,9 +1,9 @@
 //
 //  Semaphore.m
-//  MozoDojo
+//  LaTeXiT
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "Semaphore.h"
@@ -21,7 +21,11 @@
   error = error ? error : pthread_mutex_init(&mutex, &mutex_attr);
   if (error)
   {
+    #ifdef ARC_ENABLED
+    #else
     [self autorelease];
+    #endif
+    self = nil;
     return nil;
   }
   value = initialValue;
@@ -41,7 +45,10 @@
   pthread_cond_destroy(&cond);
   pthread_mutexattr_destroy(&mutex_attr);
   pthread_mutex_destroy(&mutex);
+  #ifdef ARC_ENABLED
+  #else
   [super dealloc];
+  #endif
 }
 //end dealloc
 

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsController.h"
@@ -74,9 +74,12 @@
 -(void) dealloc
 {
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:CompositionConfigurationDocumentIndexKey];
+  #ifdef ARC_ENABLED
+  #else
   [self->currentConfigurationScriptsController release];
   [self->currentConfigurationProgramArgumentsControllerDictionary release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 
@@ -224,7 +227,10 @@
         nil]];
     result = controller;
     [self->currentConfigurationProgramArgumentsControllerDictionary setObject:result forKey:key];
+    #ifdef ARC_ENABLED
+    #else
     [result release];
+    #endif
   }//end if (!result)
   return result;
 }

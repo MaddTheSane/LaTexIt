@@ -3,16 +3,26 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/11/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDataExtended.h"
 
 #import "Utils.h"
 
+#ifdef ARC_ENABLED
+#import <openssl/bio.h>
+#import <openssl/ssl.h>
+#import <openssl/sha.h>
+#elif defined(__clang__)
+#import <openssl/bio.h>
+#import <openssl/ssl.h>
+#import <openssl/sha.h>
+#else
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/bio.h>//specific to avoid compatibility problem prior MacOS 10.5
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/ssl.h>//specific to avoid compatibility problem prior MacOS 10.5
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/sha.h>//specific to avoid compatibility problem prior MacOS 10.5
+#endif
 
 @implementation NSData (Extended)
 
@@ -25,7 +35,8 @@
 +(id) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines
 {
   NSMutableData* result = [NSMutableData data];
-
+  #if defined(__clang__)
+  #else
   BIO* mem = BIO_new_mem_buf((void*)[base64 UTF8String], [base64 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
   BIO* b64 = BIO_new(BIO_f_base64());
   if (!encodedWithNewlines)
@@ -40,6 +51,7 @@
     
   //Clean up and go home
   BIO_free_all(mem);
+  #endif
   
   return result;
 }
@@ -55,6 +67,8 @@
 -(NSString*) encodeBase64WithNewlines:(BOOL)encodeWithNewlines
 {
   NSString* result = nil;
+  #if defined(__clang__)
+  #else
   BIO* mem = BIO_new(BIO_s_mem());
   BIO* b64 = BIO_new(BIO_f_base64());
   if (!encodeWithNewlines)
@@ -66,8 +80,13 @@
     DebugLog(0, @"BIO_flush : %d", error);
   char* base64Pointer = 0;
   long base64Length = BIO_get_mem_data(mem, &base64Pointer);
+  #ifdef ARC_ENABLED
+  result = [[NSString alloc] initWithBytes:base64Pointer length:base64Length encoding:NSUTF8StringEncoding];
+  #else
   result = [[[NSString alloc] initWithBytes:base64Pointer length:base64Length encoding:NSUTF8StringEncoding] autorelease];
+  #endif
   BIO_free_all(mem);
+  #endif
   return result;
 }
 //end encodeBase64WithNewlines:
@@ -79,7 +98,10 @@
   SHA1([self bytes], [self length], sha);
   NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:SHA_DIGEST_LENGTH freeWhenDone:NO];
   result = [wrapper encodeBase64WithNewlines:NO];
+  #ifdef ARC_ENABLED
+  #else
   [wrapper release];
+  #endif
   return result;
 }
 //end sha1Base64

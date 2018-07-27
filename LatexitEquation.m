@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -27,6 +27,12 @@
 #import <LinkBack/LinkBack.h>
 
 #import <Quartz/Quartz.h>
+
+#ifdef ARC_ENABLED
+#define CHBRIDGE __bridge
+#else
+#define CHBRIDGE
+#endif
 
 static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object, void* info)
 {
@@ -54,7 +60,11 @@ static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object,
         CGPDFDataFormat dataFormat = 0;
         CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
         if (data && (dataFormat == CGPDFDataFormatRaw))
+          #ifdef ARC_ENABLED
+          [((__bridge NSMutableArray*) info) addObject:(__bridge NSData*)data];
+          #else
           [((NSMutableArray*) info) addObject:[(NSData*)data autorelease]];
+          #endif
         else if (data)
           CFRelease(data);
       }//end if (CGPDFArrayGetStream(array, i, &stream))
@@ -65,7 +75,11 @@ static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object,
     CGPDFDataFormat dataFormat = 0;
     CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
     if (data && (dataFormat == CGPDFDataFormatRaw))
+      #ifdef ARC_ENABLED
+      [((__bridge NSMutableArray*) info) addObject:(__bridge NSData*)data];
+      #else
       [((NSMutableArray*) info) addObject:[(NSData*)data autorelease]];
+      #endif
     else if (data)
       CFRelease(data);
   }//end if (CGPDFObjectGetValue(object, kCGPDFObjectTypeStream, &stream))
@@ -80,7 +94,12 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
   if (okString)
   {
     CFStringRef cfString = CGPDFStringCopyTextString(pdfString);
+    #ifdef ARC_ENABLED
+    NSString* string = (__bridge NSString*)cfString;
+    #else
     NSString* string = [(NSString*)cfString autorelease];
+    #endif
+    DebugLogStatic(1, @"PDF scanning found <%@>", string);
     NSError* error = nil;
     NSArray* components =
       [string captureComponentsMatchedByRegex:@"^\\<latexit sha1_base64=\"(.*?)\"\\>(.*?)\\</latexit\\>$"
@@ -88,6 +107,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
                                  range:NSMakeRange(0, [string length]) error:&error];
     if ([components count] == 3)
     {
+      DebugLogStatic(1, @"this is metadata", string);
       NSString* sha1Base64 = [components objectAtIndex:1];
       NSString* dataBase64Encoded = [components objectAtIndex:2];
       NSString* dataBase64EncodedSha1Base64 = [[dataBase64Encoded dataUsingEncoding:NSUTF8StringEncoding] sha1Base64];
@@ -105,9 +125,14 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
       NSDictionary* plistAsDictionary = [plist dynamicCastToClass:[NSDictionary class]];
       if (plistAsDictionary)
       {
+        #ifdef ARC_ENABLED
+        if (info)
+          memcpy((void**)info, &plistAsDictionary, sizeof(NSDictionary*));
+        #else
         NSDictionary** outLatexitMetadata = (NSDictionary**)info;
         if (outLatexitMetadata)
           *outLatexitMetadata = plistAsDictionary;
+        #endif
       }//end if (plistAsDictionary)
     }//end if ([components count] == 3)
   }//end if (okString)
@@ -131,8 +156,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   {
     @synchronized(self)
     {
+      #ifdef ARC_ENABLED
+      if (!cachedEntity)
+        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
+      #else
       if (!cachedEntity)
         cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+      #endif
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -239,7 +269,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       DebugLog(0, @"exception : %@", e);
     }
     @finally{
+      #ifdef ARC_ENABLED
+      #else
       [pdfDocument release];
+      #endif
     }
     if (embeddedInfos)
     {
@@ -247,7 +280,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSAttributedString* preamble = !preambleAsString ? nil :
         [[NSAttributedString alloc] initWithString:preambleAsString attributes:defaultAttributes];
       [result setObject:(!preamble ? defaultPreambleAttributedString : preamble) forKey:@"preamble"];
+      #ifdef ARC_ENABLED
+      preamble = nil;
+      #else
       [preamble release];
+      #endif
 
       NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
@@ -260,16 +297,29 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (mode == LATEX_MODE_EQNARRAY)
       {
         NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
+        #ifdef ARC_ENABLED
+        [sourceText2 appendAttributedString:
+          [[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] ];
+        [sourceText2 appendAttributedString:sourceText];
+        [sourceText2 appendAttributedString:
+          [[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] ];
+        #else
+
         [sourceText2 appendAttributedString:
           [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
         [sourceText2 appendAttributedString:sourceText];
         [sourceText2 appendAttributedString:
           [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
         [sourceText release];
+        #endif
         sourceText = sourceText2;
       }
       [result setObject:sourceText forKey:@"sourceText"];
+      #ifdef ARC_ENABLED
+      sourceText = nil;
+      #else
       [sourceText release];
+      #endif
       
       NSNumber* pointSizeAsNumber = [embeddedInfos objectForKey:@"magnification"];
       [result setObject:(pointSizeAsNumber ? pointSizeAsNumber :
@@ -303,7 +353,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     isLaTeXiTPDF = YES;
   else//if (!decodedFromAnnotation)
   {
+    #ifdef ARC_ENABLED
+    NSString* dataAsString = [[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding];
+    #else
     NSString* dataAsString = [[[NSString alloc] initWithData:someData encoding:NSMacOSRomanStringEncoding] autorelease];
+    #endif
     NSArray*  testArray    = nil;
     
     NSMutableString* preambleString = nil;
@@ -320,10 +374,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
       [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
     }
+    #ifdef ARC_ENABLED
+    NSAttributedString* preamble =
+      preambleString ? [[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes]
+                     : (useDefaults ? defaultPreambleAttributedString
+                                    : [[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes]);
+    #else
     NSAttributedString* preamble =
       preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
                      : (useDefaults ? defaultPreambleAttributedString
                                     : [[[NSAttributedString alloc] initWithString:@"" attributes:defaultAttributes] autorelease]);
+    #endif
 
     //test escaped preample from version 1.13.0
     testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
@@ -335,14 +396,22 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
       [preambleString deleteCharactersInRange:range];
       NSString* unescapedPreamble =
-        (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                           (CFStringRef)preambleString, CFSTR(""),
+        (CHBRIDGE NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                           (CHBRIDGE CFStringRef)preambleString, CFSTR(""),
                                                                            kCFStringEncodingUTF8);
-      preambleString = [NSString stringWithString:(NSString*)unescapedPreamble];
+      preambleString = [NSMutableString stringWithString:(NSString*)unescapedPreamble];
+      #ifdef ARC_ENABLED
+      #else
       CFRelease(unescapedPreamble);
+      #endif
     }
+    #ifdef ARC_ENABLED
+    preamble = preambleString ? [[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes]
+                              : preamble;
+    #else
     preamble = preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
                               : preamble;
+    #endif
     [result setObject:preamble forKey:@"preamble"];
 
     NSMutableString* modeAsString = nil;
@@ -374,8 +443,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
       [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
     }
-    NSAttributedString* sourceText = sourceString ?
-      [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease] : @"";
+    #ifdef ARC_ENABLED
+    NSAttributedString* sourceText =
+      [[NSAttributedString alloc] initWithString:(!sourceString ? @"" : sourceString) attributes:defaultAttributes] ;
+    #else
+    NSAttributedString* sourceText =
+      [[NSAttributedString alloc] initWithString:(!sourceString ? @"" : sourceString) attributes:defaultAttributes];
+    #endif
 
     //test escaped source from version 1.13.0
     testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
@@ -388,22 +462,40 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
       [sourceString deleteCharactersInRange:range];
       NSString* unescapedSource =
-        (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                           (CFStringRef)sourceString, CFSTR(""),
+        (CHBRIDGE NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+                                                                           (CHBRIDGE CFStringRef)sourceString, CFSTR(""),
                                                                            kCFStringEncodingUTF8);
       [sourceString setString:unescapedSource];
+      #ifdef ARC_ENABLED
+      #else
       CFRelease(unescapedSource);
+      #endif
     }
+    #ifdef ARC_ENABLED
+    sourceText = sourceString ? [[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes]
+                              : sourceText;
+    #else
     sourceText = sourceString ? [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease]
                               : sourceText;
+    #endif
+
     if (mode == LATEX_MODE_EQNARRAY)
     {
+      #ifdef ARC_ENABLED
+      NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
+      [sourceText2 appendAttributedString:
+        [[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] ];
+      [sourceText2 appendAttributedString:sourceText];
+      [sourceText2 appendAttributedString:
+        [[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes]];
+      #else
       NSMutableAttributedString* sourceText2 = [[[NSMutableAttributedString alloc] init] autorelease];
       [sourceText2 appendAttributedString:
         [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
       [sourceText2 appendAttributedString:sourceText];
       [sourceText2 appendAttributedString:
         [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
+      #endif
       sourceText = sourceText2;
     }
     if (sourceText)
@@ -496,9 +588,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       CGPDFDictionaryRef catalog = !pdfDocument ? 0 : CGPDFDocumentGetCatalog(pdfDocument);
       NSMutableArray* streamObjects = [NSMutableArray array];
       if (catalog)
-        CGPDFDictionaryApplyFunction(catalog, extractStreamObjectsFunction, streamObjects);
+        CGPDFDictionaryApplyFunction(catalog, extractStreamObjectsFunction, (CHBRIDGE void*)streamObjects);
       if (pageDictionary)
-        CGPDFDictionaryApplyFunction(pageDictionary, extractStreamObjectsFunction, streamObjects);
+        CGPDFDictionaryApplyFunction(pageDictionary, extractStreamObjectsFunction, (CHBRIDGE void*)streamObjects);
       NSEnumerator* enumerator = [streamObjects objectEnumerator];
       id streamData = nil;
       NSData* pdfHeader = [@"%PDF" dataUsingEncoding:NSUTF8StringEncoding];
@@ -509,8 +601,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           ([streamAsData bridge_rangeOfData:pdfHeader options:NSDataSearchAnchored range:NSMakeRange(0, [streamAsData length])].location == NSNotFound) ?
           nil : streamAsData;
         NSData* pdfData2 = nil;
+        #ifdef ARC_ENABLED
+        NSDictionary* result2 = !streamAsPdfData ? nil :
+          [[self metaDataFromPDFData:streamAsPdfData useDefaults:NO outPdfData:&pdfData2] mutableCopy];
+        #else
         NSDictionary* result2 = !streamAsPdfData ? nil :
           [[[self metaDataFromPDFData:streamAsPdfData useDefaults:NO outPdfData:&pdfData2] mutableCopy] autorelease];
+        #endif
         if (result && outPdfData && pdfData2)
           *outPdfData = pdfData2;
         isLaTeXiTPDF |= (result2 != nil);
@@ -520,6 +617,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     NSDictionary* latexitMetadata = nil;
     if (!isLaTeXiTPDF)
     {
+      DebugLog(1, @">PDF scanning");
       CGPDFContentStreamRef contentStream = !page ? 0 :
         CGPDFContentStreamCreateWithPage(page);
       CGPDFOperatorTableRef operatorTable = CGPDFOperatorTableCreate();
@@ -530,6 +628,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       CGPDFScannerRelease(pdfScanner);
       CGPDFOperatorTableRelease(operatorTable);
       CGPDFContentStreamRelease(contentStream);
+      DebugLog(1, @"<PDF scanning");
     }//end if (!isLaTeXiTPDF)
     CGPDFDocumentRelease(pdfDocument);
     CGDataProviderRelease(dataProvider);
@@ -539,7 +638,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSAttributedString* preamble = !preambleAsString ? nil :
         [[NSAttributedString alloc] initWithString:preambleAsString attributes:defaultAttributes];
       [result setObject:(!preamble ? defaultPreambleAttributedString : preamble) forKey:@"preamble"];
+      #ifdef ARC_ENABLED
+      #else
       [preamble release];
+      #endif
 
       NSNumber* modeAsNumber = [latexitMetadata objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
@@ -552,16 +654,27 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (mode == LATEX_MODE_EQNARRAY)
       {
         NSMutableAttributedString* sourceText2 = [[NSMutableAttributedString alloc] init];
+        #ifdef ARC_ENABLED
+        [sourceText2 appendAttributedString:
+          [[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] ];
+        [sourceText2 appendAttributedString:sourceText];
+        [sourceText2 appendAttributedString:
+          [[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] ];
+        #else
         [sourceText2 appendAttributedString:
           [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:defaultAttributes] autorelease]];
         [sourceText2 appendAttributedString:sourceText];
         [sourceText2 appendAttributedString:
           [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:defaultAttributes] autorelease]];
         [sourceText release];
+        #endif
         sourceText = sourceText2;
       }
       [result setObject:sourceText forKey:@"sourceText"];
+      #ifdef ARC_ENABLED
+      #else
       [sourceText release];
+      #endif
       
       NSNumber* pointSizeAsNumber = [latexitMetadata objectForKey:@"magnification"];
       [result setObject:(pointSizeAsNumber ? pointSizeAsNumber :
@@ -602,17 +715,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti
 {
   BOOL result = NO;
-  if (UTTypeConformsTo((CFStringRef)uti, CFSTR("com.adobe.pdf")))
+  if (UTTypeConformsTo((CHBRIDGE CFStringRef)uti, CFSTR("com.adobe.pdf")))
     result = YES;
-  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.tiff")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)uti, CFSTR("public.tiff")))
     result = YES;
-  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.png")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)uti, CFSTR("public.png")))
     result = YES;
-  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.jpeg")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)uti, CFSTR("public.jpeg")))
     result = YES;
-  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.svg-image")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)uti, CFSTR("public.svg-image")))
     result = YES;
-  else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.html")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)uti, CFSTR("public.html")))
     result = YES;
   return result;
 }
@@ -634,18 +747,22 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSArray* result = nil;
   NSMutableArray* equations = [NSMutableArray arrayWithCapacity:1];
-  if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+  if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tiff")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.tiff")))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.png")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.png")))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.jpeg")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.jpeg")))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.svg-image")))
   {
     NSError* error = nil;
+    #ifdef ARC_ENABLED
+    NSString* string = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
+    #else
     NSString* string = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+    #endif
     NSArray* descriptions =
       [string componentsMatchedByRegex:@"<svg(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</svg>"
                                options:RKLCaseless|RKLMultiline|RKLDotAll
@@ -660,10 +777,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [equations safeAddObject:[self latexitEquationWithData:subData sourceUTI:sourceUTI useDefaults:useDefaults]];
     }//end for each description
   }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+  else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.html")))
   {
     NSError* error = nil;
+    #ifdef ARC_ENABLED
+    NSString* string = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
+    #else
     NSString* string = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+    #endif
     NSArray* descriptions =
       [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
                                options:RKLCaseless|RKLMultiline|RKLDotAll
@@ -690,25 +811,41 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   id instance = [[[self class] alloc] initWithPDFData:someData preamble:aPreamble sourceText:aSourceText
                                               color:aColor pointSize:aPointSize date:aDate mode:aMode
                                               backgroundColor:backgroundColor];
-  return [instance autorelease];
+  #ifdef ARC_ENABLED
+  #else
+  [instance autorelease];
+  #endif
+  return instance;
 }
 //end latexitEquationWithPDFData:preamble:sourceText:color:pointSize:date:mode:backgroundColor:
 
 +(id) latexitEquationWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults
 {
+  #ifdef ARC_ENABLED
+  return [[[self class] alloc] initWithMetaData:metaData useDefaults:useDefaults];
+  #else
   return [[[[self class] alloc] initWithMetaData:metaData useDefaults:useDefaults] autorelease];
+  #endif
 }
 //end latexitEquationWithData:sourceUTI:useDefaults:
 
 +(id) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults
 {
+  #ifdef ARC_ENABLED
+  return [[[self class] alloc] initWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults];
+  #else
   return [[[[self class] alloc] initWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults] autorelease];
+  #endif
 }
 //end latexitEquationWithData:sourceUTI:useDefaults:
 
 +(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
 {
+  #ifdef ARC_ENABLED
+  return [[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults];
+  #else
   return [[[[self class] alloc] initWithPDFData:someData useDefaults:useDefaults] autorelease];
+  #endif
 }
 //end latexitEquationWithPDFData:useDefaults:
 
@@ -736,7 +873,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self setSourceText:aSourceText];
   [self setColor:aColor];
   [self setPointSize:aPointSize];
+  #ifdef ARC_ENABLED
+  [self setDate:aDate ? [aDate copy] : [NSDate date]];
+  #else
   [self setDate:aDate ? [[aDate copy] autorelease] : [NSDate date]];
+  #endif
   [self setMode:aMode];
   [self setTitle:nil];
     
@@ -849,7 +990,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
   if (!isLaTeXiTPDF)
   {
+    #ifdef ARC_ENABLED
+    #else
     [self release];
+    #endif
     self = nil;
   }//end if (!isLaTeXiTPDF)
 
@@ -1127,19 +1271,24 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   id result = nil;
   if (!sourceUTI)
+  {
+    #ifdef ARC_ENABLED
+    #else
     [self release];
+    #endif
+  }//end if (!sourceUTI)
   else//if (sourceUTI)
   {
-    if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"com.adobe.pdf"))
+    if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
       result = [self initWithPDFData:someData useDefaults:useDefaults];
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.tiff")||
-             UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.png")||
-             UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.jpeg"))
+    else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.tiff"))||
+             UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.png"))||
+             UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.jpeg")))
     {
-      CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)someData, (CFDictionaryRef)
+      CGImageSourceRef imageSource = CGImageSourceCreateWithData((CHBRIDGE CFDataRef)someData, (CHBRIDGE CFDictionaryRef)
         [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
       CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
-      id infos = [(NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+      id infos = [(CHBRIDGE NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
       id annotationBase64 = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifUserComment];
       NSData* annotationData = ![annotationBase64 isKindOfClass:[NSString class]] ? nil :
         [NSData dataWithBase64:annotationBase64];
@@ -1150,9 +1299,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (properties) CFRelease(properties);
       if (imageSource) CFRelease(imageSource);
     }//end if (tiff, png, jpeg)
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.svg-image"))
+    else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.svg-image")))
     {
+      #ifdef ARC_ENABLED
+      NSString* svgString = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
+      #else
       NSString* svgString = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      #endif
       NSString* annotationBase64 =
         [svgString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
           inRange:NSMakeRange(0, [svgString length]) capture:1 error:0];
@@ -1161,10 +1314,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.svg-image"))
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.html"))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.html")))
     {
+      #ifdef ARC_ENABLED
+      NSString* mathmlString = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
+      #else
       NSString* mathmlString = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      #endif
       NSString* annotationBase64 =
         [mathmlString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
           inRange:NSMakeRange(0, [mathmlString length]) capture:1 error:0];
@@ -1173,10 +1330,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.html"))
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.text"))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+    else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.text")))
     {
+      #ifdef ARC_ENABLED
+      NSString* string = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
+      #else
       NSString* string = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      #endif
       NSString* annotationBase64 = nil;
       if (!annotationBase64)
         annotationBase64 = [string stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
@@ -1192,9 +1353,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         result = nil;
       else
         result = [self initWithMetaData:metaData useDefaults:useDefaults];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.text"))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
     else
+    {
+      #ifdef ARC_ENABLED
+      #else
       [self release];
+      #endif
+    }
   }//end if (sourceUTI)
   return result;
 }
@@ -1231,21 +1397,27 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) dealloc
 {
   [self dispose];
+  #ifdef ARC_ENABLED
+  #else
   [super dealloc];
+  #endif
 }
 //end dealloc
 
 -(void) dispose
 {
   [[self class] cancelPreviousPerformRequestsWithTarget:self];
+  #ifdef ARC_ENABLED
+  #else
   [self->exportPrefetcher release];
+  #endif
   self->exportPrefetcher = nil;
 }
 //end dispose
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.7.5"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.8.0"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1288,6 +1460,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     NSAttributedString* oldSourceText = [self sourceText];
     NSDictionary* attributes = [oldSourceText attributesAtIndex:0 effectiveRange:0];
     NSMutableAttributedString* newSourceText = [[NSMutableAttributedString alloc] init];
+    #ifdef ARC_ENABLED
+    [newSourceText appendAttributedString:
+       [[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:attributes]];
+    [newSourceText appendAttributedString:oldSourceText];
+    [newSourceText appendAttributedString:
+       [[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:attributes]];
+    [self setSourceText:newSourceText];
+    #else
     [newSourceText appendAttributedString:
        [[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}\n" attributes:attributes] autorelease]];
     [newSourceText appendAttributedString:oldSourceText];
@@ -1295,6 +1475,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
        [[[NSAttributedString alloc] initWithString:@"\n\\end{eqnarray*}" attributes:attributes] autorelease]];
     [self setSourceText:newSourceText];
     [newSourceText release];
+    #endif
     [[self managedObjectContext] enableUndoRegistration];
   }//end if ([self mode] == LATEX_MODE_EQNARRAY)
 }
@@ -1311,7 +1492,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   @synchronized(self)
   {
+    #ifdef ARC_ENABLED
+    #else
     [self->pdfCachedImage release];
+    #endif
     self->pdfCachedImage = nil;
   }//@synchronized(self)
 }
@@ -1362,7 +1546,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"pdfCachedImage"];
   @synchronized(self)
   {
+    #ifdef ARC_ENABLED
+    #else
     [self->pdfCachedImage release];
+    #endif
     self->pdfCachedImage = nil;
   }//end @synchronized(self)
   if (value != [self pdfData])
@@ -1391,7 +1578,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           [equationData setPrimitiveValue:self forKey:@"equation"];//if managedObjectContext is nil, this is necessary
           [equationData didChangeValueForKey:@"equation"];
         }//end if (equationData)
+        #ifdef ARC_ENABLED
+        #else
         [equationData release];
+        #endif
       }//end if (!equationData)
       [equationData setPdfData:value];
     }//end //if (!self->isModelPrior250)
@@ -1646,7 +1836,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end for each representation
       if (!hasPdfOrBitmapImageRep)
       {
+        #ifdef ARC_ENABLED
+        #else
         [self->pdfCachedImage release];
+        #endif
         result = nil;
       }//end if (!hasPdfOrBitmapImageRep)
     }//end if (result)
@@ -1664,7 +1857,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [self->pdfCachedImage addRepresentation:pdfImageRep];
         if (![self->pdfCachedImage bitmapImageRepresentationWithMaxSize:NSMakeSize(0, 128)])//to help drawing in library
           [self->pdfCachedImage bitmapImageRepresentation];
+        #ifdef ARC_ENABLED
+        #else
         [pdfImageRep release];
+        #endif
         result = self->pdfCachedImage;
       }//end if (pdfImageRep)
     }//end if (!result)
@@ -1742,24 +1938,48 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(NSAttributedString*) encapsulatedSource//the body, with \[...\], $...$ or nothing according to the mode
 {
+  #ifdef ARC_ENABLED
+  NSMutableAttributedString* result = [[NSMutableAttributedString alloc] initWithAttributedString:[self sourceText]];
+  #else
   NSMutableAttributedString* result = [[[NSMutableAttributedString alloc] initWithAttributedString:[self sourceText]] autorelease];
+  #endif
   switch([self mode])
   {
     case LATEX_MODE_DISPLAY:
+      #ifdef ARC_ENABLED
+      [result insertAttributedString:[[NSAttributedString alloc] initWithString:@"\\["] atIndex:0];
+      [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"\\]"]];
+      #else
       [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\["] autorelease] atIndex:0];
       [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\]"] autorelease]];
+      #endif
       break;
     case LATEX_MODE_INLINE:
+      #ifdef ARC_ENABLED
+      [result insertAttributedString:[[NSAttributedString alloc] initWithString:@"$"] atIndex:0];
+      [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"$"]];
+      #else
       [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"$"] autorelease] atIndex:0];
       [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"$"] autorelease]];
+      #endif
       break;
     case LATEX_MODE_EQNARRAY:
+      #ifdef ARC_ENABLED
+      [result insertAttributedString:[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}"] atIndex:0];
+      [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"\\end{eqnarray*}"]];
+      #else
       [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\begin{eqnarray*}"] autorelease] atIndex:0];
       [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\end{eqnarray*}"] autorelease]];
+      #endif
       break;
     case LATEX_MODE_ALIGN:
+      #ifdef ARC_ENABLED
+      [result insertAttributedString:[[NSAttributedString alloc] initWithString:@"\\begin{align*}"] atIndex:0];
+      [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"\\end{align*}"]];
+      #else
       [result insertAttributedString:[[[NSAttributedString alloc] initWithString:@"\\begin{align*}"] autorelease] atIndex:0];
       [result appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\\end{align*}"] autorelease]];
+      #endif
       break;
     case LATEX_MODE_TEXT:
       break;
@@ -1995,7 +2215,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (!lazyDataProvider) [pboard setData:data forType:NSHTMLPboardType];
       if (!lazyDataProvider) [pboard setData:data forType:@"public.html"];
       {
+        #ifdef ARC_ENABLED
+        NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        #else
         NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+        #endif
         NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
         [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, @"public.text", nil] owner:lazyDataProvider];
         if (blockQuote)
@@ -2044,7 +2268,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
             uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   if (exportFormat == EXPORT_FORMAT_MATHML)
   {
+    #ifdef ARC_ENABLED
+    NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    #else
     NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    #endif
     NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
     if (blockQuote)
       [pasteboard setString:blockQuote forType:type];
@@ -2057,7 +2285,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.7.5", @"version",
+       @"2.8.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",
@@ -2082,9 +2310,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self beginUpdate];
   [self setPdfData:[description objectForKey:@"pdfData"]];
   NSString* string = [description objectForKey:@"preamble"];
+  #ifdef ARC_ENABLED
+  [self setPreamble:(!string ? nil : [[NSAttributedString alloc] initWithString:string])];
+  #else
   [self setPreamble:(!string ? nil : [[[NSAttributedString alloc] initWithString:string] autorelease])];
+  #endif
   string = [description objectForKey:@"sourceText"];
+  #ifdef ARC_ENABLED
+  [self setSourceText:(!string ? nil : [[NSAttributedString alloc] initWithString:string])];
+  #else
   [self setSourceText:(!string ? nil : [[[NSAttributedString alloc] initWithString:string] autorelease])];
+  #endif
   [self setColor:[NSColor colorWithRgbaString:[description objectForKey:@"color"]]];
   [self setPointSize:[[description objectForKey:@"pointSize"] doubleValue]];
   [self setMode:[[self class] latexModeFromString:[description objectForKey:@"mode"]]];

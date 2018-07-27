@@ -70,9 +70,12 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
  */
 - (void)dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
 	[name release];
 	[url release];
 	[super dealloc];
+  #endif
 }
 #endif
 
@@ -186,11 +189,18 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		theOSType = [self type];
 		theSignature = [self signature];
 
+    #ifdef ARC_ENABLED
+		theOSTypeString = !theOSType ? @"NULL" :
+      [[NSString alloc] initWithBytes:(char*)&theOSType length:4 encoding:NSUTF8StringEncoding];
+		theSignatureString = !theSignature ? @"NULL" :
+      [[NSString alloc] initWithBytes:(char*)&theSignature length:4 encoding:NSUTF8StringEncoding];
+    #else
 		theOSTypeString = !theOSType ? @"NULL" :
       [[[NSString alloc] initWithBytes:(char*)&theOSType length:4 encoding:NSUTF8StringEncoding] autorelease];
 		theSignatureString = !theSignature ? @"NULL" :
       [[[NSString alloc] initWithBytes:(char*)&theSignature length:4 encoding:NSUTF8StringEncoding] autorelease];
 
+    #endif
 		theLaunchTime = [self launchTime];
 		return [NSString stringWithFormat:@"name:\"%@\", procces ID: %i, time:[%ih %im %.1fs], type:'%@', signature:'%@'", [self name], [self processID], (int)theLaunchTime/3600,((int)theLaunchTime/60)%60,fmod(theLaunchTime, 60.0), theOSTypeString, theSignatureString];
 	}
@@ -201,7 +211,10 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
  */
 - (id)copy
 {
+  #ifdef ARC_ENABLED
+  #else
 	[self retain];
+  #endif
 	return self;
 }
 
@@ -219,9 +232,15 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 {
 	processSerialNumber = aProcessSerialNumber;
 	infoRec.processInfoLength = 0;
+  #ifdef ARC_ENABLED
+  #else
 	[name release];
+  #endif
 	name = nil;
+  #ifdef ARC_ENABLED
+  #else
 	[url release];
+  #endif
 	url = nil;
 }
 
@@ -255,7 +274,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
  */
 + (NDProcess *)processWithProcessSerialNumber: (ProcessSerialNumber)aProcessSerialNumber
 {
+  #ifdef ARC_ENABLED
+	NDProcess  * theInstance = [[NDProcess alloc] init];
+  #else
 	NDProcess  * theInstance = [[[NDProcess alloc] init] autorelease];
+  #endif
 	[theInstance setProcessSerialNumber:aProcessSerialNumber];
 	return theInstance;
 }
@@ -270,7 +293,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 
 	if( GetCurrentProcess( &theProcessSerialNumber ) == noErr )
 	{
+    #ifdef ARC_ENABLED
+		theInstance = [[NDProcess alloc] init];
+    #else
 		theInstance = [[[NDProcess alloc] init] autorelease];
+    #endif
 		[theInstance setProcessSerialNumber:theProcessSerialNumber];
 	}
 
@@ -287,7 +314,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 
 	if( GetFrontProcess( &theProcessSerialNumber ) == noErr )
 	{
+    #ifdef ARC_ENABLED
+		theInstance = [[NDProcess alloc] init];
+    #else
 		theInstance = [[[NDProcess alloc] init] autorelease];
+    #endif
 		[theInstance setProcessSerialNumber:theProcessSerialNumber];
 	}
 
@@ -304,7 +335,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 	
 	if( GetProcessForPID( aPid, &theProcessSerialNumber) == noErr )
 	{
+    #ifdef ARC_ENABLED
+		theInstance = [[NDProcess alloc] init];
+    #else
 		theInstance = [[[NDProcess alloc] init] autorelease];
+    #endif
 		[theInstance setProcessSerialNumber:theProcessSerialNumber];
 	}
 	
@@ -322,7 +357,10 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		self = [self initWithProcessSerialNumber:theProcessSerialNumber];
 	else
 	{
+    #ifdef ARC_ENABLED
+    #else
 		[self release];
+    #endif
 		self = nil;
 	}
 	
@@ -340,7 +378,10 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		self = [self initWithProcessSerialNumber:theProcessSerialNumber];
 	else
 	{
+    #ifdef ARC_ENABLED
+    #else
 		[self release];
+    #endif
 		self = nil;
 	}
 	
@@ -358,7 +399,10 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		self = [self initWithProcessSerialNumber:theProcessSerialNumber];
 	else
 	{
+    #ifdef ARC_ENABLED
+    #else
 		[self release];
+    #endif
 		self = nil;
 	}
 
@@ -634,7 +678,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
  */
 - (NDProcess *)launcher
 {
+  #ifdef ARC_ENABLED
+	return [self fillProcessInfoRec] ? [[NDProcess alloc] initWithProcessSerialNumber:infoRec.processLauncher] : nil;
+  #else
 	return [self fillProcessInfoRec] ? [[[NDProcess alloc] initWithProcessSerialNumber:infoRec.processLauncher] autorelease] : nil;
+  #endif
 }
 
 /*
@@ -658,7 +706,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		infoRec.processAppRef = &theRef;
 
 		if( [self fillProcessInfoRec] && infoRec.processAppRef != NULL )
+      #ifdef ARC_ENABLED
+			url = [NSURL URLWithFSRef:&theRef];
+      #else
 			url = [[NSURL URLWithFSRef:&theRef] retain];
+      #endif
 		
 		infoRec.processAppRef = NULL;		// not valid after method call
 #else
@@ -712,7 +764,11 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
  */
 + (NDProcessesEnumerater *)processesEnumerater
 {
+  #ifdef ARC_ENABLED
+	return [[self alloc] init];
+  #else
 	return [[[self alloc] init] autorelease];
+  #endif
 }
 
 /*

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/01/13.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "ServiceRegularExpressionFiltersController.h"
@@ -41,7 +41,11 @@
 
 -(NSString*) applyFilter:(NSString*)value
 {
+  #ifdef ARC_ENABLED
+  NSMutableString* result = [value mutableCopy];
+  #else
   NSMutableString* result = [[value mutableCopy] autorelease];
+  #endif
   NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
   NSDictionary* filter = nil;
   while((filter = [enumerator nextObject]))
@@ -63,13 +67,22 @@
       }
     }//end if (enabled)
   }//end for each filter
-  return [[result copy] autorelease];
+  #ifdef ARC_ENABLED
+  result = [result copy];
+  #else
+  result = [[result copy] autorelease];
+  #endif
+  return result;
 }
 //end applyFilter:
 
 -(NSAttributedString*) applyFilterToAttributedString:(NSAttributedString*)value
 {
+  #ifdef ARC_ENABLED
+  NSMutableAttributedString* result = [value mutableCopy];
+  #else
   NSMutableAttributedString* result = [[value mutableCopy] autorelease];
+  #endif
   NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
   NSDictionary* filter = nil;
   while((filter = [enumerator nextObject]))
@@ -91,7 +104,12 @@
       }
     }//end if (enabled)
   }//end for each filter
-  return [[result copy] autorelease];
+  #ifdef ARC_ENABLED
+  result = [result copy];
+  #else
+  result = [[result copy] autorelease];
+  #endif
+  return result;
 }
 //end applyFilterToAttributedString:
 

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "BoolTransformer.h"
@@ -37,7 +37,11 @@
 
 +(id) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue
 {
+  #ifdef ARC_ENABLED
+  id result = [[[self class] alloc] initWithFalseValue:falseValue trueValue:trueValue];
+  #else
   id result = [[[[self class] alloc] initWithFalseValue:falseValue trueValue:trueValue] autorelease];
+  #endif
   return result;
 }
 //end transformerWithReference:
@@ -46,17 +50,25 @@
 {
   if ((!(self = [super init])))
     return nil;
+  #ifdef ARC_ENABLED
+  self->falseValue = aFalseValue;
+  self->trueValue  = aTrueValue;
+  #else
   self->falseValue = [aFalseValue retain];
   self->trueValue  = [aTrueValue  retain];
+  #endif
   return self;
 }
 //end initWithFalseValue:
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->falseValue release];
   [self->trueValue  release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 

@@ -3,13 +3,15 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
 
 #import "AppController.h"
 #import "BorderlessPanel.h"
+#import "ComposedTransformer.h"
+#import "IsKindOfClassTransformer.h"
 #import "LatexitEquation.h"
 #import "LibraryController.h"
 #import "LibraryEquation.h"
@@ -22,8 +24,11 @@
 #import "MyImageView.h"
 #import "NSArrayExtended.h"
 #import "NSSegmentedControlExtended.h"
+#import "NSObjectExtended.h"
 #import "NSOutlineViewExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
+#import "OutlineViewSelectedItemTransformer.h"
+#import "OutlineViewSelectedItemsTransformer.h"
 #import "PreferencesController.h"
 #import "Utils.h"
 
@@ -79,6 +84,20 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
   NSPoint point = [self->exportFormatPopUpButton frame].origin;
   [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
+  [self->exportFormatPopUpButton removeAllItems];
+  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"LaTeXiT", @"LaTeXiT")];
+  [[self->exportFormatPopUpButton lastItem] setTag:(int)LIBRARY_EXPORT_FORMAT_INTERNAL];
+  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"XML (Property list)", @"XML (Property list)")];
+  [[self->exportFormatPopUpButton lastItem] setTag:(int)LIBRARY_EXPORT_FORMAT_PLIST];
+  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"TeX Source", @"TeX Source")];
+  [[self->exportFormatPopUpButton lastItem] setTag:(int)LIBRARY_EXPORT_FORMAT_TEX_SOURCE];
+  
+  [self->exportOptionCommentedPreamblesButton setTitle:NSLocalizedString(@"Export commented preambles", @"Export commented preambles")];
+  [self->exportOptionUserCommentsButton setTitle:NSLocalizedString(@"Export user comments", @"Export user comments")];
+  [self->exportOptionIgnoreTitleHierarchyButton setTitle:NSLocalizedString(@"Ignore title hierarchy", @"Ignore title hierarchy")];
+  [self->exportOptionCommentedPreamblesButton sizeToFit];
+  [self->exportOptionUserCommentsButton sizeToFit];
+  [self->exportOptionIgnoreTitleHierarchyButton sizeToFit];
   
   NSMenu* actionMenu = [[NSMenu alloc] init];
   NSMenuItem* menuItem = nil;  
@@ -95,6 +114,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"Rename selection") action:@selector(renameItem:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"Remove selection") action:@selector(removeSelectedItems:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
+  [actionMenu addItem:[NSMenuItem separatorItem]];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Show comments pane", @"Show comments pane") action:@selector(toggleCommentsPane:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
@@ -123,6 +144,11 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->libraryRowTypeSegmentedControl bind:NSSelectedTagBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryViewRowTypeKey] options:nil];
 
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelectionIsChanging:) name:NSOutlineViewSelectionIsChangingNotification object:self->libraryView];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelectionDidChange:) name:NSOutlineViewSelectionDidChangeNotification object:self->libraryView];
+  [self->commentTextView setDelegate:self];
+  [self outlineViewSelectionDidChange:nil];
+  
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:LibraryDisplayPreviewPanelKey options:NSKeyValueObservingOptionNew context:nil];
   [self observeValueForKeyPath:LibraryDisplayPreviewPanelKey ofObject:nil change:nil context:nil];
   [self bind:@"enablePreviewImage" toObject:[NSUserDefaultsController sharedUserDefaultsController]
@@ -147,6 +173,39 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       forSegment:0];
 }
 //end observeValueForKeyPath:ofObject:change:context:
+
+-(void) outlineViewSelectionIsChanging:(NSNotification *)notification
+{
+  if ([notification object] == self->libraryView)
+  {
+    [[self window] makeFirstResponder:self->libraryView];
+  }//end if (object == self->libraryView)
+}
+//end outlineViewSelectionIsChanging:
+
+-(void) outlineViewSelectionDidChange:(NSNotification *)notification
+{
+  if (!notification || ([notification object] == self->libraryView))
+  {
+    LibraryEquation* libraryEquation = [[self->libraryView selectedItem] dynamicCastToClass:[LibraryEquation class]];
+    NSString* comment = [libraryEquation comment];
+    [self->commentTextView setBackgroundColor:(libraryEquation != nil) ? [NSColor controlBackgroundColor] : [NSColor windowBackgroundColor]];
+    [self->commentTextView setEditable:(libraryEquation != nil)];
+    [self->commentTextView setString:!comment ? @"" : comment];
+  }//end if (!notification || ([notification object] == self->libraryView))
+}
+//end outlineViewSelectionDidChange:
+
+-(void) textDidEndEditing:(NSNotification*)aNotification
+{
+  if ([aNotification object] == self->commentTextView)
+  {
+    LibraryEquation* libraryEquation = [[self->libraryView selectedItem] dynamicCastToClass:[LibraryEquation class]];
+    NSString* comment = [[[self->commentTextView string] copy] autorelease];
+    [libraryEquation setComment:!comment || [comment isEqualToString:@""] ? nil : comment];
+  }//end if ([aNotification object] == self->commentTextView)
+}
+//end textDidEndEditing:
 
 -(IBAction) changeLibraryDisplayPreviewPanelState:(id)sender
 {
@@ -202,6 +261,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 }
 //end actionMenu
 
+-(BOOL) isCommentsPaneOpen
+{
+  BOOL result = ([self->commentDrawer state] == NSDrawerOpenState) || ([self->commentDrawer state] == NSDrawerOpeningState);
+  return result;
+}
+//end isCommentsPaneOpen
+
 -(BOOL) validateMenuItem:(NSMenuItem*)menuItem
 {
   BOOL ok = [[self window] isVisible];
@@ -220,6 +286,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     ok &= [self canRemoveSelectedItems];
   else if ([menuItem action] == @selector(refreshItems:))
     ok &= [self canRefreshItems];
+  else if ([menuItem action] == @selector(toggleCommentsPane:))
+  {
+    [menuItem setTitle:
+      [self isCommentsPaneOpen] ?
+        NSLocalizedString(@"Hide comments pane", @"Hide comments pane") :
+        NSLocalizedString(@"Show comments pane", @"Show comments pane")];
+    ok = YES;
+  }//end if ([menuItem action] == @selector(toggleCommentsPane:))
   return ok;
 }
 //end validateMenuItem:
@@ -368,6 +442,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         LibraryEquation* libraryEquation = (LibraryEquation*)libraryItem;
         LatexitEquation* newLatexitEquation = [document latexitEquationWithCurrentStateTransient:NO];
         [newLatexitEquation setTitle:[libraryEquation title]];
+        [libraryEquation setComment:nil];
         [libraryEquation setEquation:newLatexitEquation];
         [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];
         if (item)
@@ -405,6 +480,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                                                    object:self->libraryView];
         [self->libraryView setNeedsDisplay:YES];
       }//end if !cancel
+      [self outlineViewSelectionDidChange:nil];
     }//end if selection is LibraryFile
   }//end if document
 }
@@ -415,6 +491,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->libraryView edit:sender];
 }
 //end renameItem:
+
+-(IBAction) toggleCommentsPane:(id)sender
+{
+  [self->commentDrawer toggle:sender];
+}
+//end toggleCommentsPane:
 
 -(IBAction) open:(id)sender
 {
@@ -505,8 +587,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   {
     BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
     NSArray* selectedLibraryItems = [self->libraryView selectedItems];
+    NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSNumber numberWithBool:([self->exportOptionCommentedPreamblesButton state] == NSOnState)], @"exportCommentedPreambles",
+      [NSNumber numberWithBool:([self->exportOptionUserCommentsButton state] == NSOnState)], @"exportUserComments",
+      [NSNumber numberWithBool:([self->exportOptionIgnoreTitleHierarchyButton state] == NSOnState)], @"ignoreTitleHierarchy",
+      nil];
     BOOL ok = [[LibraryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedLibraryItems
-                                              format:[exportFormatPopUpButton selectedTag]];
+                                              format:[exportFormatPopUpButton selectedTag]
+                                             options:options];
     if (!ok)
     {
       NSAlert* alert = [NSAlert
@@ -527,14 +615,39 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   switch((library_export_format_t)[sender selectedTag])
   {
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
+      [self->exportAccessoryView setFrame:
+        NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
       [self->savePanel setRequiredFileType:@"latexlib"];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
+      [self->exportAccessoryView setFrame:
+       NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
       [self->savePanel setRequiredFileType:@"plist"];
+      break;
+    case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
+      [self->exportAccessoryView setFrame:
+       NSMakeRect(0, 0, 
+         MAX(NSMaxX([self->exportFormatPopUpButton frame]),
+             MAX(NSMaxX([self->exportOptionCommentedPreamblesButton frame]),
+                 MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
+                     NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
+                  156)];
+      [self->savePanel setRequiredFileType:@"tex"];
       break;
   }
 }
 //end changeLibraryExportFormat:
+
+-(IBAction) librarySearchFieldChanged:(id)sender
+{
+  /*NSString* searchString = [[[sender dynamicCastToClass:[NSSearchField class]] stringValue] trim];
+  NSString* predicateString = !searchString || [searchString isEqualToString:@""] ? nil :
+    [NSString stringWithFormat:@"(title contains[cd] '%@') OR (equation.sourceText.string contains[cd] '%@')", searchString, searchString];
+  NSPredicate* predicate = !predicateString? nil :
+  [NSPredicate predicateWithFormat:predicateString];
+  [[self->libraryView libraryController] setFilterPredicate:predicate];*/
+}
+//end librarySearchFieldChanged:
 
 -(void) _updateButtons:(NSNotification *)aNotification
 {

@@ -11,7 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="81"/>
+			<integer value="1128"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -857,6 +857,26 @@
 									<reference key="NSMixedImage" ref="294559507"/>
 								</object>
 								<object class="NSMenuItem" id="802953469">
+									<reference key="NSMenu" ref="663913412"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="533649799"/>
+									<reference key="NSMixedImage" ref="294559507"/>
+								</object>
+								<object class="NSMenuItem" id="54294031">
+									<reference key="NSMenu" ref="663913412"/>
+									<string key="NSTitle">Afficher le panneau des commentaires</string>
+									<string key="NSKeyEquiv">b</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="533649799"/>
+									<reference key="NSMixedImage" ref="294559507"/>
+								</object>
+								<object class="NSMenuItem" id="970747860">
 									<reference key="NSMenu" ref="663913412"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -2244,6 +2264,14 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 					</object>
 					<int key="connectionID">1848</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">libraryToggleCommentsPane:</string>
+						<reference key="source" ref="106613936"/>
+						<reference key="destination" ref="54294031"/>
+					</object>
+					<int key="connectionID">1853</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -2805,6 +2833,8 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 							<reference ref="1018350283"/>
 							<reference ref="66597477"/>
 							<reference ref="1052600679"/>
+							<reference ref="970747860"/>
+							<reference ref="54294031"/>
 						</array>
 						<reference key="parent" ref="794232171"/>
 					</object>
@@ -3268,6 +3298,16 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<reference key="object" ref="77741620"/>
 						<reference key="parent" ref="925704490"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1849</int>
+						<reference key="object" ref="970747860"/>
+						<reference key="parent" ref="663913412"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1850</int>
+						<reference key="object" ref="54294031"/>
+						<reference key="parent" ref="663913412"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3293,7 +3333,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<boolean value="YES" key="1118.ImportedFromIB2"/>
 				<string key="1123.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1123.ImportedFromIB2"/>
-				<string key="1128.IBEditorWindowLastContentRect">{{443, 493}, {289, 243}}</string>
+				<string key="1128.IBEditorWindowLastContentRect">{{645, 426}, {357, 273}}</string>
 				<string key="1128.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1128.ImportedFromIB2"/>
 				<string key="1129.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3508,8 +3548,12 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 				<boolean value="YES" key="1820.ImportedFromIB2"/>
 				<string key="184.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="184.ImportedFromIB2"/>
+				<string key="1849.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1849.ImportedFromIB2"/>
 				<string key="185.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="185.ImportedFromIB2"/>
+				<string key="1850.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="1850.ImportedFromIB2"/>
 				<string key="187.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="187.ImportedFromIB2"/>
 				<string key="189.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3580,7 +3624,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1848</int>
+			<int key="maxID">1853</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3615,6 +3659,7 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						<string key="libraryRemoveSelectedItems:">id</string>
 						<string key="libraryRenameItem:">id</string>
 						<string key="librarySaveAs:">id</string>
+						<string key="libraryToggleCommentsPane:">id</string>
 						<string key="makeDonation:">id</string>
 						<string key="makeLatex:">id</string>
 						<string key="makeLatexAndExport:">id</string>
@@ -3747,6 +3792,10 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 						</object>
 						<object class="IBActionInfo" key="librarySaveAs:">
 							<string key="name">librarySaveAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="libraryToggleCommentsPane:">
+							<string key="name">libraryToggleCommentsPane:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="makeDonation:">
@@ -5533,6 +5582,27 @@ dXMgcG91dmV6IGVuIHByb2ZpdGVyIGNvbW1lIHRlbC4</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">QuartzComposer.framework/Headers/QCCompositionPickerView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CAAnimation.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CALayer.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

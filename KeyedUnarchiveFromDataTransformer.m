@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "KeyedUnarchiveFromDataTransformer.h"
@@ -37,7 +37,11 @@
 
 +(id) transformer
 {
+  #ifdef ARC_ENABLED
+  id result = [[[self class] alloc] init];
+  #else
   id result = [[[[self class] alloc] init] autorelease];
+  #endif
   return result;
 }
 //end transformer

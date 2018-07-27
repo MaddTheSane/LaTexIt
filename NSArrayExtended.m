@@ -1,7 +1,7 @@
 //  NSArrayExtended.m
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 
@@ -42,7 +42,11 @@
 
 -(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index
 {
+  #ifdef ARC_ENABLED
+  NSMutableArray* result = [self mutableCopy];
+  #else
   NSMutableArray* result = [[self mutableCopy] autorelease];
+  #endif
   [result insertObject:object atIndex:index];
   return result;
 }
@@ -50,7 +54,11 @@
 
 -(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
 {
+  #ifdef ARC_ENABLED
+  NSMutableArray* result = [self mutableCopy];
+  #else
   NSMutableArray* result = [[self mutableCopy] autorelease];
+  #endif
   [result moveObjectsAtIndices:indices toIndex:index];
   return result;
 }
@@ -77,7 +85,12 @@
         [result addObject:object];
     }
   }//end if (!exactClass)
-  return [[result copy] autorelease];
+  #ifdef ARC_ENABLED
+  result = [result copy];
+  #else
+  result = [[result copy] autorelease];
+  #endif
+  return result;
 }
 //end filteredArrayWithItemsOfClass:exactClass:
 
@@ -92,10 +105,16 @@
     id copyOfObject =
       [object respondsToSelector:@selector(deepCopyWithZone:)] ? [object deepCopyWithZone:zone] : [object copyWithZone:zone];
     [clone addObject:copyOfObject];
+    #ifdef ARC_ENABLED
+    #else
     [copyOfObject release];
+    #endif
   }//end for each object
   NSArray* immutableClone = [[NSArray allocWithZone:zone] initWithArray:clone];
+  #ifdef ARC_ENABLED
+  #else
   [clone release];
+  #endif
   return immutableClone;
 }
 //end deepCopyWithZone:
@@ -113,7 +132,10 @@
          ? [object deepMutableCopyWithZone:zone]
          : ([object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] : [object copyWithZone:zone]);
     [clone addObject:copyOfObject];
+    #ifdef ARC_ENABLED
+    #else
     [copyOfObject release];
+    #endif
   }//end for each object
   return clone;
 }

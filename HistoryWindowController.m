@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -16,6 +16,8 @@
 #import "MyDocument.h"
 #import "NSManagedObjectContextExtended.h"
 #import "PreferencesController.h"
+#import "NSObjectExtended.h"
+#import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "Utils.h"
 
@@ -225,6 +227,17 @@
   }
 }
 //end changeLibraryExportFormat:
+
+-(IBAction) historySearchFieldChanged:(id)sender
+{
+  NSString* searchString = [[[sender dynamicCastToClass:[NSSearchField class]] stringValue] trim];
+  NSString* predicateString = !searchString || [searchString isEqualToString:@""] ? nil :
+    [NSString stringWithFormat:@"equation.sourceText.string contains[cd] '%@'", searchString];
+  NSPredicate* predicate = !predicateString? nil :
+    [NSPredicate predicateWithFormat:predicateString];
+  [[self->historyView historyItemsController] setFilterPredicate:predicate];
+}
+//end historySearchFieldChanged:
 
 -(IBAction) open:(id)sender
 {

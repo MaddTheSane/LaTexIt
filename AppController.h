@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -127,10 +127,11 @@
 -(IBAction) libraryOpenEquation:(id)sender;
 -(IBAction) libraryOpenLinkedEquation:(id)sender;
 -(IBAction) libraryImportCurrent:(id)sender; //creates a library item with the current document state
--(IBAction) libraryNewFolder:(id)sender;     //creates a folder
--(IBAction) libraryRemoveSelectedItems:(id)sender;    //removes some items
--(IBAction) libraryRenameItem:(id)sender;   //rename an item
--(IBAction) libraryRefreshItems:(id)sender;   //refresh an item
+-(IBAction) libraryNewFolder:(id)sender;
+-(IBAction) libraryRemoveSelectedItems:(id)sender;
+-(IBAction) libraryRenameItem:(id)sender;
+-(IBAction) libraryRefreshItems:(id)sender;
+-(IBAction) libraryToggleCommentsPane:(id)sender;
 -(IBAction) libraryOpen:(id)sender;
 -(IBAction) librarySaveAs:(id)sender;
 -(IBAction) showOrHideLibrary:(id)sender;

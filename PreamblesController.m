@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreamblesController.h"
@@ -77,7 +77,10 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   [self removeObserver:self forKeyPath:@"arrangedObjects"];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:LatexisationSelectedPreambleIndexKey];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:ServiceSelectedPreambleIndexKey];
+  #ifdef ARC_ENABLED
+  #else
   [super dealloc];
+  #endif
 }
 //end dealloc
 
@@ -108,8 +111,13 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 
 -(void) ensureDefaultPreamble
 {
+  #ifdef ARC_ENABLED
+  if (![[self arrangedObjects] count])
+    [self addObject:[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy]];
+  #else
   if (![[self arrangedObjects] count])
     [self addObject:[[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy] autorelease]];
+  #endif
 }
 //end ensureDefaultPreamble
 

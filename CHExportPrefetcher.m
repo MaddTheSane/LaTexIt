@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 30/05/14.
-//  Copyright 2014 __MyCompanyName__. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "CHExportPrefetcher.h"
@@ -33,10 +33,13 @@
 -(void) dealloc
 {
   [self invalidateAllData];
+  #ifdef ARC_ENABLED
+  #else
   [self->cache release];
   [self->fetchSemaphore release];
   [self->isFetchingData release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 
@@ -47,11 +50,19 @@
   {
     [self->cache setObject:self->isFetchingData forKey:[NSNumber numberWithInt:exportFormat]];
   }//end @synchronized(self->cache)
+  #ifdef ARC_ENABLED
+  [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+       [NSNumber numberWithInt:exportFormat], @"exportFormat",
+       [pdfData copy], @"pdfData",
+       nil]];
+  #else
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
      [NSDictionary dictionaryWithObjectsAndKeys:
        [NSNumber numberWithInt:exportFormat], @"exportFormat",
        [[pdfData copy] autorelease], @"pdfData",
        nil]];
+  #endif
 }
 //end prefetchForFormat:
 

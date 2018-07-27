@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSManagedObjectContextExtended.h"
@@ -79,8 +79,10 @@
     NSArray* managedObjects = [self executeFetchRequest:fetchRequest error:error];
     result = [managedObjects count];
   }
+  #ifdef ARC_ENABLED
+  #else
   [fetchRequest release];
-
+  #endif
   return result;
 }
 //end countForEntity:predicate:error:

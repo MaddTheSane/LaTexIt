@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "FileExistsTransformer.h"
@@ -37,7 +37,11 @@
 
 +(id) transformerWithDirectoryAllowed:(BOOL)directoryAllowed
 {
+  #ifdef ARC_ENABLED
+  id result = [[[self class] alloc] initWithDirectoryAllowed:directoryAllowed];
+  #else
   id result = [[[[self class] alloc] initWithDirectoryAllowed:directoryAllowed] autorelease];
+  #endif
   return result;
 }
 //end transformerWithDirectoryAllowed:

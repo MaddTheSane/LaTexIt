@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -76,7 +76,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 @end
 
 @class NSDraggingSession;
+#if defined(__clang__)
+#else
 typedef NSInteger NSDraggingContext;
+#endif
 
 @implementation MyImageView
 
@@ -426,6 +429,7 @@ typedef NSInteger NSDraggingContext;
 
 -(void) concludeDragOperation:(id <NSDraggingInfo>)sender
 {
+  DebugLog(1, @">concludeDragOperation");
   //overridden to avoid some strange additional "setImage" that would occur...
   NSPasteboard* pboard = [sender draggingPasteboard];
   if ([self->transientFilesPromisedFilePaths count] &&
@@ -435,6 +439,7 @@ typedef NSInteger NSDraggingContext;
   self->transientDragData = nil;
   [self->transientDragEquation release];
   self->transientDragEquation = nil;
+  DebugLog(1, @"<concludeDragOperation");
 }
 //end concludeDragOperation:
 
@@ -478,6 +483,7 @@ typedef NSInteger NSDraggingContext;
 
 -(void) performProgrammaticDragCancellation:(id)context
 {
+  DebugLog(1, @">performProgrammaticDragCancellation");
   self->shouldRedrag = YES;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
@@ -493,10 +499,12 @@ typedef NSInteger NSDraggingContext;
   }//if (!isMacOS10_5OrAbove())
   CGEventPost(kCGHIDEventTap, cgEvent0);
   CFRelease(cgEvent0);
+  DebugLog(1, @"<");
 }//end performProgrammaticDragCancellation:
 
 -(void) performProgrammaticRedrag:(id)context
 {
+  DebugLog(1, @">performProgrammaticRedrag");
   self->shouldRedrag = YES;
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
@@ -536,6 +544,7 @@ typedef NSInteger NSDraggingContext;
   CFRelease(cgEvent1);
   CFRelease(cgEvent2);
   CFRelease(cgEvent3);
+  DebugLog(1, @"<performProgrammaticRedrag");
 }
 //end performProgrammaticRedrag:
 
@@ -631,6 +640,7 @@ typedef NSInteger NSDraggingContext;
 
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
+  DebugLog(1, @">");
   [self->document triggerSmartHistoryFeature];
 
   LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
@@ -645,12 +655,14 @@ typedef NSInteger NSDraggingContext;
     [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*//* NSFilenamesPboardType, NSURLPboardType,*/ nil]
                    owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
+  DebugLog(1, @"<");
 }
 //end _writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
 //provides lazy data to a pasteboard
 -(void) pasteboard:(NSPasteboard *)pasteboard provideDataForType:(NSString*)type
 {
+  DebugLog(1, @">pasteboard:%p provideDataForType:%@", pasteboard, type);
   PreferencesController* preferencesController = [PreferencesController sharedController];
   export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
   BOOL hasAlreadyCachedData = (self->transientDragData != nil) && (exportFormat == self->transientLastExportFormat);
@@ -768,6 +780,7 @@ typedef NSInteger NSDraggingContext;
         [pasteboard setString:blockQuote forType:type];
     }//end if (exportFormat == EXPORT_FORMAT_MATHML)
   }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
+  DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);
 }
 //end pasteboard:provideDataForType:
 
@@ -817,11 +830,13 @@ typedef NSInteger NSDraggingContext;
 
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
+  DebugLog(1, @">performDragOperation");
   BOOL result = [self _applyDataFromPasteboard:[sender draggingPasteboard] sender:sender];
   [self->transientDragData release];
   self->transientDragData = nil;
   [self->transientDragEquation release];
   self->transientDragEquation = nil;
+  DebugLog(1, @"<performDragOperation");
   return result;
 }
 //end performDragOperation:
@@ -1241,7 +1256,7 @@ typedef NSInteger NSDraggingContext;
     NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
     if (clipView)
     {
-      NSScrollView* scrollView = [[clipView superview] retain];
+      NSScrollView* scrollView = (NSScrollView*)[[clipView superview] retain];
       NSRect frame = [scrollView frame];
       NSView* superView = [scrollView superview];
       NSView* selfView = [self retain];

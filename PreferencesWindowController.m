@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -146,15 +146,32 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 {
   //get rid of formatter localization problems
   [self->generalPointSizeFormatter setLocale:[NSLocale currentLocale]];
+  [self->generalPointSizeFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+  [self->generalPointSizeFormatter setDecimalSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
+  NSString* generalPointSizeZeroSymbol =
+   [NSString stringWithFormat:@"0%@%0*d%@",
+     [self->generalPointSizeFormatter decimalSeparator], 2, 0, 
+     [self->generalPointSizeFormatter positiveSuffix]];
+  [self->generalPointSizeFormatter setZeroSymbol:generalPointSizeZeroSymbol];
+  
   [self->marginsAdditionalPointSizeFormatter setLocale:[NSLocale currentLocale]];
+  [self->marginsAdditionalPointSizeFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+  [self->marginsAdditionalPointSizeFormatter setDecimalSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
+  NSString* marginsAdditionalPointSizeZeroSymbol =
+  [NSString stringWithFormat:@"0%@%0*d%@",
+   [self->marginsAdditionalPointSizeFormatter decimalSeparator], 2, 0, 
+   [self->marginsAdditionalPointSizeFormatter positiveSuffix]];
+  [self->marginsAdditionalPointSizeFormatter setZeroSymbol:marginsAdditionalPointSizeZeroSymbol];
+  
   [self->servicePointSizeFactorFormatter setLocale:[NSLocale currentLocale]];
-  [self->generalPointSizeFormatter setZeroSymbol:
-    [NSString stringWithFormat:@"0%@%0*d", [self->generalPointSizeFormatter decimalSeparator], 2, 0]];
-  [self->marginsAdditionalPointSizeFormatter setZeroSymbol:
-    [NSString stringWithFormat:@"0%@%0*d", [self->marginsAdditionalPointSizeFormatter decimalSeparator], 2, 0]];
-  [self->servicePointSizeFactorFormatter setZeroSymbol:
-    [NSString stringWithFormat:@"0%@%0*d", [self->servicePointSizeFactorFormatter decimalSeparator], 2, 0]];
-
+  [self->servicePointSizeFactorFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
+  [self->servicePointSizeFactorFormatter setDecimalSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
+  NSString* servicePointSizeZeroSymbol =
+  [NSString stringWithFormat:@"0%@%0*d%@",
+   [self->servicePointSizeFactorFormatter decimalSeparator], 2, 0, 
+   [self->servicePointSizeFactorFormatter positiveSuffix]];
+  [self->servicePointSizeFactorFormatter setZeroSymbol:servicePointSizeZeroSymbol];
+  
   self->viewsMinSizes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
     [NSValue valueWithSize:[self->generalView frame].size], GeneralToolbarItemIdentifier,
     [NSValue valueWithSize:[self->editionView frame].size], EditionToolbarItemIdentifier,

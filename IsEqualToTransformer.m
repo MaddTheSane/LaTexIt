@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "IsEqualToTransformer.h"
@@ -37,7 +37,11 @@
 
 +(id) transformerWithReference:(id)reference
 {
+  #ifdef ARC_ENABLED
+  id result = [[[self class] alloc] initWithReference:reference];
+  #else
   id result = [[[[self class] alloc] initWithReference:reference] autorelease];
+  #endif
   return result;
 }
 //end transformerWithReference:
@@ -46,15 +50,22 @@
 {
   if ((!(self = [super init])))
     return nil;
+  #ifdef ARC_ENABLED
+  self->reference = aReference;
+  #else
   self->reference = [aReference retain];
+  #endif
   return self;
 }
 //end initWithFalseValue:
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->reference release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 

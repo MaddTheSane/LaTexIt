@@ -11,6 +11,7 @@
 			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
+			<integer value="9740"/>
 			<integer value="573"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
@@ -55,9 +56,9 @@
 			<object class="NSNumberFormatter" id="394225193">
 				<dictionary class="NSMutableDictionary" key="NS.attributes">
 					<boolean value="YES" key="allowsFloats"/>
-					<object class="NSAttributedString" key="attributedStringForZero" id="897402977">
+					<object class="NSAttributedString" key="attributedStringForZero">
 						<string key="NSString">0,00 pt</string>
-						<dictionary key="NSAttributes" id="474047866">
+						<dictionary key="NSAttributes" id="266097268">
 							<object class="NSColor" key="NSColor" id="88963050">
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
@@ -81,10 +82,10 @@
 						</dictionary>
 					</object>
 					<string key="decimalSeparator">,</string>
-					<integer value="1000" key="formatterBehavior"/>
+					<integer value="1040" key="formatterBehavior"/>
 					<string type="base64-UTF8" key="groupingSeparator">wqA</string>
-					<object class="NSLocale" key="locale" id="842318810">
-						<string key="NS.identifier">fr_FR</string>
+					<object class="NSLocale" key="locale" id="1162">
+						<string key="NS.identifier"/>
 					</object>
 					<object class="NSDecimalNumberPlaceholder" key="maximum" id="678730628">
 						<int key="NS.exponent">3</int>
@@ -110,21 +111,24 @@
 				<string key="NS.negativeformat">-#,##0.00 pt</string>
 				<nil key="NS.positiveattrs"/>
 				<nil key="NS.negativeattrs"/>
-				<reference key="NS.zero" ref="897402977"/>
-				<object class="NSAttributedString" key="NS.nil">
-					<string key="NSString"/>
-				</object>
+				<nil key="NS.zero"/>
+				<nil key="NS.nil"/>
 				<object class="NSAttributedString" key="NS.nan">
 					<string key="NSString">NaN</string>
 					<dictionary key="NSAttributes" id="102562311"/>
 				</object>
 				<reference key="NS.min" ref="347029639"/>
 				<reference key="NS.max" ref="678730628"/>
-				<nil key="NS.rounding"/>
+				<object class="NSDecimalNumberHandler" key="NS.rounding">
+					<int key="NS.roundingmode">3</int>
+					<bool key="NS.raise.overflow">YES</bool>
+					<bool key="NS.raise.underflow">YES</bool>
+					<bool key="NS.raise.dividebyzero">YES</bool>
+				</object>
 				<string key="NS.decimal">,</string>
 				<string type="base64-UTF8" key="NS.thousand">wqA</string>
 				<bool key="NS.hasthousands">YES</bool>
-				<bool key="NS.localized">YES</bool>
+				<bool key="NS.localized">NO</bool>
 				<bool key="NS.allowsfloats">YES</bool>
 			</object>
 			<object class="NSCustomView" id="336593609">
@@ -561,7 +565,9 @@
 									<string key="decimalSeparator">,</string>
 									<integer value="1000" key="formatterBehavior"/>
 									<string type="base64-UTF8" key="groupingSeparator">wqA</string>
-									<reference key="locale" ref="842318810"/>
+									<object class="NSLocale" key="locale">
+										<string key="NS.identifier">fr_FR</string>
+									</object>
 									<object class="NSDecimalNumberPlaceholder" key="minimum" id="877011362">
 										<int key="NS.exponent">0</int>
 										<int key="NS.length">0</int>
@@ -1429,9 +1435,7 @@ A</bytes>
 																	<dictionary class="NSMutableDictionary" key="NS.attributes">
 																		<boolean value="YES" key="allowsFloats"/>
 																		<integer value="1040" key="formatterBehavior"/>
-																		<object class="NSLocale" key="locale" id="1162">
-																			<string key="NS.identifier"/>
-																		</object>
+																		<reference key="locale" ref="1162"/>
 																		<real value="0.0" key="minimum"/>
 																		<string key="negativeInfinitySymbol">-∞</string>
 																		<string key="nilSymbol"/>
@@ -4495,7 +4499,7 @@ bGVzIGNhcmFjdMOocmVzIGFjY2VudHXDqXM</bytes>
 																<object class="NSTableHeaderCell" key="NSHeaderCell">
 																	<int key="NSCellFlags">75628096</int>
 																	<int key="NSCellFlags2">2048</int>
-																	<string key="NSContents">Choisissez un export</string>
+																	<string key="NSContents">Select an export</string>
 																	<reference key="NSSupport" ref="26"/>
 																	<object class="NSColor" key="NSBackgroundColor">
 																		<int key="NSColorSpace">3</int>
@@ -5382,7 +5386,7 @@ lZSG8CJ+k2ShFiIggEAKA4ilGU5VlyKgpiaAK3NQfp/H+ABvG5YQRgiaMigIewAH1VbonweDonqiB8Hl
 AAMAAAABABEAAAEBAAMAAAABABEAAAECAAMAAAAEAAAEsgEDAAMAAAABAAUAAAEGAAMAAAABAAIAAAER
 AAQAAAABAAAACAESAAMAAAABAAEAAAEVAAMAAAABAAQAAAEWAAMAAAABABEAAAEXAAQAAAABAAAD8AEc
 AAMAAAABAAEAAAE9AAMAAAABAAIAAAFSAAMAAAABAAEAAAFTAAMAAAAEAAAEuodzAAcAABnsAAAEwgAA
-AAAACAAIAAgACAABAAEAAQABAAAZ7GFwcGwCEAAAbW50clJHQiBYWVogB94AAQAHABUALQAfYWNzcEFQ
+AAAACAAIAAgACAABAAEAAQABAAAZ7GFwcGwCEAAAbW50clJHQiBYWVogB98AAQAUABYAOQA5YWNzcEFQ
 UEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA0y1hcHBsAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARZGVzYwAAAVAAAABiZHNjbQAAAbQAAAJCY3BydAAA
 A/gAAADQd3RwdAAABMgAAAAUclhZWgAABNwAAAAUZ1hZWgAABPAAAAAUYlhZWgAABQQAAAAUclRSQwAA
@@ -5399,7 +5403,7 @@ AGUALQBMAEMARABMAEMARAAgAGMAbwB1AGwAZQB1AHIATABDAEQAIABDAG8AbABvAHIAaQBkAG8ATABD
 AEQAIABhACAAQwBvAHIAZQBzX2mCcgAgAEwAQwBEAEwAQwBEACAAYwBvAGwAbwByMKsw6TD8ACAATABD
 AEQEJgQyBDUEQgQ9BD4EOQAgBBYEGgAtBDQEOARBBD8EOwQ1BDkARgDkAHIAZwAtAEwAQwBEX2mCcm2y
 ZnaYb3k6VmgARgBhAHIAYgAtAEwAQwBEAFYA5AByAGkALQBMAEMARABMAEMARAAgAGMAbwBsAG8AcgBp
-zuy37AAgAEwAQwBEAAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSwgSW5jLiwgMjAxNAAAAAAAAAAAAAAA
+zuy37AAgAEwAQwBEAAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSwgSW5jLiwgMjAxNQAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWFlaIAAAAAAAAPNSAAEAAAAB
@@ -6146,7 +6150,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSCustomView" id="144431992">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSTabView" id="339706343">
@@ -6992,14 +6996,14 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 														<object class="NSTextField" id="622082523">
 															<reference key="NSNextResponder" ref="373018691"/>
 															<int key="NSvFlags">268</int>
-															<string key="NSFrame">{{15, 19}, {66, 17}}</string>
+															<string key="NSFrame">{{15, 19}, {115, 17}}</string>
 															<reference key="NSSuperview" ref="373018691"/>
 															<bool key="NSEnabled">YES</bool>
 															<object class="NSTextFieldCell" key="NSCell" id="261451936">
 																<int key="NSCellFlags">68288064</int>
 																<int key="NSCellFlags2">272630784</int>
-																<string key="NSContents">In folder :</string>
-																<reference key="NSSupport" ref="896030324"/>
+																<string key="NSContents">保存するフォルダ :</string>
+																<reference key="NSSupport" ref="1007842108"/>
 																<reference key="NSControlView" ref="622082523"/>
 																<reference key="NSBackgroundColor" ref="183832229"/>
 																<reference key="NSTextColor" ref="918017036"/>
@@ -7050,8 +7054,8 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 															<object class="NSButtonCell" key="NSCell" id="709655645">
 																<int key="NSCellFlags">-2080244160</int>
 																<int key="NSCellFlags2">201328640</int>
-																<string key="NSContents">New documents automatically have a background file</string>
-																<reference key="NSSupport" ref="896030324"/>
+																<string key="NSContents">新規作成でバックグラウンドファイル</string>
+																<reference key="NSSupport" ref="1007842108"/>
 																<reference key="NSControlView" ref="1051463985"/>
 																<int key="NSButtonFlags">1211912703</int>
 																<int key="NSButtonFlags2">2</int>
@@ -7072,8 +7076,8 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 															<object class="NSButtonCell" key="NSCell" id="89152961">
 																<int key="NSCellFlags">-2080244160</int>
 																<int key="NSCellFlags2">201459712</int>
-																<string key="NSContents">Synchronize preamble</string>
-																<reference key="NSSupport" ref="26"/>
+																<string key="NSContents">プリアンブルを同期</string>
+																<reference key="NSSupport" ref="790482706"/>
 																<reference key="NSControlView" ref="459001349"/>
 																<int key="NSButtonFlags">1211912703</int>
 																<int key="NSButtonFlags2">2</int>
@@ -7094,8 +7098,8 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 															<object class="NSButtonCell" key="NSCell" id="108358634">
 																<int key="NSCellFlags">-2080244160</int>
 																<int key="NSCellFlags2">201459712</int>
-																<string key="NSContents">Synchronize environment</string>
-																<reference key="NSSupport" ref="26"/>
+																<string key="NSContents">環境を同期</string>
+																<reference key="NSSupport" ref="790482706"/>
 																<reference key="NSControlView" ref="308969992"/>
 																<int key="NSButtonFlags">1211912703</int>
 																<int key="NSButtonFlags2">2</int>
@@ -7116,8 +7120,8 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 															<object class="NSButtonCell" key="NSCell" id="561959639">
 																<int key="NSCellFlags">-2080244160</int>
 																<int key="NSCellFlags2">201459712</int>
-																<string key="NSContents">Synchronize body</string>
-																<reference key="NSSupport" ref="26"/>
+																<string key="NSContents">本文を同期</string>
+																<reference key="NSSupport" ref="790482706"/>
 																<reference key="NSControlView" ref="107162989"/>
 																<int key="NSButtonFlags">1211912703</int>
 																<int key="NSButtonFlags2">2</int>
@@ -7157,7 +7161,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 									</array>
 									<string key="NSFrame">{{10, 33}, {554, 530}}</string>
 								</object>
-								<string key="NSLabel">Background synchronization</string>
+								<string key="NSLabel">バックグラウンドファイル同期</string>
 								<reference key="NSColor" ref="183832229"/>
 								<reference key="NSTabView" ref="339706343"/>
 							</object>
@@ -7173,6 +7177,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 					</object>
 				</array>
 				<string key="NSFrameSize">{600, 600}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 				<string key="NSExtension">NSResponder</string>
 			</object>
@@ -7546,14 +7551,14 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 			<object class="NSNumberFormatter" id="709213948">
 				<dictionary class="NSMutableDictionary" key="NS.attributes">
 					<boolean value="YES" key="allowsFloats"/>
-					<object class="NSAttributedString" key="attributedStringForZero" id="414977394">
+					<object class="NSAttributedString" key="attributedStringForZero">
 						<string key="NSString">0,00 pt</string>
-						<reference key="NSAttributes" ref="474047866"/>
+						<reference key="NSAttributes" ref="266097268"/>
 					</object>
 					<string key="decimalSeparator">,</string>
-					<integer value="1000" key="formatterBehavior"/>
+					<integer value="1040" key="formatterBehavior"/>
 					<string type="base64-UTF8" key="groupingSeparator">wqA</string>
-					<reference key="locale" ref="842318810"/>
+					<reference key="locale" ref="1162"/>
 					<object class="NSDecimalNumberPlaceholder" key="maximum" id="559778294">
 						<int key="NS.exponent">3</int>
 						<int key="NS.length">1</int>
@@ -7571,21 +7576,24 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 				<string key="NS.negativeformat">-#,##0.00 pt</string>
 				<nil key="NS.positiveattrs"/>
 				<nil key="NS.negativeattrs"/>
-				<reference key="NS.zero" ref="414977394"/>
-				<object class="NSAttributedString" key="NS.nil">
-					<string key="NSString"/>
-				</object>
+				<nil key="NS.zero"/>
+				<nil key="NS.nil"/>
 				<object class="NSAttributedString" key="NS.nan">
 					<string key="NSString">NaN</string>
 					<reference key="NSAttributes" ref="102562311"/>
 				</object>
 				<real value="-1000" key="NS.min"/>
 				<reference key="NS.max" ref="559778294"/>
-				<nil key="NS.rounding"/>
+				<object class="NSDecimalNumberHandler" key="NS.rounding">
+					<int key="NS.roundingmode">3</int>
+					<bool key="NS.raise.overflow">YES</bool>
+					<bool key="NS.raise.underflow">YES</bool>
+					<bool key="NS.raise.dividebyzero">YES</bool>
+				</object>
 				<string key="NS.decimal">,</string>
 				<string type="base64-UTF8" key="NS.thousand">wqA</string>
 				<bool key="NS.hasthousands">YES</bool>
-				<bool key="NS.localized">YES</bool>
+				<bool key="NS.localized">NO</bool>
 				<bool key="NS.allowsfloats">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="413223260">
@@ -9748,6 +9756,14 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 						<reference key="destination" ref="477631490"/>
 					</object>
 					<int key="connectionID">9923</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">generalLatexisationLaTeXModeSegmentedControl</string>
+						<reference key="source" ref="254957384"/>
+						<reference key="destination" ref="344085494"/>
+					</object>
+					<int key="connectionID">9924</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -13704,6 +13720,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 				<string key="1498.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1500.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1502.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<integer value="1040" key="1510.IBNumberFormatterBehaviorMetadataKey"/>
 				<boolean value="YES" key="1510.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="1510.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1807.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -13717,6 +13734,8 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 				<string key="2499.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2500.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2501.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<integer value="1040" key="284.IBNumberFormatterBehaviorMetadataKey"/>
+				<boolean value="YES" key="284.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="284.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="4156.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="4158.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -13735,6 +13754,8 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 					</object>
 				</object>
 				<string key="4917.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<integer value="1040" key="5078.IBNumberFormatterBehaviorMetadataKey"/>
+				<boolean value="YES" key="5078.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="5078.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="573.IBEditorWindowLastContentRect">{{303, 188}, {600, 485}}</string>
 				<string key="573.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -13775,7 +13796,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 				<string key="634.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="635.IBEditorWindowLastContentRect">{{241, 158}, {580, 332}}</string>
 				<string key="635.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="636.IBEditorWindowLastContentRect">{{567, 156}, {600, 600}}</string>
+				<string key="636.IBEditorWindowLastContentRect">{{528, 156}, {600, 600}}</string>
 				<string key="636.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="637.IBEditorWindowLastContentRect">{{39, 428}, {600, 133}}</string>
 				<string key="637.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -14168,7 +14189,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="969277587"/>
-						<string key="toolTip">supprimer l'élément sélectionné</string>
+						<string key="toolTip">delete selected item</string>
 					</object>
 				</object>
 				<string key="9685.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -14181,7 +14202,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="358608214"/>
-						<string key="toolTip">ajouter un élément</string>
+						<string key="toolTip">add en element</string>
 					</object>
 				</object>
 				<string key="9686.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -14361,7 +14382,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 				<string key="9874.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="9874.ImportedFromIB2"/>
 				<string key="9875.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="9876.IBEditorWindowLastContentRect">{{769, 410}, {174, 37}}</string>
+				<string key="9876.IBEditorWindowLastContentRect">{{730, 410}, {174, 37}}</string>
 				<string key="9876.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="9876.ImportedFromIB2"/>
 				<string key="9877.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -14425,7 +14446,7 @@ y/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">9923</int>
+			<int key="maxID">9924</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

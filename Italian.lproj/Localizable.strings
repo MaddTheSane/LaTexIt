@@ -268,6 +268,7 @@
 "Change library in use" = "Cambia libreria in uso";
 "Export the selection only" = "Esporta solo la selezione";
 "Format :" = "Formato :";
+"TeX Source" = "TeX Source";
 "Add a folder" = "Aggiungi una cartella";
 "Add current equation" = "Aggiungi l'attuale equazione";
 "Rename selection" = "Rinomina selezione";
@@ -277,6 +278,11 @@
 "Display the equations in real size on mouse over" = "Mostra l'equazione nelle dimensioni reali quando è sotto il cursore";
 "Open the equation in a document" = "Apri l'equazione in un documento";
 "Open the equation in a linked document" = "Apri l'equazione in un documento collegato";
+"Show comments pane" = "Show comments pane";
+"Hide comments pane" = "Hide comments pane";
+"Export commented preambles" = "Export commented preambles";
+"Export user comments" = "Export user comments";
+"Ignore title hierarchy" = "Ignore title hierarchy";
 
 /* History */
 "Add to current history" = "Aggiungi all'attuale cronologia";

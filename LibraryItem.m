@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //A LibraryItem is similar to an XMLNode, in the way that it has parent (weak link to prevent cycling)
 //and children (strong link)
@@ -60,6 +60,7 @@ static NSEntityDescription* cachedEntity = nil;
   id clone = [[[self class] allocWithZone:zone] initWithParent:[self parent] insertIntoManagedObjectContext:[self managedObjectContext]];
   [clone setTitle:[self title]];
   [clone setSortIndex:[self sortIndex]];
+  [clone setComment:[self comment]];
   return clone;
 }
 //end copyWithZone:
@@ -113,6 +114,28 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end setSortIndex:
 
+-(NSString*) comment
+{
+  NSString* result = nil;
+  [self willAccessValueForKey:@"comment"];
+  result = [self primitiveValueForKey:@"comment"];
+  [self didAccessValueForKey:@"comment"];
+  return result;
+}
+//end comment
+
+-(void) setComment:(NSString*)value
+{
+  NSString* oldComment = [self comment];
+  if ((value != oldComment) && ![value isEqualToString:oldComment])
+  {
+    [self willChangeValueForKey:@"comment"];
+    [self setPrimitiveValue:value forKey:@"comment"];
+    [self didChangeValueForKey:@"comment"];
+  }//end if ((value != oldComment) && ![value isEqualToString:oldComment])
+}
+//end setComment:
+
 -(LibraryItem*) parent
 {
   LibraryItem* result = nil;
@@ -152,6 +175,24 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end brothersIncludingMe:
 
+-(NSArray*) titlePath
+{
+  NSArray* result = nil;
+  NSString* titleClone = [[[self title] copy] autorelease];
+  if (!titleClone)
+    result = [NSArray array];
+  else if (!self->parent)
+    result = [NSArray arrayWithObject:titleClone];
+  else
+  {
+    NSMutableArray* array = [NSMutableArray arrayWithArray:[[self parent] titlePath]];
+    [array addObject:titleClone];
+    result = [[array copy] autorelease];
+  }
+  return result;
+}
+//end titlePath
+
 -(void) setBestTitle//computes best title in current context
 {
   NSString* itemTitle = [self title];
@@ -178,24 +219,27 @@ static NSEntityDescription* cachedEntity = nil;
     return nil;
   [self setTitle:[coder decodeObjectForKey:@"title"]];
   [self setSortIndex:[coder decodeIntForKey:@"sortIndex"]];
+  [self setComment:[coder decodeObjectForKey:@"comment"]];  
   return self;
 }
 //end initWithCoder:
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.7.5" forKey:@"version"];
+  [coder encodeObject:@"2.8.0" forKey:@"version"];
   [coder encodeObject:[self title] forKey:@"title"];
   [coder encodeInt:[self sortIndex] forKey:@"sortIndex"];
+  [coder encodeObject:[self comment] forKey:@"comment"];
 }
 //end encodeWithCoder:
 
 -(id) plistDescription
 {
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"2.7.5", @"version",
+     @"2.8.0", @"version",
      [self title], @"title",
      [NSNumber numberWithUnsignedInt:[self sortIndex]], @"sortIndex",
+     [self comment], @"comment",
      nil];
   return plist;
 }
@@ -213,6 +257,7 @@ static NSEntityDescription* cachedEntity = nil;
   }
   [self setTitle:[description objectForKey:@"title"]];
   [self setSortIndex:[[description objectForKey:@"sortIndex"] unsignedIntValue]];
+  [self setComment:[description objectForKey:@"comment"]];
   return self;
 }
 //end initWithDescription:

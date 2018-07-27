@@ -268,6 +268,7 @@
 "Change library in use" = "Change library in use";
 "Export the selection only" = "Export the selection only";
 "Format :" = "Format :";
+"TeX Source" = "TeX Source";
 "Add a folder" = "Add a folder";
 "Add current equation" = "Add current equation";
 "Rename selection" = "Rename selection";
@@ -277,6 +278,11 @@
 "Display the equations in real size on mouse over" = "Display the equations in real size on mouse over";
 "Open the equation in a document" = "Open the equation in a document";
 "Open the equation in a linked document" = "Open the equation in a linked document";
+"Show comments pane" = "Show comments pane";
+"Hide comments pane" = "Hide comments pane";
+"Export commented preambles" = "Export commented preambles";
+"Export user comments" = "Export user comments";
+"Ignore title hierarchy" = "Ignore title hierarchy";
 
 /* History */
 "Add to current history" = "Add to current history";

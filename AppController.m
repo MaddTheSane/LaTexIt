@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -163,7 +163,7 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end retainCount
 
--(void) release
+-(oneway void) release
 {
 }
 //end release
@@ -1009,6 +1009,14 @@ static NSMutableDictionary* cachePaths = nil;
   {
     ok = [[self->libraryWindowController window] isVisible] && [self->libraryWindowController canRefreshItems];
   }
+  else if ([sender action] == @selector(libraryToggleCommentsPane:))
+  {
+    ok = [[self->libraryWindowController window] isVisible];
+    [sender setTitle:
+       ok && [self->libraryWindowController isCommentsPaneOpen] ?
+         NSLocalizedString(@"Hide comments pane", @"Hide comments pane") :
+         NSLocalizedString(@"Show comments pane", @"Show comments pane")];
+  }
   else if ([sender action] == @selector(libraryOpen:))
   {
     ok = [[self->libraryWindowController window] isVisible];
@@ -1631,29 +1639,35 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end libraryImportCurrent:
 
--(IBAction) libraryNewFolder:(id)sender     //creates a folder
+-(IBAction) libraryNewFolder:(id)sender
 {
   [[self libraryWindowController] newFolder:sender];
 }
 //end libraryNewFolder:
 
--(IBAction) libraryRemoveSelectedItems:(id)sender    //removes some items
+-(IBAction) libraryRemoveSelectedItems:(id)sender
 {
   [[self libraryWindowController] removeSelectedItems:sender];
 }
 //end libraryRemoveSelectedItems:
 
--(IBAction) libraryRenameItem:(id)sender    //rename some items
+-(IBAction) libraryRenameItem:(id)sender
 {
   [[self libraryWindowController] renameItem:sender];
 }
 //end libraryRenameItem:
 
--(IBAction) libraryRefreshItems:(id)sender   //refresh an item
+-(IBAction) libraryRefreshItems:(id)sender
 {
   [[self libraryWindowController] refreshItems:sender];
 }
 //end libraryRefreshItems:
+
+-(IBAction) libraryToggleCommentsPane:(id)sender
+{
+  [[self libraryWindowController] toggleCommentsPane:sender];
+}
+//end libraryToggleCommentsPane:
 
 -(IBAction) libraryOpen:(id)sender
 {

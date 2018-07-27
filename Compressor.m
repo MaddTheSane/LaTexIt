@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 17/02/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //This file is useful to zip-[un]compress NSData
 
@@ -38,9 +38,16 @@
         NSCAssert( YES, @"Error while compressing data: Insufficient memory" );
         break;
     }//end switch(error)
+    #ifdef ARC_ENABLED
+    #else
     [compData release];
+    #endif
   }//end if (data)
-  return [result autorelease];
+  #ifdef ARC_ENABLED
+  #else
+  [result autorelease];
+  #endif
+  return result;
 }
 //end zipcompressDeprecated:
 
@@ -74,9 +81,16 @@
         DebugLog(0, @"Error while compressing data");
         break;
     }//end switch(error)
+    #ifdef ARC_ENABLED
+    #else
     [compData release];
+    #endif
   }//end if (data)
-  return [result autorelease];
+  #ifdef ARC_ENABLED
+  #else
+  [result autorelease];
+  #endif
+  return result;
 }
 //end zipcompress:level:
 
@@ -111,7 +125,10 @@
     }//end switch(error)
     if (error != Z_OK)
     {
+      #ifdef ARC_ENABLED
+      #else
       [decompData release];
+      #endif
       destLen = MAX(swappedDestLen, unswappedDestLen);
       void* test = malloc(destLen);
       BOOL ok = (test != 0);
@@ -133,9 +150,16 @@
           break;
       }//end switch(error)
     }//end if (error != Z_OK)
+    #ifdef ARC_ENABLED
+    #else
     [decompData release];
+    #endif
   }//end if (data)
-  return [result autorelease];
+  #ifdef ARC_ENABLED
+  #else
+  [result autorelease];
+  #endif
+  return result;
 }
 //end zipuncompressDeprecated:
 
@@ -164,9 +188,16 @@
         DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         break;
     }//end switch(error)
+    #ifdef ARC_ENABLED
+    #else
     [decompData release];
+    #endif
   }//end if (data)
-  return [result autorelease];
+  #ifdef ARC_ENABLED
+  #else
+  [result autorelease];
+  #endif
+  return result;
 }
 //end zipuncompress:
 

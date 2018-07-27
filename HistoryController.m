@@ -3,12 +3,15 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryController.h"
 #import "HistoryManager.h"
 
+#import "HistoryItem.h"
+#import "LatexitEquation.h"
+#import "NSObjectExtended.h"
 #import "Utils.h"
 
 @implementation HistoryController
@@ -27,7 +30,10 @@
 -(void) dealloc
 {
   [self removeObserver:self forKeyPath:NSContentBinding];
+  #ifdef ARC_ENABLED
+  #else
   [super dealloc];
+  #endif
 }
 //end dealloc
 

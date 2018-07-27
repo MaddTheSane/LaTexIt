@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "BodyTemplatesController.h"
@@ -58,17 +58,36 @@ static NSDictionary* noneBodyTemplate = nil;
 
 +(NSMutableDictionary*) bodyTemplateDictionaryForEnvironment:(NSString*)environment
 {
+  #ifdef ARC_ENABLED
+  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+           [NSMutableString stringWithString:environment], @"name",
+           [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]], @"head",
+           [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]], @"tail",
+           nil];
+  #else
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
            [NSMutableString stringWithString:environment], @"name",
            [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]] autorelease], @"head",
            [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]] autorelease], @"tail",
            nil];
+  #endif
   return result;
 }
 //end bodyTemplateDictionaryForEnvironment:
 
 +(NSMutableDictionary*) bodyTemplateDictionaryEncodedForEnvironment:(NSString*)environment
 {
+  #ifdef ARC_ENABLED
+  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+           [NSMutableString stringWithString:environment], @"name",
+           [NSKeyedArchiver archivedDataWithRootObject:
+             [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]]],
+           @"head",
+           [NSKeyedArchiver archivedDataWithRootObject:
+             [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]]],
+           @"tail",
+           nil];
+  #else
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
            [NSMutableString stringWithString:environment], @"name",
            [NSKeyedArchiver archivedDataWithRootObject:
@@ -78,6 +97,7 @@ static NSDictionary* noneBodyTemplate = nil;
              [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]] autorelease]],
            @"tail",
            nil];
+  #endif
   return result;
 }
 //end bodyTemplateDictionaryEncodedForEnvironment:
@@ -113,7 +133,10 @@ static NSDictionary* noneBodyTemplate = nil;
   [self removeObserver:self forKeyPath:@"arrangedObjects"];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:LatexisationSelectedBodyTemplateIndexKey];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:ServiceSelectedBodyTemplateIndexKey];
+  #ifdef ARC_ENABLED
+  #else
   [super dealloc];
+  #endif
 }
 //end dealloc
 

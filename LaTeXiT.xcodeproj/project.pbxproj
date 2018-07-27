@@ -321,6 +321,14 @@
 		9375F95610296C9C00421561 /* NSActionTemplate10_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 9375F95510296C9C00421561 /* NSActionTemplate10_4.png */; };
 		9375FC7C102ADDF000421561 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9375FC7B102ADDF000421561 /* PreferencesWindow.m */; };
 		937A39870FE2F1AC000BEE6E /* MySplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937A39860FE2F1AC000BEE6E /* MySplitView.m */; };
+		937CFAE01B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
+		937CFAE11B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
+		937CFB8D1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */; };
+		937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */; };
+		937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; };
+		937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; };
+		937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; };
+		937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; };
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
@@ -389,6 +397,7 @@
 		93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
 		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */; };
+		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
 		93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; };
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
 		93B583131014704700907B47 /* NSManagedObjectContextExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9309974E1013450200C38C4E /* NSManagedObjectContextExtended.m */; };
@@ -458,7 +467,6 @@
 		93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.nib */; };
 		93F9DFD008A38ECA005DEBF6 /* poisson.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */; };
 		93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
-		93FA9A30156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
 		93FA9A331569280000268E55 /* current-version-it.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A311569280000268E55 /* current-version-it.rtf */; };
 		93FA9A361569282300268E55 /* latexit-changelog-it.html in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A341569282300268E55 /* latexit-changelog-it.html */; };
 		93FA9A391569282F00268E55 /* latexit-sparkle-it.rss in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */; };
@@ -895,6 +903,13 @@
 		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		937A39850FE2F1AC000BEE6E /* MySplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySplitView.h; sourceTree = "<group>"; };
 		937A39860FE2F1AC000BEE6E /* MySplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySplitView.m; sourceTree = "<group>"; };
+		937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.7.0.xcdatamodel"; sourceTree = "<group>"; };
+		937CFB8B1B1E4864006AD93E /* IsKindOfClassTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IsKindOfClassTransformer.h; sourceTree = "<group>"; };
+		937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IsKindOfClassTransformer.m; sourceTree = "<group>"; };
+		937CFB951B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutlineViewSelectedItemsTransformer.h; sourceTree = "<group>"; };
+		937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutlineViewSelectedItemsTransformer.m; sourceTree = "<group>"; };
+		937CFBA51B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutlineViewSelectedItemTransformer.h; sourceTree = "<group>"; };
+		937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutlineViewSelectedItemTransformer.m; sourceTree = "<group>"; };
 		937D7CE80E48F315006F04E1 /* PreamblesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreamblesController.h; sourceTree = "<group>"; };
 		937D7CE90E48F315006F04E1 /* PreamblesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreamblesController.m; sourceTree = "<group>"; };
 		937D7D000E48F4E5006F04E1 /* DeepCopying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeepCopying.h; sourceTree = "<group>"; };
@@ -1748,6 +1763,7 @@
 				932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */,
 				93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */,
 				933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */,
+				937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */,
 				9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */,
 			);
 			name = "Data models";
@@ -1778,6 +1794,8 @@
 				93937E370FA4E29C007BEAC0 /* IsEqualToTransformer.m */,
 				93937FF20FA58788007BEAC0 /* IsInTransformer.h */,
 				93937FF30FA58788007BEAC0 /* IsInTransformer.m */,
+				937CFB8B1B1E4864006AD93E /* IsKindOfClassTransformer.h */,
+				937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */,
 				93937E390FA4E390007BEAC0 /* IsNotEqualToTransformer.h */,
 				93937E3A0FA4E390007BEAC0 /* IsNotEqualToTransformer.m */,
 				93937FF70FA58814007BEAC0 /* IsNotInTransformer.h */,
@@ -1788,10 +1806,14 @@
 				93A35BA3137EB6FE0006DC07 /* LogicTransformer.m */,
 				934880C90FB1CF4800FFACCE /* MutableTransformer.h */,
 				934880CA0FB1CF4800FFACCE /* MutableTransformer.m */,
-				9390D05D0FA7A54E0002100B /* ObjectTransformer.h */,
-				9390D05E0FA7A54E0002100B /* ObjectTransformer.m */,
 				9326550C1080AADE00603657 /* NSNumberIntegerShiftTransformer.h */,
 				9326550D1080AADE00603657 /* NSNumberIntegerShiftTransformer.m */,
+				9390D05D0FA7A54E0002100B /* ObjectTransformer.h */,
+				9390D05E0FA7A54E0002100B /* ObjectTransformer.m */,
+				937CFBA51B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.h */,
+				937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */,
+				937CFB951B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.h */,
+				937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */,
 			);
 			name = "Value transformers";
 			sourceTree = "<group>";
@@ -2349,6 +2371,7 @@
 				9396BA31194EE345003CD205 /* synchronization-scripts-help.rtfd in Resources */,
 				93C289D81967F5C30087EBBD /* backsync.png in Resources */,
 				93C289D91967F5C30087EBBD /* backsync@2x.png in Resources */,
+				93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2367,7 +2390,6 @@
 				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */,
 				936B925313898EE3007C8AF4 /* LaTeXMathML.js in Resources */,
 				936B925213898EDE007C8AF4 /* LaTeXMathML.pl in Resources */,
-				93FA9A30156927ED00268E55 /* Leggimi.rtfd in Resources */,
 				93FA9A331569280000268E55 /* current-version-it.rtf in Resources */,
 				93FA9A361569282300268E55 /* latexit-changelog-it.html in Resources */,
 				93FA9A391569282F00268E55 /* latexit-sparkle-it.rss in Resources */,
@@ -2596,6 +2618,10 @@
 				938BAEA71957340B005E3C6B /* FolderExistsTransformer.m in Sources */,
 				938BAED019573789005E3C6B /* FilePathLocalizedTransformer.m in Sources */,
 				939D4E041A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */,
+				937CFAE11B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */,
+				937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
+				937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */,
+				937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2667,6 +2693,10 @@
 				931B0FA019393053008C64E8 /* Semaphore.m in Sources */,
 				939846C21945137900FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */,
 				939D4E051A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */,
+				937CFAE01B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */,
+				937CFB8D1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
+				937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */,
+				937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

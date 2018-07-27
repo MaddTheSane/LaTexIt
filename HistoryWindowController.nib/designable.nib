@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10D573</string>
-		<string key="IBDocument.InterfaceBuilderVersion">761</string>
-		<string key="IBDocument.AppKitVersion">1038.29</string>
-		<string key="IBDocument.HIToolboxVersion">460.00</string>
+		<string key="IBDocument.SystemVersion">10K549</string>
+		<string key="IBDocument.InterfaceBuilderVersion">851</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">761</string>
+			<string key="NS.object.0">851</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<integer value="6"/>
@@ -16,7 +16,10 @@
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 		</array>
-		<dictionary class="NSMutableDictionary" key="IBDocument.Metadata"/>
+		<object class="NSMutableDictionary" key="IBDocument.Metadata">
+			<string key="NS.key.0">PluginDependencyRecalculationVersion</string>
+			<integer value="1" key="NS.object.0"/>
+		</object>
 		<array class="NSMutableArray" key="IBDocument.RootObjects" id="594853608">
 			<object class="NSCustomObject" id="663999578">
 				<string key="NSClassName">HistoryWindowController</string>
@@ -30,7 +33,7 @@
 			<object class="NSWindowTemplate" id="109988692">
 				<int key="NSWindowStyleMask">31</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{1026, 408}, {213, 241}}</string>
+				<string key="NSWindowRect">{{1026, 408}, {213, 261}}</string>
 				<int key="NSWTFlags">-260571136</int>
 				<string key="NSWindowTitle">Historique</string>
 				<string key="NSWindowClass">PalettePanel</string>
@@ -54,7 +57,7 @@
 										<object class="NSTableView" id="40188176">
 											<reference key="NSNextResponder" ref="674505079"/>
 											<int key="NSvFlags">4352</int>
-											<string key="NSFrameSize">{211, 204}</string>
+											<string key="NSFrameSize">{211, 197}</string>
 											<reference key="NSSuperview" ref="674505079"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
@@ -449,110 +452,118 @@ tpWs0lXn5jFj7qXjLqZgPp1n8xVp27PqFqrqtqvqxjWjJqJaPq6dlptqbl3jNo1qnjVqzrPrRrTrVqCg
 Fn2lboDqjqprjo7rXrrrtToICAAADwEAAAMAAAABAGQAAAEBAAMAAAABAGQAAAECAAMAAAAEAABRbgED
 AAMAAAABAAUAAAEGAAMAAAABAAIAAAERAAQAAAABAAAACAESAAMAAAABAAEAAAEVAAMAAAABAAQAAAEW
 AAMAAAABAGQAAAEXAAQAAAABAABQqwEcAAMAAAABAAEAAAE9AAMAAAABAAIAAAFSAAMAAAABAAEAAAFT
-AAMAAAAEAABRdodzAAcAABg0AABRfgAAAAAACAAIAAgACAABAAEAAQABAAAYNGFwcGwCEAAAbW50clJH
-QiBYWVogB9oAAwAeAAoAEgAqYWNzcEFQUEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA
+AAMAAAAEAABRdodzAAcAABnsAABRfgAAAAAACAAIAAgACAABAAEAAQABAAAZ7GFwcGwCEAAAbW50clJH
+QiBYWVogB98AAQAUABYAOQA5YWNzcEFQUEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA
 0y1hcHBsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARZGVzYwAA
-AVAAAABiZHNjbQAAAbQAAACKY3BydAAAAkAAAADQd3RwdAAAAxAAAAAUclhZWgAAAyQAAAAUZ1hZWgAA
-AzgAAAAUYlhZWgAAA0wAAAAUclRSQwAAA2AAAAgMYWFyZwAAC2wAAAAgdmNndAAAC4wAAAYSbmRpbgAA
-EaAAAAY+Y2hhZAAAF+AAAAAsbW1vZAAAGAwAAAAoYlRSQwAAA2AAAAgMZ1RSQwAAA2AAAAgMYWFiZwAA
-C2wAAAAgYWFnZwAAC2wAAAAgZGVzYwAAAAAAAAAIRGlzcGxheQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AVAAAABiZHNjbQAAAbQAAAJCY3BydAAAA/gAAADQd3RwdAAABMgAAAAUclhZWgAABNwAAAAUZ1hZWgAA
+BPAAAAAUYlhZWgAABQQAAAAUclRSQwAABRgAAAgMYWFyZwAADSQAAAAgdmNndAAADUQAAAYSbmRpbgAA
+E1gAAAY+Y2hhZAAAGZgAAAAsbW1vZAAAGcQAAAAoYlRSQwAABRgAAAgMZ1RSQwAABRgAAAgMYWFiZwAA
+DSQAAAAgYWFnZwAADSQAAAAgZGVzYwAAAAAAAAAIRGlzcGxheQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG1s
-dWMAAAAAAAAABAAAAAxlblVTAAAAEgAAAEBmckZSAAAAFgAAAFJkZURFAAAAEAAAAGhlc0VTAAAAEgAA
-AHgAQwBvAGwAbwByACAATABDAEQATABDAEQAIABjAG8AdQBsAGUAdQByAEYAYQByAGIALQBMAEMARABM
-AEMARAAgAGMAbwBsAG8AcgAAdGV4dAAAAABDb3B5cmlnaHQgQXBwbGUsIEluYy4sIDIwMTAAAAAAAAAA
+dWMAAAAAAAAAEgAAAAxubE5MAAAAFgAAAOhkYURLAAAAHAAAAP5wbFBMAAAAEgAAARplblVTAAAAEgAA
+ASxuYk5PAAAAEgAAAT5mckZSAAAAFgAAAVBwdEJSAAAAGAAAAWZwdFBUAAAAFgAAAX56aENOAAAADAAA
+AZRlc0VTAAAAEgAAAaBqYUpQAAAADgAAAbJydVJVAAAAJAAAAcBzdlNFAAAAEAAAAeR6aFRXAAAADgAA
+AfRkZURFAAAAEAAAAgJmaUZJAAAAEAAAAhJpdElUAAAAFAAAAiJrb0tSAAAADAAAAjYASwBsAGUAdQBy
+AGUAbgAtAEwAQwBEAEwAQwBEAC0AZgBhAHIAdgBlAHMAawDmAHIAbQBLAG8AbABvAHIAIABMAEMARABD
+AG8AbABvAHIAIABMAEMARABGAGEAcgBnAGUALQBMAEMARABMAEMARAAgAGMAbwB1AGwAZQB1AHIATABD
+AEQAIABDAG8AbABvAHIAaQBkAG8ATABDAEQAIABhACAAQwBvAHIAZQBzX2mCcgAgAEwAQwBEAEwAQwBE
+ACAAYwBvAGwAbwByMKsw6TD8ACAATABDAEQEJgQyBDUEQgQ9BD4EOQAgBBYEGgAtBDQEOARBBD8EOwQ1
+BDkARgDkAHIAZwAtAEwAQwBEX2mCcm2yZnaYb3k6VmgARgBhAHIAYgAtAEwAQwBEAFYA5AByAGkALQBM
+AEMARABMAEMARAAgAGMAbwBsAG8AcgBpzuy37AAgAEwAQwBEAAB0ZXh0AAAAAENvcHlyaWdodCBBcHBs
+ZSwgSW5jLiwgMjAxNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFhZWiAAAAAAAADzUgAB
-AAAAARbPWFlaIAAAAAAAAGGcAAA2hAAAB01YWVogAAAAAAAAbZYAAK/8AAAYjlhZWiAAAAAAAAAnowAA
-GYAAALNSY3VydgAAAAAAAAQAAAAABQAKAA8AFAAZAB4AIwAoAC0AMgA2ADsAQABFAEoATwBUAFkAXgBj
-AGgAbQByAHcAfACBAIYAiwCQAJUAmgCfAKMAqACtALIAtwC8AMEAxgDLANAA1QDbAOAA5QDrAPAA9gD7
-AQEBBwENARMBGQEfASUBKwEyATgBPgFFAUwBUgFZAWABZwFuAXUBfAGDAYsBkgGaAaEBqQGxAbkBwQHJ
-AdEB2QHhAekB8gH6AgMCDAIUAh0CJgIvAjgCQQJLAlQCXQJnAnECegKEAo4CmAKiAqwCtgLBAssC1QLg
-AusC9QMAAwsDFgMhAy0DOANDA08DWgNmA3IDfgOKA5YDogOuA7oDxwPTA+AD7AP5BAYEEwQgBC0EOwRI
-BFUEYwRxBH4EjASaBKgEtgTEBNME4QTwBP4FDQUcBSsFOgVJBVgFZwV3BYYFlgWmBbUFxQXVBeUF9gYG
-BhYGJwY3BkgGWQZqBnsGjAadBq8GwAbRBuMG9QcHBxkHKwc9B08HYQd0B4YHmQesB78H0gflB/gICwgf
-CDIIRghaCG4IggiWCKoIvgjSCOcI+wkQCSUJOglPCWQJeQmPCaQJugnPCeUJ+woRCicKPQpUCmoKgQqY
-Cq4KxQrcCvMLCwsiCzkLUQtpC4ALmAuwC8gL4Qv5DBIMKgxDDFwMdQyODKcMwAzZDPMNDQ0mDUANWg10
-DY4NqQ3DDd4N+A4TDi4OSQ5kDn8Omw62DtIO7g8JDyUPQQ9eD3oPlg+zD88P7BAJECYQQxBhEH4QmxC5
-ENcQ9RETETERTxFtEYwRqhHJEegSBxImEkUSZBKEEqMSwxLjEwMTIxNDE2MTgxOkE8UT5RQGFCcUSRRq
-FIsUrRTOFPAVEhU0FVYVeBWbFb0V4BYDFiYWSRZsFo8WshbWFvoXHRdBF2UXiReuF9IX9xgbGEAYZRiK
-GK8Y1Rj6GSAZRRlrGZEZtxndGgQaKhpRGncanhrFGuwbFBs7G2MbihuyG9ocAhwqHFIcexyjHMwc9R0e
-HUcdcB2ZHcMd7B4WHkAeah6UHr4e6R8THz4faR+UH78f6iAVIEEgbCCYIMQg8CEcIUghdSGhIc4h+yIn
-IlUigiKvIt0jCiM4I2YjlCPCI/AkHyRNJHwkqyTaJQklOCVoJZclxyX3JicmVyaHJrcm6CcYJ0kneier
-J9woDSg/KHEooijUKQYpOClrKZ0p0CoCKjUqaCqbKs8rAis2K2krnSvRLAUsOSxuLKIs1y0MLUEtdi2r
-LeEuFi5MLoIuty7uLyQvWi+RL8cv/jA1MGwwpDDbMRIxSjGCMbox8jIqMmMymzLUMw0zRjN/M7gz8TQr
-NGU0njTYNRM1TTWHNcI1/TY3NnI2rjbpNyQ3YDecN9c4FDhQOIw4yDkFOUI5fzm8Ofk6Njp0OrI67zst
-O2s7qjvoPCc8ZTykPOM9Ij1hPaE94D4gPmA+oD7gPyE/YT+iP+JAI0BkQKZA50EpQWpBrEHuQjBCckK1
-QvdDOkN9Q8BEA0RHRIpEzkUSRVVFmkXeRiJGZ0arRvBHNUd7R8BIBUhLSJFI10kdSWNJqUnwSjdKfUrE
-SwxLU0uaS+JMKkxyTLpNAk1KTZNN3E4lTm5Ot08AT0lPk0/dUCdQcVC7UQZRUFGbUeZSMVJ8UsdTE1Nf
-U6pT9lRCVI9U21UoVXVVwlYPVlxWqVb3V0RXklfgWC9YfVjLWRpZaVm4WgdaVlqmWvVbRVuVW+VcNVyG
-XNZdJ114XcleGl5sXr1fD19hX7NgBWBXYKpg/GFPYaJh9WJJYpxi8GNDY5dj62RAZJRk6WU9ZZJl52Y9
-ZpJm6Gc9Z5Nn6Wg/aJZo7GlDaZpp8WpIap9q92tPa6dr/2xXbK9tCG1gbbluEm5rbsRvHm94b9FwK3CG
-cOBxOnGVcfByS3KmcwFzXXO4dBR0cHTMdSh1hXXhdj52m3b4d1Z3s3gReG54zHkqeYl553pGeqV7BHtj
-e8J8IXyBfOF9QX2hfgF+Yn7CfyN/hH/lgEeAqIEKgWuBzYIwgpKC9INXg7qEHYSAhOOFR4Wrhg6GcobX
-hzuHn4gEiGmIzokziZmJ/opkisqLMIuWi/yMY4zKjTGNmI3/jmaOzo82j56QBpBukNaRP5GokhGSepLj
-k02TtpQglIqU9JVflcmWNJaflwqXdZfgmEyYuJkkmZCZ/JpomtWbQpuvnByciZz3nWSd0p5Anq6fHZ+L
-n/qgaaDYoUehtqImopajBqN2o+akVqTHpTilqaYapoum/adup+CoUqjEqTepqaocqo+rAqt1q+msXKzQ
-rUStuK4trqGvFq+LsACwdbDqsWCx1rJLssKzOLOutCW0nLUTtYq2AbZ5tvC3aLfguFm40blKucK6O7q1
-uy67p7whvJu9Fb2Pvgq+hL7/v3q/9cBwwOzBZ8Hjwl/C28NYw9TEUcTOxUvFyMZGxsPHQce/yD3IvMk6
-ybnKOMq3yzbLtsw1zLXNNc21zjbOts83z7jQOdC60TzRvtI/0sHTRNPG1EnUy9VO1dHWVdbY11zX4Nhk
-2OjZbNnx2nba+9uA3AXcit0Q3ZbeHN6i3ynfr+A24L3hROHM4lPi2+Nj4+vkc+T85YTmDeaW5x/nqegy
-6LzpRunQ6lvq5etw6/vshu0R7ZzuKO6070DvzPBY8OXxcvH/8ozzGfOn9DT0wvVQ9d72bfb794r4Gfio
-+Tj5x/pX+uf7d/wH/Jj9Kf26/kv+3P9t//9wYXJhAAAAAAADAAAAAmZmAADypwAADVkAABPQAAAKwHZj
-Z3QAAAAAAAAAAAADAQAAAgAAAAUAFQAyAF8AmwDoATUBiQHsAlwC2gNjA/kEpAVeBicG+AfYCMgJyArQ
-C9wM9g4NDzcQXRGFEqwT0hT1FhIXJRg5GUAaRRtCHDAdFx4CHuof1CC9IaoimCOKJH4lciZpJ18oVylX
-KlcrVyxbLWUubS95MIkxmjKsM8M03zX7Nxc4PDlbOnw7kDydPas+uD/CQM9B30LuQ/xFDUYeRzFIQUlR
-SmdLe0yPTaVOuE/LUONR+lMRVCdVP1ZYV3VYmFnAWu9cHV1KXnZfo2DQYgBjMmRiZZhm02gLaUlqjGvU
-bRpuaW+7cRJybXPKdSp2jnfTeO56AHsQfCR9NH5Ff1CAXoFngmqDcoRwhWqGZYdZiEqJNYofiwSL54zJ
-jaWOgI9dkEGRKpISkvqT45TLlbSWm5eDmG2ZV5pDmy+cG50Jnfme65/foNShzKLFo72kuqWlpoanbKhT
-qTiqIKsIq++s2K3Drq6vm7CGsXKyX7NNtDu1KrYZtwW38rjfucu6p7t/vFa9L74KvuW/wsCewX7CXsNA
-xCXFDcX1xuHHz8i+ybDKpcuczJPNiM53z2XQUdE90irTGtQH1PXV5tbW18nYvNmx2qfbn9yX3ZPejd+L
-4IjhhuKM45HkkOWJ5n3nc+hp6WHqYetn7HjtnO7S8CLxlvMq9OT21vj7+2/+Jv//AAAABwAhAFAAlgD2
-AToBiAHkAkgCuAM5A8wEZgULBcUGiQdbCDkJIAoWCxsMHA0rDkAPXhB5EZgSthPUFO8WABcOGBkZIRoe
-GxYcAhznHc8euR+hIIkhcyJhI1IkRSUzJignHSgPKQ0qCCsBLAEtBS4JLw0wFTEbMiYzNjRGNVo2ajeC
-OJc5qjqyO7A8rj2tPqk/p0CpQapCqkOsRK5FsUazR7ZIuknASsVLyUzOTdFO2E/fUORR6lLxU/lVBVYW
-Vy5YS1loWoRboFy9Xdte+mAbYTtiYGOLZLNl32cQaEVpeGqza/JtNW56b8FxC3JYc4x0oXWvdrt3ynjX
-eeN67nv5fQJ+B38NgBGBEoISgxCEDYUFhf2G9IfoiN2Jzoq/i66Mlo2CjmiPU5A+kSqSF5MEk/KU5ZXY
-ls2Xw5i7mbOasJuunK6dsZ61n7ygwaHIorujnaSHpXOmX6dNqDypLKoeqxKsCKz+rfOu6a/gsNixzLLF
-s7u0rLWetpC3g7h4uWu6XbtQvEO9Nr4pvxzAEMEDwfbC68PhxNTFzMbDx7rIs8mtyqrLpsypzb/O2s/y
-0QfSHNMx1ELVU9Zl13bYiNmb2rDbxtzh3frfGuA74WDih+Ov5NnmCuc66Gzppurk7CPtaO6y8ALxVvKq
-9AT1ZPbF+Cf5jvr1/Fv9vv8X//8AAAAGAA4AIQA+AGYAmADVARcBVgGdAe4CSwKxAyEDmAQaBKUFOwXb
-Bn8HKgfcCJEJTQoPCsoLiwxODRANzQ6EDzoP7xCdEUgR7RKIEyQTvRRXFPEVixYnFsQXYxgEGKMZRRnp
-Go4bNRvdHIYdMh3jHpMfRB/5IKwhYyIfItsjlyRUJRgl2CaVJ0sn9CigKUwp9yqkK1MsAyy1LWcuHC7R
-L4cwPzD6MbUycTMwM+w0qjVpNiw26zerOG45MTn1Orc7ezxDPQo90j6aP2JAK0D2QcFCjUNcRC5E/UXP
-RqRHe0hPSSlKA0rfS7xMmk14TllPL0/+UMxRnFJuU0FUGVTwVctWqFeGWGpZTVo1WyBcDVz8Xexe3l/T
-YMhhwGK3Y65kpGWTZoJnb2hgaVNqRms7bC9tJm4gbxpwF3EVchNzEnQTdRZ2GnceeCV5LHoxezN8GXzx
-fch+n39ygEeBGYHpgruDjoRhhTSGB4bbh7KIi4liij+LHIv6jNmNu46cj3GQRJEXke6SyZOnlIiVa5ZW
-l0SYNZkvmiybLZwznT6eTJ9eoHShj6Kro72kw6XEpsanyKjOqdeq4KvsrPyuC68esDOxSLJfs3a0jbWn
-tr632Ljvugi7Qbyjvfq/SsCfwf7DaMTgxm3IEsnby7/N0tAo0sLVqdkO3Q7iIujA8xz//wAAbmRpbgAA
-AAAAAAY2AACZAgAAVsgAAFUEAACRsAAAJ3MAABcKAABQDQAAVDkAAgo9AAH64QABJmYAAwEAAAIAAAAT
-ACwARQBfAHgAkQCrAMUA3wD5ARQBMAFMAWoBhwGmAcYB5wIKAi4CVAJ8AqcC0wMDAzUDagOlA+QEJARn
-BKwE8wU7BYUFzwYcBmoGugcMB10HsAgFCFsIsAkICWEJugoUCnEKzQsqC4cL5gxHDKYNCQ1sDdUORA61
-DyYPnBAUEIsRBBF/Ef0SehL6E3sT/xSFFQoVkRYbFqUXMhfCGFMY4hl2Ggsaohs6G9McbB0EHZweMR7H
-H2Af+iCXITQh1CJ0IxQjtiRaJP0lnSZCJucniyguKM8pdSoZKrsrXiwALKItRC3mLosvLC/OMHoxRDId
-Mvkz1zSzNZg2ezdnOFE5Qzo9OzM8Nj0/Pko/YEB7QaJCzEQCRTlGfkfISRJKUUuQTNROGU9iUK1R/lNP
-VKFV91dKWKNZ/VtVXK1eBl9fYLdiD2NsZMNmN2fBaUJqyGxTbdpvaXD4coV0FXWldzx40XpqfAN9oH87
-gOGCiYQyheCHsYmPi3ONUo8zkRSS+5Talr2Ynpp4nFeeMKAIod+jtKWGp1apKasHrPKu47DYstK0xLbC
-uL+6uby4vrXAssKvxK3GqsipyqHMo86c0J7SndSK1ofYktqs3NLe7+EZ4zPlQudH6TDq/+y77lvv4fFL
-8qbz8PUp9kr3Yvhu+Wj6V/s2/BD83v2k/pf//wAAAAwAIwA8AFQAbgCHAKEAuwDWAPEBDAEpAUYBZAGC
-AaIBwwHlAgkCLgJVAn8CqwLZAwkDPQN0A7AD8AQxBHQEugUCBUsFlQXgBi8GfgbPByMHdQfKCCIIeQjR
-CSsJhwnjCkIKoQsAC2ELwgwnDIoM8A1YDcMOOA6wDygPpBAjEKERIRGkEigSrhM2E8AUTBTaFWgV+RaM
-FyEXuRhTGOsZiRooGskbaxwOHLEdUh3xHpAfMR/UIHkhHyHHInAjGiPFJHIlHiXIJnYnJCfSKH0pKina
-KocrMyvgLIwtOS3lLpYvQS/wMK0xgTJeMz40HzUBNek20Te+OKs5oDqYO5A8kT2TPps/pUC1Qc5C5EQF
-RSRGTEd3SKZJ40seTGJNo07mUCtRcVK9VAFVSlaRV9pZIlpuW7Rc/F5EX4xg02IZY2VkrGYSZ5lpFGqQ
-bBFtjG8OcI5yDHOMdQl2j3gUeZt7I3y0fkB/04FwgxCEsoZVh/eJoItPjPyOrZBgkhqT0ZWMl06ZDJrM
-nJOeVqAcoeSjrKV0pzqpBarCrGOuAq+nsVKzArSvtmm4Jbnhu5+9ZL8kwOjCqsRuxivH78moy2PNHc7S
-0IvSQNP31abXV9kM2rncYN4F363hT+Lt5IrmIOey6Urq3+xw7fvviPEW8qX0MPW490f41vpk+/39jv//
-AAAAHQBEAGoAkQC4AN8BCAEyAV4BiwG8Ae4CJAJeAp4C4gMsA38D3AQ+BKYFEgWBBfMGagbjB18H3ghg
-COEJZwnuCnkLAwuPDCAMrw1DDeEOkg9FD/4QuBF0EjMS9BO3FH4VQxYNFtgXqBh6GUwaJRr/G9scuh2f
-HoIfaCBRIT4iLSMdJBElBSX4JvEn6SjfKd0q1yvULNEtzy7SL9Mw5DIEMyc0SDVrNos3rzjOOfI7Djwv
-PU0+aT+FQKJBwkLdQ/5FGkY9R2BIhUm4Su1MKU1hTppP1VEQUlFTjFTJVglXRFiFWcZbCFxJXYxe0GAV
-YVpioGPuZUJm0Whyag9rvG1mbx9w2XKUdFJ2FHfZeZx7XH0ift6AoYJkhCSF5ofHibCLm417j1iRMJMG
-lM6WlZhWmgebup1nnw6gsqJSo++liKceqLSqWawVrd6vqLF0sz21ALbJuI+6ULwSvdi/lMFXwxjE2sae
-yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
-8Nfxn/JX8w7zu/RY9Pb1i/YX9qP3KPec+A/4g/jx+VL5tPoW+nj6yvsT+1z7pfvu/Df8dvym/NX9Bf00
-/WT9k/3D/fP+Iv5P/nr+pf7Q/vv/J/9S/33/qP/U//8AAHNmMzIAAAAAAAEMQgAABd7///MmAAAHkgAA
-/ZH///ui///9owAAA9wAAMBsbW1vZAAAAAAAAAYQAACcgQAAAADBvfOhAAAAAAAAAAAAAAAAAAAAAA</bytes>
+AAAAAAAAWFlaIAAAAAAAAPNSAAEAAAABFs9YWVogAAAAAAAAYZwAADaEAAAHTVhZWiAAAAAAAABtlgAA
+r/wAABiOWFlaIAAAAAAAACejAAAZgAAAs1JjdXJ2AAAAAAAABAAAAAAFAAoADwAUABkAHgAjACgALQAy
+ADYAOwBAAEUASgBPAFQAWQBeAGMAaABtAHIAdwB8AIEAhgCLAJAAlQCaAJ8AowCoAK0AsgC3ALwAwQDG
+AMsA0ADVANsA4ADlAOsA8AD2APsBAQEHAQ0BEwEZAR8BJQErATIBOAE+AUUBTAFSAVkBYAFnAW4BdQF8
+AYMBiwGSAZoBoQGpAbEBuQHBAckB0QHZAeEB6QHyAfoCAwIMAhQCHQImAi8COAJBAksCVAJdAmcCcQJ6
+AoQCjgKYAqICrAK2AsECywLVAuAC6wL1AwADCwMWAyEDLQM4A0MDTwNaA2YDcgN+A4oDlgOiA64DugPH
+A9MD4APsA/kEBgQTBCAELQQ7BEgEVQRjBHEEfgSMBJoEqAS2BMQE0wThBPAE/gUNBRwFKwU6BUkFWAVn
+BXcFhgWWBaYFtQXFBdUF5QX2BgYGFgYnBjcGSAZZBmoGewaMBp0GrwbABtEG4wb1BwcHGQcrBz0HTwdh
+B3QHhgeZB6wHvwfSB+UH+AgLCB8IMghGCFoIbgiCCJYIqgi+CNII5wj7CRAJJQk6CU8JZAl5CY8JpAm6
+Cc8J5Qn7ChEKJwo9ClQKagqBCpgKrgrFCtwK8wsLCyILOQtRC2kLgAuYC7ALyAvhC/kMEgwqDEMMXAx1
+DI4MpwzADNkM8w0NDSYNQA1aDXQNjg2pDcMN3g34DhMOLg5JDmQOfw6bDrYO0g7uDwkPJQ9BD14Peg+W
+D7MPzw/sEAkQJhBDEGEQfhCbELkQ1xD1ERMRMRFPEW0RjBGqEckR6BIHEiYSRRJkEoQSoxLDEuMTAxMj
+E0MTYxODE6QTxRPlFAYUJxRJFGoUixStFM4U8BUSFTQVVhV4FZsVvRXgFgMWJhZJFmwWjxayFtYW+hcd
+F0EXZReJF64X0hf3GBsYQBhlGIoYrxjVGPoZIBlFGWsZkRm3Gd0aBBoqGlEadxqeGsUa7BsUGzsbYxuK
+G7Ib2hwCHCocUhx7HKMczBz1HR4dRx1wHZkdwx3sHhYeQB5qHpQevh7pHxMfPh9pH5Qfvx/qIBUgQSBs
+IJggxCDwIRwhSCF1IaEhziH7IiciVSKCIq8i3SMKIzgjZiOUI8Ij8CQfJE0kfCSrJNolCSU4JWgllyXH
+JfcmJyZXJocmtyboJxgnSSd6J6sn3CgNKD8ocSiiKNQpBik4KWspnSnQKgIqNSpoKpsqzysCKzYraSud
+K9EsBSw5LG4soizXLQwtQS12Last4S4WLkwugi63Lu4vJC9aL5Evxy/+MDUwbDCkMNsxEjFKMYIxujHy
+MioyYzKbMtQzDTNGM38zuDPxNCs0ZTSeNNg1EzVNNYc1wjX9Njc2cjauNuk3JDdgN5w31zgUOFA4jDjI
+OQU5Qjl/Obw5+To2OnQ6sjrvOy07azuqO+g8JzxlPKQ84z0iPWE9oT3gPiA+YD6gPuA/IT9hP6I/4kAj
+QGRApkDnQSlBakGsQe5CMEJyQrVC90M6Q31DwEQDREdEikTORRJFVUWaRd5GIkZnRqtG8Ec1R3tHwEgF
+SEtIkUjXSR1JY0mpSfBKN0p9SsRLDEtTS5pL4kwqTHJMuk0CTUpNk03cTiVObk63TwBPSU+TT91QJ1Bx
+ULtRBlFQUZtR5lIxUnxSx1MTU19TqlP2VEJUj1TbVShVdVXCVg9WXFapVvdXRFeSV+BYL1h9WMtZGllp
+WbhaB1pWWqZa9VtFW5Vb5Vw1XIZc1l0nXXhdyV4aXmxevV8PX2Ffs2AFYFdgqmD8YU9homH1YklinGLw
+Y0Njl2PrZEBklGTpZT1lkmXnZj1mkmboZz1nk2fpaD9olmjsaUNpmmnxakhqn2r3a09rp2v/bFdsr20I
+bWBtuW4SbmtuxG8eb3hv0XArcIZw4HE6cZVx8HJLcqZzAXNdc7h0FHRwdMx1KHWFdeF2Pnabdvh3Vnez
+eBF4bnjMeSp5iXnnekZ6pXsEe2N7wnwhfIF84X1BfaF+AX5ifsJ/I3+Ef+WAR4CogQqBa4HNgjCCkoL0
+g1eDuoQdhICE44VHhauGDoZyhteHO4efiASIaYjOiTOJmYn+imSKyoswi5aL/IxjjMqNMY2Yjf+OZo7O
+jzaPnpAGkG6Q1pE/kaiSEZJ6kuOTTZO2lCCUipT0lV+VyZY0lp+XCpd1l+CYTJi4mSSZkJn8mmia1ZtC
+m6+cHJyJnPedZJ3SnkCerp8dn4uf+qBpoNihR6G2oiailqMGo3aj5qRWpMelOKWpphqmi6b9p26n4KhS
+qMSpN6mpqhyqj6sCq3Wr6axcrNCtRK24ri2uoa8Wr4uwALB1sOqxYLHWskuywrM4s660JbSctRO1irYB
+tnm28Ldot+C4WbjRuUq5wro7urW7LrunvCG8m70VvY++Cr6Evv+/er/1wHDA7MFnwePCX8Lbw1jD1MRR
+xM7FS8XIxkbGw8dBx7/IPci8yTrJuco4yrfLNsu2zDXMtc01zbXONs62zzfPuNA50LrRPNG+0j/SwdNE
+08bUSdTL1U7V0dZV1tjXXNfg2GTY6Nls2fHadtr724DcBdyK3RDdlt4c3qLfKd+v4DbgveFE4cziU+Lb
+42Pj6+Rz5PzlhOYN5pbnH+ep6DLovOlG6dDqW+rl63Dr++yG7RHtnO4o7rTvQO/M8Fjw5fFy8f/yjPMZ
+86f0NPTC9VD13vZt9vv3ivgZ+Kj5OPnH+lf65/t3/Af8mP0p/br+S/7c/23//3BhcmEAAAAAAAMAAAAC
+ZmYAAPKnAAANWQAAE9AAAAoOdmNndAAAAAAAAAAAAAMBAAACAAAABQAVADIAXwCbAOgBNQGJAewCXALa
+A2MD+QSkBV4GJwb4B9gIyAnICtAL3Az2Dg0PNxBdEYUSrBPSFPUWEhclGDkZQBpFG0IcMB0XHgIe6h/U
+IL0hqiKYI4okfiVyJmknXyhXKVcqVytXLFstZS5tL3kwiTGaMqwzwzTfNfs3Fzg8OVs6fDuQPJ09qz64
+P8JAz0HfQu5D/EUNRh5HMUhBSVFKZ0t7TI9NpU64T8tQ41H6UxFUJ1U/VlhXdViYWcBa71wdXUpedl+j
+YNBiAGMyZGJlmGbTaAtpSWqMa9RtGm5pb7txEnJtc8p1KnaOd9N47noAexB8JH00fkV/UIBegWeCaoNy
+hHCFaoZlh1mISok1ih+LBIvnjMmNpY6Aj12QQZEqkhKS+pPjlMuVtJabl4OYbZlXmkObL5wbnQmd+Z7r
+n9+g1KHMosWjvaS6paWmhqdsqFOpOKogqwir76zYrcOurq+bsIaxcrJfs020O7Uqthm3BbfyuN+5y7qn
+u3+8Vr0vvgq+5b/CwJ7BfsJew0DEJcUNxfXG4cfPyL7JsMqly5zMk82IznfPZdBR0T3SKtMa1AfU9dXm
+1tbXydi82bHap9uf3Jfdk96N34vgiOGG4ozjkeSQ5Ynmfedz6GnpYeph62fseO2c7tLwIvGW8yr05PbW
++Pv7b/4m//8AAAAHACEAUACWAPYBOgGIAeQCSAK4AzkDzARmBQsFxQaJB1sIOQkgChYLGwwcDSsOQA9e
+EHkRmBK2E9QU7xYAFw4YGRkhGh4bFhwCHOcdzx65H6EgiSFzImEjUiRFJTMmKCcdKA8pDSoIKwEsAS0F
+LgkvDTAVMRsyJjM2NEY1WjZqN4I4lzmqOrI7sDyuPa0+qT+nQKlBqkKqQ6xErkWxRrNHtki6ScBKxUvJ
+TM5N0U7YT99Q5FHqUvFT+VUFVhZXLlhLWWhahFugXL1d2176YBthO2JgY4tks2XfZxBoRWl4arNr8m01
+bnpvwXELclhzjHShda92u3fKeNd543rue/l9An4Hfw2AEYESghKDEIQNhQWF/Yb0h+iI3YnOir+LroyW
+jYKOaI9TkD6RKpIXkwST8pTlldiWzZfDmLuZs5qwm66crp2xnrWfvKDBociiu6OdpIelc6Zfp02oPKks
+qh6rEqwIrP6t867pr+Cw2LHMssWzu7SstZ62kLeDuHi5a7pdu1C8Q702vim/HMAQwQPB9sLrw+HE1MXM
+xsPHusizya3KqsumzKnNv87az/LRB9Ic0zHUQtVT1mXXdtiI2ZvasNvG3OHd+t8a4DvhYOKH46/k2eYK
+5zrobOmm6uTsI+1o7rLwAvFW8qr0BPVk9sX4J/mO+vX8W/2+/xf//wAAAAYADgAhAD4AZgCYANUBFwFW
+AZ0B7gJLArEDIQOYBBoEpQU7BdsGfwcqB9wIkQlNCg8KyguLDE4NEA3NDoQPOg/vEJ0RSBHtEogTJBO9
+FFcU8RWLFicWxBdjGAQYoxlFGekajhs1G90chh0yHeMekx9EH/kgrCFjIh8i2yOXJFQlGCXYJpUnSyf0
+KKApTCn3KqQrUywDLLUtZy4cLtEvhzA/MPoxtTJxMzAz7DSqNWk2LDbrN6s4bjkxOfU6tzt7PEM9Cj3S
+Ppo/YkArQPZBwUKNQ1xELkT9Rc9GpEd7SE9JKUoDSt9LvEyaTXhOWU8vT/5QzFGcUm5TQVQZVPBVy1ao
+V4ZYallNWjVbIFwNXPxd7F7eX9NgyGHAYrdjrmSkZZNmgmdvaGBpU2pGaztsL20mbiBvGnAXcRVyE3MS
+dBN1FnYadx54JXksejF7M3wZfPF9yH6ff3KAR4EZgemCu4OOhGGFNIYHhtuHsoiLiWKKP4sci/qM2Y27
+jpyPcZBEkReR7pLJk6eUiJVrllaXRJg1mS+aLJstnDOdPp5Mn16gdKGPoqujvaTDpcSmxqfIqM6p16rg
+q+ys/K4Lrx6wM7FIsl+zdrSNtae2vrfYuO+6CLtBvKO9+r9KwJ/B/sNoxODGbcgSydvLv83S0CjSwtWp
+2Q7dDuIi6MDzHP//AABuZGluAAAAAAAABjYAAJkCAABWyAAAVQQAAJGwAAAncwAAFwoAAFANAABUOQAC
+Cj0AAfrhAAEmZgADAQAAAgAAABMALABFAF8AeACRAKsAxQDfAPkBFAEwAUwBagGHAaYBxgHnAgoCLgJU
+AnwCpwLTAwMDNQNqA6UD5AQkBGcErATzBTsFhQXPBhwGaga6BwwHXQewCAUIWwiwCQgJYQm6ChQKcQrN
+CyoLhwvmDEcMpg0JDWwN1Q5EDrUPJg+cEBQQixEEEX8R/RJ6EvoTexP/FIUVChWRFhsWpRcyF8IYUxji
+GXYaCxqiGzob0xxsHQQdnB4xHscfYB/6IJchNCHUInQjFCO2JFok/SWdJkIm5yeLKC4ozyl1Khkquyte
+LAAsoi1ELeYuiy8sL84wejFEMh0y+TPXNLM1mDZ7N2c4UTlDOj07Mzw2PT8+Sj9gQHtBokLMRAJFOUZ+
+R8hJEkpRS5BM1E4ZT2JQrVH+U09UoVX3V0pYo1n9W1VcrV4GX19gt2IPY2xkw2Y3Z8FpQmrIbFNt2m9p
+cPhyhXQVdaV3PHjRemp8A32gfzuA4YKJhDKF4IexiY+Lc41SjzORFJL7lNqWvZiemnicV54woAih36O0
+pYanVqkpqwes8q7jsNiy0rTEtsK4v7q5vLi+tcCywq/ErcaqyKnKocyjzpzQntKd1IrWh9iS2qzc0t7v
+4RnjM+VC50fpMOr/7LvuW+/h8UvypvPw9Sn2Svdi+G75aPpX+zb8EPze/aT+l///AAAADAAjADwAVABu
+AIcAoQC7ANYA8QEMASkBRgFkAYIBogHDAeUCCQIuAlUCfwKrAtkDCQM9A3QDsAPwBDEEdAS6BQIFSwWV
+BeAGLwZ+Bs8HIwd1B8oIIgh5CNEJKwmHCeMKQgqhCwALYQvCDCcMigzwDVgNww44DrAPKA+kECMQoREh
+EaQSKBKuEzYTwBRMFNoVaBX5FowXIRe5GFMY6xmJGigayRtrHA4csR1SHfEekB8xH9QgeSEfIccicCMa
+I8UkciUeJcgmdickJ9IofSkqKdoqhyszK+AsjC05LeUuli9BL/AwrTGBMl4zPjQfNQE16TbRN744qzmg
+Opg7kDyRPZM+mz+lQLVBzkLkRAVFJEZMR3dIpknjSx5MYk2jTuZQK1FxUr1UAVVKVpFX2lkiWm5btFz8
+XkRfjGDTYhljZWSsZhJnmWkUapBsEW2Mbw5wjnIMc4x1CXaPeBR5m3sjfLR+QH/TgXCDEISyhlWH94mg
+i0+M/I6tkGCSGpPRlYyXTpkMmsyck55WoByh5KOspXSnOqkFqsKsY64Cr6exUrMCtK+2abglueG7n71k
+vyTA6MKqxG7GK8fvyajLY80dztLQi9JA0/fVptdX2Qzaudxg3gXfreFP4u3kiuYg57LpSurf7HDt+++I
+8RbypfQw9bj3R/jW+mT7/f2O//8AAAAdAEQAagCRALgA3wEIATIBXgGLAbwB7gIkAl4CngLiAywDfwPc
+BD4EpgUSBYEF8wZqBuMHXwfeCGAI4QlnCe4KeQsDC48MIAyvDUMN4Q6SD0UP/hC4EXQSMxL0E7cUfhVD
+Fg0W2BeoGHoZTBolGv8b2xy6HZ8egh9oIFEhPiItIx0kESUFJfgm8SfpKN8p3SrXK9Qs0S3PLtIv0zDk
+MgQzJzRINWs2izevOM458jsOPC89TT5pP4VAokHCQt1D/kUaRj1HYEiFSbhK7UwpTWFOmk/VURBSUVOM
+VMlWCVdEWIVZxlsIXEldjF7QYBVhWmKgY+5lQmbRaHJqD2u8bWZvH3DZcpR0UnYUd9l5nHtcfSJ+3oCh
+gmSEJIXmh8eJsIubjXuPWJEwkwaUzpaVmFaaB5u6nWefDqCyolKj76WIpx6otKpZrBWt3q+osXSzPbUA
+tsm4j7pQvBK92L+UwVfDGMTaxp7IZcooy/TNu8+L0V7TItSU1gnXidkT2p7cJN2j3xvgi+Hx40zkneXj
+5xjoQOli6nvrg+yF7XLuXe838A/w1/Gf8lfzDvO79Fj09vWL9hf2o/co95z4D/iD+PH5Uvm0+hb6ePrK
++xP7XPul++78N/x2/Kb81f0F/TT9ZP2T/cP98/4i/k/+ev6l/tD++/8n/1L/ff+o/9T//wAAc2YzMgAA
+AAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGxtbW9kAAAAAAAABhAAAJyBAAAAAMG9
+86EAAAAAAAAAAAAAAAAAAAAAA</bytes>
 																		</object>
 																		<string key="NSCacheWindowColorSpace">NSCalibratedRGBColorSpace</string>
 																		<int key="NSCacheWindowBPS">8</int>
@@ -608,7 +619,7 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 											<int key="NSTableViewDraggingDestinationStyle">0</int>
 										</object>
 									</array>
-									<string key="NSFrame">{{1, 1}, {211, 204}}</string>
+									<string key="NSFrame">{{1, 1}, {211, 197}}</string>
 									<reference key="NSSuperview" ref="658212693"/>
 									<reference key="NSNextKeyView" ref="40188176"/>
 									<reference key="NSDocView" ref="40188176"/>
@@ -635,7 +646,7 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 									<double key="NSPercent">0.99047619104385376</double>
 								</object>
 							</array>
-							<string key="NSFrame">{{0, 36}, {213, 206}}</string>
+							<string key="NSFrame">{{0, 36}, {213, 199}}</string>
 							<reference key="NSSuperview" ref="834725691"/>
 							<reference key="NSNextKeyView" ref="674505079"/>
 							<int key="NSsFlags">530</int>
@@ -728,8 +739,72 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 								<int key="NSPeriodicInterval">75</int>
 							</object>
 						</object>
+						<object class="NSSearchField" id="618118127">
+							<reference key="NSNextResponder" ref="834725691"/>
+							<int key="NSvFlags">266</int>
+							<string key="NSFrame">{{8, 238}, {197, 19}}</string>
+							<reference key="NSSuperview" ref="834725691"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSSearchFieldCell" key="NSCell" id="478291398">
+								<int key="NSCellFlags">343539264</int>
+								<int key="NSCellFlags2">268567616</int>
+								<string key="NSContents"/>
+								<reference key="NSSupport" ref="26"/>
+								<reference key="NSControlView" ref="618118127"/>
+								<bool key="NSDrawsBackground">YES</bool>
+								<int key="NSTextBezelStyle">1</int>
+								<object class="NSColor" key="NSBackgroundColor">
+									<int key="NSColorSpace">6</int>
+									<string key="NSCatalogName">System</string>
+									<string key="NSColorName">textBackgroundColor</string>
+									<object class="NSColor" key="NSColor">
+										<int key="NSColorSpace">3</int>
+										<bytes key="NSWhite">MQA</bytes>
+									</object>
+								</object>
+								<object class="NSColor" key="NSTextColor" id="986426230">
+									<int key="NSColorSpace">6</int>
+									<string key="NSCatalogName">System</string>
+									<string key="NSColorName">controlTextColor</string>
+									<reference key="NSColor" ref="857758166"/>
+								</object>
+								<object class="NSButtonCell" key="NSSearchButtonCell">
+									<int key="NSCellFlags">-2147353088</int>
+									<int key="NSCellFlags2">0</int>
+									<string key="NSContents">search</string>
+									<reference key="NSControlView" ref="618118127"/>
+									<string key="NSAction">_searchFieldSearch:</string>
+									<reference key="NSTarget" ref="478291398"/>
+									<int key="NSButtonFlags">138690815</int>
+									<int key="NSButtonFlags2">0</int>
+									<string key="NSKeyEquivalent"/>
+									<int key="NSPeriodicDelay">400</int>
+									<int key="NSPeriodicInterval">75</int>
+								</object>
+								<object class="NSButtonCell" key="NSCancelButtonCell">
+									<int key="NSCellFlags">130560</int>
+									<int key="NSCellFlags2">0</int>
+									<string key="NSContents">clear</string>
+									<array class="NSMutableArray" key="NSAccessibilityOverriddenAttributes">
+										<dictionary class="NSMutableDictionary">
+											<string key="AXDescription">cancel</string>
+											<integer value="1" key="NSAccessibilityEncodedAttributesValueType"/>
+										</dictionary>
+									</array>
+									<reference key="NSControlView" ref="618118127"/>
+									<string key="NSAction">_searchFieldCancel:</string>
+									<reference key="NSTarget" ref="478291398"/>
+									<int key="NSButtonFlags">138690815</int>
+									<int key="NSButtonFlags2">0</int>
+									<string key="NSKeyEquivalent"/>
+									<int key="NSPeriodicDelay">400</int>
+									<int key="NSPeriodicInterval">75</int>
+								</object>
+								<int key="NSMaximumRecents">255</int>
+							</object>
+						</object>
 					</array>
-					<string key="NSFrameSize">{213, 241}</string>
+					<string key="NSFrameSize">{213, 261}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
@@ -902,12 +977,7 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 								<string key="NSColorName">controlColor</string>
 								<reference key="NSColor" ref="640886705"/>
 							</object>
-							<object class="NSColor" key="NSTextColor">
-								<int key="NSColorSpace">6</int>
-								<string key="NSCatalogName">System</string>
-								<string key="NSColorName">controlTextColor</string>
-								<reference key="NSColor" ref="857758166"/>
-							</object>
+							<reference key="NSTextColor" ref="986426230"/>
 						</object>
 					</object>
 				</array>
@@ -1174,6 +1244,22 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 					</object>
 					<int key="connectionID">107</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">historySearchField</string>
+						<reference key="source" ref="663999578"/>
+						<reference key="destination" ref="618118127"/>
+					</object>
+					<int key="connectionID">110</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">historySearchFieldChanged:</string>
+						<reference key="source" ref="663999578"/>
+						<reference key="destination" ref="618118127"/>
+					</object>
+					<int key="connectionID">111</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -1215,9 +1301,10 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 						<reference key="object" ref="834725691"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="146136293"/>
-							<reference ref="658212693"/>
 							<reference ref="602715425"/>
 							<reference ref="618491471"/>
+							<reference ref="618118127"/>
+							<reference ref="658212693"/>
 						</array>
 						<reference key="parent" ref="109988692"/>
 					</object>
@@ -1447,6 +1534,19 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 						<reference key="object" ref="981973208"/>
 						<reference key="parent" ref="618491471"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">108</int>
+						<reference key="object" ref="618118127"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="478291398"/>
+						</array>
+						<reference key="parent" ref="834725691"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">109</int>
+						<reference key="object" ref="478291398"/>
+						<reference key="parent" ref="618118127"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -1456,6 +1556,8 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 				<boolean value="YES" key="10.ImportedFromIB2"/>
 				<string key="104.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="105.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="108.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="109.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="11.CustomClassName">HistoryCell</string>
 				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="11.ImportedFromIB2"/>
@@ -1470,9 +1572,9 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 				<boolean value="YES" key="24.ImportedFromIB2"/>
 				<string key="25.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="25.ImportedFromIB2"/>
-				<string key="5.IBEditorWindowLastContentRect">{{657, 514}, {213, 241}}</string>
+				<string key="5.IBEditorWindowLastContentRect">{{657, 494}, {213, 261}}</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBWindowTemplateEditedContentRect">{{657, 514}, {213, 241}}</string>
+				<string key="5.IBWindowTemplateEditedContentRect">{{657, 494}, {213, 261}}</string>
 				<boolean value="YES" key="5.ImportedFromIB2"/>
 				<boolean value="YES" key="5.windowTemplate.hasMinSize"/>
 				<string key="5.windowTemplate.minSize">{213, 241}</string>
@@ -1507,6 +1609,9 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 				<boolean value="YES" key="74.ImportedFromIB2"/>
 				<string key="75.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="8.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<object class="NSAffineTransform" key="8.IBViewBoundsToFrameTransform">
+					<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAw2AAAA</bytes>
+				</object>
 				<boolean value="YES" key="8.ImportedFromIB2"/>
 				<string key="83.IBEditorWindowLastContentRect">{{84, 693}, {298, 60}}</string>
 				<string key="83.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1529,7 +1634,7 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">107</int>
+			<int key="maxID">111</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1598,6 +1703,24 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 						<string key="removeSelection:">id</string>
 						<string key="undo:">id</string>
 					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="redo:">
+							<string key="name">redo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="removeSelection:">
+							<string key="name">removeSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="undo:">
+							<string key="name">undo:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">HistoryView.h</string>
@@ -1620,8 +1743,43 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 						<string key="changeLockedState:">id</string>
 						<string key="clearHistory:">id</string>
 						<string key="deselectAll:">id</string>
+						<string key="historySearchFieldChanged:">id</string>
 						<string key="open:">id</string>
 						<string key="saveAs:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="changeHistoryDisplayPreviewPanelState:">
+							<string key="name">changeHistoryDisplayPreviewPanelState:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="changeHistoryExportFormat:">
+							<string key="name">changeHistoryExportFormat:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="changeLockedState:">
+							<string key="name">changeLockedState:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="clearHistory:">
+							<string key="name">clearHistory:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="deselectAll:">
+							<string key="name">deselectAll:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="historySearchFieldChanged:">
+							<string key="name">historySearchFieldChanged:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="open:">
+							<string key="name">open:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveAs:">
+							<string key="name">saveAs:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="clearHistoryButton">NSButton</string>
@@ -1633,9 +1791,64 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 						<string key="historyPreviewPanel">BorderlessPanel</string>
 						<string key="historyPreviewPanelImageView">LibraryPreviewPanelImageView</string>
 						<string key="historyPreviewPanelSegmentedControl">NSSegmentedControl</string>
+						<string key="historySearchField">NSSearchField</string>
 						<string key="historyView">HistoryView</string>
 						<string key="importAccessoryView">NSView</string>
 						<string key="importOptionPopUpButton">NSPopUpButton</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="clearHistoryButton">
+							<string key="name">clearHistoryButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="exportAccessoryView">
+							<string key="name">exportAccessoryView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="exportFormatLabel">
+							<string key="name">exportFormatLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="exportFormatPopUpButton">
+							<string key="name">exportFormatPopUpButton</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="exportOnlySelectedButton">
+							<string key="name">exportOnlySelectedButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="historyLockButton">
+							<string key="name">historyLockButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="historyPreviewPanel">
+							<string key="name">historyPreviewPanel</string>
+							<string key="candidateClassName">BorderlessPanel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="historyPreviewPanelImageView">
+							<string key="name">historyPreviewPanelImageView</string>
+							<string key="candidateClassName">LibraryPreviewPanelImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="historyPreviewPanelSegmentedControl">
+							<string key="name">historyPreviewPanelSegmentedControl</string>
+							<string key="candidateClassName">NSSegmentedControl</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="historySearchField">
+							<string key="name">historySearchField</string>
+							<string key="candidateClassName">NSSearchField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="historyView">
+							<string key="name">historyView</string>
+							<string key="candidateClassName">HistoryView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="importAccessoryView">
+							<string key="name">importAccessoryView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="importOptionPopUpButton">
+							<string key="name">importOptionPopUpButton</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -1675,6 +1888,20 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">NSButton</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSButtonExtended.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSMenu</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSMenuExtended.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -1698,8 +1925,36 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKFileWatcher.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKKQueue.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">UKKQueue/UKMainThreadProxy.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSPopUpButton</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSPopUpButtonExtended.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1730,6 +1985,13 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">NSWindowExtended.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2177,6 +2439,27 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CAAnimation.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CALayer.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">QuartzFilters.framework/Headers/QuartzFilterManager.h</string>
 					</object>
 				</object>
@@ -2254,6 +2537,22 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">AppKit.framework/Headers/NSScroller.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSSearchField</string>
+					<string key="superclassName">NSTextField</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">AppKit.framework/Headers/NSSearchField.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSSearchFieldCell</string>
+					<string key="superclassName">NSTextFieldCell</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">AppKit.framework/Headers/NSSearchFieldCell.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2353,6 +2652,13 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 						<string key="NS.key.0">showWindow:</string>
 						<string key="NS.object.0">id</string>
 					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">showWindow:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">showWindow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">AppKit.framework/Headers/NSWindowController.h</string>
@@ -2368,7 +2674,7 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
-			<integer value="1050" key="NS.object.0"/>
+			<integer value="1060" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<string key="IBDocument.LastKnownRelativeProjectPath">LaTeXiT.xcodeproj</string>
@@ -2377,8 +2683,8 @@ yGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP
 			<string key="NSMenuCheckmark">{9, 8}</string>
 			<string key="NSMenuMixedState">{7, 2}</string>
 			<string key="NSSwitch">{15, 15}</string>
-			<string key="locked">{24, 24}</string>
-			<string key="magnifying-glass">{23, 18}</string>
+			<string key="locked">{25, 24}</string>
+			<string key="magnifying-glass">{24, 18}</string>
 			<string key="unlocked">{24, 24}</string>
 		</dictionary>
 	</data>

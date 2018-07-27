@@ -55,9 +55,9 @@
 			<object class="NSNumberFormatter" id="199343999">
 				<dictionary class="NSMutableDictionary" key="NS.attributes">
 					<boolean value="YES" key="allowsFloats"/>
-					<object class="NSAttributedString" key="attributedStringForZero" id="470048254">
+					<object class="NSAttributedString" key="attributedStringForZero">
 						<string key="NSString">0,00 pt</string>
-						<dictionary key="NSAttributes" id="609753176">
+						<dictionary key="NSAttributes" id="920036295">
 							<object class="NSColor" key="NSColor" id="643782663">
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
@@ -81,10 +81,10 @@
 						</dictionary>
 					</object>
 					<string key="decimalSeparator">,</string>
-					<integer value="1000" key="formatterBehavior"/>
+					<integer value="1040" key="formatterBehavior"/>
 					<string type="base64-UTF8" key="groupingSeparator">wqA</string>
-					<object class="NSLocale" key="locale" id="225123807">
-						<string key="NS.identifier">fr_FR</string>
+					<object class="NSLocale" key="locale" id="1157">
+						<string key="NS.identifier"/>
 					</object>
 					<object class="NSDecimalNumberPlaceholder" key="maximum" id="183449842">
 						<int key="NS.exponent">3</int>
@@ -110,21 +110,24 @@
 				<string key="NS.negativeformat">-#,##0.00 pt</string>
 				<nil key="NS.positiveattrs"/>
 				<nil key="NS.negativeattrs"/>
-				<reference key="NS.zero" ref="470048254"/>
-				<object class="NSAttributedString" key="NS.nil">
-					<string key="NSString"/>
-				</object>
+				<nil key="NS.zero"/>
+				<nil key="NS.nil"/>
 				<object class="NSAttributedString" key="NS.nan">
 					<string key="NSString">NaN</string>
 					<dictionary key="NSAttributes" id="147481562"/>
 				</object>
 				<reference key="NS.min" ref="398501941"/>
 				<reference key="NS.max" ref="183449842"/>
-				<nil key="NS.rounding"/>
+				<object class="NSDecimalNumberHandler" key="NS.rounding">
+					<int key="NS.roundingmode">3</int>
+					<bool key="NS.raise.overflow">YES</bool>
+					<bool key="NS.raise.underflow">YES</bool>
+					<bool key="NS.raise.dividebyzero">YES</bool>
+				</object>
 				<string key="NS.decimal">,</string>
 				<string type="base64-UTF8" key="NS.thousand">wqA</string>
 				<bool key="NS.hasthousands">YES</bool>
-				<bool key="NS.localized">YES</bool>
+				<bool key="NS.localized">NO</bool>
 				<bool key="NS.allowsfloats">YES</bool>
 			</object>
 			<object class="NSCustomView" id="566408037">
@@ -509,7 +512,9 @@
 									<string key="decimalSeparator">,</string>
 									<integer value="1000" key="formatterBehavior"/>
 									<string type="base64-UTF8" key="groupingSeparator">wqA</string>
-									<reference key="locale" ref="225123807"/>
+									<object class="NSLocale" key="locale">
+										<string key="NS.identifier">fr_FR</string>
+									</object>
 									<object class="NSDecimalNumberPlaceholder" key="minimum" id="446756466">
 										<int key="NS.exponent">0</int>
 										<int key="NS.length">0</int>
@@ -1374,9 +1379,7 @@ A</bytes>
 																	<dictionary class="NSMutableDictionary" key="NS.attributes">
 																		<boolean value="YES" key="allowsFloats"/>
 																		<integer value="1040" key="formatterBehavior"/>
-																		<object class="NSLocale" key="locale" id="1157">
-																			<string key="NS.identifier"/>
-																		</object>
+																		<reference key="locale" ref="1157"/>
 																		<real value="0.0" key="minimum"/>
 																		<string key="negativeInfinitySymbol">-∞</string>
 																		<string key="nilSymbol"/>
@@ -5224,7 +5227,7 @@ AWOu6+Ha4yBLmIEPcgY/YeEHICAADwEAAAMAAAABABEAAAEBAAMAAAABABEAAAECAAMAAAAEAAAEygED
 AAMAAAABAAUAAAEGAAMAAAABAAIAAAERAAQAAAABAAAACAESAAMAAAABAAEAAAEVAAMAAAABAAQAAAEW
 AAMAAAABABEAAAEXAAQAAAABAAAECAEcAAMAAAABAAEAAAE9AAMAAAABAAIAAAFSAAMAAAABAAEAAAFT
 AAMAAAAEAAAE0odzAAcAABnsAAAE2gAAAAAACAAIAAgACAABAAEAAQABAAAZ7GFwcGwCEAAAbW50clJH
-QiBYWVogB94AAQAHABUALQAfYWNzcEFQUEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA
+QiBYWVogB98AAQAUABYAOQA5YWNzcEFQUEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA
 0y1hcHBsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARZGVzYwAA
 AVAAAABiZHNjbQAAAbQAAAJCY3BydAAAA/gAAADQd3RwdAAABMgAAAAUclhZWgAABNwAAAAUZ1hZWgAA
 BPAAAAAUYlhZWgAABQQAAAAUclRSQwAABRgAAAgMYWFyZwAADSQAAAAgdmNndAAADUQAAAYSbmRpbgAA
@@ -5241,7 +5244,7 @@ AEQAIABDAG8AbABvAHIAaQBkAG8ATABDAEQAIABhACAAQwBvAHIAZQBzX2mCcgAgAEwAQwBEAEwAQwBE
 ACAAYwBvAGwAbwByMKsw6TD8ACAATABDAEQEJgQyBDUEQgQ9BD4EOQAgBBYEGgAtBDQEOARBBD8EOwQ1
 BDkARgDkAHIAZwAtAEwAQwBEX2mCcm2yZnaYb3k6VmgARgBhAHIAYgAtAEwAQwBEAFYA5AByAGkALQBM
 AEMARABMAEMARAAgAGMAbwBsAG8AcgBpzuy37AAgAEwAQwBEAAB0ZXh0AAAAAENvcHlyaWdodCBBcHBs
-ZSwgSW5jLiwgMjAxNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ZSwgSW5jLiwgMjAxNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAWFlaIAAAAAAAAPNSAAEAAAABFs9YWVogAAAAAAAAYZwAADaEAAAHTVhZWiAAAAAAAABtlgAA
@@ -7356,14 +7359,14 @@ AAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGxtbW9kAAAAAAAABhAAAJyBAAAAAMG9
 			<object class="NSNumberFormatter" id="460117439">
 				<dictionary class="NSMutableDictionary" key="NS.attributes">
 					<boolean value="YES" key="allowsFloats"/>
-					<object class="NSAttributedString" key="attributedStringForZero" id="966826388">
+					<object class="NSAttributedString" key="attributedStringForZero">
 						<string key="NSString">0,00 pt</string>
-						<reference key="NSAttributes" ref="609753176"/>
+						<reference key="NSAttributes" ref="920036295"/>
 					</object>
 					<string key="decimalSeparator">,</string>
-					<integer value="1000" key="formatterBehavior"/>
+					<integer value="1040" key="formatterBehavior"/>
 					<string type="base64-UTF8" key="groupingSeparator">wqA</string>
-					<reference key="locale" ref="225123807"/>
+					<reference key="locale" ref="1157"/>
 					<object class="NSDecimalNumberPlaceholder" key="maximum" id="164277045">
 						<int key="NS.exponent">3</int>
 						<int key="NS.length">1</int>
@@ -7381,21 +7384,24 @@ AAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGxtbW9kAAAAAAAABhAAAJyBAAAAAMG9
 				<string key="NS.negativeformat">-#,##0.00 pt</string>
 				<nil key="NS.positiveattrs"/>
 				<nil key="NS.negativeattrs"/>
-				<reference key="NS.zero" ref="966826388"/>
-				<object class="NSAttributedString" key="NS.nil">
-					<string key="NSString"/>
-				</object>
+				<nil key="NS.zero"/>
+				<nil key="NS.nil"/>
 				<object class="NSAttributedString" key="NS.nan">
 					<string key="NSString">NaN</string>
 					<reference key="NSAttributes" ref="147481562"/>
 				</object>
 				<real value="-1000" key="NS.min"/>
 				<reference key="NS.max" ref="164277045"/>
-				<nil key="NS.rounding"/>
+				<object class="NSDecimalNumberHandler" key="NS.rounding">
+					<int key="NS.roundingmode">3</int>
+					<bool key="NS.raise.overflow">YES</bool>
+					<bool key="NS.raise.underflow">YES</bool>
+					<bool key="NS.raise.dividebyzero">YES</bool>
+				</object>
 				<string key="NS.decimal">,</string>
 				<string type="base64-UTF8" key="NS.thousand">wqA</string>
 				<bool key="NS.hasthousands">YES</bool>
-				<bool key="NS.localized">YES</bool>
+				<bool key="NS.localized">NO</bool>
 				<bool key="NS.allowsfloats">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="316673541">
@@ -13604,6 +13610,7 @@ AAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGxtbW9kAAAAAAAABhAAAJyBAAAAAMG9
 				<boolean value="YES" key="1500.ImportedFromIB2"/>
 				<string key="1502.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1502.ImportedFromIB2"/>
+				<integer value="1040" key="1510.IBNumberFormatterBehaviorMetadataKey"/>
 				<boolean value="YES" key="1510.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="1510.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1510.ImportedFromIB2"/>
@@ -13628,6 +13635,8 @@ AAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGxtbW9kAAAAAAAABhAAAJyBAAAAAMG9
 				<boolean value="YES" key="2500.ImportedFromIB2"/>
 				<string key="2501.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="2501.ImportedFromIB2"/>
+				<integer value="1040" key="284.IBNumberFormatterBehaviorMetadataKey"/>
+				<boolean value="YES" key="284.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="284.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="284.ImportedFromIB2"/>
 				<string key="4156.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -13656,6 +13665,8 @@ AAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGxtbW9kAAAAAAAABhAAAJyBAAAAAMG9
 				</object>
 				<string key="4917.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="4917.ImportedFromIB2"/>
+				<integer value="1040" key="5078.IBNumberFormatterBehaviorMetadataKey"/>
+				<boolean value="YES" key="5078.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="5078.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="5078.ImportedFromIB2"/>
 				<string key="573.IBEditorWindowLastContentRect">{{327, 290}, {600, 466}}</string>

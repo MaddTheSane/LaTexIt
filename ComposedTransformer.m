@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/04/09.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 #import "ComposedTransformer.h"
@@ -38,8 +38,13 @@
 +(id) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
            additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath
 {
+  #ifdef ARC_ENABLED
+  id result = [[[self class] alloc] initWithValueTransformer:valueTransformer
+    additionalValueTransformer:additionalValueTransformer additionalKeyPath:additionalKeyPath];
+  #else
   id result = [[[[self class] alloc] initWithValueTransformer:valueTransformer
     additionalValueTransformer:additionalValueTransformer additionalKeyPath:additionalKeyPath] autorelease];
+  #endif
   return result;
 }
 //end transformerWithValueTransformer:
@@ -49,19 +54,28 @@
 {
   if ((!(self = [super init])))
     return nil;
+  #ifdef ARC_ENABLED
+  self->valueTransformer           = aValueTransformer;
+  self->additionalValueTransformer = anAdditionalValueTransformer;
+  self->additionalKeyPath          = anAdditionalKeyPath;
+  #else
   self->valueTransformer           = [aValueTransformer retain];
   self->additionalValueTransformer = [anAdditionalValueTransformer retain];
   self->additionalKeyPath          = [anAdditionalKeyPath copy];
+  #endif
   return self;
 }
 //end initWithValueTransformer:additionalKeyPath:
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->valueTransformer           release];
   [self->additionalValueTransformer release];
   [self->additionalKeyPath          release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 //
 
 //this file is an extension of the NSWorkspace class
@@ -54,7 +54,8 @@
     id runningApplication = nil;
     while((runningApplication = [enumerator nextObject]))
     {
-      [runningApplication performSelector:@selector(terminate)];
+      SEL terminateSelector = NSSelectorFromString(@"terminate");
+      [runningApplication performSelector:terminateSelector];
       result |= YES;
     }
   }//end if (runningApplicationClass)

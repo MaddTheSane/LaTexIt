@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 #import "BodyTemplatesTableView.h"
 
@@ -28,7 +28,10 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [super dealloc];
+  #endif
 }
 //end dealloc
 

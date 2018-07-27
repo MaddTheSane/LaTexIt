@@ -3,12 +3,13 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/05.
-//  Copyright 2005-2014 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSWorkspace class
 
 #import "NSStringExtended.h"
 
+#import "RegexKitLite.h"
 #import "Utils.h"
 
 @implementation NSString (Extended)
@@ -46,7 +47,10 @@
     }
     if (enc)
       *enc = usedEncoding;
+    #ifdef ARC_ENABLED
+    #else
     [string autorelease];
+    #endif
   }
   return string;
 }
@@ -84,7 +88,10 @@
     }
     if (enc)
       *enc = usedEncoding;
+    #ifdef ARC_ENABLED
+    #else
     [string autorelease];
+    #endif
   }
   return string;
 }
@@ -163,9 +170,19 @@
     unichar yenChar = 0x00a5;
     yenString = [[NSString alloc] initWithCharacters:&yenChar length:1]; //the yen symbol as a string
   }
-  [stringWithBackslash replaceOccurrencesOfString:yenString withString:@"\\"
-                                          options:NSLiteralSearch range:NSMakeRange(0, [stringWithBackslash length])];
-  return stringWithBackslash;
+  [stringWithBackslash replaceOccurrencesOfRegex:[NSString stringWithFormat:@"%@([[:space:]]+)", yenString]
+                                      withString:@"\\\\yen{}$1" options:RKLCaseless|RKLMultiline
+                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
+  [stringWithBackslash replaceOccurrencesOfRegex:[NSString stringWithFormat:@"%@%@", yenString, yenString]
+                                      withString:@"\\\\\\\\" options:RKLCaseless|RKLMultiline
+                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
+  [stringWithBackslash replaceOccurrencesOfRegex:[NSString stringWithFormat:@"%@([^[[:space:]]0-9])", yenString]
+                                      withString:@"\\\\$1" options:RKLCaseless|RKLMultiline
+                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
+  [stringWithBackslash replaceOccurrencesOfRegex:yenString
+                                      withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
+                                           range:NSMakeRange(0, [stringWithBackslash length]) error:nil];
+  return [[stringWithBackslash copy] autorelease];
 }
 //end replaceYenSymbol
 
