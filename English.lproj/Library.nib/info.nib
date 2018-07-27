@@ -9,19 +9,19 @@
 		<key>22</key>
 		<string>233 291 205 199 0 0 1280 832 </string>
 		<key>57</key>
-		<string>492 513 296 106 0 0 1280 832 </string>
+		<string>505 517 318 102 0 0 1280 832 </string>
 		<key>59</key>
-		<string>516 513 248 106 0 0 1280 832 </string>
+		<string>516 515 248 106 0 0 1280 832 </string>
 	</dict>
 	<key>IBFramework Version</key>
 	<string>446.1</string>
 	<key>IBOpenObjects</key>
 	<array>
+		<integer>5</integer>
 		<integer>57</integer>
-		<integer>59</integer>
 		<integer>22</integer>
 		<integer>51</integer>
-		<integer>5</integer>
+		<integer>59</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>8L127</string>

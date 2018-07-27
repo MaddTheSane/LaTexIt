@@ -37,6 +37,8 @@
                 donationPanel = NSPanel; 
                 readmeTextView = NSTextView; 
                 readmeWindow = NSWindow; 
+                updatesInformationTextView = NSTextView; 
+                updatesPanel = NSPanel; 
             }; 
             SUPERCLASS = NSObject; 
         }, 

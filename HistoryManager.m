@@ -317,7 +317,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         //Then save the data
         NSString* historyFilePath = [path stringByAppendingPathComponent:@"history.dat"];
         NSDictionary* plist =
-          [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.1", @"version", compressedData, @"data", nil];
+          [NSDictionary dictionaryWithObjectsAndKeys:@"1.12.0", @"version", compressedData, @"data", nil];
         NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
         historyShouldBeSaved = ![dataToWrite writeToFile:historyFilePath atomically:YES];
       }//end if path ok

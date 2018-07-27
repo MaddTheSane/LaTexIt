@@ -15,6 +15,8 @@
 extern NSString* LibraryDidChangeNotification;
 extern NSString* LibraryItemsPboardType;
 
+typedef enum {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN} library_import_option_t;
+
 @class HistoryItem;
 @class LibraryFile;
 @class LibraryFolder;
@@ -28,6 +30,8 @@ extern NSString* LibraryItemsPboardType;
   NSUndoManager* undoManager;
   
   NSThread* mainThread;
+  
+  NSString* libraryPath;
 }
 
 +(LibraryManager*) sharedManager; //the library manager singleton
@@ -50,6 +54,8 @@ extern NSString* LibraryItemsPboardType;
 -(void) refreshFileItem:(LibraryFile*)item withValue:(HistoryItem*)value;
 
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)selection selection:(NSArray*)selectedItems;
--(BOOL) loadFrom:(NSString*)path replace:(BOOL)replace;
+-(BOOL) loadFrom:(NSString*)path option:(library_import_option_t)option;
+
+-(NSString*) defaultLibraryPath;
 
 @end

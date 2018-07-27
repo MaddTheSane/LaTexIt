@@ -153,16 +153,19 @@ static NSMutableDictionary* cachePaths = nil;
     }
   }
 }
+//end initialize
 
 +(NSDictionary*) environmentDict
 {
   return environmentDict;
 }
+//end environmentDict
 
 +(NSArray*) unixBins
 {
   return unixBins;
 }
+//end unixBins
 
 +(AppController*) appController //access the unique instance of appController
 {
@@ -174,6 +177,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return appControllerInstance;
 }
+//end appController
 
 +(id) allocWithZone:(NSZone *)zone
 {
@@ -184,30 +188,36 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return appControllerInstance;
 }
+//end allocWithZone
 
 -(id) copyWithZone:(NSZone *)zone
 {
   return self;
 }
+//end copyWithZone:
 
 -(id) retain
 {
   return self;
 }
+//end retain
 
 -(unsigned) retainCount
 {
   return UINT_MAX;  //denotes an object that cannot be released
 }
+//end retainCount
 
 -(void) release
 {
 }
+//end release
 
 -(id) autorelease
 {
   return self;
 }
+//end autorelease
 
 -(id) init
 {
@@ -245,6 +255,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return self;
 }
+//end init
 
 -(void) dealloc
 {
@@ -259,6 +270,7 @@ static NSMutableDictionary* cachePaths = nil;
   [preferencesController release];
   [super dealloc];
 }
+//enddealloc
 
 -(NSLock*) strangeLock {return strangeLock;}
 
@@ -266,6 +278,7 @@ static NSMutableDictionary* cachePaths = nil;
 {
   return [[self class] currentDocument];
 }
+//end currentDocument
 
 +(NSString*) latexitTemporaryPath
 {
@@ -291,6 +304,7 @@ static NSMutableDictionary* cachePaths = nil;
     [fileManager createDirectoryAtPath:temporaryPath attributes:nil];
   return temporaryPath;
 }
+//end latexitTemporaryPath
 
 +(NSDocument*) currentDocument
 {
@@ -311,6 +325,7 @@ static NSMutableDictionary* cachePaths = nil;
     document = nil;
   return document;
 }
+//end currentDocument
 
 -(CompositionConfigurationController*) compositionConfigurationController
 {
@@ -318,6 +333,7 @@ static NSMutableDictionary* cachePaths = nil;
     compositionConfigurationController = [[CompositionConfigurationController alloc] init];
   return compositionConfigurationController;
 }
+//end compositionConfigurationController
 
 -(EncapsulationController*) encapsulationController
 {
@@ -325,6 +341,7 @@ static NSMutableDictionary* cachePaths = nil;
     encapsulationController = [[EncapsulationController alloc] init];
   return encapsulationController;
 }
+//end encapsulationController
 
 -(HistoryController*) historyController
 {
@@ -332,6 +349,7 @@ static NSMutableDictionary* cachePaths = nil;
     historyController = [[HistoryController alloc] init];
   return historyController;
 }
+//end historyController
 
 -(LatexPalettesController*) latexPalettesController
 {
@@ -339,6 +357,7 @@ static NSMutableDictionary* cachePaths = nil;
     latexPalettesController = [[LatexPalettesController alloc] init];
   return latexPalettesController;
 }
+//end latexPalettesController
 
 -(LibraryController*) libraryController
 {
@@ -346,6 +365,7 @@ static NSMutableDictionary* cachePaths = nil;
     libraryController = [[LibraryController alloc] init];
   return libraryController;
 }
+//end libraryController
 
 -(MarginController*) marginController
 {
@@ -353,6 +373,7 @@ static NSMutableDictionary* cachePaths = nil;
     marginController = [[MarginController alloc] init];
   return marginController;
 }
+//end marginController
 
 -(PreferencesController*) preferencesController
 {
@@ -360,6 +381,7 @@ static NSMutableDictionary* cachePaths = nil;
     preferencesController = [[PreferencesController alloc] init];
   return preferencesController;
 }
+//end preferencesController
 
 //the dummy document used for application service is lazily created at first use
 -(MyDocument*) _myDocumentServiceProvider
@@ -379,6 +401,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return myDocumentServiceProviderInstance;
 }
+//end _myDocumentServiceProvider
 
 //increase environmentPath
 -(void) _addInEnvironmentPath:(NSString*)path
@@ -388,6 +411,7 @@ static NSMutableDictionary* cachePaths = nil;
   [componentsSet removeObject:@"."];
   [environmentPath setString:[[componentsSet allObjects] componentsJoinedByString:@":"]];
 }
+//end _addInEnvironmentPath
 
 //performs a setenv()
 -(void) _setEnvironment
@@ -398,16 +422,19 @@ static NSMutableDictionary* cachePaths = nil;
   [components addObject:oldPathString];
   setenv("PATH", [[components componentsJoinedByString:@":"] cString], 1);
 }
+//end _setEnvironment
 
 -(BOOL) applicationShouldOpenUntitledFile:(NSApplication*)sender
 {
   return YES;
 }
+//end applicationShouldOpenUntitledFile:
 
 -(MyDocument*) dummyDocument
 {
   return [self _myDocumentServiceProvider];
 }
+//end dummyDocument
 
 -(IBAction) makeDonation:(id)sender//display info panel
 {
@@ -415,6 +442,7 @@ static NSMutableDictionary* cachePaths = nil;
     [donationPanel center];
   [donationPanel orderFront:sender];
 }
+//end makeDonation:
 
 -(IBAction) newFromClipboard:(id)sender
 {
@@ -462,11 +490,13 @@ static NSMutableDictionary* cachePaths = nil;
     }
   }
 }
+//end newFromClipboard:
 
 -(IBAction) copyAs:(id)sender
 {
   [[(MyDocument*)[self currentDocument] imageView] copy:sender]; 
 }
+//end copyAs:
 
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
@@ -584,16 +614,19 @@ static NSMutableDictionary* cachePaths = nil;
     [sender setState:(latexPalettesController && [[latexPalettesController window] isVisible]) ? NSOnState : NSOffState];
   return ok;
 }
+//end validateMenuItem:
 
 -(IBAction) historyRemoveHistoryEntries:(id)sender
 {
   [[self historyController] removeHistoryEntries:sender];
 }
+//end historyRemoveHistoryEntries:
 
 -(IBAction) historyClearHistory:(id)sender
 {
   [[self historyController] clearHistory:sender];
 }
+//end historyClearHistory:
 
 -(IBAction) showOrHideHistory:(id)sender
 {
@@ -603,41 +636,49 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [controller showWindow:self];
 }
+//end showOrHideHistory:
 
 -(IBAction) libraryImportCurrent:(id)sender //creates a library item with the current document state
 {
   [[self libraryController] importCurrent:sender];
 }
+//end libraryImportCurrent:
 
 -(IBAction) libraryNewFolder:(id)sender     //creates a folder
 {
   [[self libraryController] newFolder:sender];
 }
+//end libraryNewFolder:
 
 -(IBAction) libraryRemoveSelectedItems:(id)sender    //removes some items
 {
   [[self libraryController] removeSelectedItems:sender];
 }
+//end libraryRemoveSelectedItems:
 
 -(IBAction) libraryRenameItem:(id)sender    //rename some items
 {
   [[self libraryController] renameItem:sender];
 }
+//end libraryRenameItem:
 
 -(IBAction) libraryRefreshItems:(id)sender   //refresh an item
 {
   [[self libraryController] refreshItems:sender];
 }
+//end libraryRefreshItems:
 
 -(IBAction) libraryOpen:(id)sender
 {
   [[self libraryController] open:sender];
 }
+//end libraryOpen:
 
 -(IBAction) librarySaveAs:(id)sender
 {
   [[self libraryController] saveAs:sender];
 }
+//end librarySaveAs:
 
 -(IBAction) showOrHideLibrary:(id)sender
 {
@@ -647,6 +688,7 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [controller showWindow:self];
 }
+//end showOrHideLibrary:
 
 -(IBAction) showOrHideColorInspector:(id)sender
 {
@@ -656,6 +698,7 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [colorPanel orderFront:self];
 }
+//end showOrHideColorInspector:
 
 -(IBAction) showOrHidePreamble:(id)sender
 {
@@ -666,6 +709,7 @@ static NSMutableDictionary* cachePaths = nil;
     [document setPreambleVisible:makePreambleVisible];
   }
 }
+//end showOrHidePreamble:
 
 -(IBAction) showOrHideLatexPalettes:(id)sender
 {
@@ -675,6 +719,7 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [controller showWindow:self];
 }
+//end showOrHideLatexPalettes:
 
 -(IBAction) showOrHideCompositionConfiguration:(id)sender
 {
@@ -684,6 +729,7 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [controller showWindow:self];
 }
+//end showOrHideCompositionConfiguration:
 
 -(IBAction) showOrHideEncapsulation:(id)sender
 {
@@ -693,6 +739,7 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [controller showWindow:self];
 }
+//end showOrHideEncapsulation:
 
 -(IBAction) showOrHideMargin:(id)sender
 {
@@ -702,6 +749,7 @@ static NSMutableDictionary* cachePaths = nil;
   else
     [controller showWindow:self];
 }
+//end showOrHideMargin:
 
 //looks for a programName in the given PATHs. Just tests that the file exists
 -(NSString*) findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes
@@ -725,6 +773,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return path;  
 }
+//end findUnixProgram:inPrefixes:
 
 //looks for a programName in the environment.
 -(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes
@@ -770,6 +819,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return path;
 }
+//end findUnixProgram:tryPrefixes:environment
 
 //ask for LaTeXiT's web site
 -(IBAction) openWebSite:(id)sender
@@ -791,63 +841,110 @@ static NSMutableDictionary* cachePaths = nil;
                     @"Ok", nil, nil);
   }
 }
+//end openWebSite:
 
 //check for updates on LaTeXiT's web site
 //if <sender> is nil, it's considered as a background task and will only present a panel if a new version is available.
 -(IBAction) checkUpdates:(id)sender
 {
-  NSURL* versionFileURL = [NSURL URLWithString:@"http://ktd.club.fr/programmation/fichiers/latexit-version-current"];
+  NSURL* versionsFileURL = [NSURL URLWithString:@"http://ktd.club.fr/programmation/fichiers/latexit-versions.plist"];
+  //NSURL* versionsFileURL = [NSURL URLWithString:@"file:///Users/chacha/Sites/site_perso_php/programmation/fichiers/latexit-versions.plist"];
   NSError* error = nil;
-  NSStringEncoding encoding = NSUnicodeStringEncoding;
-  NSString* currentVersion = [NSString stringWithContentsOfURL:versionFileURL guessEncoding:&encoding error:&error];
-  if (sender && !currentVersion)
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
-                                                                @"An error occured while trying to reach %@.\n You should check your network."),
-                                              [versionFileURL absoluteString]],
-                    @"Ok", nil, nil);
-  else
+  #ifndef PANTHER
+  NSData* plistData = [NSData dataWithContentsOfURL:versionsFileURL options:0 error:&error];
+  #else
+  NSData* plistData = [NSData dataWithContentsOfURL:versionsFileURL];
+  #endif
+  if (sender && (error || !plistData || ![plistData length]))
   {
-    NSArray* components = [currentVersion componentsSeparatedByString:@" "];
-    if (components && [components count])
-      currentVersion = [components objectAtIndex:0];
-
-    NSString* thisVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    if (!thisVersion)
-      thisVersion = @"";
-    components = [thisVersion componentsSeparatedByString:@" "];
-    if (components && [components count])
-      thisVersion = [components objectAtIndex:0];
-
-    int beta = (([components count] >= 3) && ([[components objectAtIndex:1] isEqualToString:@"beta"])) ?
-                [[components objectAtIndex:2] intValue] : 0;
-
-    NSComparisonResult comparison = [thisVersion compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
-    if (sender && (comparison == NSOrderedSame) && (beta > 0))
-      comparison = NSOrderedAscending;
-
-    if (sender && (comparison == NSOrderedSame))
-      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
-                      NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
-
-                      @"Ok", nil, nil);
-    else if (sender && (comparison == NSOrderedDescending))
-      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
-                      NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
-                                        @"Your version of LaTeXiT is more recent than the official available one"),
-                      @"Ok", nil, nil);
-    else if (comparison == NSOrderedAscending)
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\nYou should check your network.",
+                                                                @"An error occured while trying to reach %@.\nYou should check your network."),
+                                              [versionsFileURL absoluteString]],
+                    NSLocalizedString(@"Ok", @"Ok"), nil, nil);
+  }//end if network error
+  else if (plistData)
+  {
+    NSPropertyListFormat propertyListFormat;
+    NSString* errorString = nil;
+    id plist = [NSPropertyListSerialization propertyListFromData:plistData mutabilityOption:NSPropertyListImmutable
+                                                          format:&propertyListFormat errorDescription:&errorString];
+    NSString* latestVersionId = [plist objectForKey:@"latestVersionId"];
+    NSDictionary* latestVersion = latestVersionId ? [[plist objectForKey:@"versions"] objectForKey:latestVersionId] : nil;
+    NSString* latestVersionNumber = latestVersion ? [latestVersion objectForKey:@"number"] : nil;
+    NSDictionary* descriptions = latestVersion ? [latestVersion objectForKey:@"descriptions"] : nil;
+    NSData* latestVersionDescriptionAsData = [descriptions objectForKey:NSLocalizedString(@"current-language", @"current-language")];
+    NSAttributedString* latestVersionDescription =
+      [latestVersionDescriptionAsData length] ? [NSUnarchiver unarchiveObjectWithData:latestVersionDescriptionAsData] : nil;
+    if (latestVersionDescription)
+      [[updatesInformationTextView textStorage] setAttributedString:latestVersionDescription];
+    NSString* selfVersionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSMutableArray* words = [NSMutableArray arrayWithArray:[selfVersionNumber componentsSeparatedByString:@" "]];
+    NSCharacterSet* versionNumberCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
+    NSString* word = [words lastObject];
+    while(word &&
+          ![[word stringByTrimmingCharactersInSet:versionNumberCharacterSet] isEqualToString:@""] &&
+          ![word isEqualToString:@"beta"])
     {
-      int choice = NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
-                                   NSLocalizedString(@"A new version of LaTeXiT is available",
-                                                     @"A new version of LaTeXiT is available"),
-                                   NSLocalizedString(@"Open download page", @"Open download page"),
-                                   NSLocalizedString(@"Cancel", @"Cancel"), nil);
-      if (choice == NSAlertDefaultReturn)
-        [self openWebSite:self];
+      [words removeLastObject];
+      word = [words lastObject];
+    }
+    selfVersionNumber = [words componentsJoinedByString:@" "];
+    BOOL latestVersionNumberHasBeta = ([latestVersionNumber rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound);
+    BOOL selfVersionNumberHasBeta   = ([selfVersionNumber   rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound);
+    NSString* latestVersionNumberWithoutBeta =
+      latestVersionNumberHasBeta ? [[latestVersionNumber componentsSeparatedByString:@" "] objectAtIndex:0] : latestVersionNumber;
+    NSString* selfVersionNumberWithoutBeta   =
+      selfVersionNumberHasBeta   ? [[selfVersionNumber componentsSeparatedByString:@" "] objectAtIndex:0] : selfVersionNumber;
+    NSComparisonResult comparisonResult = [selfVersionNumber compare:latestVersionNumber options:NSCaseInsensitiveSearch|NSNumericSearch];
+    NSComparisonResult comparisonResultWithoutBeta = [selfVersionNumberWithoutBeta compare:latestVersionNumberWithoutBeta
+                                                                                   options:NSCaseInsensitiveSearch|NSNumericSearch];
+    if ((selfVersionNumberHasBeta && 
+         (
+          (comparisonResultWithoutBeta == NSOrderedAscending) ||
+          ((comparisonResultWithoutBeta == NSOrderedSame) && (comparisonResult == NSOrderedAscending)) ||
+          ((comparisonResultWithoutBeta == NSOrderedSame) && !latestVersionNumberHasBeta)
+         )
+        ) ||
+        (!selfVersionNumberHasBeta && !latestVersionNumberHasBeta && (comparisonResultWithoutBeta == NSOrderedAscending))
+       )
+    {
+      [updatesPanel makeKeyAndOrderFront:self];
+      [updatesPanel center];
+    }
+    else if (sender &&
+             ((selfVersionNumberHasBeta &&
+               (
+                ((comparisonResultWithoutBeta == NSOrderedSame) && (comparisonResult == NSOrderedDescending)) ||
+                (comparisonResultWithoutBeta == NSOrderedDescending)
+               )
+              ) || (!selfVersionNumberHasBeta && (comparisonResultWithoutBeta == NSOrderedDescending))
+             )
+            )
+    {
+      NSAlert* alert =
+        [NSAlert alertWithMessageText:NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date")
+                       defaultButton:NSLocalizedString(@"Ok", @"Ok")
+                     alternateButton:nil
+                         otherButton:nil
+           informativeTextWithFormat:NSLocalizedString(@"Your version of LaTeXiT is more recent than the latest one available",
+                                                       @"Your version of LaTeXiT is more recent than the latest one available")];
+       [alert runModal];
+    }
+    else if (sender)
+    {
+      NSAlert* alert =
+        [NSAlert alertWithMessageText:NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date")
+                       defaultButton:NSLocalizedString(@"Ok", @"Ok")
+                     alternateButton:nil
+                         otherButton:nil
+           informativeTextWithFormat:NSLocalizedString(@"Your version of LaTeXiT is the same as the latest one available",
+                                                       @"Your version of LaTeXiT is the same as the latest one available")];
+       [alert runModal];
     }
   }//end if network ok
 }
+//end checkUpdates:
 
 -(IBAction) exportImage:(id)sender
 {
@@ -855,6 +952,7 @@ static NSMutableDictionary* cachePaths = nil;
   if (document)
     [document exportImage:sender];
 }
+//end exportImage:
 
 -(IBAction) makeLatex:(id)sender
 {
@@ -862,6 +960,7 @@ static NSMutableDictionary* cachePaths = nil;
   if (document)
     [[document makeLatexButton] performClick:self];
 }
+//end makeLatex:
 
 -(IBAction) displayLog:(id)sender
 {
@@ -869,6 +968,7 @@ static NSMutableDictionary* cachePaths = nil;
   if (document)
     [document displayLastLog:sender];
 }
+//end displayLog:
 
 //returns the preamble that should be used, according to the fact that color.sty is available or not
 -(NSAttributedString*) preamble
@@ -886,41 +986,49 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return [preamble autorelease];
 }
+//end preamble
 
 -(BOOL) isGsAvailable
 {
   return isGsAvailable;
 }
+//end isGsAvailable
 
 -(BOOL) isDvipdfAvailable
 {
   return isDvipdfAvailable;
 }
+//end isDvipdfAvailable
 
 -(BOOL) isPdfLatexAvailable
 {
   return isPdfLatexAvailable;
 }
+//end isPdfLatexAvailable
 
 -(BOOL) isPs2PdfAvailable
 {
   return isPs2PdfAvailable;
 }
+//end isPs2PdfAvailable
 
 -(BOOL) isXeLatexAvailable
 {
   return isXeLatexAvailable;
 }
+//end isXeLatexAvailable
 
 -(BOOL) isLatexAvailable
 {
   return isLatexAvailable;
 }
+//end isLatexAvailable
 
 -(BOOL) isColorStyAvailable
 {
   return isColorStyAvailable;
 }
+//end isColorStyAvailable
 
 //try to find gs program, searching by its name
 -(void) _findGsPath
@@ -938,6 +1046,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
+//end _findGsPath
 
 //try to find pdflatex program, searching by its name
 -(void) _findPdfLatexPath
@@ -955,6 +1064,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
+//end _findPdfLatexPath
 
 //try to find pdflatex program, searching by its name
 -(void) _findPs2PdfPath
@@ -972,6 +1082,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
+//end _findPs2PdfPath
 
 //try to find xelatex program, searching by its name
 -(void) _findXeLatexPath
@@ -989,6 +1100,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
+//end _findXeLatexPath
 
 //try to find latex program, searching by its name
 -(void) _findLatexPath
@@ -1006,6 +1118,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
+//end _findLatexPath
 
 //try to find dvipdf program, searching by its name
 -(void) _findDvipdfPath
@@ -1023,6 +1136,7 @@ static NSMutableDictionary* cachePaths = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:SomePathDidChangeNotification object:nil];
   }
 }
+//end _findDvipdfPath
 
 //check if gs work as expected. The user may have given a name different from "gs"
 -(BOOL) _checkGs
@@ -1054,6 +1168,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return ok;
 }
+//end _checkGs
 
 //check if pdflatex works as expected. The user may have given a name different from "pdflatex"
 -(BOOL) _checkPdfLatex
@@ -1085,6 +1200,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return ok;
 }
+//end _checkPdfLatex
 
 //check if ps2pdf works as expected. The user may have given a name different from "ps2pdf"
 -(BOOL) _checkPs2Pdf
@@ -1114,6 +1230,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return ok;
 }
+//end _checkPs2Pdf
 
 //check if xelatex works as expected. The user may have given a name different from "pdflatex"
 -(BOOL) _checkXeLatex
@@ -1145,6 +1262,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return ok;
 }
+//end _checkXeLatex
 
 //check if latex works as expected. The user may have given a name different from "pdflatex"
 -(BOOL) _checkLatex
@@ -1176,6 +1294,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return ok;
 }
+//end _checkLatex
 
 //check if dvipdf works as expected. The user may have given a name different from "pdflatex"
 -(BOOL) _checkDvipdf
@@ -1205,6 +1324,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   return ok;
 }
+//end _checkDvipdf
 
 //checks if color.sty is available, by compiling a simple latex string that uses it
 -(BOOL) _checkColorSty
@@ -1279,6 +1399,7 @@ static NSMutableDictionary* cachePaths = nil;
   [checkTask release];
   return ok;
 }
+//end _checkColorSty
 
 -(void) _checkConfiguration
 {
@@ -1290,6 +1411,7 @@ static NSMutableDictionary* cachePaths = nil;
   isDvipdfAvailable   = [self _checkDvipdf];
   isColorStyAvailable = [self _checkColorSty];
 }
+//end _checkConfiguration
 
 //when the user has clicked a latexPalettes element, we must put some text in the current document.
 //sometimes, we must add symbols, and sometimes, we must encapsulate the selection into a symbol function
@@ -1306,12 +1428,14 @@ static NSMutableDictionary* cachePaths = nil;
     [myDocument insertText:string];
   }
 }
+//end latexPalettesClick:
 
 -(void) linkBackDidClose:(LinkBack*)link
 {
   NSArray* documents = [NSApp orderedDocuments];
   [documents makeObjectsPerformSelector:@selector(closeLinkBackLink:) withObject:link];
 }
+//end linkBackDidClose:
 
 //a link back request will create a new document thanks to the available data, as historyItems
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link
@@ -1336,6 +1460,7 @@ static NSMutableDictionary* cachePaths = nil;
     [window makeFirstResponder:[currentDocument sourceTextView]];
   }
 }
+//end linkBackClientDidRequestEdit:
 
 //when the app is launched, the first document appears, then a dialog box can indicate if pdflatex and gs
 //have been found or not. Then, the user has the ability to manually find them
@@ -1618,27 +1743,37 @@ static NSMutableDictionary* cachePaths = nil;
   if ([userDefaults boolForKey:CheckForNewVersionsKey])
     [NSApplication detachDrawingThread:@selector(checkUpdates:) toTarget:self withObject:nil];
 }
+//end applicationDidFinishLaunching:
 
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_EQNARRAY error:error];
 }
+//end serviceLatexisationEqnarray:userData:error:
+
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_DISPLAY error:error];
 }
+//end serviceLatexisationDisplay:userData:error:
+
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_INLINE error:error];
 }
+//end serviceLatexisationInline:userData:error:
+
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_TEXT error:error];
 }
+//end serviceLatexisationText:userData:error:
+
 -(void) serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceMultiLatexisation:pboard userData:userData error:error];
 }
+//end serviceMultiLatexisation:userData:error:
 
 //performs the application service
 -(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
@@ -1941,6 +2076,7 @@ static NSMutableDictionary* cachePaths = nil;
     }//end @synchronized(self)
   }//end if latexisation can be performed
 }
+//end _serviceLatexisation:userData:mode:error:
 
 -(void) _serviceMultiLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
@@ -2193,6 +2329,7 @@ static NSMutableDictionary* cachePaths = nil;
     }//end @synchronized(self)
   }//end if latexisation can be performed
 }
+//end _serviceMultiLatexisation:userData:mode:error:
 
 -(IBAction) showPreferencesPane:(id)sender
 {
@@ -2201,12 +2338,14 @@ static NSMutableDictionary* cachePaths = nil;
   NSWindow* window = [preferencesController window];
   [window makeKeyAndOrderFront:self];
 }
+//end showPreferencesPane:
 
 -(void) showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier//showPreferencesPane + select one pane
 {
   [self showPreferencesPane:self];
   [preferencesController selectPreferencesPaneWithItemIdentifier:itemIdentifier];
 }
+//end showPreferencesPaneWithItemIdentifier:
 
 -(IBAction) showHelp:(id)sender
 {
@@ -2221,6 +2360,7 @@ static NSMutableDictionary* cachePaths = nil;
     [readmeWindow center];
   [readmeWindow makeKeyAndOrderFront:self];
 }
+//end showHelp:
 
 //if a path has changed in the preferences, pdflatex may become [un]available, so we must update
 //the "Latexise" button of the documents
@@ -2230,6 +2370,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSArray* documents = [NSApp orderedDocuments];
   [documents makeObjectsPerformSelector:@selector(updateAvailabilities:) withObject:nil];
 }
+//end _somePathDidChangeNotification:
 
 //modifies the \usepackage{color} line of the preamble to use the given color
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor
@@ -2253,9 +2394,9 @@ static NSMutableDictionary* cachePaths = nil;
       colorString = [NSString stringWithFormat:@"{color}%@", colorString];
       [preamble replaceCharactersInRange:colorRange withString:colorString];
     }
-    else //try to find a good place of insertion
+    else //try to find a good place of insertion.
     {
-      colorString = [NSString stringWithFormat:@"{color}%@", colorString];
+      colorString = [NSString stringWithFormat:@"\\usepackage{color}%@", colorString];
       NSRange firstUsePackage = [preamble rangeOfString:@"\\usepackage"];
       if (firstUsePackage.location != NSNotFound)
         [preamble insertString:colorString atIndex:firstUsePackage.location];
@@ -2263,9 +2404,9 @@ static NSMutableDictionary* cachePaths = nil;
         [preamble appendString:colorString];
     }
   }//end insert color
-
   return preamble;
 }
+//end insertColorInPreamble:color:
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
@@ -2427,6 +2568,7 @@ static NSMutableDictionary* cachePaths = nil;
   }//end @synchronized
   return data;
 }
+//end dataForType:pdfData:jpegColor:jpegQuality:scaleAsPercent:
 
 //returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor
@@ -2475,9 +2617,9 @@ static NSMutableDictionary* cachePaths = nil;
   @catch(NSException* e)//may occur if lockFocus fails
   {
   }
-
   return icon;
 }
+//end makeIconForData:backgroundColor:
 
 //application delegate methods
 -(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
@@ -2498,14 +2640,15 @@ static NSMutableDictionary* cachePaths = nil;
                          informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"If you choose <Replace the library>, the current library will be lost")];
     int confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
-      ok = [[LibraryManager sharedManager] loadFrom:filename replace:NO];
+      ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_MERGE];
     else if (confirm == NSAlertOtherReturn)
-      ok = [[LibraryManager sharedManager] loadFrom:filename replace:YES];
+      ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_OVERWRITE];
     else
       ok = YES;
   }
   return ok;
 }
+//end application:openFile:
 
 -(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
@@ -2573,6 +2716,7 @@ static NSMutableDictionary* cachePaths = nil;
   }//end if data
   return newData;
 }
+//end annotatePdfDataInLEEFormat:preamble:source:color:mode:magnification:baseline:backgroundColor:title:
 
 //as the delegate, no need to register the notification
 //When the application quits, the notification is caught to perform some saving
@@ -2599,6 +2743,7 @@ static NSMutableDictionary* cachePaths = nil;
   visible = marginController && [[marginController window] isVisible];
   [userDefaults setBool:visible forKey:MarginControllerVisibleAtStartupKey];
 }
+//end applicationWillTerminate:
 
 //if the marginController is not loaded, just use the user defaults values
 -(float) marginControllerTopMargin
@@ -2606,18 +2751,21 @@ static NSMutableDictionary* cachePaths = nil;
   return marginController ? [marginController topMargin]
                           : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalTopMarginKey];
 }
+//end marginControllerTopMargin
 
 -(float) marginControllerBottomMargin
 {
   return marginController ? [marginController bottomMargin]
                           : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalBottomMarginKey];
 }
+//end marginControllerBottomMargin
 
 -(float) marginControllerLeftMargin
 {
   return marginController ? [marginController leftMargin]
                           : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalLeftMarginKey];
 }
+//end marginControllerLeftMargin
 
 -(float) marginControllerRightMargin
 {
@@ -2632,6 +2780,7 @@ static NSMutableDictionary* cachePaths = nil;
   [HistoryManager sharedManager];
   [threadAutoreleasePool release];
 }
+//end _triggerHistoryBackgroundLoading:
 
 -(void) changeServiceShortcuts
 {
@@ -2699,15 +2848,18 @@ static NSMutableDictionary* cachePaths = nil;
   }//end if infoPlist
   CFRelease(cfInfoPlist);
 }
+//end changeServiceShortcuts
 
 -(void) startMessageProgress:(NSString*)message
 {
   [[[NSDocumentController sharedDocumentController] documents] makeObjectsPerformSelector:@selector(startMessageProgress:) withObject:message];
 }
+//end startMessageProgress:
 
 -(void) stopMessageProgress
 {
   [[[NSDocumentController sharedDocumentController] documents] makeObjectsPerformSelector:@selector(stopMessageProgress)];
 }
+//end stopMessageProgress
 
 @end

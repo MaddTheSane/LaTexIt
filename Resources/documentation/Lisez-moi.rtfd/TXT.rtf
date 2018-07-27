@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.11.1\
+\f2\b \cf0 LaTeXiT 1.12.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -55,7 +55,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.11.1 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.12.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -220,7 +220,7 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \fs22 \cf0 \ulnone \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 LinkBack est une technologie, incorpor\'8ee \'88 LaTeXiT. Si vous d\'8eposez une \'8equation depuis LaTeXiT dans une autre application supportant LinkBack, vous pourrez alors ult\'8erieurement r\'8eouvrir l'\'8equation dans LaTeXiT, g\'8en\'8eralement en passant par le menu <\'83dition>. Pour plus d'informations sur LinkBack, et savoir quelles applications supportent LinkBack, vous pouvez consulter l'adresse \cf3 http://www.linkbackproject.org\
-\cf0 Actuellement, Nisus Writer Express, OmniGraffle 4 et Keynote 1&2 (via un plug-in), supportent LinkBack.\cf3 \
+\cf0 Actuellement, Nisus Writer Express, OmniGraffle 4 et Keynote 1, 2, 3 (via un plug-in), supportent LinkBack.\cf3 \
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
@@ -325,7 +325,7 @@ Le i-installer est un petit programme qui permet d'installer LaTeX (entre autres
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 Choisissez le menu "i-packages > Known packages i-directory"\
 Dans le panneau de gauche, choisissez le "Gerben's i-Directory @ TUG" et <Use>\
-Dans le panneau de droite, choisissez "Tex" et <Open i-package>. Ensuite, suivez les instructions. LaTeX sera alors install\'8e sur votre machine. Vous pouvez r\'8epondre oui (ou choisir la r\'8eponse par d\'8efaut) \'88 toutes les questions.\
+Dans le panneau de droite, choisissez "Tex" ou "gwTex based on TexLive" et <Open i-package>. Ensuite, suivez les instructions. LaTeX sera alors install\'8e sur votre machine. Vous pouvez r\'8epondre oui (ou choisir la r\'8eponse par d\'8efaut) \'88 toutes les questions.\
 Pendant que vous y \'90tes, vous pouvez aussi installer, de la m\'90me fa\'8don, Ghoscript 8, qui est n\'8ecessaire pour de nombreux programmes.\
 \
 Maintenant, LaTeX est install\'8e sur votre ordinateur. Si vous n'\'8etiez pas pr\'8evenu, vous ne le sauriez m\'90me pas. En fait, LaTeX n'a pas d'interface graphique, les programmes sont orient\'8es "Unix", et ne peuvent \'90tre appel\'8es que sur la ligne de commande (avec /Appication/Utilitaires/Terminal).\
@@ -337,6 +337,11 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.12.0 (13 f\'8evrier 2007)\
+- l'import d'une biblioth\'8fque peut maintenant fusionner/remplacer/changer la biblioth\'8fque courante;\
+- correction d'un bug \'88 l'ouverture de documents LaTeX ne contenant pas \\usepackage\{color\};\
+- correction du caract\'8fre omicron de la palette LaTeX.\
+\
 v 1.11.1 (9 janvier 2007)\
 - ajout d'une notification si l'utilisateur veut rafra\'94chir une \'8equation de la biblioth\'8fque qui n'est pas celle qu'il avait pr\'8ealablement s\'8electionn\'8ee ;\
 - correction d'un bug dans la d\'8etection des erreurs LaTeX ;\

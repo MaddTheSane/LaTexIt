@@ -24,7 +24,7 @@
   BOOL enablePreviewImage;
   
   IBOutlet NSView*             importAccessoryView;
-  IBOutlet NSButton*           importReplacesExistingLibraryButton;
+  IBOutlet NSPopUpButton*      importOptionPopUpButton;
   IBOutlet NSView*             exportAccessoryView;
   IBOutlet NSButton*           exportOnlySelectedButton;
 }
@@ -39,6 +39,7 @@
 
 -(IBAction) open:(id)sender;
 -(IBAction) saveAs:(id)sender;
+-(IBAction) openDefaultLibraryPath:(id)sender;
 
 -(IBAction) changeLibraryPreviewPanelSegmentedControl:(id)sender;
 

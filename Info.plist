@@ -55,7 +55,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.11.1 (Panther version)</string>
+	<string>1.12.0 (Panther version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>

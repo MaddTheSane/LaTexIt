@@ -39,6 +39,9 @@ NSString* LibraryItemsPboardType = @"LibraryItemsPboardType";
 @interface LibraryManager (PrivateAPI)
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves library when quitting
 
+-(NSString*) libraryPath;
+-(void) setLibraryPath:(NSString*)path;
+
 -(void) _reinsertItems:(NSArray*)items atParents:(NSArray*)parents atIndexes:(NSArray*)indexes; //to perform undo
 -(void) _performDropOperation:(id <NSDraggingInfo>)info onItem:(LibraryItem*)parentItem atIndex:(int)childIndex
                   outlineView:(NSOutlineView*)outlineView;
@@ -137,6 +140,7 @@ static NSImage*        libraryFileIcon       = nil;
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [undoManager release];
+  [libraryPath release];
   [library release];
   [super dealloc];
 }
@@ -221,6 +225,50 @@ static NSImage*        libraryFileIcon       = nil;
   [threadAutoreleasePool release];
 }
 
+-(NSString*) defaultLibraryPath
+{
+  NSString* defaultLibraryPath = nil;
+  //we will create library.dat file inside ~/Library/LaTeXiT/library.dat, so we must ensure that these folders exist
+  NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+  if ([paths count])
+  {
+    NSString* path = [paths objectAtIndex:0];
+    path = [path stringByAppendingPathComponent:[NSApp applicationName]];
+        
+    //we (try to) create the folders step by step. If they already exist, does nothing
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    NSArray* pathComponents = [path pathComponents];
+    NSString* subPath = [NSString string];
+    const unsigned int count = [pathComponents count];
+    unsigned int i = 0;
+    for(i = 0 ; i<count ; ++i)
+    {
+      subPath = [subPath stringByAppendingPathComponent:[pathComponents objectAtIndex:i]];
+      [fileManager createDirectoryAtPath:subPath attributes:nil];
+    }
+    //Then save the data
+    defaultLibraryPath = [path stringByAppendingPathComponent:@"library.latexlib"];
+  }//end if [paths count]
+  return defaultLibraryPath;
+}
+//end defaultLibraryPath
+
+-(NSString*) libraryPath
+{
+  if (!libraryPath)
+    libraryPath = [[self defaultLibraryPath] copy];
+  return libraryPath;
+}
+//end libraryPath
+
+-(void) setLibraryPath:(NSString*)path
+{
+  [path retain];
+  [libraryPath release];
+  libraryPath = path;
+}
+//end setLibraryPath:
+
 //saves the library on disk
 -(void) _saveLibrary
 {
@@ -230,35 +278,7 @@ static NSImage*        libraryFileIcon       = nil;
     {
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] startMessageProgress:NSLocalizedString(@"Saving Library", @"Saving Library")];
-      NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:library];
-      NSData* compressedData = [Compressor zipcompress:uncompressedData];
-      
-      //we will create library.dat file inside ~/Library/LaTeXiT/library.dat, so we must ensure that these folders exist
-      NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-      if ([paths count])
-      {
-        NSString* path = [paths objectAtIndex:0];
-        path = [path stringByAppendingPathComponent:[NSApp applicationName]];
-        
-        //we (try to) create the folders step by step. If they already exist, does nothing
-        NSFileManager* fileManager = [NSFileManager defaultManager];
-        NSArray* pathComponents = [path pathComponents];
-        NSString* subPath = [NSString string];
-        const unsigned int count = [pathComponents count];
-        unsigned int i = 0;
-        for(i = 0 ; i<count ; ++i)
-        {
-          subPath = [subPath stringByAppendingPathComponent:[pathComponents objectAtIndex:i]];
-          [fileManager createDirectoryAtPath:subPath attributes:nil];
-        }
-        
-        //Then save the data
-        NSString* libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
-        NSDictionary* plist =
-          [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.1", @"version", compressedData, @"data", nil];
-        NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
-        libraryShouldBeSaved = ![dataToWrite writeToFile:libraryFilePath atomically:YES];
-      }//end if path ok
+      [self saveAs:[self libraryPath] onlySelection:NO selection:nil];
       if ([NSThread currentThread] == mainThread)
         [[AppController appController] stopMessageProgress];
     }//end if libraryShouldBeSaved
@@ -285,7 +305,7 @@ static NSImage*        libraryFileIcon       = nil;
     NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
     NSData* compressedData = [Compressor zipcompress:uncompressedData];
     NSDictionary* plist =
-      [NSDictionary dictionaryWithObjectsAndKeys:@"1.11.1", @"version", compressedData, @"data", nil];
+      [NSDictionary dictionaryWithObjectsAndKeys:@"1.12.0", @"version", compressedData, @"data", nil];
     NSData* dataToWrite = [NSPropertyListSerialization dataFromPropertyList:plist format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     ok = [dataToWrite writeToFile:path atomically:YES];
@@ -306,25 +326,17 @@ static NSImage*        libraryFileIcon       = nil;
 
 -(void) _loadLibrary
 {
-  //load from ~/Library/LaTeXiT/library.dat
-  NSString* libraryFilePath = [NSString string];
-  NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-  if ([paths count])
-  {
-    NSString* path = [paths objectAtIndex:0];
-    CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary( CFBundleGetMainBundle() );
-    if (bundleInfoDict)
-    {
-      NSString* applicationName = (NSString*) CFDictionaryGetValue( bundleInfoDict, CFSTR("CFBundleExecutable") );
-      path = [path stringByAppendingPathComponent:applicationName];
-      libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
-    }
-  }
-  [self loadFrom:libraryFilePath replace:YES];
+  NSString* defaultLibraryPath = [self libraryPath];
+  NSString* oldDefaultLibraryPath = [[defaultLibraryPath stringByDeletingPathExtension] stringByAppendingPathExtension:@"dat"];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  if (![fileManager isReadableFileAtPath:defaultLibraryPath] &&
+       [fileManager isReadableFileAtPath:oldDefaultLibraryPath])
+    [fileManager copyPath:oldDefaultLibraryPath toPath:defaultLibraryPath handler:NULL];
+  [self loadFrom:defaultLibraryPath option:LIBRARY_IMPORT_OVERWRITE];
   libraryShouldBeSaved = NO; //at LaTeXiT launch, library should not be saved
 }
 
--(BOOL) loadFrom:(NSString*)path replace:(BOOL)replace
+-(BOOL) loadFrom:(NSString*)path option:(library_import_option_t)option
 {
   BOOL ok = YES;
   @synchronized(self)
@@ -353,16 +365,23 @@ static NSImage*        libraryFileIcon       = nil;
       newLibrary = [[[LibraryFolder alloc] init] autorelease];
     [newLibrary setTitle:[[path lastPathComponent] stringByDeletingPathExtension]];
 
-    if (!replace)
-      [library insertChild:newLibrary];
-    else
+    switch(option)
     {
-      [library release];
-      library = [newLibrary retain];
+      case LIBRARY_IMPORT_OVERWRITE:
+        [library release];
+        library = [newLibrary retain];
+        libraryShouldBeSaved = YES;
+        break;
+      case LIBRARY_IMPORT_MERGE:
+        [library insertChild:newLibrary];
+        libraryShouldBeSaved = YES;
+        break;
+      case LIBRARY_IMPORT_OPEN:
+        [self setLibraryPath:path];
+        break;
     }
-  }
+  }//end @synchronized(library)
 
-  libraryShouldBeSaved = YES;
   [[NSNotificationCenter defaultCenter] postNotificationName:LibraryDidChangeNotification object:nil];
 
   return ok;

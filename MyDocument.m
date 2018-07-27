@@ -212,6 +212,7 @@ static NSString* yenString = nil;
   //the initial... variables has been set into a readFromFile
   if (initialPreamble)
   {
+    //try to insert usepackage{color} inside the preamble
     [self setPreamble:[[[NSAttributedString alloc] initWithString:initialPreamble] autorelease]];
     initialPreamble = nil;
   }

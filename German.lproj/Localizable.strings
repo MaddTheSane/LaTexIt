@@ -1,3 +1,5 @@
+"current-language" = "de";
+"Ok" = "Ok";
 "Cancel" = "Abbrechen";
 "Error" = "Fehler";
 "Untitled" = "Ohne Namen";
@@ -58,7 +60,6 @@
 "An error occured while trying to create the file :\n%@" = "Ein Fehler ist aufgetreten beim Versuch die Datei zu generieren :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Ein Fehler ist aufgetreten beim Versuch die Datei zu generieren mithilfe des Befehls:\n%@";
 "http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_en.php";
-"An error occured while trying to reach %@.\n You should check your network." = "Ein Fehler ist aufgetreten beim Versuch %@ zu erreichen.\n Sie sollten Ihre Netzwerkeinstellungen überprüfen.";
 "Equation linked with another application" = "Die Gleichung ist schon mit einer anderen Anwendung verknüpft";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT kann nicht ordungsgemä√ü ausgeführt werden. Bitte überprüfen Sie ihre Einstellungen";
 "Do you want to load the library <%@> ?" = "Wollen Sie die Bibliothek <%@> öffnen ?";
@@ -68,8 +69,8 @@
 "Open in LaTeXiT" = "In LaTeXiT öffnen";
 "Check for new versions" = "Nach Updates suchen";
 "Your version of LaTeXiT is up-to-date" = "Es ist keine neuere Version von LaTeXiT verfügbar";
-"Your version of LaTeXiT is more recent than the official available one" = "Ihre Version von LaTeXiT ist aktueller als die derzeit verfügbaren Versionen";
-"A new version of LaTeXiT is available" = "Eine neue Version von LaTeXiT ist verfügbar";
+"Your version of LaTeXiT is more recent than the latest one available" = "Ihre Version von LaTeXiT ist aktueller als die derzeit verfügbare Version";
+"Your version of LaTeXiT is the same as the latest one available" = "Ihre Version von LaTeXiT ist die selbe wie die derzeit neuste verfügbare Version";
 "Open download page" = "Zur Download-Seite gehen";
 "General" = "Allgemein";
 "Edition" = "Erscheinungsbild";

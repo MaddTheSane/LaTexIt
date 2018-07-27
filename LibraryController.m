@@ -261,6 +261,7 @@
 {
   [libraryTableView edit:sender];
 }
+//end renameItem:
 
 -(IBAction) open:(id)sender
 {
@@ -273,14 +274,22 @@
   else
     [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObject:@"latexlib"]] contextInfo:NULL];
 }
+//end open:
 
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
-  BOOL replace = ([importReplacesExistingLibraryButton state] == NSOnState);
+  library_import_option_t import_option = [importOptionPopUpButton selectedTag];
   if (returnCode == NSOKButton)
-    [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] replace:replace];
+    [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
 }
+//end _openPanelDidEnd:returnCode:contextInfo;
 
+-(IBAction) openDefaultLibraryPath:(id)sender
+{
+  [(NSOpenPanel*)[importAccessoryView window]
+    setDirectory:[[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent]];
+}
+//end openDefaultLibraryPath:
 
 -(IBAction) saveAs:(id)sender
 {

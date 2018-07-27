@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.11.1\
+\f2\b \cf0 LaTeXiT 1.12.0\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -57,7 +57,7 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.11.1 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.12.0 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -150,8 +150,9 @@ The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usep
 \fs26 \cf0 \ul Using the history\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
+\fs22 \cf0 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
 You can delete history items by pressing <Backspace>, or clear the whole history by clicking the appropriate button.\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
@@ -169,8 +170,9 @@ You can delete history items by pressing <Backspace>, or clear the whole history
 \fs26 \cf0 \ul Using the library\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
+\fs22 \cf0 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
 The <+> button adds to the library the current equation (that you can rename by double-clicking it)\
 The <action> button proposes more actions.\
 The <refresh> action updates the selected item with the current equation. You cannot update more than one item at a time; it will blink to show that the modification has been taken in account.\
@@ -221,7 +223,7 @@ The <refresh> action updates the selected item with the current equation. You ca
 \fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs22 \cf0 \ulnone As for now, Nisus Writer Express, OmniGraffle 4 and Keynote 1&2 (through a plugin), do support LinkBack.\
+\fs22 \cf0 \ulnone As for now, Nisus Writer Express, OmniGraffle 4 and Keynote 1, 2, 3 (through a plugin), do support LinkBack.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
@@ -326,7 +328,7 @@ The i-installer is a little program that allows you to install LaTeX (or other t
 So, just download the i-installer, open the dmg, and install it. Now, you can launch the i-installer.\
 Choose the menu item "i-packages > Known packages i-directory"\
 In the left-panel choose and <Use> the Gerben's i-Directory @ TUG\
-In the right panel, choose "Tex" and <Open i-package>. Then, follow the instructions, and LaTeX will be installed on your system. You just have to answer yes (choose the default answer) to all questions.\
+In the right panel, choose "Tex" or "gwTex based on TexLive" and <Open i-package>. Then, follow the instructions, and LaTeX will be installed on your system. You just have to answer yes (choose the default answer) to all questions.\
 Since you're there, you should also install Ghostscript 8 the same way, because it is required for most programs.\
 \
 Now, LaTeX is installed on your computer. But if you were not warned, you would not even notice that ! In fact, LaTeX has no graphical front-end, the programs are Unix-oriented and can only be called on the command line (using the /Application/Utilities/Terminal)\
@@ -337,6 +339,15 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 
 \fs26 \cf0 \ul Versions History\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone v 1.12.0 (13th february 2007)\
+- Importing a library can now merge with/replace/change the current library;\
+- Fixed a bug when opening LaTeX files that do not contain \\usepackage\{color\};\
+- Fixed the omicron character of the LaTeX palette.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone v 1.11.1 (9th january 2007)\

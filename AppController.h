@@ -36,6 +36,8 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
   IBOutlet NSWindow*   readmeWindow;
   IBOutlet NSTextView* readmeTextView;
   IBOutlet NSPanel*    donationPanel;
+  IBOutlet NSPanel*    updatesPanel;
+  IBOutlet NSTextView* updatesInformationTextView;
   
   //some info on current configuration
   BOOL isPdfLatexAvailable;

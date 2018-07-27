@@ -248,6 +248,8 @@
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
 		93310172083D1D6500DE67ED /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
+		933EBABD0B7FCF3600D84BDB /* home.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBABB0B7FCF3600D84BDB /* home.tiff */; };
+		933EBABE0B7FCF3600D84BDB /* homePressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBABC0B7FCF3600D84BDB /* homePressed.tiff */; };
 		9340E8EF0AD166CF00D52E57 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 9340E8EE0AD166CF00D52E57 /* Lies mich.rtfd */; };
 		9340E9110AD1670B00D52E57 /* ServiceShortcutsTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E90D0AD1670B00D52E57 /* ServiceShortcutsTextView.m */; };
 		9340E9130AD1670B00D52E57 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E90F0AD1670B00D52E57 /* ServiceShortcutsTableView.m */; };
@@ -604,6 +606,8 @@
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
+		933EBABB0B7FCF3600D84BDB /* home.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = home.tiff; path = Resources/interface/home.tiff; sourceTree = "<group>"; };
+		933EBABC0B7FCF3600D84BDB /* homePressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = homePressed.tiff; path = Resources/interface/homePressed.tiff; sourceTree = "<group>"; };
 		9340E8C80AD1661600D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
 		9340E8C90AD1662E00D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
 		9340E8CB0AD1664600D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Encapsulation.nib; sourceTree = "<group>"; };
@@ -1064,6 +1068,8 @@
 				93F0009209885B550064888E /* big-folder-icon.tiff */,
 				9308E39207EE46BB00DD1B5F /* error.tiff */,
 				932CF45E0826C5A500434128 /* file-icon.png */,
+				933EBABB0B7FCF3600D84BDB /* home.tiff */,
+				933EBABC0B7FCF3600D84BDB /* homePressed.tiff */,
 				93F6D53F09CE9B10002ED258 /* magnifying-glass.png */,
 				9343D0C808604F430024CDC2 /* refresh.tiff */,
 				93B528AF089FFC2B00F14B77 /* remove.tiff */,
@@ -1674,6 +1680,8 @@
 				93F2C6D90A31A88C0009FB59 /* latex-keywords.plist in Resources */,
 				93F2C6DA0A31A88C0009FB59 /* convert in Resources */,
 				9340E8EF0AD166CF00D52E57 /* Lies mich.rtfd in Resources */,
+				933EBABD0B7FCF3600D84BDB /* home.tiff in Resources */,
+				933EBABE0B7FCF3600D84BDB /* homePressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

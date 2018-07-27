@@ -1,3 +1,5 @@
+"current-language" = "fr";
+"Ok" = "Ok";
 "Cancel" = "Annuler";
 "Error" = "Erreur";
 "Untitled" = "Sans Titre";
@@ -62,7 +64,6 @@
 "An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Une erreur est survenue lors de la création du fichier avec la commande:\n%@";
 "http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_fr.php";
-"An error occured while trying to reach %@.\n You should check your network." = "Une erreur est survenue en essayant d'atteindre %@.\n Vous devriez vérifier votre réseau.";
 "Equation linked with another application" = "Équation liée à une autre application";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT ne peut être exécuté normalement; veuillez vérifier sa configuration";
 "Do you want to load the library <%@> ?" = "Voulez-vous charger la bibliothèque <%@> ?";
@@ -71,9 +72,10 @@
 "Replace the library" = "Remplacer la bibliothèque";
 "Open in LaTeXiT" = "Ouvrir dans LaTeXiT";
 "Check for new versions" = "Vérification des mises à jour";
+"An error occured while trying to reach %@.\nYou should check your network." = "Une erreur est survenue lors de l'accès à %@.\nVous devriez vérifier le bon fonctionnement de votre réseau.";
 "Your version of LaTeXiT is up-to-date" = "Votre version de LaTeXiT est à jour";
-"Your version of LaTeXiT is more recent than the official available one" = "Votre version de LaTeXiT est plus récente que la dernière version officielle";
-"A new version of LaTeXiT is available" = "Une nouvelle version de LaTeXiT est disponible";
+"Your version of LaTeXiT is more recent than the latest one available" = "Votre version de LaTeXiT est plus récente que la dernière version disponible";
+"Your version of LaTeXiT is the same as the latest one available" = "Votre version de LaTeXiT est la même que la dernière version disponible";
 "Open download page" = "Aller sur le site";
 "General" = "Général";
 "Edition" = "Édition";

@@ -42,7 +42,7 @@
   PaletteItem* Lambda  = [PaletteItem paletteItemWithName:@"Lambda"  resourceName:@"lambda-big" requires:@""];
   PaletteItem* mu      = [PaletteItem paletteItemWithName:@"mu"      requires:@""];
   PaletteItem* nu      = [PaletteItem paletteItemWithName:@"nu"      requires:@""];
-  PaletteItem* o       = [PaletteItem paletteItemWithName:@"o"       requires:@""];
+  PaletteItem* o       = [PaletteItem paletteItemWithName:@"o"       latexCode:@" o" type:LATEX_ITEM_TYPE_KEYWORD requires:@""];
   PaletteItem* omega   = [PaletteItem paletteItemWithName:@"omega"   requires:@""];
   PaletteItem* Omega   = [PaletteItem paletteItemWithName:@"Omega"   resourceName:@"omega-big" requires:@""];
   PaletteItem* phi     = [PaletteItem paletteItemWithName:@"phi"     requires:@""];

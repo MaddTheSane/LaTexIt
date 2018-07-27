@@ -16,6 +16,7 @@
                 importCurrent = id; 
                 newFolder = id; 
                 open = id; 
+                openDefaultLibraryPath = id; 
                 refreshItems = id; 
                 removeSelectedItems = id; 
                 renameItem = id; 
@@ -29,7 +30,7 @@
                 exportOnlySelectedButton = NSButton; 
                 importAccessoryView = NSView; 
                 importCurrentButton = NSButton; 
-                importReplacesExistingLibraryButton = NSButton; 
+                importOptionPopUpButton = NSPopUpButton; 
                 libraryPreviewPanel = BorderlessPanel; 
                 libraryPreviewPanelImageView = LibraryPreviewPanelImageView; 
                 libraryPreviewPanelSegmentedControl = NSSegmentedControl; 

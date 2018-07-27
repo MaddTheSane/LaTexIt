@@ -206,6 +206,13 @@
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
 		93310172083D1D6500DE67ED /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
+		933EB9CD0B7FB9AB00D84BDB /* current-version-fr.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933EB9CA0B7FB9AB00D84BDB /* current-version-fr.rtf */; };
+		933EB9CE0B7FB9AB00D84BDB /* current-version-en.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */; };
+		933EB9CF0B7FB9AB00D84BDB /* current-version-de.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */; };
+		933EB9EC0B7FBAEB00D84BDB /* createHistoryPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */; };
+		933EB9F90B7FBB9E00D84BDB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		933EBA920B7FCDD900D84BDB /* home.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBA900B7FCDD900D84BDB /* home.tiff */; };
+		933EBA930B7FCDD900D84BDB /* homePressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933EBA910B7FCDD900D84BDB /* homePressed.tiff */; };
 		933F2ED908A0B86F004C7A31 /* action-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933F2ED708A0B86F004C7A31 /* action-pressed.tiff */; };
 		933F2EDA08A0B86F004C7A31 /* action.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933F2ED808A0B86F004C7A31 /* action.tiff */; };
 		933F2EE408A0B993004C7A31 /* add-big-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */; };
@@ -560,6 +567,13 @@
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
+		933EB9CA0B7FB9AB00D84BDB /* current-version-fr.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-fr.rtf"; path = "Resources/documentation/current-version-fr.rtf"; sourceTree = "<group>"; };
+		933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "Resources/documentation/current-version-en.rtf"; sourceTree = "<group>"; };
+		933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "Resources/documentation/current-version-de.rtf"; sourceTree = "<group>"; };
+		933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = createHistoryPlist.m; sourceTree = "<group>"; };
+		933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CreateHistoryPlist; sourceTree = BUILT_PRODUCTS_DIR; };
+		933EBA900B7FCDD900D84BDB /* home.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = home.tiff; path = Resources/interface/home.tiff; sourceTree = "<group>"; };
+		933EBA910B7FCDD900D84BDB /* homePressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = homePressed.tiff; path = Resources/interface/homePressed.tiff; sourceTree = "<group>"; };
 		933F2ED708A0B86F004C7A31 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/interface/action-pressed.tiff"; sourceTree = "<group>"; };
 		933F2ED808A0B86F004C7A31 /* action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = action.tiff; path = Resources/interface/action.tiff; sourceTree = "<group>"; };
 		933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big-pressed.tiff"; path = "Resources/interface/add-big-pressed.tiff"; sourceTree = "<group>"; };
@@ -734,6 +748,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		933EB9E80B7FBADA00D84BDB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				933EB9F90B7FBB9E00D84BDB /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -760,6 +782,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* LaTeXiT.app */,
+				933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -804,6 +827,7 @@
 			children = (
 				32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+				933EB9DF0B7FBAC400D84BDB /* createHistoryPlist.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -857,6 +881,9 @@
 		93019F15086C765800A2A9E7 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				933EB9CA0B7FB9AB00D84BDB /* current-version-fr.rtf */,
+				933EB9CB0B7FB9AB00D84BDB /* current-version-en.rtf */,
+				933EB9CC0B7FB9AB00D84BDB /* current-version-de.rtf */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				93A592C907F46075001DF900 /* Lisez-moi.rtfd */,
 				93A592CA07F46075001DF900 /* Read Me.rtfd */,
@@ -1325,6 +1352,8 @@
 				93F0FFC1098847940064888E /* big-folder-icon.tiff */,
 				9308E39207EE46BB00DD1B5F /* error.tiff */,
 				932CF45E0826C5A500434128 /* file-icon.png */,
+				933EBA900B7FCDD900D84BDB /* home.tiff */,
+				933EBA910B7FCDD900D84BDB /* homePressed.tiff */,
 				9309DEB109C8D09700C5231C /* magnifying-glass.png */,
 				9343D0C808604F430024CDC2 /* refresh.tiff */,
 				93B5288C089FF95800F14B77 /* remove.tiff */,
@@ -1411,6 +1440,22 @@
 			productReference = 8D15AC370486D014006FF6A4 /* LaTeXiT.app */;
 			productType = "com.apple.product-type.application";
 		};
+		933EB9E90B7FBADA00D84BDB /* CreateHistoryPlist */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 933EB9EF0B7FBB2700D84BDB /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */;
+			buildPhases = (
+				933EB9E70B7FBADA00D84BDB /* Sources */,
+				933EB9E80B7FBADA00D84BDB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CreateHistoryPlist;
+			productName = CreateHistoryPlist;
+			productReference = 933EB9EA0B7FBADA00D84BDB /* CreateHistoryPlist */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1422,6 +1467,7 @@
 			projectDirPath = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* LaTeXiT */,
+				933EB9E90B7FBADA00D84BDB /* CreateHistoryPlist */,
 			);
 		};
 /* End PBXProject section */
@@ -1677,6 +1723,11 @@
 				93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */,
 				9345E3360AC9A2620082ADB4 /* textShortcuts.plist in Resources */,
 				934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */,
+				933EB9CD0B7FB9AB00D84BDB /* current-version-fr.rtf in Resources */,
+				933EB9CE0B7FB9AB00D84BDB /* current-version-en.rtf in Resources */,
+				933EB9CF0B7FB9AB00D84BDB /* current-version-de.rtf in Resources */,
+				933EBA920B7FCDD900D84BDB /* home.tiff in Resources */,
+				933EBA930B7FCDD900D84BDB /* homePressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1760,6 +1811,14 @@
 				9345E42A0AC9C5310082ADB4 /* TextShortcutsController.m in Sources */,
 				9345E42D0AC9C5310082ADB4 /* TextShortcutsTableView.m in Sources */,
 				9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		933EB9E70B7FBADA00D84BDB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				933EB9EC0B7FBAEB00D84BDB /* createHistoryPlist.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2043,6 +2102,30 @@
 			};
 			name = "Deployment Tiger";
 		};
+		933EB9F00B7FBB2700D84BDB /* Development Tiger */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = CreateHistoryPlist;
+				ZERO_LINK = YES;
+			};
+			name = "Development Tiger";
+		};
+		933EB9F10B7FBB2700D84BDB /* Deployment Tiger */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = CreateHistoryPlist;
+				ZERO_LINK = YES;
+			};
+			name = "Deployment Tiger";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2060,6 +2143,15 @@
 			buildConfigurations = (
 				9323885B0854FD210017F3BB /* Development Tiger */,
 				9323885C0854FD210017F3BB /* Deployment Tiger */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Development Tiger";
+		};
+		933EB9EF0B7FBB2700D84BDB /* Build configuration list for PBXNativeTarget "CreateHistoryPlist" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				933EB9F00B7FBB2700D84BDB /* Development Tiger */,
+				933EB9F10B7FBB2700D84BDB /* Deployment Tiger */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Development Tiger";
