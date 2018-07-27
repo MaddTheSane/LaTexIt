@@ -28,5 +28,6 @@ FOUNDATION_EXTERN_INLINE unsigned long EndianUL_NtoB(unsigned long x);
 }
 
 +(BOOL) createDirectoryPath:(NSString*)path attributes:(NSDictionary*)attributes;
++(NSString*) localizedPath:(NSString*)path;
 
 @end

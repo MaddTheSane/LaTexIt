@@ -52,7 +52,7 @@
 "pdflatex, latex, dvipdf, xelatex oder gs (abhängig von der derzeitigen Konfiguration) wurde auf Ihrem System nicht gefunden. Bitte überprüfen Sie die Installation.";
 "color.sty seems to be unavailable" = "color.sty wurde nicht gefunden";
 "Without the color.sty package, you won't be able to change the font color" = "Ohne das color.sty Packet, können Sie die Schriftfarbe nicht ändern";
-"color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "Das color.sty Packet scheint bei Ihrer Installation von LaTeX zu fehlen. Daher ist ein √Ñndern der Schriftfarbe nicht möglich.";
+"color.sty package seems not to be present in your LaTeX installation. So, color font change is disabled." = "Das color.sty Packet scheint bei Ihrer Installation von LaTeX zu fehlen. Daher ist ein ändern der Schriftfarbe nicht möglich.";
 "This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT" = "Dieser Text ist nicht LaTeX kompatibel; oder es besteht ein Einleitungs-Problem ? Sie können dies in LaTeXiT überprüfen";
 "Empty LaTeX body" = "leeres LaTeX-Dokument";
 "Process anyway" = "Trotzdem bearbeiten";
@@ -114,3 +114,16 @@
 "Content" = "Inhalt";
 "Script failed" = "Skript Fehler";
 "Script too long : timeout reached" = "Skript zu lang: Abschaltung erreichte";
+"Palette installation" = "Installation einer Palette";
+"It does not appear to be a valid Latex palette package" = "Es scheint nicht, ein gültiges Latexpalette Paket zu sein";
+"Do you want to install the palette %@ ?" = "Möchtest du die Palette %@ installieren ?";
+"This palette will be installed into \n%@" = "Diese Palette wird in \n%@ angebracht";
+"Install palette" = "Installieren die Palette";
+"Could not create path" = "Konnte nicht %@ herstellen";
+"The path %@ could not be created to install a palette in it" = "Der Pfad %@ konnte nicht hergestellt werden, um eine Palette in ihn anzubringen";
+"The palette %@ already exists, do you want to replace it ?" = "Die Palette %@ bereits, bestehst du möchtest sie ersetzen ?";
+"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents." = "Eine Datei oder ein Ordner mit dem gleichen Namen besteht bereits in %@. Es ersetzend, überschreibt seinen gegenwärtigen Inhalt.";
+"Replace" = "Ersetzen";
+"Installation failed" = "Installation Fehler";
+"%@ could not be installed as %@" = "%@ konnte nicht als %@ angebracht werden";
+"Author" = "Autor";

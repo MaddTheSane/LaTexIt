@@ -1,0 +1,9 @@
+"groups-and-sets" = "Groups and Sets";
+"subgroup"="Subgroup";
+"supgroup"="Supergroup";
+"supnormgroup"="Normal Supergroup";
+"subnormgroup"="Normal Subgroup";
+"supset"="Strict superset";
+"supseteq"="Superset";
+"subset"="Strict subset";
+"subseteq"="Subset";

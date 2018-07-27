@@ -11,6 +11,7 @@
             CLASS = LatexPalettesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                authorTextField = NSTextField; 
                 detailsBox = NSBox; 
                 detailsButton = NSButton; 
                 detailsImageView = NSImageView; 

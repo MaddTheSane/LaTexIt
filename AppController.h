@@ -167,4 +167,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(void) linkBackDidClose:(LinkBack*)link;
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link;
 
+//LatexPalette installation
+-(BOOL) installLatexPalette:(NSString*)palettePath;
+
 @end

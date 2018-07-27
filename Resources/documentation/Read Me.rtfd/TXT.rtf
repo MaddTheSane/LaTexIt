@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.13.0\
+\f2\b \cf0 LaTeXiT 1.14.0\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -52,7 +52,7 @@ Feedback e-mail address: \cf3 pierre.chatelier@club-internet.fr
 System Requirements\
 
 \fs22 \ulnone \
-LaTeXiT 1.13.0 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.14.0 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 
 \f2\b\fs26 \
 
@@ -170,7 +170,7 @@ The "Detect and typeset" item is different : it does not typeset the whole text.
 \f2\b \cf0 Tip: the inline mode "$...$" tries, when it's possible, to align the equation on the baseline of the text stream.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f1\b0 \cf0 A new service has been introduced in version 1.13.0, thats allows to revert back equations to the LaTeX code.\
+\f1\b0 \cf0 A new service has been introduced in version 1.14.0, thats allows to revert back equations to the LaTeX code.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
@@ -205,6 +205,53 @@ From version 1.8.0, LaTeXiT allows the user to use scipts during pre-, middle- a
 \f1\fs26 \cf0 \ul \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
+LaTeX Palettes\
+
+\fs22 \ulnone \
+Since version 1.14.0, LaTeXiT handles LaTeX palettes as plugins. Built-in palettes are inside the application, but additional palettes can be installed inside the Library folders, in a sub-folder Application Support/LaTeXiT/Palettes.\
+Examples :\
+/Library/Application Support/LaTeXiT/Palettes\
+/Users/[your name]/Library/Application Support/LaTeXiT/Palettes\
+/Network/Library/Application Support/LaTeXiT/Palettes\
+\
+A palette is a folder with the following structure:\
+name.latexpalette\
+     |_Info.plist\
+     |_Resources\
+          |_English.lproj
+\fs26 \ul \
+
+\fs22 \ulnone                |_Localizable.strings\
+          |_French.lproj\
+               |_Localizable.strings\
+          |...image files...\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 The file Info.plist describes the palette in the following plist format:\
+[required]	key : "version"				value : the format version of the palette, currently 1\
+[required]	key : "name"     				value : the name of the palette, that can be localized in the Localizable.strings files of the lproj folders\
+[optional] 	key : "author"				value : the name of the author of the palette\
+[optional] 	key : "numberOfItemsPerRow"	value : the number of palette items per row, by default 4\
+[required]	key : "items"     				value : an array of dictionaries, each one describing a palette item\
+\
+\pard\pardeftab720\ql\qnatural
+\cf0 A palette item is described with the following information:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 [required]	key : "name"				value : a name for the item (example: looparrowleft), that can be localized in the Localizable.strings files of the lproj folders\
+[optional]	key : "latexCode"			value : the latex code (example: \\looparrowleft), by default equal to the "name" (not localized) prefixed by a backslash\
+[optional]	key : "resourceName"		value : the name of the image file (the extension is optional). By default, equal to the "name" (not localized)\
+[optional]	key : "requires"				value : name of required packages (example: amssymb)\
+[optional]	key : "numberOfArguments"	value : integer larger than 1 telling how much pairs of curly braces \{\} should be added (useful for functions)\
+[optional]	key : "isEnvironment"		value : boolean (default FALSE) telling whether the keyword should be written \\begin\{name\}...\\end\{name\}\
+\
+The images files must be in the Resources sub-folder.\
+The "name" values of the palette and its items can be localized in Localizable.strings files in the sub-folders lang.lproj\
+A Localizable.strings file is a raw-text UTF-8 file containing lines like "key" = "value", ending with semi-colons.\
+Here is an example :\
+"arrows" = "Fl\'8fches";\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs26 \cf0 \ul \
 FAQ (Frequently asked questions)\
 
 \fs22 \ulnone \
@@ -312,9 +359,17 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 
 \fs26 \ul Versions History\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone v 1.13.0 (25th may 2007)\
+\fs22 \ulnone v 1.14.0 (29th may 2007)
+\fs26 \ul \
+
+\fs22 \ulnone - fixed a regression causing some scripts to fail;\
+- the color of the edited text did not always match the one of the preferences;\
+- the LaTeX palettes are now handled as plug-ins; please see the Section "LaTeX Palettes" of the present documentation (credits Matthew Hutton).\
+
+\fs26 \ul \
+
+\fs22 \ulnone v 1.13.0 (25th may 2007)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\qj
 \cf0 - spanish translation (interface) by \'e7lvaro Lozano;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj

@@ -9,36 +9,34 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum {LATEX_ITEM_TYPE_KEYWORD, LATEX_ITEM_TYPE_FUNCTION} latex_item_type_t;
+typedef enum {LATEX_ITEM_TYPE_STANDARD, LATEX_ITEM_TYPE_ENVIRONMENT} latex_item_type_t;
 
 @interface PaletteItem : NSObject {
-  NSString* name;
-  NSString* latexCode;
-  NSString* requires;
-  NSImage*  image;
+  NSString*         name;
+  NSString*         localizedName;
+  NSString*         resourcePath;
   latex_item_type_t type;
+  unsigned int      numberOfArguments;
+  NSString*         latexCode;
+  NSString*         requires;
+
+  NSImage* image;
 }
 
-+(id) paletteItemWithName:(NSString*)name requires:(NSString*)package;
-+(id) paletteItemWithName:(NSString*)name type:(latex_item_type_t)type requires:(NSString*)package;
-+(id) paletteItemWithName:(NSString*)name latexCode:(NSString*)latexCode type:(latex_item_type_t)type requires:(NSString*)package;
-+(id) paletteItemWithName:(NSString*)name resourceName:(NSString*)resourceName requires:(NSString*)package;
-+(id) paletteItemWithName:(NSString*)name resourceName:(NSString*)resourceName type:(latex_item_type_t)type requires:(NSString*)package;
-
--(id) initWithName:(NSString*)name requires:(NSString*)package;
--(id) initWithName:(NSString*)name type:(latex_item_type_t)type requires:(NSString*)package;
--(id) initWithName:(NSString*)name latexCode:(NSString*)latexCode type:(latex_item_type_t)type requires:(NSString*)package;
--(id) initWithName:(NSString*)name resourceName:(NSString*)resourceName requires:(NSString*)package;
--(id) initWithName:(NSString*)name resourceName:(NSString*)resourceName type:(latex_item_type_t)type requires:(NSString*)package;
-
--(id) initWithName:(NSString*)aName resourceName:(NSString*)aResourceName latexCode:(NSString*)aLatexCode 
-              type:(latex_item_type_t)aType  requires:(NSString*)package;
-
--(NSString*) name;
--(NSString*) latexCode;
--(NSString*) requires;
--(NSImage*)  image;
+-(id) initWithName:(NSString*)name localizedName:(NSString*)localizedName resourcePath:(NSString*)resourcePath 
+              type:(latex_item_type_t)type numberOfArguments:(unsigned int)numberOfArguments
+              latexCode:(NSString*)latexCode requires:(NSString*)package;
+                
+-(NSString*)         name;
+-(NSString*)         localizedName;
+-(NSString*)         resourcePath;
 -(latex_item_type_t) type;
+-(unsigned int)      numberOfArguments;
+-(NSString*)         latexCode;
+-(NSString*)         requires;
+
+-(NSImage*)  image;
 -(NSString*) toolTip;
+-(NSString*) formatStringToInsertText;
 
 @end

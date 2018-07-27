@@ -1474,8 +1474,8 @@ static NSMutableDictionary* cachePaths = nil;
   MyDocument* myDocument = (MyDocument*) [self currentDocument];
   if (string && myDocument)
   {
-    if ([item type] == LATEX_ITEM_TYPE_FUNCTION)
-      string = [NSString stringWithFormat:@"%@{%@}", string, [myDocument selectedText]];
+    if (([item numberOfArguments] >= 1) || ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT))
+      string = [NSString stringWithFormat:[item formatStringToInsertText],[myDocument selectedText]];
     [myDocument insertText:string];
   }
 }
@@ -2782,9 +2782,14 @@ static NSMutableDictionary* cachePaths = nil;
 {
   BOOL ok = NO;
   NSString* type = [[filename pathExtension] lowercaseString];
-  if (![type isEqualTo:@"latexlib"])
-    ok = ([[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filename display:YES] != nil);
-  else
+  if ([type isEqualTo:@"latexpalette"])
+  {
+    ok = [self installLatexPalette:filename];
+    if (ok)
+      [latexPalettesController reloadPalettes];
+    ok = YES;
+  }
+  else if ([type isEqualTo:@"latexlib"])
   {
     NSString* title =
       [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @"Do you want to load the library <%@> ?"),
@@ -2802,6 +2807,8 @@ static NSMutableDictionary* cachePaths = nil;
     else
       ok = YES;
   }
+  else //latex document
+    ok = ([[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filename display:YES] != nil);
   return ok;
 }
 //end application:openFile:
@@ -3043,5 +3050,83 @@ static NSMutableDictionary* cachePaths = nil;
   [[[NSDocumentController sharedDocumentController] documents] makeObjectsPerformSelector:@selector(stopMessageProgress)];
 }
 //end stopMessageProgress
+
+-(BOOL) installLatexPalette:(NSString*)palettePath
+{
+  BOOL ok = NO;
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  //first, checks if it may be a palette
+  BOOL fileIsOk = NO;
+  BOOL isDirectory  = NO;
+  BOOL isDirectory2 = NO;
+  BOOL isDirectory3 = NO;
+  if ([fileManager fileExistsAtPath:palettePath isDirectory:&isDirectory] && isDirectory &&
+      [fileManager fileExistsAtPath:[palettePath stringByAppendingPathComponent:@"Info.plist"] isDirectory:&isDirectory2] && !isDirectory2 &&
+      [fileManager fileExistsAtPath:[palettePath stringByAppendingPathComponent:@"Resources"] isDirectory:&isDirectory3] && isDirectory3)
+    fileIsOk = YES;
+  if (!fileIsOk)
+    NSRunAlertPanel(NSLocalizedString(@"Palette installation", @"Palette installation"),
+                    NSLocalizedString(@"It does not appear to be a valid Latex palette package", @"It does not appear to be a valid Latex palette package"),
+                    NSLocalizedString(@"OK", @"OK"), nil, nil);
+  else
+  {
+    NSArray* libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+    libraryPaths = [libraryPaths count] ? [libraryPaths subarrayWithRange:NSMakeRange(0, 1)] : nil;
+    NSArray* palettesFolderPathComponents =
+      libraryPaths ? [libraryPaths arrayByAddingObjectsFromArray:[NSArray arrayWithObjects:@"Application Support", [NSApp applicationName], @"Palettes", nil]] : nil;
+    NSString* palettesFolderPath = [NSString pathWithComponents:palettesFolderPathComponents];
+    if (palettesFolderPath)
+    {
+      NSString* localizedPalettesFolderPath = [Utils localizedPath:palettesFolderPath];
+      int choice = NSRunAlertPanel(
+        [NSString stringWithFormat:NSLocalizedString(@"Do you want to install the palette %@ ?", @"Do you want to install the palette %@ ?"),
+                                   [palettePath lastPathComponent]],
+        [NSString stringWithFormat:NSLocalizedString(@"This palette will be installed into \n%@", @"This palette will be installed into \n%@"),
+                                   localizedPalettesFolderPath],
+        NSLocalizedString(@"Install palette", @"Install palette"),
+        NSLocalizedString(@"Cancel", @"Cancel"), nil);
+      if (choice == NSAlertDefaultReturn)
+      {
+        BOOL shouldInstall = [Utils createDirectoryPath:palettesFolderPath attributes:nil];
+        if (!shouldInstall)
+          NSRunAlertPanel(NSLocalizedString(@"Could not create path", @"Could not create path"),
+                          [NSString stringWithFormat:NSLocalizedString(@"The path %@ could not be created to install a palette in it",
+                                                                       @"The path %@ could not be created to install a palette in it"),
+                                                     palettesFolderPath],
+                          NSLocalizedString(@"OK", @"OK"), nil, nil);
+                          
+        NSString* destinationPath = [palettesFolderPath stringByAppendingPathComponent:[palettePath lastPathComponent]];
+        BOOL alreadyExists = [fileManager fileExistsAtPath:destinationPath];
+        BOOL overwrite = !alreadyExists;
+        if (alreadyExists)
+        {
+          choice = NSRunAlertPanel(
+            [NSString stringWithFormat:NSLocalizedString(@"The palette %@ already exists, do you want to replace it ?",
+                                                         @"The palette %@ already exists, do you want to replace it ?"), [palettePath lastPathComponent]],
+            [NSString stringWithFormat:NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.",
+                                                         @"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents."),
+                                       palettesFolderPath],
+             NSLocalizedString(@"Replace", @"Replace"),
+             NSLocalizedString(@"Cancel", @"Cancel"), nil);
+          overwrite |= (choice == NSAlertDefaultReturn);
+        }//end if overwrite palette
+        
+        if (overwrite)
+        {
+          [fileManager removeFileAtPath:destinationPath handler:NULL];
+          BOOL success = [fileManager copyPath:palettePath toPath:destinationPath handler:NULL];
+          if (!success)
+            NSRunAlertPanel(NSLocalizedString(@"Installation failed", @"Installation failed"),
+                            [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @"%@ could not be installed as %@"),
+                                                                         [palettePath lastPathComponent], destinationPath],
+                            NSLocalizedString(@"OK", @"OK"), nil, nil);
+          ok = success;
+        }//end if overwrite
+      }//end if install palette
+    }//end if palettesFolderPath
+  }//end if ok to be a palette
+  return ok;
+}
+//end installLatexPalette:
 
 @end

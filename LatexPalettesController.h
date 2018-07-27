@@ -18,21 +18,15 @@
   IBOutlet NSButton*      detailsButton;
 
   IBOutlet NSBox*       detailsBox;
+  IBOutlet NSTextField* authorTextField;
   IBOutlet NSImageView* detailsImageView;
   IBOutlet NSTextField* detailsLatexCodeTextField;
   IBOutlet NSTextField* detailsRequiresTextField;
   
-  NSArray* groups;
-  NSArray* greekItems;
-  NSArray* lettersItems;
-  NSArray* relationsItems;
-  NSArray* binaryOperatorsItems;
-  NSArray* otherOperatorsItems;
-  NSArray* arrowsItems;
-  NSArray* decorationsItems;
-  
-  int numberOfItemsPerRow;
+  NSMutableArray* orderedPalettes;
 }
+
+-(void) reloadPalettes;
 
 -(IBAction) changeGroup:(id)sender;
 -(IBAction) openOrHideDetails:(id)sender;

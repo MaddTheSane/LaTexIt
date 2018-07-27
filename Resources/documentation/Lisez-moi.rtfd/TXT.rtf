@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.13.0\
+\f2\b \cf0 LaTeXiT 1.14.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -34,6 +34,7 @@
 -Utiliser le "Service LaTeXiT"\
 -Utiliser LinkBack\
 -Utiliser les scripts\
+-Palettes LaTeX\
 -FAQ (Foire aux questions = Questions fr\'8equemment pos\'8ees)\
 -Bugs/incompatibilit\'8es connus\
 -Installer LaTeX\
@@ -50,7 +51,7 @@ Adresse e-mail (commentaires, suggestions, probl\'8fmes,...): \cf3 pierre.chatel
 Syst\'8fme Requis\
 
 \fs22 \ulnone \
-LaTeXiT 1.13.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.14.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 
 \f2\b\fs26 \
 
@@ -170,7 +171,7 @@ Le service "D\'8etecter et cr\'8eer les \'8equations" est un peu diff\'8erent : 
 \f2\b \cf0 Astuce: le mode "$...$" (inline) essaye quand c'est possible d'aligner l'\'8equation sur la ligne de base du texte.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\f1\b0 \cf0 Un nouveau service est disponible depuis la version 1.13.0, permettant d'effectuer la manipulation inverse, c'est-\'88-dire revenir des \'8equations au code LaTeX.\
+\f1\b0 \cf0 Un nouveau service est disponible depuis la version 1.14.0, permettant d'effectuer la manipulation inverse, c'est-\'88-dire revenir des \'8equations au code LaTeX.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
@@ -204,7 +205,53 @@ LinkBack est une technologie, incorpor\'8ee \'88 LaTeXiT. Si vous d\'8eposez une
 \f1\fs22 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs26 \cf0 \ul FAQ (Foire aux questions)\
+\fs26 \cf0 \ul \
+Palettes LaTeX\
+
+\fs22 \ulnone \
+Depuis la version 1.14.0, LaTeXiT g\'8fre les palettes LaTeX comme des plugins. Les palettes int\'8egr\'8ees font partie de l'application, mais des palettes suppl\'8ementaires peuvent \'90tre ajout\'8ees dans les r\'8epertoires Biblioth\'8fque, dans un sous-dossier Application Support/LaTeXiT/Palettes.\
+Exemples :\
+/Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
+/Users/[votre nom]/Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
+/R\'8eseau/Biblioth\'8fque/Application Support/LaTeXiT/Palettes\
+\
+Une palette est un dossier de la forme suivante:\
+nom.latexpalette\
+     |_Info.plist\
+     |_Resources\
+          |_English.lproj
+\fs26 \ul \
+
+\fs22 \ulnone                |_Localizable.strings\
+          |_French.lproj\
+               |_Localizable.strings\
+          |...fichiers images...\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 Le fichier Info.plist d\'8ecrit la palette au format plist suivant:\
+[requis]		clef : "version"				valeur : version du format de palette, actuellement 1\
+[requis]		clef : "name"				valeur : le nom de la palette, \'8eventuellement traduit dans les fichiers Localizable.strings des dossiers lproj\
+[optionnel] 	clef : "author"				valeur : l'auteur de la palette\
+[optionnel] 	clef : "numberOfItemsPerRow"	valeur : le nombre d'\'8el\'8ements par ligne dans la palette, par d\'8efaut 4\
+[requis]		clef : "items"     			valeur : un tableau de dictionnaires d\'8ecrivant chacun un \'8el\'8ement de la palette\
+\
+Un \'8el\'8ement de palette est form\'8e ainsi :\
+[requis]		clef : "name"				valeur : un nom pour l'\'8el\'8ement (exemple: looparrowleft), \'8eventuellement traduit dans les Localizable.strings des dossiers lproj\
+[optionnel]	clef : "latexCode"			valeur : le code latex correspondant (exemple: \\looparrowleft), par d\'8efaut identique "name" (non traduit) pr\'8ec\'8ed\'8e d'un antislash\
+[optionnel]	clef : "resourceName"		valeur : le nom du fichier image correspondant (extension optionnelle). Par d\'8efaut, identique au "name" (non traduit)\
+[optionnel]	clef : "requires"				valeur : nom des packages requis (exemple: amssymb)\
+[optionnel]	clef : "numberOfArguments"	valeur : entier sup\'8erieur \'88 1 indiquant le nombre de paires d'accolades \{\} \'88 rajouter au code latex (utile pour les fonctions)\
+[optionnel]	clef : "isEnvironment"		valeur : bool\'8een (FAUX par d\'8efaut) indiquant si le mot-clef devrait s'\'8ecrire \\begin\{nom\}...\\end\{nom\}\
+\
+Les fichiers images sont dispos\'8es dans le sous-dossier Resources.\
+Les valeurs des "name" de la palette ou des \'8el\'8ements peuvent \'90tre traduits dans des fichiers Localizable.strings de sous-dossiers langue.lproj\
+Un fichier Localizable.strings est un fichier texte brut UTF-8 qui contient des lignes du type "clef" = "valeur", termin\'8ees par des points-virgules.\
+En voici un exemple :\
+"arrows" = "Fl\'8fches";\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0                
+\fs26 \ul \
+FAQ (Foire aux questions)\
 
 \fs22 \ulnone \
 (Q) : LaTeXiT plante au d\'8emarrage.\
@@ -311,8 +358,12 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \fs26 \cf0 \ul Historique des versions\
 
 \fs22 \ulnone \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 v 1.13.0 (25 mai 2007)\
+v 1.14.0 (29 mai 2007)\
+- correction d'une r\'8egression emp\'90chant certains scripts de s'ex\'8ecuter;\
+- la couleur du texte \'8edit\'8e ne respectait pas toujours celle des pr\'8ef\'8erences;\
+- les palettes LaTeX sont maintenant g\'8er\'8ees comme des plug-ins; voyez la section "Palettes LaTeX" de la pr\'8esente documentation (merci \'88 Matthew Hutton).\
+\
+v 1.13.0 (25 mai 2007)\
 - traduction en espagnol (interface) par \'e7lvaro Lozano;\
 - ajout de $\{INPUTFILE\} et $\{CURRENTDIRECTORY\} comme variables de script;\
 - ajout d'une limite de temps d'ex\'8ecution aux scripts pour \'8eviter d'\'8eventuels blocages de LaTeXiT lors de l'utilisation d'un script mal con\'8du;\
@@ -347,9 +398,8 @@ v 1.10.1 (9 novembre 2006)\
 - correction de quelques bugs de localisation par rapport au point d\'8ecimal;\
 - correction de quelques fautes de frappe dans la traduction allemande.
 \fs26 \ul \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone \
+\fs22 \ulnone \
 v 1.10.0 (7 octobre 2006)\
 - traduction allemande par Simon L\'8ammle;\
 - la biblioth\'8fque ne remplace maintenant le contenu du document qu'avec un double-clic;\

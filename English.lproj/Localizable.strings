@@ -115,3 +115,16 @@
 "Content" = "Content";
 "Script failed" = "Script failed";
 "Script too long : timeout reached" = "Script too long : timeout reached";
+"Palette installation" = "Palette installation";
+"It does not appear to be a valid Latex palette package" = "It does not appear to be a valid Latex palette package";
+"Do you want to install the palette %@ ?" = "Do you want to install the palette %@ ?";
+"This palette will be installed into \n%@" = "This palette will be installed into \n%@";
+"Install palette" = "Install palette";
+"Could not create path" = "Could not create path";
+"The path %@ could not be created to install a palette in it" = "The path %@ could not be created to install a palette in it";
+"The palette %@ already exists, do you want to replace it ?" = "The palette %@ already exists, do you want to replace it ?";
+"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents." = "A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.";
+"Replace" = "Replace";
+"Installation failed" = "Installation failed";
+"%@ could not be installed as %@" = "%@ could not be installed as %@";
+"Author" = "Author";

@@ -83,19 +83,21 @@ static NSArray *syntaxDefinitionsArray;
   return self;
 }
 
-- (NSUndoManager *)undoManagerForTextView:(NSTextView *)aTextView
+-(NSUndoManager*) undoManagerForTextView:(NSTextView*)aTextView
 {
-	return [self undoManager];
+  return [self undoManager];
 }
 
 -(void)setColours
 {
   BOOL syntaxColoring = [userDefaults boolForKey:SyntaxColoringEnableKey];
-  
+  NSColor* color = nil;
   [textView setBackgroundColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextBackgroundColorKey]]];
-  [[textView textStorage] setForegroundColor:[NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]]];
   
-  NSColor* color = [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]];
+  color = [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]];
+  [[textView textStorage] setForegroundColor:color];
+  
+  color = [NSColor colorWithData:[userDefaults dataForKey:SyntaxColoringTextForegroundColorKey]];
 	if (commandsColour) {
 		[commandsColour release];
 		commandsColour = nil;
@@ -321,12 +323,12 @@ static NSArray *syntaxDefinitionsArray;
 
 -(void)removeColoursFromRange:(NSRange)range
 {
-	[layoutManager removeTemporaryAttribute:NSForegroundColorAttributeName forCharacterRange:range];
+  [layoutManager removeTemporaryAttribute:NSForegroundColorAttributeName forCharacterRange:range];
 }
 
 -(void)removeAllColours
 {
-	[self removeColoursFromRange:NSMakeRange(0, [completeString length])];
+  [self removeColoursFromRange:NSMakeRange(0, [completeString length])];
 }
 
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification

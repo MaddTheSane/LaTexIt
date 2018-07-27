@@ -162,9 +162,11 @@ static int SpellCheckerDocumentTag = 0;
   [self _computeLineRanges]; //line ranges are computed at each change. It is not very efficient and will be very slow
                              //for large texts, but in LaTeXiT, texts are small, and I did not know how to do that simply otherwise
 
-  //normal lines are displayed in black
+  //normal lines are displayed with the default foregound color
   NSDictionary* normalAttributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor blackColor], NSForegroundColorAttributeName, nil];
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      [NSColor colorWithData:[[NSUserDefaults standardUserDefaults] dataForKey:SyntaxColoringTextForegroundColorKey]],
+      NSForegroundColorAttributeName, nil];
   [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
 
   //line count
@@ -325,7 +327,8 @@ static int SpellCheckerDocumentTag = 0;
   NSFont* oldFont = [self font];
   NSFont* newFont = [sender convertFont:oldFont];
   if (!range.length)
-    [self setTypingAttributes:[NSDictionary dictionaryWithObject:newFont forKey:NSFontAttributeName]];
+    [self setTypingAttributes:
+      [NSDictionary dictionaryWithObjectsAndKeys:newFont, NSFontAttributeName, nil]];
   else
     [self setFont:newFont range:range];
   [lineCountRulerView setNeedsDisplay:YES];

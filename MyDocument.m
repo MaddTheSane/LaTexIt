@@ -25,6 +25,7 @@
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "SMLSyntaxColouring.h"
+#import "SystemTask.h"
 
 #ifdef PANTHER
 #import <LinkBack-panther/LinkBack.h>
@@ -78,7 +79,6 @@ static NSMutableArray* freeIds = nil;
 -(void) closeSheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;//for doc closing
 
 -(NSString*) descriptionForScript:(NSDictionary*)script;
--(void) threadKillTaskOnTimeout:(NSDictionary*)taskAndTimeout;
 @end
 
 @implementation MyDocument
@@ -355,46 +355,57 @@ static NSString* yenString = nil;
 //LaTeXiT can open documents
 -(BOOL) readFromFile:(NSString *)file ofType:(NSString *)aType
 {
-  //Insert code here to read your document from the given data.
+  BOOL ok = YES;
   //You can also choose to override -loadFileWrapperRepresentation:ofType: or -readFromFile:ofType: instead.
-  NSData* data = [NSData dataWithContentsOfFile:file];
-  NSString* type = [[file pathExtension] lowercaseString];
-  NSString* string = nil;
-  if ([type isEqualToString:@"rtf"])
-    string = [[[[NSAttributedString alloc] initWithRTF:data documentAttributes:nil] autorelease] string];
-  else if ([type isEqualToString:@"pdf"])
-    initialPdfData = [NSData dataWithContentsOfFile:file];
-  else //by default, we suppose that it is a plain text file
+  NSLog(@"readFromFile");
+  if ([aType isEqualToString:@"LatexPalette"])
   {
-    NSStringEncoding encoding = NSMacOSRomanStringEncoding;
-    NSError* error = nil;
-    string = [NSString stringWithContentsOfFile:file guessEncoding:&encoding error:&error];
-    #ifndef PANTHER
-    if (error)
-      [self presentError:error];
-    #endif
+     NSLog(@"LatexPalette");
+    [[AppController appController] installLatexPalette:file];
+    ok = YES;
   }
+  else
+  {
+    NSData* data = [NSData dataWithContentsOfFile:file];
+    NSString* type = [[file pathExtension] lowercaseString];
+    NSString* string = nil;
+    if ([type isEqualToString:@"rtf"])
+      string = [[[[NSAttributedString alloc] initWithRTF:data documentAttributes:nil] autorelease] string];
+    else if ([type isEqualToString:@"pdf"])
+      initialPdfData = [NSData dataWithContentsOfFile:file];
+    else //by default, we suppose that it is a plain text file
+    {
+      NSStringEncoding encoding = NSMacOSRomanStringEncoding;
+      NSError* error = nil;
+      string = [NSString stringWithContentsOfFile:file guessEncoding:&encoding error:&error];
+      #ifndef PANTHER
+      if (error)
+        [self presentError:error];
+      #endif
+    }
 
-  //if a text document is opened, try to split it into preamble+body
-  if (string)
-  {
-	  NSRange beginDocument = [string rangeOfString:@"\\begin{document}" options:NSCaseInsensitiveSearch];
-	  NSRange endDocument   = [string rangeOfString:@"\\end{document}" options:NSCaseInsensitiveSearch];
-	  initialPreamble = (beginDocument.location == NSNotFound) ?
-							  nil :
-							  [string substringWithRange:NSMakeRange(0, beginDocument.location)];
-	  initialBody = (beginDocument.location == NSNotFound) ?
-						  string :
-						  (endDocument.location == NSNotFound) ?
-							 [string substringWithRange:
-							   NSMakeRange(beginDocument.location+beginDocument.length,
-										   [string length]-(beginDocument.location+beginDocument.length))] :
-							 [string substringWithRange:
-							   NSMakeRange(beginDocument.location+beginDocument.length,
-										   endDocument.location-(beginDocument.location+beginDocument.length))];
+    //if a text document is opened, try to split it into preamble+body
+    if (string)
+    {
+            NSRange beginDocument = [string rangeOfString:@"\\begin{document}" options:NSCaseInsensitiveSearch];
+            NSRange endDocument   = [string rangeOfString:@"\\end{document}" options:NSCaseInsensitiveSearch];
+            initialPreamble = (beginDocument.location == NSNotFound) ?
+                                                            nil :
+                                                            [string substringWithRange:NSMakeRange(0, beginDocument.location)];
+            initialBody = (beginDocument.location == NSNotFound) ?
+                                                    string :
+                                                    (endDocument.location == NSNotFound) ?
+                                                           [string substringWithRange:
+                                                             NSMakeRange(beginDocument.location+beginDocument.length,
+                                                                                     [string length]-(beginDocument.location+beginDocument.length))] :
+                                                           [string substringWithRange:
+                                                             NSMakeRange(beginDocument.location+beginDocument.length,
+                                                                                     endDocument.location-(beginDocument.location+beginDocument.length))];
+    }
   }
-  return YES;
+  return ok;
 }
+//end readFromFile:ofType
 
 //in Japanese environment, we should replace the Yen symbol by a backslash
 //You can read http://www.xs4all.nl/~msneep/articles/japanese.html to know more about that problem
@@ -1625,13 +1636,6 @@ static NSString* yenString = nil;
     posixPermissions = [NSNumber numberWithUnsignedLong:[posixPermissions unsignedLongValue] | 0700];//add rwx flag
     [fileAttributes setObject:posixPermissions forKey:NSFilePosixPermissions];
     [fileManager changeFileAttributes:fileAttributes atPath:latexScriptPath];
-    
-    NSMutableString* systemCommand = [NSMutableString string];
-    NSEnumerator* environmentEnumerator = [environment keyEnumerator];
-    NSString* variable = nil;
-    [systemCommand appendFormat:@"cd %@;", directory];
-    while((variable = [environmentEnumerator nextObject]))
-      [systemCommand appendFormat:@"export %@=\"%@\";", variable, [environment objectForKey:variable]];
 
     NSString* scriptShell = nil;
     switch(source)
@@ -1639,45 +1643,43 @@ static NSString* yenString = nil;
       case SCRIPT_SOURCE_STRING: scriptShell = [script objectForKey:ScriptShellKey]; break;
       case SCRIPT_SOURCE_FILE: scriptShell = @"/bin/sh"; break;
     }
-    
-    [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
+
     NSPipe* pipeForOutput = [NSPipe pipe];
-    NSTask* task = [[[NSTask alloc] init] autorelease];
-    [systemCommand appendFormat:@"%@ -c %@", scriptShell, latexScriptPath];
-    [logString appendFormat:@"%@\n", systemCommand];
+    SystemTask* task = [[[SystemTask alloc] init] autorelease];
+    [task setCurrentDirectoryPath:directory];
     [task setEnvironment:environment];
     [task setLaunchPath:scriptShell];
     [task setArguments:[NSArray arrayWithObjects:@"-c", latexScriptPath, nil]];
     [task setCurrentDirectoryPath:[latexScriptPath stringByDeletingLastPathComponent]];
     [task setStandardOutput:pipeForOutput];
     [task setStandardError:pipeForOutput];
-    NSMutableString* timeOutString = [NSMutableString stringWithString:@""];
+
+    [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
+    [logString appendFormat:@"%@\n", [task equivalentLaunchCommand]];
+
     @try {
-      [NSApplication detachDrawingThread:@selector(threadKillTaskOnTimeout:) toTarget:self
-                              withObject:[NSDictionary dictionaryWithObjectsAndKeys:task, @"task", 
-                                            [NSNumber numberWithDouble:15], @"timeInterval",
-                                            timeOutString, @"timeOutString", nil]];
+      [task setTimeOut:30];
       [task launch];
       [task waitUntilExit];
-      @synchronized(timeOutString)
+      if ([task hasReachedTimeout])
+        [logString appendFormat:@"\n%@\n\n", NSLocalizedString(@"Script too long : timeout reached",
+                                                               @"Script too long : timeout reached")];
+      else if ([task terminationStatus])
       {
-        if (![timeOutString isEqualToString:@""])
-          [logString appendFormat:@"%@\n", NSLocalizedString(@"Script too long : timeout reached",
-                                                             @"Script too long : timeout reached")];
-        else if ([task terminationStatus])
-          [logString appendFormat:@"%@\n", NSLocalizedString(@"Script failed", @"Script failed")];
-        else
-        {
-          encoding = NSUTF8StringEncoding;
-          error = nil;
-          NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
-                                                       encoding:encoding] autorelease];
-          [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
-        }
-      }//end @synchronized(timeOutNumber)
+        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
+                                                     encoding:encoding] autorelease];
+        [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
+      }
+      else
+      {
+        NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
+                                                     encoding:encoding] autorelease];
+        [logString appendFormat:@"\n%@\n----------------------------------------------------\n", outputLog];
+      }
     }//end try task
     @catch(NSException* e) {
-        [logString appendFormat:@"%@\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
         NSString* outputLog = [[[NSString alloc] initWithData:[[pipeForOutput fileHandleForReading] availableData]
                                                      encoding:encoding] autorelease];
         [logString appendFormat:@"%@\n----------------------------------------------------\n", outputLog];
@@ -1717,17 +1719,5 @@ static NSString* yenString = nil;
 {
 }
 //end nullAction:
-
--(void) threadKillTaskOnTimeout:(NSDictionary*)taskAndTimeout
-{
-  NSTask* task = [[taskAndTimeout objectForKey:@"task"] retain];
-  NSMutableString* timeOutString = [[taskAndTimeout objectForKey:@"timeOutString"] retain];
-  [NSThread sleepUntilDate:[[NSDate date] addTimeInterval:[[taskAndTimeout objectForKey:@"timeInterval"] doubleValue]]];
-  [timeOutString setString:@"timedOut"];
-  [task terminate];
-  [task release];
-  [timeOutString release];
-}
-//end end threadKillTaskOnTimeout:
 
 @end

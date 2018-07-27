@@ -9,6 +9,24 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>latexpalette</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>latexit-latex-palette.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>LatexPalette</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>InMemory</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>pdf</string>
 				<string>tex</string>
 			</array>
@@ -29,7 +47,7 @@
 				<string>latexlib</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>latexit-lib.png</string>
+			<string>latexit-lib.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>LibraryType</string>
 			<key>CFBundleTypeRole</key>
@@ -55,7 +73,7 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>1.13.0 (Panther version)</string>
+	<string>1.14.0 (Tiger version)</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://ktd.club.fr/programmation/latexit.php</string>
 	<key>LinkBackServer</key>

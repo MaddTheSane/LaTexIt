@@ -142,4 +142,20 @@ unsigned long EndianUL_NtoB(unsigned long x)
 }
 //end createDirectoryPath:attributes:
 
++(NSString*) localizedPath:(NSString*)path
+{
+  NSMutableArray* localizedPathComponents = [NSMutableArray array];
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  NSArray* components = [path pathComponents];
+  components = components ? components : [NSArray array];
+  unsigned int i = 0;
+  for(i = 1 ; (i <= [components count]) ; ++i)
+  {
+    NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
+    [localizedPathComponents addObject:[fileManager displayNameAtPath:subPath]];
+  }//end for each subPath
+  return [NSString pathWithComponents:localizedPathComponents];
+}
+//end localizedPath:
+
 @end

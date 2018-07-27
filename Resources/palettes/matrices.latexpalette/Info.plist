@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>pmatrix</string>
+			<key>isEnvironment</key>
+			<true/>
+			<key>latexCode</key>
+			<string>\begin{pmatrix}1 &amp; 2\\ 3 &amp; 4 \end{pmatrix}</string>
+			<key>requires</key>
+			<string>amsmath</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>bmatrix</string>
+			<key>isEnvironment</key>
+			<true/>
+			<key>latexCode</key>
+			<string>\begin{bmatrix}1 &amp; 2\\ 3 &amp; 4 \end{bmatrix}</string>
+			<key>requires</key>
+			<string>amsmath</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Bmatrix</string>
+			<key>isEnvironment</key>
+			<true/>
+			<key>latexCode</key>
+			<string>\begin{Bmatrix}1 &amp; 2\\ 3 &amp; 4 \end{Bmatrix}</string>
+			<key>requires</key>
+			<string>amsmath</string>
+			<key>resourceName</key>
+			<string>bmatrix-curly</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>vmatrix</string>
+			<key>isEnvironment</key>
+			<true/>
+			<key>latexCode</key>
+			<string>\begin{vmatrix}1 &amp; 2\\ 3 &amp; 4 \end{vmatrix}</string>
+			<key>requires</key>
+			<string>amsmath</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Vmatrix</string>
+			<key>isEnvironment</key>
+			<true/>
+			<key>latexCode</key>
+			<string>\begin{Vmatrix}1 &amp; 2\\ 3 &amp; 4 \end{Vmatrix}</string>
+			<key>requires</key>
+			<string>amsmath</string>
+			<key>resourceName</key>
+			<string>vmatrix-double</string>
+		</dict>
+	</array>
+	<key>author</key>
+	<string>Pierre Chatelier</string>
+	<key>name</key>
+	<string>matrices</string>
+	<key>numberOfItemsPerRow</key>
+	<integer>3</integer>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

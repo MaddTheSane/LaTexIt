@@ -9,13 +9,16 @@
 #import "LatexPalettesController.h"
 
 #import "AppController.h"
+#import "NSApplicationExtended.h"
 #import "NSPopUpButtonExtended.h"
 #import "PaletteCell.h"
 #import "PaletteItem.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
 @interface LatexPalettesController (PrivateAPI)
 -(void) _initMatrices;
+-(void) _loadPalettes;
 @end
 
 @implementation LatexPalettesController
@@ -24,259 +27,8 @@
 {
   if (![super initWithWindowNibName:@"LatexPalettes"])
     return nil;
-    
-  numberOfItemsPerRow = 4;
+  [self _loadPalettes];
 
-  PaletteItem* alpha   = [PaletteItem paletteItemWithName:@"alpha" requires:@""];
-  PaletteItem* beta    = [PaletteItem paletteItemWithName:@"beta"  requires:@""];
-  PaletteItem* chi     = [PaletteItem paletteItemWithName:@"chi"   requires:@""];
-  PaletteItem* delta   = [PaletteItem paletteItemWithName:@"delta" requires:@""];
-  PaletteItem* Delta   = [PaletteItem paletteItemWithName:@"Delta"   resourceName:@"delta-big" requires:@""];
-  PaletteItem* epsilon = [PaletteItem paletteItemWithName:@"epsilon" requires:@""];
-  PaletteItem* eta     = [PaletteItem paletteItemWithName:@"eta"     requires:@""];
-  PaletteItem* gamma   = [PaletteItem paletteItemWithName:@"gamma"   requires:@""];
-  PaletteItem* Gamma   = [PaletteItem paletteItemWithName:@"Gamma"   resourceName:@"gamma-big" requires:@""];
-  PaletteItem* iota    = [PaletteItem paletteItemWithName:@"iota"    requires:@""];
-  PaletteItem* kappa   = [PaletteItem paletteItemWithName:@"kappa"   requires:@""];
-  PaletteItem* lambda  = [PaletteItem paletteItemWithName:@"lambda"  requires:@""];
-  PaletteItem* Lambda  = [PaletteItem paletteItemWithName:@"Lambda"  resourceName:@"lambda-big" requires:@""];
-  PaletteItem* mu      = [PaletteItem paletteItemWithName:@"mu"      requires:@""];
-  PaletteItem* nu      = [PaletteItem paletteItemWithName:@"nu"      requires:@""];
-  PaletteItem* o       = [PaletteItem paletteItemWithName:@"o"       latexCode:@" o" type:LATEX_ITEM_TYPE_KEYWORD requires:@""];
-  PaletteItem* omega   = [PaletteItem paletteItemWithName:@"omega"   requires:@""];
-  PaletteItem* Omega   = [PaletteItem paletteItemWithName:@"Omega"   resourceName:@"omega-big" requires:@""];
-  PaletteItem* phi     = [PaletteItem paletteItemWithName:@"phi"     requires:@""];
-  PaletteItem* Phi     = [PaletteItem paletteItemWithName:@"Phi"     resourceName:@"phi-big" requires:@""];
-  PaletteItem* pi      = [PaletteItem paletteItemWithName:@"pi"      requires:@""];
-  PaletteItem* Pi      = [PaletteItem paletteItemWithName:@"Pi"      resourceName:@"pi-big" requires:@""];
-  PaletteItem* psi     = [PaletteItem paletteItemWithName:@"psi"     requires:@""];
-  PaletteItem* Psi     = [PaletteItem paletteItemWithName:@"Psi"     resourceName:@"psi-big" requires:@""];
-  PaletteItem* rho     = [PaletteItem paletteItemWithName:@"rho"     requires:@""];
-  PaletteItem* sigma   = [PaletteItem paletteItemWithName:@"sigma"   requires:@""];
-  PaletteItem* Sigma   = [PaletteItem paletteItemWithName:@"Sigma"   resourceName:@"sigma-big" requires:@""];
-  PaletteItem* tau     = [PaletteItem paletteItemWithName:@"tau"     requires:@""];
-  PaletteItem* theta   = [PaletteItem paletteItemWithName:@"theta"   requires:@""];
-  PaletteItem* Theta   = [PaletteItem paletteItemWithName:@"Theta"   resourceName:@"theta-big" requires:@""];
-  PaletteItem* upsilon = [PaletteItem paletteItemWithName:@"upsilon" requires:@""];
-  PaletteItem* Upsilon = [PaletteItem paletteItemWithName:@"Upsilon" resourceName:@"upsilon-big" requires:@""];
-  PaletteItem* varphi  = [PaletteItem paletteItemWithName:@"varphi"  requires:@""];
-  PaletteItem* xi      = [PaletteItem paletteItemWithName:@"xi"      requires:@""];
-  PaletteItem* Xi      = [PaletteItem paletteItemWithName:@"Xi"      resourceName:@"xi-big" requires:@""];
-  PaletteItem* zeta    = [PaletteItem paletteItemWithName:@"zeta"    requires:@""];
-  greekItems = [[NSArray alloc] initWithObjects:alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu,
-                                                nu, xi, o, pi, rho, sigma, tau, upsilon, varphi, chi, psi, omega,
-                                                Gamma, Delta, Theta, Lambda, Pi, Sigma, Xi, Upsilon, phi, Phi, Psi, Omega, nil];
-
-  PaletteItem* aleph     = [PaletteItem paletteItemWithName:@"aleph"     requires:@""];
-  PaletteItem* ell       = [PaletteItem paletteItemWithName:@"ell"       requires:@""];
-  PaletteItem* emptyset  = [PaletteItem paletteItemWithName:@"emptyset"  requires:@""];
-  PaletteItem* hbar      = [PaletteItem paletteItemWithName:@"hbar"      requires:@""];
-  PaletteItem* hmathbb   = [PaletteItem paletteItemWithName:@"mathbb{H}" resourceName:@"h-mathbb" requires:@"amssymb"];
-  PaletteItem* im        = [PaletteItem paletteItemWithName:@"Im"        resourceName:@"im" requires:@""];
-  PaletteItem* imath     = [PaletteItem paletteItemWithName:@"imath"     requires:@""];
-  PaletteItem* infty     = [PaletteItem paletteItemWithName:@"infty"     requires:@""];
-  PaletteItem* jmath     = [PaletteItem paletteItemWithName:@"jmath"     requires:@""];
-  PaletteItem* nabla     = [PaletteItem paletteItemWithName:@"nabla"     requires:@""];
-  PaletteItem* nmathbb   = [PaletteItem paletteItemWithName:@"mathbb{N}" resourceName:@"n-mathbb" requires:@"amssymb"];
-  PaletteItem* pmathbb   = [PaletteItem paletteItemWithName:@"mathbb{P}" resourceName:@"p-mathbb" requires:@"amssymb"];
-  PaletteItem* qmathbb   = [PaletteItem paletteItemWithName:@"mathbb{Q}" resourceName:@"q-mathbb" requires:@"amssymb"];
-  PaletteItem* re        = [PaletteItem paletteItemWithName:@"Re"        resourceName:@"re" requires:@""];
-  PaletteItem* rmathbb   = [PaletteItem paletteItemWithName:@"mathbb{R}" resourceName:@"r-mathbb" requires:@"amssymb"];
-  PaletteItem* zmathbb   = [PaletteItem paletteItemWithName:@"mathbb{Z}" resourceName:@"z-mathbb" requires:@"amssymb"];
-  lettersItems = [[NSArray alloc] initWithObjects:nmathbb, zmathbb, qmathbb, pmathbb,
-                                                  rmathbb, hmathbb, re, im,
-                                                  hbar, imath, jmath, ell,
-                                                  aleph, infty, Delta, nabla,
-                                                  emptyset, nil];
-
-  PaletteItem* approx     = [PaletteItem paletteItemWithName:@"approx"     requires:@""];
-  PaletteItem* asymp      = [PaletteItem paletteItemWithName:@"asymp"      requires:@""];
-  PaletteItem* bot        = [PaletteItem paletteItemWithName:@"bot"        requires:@""];
-  PaletteItem* bowtie     = [PaletteItem paletteItemWithName:@"bowtie"     requires:@""];
-  PaletteItem* cong       = [PaletteItem paletteItemWithName:@"cong"       requires:@""];
-  PaletteItem* dashv      = [PaletteItem paletteItemWithName:@"dashv"      requires:@""];
-  PaletteItem* doteq      = [PaletteItem paletteItemWithName:@"doteq"      requires:@""];
-  PaletteItem* equiv      = [PaletteItem paletteItemWithName:@"equiv"      requires:@""];
-  PaletteItem* geq        = [PaletteItem paletteItemWithName:@"geq"        requires:@""];
-  PaletteItem* geqslant   = [PaletteItem paletteItemWithName:@"geqslant"   requires:@"amssymb"];
-  PaletteItem* gg         = [PaletteItem paletteItemWithName:@"gg"         requires:@""];
-  PaletteItem* ggg        = [PaletteItem paletteItemWithName:@"ggg"        requires:@"amssymb"];
-  PaletteItem* gtrsim     = [PaletteItem paletteItemWithName:@"gtrsim"     requires:@"amssymb"];
-  PaletteItem* in_        = [PaletteItem paletteItemWithName:@"in"         requires:@""];
-  PaletteItem* leq        = [PaletteItem paletteItemWithName:@"leq"        requires:@""];
-  PaletteItem* leqslant   = [PaletteItem paletteItemWithName:@"leqslant"   requires:@"amssymb"];
-  PaletteItem* lesssim    = [PaletteItem paletteItemWithName:@"lesssim"    requires:@"amssymb"];
-  PaletteItem* ll         = [PaletteItem paletteItemWithName:@"ll"         requires:@""];
-  PaletteItem* lll        = [PaletteItem paletteItemWithName:@"lll"        requires:@"amssymb"];
-  PaletteItem* ltimes     = [PaletteItem paletteItemWithName:@"ltimes"     requires:@"amssymb"];
-  PaletteItem* mid        = [PaletteItem paletteItemWithName:@"mid"        requires:@""];
-  PaletteItem* models     = [PaletteItem paletteItemWithName:@"models"     requires:@""];
-  PaletteItem* neq        = [PaletteItem paletteItemWithName:@"neq"        requires:@""];
-  PaletteItem* ngeq       = [PaletteItem paletteItemWithName:@"ngeq"       requires:@"amssymb"];
-  PaletteItem* ngeqslant  = [PaletteItem paletteItemWithName:@"ngeqslant"  requires:@"amssymb"];
-  PaletteItem* ni         = [PaletteItem paletteItemWithName:@"ni"         requires:@""];
-  PaletteItem* nleq       = [PaletteItem paletteItemWithName:@"nleq"       requires:@"amssymb"];
-  PaletteItem* nleqslant  = [PaletteItem paletteItemWithName:@"nleqslant"  requires:@"amssymb"];
-  PaletteItem* nmid       = [PaletteItem paletteItemWithName:@"nmid"       requires:@"amssymb"];
-  PaletteItem* notin      = [PaletteItem paletteItemWithName:@"notin"      requires:@""];
-  PaletteItem* nparallel  = [PaletteItem paletteItemWithName:@"nparallel"  requires:@"amssymb"];
-  PaletteItem* nprec      = [PaletteItem paletteItemWithName:@"nprec"      requires:@"amssymb"];
-  PaletteItem* npreceq    = [PaletteItem paletteItemWithName:@"npreceq"    requires:@"amssymb"];
-  PaletteItem* nsubseteq  = [PaletteItem paletteItemWithName:@"nsubseteq"  requires:@"amssymb"];
-  PaletteItem* nsucc      = [PaletteItem paletteItemWithName:@"nsucc"      requires:@"amssymb"];
-  PaletteItem* nsucceq    = [PaletteItem paletteItemWithName:@"nsucceq"    requires:@"amssymb"];
-  PaletteItem* nsupseteq  = [PaletteItem paletteItemWithName:@"nsupseteq"  requires:@"amssymb"];
-  PaletteItem* parallel   = [PaletteItem paletteItemWithName:@"parallel"   requires:@""];
-  PaletteItem* prec       = [PaletteItem paletteItemWithName:@"prec"       requires:@""];
-  PaletteItem* preceq     = [PaletteItem paletteItemWithName:@"preceq"     requires:@""];
-  PaletteItem* propto     = [PaletteItem paletteItemWithName:@"propto"     requires:@""];  
-  PaletteItem* rtimes     = [PaletteItem paletteItemWithName:@"rtimes"     requires:@"amssymb"];
-  PaletteItem* sim        = [PaletteItem paletteItemWithName:@"sim"        requires:@""];
-  PaletteItem* simeq      = [PaletteItem paletteItemWithName:@"simeq"      requires:@""];
-  PaletteItem* sqsubset   = [PaletteItem paletteItemWithName:@"sqsubset"   requires:@"amssymb"];
-  PaletteItem* sqsubseteq = [PaletteItem paletteItemWithName:@"sqsubseteq" requires:@""];
-  PaletteItem* sqsupset   = [PaletteItem paletteItemWithName:@"sqsupset"   requires:@"amssymb"];
-  PaletteItem* sqsupseteq = [PaletteItem paletteItemWithName:@"sqsupseteq" requires:@""];
-  PaletteItem* subset     = [PaletteItem paletteItemWithName:@"subset"     requires:@""];
-  PaletteItem* subseteq   = [PaletteItem paletteItemWithName:@"subseteq"   requires:@""];
-  PaletteItem* succ       = [PaletteItem paletteItemWithName:@"succ"       requires:@""];
-  PaletteItem* succeq     = [PaletteItem paletteItemWithName:@"succeq"     requires:@""];
-  PaletteItem* supset     = [PaletteItem paletteItemWithName:@"supset"     requires:@""];
-  PaletteItem* supseteq   = [PaletteItem paletteItemWithName:@"supseteq"   requires:@""];
-  PaletteItem* top        = [PaletteItem paletteItemWithName:@"top"        requires:@""];
-  PaletteItem* vdash      = [PaletteItem paletteItemWithName:@"vdash"      requires:@""];
-  relationsItems = [[NSArray alloc] initWithObjects:leq, geq, nleq, ngeq,
-                                                    leqslant, geqslant, nleqslant, ngeqslant,
-                                                    prec, succ, nprec, nsucc,
-                                                    preceq, succeq, npreceq, nsucceq,
-                                                    subset, supset, subseteq, supseteq,
-                                                    sqsubset, sqsupset, sqsubseteq, sqsupseteq,
-                                                    nsubseteq, nsupseteq, lesssim, gtrsim,
-                                                    ll, gg, lll, ggg,
-                                                    sim, approx, simeq, neq,
-                                                    asymp, doteq, cong, equiv,
-                                                    in_, ni, notin, models,
-                                                    vdash, dashv, bot, top,
-                                                    propto, ltimes, rtimes, bowtie,
-                                                    mid, nmid, parallel, nparallel, nil];
-
-  PaletteItem* amalg           = [PaletteItem paletteItemWithName:@"amalg"           requires:@""];
-  PaletteItem* ast             = [PaletteItem paletteItemWithName:@"ast"             requires:@""];
-  PaletteItem* bigcirc         = [PaletteItem paletteItemWithName:@"bigcirc"         requires:@""];
-  PaletteItem* bigtriangledown = [PaletteItem paletteItemWithName:@"bigtriangledown" requires:@"amssymb"];
-  PaletteItem* bigtriangleup   = [PaletteItem paletteItemWithName:@"bigtriangleup"   requires:@"amssymb"];
-  PaletteItem* bullet          = [PaletteItem paletteItemWithName:@"bullet"          requires:@""];
-  PaletteItem* cap             = [PaletteItem paletteItemWithName:@"cap"             requires:@""];
-  PaletteItem* cdot            = [PaletteItem paletteItemWithName:@"cdot"            requires:@""];
-  PaletteItem* circ            = [PaletteItem paletteItemWithName:@"circ"            requires:@""];
-  PaletteItem* cup             = [PaletteItem paletteItemWithName:@"cup"             requires:@""];
-  PaletteItem* dagger          = [PaletteItem paletteItemWithName:@"dagger"          requires:@""];
-  PaletteItem* ddagger         = [PaletteItem paletteItemWithName:@"ddagger"         requires:@""];
-  PaletteItem* diamond         = [PaletteItem paletteItemWithName:@"diamond"         requires:@""];
-  PaletteItem* div             = [PaletteItem paletteItemWithName:@"div"             requires:@""];
-  PaletteItem* mp              = [PaletteItem paletteItemWithName:@"mp"              requires:@""];
-  PaletteItem* odot            = [PaletteItem paletteItemWithName:@"odot"            requires:@""];
-  PaletteItem* ominus          = [PaletteItem paletteItemWithName:@"ominus"          requires:@""];
-  PaletteItem* oplus           = [PaletteItem paletteItemWithName:@"oplus"           requires:@""];  
-  PaletteItem* oslash          = [PaletteItem paletteItemWithName:@"oslash"          requires:@""];
-  PaletteItem* otimes          = [PaletteItem paletteItemWithName:@"otimes"          requires:@""];
-  PaletteItem* pm              = [PaletteItem paletteItemWithName:@"pm"              requires:@""];
-  //PaletteItem* propto          = [PaletteItem paletteItemWithName:@"propto" requires:@""];  
-  PaletteItem* setminus        = [PaletteItem paletteItemWithName:@"setminus"        requires:@""];
-  PaletteItem* sqcap           = [PaletteItem paletteItemWithName:@"sqcap"           requires:@""];
-  PaletteItem* sqcup           = [PaletteItem paletteItemWithName:@"sqcup"           requires:@""];
-  PaletteItem* star            = [PaletteItem paletteItemWithName:@"star"            requires:@""];  
-  PaletteItem* times           = [PaletteItem paletteItemWithName:@"times"           requires:@""];
-  PaletteItem* triangleleft    = [PaletteItem paletteItemWithName:@"triangleleft"    requires:@""];
-  PaletteItem* triangleright   = [PaletteItem paletteItemWithName:@"triangleright"   requires:@""];
-  PaletteItem* unlhd           = [PaletteItem paletteItemWithName:@"unlhd"           requires:@"amssymb"];  
-  PaletteItem* unrhd           = [PaletteItem paletteItemWithName:@"unrhd"           requires:@"amssymb"];
-  PaletteItem* uplus           = [PaletteItem paletteItemWithName:@"uplus"           requires:@""];
-  PaletteItem* vee             = [PaletteItem paletteItemWithName:@"vee"             requires:@""];
-  PaletteItem* wedge           = [PaletteItem paletteItemWithName:@"wedge"           requires:@""];  
-  PaletteItem* wr              = [PaletteItem paletteItemWithName:@"wr"              requires:@""];
-  binaryOperatorsItems = [[NSArray alloc] initWithObjects:pm, mp, times, div,
-                                                          ast, star, setminus, wr,
-                                                          circ, bullet, cdot, diamond,
-                                                          triangleleft, triangleright, unlhd, unrhd,
-                                                          bigtriangleup, bigtriangledown, vee, wedge,
-                                                          cup, cap, sqcup, sqcap,
-                                                          oplus, ominus, otimes, oslash,
-                                                          odot, bigcirc, uplus, amalg,
-                                                          dagger, ddagger, propto, nil];
-
-  PaletteItem* bigcap   = [PaletteItem paletteItemWithName:@"bigcap"   requires:@""];
-  PaletteItem* bigcup   = [PaletteItem paletteItemWithName:@"bigcup"   requires:@""];
-  PaletteItem* bigvee   = [PaletteItem paletteItemWithName:@"bigvee"   requires:@""];
-  PaletteItem* bigwedge = [PaletteItem paletteItemWithName:@"bigwedge" requires:@""];
-  PaletteItem* coprod   = [PaletteItem paletteItemWithName:@"coprod"   requires:@""];
-  PaletteItem* exists   = [PaletteItem paletteItemWithName:@"exists"   requires:@""];
-  PaletteItem* forall   = [PaletteItem paletteItemWithName:@"forall"   requires:@""];
-  PaletteItem* int_     = [PaletteItem paletteItemWithName:@"int"      requires:@""];
-  PaletteItem* iint     = [PaletteItem paletteItemWithName:@"iint"     requires:@"amsmath"];
-  PaletteItem* iiint    = [PaletteItem paletteItemWithName:@"iiint"    requires:@"amsmath"];
-  PaletteItem* neg      = [PaletteItem paletteItemWithName:@"neg"      requires:@""];
-  PaletteItem* nexists  = [PaletteItem paletteItemWithName:@"nexists"  requires:@"amssymb"];
-  PaletteItem* oint     = [PaletteItem paletteItemWithName:@"oint"     requires:@""];
-  PaletteItem* partial  = [PaletteItem paletteItemWithName:@"partial"  requires:@""];
-  PaletteItem* prod     = [PaletteItem paletteItemWithName:@"prod"     requires:@""];
-  PaletteItem* sqrt_    = [PaletteItem paletteItemWithName:@"sqrt"  type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* sqrt3_   = [PaletteItem paletteItemWithName:@"sqrt3" latexCode:@"\\sqrt[3]" type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* sum      = [PaletteItem paletteItemWithName:@"sum"    requires:@""];
-  otherOperatorsItems = [[NSArray alloc] initWithObjects:sum, prod, coprod, partial,
-                                                         Delta, nabla, sqrt_, sqrt3_,
-                                                         int_, oint, iint, iiint,
-                                                         bigcup, bigcap, bigvee, bigwedge,
-                                                         neg, forall, exists, nexists, nil];
-
-  PaletteItem* downarrow         = [PaletteItem paletteItemWithName:@"downarrow"        requires:@""];
-  PaletteItem* hookleftarrow     = [PaletteItem paletteItemWithName:@"hookleftarrow"    requires:@""];
-  PaletteItem* hookrightarrow    = [PaletteItem paletteItemWithName:@"hookrightarrow"   requires:@""];
-  PaletteItem* leftarrow         = [PaletteItem paletteItemWithName:@"leftarrow"        requires:@""];
-  PaletteItem* Leftarrow         = [PaletteItem paletteItemWithName:@"Leftarrow"        resourceName:@"leftarrow-big" requires:@""];
-  PaletteItem* leftharpoondown   = [PaletteItem paletteItemWithName:@"leftharpoondown"  requires:@""];
-  PaletteItem* leftharpoonup     = [PaletteItem paletteItemWithName:@"leftharpoonup"    requires:@""];
-  PaletteItem* leftrightarrow    = [PaletteItem paletteItemWithName:@"leftrightarrow"   requires:@""];
-  PaletteItem* Leftrightarrow    = [PaletteItem paletteItemWithName:@"Leftrightarrow"   resourceName:@"leftrightarrow-big" requires:@""];
-  PaletteItem* longmapsto        = [PaletteItem paletteItemWithName:@"longmapsto"       requires:@""];
-  PaletteItem* looparrowleft     = [PaletteItem paletteItemWithName:@"looparrowleft"    requires:@"amssymb"];
-  PaletteItem* looparrowright    = [PaletteItem paletteItemWithName:@"looparrowright"   requires:@"amssymb"];
-  PaletteItem* mapsto            = [PaletteItem paletteItemWithName:@"mapsto"           requires:@""];
-  PaletteItem* nearrow           = [PaletteItem paletteItemWithName:@"nearrow"          requires:@""];
-  PaletteItem* nwarrow           = [PaletteItem paletteItemWithName:@"nwarrow"          requires:@""];
-  PaletteItem* rightarrow        = [PaletteItem paletteItemWithName:@"rightarrow"       requires:@""];
-  PaletteItem* Rightarrow        = [PaletteItem paletteItemWithName:@"Rightarrow"       resourceName:@"rightarrow-big" requires:@""];
-  PaletteItem* rightharpoondown  = [PaletteItem paletteItemWithName:@"rightharpoondown" requires:@""];
-  PaletteItem* rightharpoonup    = [PaletteItem paletteItemWithName:@"rightharpoonup"   requires:@""];
-  PaletteItem* searrow           = [PaletteItem paletteItemWithName:@"searrow"          requires:@""];
-  PaletteItem* swarrow           = [PaletteItem paletteItemWithName:@"swarrow"          requires:@""];
-  PaletteItem* uparrow           = [PaletteItem paletteItemWithName:@"uparrow"          requires:@""];
-  PaletteItem* rightleftarrows   = [PaletteItem paletteItemWithName:@"rightleftarrows"  requires:@"amssymb"];
-  arrowsItems = [[NSArray alloc] initWithObjects:leftarrow, uparrow, rightarrow, downarrow, nwarrow, nearrow, searrow, swarrow,
-                                                 leftharpoonup, leftharpoondown, rightharpoonup, rightharpoondown,
-                                                 hookleftarrow, hookrightarrow, looparrowleft, looparrowright, mapsto, longmapsto, 
-                                                 rightleftarrows, leftrightarrow, Leftarrow, Rightarrow, Leftrightarrow, nil];
-
-  PaletteItem* bar             = [PaletteItem paletteItemWithName:@"bar"             type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* dot             = [PaletteItem paletteItemWithName:@"dot"             type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* ddot            = [PaletteItem paletteItemWithName:@"ddot"            type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* hat             = [PaletteItem paletteItemWithName:@"hat"             type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* overbrace       = [PaletteItem paletteItemWithName:@"overbrace"       type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* overleftarrow   = [PaletteItem paletteItemWithName:@"overleftarrow"   type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* overrightarrow  = [PaletteItem paletteItemWithName:@"overrightarrow"  type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* tilde           = [PaletteItem paletteItemWithName:@"tilde"           type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* underbrace      = [PaletteItem paletteItemWithName:@"underbrace"      type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* underleftarrow  = [PaletteItem paletteItemWithName:@"underleftarrow"  type:LATEX_ITEM_TYPE_FUNCTION requires:@"amsmath"];
-  PaletteItem* underrightarrow = [PaletteItem paletteItemWithName:@"underrightarrow" type:LATEX_ITEM_TYPE_FUNCTION requires:@"amsmath"];
-  PaletteItem* vec             = [PaletteItem paletteItemWithName:@"vec"             type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* widehat         = [PaletteItem paletteItemWithName:@"widehat"         type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  PaletteItem* widetilde       = [PaletteItem paletteItemWithName:@"widetilde"       type:LATEX_ITEM_TYPE_FUNCTION requires:@""];
-  decorationsItems = [[NSArray alloc] initWithObjects:overleftarrow, overrightarrow, underleftarrow, underrightarrow, vec,
-                                                      hat, widehat, tilde, widetilde, bar, dot, ddot, overbrace, underbrace, nil];
-
-  groups = [[NSArray alloc] initWithObjects:greekItems, lettersItems, relationsItems, binaryOperatorsItems,
-                                            otherOperatorsItems, arrowsItems, decorationsItems, nil];
-                                            
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
                                                name:NSApplicationWillTerminateNotification object:nil];
   return self;
@@ -285,35 +37,56 @@
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [groups release];
-  [greekItems release];
-  [lettersItems release];
-  [binaryOperatorsItems release];
-  [otherOperatorsItems release];
-  [arrowsItems release];
-  [decorationsItems release];
+  [orderedPalettes release];
   [super dealloc];
 }
+//end dealloc:
 
 -(void) windowDidResize:(NSNotification*)notification
 {
+  NSDictionary* palette = [orderedPalettes objectAtIndex:[matrixChoicePopUpButton selectedTag]];
+  NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
+  unsigned int numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntValue] == 0) ?
+                                     4 : [numberOfItemsPerRowNumber unsignedIntValue];
   float clipViewWidth = [[[matrix superview] superview] frame].size.width-[NSScroller scrollerWidth]+1;
   float cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
   [matrix setCellSize:NSMakeSize(cellWidth, cellWidth)];
   [matrix setFrame:NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*[matrix numberOfRows])];
   [matrix setNeedsDisplay:YES];
 }
+//end windowDidResize:
 
 -(void) awakeFromNib
 {
+  [matrixChoicePopUpButton setFocusRingType:NSFocusRingTypeNone];
+  [matrixChoicePopUpButton removeAllItems];
+  NSString* lastDomain = [orderedPalettes count] ? [[orderedPalettes objectAtIndex:0] objectForKey:@"domainName"] : nil;
+  unsigned int i = 0;
+  for(i = 0 ; i<[orderedPalettes count] ; ++i)
+  {
+    NSDictionary* paletteAsDictionary = [orderedPalettes objectAtIndex:i];
+    NSString* domainName = [Utils localizedPath:[paletteAsDictionary objectForKey:@"domainName"]];
+    if (![domainName isEqualToString:lastDomain])
+    {
+      [[matrixChoicePopUpButton menu] addItem:[NSMenuItem separatorItem]];
+      [[matrixChoicePopUpButton lastItem] setToolTip:domainName];
+    }
+    lastDomain = domainName;
+    [matrixChoicePopUpButton addItemWithTitle:[paletteAsDictionary objectForKey:@"localizedName"]];
+    [[matrixChoicePopUpButton lastItem] setTag:i];
+  }
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:)
                                                name:NSWindowDidResizeNotification object:[self window]];
   [matrix setDelegate:self];
   [matrixChoicePopUpButton selectItemWithTag:[[NSUserDefaults standardUserDefaults] integerForKey:LatexPaletteGroupKey]];
+  if ([matrixChoicePopUpButton selectedTag] == -1)
+    [matrixChoicePopUpButton selectItemWithTag:0];
   [matrix setNextKeyView:matrixChoicePopUpButton];
   [self changeGroup:matrixChoicePopUpButton];
   [self latexPalettesSelect:nil];
 }
+//end awakeFromNib
 
 -(void) windowDidLoad
 {
@@ -333,6 +106,134 @@
   if (defaultDetails)
     [self openOrHideDetails:detailsButton];
 }
+//end windowDidLoad
+
+-(void) _loadPalettes
+{
+  NSFileManager* fileManager =  [NSFileManager defaultManager];                           
+  NSMutableArray* allPalettes = [NSMutableArray array];
+  [allPalettes addObject:
+    [NSDictionary dictionaryWithObjectsAndKeys:@"built-in", @"domainName", 
+                                              [[NSBundle mainBundle] pathsForResourcesOfType:@"latexpalette" inDirectory:@"palettes"], @"paths",
+                                              nil]];
+  NSEnumerator* domainPathsEnumerator = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask , YES) objectEnumerator];
+  NSString* domainPath = nil;
+  while((domainPath = [domainPathsEnumerator nextObject]))
+  {
+    NSString* domainName = domainPath;
+    NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [NSApp applicationName], @"Palettes", nil];
+    NSString* directoryPath = [NSString pathWithComponents:pathComponents];
+    NSArray* palettesPaths  = [fileManager directoryContentsAtPath:directoryPath];
+    NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:[palettesPaths count]];
+    NSEnumerator* latexPalettesEnumerator = [palettesPaths objectEnumerator];
+    NSString* file = nil;
+    while((file = [latexPalettesEnumerator nextObject]))
+    {
+      file = [directoryPath stringByAppendingPathComponent:file];
+      BOOL isDirectory = NO;
+      if ([fileManager fileExistsAtPath:file isDirectory:&isDirectory] && isDirectory &&
+          ([[file pathExtension] caseInsensitiveCompare:@"latexpalette"] == NSOrderedSame))
+        [palettesFullPaths addObject:file];
+    }//end for each latexpalette subfolder
+    
+    if (domainName)
+      [allPalettes addObject:
+        [NSDictionary dictionaryWithObjectsAndKeys:domainName, @"domainName", palettesFullPaths, @"paths", nil]];
+  }//end for each domain
+  
+  //we got all the palettes
+  NSMutableArray* palettesAsDictionariesByBundle = [NSMutableArray array];
+  NSEnumerator* palettesEnumerator = [allPalettes objectEnumerator];
+  NSDictionary* paletteInBundle = nil;
+  while((paletteInBundle = [palettesEnumerator nextObject]))
+  {
+    NSString* domainName = [paletteInBundle objectForKey:@"domainName"];
+    NSMutableArray* palettesAsDictionaries = [NSMutableArray array];
+    NSEnumerator* palettesPathEnumerator = [[paletteInBundle objectForKey:@"paths"] objectEnumerator];
+    NSString* paletteFilePath = nil;
+    while((paletteFilePath = [palettesPathEnumerator nextObject]))
+    {
+      NSBundle* bundle = [NSBundle bundleWithPath:paletteFilePath];
+      NSData*   infoPlistData = [NSData dataWithContentsOfFile:[bundle pathForResource:@"Info" ofType:@"plist"]];
+      NSPropertyListFormat format;
+      id plist = !infoPlistData ? nil :
+        [NSPropertyListSerialization propertyListFromData:infoPlistData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      if ([plist isKindOfClass:[NSDictionary class]])
+      {
+        NSString* paletteName = [plist objectForKey:@"name"];
+        paletteName = [paletteName isKindOfClass:[NSString class]] ? paletteName : nil;
+        NSString* paletteAuthor = [plist objectForKey:@"author"];
+        paletteAuthor = [paletteAuthor isKindOfClass:[NSString class]] ? paletteAuthor : @"";
+        NSNumber* numberOfItemsPerRow = [plist objectForKey:@"numberOfItemsPerRow"];
+        numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : [NSNumber numberWithUnsignedInt:4];
+        NSString* localizedName = paletteName ? [bundle localizedStringForKey:paletteName value:paletteName table:nil] : nil;
+        NSArray*  items = [plist objectForKey:@"items"];
+        NSEnumerator* itemsEnumerator = [items isKindOfClass:[NSArray class]] ? [items objectEnumerator] : nil;
+        NSDictionary* item = nil;
+        NSMutableArray* palette = [NSMutableArray arrayWithCapacity:10];
+        while((item = [itemsEnumerator nextObject]))
+        {
+          if ([item isKindOfClass:[NSDictionary class]])
+          {
+            NSString* itemName      = [item objectForKey:@"name"];
+            itemName = [itemName isKindOfClass:[NSString class]] ? itemName : nil;
+            NSString* localizedItemName = itemName ? [bundle localizedStringForKey:itemName value:itemName table:nil] : nil;
+            NSString* resourceName  = [item objectForKey:@"resourceName"];
+            resourceName = [resourceName isKindOfClass:[NSString class]] ? resourceName : itemName;
+            NSString* resourcePath  = [bundle pathForImageResource:resourceName];
+            resourcePath = [resourcePath isKindOfClass:[NSString class]] ? resourcePath : nil;
+            NSString* latexCode     = [item objectForKey:@"latexCode"];
+            latexCode = [latexCode isKindOfClass:[NSString class]] ? latexCode : nil;
+            NSString* requires      = [item objectForKey:@"requires"];
+            requires = [requires isKindOfClass:[NSString class]] ? requires : nil;
+            NSNumber* isEnvironment = [item objectForKey:@"isEnvironment"];
+            isEnvironment = [isEnvironment isKindOfClass:[NSNumber class]] ? isEnvironment : nil;
+            NSNumber* numberOfArguments = [item objectForKey:@"numberOfArguments"];
+            numberOfArguments = [numberOfArguments isKindOfClass:[NSNumber class]] ? numberOfArguments : nil;
+            PaletteItem* paletteItem =
+              [[PaletteItem alloc] initWithName:itemName localizedName:localizedItemName resourcePath:resourcePath
+                                           type:(isEnvironment && [isEnvironment boolValue] ? LATEX_ITEM_TYPE_ENVIRONMENT : LATEX_ITEM_TYPE_STANDARD)
+                                     numberOfArguments:[numberOfArguments unsignedIntValue] latexCode:latexCode
+                                      requires:requires];
+            if (paletteItem)
+              [palette addObject:paletteItem];
+            [paletteItem release];
+          }//end if item is a dictionary
+        }//end for each item
+        
+        if (palette)
+          [palettesAsDictionaries addObject:
+            [NSDictionary dictionaryWithObjectsAndKeys:
+              paletteName, @"name",
+              localizedName, @"localizedName",
+              paletteAuthor, @"author",
+              numberOfItemsPerRow, @"numberOfItemsPerRow",
+              domainName, @"domainName",
+              palette, @"items", nil]];
+      }//end if plist is dictionary
+    }//end for each palette path
+    [palettesAsDictionariesByBundle addObject:palettesAsDictionaries];
+  }//end for each bundle
+  
+  [palettesAsDictionariesByBundle makeObjectsPerformSelector:@selector(sortUsingDescriptors:)
+     withObject:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"localizedName" ascending:YES] autorelease],
+                                          [[[NSSortDescriptor alloc] initWithKey:@"index"         ascending:YES] autorelease], nil]];
+
+  [orderedPalettes release];
+  orderedPalettes = [[NSMutableArray alloc] init];
+  NSEnumerator* enumerator = [palettesAsDictionariesByBundle objectEnumerator];
+  NSArray* orderedPalettesInBundle = nil;
+  while((orderedPalettesInBundle = [enumerator nextObject]))
+    [orderedPalettes addObjectsFromArray:orderedPalettesInBundle];
+}
+//end _loadPalettes
+
+-(void) reloadPalettes
+{
+  [self _loadPalettes];
+  [self awakeFromNib];
+}
+//end reloadPalettes
 
 -(void) mouseMoved:(NSEvent*)event
 {
@@ -347,7 +248,6 @@
     BOOL ok = [matrix getRow:&row column:&column forPoint:[matrix convertPoint:location fromView:clipView]];
     if (ok)
     {
-    
       [matrix selectCellAtRow:row column:column];
       [self latexPalettesSelect:matrix];
       [clipView setBounds:clipBounds];
@@ -355,6 +255,7 @@
     }
   }
 }
+//end mouseMoved:
 
 //triggered when the user selects an element on the palette
 -(IBAction) latexPalettesSelect:(id)sender
@@ -380,6 +281,7 @@
   [detailsImageView setImage:image];
   [detailsLatexCodeTextField setStringValue:selectedItem ? [selectedItem latexCode] : @"-"];
 }
+//end latexPalettesSelect:
 
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document
 -(IBAction) latexPalettesClick:(id)sender
@@ -387,36 +289,47 @@
   [self latexPalettesSelect:sender];
   [[AppController appController] latexPalettesClick:sender];
 }
+//end latexPalettesClick:
 
 -(IBAction) changeGroup:(id)sender
 {
-  int group = [sender selectedTag];
-  NSArray* items = [groups objectAtIndex:group];
-  unsigned int nbItems = [items count];
-  int nbColumns = numberOfItemsPerRow;
-  int nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
-  PaletteCell* prototype = [[[PaletteCell alloc] initImageCell:nil] autorelease];
-  [prototype setImageAlignment:NSImageAlignCenter];
-  [prototype setImageScaling:NSScaleToFit];
-  while([matrix numberOfRows])
-    [matrix removeRow:0];
-  [matrix setPrototype:prototype];
-  [matrix renewRows:nbRows columns:nbColumns];
-  unsigned int i = 0;
-  for(i = 0 ; i<nbItems ; ++i)
+  int tag = [sender selectedTag];
+  if ((tag >= 0) && ((unsigned int)tag < [orderedPalettes count]))
   {
-    int row    = i/numberOfItemsPerRow;
-    int column = i%numberOfItemsPerRow;
-    NSImageCell* cell = (NSImageCell*) [matrix cellAtRow:row column:column];
-    PaletteItem* item = [items objectAtIndex:i];
-    [cell setRepresentedObject:item];
-    [cell setImage:[item image]];
-    [matrix setToolTip:[item toolTip] forCell:cell]; 
+    NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
+    NSString* author = [palette objectForKey:@"author"];
+    [authorTextField setStringValue:[NSString stringWithFormat:@"%@ : %@", NSLocalizedString(@"Author", @"Author"), author]];
+    NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
+    unsigned int numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntValue] == 0) ?
+                                       4 : [numberOfItemsPerRowNumber unsignedIntValue];
+    NSArray* items = [palette objectForKey:@"items"];
+    unsigned int nbItems = [items count];
+    int nbColumns = numberOfItemsPerRow;
+    int nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
+    PaletteCell* prototype = [[[PaletteCell alloc] initImageCell:nil] autorelease];
+    [prototype setImageAlignment:NSImageAlignCenter];
+    [prototype setImageScaling:NSScaleToFit];
+    while([matrix numberOfRows])
+      [matrix removeRow:0];
+    [matrix setPrototype:prototype];
+    [matrix renewRows:nbRows columns:nbColumns];
+    unsigned int i = 0;
+    for(i = 0 ; i<nbItems ; ++i)
+    {
+      int row    = i/numberOfItemsPerRow;
+      int column = i%numberOfItemsPerRow;
+      NSImageCell* cell = (NSImageCell*) [matrix cellAtRow:row column:column];
+      PaletteItem* item = [items objectAtIndex:i];
+      [cell setRepresentedObject:item];
+      [cell setImage:[item image]];
+      [matrix setToolTip:[item toolTip] forCell:cell]; 
+    }
+    [self windowDidResize:nil];
+    [[NSUserDefaults standardUserDefaults] setInteger:tag forKey:LatexPaletteGroupKey];
+    [self latexPalettesSelect:nil];
   }
-  [self windowDidResize:nil];
-  [[NSUserDefaults standardUserDefaults] setInteger:group forKey:LatexPaletteGroupKey];
-  [self latexPalettesSelect:nil];
 }
+//end changeGroup:
 
 -(IBAction) openOrHideDetails:(id)sender
 {
@@ -475,6 +388,7 @@
     [window display];
   }
 }
+//end openOrHideDetails:
 
 -(void) applicationWillTerminate:(NSNotification*)notification
 {
@@ -482,5 +396,6 @@
   [userDefaults setObject:NSStringFromRect([[self window] frame]) forKey:LatexPaletteFrameKey];
   [userDefaults setBool:([detailsButton state] == NSOnState) forKey:LatexPaletteDetailsStateKey];
 }
+//end applicationWillTerminate:
 
 @end
