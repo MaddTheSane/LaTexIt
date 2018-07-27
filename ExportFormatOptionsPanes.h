@@ -53,7 +53,7 @@
   BOOL textExportBody;
   __weak id<ExportFormatOptionsDelegate>   exportFormatOptionsTextPanelDelegate;
   
-  IBOutlet NSPanel*       exportFormatOptionsPDFWofPanel;
+  IBOutlet __weak NSPanel*exportFormatOptionsPDFWofPanel;
   IBOutlet NSBox*         exportFormatOptionsPDFWofGSBox;
   IBOutlet NSTextField*   exportFormatOptionsPDFWofGSWriteEngineLabel;
   IBOutlet NSPopUpButton* exportFormatOptionsPDFWofGSWriteEnginePopUpButton;
@@ -89,15 +89,11 @@
 @property BOOL textExportBody;
 @property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsTextPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsPDFWofPanel;
--(NSString*) pdfWofGSWriteEngine;
--(void)      setPdfWofGSWriteEngine:(NSString*)value;
--(NSString*) pdfWofGSPDFCompatibilityLevel;
--(void)      setPdfWofGSPDFCompatibilityLevel:(NSString*)value;
--(BOOL)      pdfWofMetaDataInvisibleGraphicsEnabled;
--(void)      setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
--(id)        exportFormatOptionsPDFWofPanelDelegate;
--(void)      setExportFormatOptionsPDFWofPanelDelegate:(id)delegate;
+@property (weak) IBOutlet NSPanel *exportFormatOptionsPDFWofPanel;
+@property (copy) NSString *pdfWofGSWriteEngine;
+@property (copy) NSString *pdfWofGSPDFCompatibilityLevel;
+@property BOOL pdfWofMetaDataInvisibleGraphicsEnabled;
+@property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsPDFWofPanelDelegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 

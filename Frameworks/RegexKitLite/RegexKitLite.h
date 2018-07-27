@@ -164,25 +164,25 @@ typedef NS_OPTIONS(NSUInteger, RKLRegexEnumerationOptions) {
 #ifdef __OBJC__
 
 // NSException exception name.
-extern NSString * const RKLICURegexException;
+extern NSExceptionName const RKLICURegexException;
 
 // NSError error domains and user info keys.
 extern NSErrorDomain const RKLICURegexErrorDomain;
 
-extern NSString * const RKLICURegexEnumerationOptionsErrorKey;
-extern NSString * const RKLICURegexErrorCodeErrorKey;
-extern NSString * const RKLICURegexErrorNameErrorKey;
-extern NSString * const RKLICURegexLineErrorKey;
-extern NSString * const RKLICURegexOffsetErrorKey;
-extern NSString * const RKLICURegexPreContextErrorKey;
-extern NSString * const RKLICURegexPostContextErrorKey;
-extern NSString * const RKLICURegexRegexErrorKey;
-extern NSString * const RKLICURegexRegexOptionsErrorKey;
-extern NSString * const RKLICURegexReplacedCountErrorKey;
-extern NSString * const RKLICURegexReplacedStringErrorKey;
-extern NSString * const RKLICURegexReplacementStringErrorKey;
-extern NSString * const RKLICURegexSubjectRangeErrorKey;
-extern NSString * const RKLICURegexSubjectStringErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexEnumerationOptionsErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexErrorCodeErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexErrorNameErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexLineErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexOffsetErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexPreContextErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexPostContextErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexRegexErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexRegexOptionsErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexReplacedCountErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexReplacedStringErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexReplacementStringErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexSubjectRangeErrorKey;
+extern NSErrorUserInfoKey const RKLICURegexSubjectStringErrorKey;
   
 @interface NSString (RegexKitLiteAdditions)
 

@@ -114,6 +114,7 @@
 @synthesize pdfLaTeXAvailable = isPdfLaTeXAvailable;
 @synthesize psToPdfAvailable = isPsToPdfAvailable;
 @synthesize xeLaTeXAvailable = isXeLaTeXAvailable;
+@synthesize luaLaTeXAvailable = isLuaLaTeXAvailable;
 @synthesize laTeXAvailable = isLaTeXAvailable;
 @synthesize colorStyAvailable = isColorStyAvailable;
 @synthesize pdfToSvgAvailable = isPdfToSvgAvailable;
@@ -586,7 +587,7 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
     NSString* uti = [[NSFileManager defaultManager] UTIFromURL:fileURL];
-    if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.svg-image")))
+    if (UTTypeConformsTo((CFStringRef)uti, kUTTypeScalableVectorGraphics))
     {
       NSError* error = nil;
       NSData* data = [NSData dataWithContentsOfURL:fileURL options:NSUncachedRead error:&error];
@@ -620,8 +621,8 @@ static NSMutableDictionary* cachePaths = nil;
           ok |= (document != nil);
         }//end for each equation
       }//end if (equationsCount > 1)
-    }//end if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.svg-image")))
-    else if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.html")))
+    }//end if (UTTypeConformsTo((CFStringRef)uti, kUTTypeScalableVectorGraphics))
+    else if (UTTypeConformsTo((CFStringRef)uti, kUTTypeHTML))
     {
       NSError* error = nil;
       NSData* data = [NSData dataWithContentsOfURL:fileURL options:NSUncachedRead error:&error];
@@ -666,7 +667,7 @@ static NSMutableDictionary* cachePaths = nil;
           ok |= (document != nil);
         }//end for each equation
       }//end if (equationsCount > 1)
-    }//end if (UTTypeConformsTo((CFStringRef)uti, CFSTR("public.html")))
+    }//end if (UTTypeConformsTo((CFStringRef)uti, kUTTypeHTML))
     else
     {
       NSError* error = nil;
@@ -2039,12 +2040,6 @@ static NSMutableDictionary* cachePaths = nil;
   return mutablePreamble;
 }
 //end adaptPreambleToCurrentConfiguration:
-
--(BOOL) isLuaLaTeXAvailable
-{
-  return self->isLuaLaTeXAvailable;
-}
-//end isLuaLatexAvailable
 
 //try to find gs program, searching by its name
 -(void) _findPathWithConfiguration:(id)configuration

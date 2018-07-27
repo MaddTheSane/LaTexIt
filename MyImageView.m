@@ -87,7 +87,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType,
-                              kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, @"public.svg-image",
+                              kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, kUTTypeScalableVectorGraphics,
                               kUTTypeHTML,
                               //@"com.apple.iWork.TSPNativeMetadata",
                               nil]];
@@ -581,7 +581,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       if (![fileManager fileExistsAtPath:filePath])
       {
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
+        [fileManager setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
                              ofItemAtPath:filePath error:0];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
         NSColor* autoBackgroundColor = [self->transientDragEquation backgroundColor];
@@ -704,7 +704,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
         break;
       case EXPORT_FORMAT_SVG:
         extension = @"svg";
-        uti = @"public.svg-image";
+        uti = (NSString*)kUTTypeScalableVectorGraphics;
         break;
       case EXPORT_FORMAT_TEXT:
         extension = @"tex";

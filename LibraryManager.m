@@ -179,11 +179,7 @@ static LibraryManager* sharedManagerInstance = nil;
 
 -(void) removeAllItems
 {
-  #ifdef ARC_ENABLED
   @autoreleasepool {
-  #else
-  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
-  #endif
   NSArray* itemsToRemove = [self allItems];
   if ([itemsToRemove count])
   {
@@ -191,21 +187,13 @@ static LibraryManager* sharedManagerInstance = nil;
     [self->managedObjectContext safeDeleteObjects:itemsToRemove];
     [self->managedObjectContext processPendingChanges];
   }//end if ([itemsToRemove count])
-  #ifdef ARC_ENABLED
   }//end @autoreleasepool
-  #else
-  [ap1 release];
-  #endif
 }
 //end removeAllItems
 
 -(void) removeItems:(NSArray*)items
 {
-  #ifdef ARC_ENABLED
   @autoreleasepool {
-  #else
-  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
-  #endif
   NSArray* itemsToRemove = [items copy];
   if ([itemsToRemove count])
   {
@@ -214,11 +202,7 @@ static LibraryManager* sharedManagerInstance = nil;
     [self->managedObjectContext processPendingChanges];
   }//end if ([itemsToRemove count])
     [itemsToRemove release];
-  #ifdef ARC_ENABLED
   }//end @autoreleasepool
-  #else
-  [ap1 release];
-  #endif
 }
 //end removeItems:
 
@@ -280,7 +264,7 @@ static LibraryManager* sharedManagerInstance = nil;
         if (ok)
         {
           [[NSFileManager defaultManager]
-             setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
+             setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
                      ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created

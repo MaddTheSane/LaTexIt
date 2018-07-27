@@ -616,17 +616,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti
 {
   BOOL result = NO;
-  if (UTTypeConformsTo((__bridge CFStringRef)uti, CFSTR("com.adobe.pdf")))
+  if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypePDF))
     result = YES;
-  else if (UTTypeConformsTo((__bridge CFStringRef)uti, CFSTR("public.tiff")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeTIFF))
     result = YES;
-  else if (UTTypeConformsTo((__bridge CFStringRef)uti, CFSTR("public.png")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypePNG))
     result = YES;
-  else if (UTTypeConformsTo((__bridge CFStringRef)uti, CFSTR("public.jpeg")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeJPEG))
     result = YES;
-  else if (UTTypeConformsTo((__bridge CFStringRef)uti, CFSTR("public.svg-image")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeScalableVectorGraphics))
     result = YES;
-  else if (UTTypeConformsTo((__bridge CFStringRef)uti, CFSTR("public.html")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeHTML))
     result = YES;
   return result;
 }
@@ -648,15 +648,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSArray* result = nil;
   NSMutableArray* equations = [NSMutableArray arrayWithCapacity:1];
-  if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+  if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypePDF))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.tiff")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeTIFF))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.png")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypePNG))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.jpeg")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeJPEG))
     [equations safeAddObject:[self latexitEquationWithData:someData sourceUTI:sourceUTI useDefaults:useDefaults]];
-  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
   {
     NSError* error = nil;
     NSString* string = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
@@ -673,8 +673,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSData* subData = [description dataUsingEncoding:NSUTF8StringEncoding];
       [equations safeAddObject:[self latexitEquationWithData:subData sourceUTI:sourceUTI useDefaults:useDefaults]];
     }//end for each description
-  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
-  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.html")))
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
+  else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeHTML))
   {
     NSError* error = nil;
     NSString* string = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
@@ -704,7 +704,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSData* subData = [description dataUsingEncoding:NSUTF8StringEncoding];
       [equations safeAddObject:[self latexitEquationWithData:subData sourceUTI:sourceUTI useDefaults:useDefaults]];
     }//end for each description
-  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeHTML))
   result = [NSArray arrayWithArray:equations];
   return result;
 }
@@ -1179,7 +1179,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (properties) CFRelease(properties);
       if (imageSource) CFRelease(imageSource);
     }//end if (tiff, png, jpeg)
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
     {
       NSString* svgString = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
       NSString* annotationBase64 =
@@ -1190,8 +1190,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.html")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeHTML))
     {
       NSString* mathmlString = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
       NSString* annotationBase64 =
@@ -1202,8 +1202,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeHTML))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
     {
       NSString* string = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
       NSString* annotationBase64 = nil;
@@ -2073,8 +2073,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       break;
     case EXPORT_FORMAT_SVG:
       extension = @"svg";
-      uti = @"public.svg-image";
-      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", NSStringPboardType, nil] owner:lazyDataProvider];
+      uti = (NSString*)kUTTypeScalableVectorGraphics;
+      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), kUTTypeScalableVectorGraphics, NSStringPboardType, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
         [pboard setData:data forType:GetMySVGPboardType()];
@@ -2179,7 +2179,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       break;
     case EXPORT_FORMAT_SVG:
       extension = @"svg";
-      uti = @"public.svg-image";
+      uti = (NSString*)kUTTypeScalableVectorGraphics;
       break;
     case EXPORT_FORMAT_TEXT:
       extension = @"txt";
@@ -2277,11 +2277,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 +(NSString*) computeFileNameFromContent:(NSString*)content
 {
   NSString* result = nil;
-  #ifdef ARC_ENABLED
   NSMutableString* mutableString = [content mutableCopy];
-  #else
-  NSMutableString* mutableString = [[content mutableCopy] autorelease];
-  #endif
   NSUInteger oldLength = [mutableString length];
   BOOL stop = !oldLength;
   while(!stop)

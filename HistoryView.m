@@ -585,7 +585,7 @@
                compositionConfiguration:[preferencesController compositionConfigurationDocument]
                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
-      [fileManager setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt'] forKey:NSFileHFSCreatorCode]
+      [fileManager setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
                            ofItemAtPath:filePath error:0];
       NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
       NSColor* autoBackgroundColor = [equation backgroundColor];

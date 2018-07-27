@@ -31,6 +31,11 @@
 @synthesize exportFormatOptionsSvgPanel;
 @synthesize exportFormatOptionsJpegPanel;
 @synthesize exportFormatOptionsTextPanel;
+@synthesize exportFormatOptionsPDFWofPanel;
+@synthesize pdfWofGSWriteEngine;
+@synthesize pdfWofGSPDFCompatibilityLevel;
+@synthesize pdfWofMetaDataInvisibleGraphicsEnabled;
+@synthesize exportFormatOptionsPDFWofPanelDelegate;
 
 
 -(id) initWithLoadingFromNib
@@ -256,82 +261,6 @@
 #pragma mark TEXT
 
 #pragma mark PDF Wof
-
--(NSPanel*) exportFormatOptionsPDFWofPanel
-{
-  return self->exportFormatOptionsPDFWofPanel;
-}
-//end exportFormatOptionsPDFWofPanel
-
--(NSString*) pdfWofGSWriteEngine
-{
-  return self->pdfWofGSWriteEngine;
-}
-//end pdfWofGSWriteEngine
-
--(void) setPdfWofGSWriteEngine:(NSString*)value
-{
-#ifdef ARC_ENABLED
-#else
-  [value retain];
-#endif
-  [self willChangeValueForKey:@"pdfWofGSWriteEngine"];
-#ifdef ARC_ENABLED
-#else
-  [self->pdfWofGSWriteEngine release];
-#endif
-  self->pdfWofGSWriteEngine = value;
-  [self didChangeValueForKey:@"pdfWofGSWriteEngine"];
-}
-//end setPdfWofGSWriteEngine:
-
--(NSString*) pdfWofGSPDFCompatibilityLevel
-{
-  return self->pdfWofGSPDFCompatibilityLevel;
-}
-//end pdfWofGSPDFCompatibilityLevel
-
--(void) setPdfWofGSPDFCompatibilityLevel:(NSString*)value
-{
-  #ifdef ARC_ENABLED
-  #else
-  [value retain];
-  #endif
-  [self willChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
-  #ifdef ARC_ENABLED
-  #else
-  [self->pdfWofGSPDFCompatibilityLevel release];
-  #endif
-  self->pdfWofGSPDFCompatibilityLevel = value;
-  [self didChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
-}
-//end setPdfWofGSPDFCompatibilityLevel:
-
--(BOOL) pdfWofMetaDataInvisibleGraphicsEnabled
-{
-  return self->pdfWofMetaDataInvisibleGraphicsEnabled;
-}
-//end pdfWofMetaDataInvisibleGraphicsEnabled
-
--(void) setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value
-{
-  [self willChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
-  self->pdfWofMetaDataInvisibleGraphicsEnabled = value;
-  [self didChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
-}
-//end setPdfWofMetaDataInvisibleGraphicsEnabled
-
--(id) exportFormatOptionsPDFWofPanelDelegate
-{
-  return self->exportFormatOptionsPDFWofPanelDelegate;
-}
-//end exportFormatOptionsPDFWofPanelDelegate
-
--(void) setExportFormatOptionsPDFWofPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsPDFWofPanelDelegate = delegate;
-}
-//end setExportFormatOptionsPDFWofPanelDelegate:
 
 #pragma mark ALL
 

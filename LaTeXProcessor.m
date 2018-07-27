@@ -2301,7 +2301,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
-        data = [self annotateData:data ofUTI:@"public.svg-image" withData:annotationDataCompressed];
+        data = [self annotateData:data ofUTI:(NSString*)kUTTypeScalableVectorGraphics withData:annotationDataCompressed];
         [[NSFileManager defaultManager] removeItemAtPath:tmpSvgFilePath error:0];
       }//end if (format == EXPORT_FORMAT_SVG)
       else if (format == EXPORT_FORMAT_MATHML)
@@ -2465,7 +2465,7 @@ static LaTeXProcessor* sharedInstance = nil;
       if (annotatedData)
         result = [annotatedData copy];
     }//end if (tiff, png, jpeg)
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];
       NSMutableString* outputString = !annotationDataBase64 ? nil :
@@ -2479,7 +2479,7 @@ static LaTeXProcessor* sharedInstance = nil;
         DebugLog(0, @"error : %@", error);
       result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.html")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeHTML))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];
       NSMutableString* outputString = !annotationDataBase64 ? nil :
@@ -2491,7 +2491,7 @@ static LaTeXProcessor* sharedInstance = nil;
       if (error)
         DebugLog(0, @"error : %@", error);
       result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeHTML))
   }//end if (inputData && annotationData)
   if (!result)
     result = inputData;

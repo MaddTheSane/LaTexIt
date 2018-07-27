@@ -57,13 +57,9 @@
 @property BOOL              saveAccessoryViewOptionsTextExportPreamble;
 @property BOOL              saveAccessoryViewOptionsTextExportEnvironment;
 @property BOOL              saveAccessoryViewOptionsTextExportBody;
-
--(NSString*)       saveAccessoryViewOptionsPDFWofGSWriteEngine;
--(void)            setSaveAccessoryViewOptionsPDFWofGSWriteEngine:(NSString*)value;
--(NSString*)       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
--(void)            setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:(NSString*)value;
--(BOOL)            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
--(void)            setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+@property (copy) NSString * saveAccessoryViewOptionsPDFWofGSWriteEngine;
+@property (copy) NSString * saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+@property BOOL              saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
 
 @property (nonatomic, assign) NSSavePanel *currentSavePanel;
 

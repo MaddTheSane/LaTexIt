@@ -554,7 +554,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:DragExportTypeKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)DragExportTypeKey, (__bridge CFNumberRef)[NSNumber numberWithInt:value], (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CFStringRef)DragExportTypeKey, (__bridge CFNumberRef)@(value), (CFStringRef)LaTeXiTAppKey);
   [self setExportFormatCurrentSession:value];
 }
 //end setExportFormatPersistent:
@@ -588,7 +588,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:DragExportJpegColorKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)DragExportJpegColorKey, (__bridge const void*)value, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CFStringRef)DragExportJpegColorKey, (__bridge CFPropertyListRef)value, (CFStringRef)LaTeXiTAppKey);
 }
 //end setExportJpegBackgroundColorData:
 
@@ -605,9 +605,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end setExportJpegBackgroundColor:
 
--(CGFloat) exportJpegQualityPercent
+-(float) exportJpegQualityPercent
 {
-  CGFloat result = 0;
+  float result = 0;
   NSNumber* number = nil;
   if (self->isLaTeXiT)
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportJpegQualityKey];
@@ -618,12 +618,12 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end exportJpegQualityPercent
 
--(void) setExportJpegQualityPercent:(CGFloat)value
+-(void) setExportJpegQualityPercent:(float)value
 {
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportJpegQualityKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)DragExportJpegQualityKey, (__bridge const void*)[NSNumber numberWithFloat:value], (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CFStringRef)DragExportJpegQualityKey, (__bridge CFPropertyListRef)@(value), (CFStringRef)LaTeXiTAppKey);
 }
 //end setExportJpegQualityPercent:
 
@@ -633,11 +633,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportPDFWOFGsWriteEngineKey];
   else
-    #ifdef ARC_ENABLED
-    result = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFGsWriteEngineKey, (__bridge CFStringRef)LaTeXiTAppKey);
-    #else
-    result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
-    #endif
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFGsWriteEngineKey, (__bridge CFStringRef)LaTeXiTAppKey));
   return result;
 }
 //end exportPDFWOFGsWriteEngine
@@ -647,11 +643,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:DragExportPDFWOFGsWriteEngineKey];
   else
-    #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, (__bridge const void*)value, (CFStringRef)LaTeXiTAppKey);
-    #else
-    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, value, (CFStringRef)LaTeXiTAppKey);
-    #endif
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsWriteEngineKey, (__bridge CFPropertyListRef)value, (CFStringRef)LaTeXiTAppKey);
 }
 //end setExportPDFWOFGsWriteEngine:
 
@@ -661,11 +653,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportPDFWOFGsPDFCompatibilityLevelKey];
   else
-#ifdef ARC_ENABLED
-    result = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (__bridge CFStringRef)LaTeXiTAppKey);
-#else
-  result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
-#endif
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (__bridge CFStringRef)LaTeXiTAppKey));
   return result;
 }
 //end exportPDFWOFGsPDFCompatibilityLevel
@@ -675,11 +663,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:DragExportPDFWOFGsPDFCompatibilityLevelKey];
   else
-#ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (__bridge const void*)value, (CFStringRef)LaTeXiTAppKey);
-#else
-  CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, value, (CFStringRef)LaTeXiTAppKey);
-#endif
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (__bridge CFPropertyListRef)value, (CFStringRef)LaTeXiTAppKey);
 }
 //end setExportPDFWOFGsPDFCompatibilityLevel:
 
@@ -690,11 +674,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey];
   else
-  #ifdef ARC_ENABLED
-    number = (__bridge NSNumber*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (__bridge CFStringRef)LaTeXiTAppKey);
-  #else
-  number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
-  #endif
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (__bridge CFStringRef)LaTeXiTAppKey));
   result = !number ? NO : [number boolValue];
   return result;
 }
@@ -705,11 +685,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey];
   else
-  #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (__bridge const void*)[NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
-  #else
-  CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
-  #endif
+    CFPreferencesSetAppValue((CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (__bridge CFPropertyListRef)[NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
 }
 //end setExportPDFWOFMetaDataInvisibleGraphicsEnabled:
 

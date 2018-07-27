@@ -70,7 +70,7 @@
 {
 #ifdef ARC_ENABLED
 #else
-  [self->outlineView release];
+  [outlineView release];
   [super dealloc];
 #endif
 }

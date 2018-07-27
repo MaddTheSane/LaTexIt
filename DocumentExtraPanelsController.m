@@ -31,6 +31,9 @@
 @synthesize saveAccessoryViewOptionsTextExportBody;
 @synthesize saveAccessoryViewExportFormat;
 @synthesize saveAccessoryViewScalePercent = saveAccessoryViewExportScalePercent;
+@synthesize saveAccessoryViewOptionsPDFWofGSWriteEngine;
+@synthesize saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+@synthesize saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
 
 #pragma mark init/load/dealloc
 
@@ -207,46 +210,6 @@
   }//end if (value != self->saveAccessoryViewOptionsSvgPdfToSvgPath)
 }
 //end setSaveAccessoryViewOptionsSvgPdfToSvgPath:
-
--(NSString*) saveAccessoryViewOptionsPDFWofGSWriteEngine
-{
-  return self->saveAccessoryViewOptionsPDFWofGSWriteEngine;
-}
-//end saveAccessoryViewOptionsPDFWofGSWriteEngine
-
--(void) setSaveAccessoryViewOptionsPDFWofGSWriteEngine:(NSString*)value
-{
-  [value retain];
-  [self->saveAccessoryViewOptionsPDFWofGSWriteEngine release];
-  self->saveAccessoryViewOptionsPDFWofGSWriteEngine = value;
-}
-//end setSaveAccessoryViewOptionsPDFWofGSWriteEngine:
-
--(NSString*) saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel
-{
-  return self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
-}
-//end saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel
-
--(void) setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:(NSString*)value
-{
-  [value retain];
-  [self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel release];
-  self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel = value;
-}
-//end setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:
-
--(BOOL) saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled
-{
-  return self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
-}
-//end saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled
-
--(void) setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:(BOOL)value
-{
-  self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled = value;
-}
-//end setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:
 
 -(void) setCurrentSavePanel:(NSSavePanel*)value
 {

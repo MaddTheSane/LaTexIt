@@ -859,17 +859,17 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       NSString* string = [[[[NSAttributedString alloc] initWithRTF:data documentAttributes:nil] autorelease] string];
       [self _decomposeString:string preamble:&self->initialPreamble body:&self->initialBody];
     }//end if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.rtf")))
-    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("com.adobe.pdf")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypePDF))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
-    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.tiff")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeTIFF))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
-    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.png")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypePNG))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
-    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.jpeg")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeJPEG))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
-    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.html")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeHTML))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
-    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.svg-image")))
+    else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeScalableVectorGraphics))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
     else //by default, we suppose that it is a plain text file
     {
@@ -1767,7 +1767,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (data)
   {
     [data writeToFile:filePath atomically:YES];
-    [[NSFileManager defaultManager] setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:'LTXt']
+    [[NSFileManager defaultManager] setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt')
                                                                                      forKey:NSFileHFSCreatorCode]
                                             ofItemAtPath:filePath error:0];    
     NSColor* backgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? aJpegColor : nil;

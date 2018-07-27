@@ -135,7 +135,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
   [self->actionButton setMenu:actionMenu];
-  [actionMenu setDelegate:(id)self];
+  [actionMenu setDelegate:self];
   [actionMenu release];
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
   
@@ -885,28 +885,21 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 {
   LibraryManager* libraryManager = [LibraryManager sharedManager];
   NSNumber* importOption = [[self->importTeXOptions objectForKey:@"importOption"] dynamicCastToClass:[NSNumber class]];
-  #ifdef ARC_ENABLED
+  BOOL souldImport;
   @autoreleasepool {
-  #else
-  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
-  #endif
   NSArray* itemsToRemove = nil;
   if (importOption && ([importOption integerValue] == LIBRARY_IMPORT_OVERWRITE))
     itemsToRemove = [libraryManager allItems];
   [self->importTeXOptions release];
   self->importTeXOptions = nil;
 
-  BOOL souldImport = (sender == self->importTeXImportButton);
+  souldImport = (sender == self->importTeXImportButton);
   if (souldImport)
     [self performImportTeXItems:sender];
   
   if (itemsToRemove)
     [libraryManager removeItems:itemsToRemove];
-  #ifdef ARC_ENABLED
   }//end @autoreleasepool
-  #else
-  [ap1 release];
-  #endif
   [NSApp endSheet:self->importTeXPanel returnCode:(souldImport ? 1 : 0)];
   [self->importTeXArrayController removeObserver:self forKeyPath:@"arrangedObjects.checked"];
   [self->importTeXArrayController release];
@@ -986,7 +979,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     [brothers removeObjectsInArray:newLibraryRootItems];
     [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
       [brothers count] : MIN([brothers count], (unsigned)proposedChildIndex)];
-    unsigned int nbBrothers = [brothers count];
+    NSUInteger nbBrothers = [brothers count];
     while(nbBrothers--)
       [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
     [newLibraryRootItems release];

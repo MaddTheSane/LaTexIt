@@ -168,7 +168,7 @@
 //returns some configuration info
 @property (readonly, getter=isPdfLaTeXAvailable) BOOL pdfLaTeXAvailable;
 @property (readonly, getter=isXeLaTeXAvailable) BOOL xeLaTeXAvailable;
--(BOOL) isLuaLaTeXAvailable;
+@property (readonly, getter=isLuaLaTeXAvailable) BOOL luaLaTeXAvailable;
 @property (readonly, getter=isLaTeXAvailable) BOOL laTeXAvailable;
 @property (readonly, getter=isDviPdfAvailable) BOOL dviPdfAvailable;
 @property (readonly, getter=isGsAvailable) BOOL gsAvailable;
