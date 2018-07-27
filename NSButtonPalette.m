@@ -66,12 +66,10 @@
 }
 //end buttonWithState:
 
--(int) selectedTag
+-(NSInteger) selectedTag
 {
-  int result = 0;
-  NSEnumerator* enumerator = [self->buttons objectEnumerator];
-  NSButton* button = nil;
-  while((button = [enumerator nextObject]))
+  NSInteger result = 0;
+  for(NSButton* button in buttons)
   {
     if ([button state] == NSOnState)
     {
@@ -83,7 +81,7 @@
 }
 //end selectedTag
 
--(void) setSelectedTag:(int)tag
+-(void) setSelectedTag:(NSInteger)tag
 {
   NSEnumerator* enumerator = [self->buttons objectEnumerator];
   NSButton* button = nil;

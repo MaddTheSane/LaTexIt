@@ -1145,7 +1145,7 @@ static LibraryManager* sharedManagerInstance = nil;
   BOOL conformsToTex = UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tex")) || UTTypeConformsTo((CFStringRef)fileUti, kUTTypePlainText);
   if (conformsToTex)
   {
-    NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename];
+    NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename usedEncoding:NULL error:NULL];
     NSError* error = nil;
     NSArray* components = [fileContent captureComponentsMatchedByRegex:@"^(.*?)\\s*\\\\begin\\{document\\}(.*)\\\\end\\{document\\}" options:RKLDotAll|RKLMultiline|RKLCaseless range:[fileContent range] error:&error];
     if (error)

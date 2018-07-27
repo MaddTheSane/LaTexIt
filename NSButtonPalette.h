@@ -11,7 +11,7 @@
 @protocol NSButtonPaletteDelegate;
 
 @interface NSButtonPalette : NSObject {
-  NSMutableArray* buttons;
+  NSMutableArray<NSButton*>* buttons;
   BOOL isExclusive;
   id<NSButtonPaletteDelegate> delegate;
 }
@@ -21,8 +21,7 @@
 -(void) remove:(NSButton*)button;
 -(NSButton*) buttonWithTag:(NSInteger)tag;
 -(NSButton*) buttonWithState:(NSInteger)state;
--(int) selectedTag;
--(void) setSelectedTag:(int)tag;
+@property NSInteger selectedTag;
 
 @property (assign) id<NSButtonPaletteDelegate> delegate;
 -(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;

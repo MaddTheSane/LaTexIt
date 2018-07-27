@@ -145,7 +145,7 @@
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:imageFrame.origin.x yBy:imageFrame.origin.y];
     [transform translateXBy:0 yBy:imageFrame.size.height/2];
-    [transform scaleXBy:1.f yBy:[self->image isFlipped] ^ [controlView isFlipped] ? -1.f : 1.f];
+    [transform scaleXBy:1.f yBy:[controlView isFlipped] ? -1.f : 1.f];
     [transform translateXBy:0 yBy:-imageFrame.size.height/2];
     [transform concat];
     NSImage* wrapImage = [[NSImage alloc] initWithSize:imageSize];
