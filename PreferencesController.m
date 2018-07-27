@@ -230,7 +230,7 @@ static PreferencesController* sharedController = nil;
                                                                      format:&format errorDescription:&errorString];
     NSString* version = [plist objectForKey:@"version"];
     //we can check the version...
-    if (!version || [version compare:@"1.10.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
+    if (!version || [version compare:@"1.10.1" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
     {
     }
     NSEnumerator* enumerator = [[plist objectForKey:@"shortcuts"] objectEnumerator];

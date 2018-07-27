@@ -1840,7 +1840,7 @@ static NSMutableDictionary* cachePaths = nil;
         }
         #endif
         if (!pboardString)
-          [pboard stringForType:NSStringPboardType];
+          pboardString = [pboard stringForType:NSStringPboardType];
 
         //performs effective latexisation
         NSData* pdfData = [[self _myDocumentServiceProvider] latexiseWithPreamble:[preamble string] body:pboardString

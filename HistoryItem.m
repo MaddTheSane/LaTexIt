@@ -300,7 +300,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.10.0"  forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.10.1"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -387,13 +387,6 @@ static NSLock* strangeLock = nil;
       [pdfCachedImage addRepresentation:pdfImageRep];
       [pdfImageRep release];
       //[pdfCachedImage recache];
-      
-
-      //we need to redefine the cache policy so that zoom of imageView will scale PDF and not cached bitmap
-      /*pdfCachedImage = [[NSImage alloc] initWithData:pdfData];
-      [pdfCachedImage setCacheMode:NSImageCacheNever];
-      [pdfCachedImage setDataRetained:YES];
-      [pdfCachedImage recache];*/
     }
   }
   return pdfCachedImage;
@@ -414,23 +407,13 @@ static NSLock* strangeLock = nil;
       //temporarily change size
       [strangeLock lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
       [pdfImage setSize:newSize];
-      @try{
-        [pdfImage lockFocus];
-        NSData* bitmapData = nil;
-        @try{
-          bitmapData = [pdfImage TIFFRepresentation];
-        }
-        @catch(NSException* e){
-        }
-        bitmapCachedImage = bitmapData ? [[NSImage alloc] initWithData:bitmapData] : [[NSImage alloc] initWithSize:NSZeroSize];
-        [pdfImage unlockFocus];
-      }
-      @catch(NSException* e) //may occur if lockFocus fails
-      {
-        [bitmapCachedImage release];
-        bitmapCachedImage = [[NSImage alloc] initWithSize:NSZeroSize];
-      }
+      [pdfImage lockFocus];
+      NSBitmapImageRep* bitmapRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, newSize.width, newSize.height)]; 
+      bitmapCachedImage = [[NSImage alloc] initWithSize:newSize];
+      [bitmapCachedImage addRepresentation:bitmapRep];
+      [bitmapRep release];
       //restore size
+      [pdfImage unlockFocus];
       [pdfImage setSize:realSize];
       [strangeLock unlock];
     }
