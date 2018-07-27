@@ -35,7 +35,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 @interface MyImageView (PrivateAPI)
--(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh;
+-(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(void) _copyCurrentImageNotification:(NSNotification*)notification;
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard;
 @end
@@ -140,7 +140,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   //may update linkback link
   if (pdfData && link)
   {
-    [self _writeToPasteboard:[link pasteboard] isLinkBackRefresh:YES];
+    [self _writeToPasteboard:[link pasteboard] isLinkBackRefresh:YES lazyDataProvider:self];
     [link sendEdit];
   }
 }
@@ -174,7 +174,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   p.x -= iconSize.width/2;
   p.y -= iconSize.height/2;
   
-  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO];
+  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:self];
 
   [super dragImage:draggedImage at:p offset:offset event:event pasteboard:pasteboard source:object slideBack:YES];
 }
@@ -248,12 +248,12 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   return names;
 }
 
--(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh
+-(void) _writeToPasteboard:(NSPasteboard*)pasteboard isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   HistoryItem* historyItem = [document historyItemWithCurrentState];
   [pasteboard addTypes:[NSArray arrayWithObject:HistoryItemsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObject:historyItem]] forType:HistoryItemsPboardType];
-  [historyItem writeToPasteboard:pasteboard forDocument:document isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:self];
+  [historyItem writeToPasteboard:pasteboard forDocument:document isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
 }
 
 //provides lazy data to a pasteboard
@@ -335,7 +335,19 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
-  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO];
+  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:self];
+}
+
+-(IBAction) copyWithOutlinedFonts:(id)sender
+{
+  NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard declareTypes:[NSArray array] owner:self];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  export_format_t savExportFormat = [userDefaults integerForKey:DragExportTypeKey];
+  [userDefaults setInteger:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS forKey:DragExportTypeKey];
+  //lazyDataProvider to nil to force immediate computation of the pdf with outlined fonts
+  [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:nil];
+  [userDefaults setInteger:savExportFormat forKey:DragExportTypeKey];
 }
 
 //In my opinion, this paste: is triggered only programmatically from the paste: of LineCountTextView

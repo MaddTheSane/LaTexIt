@@ -4,6 +4,7 @@
             ACTIONS = {
                 checkUpdates = id; 
                 copyEquation = id; 
+                copyEquationWithOutlinedFonts = id; 
                 displayLog = id; 
                 exportImage = id; 
                 historyClearHistory = id; 
@@ -15,6 +16,7 @@
                 libraryRefreshItems = id; 
                 libraryRemoveSelectedItems = id; 
                 librarySaveAs = id; 
+                makeDonation = id; 
                 makeLatex = id; 
                 openWebSite = id; 
                 paste = id; 
@@ -30,7 +32,11 @@
             }; 
             CLASS = AppController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {readmeTextView = NSTextView; readmeWindow = NSWindow; }; 
+            OUTLETS = {
+                donationPanel = NSPanel; 
+                readmeTextView = NSTextView; 
+                readmeWindow = NSWindow; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 

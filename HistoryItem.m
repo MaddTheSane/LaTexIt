@@ -273,7 +273,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.6.0"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.6.1"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];

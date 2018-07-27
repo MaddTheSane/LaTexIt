@@ -22,6 +22,7 @@
 #import "LibraryManager.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
+#import "MyImageView.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
 #import "NSStringExtended.h"
@@ -353,9 +354,22 @@ static NSMutableArray*      unixBins = nil;
   return [self _myDocumentServiceProvider];
 }
 
+-(IBAction) makeDonation:(id)sender//display info panel
+{
+  [donationPanel center];
+  [donationPanel orderFront:sender];
+}
+
 -(IBAction) copyEquation:(id)sender
 {
-  [[[[NSDocumentController sharedDocumentController] currentDocument] imageView] copy:sender];
+  //[[[[NSDocumentController sharedDocumentController] currentDocument] imageView] copy:sender];
+  [[(MyDocument*)[self currentDocument] imageView] copy:sender];
+}
+
+-(IBAction) copyEquationWithOutlinedFonts:(id)sender
+{
+  //[[[[NSDocumentController sharedDocumentController] currentDocument] imageView] copyEquationWithOutlinedFonts:sender];
+  [[(MyDocument*)[self currentDocument] imageView] copyWithOutlinedFonts:sender];
 }
 
 -(IBAction) paste:(id)sender
@@ -370,6 +384,11 @@ static NSMutableArray*      unixBins = nil;
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
+  }
+  else if ([sender action] == @selector(copyEquationWithOutlinedFonts:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage] && isGsAvailable && isPs2PdfAvailable;
   }
   else if ([sender action] == @selector(paste:))
   {
@@ -388,6 +407,11 @@ static NSMutableArray*      unixBins = nil;
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [self isPdfLatexAvailable];
+  }
+  else if ([sender action] == @selector(displayLog:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    ok = (myDocument != nil);
   }
   else if ([sender action] == @selector(showOrHidePreamble:))
   {
@@ -1777,6 +1801,7 @@ static NSMutableArray*      unixBins = nil;
     NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"Read Me") ofType:@"rtfd"];
     [readmeTextView readRTFDFromFile:file];
   }
+  [readmeWindow center];
   [readmeWindow makeKeyAndOrderFront:self];
 }
 

@@ -805,6 +805,18 @@ static NSImage*        libraryFileIcon       = nil;
 
 //outline view delegate methods
 
+/* heightOfRowByItem is Tiger only, but should not be called if the Panther version is launched on Tiger */
+#ifndef PANTHER
+-(float)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
+{
+  float height = 16;
+  if (([(LibraryTableView*)outlineView libraryRowType] == LIBRARY_ROW_IMAGE_LARGE) &&
+      ![item isKindOfClass:[LibraryFolder class]])
+    height = 34;
+  return height;
+}
+#endif
+
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
   [item setExpanded:NO];
@@ -864,7 +876,11 @@ static NSImage*        libraryFileIcon       = nil;
     if ([item isKindOfClass:[LibraryFile class]])
       [cell setImage:[[(LibraryFile*)item value] pdfImage]];
     else if ([item isKindOfClass:[LibraryFolder class]])
+      #ifdef PANTHER //Under Panther, the lines have the same big height, not under Tiger
       [cell setImage:[(LibraryFolder*)item bigIcon]];
+      #else
+      [cell setImage:[(LibraryFolder*)item icon]];
+      #endif
     else
       [cell setImage:[item icon]];
   }

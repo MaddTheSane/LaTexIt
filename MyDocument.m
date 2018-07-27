@@ -263,18 +263,20 @@ static NSString* yenString = nil;
 {
   [progressMessageProgressIndicator setHidden:NO];
   [progressMessageProgressIndicator startAnimation:self];
-  [progressMessageProgressIndicator display];
+  [progressMessageProgressIndicator setNeedsDisplay:YES];
   [progressMessageTextField setStringValue:message];
-  [progressMessageTextField display];
+  [progressMessageTextField setNeedsDisplay:YES];
+  [[progressMessageProgressIndicator superview] display];
 }
 
 -(void) stopMessageProgress
 {
   [progressMessageTextField setStringValue:@""];
-  [progressMessageTextField display];
+  [progressMessageTextField setNeedsDisplay:YES];
   [progressMessageProgressIndicator stopAnimation:self];
   [progressMessageProgressIndicator setHidden:YES];
-  [progressMessageProgressIndicator display];
+  [progressMessageProgressIndicator setNeedsDisplay:YES];
+  [[progressMessageProgressIndicator superview] display];
 }
 
 //updates interface to allow latexisation or not, according to current configuration

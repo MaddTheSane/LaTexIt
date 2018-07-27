@@ -34,6 +34,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
 @interface AppController : NSObject <LinkBackServerDelegate> {  
   IBOutlet NSWindow*   readmeWindow;
   IBOutlet NSTextView* readmeTextView;
+  IBOutlet NSPanel*    donationPanel;
   
   //some info on current configuration
   BOOL isPdfLatexAvailable;
@@ -66,10 +67,12 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
 +(NSDictionary*) environmentDict; //environment useful to call programs on the command line
 
 //the menu actions
+-(IBAction) makeDonation:(id)sender;//display info panel
 -(IBAction) openWebSite:(id)sender;//ask for LaTeXiT's web site
 -(IBAction) checkUpdates:(id)sender;//check for updates on LaTeXiT's web site
 
 -(IBAction) copyEquation:(id)sender;
+-(IBAction) copyEquationWithOutlinedFonts:(id)sender;
 -(IBAction) paste:(id)sender;
 
 -(IBAction) exportImage:(id)sender;

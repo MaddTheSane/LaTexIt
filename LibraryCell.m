@@ -57,7 +57,11 @@
 {
   LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
   library_row_t libraryRowType = [libraryTableView libraryRowType];
-  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+       #ifndef PANTHER
+       || (aRect.size.height < 30)
+       #endif
+     )
   {
     NSRect textFrame  = NSZeroRect;
     NSRect imageFrame = NSZeroRect;
@@ -70,7 +74,11 @@
 {
   LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
   library_row_t libraryRowType = [libraryTableView libraryRowType];
-  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+        #ifndef PANTHER
+        || (aRect.size.height < 30)
+        #endif
+       )
   {
     NSRect textFrame  = NSZeroRect;
     NSRect imageFrame = NSZeroRect;
@@ -89,9 +97,13 @@
     
     LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
     library_row_t libraryRowType = [libraryTableView libraryRowType];
-    if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+    if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+        #ifndef PANTHER
+        || (cellFrame.size.height < 30)
+        #endif
+       )
       NSDivideRect(cellFrame, &imageFrame, &cellFrame, 3 + imageSize.width, NSMinXEdge);
-    else if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
+    else// if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
     {
       imageFrame = NSMakeRect(0, 0, imageSize.width, imageSize.height);
       float factor = imageSize.height ? cellFrame.size.height/imageSize.height : 0;
@@ -104,7 +116,21 @@
       NSRectFill(imageFrame);
     }
     
-    if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
+    if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+        #ifndef PANTHER
+        || (cellFrame.size.height < 30)
+        #endif
+       )
+    {
+      imageFrame.origin.x += 3;
+      imageFrame.size = imageSize;
+      if ([controlView isFlipped])
+	imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
+      else
+	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
+      [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
+    }
+    else// if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
     {
       [self setTitle:@""];
       NSSize savSize = imageFrame.size;
@@ -117,16 +143,6 @@
 	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
       [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
       [image setSize:savSize];
-    }
-    else if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
-    {
-      imageFrame.origin.x += 3;
-      imageFrame.size = imageSize;
-      if ([controlView isFlipped])
-	imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
-      else
-	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
-      [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
     }
   }
   [super drawWithFrame:cellFrame inView:controlView];
@@ -147,7 +163,11 @@
 {
   LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
   library_row_t libraryRowType = [libraryTableView libraryRowType];
-  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+      #ifndef PANTHER
+      || (cellFrame.size.height < 30)
+      #endif
+     )
   {
     cellFrame.origin.x += 8;
     [super drawInteriorWithFrame:cellFrame inView:controlView];

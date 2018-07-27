@@ -53,6 +53,8 @@
 -(void) setLibraryRowType:(library_row_t)type
 {
   libraryRowType = type;
+  //Tiger will use outlineView:heightOfRowByItem:
+  #ifdef PANTHER
   switch(libraryRowType)
   {
     case LIBRARY_ROW_IMAGE_AND_TEXT:
@@ -64,6 +66,8 @@
       [self setIndentationPerLevel:34];
       break;
   }
+  #endif
+  [self reloadData];
   [self setNeedsDisplay:YES];
 }
 
