@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>latexit.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.club.ktd.LaTeXiT</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -18,6 +18,8 @@
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
 	<string>2.10.1</string>
+	<key>LSUIElement</key>
+	<true/>
 	<key>LinkBackApplicationURL</key>
 	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
@@ -26,8 +28,6 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>LSUIElement</key>
-	<true/>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -39,12 +39,12 @@
 			<string>public.tex</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
-				<key>public.mime-type</key>
-				<string>application/x-tex</string>
 				<key>public.filename-extension</key>
 				<array>
 					<string>tex</string>
 				</array>
+				<key>public.mime-type</key>
+				<string>application/x-tex</string>
 			</dict>
 		</dict>
 	</array>

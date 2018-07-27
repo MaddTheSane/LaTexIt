@@ -277,7 +277,7 @@
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
-		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
+		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
@@ -306,10 +306,10 @@
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
 		9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
-		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
-		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
-		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
 		9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
@@ -408,7 +408,7 @@
 		93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
 		93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
-		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
+		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
 		93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
@@ -2240,6 +2240,9 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1000;
+			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
@@ -2933,13 +2936,10 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		932388570854FD210017F3BB /* Development */ = {
+		932388570854FD210017F3BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2951,14 +2951,12 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
@@ -2967,7 +2965,6 @@
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -2989,54 +2986,42 @@
 					"-lxml2",
 					"-lz",
 				);
-				PREBINDING = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		932388580854FD210017F3BB /* Deployment */ = {
+		932388580854FD210017F3BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks/LinkBack\"",
 				);
-				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = NO;
 				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
 				GCC_STRICT_ALIASING = YES;
 				GCC_UNROLL_LOOPS = YES;
-				GCC_VERSION = 4.2;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -3057,51 +3042,92 @@
 					"-lxml2",
 					"-lz",
 				);
-				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9323885B0854FD210017F3BB /* Development */ = {
+		9323885B0854FD210017F3BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-					ppc64,
-				);
-				GCC_AUTO_VECTORIZATION = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_FAST_OBJC_DISPATCH = NO;
-				GCC_VERSION = 4.2;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				IBC_FLATTEN_NIBS = NO;
 				IBC_STRIP_NIBS = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.5;
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx;
 			};
-			name = Development;
+			name = Debug;
 		};
-		9323885C0854FD210017F3BB /* Deployment */ = {
+		9323885C0854FD210017F3BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_BIT)",
-					ppc,
-				);
-				GCC_AUTO_VECTORIZATION = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = 4.2;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -3115,31 +3141,24 @@
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.5;
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
-				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
-				VALID_ARCHS = "i386 ppc ppc7400 ppc970";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9344B9910E8CF38800FE90A5 /* Development */ = {
+		9344B9910E8CF38800FE90A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-					ppc7400,
-				);
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3190,21 +3209,18 @@
 				);
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CreateEquations;
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = action;
 			};
-			name = Development;
+			name = Debug;
 		};
-		9344B9920E8CF38800FE90A5 /* Deployment */ = {
+		9344B9920E8CF38800FE90A5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-					ppc7400,
-				);
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3256,63 +3272,65 @@
 					"-lz",
 				);
 				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CreateEquations;
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = action;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		934AAA070F3388460010E384 /* Development */ = {
+		934AAA070F3388460010E384 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = Packaging;
 			};
-			name = Development;
+			name = Debug;
 		};
-		934AAA090F3388460010E384 /* Deployment */ = {
+		934AAA090F3388460010E384 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Packaging;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		934AAA130F3388800010E384 /* Development */ = {
+		934AAA130F3388800010E384 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = All;
 			};
-			name = Development;
+			name = Debug;
 		};
-		934AAA150F3388800010E384 /* Deployment */ = {
+		934AAA150F3388800010E384 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		938DBE1110BDC2E0002350CF /* Development */ = {
+		938DBE1110BDC2E0002350CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3353,21 +3371,18 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PREBINDING = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
 				PRODUCT_NAME = "LaTeXiT Helper";
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		938DBE1210BDC2E0002350CF /* Deployment */ = {
+		938DBE1210BDC2E0002350CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3411,75 +3426,81 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
 				PRODUCT_NAME = "LaTeXiT Helper";
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9396E5450EC628C40014C4BD /* Development */ = {
+		9396E5450EC628C40014C4BD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Create dmg";
 			};
-			name = Development;
+			name = Debug;
 		};
-		9396E5470EC628C40014C4BD /* Deployment */ = {
+		9396E5470EC628C40014C4BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9396E96B0EC843190014C4BD /* Development */ = {
+		9396E96B0EC843190014C4BD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Create dmg";
 			};
-			name = Development;
+			name = Debug;
 		};
-		9396E96D0EC843190014C4BD /* Deployment */ = {
+		9396E96D0EC843190014C4BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		93BD651E0E8D08EC00DB341B /* Development */ = {
+		93BD651E0E8D08EC00DB341B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = All;
 			};
-			name = Development;
+			name = Debug;
 		};
-		93BD651F0E8D08EC00DB341B /* Deployment */ = {
+		93BD651F0E8D08EC00DB341B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -3487,83 +3508,83 @@
 		932388560854FD210017F3BB /* Build configuration list for PBXNativeTarget "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				932388570854FD210017F3BB /* Development */,
-				932388580854FD210017F3BB /* Deployment */,
+				932388570854FD210017F3BB /* Debug */,
+				932388580854FD210017F3BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9323885B0854FD210017F3BB /* Development */,
-				9323885C0854FD210017F3BB /* Deployment */,
+				9323885B0854FD210017F3BB /* Debug */,
+				9323885C0854FD210017F3BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9344B9930E8CF38800FE90A5 /* Build configuration list for PBXNativeTarget "Automator-CreateEquations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9344B9910E8CF38800FE90A5 /* Development */,
-				9344B9920E8CF38800FE90A5 /* Deployment */,
+				9344B9910E8CF38800FE90A5 /* Debug */,
+				9344B9920E8CF38800FE90A5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		934AAA1D0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "Packaging" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				934AAA070F3388460010E384 /* Development */,
-				934AAA090F3388460010E384 /* Deployment */,
+				934AAA070F3388460010E384 /* Debug */,
+				934AAA090F3388460010E384 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		934AAA1E0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "All" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				934AAA130F3388800010E384 /* Development */,
-				934AAA150F3388800010E384 /* Deployment */,
+				934AAA130F3388800010E384 /* Debug */,
+				934AAA150F3388800010E384 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		938DBE1010BDC2E0002350CF /* Build configuration list for PBXNativeTarget "LaTeXiT Helper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				938DBE1110BDC2E0002350CF /* Development */,
-				938DBE1210BDC2E0002350CF /* Deployment */,
+				938DBE1110BDC2E0002350CF /* Debug */,
+				938DBE1210BDC2E0002350CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9396E54D0EC628D60014C4BD /* Build configuration list for PBXAggregateTarget "Package as DMG" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9396E5450EC628C40014C4BD /* Development */,
-				9396E5470EC628C40014C4BD /* Deployment */,
+				9396E5450EC628C40014C4BD /* Debug */,
+				9396E5470EC628C40014C4BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9396E96A0EC843190014C4BD /* Build configuration list for PBXAggregateTarget "Apply Sparkle DSA keys" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9396E96B0EC843190014C4BD /* Development */,
-				9396E96D0EC843190014C4BD /* Deployment */,
+				9396E96B0EC843190014C4BD /* Debug */,
+				9396E96D0EC843190014C4BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All compilations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				93BD651E0E8D08EC00DB341B /* Development */,
-				93BD651F0E8D08EC00DB341B /* Deployment */,
+				93BD651E0E8D08EC00DB341B /* Debug */,
+				93BD651F0E8D08EC00DB341B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

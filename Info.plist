@@ -142,27 +142,27 @@
 	<key>CFBundleIconFile</key>
 	<string>latexit.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.chachatelier.pierre.LaTeXiT</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.10.1</string>
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.10.1</string>
-	<key>CFBundleShortVersionString</key>
 	<string>2.10.1</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
 	<string>LaTeXiT</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>NSHighResolutionCapable</key>
-	<true/>
 	<key>NSServices</key>
 	<array>
 		<dict>
