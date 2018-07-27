@@ -66,10 +66,13 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
   [aHistoryItem retain];
   [historyItem release];
   historyItem = aHistoryItem;
-  NSString* string = [[historyItem sourceText] string];
-  unsigned int endIndex = MIN(17U, [string length]);
   if (setAutomaticTitle)
+  {
+    NSString* string =
+      [[[historyItem sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    unsigned int endIndex = MIN(17U, [string length]);
     [self setTitle:[string substringToIndex:endIndex]];
+  }
 }
 
 -(HistoryItem*) value

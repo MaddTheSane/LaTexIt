@@ -275,7 +275,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.8.1"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.8.2"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -352,11 +352,21 @@ static NSLock* strangeLock = nil;
   {
     if (!pdfCachedImage)
     {
-      pdfCachedImage = [[NSImage alloc] initWithData:pdfData];
-      //we need to redefine the cache policy so that zoom of imageView will scale PDF and not cached bitmap
+      NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
+      pdfCachedImage = [[NSImage alloc] initWithSize:[pdfImageRep size]];
       [pdfCachedImage setCacheMode:NSImageCacheNever];
       [pdfCachedImage setDataRetained:YES];
-      [pdfCachedImage recache];
+      [pdfCachedImage setScalesWhenResized:YES];
+      [pdfCachedImage addRepresentation:pdfImageRep];
+      [pdfImageRep release];
+      //[pdfCachedImage recache];
+      
+
+      //we need to redefine the cache policy so that zoom of imageView will scale PDF and not cached bitmap
+      /*pdfCachedImage = [[NSImage alloc] initWithData:pdfData];
+      [pdfCachedImage setCacheMode:NSImageCacheNever];
+      [pdfCachedImage setDataRetained:YES];
+      [pdfCachedImage recache];*/
     }
   }
   return pdfCachedImage;
@@ -375,16 +385,16 @@ static NSLock* strangeLock = nil;
       float factor = MIN(1.0f, 256.0f/MAX(1.0f, MAX(realSize.width, realSize.height)));
       NSSize newSize = NSMakeSize(factor*realSize.width, factor*realSize.height);
       //temporarily change size
-      [pdfImage setScalesWhenResized:YES];
-      [pdfImage setSize:newSize];
       [strangeLock lock];//this lock seems necessary to avoid erratic AppKit deadlock when loading history in the background
-      [pdfImage lockFocus];//same problem
+      //[pdfImage setScalesWhenResized:YES];
+      [pdfImage setSize:newSize];
+      [pdfImage lockFocus];
       NSData* bitmapData = [pdfImage TIFFRepresentation];
       bitmapCachedImage = [[NSImage alloc] initWithData:bitmapData];
       [pdfImage unlockFocus];
-      [strangeLock unlock];
       //restore size
       [pdfImage setSize:realSize];
+      [strangeLock unlock];
     }
   }
   return bitmapCachedImage;

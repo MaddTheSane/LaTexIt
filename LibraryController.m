@@ -59,6 +59,7 @@
 
   [libraryTableView setDataSource:[LibraryManager sharedManager]];
   [libraryTableView setDelegate:[LibraryManager sharedManager]];
+  BOOL oldLibraryShouldBeSaved = [[LibraryManager sharedManager] libraryShouldBeSaved];
   NSArray* items = [[LibraryManager sharedManager] allItems];
   NSEnumerator* enumerator = [items objectEnumerator];
   LibraryItem* item = [enumerator nextObject];
@@ -68,8 +69,8 @@
       [libraryTableView expandItem:item];
     item = [enumerator nextObject];
   }
-  //here, we must cancel a side effect of expand item that marks the library as needing saving
-  [[LibraryManager sharedManager] setLibraryShouldBeSaved:NO];
+  //here, using old value, we may cancel a side effect of expand item that marks the library as needing saving
+  [[LibraryManager sharedManager] setLibraryShouldBeSaved:oldLibraryShouldBeSaved];
 
   [[importCurrentButton cell] setShowsStateBy:NSChangeGrayCellMask];//fixes a cosmetic bug of Panther
   

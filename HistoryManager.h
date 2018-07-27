@@ -27,6 +27,7 @@ extern NSString* HistoryItemsPboardType;
 
 -(NSUndoManager*) undoManager;
 
+-(BOOL) historyShouldBeSaved;
 -(void) setHistoryShouldBeSaved:(BOOL)state;
 
 //getting the history items

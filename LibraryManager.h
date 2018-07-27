@@ -34,6 +34,7 @@ extern NSString* LibraryItemsPboardType;
 
 -(NSUndoManager*) undoManager;
 
+-(BOOL) libraryShouldBeSaved;
 -(void) setLibraryShouldBeSaved:(BOOL)state;//marks if library needs being saved
 
 -(NSArray*) allItems;

@@ -99,3 +99,4 @@
 "Edit configurations list..." = "Modifier les configurations...";
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d equation n'a pas pu être convertie à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec elle.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations n'ont pas pu être converties à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec ces équations.";
+"unexpected error, please see \"LaTeX > Display last log\"" = "erreur inattendue, veuillez consulter \"LaTeX > Afficher le dernier rapport d'exécution\"";

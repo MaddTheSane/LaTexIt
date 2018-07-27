@@ -151,6 +151,16 @@ static NSImage*        libraryFileIcon       = nil;
   [self _saveLibrary];
 }
 
+-(BOOL) libraryShouldBeSaved
+{
+  BOOL status = NO;
+  @synchronized(library)
+  {
+    status = libraryShouldBeSaved;
+  }
+  return status;
+}
+
 //marks if library needs being saved
 -(void) setLibraryShouldBeSaved:(BOOL)status
 {

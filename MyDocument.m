@@ -56,7 +56,7 @@ static NSMutableArray* freeIds = nil;
                                        compositionMode:(composition_mode_t)compositionMode;
 
 //returns an array of the errors. Each case will contain an error string
--(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog;
+-(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift;
 
 //updates the logTableView to report the errors
 -(void) _analyzeErrors:(NSArray*)errors;
@@ -459,7 +459,16 @@ static NSString* yenString = nil;
 
     //did it work ?
     BOOL failed = !pdfData;
-    if (!failed)
+    if (failed)
+    {
+      if (![logTableView numberOfRows] ) //unexpected error...
+        [logTableView setErrors:
+          [NSArray arrayWithObject:
+            [NSString stringWithFormat:@"::%@",
+              NSLocalizedString(@"unexpected error, please see \"LaTeX > Display last log\"",
+                                @"unexpected error, please see \"LaTeX > Display last log\"")]]];
+    }
+    else
     {
       //if it is ok, updates the image view
       [imageView setPDFData:pdfData cachedImage:[self _checkEasterEgg]];
@@ -795,6 +804,16 @@ static NSString* yenString = nil;
   //STEP 1
   //first, creates simple latex source text to compile and report errors (if there are any)
   
+  //the body is trimmed to avoid some latex problems (sometimes, a newline at the end of the equatiosn makes it fail!)
+  NSString* trimmedBody = [body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  //the problem is that now, the error lines must be shifted ! How many new lines have been removed ?
+  NSString* firstChar = [trimmedBody length] ? [trimmedBody substringWithRange:NSMakeRange(0, 1)] : @"";
+  NSRange firstCharLocation = [body rangeOfString:firstChar];
+  NSRange rangeOfTrimmedHeader = NSMakeRange(0, (firstCharLocation.location != NSNotFound) ? firstCharLocation.location : 0);
+  NSString* trimmedHeader = [body substringWithRange:rangeOfTrimmedHeader];
+  unsigned int nbNewLinesInTrimmedHeader = MAX(1U, [[trimmedHeader componentsSeparatedByString:@"\n"] count]);
+  int errorLineShift = MAX((int)0, (int)nbNewLinesInTrimmedHeader-1);
+  
   //xelatex requires to insert the color in the body, so we compute the color as string...
   color = [(color ? color : [NSColor blackColor]) colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
   float rgba[4] = {0, 0, 0, 0};
@@ -809,7 +828,8 @@ static NSString* yenString = nil;
        [self _replaceYenSymbol:colouredPreamble], addSymbolLeft,
        ([[PreferencesController currentCompositionConfigurationObjectForKey:
             CompositionConfigurationCompositionModeKey] intValue] == COMPOSITION_MODE_XELATEX) ? colorString : @"",
-       [self _replaceYenSymbol:body], addSymbolRight];
+       [self _replaceYenSymbol:trimmedBody],
+       addSymbolRight];
 
   //creates the corresponding latex file
   NSData* latexData = [normalSourceToCompile dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -822,9 +842,10 @@ static NSString* yenString = nil;
     [fullLog appendString:stdoutLog];
   [logTextView setString:fullLog];
 
-  NSArray* errors = [self _filterLatexErrors:[stdoutLog stringByAppendingString:stderrLog]];
+  NSArray* errors = [self _filterLatexErrors:[stdoutLog stringByAppendingString:stderrLog] shiftLinesBy:errorLineShift];
   [self _analyzeErrors:errors];
-  failed |= errors && [errors count];
+  BOOL isDirectory = NO;
+  failed |= errors && [errors count] && (![fileManager fileExistsAtPath:pdfFilePath isDirectory:&isDirectory] || !isDirectory);
   //STEP 1 is over. If it has failed, it is the fault of the user, and syntax errors will be reported
 
   //Middle-Processing
@@ -1013,7 +1034,7 @@ static NSString* yenString = nil;
 }
 
 //returns an array of the errors. Each case will contain an error string
--(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog
+-(NSArray*) _filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift
 {
   NSArray* errorsNotFiltered = [fullErrorLog componentsSeparatedByString:@"\n"];
   NSMutableArray* filteredErrors = [NSMutableArray arrayWithCapacity:[errorsNotFiltered count]];
@@ -1022,20 +1043,30 @@ static NSString* yenString = nil;
   while(line)
   {
     NSArray* components = [line componentsSeparatedByString:@":"];
-    if ((([components count] >= 3) &&
-          [[[components objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""]) ||
-        ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
+    if ([components count] >= 3) 
     {
-      NSMutableString* fullError = [NSMutableString stringWithString:line];
-      while([line length] && ([line characterAtIndex:[line length]-1] != '.'))
+      NSString* fileComponent  = [components objectAtIndex:0];
+      NSString* lineComponent  = [components objectAtIndex:1];
+      BOOL      lineComponentIsANumber =
+        [[lineComponent stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""];
+      NSString* errorComponent = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)] componentsJoinedByString:@":"];
+      if (lineComponentIsANumber)
+        lineComponent = [[NSNumber numberWithInt:[lineComponent intValue]+errorLineShift] stringValue];
+      if (lineComponentIsANumber || ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
       {
-        line = [enumerator nextObject];
-        [fullError appendString:line];
-      }
-      [filteredErrors addObject:fullError];
-    }
+        NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
+        NSString* fixedError = [fixedErrorComponents componentsJoinedByString:@":"];
+        NSMutableString* fullError = [NSMutableString stringWithString:fixedError];
+        while([line length] && ([line characterAtIndex:[line length]-1] != '.'))
+        {
+          line = [enumerator nextObject];
+          [fullError appendString:line];
+        }//end if error message on multiple lines
+        [filteredErrors addObject:fullError];
+      }//end if error seems ok
+    }//end if >=3 components
     line = [enumerator nextObject];
-  }
+  }//end while line
   return filteredErrors;
 }
 

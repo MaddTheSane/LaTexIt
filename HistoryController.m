@@ -47,9 +47,10 @@
   [notificationCenter addObserver:self selector:@selector(_historyDidChange:) name:HistoryDidChangeNotification object:nil];
 
   //posts historyDidChange to update "clear history" button state (self) and update column header (historyTableView)
+  BOOL oldHistoryShouldBeSaved = [[HistoryManager sharedManager] historyShouldBeSaved];
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-  //but the historyDidChange notification sets <historyDidChange> to YES as a side effect; we cancel it
-  [[HistoryManager sharedManager] setHistoryShouldBeSaved:NO];
+  //but the historyDidChange notification sets <historyDidChange> to YES as a side effect; we may cancel it using old value
+  [[HistoryManager sharedManager] setHistoryShouldBeSaved:oldHistoryShouldBeSaved];
 }
 
 -(void) dealloc

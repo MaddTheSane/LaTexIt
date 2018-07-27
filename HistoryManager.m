@@ -132,6 +132,16 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   return undoManager;
 }
 
+-(BOOL) historyShouldBeSaved
+{
+  BOOL status = NO;
+  @synchronized(historyItems)
+  {
+    status = historyShouldBeSaved;
+  }
+  return status;
+}
+
 -(void) setHistoryShouldBeSaved:(BOOL)state
 {
   @synchronized(historyItems)

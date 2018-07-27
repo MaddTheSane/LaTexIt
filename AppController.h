@@ -1,4 +1,4 @@
-//  AppController.h
+// AppController.h
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.

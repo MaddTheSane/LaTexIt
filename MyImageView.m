@@ -118,10 +118,18 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSImage* image = cachedImage;
   if (!image)
   {
-    image = [[[NSImage alloc] initWithData:pdfData] autorelease];
+    NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
+    image = [[NSImage alloc] initWithSize:[pdfImageRep size]];
     [image setCacheMode:NSImageCacheNever];
     [image setDataRetained:YES];
-    [image recache];
+    [image setScalesWhenResized:YES];
+    [image addRepresentation:pdfImageRep];
+    [pdfImageRep release];
+
+    /*image = [[[NSImage alloc] initWithData:pdfData] autorelease];
+    [image setCacheMode:NSImageCacheNever];
+    [image setDataRetained:YES];
+    [image recache];*/
   }
   [self setImage:image];
 }
@@ -177,6 +185,12 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [self _writeToPasteboard:pasteboard isLinkBackRefresh:NO lazyDataProvider:self];
 
   [super dragImage:draggedImage at:p offset:offset event:event pasteboard:pasteboard source:object slideBack:YES];
+}
+
+
+-(void) concludeDragOperation:(id <NSDraggingInfo>)sender
+{
+  //overwritten to avoid some strange additional "setImage" tghat would occur...
 }
 
 //creates the promised file of the drag
@@ -405,13 +419,14 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSSize newSize = naturalImageSize;
   newSize.width *= factor;
   newSize.height *= factor;
+
+  /*  
   NSSize viewSize = [self frame].size;
-    
   //if is useless to get a newSize greater than the imageView size
   if (newSize.height > viewSize.height)
     newSize = NSMakeSize((viewSize.height/newSize.height)*newSize.width, viewSize.height);
   if (newSize.width > viewSize.width)
-    newSize = NSMakeSize(viewSize.width, (viewSize.width/newSize.width)*newSize.height);
+    newSize = NSMakeSize(viewSize.width, (viewSize.width/newSize.width)*newSize.height);*/
 
   [image setSize:newSize];
   if (backgroundColor)

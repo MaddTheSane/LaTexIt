@@ -16,6 +16,6 @@ extern NSString* ClickErrorLineNotification;
   NSMutableArray* errorLines;//the lines where the errors are located
 }
 
-//updates contents thnaks to the array of error strings
+//updates contents thanks to the array of error strings
 -(void) setErrors:(NSArray*)errors;
 @end
