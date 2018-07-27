@@ -749,7 +749,7 @@ some text &amp; $some maths$ \\
                                     <button imageHugsTitle="YES" id="1220">
                                         <rect key="frame" x="15" y="15" width="165" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="check" title="入力エリアを小さくする" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="9432">
+                                        <buttonCell key="cell" type="check" title="入力エリアを小さくする" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9432">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" size="13" name="HiraKakuProN-W3"/>
                                         </buttonCell>
@@ -789,7 +789,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="dXG-oT-z7i">
                                             <rect key="frame" x="1" y="0.0" width="512" height="302"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9520" id="1175" customClass="TextShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="513" height="279"/>
@@ -1288,7 +1288,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="Vo5-Sm-vEh">
                                                         <rect key="frame" x="1" y="1" width="456" height="106"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1078">
                                                                 <rect key="frame" x="0.0" y="0.0" width="456" height="106"/>
@@ -1324,7 +1324,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="1cr-ui-spu">
                                                         <rect key="frame" x="1" y="0.0" width="456" height="17"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9528" id="1082">
                                                                 <rect key="frame" x="0.0" y="0.0" width="456" height="19"/>
@@ -1401,7 +1401,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="cBb-OL-UVk">
                                             <rect key="frame" x="1" y="0.0" width="292" height="74"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9523" id="1069">
                                                     <rect key="frame" x="0.0" y="0.0" width="293" height="51"/>
@@ -1594,7 +1594,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="zwV-UA-V6X">
                                             <rect key="frame" x="1" y="1" width="391" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="391" height="132"/>
@@ -1637,7 +1637,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="fOc-5w-Yeq">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1760,10 +1760,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="jMP-Ug-cD5">
                                             <rect key="frame" x="1" y="1" width="391" height="65"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9574" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-6" width="406" height="97"/>
+                                                    <rect key="frame" x="0.0" y="-5.01171875" width="406" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <size key="minSize" width="391" height="65"/>
@@ -1803,10 +1803,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="fn5-S3-abq">
                                             <rect key="frame" x="1" y="1" width="391" height="66"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9579" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-6" width="391" height="97"/>
+                                                    <rect key="frame" x="0.0" y="-5.01171875" width="391" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <size key="minSize" width="391" height="66"/>
@@ -1846,7 +1846,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="Gbn-SC-cZ9">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9569" customClass="BodyTemplatesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1900,7 +1900,7 @@ some text &amp; $some maths$ \\
                 <button imageHugsTitle="YES" id="9625">
                     <rect key="frame" x="18" y="263" width="204" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="テキスト書き出しのカプセル化" bezelStyle="regularSquare" imagePosition="leading" alignment="left" state="on" inset="2" id="9626">
+                    <buttonCell key="cell" type="check" title="テキスト書き出しのカプセル化" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9626">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" size="13" name="HiraKakuProN-W3"/>
                     </buttonCell>
@@ -2256,7 +2256,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="Fhb-nI-NJr">
                                             <rect key="frame" x="1" y="0.0" width="509" height="148"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9531" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="510" height="125"/>
@@ -2387,7 +2387,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="m8v-Dq-BtN">
                                             <rect key="frame" x="1" y="0.0" width="498" height="93"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9694" id="9697" customClass="ServiceRegularExpressionFiltersTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="499" height="70"/>
@@ -2475,7 +2475,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="FSO-jn-Pd8">
                                             <rect key="frame" x="1" y="1" width="244" height="61"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9724" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="244" height="61"/>
@@ -2502,7 +2502,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="qCQ-Ci-oho">
                                             <rect key="frame" x="1" y="1" width="244" height="61"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9723" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="244" height="61"/>
@@ -2901,7 +2901,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="9903">
                                                     <rect key="frame" x="16" y="105" width="359" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="新規作成でバックグラウンドファイル" bezelStyle="regularSquare" imagePosition="leading" alignment="justified" lineBreakMode="truncatingTail" state="on" inset="2" id="9906">
+                                                    <buttonCell key="cell" type="check" title="新規作成でバックグラウンドファイル" bezelStyle="regularSquare" imagePosition="left" alignment="justified" lineBreakMode="truncatingTail" state="on" inset="2" id="9906">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
                                                     </buttonCell>
@@ -2909,7 +2909,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="9902">
                                                     <rect key="frame" x="47" y="83" width="141" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="プリアンブルを同期" bezelStyle="regularSquare" imagePosition="leading" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9907">
+                                                    <buttonCell key="cell" type="check" title="プリアンブルを同期" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9907">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" size="11" name="HiraKakuProN-W3"/>
                                                     </buttonCell>
@@ -2917,7 +2917,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="9901">
                                                     <rect key="frame" x="47" y="63" width="158" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="環境を同期" bezelStyle="regularSquare" imagePosition="leading" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9908">
+                                                    <buttonCell key="cell" type="check" title="環境を同期" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9908">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" size="11" name="HiraKakuProN-W3"/>
                                                     </buttonCell>
@@ -2925,7 +2925,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="9900">
                                                     <rect key="frame" x="47" y="43" width="117" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="本文を同期" bezelStyle="regularSquare" imagePosition="leading" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9909">
+                                                    <buttonCell key="cell" type="check" title="本文を同期" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9909">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" size="11" name="HiraKakuProN-W3"/>
                                                     </buttonCell>
@@ -3004,7 +3004,7 @@ some text &amp; $some maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Ed6-yY-I85">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9544" id="1130" customClass="CompositionConfigurationsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="145"/>
@@ -3106,7 +3106,7 @@ some text &amp; $some maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="M8Y-jd-9WH">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9547" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="145"/>

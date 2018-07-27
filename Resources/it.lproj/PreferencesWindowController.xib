@@ -169,9 +169,9 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Preferenze" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="Preferenze" animationBehavior="default" id="129" userLabel="Preferences" customClass="PreferencesWindow">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" unifiedTitleAndToolbar="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="460" y="392" width="548" height="228"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
@@ -442,7 +442,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9401">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="menu"/>
                         <menu key="menu" title="OtherViews" id="575"/>
                     </popUpButtonCell>
                     <connections>
@@ -488,7 +488,7 @@
                         <tabViewItem label="Aspetto" identifier="" id="1170">
                             <view key="view" id="1172">
                                 <rect key="frame" x="10" y="33" width="554" height="425"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" imageHugsTitle="YES" id="620">
                                         <rect key="frame" x="435" y="377" width="105" height="32"/>
@@ -525,7 +525,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="aJO-oo-nlg">
                                             <rect key="frame" x="1" y="1" width="512" height="111"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="947" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="512" height="111"/>
@@ -622,7 +622,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="605">
                                                     <rect key="frame" x="309" y="134" width="156" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Coloramento sintassi" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="9425">
+                                                    <buttonCell key="cell" type="check" title="Coloramento sintassi" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9425">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -702,7 +702,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="1208">
                                                     <rect key="frame" x="32" y="18" width="134" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Controlla spelling" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="9431">
+                                                    <buttonCell key="cell" type="check" title="Controlla spelling" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9431">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -718,7 +718,7 @@ some text &amp; $some maths$ \\
                                                 <button imageHugsTitle="YES" id="9662">
                                                     <rect key="frame" x="32" y="45" width="141" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="tasto Tab inserisce" bezelStyle="regularSquare" imagePosition="leading" alignment="left" state="on" inset="2" id="9667">
+                                                    <buttonCell key="cell" type="check" title="tasto Tab inserisce" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9667">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -789,7 +789,7 @@ some text &amp; $some maths$ \\
                                         <rect key="frame" x="20" y="39" width="514" height="341"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="urq-aQ-DsB">
-                                            <rect key="frame" x="1" y="23" width="512" height="317"/>
+                                            <rect key="frame" x="1" y="0.0" width="512" height="340"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9520" id="1175" customClass="TextShortcutsTableView">
@@ -1013,46 +1013,7 @@ some text &amp; $some maths$ \\
 \usepackage[utf8]{inputenc} %utile pour taper directement les caractères accentués</string>
                                                             <attributes>
                                                                 <font key="NSFont" size="12" name="Monaco"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                                    <tabStops>
-                                                                        <textTab alignment="left" location="28">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="56">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="84">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="112">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="140">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="168">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="196">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="224">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="252">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="280">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="308">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="336">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                    </tabStops>
-                                                                </paragraphStyle>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                                             </attributes>
                                                         </fragment>
                                                     </attributedString>
@@ -1076,7 +1037,7 @@ some text &amp; $some maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="1807">
                                         <rect key="frame" x="9" y="127" width="128" height="134"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="CaZ-rK-lve">
+                                        <clipView key="contentView" drawsBackground="NO" id="CaZ-rK-lve">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1104,6 +1065,7 @@ some text &amp; $some maths$ \\
                                                     </tableColumns>
                                                 </tableView>
                                             </subviews>
+                                            <nil key="backgroundColor"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9539">
                                             <rect key="frame" x="1" y="100" width="111" height="15"/>
@@ -1191,7 +1153,7 @@ some text &amp; $some maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9572" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="407" height="90"/>
+                                                    <rect key="frame" x="0.0" y="-6.01171875" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <size key="minSize" width="407" height="65"/>
@@ -1205,46 +1167,7 @@ some text &amp; $some maths$ \\
 \usepackage[utf8]{inputenc} %utile pour taper directement les caractères accentués</string>
                                                             <attributes>
                                                                 <font key="NSFont" size="12" name="Monaco"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                                    <tabStops>
-                                                                        <textTab alignment="left" location="28">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="56">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="84">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="112">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="140">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="168">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="196">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="224">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="252">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="280">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="308">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="336">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                    </tabStops>
-                                                                </paragraphStyle>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                                             </attributes>
                                                         </fragment>
                                                     </attributedString>
@@ -1270,7 +1193,7 @@ some text &amp; $some maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9577" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="407" height="90"/>
+                                                    <rect key="frame" x="0.0" y="-6.01171875" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <size key="minSize" width="407" height="66"/>
@@ -1284,46 +1207,7 @@ some text &amp; $some maths$ \\
 \usepackage[utf8]{inputenc} %utile pour taper directement les caractères accentués</string>
                                                             <attributes>
                                                                 <font key="NSFont" size="12" name="Monaco"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                                    <tabStops>
-                                                                        <textTab alignment="left" location="28">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="56">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="84">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="112">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="140">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="168">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="196">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="224">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="252">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="280">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="308">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                        <textTab alignment="left" location="336">
-                                                                            <options/>
-                                                                        </textTab>
-                                                                    </tabStops>
-                                                                </paragraphStyle>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                                             </attributes>
                                                         </fragment>
                                                     </attributedString>
@@ -1344,7 +1228,7 @@ some text &amp; $some maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="9551">
                                         <rect key="frame" x="9" y="127" width="128" height="134"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="gdc-ah-6YA">
+                                        <clipView key="contentView" drawsBackground="NO" id="gdc-ah-6YA">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1372,6 +1256,7 @@ some text &amp; $some maths$ \\
                                                     </tableColumns>
                                                 </tableView>
                                             </subviews>
+                                            <nil key="backgroundColor"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9569">
                                             <rect key="frame" x="1" y="100" width="111" height="15"/>
@@ -1752,13 +1637,13 @@ some text &amp; $some maths$ \\
                                     <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9874">
                                         <rect key="frame" x="213" y="298" width="128" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <popUpButtonCell key="cell" type="push" title="xelatex" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="9895" id="9875">
+                                        <popUpButtonCell key="cell" type="push" title="lualatex" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="9895" id="9875">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
                                             <menu key="menu" title="OtherViews" id="9876">
                                                 <items>
                                                     <menuItem title="pdflatex" id="9877"/>
-                                                    <menuItem title="xelatex" state="on" tag="2" id="9878"/>
+                                                    <menuItem title="xelatex" tag="2" id="9878"/>
                                                     <menuItem title="lualatex" state="on" tag="3" id="9895"/>
                                                     <menuItem title="latex+dvipdf" tag="1" id="9879"/>
                                                 </items>
@@ -1812,7 +1697,7 @@ some text &amp; $some maths$ \\
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9524">
-                                                        <rect key="frame" x="-30" y="1" width="15" height="134"/>
+                                                        <rect key="frame" x="451" y="1" width="16" height="84"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
@@ -1829,7 +1714,7 @@ some text &amp; $some maths$ \\
                                                     <rect key="frame" x="16" y="114" width="478" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="Fdo-Sp-dQj">
-                                                        <rect key="frame" x="1" y="16" width="476" height="0.0"/>
+                                                        <rect key="frame" x="1" y="0.0" width="476" height="16"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9528" id="1082">
@@ -1906,7 +1791,7 @@ some text &amp; $some maths$ \\
                                         <rect key="frame" x="130" y="245" width="294" height="75"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="0xX-hz-Rh7">
-                                            <rect key="frame" x="1" y="23" width="292" height="51"/>
+                                            <rect key="frame" x="1" y="0.0" width="292" height="74"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9523" id="1069">
@@ -2112,7 +1997,7 @@ some text &amp; $some maths$ \\
                 <button imageHugsTitle="YES" id="9591">
                     <rect key="frame" x="110" y="70" width="107" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Salva risultati" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="9599">
+                    <buttonCell key="cell" type="check" title="Salva risultati" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9599">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -2120,7 +2005,7 @@ some text &amp; $some maths$ \\
                 <button imageHugsTitle="YES" id="9590">
                     <rect key="frame" x="110" y="44" width="205" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Rimuovi oggetti più vecchi di" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="9600">
+                    <buttonCell key="cell" type="check" title="Rimuovi oggetti più vecchi di" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9600">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -2160,7 +2045,7 @@ some text &amp; $some maths$ \\
                 <button imageHugsTitle="YES" id="9589">
                     <rect key="frame" x="110" y="18" width="475" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Cronologia intelligente (salva oggetti quando sono effettivamente usati)" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="9601">
+                    <buttonCell key="cell" type="check" title="Cronologia intelligente (salva oggetti quando sono effettivamente usati)" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9601">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -2179,7 +2064,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Configurazione" identifier="" id="1025">
                             <view key="view" id="1027">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <customView id="8921">
                                         <rect key="frame" x="58" y="0.0" width="438" height="246"/>
@@ -2191,17 +2076,17 @@ some text &amp; $some maths$ \\
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 <size key="cellSize" width="240" height="34"/>
                                                 <size key="intercellSpacing" width="4" height="2"/>
-                                                <buttonCell key="prototype" type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="9513">
+                                                <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="9513">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                                 <cells>
                                                     <column>
-                                                        <buttonCell type="radio" title="Predefinita" bezelStyle="regularSquare" imagePosition="leading" alignment="left" state="on" inset="2" id="674">
+                                                        <buttonCell type="radio" title="Predefinita" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="674">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <buttonCell type="radio" imagePosition="leading" alignment="left" tag="1" inset="2" id="673">
+                                                        <buttonCell type="radio" imagePosition="left" alignment="left" tag="1" inset="2" id="673">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <string key="title">Dimensione dei caratteri stessodel
 testo originale</string>
@@ -2262,7 +2147,7 @@ testo originale</string>
                                             <button imageHugsTitle="YES" id="676">
                                                 <rect key="frame" x="82" y="44" width="316" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <buttonCell key="cell" type="square" title="Questo può prevenire a LinkBack di funzionare" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="leading" alignment="center" alternateImage="warning-triangle" inset="2" id="9474">
+                                                <buttonCell key="cell" type="square" title="Questo può prevenire a LinkBack di funzionare" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="9474">
                                                     <behavior key="behavior" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -2353,7 +2238,7 @@ testo originale</string>
                                         <rect key="frame" x="17" y="44" width="520" height="132"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="1xt-5E-g2c">
-                                            <rect key="frame" x="1" y="23" width="518" height="108"/>
+                                            <rect key="frame" x="1" y="0.0" width="518" height="131"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9531" id="1030" customClass="ServiceShortcutsTableView">
@@ -2486,7 +2371,7 @@ testo originale</string>
                                         <rect key="frame" x="17" y="107" width="520" height="94"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="rdt-Ig-dbp">
-                                            <rect key="frame" x="1" y="23" width="518" height="70"/>
+                                            <rect key="frame" x="1" y="0.0" width="518" height="93"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9689" id="9692" customClass="ServiceRegularExpressionFiltersTableView">
@@ -2792,7 +2677,7 @@ testo originale</string>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9806">
-                                                                    <rect key="frame" x="179" y="1" width="15" height="13"/>
+                                                                    <rect key="frame" x="393" y="1" width="16" height="148"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
@@ -2809,7 +2694,7 @@ testo originale</string>
                                                                 <rect key="frame" x="16" y="166" width="422" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" id="Laq-bH-VSN">
-                                                                    <rect key="frame" x="1" y="16" width="420" height="0.0"/>
+                                                                    <rect key="frame" x="1" y="0.0" width="420" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9812" id="9809">
@@ -2856,17 +2741,17 @@ testo originale</string>
                                                     <rect key="frame" x="36" y="269" width="452" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="W83-Jf-kuj">
-                                                        <rect key="frame" x="1" y="23" width="450" height="70"/>
+                                                        <rect key="frame" x="1" y="0.0" width="450" height="93"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9815" id="9818">
-                                                                <rect key="frame" x="0.0" y="0.0" width="450.5" height="70"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="450" height="70"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="place" editable="NO" width="378" minWidth="221" maxWidth="1000" id="9819">
+                                                                    <tableColumn identifier="place" editable="NO" width="377.5" minWidth="221" maxWidth="1000" id="9819">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Script">
                                                                             <font key="font" metaFont="smallSystem"/>
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -2903,7 +2788,7 @@ testo originale</string>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <tableHeaderView key="headerView" id="9815">
-                                                        <rect key="frame" x="0.0" y="0.0" width="450.5" height="23"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="450" height="23"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </tableHeaderView>
                                                 </scrollView>
@@ -3103,7 +2988,7 @@ testo originale</string>
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Hiv-On-Owk">
-                            <rect key="frame" x="1" y="23" width="238" height="145"/>
+                            <rect key="frame" x="1" y="0.0" width="238" height="168"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9544" id="1130" customClass="CompositionConfigurationsTableView">
@@ -3113,7 +2998,7 @@ testo originale</string>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="name" width="234.59423828125" minWidth="40" maxWidth="1000" id="1131">
+                                        <tableColumn identifier="name" width="235.09423828125" minWidth="40" maxWidth="1000" id="1131">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Configurazioni">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3205,7 +3090,7 @@ testo originale</string>
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="byY-eH-Afa">
-                            <rect key="frame" x="1" y="23" width="238" height="145"/>
+                            <rect key="frame" x="1" y="0.0" width="238" height="168"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9547" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
@@ -3215,7 +3100,7 @@ testo originale</string>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="arguments" width="234.59423828125" minWidth="40" maxWidth="1000" id="8061">
+                                        <tableColumn identifier="arguments" width="235.09423828125" minWidth="40" maxWidth="1000" id="8061">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Programma argomenti">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3281,6 +3166,7 @@ testo originale</string>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSCaution" width="32" height="32"/>
         <image name="add" width="23" height="22"/>
         <image name="add-pressed" width="23" height="22"/>
         <image name="imageCell:1032:image" width="17" height="17">

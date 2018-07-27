@@ -159,70 +159,50 @@ extern NSString* SynchronizationAdditionalScriptsKey;
   export_format_t exportFormatCurrentSession;
 }
 
-+(PreferencesController*) sharedController;
+@property (class, readonly) PreferencesController* sharedController;
 
 -(NSUndoManager*) undoManager;
 
--(NSString*)    latexitVersion;
+@property (readonly) NSString* latexitVersion;
 
 @property export_format_t exportFormatPersistent;
 @property export_format_t exportFormatCurrentSession;
 
 
--(NSData*)         exportJpegBackgroundColorData;
--(void)            setExportJpegBackgroundColorData:(NSData*)value;
--(NSColor*)        exportJpegBackgroundColor;
--(void)            setExportJpegBackgroundColor:(NSColor*)value;
--(float)           exportJpegQualityPercent;
--(void)            setExportJpegQualityPercent:(float)value;
--(NSString*)       exportSvgPdfToSvgPath;
--(void)            setExportSvgPdfToSvgPath:(NSString*)value;
--(BOOL)            exportTextExportPreamble;
--(void)            setExportTextExportPreamble:(BOOL)value;
--(BOOL)            exportTextExportEnvironment;
--(void)            setExportTextExportEnvironment:(BOOL)value;
--(BOOL)            exportTextExportBody;
--(void)            setExportTextExportBody:(BOOL)value;
--(CGFloat)         exportScalePercent;
--(void)            setExportScalePercent:(CGFloat)value;
+@property (copy) NSData* exportJpegBackgroundColorData;
+@property (assign) NSColor* exportJpegBackgroundColor;
+@property float exportJpegQualityPercent;
+@property (copy) NSString* exportSvgPdfToSvgPath;
+@property BOOL exportTextExportPreamble;
+@property BOOL exportTextExportEnvironment;
+@property BOOL exportTextExportBody;
+@property CGFloat exportScalePercent;
 
--(NSString*) exportPDFWOFGsWriteEngine;
--(void) setExportPDFWOFGsWriteEngine:(NSString*)value;
--(NSString*) exportPDFWOFGsPDFCompatibilityLevel;
--(void) setExportPDFWOFGsPDFCompatibilityLevel:(NSString*)value;
--(BOOL) exportPDFWOFMetaDataInvisibleGraphicsEnabled;
--(void) setExportPDFWOFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+@property (copy) NSString* exportPDFWOFGsWriteEngine;
+@property (copy) NSString* exportPDFWOFGsPDFCompatibilityLevel;
+@property BOOL exportPDFWOFMetaDataInvisibleGraphicsEnabled;
 
--(BOOL) doNotClipPreview;
--(void) setDoNotClipPreview:(BOOL)value;
+@property BOOL doNotClipPreview;
 
--(latex_mode_t) latexisationLaTeXMode;
--(void)         setLatexisationLaTeXMode:(latex_mode_t)mode;
--(CGFloat)      latexisationFontSize;
--(NSData*)      latexisationFontColorData;
--(NSColor*)     latexisationFontColor;
+@property latex_mode_t latexisationLaTeXMode;
+@property (readonly) CGFloat latexisationFontSize;
+@property (readonly) NSData* latexisationFontColorData;
+@property (readonly) NSColor* latexisationFontColor;
 
--(CGFloat) marginsAdditionalLeft;
--(void)    setMarginsAdditionalLeft:(CGFloat)value;
--(CGFloat) marginsAdditionalRight;
--(void)    setMarginsAdditionalRight:(CGFloat)value;
--(CGFloat) marginsAdditionalTop;
--(void)    setMarginsAdditionalTop:(CGFloat)value;
--(CGFloat) marginsAdditionalBottom;
--(void)    setMarginsAdditionalBottom:(CGFloat)value;
+@property CGFloat marginsAdditionalLeft;
+@property CGFloat marginsAdditionalRight;
+@property CGFloat marginsAdditionalTop;
+@property CGFloat marginsAdditionalBottom;
 
--(document_style_t) documentStyle;
--(void)             setDocumentStyle:(document_style_t)documentStyle;
--(BOOL)             documentIsReducedTextArea;
--(NSData*)          documentImageViewBackgroundColorData;
--(NSColor*)         documentImageViewBackgroundColor;
--(BOOL)             documentUseAutomaticHighContrastedPreviewBackground;
+@property document_style_t documentStyle;
+@property (readonly) BOOL documentIsReducedTextArea;
+@property (readonly) NSData* documentImageViewBackgroundColorData;
+@property (readonly) NSColor* documentImageViewBackgroundColor;
+@property (readonly) BOOL documentUseAutomaticHighContrastedPreviewBackground;
 
--(NSData*)    editionFontData;
--(void)       setEditionFontData:(NSData*)value;
--(NSFont*)    editionFont;
--(void)       setEditionFont:(NSFont*)value;
--(BOOL)       editionSyntaxColoringEnabled;
+@property (copy) NSData* editionFontData;
+@property (assign) NSFont* editionFont;
+@property (readonly) BOOL editionSyntaxColoringEnabled;
 -(NSData*)    editionSyntaxColoringTextForegroundColorData;
 -(NSColor*)   editionSyntaxColoringTextForegroundColor;
 -(NSData*)    editionSyntaxColoringTextBackgroundColorData;
@@ -235,90 +215,73 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSColor*)   editionSyntaxColoringKeywordColor;
 -(NSData*)    editionSyntaxColoringMathsColorData;
 -(NSColor*)   editionSyntaxColoringMathsColor;
--(BOOL)       editionTabKeyInsertsSpacesEnabled;
--(NSUInteger) editionTabKeyInsertsSpacesCount;
+@property (readonly) BOOL editionTabKeyInsertsSpacesEnabled;
+@property (readonly) NSUInteger editionTabKeyInsertsSpacesCount;
 
--(NSArray*)           editionTextShortcuts;
+@property (readonly) NSArray* editionTextShortcuts;
 -(NSArrayController*) editionTextShortcutsController;
 
--(NSArray*)             preambles;
--(NSInteger)            preambleDocumentIndex;
--(NSInteger)            preambleServiceIndex;
+@property (readonly) NSArray* preambles;
+@property (readonly) NSInteger preambleDocumentIndex;
+@property (readonly) NSInteger preambleServiceIndex;
 -(NSAttributedString*)  preambleDocumentAttributedString;
 -(NSAttributedString*)  preambleServiceAttributedString;
 -(PreamblesController*) preamblesController;
 
--(NSArray*)                 bodyTemplates;
--(NSArray*)                 bodyTemplatesWithNone;
--(NSInteger)                bodyTemplateDocumentIndex;
--(NSInteger)                bodyTemplateServiceIndex;
--(NSDictionary*)            bodyTemplateDocumentDictionary;
--(NSDictionary*)            bodyTemplateServiceDictionary;
+@property (readonly) NSArray* bodyTemplates;
+@property (readonly) NSArray* bodyTemplatesWithNone;
+@property (readonly) NSInteger bodyTemplateDocumentIndex;
+@property (readonly) NSInteger bodyTemplateServiceIndex;
+@property (readonly) NSDictionary* bodyTemplateDocumentDictionary;
+@property (readonly) NSDictionary* bodyTemplateServiceDictionary;
 -(BodyTemplatesController*) bodyTemplatesController;
 
 -(CompositionConfigurationsController*) compositionConfigurationsController;
--(NSArray*)           compositionConfigurations;
--(void)               setCompositionConfigurations:(NSArray*)value;
+@property (copy) NSArray* compositionConfigurations;
 
--(NSInteger)          compositionConfigurationsDocumentIndex;
--(void)               setCompositionConfigurationsDocumentIndex:(NSInteger)value;
--(NSDictionary*)      compositionConfigurationDocument;
--(void)               setCompositionConfigurationDocument:(NSDictionary*)value;
+@property NSInteger   compositionConfigurationsDocumentIndex;
+@property (copy) NSDictionary* compositionConfigurationDocument;
 
 -(void)               setCompositionConfigurationDocumentProgramPath:(NSString*)value forKey:(NSString*)key;
 
--(BOOL)      historySaveServicesResultsEnabled;
--(BOOL)      historyDeleteOldEntriesEnabled;
--(NSNumber*) historyDeleteOldEntriesLimit;
--(BOOL)      historySmartEnabled;
+@property (readonly) BOOL historySaveServicesResultsEnabled;
+@property (readonly) BOOL historyDeleteOldEntriesEnabled;
+@property (readonly) NSNumber* historyDeleteOldEntriesLimit;
+@property (readonly) BOOL historySmartEnabled;
 
 -(NSString*)          serviceDescriptionForIdentifier:(service_identifier_t)identifier;
--(NSArray*)           serviceShortcuts;
--(void)               setServiceShortcuts:(NSArray*)value;
+@property (copy) NSArray* serviceShortcuts;
 -(NSArrayController*) serviceShortcutsController;
 -(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
                                authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
--(NSArray*)           serviceRegularExpressionFilters;
--(void)               setServiceRegularExpressionFilters:(NSArray*)value;
+@property (copy) NSArray<NSString*>* serviceRegularExpressionFilters;
 -(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController;
 
--(BOOL)                      encapsulationsEnabled;
--(NSArray*)                  encapsulations;
--(NSInteger)                 encapsulationsSelectedIndex;
--(NSString*)                 encapsulationSelected;
+@property (readonly) BOOL encapsulationsEnabled;
+@property (readonly) NSArray* encapsulations;
+@property (readonly) NSInteger encapsulationsSelectedIndex;
+@property (readonly) NSString* encapsulationSelected;
 -(EncapsulationsController*) encapsulationsController;
 
--(NSArray*)                   additionalFilesPaths;
--(void)                       setAdditionalFilesPaths:(NSArray*)value;
+@property (copy) NSArray<NSString*>* additionalFilesPaths;
 -(AdditionalFilesController*) additionalFilesController;
 
--(BOOL)                                        synchronizationNewDocumentsEnabled;
--(void)                                        setSynchronizationNewDocumentsEnabled:(BOOL)value;
--(NSString*)                                   synchronizationNewDocumentsPath;
--(void)                                        setSynchronizationNewDocumentsPath:(NSString*)value;
--(BOOL)                                        synchronizationNewDocumentsSynchronizePreamble;
--(void)                                        setSynchronizationNewDocumentsSynchronizePreamble:(BOOL)value;
--(BOOL)                                        synchronizationNewDocumentsSynchronizeEnvironment;
--(void)                                        setSynchronizationNewDocumentsSynchronizeEnvironment:(BOOL)value;
--(BOOL)                                        synchronizationNewDocumentsSynchronizeBody;
--(void)                                        setSynchronizationNewDocumentsSynchronizeBody:(BOOL)value;
--(NSDictionary*)                               synchronizationAdditionalScripts;
+@property BOOL synchronizationNewDocumentsEnabled;
+@property (copy) NSString* synchronizationNewDocumentsPath;
+@property BOOL synchronizationNewDocumentsSynchronizePreamble;
+@property BOOL synchronizationNewDocumentsSynchronizeEnvironment;
+@property BOOL synchronizationNewDocumentsSynchronizeBody;
+@property (readonly) NSDictionary *synchronizationAdditionalScripts;
 -(SynchronizationAdditionalScriptsController*) synchronizationAdditionalScriptsController;
 
--(NSInteger)paletteLaTeXGroupSelectedTag;
--(void)   setPaletteLaTeXGroupSelectedTag:(NSInteger)value;
--(NSRect) paletteLaTeXWindowFrame;
--(void)   setPaletteLaTeXWindowFrame:(NSRect)value;
--(BOOL)   paletteLaTeXDetailsOpened;
--(void)   setPaletteLaTeXDetailsOpened:(BOOL)value;
+@property NSInteger paletteLaTeXGroupSelectedTag;
+@property NSRect paletteLaTeXWindowFrame;
+@property BOOL paletteLaTeXDetailsOpened;
 
--(BOOL) historyDisplayPreviewPanelState;
--(void) setHistoryDisplayPreviewPanelState:(BOOL)value;
+@property BOOL historyDisplayPreviewPanelState;
 
--(NSString*) libraryPath;
--(void)      setLibraryPath:(NSString*)libraryPath;
--(BOOL) libraryDisplayPreviewPanelState;
--(void) setLibraryDisplayPreviewPanelState:(BOOL)value;
--(library_row_t) libraryViewRowType;
+@property (copy) NSString* libraryPath;
+@property BOOL libraryDisplayPreviewPanelState;
+@property (readonly) library_row_t libraryViewRowType;
 
 @end

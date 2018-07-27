@@ -360,7 +360,7 @@ static LaTeXProcessor* sharedInstance = nil;
         CGDataConsumerCreateWithCFData((CFMutableDataRef)dataConsumerData);
       CGDataProviderRef dataProvider = !data2 ? 0 :
         CGDataProviderCreateWithCFData((CFDataRef)data2);
-      DebugLog(1, @"original pdf data :%u bytes", [data2 length]);
+      DebugLog(1, @"original pdf data :%lu bytes", (unsigned long)[data2 length]);
       CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
         CGPDFDocumentCreateWithProvider(dataProvider);
       CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
