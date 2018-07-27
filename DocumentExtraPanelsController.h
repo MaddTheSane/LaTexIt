@@ -19,6 +19,7 @@
   IBOutlet NSButton*      saveAccessoryViewOptionsButton;
   IBOutlet NSButton*      saveAccessoryViewJpegWarning;
   IBOutlet NSButton*      saveAccessoryViewSvgWarning;
+  IBOutlet NSButton*      saveAccessoryViewMathMLWarning;
   IBOutlet NSTextField*   saveAccessoryViewScaleLabel;
   IBOutlet NSTextField*   saveAccessoryViewScalePercentTextField;
   

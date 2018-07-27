@@ -42,7 +42,7 @@ extern NSString* LatexitEquationsPboardType;
 +(NSManagedObjectContext*) popManagedObjectContext;
 
 //
-+(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
++(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults outPdfData:(NSData**)outPdfData;
 
 //constructors
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti;

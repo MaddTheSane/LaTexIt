@@ -21,6 +21,8 @@
 "Options" = "オプション";
 "Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
 "Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";
+"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
 
 "JPEG Quality" = "JPEG 品質";

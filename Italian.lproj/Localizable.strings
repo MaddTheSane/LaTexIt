@@ -59,7 +59,9 @@
 "no color.sty found" = "nessun color.sty trovato";
 "useful to type directly diacritic characters" = "utile per scrivere direttamente caratteri accentuati";
 "%@ not found or does not work as expected" = "%@ non trovato oppure non funziona come previsto";
+"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs)." = "Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).";
 "%@ is required" = "%@ è richiesto";
+"The XML::LibXML perl module must be installed" = "The XML::LibXML perl module must be installed";
 "The current configuration of LaTeXiT requires %@ to work." = "L'attuale configurazione di LaTeXiT necessita %@ per funzionare.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "È necessario ps2pdf per esportare come \"PDF con outlined fonts\"";
 "Find %@..." = "Trova %@…";
@@ -251,6 +253,9 @@
 "Scale" = "Scala";
 "Warning : jpeg does not manage transparency" = "Attenzione : jpeg non lavora con la trasparenza";
 "Warning : pdf2svg path is invalid" = "Attenzione : indirizzo pdf2svg invalido";
+"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
+
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";
 "Export body" = "Export body";

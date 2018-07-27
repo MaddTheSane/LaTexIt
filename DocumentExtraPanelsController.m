@@ -88,8 +88,11 @@
   [self->saveAccessoryViewJpegWarning setTitle:
     LocalLocalizedString(@"Warning : jpeg does not manage transparency", @"Warning : jpeg does not manage transparency")];
   [self->saveAccessoryViewSvgWarning setTitle:
-    LocalLocalizedString(@"Warning : pdf2svg path is invalid", @"Warning : pdf2svg path is invalid")];
+    LocalLocalizedString(@"Warning : pdf2svg was not found", @"Warning : pdf2svg was not found")];
   [self->saveAccessoryViewSvgWarning setTextColor:[NSColor redColor]];
+  [self->saveAccessoryViewMathMLWarning setTitle:
+   LocalLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"Warning : the XML::LibXML perl module was not found")];
+  [self->saveAccessoryViewMathMLWarning setTextColor:[NSColor redColor]];
   
   [self->saveAccessoryViewFormatLabel sizeToFit];
   [self->saveAccessoryViewPopupFormat sizeToFit];
@@ -97,6 +100,7 @@
   [self->saveAccessoryViewScaleLabel sizeToFit];
   [self->saveAccessoryViewJpegWarning sizeToFit];
   [self->saveAccessoryViewSvgWarning sizeToFit];
+  [self->saveAccessoryViewMathMLWarning sizeToFit];
   [self->saveAccessoryView setFrameSize:NSMakeSize(
     [self->saveAccessoryViewFormatLabel frame].origin.x+
     [self->saveAccessoryViewFormatLabel frame].size.width+8+
@@ -120,6 +124,7 @@
                 [self->saveAccessoryViewScalePercentTextField frame].origin.y)];
   [self->saveAccessoryViewJpegWarning centerInSuperviewHorizontally:YES vertically:NO];
   [self->saveAccessoryViewSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
+  [self->saveAccessoryViewMathMLWarning centerInSuperviewHorizontally:YES vertically:NO];
     
   [self->saveAccessoryViewPopupFormat setTarget:self];
   [self->saveAccessoryViewPopupFormat bind:NSSelectedTagBinding toObject:self
@@ -338,6 +343,8 @@
       (!isSvgFormat ||
        ([[NSFileManager defaultManager]
          fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory))];
+    [self->saveAccessoryViewMathMLWarning setHidden:
+     (!isMathMLFormat || [[AppController appController] isPerlWithLibXMLAvailable])];
     if (isJpegFormat)
       [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"jpg", @"jpeg", nil]];
     else

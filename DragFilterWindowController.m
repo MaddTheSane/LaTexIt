@@ -55,14 +55,24 @@
   }//end while((view = [enumerator nextObject]))
   [self->closeButton setShouldBlink:NO];
   [self->closeButton setDelay:.05];
+
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS] setTitle:
     NSLocalizedString(@"PDF w.o.f.", @"PDF w.o.f.")];
+
   [[self->buttonPalette buttonWithTag:[[PreferencesController sharedController] exportFormatCurrentSession]] setState:NSOnState];
+
   BOOL isPdfToSvgAvailable = [[AppController appController] isPdfToSvgAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:isPdfToSvgAvailable ? nil :
     [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @"%@ is required"), @"pdf2svg"]];
+  
+  BOOL isPerlWithLibXMLAvailable = [[AppController appController] isPerlWithLibXMLAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setEnabled:isPerlWithLibXMLAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setToolTip:isPerlWithLibXMLAvailable ? nil :
+    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"The XML::LibXML perl module must be installed")];
+
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"Text")];
+  
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:DragThroughButtonStateChangedNotification object:nil];
 }
 //end awakeFromNib

@@ -222,3 +222,40 @@ NSRect adaptRectangle(NSRect rectangle, NSRect containerRectangle, BOOL allowSca
   return result;
 }
 //end adaptRectangle()
+
+NSComparisonResult compareVersions(NSString* version1, NSString* version2)
+{
+  NSComparisonResult result = NSOrderedSame;
+  if (!version1 && !version2){
+  }
+  else if (!version1 && version2)
+    result = NSOrderedAscending;
+  else if (version1 && !version2)
+    result = NSOrderedDescending;
+  else//if (version1 && version2)
+  {
+    NSArray* components1 = [version1 componentsSeparatedByString:@"."];
+    NSArray* components2 = [version2 componentsSeparatedByString:@"."];
+    NSEnumerator* it1 = [components1 objectEnumerator];
+    NSEnumerator* it2 = [components2 objectEnumerator];
+    NSString* c1 = [it1 nextObject];
+    NSString* c2 = [it2 nextObject];
+    BOOL stop = NO;
+    while(!stop)
+    {
+      if (!c1 && !c2){
+      }
+      else if (!c1 && c2)
+        result = NSOrderedAscending;
+      else if (c1 && !c2)
+        result = NSOrderedDescending;
+      else
+        result = [c1 compare:c2 options:NSNumericSearch];
+      stop |= !c1 || !c2 || (result != NSOrderedSame);
+      c1 = [it1 nextObject];
+      c2 = [it2 nextObject];
+    }//end while(!stop)
+  }//if (version1 && version2)
+  return result;
+}
+//end compareVersions()

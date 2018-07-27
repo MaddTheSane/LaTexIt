@@ -77,3 +77,4 @@ FOUNDATION_STATIC_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, float newX,
                    setWidth ? newWidth : rect.size.width, setHeight ? newHeight : rect.size.height);}
 
 NSRect adaptRectangle(NSRect rectangle, NSRect containerRectangle, BOOL allowScaleDown, BOOL allowScaleUp, BOOL integerScale);
+NSComparisonResult compareVersions(NSString* version1, NSString* version2);

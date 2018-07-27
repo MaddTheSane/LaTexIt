@@ -55,6 +55,7 @@
   BOOL isPsToPdfAvailable;
   BOOL isColorStyAvailable;
   BOOL isPdfToSvgAvailable;
+  BOOL isPerlWithLibXMLAvailable;
 
   AdditionalFilesWindowController*           additionalFilesWindowController;
   CompositionConfigurationsWindowController* compositionConfigurationWindowController;
@@ -168,6 +169,7 @@
 -(BOOL) isPsToPdfAvailable;
 -(BOOL) isColorStyAvailable;
 -(BOOL) isPdfToSvgAvailable;
+-(BOOL) isPerlWithLibXMLAvailable;
 
 //if the marginWindowController is not loaded, just use the user defaults values
 -(CGFloat) marginsCurrentTopMargin;

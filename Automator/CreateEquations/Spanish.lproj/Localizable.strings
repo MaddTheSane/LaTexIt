@@ -21,6 +21,8 @@
 "Options" = "Opciones";
 "Warning : jpeg does not manage transparency" = "Atención: JPEG nos soporta la transparencia";
 "Warning : pdf2svg path is invalid" = "Atención : La ruta de pdf2svg no es válida";
+"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
 "JPEG Quality" = "JPEG Calitat";
 "least" = "mínima";

@@ -228,6 +228,28 @@ static NSMutableDictionary* cachePaths = nil;
       withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
                                                                  [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
+
+    //check perlWithLibXMLAvailable
+    {
+      SystemTask* perlTask = [[SystemTask alloc] initWithWorkingDirectory:[[NSWorkspace sharedWorkspace] temporaryDirectory]];
+      @try {
+        [perlTask setArguments:[NSArray arrayWithObjects:@"-e", @"\"use XML::LibXML;\"", nil]];
+        [perlTask setEnvironment:[[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment]];
+        [perlTask setLaunchPath:@"perl"];
+        [perlTask setUsingLoginShell:YES];
+        [perlTask launch];
+        [perlTask waitUntilExit];
+        int terminationStatus = [perlTask terminationStatus];
+        self->isPerlWithLibXMLAvailable = (terminationStatus == 0);
+      }
+      @catch(NSException* e) {
+      }
+      @finally {
+        [perlTask release];
+      }
+      
+    }
+    
     [configurationSemaphore Z];
     [configurationSemaphore release];
     configurationSemaphore = nil;
@@ -271,6 +293,8 @@ static NSMutableDictionary* cachePaths = nil;
     if ((exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) && (!self->isGsAvailable || !self->isPsToPdfAvailable))
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     if ((exportFormat == EXPORT_FORMAT_SVG) && !self->isPdfToSvgAvailable)
+      [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
+    if ((exportFormat == EXPORT_FORMAT_MATHML) && !self->isPerlWithLibXMLAvailable)
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     [self endCheckUpdates];
 
@@ -459,7 +483,7 @@ static NSMutableDictionary* cachePaths = nil;
     [NSDictionary dictionaryWithObjectsAndKeys:
       DragExportSvgPdfToSvgPathKey, @"path",
       [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil],
-    DragExportSvgPdfToSvgPathKey,
+      DragExportSvgPdfToSvgPathKey,
     nil];
   NSDictionary* configuration = [NSDictionary dictionaryWithObjectsAndKeys:
     [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
@@ -820,6 +844,8 @@ static NSMutableDictionary* cachePaths = nil;
       ok &= self->isGsAvailable && self->isPsToPdfAvailable;
     if ([sender tag] == EXPORT_FORMAT_SVG)
       ok &= self->isPdfToSvgAvailable;
+    if ([sender tag] == EXPORT_FORMAT_MATHML)
+      ok &= self->isPerlWithLibXMLAvailable;
     if ([sender tag] == -1)//default
     {
       export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
@@ -1980,6 +2006,12 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end isPdfToSvgAvailable
 
+-(BOOL) isPerlWithLibXMLAvailable
+{
+  return self->isPerlWithLibXMLAvailable;
+}
+//end isPerlWithLibXMLAvailable
+
 //try to find gs program, searching by its name
 -(void) _findPathWithConfiguration:(id)configuration
 {
@@ -2090,13 +2122,17 @@ static NSMutableDictionary* cachePaths = nil;
       while (retry)
       {
         retry = NO;
+        NSString* additionalInfo = ![executableDisplayName isEqualToString:@"ghostscript"] ? @"" :
+          [NSString stringWithFormat:@"\n%@",
+            NSLocalizedString(@"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).",
+                              @"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).")];
         int returnCode =
           NSRunAlertPanel(
             [NSString stringWithFormat:
               NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"), executableDisplayName],
             [NSString stringWithFormat:
-              NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.",
-                                @"The current configuration of LaTeXiT requires %@ to work."), executableDisplayName],
+              NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.%@",
+                                @"The current configuration of LaTeXiT requires %@ to work.%@"), executableDisplayName, additionalInfo],
             !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), executableDisplayName],
             !allowUIFindOnFailure ? nil : NSLocalizedString(@"Cancel", @"Cancel"),
             !allowUIFindOnFailure ? nil : NSLocalizedString(@"What's that ?", @"What's that ?"),
@@ -2587,7 +2623,7 @@ static NSMutableDictionary* cachePaths = nil;
             //extracts the baseline of the equation, if possible
             CGFloat newBaseline = [originalBaseline floatValue];
             if (useBaseline)
-              newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
+              newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:&pdfData] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
             //creates a mutable attributed string containing the image file
             [attachedData writeToFile:attachedFilePath atomically:NO];
@@ -3173,7 +3209,7 @@ static NSMutableDictionary* cachePaths = nil;
               //extracts the baseline of the equation, if possible
               CGFloat newBaseline = [originalBaseline floatValue];
               if (useBaseline)
-                newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
+                newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:&pdfData] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
               //creates a mutable attributed string containing the image file
               [fileHandle writeData:attachedData];

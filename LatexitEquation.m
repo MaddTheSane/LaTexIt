@@ -28,6 +28,50 @@
 
 #import <Quartz/Quartz.h>
 
+static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object, void* info)
+{
+  CGPDFDictionaryRef dict = 0;
+  CGPDFArrayRef array = 0;
+  CGPDFStreamRef stream = 0;
+  if (CGPDFObjectGetValue(object, kCGPDFObjectTypeDictionary, &dict))
+    CGPDFDictionaryApplyFunction(dict, extractStreamObjectsFunction, info);
+  else if (CGPDFObjectGetValue(object, kCGPDFObjectTypeArray, &array))
+  {
+    size_t count = CGPDFArrayGetCount(array);
+    size_t i = 0;
+    for(i = 0 ; i<count ; ++i)
+    {
+      CGPDFStreamRef stream = 0;
+      CGPDFArrayRef array2 = 0;
+      if (CGPDFArrayGetArray(array, i, &array2))
+      {
+        CGPDFObjectRef object2 = 0;
+        CGPDFArrayGetObject(array, i, &object2);
+        extractStreamObjectsFunction(0, object2, info);
+      }//end if (CGPDFArrayGetArray(array, i, &array2))
+      else if (CGPDFArrayGetStream(array, i, &stream))
+      {
+        CGPDFDataFormat dataFormat = 0;
+        CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
+        if (data && (dataFormat == CGPDFDataFormatRaw))
+          [((NSMutableArray*) info) addObject:[(NSData*)data autorelease]];
+        else if (data)
+          CFRelease(data);
+      }//end if (CGPDFArrayGetStream(array, i, &stream))
+    }//end for each object
+  }//end if (CGPDFObjectGetValue(object, kCGPDFObjectTypeArray, &array))
+  else if (CGPDFObjectGetValue(object, kCGPDFObjectTypeStream, &stream))
+  {
+    CGPDFDataFormat dataFormat = 0;
+    CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
+    if (data && (dataFormat == CGPDFDataFormatRaw))
+      [((NSMutableArray*) info) addObject:[(NSData*)data autorelease]];
+    else if (data)
+      CFRelease(data);
+  }//end if (CGPDFObjectGetValue(object, kCGPDFObjectTypeStream, &stream))
+}
+//end extractStreamObjectsFunction()
+
 static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info);
 static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
 {
@@ -145,9 +189,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end popManagedObjectContext
 
-+(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults
++(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults outPdfData:(NSData**)outPdfData
 {
   NSMutableDictionary* result = [NSMutableDictionary dictionary];
+  if (outPdfData)
+    *outPdfData = someData;
   
   BOOL isLaTeXiTPDF = NO;
   PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -442,17 +488,49 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       CGPDFDocumentCreateWithProvider(dataProvider);
     CGPDFPageRef page = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
       CGPDFDocumentGetPage(pdfDocument, 1);
-    CGPDFContentStreamRef contentStream = !page ? 0 :
-      CGPDFContentStreamCreateWithPage(page);
-    CGPDFOperatorTableRef operatorTable = CGPDFOperatorTableCreate();
-    CGPDFOperatorTableSetCallback(operatorTable, "Tj", &CHCGPDFOperatorCallback_Tj);
+    CGPDFDictionaryRef pageDictionary = !page ? 0 : CGPDFPageGetDictionary(page);
+    
+    BOOL exploreStreams = NO;
+    if (exploreStreams)
+    {
+      CGPDFDictionaryRef catalog = !pdfDocument ? 0 : CGPDFDocumentGetCatalog(pdfDocument);
+      NSMutableArray* streamObjects = [NSMutableArray array];
+      if (catalog)
+        CGPDFDictionaryApplyFunction(catalog, extractStreamObjectsFunction, streamObjects);
+      if (pageDictionary)
+        CGPDFDictionaryApplyFunction(pageDictionary, extractStreamObjectsFunction, streamObjects);
+      NSEnumerator* enumerator = [streamObjects objectEnumerator];
+      id streamData = nil;
+      NSData* pdfHeader = [@"%PDF" dataUsingEncoding:NSUTF8StringEncoding];
+      while(!isLaTeXiTPDF && ((streamData = [enumerator nextObject])))
+      {
+        NSData* streamAsData = [streamData dynamicCastToClass:[NSData class]];
+        NSData* streamAsPdfData = 
+          ([streamAsData bridge_rangeOfData:pdfHeader options:NSDataSearchAnchored range:NSMakeRange(0, [streamAsData length])].location == NSNotFound) ?
+          nil : streamAsData;
+        NSData* pdfData2 = nil;
+        NSDictionary* result2 = !streamAsPdfData ? nil :
+          [[[self metaDataFromPDFData:streamAsPdfData useDefaults:NO outPdfData:&pdfData2] mutableCopy] autorelease];
+        if (result && outPdfData && pdfData2)
+          *outPdfData = pdfData2;
+        isLaTeXiTPDF |= (result2 != nil);
+      }//end for each stream
+    }//end if (exploreStreams)
+
     NSDictionary* latexitMetadata = nil;
-    CGPDFScannerRef pdfScanner = !contentStream ? 0 :
-      CGPDFScannerCreate(contentStream, operatorTable, &latexitMetadata);
-    CGPDFScannerScan(pdfScanner);
-    CGPDFScannerRelease(pdfScanner);
-    CGPDFOperatorTableRelease(operatorTable);
-    CGPDFContentStreamRelease(contentStream);
+    if (!isLaTeXiTPDF)
+    {
+      CGPDFContentStreamRef contentStream = !page ? 0 :
+        CGPDFContentStreamCreateWithPage(page);
+      CGPDFOperatorTableRef operatorTable = CGPDFOperatorTableCreate();
+      CGPDFOperatorTableSetCallback(operatorTable, "Tj", &CHCGPDFOperatorCallback_Tj);
+      CGPDFScannerRef pdfScanner = !contentStream ? 0 :
+        CGPDFScannerCreate(contentStream, operatorTable, &latexitMetadata);
+      CGPDFScannerScan(pdfScanner);
+      CGPDFScannerRelease(pdfScanner);
+      CGPDFOperatorTableRelease(operatorTable);
+      CGPDFContentStreamRelease(contentStream);
+    }//end if (!isLaTeXiTPDF)
     CGPDFDocumentRelease(pdfDocument);
     CGDataProviderRelease(dataProvider);
     if (latexitMetadata)
@@ -722,7 +800,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
   [self setPdfData:someData];
-  NSDictionary* metaData = [[self class] metaDataFromPDFData:someData useDefaults:useDefaults];
+  NSDictionary* metaData = [[self class] metaDataFromPDFData:someData useDefaults:useDefaults outPdfData:0];
   BOOL isLaTeXiTPDF = (metaData != nil);
 
   [self beginUpdate];
@@ -1096,6 +1174,25 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.html"))
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.text"))
+    {
+      NSString* string = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      NSString* annotationBase64 = nil;
+      if (!annotationBase64)
+        annotationBase64 = [string stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
+                                            inRange:NSMakeRange(0, [string length]) capture:1 error:0];
+      if (!annotationBase64)
+        annotationBase64 = [string stringByMatching:@"([A-Za-z0-9\\+\\/\\n])*\\=*" options:RKLCaseless|RKLDotAll|RKLMultiline
+                                            inRange:NSMakeRange(0, [string length]) capture:0 error:0];
+      NSData* annotationData = !annotationBase64 ? nil : [NSData dataWithBase64:annotationBase64];
+      annotationData = !annotationData ? nil : [Compressor zipuncompress:annotationData];
+      NSDictionary* metaData = !annotationData ? nil :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      if (!metaData)
+        result = nil;
+      else
+        result = [self initWithMetaData:metaData useDefaults:useDefaults];
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, (CFStringRef)@"public.text"))
     else
       [self release];
   }//end if (sourceUTI)
@@ -1148,7 +1245,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.7.3"               forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.7.4"               forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -1897,6 +1994,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [pboard addTypes:[NSArray arrayWithObjects:NSHTMLPboardType, @"public.html", nil] owner:lazyDataProvider];
       if (!lazyDataProvider) [pboard setData:data forType:NSHTMLPboardType];
       if (!lazyDataProvider) [pboard setData:data forType:@"public.html"];
+      {
+        NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+        NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
+        [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, @"public.text", nil] owner:lazyDataProvider];
+        if (blockQuote)
+        {
+          if (!lazyDataProvider) [pboard setString:blockQuote forType:NSStringPboardType];
+          if (!lazyDataProvider) [pboard setString:blockQuote forType:@"public.text"];
+        }//end if (blockQuote)
+      }
       break;
     case EXPORT_FORMAT_SVG:
       [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", nil] owner:lazyDataProvider];
@@ -1930,19 +2037,27 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     nil;
   if (!data)
     data = [[LaTeXProcessor sharedLaTeXProcessor]
-            dataForType:[preferencesController exportFormatCurrentSession]
+            dataForType:exportFormat
                 pdfData:[self pdfData]
               exportOptions:exportOptions
             compositionConfiguration:[preferencesController compositionConfigurationDocument]
             uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
-  [pasteboard setData:data forType:type];
+  if (exportFormat == EXPORT_FORMAT_MATHML)
+  {
+    NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
+    if (blockQuote)
+      [pasteboard setString:blockQuote forType:type];
+  }//end if (exportFormat == EXPORT_FORMAT_MATHML)
+  else
+    [pasteboard setData:data forType:type];
 }
 //end pasteboard:provideDataForType:
 -(id) plistDescription
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.7.3", @"version",
+       @"2.7.4", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

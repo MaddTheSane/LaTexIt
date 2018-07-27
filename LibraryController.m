@@ -242,8 +242,12 @@
         [replacedText replaceOccurrencesOfString:@"#" withString:source options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
       [labels appendString:replacedText];
     }//end for each libraryEquationItem
-    [pasteBoard addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
-    [pasteBoard setString:labels forType:NSStringPboardType];
+    export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+    if (exportFormat != EXPORT_FORMAT_MATHML)
+    {
+      [pasteBoard addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+      [pasteBoard setString:labels forType:NSStringPboardType];
+    }//end if (exportFormat != EXPORT_FORMAT_MATHML)
   }//end if ([libraryEquationsItems count])
 
   return YES;

@@ -244,7 +244,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG]], NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatSvgWarning setTitle:
-    NSLocalizedString(@"Warning : pdf2svg path is invalid", @"Warning : pdf2svg path is invalid")];
+    NSLocalizedString(@"Warning : pdf2svg was not found", @"Warning : pdf2svg was not found")];
   [self->generalExportFormatSvgWarning sizeToFit];
   [self->generalExportFormatSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
   [self->generalExportFormatSvgWarning setTextColor:[NSColor redColor]];
@@ -259,6 +259,20 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [FileExistsTransformer transformerWithDirectoryAllowed:NO],
       NSValueTransformerBindingOption, nil]];
+
+  [self->generalExportFormatMathMLWarning setTitle:
+    NSLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"Warning : the XML::LibXML perl module was not found")];
+  [self->generalExportFormatMathMLWarning sizeToFit];
+  [self->generalExportFormatMathMLWarning centerInSuperviewHorizontally:YES vertically:NO];
+  [self->generalExportFormatMathMLWarning setTextColor:[NSColor redColor]];
+  [self->generalExportFormatMathMLWarning bind:NSHiddenBinding toObject:userDefaultsController
+                                withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
+                                    options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                             [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_MATHML]],
+                                             NSValueTransformerBindingOption, nil]];
+  [self->generalExportFormatMathMLWarning bind:NSHidden2Binding toObject:[AppController appController]
+                                   withKeyPath:@"isPerlWithLibXMLAvailable"
+                                       options:nil];
   
   [self->generalExportScalePercentTextField bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportScaleAsPercentKey] options:nil];

@@ -33,6 +33,7 @@
 #import "NSObjectExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
+#import "RegexKitLite.h"
 #import "Utils.h"
 
 #import "CGExtras.h"
@@ -641,7 +642,7 @@ typedef NSInteger NSDraggingContext;
   [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider];
   if (self->isDragging && (lazyDataProvider == self))
   {
-    [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*/ NSFilenamesPboardType, NSURLPboardType, nil]
+    [pasteboard addTypes:[NSArray arrayWithObjects:/*NSFileContentsPboardType,*//* NSFilenamesPboardType, NSURLPboardType,*/ nil]
                    owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
 }
@@ -757,7 +758,15 @@ typedef NSInteger NSDraggingContext;
   }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
   else//if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
   {
-    [pasteboard setData:data forType:type];
+    if (exportFormat != EXPORT_FORMAT_MATHML)
+      [pasteboard setData:data forType:type];
+    else//if (exportFormat == EXPORT_FORMAT_MATHML)
+    {
+      NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+      NSString* blockQuote = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
+      if (blockQuote)
+        [pasteboard setString:blockQuote forType:type];
+    }//end if (exportFormat == EXPORT_FORMAT_MATHML)
   }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
 }
 //end pasteboard:provideDataForType:
@@ -1065,14 +1074,19 @@ typedef NSInteger NSDraggingContext;
     NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
-    [self->document applyString:[attributedString string]];
+    NSString* string = [attributedString string];
+    NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    //[self->document applyString:string];
+    [self->document applyData:data sourceUTI:@"public.text"];
     [attributedString release];
     done = YES;
   }
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    [self->document applyString:[pboard stringForType:type]];
+    //NSString* string = [pboard stringForType:type];
+    //[self->document applyString:string];
+    [self->document applyData:[pboard dataForType:type] sourceUTI:@"public.text"];
     done = YES;
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:@"public.text", NSStringPboardType, nil]])))
   if (!done)

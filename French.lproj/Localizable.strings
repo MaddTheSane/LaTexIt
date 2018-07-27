@@ -61,7 +61,9 @@
 "useful to type directly accentuated characters" = "utile pour taper directement les caractères accentués";
 "color.sty seems to be unavailable" = "color.sty semble indisponible";
 "%@ not found or does not work as expected" = "%@ est introuvable ou ne fonctionne pas comme attendu";
+"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs)." = "À moins que vous ayez installé X11, vous devriez vous assurer que vous utilisez une vesion de ghostscript qui ne le nécessite pas (habituellement gs-nox11 au lieu de gs)";
 "%@ is required" = "%@ est nécessaire";
+"The XML::LibXML perl module must be installed" = "Le module perl XML::LibXML est nécessaire";
 "The current configuration of LaTeXiT requires %@ to work." = "La configuration actuelle de LaTeXiT nécessite %@ pour fonctionner.";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "ps2pdf est requis pour activer l'export en \"PDF avec polices vectorisées\"";
 "Find %@..." = "Chercher %@…";
@@ -252,6 +254,9 @@
 "Scale" = "Échelle";
 "Warning : jpeg does not manage transparency" = "Attention : jpeg ne gère pas la transparence";
 "Warning : pdf2svg path is invalid" = "Attention : Le chemin vers pdf2svg est invalide";
+"Warning : pdf2svg was not found" = "Attention : pdf2svg n'a pas été détecté";
+"Warning : the XML::LibXML perl module was not found" = "Attention : le module perl XML::LibXML n'a pas été détecté";
+
 "Export preamble" = "Exporter le préambule";
 "Export environment" = "Exporter l'environnement";
 "Export body" = "Exporter le corps";

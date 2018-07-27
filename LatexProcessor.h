@@ -31,6 +31,7 @@ extern NSString* LatexizationDidEndNotification;
 
 -(void) addInEnvironmentPath:(NSString*)path;
 
+-(NSData*) stripPdfData:(NSData*)pdfData;
 -(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData;
 -(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline

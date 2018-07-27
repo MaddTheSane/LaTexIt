@@ -1607,7 +1607,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [[self->lowerBoxSourceTextView textStorage]   addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
 
     [self->lowerBoxControlsBoxFontColorWell deactivate];
-    [self->lowerBoxControlsBoxFontColorWell setColor:[latexitEquation color]];
+    NSColor* latexitEquationColor = [latexitEquation color];
+    if (latexitEquationColor)
+      [self->lowerBoxControlsBoxFontColorWell setColor:latexitEquationColor];
     [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[latexitEquation pointSize]];
     if ([latexitEquation mode] != LATEX_MODE_AUTO)
     {

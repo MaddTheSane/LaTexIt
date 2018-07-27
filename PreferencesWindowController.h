@@ -58,6 +58,7 @@ extern NSString* PluginsToolbarItemIdentifier;
   IBOutlet NSButton*        generalExportFormatOptionsButton;
   IBOutlet NSButton*        generalExportFormatJpegWarning;
   IBOutlet NSButton*        generalExportFormatSvgWarning;
+  IBOutlet NSButton*        generalExportFormatMathMLWarning;
   ExportFormatOptionsPanes* generalExportFormatOptionsPanes;
   IBOutlet NSTextField*     generalExportScaleLabel;
   IBOutlet NSTextField*     generalExportScalePercentTextField;

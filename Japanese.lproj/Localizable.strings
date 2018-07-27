@@ -59,7 +59,9 @@
 "no color.sty found" = "color.sty が見つかりませんでした";
 "useful to type directly diacritic characters" = "分音符付きラテン文字の入力に役立つ";
 "%@ not found or does not work as expected" = "%@ が見つからなかったか期待するように動作しませんでした。";
+"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs)." = "Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).";
 "%@ is required" = "%@が必要です";
+"The XML::LibXML perl module must be installed" = "The XML::LibXML perl module must be installed";
 "The current configuration of LaTeXiT requires %@ to work." = "現在の LaTeXiT の設定は動作のために %@ を必要とします。";
 "You need ps2pdf to export as \"PDF with outlined fonts\"" = "“アウトラインフォント付きのPDF”としての書き出しには ps2pdf が必要です";
 "Find %@..." = "%@ を検索…";
@@ -251,6 +253,9 @@
 "Scale" = "スケール";
 "Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
 "Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";
+"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
+
 "Export preamble" = "Export preamble";
 "Export environment" = "Export environment";
 "Export body" = "Export body";

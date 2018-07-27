@@ -222,7 +222,8 @@ static int SpellCheckerDocumentTag = 0;
   NSMutableAttributedString* attributedString = [[value mutableCopy] autorelease];
   [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
   
-  [[self textStorage] setAttributedString:attributedString];
+  if (attributedString)
+    [[self textStorage] setAttributedString:attributedString];
   [self->syntaxColouring recolourCompleteDocument];
 }
 //end setAttributedString:
