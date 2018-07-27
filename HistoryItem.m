@@ -285,7 +285,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.7.4", @"version",
+       @"2.7.5", @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -323,7 +323,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.7.4" forKey:@"version"];
+  [coder encodeObject:@"2.7.5" forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:

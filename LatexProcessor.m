@@ -284,7 +284,7 @@ static LaTeXProcessor* sharedInstance = nil;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.7.4", @"version",
+        @"2.7.5", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -458,10 +458,10 @@ static LaTeXProcessor* sharedInstance = nil;
       [s release];
     }//end if ((r1.location != NSNotFound) && (r2.location != NSNotFound))
     NSUInteger annotationObjectIndex = !nbObjects ? 100000 : nbObjects;
-    
+    BOOL useAnnotationObjectIndex = YES;
     NSMutableString *annotation =
       [NSMutableString stringWithFormat:
-       @"\n%u 0 obj\n<< /Type /Annot /Subtype /Text /Rect [0 0 0 0] /Encoding /MacRomanEncoding /Content\n"
+       @"\n%@obj\n<<\n/Encoding /MacRomanEncoding\n"
        "/Preamble (ESannop%sESannopend)\n"
        "/EscapedPreamble (ESannoep%sESannoepend)\n"
        "/Subject (ESannot%sESannotend)\n"
@@ -473,7 +473,7 @@ static LaTeXProcessor* sharedInstance = nil;
        "/Magnification (EEmag%fEEmagend)\n"
        "/Baseline (EEbas%fEEbasend)\n"
        ">>\nendobj\n",
-       annotationObjectIndex,
+       !useAnnotationObjectIndex ? @"" : [NSString stringWithFormat:@"%u 0 ", annotationObjectIndex],
        [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
        [escapedPreamble  cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
        [replacedSource  cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
@@ -489,31 +489,38 @@ static LaTeXProcessor* sharedInstance = nil;
     [numberFormatter setMaximum:[NSNumber numberWithUnsignedInt:(unsigned int)(-1)]];
     NSNumber* number = !byteCountString ? nil : [numberFormatter numberFromString:byteCountString];
     NSUInteger byte_count = [number unsignedIntValue];
-    
-    NSMutableData* buildData = [NSMutableData data];
-    if (r0.location != NSNotFound)
-      [buildData appendData:[data2 subdataWithRange:r0]];
-    if (annotation)
-      [buildData appendData:[annotation dataUsingEncoding:NSMacOSRomanStringEncoding]];
-    if (r1.location != NSNotFound)
+
+    BOOL annotateWithPDF = YES;
+    if (!annotateWithPDF)
+      newData = data0;
+    else//if (annotateWithPDF)
     {
-      [buildData appendData:[[NSString stringWithFormat:@"xref\n%u %u\n", 0, annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
-      [buildData appendData:[afterObjCountString dataUsingEncoding:NSUTF8StringEncoding]];
-      [buildData appendData:[[NSString stringWithFormat:@"%010ld %05ld n \n", r1.location, 0U] dataUsingEncoding:NSUTF8StringEncoding]];
-    }//end if (r1.location != NSNotFound)
-    if (r2.location != NSNotFound)
-    {
-      [buildData appendData:[[NSString stringWithFormat:@"trailer\n<< /Size %u", annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
-      [buildData appendData:[trailerAfterSize dataUsingEncoding:NSUTF8StringEncoding]];
-    }//end if (r2.location != NSNotFound)
-    if (r3.location != NSNotFound)
-    {
-      NSUInteger newByteCount = byte_count;
+      NSMutableData* buildData = [NSMutableData data];
+      if (r0.location != NSNotFound)
+        [buildData appendData:[data2 subdataWithRange:r0]];
+      if (annotation)
+        [buildData appendData:[annotation dataUsingEncoding:NSMacOSRomanStringEncoding]];
       if (r1.location != NSNotFound)
-        newByteCount += [annotation length]-1;
-      [buildData appendData:[[NSString stringWithFormat:@"startxref\n%ld\n%%%%EOF", newByteCount] dataUsingEncoding:NSUTF8StringEncoding]];
-    }//end if (r3.location != NSNotFound)
-    newData = buildData;
+      {
+        [buildData appendData:[[NSString stringWithFormat:@"xref\n%u %u\n", 0, annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[afterObjCountString dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"%010ld %05ld n \n", r1.location, 0U] dataUsingEncoding:NSUTF8StringEncoding]];
+      }//end if (r1.location != NSNotFound)
+      if (r2.location != NSNotFound)
+      {
+        [buildData appendData:[[NSString stringWithFormat:@"trailer\n<< /Size %u", 
+                                annotationObjectIndex+(useAnnotationObjectIndex ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[trailerAfterSize dataUsingEncoding:NSUTF8StringEncoding]];
+      }//end if (r2.location != NSNotFound)
+      if (r3.location != NSNotFound)
+      {
+        NSUInteger newByteCount = byte_count;
+        if (r1.location != NSNotFound)
+          newByteCount += [annotation length]-1;
+        [buildData appendData:[[NSString stringWithFormat:@"startxref\n%ld\n%%%%EOF", newByteCount] dataUsingEncoding:NSUTF8StringEncoding]];
+      }//end if (r3.location != NSNotFound)
+      newData = buildData;
+    }//end if (annotateWithPDF)
   }//end if (data2)
   
   return newData;
@@ -2312,8 +2319,9 @@ static LaTeXProcessor* sharedInstance = nil;
       CGDataConsumerCreateWithCFData((CFMutableDataRef)outputData);
     CGContextRef outputPdfContext = !outputDataConsumer ? 0 :
       CGPDFContextCreate(outputDataConsumer, &inputMediaBox, 0);
-    
+    CGContextBeginPage(outputPdfContext, &inputMediaBox);
     CGContextDrawPDFPage(outputPdfContext, inputPage);
+    CGContextEndPage(outputPdfContext);
     CGContextFlush(outputPdfContext);
 
     CGContextRelease(outputPdfContext);

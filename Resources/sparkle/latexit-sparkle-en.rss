@@ -485,6 +485,26 @@
       <title>Version 2.7.4</title>
       <description><![CDATA[
         <ul>
+          <li>totally broken version just to make a fool out of myself.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.4</sparkle:releaseNotesLink>
+			<pubDate>Fri, 28 Nov 2014 22:33:42 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_4.dmg"
+				sparkle:version="2.7.4"
+                   sparkle:shortVersionString="2.7.4"
+				type="application/octet-stream"
+				length="10760874"
+				sparkle:dsaSignature="MC0CFQCdidEfOfl16FKk4LZcTCukun2rFgIUaLSotytwXoaY4kdrQ2EGSGUfipw="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</guid>
+      <title>Version 2.7.5</title>
+      <description><![CDATA[
+        <ul>
+          <li>Fixed 2.7.4 that was totally broken just before the release. Totally my fault. Totally sorry.</li>
           <li>better MathML export&nbsp;;</li>
           <li>fixed compatibility with Ghostscript 9.15&nbsp;;</li>
           <li>better PDF metadata insertion&nbsp;;</li>
@@ -495,15 +515,15 @@
           </li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.3</sparkle:releaseNotesLink>
-			<pubDate>Fri, 28 Nov 2014 22:33:42 +0100</pubDate>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.7.5</sparkle:releaseNotesLink>
+			<pubDate>Sat, 29 Nov 2014 19:10:38 +0100</pubDate>
 			<enclosure
-				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_4.dmg"
-				sparkle:version="2.7.4"
-                   sparkle:shortVersionString="2.7.4"
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_7_5.dmg"
+				sparkle:version="2.7.5"
+                   sparkle:shortVersionString="2.7.5"
 				type="application/octet-stream"
-				length="10760874"
-				sparkle:dsaSignature="MC0CFQCdidEfOfl16FKk4LZcTCukun2rFgIUaLSotytwXoaY4kdrQ2EGSGUfipw="
+				length="10788473"
+				sparkle:dsaSignature="MCwCFDWqNfg3rsGCZvCW0zamVBDrNi4wAhQ++sZPT5mFEjBA9SeFQ68zyL3BlA=="
 			/>
     </item>
   </channel> 

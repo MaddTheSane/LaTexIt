@@ -240,7 +240,6 @@
 		934192E51281D2A8009D3E97 /* ExportFormatOptionsPanes.m in Sources */ = {isa = PBXBuildFile; fileRef = 935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */; };
 		934193271281D52E009D3E97 /* IsEqualToTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937E370FA4E29C007BEAC0 /* IsEqualToTransformer.m */; };
 		9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B4370E8B7DAC00FE90A5 /* Automator.framework */; };
-		9344B6EA0E8BBDCC00FE90A5 /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B6E90E8BBDCC00FE90A5 /* LaTeXProcessor.m */; };
 		9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */; };
 		9344B9EC0E8CF4BE00FE90A5 /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */; };
 		9344B9F30E8CF4C400FE90A5 /* Automator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9344B4370E8B7DAC00FE90A5 /* Automator.framework */; };
@@ -250,7 +249,6 @@
 		9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C531CF0D9E310C003AF7FC /* NSFileManagerExtended.m */; };
 		9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
 		9344BBA30E8CF5AE00FE90A5 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
-		9344BBA40E8CF5B900FE90A5 /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344B6E90E8BBDCC00FE90A5 /* LaTeXProcessor.m */; };
 		9344BBA70E8CF5C500FE90A5 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
 		9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
@@ -372,6 +370,8 @@
 		939846BB194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
 		939846C21945137900FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
 		939A64580800281900AE4486 /* ServicesMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 939A64570800281900AE4486 /* ServicesMenu.strings */; };
+		939D4E041A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; };
+		939D4E051A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; };
 		939D6588194457DA008A29AB /* PropertyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6587194457DA008A29AB /* PropertyStorage.m */; };
 		939D6B2409C7FEEB0076D19E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D6B2209C7FEEB0076D19E /* Utils.m */; };
 		939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */; };
@@ -801,7 +801,6 @@
 		9344B2980E8B60BB00FE90A5 /* LaTeXiTSharedTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiTSharedTypes.h; sourceTree = "<group>"; };
 		9344B4370E8B7DAC00FE90A5 /* Automator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Automator.framework; path = /System/Library/Frameworks/Automator.framework; sourceTree = "<absolute>"; };
 		9344B6E80E8BBDCC00FE90A5 /* LaTeXProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXProcessor.h; sourceTree = "<group>"; };
-		9344B6E90E8BBDCC00FE90A5 /* LaTeXProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaTeXProcessor.m; sourceTree = "<group>"; };
 		9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = /System/Library/Frameworks/OSAKit.framework; sourceTree = "<absolute>"; };
 		9344B98F0E8CF38700FE90A5 /* CreateEquations.action */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CreateEquations.action; sourceTree = BUILT_PRODUCTS_DIR; };
 		9344D76E08257B2400B17B37 /* LibraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryView.h; sourceTree = "<group>"; };
@@ -978,6 +977,7 @@
 		939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynchronizationAdditionalScriptsController.m; sourceTree = "<group>"; };
 		939A644F080027EA00AE4486 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		939A64590800281C00AE4486 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaTeXProcessor.m; sourceTree = "<group>"; };
 		939D6586194457DA008A29AB /* PropertyStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyStorage.h; sourceTree = "<group>"; };
 		939D6587194457DA008A29AB /* PropertyStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyStorage.m; sourceTree = "<group>"; };
 		939D6B2109C7FEEB0076D19E /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -1596,7 +1596,7 @@
 				933345881077322E0022DBEB /* LatexitEquationWrapper.h */,
 				933345891077322E0022DBEB /* LatexitEquationWrapper.m */,
 				9344B6E80E8BBDCC00FE90A5 /* LaTeXProcessor.h */,
-				9344B6E90E8BBDCC00FE90A5 /* LaTeXProcessor.m */,
+				939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */,
 			);
 			name = "LaTeX Processor";
 			sourceTree = "<group>";
@@ -2506,7 +2506,6 @@
 				934D20BB0E5F5A2000BA812B /* AdditionalFilesTableView.m in Sources */,
 				934D22AD0E6014FF00BA812B /* ImageAndTextCell.m in Sources */,
 				931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */,
-				9344B6EA0E8BBDCC00FE90A5 /* LaTeXProcessor.m in Sources */,
 				935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */,
 				93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */,
 				93291FB20F57434400F47078 /* HistoryItem.m in Sources */,
@@ -2596,6 +2595,7 @@
 				938FF3341955778A00491B00 /* NSSavePanelExtended.m in Sources */,
 				938BAEA71957340B005E3C6B /* FolderExistsTransformer.m in Sources */,
 				938BAED019573789005E3C6B /* FilePathLocalizedTransformer.m in Sources */,
+				939D4E041A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2609,7 +2609,6 @@
 				9344BBA10E8CF5A300FE90A5 /* NSFileManagerExtended.m in Sources */,
 				9344BBA20E8CF5A800FE90A5 /* NSStringExtended.m in Sources */,
 				9344BBA30E8CF5AE00FE90A5 /* NSTaskExtended.m in Sources */,
-				9344BBA40E8CF5B900FE90A5 /* LaTeXProcessor.m in Sources */,
 				9344BBA70E8CF5C500FE90A5 /* SystemTask.m in Sources */,
 				9344BBA80E8CF5CA00FE90A5 /* Utils.m in Sources */,
 				9344BBAA0E8CF5DA00FE90A5 /* PreamblesController.m in Sources */,
@@ -2667,6 +2666,7 @@
 				931B0F991939302B008C64E8 /* CHExportPrefetcher.m in Sources */,
 				931B0FA019393053008C64E8 /* Semaphore.m in Sources */,
 				939846C21945137900FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */,
+				939D4E051A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
