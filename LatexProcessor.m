@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
@@ -296,7 +296,7 @@ static LaTeXProcessor* sharedInstance = nil;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.8.0", @"version",
+        @"2.8.1", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -880,7 +880,8 @@ static LaTeXProcessor* sharedInstance = nil;
     [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
     [self executeScript:script setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
       compositionConfiguration:compositionConfiguration];
-    if (outFullLog) *outFullLog = fullLog;
+    if (outFullLog)
+      *outFullLog = fullLog;
   }
 
   NSString* customLog = nil;
@@ -890,7 +891,8 @@ static LaTeXProcessor* sharedInstance = nil;
                 compositionConfiguration:compositionConfiguration fullEnvironment:fullEnvironment];
   if (customLog)
     [fullLog appendString:customLog];
-  if (outFullLog) *outFullLog = fullLog;
+  if (outFullLog)
+    *outFullLog = fullLog;
 
   NSArray* errors = [self filterLatexErrors:[stdoutLog stringByAppendingString:stderrLog] shiftLinesBy:errorLineShift];
   if (outErrors) *outErrors = errors;
@@ -926,7 +928,7 @@ static LaTeXProcessor* sharedInstance = nil;
     {
       //compute the bounding box of the pdf file generated during step 1
       NSRect boundingBox = [self computeBoundingBox:((compositionMode == COMPOSITION_MODE_LATEXDVIPDF) ? dviFilePath : pdfFilePath)
-                             workingDirectory:workingDirectory fullEnvironment:fullEnvironment compositionConfiguration:compositionConfiguration];
+                                   workingDirectory:workingDirectory fullEnvironment:fullEnvironment compositionConfiguration:compositionConfiguration outFullLog:fullLog];
       boundingBox.origin.x    -= leftMargin/(magnification/ptSizeBase);
       boundingBox.size.width  += (leftMargin+rightMargin)/(magnification/ptSizeBase);
       boundingBox.origin.y    -= (bottomMargin)/(magnification/ptSizeBase);
@@ -1001,7 +1003,7 @@ static LaTeXProcessor* sharedInstance = nil;
             boundingBox.origin.y-bottomMargin],*/
           nil];
         [self crop:pdfBaselineFilePath to:pdfCroppedFilePath canClip:(compositionMode != COMPOSITION_MODE_XELATEX) extraArguments:extraArguments compositionConfiguration:compositionConfiguration
-          workingDirectory:workingDirectory environment:fullEnvironment outPdfData:&pdfData];
+          workingDirectory:workingDirectory environment:fullEnvironment outFullLog:fullLog outPdfData:&pdfData];
       }
     }//end of step 2
     
@@ -1023,7 +1025,7 @@ static LaTeXProcessor* sharedInstance = nil;
       failed = NO; //since step 3 is a resort, step 2 is not a real failure, so we reset <failed> to NO
       pdfData = nil;
       NSRect boundingBox = [self computeBoundingBox:((compositionMode == COMPOSITION_MODE_LATEXDVIPDF) ? dviFilePath : pdfFilePath)
-                                   workingDirectory:workingDirectory fullEnvironment:fullEnvironment compositionConfiguration:compositionConfiguration];
+                                   workingDirectory:workingDirectory fullEnvironment:fullEnvironment compositionConfiguration:compositionConfiguration outFullLog:fullLog];
       BOOL boundingBoxCouldNotBeComputed = (!boundingBox.size.width || !boundingBox.size.height);
 
       boundingBox.origin.x    -= leftMargin/(magnification/ptSizeBase)*(magnification/ptSizeBase);
@@ -1089,13 +1091,13 @@ static LaTeXProcessor* sharedInstance = nil;
           nil];
         failed = fontColorIsWhite || boundingBoxCouldNotBeComputed ||
                  ![self crop:pdfFilePath2 to:pdfCroppedFilePath canClip:(compositionMode != COMPOSITION_MODE_XELATEX) extraArguments:extraArguments
-                     compositionConfiguration:compositionConfiguration workingDirectory:workingDirectory environment:fullEnvironment outPdfData:&pdfData];
+                     compositionConfiguration:compositionConfiguration workingDirectory:workingDirectory environment:fullEnvironment outFullLog:fullLog outPdfData:&pdfData];
         if (failed)//use old method
         {
           failed = NO; //since step 3 is a resort, step 2 is not a real failure, so we reset <failed> to NO
           pdfData = nil;
           NSRect boundingBox = [self computeBoundingBox:pdfFilePath workingDirectory:workingDirectory fullEnvironment:fullEnvironment
-                                compositionConfiguration:compositionConfiguration];
+                                compositionConfiguration:compositionConfiguration outFullLog:fullLog];
 
           //compute the bounding box of the pdf file generated during step 1
           boundingBox.origin.x    -= leftMargin/(magnification/ptSizeBase);
@@ -1228,6 +1230,7 @@ static LaTeXProcessor* sharedInstance = nil;
 //computes the tight bounding box of a pdfFile
 -(NSRect) computeBoundingBox:(NSString*)filePath workingDirectory:(NSString*)workingDirectory
              fullEnvironment:(NSDictionary*)fullEnvironment compositionConfiguration:(NSDictionary*)compositionConfiguration
+                  outFullLog:(NSMutableString*)outFullLog
 {
   NSRect boundingBoxRect = NSZeroRect;
   
@@ -1251,7 +1254,10 @@ static LaTeXProcessor* sharedInstance = nil;
       [boundingBoxTask setLaunchPath:gsPath];
     NSArray* defaultArguments = ([[[filePath pathExtension] lowercaseString] isEqualToString:@"dvi"]) ? dviPdfArguments : gsArguments;
     [boundingBoxTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
-      [NSArray arrayWithObjects:@"-dNOPAUSE", @"-dSAFER", @"-dNOPLATFONTS", @"-sDEVICE=bbox",@"-dBATCH",@"-q", filePath, nil]]];
+      [NSArray arrayWithObjects:@"-sstdout=%stderr", @"-dNOPAUSE", @"-dSAFER", @"-dNOPLATFONTS", @"-sDEVICE=bbox",@"-dBATCH",@"-q", filePath, nil]]];
+    [outFullLog appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n%@\n",
+                                NSLocalizedString(@"bounding box computation", @"bounding box computation"),
+                                [boundingBoxTask equivalentLaunchCommand]]];
     [boundingBoxTask launch];
     [boundingBoxTask waitUntilExit];
     NSData*   boundingBoxData = [boundingBoxTask dataForStdError];
@@ -1587,9 +1593,11 @@ static LaTeXProcessor* sharedInstance = nil;
         compositionConfiguration:(NSDictionary*)compositionConfiguration
         workingDirectory:(NSString*)workingDirectory
         environment:(NSDictionary*)environment
+        outFullLog:(NSMutableString*)fullLog
         outPdfData:(NSData**)outPdfData
 {
   BOOL result = YES;
+  
   //Call pdfCrop
   BOOL useLoginShell = [compositionConfiguration compositionConfigurationUseLoginShell];
   NSString* pdfCropPath  = [[NSBundle bundleForClass:[self class]] pathForResource:@"pdfcrop" ofType:@"pl"];
@@ -1604,6 +1612,9 @@ static LaTeXProcessor* sharedInstance = nil;
   [pdfCropTask setLaunchPath:@"perl"];
   [pdfCropTask setArguments:arguments];
   [pdfCropTask setCurrentDirectoryPath:workingDirectory];
+  [fullLog appendString:@"--------------- pdfcrop call ---------------\n"];
+  [fullLog appendString:[pdfCropTask equivalentLaunchCommand]];
+  [fullLog appendString:@"------------------------------------------------\n"];
   [pdfCropTask launch];
   [pdfCropTask waitUntilExit];
   result = ([pdfCropTask terminationStatus] == 0);
@@ -1989,8 +2000,8 @@ static LaTeXProcessor* sharedInstance = nil;
             tmpFilePath = @"/dev/null";
           NSString* systemCall =
             [NSString stringWithFormat:
-              @"%@ -sDEVICE=%@ -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dSAFER -dNOPLATFONTS -dNoOutputFonts=true %@ -c quit 2>|%@ | %@  -dSubsetFonts=false -dEmbedAllFonts=true -dDEVICEWIDTHPOINTS=100000 -dDEVICEHEIGHTPOINTS=100000 -dPDFSETTINGS=/prepress %@ - %@ 1>>%@ 2>&1",
-              //@"%@ -sDEVICE=epswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dSAFER -dNOPLATFONTS %@ -c quit 2>|%@ | %@  -dSubsetFonts=false -dEmbedAllFonts=true -dDEVICEWIDTHPOINTS=100000 -dDEVICEHEIGHTPOINTS=100000 -dPDFSETTINGS=/prepress %@ - %@ 1>>%@ 2>&1",
+              @"%@ -sstdout=%%stderr -sDEVICE=%@ -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dSAFER -dNOPLATFONTS -dNoOutputFonts=true %@ -c quit 2>|%@ | %@  -dSubsetFonts=false -dEmbedAllFonts=true -dDEVICEWIDTHPOINTS=100000 -dDEVICEHEIGHTPOINTS=100000 -dPDFSETTINGS=/prepress %@ - %@ 1>>%@ 2>&1",
+              //@"%@ -sstdout=%stderr -sDEVICE=epswrite -dNOCACHE -sOutputFile=- -q -dbatch -dNOPAUSE -dSAFER -dNOPLATFONTS %@ -c quit 2>|%@ | %@  -dSubsetFonts=false -dEmbedAllFonts=true -dDEVICEWIDTHPOINTS=100000 -dDEVICEHEIGHTPOINTS=100000 -dPDFSETTINGS=/prepress %@ - %@ 1>>%@ 2>&1",
               gsPath,
              isGS915OrAbove ? @"eps2write" : @"epswrite",
              pdfFilePath, tmpFilePath, psToPdfPath, [psToPdfArguments componentsJoinedByString:@" "], tmpPdfFilePath, tmpFilePath];
@@ -2024,13 +2035,13 @@ static LaTeXProcessor* sharedInstance = nil;
             CGRect pdfOriginalMediaBox = !pdfOriginalPage ? CGRectZero :
               CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFMediaBox);
             CGRect pdfOriginalBoundingBox =
-              NSRectToCGRect([self computeBoundingBox:pdfFilePath workingDirectory:temporaryDirectory fullEnvironment:[self fullEnvironment] compositionConfiguration:compositionConfiguration]);
+              NSRectToCGRect([self computeBoundingBox:pdfFilePath workingDirectory:temporaryDirectory fullEnvironment:[self fullEnvironment] compositionConfiguration:compositionConfiguration outFullLog:nil]);
             CGPDFDocumentRelease(pdfOriginalDocument);
             CGDataProviderRelease(pdfOriginalDataProvider);
             
             LatexitEquation* latexitEquation = [LatexitEquation latexitEquationWithPDFData:pdfData useDefaults:YES];
             [self crop:tmpPdfFilePath to:tmpPdfFilePath canClip:YES extraArguments:[NSArray array]
-              compositionConfiguration:compositionConfiguration workingDirectory:temporaryDirectory environment:self->globalExtraEnvironment outPdfData:&pdfData];
+              compositionConfiguration:compositionConfiguration workingDirectory:temporaryDirectory environment:self->globalExtraEnvironment outFullLog:nil outPdfData:&pdfData];
             data = [NSData dataWithContentsOfFile:tmpPdfFilePath options:NSUncachedRead error:nil];
            
             CGDataProviderRef pdfUncroppedDataProvider = !data ? 0 :
@@ -2040,8 +2051,6 @@ static LaTeXProcessor* sharedInstance = nil;
             CGPDFPageRef pdfUncroppedPage = !pdfUncroppedDocument ? 0 :
               CGPDFDocumentGetPage(pdfUncroppedDocument, 1);
             
-            //CGRect boundingBox =
-            //  NSRectToCGRect([self computeBoundingBox:tmpPdfFilePath workingDirectory:temporaryDirectory fullEnvironment:[self fullEnvironment] compositionConfiguration:compositionConfiguration]);
             NSMutableData* pdfCroppedMutableData = [NSMutableData data];
             CGDataConsumerRef pdfCroppedDataConsumer = !pdfCroppedMutableData ? 0 :
               CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfCroppedMutableData);
@@ -2089,7 +2098,7 @@ static LaTeXProcessor* sharedInstance = nil;
           [gsTask setEnvironment:self->globalExtraEnvironment];
           [gsTask setLaunchPath:gsPath];
           [gsTask setArguments:[gsArguments arrayByAddingObjectsFromArray:
-            [NSArray arrayWithObjects:@"-dNOPAUSE", @"-dNOCACHE", @"-dBATCH", @"-dSAFER", @"-dNOPLATFONTS",
+            [NSArray arrayWithObjects:@"-sstdout=%stderr -dNOPAUSE", @"-dNOCACHE", @"-dBATCH", @"-dSAFER", @"-dNOPLATFONTS",
                [NSString stringWithFormat:@"-sDEVICE=%@", isGS915OrAbove ? @"eps2write" : @"epswrite"],
                [NSString stringWithFormat:@"-sOutputFile=%@", tmpEpsFilePath], pdfFilePath, nil]]];
           [gsTask launch];

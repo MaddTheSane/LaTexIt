@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -51,7 +51,8 @@ extern NSString* LatexizationDidEndNotification;
                     outFullLog:(NSString**)outFullLog outErrors:(NSArray**)outErrors outPdfData:(NSData**)outPdfData;
 
 -(NSRect) computeBoundingBox:(NSString*)filePath workingDirectory:(NSString*)workingDirectory
-             fullEnvironment:(NSDictionary*)fullEnvironment compositionConfiguration:(NSDictionary*)compositionConfiguration;
+             fullEnvironment:(NSDictionary*)fullEnvironment compositionConfiguration:(NSDictionary*)compositionConfiguration
+                  outFullLog:(NSMutableString*)outFullLog;
 
 -(NSData*) composeLaTeX:(NSString*)filePath customLog:(NSString**)customLog
               stdoutLog:(NSString**)stdoutLog stderrLog:(NSString**)stderrLog
@@ -63,6 +64,7 @@ extern NSString* LatexizationDidEndNotification;
         compositionConfiguration:(NSDictionary*)compositionConfiguration
         workingDirectory:(NSString*)workingDirectory
         environment:(NSDictionary*)environment
+        outFullLog:(NSMutableString*)outFullLog
         outPdfData:(NSData**)outPdfData;
 
 -(NSString*) descriptionForScript:(NSDictionary*)script;

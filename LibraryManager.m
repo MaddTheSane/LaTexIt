@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -43,7 +43,6 @@ NSString* LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
 -(void) _migrateLatexitManagedModel:(NSString*)path;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves library when quitting
--(void) saveLibrary;
 -(void) createLibraryMigratingIfNeeded;
 -(NSModalSession) showMigratingProgressionWindow:(NSWindowController**)outMigratingWindowController progressIndicator:(NSProgressIndicator**)outProgressIndicator;
 -(void) hideMigratingProgressionWindow:(NSModalSession)modalSession windowController:(NSWindowController*)windowController;
@@ -157,10 +156,7 @@ static LibraryManager* sharedManagerInstance = nil;
 //triggers saving when app is quitting
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
-  NSError* error = nil;
-  [self->managedObjectContext save:&error];
-  if (error)
-    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+  [self saveLibrary];
 }
 //end applicationWillTerminate:
 
@@ -213,7 +209,7 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.8.0", @"version", nil];
+          @"2.8.1", @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
@@ -676,7 +672,7 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -686,6 +682,20 @@ static LibraryManager* sharedManagerInstance = nil;
   return [result autorelease];
 }
 //end managedObjectContextAtPath:setVersion:
+
+-(void) saveLibrary
+{
+  @try{
+    NSError* error = nil;
+    BOOL saved = [self->managedObjectContext save:&error];
+    if (!saved || error)
+    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+  }//end @try
+  @catch(NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }//end @catch
+}
+//end saveLibrary
 
 -(void) createLibraryMigratingIfNeeded
 {
@@ -816,7 +826,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }

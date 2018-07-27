@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 
 //A LibraryItem is similar to an XMLNode, in the way that it has parent (weak link to prevent cycling)
 //and children (strong link)
@@ -226,7 +226,7 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.8.0" forKey:@"version"];
+  [coder encodeObject:@"2.8.1" forKey:@"version"];
   [coder encodeObject:[self title] forKey:@"title"];
   [coder encodeInt:[self sortIndex] forKey:@"sortIndex"];
   [coder encodeObject:[self comment] forKey:@"comment"];
@@ -236,7 +236,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(id) plistDescription
 {
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"2.8.0", @"version",
+     @"2.8.1", @"version",
      [self title], @"title",
      [NSNumber numberWithUnsignedInt:[self sortIndex]], @"sortIndex",
      [self comment], @"comment",

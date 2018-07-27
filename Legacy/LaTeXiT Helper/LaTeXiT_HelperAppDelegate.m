@@ -3,7 +3,7 @@
 //  LaTeXiT Helper
 //
 //  Created by Pierre Chatelier on 25/11/09.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXiT_HelperAppDelegate.h"

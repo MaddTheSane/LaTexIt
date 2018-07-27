@@ -2920,6 +2920,10 @@
 		932388570854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_64_BIT)",
+					ppc,
+				);
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2970,6 +2974,7 @@
 				);
 				PREBINDING = YES;
 				PRODUCT_NAME = LaTeXiT;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -3115,6 +3120,7 @@
 				ARCHS = (
 					"$(ARCHS_STANDARD_32_64_BIT)",
 					ppc,
+					ppc7400,
 				);
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3165,6 +3171,7 @@
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
 				PREBINDING = NO;
 				PRODUCT_NAME = CreateEquations;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = action;
 			};
 			name = Development;
@@ -3279,6 +3286,10 @@
 		938DBE1110BDC2E0002350CF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_64_BIT)",
+					ppc,
+				);
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3321,6 +3332,7 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = YES;
 				PRODUCT_NAME = "LaTeXiT Helper";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -3329,6 +3341,10 @@
 		938DBE1210BDC2E0002350CF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_64_BIT)",
+					ppc,
+				);
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -3374,6 +3390,7 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = "LaTeXiT Helper";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};

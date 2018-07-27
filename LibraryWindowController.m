@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -732,6 +732,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(void) windowDidResignKey:(NSNotification*)notification
 {
   [libraryPreviewPanel orderOut:self];
+  [[LibraryManager sharedManager] saveLibrary];
 }
 //end windowDidResignKey:
 

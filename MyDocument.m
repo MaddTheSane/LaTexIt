@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -1955,7 +1955,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self willChangeValueForKey:@"linkBackLink"];
     LinkBack* oldLinkbackLink = self->linkBackLink;
     self->linkBackLink = nil;
-    [oldLinkbackLink remoteCloseLink];
+    //[oldLinkbackLink remoteCloseLink];
     [oldLinkbackLink closeLink];
     [oldLinkbackLink release];
     self->linkBackLink = [newLinkBackLink retain];

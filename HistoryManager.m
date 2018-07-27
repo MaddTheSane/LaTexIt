@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -34,7 +34,6 @@
 -(NSString*) defaultHistoryPath;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves history when quitting
--(void) saveHistory;
 -(void) createHistoryMigratingIfNeeded;
 -(BOOL) tableView:(NSTableView*)tableView writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard;
 -(BOOL) tableView:(NSTableView*)tableView writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard;
@@ -142,7 +141,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
                                           defaultValue:[userLibraryPath stringByAppendingString:@"Application Support"]];
   NSArray* libraryPathComponents =
     [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName],
-                              @"history.db", nil];
+                              @"history.latexhist", nil];
   result = [NSString pathWithComponents:libraryPathComponents];
   return result;
 }
@@ -190,7 +189,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   [fetchRequest release];
   #endif
   if (error)
-    {DebugLog(0, @"error : %@", error);}
+    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
   return result;
 }
 //end numberOfItems
@@ -211,7 +210,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSError* error = nil;
     NSArray* oldEntries = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error)
-      {DebugLog(0, @"error : %@", error);}
+      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     NSArray* oldHistoryItems = [oldEntries valueForKey:@"wrapper"];
     #ifdef ARC_ENABLED
     #else
@@ -229,10 +228,15 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(void) saveHistory
 {
-  NSError* error = nil;
-  BOOL saved = [self->managedObjectContext save:&error];
-  if (!saved || error)
-    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+  @try {
+    NSError* error = nil;
+    BOOL saved = [self->managedObjectContext save:&error];
+    if (!saved || error)
+      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+  }//end @try
+  @catch(NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }//end @catch
 }
 //end saveHistory
 
@@ -250,25 +254,53 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSString* userLibraryApplicationSupportPath = [[NSWorkspace sharedWorkspace] getBestStandardPast:NSApplicationSupportDirectory domain:NSAllDomainsMask defaultValue:[userLibraryPath stringByAppendingString:@"Application Support"]];
 
     NSString* newFilePath  = [self defaultHistoryPath];
-    NSString* oldFilePath = nil;
-    if (!oldFilePath)
+    NSString* oldFilePathDat = nil;
+    if (!oldFilePathDat)
     {
       NSArray* pathComponents =
         [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat", nil];
       NSString* filePath = [NSString pathWithComponents:pathComponents];
       if ([fileManager isReadableFileAtPath:filePath])
-        oldFilePath = filePath;
-    }
-    if (!oldFilePath)
+        oldFilePathDat = filePath;
+    }//end if (!oldFilePathDat)
+    if (!oldFilePathDat)
     {
       NSArray* pathComponents =
         [NSArray arrayWithObjects:userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat", nil];
       NSString* filePath = [NSString pathWithComponents:pathComponents];
       if ([fileManager isReadableFileAtPath:filePath])
-        oldFilePath = filePath;
-    }
+        oldFilePathDat = filePath;
+    }//end if (!oldFilePathDat)
 
-    BOOL shouldMigrateHistoryToCoreData = ![fileManager isReadableFileAtPath:newFilePath] && oldFilePath;
+    NSString* oldFilePathDb = nil;
+    if (!oldFilePathDb)
+    {
+      NSArray* pathComponents =
+      [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.db", nil];
+      NSString* filePath = [NSString pathWithComponents:pathComponents];
+      if ([fileManager isReadableFileAtPath:filePath])
+        oldFilePathDb = filePath;
+    }//end if (!oldFilePathDb)
+    if (!oldFilePathDb)
+    {
+      NSArray* pathComponents =
+      [NSArray arrayWithObjects:userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.db", nil];
+      NSString* filePath = [NSString pathWithComponents:pathComponents];
+      if ([fileManager isReadableFileAtPath:filePath])
+        oldFilePathDb = filePath;
+    }//end if (!oldFilePathDb)
+    
+    BOOL shouldRenameHistoryFile = ![fileManager isReadableFileAtPath:newFilePath] && oldFilePathDb;
+    BOOL shouldMigrateHistoryToCoreData = !shouldRenameHistoryFile && ![fileManager isReadableFileAtPath:newFilePath] && oldFilePathDat;
+    if (shouldRenameHistoryFile)
+    {
+      NSError* error = nil;
+      BOOL moved = [fileManager bridge_moveItemAtPath:oldFilePathDb toPath:newFilePath error:&error];
+      if (error)
+        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+      if (!moved)
+        newFilePath = oldFilePathDb;
+    }//end if (shouldRenameHistoryFile)
 
     BOOL isDirectory = NO;
     BOOL exists = [fileManager fileExistsAtPath:newFilePath isDirectory:&isDirectory] && !isDirectory &&
@@ -302,7 +334,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (shouldMigrateHistoryToCoreData)
     {
       NSError* error = nil;
-      NSData* legacyHistoryData = [NSData dataWithContentsOfFile:oldFilePath options:NSUncachedRead error:&error];
+      NSData* legacyHistoryData = [NSData dataWithContentsOfFile:oldFilePathDat options:NSUncachedRead error:&error];
       if (error) {DebugLog(0, @"error : %@", error);}
       NSPropertyListFormat format;
       id plist = [NSPropertyListSerialization propertyListFromData:legacyHistoryData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
@@ -345,7 +377,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       }//end if (uncompressedData)
       migrationError |= (error != nil);
       if (!migrationError)
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:oldFilePath error:0];
+        [[NSFileManager defaultManager] bridge_removeItemAtPath:oldFilePathDat error:0];
     }//end if (shouldMigrateHistoryToCoreData)
     else if (shouldMigrateHistoryToAlign)
     {
@@ -393,7 +425,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -456,7 +488,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.0", @"version", nil]
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.8.1", @"version", nil]
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -510,7 +542,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           NSError* error = nil;
           [saveManagedObjectContext save:&error];
           if (error)
-            {DebugLog(0, @"error : %@", error);}
+            {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
           [savedItems makeObjectsPerformSelector:@selector(dispose)];
         }//end if (ok)
       }//end case HISTORY_EXPORT_FORMAT_INTERNAL
@@ -524,7 +556,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.8.0", @"version",
+          @"2.8.1", @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
@@ -560,7 +592,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [fetchRequest setEntity:[HistoryItem entity]];
     NSError* error = nil;
     [itemsToRemove setArray:[self->managedObjectContext executeFetchRequest:fetchRequest error:&error]];
-    if (error) {DebugLog(0, @"error : %@", error);}
+    if (error)
+      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     #ifdef ARC_ENABLED
     #else
     [fetchRequest release];
@@ -577,7 +610,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (error)
     {
       ok = NO;
-      DebugLog(0, @"error : %@", error);
+      DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);
     }
     #ifdef ARC_ENABLED
     #else
@@ -690,7 +723,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       isManagedObjectModelPrevious260 = oldPersistentStore && !error;
       isManagedObjectModelPrevious250 = [oldDataModelName isEqualToString:@"Latexit-2.4.0"] && oldPersistentStore && !error;
       if (error)
-        {DebugLog(0, @"error : %@", error);}
+        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     }
     @catch (NSException* e){
       DebugLog(0, @"exception : %@", e);
@@ -733,7 +766,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [newPersistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:newStoreURL
                                                         options:nil error:&error];
     if (error)
-      {DebugLog(0, @"error : %@", error);}
+      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
   }
   @catch(NSException* e){
     DebugLog(0, @"exception : %@", e);
@@ -772,7 +805,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [oldFetchRequest release];
       #endif
       if (error)
-        {DebugLog(0, @"error : %@", error);}
+        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
         
       NSEnumerator* oldEnumerator = [oldHistoryItems objectEnumerator];
       HistoryItem* oldHistoryItem = nil;
@@ -815,7 +848,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         if (!error)
           migrationOK = YES;
         else
-          {DebugLog(0, @"error : %@", error);}
+          {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
       }//end for each historyItem
       @catch(NSException* e){
         DebugLog(0, @"exception : %@", e);
@@ -846,7 +879,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSError* error = nil;
       [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
       if (error)
-        {DebugLog(0, @"error : %@", error);}
+        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
     }//end if (!migrationOK)
     else if (migrationOK)
     {
@@ -856,25 +889,25 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSFileManager* fileManager = [NSFileManager defaultManager];
       BOOL removedOldStore = [fileManager bridge_removeItemAtPath:oldPath error:&error];
       if (error)
-        {DebugLog(0, @"error : %@", error);}
+        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
       if (!removedOldStore || error)
       {
         error = nil;
         [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
         if (error)
-          {DebugLog(0, @"error : %@", error);}
+          {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
       }//end if (!removedOldStore || error)
       else//if (removedOldStore && !error)
       {
         BOOL movedNewStore = [fileManager bridge_moveItemAtPath:newPath toPath:oldPath error:&error];
         if (error)
-          {DebugLog(0, @"error : %@", error);}
+          {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
         if (!movedNewStore)
         {
           error = nil;
           [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
           if (error)
-            {DebugLog(0, @"error : %@", error);}
+            {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
         }//end if (!movedNewStore)
       }//end if (removedOldStore)
     }//end if (migrationOK)

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2015 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2016 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -431,6 +431,7 @@ static NSMutableDictionary* cachePaths = nil;
     result = [[[HistoryItem alloc] initWithEquation:latexitEquation insertIntoManagedObjectContext:nil] autorelease];
   if (result)
     result = [self addHistoryItemToHistory:result];
+  [[HistoryManager sharedManager] saveHistory];
   return result;
 }
 //end addEquationToHistory:
@@ -734,19 +735,16 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end applicationDidFinishLaunching:
 
-/*-(NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
+-(NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
 {
   NSApplicationTerminateReply result = NSTerminateNow;
   NSEnumerator* enumerator = [[NSApp orderedDocuments] objectEnumerator];
   MyDocument* document = nil;
   while((document = [enumerator nextObject]))
-  {
-    [[document linkBackLink] remoteCloseLink];
     [document setLinkBackLink:nil];
-  }//end for each document
   return result;
 }
-//end applicationShouldTerminate*/
+//end applicationShouldTerminate
 
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
@@ -1877,7 +1875,11 @@ static NSMutableDictionary* cachePaths = nil;
 //looks for a programName in the given PATHs. Just tests that the file exists
 -(NSString*) _findUnixProgram:(NSString*)programName inPrefixes:(NSArray*)prefixes
 {
-  NSString* path = [cachePaths objectForKey:programName];
+  NSString* path = nil;
+  @synchronized(cachePaths)
+  {
+    path = [cachePaths objectForKey:programName];
+  }//end @synchronized(cachePaths)
   if (!path && prefixes)
   {
     NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -1892,7 +1894,12 @@ static NSMutableDictionary* cachePaths = nil;
         path = fullpath;
     }
     if (path)
-      [cachePaths setObject:path forKey:programName];
+    {
+      @synchronized(cachePaths)
+      {
+        [cachePaths setObject:path forKey:programName];
+      }//end @synchronized(cachePaths)
+    }//end if (path)
   }//end if (!path && prefixes)
   return path;  
 }
@@ -1902,7 +1909,11 @@ static NSMutableDictionary* cachePaths = nil;
 -(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray*)prefixes environment:(NSDictionary*)environment useLoginShell:(BOOL)useLoginShell
 {
   //first, it may be simply found in the common, usual, path
-  NSString* path = [cachePaths objectForKey:programName];
+  NSString* path = nil;
+  @synchronized(cachePaths)
+  {
+    [cachePaths objectForKey:programName];
+  }//end @synchronized(cachePaths)
   if (!path)
     path = [self _findUnixProgram:programName inPrefixes:prefixes];
 
@@ -1932,11 +1943,16 @@ static NSMutableDictionary* cachePaths = nil;
       [whichTask release];
     }
     if (path)
-      [cachePaths setObject:path forKey:programName];
+    {
+      @synchronized(cachePaths)
+      {
+        [cachePaths setObject:path forKey:programName];
+      }//end @synchronized(cachePaths)
+    }//end if (path)
   }//end if (!path)
   return path;
 }
-//end _findUnixProgram:tryPrefixes:environment
+//end findUnixProgram:tryPrefixes:environment:useLoginShell:
 
 //returns the preamble that should be used, according to the fact that color.sty is available or not
 -(NSAttributedString*) preambleLatexisationAttributedString

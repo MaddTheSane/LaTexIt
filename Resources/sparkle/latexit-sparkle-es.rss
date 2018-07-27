@@ -539,7 +539,7 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
           <li>fixed various localizations.</li>
         </ul>
       ]]></description>
-			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.8.0</sparkle:releaseNotesLink>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.7.5</sparkle:releaseNotesLink>
 			<pubDate>Mon, 07 Sep 2015 22:46:42 +0200</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_8_0.dmg"
@@ -549,6 +549,30 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				length="11073977"
 				sparkle:dsaSignature="MCwCFGjy7E3eBlRm96Og4l3rotzF26zxAhRe6cSjEouRWlG6qvm21N813R/1aw=="
 			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.8.1</guid>
+      <title>Version 2.8.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>fixed incompatibilities with recent updates of Ghostscript&nbsp;;</li>
+          <li>save history after each new item&nbsp;;</li>
+          <li>save library as soon as possible&nbsp;;</li>
+          <li>updated Linkback.</li>
+        </ul>
+      ]]></description>
+			<sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.8.1</sparkle:releaseNotesLink>
+			<pubDate>Mon, 07 Sep 2015 22:46:42 +0200</pubDate>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.8.1</sparkle:releaseNotesLink>
+      <pubDate>Wed, 13 Jul 2016 22:20:50 +0200</pubDate>
+      <enclosure
+        url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_8_1.dmg"
+        sparkle:version="2.8.1"
+        sparkle:shortVersionString="2.8.1"
+        type="application/octet-stream"
+        length="11069861"
+        sparkle:dsaSignature="MCwCFBUUeIDsNsYhG1DPyPMA3+/2RxziAhR/zorg7CNEQYoSoQnZBL59GPJ7cQ=="
+      />
     </item>
   </channel> 
 </rss>
