@@ -118,7 +118,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [pdfData release];
   pdfData = someData;
   NSImage* image = cachedImage;
-  if (!image)
+  if (!image && pdfData)
   {
     NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
     image = [[NSImage alloc] initWithSize:[pdfImageRep size]];

@@ -241,7 +241,6 @@
 		932BA6DD0960CC9B004EECBA /* PaletteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA6D70960CC9B004EECBA /* PaletteItem.m */; };
 		932BA8450961562A004EECBA /* prod.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BA8440961562A004EECBA /* prod.pdf */; };
 		932BA852096156B1004EECBA /* NSPopUpButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA850096156B1004EECBA /* NSPopUpButtonExtended.m */; };
-		932BA87209615747004EECBA /* ShortcutTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 932BA87009615747004EECBA /* ShortcutTextView.m */; };
 		932BADD609629EA7004EECBA /* nmid.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 932BADD509629EA7004EECBA /* nmid.pdf */; };
 		932CF4230826C2EB00434128 /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4210826C2EB00434128 /* LibraryItem.m */; };
 		932CF4270826C33D00434128 /* LibraryFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF4250826C33D00434128 /* LibraryFile.m */; };
@@ -249,6 +248,12 @@
 		932CF5790826D9E500434128 /* LibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 932CF5770826D9E500434128 /* LibraryManager.m */; };
 		93310172083D1D6500DE67ED /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
 		93344CB608251BD500F00A49 /* NSTaskExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93344CB408251BD500F00A49 /* NSTaskExtended.m */; };
+		9340E8EF0AD166CF00D52E57 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 9340E8EE0AD166CF00D52E57 /* Lies mich.rtfd */; };
+		9340E9110AD1670B00D52E57 /* ServiceShortcutsTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E90D0AD1670B00D52E57 /* ServiceShortcutsTextView.m */; };
+		9340E9130AD1670B00D52E57 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E90F0AD1670B00D52E57 /* ServiceShortcutsTableView.m */; };
+		9340E9320AD1676400D52E57 /* TextShortcutsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E92C0AD1676400D52E57 /* TextShortcutsManager.m */; };
+		9340E9340AD1676400D52E57 /* TextShortcutsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E92E0AD1676400D52E57 /* TextShortcutsController.m */; };
+		9340E9360AD1676400D52E57 /* TextShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9340E9300AD1676400D52E57 /* TextShortcutsTableView.m */; };
 		9343D0C908604F430024CDC2 /* refresh.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9343D0C808604F430024CDC2 /* refresh.tiff */; };
 		934497ED08A520FC00CE2E61 /* poisson.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 934497EC08A520FC00CE2E61 /* poisson.pdf */; };
 		9344D8280825808900B17B37 /* LibraryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8260825808900B17B37 /* LibraryCell.m */; };
@@ -269,7 +274,6 @@
 		93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592C907F46075001DF900 /* Lisez-moi.rtfd */; };
 		93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93A592CA07F46075001DF900 /* Read Me.rtfd */; };
 		93AD08B808A2D2CE0045B7F9 /* EncapsulationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */; };
-		93B419E6095C017D009C6A1F /* ShortcutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B419E4095C017D009C6A1F /* ShortcutTableView.m */; };
 		93B528B0089FFC2B00F14B77 /* add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AC089FFC2B00F14B77 /* add.tiff */; };
 		93B528B1089FFC2B00F14B77 /* add-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AD089FFC2B00F14B77 /* add-pressed.tiff */; };
 		93B528B2089FFC2B00F14B77 /* remove-pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */; };
@@ -588,8 +592,6 @@
 		932BA8440961562A004EECBA /* prod.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = prod.pdf; path = Resources/symbols/prod.pdf; sourceTree = "<group>"; };
 		932BA84F096156B1004EECBA /* NSPopUpButtonExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonExtended.h; sourceTree = "<group>"; };
 		932BA850096156B1004EECBA /* NSPopUpButtonExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonExtended.m; sourceTree = "<group>"; };
-		932BA87009615747004EECBA /* ShortcutTextView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ShortcutTextView.m; sourceTree = "<group>"; };
-		932BA87109615747004EECBA /* ShortcutTextView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ShortcutTextView.h; sourceTree = "<group>"; };
 		932BADD509629EA7004EECBA /* nmid.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = nmid.pdf; path = Resources/symbols/nmid.pdf; sourceTree = "<group>"; };
 		932CF4200826C2EB00434128 /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
 		932CF4210826C2EB00434128 /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
@@ -602,6 +604,30 @@
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
+		9340E8C80AD1661600D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
+		9340E8C90AD1662E00D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
+		9340E8CB0AD1664600D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Encapsulation.nib; sourceTree = "<group>"; };
+		9340E8CD0AD1664E00D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/History.nib; sourceTree = "<group>"; };
+		9340E8D40AD1666300D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
+		9340E8D50AD1666A00D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Library.nib; sourceTree = "<group>"; };
+		9340E8D60AD1667000D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9340E8DB0AD1668200D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9340E8DE0AD1669200D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		9340E8DF0AD1669800D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Margin.nib; sourceTree = "<group>"; };
+		9340E8E00AD166A400D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MyDocument.nib; sourceTree = "<group>"; };
+		9340E8E10AD166AA00D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Preferences.nib; sourceTree = "<group>"; };
+		9340E8E20AD166B900D52E57 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		9340E8EE0AD166CF00D52E57 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "Resources/documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
+		9340E90D0AD1670B00D52E57 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
+		9340E90E0AD1670B00D52E57 /* ServiceShortcutsTextView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTextView.h; sourceTree = "<group>"; };
+		9340E90F0AD1670B00D52E57 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
+		9340E9100AD1670B00D52E57 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
+		9340E92B0AD1676400D52E57 /* TextShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsTableView.h; sourceTree = "<group>"; };
+		9340E92C0AD1676400D52E57 /* TextShortcutsManager.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsManager.m; sourceTree = "<group>"; };
+		9340E92D0AD1676400D52E57 /* TextShortcutsManager.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsManager.h; sourceTree = "<group>"; };
+		9340E92E0AD1676400D52E57 /* TextShortcutsController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsController.m; sourceTree = "<group>"; };
+		9340E92F0AD1676400D52E57 /* TextShortcutsController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsController.h; sourceTree = "<group>"; };
+		9340E9300AD1676400D52E57 /* TextShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsTableView.m; sourceTree = "<group>"; };
 		9343D0C808604F430024CDC2 /* refresh.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = refresh.tiff; path = Resources/interface/refresh.tiff; sourceTree = "<group>"; };
 		934497EC08A520FC00CE2E61 /* poisson.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = poisson.pdf; path = Resources/easterEggs/poisson.pdf; sourceTree = "<group>"; };
 		9344D8250825808900B17B37 /* LibraryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryCell.h; sourceTree = "<group>"; };
@@ -632,8 +658,6 @@
 		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/documentation/Read Me.rtfd"; sourceTree = "<group>"; };
 		93AD08B608A2D2CE0045B7F9 /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93AD08B708A2D2CE0045B7F9 /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
-		93B419E4095C017D009C6A1F /* ShortcutTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ShortcutTableView.m; sourceTree = "<group>"; };
-		93B419E5095C017D009C6A1F /* ShortcutTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ShortcutTableView.h; sourceTree = "<group>"; };
 		93B528AC089FFC2B00F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/interface/add.tiff; sourceTree = "<group>"; };
 		93B528AD089FFC2B00F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/interface/add-pressed.tiff"; sourceTree = "<group>"; };
 		93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/interface/remove-pressed.tiff"; sourceTree = "<group>"; };
@@ -761,7 +785,6 @@
 				9324D3EE08A6453D0010DB95 /* Interface */,
 				93A5972207F479B8001DF900 /* LatexPalettes */,
 				9344D76D08257B1600B17B37 /* Library */,
-				9308E22807EE3ED500DD1B5F /* LineCount */,
 				9372A1FA08781A0F00A3A645 /* Margins */,
 				9315A44A07FD30E800AFCCE9 /* Preferences */,
 				9302548807F0BC7600011996 /* Utils */,
@@ -835,6 +858,7 @@
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				93A592C907F46075001DF900 /* Lisez-moi.rtfd */,
 				93A592CA07F46075001DF900 /* Read Me.rtfd */,
+				9340E8EE0AD166CF00D52E57 /* Lies mich.rtfd */,
 				93A592C807F46075001DF900 /* Licence.rtf */,
 				935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */,
 				935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */,
@@ -873,12 +897,10 @@
 		9315A44A07FD30E800AFCCE9 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				9340E9270AD1673F00D52E57 /* ServiceShortcuts */,
+				9340E9280AD1674B00D52E57 /* TextShortcuts */,
 				9315A59907FD36BD00AFCCE9 /* PreferencesController.h */,
 				9315A59807FD36BD00AFCCE9 /* PreferencesController.m */,
-				93B419E5095C017D009C6A1F /* ShortcutTableView.h */,
-				93B419E4095C017D009C6A1F /* ShortcutTableView.m */,
-				932BA87009615747004EECBA /* ShortcutTextView.m */,
-				932BA87109615747004EECBA /* ShortcutTextView.h */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -886,6 +908,7 @@
 		9324D3EE08A6453D0010DB95 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				9308E22807EE3ED500DD1B5F /* LineCount */,
 				936A2C5B09C9A0CC00310E33 /* BorderlessPanel.h */,
 				936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */,
 				9324D3F308A645500010DB95 /* ButtonNotClickThrough.h */,
@@ -939,6 +962,30 @@
 				93D06B090990C02300C484B8 /* relations */,
 			);
 			name = symbols;
+			sourceTree = "<group>";
+		};
+		9340E9270AD1673F00D52E57 /* ServiceShortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				9340E9100AD1670B00D52E57 /* ServiceShortcutsTableView.h */,
+				9340E90F0AD1670B00D52E57 /* ServiceShortcutsTableView.m */,
+				9340E90E0AD1670B00D52E57 /* ServiceShortcutsTextView.h */,
+				9340E90D0AD1670B00D52E57 /* ServiceShortcutsTextView.m */,
+			);
+			name = ServiceShortcuts;
+			sourceTree = "<group>";
+		};
+		9340E9280AD1674B00D52E57 /* TextShortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				9340E92F0AD1676400D52E57 /* TextShortcutsController.h */,
+				9340E92E0AD1676400D52E57 /* TextShortcutsController.m */,
+				9340E92D0AD1676400D52E57 /* TextShortcutsManager.h */,
+				9340E92C0AD1676400D52E57 /* TextShortcutsManager.m */,
+				9340E92B0AD1676400D52E57 /* TextShortcutsTableView.h */,
+				9340E9300AD1676400D52E57 /* TextShortcutsTableView.m */,
+			);
+			name = TextShortcuts;
 			sourceTree = "<group>";
 		};
 		934497E708A520E400CE2E61 /* easterEggs */ = {
@@ -1626,6 +1673,7 @@
 				93D7CB7909D36DC10001DC5E /* CompositionConfiguration.nib in Resources */,
 				93F2C6D90A31A88C0009FB59 /* latex-keywords.plist in Resources */,
 				93F2C6DA0A31A88C0009FB59 /* convert in Resources */,
+				9340E8EF0AD166CF00D52E57 /* Lies mich.rtfd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1695,18 +1743,21 @@
 				93AD08B808A2D2CE0045B7F9 /* EncapsulationTableView.m in Sources */,
 				9324D3F608A645500010DB95 /* ButtonNotClickThrough.m in Sources */,
 				93F350220952AF2300DDFD09 /* SMLSyntaxColouring.m in Sources */,
-				93B419E6095C017D009C6A1F /* ShortcutTableView.m in Sources */,
 				932BA6D80960CC9B004EECBA /* PaletteCell.m in Sources */,
 				932BA6D90960CC9B004EECBA /* PaletteMatrix.m in Sources */,
 				932BA6DD0960CC9B004EECBA /* PaletteItem.m in Sources */,
 				932BA852096156B1004EECBA /* NSPopUpButtonExtended.m in Sources */,
-				932BA87209615747004EECBA /* ShortcutTextView.m in Sources */,
 				93D4E3F109C821A700736816 /* Utils.m in Sources */,
 				936A2C5E09C9A0CC00310E33 /* BorderlessPanel.m in Sources */,
 				93D7CB2509D36C870001DC5E /* CompositionConfigurationController.m in Sources */,
 				93D7CB2809D36C870001DC5E /* CompositionConfigurationManager.m in Sources */,
 				93D7CB2A09D36C870001DC5E /* CompositionConfigurationTableView.m in Sources */,
 				930BFD1C0A245AC6008C586D /* LibraryPreviewPanelImageView.m in Sources */,
+				9340E9110AD1670B00D52E57 /* ServiceShortcutsTextView.m in Sources */,
+				9340E9130AD1670B00D52E57 /* ServiceShortcutsTableView.m in Sources */,
+				9340E9320AD1676400D52E57 /* TextShortcutsManager.m in Sources */,
+				9340E9340AD1676400D52E57 /* TextShortcutsController.m in Sources */,
+				9340E9360AD1676400D52E57 /* TextShortcutsTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1718,6 +1769,7 @@
 			children = (
 				089C1660FE840EACC02AAC07 /* English */,
 				93773C4907FFF713004AAB30 /* French */,
+				9340E8D60AD1667000D52E57 /* German */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = SOURCE_ROOT;
@@ -1727,6 +1779,7 @@
 			children = (
 				2A37F4B5FDCFA73011CA2CEA /* English */,
 				93773C3307FFF547004AAB30 /* French */,
+				9340E8E00AD166A400D52E57 /* German */,
 			);
 			name = MyDocument.nib;
 			sourceTree = "<group>";
@@ -1736,6 +1789,7 @@
 			children = (
 				2A37F4B7FDCFA73011CA2CEA /* English */,
 				93773C3207FFF541004AAB30 /* French */,
+				9340E8DE0AD1669200D52E57 /* German */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -1745,6 +1799,7 @@
 			children = (
 				2A37F4BAFDCFA73011CA2CEA /* English */,
 				93773C4707FFF704004AAB30 /* French */,
+				9340E8C80AD1661600D52E57 /* German */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -1754,6 +1809,7 @@
 			children = (
 				930255CD07F0C2A300011996 /* English */,
 				93773C4607FFF6FB004AAB30 /* French */,
+				9340E8DB0AD1668200D52E57 /* German */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1763,6 +1819,7 @@
 			children = (
 				9315A45107FD331800AFCCE9 /* English */,
 				93773C3407FFF54D004AAB30 /* French */,
+				9340E8E10AD166AA00D52E57 /* German */,
 			);
 			name = Preferences.nib;
 			sourceTree = "<group>";
@@ -1772,6 +1829,7 @@
 			children = (
 				9372A26A08781EC800A3A645 /* English */,
 				9372A2F50878280700A3A645 /* French */,
+				9340E8DF0AD1669800D52E57 /* German */,
 			);
 			name = Margin.nib;
 			sourceTree = "<group>";
@@ -1781,6 +1839,7 @@
 			children = (
 				939A644F080027EA00AE4486 /* English */,
 				939A64590800281C00AE4486 /* French */,
+				9340E8E20AD166B900D52E57 /* German */,
 			);
 			name = ServicesMenu.strings;
 			sourceTree = "<group>";
@@ -1790,6 +1849,7 @@
 			children = (
 				93D7CB7709D36DC10001DC5E /* English */,
 				93D7CB7809D36DC10001DC5E /* French */,
+				9340E8C90AD1662E00D52E57 /* German */,
 			);
 			name = CompositionConfiguration.nib;
 			sourceTree = "<group>";
@@ -1799,6 +1859,7 @@
 			children = (
 				93F16CAC089FC1D800FF7B94 /* English */,
 				93F16CAE089FC1E700FF7B94 /* French */,
+				9340E8D40AD1666300D52E57 /* German */,
 			);
 			name = LatexPalettes.nib;
 			sourceTree = "<group>";
@@ -1808,6 +1869,7 @@
 			children = (
 				93F73E9C0899095F00EFFA5E /* English */,
 				93F73E9E0899096A00EFFA5E /* French */,
+				9340E8CB0AD1664600D52E57 /* German */,
 			);
 			name = Encapsulation.nib;
 			sourceTree = "<group>";
@@ -1817,6 +1879,7 @@
 			children = (
 				93F9DEAD08A2D96C005DEBF6 /* English */,
 				93F9DEB208A2D985005DEBF6 /* French */,
+				9340E8D50AD1666A00D52E57 /* German */,
 			);
 			name = Library.nib;
 			sourceTree = "<group>";
@@ -1826,6 +1889,7 @@
 			children = (
 				93F9DEAF08A2D96C005DEBF6 /* English */,
 				93F9DEB308A2D985005DEBF6 /* French */,
+				9340E8CD0AD1664E00D52E57 /* German */,
 			);
 			name = History.nib;
 			sourceTree = "<group>";

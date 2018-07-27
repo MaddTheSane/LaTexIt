@@ -49,7 +49,7 @@ extern NSString* LibraryItemsPboardType;
 -(void) removeItems:(NSArray*)items;
 -(void) refreshFileItem:(LibraryFile*)item withValue:(HistoryItem*)value;
 
--(BOOL) saveAs:(NSString*)path;
--(BOOL) loadFrom:(NSString*)path;
+-(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)selection selection:(NSArray*)selectedItems;
+-(BOOL) loadFrom:(NSString*)path replace:(BOOL)replace;
 
 @end

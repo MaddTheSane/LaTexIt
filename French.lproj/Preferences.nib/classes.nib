@@ -52,10 +52,12 @@
                 gotoWebSite = id; 
                 newCompositionConfiguration = id; 
                 newEncapsulation = id; 
+                newTextShortcut = id; 
                 nullAction = id; 
                 openOptionsForDragExport = id; 
                 removeSelectedCompositionConfigurations = id; 
                 removeSelectedEncapsulations = id; 
+                removeSelectedTextShortcuts = id; 
                 resetDefaultPreamble = id; 
                 selectFont = id; 
                 selectScript = id; 
@@ -108,6 +110,7 @@
                 preambleView = NSView; 
                 ps2pdfTextField = NSTextField; 
                 removeEncapsulationButton = NSButton; 
+                removeTextShortcutsButton = NSButton; 
                 scriptsHelpPanel = NSPanel; 
                 scriptsScriptDefinitionBodyTextView = NSTextView; 
                 scriptsScriptDefinitionBox = NSBox; 
@@ -131,13 +134,32 @@
                 syntaxColoringMathsColorColorWell = NSColorWell; 
                 syntaxColoringTextBackgroundColorColorWell = NSColorWell; 
                 syntaxColoringTextForegroundColorColorWell = NSColorWell; 
+                textShortcutsTableView = TextShortcutsTableView; 
                 webView = NSView; 
                 xeLatexButton = NSButton; 
                 xeLatexTextField = NSTextField; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 
-        {CLASS = ShortcutTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }
+        {
+            CLASS = ServiceShortcutsTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {newTextShortcut = id; removeSelectedTextShortcuts = id; }; 
+            CLASS = TextShortcutsController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {removeButton = NSButton; textShortcutsTableView = TextShortcutsTableView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = TextShortcutsManager; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {edit = id; redo = id; undo = id; }; 
+            CLASS = TextShortcutsTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }
     ); 
     IBVersion = 1; 
 }

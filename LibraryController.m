@@ -125,6 +125,11 @@
   return [[self window] isVisible] && ([libraryTableView selectedRow] >= 0);
 }
 
+-(BOOL) canRenameSelectedItems
+{
+  return [[self window] isVisible] && ([[libraryTableView selectedRowIndexes] count] == 1);
+}
+
 -(BOOL) canRefreshItems
 {
   NSDocument* document = [AppController currentDocument];
@@ -147,6 +152,8 @@
     MyDocument* document = (MyDocument*) [AppController currentDocument];
     ok &= document && [document hasImage];
   }
+  else if ([menuItem action] == @selector(renameItem:))
+    ok &= [self canRenameSelectedItems];
   else if ([menuItem action] == @selector(removeSelectedItems:))
     ok &= [self canRemoveSelectedItems];
   else if ([menuItem action] == @selector(refreshItems:))
@@ -159,11 +166,13 @@
 {
   MyDocument*  document = (MyDocument*) [AppController currentDocument];
   HistoryItem* historyItem = [document historyItemWithCurrentState];
+  [[[document undoManager] prepareWithInvocationTarget:document] applyHistoryItem:historyItem];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
-  historyItem = [HistoryItem historyItemWithPDFData:[historyItem pdfData] useDefaults:YES];
-  LibraryItem* newItem = [[LibraryManager sharedManager] newFile:historyItem outlineView:libraryTableView];
+  HistoryItem* historyItem2 = [HistoryItem historyItemWithPDFData:[historyItem pdfData] useDefaults:YES];
+  LibraryItem* newItem = [[LibraryManager sharedManager] newFile:historyItem2 outlineView:libraryTableView];
   [libraryTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[libraryTableView rowForItem:newItem]]
            byExtendingSelection:NO];
+  [[document windowForSheet] makeKeyWindow];
 }
 
 //Creates a folder library item
@@ -193,6 +202,7 @@
     {
       LibraryFile* fileItem = (LibraryFile*) item;
       HistoryItem* newValue = [document historyItemWithCurrentState];
+      [newValue setTitle:[fileItem title]];
       [[LibraryManager sharedManager] refreshFileItem:fileItem withValue:newValue];
       [libraryTableView reloadItem:item];
       
@@ -228,11 +238,18 @@
     }//end if selection is LibraryFile
   }//end if document
 }
+//end refreshItems
+
+-(IBAction) renameItem:(id)sender
+{
+  [libraryTableView edit:sender];
+}
 
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setTitle:NSLocalizedString(@"Open library...", @"Open library...")];
+  [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
+  [openPanel setAccessoryView:[importAccessoryView retain]];
   if ([[self window] isVisible])
     [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"latexlib"] modalForWindow:[self window]
                         modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
@@ -242,17 +259,20 @@
 
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
+  BOOL replace = ([importReplacesExistingLibraryButton state] == NSOnState);
   if (returnCode == NSOKButton)
-    [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path]];
+    [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] replace:replace];
 }
 
 
 -(IBAction) saveAs:(id)sender
 {
   NSSavePanel* savePanel = [NSSavePanel savePanel];
-  [savePanel setTitle:NSLocalizedString(@"Save library as...", @"Save library as...")];
+  [savePanel setTitle:NSLocalizedString(@"Export library...", @"Export library...")];
   [savePanel setRequiredFileType:@"latexlib"];
   [savePanel setCanSelectHiddenExtension:YES];
+  [savePanel setAccessoryView:[exportAccessoryView retain]];
+  [exportOnlySelectedButton setState:([[self selectedItems] count] ? NSOnState : NSOffState)];
   if ([[self window] isVisible])
     [savePanel beginSheetForDirectory:nil file:nil modalForWindow:[self window] modalDelegate:self
                        didEndSelector:@selector(_savePanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
@@ -263,7 +283,10 @@
 -(void) _savePanelDidEnd:(NSSavePanel*)savePanel returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
   if (returnCode == NSFileHandlingPanelOKButton)
-    [[LibraryManager sharedManager] saveAs:[[savePanel URL] path]];
+  {
+    BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
+    [[LibraryManager sharedManager] saveAs:[[savePanel URL] path] onlySelection:onlySelection selection:[libraryTableView selectedItems]];
+  }
 }
 
 -(void) _updateButtons:(NSNotification *)aNotification

@@ -410,20 +410,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 //NSTableView delegate
 
-//if a selection is made in the history, updates the document state
 -(void) tableViewSelectionDidChange:(NSNotification*)notification
 {
-  NSTableView* historyTableView = [notification object];
-  MyDocument* document = (MyDocument*)[AppController currentDocument];
-  if (document)
-  {
-    int selectedRow = [historyTableView selectedRow];
-    if (selectedRow >= 0)
-    {
-      HistoryItem* historyItem = [self itemAtIndex:selectedRow tableView:historyTableView];
-      [document applyHistoryItem:historyItem];
-    }
-  }
 }
 
 -(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn

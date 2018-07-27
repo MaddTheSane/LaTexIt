@@ -14,6 +14,7 @@
 
 #import "LibraryItem.h"
 
+#import "LibraryFile.h"
 #import "LibraryFolder.h"
 #import "NSMutableArrayExtended.h"
 
@@ -49,14 +50,16 @@
   return isExpanded;
 }
 
--(id) copyWithZone:(NSZone*) zone
+-(id) copyWithZone:(NSZone*)zone
 {
-  LibraryItem* item = (LibraryItem*) [super copy];
+  LibraryItem* item = [[[self class] alloc] init];
   if (item)
   {
+    [item->title release];
+    [item->children release];    
     item->parent = parent;
     item->title = [title retain];
-    item->children = [children copy];
+    item->children = [children mutableCopy];
     unsigned int i = 0;
     for(i= 0 ; i<[item->children count] ; ++i)
     {
@@ -82,6 +85,8 @@
   [aTitle retain];
   [title release];
   title = aTitle;
+  if ([self isKindOfClass:[LibraryFile class]])
+    [[(LibraryFile*)self value] setTitle:title];
 }
 
 -(NSString*) title

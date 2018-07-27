@@ -1,0 +1,29 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                changeGroup = id; 
+                latexPalettesClick = id; 
+                latexPalettesSelect = id; 
+                openOrHideDetails = id; 
+            }; 
+            CLASS = LatexPalettesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                detailsBox = NSBox; 
+                detailsButton = NSButton; 
+                detailsImageView = NSImageView; 
+                detailsLatexCodeTextField = NSTextField; 
+                detailsRequiresTextField = NSTextField; 
+                matrix = NSMatrix; 
+                matrixBox = NSBox; 
+                matrixChoicePopUpButton = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = LogTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = PaletteMatrix; LANGUAGE = ObjC; SUPERCLASS = NSMatrix; }
+    ); 
+    IBVersion = 1; 
+}

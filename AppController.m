@@ -99,8 +99,11 @@ static NSMutableDictionary* cachePaths = nil;
     [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" > %@",
       temporaryPathFilePath, temporaryPathFilePath];
   int error = system([systemCall UTF8String]);
+  NSError* nserror = nil;
+  NSStringEncoding encoding = NSUTF8StringEncoding;
   NSArray* profileBins = error ? [NSArray array] 
-                               : [[NSString stringWithContentsOfFile:temporaryPathFilePath] componentsSeparatedByString:@":"];
+                               : [[NSString stringWithContentsOfFile:temporaryPathFilePath guessEncoding:&encoding error:&nserror] 
+                                   componentsSeparatedByString:@":"];
     
   if (!unixBins)
     unixBins = [[NSMutableArray alloc] initWithArray:profileBins];
@@ -545,6 +548,10 @@ static NSMutableDictionary* cachePaths = nil;
     MyDocument* document = (MyDocument*) [self currentDocument];
     ok = libraryController && [[libraryController window] isVisible] && document && [document hasImage];
   }
+  else if ([sender action] == @selector(libraryRenameItem:))
+  {
+    ok = libraryController && [[libraryController window] isVisible] && [libraryController canRenameSelectedItems];
+  }
   else if ([sender action] == @selector(libraryRemoveSelectedItems:))
   {
     ok = libraryController && [[libraryController window] isVisible] && [libraryController canRemoveSelectedItems];
@@ -606,6 +613,11 @@ static NSMutableDictionary* cachePaths = nil;
 -(IBAction) libraryRemoveSelectedItems:(id)sender    //removes some items
 {
   [[self libraryController] removeSelectedItems:sender];
+}
+
+-(IBAction) libraryRenameItem:(id)sender    //rename some items
+{
+  [[self libraryController] renameItem:sender];
 }
 
 -(IBAction) libraryRefreshItems:(id)sender   //refresh an item
@@ -781,7 +793,9 @@ static NSMutableDictionary* cachePaths = nil;
 -(IBAction) checkUpdates:(id)sender
 {
   NSURL* versionFileURL = [NSURL URLWithString:@"http://ktd.club.fr/programmation/fichiers/latexit-version-current"];
-  NSString* currentVersion = [NSString stringWithContentsOfURL:versionFileURL];
+  NSError* error = nil;
+  NSStringEncoding encoding = NSUnicodeStringEncoding;
+  NSString* currentVersion = [NSString stringWithContentsOfURL:versionFileURL guessEncoding:&encoding error:&error];
   if (sender && !currentVersion)
     NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
                    [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
@@ -2318,7 +2332,7 @@ static NSMutableDictionary* cachePaths = nil;
                                               color:[historyItem color] mode:[historyItem mode]
                                       magnification:[historyItem pointSize]
                                            baseline:0
-                                    backgroundColor:[historyItem backgroundColor]];
+                                    backgroundColor:[historyItem backgroundColor] title:[historyItem title]];
           }
         }
       }
@@ -2470,10 +2484,16 @@ static NSMutableDictionary* cachePaths = nil;
     NSString* title =
       [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @"Do you want to load the library <%@> ?"),
                                  [[filename pathComponents] lastObject]];
-    int confirm = NSRunAlertPanel(title, NSLocalizedString(@"The current library will be lost", @"The current library will be lost"),
-                                  NSLocalizedString(@"Load the library", @"Load the library"), NSLocalizedString(@"Cancel", @"Cancel"), nil);
+    NSAlert* alert = [NSAlert alertWithMessageText:title
+                                     defaultButton:NSLocalizedString(@"Add to the library", @"Add to the library")
+                                   alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
+                                       otherButton:NSLocalizedString(@"Replace the library", @"Replace the library")
+                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"If you choose <Replace the library>, the current library will be lost")];
+    int confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
-      ok = [[LibraryManager sharedManager] loadFrom:filename];
+      ok = [[LibraryManager sharedManager] loadFrom:filename replace:NO];
+    else if (confirm == NSAlertOtherReturn)
+      ok = [[LibraryManager sharedManager] loadFrom:filename replace:YES];
     else
       ok = YES;
   }
@@ -2482,7 +2502,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
-                                 backgroundColor:(NSColor*)backgroundColor
+                                 backgroundColor:(NSColor*)backgroundColor title:(NSString*)title
 {
   NSMutableData* newData = nil;
   
@@ -2510,14 +2530,15 @@ static NSMutableDictionary* cachePaths = nil;
            "/Preamble (ESannop%sESannopend)\n"\
            "/Subject (ESannot%sESannotend)\n"\
            "/Type (EEtype%@EEtypeend)\n"\
-           "/Color (EEcol%@EEcolend)\n"
-           "/BKColor (EEbkc%@EEbkcend)\n"
+           "/Color (EEcol%@EEcolend)\n"\
+           "/BKColor (EEbkc%@EEbkcend)\n"\
+           "/Title (EEtitle%@EEtitleend)\n"\
            "/Magnification (EEmag%fEEmagend)\n"\
            "/Baseline (EEbas%fEEbasend)\n"\
            ">> endobj",
           [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
           [replacedSource   cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
-          type, colorAsString, bkColorAsString, magnification, baseline];
+          type, colorAsString, bkColorAsString, (title ? title : @""), magnification, baseline];
           
     NSMutableString* pdfString = [[[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
     

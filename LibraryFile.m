@@ -46,7 +46,7 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
 
 -(id) copyWithZone:(NSZone*) zone
 {
-  LibraryFile* newInstance = (LibraryFile*) [super copy];
+  LibraryFile* newInstance = (LibraryFile*) [super copyWithZone:zone];
   if (newInstance)
     newInstance->historyItem = [historyItem copy];
   return newInstance;
@@ -66,7 +66,9 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
   [aHistoryItem retain];
   [historyItem release];
   historyItem = aHistoryItem;
-  if (setAutomaticTitle)
+  if (!setAutomaticTitle || ([historyItem title] && ![[historyItem title] isEqualToString:@""]))
+    [self setTitle:[historyItem title]];
+  else
   {
     NSString* string =
       [[[historyItem sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

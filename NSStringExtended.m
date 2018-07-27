@@ -12,7 +12,7 @@
 @implementation NSString (Extended)
 
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
-+(id) stringWithContentsOfFile:(NSString *)path guessEncoding:(NSStringEncoding *)enc error:(NSError **)error;
++(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 {
   NSString* string = nil;
   #ifndef PANTHER
@@ -24,6 +24,45 @@
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
     NSData* data = [NSData dataWithContentsOfFile:path];
+    if (!string)
+    {
+      usedEncoding = NSUTF8StringEncoding;
+      string = [[NSString alloc] initWithData:data encoding:usedEncoding];
+    }
+    if (!string)
+    {
+      usedEncoding = NSMacOSRomanStringEncoding;
+      string = [[NSString alloc] initWithData:data encoding:usedEncoding];
+    }
+    if (!string)
+    {
+      usedEncoding = NSISOLatin1StringEncoding;
+      string = [[NSString alloc] initWithData:data encoding:usedEncoding];
+    }
+    if (!string)
+    {
+      usedEncoding = NSASCIIStringEncoding;
+      string = [[NSString alloc] initWithData:data encoding:usedEncoding];
+    }
+    if (enc)
+      *enc = usedEncoding;
+    [string autorelease];
+  }
+  return string;
+}
+
++(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
+{
+  NSString* string = nil;
+  #ifndef PANTHER
+  string = [NSString stringWithContentsOfURL:url usedEncoding:enc error:error];
+  #endif
+  if (!string)
+  {
+    if (error)
+      *error = nil;
+    NSStringEncoding usedEncoding = NSUTF8StringEncoding;
+    NSData* data = [NSData dataWithContentsOfURL:url];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;

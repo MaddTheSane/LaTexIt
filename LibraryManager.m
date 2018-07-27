@@ -262,12 +262,24 @@ static NSImage*        libraryFileIcon       = nil;
   }//end @synchronized(library)
 }
 
--(BOOL) saveAs:(NSString*)path
+-(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems
 {
   BOOL ok = NO;
   @synchronized(library) //to prevent concurrent saving, and conflicts, if library is modified in another thread
   {
-    NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:library];
+    LibraryFolder* libraryToSave = library;
+    if (onlySelection)
+    {
+      libraryToSave = [[[LibraryFolder alloc] init] autorelease];
+      NSEnumerator* enumerator = [[LibraryItem minimumNodeCoverFromItemsInArray:selectedItems] objectEnumerator];
+      LibraryItem* item = nil;
+      while ((item = [enumerator nextObject]))
+      {
+        LibraryItem* clone = [[item copy] autorelease];
+        [libraryToSave insertChild:clone];
+      }
+    }
+    NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:libraryToSave];
     NSData* compressedData = [Compressor zipcompress:uncompressedData];
     ok = [compressedData writeToFile:path atomically:YES];
     if (ok)
@@ -301,11 +313,11 @@ static NSImage*        libraryFileIcon       = nil;
       libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
     }
   }
-  [self loadFrom:libraryFilePath];
+  [self loadFrom:libraryFilePath replace:YES];
   libraryShouldBeSaved = NO; //at LaTeXiT launch, library should not be saved
 }
 
--(BOOL) loadFrom:(NSString*)path
+-(BOOL) loadFrom:(NSString*)path replace:(BOOL)replace
 {
   BOOL ok = YES;
   @synchronized(self)
@@ -325,9 +337,15 @@ static NSImage*        libraryFileIcon       = nil;
 
     if (!newLibrary)
       newLibrary = [[[LibraryFolder alloc] init] autorelease];
+    [newLibrary setTitle:[[path lastPathComponent] stringByDeletingPathExtension]];
 
-    [library release];
-    library = [newLibrary retain];
+    if (!replace)
+      [library insertChild:newLibrary];
+    else
+    {
+      [library release];
+      library = [newLibrary retain];
+    }
   }
 
   libraryShouldBeSaved = YES;
@@ -456,74 +474,227 @@ static NSImage*        libraryFileIcon       = nil;
 -(NSDragOperation) outlineView:(NSOutlineView*)outlineView validateDrop:(id <NSDraggingInfo>)info
                proposedItem:(id)item proposedChildIndex:(int)childIndex
 {
+  NSDragOperation dragOperation = NSDragOperationNone;
   BOOL proposedParentIsValid = YES;
-  BOOL isColorDrop = ([[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
-  @synchronized(library)
+  NSPasteboard* pasteboard = [info draggingPasteboard];
+  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
+  BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]] != nil);
+  if (isFileDrop)//if fileDrop...
   {
-    //This method validates whether or not the proposal is a valid one. Returns NO if the drop should not be allowed.
-    LibraryItem* proposedParent = item;
-    
-    //if the dragged occured from a LibraryTableView, the destination can only be the same libraryTableView, that is to say the current one
-    id draggingSource = [info draggingSource];
-    if ([draggingSource isKindOfClass:[LibraryTableView class]] && (draggingSource != outlineView))
-      proposedParentIsValid = NO;
-    
-    BOOL isOnDropTypeProposal = (childIndex==NSOutlineViewDropOnItemIndex);
-      
-    //Refuse if the dropping occurs "on" the *view* itself, unless we have no data in the view.
-    if (isOnDropTypeProposal && !proposedParent)
-      proposedParentIsValid = NO;
-
-    if (isOnDropTypeProposal && !proposedParent && ([library numberOfChildren]!=0))
-      proposedParentIsValid = NO;
-      
-    //Refuse if we are trying to drop on a LibraryFile
-    if ([proposedParent isKindOfClass:[LibraryFile class]] && isOnDropTypeProposal)
-      proposedParentIsValid = isColorDrop;
-    
-    //for color drop, refuse on what is not a library file
-    if (isColorDrop && (![proposedParent isKindOfClass:[LibraryFile class]] || !isOnDropTypeProposal))
-      proposedParentIsValid = NO;
-
-    //Check to make sure we don't allow a node to be inserted into one of its descendants!
-    if (proposedParentIsValid && ([info draggingSource] == outlineView) &&
-        [[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+    NSMutableArray* filenames = [NSMutableArray arrayWithArray:[pasteboard propertyListForType:NSFilenamesPboardType]];
+    NSString* libFilename = nil;
+    NSString* filename = nil;
+    NSEnumerator* enumerator = [filenames objectEnumerator];
+    while(!libFilename && ((filename = [enumerator nextObject])))
     {
-        NSArray* dragged      = [[[info draggingSource] dataSource] _draggedItems];
-        proposedParentIsValid = ![proposedParent isDescendantOfItemInArray:dragged];
+      if ([[filename pathExtension] caseInsensitiveCompare:@"latexlib"] == NSOrderedSame)
+        libFilename = filename;
     }
-    
-    //we don't want an item to be dropped at the same place (same parent, same child index)
-    if (proposedParentIsValid && !isOnDropTypeProposal && ([info draggingSource] == outlineView))
+    if (libFilename)//if it was some library..
     {
-      NSArray* dragged = [[[info draggingSource] dataSource] _draggedItems];
-      LibraryItem* firstItem = [dragged objectAtIndex:0];
-      LibraryItem* firstItemParent = [firstItem parent];
-      if ((firstItemParent == proposedParent) || (!proposedParent && (firstItemParent == library)))
+      [outlineView setDropItem:nil dropChildIndex:NSOutlineViewDropOnItemIndex];
+      dragOperation = NSDragOperationCopy;
+    }
+    else //if it was not a library, it may be pdf files
+    {
+      NSFileManager* fileManager = [NSFileManager defaultManager];
+      BOOL isDirectory = NO;
+      NSMutableDictionary* dictionaryOfFoldersByPath = [NSMutableDictionary dictionary];
+      NSMutableArray* libraryItems = [NSMutableArray arrayWithCapacity:[filenames count]];
+      unsigned int i = 0;
+      for(i = 0 ; i<[filenames count] ; ++i)
       {
-        int actualChildIndex  = proposedParent ? [proposedParent indexOfChild:firstItem] : [library indexOfChild:firstItem];
-        if ((actualChildIndex == childIndex) || (actualChildIndex+1 == childIndex))
-          proposedParentIsValid = NO;
+        NSString* filename = [filenames objectAtIndex:i];
+        if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)
+        {
+          LibraryFolder* libraryFolder = [[LibraryFolder alloc] init];
+          [libraryFolder setTitle:[filename lastPathComponent]];
+          [dictionaryOfFoldersByPath setObject:libraryFolder forKey:filename];
+          LibraryFolder* parent = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
+          if (parent)
+            [parent insertChild:libraryFolder];
+          else
+            [libraryItems addObject:libraryFolder];
+          [libraryFolder release];
+          NSDirectoryEnumerator* directoryEnumerator = [fileManager enumeratorAtPath:filename];
+          NSString* subFile = nil;
+          while((subFile = [directoryEnumerator nextObject]))
+          {
+            subFile = [filename stringByAppendingPathComponent:subFile];
+            if (([[subFile pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame) ||
+                ([fileManager fileExistsAtPath:subFile isDirectory:&isDirectory] && isDirectory))
+              [filenames addObject:subFile];
+          }
+        }
+        else if ([[filename pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame)
+        {
+          NSData* pdfData = [NSData dataWithContentsOfFile:filename];
+          HistoryItem* historyItem = [HistoryItem historyItemWithPDFData:pdfData useDefaults:YES];
+          if (historyItem)
+          {
+            LibraryFile* libraryFile = [[LibraryFile alloc] init];
+            [libraryFile setValue:historyItem setAutomaticTitle:YES];
+            if (libraryFile)
+            {
+              LibraryFolder* libraryFolder = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
+              if (libraryFolder)
+                [libraryFolder insertChild:libraryFile];
+              else
+                [libraryItems addObject:libraryFile];
+            }
+            [libraryFile release];
+          }
+        }//end if pdf
+      }//end for each filename
+      if ([libraryItems count])
+      {
+        [self outlineView:outlineView writeItems:libraryItems toPasteboard:pasteboard];
+        @synchronized(library)
+        {
+          //This method validates whether or not the proposal is a valid one. Returns NO if the drop should not be allowed.
+          LibraryItem* proposedParent = item;
+          
+          //if the dragged occured from a LibraryTableView, the destination can only be the same libraryTableView, that is to say the current one
+          id draggingSource = [info draggingSource];
+          if ([draggingSource isKindOfClass:[LibraryTableView class]] && (draggingSource != outlineView))
+            proposedParentIsValid = NO;
+          
+          BOOL isOnDropTypeProposal = (childIndex==NSOutlineViewDropOnItemIndex);
+            
+          //Refuse if the dropping occurs "on" the *view* itself, unless we have no data in the view.
+          if (isOnDropTypeProposal && !proposedParent)
+            proposedParentIsValid = NO;
+
+          if (isOnDropTypeProposal && !proposedParent && ([library numberOfChildren]!=0))
+            proposedParentIsValid = NO;
+            
+          //Refuse if we are trying to drop on a LibraryFile
+          if ([proposedParent isKindOfClass:[LibraryFile class]] && isOnDropTypeProposal)
+            proposedParentIsValid = isColorDrop;
+          
+          //for color drop, refuse on what is not a library file
+          if (isColorDrop && (![proposedParent isKindOfClass:[LibraryFile class]] || !isOnDropTypeProposal))
+            proposedParentIsValid = NO;
+
+          //Check to make sure we don't allow a node to be inserted into one of its descendants!
+          if (proposedParentIsValid && ([info draggingSource] == outlineView) &&
+              [[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+          {
+              NSArray* dragged      = [[[info draggingSource] dataSource] _draggedItems];
+              proposedParentIsValid = ![proposedParent isDescendantOfItemInArray:dragged];
+          }
+          
+          //we don't want an item to be dropped at the same place (same parent, same child index)
+          if (proposedParentIsValid && !isOnDropTypeProposal && ([info draggingSource] == outlineView))
+          {
+            NSArray* dragged = [[[info draggingSource] dataSource] _draggedItems];
+            LibraryItem* firstItem = [dragged objectAtIndex:0];
+            LibraryItem* firstItemParent = [firstItem parent];
+            if ((firstItemParent == proposedParent) || (!proposedParent && (firstItemParent == library)))
+            {
+              int actualChildIndex  = proposedParent ? [proposedParent indexOfChild:firstItem] : [library indexOfChild:firstItem];
+              if ((actualChildIndex == childIndex) || (actualChildIndex+1 == childIndex))
+                proposedParentIsValid = NO;
+            }
+          }
+          
+          //Sets the item and child index in case we computed a retargeted one.
+          [outlineView setDropItem:proposedParent dropChildIndex:childIndex];
+        }//end @synchronized(library)
+        dragOperation = proposedParentIsValid ? NSDragOperationCopy : NSDragOperationNone;
+      }//end if libraryItems count
+    }//end if pdfFiles
+  }
+  else //if !fileDrop
+  {
+    @synchronized(library)
+    {
+      //This method validates whether or not the proposal is a valid one. Returns NO if the drop should not be allowed.
+      LibraryItem* proposedParent = item;
+      
+      //if the dragged occured from a LibraryTableView, the destination can only be the same libraryTableView, that is to say the current one
+      id draggingSource = [info draggingSource];
+      if ([draggingSource isKindOfClass:[LibraryTableView class]] && (draggingSource != outlineView))
+        proposedParentIsValid = NO;
+      
+      BOOL isOnDropTypeProposal = (childIndex==NSOutlineViewDropOnItemIndex);
+        
+      //Refuse if the dropping occurs "on" the *view* itself, unless we have no data in the view.
+      if (isOnDropTypeProposal && !proposedParent)
+        proposedParentIsValid = NO;
+
+      if (isOnDropTypeProposal && !proposedParent && ([library numberOfChildren]!=0))
+        proposedParentIsValid = NO;
+        
+      //Refuse if we are trying to drop on a LibraryFile
+      if ([proposedParent isKindOfClass:[LibraryFile class]] && isOnDropTypeProposal)
+        proposedParentIsValid = isColorDrop;
+      
+      //for color drop, refuse on what is not a library file
+      if (isColorDrop && (![proposedParent isKindOfClass:[LibraryFile class]] || !isOnDropTypeProposal))
+        proposedParentIsValid = NO;
+
+      //Check to make sure we don't allow a node to be inserted into one of its descendants!
+      if (proposedParentIsValid && ([info draggingSource] == outlineView) &&
+          [[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
+      {
+          NSArray* dragged      = [[[info draggingSource] dataSource] _draggedItems];
+          proposedParentIsValid = ![proposedParent isDescendantOfItemInArray:dragged];
       }
-    }
-    
-    //Sets the item and child index in case we computed a retargeted one.
-    [outlineView setDropItem:proposedParent dropChildIndex:childIndex];
-  }//end @synchronized(library)
-  return proposedParentIsValid ? NSDragOperationGeneric : NSDragOperationNone;
+      
+      //we don't want an item to be dropped at the same place (same parent, same child index)
+      if (proposedParentIsValid && !isOnDropTypeProposal && ([info draggingSource] == outlineView))
+      {
+        NSArray* dragged = [[[info draggingSource] dataSource] _draggedItems];
+        LibraryItem* firstItem = [dragged objectAtIndex:0];
+        LibraryItem* firstItemParent = [firstItem parent];
+        if ((firstItemParent == proposedParent) || (!proposedParent && (firstItemParent == library)))
+        {
+          int actualChildIndex  = proposedParent ? [proposedParent indexOfChild:firstItem] : [library indexOfChild:firstItem];
+          if ((actualChildIndex == childIndex) || (actualChildIndex+1 == childIndex))
+            proposedParentIsValid = NO;
+        }
+      }
+      
+      //Sets the item and child index in case we computed a retargeted one.
+      [outlineView setDropItem:proposedParent dropChildIndex:childIndex];
+    }//end @synchronized(library)
+    dragOperation =  proposedParentIsValid ? NSDragOperationGeneric : NSDragOperationNone;
+  }//end if !fileDrop
+  return dragOperation;
 }
 
 //accepts drop
 -(BOOL) outlineView:(NSOutlineView*)outlineView acceptDrop:(id <NSDraggingInfo>)info
                item:(id)targetItem childIndex:(int)childIndex
 {
+  BOOL ok = NO;
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isColorDrop = ([[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
+  BOOL isFileDrop = ([[info draggingPasteboard] availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]] != nil);
   if (isColorDrop)
   {
     NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSColorPboardType]];
     LibraryFile* libraryFile = [targetItem isKindOfClass:[LibraryFile class]] ? (LibraryFile*)targetItem : nil;
     [self _setItemBackgroundColor:color onItem:libraryFile outlineView:outlineView];
+    ok = YES;
+  }
+  else if (isFileDrop)
+  {
+    NSArray* filenames = (NSArray*)[pasteboard propertyListForType:NSFilenamesPboardType];
+    NSString* libFilename = nil;
+    NSString* filename = nil;
+    NSEnumerator* enumerator = [filenames objectEnumerator];
+    while(!libFilename && ((filename = [enumerator nextObject])))
+    {
+      if ([[filename pathExtension] caseInsensitiveCompare:@"latexlib"] == NSOrderedSame)
+        libFilename = filename;
+    }
+    if (libFilename != nil)
+    {
+      [[AppController appController] application:NSApp openFile:libFilename];
+      ok = YES;
+    }
   }
   else
   {
@@ -532,9 +703,10 @@ static NSImage*        libraryFileIcon       = nil;
     childIndex = (childIndex == NSOutlineViewDropOnItemIndex) ? 0 : childIndex;
     
     [self _performDropOperation:info onItem:parent atIndex:childIndex outlineView:outlineView];
+    ok = YES;
   }
   
-  return YES;
+  return ok;
 }
 
 -(void) _setItemBackgroundColor:(NSColor*)color onItem:(LibraryFile*)item outlineView:(NSOutlineView*)outlineView
@@ -710,70 +882,91 @@ static NSImage*        libraryFileIcon       = nil;
     if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
     {
       LibraryManager* dragDataSource = [[info draggingSource] dataSource];
-      itemsToSelect = [NSMutableArray arrayWithArray:[dragDataSource _draggedItems]];
-      NSArray* tmpDraggedItems = [LibraryItem minimumNodeCoverFromItemsInArray:itemsToSelect];
-      
-      //reorder tmpDraggedItems
-      NSMutableArray* orderedTmpDraggedItems = [NSMutableArray arrayWithCapacity:[tmpDraggedItems count]];
-      NSMutableIndexSet* indexSetForReordering   = [NSMutableIndexSet indexSet];
-      NSEnumerator *tmpDraggedItemsEnumerator = [tmpDraggedItems objectEnumerator];
-      LibraryItem *tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
-      while (tmpDraggedItem)
+      if (!dragDataSource) //pdf from Finder
       {
-        [indexSetForReordering addIndex:[outlineView rowForItem:tmpDraggedItem]];
-        tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        NSData* data = [pboard dataForType:LibraryItemsPboardType];
+        NSArray* array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        NSEnumerator* enumerator  = [array objectEnumerator];
+        LibraryItem* libraryItem  = nil;
+        while ((libraryItem = [enumerator nextObject]))
+        {
+          itemsToSelect = [NSArray arrayWithObject:libraryItem];
+          [parentItem insertChild:libraryItem atIndex:childIndex++];
+          NSString* oldTitle = [[[libraryItem title] copy] autorelease];
+          [libraryItem updateTitle];
+          [[undoManager prepareWithInvocationTarget:self] _setTitle:oldTitle onItem:libraryItem];
+          [[undoManager prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:libraryItem]];
+        }
+        if (![undoManager isUndoing])
+          [undoManager setActionName:NSLocalizedString(@"Add Library items", @"Add Library items")];
       }
-      unsigned int index = [indexSetForReordering firstIndex];
-      while(index != NSNotFound)
+      else
       {
-        [orderedTmpDraggedItems addObject:[outlineView itemAtRow:index]];
-        index = [indexSetForReordering indexGreaterThanIndex:index];
-      }
-
-      //compute parents indexes of children
-      NSMutableArray* parents = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
-      NSMutableArray* indexesOfChildren = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
-      tmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
-      tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
-      while (tmpDraggedItem)
-      {
-        LibraryItem *tmpDraggedParent = [tmpDraggedItem parent];
-        [parents addObject:tmpDraggedParent];
-        [indexesOfChildren addObject:[NSNumber numberWithInt:[tmpDraggedParent indexOfChild:tmpDraggedItem]]];
-        tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
-      }
+        itemsToSelect = [NSMutableArray arrayWithArray:[dragDataSource _draggedItems]];
+        NSArray* tmpDraggedItems = [LibraryItem minimumNodeCoverFromItemsInArray:itemsToSelect];
         
-      //perform removal
-      tmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
-      tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
-      while (tmpDraggedItem)
-      {
-        LibraryItem *tmpDraggedParent = [tmpDraggedItem parent];
-        if ((parentItem == tmpDraggedParent) && ([parentItem indexOfChild:tmpDraggedItem] < childIndex))
-          --childIndex;
-        [tmpDraggedParent removeChild:tmpDraggedItem];
-        tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
-      }
-      [[undoManager prepareWithInvocationTarget:self] _reinsertItems:orderedTmpDraggedItems atParents:parents
-                                                           atIndexes:indexesOfChildren];
+        //reorder tmpDraggedItems
+        NSMutableArray*   orderedTmpDraggedItems = [NSMutableArray arrayWithCapacity:[tmpDraggedItems count]];
+        NSMutableIndexSet* indexSetForReordering = [NSMutableIndexSet indexSet];
+        NSEnumerator*  tmpDraggedItemsEnumerator = [tmpDraggedItems objectEnumerator];
+        LibraryItem*              tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        while (tmpDraggedItem)
+        {
+          [indexSetForReordering addIndex:[outlineView rowForItem:tmpDraggedItem]];
+          tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        }
+        unsigned int index = [indexSetForReordering firstIndex];
+        while(index != NSNotFound)
+        {
+          [orderedTmpDraggedItems addObject:[outlineView itemAtRow:index]];
+          index = [indexSetForReordering indexGreaterThanIndex:index];
+        }
 
-      //then, insertion
-      [parentItem insertChildren:orderedTmpDraggedItems atIndex:childIndex];
-      //saves titles
-      NSMutableArray* oldTitles = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
-      NSEnumerator* orderedTmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
-      LibraryItem* item = [orderedTmpDraggedItemsEnumerator nextObject];
-      while(item)
-      {
-        [oldTitles addObject:[item title]];
-        item = [orderedTmpDraggedItemsEnumerator nextObject];
-      }
-      //update titles
-      [orderedTmpDraggedItems makeObjectsPerformSelector:@selector(updateTitle)];
-      [[undoManager prepareWithInvocationTarget:self] _setTitles:oldTitles onItems:orderedTmpDraggedItems];
-      [[undoManager prepareWithInvocationTarget:self] removeItems:orderedTmpDraggedItems];
-      if (![undoManager isUndoing])
-        [undoManager setActionName:NSLocalizedString(@"Move Library items", @"Move Library items")];
+        //compute parents indexes of children
+        NSMutableArray* parents = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
+        NSMutableArray* indexesOfChildren = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
+        tmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
+        tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        while (tmpDraggedItem)
+        {
+          LibraryItem *tmpDraggedParent = [tmpDraggedItem parent];
+          [parents addObject:tmpDraggedParent];
+          [indexesOfChildren addObject:[NSNumber numberWithInt:[tmpDraggedParent indexOfChild:tmpDraggedItem]]];
+          tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        }
+
+        //perform removal
+        tmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
+        tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        while (tmpDraggedItem)
+        {
+          LibraryItem *tmpDraggedParent = [tmpDraggedItem parent];
+          if ((parentItem == tmpDraggedParent) && ([parentItem indexOfChild:tmpDraggedItem] < childIndex))
+            --childIndex;
+          [tmpDraggedParent removeChild:tmpDraggedItem];
+          tmpDraggedItem = [tmpDraggedItemsEnumerator nextObject];
+        }
+        [[undoManager prepareWithInvocationTarget:self] _reinsertItems:orderedTmpDraggedItems atParents:parents
+                                                             atIndexes:indexesOfChildren];
+
+        //then, insertion
+        [parentItem insertChildren:orderedTmpDraggedItems atIndex:childIndex];
+        //saves titles
+        NSMutableArray* oldTitles = [NSMutableArray arrayWithCapacity:[orderedTmpDraggedItems count]];
+        NSEnumerator* orderedTmpDraggedItemsEnumerator = [orderedTmpDraggedItems objectEnumerator];
+        LibraryItem* item = [orderedTmpDraggedItemsEnumerator nextObject];
+        while(item)
+        {
+          [oldTitles addObject:[item title]];
+          item = [orderedTmpDraggedItemsEnumerator nextObject];
+        }
+        //update titles
+        [orderedTmpDraggedItems makeObjectsPerformSelector:@selector(updateTitle)];
+        [[undoManager prepareWithInvocationTarget:self] _setTitles:oldTitles onItems:orderedTmpDraggedItems];
+        [[undoManager prepareWithInvocationTarget:self] removeItems:orderedTmpDraggedItems];
+        if (![undoManager isUndoing])
+          [undoManager setActionName:NSLocalizedString(@"Move Library items", @"Move Library items")];
+      }//end if datasource is outlineview itself
     }
     else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
     {
@@ -805,7 +998,8 @@ static NSImage*        libraryFileIcon       = nil;
     while(itemToExpand)
     {
       LibraryItem* parentToExpand = [itemToExpand parent];
-      [outlineView expandItem:parentToExpand];
+      if (parentToExpand)
+        [outlineView expandItem:parentToExpand];
       itemToExpand = [enumerator nextObject];
     }
 
@@ -886,16 +1080,6 @@ static NSImage*        libraryFileIcon       = nil;
 {
   NSOutlineView* outlineView = [notification object];
   [outlineView scrollRowToVisible:[[outlineView selectedRowIndexes] firstIndex]];
-
-  MyDocument* document = (MyDocument*)[AppController currentDocument];
-  if (document && ([outlineView selectedRow] >= 0))
-  {
-    LibraryItem* libraryItem = [outlineView itemAtRow:[outlineView selectedRow]];
-    if ([libraryItem isKindOfClass:[LibraryFile class]])
-      [document applyHistoryItem:[(LibraryFile*)libraryItem value]];
-    else if ([libraryItem isKindOfClass:[LibraryFolder class]])
-      [document applyHistoryItem:nil];
-  }
 }
 
 -(id)outlineView:(NSOutlineView*)outlineView

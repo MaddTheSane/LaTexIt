@@ -33,7 +33,7 @@ static CompositionConfigurationManager* sharedManagerInstance = nil; //the (priv
 {
   @synchronized(self)
   {
-    //creates the unique instance of EncapsulationManager
+    //creates the unique instance of CompositionConfigurationManager
     if (!sharedManagerInstance)
       sharedManagerInstance = [[self  alloc] init];
   }

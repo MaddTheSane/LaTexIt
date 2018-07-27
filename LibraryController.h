@@ -22,12 +22,18 @@
   IBOutlet LibraryPreviewPanelImageView* libraryPreviewPanelImageView;
   IBOutlet NSSegmentedControl* libraryPreviewPanelSegmentedControl;
   BOOL enablePreviewImage;
+  
+  IBOutlet NSView*             importAccessoryView;
+  IBOutlet NSButton*           importReplacesExistingLibraryButton;
+  IBOutlet NSView*             exportAccessoryView;
+  IBOutlet NSButton*           exportOnlySelectedButton;
 }
 
 -(IBAction) importCurrent:(id)sender; //creates a library item with the current document state
 -(IBAction) newFolder:(id)sender;     //creates a folder
 -(IBAction) removeSelectedItems:(id)sender;    //removes some items
 -(IBAction) refreshItems:(id)sender;   //refresh an item
+-(IBAction) renameItem:(id)sender;   //refresh an item
 
 -(IBAction) changeLibraryRowType:(id)sender;
 
@@ -37,6 +43,7 @@
 -(IBAction) changeLibraryPreviewPanelSegmentedControl:(id)sender;
 
 -(BOOL) canRemoveSelectedItems;
+-(BOOL) canRenameSelectedItems;
 -(BOOL) canRefreshItems;
 
 -(NSMenu*)  actionMenu;

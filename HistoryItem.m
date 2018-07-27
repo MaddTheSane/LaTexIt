@@ -70,6 +70,7 @@ static NSLock* strangeLock = nil;
   mode       = aMode;
   //pdfCachedImage and bitmapCachedImage are lazily initialized in the "image" methods that returns these cached images
   backgroundColor = [aBackgroundColor copy];
+  title = nil;
   return self;
 }
 
@@ -172,6 +173,18 @@ static NSLock* strangeLock = nil;
   backgroundColor = bkColorAsString ? [[NSColor colorWithRgbaString:bkColorAsString] retain] : nil;
   if (!backgroundColor)
     backgroundColor = (useDefaults ? [defaultBkColor retain] : [[NSColor whiteColor] retain]);
+    
+  NSMutableString* titleAsString = nil;
+  testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
+  if (testArray && ([testArray count] >= 2))
+  {
+    titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
+    NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
+    range.length = (range.location != NSNotFound) ? [titleAsString length]-range.location : 0;
+    [titleAsString deleteCharactersInRange:range];
+  }
+  [self setTitle:titleAsString];
+
   return self;
 }
 
@@ -184,25 +197,20 @@ static NSLock* strangeLock = nil;
   [date              release];
   [pdfCachedImage    release];
   [bitmapCachedImage release];
-  [backgroundColor   release];  
+  [backgroundColor   release];
+  [title             release];
   [super dealloc];
 }
 
--(id) copyWithZone:(NSZone*) zone
+-(id) copyWithZone:(NSZone*)zone
 {
-  HistoryItem* newInstance = (HistoryItem*) [super copy];
+  HistoryItem* newInstance = [[[self class] alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color
+                                                         pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor];
   if (newInstance)
   {
-    newInstance->pdfData = [pdfData copy];
-    newInstance->preamble = [preamble mutableCopy];
-    newInstance->sourceText = [preamble mutableCopy];
-    newInstance->color = [color copy];
-    newInstance->pointSize = pointSize;
-    newInstance->date = [date copy];
-    newInstance->mode = mode;
     newInstance->pdfCachedImage = [pdfCachedImage copy];
     newInstance->bitmapCachedImage = [bitmapCachedImage copy];
-    newInstance->backgroundColor = [backgroundColor copy];
+    newInstance->title = [title copy];
   }
   return newInstance;
 }
@@ -247,6 +255,11 @@ static NSLock* strangeLock = nil;
   return backgroundColor;
 }
 
+-(NSString*) title
+{
+  return title;
+}
+
 -(void) setPreamble:(NSAttributedString*)text
 {
   @synchronized(self)
@@ -273,9 +286,21 @@ static NSLock* strangeLock = nil;
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
 }
 
+-(void) setTitle:(NSString*)newTitle
+{
+  @synchronized(self)
+  {
+    [newTitle retain];
+    [title release];
+    title = newTitle;
+    [self _reannotatePDFDataUsingPDFKeywords:YES];
+  }
+  [[NSNotificationCenter defaultCenter] postNotificationName:HistoryItemDidChangeNotification object:self];
+}
+
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.9.3"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.10.0"  forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -289,6 +314,7 @@ static NSLock* strangeLock = nil;
   //[coder encodeObject:pdfCachedImage    forKey:@"pdfCachedImage"];
   //[coder encodeObject:bitmapCachedImage forKey:@"bitmapCachedImage"];
   [coder encodeObject:backgroundColor forKey:@"backgroundColor"];
+  [coder encodeObject:title forKey:@"title"];
 }
 
 -(id) initWithCoder:(NSCoder*)coder
@@ -323,6 +349,7 @@ static NSLock* strangeLock = nil;
     //pdfCachedImage    = [[coder decodeObjectForKey:@"pdfCachedImage"]    retain];
     //bitmapCachedImage = [[coder decodeObjectForKey:@"bitmapCachedImage"] retain];
     backgroundColor = [[coder decodeObjectForKey:@"backgroundColor"] retain];
+    title       = [[coder decodeObjectForKey:@"title"]       retain];//may be nil
   }
   //old versions of LaTeXiT would use \usepackage[pdftex]{color} in the preamble. [pdftex] is useless, in fact
   NSRange rangeOfColorPackage = [[preamble string] rangeOfString:@"\\usepackage[pdftex]{color}"];
@@ -467,7 +494,7 @@ static NSLock* strangeLock = nil;
   newData = [[AppController appController]
                 annotatePdfDataInLEEFormat:newData
                                   preamble:(preamble ? [preamble string] : @"") source:(sourceText ? [sourceText string] : @"")
-                                     color:color mode:mode magnification:pointSize baseline:baseline backgroundColor:backgroundColor];
+                                     color:color mode:mode magnification:pointSize baseline:baseline backgroundColor:backgroundColor title:title];
   return newData;
 }
 

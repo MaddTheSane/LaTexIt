@@ -1,0 +1,575 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fnil\fcharset77 LucidaGrande;\f2\fnil\fcharset77 LucidaGrande-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;\red0\green0\blue221;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0  {{\NeXTGraphic latexit128.png \width2560 \height2560
+}¬}
+\f1\fs26 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f2\b \cf0 LaTeXiT 1.10.0\
+
+\f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \ul \ulc0 Kurze Inhaltsangabe
+\f2\b \ulnone \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\f1\b0\fs22 \cf0 -Generelle Informationen\
+-Systemanforderungen\
+-Installieren / Deinstallieren\
+-Was ist LaTeXiT ?\
+-\'86bersicht\
+-Modifikation der LaTeX Einleitung\
+-Benutzung des Zoom\
+-Benutzung der History\
+-Benutzung der Bibliothek\
+-Benutzung des "LaTeXiT Dienstes"\
+-Benutzung von LinkBack\
+-Benutzung von Skripten\
+-FAQ (H\'8aufig gestellte Fragen)\
+-Bekannte Fehler\
+-LaTeX installieren
+\f2\b\fs26 \
+
+\f1\b0\fs22 -Versions-Geschichte\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Generelle Informationen\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+LaTeXiT Homepage: \cf3 http://ktd.club.fr/programmation/latexit.php\cf0 \
+Feedback E-Mail Adresse (Mails bitte nur in englisch oder franz\'9asisch): \cf3 pierre.chatelier@club-internet.fr
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+Systemanforderungen\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone \
+LaTeXiT 1.10.0 ben\'9atigt Mac OS X Version 10.3.9 (Panther) oder 10.4 oder h\'9aher (Tiger), und eine funktionierende LaTeX-Installation mit mindestens pdflatex und GhostScript (gs). Wenn Sie nicht wissen, was dies f\'9fr Programme sind, k\'9annen Sie dies im Teil "LaTeX installieren" in dieser Dokumentation nachlesen.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b\fs26 \cf0 \
+
+\f1\b0 \ul Installieren/Deinstallieren\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 Installieren: Verschieben Sie einfach die Anwendung LaTeXiT aus dem ge\'9affneten Disk-Image (.dmg) in den Ordner "Programme" oder an irgend einen anderen Ort Ihrer Festplatte.\
+Deinstallieren: LaTeXiT erstellt einen Ordner /Library/LaTeXiT in Ihrem Benutzer-Ordner. Wenn Sie planen LaTeXiT zu deinstallieren (durch Verschieben des Programms in den Papierkorb), sollten Sie auch diesen Ordner l\'9aschen. Au\'a7erdem erstellt LaTeXiT eine Datei /Library/Preferences/fr.club.ktd.LaTeXiT.plist in der alle benutzerdefinierten Einstellungen gespeichert werden. Diese kann auch gel\'9ascht werden, es gehen dann aber alle benutzereigenen Einstellungen verloren.
+\f2\b\fs26 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+
+\f1\b0 \ul Was ist LaTeXiT ?\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 LaTeXiT ist ein kleines Programm designed um schnell und einfach LaTeX-Schrifts\'8atze in Gleichungen umzuwandeln und diese dann in jedm\'9agliche Dokumente einzuf\'9fgen. Au\'a7erdem ist es m\'9aglich LaTeX-Schrifts\'8atze aus vielen Anwendungen direkt umzuwandeln (\'9fber: Dienste --> LaTeXiT).\
+\
+Es ist nur fair darauf hinzuweisen, dass dieses Programm vom bemerkenswerten "LaTeX Equation Editor" von J. McKenzie Alexander beeinflusst wurde. Allerdings vermisste ich einige Features in diesem Programm, also entschloss ich mich ein eigenes zu entwickeln. LaTeXiT basiert nicht auf dem Latex Equation Editor, es wurde nur davon inspiriert. \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+Die Hauptfunktionalit\'8aten von LaTeXiT sind :\
+\pard\pardeftab720\ql\qnatural
+\cf0 	- Multi-Dokument-F\'8ahigkeit\
+	- Syntax-F\'8arbung und Auto-Vervollst\'8andigung von LaTeX-Schl\'9fsselw\'9artern\
+	- unauff\'8alliger Error-Manager\
+	- automatische History\
+	- enthaltener Anwendungs-Dienst \
+	- bearbeitbare Bibliothek \
+	- LinkBack-Unterst\'9ftzung\
+	- vielf\'8altige Export-Formate (PDF, EPS, TIFF, PNG...)\
+	- LaTeX-Palette\
+	- weitreichender Drag'N'Drop \
+\pard\pardeftab720\ql\qnatural
+
+\f2\b \cf0 	- generierte PDFs, welche in Anwendungen eingef\'9fgt wurden, k\'9annen danach noch in LaTeXiT ge\'9affnet und weiterbearbeitet werden (\'9fber einfaches Kopieren/Einf\'9fgen)
+\f1\b0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul \'86bersicht\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 \ulnone {{\NeXTGraphic Pasted Graphic.tiff \width12800 \height8540
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone Im Hauptfenster kann der LaTeX-Code ohne Einleitung, das \\begin\{document\} und das \\end\{document\}, eingegeben werden. Die Einleitung wird dann von alleine hinzugef\'9fgt. Dr\'9fcken Sie dann auf "LaTeX it!" und ihre Eingabe wird im Bildfenster dargestellt. Nun k\'9annen Sie die Formel als Bild speichern oder per Drag'N'Drop in andere Anwendungen eingef\'9fgen. Das Export-Format kann in den Einstellungen vorgegeben werden. PDF ist f\'9fr gew\'9ahnlich die beste Wahl, da es ein "vektorielles" Format ist, d.h. das Bild kann ohne Qualit\'8atsverluste in der Gr\'9a\'a7e ver\'8andert werden. Au\'a7erdem kann die Schriftgr\'9a\'a7e und -farbe des Bildes vorgew\'8ahlt werden.\
+Einmal in eine andere Anwendung eingef\'9fgt, kann die (PDF) Gleichung durch einfaches "Kopieren/Einf\'9fgen" in LaTeXiT erneut ge\'9affnet und bearbeitet werden. Der LaTeX Quellcode und die Erstellungs-Parameter wurden mitgespeichert.\
+Die Modi "Display", "Inline" und "Text" sind identisch mit den 3 LaTeX Modi des selben Namens; bitte informieren Sie sich in einer LaTeX-Dokumentation \'9fber deren Bedeutung. Der "Eqnarray" Modus ist eine handliche Erleichterung f\'9fr mehrzeilige Gleichungen. Es verwendet automatisch \\begin\{eqnarray*\}...\\end\{eqnarray*\} um den LaTeX Code.\
+Es ist au\'a7erdem m\'9aglich LaTeXiT als Dienst in Textbearbeitungs-Programmen zu verwenden (oder anderen Programmen die Textbearbeitung unterst\'9ftzen. Hier werden LaTeX-Codes direkt in Gleichungen umgewandelt, unter indirekter Verwendung von LaTeXiT. Vergleichen sie hierzu auch den Teil \ul Verwendung des "LaTeXiT-Dienstes"\ulnone  um ein Beispiel zu bekommen.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Modifikation der Einleitung\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+Die LaTeX-Einleitung, welche ben\'9atigt wird um ein Bild zu erzeugen (\\documentclass\{...\}, \\usepackage\{...\}, ...), wird automatisch hinzugef\'9fgt. Sie k\'9annen diese Einleitung modifizieren. Gehen Sie dazu mit der Maus auf den Punkt \'9fber dem Eingabefeld bis sich der Mauszeiger ver\'8andert und ziehen Sie mit gedr\'9fckter Maustaste das entsprechende Feld auf. Au\'a7erdem l\'8asst sich die Einleitung in den Einstellungen ver\'8andern. Sie werden feststellen, dass die ersten zwei (grauen) Zeilen unver\'8anderbar sind. Der Grund liegt darin, dass das Verhalten von LaTeXiT von diesen zwei Zeilen abh\'8angt, daher d\'9frfen diese nicht ver\'8andert werden.\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0          {{\NeXTGraphic Pasted Graphic 1.tiff \width7740 \height10580
+}¬}
+\f1\fs22 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Benutzung des Zoom\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone Ein kleiner Regler erm\'9aglicht das Zoomen, ver\'8andert aber nicht die reale Gr\'9a\'a7e der Gleichung. Es ver\'8andert nur die Gr\'9a\'a7e der Vorschau, damit man kleine Gleichung besser betrachten kann.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Benutzung der History\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+
+\fs22 \ulnone Die History (anzeigbar durch \uc0\u8984 R) speichert automatisch die erstellen Gleichungen, so kann man diese leicht wiederfinden, auch wenn man sie nicht in der Bibliothek gespeichert hat (siehe n\'8achster Abschnitt).\
+Sie k\'9annen History-Eintr\'8age durch Dr\'9fcken von <Leerzeichen> l\'9aschen oder die ganze History durch Klicken auf "History l\'9aschen" l\'9aschen.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0                                        {{\NeXTGraphic Pasted Graphic 2.tiff \width4260 \height8440
+}¬}\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Benutzung der Bibliothek\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 \
+
+\fs22 \ulnone Die LaTeXiT-Bibliothek (anzeigbar durch \uc0\u8984 B) erlaubt es einige Gleichungen zu speichern und zu organisieren. Dazu muss man eine Gleichung einfach in die Bibliothek ziehen. \'86ber <+> l\'8asst sich die momentane Gleichung zur Bibliothek hinzuf\'9fgen (diese ist \'9fber einen Doppelklick dann umbenennbar).\
+\'86ber den <Aktion>-Button erscheinen noch weitere Funktionen.\
+\'86ber <Aktuelle Gleichung erneuern> wird das ausgew\'8ahlte Objekt mit der momentanen Gleichung aktualisiert. Es ist nicht m\'9aglich mehr als ein Objekt zu selben Zeit zu aktualisieren; nach erfolgter Aktualisierung blinkt die Gleichung auf.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0                                       {{\NeXTGraphic Pasted Graphic 3.tiff \width4320 \height4060
+}¬}
+\f1\fs26 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+\cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 Den "LaTeXiT Dienst" benutzen\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+
+\fs22 \cf0 \ulnone LaTeXiT kann auch als ein Programm-Dienst verwendet werden (im jeweiligen Programm unter: Dienst --> LaTeXiT). Markieren sie dazu den Text der umgewandelt werden soll.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 "Gleichung detektieren und umwandeln" macht etwas anderes, es \'9fbersetzt nicht den ganzen Text. Es sucht nach Bl\'9acken die durch "\\[...\\]" (DISPLAY mode), "$$...$$" (DISPLAY mode) und/oder "$...$" (INLINE mode) begrenzt sind und ersetzt nur diese durch die Gleichung (ebenso im Display und Inline Modus).\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b \cf0 Tipp: Der Inline-Modus "$...$" versucht, wenn m\'9aglich, die Gleichung an die Grundlinie des Textes anzugleichen.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\fs24 \cf0 {{\NeXTGraphic Pasted Graphic 4.tiff \width10000 \height7500
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 {{\NeXTGraphic Pasted Graphic 5.tiff \width10000 \height7500
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs22 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul \
+Benutzung von LinkBack\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 LinkBack ist eine Technologie die in LaTeXiT integriert ist. Wenn Sie eine Gleichung aus LaTeXiT in eine anderes Programm ziehen, das LinkBack unterst\'9ftzt, ist es sp\'8ater m\'9aglich die Gleichung in LaTeXiT erneut zu \'9affnen (f\'9fr gew\'9ahnlich \'9fber den Men\'9fpunkt "Bearbeiten". F\'9fr mehr Informationen \'9fber LinkBack, besuchen Sie die URL \cf3 http://www.linkbackproject.org
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone Bis jetzt unterst\'9ftzen Nisus Writer Express, OmniGraffle 4 und Keynote 1&2 (\'9fber ein optionales Plugin) LinkBack.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Benutzung von Skripten\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+Seit Version 1.8.0, LaTeXiT ist es m\'9aglich Skripte w\'8ahrend Vor-, Mittel- und Nach-Bearbeitungs-Schritten zu benutzen. Es ist ein Hilfefenster im Skript-Bereich (Pfade --> Zus\'8atzliche Skripte) der Einstellungen verf\'9fgbar (Fragezeichen). Um zu verstehen wo die Skripte verwendet werden, ist es von Interesse das interne Verhalten von LaTeXiT zu verstehen; hier ist dazu ein Flie\'a7diagramm:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 {{\NeXTGraphic 1__#$!@%!#__Pasted Graphic.tiff \width9760 \height14980
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+FAQ (H\'8aufig gestellte Fragen)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+(Q) : LaTeXiT st\'9frzt beim Starten ab.\
+(R) : Eine defekte History oder Bibliothek verhindert den Start von LaTeXiT. In manchen F\'8allen hilft es die Dateien "history.dat" und "library.dat" aus dem Ordner "Library/LaTeXiT" in den Papierkorb zu verschieben.\
+\
+(Q): Woher bekomme ich pdflatex, dvipdf und GhostScript ?\
+(A): Bitte lesen Sie dazu "LaTeX installieren" in diesem Dokument.\
+\
+(Q) : Ich habe LaTeX wie beschrieben installiert, aber LaTeXiT funktioniert immer noch nicht.\
+(R) : Wenn Sie zuerst TeXShop, dann LaTeXiT und dann LaTeX installiert haben, verweist LaTeXiT zu einem pdflatex von TeXShop welches hier nicht funktioniert. Versuchen Sie dann die LaTeXiT's Preferences (Library/Preferences/fr.club.ktd.LaTeXiT.plist) zu l\'9aschen. Sie k\'9annen auch versuchen den Pfad unter "Pfade" in den LaTeXiT Einstellungen von Hand einzustellen.\
+\
+(Q): Meine Gleichung ist abgeschnitten und wird nicht komplett angezeigt.\
+(A): Siehe dazu unter "Bekannte Fehler" weiter unten.\
+\
+(Q): Welches Export-Format sollte ich bevorzugen?\
+(A): PDF ist f\'9fr gew\'9ahnlich die beste Wahl, denn es ist ein "vektorielles" Format: Das Bild kann ohne Qualit\'8atsverluste in der Gr\'9a\'a7e ver\'8andert werden.\
+\
+(Q): \'80nderungen der Einleitungen scheinen erst dann zu funktionieren wenn das Programm beendet und erneut gestartet wurde.\
+(A): Jegliche \'80nderungen der Einleitung haben keinen Effekt auf momentan ge\'9affnete Fenster, da sonst die Gefahr besteht vom Benutzer vorgenommene Modifikationen zu \'9fberschreiben. Sie m\'9fssen dazu aber nicht das gesamte Programm neu starten, es gen\'9fgt ein neues Fenster zu \'9affnen (\uc0\u8984 N).\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone (Q): LinkBack funktioniert nicht, wenn ich den LaTeXiT's Dienst verwende.\
+(A): Siehe dazu unter "Bekannte Fehler" f\'9fr mehr Details. Um dieses Problem zu beheben, versuchen Sie das Angleichen der Gleichung an die Grundlinie in den LaTeXiT <Dienste> Einstellungen abzustellen.\
+\
+(Q): Ich verstehe die "Argumente" Palette nicht.\
+(R): Diese Palette ist sehr wichtig. F\'9fr gew\'9ahnlich ist es nutzlos eine Gleichung (als Bild) in ein Programm zu ziehen, welches keine Bilder darstellen kann. Wann immer dieses Programm ein LaTeX Text Editor ist, ist es relevant einen von der Gleichung abh\'8angigen Text mit zu verschieben: den Quellcode der Gleichung, ein \\ref\{\} mit ihrem Titel.... Dies ist in dieser Palette vom Benutzer definierbar und funktioniert beim Verschieben aus der Bibliothek.\
+\
+(Q): Wie kann ich das feynmf-Paket mit LaTeXiT benutzen?\
+(R):  Sie sollten das feynmp-Paket, im "Text" LaTeX Modus, als "latex+dvipdf" Komposition verwenden. Dann ist ein Skript f\'9fr die mittlere Bearbeitung n\'9atig um die Metafonts der Labels zu verarbeiten; verwenden Sie dazu folgendes Skript f\'9fr die mittlere Bearbeitung:\
+				mpost the-name-of-your-feynmf-graph\
+				#but now me must recreate the pdf file\
+				latex $\{INPUTTEXFILE\}\
+				dvipdf $\{OUTPUTDVIFILE\}\
+	Bitte lesen Sie dazu auch den vorhergehenden Teil "Benutzung von Skripten"  f\'9fr eine weitergehende Beschreibung.\
+        Au\'a7erdem k\'9annen Sie die Webseite {\field{\*\fldinst{HYPERLINK "http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html"}}{\fldrslt 
+\f0\fs24 \cf4 http://osksn2.hep.sci.osaka-u.ac.jp/%7Etaku/osx/feynmp_latexit.html}} besuchen (Herzlichen Dank an T. Yamanaka)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Bekannte Fehler\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b \cf0 - Wenn Sie nur TeXShop installiert haben kann LaTeXiT nicht richtig funktionieren. Sie brauchen eine richtige LaTeX Installation. Sie finden mehr dar\'9fber im n\'8achsten Abschnitt "LaTeX installieren";\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 - Wenn die Farbe der Gleichung auf reines Wei\'a7 eingestellt ist, sieht die Gleichung "angefressen" aus (die rechte und linke Klammer k\'9annen zum Beispiel verschwinden ). Dies ist ein Fehler von GhostScript, dieses kommt mit einer wei\'a7en Gleichung auf wei\'a7em Untergrund nicht zurecht. Um dies zu beheben gehen sie auf "Paletten > R\'8ander" um die rechten und linken R\'8ander zu vergr\'9a\'a7ern;\
+- Die Syntax kann "$$" nicht ordentlich handhaben;\
+- Bei sehr kleinen Gleichungen k\'9annen Sie ebenfalls ein Abschneidungs-Problem bekommen. LaTeX versagt dann beim richtigen berechnen der Grenzen der Gleichung. Es gibt zwei M\'9aglichkeiten dies zu beheben: Sie k\'9annen auch hier R\'8ander mit der R\'8ander-Palette hinzuf\'9fgen oder sie benutzen $$...$$ im Text-Modus anstatt des Display- oder Inline-Modus (hier gibt es in LaTeXiT einen internen Unterschied);\
+- Benutzerdefinierte R\'8ander werden beim Export als EPS nicht unterst\'9ftz; dies scheint ein Fehler in GhostScript zu sein;\
+- Beim aktualisieren der Version 1.2 f\'9fr Panther nach 1.3 f\'9fr Panther, muss der Ordner ~/Library/LaTeXiT-panther in ~/Library/LaTeXiT umbenannt werden um die History und die Bibliothek weiterhin benutzen zu k\'9annen;\
+- Der Dienst funktioniert nicht mit Mail 2.0.0, ..., 2.0.5 (zum Zeitpunkt des Schreibens die h\'9achste Versionsnummer);\
+- Der Dienst funktioniert nicht mit 1, 2 & 3, weil Keynote kein Bild in einen Textblock einf\'9fgen kann;\
+- LinkBack funktioniert nicht bei Verwendung des LaTeXiT-Dienstes. Um die Gleichung an den umgebenen Text anzugleichen bettet LaTeXiT das Bild in einen RTFD-Stream ein, somit kann die Basislinie eingestellt werden. Manchmal kann es passieren, dass Text-Programme beim extrahieren des Bildes aus dem Stream scheitern. Immer wenn die Abbildung in Ordnung ist, wird LinkBack "unerreichbar". Der Schuldige ist in diesem Fall das Textprogramm, aber dies ist verschieden. Um das Problem zu l\'9asen deaktivieren Sie "Gleichung an Originaltext anpassen" in den LaTeXiT Einstellungen; dies schaltet das Anpassen an die Basislinie ab und es wird kein RTFD-Stream verwendet;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
+\cf0 - Bei Pages 1.0.2 und 2.0.1 wird, bei Verwendung des LaTeXiT Dienstes, das automatische Einr\'9fcken der Gleichung, um sie an die Basislinie anzugleichen ("baseline" management), nicht unterst\'9ftzt. Allerdings funktioniert es einwandfrei mit TextEdit und Nisus Writer Express, somit ist dies ein Fehler von Pages.\
+- Mit EazyDraw 1.7.1 werden aus LaTeXiT her\'9fbergezogene Gleichungen verkehrt herum angezeigt. Dies ist ein Fehler von EazyDraw, welcher in der Version 1.8 behoben wurde;\
+- Mit Adobe Illustrator wird beim Ziehen einer Gleichung im PDF-Format aus LaTeXiT zum Illustrator die Schrift ver\'8andert, da Illustrator jedes einzelne Zeichen des mit LaTeXiT erstellen PDF's ver\'8andern und eine eigene Schriftart verwenden kann. Um dies zu verhindern verwenden Sie eine tempor\'8are Datei: Ziehen Sie die Gleichung aus LaTeXiT auf den Schreibtisch, eine Datei wird erstellt, ziehen Sie nun diese Datei in das Illustrator-Dokument. Dies funktioniert, allerdings kann man dann die Gleichung im Illustrator nicht mehr ver\'8andern. Eine Alternative: Export in einem anderen Format (in den LaTeXiT Einstellungen), z.B. EPS, oder "PDF mit umrissener Schrift";\
+- Weiterhin kommt es bei Adobe Illustrator vor, dass bei Drag'N'Drop eine Datei auf dem Schreibtisch erstellt wird. Dies passiert nur bei Illustrator und er ist hierf\'9fr auch meistens verantwortlich, aufgrund seiner Art mit Drag'N'Drop umzugehen. Solche Dinge passieren z.B. nicht bei OmniGraffle;\
+- Weiterhin Adobe Illustrator: Einige Benutzer berichten ein Abnehmen solcher Probleme beim Aktualisieren von Illustrator auf eine neuere Version;\
+- Wenn Sie feststellen, dass LaTeXiT in unbenutztem Zustand Prozessorlast frisst und mehr und mehr Arbeitsspeicher verbraucht, dann verk\'9frzen Sie bewusst die Arbeitszeit mit LaTeXiT. Es l\'8ad im Hintergrund die Bilder aus der History. Diese Aufgabe (Task) hat eine sehr niedrige Priorit\'8at und kann einige Zeit dauern; aber es wirkt sich stabilisierend aus. Wollen Sie dies verhindern, dann l\'9aschen Sie von Zeit zu Zeit Ihre History!\
+- Sie werden feststellen, dass nach jeder "Latexisation" eine Meldung in einer Konsole Log-Datei auftaucht: "WARNING: Type1 font data returned by OFAStreamPSDownload isn't in the correct format required by the Adobe Type 1 Font Format specification". Diese Warnung k\'9annen Sie getrost ignorieren, sie bezieht sich auf die PDF-Dateien, die mit pdflatex generiert wurden. In der Praxis verursacht diese keinerlei Probleme und dies wird auch in weiteren Versionen von pdflatex passieren (aber ich wei\'a7 dies nicht genau).\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul LaTeX installieren\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+LaTeXiT basiert auf einer funktionsf\'8ahigen LaTeX-Installation. Sollten Sie nicht wissen was LaTeX ist, werden Sie es kompliziert finden alle ben\'9atigten Komponenten zu finden und zu installieren. Daher hier nun ein paar sehr grundlegende Erkl\'8arungen.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 LaTeX ist in Wirklichkeit kein einzelnes Programm. Es besteht aus einer Reihe von Ausf\'9fhrdateien und anderen Dateien, die alle zusammen arbeiten. Wie zum Beispiel auch f\'9fr Linux, findet man LaTeX *Distributionen*. Eine Distribution von LaTeX ist eine Zusammenstellung von Dateien, die jemand zusammengefasst und so organisiert hat, dass einmal installiert, alles funktionieren sollte.\
+Unter MacOS, gibt es zwei gut bekannte Distributionen: "Gerben Wierda's distribution" \'9fber den i-Installer, und die Fink Distribution. Ich will hier nur \'9fber Gerben Wierda's Installation sprechen, aber behalten Sie im Hinterkopf, dies ist nur ein Weg von vielen.\
+Auf Gerben Wierda's i-Installer Seite ({\field{\*\fldinst{HYPERLINK "http://www.rna.nl/ii.html"}}{\fldrslt http://ii2.sourceforge.net/}}), k\'9annen Sie sich den i-Installer herunterladen ({\field{\*\fldinst{HYPERLINK "http://bloch.ling.yale.edu/volumes/ii2/II2.dmg"}}{\fldrslt http://bloch.ling.yale.edu/volumes/ii2/II2.dmg}})\
+Der i-Installer ist ein kleines Programm, welches einem einfach erlaubt LaTeX auf seinem System zu installieren (und andere Dinge), indem es sich alle ben\'9atigen Dateien von einem entfernten Speicherort holt. Dies ist sehr praktisch, denn Sie k\'9annen sicher sein immer die neusten Versionen zu bekommen und die gesamte Installation wird f\'9fr einen erledigt.\
+Also, laden Sie sich zuerst den i-Installer, \'9affnen das dmg, und installieren es. Nun k\'9annen Sie den i-Installer starten.\
+W\'8ahlen Sie dann den Men\'9fpunkt "i-Package > Known Packages i-Directory" aus. Nun wird ein Fenster mit verf\'9fgbaren Paketen angezeigt.\
+W\'8ahlen Sie dann im linken Teil <Use> das "Gerben's i-Directory @ TUG".\
+Im rechten Teil w\'8ahlen Sie "Tex" und <Open i-package>. Dann folgen Sie den Anweisungen, LaTeX wird nun auf Ihrem System installiert. Sie m\'9fssten bei allen Fragen mit Ja (Yes) antworten (die voreingestellte Antwort verwenden) .\
+Danach sollten Sie auf die selbe Art und Weise "Ghostscript 8" installieren, da dies f\'9fr einige Programme ebenfalls ben\'9atigt wird. H\'8aufig wird angeraten auch noch FreeType 2, libwmf, PNG Library und ImageMagick zu installieren. Dies ist f\'9fr LaTeXiT aber nicht unbedingt notwendig.\
+\
+Nun haben Sie erfolgreich LaTeX auf Ihrem Computer installiert. Wenn Sie dies aber nicht wissen, w\'9frden Sie es auch niemals bemerken! LaTeX besitzt keine graphische Benutzeroberfl\'8ache, das Programm ist Unix-orientiert und kann nur \'9fber die Befehlszeile aufgerufen werden (durch Verwendung von /Programme/Dienstprogramme/Terminal)\
+Aber werden Sie deshalb nicht traurig: Es existieren einige graphische Benutzeroberfl\'8achen um LaTeX in einer benutzerfreundlicheren Art und Weise zu verwenden. Es gibt eine Reihe von third-party Software, die meisten sind zur Zeit kostenlos. LaTeXiT ist eines davon: Es erlaubt das Schreiben von kleineren Gleichungen. Um gr\'9a\'a7ere Dokumente (z.B. wissenschaftliche Publikationen) zu schreiben sollten Sie lieber TexShop oder iTexMac (nur als Beispiel) verwenden, diese wurden daf\'9fr entwickelt.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Versions-Geschichte\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+v 1.10.0 (7. Oktober 2006)\
+- Deutsche Lokalisation und Dokumentation von Simon L\'8ammle;\
+- Die Bibliothek ben\'9atigt nun einen Doppelklick um einen Eintrag zu ersetzen;\
+- Sie k\'9annen nun eine Bibliotheks-Datei in das Bibliotheks-Fenster ziehen;\
+- Sie k\'9annen nun Ordner oder PDF-Dateien in das Bibliotheks-Fenster ziehen;\
+- Die Bibliothek beinhaltet nun einen kleine Import/Export-Funktion;\
+- Die History ben\'9atigt nun einen Doppelklick um einen Eintrag zu ersetzen;\
+- Die History hat nun eine Vorschau wie die Bibliothek;\
+- M\'9aglichkeit Shortcuts zu erstellen um spezielle Schriftzeichen zu schreiben;\
+- Bessere Bedienbarkeit der Rechtschreibhilfe;\
+- Behobener Darstellungsfehler von akzentuierten Zeichen im Log;\
+- Einige kleine \'80nderungen der Benutzeroberfl\'8ache.\
+\
+v 1.9.3 (28. August 2006)\
+- Erneutes reparieren des Dienstes "Gleichung detektieren und umwandeln" so dass es nun im zu transformierenden Text keine existierenden Bilder mehr l\'9ascht;\
+- LaTeXiT kann nun in RTF eingebettete PDF-Daten erneut \'9affnen; dies bedeutet, dass Kopieren/Einf\'9fgen nun aus dem Text-Editor zum Neu\'9affnen funktionieren sollte;\
+- Behebung eines Absturzes von LaTeXiT der beim \'85ffnen einer besch\'8adigten Bibliothek/History auftreten konnte.\
+\
+v 1.9.2 (26. Juli 2006)\
+- Behebung eines Fehlers, der zum Absturz von LaTeXiT f\'9fhrte beim Versuch den selben LinkBack ein zweites Mal zu \'9affnen;\
+- Das "PDF mit umrissener Schrift" - Format kann nun erneut in LaTeXiT ge\'9affnet werden;\
+- "Neu aus der Zwischenablage" vergisst nun keine Farbe, Gr\'9a\'a7e und Modus der Gleichung mehr;\
+- Bessere Handhabung einiger LaTeX Fehler;\
+- Behobene typographische Fehler.\
+\
+v 1.9.1 (12. Juli 2006)\
+- Hinzugef\'9fgte M\'9aglichkeit die Skalierung des Exportes zu \'8andern;\
+- Behobener Fehler, der beim Laden eines besch\'8adigten Bildes zu einem Absturz f\'9fhrte;\
+- Behebung eines Fehlers, bei dem das Ergebnis des Dienstes "Gleichung detektieren und umwandeln" nicht automatisch in der History gespeichert wurde;\
+- Der Dienst \'9fbersetzt nun "soft-line-breaking" (Shift-return) in ein einfaches Return und ein "unbreakable space" (Alt-space) in ein space um, damit werden Probleme unter LaTeX verhindert;\
+- Ein vom Dienst generiertes Bild hat nun standardm\'8a\'a7ig keinen wei\'a7en Hintergrund in der History mehr;\
+- Der Dienst "Gleichung detektieren und umwandeln" kann nun fehlerhafte Versuche in LaTeXiT \'9affnen um Fehler aufzusp\'9fren;\
+- Der Dienst "Gleichung detektieren und umwandeln" l\'9ascht nun keine existierenden Bilder im zu transformierenden Text mehr.\
+\
+v 1.9.0 (4. Juni 2006)\
+- Hinzuf\'9fgen einiger  LaTeX Schl\'9fsselw\'9arter in die automatische Vervollst\'8andigung, welche \'9fber Option-Escape aufrufbar ist;\
+- Hinzuf\'9fgen des "Bild kopieren als" Kontextmen\'9fs;\
+- Behobener Fehler, der beim \'85ffnen von auf PowerPC erstellen Bibliotheken auf Intel Macs, auftreten konnte;\
+- Behobener Fehler, der das automatische Speichern geladener Bibliotheken verhinderte;\
+- Behobener Fehler, der Scrollbarh\'9fpfen beim Verwenden der LaTeX Palette ausl\'9aste.\
+\
+v 1.8.9 (24. Mai 2006)\
+- Die Bibliothek kann nun "Dummy" Hintergrundfarben der Gleichung handhaben. Es war au\'a7erdem m\'9aglich diese durch das Drag'N'Drop einer Farbe zu definieren (n\'9ftzlich f\'9fr Gleichungen mit einer sehr hellen Schriftfarbe).\
+\
+v 1.8.8 (12. Mai 2006)\
+- Behebung eines Fehlers, der bei Verwendung des Spezialzeichens "::" auftreten konnte. Dies verursachte einen unerw\'9fnschten Fehler w\'8ahrend dem Latexieren.\
+\
+v 1.8.7 (11. Mai 2006)\
+- Das "Einf\'9fgen" funktionierte nicht mehr in der englischen Version 1.8.6 (was f\'9fr eine Verbesserung!). Das war nur ein Lokalisations-Fehler.\
+\
+v 1.8.6 (10. Mai 2006)\
+- Verbessertes Verhalten des Men\'9fpunktes "Einf\'9fgen".\
+\
+v 1.8.5 (29. April 2006)\
+- Hinzuf\'9fgen des Men\'9fpunktes "Datei > Neu aus Zwischenablage";\
+- In der Englischen Version konnte der Men\'9fpunkt "Einf\'9fgen" in manchen F\'8allen nicht anw\'8ahlbar sein.\
+\
+v 1.8.4 (26. April 2006)\
+- Behebung eines Lokalisations-Fehlers im LaTeXiT Dienstemen\'9f.\
+\
+v 1.8.3 (18. April 2006)\
+- Hinzuf\'9fgen des Men\'9fpunktes "Bearbeiten > Bild kopieren als...".\
+\
+v 1.8.2 (8. April 2006)\
+- Es konnte passiere, dass einige fr\'9fhere \'80nderungen in der History nicht gespeichert wurden;\
+- Einige pdflatex Fehler werden nun besser gehandhabt.\
+\
+v 1.8.1 (27. M\'8arz 2006)\
+- Hinzuf\'9fgen eines neuen Dienstes, der automatisch "$$...$$" and "$...$" in einem Text erkennt und das Entsprechende in eine Gleichung umsetzt (identisch in "Display" und "Inline");\
+- Behebung einiger Fehler der Benutzeroberfl\'8ache, einige Einstellungen wurden beim \'8andern der Gestalteten Zusammensetzungen nicht erneuert.\
+\
+v 1.8.0 (24. M\'8arz 2006)\
+- Hinzuf\'9fgen der M\'9aglichkeit w\'8ahrend der Verarbeitung benutzereigene Skripte zu verwenden;\
+- Hinzuf\'9fgen der M\'9aglichkeit einige "Gestaltete Zusammensetzungen zu erstellen";\
+- Die LaTeX Palette wurde etwas verbessert;\
+- Die Benutzungsdauer wurde verbessert;\
+- Das Schieben einer Farbe in ein Textfeld f\'9fgt dort nun den LaTeX code "\\color[rgb]\{\}" der Farbe ein.\
+\
+v 1.7.1 (20. M\'8arz 2006)\
+- \'80nderung des standartm\'8a\'a7igen Tastenk\'9frzels des Men\'9fpunktes Dienste um Konflikte mit MathLab zu umgehen bzw. um auf die Angewohnheiten einiger Benutzer R\'9fcksicht zu nehmen \uc0\u8984 +. ;\
+- Behebung eines Fehlers in diesem Tastenk\'9frzel;\
+- Behebung eines Fehlers, in dem die Vorschau von Bibliotheks-Eintr\'8agen nur angezeigt wurde, wenn die Maus au\'a7erhalb des Fensters war.\
+\
+v 1.7.0 (16th march 2006)\
+- Hinzuf\'9fgen des Modus "Eqnarray" neben "Display | Inline | Text"; dies ist ein handlicher Shortcut um mehrzeilige Gleichungen zu machen; es verwendet automatisch die "\\begin\{eqnarray*\}...\\end\{eqnarray*\}" Einklammerung;\
+- Hinzuf\'9fgen eines Vergr\'9a\'a7erungsglases um Bibliotheks-Eintr\'8age in realer Gr\'9a\'a7e darzustellen;\
+- Verbesserte Handhabung des LaTeXiT Programmdienstes.\
+\
+v 1.6.2 (23. Februar 2006)\
+- Besserer Umgang mit tempor\'8aren Dateien, um Probleme mit dem feynmf-Paket vorzubeugen;\
+- Eingef\'9fgte Texte in LaTeXiT \'8andern nun automatisch die Schriftart, welche in den Einstellungen festgelegt ist.\
+\
+v 1.6.1 (16th Februar 2006)\
+- Nach \'9affentlichen Nachfragen habe ich einen Paypal Account erstellt, f\'9fr die Leute, welche etwas spenden m\'9achten; aber LaTeXiT ist weiterhin absolut frei!\
+- Hinzuf\'9fgen von "Bearbeiten > Kopieren als PDF mit umrissener Schrift" um es einfach zu erm\'9aglichen das Bild als "PDF mit umrissener Schrift" zu kopieren; dies vereinfacht das Einf\'9fgen in Illustrator;\
+- Unter Tiger, der Ordner der Bibliothek verbleibt nun in der "Vorschau" klein, um besser lesbar zu sein;\
+- Behebung eines kosmetischen Fehlers: Ein Erneuerungsproblem konnte das Anzeigen des Prozessindikators verhindern.\
+\
+v 1.6.0 (12. Februar 2006)\
+- Hinzuf\'9fgen von Exports "PDF mit umrissener Schrift", welches das Exportieren in Illustrator ohne das Ersetzen der Schrift erlaubt (Danke an Jens N\'9ackel!);\
+- Behebung eines Fehlers in der englischen Version; in den Einstellungen von "composition pane" waren die Einstellungen wirkungslos;\
+- Behebung eines graphischen Fehlers, der beim Aktualisieren von Bibliotheks-Objekten auftrat.\
+\
+v 1.5.6 (7. Februar 2006)\
+- Behebung eines durch eine r\'9fckl\'8aufige Bewegung ausgel\'9asten Fehlers in "LaTeX > Einleitung anzeigen";\
+- Hinzuf\'9fgen einer Speichern/Laden Zustandsanzeige f\'9fr die History/Bibliothek;\
+- Die Bibliothek und die History speichern sich nicht mehr, solange sie nicht ver\'8andert wurden.\
+\
+v 1.5.5 (7. Februar 2006)\
+- Beschleunigung der Neuindexierung der History und Bibliothek beim aktualisieren einer LaTeXiT Version vor 1.5.4. Dieser Prozess dauert sehr lange und vermittelt den Anschein, dass LaTeXiT fehlerhaft ist.\
+\
+v 1.5.4 (7. Februar 2006)\
+- Akzentuierte Zeichen des LaTeX Codes wurden nicht in den PDF Metadaten gespeichert. Nun werden sie es.\
+\
+v 1.5.3 (4. Februar 2006)\
+- Behebung eines Fehlers bei der Suche nach Updates;\
+- Behebung eines Fehlers basierend auf pdflatex Pfad Entwicklung auf MacIntels.\
+\
+v 1.5.2 (2. Februar 2006)\
+- Behebung eines Fehlers beruhend auf dem Aliasing einiger Symbole der LaTeX Palette;\
+- Behebung eines Fehlers der in Version 1.5.1 eingef\'9fhrt wurde in dem das Textfenster sich nicht ordnungsgem\'8a\'a7 an die Gr\'9a\'a7e anpasste;\
+- Behebung eines Fehlers bei dem der obere und der rechte Rand ignoriert wurde;\
+- Behebung eines Fehlers in der Bibliothek, in dem der "+" Knopf unerwarteter Wei\'a7e ausfallen konnte.\
+\
+v 1.5.1 (26. Januar 2006)\
+- Handhabung eines Fehlers in pdflatex welcher trotz eines Erfolgs zu einem Fehler f\'9fhren kann;\
+-Die Bibliothek bietet nun eine Gleichungs-Vorschau;\
+- Behebung kosmetischer Fehler:\
+	- Die ersten 2 Zeilen der Einleitung k\'9annen nicht ver\'8andert werden: Sie werden nun in Grau dargestellt	\
+- schreckliche Anzeige von Zeilennummern beim scrollen in der Einleitungs-Vorschau;\
+	- Das Scrollrad war im Haupttextfenster nicht aktiv;\
+  	- Ausf\'9fhrungs-Pfade wurden nicht wieder gef\'8arbt beim \'80ndern des Zusammenstellungs-Modus;
+\fs26 \ul \
+
+\fs22 \ulnone \
+v 1.5.0 (4. Januar 2006)\
+- Einige Editierungs-Verbesserungen (Syntax-F\'8arbung...) Danke f\'9fr das Verwenden einiger Teile des Smultron Quellcodes, von Peter Borg (http://smultron.sourceforge.net); Syntax-F\'8arbung ist noch nicht perfekt;\
+- Behebung eines Fehlers der einen Fehler w\'8ahrend einer "Latexisation" ausl\'9aste;\
+- Hinzuf\'9fgen von benutzerdefinierten Shortcuts f\'9fr den Anwendungs-Dienst;\
+- sch\'9anere LaTeX Palette;\
+- Sch\'9anere Einstellungs-Panel;\
+- Verfeinerungen.\
+\
+v 1.4.4 (10. Oktober 2005)\
+- noch eine \'80nderung der "bounding box".\
+\
+v 1.4.3 (7th Oktober 2005)\
+- In den Einstellungen ist es nun vom Anwender m\'9aglich die ersten 2 Zeilen der Einleitung zu \'8andern (f\'9fr diejenigen, die "wirklich" wissen was sie tun);\
+- Ein verbessertes Verhalten im Modus "latex+dvipdf" (nun ein wirklicher Gebrauch von "latex" anstatt von "pdflatex -progname latex");\
+- Die vom Dienst erstellten Gleichungen k\'9annen nun in der History gespeichert werden;\
+- Verbesserte Einstellung der "bounding box" (diese versucht die Gleichung zu beschneiden);\
+- verbesserte Dokumentation.\
+\
+v 1.4.2 (9. September 2005)\
+- Behebung eines Fehlers, der zum Absturz von LaTeXiT f\'9fhrt, wenn auf dem System kein pdflatex oder dvipdf installiert ist;\
+- Behebung einiger typographischer Fehler.\
+  \
+v 1.4.1\
+- Eingeleitete xelatex Unterst\'9ftzung;\
+- Behobener Fehler in der Zeilen-Z\'8ahlung;\
+- Behobener Fehler, bei dem der "Pfad" der "Zusammenstellung" in den Einstellungen nicht gespeichert wurde;\
+- Unter Tiger, der LaTeXiT Dienst kann nun mit PDF Text als Ausgangsdaten verwendet werden;\
+- Neuer Shortcut um das Bild in die Zwischenablage zu kopieren;\
+- Besseres \'9fberpr\'9ffen von color.sty.\
+\
+\
+v 1.4.0 (14. August 2005)\
+- \'80nderungen der Benutzeroberfl\'8ache (History, Bibliothek) um logischer zu sein und um den Richtlinien von Apple besser zu entsprechen;\
+- Behebung eines Fehlers unter Tiger, beim Importieren von Gleichungen die ein Komma enthalten;\
+- Sie k\'9annen nun pdflatex der latex+dvipdf verwenden - dies ist f\'9fr manche Pakete ganz n\'9ftzlich;\
+- Sie k\'9annen nun Eintr\'8age der Bibliothek als "eingeklammerten" (oder "geschm\'9fckten") Text exportieren;\
+- Hinzuf\'9fgen eines Farb-Pr\'9ffers, n\'9ftzlich f\'9fr Drag'N'Drop auf die Vorschau, History Schreiber oder Textfelder;\
+- Einige neue Funktionalit\'8aten bei Kopieren/Einf\'9fgen, in der Bibliothek oder von anderen Anwendungen;\
+- Sie k\'9annen nun nach neuen Versionen suchen;\
+- Die Standardschrift ist nun Monaco (mit konstantem Absand);\
+- Weitere Fehlerbehebungen.\
+\
+v 1.3.1\
+- Es ist nun m\'9aglich Bibliotheken zu Speichern/Laden;\
+- Sie k\'9annen nun die Einleitung Verstecken/Zeigen \'9fber das Latex Men\'9f. Ziemlich handlich f\'9fr diejenigen, welche nicht die Dokumentation lesen... ;-)\
+- \'80nderungen der Standard-Einleitungen kann an ge\'9affneten Dokumenten und der Bibliothek durchgef\'9fhrt werden;\
+- Von LaTeXiT erstellte Dateien haben nun ein Icon gem\'8a\'a7 ihrem Inhalt;\
+- PDF die von LaTeXiT erstellt wurden, werden nun von LaTeXiT im Finder ge\'9affnet;\
+- Nun, sollten andere Schriftarten als die Standardschriftart von LaTeX' akzeptiert werden;\
+- Im Textmodus sind nun \\newline und andere \\\\ erlaubt;\
+- Behebung eines Fehlers beim importieren vom LaTeX Equation Editor;\
+- Behebung eines Fehlers bei dem die Vorschau verwischt aussehen konnte, beim Verschieben eines PDF auf das  LaTeXiT Dock Icon;\
+- Behebung eines Fehlers, bi dem das Men\'9f "vergessen" konnte ob die Bibliothek sichtbar war oder nicht;\
+- Entfernen der "PDF (Illustrator)" Exportoption, welche aktuell nun w\'8ahrend der fr\'9fhen Entwicklung von LaTeXiT existiert hatte (und nicht gut funktionierte);\
+- Behebung eines Fehlers, der zum Absturz von LaTeXiT unter Panther f\'9fhrte;\
+- Behebung eines Fehlers, der die Basislinie falsch machte beim Anbringen eines Randes unter der Gleichung;\
+- Weitere Fehlerbehebungen.\
+\
+v 1.3\
+- Hinzuf\'9fgung der Kompatibilit\'8at von PDF-Dateien aus LaTeXiT und des LaTeX Equation Editor;\
+- Der Anwendungs-Dienst funktionierte nicht ordentlich unter Panther.\
+\
+v 1.2\
+- Die Anwendung hat nun 2 Verbreitungen: Eine f\'9fr Panther und eine f\'9fr Tiger - die Version f\'9fr Tiger hat mehr Funktionen;\
+- (Tiger Version) fertig f\'9fr Mac-Intel (compiliert als Universal Binary); aber die Intel version sollte keine groben Fehler mehr enthalten, sie konnte noch nicht getestet werden. Es ist als "experimentell" zu betrachten und Fehlerberichte (von denjenigen, die einen Mac-Intel besitzen) sind willkommen;\
+- (Tiger Version) es ist nun m\'9aglich ein mit LaTeXiT erstelltes PDF erneut zu \'9affnen;\
+- (Tiger Version) es ist nun m\'9aglich Objekte aus der Bibliothek oder der History in den Finder zu ziehen;\
+- (Tiger Version) mehr Unterst\'9ftzung von Drag'N'Drop in LaTeXiT selbst (z.B. von der History in die Bibliothek);\
+- Die Software steht nun unter CeCILL Lizenz (open source, GPL compatible);\
+- Verbesserte Geschwindigkeit;\
+- Verbesserte LinkBack-Unterst\'9ftzung (sie k\'9annen nun eine Gleichung "erneuern" welche in eine andere Anwendung gezogen wurde);\
+- Das Exportformat, \'9fber Drag'N'Drop oder \'9fber den Dienst, ist nun benutzerdefinierbar;\
+- Der Anwendungsdienst ist nun besser konfigurierbar;\
+- Der LaTeXiT Dienst versucht nun die Gleichung an den umgebenen Text anzugleichen;\
+- Der LaTeXiT Dienst kann nun die selbe Farbe wie der Quelltext verwenden;\
+- Sie k\'9annen nun ein Objekt der Bibliothek aktualisieren ohne es zu l\'9aschen und neu zu erstellen;\
+- Japanische Benutzer k\'9annen nun das " \'b4 " (yen) Symbol anstatt " \\ " (backslash) verwenden;\
+- aktualisierte Paletten;\
+- Korrigierter Tooltips in der Palette;\
+- Die Latexistation kann nun ausgel\'9ast werden mit \uc0\u8984 L, \u8679 \u8984 L or \u8679 \u8984 T (um TeXShop Benutzer gl\'9fcklich zu machen);\
+- Hinzugef\'9fgter Zoom in der Bildvorschau;\
+- Bei einem Drag'N'Drop aus der Bibliothek zu einem Ziel das keine Bilder darstellen kann kann das Label der Gleichung (so wie in der Bibliothek definiert) verwendet werden;\
+- Hinzuf\'9fgen einer kleinen Palette zum vergr\'9a\'a7ern der R\'8ander;\
+- Sie k\'9annen nun die Schrift/Gr\'9a\'a7e von Text ver\'8andern, f\'9fr ein besseres Arbeitsgef\'9fhl; es hat keine Auswirkungen auf den erstellten Text;\
+- Einige weitere Fehlerbehebungen.\
+\
+v 1.1.1\
+- Abschaltung einer Eigenschaft die es Programmen die kein PDF verstehen erm\'9aglicht Ziele irgendwo hin zu verschieben, \'9fber Empfangen des LaTeX Quellcodes: Programme wie Word ignorieren das PDF in so einem Fall;\
+- Behebung eines Fehlers, der beim Hinzuf\'9fgen eines Objektes zur Bibliothek auftreten konnte;\
+- Eine versuchswei\'a7e Behebung eines Fehlers des LaTeXiT Dienstes unter Tiger (Ich kann es nicht testen, solange ich noch kein Tiger habe).\
+\
+v 1.1\
+- LinkBack-Unterst\'9ftzung: Es ist nun m\'9aglich, von Programmen welche LinkBack unterst\'9ftzen, eine Gleichung in LaTeXiT erneut zu \'9affnen (f\'9fr gew\'9ahnlich \'9fber das <Berabeiten> Men\'9f);\
+- Hinzuf\'9fgen einer Bibliothek um Gleichungen zu archivieren;\
+- Bessere Kompatibilit\'8at mit Microsoft Office;\
+- Es ist nun m\'9aglich in der History mehr als ein Objekt auf einmal auszuw\'8ahlen.\
+\
+v 1.0\
+- Erste Ver\'9affentlichung\
+}

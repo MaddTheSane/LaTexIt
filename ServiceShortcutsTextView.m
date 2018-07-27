@@ -1,5 +1,5 @@
 //
-//  ShortcutTextView.m
+//  ServiceShortcutsTextView.m
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/12/05.
@@ -8,9 +8,9 @@
 //This sub-class is a textfield that may catch keyboard shortcuts and display them.
 //Note that it inserts Command and Shift because it is used for Service shortcut.
 
-#import "ShortcutTextView.h"
+#import "ServiceShortcutsTextView.h"
 
-@implementation ShortcutTextView
+@implementation ServiceShortcutsTextView
 
 -(id) initWithFrame:(NSRect)frame
 {

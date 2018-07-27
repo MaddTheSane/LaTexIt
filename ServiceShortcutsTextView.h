@@ -1,5 +1,5 @@
 //
-//  ShortcutTextView.h
+//  ServiceShortcutsTextView.h
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/12/05.
@@ -11,7 +11,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface ShortcutTextView : NSTextView {
+@interface ServiceShortcutsTextView : NSTextView {
 
 }
 

@@ -18,13 +18,18 @@
                 open = id; 
                 refreshItems = id; 
                 removeSelectedItems = id; 
+                renameItem = id; 
                 saveAs = id; 
             }; 
             CLASS = LibraryController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 actionButton = ImagePopupButton; 
+                exportAccessoryView = NSView; 
+                exportOnlySelectedButton = NSButton; 
+                importAccessoryView = NSView; 
                 importCurrentButton = NSButton; 
+                importReplacesExistingLibraryButton = NSButton; 
                 libraryPreviewPanel = BorderlessPanel; 
                 libraryPreviewPanelImageView = LibraryPreviewPanelImageView; 
                 libraryPreviewPanelSegmentedControl = NSSegmentedControl; 

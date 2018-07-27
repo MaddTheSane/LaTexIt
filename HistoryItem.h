@@ -22,11 +22,13 @@ extern NSString* HistoryItemDidChangeNotification;
   double              pointSize;   //the point size chosen
   NSDate*             date;        //the date the equation was computed
   latex_mode_t        mode;        //the mode (EQNARRAY, DISPLAY(\[...\]), INLINE($...$) or TEXT(text))
-
+  
   NSImage*     pdfCachedImage; //a cached image to display the pdf data  
   NSImage*     bitmapCachedImage; //a bitmap equivalent to allow faster display in some cases
   
   NSColor* backgroundColor;//not really background of the image, just useful when previewing, to prevent text to blend with the background
+  
+  NSString* title;
 }
 
 //constructors
@@ -51,9 +53,11 @@ extern NSString* HistoryItemDidChangeNotification;
 -(NSDate*)             date;
 -(latex_mode_t)        mode;
 -(NSColor*)            backgroundColor;
+-(NSString*)           title;
 
 -(void) setPreamble:(NSAttributedString*)text;
 -(void) setBackgroundColor:(NSColor*)backgroundColor;
+-(void) setTitle:(NSString*)title;
 
 //latex source code (preamble+body) typed by the user. This WON'T add magnification, auto-bounding, coloring.
 //It is a summary of what the user did effectively type.

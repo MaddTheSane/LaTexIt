@@ -215,12 +215,17 @@
 		9344D8280825808900B17B37 /* LibraryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8260825808900B17B37 /* LibraryCell.m */; };
 		9344D83D0825818B00B17B37 /* small-folder-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9344D83C0825818B00B17B37 /* small-folder-icon.png */; };
 		9344D8A2082587ED00B17B37 /* LibraryFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8A0082587ED00B17B37 /* LibraryFolder.m */; };
-		935888EA096048A00068C698 /* ShortcutTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935888E8096048A00068C698 /* ShortcutTextView.m */; };
+		9345E3360AC9A2620082ADB4 /* textShortcuts.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9345E3350AC9A2620082ADB4 /* textShortcuts.plist */; };
+		9345E42A0AC9C5310082ADB4 /* TextShortcutsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4240AC9C5310082ADB4 /* TextShortcutsController.m */; };
+		9345E42D0AC9C5310082ADB4 /* TextShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4270AC9C5310082ADB4 /* TextShortcutsTableView.m */; };
+		9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9345E4280AC9C5310082ADB4 /* TextShortcutsManager.m */; };
+		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
+		935888EA096048A00068C698 /* ServiceShortcutsTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935888E8096048A00068C698 /* ServiceShortcutsTextView.m */; };
 		935A834C084EFF11005724CE /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
 		935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */; };
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
 		935A8612084F4F27005724CE /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 935A860C084F4F15005724CE /* LinkBack.framework */; };
-		9368E8E0095B184B00B35E30 /* ShortcutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ShortcutTableView.m */; };
+		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		936E319309465EAE0091BEC1 /* advancedToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */; };
 		936E319409465EAE0091BEC1 /* compositionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318E09465EAE0091BEC1 /* compositionToolbarItem.tiff */; };
 		936E319509465EAE0091BEC1 /* editionToolbarItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 936E318F09465EAE0091BEC1 /* editionToolbarItem.tiff */; };
@@ -567,15 +572,36 @@
 		9344D83C0825818B00B17B37 /* small-folder-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "small-folder-icon.png"; path = "Resources/interface/small-folder-icon.png"; sourceTree = "<group>"; };
 		9344D89F082587ED00B17B37 /* LibraryFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFolder.h; sourceTree = "<group>"; };
 		9344D8A0082587ED00B17B37 /* LibraryFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFolder.m; sourceTree = "<group>"; };
-		935888E7096048A00068C698 /* ShortcutTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortcutTextView.h; sourceTree = "<group>"; };
-		935888E8096048A00068C698 /* ShortcutTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortcutTextView.m; sourceTree = "<group>"; };
+		9345E3350AC9A2620082ADB4 /* textShortcuts.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = textShortcuts.plist; path = Resources/textShortcuts.plist; sourceTree = "<group>"; };
+		9345E4230AC9C5310082ADB4 /* TextShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsTableView.h; sourceTree = "<group>"; };
+		9345E4240AC9C5310082ADB4 /* TextShortcutsController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsController.m; sourceTree = "<group>"; };
+		9345E4250AC9C5310082ADB4 /* TextShortcutsManager.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsManager.h; sourceTree = "<group>"; };
+		9345E4260AC9C5310082ADB4 /* TextShortcutsController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = TextShortcutsController.h; sourceTree = "<group>"; };
+		9345E4270AC9C5310082ADB4 /* TextShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsTableView.m; sourceTree = "<group>"; };
+		9345E4280AC9C5310082ADB4 /* TextShortcutsManager.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = TextShortcutsManager.m; sourceTree = "<group>"; };
+		934C03330AD035D4007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/CompositionConfiguration.nib; sourceTree = "<group>"; };
+		934C03360AD035E5007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Encapsulation.nib; sourceTree = "<group>"; };
+		934C03370AD035EE007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/History.nib; sourceTree = "<group>"; };
+		934C03380AD035F7007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Library.nib; sourceTree = "<group>"; };
+		934C03390AD03600007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		934C033A0AD0360A007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Margin.nib; sourceTree = "<group>"; };
+		934C033C0AD03617007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MyDocument.nib; sourceTree = "<group>"; };
+		934C033D0AD0361F007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
+		934C033E0AD03626007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Preferences.nib; sourceTree = "<group>"; };
+		934C033F0AD03632007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		934C03400AD0363B007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
+		934C03410AD03648007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		934C034D0AD0368D007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
+		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "Resources/documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
+		935888E7096048A00068C698 /* ServiceShortcutsTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTextView.h; sourceTree = "<group>"; };
+		935888E8096048A00068C698 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
 		935A8349084EFF11005724CE /* NSApplicationExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSApplicationExtended.h; sourceTree = "<group>"; };
 		935A834A084EFF11005724CE /* NSApplicationExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSApplicationExtended.m; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		935A860C084F4F15005724CE /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LinkBack.framework; sourceTree = "<group>"; };
-		9368E8DD095B184B00B35E30 /* ShortcutTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortcutTableView.h; sourceTree = "<group>"; };
-		9368E8DE095B184B00B35E30 /* ShortcutTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortcutTableView.m; sourceTree = "<group>"; };
+		9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTableView.h; sourceTree = "<group>"; };
+		9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTableView.m; sourceTree = "<group>"; };
 		936E318D09465EAE0091BEC1 /* advancedToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = advancedToolbarItem.tiff; sourceTree = "<group>"; };
 		936E318E09465EAE0091BEC1 /* compositionToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = compositionToolbarItem.tiff; sourceTree = "<group>"; };
 		936E318F09465EAE0091BEC1 /* editionToolbarItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = editionToolbarItem.tiff; sourceTree = "<group>"; };
@@ -760,7 +786,6 @@
 				9324D35808A63ED90010DB95 /* Interface */,
 				93A5972207F479B8001DF900 /* LatexPalettes */,
 				9344D76D08257B1600B17B37 /* Library */,
-				9308E22807EE3ED500DD1B5F /* LineCount */,
 				9372A1FA08781A0F00A3A645 /* Margins */,
 				9315A44A07FD30E800AFCCE9 /* Preferences */,
 				9302548807F0BC7600011996 /* Utils */,
@@ -789,6 +814,7 @@
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
 				9326DEDD0A2E3A1E003A430E /* latex-keywords */,
+				9345E3350AC9A2620082ADB4 /* textShortcuts.plist */,
 				93B48F5D091FA47C00FDEEB6 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -834,6 +860,7 @@
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				93A592C907F46075001DF900 /* Lisez-moi.rtfd */,
 				93A592CA07F46075001DF900 /* Read Me.rtfd */,
+				934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */,
 				93A592C807F46075001DF900 /* Licence.rtf */,
 				935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */,
 				935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */,
@@ -868,12 +895,10 @@
 		9315A44A07FD30E800AFCCE9 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				9345E40E0AC9C5120082ADB4 /* ServiceShortcuts */,
+				9345E3D70AC9C3390082ADB4 /* TextShortcuts */,
 				9315A59907FD36BD00AFCCE9 /* PreferencesController.h */,
 				9315A59807FD36BD00AFCCE9 /* PreferencesController.m */,
-				9368E8DD095B184B00B35E30 /* ShortcutTableView.h */,
-				9368E8DE095B184B00B35E30 /* ShortcutTableView.m */,
-				935888E7096048A00068C698 /* ShortcutTextView.h */,
-				935888E8096048A00068C698 /* ShortcutTextView.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -881,6 +906,7 @@
 		9324D35808A63ED90010DB95 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				9308E22807EE3ED500DD1B5F /* LineCount */,
 				9309DCD209C8B17600C5231C /* BorderlessPanel.h */,
 				9309DCD309C8B17600C5231C /* BorderlessPanel.m */,
 				9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */,
@@ -1213,6 +1239,30 @@
 				9344D76F08257B2400B17B37 /* LibraryTableView.m */,
 			);
 			name = Library;
+			sourceTree = "<group>";
+		};
+		9345E3D70AC9C3390082ADB4 /* TextShortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				9345E4260AC9C5310082ADB4 /* TextShortcutsController.h */,
+				9345E4240AC9C5310082ADB4 /* TextShortcutsController.m */,
+				9345E4250AC9C5310082ADB4 /* TextShortcutsManager.h */,
+				9345E4280AC9C5310082ADB4 /* TextShortcutsManager.m */,
+				9345E4230AC9C5310082ADB4 /* TextShortcutsTableView.h */,
+				9345E4270AC9C5310082ADB4 /* TextShortcutsTableView.m */,
+			);
+			name = TextShortcuts;
+			sourceTree = "<group>";
+		};
+		9345E40E0AC9C5120082ADB4 /* ServiceShortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				9368E8DD095B184B00B35E30 /* ServiceShortcutsTableView.h */,
+				9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */,
+				935888E7096048A00068C698 /* ServiceShortcutsTextView.h */,
+				935888E8096048A00068C698 /* ServiceShortcutsTextView.m */,
+			);
+			name = ServiceShortcuts;
 			sourceTree = "<group>";
 		};
 		936E318C09465EAE0091BEC1 /* toolbarItems */ = {
@@ -1625,6 +1675,8 @@
 				93D7CB5A09D36D6D0001DC5E /* CompositionConfiguration.nib in Resources */,
 				9326E12F0A2E46B5003A430E /* convert in Resources */,
 				93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */,
+				9345E3360AC9A2620082ADB4 /* textShortcuts.plist in Resources */,
+				934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1692,8 +1744,8 @@
 				9311C8E708A10931009AC959 /* HistoryController.m in Sources */,
 				9324D34F08A63E540010DB95 /* ButtonNotClickThrough.m in Sources */,
 				936E5F920906E64000A26F7B /* SMLSyntaxColouring.m in Sources */,
-				9368E8E0095B184B00B35E30 /* ShortcutTableView.m in Sources */,
-				935888EA096048A00068C698 /* ShortcutTextView.m in Sources */,
+				9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */,
+				935888EA096048A00068C698 /* ServiceShortcutsTextView.m in Sources */,
 				9391D8FA09607C2100A22F19 /* PaletteItem.m in Sources */,
 				932BA15609609A3D004EECBA /* PaletteCell.m in Sources */,
 				932BA4D10960C6CD004EECBA /* PaletteMatrix.m in Sources */,
@@ -1705,6 +1757,9 @@
 				93D7CA5709D362FC0001DC5E /* CompositionConfigurationController.m in Sources */,
 				939E652F0A23D427009308E4 /* LibraryPreviewPanelImageView.m in Sources */,
 				93D19DB20AA2E41C00DFBEE8 /* NSAttributedStringExtended.m in Sources */,
+				9345E42A0AC9C5310082ADB4 /* TextShortcutsController.m in Sources */,
+				9345E42D0AC9C5310082ADB4 /* TextShortcutsTableView.m in Sources */,
+				9345E42E0AC9C5310082ADB4 /* TextShortcutsManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1716,6 +1771,7 @@
 			children = (
 				089C1660FE840EACC02AAC07 /* English */,
 				93773C4907FFF713004AAB30 /* French */,
+				934C03410AD03648007FEC06 /* German */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1725,6 +1781,7 @@
 			children = (
 				2A37F4B5FDCFA73011CA2CEA /* English */,
 				93773C3307FFF547004AAB30 /* French */,
+				934C033C0AD03617007FEC06 /* German */,
 			);
 			name = MyDocument.nib;
 			sourceTree = "<group>";
@@ -1734,6 +1791,7 @@
 			children = (
 				2A37F4B7FDCFA73011CA2CEA /* English */,
 				93773C3207FFF541004AAB30 /* French */,
+				934C03390AD03600007FEC06 /* German */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -1743,6 +1801,7 @@
 			children = (
 				2A37F4BAFDCFA73011CA2CEA /* English */,
 				93773C4707FFF704004AAB30 /* French */,
+				934C034D0AD0368D007FEC06 /* German */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -1752,6 +1811,7 @@
 			children = (
 				930255CD07F0C2A300011996 /* English */,
 				93773C4607FFF6FB004AAB30 /* French */,
+				934C03400AD0363B007FEC06 /* German */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1761,6 +1821,7 @@
 			children = (
 				9315A45107FD331800AFCCE9 /* English */,
 				93773C3407FFF54D004AAB30 /* French */,
+				934C033E0AD03626007FEC06 /* German */,
 			);
 			name = Preferences.nib;
 			sourceTree = "<group>";
@@ -1770,6 +1831,7 @@
 			children = (
 				931CB32E0801325800CF9D2B /* English */,
 				931CB342080132DF00CF9D2B /* French */,
+				934C033D0AD0361F007FEC06 /* German */,
 			);
 			name = LatexPalettes.nib;
 			sourceTree = "<group>";
@@ -1779,6 +1841,7 @@
 			children = (
 				9372A26A08781EC800A3A645 /* English */,
 				9372A2F50878280700A3A645 /* French */,
+				934C033A0AD0360A007FEC06 /* German */,
 			);
 			name = Margin.nib;
 			sourceTree = "<group>";
@@ -1788,6 +1851,7 @@
 			children = (
 				939A644F080027EA00AE4486 /* English */,
 				939A64590800281C00AE4486 /* French */,
+				934C033F0AD03632007FEC06 /* German */,
 			);
 			name = ServicesMenu.strings;
 			sourceTree = "<group>";
@@ -1797,6 +1861,7 @@
 			children = (
 				93D7CA7809D363B50001DC5E /* English */,
 				93D7CB5B09D36D780001DC5E /* French */,
+				934C03330AD035D4007FEC06 /* German */,
 			);
 			name = CompositionConfiguration.nib;
 			sourceTree = "<group>";
@@ -1806,6 +1871,7 @@
 			children = (
 				93EED7D508A2197500A99BDF /* English */,
 				93EED7E108A2198D00A99BDF /* French */,
+				934C03370AD035EE007FEC06 /* German */,
 			);
 			name = History.nib;
 			sourceTree = "<group>";
@@ -1815,6 +1881,7 @@
 			children = (
 				93EED7F308A21A9100A99BDF /* English */,
 				93EED80A08A21AE100A99BDF /* French */,
+				934C03380AD035F7007FEC06 /* German */,
 			);
 			name = Library.nib;
 			sourceTree = "<group>";
@@ -1824,6 +1891,7 @@
 			children = (
 				93F73D100898E33D00EFFA5E /* English */,
 				93F73DB10898FE3500EFFA5E /* French */,
+				934C03360AD035E5007FEC06 /* German */,
 			);
 			name = Encapsulation.nib;
 			sourceTree = "<group>";

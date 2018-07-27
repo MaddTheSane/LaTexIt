@@ -1,0 +1,5 @@
+"LaTeXiT/Typeset LaTeX Maths eqnarray" = "LaTeXiT/LaTeX-Schriftsatz in Gleichung umwandeln";
+"LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/LaTeX-Schriftsatz in Darstellung umwandeln \\[...\\]";
+"LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/LaTeX-Schriftsatz in Inline umwandeln $...$";
+"LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/LaTeX-Schriftsatz in Text umwandeln";
+"LaTeXiT/Detect and typeset equations" = "LaTeXiT/Gleichung detektieren und umwandeln";

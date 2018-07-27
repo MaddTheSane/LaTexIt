@@ -23,8 +23,8 @@
 "Move Library items" = "Déplacer des entrées de la bibliothèque";
 "Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
 "Change Library item background color" = "Changer la couleur de fond d'un item de la bibliothèque";
-"Open library..." = "Ouvrir la bibliothèque...";
-"Save library as..." = "Enregistrer la bibliothèque sous...";
+"Import library..." = "Importer une bibliothèque...";
+"Export library..." = "Exporter la bibliothèque...";
 "New encapsulation" = "Nouvelle encapsulation";
 "Change the encapsulation" = "Changer l'encapsulation";
 "Remove encapsulation items" = "Supprimer des encapsulations";
@@ -66,8 +66,9 @@
 "Equation linked with another application" = "Équation liée à une autre application";
 "LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT ne peut être exécuté normalement; veuillez vérifier sa configuration";
 "Do you want to load the library <%@> ?" = "Voulez-vous charger la bibliothèque <%@> ?";
-"The current library will be lost" = "La bibliothèque actuelle sera perdue";
-"Load the library" = "Charger la bibliothèque";
+"If you choose <Replace the library>, the current library will be lost" = "Si vous choisissez <Remplacer la bibliothèque>, la bibliothèque actuelle sera perdue";
+"Add to the library" = "Ajouter à la bibliothèque";
+"Replace the library" = "Remplacer la bibliothèque";
 "Open in LaTeXiT" = "Ouvrir dans LaTeXiT";
 "Check for new versions" = "Vérification des mises à jour";
 "Your version of LaTeXiT is up-to-date" = "Votre version de LaTeXiT est à jour";
@@ -101,3 +102,4 @@
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d equation n'a pas pu être convertie à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec elle.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations n'ont pas pu être converties à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec ces équations.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "erreur inattendue, veuillez consulter \"LaTeX > Afficher le dernier rapport d'exécution\"";
+"New text shortcut" = "Nouveau raccourci de texte";

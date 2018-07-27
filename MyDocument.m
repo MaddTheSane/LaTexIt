@@ -603,7 +603,9 @@ static NSString* yenString = nil;
   NSMutableString* stdoutString = [NSMutableString string];
   NSMutableString* stderrString = [NSMutableString string];
 
-  NSString* source = [NSString stringWithContentsOfFile:texFile];
+  NSStringEncoding encoding = NSUTF8StringEncoding;
+  NSError* error = nil;
+  NSString* source = [NSString stringWithContentsOfFile:texFile guessEncoding:&encoding error:&error];
   [customString appendString:[NSString stringWithFormat:@"Source :\n%@\n", source ? source : @""]];
 
   //it happens that the NSTask fails for some strange reason (fflush problem...), so I will use a simple and ugly system() call
@@ -620,7 +622,9 @@ static NSString* yenString = nil;
                                                         [executablePath lastPathComponent],
                                                         systemCall]];
   BOOL failed = (system([systemCall UTF8String]) != 0) && ![fileManager fileExistsAtPath:pdfFile];
-  NSString* errors = [NSString stringWithContentsOfFile:errFile];
+  encoding = NSUTF8StringEncoding;
+  error = nil;
+  NSString* errors = [NSString stringWithContentsOfFile:errFile guessEncoding:&encoding error:&error];
   [customString appendString:errors ? errors : @""];
   [stdoutString appendString:errors ? errors : @""];
   
@@ -964,8 +968,10 @@ static NSString* yenString = nil;
     float baseline = 0;
     if (!failed && shouldTryStep2)
     {
+      NSStringEncoding encoding = NSUTF8StringEncoding;
+      NSError* error = nil;
       //try to read the baseline in the "sizes" file magically generated
-      NSString* sizes = [NSString stringWithContentsOfFile:sizesFilePath];
+      NSString* sizes = [NSString stringWithContentsOfFile:sizesFilePath guessEncoding:&encoding error:&error];
       NSScanner* scanner = [NSScanner scannerWithString:sizes];
       [scanner scanFloat:&baseline];
       //Step 2 is over, it has worked, so step 3 is useless.
@@ -1065,7 +1071,7 @@ static NSString* yenString = nil;
       pdfData = [[AppController appController]
                   annotatePdfDataInLEEFormat:pdfData preamble:preamble source:body color:color
                                         mode:latexMode magnification:magnification baseline:baseline
-                             backgroundColor:[imageView backgroundColor]];
+                             backgroundColor:[imageView backgroundColor] title:nil];
 
     [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
     
@@ -1214,6 +1220,7 @@ static NSString* yenString = nil;
 //sets the state of the document according to the given history item
 -(void) applyHistoryItem:(HistoryItem*)historyItem
 {
+  [[[self undoManager] prepareWithInvocationTarget:self] applyHistoryItem:[self historyItemWithCurrentState]];
   if (historyItem)
   {
     [self _setLogTableViewVisible:NO];
@@ -1536,10 +1543,12 @@ static NSString* yenString = nil;
     NSNumber* scriptType = [script objectForKey:ScriptSourceTypeKey];
     script_source_t source = scriptType ? [scriptType intValue] : SCRIPT_SOURCE_STRING;
 
+    NSStringEncoding encoding = NSUTF8StringEncoding;
+    NSError* error = nil;
     switch(source)
     {
       case SCRIPT_SOURCE_STRING: scriptBody = [script objectForKey:ScriptBodyKey];break;
-      case SCRIPT_SOURCE_FILE: scriptBody = [NSString stringWithContentsOfFile:[script objectForKey:ScriptFileKey]]; break;
+      case SCRIPT_SOURCE_FILE: scriptBody = [NSString stringWithContentsOfFile:[script objectForKey:ScriptFileKey] guessEncoding:&encoding error:&error]; break;
     }
     
     NSData* scriptData = [scriptBody dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -1570,7 +1579,9 @@ static NSString* yenString = nil;
     [systemCommand appendFormat:@"%@ -c %@ 1> %@ 2> %@", scriptShell, latexScriptPath, logScriptPath, logScriptPath];
     [logString appendFormat:@"%@\n", systemCommand];
     system([systemCommand UTF8String]);
-    [logString appendFormat:@"%@\n",[NSString stringWithContentsOfFile:logScriptPath]];
+    encoding = NSUTF8StringEncoding;
+    error = nil;
+    [logString appendFormat:@"%@\n",[NSString stringWithContentsOfFile:logScriptPath guessEncoding:&encoding error:&error]];
     [logString appendString:@"----------------------------------------------------\n\n"];
   }//end if (source != SCRIPT_SOURCE_NONE)
 }

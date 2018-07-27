@@ -12,7 +12,8 @@
 @interface NSString (Extended)
 
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
-+(id) stringWithContentsOfFile:(NSString *)path guessEncoding:(NSStringEncoding *)enc error:(NSError **)error;
++(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
++(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 
 -(BOOL) startsWith:(NSString*)substring options:(unsigned)mask;
 -(BOOL) endsWith:(NSString*)substring options:(unsigned)mask;

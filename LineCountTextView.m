@@ -33,6 +33,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 @implementation LineCountTextView
 
 static NSArray* WellKnownLatexKeywords = nil;
+static int SpellCheckerDocumentTag = 0;
 
 +(void) initialize
 {
@@ -65,6 +66,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   lineRanges = [[NSMutableArray alloc] init];
   forbiddenLines = [[NSMutableSet alloc] init];
   [self setDelegate:self];
+
   #ifdef PANTHER
   NSArray* registeredDraggedTypes = [NSArray array];    
   #else
@@ -93,6 +95,29 @@ static NSArray* WellKnownLatexKeywords = nil;
   [scrollView setVerticalRulerView:lineCountRulerView];
   [lineCountRulerView setClientView:self];
   syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
+
+  NSMutableArray* keywordsToCheck = [NSMutableArray array];
+  unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+  while(nbPackages--)
+  {
+    NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+    [keywordsToCheck addObject:[package objectForKey:@"name"]];
+    NSArray* kw = [package objectForKey:@"keywords"];
+    unsigned int count = [kw count];
+    while(count--)
+      [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
+  }
+  [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+  unsigned int count = [keywordsToCheck count];
+  while(count--)
+  {
+    NSString* w = [keywordsToCheck objectAtIndex:count];
+    if ([w startsWith:@"\\" options:0])
+      [keywordsToCheck addObject:[w substringFromIndex:1]];
+  }
+  [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+  if (SpellCheckerDocumentTag == 0)
+    [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
 }
 
 -(void) dealloc
@@ -102,6 +127,13 @@ static NSArray* WellKnownLatexKeywords = nil;
   [forbiddenLines release];
   [lineCountRulerView release];
   [super dealloc];
+}
+
+-(int) spellCheckerDocumentTag
+{
+  if (SpellCheckerDocumentTag == 0)
+    SpellCheckerDocumentTag = [super spellCheckerDocumentTag];
+  return SpellCheckerDocumentTag;
 }
 
 //since the nextResponder is the imageView (see MyDocument.m), we must override the behaviour for scrollWheel
@@ -415,7 +447,36 @@ static NSArray* WellKnownLatexKeywords = nil;
     isSmallReturn = (character == 3);//return key
   }
   if (!isSmallReturn)
-    [super keyDown:theEvent];
+  {
+    NSString* characters = [theEvent characters];
+    NSArray* textShortcuts = [[NSUserDefaults  standardUserDefaults] objectForKey:TextShortcutsKey];
+    NSEnumerator* enumerator = [textShortcuts objectEnumerator];
+    NSDictionary* dict = nil;
+    NSDictionary* textShortcut = nil;
+    while(!textShortcut && (dict = [enumerator nextObject]))
+    {
+      if ([[dict objectForKey:@"input"] isEqualToString:characters] && [[dict objectForKey:@"enabled"] boolValue])
+        textShortcut = dict;
+    }
+    if (!textShortcut)
+      [super keyDown:theEvent];
+    else
+    {
+      if (![[theEvent charactersIgnoringModifiers] isEqualToString:characters])
+        [self deleteBackward:self];
+      NSRange range = [self selectedRange];
+      NSString* left = [textShortcut objectForKey:@"left"];
+      NSString* right = [textShortcut objectForKey:@"right"];
+      if (range.location == NSNotFound)
+        [self insertText:[left stringByAppendingString:right]];
+      else
+      {
+        NSString* selectedText = [[self string] substringWithRange:range];
+        [self replaceCharactersInRange:range withString:[NSString stringWithFormat:@"%@%@%@",left,selectedText,right]];
+        [self setSelectedRange:NSMakeRange(range.location+[left length]+range.length, 0)];
+      }
+    }
+  }
   else
     [[(MyDocument*)[AppController currentDocument] makeLatexButton] performClick:self];
 }

@@ -48,6 +48,7 @@ extern NSString* AdditionalRightMarginKey;
 extern NSString* AdditionalBottomMarginKey;
 extern NSString* EncapsulationsKey;
 extern NSString* CurrentEncapsulationIndexKey;
+extern NSString* TextShortcutsKey;
 extern NSString* CompositionConfigurationsKey;
 extern NSString* CurrentCompositionConfigurationIndexKey;
 extern NSString* CompositionConfigurationNameKey;
@@ -72,6 +73,7 @@ extern NSString* MarginControllerVisibleAtStartupKey;
 
 extern NSString* LibraryViewRowTypeKey;
 extern NSString* LibraryDisplayPreviewPanelKey;
+extern NSString* HistoryDisplayPreviewPanelKey;
 
 extern NSString* CheckForNewVersionsKey;
 
@@ -96,6 +98,7 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
 @class EncapsulationTableView;
 @class LineCountTextView;
 @class SMLSyntaxColouring;
+@class TextShortcutsTableView;
 @interface PreferencesController : NSWindowController {
 
   IBOutlet NSView*        generalView;
@@ -134,6 +137,10 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
   IBOutlet NSTextField*       fontTextField;
   SMLSyntaxColouring*         exampleSyntaxColouring;
   IBOutlet NSTextView*        exampleTextView;
+  
+  IBOutlet TextShortcutsTableView* textShortcutsTableView;
+  IBOutlet NSButton*               removeTextShortcutsButton;
+
 
   IBOutlet LineCountTextView* preambleTextView;
 
@@ -231,6 +238,9 @@ typedef enum {SCRIPT_PLACE_PREPROCESSING, SCRIPT_PLACE_MIDDLEPROCESSING, SCRIPT_
 
 -(IBAction) newEncapsulation:(id)sender;
 -(IBAction) removeSelectedEncapsulations:(id)sender;
+
+-(IBAction) newTextShortcut:(id)sender;
+-(IBAction) removeSelectedTextShortcuts:(id)sender;
 
 -(IBAction) newCompositionConfiguration:(id)sender;
 -(IBAction) removeSelectedCompositionConfigurations:(id)sender;

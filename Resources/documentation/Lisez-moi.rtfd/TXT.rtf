@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.9.3\
+\f2\b \cf0 LaTeXiT 1.10.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -55,7 +55,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.9.3 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.10.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -291,8 +291,7 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f1\b0 \cf0 - quand la couleur de l'\'8equation est r\'8egl\'8ee sur blanc pur, elle semble mal d\'8ecoup\'8ee (disparition \'8eventuelle des parenth\'8fses gauches et droites par exemple). Il s'agit d'un bug de Ghostscript, qui \'8echoue \'88 d\'8ecouper correctement avec une \'8equation blanche sur fond blanc. Pour corriger cela, utilisez le menu "Palettes > Marges" pour augmenter les marges gauche et droite;\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 - la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
+- la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
 - avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer sa taille exacte, et l'\'8equation se retrouve alors tronqu\'8ee. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
 - les marges personnalis\'8ees ne sont pas prises en compte lors d'un export en EPS; cela semble \'90tre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque;\
@@ -300,7 +299,7 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 - le service ne marche pas avec Keynote 1, 2 & 3, car Keynote ne peut ins\'8erer une image dans un bloc de texte;\
 - LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'8equations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'8ees par le service dans un flot RTFD. Or, il peut arriver que les \'8editeurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'90me si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'88 l'\'8editeur de texte, mais c'est quelque chose de difficile. Pour r\'8esoudre le probl\'8fme, d\'8esactivez simplement l'alignement de l'\'8equation avec la ligne de base texte dans les pr\'8ef\'8erences du service LaTeXiT; cela d\'8esactive l'utilisation des flots RTFD;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 - avec Pages 1.0.2, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages, apparemment r\'8esolu avec Pages 2.0.\
+\cf0 - avec Pages 1.0.2 and 2.0.1, lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages.\
 - avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, qui a \'8et\'8e corrig\'8e dans la version 1.8;\
 - avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS, ou PDF sans polices embarqu\'8ees;\
 - toujours avec Adobe Illustrator, y glisser/d\'8eposer un objet peut entra\'94ner la cr\'8eation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'8don de g\'8erer le glisser/d\'8eposer. OmniGraffle ne pose pas ce genre de probl\'8fmes;\
@@ -336,6 +335,19 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.10.0 (7 octobre 2006)\
+- traduction allemande par Simon L\'8ammle;\
+- la biblioth\'8fque ne remplace maintenant le contenu du document qu'avec un double-clic;\
+- l'historique ne remplace maintenant le contenu du document qu'avec un double-clic;\
+- on peut maintenant glisser/d\'8eposer un fichier biblioth\'8fque sur la fen\'90tre de la biblioth\'8fque;\
+- on peut maintenant glisser/d\'8eposer des dossiers ou des fichiers PDF sur la fen\'90tre de la biblioth\'8fque;\
+- la biblioth\'8fque r\'8ealise maintenant des imports/exports plus intuitifs;\
+- l'historique a maintenant un panneau de pr\'8evisualisation comme la biblioth\'8fque;\
+- possibilit\'8e de cr\'8eer des raccourcis pour faciliter la saisie de caract\'8fres sp\'8eciaux;\
+- meilleure utilisation du v\'8erificateur d'orthographe;\
+- correction de l'affichage des caract\'8fres accentu\'8es dans le rapport d'ex\'8ecution;\
+- quelques corrections mineures d'interface.\
+\
 v 1.9.3 (28 ao\'9et 2006)\
 - correction (encore) du service "D\'8etecter et cr\'8eer les \'8equations" pour qu'il ne supprime plus les images d\'8ej\'88 ins\'8er\'8ees dans un texte \'88 convertir;\
 - LaTeXiT peut maintenant r\'8eouvrir le PDF embarqu\'8e dans du RTF; cela signifie que le copier/coller devrait maintenant fonctionner depuis les \'8editeurs de texte pour r\'8eouvrir les \'8equations;\

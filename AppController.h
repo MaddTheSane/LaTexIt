@@ -89,6 +89,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 -(IBAction) libraryImportCurrent:(id)sender; //creates a library item with the current document state
 -(IBAction) libraryNewFolder:(id)sender;     //creates a folder
 -(IBAction) libraryRemoveSelectedItems:(id)sender;    //removes some items
+-(IBAction) libraryRenameItem:(id)sender;   //rename an item
 -(IBAction) libraryRefreshItems:(id)sender;   //refresh an item
 -(IBAction) libraryOpen:(id)sender;
 -(IBAction) librarySaveAs:(id)sender;
@@ -146,7 +147,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE
 //annotates data in LEE format
 -(NSData*) annotatePdfDataInLEEFormat:(NSData*)data preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
-                                 backgroundColor:(NSColor*)backgroundColor;
+                                 backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
 
 //methods for the application service
 -(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;

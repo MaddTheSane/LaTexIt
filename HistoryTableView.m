@@ -10,6 +10,8 @@
 #import "HistoryTableView.h"
 
 #import "HistoryCell.h"
+#import "HistoryController.h"
+#import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LibraryManager.h"
 #import "MyDocument.h"
@@ -30,6 +32,7 @@
 
 -(void) awakeFromNib
 {
+  [[self window] setAcceptsMouseMovedEvents:YES]; //to allow history to detect mouse moved events
   [self registerForDraggedTypes:[NSArray arrayWithObject:NSColorPboardType]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_historyDidChange:)
                                                name:HistoryDidChangeNotification object:nil];
@@ -91,10 +94,38 @@
 
 //events management, particularly cursor moving and selection
 
+-(void) applyItem
+{
+  MyDocument* document = (MyDocument*)[AppController currentDocument];
+  if (document)
+  {
+    int selectedRow = [self selectedRow];
+    if (selectedRow >= 0)
+    {
+      HistoryItem* historyItem = [[HistoryManager sharedManager] itemAtIndex:selectedRow tableView:self];
+      [document applyHistoryItem:historyItem];
+    }
+    [[document windowForSheet] makeKeyWindow];
+  }
+}
+
 -(void) keyDown:(NSEvent*)theEvent
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+  unsigned short keyCode = [theEvent keyCode];
+  if ((keyCode == 36) || (keyCode == 76) || (keyCode == 49)) //enter or return or space
+    [self applyItem];
+  else
+    [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }
+
+-(void) mouseDown:(NSEvent*)theEvent
+{
+  if ([theEvent clickCount] == 1)
+    [super mouseDown:theEvent];
+  else if ([theEvent clickCount] == 2)
+    [self applyItem];
+}
+//end mouseDown
 
 -(void) cancelOperation:(id)sender
 {
@@ -226,5 +257,31 @@
   }
 }
 */
+
+-(void) scrollWheel:(NSEvent*)event
+{
+  [super scrollWheel:event];
+  [self mouseMoved:event];//to trigger preview display
+}
+
+-(void) mouseMoved:(NSEvent*)event
+{
+  HistoryController* historyController = (HistoryController*)[[self window] windowController];
+  NSClipView*        clipView = (NSClipView*)   [self superview];
+  NSPoint location = [clipView convertPoint:[event locationInWindow] fromView:nil];
+  if (!NSPointInRect(location, [clipView bounds]))
+    [historyController displayPreviewImage:nil backgroundColor:nil];
+  else
+  {
+    location = [self convertPoint:location fromView:clipView];
+    int row = [self rowAtPoint:location];
+    id item = (row >= 0) && (row < [self numberOfRows]) ? [[HistoryManager sharedManager] itemAtIndex:row tableView:self] : nil;
+    NSImage* image = nil;
+    NSColor* backgroundColor = nil;
+    image = [item pdfImage];
+    backgroundColor = [item backgroundColor];
+    [historyController displayPreviewImage:image backgroundColor:backgroundColor];
+  }
+}
 
 @end

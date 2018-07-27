@@ -36,7 +36,7 @@
 -(void) awakeFromNib
 {
   [[self window] setAcceptsMouseMovedEvents:YES]; //to allow library to detect mouse moved events
-  [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, NSColorPboardType, nil]];
+  [self registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType,LibraryItemsPboardType, HistoryItemsPboardType, NSColorPboardType, nil]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_libraryDidChange:)
                                                name:LibraryDidChangeNotification object:nil];
 }
@@ -75,9 +75,6 @@
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
-  [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
 
@@ -87,6 +84,28 @@
   [NSMenu popUpContextMenu:popupMenu withEvent:theEvent forView:self];
 }
 
+-(void) applyItem
+{
+  MyDocument* document = (MyDocument*)[AppController currentDocument];
+  if (document && ([self selectedRow] >= 0))
+  {
+    LibraryItem* libraryItem = [self itemAtRow:[self selectedRow]];
+    if ([libraryItem isKindOfClass:[LibraryFile class]])
+    {
+      [[[document undoManager] prepareWithInvocationTarget:document] applyHistoryItem:[document historyItemWithCurrentState]];
+      [document applyHistoryItem:[(LibraryFile*)libraryItem value]];
+      [[document windowForSheet] makeKeyWindow];
+    }
+    else if ([libraryItem isKindOfClass:[LibraryFolder class]])
+    {
+      if([self isItemExpanded:libraryItem])
+        [self collapseItem:libraryItem];
+      else
+        [self expandItem:libraryItem];
+    }//end if folder
+  }//end if selected row
+}
+
 -(void) mouseDown:(NSEvent*)theEvent
 {
   if ([theEvent modifierFlags] & NSControlKeyMask)
@@ -94,8 +113,24 @@
     NSMenu* popupMenu = [(LibraryController*)[[self window] windowController] actionMenu];
     [NSMenu popUpContextMenu:popupMenu withEvent:theEvent forView:self];
   }
-  else
+  else if ([theEvent modifierFlags] & (NSCommandKeyMask | NSShiftKeyMask))
     [super mouseDown:theEvent];
+  else
+  {
+    NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    int row = [self rowAtPoint:point];
+    [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+
+    if ([theEvent clickCount] == 1)
+      [super mouseDown:theEvent];
+    else if ([theEvent clickCount] == 2)
+      [self applyItem];
+    else if ([theEvent clickCount] == 3)
+    {
+      [self edit:self];
+      [[self window] makeKeyAndOrderFront:self];
+    }
+  }
 }
 
 -(void) scrollWheel:(NSEvent*)event
@@ -166,11 +201,32 @@
   }
 }
 
+-(void) cancelOperation:(id)sender
+{
+  int editedRow = [self editedRow];
+  if (editedRow >= 0)
+  {
+    LibraryItem* item = [self itemAtRow:editedRow];
+    NSCell* cell = [[self tableColumnWithIdentifier:@"library"] dataCellForRow:editedRow];
+    NSText* fieldEditor = [[self window] fieldEditor:NO forObject:cell];
+    [fieldEditor setString:[item title]];
+    [[self window] endEditingFor:cell];
+    [[self window] makeFirstResponder:self];
+  }
+}
+
 -(void) keyDown:(NSEvent*)theEvent
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-  if (([theEvent keyCode] == 36) || ([theEvent keyCode] == 52) || ([theEvent keyCode] == 49))//Enter, space or ?? What did I do ???
-    [self edit:self];
+  unsigned short keyCode = [theEvent keyCode];
+  if ((keyCode == 36) || (keyCode == 76))//enter or return
+  {
+    if ([self editedRow] < 0)
+      [self edit:self];
+  }
+  else if (keyCode == 49) //space
+    [self applyItem];
+  else
+    [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }
 
 -(void) edit:(id)sender
@@ -446,34 +502,5 @@
     }
   }
 }
-
-/*
--(NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender
-{
-  BOOL ok = NO;
-  NSPasteboard* pboard = [sender draggingPasteboard];
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
-  {
-    NSPoint locationInWindow = [sender draggingLocation];
-    id item = [self itemAtRow:[self rowAtPoint:[self convertPoint:locationInWindow fromView:nil]]];
-    ok = [item isKindOfClass:[LibraryFile class]];
-  }
-  return ok ? NSDragOperationCopy : NSDragOperationNone;
-}
-
--(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
-{
-  NSPasteboard* pboard = [sender draggingPasteboard];
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
-  {
-    NSPoint locationInWindow = [sender draggingLocation];
-    id item = [self itemAtRow:[self rowAtPoint:[self convertPoint:locationInWindow fromView:nil]]];
-    HistoryItem* historyItem = [item isKindOfClass:[LibraryFile class]] ? [(LibraryFile*)item value] : nil;
-    NSColor* backgroundColor = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
-    [historyItem setBackgroundColor:backgroundColor];
-  }
-  return YES;
-}
-*/
 
 @end

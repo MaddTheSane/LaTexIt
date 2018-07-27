@@ -25,6 +25,7 @@
 {
   if (![super initWithWindowNibName:@"History"])
     return nil;
+  enablePreviewImage = YES;
   return self;
 }
 
@@ -39,6 +40,17 @@
 
   [historyTableView setDataSource:[HistoryManager sharedManager]];
   [historyTableView setDelegate:[HistoryManager sharedManager]];
+  
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [historyPreviewPanelSegmentedControl setSelected:[userDefaults boolForKey:HistoryDisplayPreviewPanelKey] forSegment:0];
+  [self changeHistoryPreviewPanelSegmentedControl:historyPreviewPanelSegmentedControl];
+
+  [historyPreviewPanel setFloatingPanel:YES];
+  [historyPreviewPanel setBackgroundColor:[NSColor clearColor]];
+  [historyPreviewPanel setLevel:NSStatusWindowLevel];
+  [historyPreviewPanel setAlphaValue:1.0];
+  [historyPreviewPanel setOpaque:NO];
+  [historyPreviewPanel setHasShadow:YES];
 
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   
@@ -128,6 +140,7 @@
 -(void) windowDidResignKey:(NSNotification *)aNotification
 {
   [clearHistoryButton setEnabled:NO];
+  [historyPreviewPanel orderOut:self];
 }
 
 //display history when application becomes active
@@ -135,6 +148,50 @@
 {
   if ([[self window] isVisible])
     [[self window] orderFront:self];
+}
+
+//preview pane
+-(IBAction) changeHistoryPreviewPanelSegmentedControl:(id)sender
+{
+  int segment = [sender selectedSegment];
+  BOOL status = (segment != -1) ? [sender isSelectedForSegment:segment] : NO;
+  [[NSUserDefaults standardUserDefaults] setBool:status forKey:HistoryDisplayPreviewPanelKey];
+  [self setEnablePreviewImage:status];
+}
+
+-(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
+{
+  if (!image && [historyPreviewPanel isVisible])
+    [historyPreviewPanel orderOut:self];
+  else if (image && enablePreviewImage)
+  {
+    NSSize imageSize = [image size];
+    NSPoint locationOnScreen = [NSEvent mouseLocation];
+    NSSize screenSize = [[NSScreen mainScreen] frame].size;
+    int shiftRight = 24;
+    int shiftLeft = -24-imageSize.width-16;
+    int shift = ((locationOnScreen.x+shiftRight+imageSize.width+16 > screenSize.width) && (locationOnScreen.x+shiftLeft > 0)) ?
+                shiftLeft : shiftRight;
+    NSRect newFrame = NSMakeRect(locationOnScreen.x+shift,
+                                  MIN(locationOnScreen.y-imageSize.height/2, screenSize.height-imageSize.height-16),
+                                 imageSize.width+16, imageSize.height+16);
+    if (image != [historyPreviewPanelImageView image])
+      [historyPreviewPanelImageView setImage:image];
+    [historyPreviewPanelImageView setBackgroundColor:backgroundColor];
+    [historyPreviewPanel setFrame:newFrame display:image ? YES : NO];
+    if (![historyPreviewPanel isVisible])
+      [historyPreviewPanel orderFront:self];
+  }
+}
+
+-(void) setEnablePreviewImage:(BOOL)status
+{
+  enablePreviewImage = status;
+}
+
+-(void) windowWillClose:(NSNotification*)notification
+{
+  [historyPreviewPanel orderOut:self];
 }
 
 @end

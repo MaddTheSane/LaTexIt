@@ -21,7 +21,8 @@
 #import "LineCountTextView.h"
 #import "MyDocument.h"
 #import "SMLSyntaxColouring.h"
-#import "ShortcutTextView.h"
+#import "ServiceShortcutsTextView.h"
+#import "TextShortcutsManager.h"
 #import "Utils.h"
 
 NSString* GeneralToolbarItemIdentifier     = @"GeneralToolbarItem";
@@ -64,6 +65,7 @@ NSString* AdditionalRightMarginKey     = @"LaTeXiT_AdditionalRightMarginKey";
 NSString* AdditionalBottomMarginKey    = @"LaTeXiT_AdditionalBottomMarginKey";
 NSString* EncapsulationsKey            = @"LaTeXiT_EncapsulationsKey";
 NSString* CurrentEncapsulationIndexKey = @"LaTeXiT_CurrentEncapsulationIndexKey";
+NSString* TextShortcutsKey             = @"LaTeXiT_TextShortcutsKey";
 
 NSString* CurrentCompositionConfigurationIndexKey    = @"LaTeXiT_CurrentCompositionConfigurationIndexKey";
 NSString* CompositionConfigurationsKey               = @"LaTeXiT_CompositionConfigurationsKey";
@@ -100,6 +102,7 @@ NSString* MarginControllerVisibleAtStartupKey        = @"MarginControllerVisible
 
 NSString* LibraryViewRowTypeKey = @"LibraryViewRowTypeKey";
 NSString* LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanelKey";
+NSString* HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanelKey";
 
 NSString* CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
 
@@ -216,6 +219,26 @@ static PreferencesController* sharedController = nil;
        additionalProcessingScripts, CompositionConfigurationAdditionalProcessingScriptsKey,
        nil];
 
+  NSMutableArray* defaultTextShortcuts = [NSMutableArray array];
+  {
+    NSString*  textShortcutsPlistPath = [[NSBundle mainBundle] pathForResource:@"textShortcuts" ofType:@"plist"];
+    NSData*    dataTextShortcutsPlist = [NSData dataWithContentsOfFile:textShortcutsPlistPath];
+    NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
+    NSString* errorString = nil;
+    NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataTextShortcutsPlist
+                                                           mutabilityOption:NSPropertyListImmutable
+                                                                     format:&format errorDescription:&errorString];
+    NSString* version = [plist objectForKey:@"version"];
+    //we can check the version...
+    if (!version || [version compare:@"1.10.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
+    {
+    }
+    NSEnumerator* enumerator = [[plist objectForKey:@"shortcuts"] objectEnumerator];
+    NSDictionary* dict = nil;
+    while((dict = [enumerator nextObject]))
+      [defaultTextShortcuts addObject:[NSMutableDictionary dictionaryWithDictionary:dict]];
+  }
+
   NSDictionary* defaults =
     [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:EXPORT_FORMAT_PDF], DragExportTypeKey,
                                                [[NSColor whiteColor] data],      DragExportJpegColorKey,
@@ -248,6 +271,7 @@ static PreferencesController* sharedController = nil;
                                                                          @"\\[#\\]", @"\\begin{equation}#\\label{@}\\end{equation}",
                                                                          nil], EncapsulationsKey,
                                                [NSNumber numberWithUnsignedInt:0], CurrentEncapsulationIndexKey,
+                                               defaultTextShortcuts, TextShortcutsKey,
                                                [NSArray arrayWithObject:defaultCompositionConfiguration], CompositionConfigurationsKey,
                                                [NSNumber numberWithUnsignedInt:0], CurrentCompositionConfigurationIndexKey,
                                                [NSNumber numberWithBool:YES], CheckForNewVersionsKey,
@@ -259,6 +283,7 @@ static PreferencesController* sharedController = nil;
                                                [NSNumber numberWithBool:NO], MarginControllerVisibleAtStartupKey,
                                                [NSNumber numberWithInt:LIBRARY_ROW_IMAGE_AND_TEXT], LibraryViewRowTypeKey,
                                                [NSNumber numberWithBool:YES], LibraryDisplayPreviewPanelKey,
+                                               [NSNumber numberWithBool:NO], HistoryDisplayPreviewPanelKey,
                                                [NSNumber numberWithInt:0], LatexPaletteGroupKey,
                                                NSStringFromRect(NSMakeRect(235, 624, 200, 170)), LatexPaletteFrameKey,
                                                [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
@@ -357,7 +382,7 @@ static PreferencesController* sharedController = nil;
   sharedController = self;
   toolbarItems = [[NSMutableDictionary alloc] init];
   warningImage = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"warning"]];
-  shortcutTextView = [[ShortcutTextView alloc] initWithFrame:NSMakeRect(0,0,10,10)];
+  shortcutTextView = [[ServiceShortcutsTextView alloc] initWithFrame:NSMakeRect(0,0,10,10)];
   return self;
 }
 
@@ -595,6 +620,8 @@ static PreferencesController* sharedController = nil;
                              name:NSUserDefaultsDidChangeNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
                              name:NSTableViewSelectionDidChangeNotification object:encapsulationTableView];
+  [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
+                             name:NSTableViewSelectionDidChangeNotification object:textShortcutsTableView];
   [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
                              name:NSTableViewSelectionDidChangeNotification object:compositionConfigurationTableView];
   [notificationCenter addObserver:self selector:@selector(_updateButtonStates:)
@@ -1074,6 +1101,18 @@ static PreferencesController* sharedController = nil;
   [[EncapsulationManager sharedManager] removeEncapsulationIndexes:[encapsulationTableView selectedRowIndexes]];
 }
 
+-(IBAction) newTextShortcut:(id)sender
+{
+  [[TextShortcutsManager sharedManager] newTextShortcut];
+  [textShortcutsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[textShortcutsTableView numberOfRows]-1]
+                    byExtendingSelection:NO];
+}
+
+-(IBAction) removeSelectedTextShortcuts:(id)sender
+{
+  [[TextShortcutsManager sharedManager] removeTextShortcutsIndexes:[textShortcutsTableView selectedRowIndexes]];
+}
+
 -(IBAction) newCompositionConfiguration:(id)sender
 {
   [[CompositionConfigurationManager sharedManager] newCompositionConfiguration];
@@ -1120,7 +1159,9 @@ static PreferencesController* sharedController = nil;
 -(void) _updateButtonStates:(NSNotification*)notification
 {
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  if ([notification object] == encapsulationTableView)
+  if (!notification || ([notification object] == textShortcutsTableView))
+    [removeTextShortcutsButton setEnabled:([textShortcutsTableView selectedRow] >= 0)];
+  else if ([notification object] == encapsulationTableView)
     [removeEncapsulationButton setEnabled:([encapsulationTableView selectedRow] >= 0)];
   else if ([notification object] == compositionConfigurationTableView)
   {
@@ -1397,7 +1438,7 @@ static PreferencesController* sharedController = nil;
   if (![scriptsHelpPanel isVisible])
   {
     [scriptsHelpPanel center];
-    [scriptsHelpPanel orderFront:sender];
+    [scriptsHelpPanel makeKeyAndOrderFront:sender];
   }
 }
 
