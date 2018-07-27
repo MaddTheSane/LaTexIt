@@ -9,6 +9,7 @@
 //in the developer documentation
 
 #import "LibraryCell.h"
+#import "LibraryTableView.h"
 
 @implementation LibraryCell
 
@@ -54,43 +55,85 @@
 
 -(void) editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
 {
-  NSRect textFrame, imageFrame;
-  NSDivideRect (aRect, &imageFrame, &textFrame, 3 + [image size].width, NSMinXEdge);
-  [super editWithFrame: textFrame inView: controlView editor:textObj delegate:anObject event: theEvent];
+  LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+  library_row_t libraryRowType = [libraryTableView libraryRowType];
+  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  {
+    NSRect textFrame  = NSZeroRect;
+    NSRect imageFrame = NSZeroRect;
+    NSDivideRect(aRect, &imageFrame, &textFrame, 3 + [image size].width, NSMinXEdge);
+    [super editWithFrame:textFrame inView:controlView editor:textObj delegate:anObject event: theEvent];
+  }
 }
 
 -(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
 {
-  NSRect textFrame, imageFrame;
-  NSDivideRect (aRect, &imageFrame, &textFrame, 3 + [image size].width, NSMinXEdge);
-  [super selectWithFrame: textFrame inView: controlView editor:textObj delegate:anObject start:selStart length:selLength];
+  LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+  library_row_t libraryRowType = [libraryTableView libraryRowType];
+  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  {
+    NSRect textFrame  = NSZeroRect;
+    NSRect imageFrame = NSZeroRect;
+    NSDivideRect (aRect, &imageFrame, &textFrame, 3 + [image size].width, NSMinXEdge);
+    [super selectWithFrame:textFrame inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
+  }
 }
 
 -(void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
+  NSString* savTitle = [[self title] retain];//if displaying onlyimage, we will temporarily reset the title
   if (image)
   {
-    NSSize	imageSize;
-    NSRect	imageFrame;
+    NSSize imageSize = [image size];
+    NSRect imageFrame = NSZeroRect;
     
-    imageSize = [image size];
-    NSDivideRect(cellFrame, &imageFrame, &cellFrame, 3 + imageSize.width, NSMinXEdge);
+    LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+    library_row_t libraryRowType = [libraryTableView libraryRowType];
+    if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+      NSDivideRect(cellFrame, &imageFrame, &cellFrame, 3 + imageSize.width, NSMinXEdge);
+    else if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
+    {
+      imageFrame = NSMakeRect(0, 0, imageSize.width, imageSize.height);
+      float factor = imageSize.height ? cellFrame.size.height/imageSize.height : 0;
+      cellFrame.size.width = imageSize.width*factor;
+    }
+
     if ([self drawsBackground])
     {
       [[self backgroundColor] set];
       NSRectFill(imageFrame);
     }
-    imageFrame.origin.x += 3;
-    imageFrame.size = imageSize;
     
-    if ([controlView isFlipped])
-      imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
-    else
-      imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
-    
-    [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
+    if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
+    {
+      [self setTitle:@""];
+      NSSize savSize = imageFrame.size;
+      [image setScalesWhenResized:YES];
+      [image setSize:cellFrame.size];
+      imageFrame = cellFrame;
+      if ([controlView isFlipped])
+	imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
+      else
+	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
+      [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
+      [image setSize:savSize];
+    }
+    else if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+    {
+      imageFrame.origin.x += 3;
+      imageFrame.size = imageSize;
+      if ([controlView isFlipped])
+	imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
+      else
+	imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
+      [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
+    }
   }
   [super drawWithFrame:cellFrame inView:controlView];
+  
+  //restores the title that may have been reset
+  [self setTitle:savTitle];
+  [savTitle release];
 }
 
 -(NSSize) cellSize
@@ -102,8 +145,13 @@
 
 -(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-  cellFrame.origin.x += 8;
-  [super drawInteriorWithFrame:cellFrame inView:controlView];
+  LibraryTableView* libraryTableView = (LibraryTableView*)controlView;
+  library_row_t libraryRowType = [libraryTableView libraryRowType];
+  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+  {
+    cellFrame.origin.x += 8;
+    [super drawInteriorWithFrame:cellFrame inView:controlView];
+  }
 }
 
 @end

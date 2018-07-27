@@ -210,7 +210,7 @@
 		9343D0C908604F430024CDC2 /* refresh.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9343D0C808604F430024CDC2 /* refresh.tiff */; };
 		9344D77108257B2400B17B37 /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D76F08257B2400B17B37 /* LibraryTableView.m */; };
 		9344D8280825808900B17B37 /* LibraryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8260825808900B17B37 /* LibraryCell.m */; };
-		9344D83D0825818B00B17B37 /* folder-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9344D83C0825818B00B17B37 /* folder-icon.png */; };
+		9344D83D0825818B00B17B37 /* small-folder-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9344D83C0825818B00B17B37 /* small-folder-icon.png */; };
 		9344D8A2082587ED00B17B37 /* LibraryFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8A0082587ED00B17B37 /* LibraryFolder.m */; };
 		935888EA096048A00068C698 /* ShortcutTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935888E8096048A00068C698 /* ShortcutTextView.m */; };
 		935A834C084EFF11005724CE /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
@@ -289,6 +289,9 @@
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
 		93EF9E9207EF99910003FA6E /* HistoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryTableView.m */; };
 		93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
+		93F0FFC2098847940064888E /* big-folder-icon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0FFC1098847940064888E /* big-folder-icon.tiff */; };
+		93F0FFE509884B030064888E /* view-icons.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0FFE409884B030064888E /* view-icons.tiff */; };
+		93F0FFEC09884BDA0064888E /* view-titles.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0FFEB09884BDA0064888E /* view-titles.tiff */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationController.m */; };
 		93F73DAE0898FE2700EFFA5E /* Encapsulation.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73DAD0898FE2700EFFA5E /* Encapsulation.nib */; };
@@ -405,7 +408,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
 		9302547F07F0BC6A00011996 /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
 		930255CD07F0C2A300011996 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -415,7 +418,7 @@
 		9308AB92088CEAE20062A340 /* NSWorkspaceExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSWorkspaceExtended.m; sourceTree = "<group>"; };
 		9308E1E707EE3A5900DD1B5F /* LineCountTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineCountTextView.h; sourceTree = "<group>"; };
 		9308E1E807EE3A5900DD1B5F /* LineCountTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineCountTextView.m; sourceTree = "<group>"; };
-		9308E39207EE46BB00DD1B5F /* error.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = error.tiff; path = Resources/error.tiff; sourceTree = "<group>"; };
+		9308E39207EE46BB00DD1B5F /* error.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = error.tiff; path = Resources/interface/error.tiff; sourceTree = "<group>"; };
 		930AC4E107EDEEF400AC66FA /* LineCountRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineCountRulerView.h; sourceTree = "<group>"; };
 		930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineCountRulerView.m; sourceTree = "<group>"; };
 		930BC29807ECBC3C00EEB238 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
@@ -428,7 +431,7 @@
 		9311C80208A0FA95009AC959 /* LibraryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryController.m; sourceTree = "<group>"; };
 		9311C8E408A10931009AC959 /* HistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryController.h; sourceTree = "<group>"; };
 		9311C8E508A10931009AC959 /* HistoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryController.m; sourceTree = "<group>"; };
-		93149F6F089438630017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/latexit-lib.png"; sourceTree = "<group>"; };
+		93149F6F089438630017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/file-icons/latexit-lib.png"; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
@@ -441,7 +444,7 @@
 		931CB342080132DF00CF9D2B /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
-		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = Resources/latexit.icns; sourceTree = "<group>"; };
+		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = "Resources/file-icons/latexit.icns"; sourceTree = "<group>"; };
 		932BA15309609A3D004EECBA /* PaletteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteCell.h; sourceTree = "<group>"; };
 		932BA15409609A3D004EECBA /* PaletteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteCell.m; sourceTree = "<group>"; };
 		932BA1A009609D0C004EECBA /* jmath.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jmath.pdf; path = Resources/symbols/jmath.pdf; sourceTree = "<group>"; };
@@ -612,23 +615,23 @@
 		932CF4210826C2EB00434128 /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
 		932CF4240826C33D00434128 /* LibraryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFile.h; sourceTree = "<group>"; };
 		932CF4250826C33D00434128 /* LibraryFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFile.m; sourceTree = "<group>"; };
-		932CF45E0826C5A500434128 /* file-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file-icon.png"; path = "Resources/file-icon.png"; sourceTree = "<group>"; };
+		932CF45E0826C5A500434128 /* file-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file-icon.png"; path = "Resources/interface/file-icon.png"; sourceTree = "<group>"; };
 		932CF5760826D9E500434128 /* LibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryManager.h; sourceTree = "<group>"; };
 		932CF5770826D9E500434128 /* LibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryManager.m; sourceTree = "<group>"; };
 		9331016F083D1D6400DE67ED /* NSColorExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSColorExtended.h; sourceTree = "<group>"; };
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
-		933F2ED708A0B86F004C7A31 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/action-pressed.tiff"; sourceTree = "<group>"; };
-		933F2ED808A0B86F004C7A31 /* action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = action.tiff; path = Resources/action.tiff; sourceTree = "<group>"; };
-		933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big-pressed.tiff"; path = "Resources/add-big-pressed.tiff"; sourceTree = "<group>"; };
-		933F2EE308A0B993004C7A31 /* add-big.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big.tiff"; path = "Resources/add-big.tiff"; sourceTree = "<group>"; };
-		9343D0C808604F430024CDC2 /* refresh.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = refresh.tiff; path = Resources/refresh.tiff; sourceTree = "<group>"; };
+		933F2ED708A0B86F004C7A31 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/interface/action-pressed.tiff"; sourceTree = "<group>"; };
+		933F2ED808A0B86F004C7A31 /* action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = action.tiff; path = Resources/interface/action.tiff; sourceTree = "<group>"; };
+		933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big-pressed.tiff"; path = "Resources/interface/add-big-pressed.tiff"; sourceTree = "<group>"; };
+		933F2EE308A0B993004C7A31 /* add-big.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big.tiff"; path = "Resources/interface/add-big.tiff"; sourceTree = "<group>"; };
+		9343D0C808604F430024CDC2 /* refresh.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = refresh.tiff; path = Resources/interface/refresh.tiff; sourceTree = "<group>"; };
 		9344D76E08257B2400B17B37 /* LibraryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableView.h; sourceTree = "<group>"; };
 		9344D76F08257B2400B17B37 /* LibraryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableView.m; sourceTree = "<group>"; };
 		9344D8250825808900B17B37 /* LibraryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryCell.h; sourceTree = "<group>"; };
 		9344D8260825808900B17B37 /* LibraryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryCell.m; sourceTree = "<group>"; };
-		9344D83C0825818B00B17B37 /* folder-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-icon.png"; path = "Resources/folder-icon.png"; sourceTree = "<group>"; };
+		9344D83C0825818B00B17B37 /* small-folder-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "small-folder-icon.png"; path = "Resources/interface/small-folder-icon.png"; sourceTree = "<group>"; };
 		9344D89F082587ED00B17B37 /* LibraryFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFolder.h; sourceTree = "<group>"; };
 		9344D8A0082587ED00B17B37 /* LibraryFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFolder.m; sourceTree = "<group>"; };
 		935888E7096048A00068C698 /* ShortcutTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortcutTextView.h; sourceTree = "<group>"; };
@@ -652,7 +655,7 @@
 		9372A1F3087819EF00A3A645 /* MarginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Margin.nib; sourceTree = "<group>"; };
 		9372A2F50878280700A3A645 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Margin.nib; sourceTree = "<group>"; };
-		93773C2107FFF2B6004AAB30 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = warning.tiff; path = Resources/warning.tiff; sourceTree = "<group>"; };
+		93773C2107FFF2B6004AAB30 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = warning.tiff; path = Resources/interface/warning.tiff; sourceTree = "<group>"; };
 		93773C3207FFF541004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93773C3307FFF547004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MyDocument.nib; sourceTree = "<group>"; };
 		93773C3407FFF54D004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Preferences.nib; sourceTree = "<group>"; };
@@ -702,10 +705,10 @@
 		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "Resources/Lisez-moi.rtfd"; sourceTree = "<group>"; };
 		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/Read Me.rtfd"; sourceTree = "<group>"; };
 		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
-		93B52889089FF95800F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/add.tiff; sourceTree = "<group>"; };
-		93B5288A089FF95800F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/add-pressed.tiff"; sourceTree = "<group>"; };
-		93B5288B089FF95800F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/remove-pressed.tiff"; sourceTree = "<group>"; };
-		93B5288C089FF95800F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/remove.tiff; sourceTree = "<group>"; };
+		93B52889089FF95800F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/interface/add.tiff; sourceTree = "<group>"; };
+		93B5288A089FF95800F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/interface/add-pressed.tiff"; sourceTree = "<group>"; };
+		93B5288B089FF95800F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/interface/remove-pressed.tiff"; sourceTree = "<group>"; };
+		93B5288C089FF95800F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/interface/remove.tiff; sourceTree = "<group>"; };
 		93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableView.h; sourceTree = "<group>"; };
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
@@ -730,6 +733,9 @@
 		93EF9E9007EF99910003FA6E /* HistoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableView.m; sourceTree = "<group>"; };
 		93EFDB72088FEFA6000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB73088FEFA6000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; };
+		93F0FFC1098847940064888E /* big-folder-icon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "big-folder-icon.tiff"; path = "Resources/interface/big-folder-icon.tiff"; sourceTree = "<group>"; };
+		93F0FFE409884B030064888E /* view-icons.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-icons.tiff"; path = "Resources/interface/view-icons.tiff"; sourceTree = "<group>"; };
+		93F0FFEB09884BDA0064888E /* view-titles.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-titles.tiff"; path = "Resources/interface/view-titles.tiff"; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationController.h; sourceTree = "<group>"; };
@@ -863,23 +869,10 @@
 			isa = PBXGroup;
 			children = (
 				93F9DFB508A38EBC005DEBF6 /* easterEggs */,
-				93351D2C07F8216B004E4606 /* Symbols */,
+				93D06AE30990BCAA00C484B8 /* file-icons */,
+				93D06AE40990BCC000C484B8 /* interface */,
+				93351D2C07F8216B004E4606 /* symbols */,
 				936E318C09465EAE0091BEC1 /* toolbarItems */,
-				933F2ED808A0B86F004C7A31 /* action.tiff */,
-				933F2ED708A0B86F004C7A31 /* action-pressed.tiff */,
-				93B52889089FF95800F14B77 /* add.tiff */,
-				93B5288A089FF95800F14B77 /* add-pressed.tiff */,
-				933F2EE308A0B993004C7A31 /* add-big.tiff */,
-				933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */,
-				9328604307F4505F009BF03D /* latexit.icns */,
-				9308E39207EE46BB00DD1B5F /* error.tiff */,
-				9343D0C808604F430024CDC2 /* refresh.tiff */,
-				93B5288C089FF95800F14B77 /* remove.tiff */,
-				93B5288B089FF95800F14B77 /* remove-pressed.tiff */,
-				93773C2107FFF2B6004AAB30 /* warning.tiff */,
-				9344D83C0825818B00B17B37 /* folder-icon.png */,
-				932CF45E0826C5A500434128 /* file-icon.png */,
-				93149F6F089438630017C83A /* latexit-lib.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -1099,8 +1092,8 @@
 				932BA2CA0960B125004EECBA /* rtimes.pdf */,
 				932BA2C90960B125004EECBA /* sim.pdf */,
 				932BA2F20960B125004EECBA /* simeq.pdf */,
-				932BA2D50960B125004EECBA /* sqsubseteq.pdf */,
 				932BA2D60960B125004EECBA /* sqsubset.pdf */,
+				932BA2D50960B125004EECBA /* sqsubseteq.pdf */,
 				932BA2E20960B125004EECBA /* sqsupset.pdf */,
 				932BA2FE0960B125004EECBA /* sqsupseteq.pdf */,
 				932BA2F60960B125004EECBA /* subset.pdf */,
@@ -1219,7 +1212,7 @@
 			name = CocoaExtensions;
 			sourceTree = "<group>";
 		};
-		93351D2C07F8216B004E4606 /* Symbols */ = {
+		93351D2C07F8216B004E4606 /* symbols */ = {
 			isa = PBXGroup;
 			children = (
 				932BA3DC0960BC8C004EECBA /* arrows */,
@@ -1230,7 +1223,7 @@
 				932BA3620960B65E004EECBA /* other operators */,
 				932BA2C20960B115004EECBA /* relations */,
 			);
-			name = Symbols;
+			name = symbols;
 			sourceTree = "<group>";
 		};
 		9344D76D08257B1600B17B37 /* Library */ = {
@@ -1291,6 +1284,38 @@
 				932BA4CF0960C6CD004EECBA /* PaletteMatrix.m */,
 			);
 			name = LatexPalettes;
+			sourceTree = "<group>";
+		};
+		93D06AE30990BCAA00C484B8 /* file-icons */ = {
+			isa = PBXGroup;
+			children = (
+				9328604307F4505F009BF03D /* latexit.icns */,
+				93149F6F089438630017C83A /* latexit-lib.png */,
+			);
+			name = "file-icons";
+			sourceTree = "<group>";
+		};
+		93D06AE40990BCC000C484B8 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				933F2ED808A0B86F004C7A31 /* action.tiff */,
+				933F2ED708A0B86F004C7A31 /* action-pressed.tiff */,
+				93B52889089FF95800F14B77 /* add.tiff */,
+				93B5288A089FF95800F14B77 /* add-pressed.tiff */,
+				933F2EE308A0B993004C7A31 /* add-big.tiff */,
+				933F2EE208A0B993004C7A31 /* add-big-pressed.tiff */,
+				93F0FFC1098847940064888E /* big-folder-icon.tiff */,
+				9308E39207EE46BB00DD1B5F /* error.tiff */,
+				932CF45E0826C5A500434128 /* file-icon.png */,
+				9343D0C808604F430024CDC2 /* refresh.tiff */,
+				93B5288C089FF95800F14B77 /* remove.tiff */,
+				93B5288B089FF95800F14B77 /* remove-pressed.tiff */,
+				9344D83C0825818B00B17B37 /* small-folder-icon.png */,
+				93F0FFE409884B030064888E /* view-icons.tiff */,
+				93F0FFEB09884BDA0064888E /* view-titles.tiff */,
+				93773C2107FFF2B6004AAB30 /* warning.tiff */,
+			);
+			name = interface;
 			sourceTree = "<group>";
 		};
 		93EF9D1B07EF7B5C0003FA6E /* History */ = {
@@ -1407,7 +1432,7 @@
 				93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */,
 				939A64580800281900AE4486 /* ServicesMenu.strings in Resources */,
 				931CB341080132D900CF9D2B /* LatexPalettes.nib in Resources */,
-				9344D83D0825818B00B17B37 /* folder-icon.png in Resources */,
+				9344D83D0825818B00B17B37 /* small-folder-icon.png in Resources */,
 				932CF45F0826C5A500434128 /* file-icon.png in Resources */,
 				935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */,
 				935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */,
@@ -1630,6 +1655,9 @@
 				932BA4580960C031004EECBA /* underleftarrow.pdf in Resources */,
 				932BA4590960C031004EECBA /* underbrace.pdf in Resources */,
 				932BAD9809629767004EECBA /* nmid.pdf in Resources */,
+				93F0FFC2098847940064888E /* big-folder-icon.tiff in Resources */,
+				93F0FFE509884B030064888E /* view-icons.tiff in Resources */,
+				93F0FFEC09884BDA0064888E /* view-titles.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,10 +14,10 @@
   NSImage	*image;
 }
 
-- (void)setImage:(NSImage *)anImage;
-- (NSImage *)image;
+-(NSImage*) image;
+-(void) setImage:(NSImage *)anImage;
 
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (NSSize)cellSize;
+-(NSSize) cellSize;
+-(void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 
 @end

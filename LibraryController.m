@@ -16,6 +16,8 @@
 #import "LibraryTableView.h"
 #import "MyDocument.h"
 #import "MyImageView.h"
+#import "PreferencesController.h"
+#import "NSSegmentedControlExtended.h"
 
 @interface LibraryController (PrivateAPI)
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
@@ -65,6 +67,10 @@
   image = [[[NSImage alloc] initWithContentsOfFile:iconPath] autorelease];
   [actionButton setAlternateImage:image];
   
+  library_row_t type = (library_row_t) [[NSUserDefaults standardUserDefaults] integerForKey:LibraryViewRowTypeKey];
+  [libraryRowTypeSegmentedControl selectSegmentWithTag:type];
+  [self changeLibraryRowType:libraryRowTypeSegmentedControl];
+  
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self selector:@selector(applicationWillBecomeActive:)
                              name:NSApplicationWillBecomeActiveNotification object:nil];
@@ -100,7 +106,7 @@
 
 -(BOOL) canRefreshItems
 {
-  NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+  NSDocument* document = [AppController currentDocument];
   NSIndexSet* selectedRowIndexes = [libraryTableView selectedRowIndexes];
   BOOL onlyOneItemSelected = ([selectedRowIndexes count] == 1);
   unsigned int firstIndex = [selectedRowIndexes firstIndex];
@@ -117,7 +123,7 @@
   BOOL ok = [[self window] isVisible];
   if ([menuItem action] == @selector(importCurrent:))
   {
-    MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    MyDocument* document = (MyDocument*) [AppController currentDocument];
     ok &= document && [document hasImage];
   }
   else if ([menuItem action] == @selector(removeSelectedItems:))
@@ -130,7 +136,7 @@
 //Creates a library item with the current document state
 -(IBAction) importCurrent:(id)sender
 {
-  MyDocument*  document = [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument*  document = (MyDocument*) [AppController currentDocument];
   HistoryItem* historyItem = [document historyItemWithCurrentState];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
   historyItem = [HistoryItem historyItemWithPdfData:[historyItem pdfData] useDefaults:YES];
@@ -157,7 +163,7 @@
 //if one LibraryFile item is selected, update it with current document's state
 -(IBAction) refreshItems:(id)sender
 {
-  MyDocument*  document = [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument*  document = (MyDocument*) [AppController currentDocument];
   if (document)
   {
     unsigned int index = [[libraryTableView selectedRowIndexes] firstIndex];
@@ -234,7 +240,7 @@
 -(void) _updateButtons:(NSNotification *)aNotification
 {
   //maybe all documents are closed, so we must update the import button
-  MyDocument* anyDocument = (MyDocument*) [[[NSDocumentController sharedDocumentController] documents] lastObject];
+  MyDocument* anyDocument = (MyDocument*) [AppController currentDocument];
   [importCurrentButton setEnabled:(anyDocument && [anyDocument hasImage])];
   [[[libraryTableView superview] superview] setNeedsDisplay:YES];//to bring scrollview to front and hide the top line of the button
 }
@@ -245,6 +251,13 @@
   [self _updateButtons:nil];
   if ([[self window] isVisible])
     [[self window] orderFront:self];
+}
+
+-(IBAction) changeLibraryRowType:(id)sender
+{
+  int tag = [[sender cell] tagForSegment:[sender selectedSegment]];
+  [libraryTableView setLibraryRowType:(library_row_t)tag];
+  [[NSUserDefaults standardUserDefaults] setInteger:tag forKey:LibraryViewRowTypeKey];
 }
 
 @end

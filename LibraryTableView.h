@@ -8,7 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef enum {LIBRARY_ROW_IMAGE_AND_TEXT, LIBRARY_ROW_IMAGE_LARGE} library_row_t;
+
 @interface LibraryTableView : NSOutlineView {
+  library_row_t  libraryRowType;
 }
 
 -(IBAction) copy:(id)sender;
@@ -20,5 +23,8 @@
 -(NSArray*) selectedFileItems;
 -(NSArray*) selectedItems;
 -(void) removeSelectedItems;
+
+-(library_row_t) libraryRowType;
+-(void) setLibraryRowType:(library_row_t)type;
 
 @end

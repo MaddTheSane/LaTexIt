@@ -14,5 +14,8 @@
 
 @interface LibraryFolder : LibraryItem <NSCoding, NSCopying> {
 }
--(NSImage*) image; //to get an icon
+
+-(NSImage*) icon; //to get an icon
+-(NSImage*) bigIcon; //to get an icon
+
 @end

@@ -1,4 +1,4 @@
-{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf230
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
 {\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fnil\fcharset77 LucidaGrande;\f2\fnil\fcharset77 LucidaGrande-Bold;
 }
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;}
@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.5.0\
+\f2\b \cf0 LaTeXiT 1.5.2\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -54,7 +54,7 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.5.0 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.5.2 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -130,9 +130,8 @@ The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usep
 \fs26 \cf0 \ul Using the history\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
+\fs22 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
 You can delete history items by pressing <Backspace>, or clear the whole history by clicking the appropriate button.\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
@@ -140,8 +139,9 @@ You can delete history items by pressing <Backspace>, or clear the whole history
 \f0\fs24 \cf0 {{\NeXTGraphic history.jpeg \width4260 \height8440
 }¬}\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 
-\f1\fs22 \
+\f1\fs22 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -149,9 +149,8 @@ You can delete history items by pressing <Backspace>, or clear the whole history
 \fs26 \cf0 \ul Using the library\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
+\fs22 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
 The <+> button adds to the library the current equation (that you can rename by double-clicking it)\
 The <action> button proposes more actions.\
 The <refresh> action updates the selected item with the current equation. You cannot update more than one item at a time; it will blink to show that the modification has been taken in account.\
@@ -277,7 +276,25 @@ However, do not worry : there exist graphical interfaces to use LaTeX in a more 
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-v 1.5.0\
+v 1.5.2 (2nd february 2006)\
+- fixed a bug related to aliasing for some symbols of the LaTeX palette;\
+- fixed a bug introduced in the 1.5.1 version where the text view did not resize correctly;\
+- fixed a bug that could cause right and top margin to be ignored;\
+- fixed a bug in the library, where the "+" button could unexpectedly be disabled.\
+\
+v 1.5.1 (26th january 2006)\
+- handle pdflatex bug that may return an error even if it succeeds;\
+- the library can now display equation previews;\
+- fixed cosmetic bugs :\
+	- the first two lines of the preamble view cannot be modified : they are now grayed in the document window\
+	- strange display of line numbers when scrolling the preamble view;\
+	- scrollwheel was disabled in the main text view;\
+  	- executable paths were not recoloured when changing composition mode;
+\fs26 \ul \
+
+\fs22 \ulnone \
+\
+v 1.5.0 (4th january 2006)\
 - some editing enhancement (syntax colouring...) thanks to the use of some parts of Smultron source code, by Peter Borg (http://smultron.sourceforge.net); syntax colouring is not yet perfect;\
 - fixed a bug affecting error detection during a "latexisation";\
 - added customizable shortcuts for the application service;\
@@ -285,17 +302,17 @@ v 1.5.0\
 - nicer preferences pane;\
 - minor refinments.\
 \
-v 1.4.4\
+v 1.4.4 (10th october 2005)\
 - yet another bounding box adjustment.\
 \
-v 1.4.3\
+v 1.4.3 (7th october 2005)\
 - in the preference pane, the user is now allowed to modify the first two line of the preamble (for those who *really* know what they are doing);\
 - better behaviour in "latex+dvipdf" mode (now really uses "latex" instead of "pdflatex -progname latex");\
 - the equations computed by the service can now be saved in the history;\
 - better bounding box adjustment (that tries to crop the equation);\
 - improved documentation.\
 \
-v 1.4.2\
+v 1.4.2 (9th september 2005)\
 - fixed a bug causing a crash during LaTeXIT's launch on machines that do not have pdflatex or dvipdf installed;\
 - fixed some typo mistakes.\
   \
@@ -308,7 +325,7 @@ v 1.4.1\
 - better color.sty checking.\
 \
 \
-v 1.4.0\
+v 1.4.0 (14th august 2005)\
 - interface changes (history, library) to be more logical and respects Apple guidelines;\
 - fixed a bug under Tiger, while importing equations containing commas;\
 - you can now compose using pdflatex or latex+dvipdf - it is useful for some packages;\

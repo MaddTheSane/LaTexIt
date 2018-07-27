@@ -11,15 +11,18 @@
 @class ImagePopupButton;
 @class LibraryTableView;
 @interface LibraryController : NSWindowController {
-  IBOutlet NSButton*         importCurrentButton;
-  IBOutlet ImagePopupButton* actionButton;
-  IBOutlet LibraryTableView* libraryTableView;
+  IBOutlet NSButton*           importCurrentButton;
+  IBOutlet ImagePopupButton*   actionButton;
+  IBOutlet LibraryTableView*   libraryTableView;
+  IBOutlet NSSegmentedControl* libraryRowTypeSegmentedControl;
 }
 
 -(IBAction) importCurrent:(id)sender; //creates a library item with the current document state
 -(IBAction) newFolder:(id)sender;     //creates a folder
 -(IBAction) removeSelectedItems:(id)sender;    //removes some items
 -(IBAction) refreshItems:(id)sender;   //refresh an item
+
+-(IBAction) changeLibraryRowType:(id)sender;
 
 -(IBAction) open:(id)sender;
 -(IBAction) saveAs:(id)sender;

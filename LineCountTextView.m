@@ -39,7 +39,12 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   #else
   NSArray* registeredDraggedTypes = [self registeredDraggedTypes];
   #endif
-  
+
+  //strange fix for splitview
+  NSRect frame = [self frame];
+  frame.origin.y = MAX(0,   frame.origin.y);
+  [self setFrame:frame];
+
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObject:NSColorPboardType]];
   return self;
 }
@@ -65,6 +70,12 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   [super dealloc];
 }
 
+//since the nextResponder is the imageView (see MyDocument.m), we must override the behaviour for scrollWheel
+-(void) scrollWheel:(NSEvent*)event
+{
+  [[[self superview] superview] scrollWheel:event];
+}
+
 //as its own delegate, only notifications from self are seen
 -(void) textDidChange:(NSNotification*)aNotification
 {
@@ -76,11 +87,17 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
     [NSDictionary dictionaryWithObjectsAndKeys:[NSColor blackColor], NSForegroundColorAttributeName, nil];
   [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
 
+  //line count
+  [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
+  
+  //syntax colouring
+  [syntaxColouring textDidChange:aNotification];
+
   //forbidden lines are displayed in gray
   NSDictionary* forbiddenAttributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.7 green:0.7 blue:0.7 alpha:1],
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1],
                                                NSForegroundColorAttributeName, nil];
-  
+
   //updates text attributes to set the color
   NSEnumerator* enumerator = [forbiddenLines objectEnumerator];
   NSNumber*    numberIndex = [enumerator nextObject];
@@ -88,13 +105,13 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   {
     unsigned int index = [numberIndex intValue];
     if (index < [lineRanges count])
-      [[self textStorage] addAttributes:forbiddenAttributes range:NSRangeFromString([lineRanges objectAtIndex:index])];
+    {
+      NSRange range = NSRangeFromString([lineRanges objectAtIndex:index]);
+      [syntaxColouring removeColoursFromRange:range];
+      [[self textStorage] addAttributes:forbiddenAttributes range:range];
+    }
     numberIndex = [enumerator nextObject];
   }
-
-  //line count
-  [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
-  [syntaxColouring textDidChange:aNotification];
 }
 
 -(NSArray*) lineRanges
@@ -263,7 +280,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   if (!isSmallReturn)
     [super keyDown:theEvent];
   else
-    [[(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] makeLatexButton] performClick:self];
+    [[(MyDocument*)[AppController currentDocument] makeLatexButton] performClick:self];
 }
 
 //method taken from Smultron

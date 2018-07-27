@@ -26,7 +26,7 @@
 -(NSString*) title;
 -(BOOL) updateTitle;//try to change the name so that no brother has the same; rretusn YES if it has changed
 
--(NSImage*) image; //the icon used to display the item. Should be pure virtual
+-(NSImage*) icon; //the icon used to display the item. Should be pure virtual
 
 -(void) setExpanded:(BOOL)expanded;
 -(BOOL) isExpanded;

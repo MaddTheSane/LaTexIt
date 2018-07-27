@@ -316,6 +316,7 @@ static NSArray *syntaxDefinitionsArray;
 	[self recolourRange:NSMakeRange(0, [completeString length]) completeRecolour:YES];
 	//if ([defaults boolForKey:@"ShowSpinningProgressIndicator"])
 	//	[[SMLMainController sharedInstance] stopProgressIndicator];
+  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:textView];
 }
 
 -(void)removeColoursFromRange:(NSRange)range

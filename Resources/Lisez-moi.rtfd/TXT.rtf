@@ -1,4 +1,4 @@
-{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf230
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
 {\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fnil\fcharset77 LucidaGrande;\f2\fnil\fcharset77 LucidaGrande-Bold;
 }
 {\colortbl;\red255\green255\blue255;\red125\green125\blue125;\red64\green93\blue255;}
@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.5.0\
+\f2\b \cf0 LaTeXiT 1.5.2\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -52,7 +52,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.5.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.5.2 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -268,10 +268,31 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs26 \cf0 \ul Historique des versions\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs22 \cf0 \ulnone \
-v 1.5.0\
+\fs22 \cf0 \ulnone v 1.5.2 (2 f\'8evrier 2006)\
+- correction d'un bug affectant le lissage de certains symboles dans la palette LaTeX;\
+- correction d'un bug introduit dans la version 1.5.1 qui emp\'90chait le champ de texte de se redimensionner correctement;\
+- correction d'un bug qui ignorait parfois les marges droite et sup\'8erieure;\
+- correction d'un bug dans la biblioth\'8fque, o\'9d le bouton "+" se d\'8esactivait parfois.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone v 1.5.1 (26 janvier 2006)\
+- gestion d'un bug de pdflatex qui retourne parfois une erreur m\'90me en cas de succ\'8fs;\
+- la biblioth\'8fque peut maintenant afficher des aper\'8dus des \'8equations;\
+- correction de bugs cosm\'8etiques :\
+	- les deux premi\'8fres lignes du pr\'8eambule ne peuvent \'90tre modifi\'8ees : elles sont maintenant gris\'8ees dans la fen\'90tre principale;\
+	- affichage \'8etrange des num\'8eros de lignes lors d'un d\'8efilement de la zone de preambule;\
+	- le d\'8efilement-molette ne marchait pas dans la zone de texte principale;\
+  	- les chemins d'acc\'8fs aux ex\'8ecutables n'\'8etaient pas recolori\'8es lors d'un changement du mode de composition.
+\fs26 \ul \
+
+\fs22 \ulnone \
+v 1.5.0 (4 janvier 2006)\
 - quelques am\'8eliorations  de l'\'8edition (coloration syntaxique...) gr\'89ce \'88 l'utilisation de portions du code source de Smultron, par Peter Borg (http://smultron.sourceforge.net); la coloration syntaxique n'est pas encore parfaite;\
 - correction d'un bug affectant la d\'8etection d'erreurs lors d'une "latexisation";\
 - ajout de raccourcis claviers configurables pour le service d'application;\
@@ -279,17 +300,17 @@ v 1.5.0\
 - embellissement des pr\'8ef\'8erences;\
 - quelques raffinements mineurs.\
 \
-v 1.4.4\
+v 1.4.4 (10 octobre 2005)\
 - encore un ajustement de la bounding box.\
 \
-v 1.4.3\
+v 1.4.3 (7 octobre 2005)\
 - dans les pr\'8ef\'8erences, l'utilisateur est maintenant autoris\'8e \'88 modifier les deux premi\'8fres lignes du pr\'8eambule (pour ceux qui savent *vraiment* ce qu'ils font);\
 - meilleur comportement en mode "latex+dvipdf" (utilise maintenant r\'8eellement "latex" au lieu de "pdflatex -progname latex");\
 - les \'8equations r\'8ealis\'8ees par le service peuvent maintenant \'90tre sauv\'8ees dans l'historique;\
 - meilleur ajustement de la "bounding box" (qui essaye de couper l'\'8equation \'88 la bonne taille);\
 - documentation plus compl\'8fte.\
 \
-v 1.4.2\
+v 1.4.2 (9 septembre 2005)\
 - correction d'un bug provoquant un crash au d\'8emarrage de LaTeXiT sur les machines ne disposant pas de pdflatex ou dvipdf;\
 - correction de quelques fautes de frappe.\
 \
@@ -301,7 +322,7 @@ v 1.4.1\
 - nouveau raccourci clavier pour copier l'image dans le presse-papier;\
 - am\'8elioration de la d\'8etection de color.sty.\
 \
-v 1.4.0\
+v 1.4.0 (14 ao\'9et 2005)\
 - modifications de l'interface (historique, biblioth\'8fque) pour la rendre plus logique et conforme aux canons;\
 - correction d'un bug sous Tiger, lors de l'import PDF d'\'8equation contenant des virgules;\
 - on peut maintenant composer en pdflatex ou en latex+dvipdf; c'est utile pour utiliser certains packages;\

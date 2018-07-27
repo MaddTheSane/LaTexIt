@@ -58,6 +58,8 @@ extern NSString* LatexPalettesControllerVisibleAtStartupKey;
 extern NSString* LibraryControllerVisibleAtStartupKey;
 extern NSString* MarginControllerVisibleAtStartupKey;
 
+extern NSString* LibraryViewRowTypeKey;
+
 extern NSString* CheckForNewVersionsKey;
 
 extern NSString* LatexPaletteGroupKey;

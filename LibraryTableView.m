@@ -24,6 +24,14 @@
 
 @implementation LibraryTableView
 
+-(id) initWithCoder:(NSCoder*)coder
+{
+  if (![super initWithCoder:coder])
+    return nil;
+  libraryRowType = LIBRARY_ROW_IMAGE_AND_TEXT;
+  return self;
+}
+
 -(void) awakeFromNib
 {
   [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, nil]];
@@ -35,6 +43,28 @@
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
+}
+
+-(library_row_t) libraryRowType
+{
+  return libraryRowType;
+}
+
+-(void) setLibraryRowType:(library_row_t)type
+{
+  libraryRowType = type;
+  switch(libraryRowType)
+  {
+    case LIBRARY_ROW_IMAGE_AND_TEXT:
+      [self setRowHeight:17];
+      [self setIndentationPerLevel:16];
+      break;
+    case LIBRARY_ROW_IMAGE_LARGE:
+      [self setRowHeight:34];
+      [self setIndentationPerLevel:34];
+      break;
+  }
+  [self setNeedsDisplay:YES];
 }
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
@@ -329,7 +359,7 @@
 //may paste data in the document
 -(IBAction) paste:(id)sender
 {
-  MyDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* document = (MyDocument*) [AppController currentDocument];
   if (document)
   {
     NSPasteboard* pboard = [NSPasteboard generalPasteboard];

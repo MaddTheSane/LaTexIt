@@ -829,7 +829,19 @@ static NSImage*        libraryFileIcon       = nil;
 -(void) outlineView:(NSOutlineView*)outlineView willDisplayCell:(id)cell
      forTableColumn:(NSTableColumn*)tableColumn item:(id)item
 {
-  [cell setImage:[item image]];
+  LibraryTableView* libraryTableView = (LibraryTableView*)outlineView;
+  library_row_t libraryRowType = [libraryTableView libraryRowType];
+  if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
+    [cell setImage:[item icon]];
+  else if (libraryRowType == LIBRARY_ROW_IMAGE_LARGE)
+  {
+    if ([item isKindOfClass:[LibraryFile class]])
+      [cell setImage:[[(LibraryFile*)item value] pdfImage]];
+    else if ([item isKindOfClass:[LibraryFolder class]])
+      [cell setImage:[(LibraryFolder*)item bigIcon]];
+    else
+      [cell setImage:[item icon]];
+  }
 }
 
 //Some management (adding folders, files, removing...), undo-aware

@@ -382,8 +382,8 @@ static NSString* yenString = nil;
 {
   [preambleTextView clearErrors];
   [[preambleTextView textStorage] setAttributedString:aString];
-  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
   [[preambleTextView syntaxColouring] recolourCompleteDocument];
+  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:preambleTextView];
   [preambleTextView setNeedsDisplay:YES];
 }
 
@@ -391,8 +391,8 @@ static NSString* yenString = nil;
 {
   [sourceTextView clearErrors];
   [[sourceTextView textStorage] setAttributedString:aString];
-  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:sourceTextView];
   [[sourceTextView syntaxColouring] recolourCompleteDocument];
+  [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:sourceTextView];
   [sourceTextView setNeedsDisplay:YES];
 }
 
@@ -564,7 +564,7 @@ static NSString* yenString = nil;
                                                         NSLocalizedString(@"processing", @"processing"),
                                                         [executablePath lastPathComponent],
                                                         systemCall]];
-  BOOL failed = (system([systemCall UTF8String]) != 0);
+  BOOL failed = (system([systemCall UTF8String]) != 0) && ![fileManager fileExistsAtPath:pdfFile];
   NSString* errors = [NSString stringWithContentsOfFile:errFile];
   [stdoutString appendString:errors ? errors : @""];
   
@@ -833,8 +833,8 @@ static NSString* yenString = nil;
       NSRect boundingBox = [self _computeBoundingBox:pdfFilePath]; //compute the bounding box of the pdf file generated during step 1
       boundingBox.origin.x    -= [appController marginControllerLeftMargin]/(magnification/10);
       boundingBox.origin.y    -= [appController marginControllerBottomMargin]/(magnification/10);
-      boundingBox.size.width  += [appController marginControllerRightMargin]/(magnification/10);
-      boundingBox.size.height += [appController marginControllerTopMargin]/(magnification/10);
+      boundingBox.size.width  += ([appController marginControllerRightMargin]+[appController marginControllerLeftMargin])/(magnification/10);
+      boundingBox.size.height += ([appController marginControllerBottomMargin]+[appController marginControllerTopMargin])/(magnification/10);
 
       //then use the bounding box and the magnification in the magic-box-template, the body of which will be a mere \includegraphics
       //of the pdf file of step 1
@@ -863,7 +863,9 @@ static NSString* yenString = nil;
           "\\immediate\\write\\foo{\\the\\latexitheight (TotalHeight)} \\immediate\\write\\foo{\\the\\latexitwidth (Width)}\n"\
           "\\closeout\\foo \\geometry{paperwidth=\\latexitwidth,paperheight=\\latexitheight,margin=0pt}\n"\
           "\\begin{document}\\scalebox{\\latexitscalefactor}{\\usebox{\\latexitbox}}\\end{document}\n", 
-          [self _replaceYenSymbol:colouredPreamble], magnification/10.0,
+          //[self _replaceYenSymbol:colouredPreamble],
+	  @"\\documentclass[10pt]{article}\n",//minimal preamble
+	  magnification/10.0,
           boundingBox.origin.x, boundingBox.origin.y,
           boundingBox.origin.x+boundingBox.size.width, boundingBox.origin.y+boundingBox.size.height,
           pdfFile,

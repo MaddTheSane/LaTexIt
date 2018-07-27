@@ -251,7 +251,6 @@
 		9343D0C908604F430024CDC2 /* refresh.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9343D0C808604F430024CDC2 /* refresh.tiff */; };
 		934497ED08A520FC00CE2E61 /* poisson.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 934497EC08A520FC00CE2E61 /* poisson.pdf */; };
 		9344D8280825808900B17B37 /* LibraryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8260825808900B17B37 /* LibraryCell.m */; };
-		9344D83D0825818B00B17B37 /* folder-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9344D83C0825818B00B17B37 /* folder-icon.png */; };
 		9344D8A2082587ED00B17B37 /* LibraryFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9344D8A0082587ED00B17B37 /* LibraryFolder.m */; };
 		935A834C084EFF11005724CE /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
 		935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */; };
@@ -282,6 +281,9 @@
 		93EF9D1F07EF7B6A0003FA6E /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D1D07EF7B6A0003FA6E /* HistoryItem.m */; };
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
 		93EFDB9F088FF163000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB9D088FF163000156A3 /* NSStringExtended.m */; };
+		93F0009009885B310064888E /* view-icons.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0008E09885B310064888E /* view-icons.tiff */; };
+		93F0009109885B310064888E /* view-titles.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0008F09885B310064888E /* view-titles.tiff */; };
+		93F0009309885B550064888E /* big-folder-icon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93F0009209885B550064888E /* big-folder-icon.tiff */; };
 		93F16CAD089FC1D800FF7B94 /* LatexPalettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F16CAB089FC1D800FF7B94 /* LatexPalettes.nib */; };
 		93F16CD1089FC25200FF7B94 /* LatexPalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F16CCD089FC25200FF7B94 /* LatexPalettesController.m */; };
 		93F350220952AF2300DDFD09 /* SMLSyntaxColouring.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F350200952AF2300DDFD09 /* SMLSyntaxColouring.m */; };
@@ -422,14 +424,14 @@
 		9308AD0A088CF3D50062A340 /* NSWorkspaceExtended.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = NSWorkspaceExtended.m; sourceTree = "<group>"; };
 		9308E1E707EE3A5900DD1B5F /* LineCountTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineCountTextView.h; sourceTree = "<group>"; };
 		9308E1E807EE3A5900DD1B5F /* LineCountTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineCountTextView.m; sourceTree = "<group>"; };
-		9308E39207EE46BB00DD1B5F /* error.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = error.tiff; path = Resources/error.tiff; sourceTree = "<group>"; };
+		9308E39207EE46BB00DD1B5F /* error.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = error.tiff; path = Resources/interface/error.tiff; sourceTree = "<group>"; };
 		930AC4E107EDEEF400AC66FA /* LineCountRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineCountRulerView.h; sourceTree = "<group>"; };
 		930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineCountRulerView.m; sourceTree = "<group>"; };
 		930BC29807ECBC3C00EEB238 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		930BC29907ECBC3C00EEB238 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		930BC2A707ECBD6500EEB238 /* MyImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyImageView.h; sourceTree = "<group>"; };
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
-		93149F7D089438B10017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/latexit-lib.png"; sourceTree = "<group>"; };
+		93149F7D089438B10017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/file-icons/latexit-lib.png"; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
@@ -446,13 +448,13 @@
 		931D5E0E08A15B9E00573DD8 /* HistoryController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = HistoryController.m; sourceTree = "<group>"; };
 		931D5E0F08A15B9E00573DD8 /* HistoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = HistoryTableView.h; sourceTree = "<group>"; };
 		931D5E1008A15B9E00573DD8 /* HistoryController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = HistoryController.h; sourceTree = "<group>"; };
-		931D5E2008A15C1400573DD8 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/action-pressed.tiff"; sourceTree = "<group>"; };
-		931D5E2108A15C1400573DD8 /* action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = action.tiff; path = Resources/action.tiff; sourceTree = "<group>"; };
-		931D5E2208A15C1400573DD8 /* add-big.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big.tiff"; path = "Resources/add-big.tiff"; sourceTree = "<group>"; };
-		931D5E2308A15C1400573DD8 /* add-big-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big-pressed.tiff"; path = "Resources/add-big-pressed.tiff"; sourceTree = "<group>"; };
+		931D5E2008A15C1400573DD8 /* action-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "action-pressed.tiff"; path = "Resources/interface/action-pressed.tiff"; sourceTree = "<group>"; };
+		931D5E2108A15C1400573DD8 /* action.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = action.tiff; path = Resources/interface/action.tiff; sourceTree = "<group>"; };
+		931D5E2208A15C1400573DD8 /* add-big.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big.tiff"; path = "Resources/interface/add-big.tiff"; sourceTree = "<group>"; };
+		931D5E2308A15C1400573DD8 /* add-big-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-big-pressed.tiff"; path = "Resources/interface/add-big-pressed.tiff"; sourceTree = "<group>"; };
 		9324D3F308A645500010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D3F408A645500010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
-		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = Resources/latexit.icns; sourceTree = "<group>"; };
+		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = "Resources/file-icons/latexit.icns"; sourceTree = "<group>"; };
 		932BA54A0960CC82004EECBA /* sqrt3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = sqrt3.pdf; path = Resources/symbols/sqrt3.pdf; sourceTree = "<group>"; };
 		932BA54B0960CC82004EECBA /* rightarrow-big.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = "rightarrow-big.pdf"; path = "Resources/symbols/rightarrow-big.pdf"; sourceTree = "<group>"; };
 		932BA54C0960CC82004EECBA /* partial.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = partial.pdf; path = Resources/symbols/partial.pdf; sourceTree = "<group>"; };
@@ -663,18 +665,17 @@
 		932CF4210826C2EB00434128 /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
 		932CF4240826C33D00434128 /* LibraryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFile.h; sourceTree = "<group>"; };
 		932CF4250826C33D00434128 /* LibraryFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFile.m; sourceTree = "<group>"; };
-		932CF45E0826C5A500434128 /* file-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file-icon.png"; path = "Resources/file-icon.png"; sourceTree = "<group>"; };
+		932CF45E0826C5A500434128 /* file-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file-icon.png"; path = "Resources/interface/file-icon.png"; sourceTree = "<group>"; };
 		932CF5760826D9E500434128 /* LibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryManager.h; sourceTree = "<group>"; };
 		932CF5770826D9E500434128 /* LibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryManager.m; sourceTree = "<group>"; };
 		9331016F083D1D6400DE67ED /* NSColorExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSColorExtended.h; sourceTree = "<group>"; };
 		93310170083D1D6400DE67ED /* NSColorExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColorExtended.m; sourceTree = "<group>"; };
 		93344CB308251BD500F00A49 /* NSTaskExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTaskExtended.h; sourceTree = "<group>"; };
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
-		9343D0C808604F430024CDC2 /* refresh.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = refresh.tiff; path = Resources/refresh.tiff; sourceTree = "<group>"; };
+		9343D0C808604F430024CDC2 /* refresh.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = refresh.tiff; path = Resources/interface/refresh.tiff; sourceTree = "<group>"; };
 		934497EC08A520FC00CE2E61 /* poisson.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = poisson.pdf; path = Resources/easterEggs/poisson.pdf; sourceTree = "<group>"; };
 		9344D8250825808900B17B37 /* LibraryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryCell.h; sourceTree = "<group>"; };
 		9344D8260825808900B17B37 /* LibraryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryCell.m; sourceTree = "<group>"; };
-		9344D83C0825818B00B17B37 /* folder-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-icon.png"; path = "Resources/folder-icon.png"; sourceTree = "<group>"; };
 		9344D89F082587ED00B17B37 /* LibraryFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryFolder.h; sourceTree = "<group>"; };
 		9344D8A0082587ED00B17B37 /* LibraryFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryFolder.m; sourceTree = "<group>"; };
 		935A8349084EFF11005724CE /* NSApplicationExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSApplicationExtended.h; sourceTree = "<group>"; };
@@ -685,7 +686,7 @@
 		9372A1F3087819EF00A3A645 /* MarginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Margin.nib; sourceTree = "<group>"; };
 		9372A2F50878280700A3A645 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Margin.nib; sourceTree = "<group>"; };
-		93773C2107FFF2B6004AAB30 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = warning.tiff; path = Resources/warning.tiff; sourceTree = "<group>"; };
+		93773C2107FFF2B6004AAB30 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = warning.tiff; path = Resources/interface/warning.tiff; sourceTree = "<group>"; };
 		93773C3207FFF541004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93773C3307FFF547004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MyDocument.nib; sourceTree = "<group>"; };
 		93773C3407FFF54D004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Preferences.nib; sourceTree = "<group>"; };
@@ -701,10 +702,10 @@
 		93AD08B708A2D2CE0045B7F9 /* EncapsulationTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = EncapsulationTableView.h; sourceTree = "<group>"; };
 		93B419E4095C017D009C6A1F /* ShortcutTableView.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = ShortcutTableView.m; sourceTree = "<group>"; };
 		93B419E5095C017D009C6A1F /* ShortcutTableView.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = ShortcutTableView.h; sourceTree = "<group>"; };
-		93B528AC089FFC2B00F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/add.tiff; sourceTree = "<group>"; };
-		93B528AD089FFC2B00F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/add-pressed.tiff"; sourceTree = "<group>"; };
-		93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/remove-pressed.tiff"; sourceTree = "<group>"; };
-		93B528AF089FFC2B00F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/remove.tiff; sourceTree = "<group>"; };
+		93B528AC089FFC2B00F14B77 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = add.tiff; path = Resources/interface/add.tiff; sourceTree = "<group>"; };
+		93B528AD089FFC2B00F14B77 /* add-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "add-pressed.tiff"; path = "Resources/interface/add-pressed.tiff"; sourceTree = "<group>"; };
+		93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "remove-pressed.tiff"; path = "Resources/interface/remove-pressed.tiff"; sourceTree = "<group>"; };
+		93B528AF089FFC2B00F14B77 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = remove.tiff; path = Resources/interface/remove.tiff; sourceTree = "<group>"; };
 		93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableView.h; sourceTree = "<group>"; };
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
@@ -723,6 +724,9 @@
 		93EF9D2107EF7B740003FA6E /* HistoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryManager.m; sourceTree = "<group>"; };
 		93EFDB9C088FF163000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB9D088FF163000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; };
+		93F0008E09885B310064888E /* view-icons.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-icons.tiff"; path = "Resources/interface/view-icons.tiff"; sourceTree = "<group>"; };
+		93F0008F09885B310064888E /* view-titles.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "view-titles.tiff"; path = "Resources/interface/view-titles.tiff"; sourceTree = "<group>"; };
+		93F0009209885B550064888E /* big-folder-icon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "big-folder-icon.tiff"; path = "Resources/interface/big-folder-icon.tiff"; sourceTree = "<group>"; };
 		93F16CAC089FC1D800FF7B94 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		93F16CAE089FC1E700FF7B94 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LatexPalettes.nib; sourceTree = "<group>"; };
 		93F16CCC089FC25200FF7B94 /* LatexPalettesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = LatexPalettesController.h; sourceTree = "<group>"; };
@@ -839,7 +843,6 @@
 			children = (
 				93019F15086C765800A2A9E7 /* Documentation */,
 				93019F14086C763600A2A9E7 /* Icons */,
-				93F350400952AFC400DDFD09 /* toolbarItems */,
 				93F3506C0952B08700DDFD09 /* tex.plist */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -870,22 +873,10 @@
 			isa = PBXGroup;
 			children = (
 				934497E708A520E400CE2E61 /* easterEggs */,
-				93351D2C07F8216B004E4606 /* Symbols */,
-				931D5E2108A15C1400573DD8 /* action.tiff */,
-				931D5E2008A15C1400573DD8 /* action-pressed.tiff */,
-				93B528AC089FFC2B00F14B77 /* add.tiff */,
-				93B528AD089FFC2B00F14B77 /* add-pressed.tiff */,
-				931D5E2208A15C1400573DD8 /* add-big.tiff */,
-				931D5E2308A15C1400573DD8 /* add-big-pressed.tiff */,
-				9328604307F4505F009BF03D /* latexit.icns */,
-				9308E39207EE46BB00DD1B5F /* error.tiff */,
-				9343D0C808604F430024CDC2 /* refresh.tiff */,
-				93B528AF089FFC2B00F14B77 /* remove.tiff */,
-				93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */,
-				93773C2107FFF2B6004AAB30 /* warning.tiff */,
-				9344D83C0825818B00B17B37 /* folder-icon.png */,
-				932CF45E0826C5A500434128 /* file-icon.png */,
-				93149F7D089438B10017C83A /* latexit-lib.png */,
+				93D06AF30990BE4400C484B8 /* file-icons */,
+				93D06AF50990BE6700C484B8 /* interface */,
+				93351D2C07F8216B004E4606 /* symbols */,
+				93F350400952AFC400DDFD09 /* toolbarItems */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -984,207 +975,18 @@
 			name = CocoaExtensions;
 			sourceTree = "<group>";
 		};
-		93351D2C07F8216B004E4606 /* Symbols */ = {
+		93351D2C07F8216B004E4606 /* symbols */ = {
 			isa = PBXGroup;
 			children = (
-				932BA54A0960CC82004EECBA /* sqrt3.pdf */,
-				932BA54B0960CC82004EECBA /* rightarrow-big.pdf */,
-				932BA54C0960CC82004EECBA /* partial.pdf */,
-				932BA54D0960CC82004EECBA /* sum.pdf */,
-				932BA54E0960CC82004EECBA /* coprod.pdf */,
-				932BA54F0960CC82004EECBA /* dot.pdf */,
-				932BA5500960CC82004EECBA /* iiint.pdf */,
-				932BA5510960CC82004EECBA /* iint.pdf */,
-				932BA5520960CC82004EECBA /* oint.pdf */,
-				932BA5530960CC82004EECBA /* nexists.pdf */,
-				932BA5540960CC82004EECBA /* exists.pdf */,
-				932BA5550960CC82004EECBA /* forall.pdf */,
-				932BA5560960CC82004EECBA /* neg.pdf */,
-				932BA5570960CC82004EECBA /* bigwedge.pdf */,
-				932BA5580960CC82004EECBA /* bigvee.pdf */,
-				932BA5590960CC82004EECBA /* bigcap.pdf */,
-				932BA55A0960CC82004EECBA /* bigcup.pdf */,
-				932BA55B0960CC82004EECBA /* widetilde.pdf */,
-				932BA55C0960CC82004EECBA /* rightarrow.pdf */,
-				932BA55D0960CC82004EECBA /* leftarrow.pdf */,
-				932BA55E0960CC82004EECBA /* int.pdf */,
-				932BA55F0960CC82004EECBA /* dagger.pdf */,
-				932BA5600960CC82004EECBA /* sim.pdf */,
-				932BA5610960CC82004EECBA /* rtimes.pdf */,
-				932BA5620960CC82004EECBA /* approx.pdf */,
-				932BA5630960CC82004EECBA /* cong.pdf */,
-				932BA5640960CC82004EECBA /* leq.pdf */,
-				932BA5650960CC82004EECBA /* ddot.pdf */,
-				932BA5660960CC82004EECBA /* supseteq.pdf */,
-				932BA5670960CC82004EECBA /* nsubseteq.pdf */,
-				932BA5680960CC82004EECBA /* subseteq.pdf */,
-				932BA5690960CC82004EECBA /* leqslant.pdf */,
-				932BA56A0960CC82004EECBA /* ggg.pdf */,
-				932BA56B0960CC82004EECBA /* uparrow.pdf */,
-				932BA56C0960CC82004EECBA /* models.pdf */,
-				932BA56D0960CC82004EECBA /* ltimes.pdf */,
-				932BA56E0960CC82004EECBA /* widehat.pdf */,
-				932BA56F0960CC82004EECBA /* nparallel.pdf */,
-				932BA5700960CC82004EECBA /* sqsubseteq.pdf */,
-				932BA5710960CC82004EECBA /* sqsubset.pdf */,
-				932BA5720960CC82004EECBA /* leftarrow-big.pdf */,
-				932BA5730960CC82004EECBA /* mapsto.pdf */,
-				932BA5740960CC82004EECBA /* sqcap.pdf */,
-				932BA5750960CC82004EECBA /* mid.pdf */,
-				932BA5760960CC82004EECBA /* pm.pdf */,
-				932BA5770960CC82004EECBA /* div.pdf */,
-				932BA5780960CC82004EECBA /* gg.pdf */,
-				932BA5790960CC82004EECBA /* cap.pdf */,
-				932BA57A0960CC82004EECBA /* vdash.pdf */,
-				932BA57B0960CC82004EECBA /* star.pdf */,
-				932BA57C0960CC82004EECBA /* tilde.pdf */,
-				932BA57D0960CC82004EECBA /* nsupseteq.pdf */,
-				932BA57E0960CC82004EECBA /* bowtie.pdf */,
-				932BA57F0960CC82004EECBA /* ni.pdf */,
-				932BA5800960CC82004EECBA /* vec.pdf */,
-				932BA5810960CC82004EECBA /* jmath.pdf */,
-				932BA5820960CC82004EECBA /* ell.pdf */,
-				932BA5830960CC82004EECBA /* re.pdf */,
-				932BA5840960CC82004EECBA /* im.pdf */,
-				932BA5850960CC82004EECBA /* n-mathbb.pdf */,
-				932BA5860960CC82004EECBA /* z-mathbb.pdf */,
-				932BA5870960CC82004EECBA /* q-mathbb.pdf */,
-				932BA8440961562A004EECBA /* prod.pdf */,
-				932BA5890960CC82004EECBA /* doteq.pdf */,
-				932BA58A0960CC82004EECBA /* aleph.pdf */,
-				932BA58B0960CC82004EECBA /* infty.pdf */,
-				932BA58C0960CC82004EECBA /* nabla.pdf */,
-				932BA58D0960CC82004EECBA /* gtrsim.pdf */,
-				932BA58E0960CC82004EECBA /* nsucceq.pdf */,
-				932BA58F0960CC82004EECBA /* p-mathbb.pdf */,
-				932BA5900960CC82004EECBA /* r-mathbb.pdf */,
-				932BA5910960CC82004EECBA /* leftharpoondown.pdf */,
-				932BA5920960CC82004EECBA /* lambda-big.pdf */,
-				932BA5930960CC82004EECBA /* pi-big.pdf */,
-				932BA5940960CC82004EECBA /* sigma-big.pdf */,
-				932BA5950960CC82004EECBA /* xi-big.pdf */,
-				932BA5960960CC82004EECBA /* gamma.pdf */,
-				932BA5970960CC82004EECBA /* delta.pdf */,
-				932BA5980960CC82004EECBA /* epsilon.pdf */,
-				932BA5990960CC82004EECBA /* zeta.pdf */,
-				932BA59A0960CC82004EECBA /* eta.pdf */,
-				932BA59B0960CC82004EECBA /* theta.pdf */,
-				932BA59C0960CC82004EECBA /* iota.pdf */,
-				932BA59D0960CC82004EECBA /* kappa.pdf */,
-				932BA59E0960CC82004EECBA /* lambda.pdf */,
-				932BA59F0960CC82004EECBA /* mu.pdf */,
-				932BA5A00960CC82004EECBA /* nu.pdf */,
-				932BA5A10960CC82004EECBA /* xi.pdf */,
-				932BA5A20960CC82004EECBA /* succeq.pdf */,
-				932BA5A30960CC82004EECBA /* sqsupset.pdf */,
-				932BA5A40960CC82004EECBA /* upsilon-big.pdf */,
-				932BA5A50960CC82004EECBA /* phi.pdf */,
-				932BA5A60960CC82004EECBA /* phi-big.pdf */,
-				932BA5A70960CC82004EECBA /* omega-big.pdf */,
-				932BA5A80960CC82004EECBA /* nprec.pdf */,
-				932BA5A90960CC82004EECBA /* pi.pdf */,
-				932BA5AA0960CC82004EECBA /* rho.pdf */,
-				932BA5AB0960CC82004EECBA /* sigma.pdf */,
-				932BA5AC0960CC82004EECBA /* tau.pdf */,
-				932BA5AD0960CC82004EECBA /* upsilon.pdf */,
-				932BA5AE0960CC82004EECBA /* varphi.pdf */,
-				932BA5AF0960CC82004EECBA /* chi.pdf */,
-				932BA5B00960CC82004EECBA /* psi.pdf */,
-				932BA5B10960CC82004EECBA /* omega.pdf */,
-				932BA5B20960CC82004EECBA /* gamma-big.pdf */,
-				932BA5B30960CC82004EECBA /* delta-big.pdf */,
-				932BA5B40960CC82004EECBA /* theta-big.pdf */,
-				932BA5B50960CC82004EECBA /* unrhd.pdf */,
-				932BA5B60960CC82004EECBA /* bigtriangledown.pdf */,
-				932BA5B70960CC82004EECBA /* circ.pdf */,
-				932BA5B90960CC82004EECBA /* lesssim.pdf */,
-				932BA5BA0960CC82004EECBA /* odot.pdf */,
-				932BA5BB0960CC82004EECBA /* emptyset.pdf */,
-				932BA5BC0960CC82004EECBA /* sqcup.pdf */,
-				932BA5BD0960CC82004EECBA /* mp.pdf */,
-				932BA5BE0960CC82004EECBA /* in.pdf */,
-				932BA5BF0960CC82004EECBA /* bar.pdf */,
-				932BA5C00960CC82004EECBA /* rightharpoonup.pdf */,
-				932BA5C10960CC82004EECBA /* bot.pdf */,
-				932BA5C20960CC82004EECBA /* top.pdf */,
-				932BA5C30960CC82004EECBA /* hookleftarrow.pdf */,
-				932BA5C40960CC82004EECBA /* nearrow.pdf */,
-				932BA5C50960CC82004EECBA /* dashv.pdf */,
-				932BA5C60960CC82004EECBA /* diamond.pdf */,
-				932BA5C70960CC82004EECBA /* leftrightarrow.pdf */,
-				932BA5C80960CC82004EECBA /* npreceq.pdf */,
-				932BA5C90960CC82004EECBA /* bullet.pdf */,
-				932BA5CA0960CC82004EECBA /* notin.pdf */,
-				932BA5CB0960CC82004EECBA /* ast.pdf */,
-				932BA5CC0960CC82004EECBA /* neq.pdf */,
-				932BADD509629EA7004EECBA /* nmid.pdf */,
-				932BA5CD0960CC82004EECBA /* lll.pdf */,
-				932BA5CE0960CC82004EECBA /* ngeqslant.pdf */,
-				932BA5CF0960CC82004EECBA /* ominus.pdf */,
-				932BA5D00960CC82004EECBA /* overleftarrow.pdf */,
-				932BA5D10960CC82004EECBA /* looparrowleft.pdf */,
-				932BA5D20960CC82004EECBA /* equiv.pdf */,
-				932BA5D30960CC82004EECBA /* cup.pdf */,
-				932BA5D40960CC82004EECBA /* imath.pdf */,
-				932BA5D50960CC82004EECBA /* nleq.pdf */,
-				932BA5D60960CC82004EECBA /* ddagger.pdf */,
-				932BA5D70960CC82004EECBA /* downarrow.pdf */,
-				932BA5D80960CC82004EECBA /* o.pdf */,
-				932BA5D90960CC82004EECBA /* overrightarrow.pdf */,
-				932BA5DA0960CC82004EECBA /* simeq.pdf */,
-				932BA5DB0960CC82004EECBA /* ngeq.pdf */,
-				932BA5DC0960CC82004EECBA /* parallel.pdf */,
-				932BA5DD0960CC82004EECBA /* h-mathbb.pdf */,
-				932BA5DE0960CC82004EECBA /* hbar.pdf */,
-				932BA5DF0960CC82004EECBA /* nwarrow.pdf */,
-				932BA5E00960CC82004EECBA /* wedge.pdf */,
-				932BA5E10960CC82004EECBA /* oslash.pdf */,
-				932BA5E20960CC82004EECBA /* supset.pdf */,
-				932BA5E30960CC82004EECBA /* nsucc.pdf */,
-				932BA5E40960CC82004EECBA /* unlhd.pdf */,
-				932BA5E50960CC82004EECBA /* subset.pdf */,
-				932BA5E60960CC82004EECBA /* rightharpoondown.pdf */,
-				932BA5E70960CC82004EECBA /* setminus.pdf */,
-				932BA5E80960CC82004EECBA /* oplus.pdf */,
-				932BA5E90960CC82004EECBA /* bigtriangleup.pdf */,
-				932BA5EA0960CC82004EECBA /* ll.pdf */,
-				932BA5EB0960CC82004EECBA /* cdot.pdf */,
-				932BA5EC0960CC82004EECBA /* asymp.pdf */,
-				932BA5ED0960CC82004EECBA /* propto.pdf */,
-				932BA5EE0960CC82004EECBA /* geqslant.pdf */,
-				932BA5EF0960CC82004EECBA /* beta.pdf */,
-				932BA5F00960CC82004EECBA /* hookrightarrow.pdf */,
-				932BA5F10960CC82004EECBA /* triangleleft.pdf */,
-				932BA5F20960CC82004EECBA /* geq.pdf */,
-				932BA5F30960CC82004EECBA /* longmapsto.pdf */,
-				932BA5F40960CC82004EECBA /* looparrowright.pdf */,
-				932BA5F50960CC82004EECBA /* hat.pdf */,
-				932BA5F60960CC82004EECBA /* swarrow.pdf */,
-				932BA5F70960CC82004EECBA /* uplus.pdf */,
-				932BA5F80960CC82004EECBA /* leftharpoonup.pdf */,
-				932BA5F90960CC82004EECBA /* underrightarrow.pdf */,
-				932BA5FA0960CC82004EECBA /* succ.pdf */,
-				932BA5FB0960CC82004EECBA /* preceq.pdf */,
-				932BA5FC0960CC82004EECBA /* sqrt.pdf */,
-				932BA5FD0960CC82004EECBA /* nleqslant.pdf */,
-				932BA5FE0960CC82004EECBA /* sqsupseteq.pdf */,
-				932BA5FF0960CC82004EECBA /* alpha.pdf */,
-				932BA6000960CC82004EECBA /* triangleright.pdf */,
-				932BA6010960CC82004EECBA /* overbrace.pdf */,
-				932BA6020960CC82004EECBA /* prec.pdf */,
-				932BA6030960CC82004EECBA /* underleftarrow.pdf */,
-				932BA6040960CC82004EECBA /* bigcirc.pdf */,
-				932BA6050960CC82004EECBA /* amalg.pdf */,
-				932BA6060960CC82004EECBA /* underbrace.pdf */,
-				932BA6070960CC82004EECBA /* wr.pdf */,
-				932BA6080960CC82004EECBA /* leftrightarrow-big.pdf */,
-				932BA6090960CC82004EECBA /* vee.pdf */,
-				932BA60A0960CC82004EECBA /* psi-big.pdf */,
-				932BA60B0960CC82004EECBA /* times.pdf */,
-				932BA60C0960CC82004EECBA /* searrow.pdf */,
-				932BA60D0960CC82004EECBA /* otimes.pdf */,
+				93D06B030990BFE400C484B8 /* arrows */,
+				93D06B040990BFEB00C484B8 /* binary operators */,
+				93D06B050990BFF400C484B8 /* decorations */,
+				93D06B060990C00000C484B8 /* greek */,
+				93D06B070990C00A00C484B8 /* letters */,
+				93D06B080990C01700C484B8 /* other operators */,
+				93D06B090990C02300C484B8 /* relations */,
 			);
-			name = Symbols;
+			name = symbols;
 			sourceTree = "<group>";
 		};
 		934497E708A520E400CE2E61 /* easterEggs */ = {
@@ -1238,6 +1040,282 @@
 				932BA6D30960CC9B004EECBA /* PaletteMatrix.m */,
 			);
 			name = LatexPalettes;
+			sourceTree = "<group>";
+		};
+		93D06AF30990BE4400C484B8 /* file-icons */ = {
+			isa = PBXGroup;
+			children = (
+				9328604307F4505F009BF03D /* latexit.icns */,
+				93149F7D089438B10017C83A /* latexit-lib.png */,
+			);
+			name = "file-icons";
+			sourceTree = "<group>";
+		};
+		93D06AF50990BE6700C484B8 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				931D5E2108A15C1400573DD8 /* action.tiff */,
+				931D5E2008A15C1400573DD8 /* action-pressed.tiff */,
+				93B528AC089FFC2B00F14B77 /* add.tiff */,
+				93B528AD089FFC2B00F14B77 /* add-pressed.tiff */,
+				931D5E2208A15C1400573DD8 /* add-big.tiff */,
+				931D5E2308A15C1400573DD8 /* add-big-pressed.tiff */,
+				93F0009209885B550064888E /* big-folder-icon.tiff */,
+				9308E39207EE46BB00DD1B5F /* error.tiff */,
+				932CF45E0826C5A500434128 /* file-icon.png */,
+				9343D0C808604F430024CDC2 /* refresh.tiff */,
+				93B528AF089FFC2B00F14B77 /* remove.tiff */,
+				93B528AE089FFC2B00F14B77 /* remove-pressed.tiff */,
+				93F0008E09885B310064888E /* view-icons.tiff */,
+				93F0008F09885B310064888E /* view-titles.tiff */,
+				93773C2107FFF2B6004AAB30 /* warning.tiff */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		93D06B030990BFE400C484B8 /* arrows */ = {
+			isa = PBXGroup;
+			children = (
+				932BA5D70960CC82004EECBA /* downarrow.pdf */,
+				932BA5C30960CC82004EECBA /* hookleftarrow.pdf */,
+				932BA5F00960CC82004EECBA /* hookrightarrow.pdf */,
+				932BA55D0960CC82004EECBA /* leftarrow.pdf */,
+				932BA5720960CC82004EECBA /* leftarrow-big.pdf */,
+				932BA5910960CC82004EECBA /* leftharpoondown.pdf */,
+				932BA5F80960CC82004EECBA /* leftharpoonup.pdf */,
+				932BA5C70960CC82004EECBA /* leftrightarrow.pdf */,
+				932BA6080960CC82004EECBA /* leftrightarrow-big.pdf */,
+				932BA5F30960CC82004EECBA /* longmapsto.pdf */,
+				932BA5D10960CC82004EECBA /* looparrowleft.pdf */,
+				932BA5F40960CC82004EECBA /* looparrowright.pdf */,
+				932BA5730960CC82004EECBA /* mapsto.pdf */,
+				932BA5C40960CC82004EECBA /* nearrow.pdf */,
+				932BA5DF0960CC82004EECBA /* nwarrow.pdf */,
+				932BA55C0960CC82004EECBA /* rightarrow.pdf */,
+				932BA54B0960CC82004EECBA /* rightarrow-big.pdf */,
+				932BA5E60960CC82004EECBA /* rightharpoondown.pdf */,
+				932BA5C00960CC82004EECBA /* rightharpoonup.pdf */,
+				932BA60C0960CC82004EECBA /* searrow.pdf */,
+				932BA5F60960CC82004EECBA /* swarrow.pdf */,
+				932BA56B0960CC82004EECBA /* uparrow.pdf */,
+			);
+			name = arrows;
+			sourceTree = "<group>";
+		};
+		93D06B040990BFEB00C484B8 /* binary operators */ = {
+			isa = PBXGroup;
+			children = (
+				932BA6050960CC82004EECBA /* amalg.pdf */,
+				932BA5CB0960CC82004EECBA /* ast.pdf */,
+				932BA6040960CC82004EECBA /* bigcirc.pdf */,
+				932BA5B60960CC82004EECBA /* bigtriangledown.pdf */,
+				932BA5E90960CC82004EECBA /* bigtriangleup.pdf */,
+				932BA5C90960CC82004EECBA /* bullet.pdf */,
+				932BA5790960CC82004EECBA /* cap.pdf */,
+				932BA5EB0960CC82004EECBA /* cdot.pdf */,
+				932BA5B70960CC82004EECBA /* circ.pdf */,
+				932BA5D30960CC82004EECBA /* cup.pdf */,
+				932BA55F0960CC82004EECBA /* dagger.pdf */,
+				932BA5D60960CC82004EECBA /* ddagger.pdf */,
+				932BA5C60960CC82004EECBA /* diamond.pdf */,
+				932BA5770960CC82004EECBA /* div.pdf */,
+				932BA5BD0960CC82004EECBA /* mp.pdf */,
+				932BA5BA0960CC82004EECBA /* odot.pdf */,
+				932BA5CF0960CC82004EECBA /* ominus.pdf */,
+				932BA5E80960CC82004EECBA /* oplus.pdf */,
+				932BA5E10960CC82004EECBA /* oslash.pdf */,
+				932BA60D0960CC82004EECBA /* otimes.pdf */,
+				932BA5760960CC82004EECBA /* pm.pdf */,
+				932BA5ED0960CC82004EECBA /* propto.pdf */,
+				932BA5E70960CC82004EECBA /* setminus.pdf */,
+				932BA5740960CC82004EECBA /* sqcap.pdf */,
+				932BA5BC0960CC82004EECBA /* sqcup.pdf */,
+				932BA57B0960CC82004EECBA /* star.pdf */,
+				932BA60B0960CC82004EECBA /* times.pdf */,
+				932BA5F10960CC82004EECBA /* triangleleft.pdf */,
+				932BA6000960CC82004EECBA /* triangleright.pdf */,
+				932BA5E40960CC82004EECBA /* unlhd.pdf */,
+				932BA5B50960CC82004EECBA /* unrhd.pdf */,
+				932BA5F70960CC82004EECBA /* uplus.pdf */,
+				932BA6090960CC82004EECBA /* vee.pdf */,
+				932BA5E00960CC82004EECBA /* wedge.pdf */,
+				932BA6070960CC82004EECBA /* wr.pdf */,
+			);
+			name = "binary operators";
+			sourceTree = "<group>";
+		};
+		93D06B050990BFF400C484B8 /* decorations */ = {
+			isa = PBXGroup;
+			children = (
+				932BA5BF0960CC82004EECBA /* bar.pdf */,
+				932BA54F0960CC82004EECBA /* dot.pdf */,
+				932BA5650960CC82004EECBA /* ddot.pdf */,
+				932BA5F50960CC82004EECBA /* hat.pdf */,
+				932BA6010960CC82004EECBA /* overbrace.pdf */,
+				932BA5D00960CC82004EECBA /* overleftarrow.pdf */,
+				932BA5D90960CC82004EECBA /* overrightarrow.pdf */,
+				932BA57C0960CC82004EECBA /* tilde.pdf */,
+				932BA6060960CC82004EECBA /* underbrace.pdf */,
+				932BA6030960CC82004EECBA /* underleftarrow.pdf */,
+				932BA5F90960CC82004EECBA /* underrightarrow.pdf */,
+				932BA5800960CC82004EECBA /* vec.pdf */,
+				932BA56E0960CC82004EECBA /* widehat.pdf */,
+				932BA55B0960CC82004EECBA /* widetilde.pdf */,
+			);
+			name = decorations;
+			sourceTree = "<group>";
+		};
+		93D06B060990C00000C484B8 /* greek */ = {
+			isa = PBXGroup;
+			children = (
+				932BA5FF0960CC82004EECBA /* alpha.pdf */,
+				932BA5EF0960CC82004EECBA /* beta.pdf */,
+				932BA5AF0960CC82004EECBA /* chi.pdf */,
+				932BA5970960CC82004EECBA /* delta.pdf */,
+				932BA5B30960CC82004EECBA /* delta-big.pdf */,
+				932BA5980960CC82004EECBA /* epsilon.pdf */,
+				932BA59A0960CC82004EECBA /* eta.pdf */,
+				932BA5960960CC82004EECBA /* gamma.pdf */,
+				932BA5B20960CC82004EECBA /* gamma-big.pdf */,
+				932BA59C0960CC82004EECBA /* iota.pdf */,
+				932BA59D0960CC82004EECBA /* kappa.pdf */,
+				932BA59E0960CC82004EECBA /* lambda.pdf */,
+				932BA5920960CC82004EECBA /* lambda-big.pdf */,
+				932BA59F0960CC82004EECBA /* mu.pdf */,
+				932BA5A00960CC82004EECBA /* nu.pdf */,
+				932BA5D80960CC82004EECBA /* o.pdf */,
+				932BA5B10960CC82004EECBA /* omega.pdf */,
+				932BA5A70960CC82004EECBA /* omega-big.pdf */,
+				932BA5A50960CC82004EECBA /* phi.pdf */,
+				932BA5A60960CC82004EECBA /* phi-big.pdf */,
+				932BA5A90960CC82004EECBA /* pi.pdf */,
+				932BA5930960CC82004EECBA /* pi-big.pdf */,
+				932BA5B00960CC82004EECBA /* psi.pdf */,
+				932BA60A0960CC82004EECBA /* psi-big.pdf */,
+				932BA5AA0960CC82004EECBA /* rho.pdf */,
+				932BA5AB0960CC82004EECBA /* sigma.pdf */,
+				932BA5940960CC82004EECBA /* sigma-big.pdf */,
+				932BA5AC0960CC82004EECBA /* tau.pdf */,
+				932BA59B0960CC82004EECBA /* theta.pdf */,
+				932BA5B40960CC82004EECBA /* theta-big.pdf */,
+				932BA5AD0960CC82004EECBA /* upsilon.pdf */,
+				932BA5A40960CC82004EECBA /* upsilon-big.pdf */,
+				932BA5AE0960CC82004EECBA /* varphi.pdf */,
+				932BA5A10960CC82004EECBA /* xi.pdf */,
+				932BA5950960CC82004EECBA /* xi-big.pdf */,
+				932BA5990960CC82004EECBA /* zeta.pdf */,
+			);
+			name = greek;
+			sourceTree = "<group>";
+		};
+		93D06B070990C00A00C484B8 /* letters */ = {
+			isa = PBXGroup;
+			children = (
+				932BA58A0960CC82004EECBA /* aleph.pdf */,
+				932BA5820960CC82004EECBA /* ell.pdf */,
+				932BA5BB0960CC82004EECBA /* emptyset.pdf */,
+				932BA5DE0960CC82004EECBA /* hbar.pdf */,
+				932BA5DD0960CC82004EECBA /* h-mathbb.pdf */,
+				932BA5840960CC82004EECBA /* im.pdf */,
+				932BA5D40960CC82004EECBA /* imath.pdf */,
+				932BA58B0960CC82004EECBA /* infty.pdf */,
+				932BA5810960CC82004EECBA /* jmath.pdf */,
+				932BA58C0960CC82004EECBA /* nabla.pdf */,
+				932BA5850960CC82004EECBA /* n-mathbb.pdf */,
+				932BA58F0960CC82004EECBA /* p-mathbb.pdf */,
+				932BA5870960CC82004EECBA /* q-mathbb.pdf */,
+				932BA5830960CC82004EECBA /* re.pdf */,
+				932BA5900960CC82004EECBA /* r-mathbb.pdf */,
+				932BA5860960CC82004EECBA /* z-mathbb.pdf */,
+			);
+			name = letters;
+			sourceTree = "<group>";
+		};
+		93D06B080990C01700C484B8 /* other operators */ = {
+			isa = PBXGroup;
+			children = (
+				932BA5590960CC82004EECBA /* bigcap.pdf */,
+				932BA55A0960CC82004EECBA /* bigcup.pdf */,
+				932BA5580960CC82004EECBA /* bigvee.pdf */,
+				932BA5570960CC82004EECBA /* bigwedge.pdf */,
+				932BA54E0960CC82004EECBA /* coprod.pdf */,
+				932BA5540960CC82004EECBA /* exists.pdf */,
+				932BA5550960CC82004EECBA /* forall.pdf */,
+				932BA55E0960CC82004EECBA /* int.pdf */,
+				932BA5510960CC82004EECBA /* iint.pdf */,
+				932BA5500960CC82004EECBA /* iiint.pdf */,
+				932BA5560960CC82004EECBA /* neg.pdf */,
+				932BA5530960CC82004EECBA /* nexists.pdf */,
+				932BA5520960CC82004EECBA /* oint.pdf */,
+				932BA54C0960CC82004EECBA /* partial.pdf */,
+				932BA8440961562A004EECBA /* prod.pdf */,
+				932BA5FC0960CC82004EECBA /* sqrt.pdf */,
+				932BA54A0960CC82004EECBA /* sqrt3.pdf */,
+				932BA54D0960CC82004EECBA /* sum.pdf */,
+			);
+			name = "other operators";
+			sourceTree = "<group>";
+		};
+		93D06B090990C02300C484B8 /* relations */ = {
+			isa = PBXGroup;
+			children = (
+				932BA5620960CC82004EECBA /* approx.pdf */,
+				932BA5EC0960CC82004EECBA /* asymp.pdf */,
+				932BA5C10960CC82004EECBA /* bot.pdf */,
+				932BA57E0960CC82004EECBA /* bowtie.pdf */,
+				932BA5630960CC82004EECBA /* cong.pdf */,
+				932BA5C50960CC82004EECBA /* dashv.pdf */,
+				932BA5890960CC82004EECBA /* doteq.pdf */,
+				932BA5D20960CC82004EECBA /* equiv.pdf */,
+				932BA5F20960CC82004EECBA /* geq.pdf */,
+				932BA5EE0960CC82004EECBA /* geqslant.pdf */,
+				932BA58D0960CC82004EECBA /* gtrsim.pdf */,
+				932BA5BE0960CC82004EECBA /* in.pdf */,
+				932BA5640960CC82004EECBA /* leq.pdf */,
+				932BA5690960CC82004EECBA /* leqslant.pdf */,
+				932BA5B90960CC82004EECBA /* lesssim.pdf */,
+				932BA5EA0960CC82004EECBA /* ll.pdf */,
+				932BA5CD0960CC82004EECBA /* lll.pdf */,
+				932BA56D0960CC82004EECBA /* ltimes.pdf */,
+				932BA5750960CC82004EECBA /* mid.pdf */,
+				932BA56C0960CC82004EECBA /* models.pdf */,
+				932BA5CC0960CC82004EECBA /* neq.pdf */,
+				932BA5DB0960CC82004EECBA /* ngeq.pdf */,
+				932BA5CE0960CC82004EECBA /* ngeqslant.pdf */,
+				932BA57F0960CC82004EECBA /* ni.pdf */,
+				932BA5D50960CC82004EECBA /* nleq.pdf */,
+				932BA5FD0960CC82004EECBA /* nleqslant.pdf */,
+				932BADD509629EA7004EECBA /* nmid.pdf */,
+				932BA5CA0960CC82004EECBA /* notin.pdf */,
+				932BA56F0960CC82004EECBA /* nparallel.pdf */,
+				932BA5A80960CC82004EECBA /* nprec.pdf */,
+				932BA5C80960CC82004EECBA /* npreceq.pdf */,
+				932BA5670960CC82004EECBA /* nsubseteq.pdf */,
+				932BA5E30960CC82004EECBA /* nsucc.pdf */,
+				932BA58E0960CC82004EECBA /* nsucceq.pdf */,
+				932BA57D0960CC82004EECBA /* nsupseteq.pdf */,
+				932BA5DC0960CC82004EECBA /* parallel.pdf */,
+				932BA6020960CC82004EECBA /* prec.pdf */,
+				932BA5FB0960CC82004EECBA /* preceq.pdf */,
+				932BA5780960CC82004EECBA /* gg.pdf */,
+				932BA56A0960CC82004EECBA /* ggg.pdf */,
+				932BA5610960CC82004EECBA /* rtimes.pdf */,
+				932BA5600960CC82004EECBA /* sim.pdf */,
+				932BA5DA0960CC82004EECBA /* simeq.pdf */,
+				932BA5710960CC82004EECBA /* sqsubset.pdf */,
+				932BA5700960CC82004EECBA /* sqsubseteq.pdf */,
+				932BA5A30960CC82004EECBA /* sqsupset.pdf */,
+				932BA5FE0960CC82004EECBA /* sqsupseteq.pdf */,
+				932BA5E50960CC82004EECBA /* subset.pdf */,
+				932BA5680960CC82004EECBA /* subseteq.pdf */,
+				932BA5FA0960CC82004EECBA /* succ.pdf */,
+				932BA5A20960CC82004EECBA /* succeq.pdf */,
+				932BA5E20960CC82004EECBA /* supset.pdf */,
+				932BA5660960CC82004EECBA /* supseteq.pdf */,
+				932BA5C20960CC82004EECBA /* top.pdf */,
+				932BA57A0960CC82004EECBA /* vdash.pdf */,
+			);
+			name = relations;
 			sourceTree = "<group>";
 		};
 		93EF9D1B07EF7B5C0003FA6E /* History */ = {
@@ -1360,7 +1438,6 @@
 				9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */,
 				93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */,
 				939A64580800281900AE4486 /* ServicesMenu.strings in Resources */,
-				9344D83D0825818B00B17B37 /* folder-icon.png in Resources */,
 				932CF45F0826C5A500434128 /* file-icon.png in Resources */,
 				935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */,
 				935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */,
@@ -1584,6 +1661,9 @@
 				932BA6D10960CC82004EECBA /* otimes.pdf in Resources */,
 				932BA8450961562A004EECBA /* prod.pdf in Resources */,
 				932BADD609629EA7004EECBA /* nmid.pdf in Resources */,
+				93F0009009885B310064888E /* view-icons.tiff in Resources */,
+				93F0009109885B310064888E /* view-titles.tiff in Resources */,
+				93F0009309885B550064888E /* big-folder-icon.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

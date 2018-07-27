@@ -220,7 +220,7 @@
   return self;
 }
 
--(NSImage*) image
+-(NSImage*) icon
 {
   return nil;
 }

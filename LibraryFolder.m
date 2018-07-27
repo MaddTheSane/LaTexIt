@@ -13,6 +13,7 @@
 @implementation LibraryFolder
 
 static NSImage* smallFolderIcon = nil; //stores the icon of a LibraryFolder
+static NSImage* bigFolderIcon   = nil; //stores the big icon of a LibraryFolder
 
 +(void) initialize
 {
@@ -22,8 +23,9 @@ static NSImage* smallFolderIcon = nil; //stores the icon of a LibraryFolder
     NSString* resourcePath = [mainBundle resourcePath];
     NSString* fileName = nil;
     NSImage*  image = nil;
-    fileName = [resourcePath stringByAppendingPathComponent:@"folder-icon.png"];
+    fileName = [resourcePath stringByAppendingPathComponent:@"big-folder-icon.tiff"];
     image = [[NSImage alloc] initWithContentsOfFile:fileName];
+    bigFolderIcon = [image retain];
     NSSize   iconSize = [image size];
     smallFolderIcon = [[NSImage alloc] initWithSize:NSMakeSize(16, 16)];
     [smallFolderIcon lockFocus];
@@ -41,9 +43,14 @@ static NSImage* smallFolderIcon = nil; //stores the icon of a LibraryFolder
   return newInstance;
 }
 
--(NSImage*) image
+-(NSImage*) icon
 {
   return smallFolderIcon; //icon of a LibraryFolder
+}
+
+-(NSImage*) bigIcon
+{
+  return bigFolderIcon; //icon of a LibraryFolder
 }
 
 //NSCoding protocol

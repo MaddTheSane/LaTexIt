@@ -51,6 +51,7 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
 
 +(AppController*)           appController; //getting the unique instance of appController
 +(NSDocument*)              currentDocument;
+-(NSDocument*)              currentDocument;
 -(EncapsulationController*) encapsulationController;
 -(HistoryController*)       historyController;
 -(LatexPalettesController*) latexPalettesController;

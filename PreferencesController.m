@@ -15,6 +15,7 @@
 #import "NSFontExtended.h"
 #import "NSSegmentedControlExtended.h"
 #import "LibraryManager.h"
+#import "LibraryTableView.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
 #import "SMLSyntaxColouring.h"
@@ -72,6 +73,8 @@ NSString* HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibl
 NSString* LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartupKey";
 NSString* LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibleAtStartupKey";
 NSString* MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartupKey";
+
+NSString* LibraryViewRowTypeKey = @"LibraryViewRowTypeKey";
 
 NSString* CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
 
@@ -160,6 +163,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [NSNumber numberWithBool:NO], LatexPalettesControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], LibraryControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], MarginControllerVisibleAtStartupKey,
+                                               [NSNumber numberWithInt:LIBRARY_ROW_IMAGE_AND_TEXT], LibraryViewRowTypeKey,
                                                [NSNumber numberWithInt:0], LatexPaletteGroupKey,
                                                NSStringFromRect(NSMakeRect(235, 624, 200, 170)), LatexPaletteFrameKey,
                                                [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
@@ -623,6 +627,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [latexButton       setEnabled:(mode == LATEXDVIPDF)];
     [dvipdfTextField   setEnabled:(mode == LATEXDVIPDF)];
     [dvipdfButton      setEnabled:(mode == LATEXDVIPDF)];
+    [self controlTextDidEndEditing:nil];
     [userDefaults setInteger:(int)mode forKey:CompositionModeKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:CompositionModeDidChangeNotification object:self];
   }
@@ -690,7 +695,18 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [NSArray arrayWithObjects:pdfLatexTextField, xeLatexTextField, latexTextField, dvipdfTextField, gsTextField, nil];
 
   //if it is a path textfield, color in red in case of invalid file
-  if ([pathTextFields containsObject:textField])
+  if (!textField)//check all
+  {
+    NSEnumerator* enumerator = [pathTextFields objectEnumerator];
+    NSTextField* theTextField = nil;
+    while((theTextField = [enumerator nextObject]))
+    {
+      BOOL fileSeemsOk = [[NSFileManager defaultManager] fileExistsAtPath:[theTextField stringValue] isDirectory:&isDirectory] &&
+                         !isDirectory;
+      [theTextField setTextColor:(fileSeemsOk || ![theTextField isEnabled] ? [NSColor blackColor] : [NSColor redColor])];
+    }
+  }
+  else if ([pathTextFields containsObject:textField])
   {
     BOOL fileSeemsOk = [[NSFileManager defaultManager] fileExistsAtPath:[textField stringValue] isDirectory:&isDirectory] &&
                        !isDirectory;

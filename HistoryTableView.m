@@ -194,7 +194,7 @@
 -(IBAction) paste:(id)sender
 {
   NSPasteboard* pboard = [NSPasteboard generalPasteboard];
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* document = (MyDocument*) [AppController currentDocument];
   if (document)
   {
     if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])

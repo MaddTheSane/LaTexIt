@@ -52,7 +52,7 @@ static NSImage* smallFileIcon = nil; //to store the icon representing a LibraryF
   return newInstance;
 }
 
--(NSImage*) image
+-(NSImage*) icon
 {
   return smallFileIcon; //icon of a LibraryFile
 }

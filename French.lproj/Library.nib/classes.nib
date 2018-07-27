@@ -5,6 +5,7 @@
         {CLASS = LibraryCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {
             ACTIONS = {
+                changeLibraryRowType = id; 
                 importCurrent = id; 
                 newFolder = id; 
                 open = id; 
@@ -17,6 +18,7 @@
             OUTLETS = {
                 actionButton = ImagePopupButton; 
                 importCurrentButton = NSButton; 
+                libraryRowTypeSegmentedControl = NSSegmentedControl; 
                 libraryTableView = LibraryTableView; 
             }; 
             SUPERCLASS = NSWindowController; 
@@ -26,7 +28,8 @@
             CLASS = LibraryTableView; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSOutlineView; 
-        }
+        }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
     ); 
     IBVersion = 1; 
 }

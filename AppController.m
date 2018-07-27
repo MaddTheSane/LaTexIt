@@ -223,6 +223,11 @@ static NSArray* unixBins = nil;
   [super dealloc];
 }
 
+-(NSDocument*) currentDocument
+{
+  return [[self class] currentDocument];
+}
+
 +(NSDocument*) currentDocument
 {
   NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
@@ -346,7 +351,7 @@ static NSArray* unixBins = nil;
   BOOL ok = YES;
   if ([sender action] == @selector(copyEquation:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
   }
   else if ([sender action] == @selector(paste:))
@@ -359,17 +364,17 @@ static NSArray* unixBins = nil;
   }
   else if ([sender action] == @selector(exportImage:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
   }
   else if ([sender action] == @selector(makeLatex:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [self isPdfLatexAvailable];
   }
   else if ([sender action] == @selector(showOrHidePreamble:))
   {
-    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
     BOOL isPreambleVisible = (myDocument && [myDocument isPreambleVisible]);
     ok = (myDocument != nil) && ![myDocument isBusy];
     if (isPreambleVisible)
@@ -407,7 +412,7 @@ static NSArray* unixBins = nil;
   }
   else if ([sender action] == @selector(libraryImportCurrent:))
   {
-    MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    MyDocument* document = (MyDocument*) [self currentDocument];
     ok = libraryController && [[libraryController window] isVisible] && document && [document hasImage];
   }
   else if ([sender action] == @selector(libraryRemoveSelectedItems:))
@@ -506,7 +511,7 @@ static NSArray* unixBins = nil;
 
 -(IBAction) showOrHidePreamble:(id)sender
 {
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* document = (MyDocument*) [self currentDocument];
   if (document)
   {
     BOOL makePreambleVisible = ![document isPreambleVisible];
@@ -645,24 +650,24 @@ static NSArray* unixBins = nil;
     if (components && [components count])
       thisVersionNumber = [components objectAtIndex:0];
 
-    NSComparisonResult comparison = [thisVersionNumber compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
+    int beta = (([components count] >= 3) && ([[components objectAtIndex:1] isEqualToString:@"beta"])) ?
+                [[components objectAtIndex:2] intValue] : 0;
+
+    NSComparisonResult comparison = [thisVersion compare:currentVersion options:NSCaseInsensitiveSearch|NSNumericSearch];
+    if (sender && (comparison == NSOrderedSame) && (beta > 0))
+      comparison = NSOrderedAscending;
+
     if (sender && (comparison == NSOrderedSame))
-    {
-      if ([thisVersion rangeOfString:@"beta" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        comparison = NSOrderedAscending;
-      else
-        NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
-                        NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
-                        @"Ok", nil, nil);
-    }
-    if (sender && (comparison == NSOrderedDescending))
-    {
-        NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
-                        NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
-                                          @"Your version of LaTeXiT is more recent than the official available one"),
-                        @"Ok", nil, nil);
-    }
-    if (comparison == NSOrderedAscending)
+      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
+                      NSLocalizedString(@"Your version of LaTeXiT is up-to-date", @"Your version of LaTeXiT is up-to-date"),
+
+                      @"Ok", nil, nil);
+    else if (sender && (comparison == NSOrderedDescending))
+      NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
+                      NSLocalizedString(@"Your version of LaTeXiT is more recent than the official available one",
+                                        @"Your version of LaTeXiT is more recent than the official available one"),
+                      @"Ok", nil, nil);
+    else if (comparison == NSOrderedAscending)
     {
       int choice = NSRunAlertPanel(NSLocalizedString(@"Check for new versions", @"Check for new versions"),
                                    NSLocalizedString(@"A new version of LaTeXiT is available",
@@ -677,21 +682,21 @@ static NSArray* unixBins = nil;
 
 -(IBAction) exportImage:(id)sender
 {
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* document = (MyDocument*) [self currentDocument];
   if (document)
     [document exportImage:sender];
 }
 
 -(IBAction) makeLatex:(id)sender
 {
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* document = (MyDocument*) [self currentDocument];
   if (document)
     [[document makeLatexButton] performClick:self];
 }
 
 -(IBAction) displayLog:(id)sender
 {
-  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* document = (MyDocument*) [self currentDocument];
   if (document)
     [document displayLastLog:sender];
 }
@@ -1056,7 +1061,7 @@ static NSArray* unixBins = nil;
 {
   PaletteItem* item = [[sender selectedCell] representedObject];
   NSString* string = [item latexCode];
-  MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* myDocument = (MyDocument*) [self currentDocument];
   if (string && myDocument)
   {
     if ([item type] == LATEX_ITEM_TYPE_FUNCTION)
@@ -1077,7 +1082,7 @@ static NSArray* unixBins = nil;
   NSData* historyItemData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
   NSArray* historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemData];
   HistoryItem* historyItem = (historyItems && [historyItems count]) ? [historyItems objectAtIndex:0] : nil;
-  MyDocument* currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  MyDocument* currentDocument = (MyDocument*) [self currentDocument];
   if (!currentDocument)
     currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
   if (currentDocument && historyItem)
@@ -1322,7 +1327,7 @@ static NSArray* unixBins = nil;
     [[self libraryController] showWindow:self];
   if ([userDefaults boolForKey:MarginControllerVisibleAtStartupKey])
     [[self marginController] showWindow:self];
-  [[[[NSDocumentController sharedDocumentController] currentDocument] windowForSheet] makeKeyAndOrderFront:self];
+  [[[self currentDocument] windowForSheet] makeKeyAndOrderFront:self];
   
   [NSThread detachNewThreadSelector:@selector(_triggerHistoryBackgroundLoading:) toTarget:self withObject:nil];
   
