@@ -5,7 +5,7 @@
 //  Copyright 2005 Pierre Chatelier. All rights reserved.
 
 //An HistoryItem is a useful structure to hold the info about the generated image
-//It will typically contain the latex source code (preamble+body), the color, the mode (\[...\], $...$ or text)
+//It will typically contain the latex source code (preamble+body), the color, the mode (EQNARRAY, \[...\], $...$ or text)
 //the date, the point size.
 
 #import "HistoryItem.h"
@@ -15,6 +15,7 @@
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
 #import "PreferencesController.h"
+#import "Utils.h"
 
 #ifdef PANTHER
 #import <LinkBack-panther/LinkBack.h>
@@ -142,6 +143,7 @@ static NSLock* strangeLock = nil;
   }
   mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
                       : (latex_mode_t) (useDefaults ? [userDefaults integerForKey:DefaultModeKey] : 0);
+  mode = validateLatexMode(mode); //Added starting from version 1.7.0
 
   NSColor* defaultColor = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
   NSMutableString* colorAsString = nil;[NSMutableString stringWithString:[defaultColor rgbaString]];
@@ -273,7 +275,7 @@ static NSLock* strangeLock = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.6.2"   forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.7.0"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -305,7 +307,7 @@ static NSLock* strangeLock = nil;
     color       = [[coder decodeObjectForKey:@"color"]      retain];
     pointSize   = [[coder decodeObjectForKey:@"pointSize"] doubleValue];
     date        = [[coder decodeObjectForKey:@"date"]       retain];
-    mode        = (latex_mode_t) [coder decodeIntForKey:@"mode"];
+    mode        = validateLatexMode((latex_mode_t) [coder decodeIntForKey:@"mode"]);
   }
   else
   {
@@ -315,7 +317,7 @@ static NSLock* strangeLock = nil;
     color       = [[coder decodeObjectForKey:@"color"]      retain];
     pointSize   = [coder decodeDoubleForKey:@"pointSize"];
     date        = [[coder decodeObjectForKey:@"date"]       retain];
-    mode        = (latex_mode_t) [coder decodeIntForKey:@"mode"];
+    mode        = validateLatexMode((latex_mode_t) [coder decodeIntForKey:@"mode"]);
     //we need to reduce the history size and load time, so we can safely not save the cached images, since they are lazily
     //initialized in the "image" methods, using the pdfData
     //pdfCachedImage    = [[coder decodeObjectForKey:@"pdfCachedImage"]    retain];

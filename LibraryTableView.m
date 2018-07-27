@@ -34,6 +34,7 @@
 
 -(void) awakeFromNib
 {
+  [[self window] setAcceptsMouseMovedEvents:YES]; //to allow library to detect mouse moved events
   [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsPboardType, HistoryItemsPboardType, nil]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_libraryDidChange:)
                                                name:LibraryDidChangeNotification object:nil];
@@ -94,6 +95,22 @@
   }
   else
     [super mouseDown:theEvent];
+}
+
+-(void) mouseMoved:(NSEvent*)event
+{
+  LibraryController* libraryController = (LibraryController*)[[self window] windowController];
+  NSPoint locationInWindow = [event locationInWindow];
+  NSPoint location = [self convertPoint:locationInWindow fromView:nil];
+  if (!NSPointInRect(location, [self frame]))
+    [libraryController displayPreviewImage:nil];
+  else
+  {
+    int row = [self rowAtPoint:location];
+    id item = (row >= 0) && (row < [self numberOfRows]) ? [self itemAtRow:row] : nil;
+    NSImage* image = [item isKindOfClass:[LibraryFile class]] ? [[(LibraryFile*)item value] pdfImage] : nil;
+    [libraryController displayPreviewImage:image];
+  }
 }
 
 //when the library changes, the userinfo of the notification may contain some directives to
@@ -279,6 +296,9 @@
   int selectedRow = [self selectedRow];
   [super textDidEndEditing:aNotification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
+  LibraryController* libraryController = (LibraryController*)[[self window] windowController];
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [libraryController setEnablePreviewImage:[userDefaults boolForKey:LibraryDisplayPreviewPanelKey]];
 }
 
 //we cannot end editing if a brother has the same name

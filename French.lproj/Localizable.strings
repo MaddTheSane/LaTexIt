@@ -75,6 +75,7 @@
 "Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost." =
 "Leur ancien préambule sera écrasé. S'il s'agissait d'un préambule spécial utilisé pour leur génération, il sera perdu.";
 "Apply" = "Appliquer";
+"Typeset LaTeX Maths eqnarray" = "Créer l'équation en mode eqnarray";
 "Typeset LaTeX Maths display" = "Créer l'équation en mode display \\[...\\]";
 "Typeset LaTeX Maths inline" = "Créer l'équation en mode inline $...$";
 "Typeset LaTeX Text" = "Créer l'équation en mode texte";

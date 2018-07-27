@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.6.3\
+\f2\b \cf0 LaTeXiT 1.7.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -53,7 +53,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.6.3 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 1.7.0 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -94,6 +94,7 @@ Mais avant toutes choses, il est bon de pr\'8eciser que LaTeXiT est tr\'8fs fort
 Dans le cadre de texte principal, tapez votre code LaTeX, sans vous soucier du pr\'8eambule, du \\begin\{document\} et du \\end\{document\} qui seront rajout\'8es pour vous. Cliquez ensuite sur le bouton"LaTeXiser", et l'image est calcul\'8ee et affich\'8ee dans le cadre d'image. Vous pouvez alors sauvegarder cette image, ou surtout la glisser/d\'8eposer dans toute application o\'9d elle pourra servir d'illustration. On peut r\'8egler le format d'export dans les pr\'8ef\'8erences. PDF est le choix de pr\'8edilection puisque c'est un format "vectoriel" : on peut redimensionner l'image sans perte de qualit\'8e.\
 La taille de la police ainsi que la couleur utilis\'8ees lors de la g\'8en\'8eration de l'image sont personnalisables.\
 Les modes "Display", "Inline" et "Texte" correspondent aux trois modes de LaTeX du m\'90me nom; voyez une documentation LaTeX pour plus d'informations sur leur signification.\
+Le mode "Eqnarray" est un raccourci pratique pour faire des \'8equations multi-lignes, qui encapsule automatiquement le code LaTeX dans un \\begin\{eqnarray*\}...\\end\{eqnarray*\}\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 \
@@ -228,7 +229,12 @@ L'action <mettre \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-- la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b \cf0 - si vous n'avez que TeXShop d'install\'8e, LaTeXiT ne peut fonctionner. Il vous faut une v\'8eritable installation de LaTeX; vous trouverez des informations dans la section "Installer LaTeX" ci-apr\'8fs.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 - la coloration syntaxique ne g\'8fre pas le "$$" correctement;\
 - avec les \'8equations tr\'8fs petites, LaTeX \'8echoue parfois \'88 calculer sa taille exacte, et l'\'8equation se retrouve alors tronqu\'8ee. Il y a deux fa\'8dons d'y rem\'8edier : soit vous ajoutez des marges avec la palette "Marges", soit vous n'utilisez pas le mode DISPLAY ou INLINE, mais le mode TEXTE avec une encapsulation $$...$$ (il y a une diff\'8erence au sein de LaTeXiT);\
 - les marges personnalis\'8ees ne sont pas prises en compte lors d'un export en EPS; cela semble \'90tre un bug de GhostScript;\
 - lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque;\
@@ -272,7 +278,10 @@ Ne vous inqui\'8etez cependant pas : il y a des interfaces graphiques pour utili
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs22 \cf0 \ulnone v 1.6.3\
+\fs22 \cf0 \ulnone v 1.7.0 (16 mars 2006)\
+- ajout du mode "Eqnarray" en marge de "Display | Inline | Texte"; c'est un raccourci pratique pour faire des \'8equations multi-lignes, en utilisant une encapsulation automatique dans "\\begin\{eqnarray*\}...\\end\{eqnarray*\}";\
+- ajout d'une loupe dans la biblioth\'8fque pour visualiser les \'8equations en taille r\'8eelle;\
+- meilleur gestion des items du service d'application LaTeXiT.\
 \
 v 1.6.2 (23 f\'8evrier 2006)\
 - meilleure organisation des fichiers temporaires cr\'8e\'8es par LaTeXiT pour \'8eviter un probl\'8fme avec le package feynmf;\

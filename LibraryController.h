@@ -8,13 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class BorderlessPanel;
 @class ImagePopupButton;
 @class LibraryTableView;
+
 @interface LibraryController : NSWindowController {
   IBOutlet NSButton*           importCurrentButton;
   IBOutlet ImagePopupButton*   actionButton;
   IBOutlet LibraryTableView*   libraryTableView;
   IBOutlet NSSegmentedControl* libraryRowTypeSegmentedControl;
+  IBOutlet BorderlessPanel*    libraryPreviewPanel;
+  IBOutlet NSImageView*        libraryPreviewPanelImageView;
+  IBOutlet NSSegmentedControl* libraryPreviewPanelSegmentedControl;
+  BOOL enablePreviewImage;
 }
 
 -(IBAction) importCurrent:(id)sender; //creates a library item with the current document state
@@ -27,11 +33,16 @@
 -(IBAction) open:(id)sender;
 -(IBAction) saveAs:(id)sender;
 
+-(IBAction) changeLibraryPreviewPanelSegmentedControl:(id)sender;
+
 -(BOOL) canRemoveSelectedItems;
 -(BOOL) canRefreshItems;
 
 -(NSMenu*)  actionMenu;
 -(BOOL)     validateMenuItem:(NSMenuItem*)menuItem;
 -(NSArray*) selectedItems;
+
+-(void) displayPreviewImage:(NSImage*)image;
+-(void) setEnablePreviewImage:(BOOL)status;
 
 @end

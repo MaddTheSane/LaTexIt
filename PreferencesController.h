@@ -63,6 +63,7 @@ extern NSString* LibraryControllerVisibleAtStartupKey;
 extern NSString* MarginControllerVisibleAtStartupKey;
 
 extern NSString* LibraryViewRowTypeKey;
+extern NSString* LibraryDisplayPreviewPanelKey;
 
 extern NSString* CheckForNewVersionsKey;
 

@@ -255,6 +255,7 @@
 		935A834C084EFF11005724CE /* NSApplicationExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935A834A084EFF11005724CE /* NSApplicationExtended.m */; };
 		935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */; };
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
+		936A2C5E09C9A0CC00310E33 /* BorderlessPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */; };
 		9372A1F5087819EF00A3A645 /* MarginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9372A1F3087819EF00A3A645 /* MarginController.m */; };
 		9372A2F4087827FF00A3A645 /* Margin.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A2F3087827FF00A3A645 /* Margin.nib */; };
 		93773C2207FFF2B6004AAB30 /* warning.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93773C2107FFF2B6004AAB30 /* warning.tiff */; };
@@ -274,6 +275,7 @@
 		93B528B3089FFC2B00F14B77 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 93B528AF089FFC2B00F14B77 /* remove.tiff */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
 		93CD21DE0827E9230079C367 /* NSMutableArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */; };
+		93D4E3F109C821A700736816 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4E3EF09C821A700736816 /* Utils.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		93E81972087969BE0081B897 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */; };
 		93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
@@ -409,7 +411,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
 		9302547F07F0BC6A00011996 /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
 		930255CD07F0C2A300011996 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -682,6 +684,8 @@
 		935A834A084EFF11005724CE /* NSApplicationExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSApplicationExtended.m; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
+		936A2C5B09C9A0CC00310E33 /* BorderlessPanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = BorderlessPanel.h; sourceTree = "<group>"; };
+		936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = BorderlessPanel.m; sourceTree = "<group>"; };
 		9372A1F2087819EF00A3A645 /* MarginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Margin.nib; sourceTree = "<group>"; };
@@ -710,6 +714,8 @@
 		93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableView.m; sourceTree = "<group>"; };
 		93CD21DB0827E9230079C367 /* NSMutableArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArrayExtended.h; sourceTree = "<group>"; };
 		93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArrayExtended.m; sourceTree = "<group>"; };
+		93D4E3EF09C821A700736816 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		93D4E3F009C821A700736816 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
 		93D6BA1C082941900081D58A /* NSArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtended.m; sourceTree = "<group>"; };
 		93E8196F087969BE0081B897 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
@@ -903,6 +909,8 @@
 				9308AC31088CF2850062A340 /* IconFamily.m */,
 				9308AC2E088CF2850062A340 /* NSString+CarbonFSSpecCreation.h */,
 				9308AC2F088CF2850062A340 /* NSString+CarbonFSSpecCreation.m */,
+				93D4E3EF09C821A700736816 /* Utils.m */,
+				93D4E3F009C821A700736816 /* Utils.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -936,6 +944,8 @@
 		9324D3EE08A6453D0010DB95 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				936A2C5B09C9A0CC00310E33 /* BorderlessPanel.h */,
+				936A2C5C09C9A0CC00310E33 /* BorderlessPanel.m */,
 				9324D3F308A645500010DB95 /* ButtonNotClickThrough.h */,
 				9324D3F408A645500010DB95 /* ButtonNotClickThrough.m */,
 				931D5DFA08A15B6500573DD8 /* ImagePopupButton.h */,
@@ -1721,6 +1731,8 @@
 				932BA6DD0960CC9B004EECBA /* PaletteItem.m in Sources */,
 				932BA852096156B1004EECBA /* NSPopUpButtonExtended.m in Sources */,
 				932BA87209615747004EECBA /* ShortcutTextView.m in Sources */,
+				93D4E3F109C821A700736816 /* Utils.m in Sources */,
+				936A2C5E09C9A0CC00310E33 /* BorderlessPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

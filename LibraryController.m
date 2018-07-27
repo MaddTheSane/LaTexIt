@@ -9,6 +9,7 @@
 #import "LibraryController.h"
 
 #import "AppController.h"
+#import "BorderlessPanel.h"
 #import "HistoryItem.h"
 #import "LibraryItem.h"
 #import "LibraryFile.h"
@@ -32,6 +33,7 @@
 {
   if (![super initWithWindowNibName:@"Library"])
     return nil;
+  enablePreviewImage = YES;
   return self;
 }
 
@@ -43,6 +45,17 @@
   [window setFrameAutosaveName:@"library"];
   //[window setBecomesKeyOnlyIfNeeded:YES];//we could try that to enable item selecting without activating the window first
   //but this prevents keyDown events
+  
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [libraryPreviewPanelSegmentedControl setSelected:[userDefaults boolForKey:LibraryDisplayPreviewPanelKey] forSegment:0];
+  [self changeLibraryPreviewPanelSegmentedControl:libraryPreviewPanelSegmentedControl];
+
+  [libraryPreviewPanel setFloatingPanel:YES];
+  [libraryPreviewPanel setBackgroundColor:[NSColor clearColor]];
+  [libraryPreviewPanel setLevel:NSStatusWindowLevel];
+  [libraryPreviewPanel setAlphaValue:1.0];
+  [libraryPreviewPanel setOpaque:NO];
+  [libraryPreviewPanel setHasShadow:YES];
 
   [libraryTableView setDataSource:[LibraryManager sharedManager]];
   [libraryTableView setDelegate:[LibraryManager sharedManager]];
@@ -268,6 +281,42 @@
   int tag = [[sender cell] tagForSegment:[sender selectedSegment]];
   [libraryTableView setLibraryRowType:(library_row_t)tag];
   [[NSUserDefaults standardUserDefaults] setInteger:tag forKey:LibraryViewRowTypeKey];
+}
+
+-(IBAction) changeLibraryPreviewPanelSegmentedControl:(id)sender
+{
+  int segment = [sender selectedSegment];
+  BOOL status = (segment != -1) ? [sender isSelectedForSegment:segment] : NO;
+  [[NSUserDefaults standardUserDefaults] setBool:status forKey:LibraryDisplayPreviewPanelKey];
+  [self setEnablePreviewImage:status];
+}
+
+-(void) displayPreviewImage:(NSImage*)image;
+{
+  if (!image && [libraryPreviewPanel isVisible])
+    [libraryPreviewPanel orderOut:self];
+  else if (image && enablePreviewImage)
+  {
+    NSSize imageSize = [image size];
+    NSPoint locationOnScreen = [NSEvent mouseLocation];
+    NSSize screenSize = [[NSScreen mainScreen] frame].size;
+    int shiftRight = 24;
+    int shiftLeft = -24-imageSize.width-16;
+    int shift = ((locationOnScreen.x+shiftRight+imageSize.width+16 > screenSize.width) && (locationOnScreen.x+shiftLeft > 0)) ?
+                shiftLeft : shiftRight;
+    NSRect newFrame = NSMakeRect(locationOnScreen.x+shift,
+                                  MIN(locationOnScreen.y-imageSize.height/2, screenSize.height-imageSize.height-16),
+                                 imageSize.width+16, imageSize.height+16);
+    if (image != [libraryPreviewPanelImageView image])
+      [libraryPreviewPanelImageView setImage:image];
+    [libraryPreviewPanel setFrame:newFrame display:image ? YES : NO];
+    [libraryPreviewPanel orderFront:self];
+  }
+}
+
+-(void) setEnablePreviewImage:(BOOL)status
+{
+  enablePreviewImage = status;
 }
 
 @end

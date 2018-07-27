@@ -166,9 +166,10 @@ static NSString* yenString = nil;
   [saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [[typeOfTextControl cell] setTag:LATEX_MODE_DISPLAY forSegment:0];
-  [[typeOfTextControl cell] setTag:LATEX_MODE_INLINE  forSegment:1];
-  [[typeOfTextControl cell] setTag:LATEX_MODE_TEXT  forSegment:2];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
+  [[typeOfTextControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
   [typeOfTextControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
   
   [sizeText setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
@@ -757,8 +758,12 @@ static NSString* yenString = nil;
 
   //some tuning due to parameters; note that \[...\] is replaced by $\displaystyle because of
   //incompatibilities with the magical boxes
-  NSString* addSymbolLeft  = (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " : (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
-  NSString* addSymbolRight = (latexMode == LATEX_MODE_DISPLAY) ? @"$" : (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
+  NSString* addSymbolLeft  = (latexMode == LATEX_MODE_EQNARRAY) ? @"\\begin{eqnarray*}" :
+                             (latexMode == LATEX_MODE_DISPLAY) ? @"$\\displaystyle " :
+                             (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
+  NSString* addSymbolRight = (latexMode == LATEX_MODE_EQNARRAY) ? @"\\end{eqnarray*}" :
+                             (latexMode == LATEX_MODE_DISPLAY) ? @"$" :
+                             (latexMode == LATEX_MODE_INLINE) ? @"$" : @"";
   NSString* colouredPreamble = [[AppController appController] insertColorInPreamble:preamble color:color];
   
   NSMutableString* fullLog = [NSMutableString string];
@@ -797,7 +802,8 @@ static NSString* yenString = nil;
   //STEP 1 is over. If it has failed, it is the fault of the user, and syntax errors will be reported
   
   //STEP 2
-  BOOL shouldTryStep2 = (latexMode != LATEX_MODE_TEXT) && (compositionMode != LATEXDVIPDF) && (compositionMode != XELATEX);
+  BOOL shouldTryStep2 = (latexMode != LATEX_MODE_TEXT) && (latexMode != LATEX_MODE_EQNARRAY) &&
+                        (compositionMode != LATEXDVIPDF) && (compositionMode != XELATEX);
   //But if the latex file passed this first latexisation, it is time to start step 2 and perform cropping and magnification.
   if (!failed)
   {
@@ -846,7 +852,6 @@ static NSString* yenString = nil;
       //try to latexise that file
       NSData* latexData = [magicSourceToFindBaseLine dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];  
       failed |= ![latexData writeToFile:latexBaselineFilePath atomically:NO];
-      
       if (!failed)
         pdfData = [self _composeLaTeX:latexBaselineFilePath stdoutLog:&stdoutLog stderrLog:&stderrLog compositionMode:compositionMode];
       failed |= !pdfData;

@@ -21,6 +21,7 @@
 #import "MyDocument.h"
 #import "SMLSyntaxColouring.h"
 #import "ShortcutTextView.h"
+#import "Utils.h"
 
 NSString* GeneralToolbarItemIdentifier     = @"GeneralToolbarItem";
 NSString* EditionToolbarItemIdentifier     = @"EditionToolbarItem";
@@ -77,6 +78,7 @@ NSString* LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibl
 NSString* MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartupKey";
 
 NSString* LibraryViewRowTypeKey = @"LibraryViewRowTypeKey";
+NSString* LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanelKey";
 
 NSString* CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
 
@@ -129,7 +131,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [[NSColor whiteColor] data],      DefaultImageViewBackground,
                                                [[NSColor  blackColor]   data],   DefaultColorKey,
                                                [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
-                                               [NSNumber numberWithInt:LATEX_MODE_DISPLAY], DefaultModeKey,
+                                               [NSNumber numberWithInt:LATEX_MODE_EQNARRAY], DefaultModeKey,
                                                [NSNumber numberWithInt:0], CompositionModeKey,
                                                @"", PdfLatexPathKey,
                                                @"", XeLatexPathKey,
@@ -146,8 +148,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] data], SyntaxColoringCommentColorKey,
                                                factoryDefaultPreambleData, DefaultPreambleAttributedKey,
                                                defaultFontAsData, DefaultFontKey,
-                                               [NSArray arrayWithObjects:numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
-                                               [NSArray arrayWithObjects:@"/", @".", @"", nil], ServiceShortcutStringsKey,
+                                               [NSArray arrayWithObjects:numberYes, numberYes, numberYes, numberYes, nil], ServiceShortcutEnabledKey,
+                                               [NSArray arrayWithObjects:@"/", @"", @".", @"", nil], ServiceShortcutStringsKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
                                                [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
@@ -167,6 +169,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                [NSNumber numberWithBool:NO], LibraryControllerVisibleAtStartupKey,
                                                [NSNumber numberWithBool:NO], MarginControllerVisibleAtStartupKey,
                                                [NSNumber numberWithInt:LIBRARY_ROW_IMAGE_AND_TEXT], LibraryViewRowTypeKey,
+                                               [NSNumber numberWithBool:YES], LibraryDisplayPreviewPanelKey,
                                                [NSNumber numberWithInt:0], LatexPaletteGroupKey,
                                                NSStringFromRect(NSMakeRect(235, 624, 200, 170)), LatexPaletteFrameKey,
                                                [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
@@ -194,6 +197,16 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       exportFormat = [NSNumber numberWithInt:EXPORT_FORMAT_PDF];
     [userDefaults setObject:exportFormat forKey:DragExportTypeKey];
   }
+  
+  //from version >= 1.7.0, one service has been added
+  NSMutableArray* serviceShortcutStrings = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:ServiceShortcutStringsKey]];
+  if ([serviceShortcutStrings count] < 4)
+    [serviceShortcutStrings insertObject:@"" atIndex:0];
+  [userDefaults setObject:serviceShortcutStrings forKey:ServiceShortcutStringsKey];
+  NSMutableArray* serviceShortcutEnabled = [NSMutableArray arrayWithArray:[userDefaults arrayForKey:ServiceShortcutEnabledKey]];
+  if ([serviceShortcutEnabled count] < 4)
+    [serviceShortcutEnabled insertObject:numberYes atIndex:0];
+  [userDefaults setObject:serviceShortcutEnabled forKey:ServiceShortcutEnabledKey];
 }
 
 -(id) init
@@ -365,9 +378,10 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 
   [defaultImageViewBackgroundColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultImageViewBackground]]];
   
-  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:0];
-  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:1];
-  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:2];
+  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_EQNARRAY forSegment:0];
+  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
+  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
+  [[defaultModeSegmentedControl cell] setTag:LATEX_MODE_TEXT  forSegment:3];
   [defaultModeSegmentedControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
   [defaultPointSizeTextField setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
   [defaultColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
@@ -935,14 +949,15 @@ static NSAttributedString* factoryDefaultPreamble = nil;
 //data source of the shortcut tableviw
 -(int) numberOfRowsInTableView:(NSTableView *)aTableView
 {
-  //3 rows for the 3 latex modes
-  return (aTableView == serviceShortcutsTableView) ? 3 : 0;
+  //4 rows for the 4 latex modes
+  return (aTableView == serviceShortcutsTableView) ? 4 : 0;
 }
 
 -(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
   id object = nil;
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  
   if (aTableView == serviceShortcutsTableView)
   {
     NSString* identifier = [aTableColumn identifier];
@@ -950,9 +965,10 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       object = [[userDefaults objectForKey:ServiceShortcutEnabledKey] objectAtIndex:rowIndex];
     else if ([identifier isEqualToString:@"description"])
       object = [[NSArray arrayWithObjects:
-                   NSLocalizedString(@"Typeset LaTeX Maths display", @"Typeset LaTeX Maths display"),
-                   NSLocalizedString(@"Typeset LaTeX Maths inline" , @"Typeset LaTeX Maths inline"),
-                   NSLocalizedString(@"Typeset LaTeX Text"         , @"Typeset LaTeX Text"),
+                   NSLocalizedString(@"Typeset LaTeX Maths eqnarray", @"Typeset LaTeX Maths eqnarray"), 
+                   NSLocalizedString(@"Typeset LaTeX Maths display" , @"Typeset LaTeX Maths display"),
+                   NSLocalizedString(@"Typeset LaTeX Maths inline"  , @"Typeset LaTeX Maths inline"),
+                   NSLocalizedString(@"Typeset LaTeX Text"          , @"Typeset LaTeX Text"),
                    nil] objectAtIndex:rowIndex];
     else if ([identifier isEqualToString:@"shortcut"])
     {
@@ -972,11 +988,12 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       NSString* currentShortcut = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:shortcutColumn row:rowIndex];
       BOOL conflict = NO;
       int i = 0;
-      for(i = 0 ; [currentEnabled boolValue] && !conflict && i<3 ; ++i)
+      for(i = 0 ; [currentEnabled boolValue] && !conflict && i<4 ; ++i)
       {
          NSNumber* enabled =  [[aTableView delegate] tableView:aTableView objectValueForTableColumn:enabledColumn row:i];
          NSString* shortcut = [[aTableView delegate] tableView:aTableView objectValueForTableColumn:shortcutColumn row:i];
-         conflict |= (i != rowIndex) && [enabled boolValue] && [currentShortcut isEqualToString:shortcut];
+         conflict |= (i != rowIndex) && [enabled boolValue] && currentShortcut && ![currentShortcut isEqualToString:@""] &&
+                                        [currentShortcut isEqualToString:shortcut];
       }
 
       object = conflict ? warningImage : nil;
@@ -991,13 +1008,14 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   if (aTableView == serviceShortcutsTableView)
   {
-    latex_mode_t latex_mode = (latex_mode_t)rowIndex;
-  
+    latex_mode_t latex_mode = latexModeForIndex(rowIndex);
+    int index = indexOfLatexMode(latex_mode);
+
     NSString* identifier = [aTableColumn identifier];
     if ([identifier isEqualToString:@"enabled"])
     {
       NSMutableArray* shortcutEnabled = [NSMutableArray arrayWithArray:[userDefaults objectForKey:ServiceShortcutEnabledKey]];
-      [shortcutEnabled replaceObjectAtIndex:latex_mode withObject:value];
+      [shortcutEnabled replaceObjectAtIndex:index withObject:value];
       [userDefaults setObject:shortcutEnabled forKey:ServiceShortcutEnabledKey];
     }
     else if ([identifier isEqualToString:@"shortcut"])
@@ -1005,13 +1023,13 @@ static NSAttributedString* factoryDefaultPreamble = nil;
       NSMutableArray* shorcutStrings = [NSMutableArray arrayWithArray:[userDefaults objectForKey:ServiceShortcutStringsKey]];
       NSString* valueToStore = ((value != nil) && ![value isEqualToString:@""])
                                  ? [value substringWithRange:NSMakeRange([value length]-1, 1)] : @"";
-      [shorcutStrings replaceObjectAtIndex:latex_mode withObject:valueToStore];
+      [shorcutStrings replaceObjectAtIndex:index withObject:valueToStore];
       [userDefaults setObject:shorcutStrings forKey:ServiceShortcutStringsKey];
     }
 
-    NSNumber* currentEnabled  = [[userDefaults objectForKey:ServiceShortcutEnabledKey] objectAtIndex:latex_mode];
-    NSString* currentShortcut = [[userDefaults objectForKey:ServiceShortcutStringsKey] objectAtIndex:latex_mode];
-    [[AppController appController] changeServiceShortcut:([currentEnabled boolValue] ? currentShortcut : @"") forMode:latex_mode];
+    NSNumber* currentEnabled  = [[userDefaults objectForKey:ServiceShortcutEnabledKey] objectAtIndex:index];
+    NSString* currentShortcut = [[userDefaults objectForKey:ServiceShortcutStringsKey] objectAtIndex:index];
+    [[AppController appController] changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
   
     [serviceWarningShortcutConflict setHidden:YES];
     [aTableView reloadData];    

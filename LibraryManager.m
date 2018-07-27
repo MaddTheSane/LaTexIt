@@ -16,6 +16,7 @@
 #import "Compressor.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
+#import "LibraryController.h"
 #import "LibraryFile.h"
 #import "LibraryFolder.h"
 #import "LibraryTableView.h"
@@ -816,6 +817,15 @@ static NSImage*        libraryFileIcon       = nil;
   return height;
 }
 #endif
+
+-(BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id)item
+{
+  //disables preview image while editing. See in textDidEndEditin of LibraryView to re-enable it
+  LibraryController* libraryController = (LibraryController*)[[outlineView window] windowController];
+  [libraryController displayPreviewImage:nil];
+  [libraryController setEnablePreviewImage:NO];
+  return YES;
+}
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {

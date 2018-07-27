@@ -20,8 +20,8 @@
 #import <LinkBack/LinkBack.h>
 #endif
 
-//useful to differenciate the different latex modes : DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
-typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode_t;
+//useful to differenciate the different latex modes : EQNARRA, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
+typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT, LATEX_MODE_EQNARRAY} latex_mode_t;
 
 @class EncapsulationController;
 @class HistoryController;
@@ -146,10 +146,11 @@ typedef enum {LATEX_MODE_DISPLAY, LATEX_MODE_INLINE, LATEX_MODE_TEXT} latex_mode
                                  backgroundColor:(NSColor*)backgroundColor;
 
 //methods for the application service
+-(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationInline:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
--(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode;
+-(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode disable:(BOOL)disable;
 
 //LinkBackServerDelegateProtocol
 -(void) linkBackDidClose:(LinkBack*)link;

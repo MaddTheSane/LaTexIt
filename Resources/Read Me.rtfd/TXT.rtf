@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.6.3\
+\f2\b \cf0 LaTeXiT 1.7.0\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -55,7 +55,7 @@ System Requirements\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.6.3 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 1.7.0 requires Mac OS X version 10.3.9 (Panther version) or 10.4 or above (Tiger version), and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -99,7 +99,7 @@ However, it is fair to tell that is is heavily inspired from the remarkable LaTe
 You can also choose the font size and the font color used for image generation.\
 The modes "Display", "Inline" and "Text" match the three LaTeX modes with the same names; please look at a LaTeX documentation to know more about their meaning.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
-\cf0 \
+\cf0 The "Eqnarray" mode is a handy shortcut to make multi-lines equations. It automatically uses \\begin\{eqnarray*\}...\\end\{eqnarray*\} around the LaTeX code.\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
@@ -131,8 +131,9 @@ The LaTeX preamble required to generate an image (\\documentclass\{...\}, \\usep
 \fs26 \cf0 \ul Using the history\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
+\fs22 \cf0 \ulnone The History (displayed by \uc0\u8984 R) automatically saves the generated equations, so that you can retreive them, even if you did not store them in the Library (see next section).\
 You can delete history items by pressing <Backspace>, or clear the whole history by clicking the appropriate button.\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
@@ -150,8 +151,9 @@ You can delete history items by pressing <Backspace>, or clear the whole history
 \fs26 \cf0 \ul Using the library\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
+\fs22 \cf0 \ulnone The LaTeXiT library (displayed by \uc0\u8984 B) allows you to store and organize some equations you are used to. Drag'n drop equations on the library to store them in.\
 The <+> button adds to the library the current equation (that you can rename by double-clicking it)\
 The <action> button proposes more actions.\
 The <refresh> action updates the selected item with the current equation. You cannot update more than one item at a time; it will blink to show that the modification has been taken in account.\
@@ -232,7 +234,12 @@ FAQ (Frequently asked questions)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-- syntax colouring does not handle "$$" well;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b \cf0 - if you only have TeXShop, LaTeXiT cannot function properly. You need a real LaTeX installation. You will find more information in the next section "Install LaTeX";\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 - syntax colouring does not handle "$$" well;\
 - with very little equations, you may encounter a cropping problem. LaTeX may fail to compute the bounding box of an equation. There are two workarounds : either add margins with the Margin palette, or use $$...$$ in TEXT mode instead of using DISPLAY or INLINE mode (there is an internal difference in LaTeXiT);\
 - custom margins are not taken in account when exporting to EPS; it seems to be a bug of GhostScript;\
 - while evolving from version 1.2 for Panther to 1.3 for Panther, you need to rename the folder ~/Library/LaTeXiT-panther into ~/Library/LaTeXiT, to get back your history and library;\
@@ -277,7 +284,10 @@ However, do not worry : there exist graphical interfaces to use LaTeX in a more 
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-v 1.6.3\
+v 1.7.0 (16th mars 2006)\
+- added "Eqnarray" mode aside "Display | Inline | Text"; this is a handy shortcut to make multi-lines equations; it automatically uses a "\\begin\{eqnarray*\}...\\end\{eqnarray*\}" encapsulation;\
+- added a magnifying glass in the library to display the equations at real size;\
+- better handling of LaTeXiT's application service items.\
 \
 v 1.6.2 (23th february 2006)\
 - better handling of temporary files, to avoid a problem with the feynmf package;\

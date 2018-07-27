@@ -1492,12 +1492,32 @@ static NSMutableArray*      unixBins = nil;
     [[self marginController] showWindow:self];
   [[[self currentDocument] windowForSheet] makeKeyAndOrderFront:self];
   
+  //initialize system services
+  NSArray* serviceShortcutStrings = [userDefaults arrayForKey:ServiceShortcutStringsKey];
+  NSArray* serviceShortcutEnabled = [userDefaults arrayForKey:ServiceShortcutEnabledKey];
+  unsigned int count = MIN([serviceShortcutStrings count], [serviceShortcutEnabled count]);
+  while(count--)
+  {
+    NSString* currentShortcut = [serviceShortcutStrings objectAtIndex:count];
+    NSNumber* currentEnabled  = [serviceShortcutEnabled objectAtIndex:count];
+    latex_mode_t latex_mode = latexModeForIndex(count);
+    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
+    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
+    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
+    [self changeServiceShortcut:currentShortcut forMode:latex_mode disable:![currentEnabled boolValue]];
+  }
+
+  
   [NSThread detachNewThreadSelector:@selector(_triggerHistoryBackgroundLoading:) toTarget:self withObject:nil];
   
   if ([userDefaults boolForKey:CheckForNewVersionsKey])
     [NSApplication detachDrawingThread:@selector(checkUpdates:) toTarget:self withObject:nil];
 }
 
+-(void) serviceLatexisationEqnarray:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
+{
+  [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_EQNARRAY error:error];
+}
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
   [self _serviceLatexisation:pboard userData:userData mode:LATEX_MODE_DISPLAY error:error];
@@ -2097,7 +2117,7 @@ static NSMutableArray*      unixBins = nil;
     [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
     [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
 
-    NSString *type = (mode == LATEX_MODE_DISPLAY) ? @"0" : (mode == LATEX_MODE_INLINE) ? @"1" : @"2";
+    NSString* type = [[NSNumber numberWithInt:mode] stringValue];
 
     NSMutableString *annotation =
         [NSMutableString stringWithFormat:
@@ -2197,7 +2217,7 @@ static NSMutableArray*      unixBins = nil;
   [threadAutoreleasePool release];
 }
 
--(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode
+-(void) changeServiceShortcut:(NSString*)shortCut forMode:(latex_mode_t)mode disable:(BOOL)disable
 {
   NSString* infoPlistPath =
     [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
@@ -2210,20 +2230,31 @@ static NSMutableArray*      unixBins = nil;
   {
     NSMutableDictionary* infoPlist = (NSMutableDictionary*) cfInfoPlist;
     NSMutableArray* services = [infoPlist objectForKey:@"NSServices"];
-    unsigned int index = (mode == LATEX_MODE_DISPLAY) ? 0 : (mode == LATEX_MODE_INLINE) ? 1 : 2;
+    unsigned int index =    (mode == LATEX_MODE_EQNARRAY) ? 0 :
+                            (mode == LATEX_MODE_DISPLAY)  ? 1 :
+                            (mode == LATEX_MODE_INLINE)   ? 2 :
+                            (mode == LATEX_MODE_TEXT)     ? 3 : 0;
+    NSString* menuItemName = (mode == LATEX_MODE_EQNARRAY) ? @"LaTeXiT/Typeset LaTeX Maths eqnarray" :
+                             (mode == LATEX_MODE_DISPLAY)  ? @"LaTeXiT/Typeset LaTeX Maths display"  :
+                             (mode == LATEX_MODE_INLINE)   ? @"LaTeXiT/Typeset LaTeX Maths inline"   :
+                             (mode == LATEX_MODE_TEXT)     ? @"LaTeXiT/Typeset LaTeX Text"     : @"";
+    NSString* serviceMessage = (mode == LATEX_MODE_EQNARRAY) ? @"serviceLatexisationEqnarray" :
+                               (mode == LATEX_MODE_DISPLAY)  ? @"serviceLatexisationDisplay"  :
+                               (mode == LATEX_MODE_INLINE)   ? @"serviceLatexisationInline"   :
+                               (mode == LATEX_MODE_TEXT)     ? @"serviceLatexisationText"     : @"";
     if (services && (index < [services count]))
     {
-      NSMutableDictionary* service = [services objectAtIndex:index];
-      if (!shortCut || [shortCut isEqualToString:@""])
-        [service removeObjectForKey:@"NSKeyEquivalent"];
-      else
-      {
-        NSMutableDictionary* keyEquivalent = [service objectForKey:@"NSKeyEquivalent"];
-        if (!keyEquivalent)
-          [service setObject:[NSDictionary dictionaryWithObject:shortCut forKey:@"default"] forKey:@"NSKeyEquivalent"];
-        else
-          [keyEquivalent setObject:shortCut forKey:@"default"];
-      }
+      if (!shortCut) shortCut = @"";
+      NSDictionary* serviceItemPlist = disable ? [NSDictionary dictionary] :
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          [NSDictionary dictionaryWithObject:shortCut forKey:@"default"], @"NSKeyEquivalent",
+          [NSDictionary dictionaryWithObject:menuItemName forKey:@"default"], @"NSMenuItem",
+          serviceMessage, @"NSMessage",
+          @"LaTeXiT", @"NSPortName",
+          [NSArray arrayWithObjects:@"NSRTFDPboardType", @"NSPDFPboardType", @"NSPostScriptPboardType", @"NSTIFFPboardType", nil], @"NSReturnTypes",
+          [NSArray arrayWithObjects:@"NSStringPboardType", @"NSRTFPboardType", @"NSPDFPboardType", nil], @"NSSendTypes",
+          nil];
+      [services replaceObjectAtIndex:index withObject:serviceItemPlist];
       [infoPlist writeToURL:infoPlistURL atomically:YES];
     }
   }
