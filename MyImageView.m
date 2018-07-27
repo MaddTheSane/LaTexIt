@@ -668,12 +668,13 @@ typedef NSInteger NSDraggingContext;
   [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
   if (self->isDragging && (lazyDataProvider == self))
   {
-    [pasteboard addTypes:
-       [NSArray arrayWithObjects:
-         //NSFileContentsPboardType,
-         NSFilenamesPboardType, NSURLPboardType,
-         nil]
-      owner:lazyDataProvider];
+    NSMutableArray* types = [NSMutableArray array];
+    BOOL fillFilenames = NO;
+    if (fillFilenames)
+      [types addObjectsFromArray:[NSArray arrayWithObjects:
+        NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType,
+        nil]];
+    [pasteboard addTypes:types owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
   DebugLog(1, @"<");
 }
