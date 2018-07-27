@@ -19,6 +19,7 @@
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSIndexSetExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 
 #ifdef PANTHER
@@ -104,7 +105,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(void) clearAll
 {
-  NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+  NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
   [undo removeAllActionsWithTarget:self];
   @synchronized(historyItems)
   {
@@ -148,7 +149,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         index = [indexSet indexLessThanIndex:index];
       }
 
-      NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+      NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
       [[undo prepareWithInvocationTarget:self] insertItems:[removedItems reversed] atIndexes:[indexSet array]
                                                  tableView:tableView];
       if (![undo isUndoing])
@@ -192,7 +193,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   }//end @synchronized(historyItems)
   
   [[NSNotificationCenter defaultCenter] postNotificationName:HistoryDidChangeNotification object:nil];
-  NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+  NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
   [[undo prepareWithInvocationTarget:self] removeItemsAtIndexes:indexSet tableView:tableView];
 
   //user friendly : we update the selection in the tableview
@@ -415,7 +416,6 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   NSFileManager* fileManager = [NSFileManager defaultManager];
   
   //the problem will be to avoid overwritting files when they already exist
-  MyDocument* document = [(HistoryView*)tableView document];
   NSString* filePrefix = @"latex-image";
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
@@ -445,10 +445,20 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       //now, we may have found a proper filename to save our data
       if (![fileManager fileExistsAtPath:filePath])
       {
-        NSData* pdfData = [[historyItems objectAtIndex:index] pdfData];
-        NSData* data = [document dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+        HistoryItem* historyItem = [historyItems objectAtIndex:index];
+        NSData* pdfData = [historyItem pdfData];
+        NSData* data = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
+        [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                                   atPath:filePath];
+        unsigned int options = 0;
+        #ifndef PANTHER
+        options = NSExclude10_4ElementsIconCreationOption;
+        #endif
+        if (![dragExportType isEqualTo:@"jpeg"])
+          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData]]
+                                         forFile:filePath options:options];
         [names addObject:fileName];
       }
       index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item

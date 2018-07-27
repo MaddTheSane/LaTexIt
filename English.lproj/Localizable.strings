@@ -3,6 +3,8 @@
 "Clear History" = "Clear History";
 "Cancel" = "Cancel";
 "Are you sure you want to clear the whole history ?\nThis operation is irreversible." = "Are you sure you want to clear the whole history ?\nThis operation is irreversible.";
+"Hide preamble" = "Hide preamble";
+"Show preamble" = "Show preamble";
 "Hide Margins" = "Hide Margins";
 "Show Margins" = "Show Margins";
 "Hide History" = "Hide History";
@@ -19,6 +21,8 @@
 "Delete Library items" = "Delete Library items";
 "Move Library items" = "Move Library items";
 "Change Library item name" = "Change Library item name";
+"Open library..." = "Open library...";
+"Save library as..." = "Save library as...";
 "Untitled" = "Untitled";
 "processing pdflatex" = "processing pdflatex";
 "error while processing pdflatex" = "error while processing pdflatex";
@@ -43,3 +47,8 @@
 "http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_en.php";
 "An error occured while trying to reach %@\n. You should check your network." = "An error occured while trying to reach %@\n. You should check your network.";
 "Equation linked with another application" = "Equation linked with another application";
+"LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT cannot be run properly, please check its configuration";
+"Do you want to load the library <%@> ?" = "Do you want to load the library <%@> ?";
+"The current library will be lost" = "The current library will be lost";
+"Load the library" = "Load the library";
+"Open in LaTeXiT" = "Open in LaTeXiT";

@@ -12,6 +12,7 @@
 #import "NSColorExtended.h"
 #import "NSFontExtended.h"
 #import "NSSegmentedControlExtended.h"
+#import "LibraryManager.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
 
@@ -37,6 +38,10 @@ NSString* AdvancedLibraryExportUseEncapsulationKey  = @"LaTeXiT_AdvancedLibraryE
 NSString* AdvancedLibraryExportEncapsulationTextKey = @"LaTeXiT_AdvancedLibraryExportEncapsulationTextKey";
 
 NSString* SomePathDidChangeNotification = @"SomePathDidChangeNotification"; //changing the path to an executable (like pdflatex)
+
+@interface PreferencesController (PrivateAPI)
+-(void) _userDefaultsDidChangeNotification:(NSNotification*)notification;
+@end
 
 @implementation PreferencesController
 
@@ -99,6 +104,8 @@ static NSAttributedString* factoryDefaultPreamble = nil;
                                                  name:FontDidChangeNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(windowWillClose:)
                                                  name:NSWindowWillCloseNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(_userDefaultsDidChangeNotification:)
+                                                 name:NSUserDefaultsDidChangeNotification object:nil];
   }
   return self;
 }
@@ -119,7 +126,7 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   
   [[defaultModeSegmentedControl cell] setTag:DISPLAY forSegment:0];
   [[defaultModeSegmentedControl cell] setTag:INLINE  forSegment:1];
-  [[defaultModeSegmentedControl cell] setTag:NORMAL  forSegment:2];
+  [[defaultModeSegmentedControl cell] setTag:TEXT  forSegment:2];
   [defaultModeSegmentedControl selectSegmentWithTag:[userDefaults integerForKey:DefaultModeKey]];
   [defaultPointSizeTextField setDoubleValue:[userDefaults floatForKey:DefaultPointSizeKey]];
   [defaultColorColorWell setColor:[NSColor colorWithData:[userDefaults dataForKey:DefaultColorKey]]];
@@ -316,6 +323,18 @@ static NSAttributedString* factoryDefaultPreamble = nil;
   }
 }
 
+-(IBAction) applyPreambleToOpenDocuments:(id)sender
+{
+  NSArray* documents = [[NSDocumentController sharedDocumentController] documents];
+  [documents makeObjectsPerformSelector:@selector(setPreamble:) withObject:[[[preambleTextView textStorage] mutableCopy] autorelease]];
+}
+
+-(IBAction) applyPreambleToLibrary:(id)sender
+{
+  NSArray* historyItems = [[LibraryManager sharedManager] allValues];
+  [historyItems makeObjectsPerformSelector:@selector(setPreamble:) withObject:[[[preambleTextView textStorage] mutableCopy] autorelease]];
+}
+
 //opens a panel to let the user select a file, as the new path
 -(IBAction) changePath:(id)sender
 {
@@ -429,6 +448,16 @@ static NSAttributedString* factoryDefaultPreamble = nil;
     [userDefaults setFloat:[additionalRightMarginTextField floatValue] forKey:AdditionalRightMarginKey];
   else if (sender == additionalBottomMarginTextField)
     [userDefaults setFloat:[additionalBottomMarginTextField floatValue] forKey:AdditionalBottomMarginKey];
+}
+
+-(void) _userDefaultsDidChangeNotification:(NSNotification*)notification
+{
+  //the MarginController may change the margins defaults, so this notification is useful for synchronizing
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [additionalTopMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalTopMarginKey]];
+  [additionalLeftMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalLeftMarginKey]];
+  [additionalRightMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalRightMarginKey]];
+  [additionalBottomMarginTextField setFloatValue:[userDefaults floatForKey:AdditionalBottomMarginKey]];
 }
 
 @end

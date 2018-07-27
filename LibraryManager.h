@@ -8,6 +8,8 @@
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
 //It provides management (insertion/deletion) with undoing, save/load, drag'n drop
 
+//Note that the library will be @synchronized
+
 #import <Cocoa/Cocoa.h>
 
 extern NSString* LibraryDidChangeNotification;
@@ -26,6 +28,9 @@ extern NSString* LibraryItemsPboardType;
 
 +(LibraryManager*) sharedManager; //the library manager singleton
 
+-(NSArray*) allValues;//returns all the values contained in LibraryFile items
+-(void) setNeedsSaving:(BOOL)status;//marks if library needs being saved
+
 //undo-aware methods to manage the library.
 
 -(LibraryItem*) addFolder:(NSOutlineView*)outlineView;
@@ -33,5 +38,8 @@ extern NSString* LibraryItemsPboardType;
 -(LibraryItem*) addFile:(HistoryItem*)historyItem outlineView:(NSOutlineView*)outlineView;
 -(void) removeItems:(NSArray*)items;
 -(void) refreshFileItem:(LibraryFile*)item withValue:(HistoryItem*)value;
+
+-(BOOL) saveAs:(NSString*)path;
+-(BOOL) loadFrom:(NSString*)path;
 
 @end

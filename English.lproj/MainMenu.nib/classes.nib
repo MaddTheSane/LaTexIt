@@ -7,17 +7,20 @@
                 clearHistory = id; 
                 displayLog = id; 
                 exportImage = id; 
+                loadLibrary = id; 
                 makeLatex = id; 
                 openWebSite = id; 
                 paletteClick = id; 
                 refreshLibraryItems = id; 
                 removeHistoryEntries = id; 
                 removeLibraryItems = id; 
+                saveLibrary = id; 
                 showHelp = id; 
                 showOrHideHistory = id; 
                 showOrHideLibrary = id; 
                 showOrHideMargin = id; 
                 showOrHidePalette = id; 
+                showOrHidePreamble = id; 
                 showPreferencesPane = id; 
             }; 
             CLASS = AppController; 
@@ -29,6 +32,7 @@
                 readmeWindow = NSWindow; 
                 showHistoryMenuItem = NSMenuItem; 
                 showLibraryMenuItem = NSMenuItem; 
+                showPreambleMenuItem = NSMenuItem; 
             }; 
             SUPERCLASS = NSObject; 
         }, 

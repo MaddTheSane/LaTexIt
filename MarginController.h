@@ -24,4 +24,6 @@
 +(float) rightMargin;
 +(float) bottomMargin;
 
+-(IBAction) makeDefaultsMargins:(id)sender;
+
 @end

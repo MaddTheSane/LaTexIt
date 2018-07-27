@@ -2,6 +2,7 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
+            ACTIONS = {makeDefaultsMargins = id; }; 
             CLASS = MarginController; 
             LANGUAGE = ObjC; 
             OUTLETS = {

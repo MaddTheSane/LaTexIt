@@ -18,13 +18,13 @@
 #import <LinkBack/LinkBack.h>
 #endif
 
-@class MyDocument;
 @class MarginController;
 @class PalettesController;
 @class PreferencesController;
 
 @interface AppController : NSObject <LinkBackServerDelegate> {
   //Shared Interface elements
+  IBOutlet NSMenuItem* showPreambleMenuItem;
   IBOutlet NSMenuItem* showHistoryMenuItem;
   IBOutlet NSMenuItem* showLibraryMenuItem;
   IBOutlet NSMenuItem* marginMenuItem;
@@ -37,8 +37,7 @@
   BOOL isPdfLatexAvailable;
   BOOL isGsAvailable;
   BOOL isColorStyAvailable;
-  
-  MyDocument* myDocumentServiceProvider; //dummy document for the application service
+
   MarginController*      marginController;
   PalettesController*    palettesController;
   PreferencesController* preferencesController;
@@ -55,6 +54,7 @@
 -(IBAction) exportImage:(id)sender;
 -(IBAction) makeLatex:(id)sender;
 -(IBAction) displayLog:(id)sender;
+-(IBAction) showOrHidePreamble:(id)sender;
 -(IBAction) showOrHideHistory:(id)sender;
 -(IBAction) showOrHideLibrary:(id)sender;
 -(IBAction) showOrHidePalette:(id)sender;
@@ -69,10 +69,10 @@
 -(IBAction) addLibraryFolder:(id)sender;
 -(IBAction) removeLibraryItems:(id)sender;
 -(IBAction) refreshLibraryItems:(id)sender;
+-(IBAction) loadLibrary:(id)sender;
+-(IBAction) saveLibrary:(id)sender;
 
 -(void) menuNeedsUpdate:(NSMenu*)menu;
-
--(NSDocument*) currentDocument; //active document, nil if no document opened
 
 //utility : finds a program in the unix environment. You can give an environment, and
 //some "prefixes", that is to say an array of PATH in which the program could be
@@ -89,6 +89,12 @@
 
 //modifies the \usepackage{color} line of the preamble in order to use the given color
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor;
+
+//returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
+-(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality;
+
+//returns a file icon to represent the given PDF data
+-(NSImage*) makeIconForData:(NSData*)pdfData;
 
 //methods for the application service
 -(void) serviceLatexisationDisplay:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;

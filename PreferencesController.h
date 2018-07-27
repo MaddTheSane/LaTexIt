@@ -80,6 +80,8 @@ extern NSString* SomePathDidChangeNotification;
 
 -(IBAction) resetDefaultPreamble:(id)sender;
 -(IBAction) selectFont:(id)sender;
+-(IBAction) applyPreambleToOpenDocuments:(id)sender;
+-(IBAction) applyPreambleToLibrary:(id)sender;
 
 -(IBAction) changePath:(id)sender;
 -(IBAction) changeServiceConfiguration:(id)sender;

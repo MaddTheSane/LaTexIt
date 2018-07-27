@@ -11,6 +11,8 @@
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
             ACTIONS = {
+                applyPreambleToLibrary = id; 
+                applyPreambleToOpenDocuments = id; 
                 changeAdvancedConfiguration = id; 
                 changeDefaultGeneralConfig = id; 
                 changePath = id; 

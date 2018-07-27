@@ -9,7 +9,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f2\b \cf0 LaTeXiT 1.3\
+\f2\b \cf0 LaTeXiT 1.3.1\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -31,6 +31,7 @@
 -Utiliser la biblioth\'8fque\
 -Utiliser le "Service LaTeXiT"\
 -Utiliser LinkBack\
+-FAQ (Foire aux questions = Questions fr\'8equemment pos\'8ees)\
 -Bugs/incompatibilit\'8es connus\
 -Historique des versions\
 \
@@ -49,7 +50,7 @@ Syst\'8fme Requis\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
-LaTeXiT 1.3 requiert Mac OS X version 10.3 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs).\
+LaTeXiT 1.3.1 requiert Mac OS X version 10.3.9 (version Panther) ou 10.4 ou sup\'8erieure (version Tiger), ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \f2\b\fs26 \cf0 \
@@ -182,16 +183,30 @@ Le bouton <mise \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec 
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\fs26 \cf0 \ul Bugs/incompatibilit\'8es connus/FAQ\
+\fs26 \cf0 \ul FAQ (Foire aux questions)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
-- lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque.\
-- le service ne marche pas avec Mail 2.0.1 ;\
+(Q) : les modification faites au pr\'8eambule par d\'8efaut (dans les pr\'8ef\'8erences) semblent ne pas prendre effet sans un red\'8emarrage de l'application.\
+(R) : Les modification faites au pr\'8eambule par d\'8efaut ne sont pas r\'8epercut\'8ees dans les documents d\'8ej\'88 ouverts, car il y aurait un risque d'\'8ecraser les modifications que l'utilisateur pourraient y avoir d\'8ej\'88 fait. Cependant, il n'est pas n\'8ecessaire de red\'8emarrer LaTeXiT : ouvrir un nouveau document suffit (\uc0\u8984 N).\
+\
+(Q) : LinkBack ne marche pas quand j'utilise le service LaTeXiT.\
+(R) : Voyez la section "Bugs/incompatibilit\'8es connues" pour plus de d\'8etails. Pour r\'8esoudre ce probl\'8fme, essayez de d\'8esactiver l'alignement de l'\'8equation sur la ligne de texte, dans les pr\'8ef\'8erences du service LaTeXiT.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 \ul Bugs/incompatibilit\'8es connues\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf0 \ulnone \
+- lors du passage de la version 1.2 pour Panther \'88 1.3 pour Panther, il vous faut renommer le dossier ~/Biblioth\'8fque/LaTeXiT-panther en ~/Biblioth\'8fque/LaTeXiT pour r\'8ecup\'8erer votre historique et votre biblioth\'8fque ;\
+- le service ne marche pas avec Mail 2.0.0, 2.0.1, 2.0.2 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites) ;\
+- LinkBack peut ne pas fonctionner quand on utilise le service LaTeXiT. En effet, pour aligner les \'8equations sur la ligne de base du texte, LaTeXiT encapsule les images renvoy\'8ees par le service dans un flot RTFD. Or, il peut arriver que les \'8editeurs de texte ne sachent pas "extraire" l'image du flot, si bien que m\'90me si l'affichage est correct, LinkBack devient "inaccessible". La faute incombe alors \'88 l'\'8editeur de texte, mais c'est quelque chose de difficile. Pour r\'8esoudre le probl\'8fme, d\'8esactivez simplement l'alignement de l'\'8equation avec la ligne de base texte dans les pr\'8ef\'8erences du service LaTeXiT; cela d\'8esactive l'utilisation des flots RTFD ;\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 - avec Pages 1.0.2 (derni\'8fre version disponible au moment o\'9d ces lignes sont \'8ecrites), lors de l'utilisation du service LaTeXiT, l'alignement automatique d'une \'8equation sur la ligne de texte (gestion de la "baseline") semble ne pas marcher. En revanche, cela fonctionne tr\'8fs bien avec TextEdit et Nisus Writer Express. Ce doit donc \'90tre un bug de Pages ;\
 - avec EazyDraw 1.7.1, les \'8equations gliss\'8ees/d\'8epos\'8ees se retrouvent invers\'8ees. C'est un bug de EazyDraw, que les d\'8eveloppeurs m'ont dit corriger d\'8fs la prochaine version ;\
-- avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS.\
+- avec Adobe Illustrator, si vous glissez/d\'8eposez une \'8equation PDF de LaTeXiT vers Illustrator, les polices de caract\'8fres seront chang\'8ees, car Illustrator permet l'\'8edition de chaque symbole du PDF g\'8en\'8er\'8e par LaTeXiT, et utilise ses propres polices. Pour contrer cela, une technique simple est de passer par un fichier interm\'8ediaire : d\'8eposez l'\'8equation LaTeXiT sur votre bureau, un fichier est cr\'8e\'8e, puis d\'8eplacez ce fichier sur votre document Illustrator. En contrepartie, vous ne pourrez plus \'8editer cette \'8equation dans Illustrator. Autre possibilit\'8e : exporter avec un autre format (voyez les Pr\'8ef\'8erences de LaTeXiT), comme EPS ;\
+- toujours avec Adobe Illustrator, y glisser/d\'8eposer un objet entra\'94ne la cr\'8eation d'un fichier sur le bureau; cela ne survient qu'avec Illustrator, et la faute lui incombe en grande partie dans sa fa\'8don de g\'8erer le glisser/d\'8eposer. OmniGraffle ne pose pas ce genre de probl\'8fmes ;\
 - si vous constatez que, m\'90me sans \'90tre utilis\'8e, LaTeXiT consomme du temps processeur et prend de plus en plus de m\'8emoire, sachez simplement que pour acc\'8el\'8erer son temps de d\'8emarrage, il charge les images de l'historique en arri\'8fre plan. Ce travail, de tr\'8fs faible priorit\'8e, prend un certain temps, mais se stabilise au bout d'un moment. Si vous voulez r\'8eellement l'\'8eviter, pensez simplement \'88 faire le m\'8enage dans votre historique de temps en temps !\
 - vous pouvez remarquer que dans la console syst\'8fme, \'88 chaque latexisation un message appara\'94t : "WARNING: Type1 font data returned by OFAStreamPSDownload isn't in the correct format required by the Adobe Type 1 Font Format specification". Vous pouvez ignorer ce warning, d\'9e \'88 la forme des pdf g\'8en\'8er\'8es par pdflatex. En pratique il n'y a pas de probl\'8fmes, et ce warning dispara\'94tra peut-\'90tre dans les futures versions de pdflatex (mais en fait je n'en sais rien).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
@@ -202,6 +217,23 @@ Le bouton <mise \'88 jour> met \'88 jour l'\'8el\'8ement s\'8electionn\'8e avec 
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
 \fs22 \cf0 \ulnone \
+v 1.3.1\
+- on peut maintenant sauvegarder/charger les biblioth\'8fques \'88 volont\'8e ;\
+- on peut maintenant afficher/masquer le pr\'8eambule depuis le menu Latex; pratique pour ceux qui ne lisent pas la documentation... ;-)\
+- on peut r\'8epercuter les changements du pr\'8eambule par d\'8efaut aux documents ouverts et \'88 la biblioth\'8fque ;\
+- les fichiers PDF et EPS cr\'8e\'8es par LaTeXiT ont maintenant une ic\'99ne correspondant \'88 leur image ;\
+- les fichiers PDF g\'8en\'8er\'8es par LaTeXiT sont maintenant ouverts par LaTeXiT depuis le Finder ;\
+- maintenant, il devrait \'90tre possible d'utiliser des fontes diff\'8erentes des fontes par d\'8efaut de LaTeX ;\
+- en mode texte, les \\newline et autres \\\\ sont maintenant autoris\'8es ;\
+- correction d'un bug lors de l'import d'un PDF g\'8en\'8er\'8e par LaTeX Equation Editor ;\
+- correction d'un bug pouvant provoquer un affichage flou dans la fen\'90tre d'aper\'8du, lors du d\'8ep\'99t d'un PDF sur l'ic\'99ne du Dock de LaTeXiT ;\
+- correction d'un bug lors duquel le menu ne "savait" plus si la biblioth\'8fque \'8etait visible ou non ;\
+- retrait de l'export "PDF (Illustrator)" qui n'existait qu'en phase de d\'8eveloppement de LaTeXiT (et ne fonctionnait d'ailleurs pas) ;\
+- correction d'un bug pouvant causer un crash de LaTeXiT sous Panther ;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 - correction d'un bug faussant la ligne de base dans le cas de l'ajout d'une marge sous l'\'8equation ;\
+- correction de bugs mineurs.\
+\
 v 1.3\
 - ajout de la compatibilit\'8e des PDF avec ceux de LaTeX Equation Editor ;\
 - le service d'application ne marchait pas correctement sous Panther.\

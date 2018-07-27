@@ -192,16 +192,19 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
   return NO;
 }
 
--(void) gotoLine:(int)row
+-(BOOL) gotoLine:(int)row
 {
+  BOOL ok = NO;
   --row; //the first line is at 0, but the user thinks it is 1
   row -= lineShift;
-  if ((row >=0) && ((unsigned int) row < [lineRanges count]))
+  ok = (row >=0) && ((unsigned int) row < [lineRanges count]);
+  if (ok)
   {
     NSRange range = NSRangeFromString([lineRanges objectAtIndex:row]);
     [self setSelectedRange:range];
     [self scrollRangeToVisible:range];
   }
+  return ok;
 }
 
 //responds to the font manager

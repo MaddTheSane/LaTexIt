@@ -30,6 +30,6 @@ extern NSString* FontDidChangeNotification;
 -(unsigned int) nbLines; //the number of lines in the text
 -(void) clearErrors; //remove error markers
 -(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message; //set error markers
--(void) gotoLine:(int)row;//scroll to visible line <row>
+-(BOOL) gotoLine:(int)row;//scroll to visible line <row>
 
 @end

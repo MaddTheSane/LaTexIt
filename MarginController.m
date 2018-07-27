@@ -121,4 +121,13 @@ static MarginController* sharedControllerInstance = nil; //the (private) singlet
                   [userDefaults floatForKey:AdditionalBottomMarginKey];
 }
 
+-(IBAction) makeDefaultsMargins:(id)sender
+{
+  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults setFloat:[topMarginButton    floatValue] forKey:AdditionalTopMarginKey];
+  [userDefaults setFloat:[leftMarginButton   floatValue] forKey:AdditionalLeftMarginKey];
+  [userDefaults setFloat:[rightMarginButton  floatValue] forKey:AdditionalRightMarginKey];
+  [userDefaults setFloat:[bottomMarginButton floatValue] forKey:AdditionalBottomMarginKey];
+}
+
 @end

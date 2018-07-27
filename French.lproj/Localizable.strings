@@ -4,6 +4,8 @@
 "Cancel" = "Annuler";
 "Are you sure you want to clear the whole history ?\nThis operation is irreversible." =
 "Voulez-vous vraiment effacer entièrement l'historique ?\nCette operation est irréversible.";
+"Hide preamble" = "Masquer le préambule";
+"Show preamble" = "Afficher le préambule";
 "Hide Margins" = "Masquer les Marges";
 "Show Margins" = "Afficher les Marges";
 "Hide History" = "Masquer l'historique";
@@ -20,6 +22,8 @@
 "Delete Library items" = "Supprimer plusieurs entrées de la bibliothèque";
 "Move Library items" = "Déplacer des entrées de la bibliothèque";
 "Change Library item name" = "Changer le nom d'une entrée de la bibliothèque";
+"Open library..." = "Ouvrir la bibliothèque...";
+"Save library as..." = "Enregistrer la bibliothèque sous...";
 "Untitled" = "Sans Titre";
 "processing pdflatex" = "exécution de pdflatex";
 "error while processing pdflatex" = "erreur à l'exécution de pdflatex";
@@ -50,3 +54,8 @@
 "http://ktd.club.fr/programmation/latexit_en.php" = "http://ktd.club.fr/programmation/latexit_fr.php";
 "An error occured while trying to reach %@\n. You should check your network." = "Une erreur est survenue en essayant d'atteindre %@\n. Vous devriez vérifier votre réseau.";
 "Equation linked with another application" = "Équation liée à une autre application";
+"LaTeXiT cannot be run properly, please check its configuration" = "LaTeXiT ne peut être exécuté normalement; veuillez vérifier sa configuration";
+"Do you want to load the library <%@> ?" = "Voulez-vous charger la bibliothèque <%@> ?";
+"The current library will be lost" = "La bibliothèque actuelle sera perdue";
+"Load the library" = "Charger la bibliothèque";
+"Open in LaTeXiT" = "Ouvrir dans LaTeXiT";

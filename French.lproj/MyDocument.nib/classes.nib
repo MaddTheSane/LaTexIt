@@ -120,6 +120,7 @@
                 saveAccessoryViewPopupFormat = NSPopUpButton; 
                 sizeText = NSTextField; 
                 sourceTextView = LineCountTextView; 
+                splitView = NSSplitView; 
                 typeOfTextControl = NSSegmentedControl; 
             }; 
             SUPERCLASS = NSDocument; 

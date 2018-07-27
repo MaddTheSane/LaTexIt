@@ -19,7 +19,7 @@
   NSColor*            color;       //the color chosen for the equation
   double              pointSize;   //the point size chosen
   NSDate*             date;        //the date the equation was computed
-  latex_mode_t        mode;        //the mode (DISPLAY(\[...\]), INLINE($...$) or NORMAL(text))
+  latex_mode_t        mode;        //the mode (DISPLAY(\[...\]), INLINE($...$) or TEXT(text))
 
   NSImage*     pdfCachedImage; //a cached image to display the pdf data  
   NSImage*     bitmapCachedImage; //a bitmap equivalent to allow faster display in some cases
@@ -44,9 +44,11 @@
 -(NSDate*)             date;
 -(latex_mode_t)        mode;
 
+-(void) setPreamble:(NSAttributedString*)text;
+
 //latex source code (preamble+body) typed by the user. This WON'T add magnification, auto-bounding, coloring.
 //It is a summary of what the user did effectively type.
--(NSString*) string; 
+-(NSString*) string;
 
 //to feed a pasteboard. It needs a document, because there may be some temporary files needed for certain kind of data
 //the lazyDataProvider, if not nil, is the one who will call [pasteboard:provideDataForType] *as needed* (to save time)

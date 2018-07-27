@@ -15,6 +15,7 @@
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LibraryFile.h"
+#import "LibraryManager.h"
 #import "LineCountTextView.h"
 #import "MyDocument.h"
 #import "NSApplicationExtended.h"
@@ -45,17 +46,23 @@
 
 //some notifications that trigger some work
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification;
+-(void) windowDidBecomeMain:(NSNotification *)aNotification;
 -(void) _somePathDidChangeNotification:(NSNotification *)aNotification;
 
 //private method factorizing the work of the different application service calls
+-(MyDocument*) _myDocumentServiceProvider;
 -(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
                        error:(NSString **)error;
+
+//delegate method to filter file opening                       
+-(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename;
 @end
 
 @implementation AppController
 
 //the unique instance of the appController
 static AppController* appControllerInstance = nil;
+static MyDocument*    myDocumentServiceProviderInstance = nil;
 
 //usual environment and PATH to find a program on the command line
 static NSMutableString*     environmentPath = nil;
@@ -153,19 +160,13 @@ static NSArray* unixBins = nil;
                                                name:NSApplicationDidFinishLaunchingNotification object:nil];
       [notificationCenter addObserver:self selector:@selector(_somePathDidChangeNotification:)
                                                name:SomePathDidChangeNotification object:nil];
-                                                   
-      if (isPdfLatexAvailable)
-      {
-        myDocumentServiceProvider =
-          [[[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:@"DocumentType"] retain];
+      [notificationCenter addObserver:self selector:@selector(windowDidBecomeMain:)
+                                               name:NSWindowDidBecomeMainNotification object:nil];
 
-        //uncomment the line below if you need the dummy document (myDocumentServiceProvider) to have its IBOutlets connected
-        //(it is disabled to improve start up time)
-        //[NSBundle loadNibNamed:@"MyDocument" owner:myDocumentServiceProvider];
-        
-        [NSApp setServicesProvider:self];
-        NSUpdateDynamicServices();
-      }      
+       //declares the service. The service will be called on a dummy document (myDocumentServiceProvider), which is lazily created
+       //when first used
+       [NSApp setServicesProvider:self];
+       NSUpdateDynamicServices();
     }
     return self;
   }
@@ -174,11 +175,29 @@ static NSArray* unixBins = nil;
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [myDocumentServiceProvider release];
   [marginController release];
   [palettesController release];
   [preferencesController release];
   [super dealloc];
+}
+
+//the dummy document used for application service is lazily created at first use
+-(MyDocument*) _myDocumentServiceProvider
+{
+  @synchronized(self)
+  {
+    if (!myDocumentServiceProviderInstance)
+    {
+       //this dummy document is only used for the application service
+       myDocumentServiceProviderInstance =
+         (MyDocument*) [[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:NO] retain];
+       //uncomment the line below if you need the dummy document (myDocumentServiceProviderInstance) to have its IBOutlets connected
+       //(it is disabled to improve start up time)
+       //[NSBundle loadNibNamed:@"MyDocument" owner:myDocumentServiceProviderInstance];
+       [myDocumentServiceProviderInstance setNullId];//the id should not interfere with the one of real documents
+    }
+  }
+  return myDocumentServiceProviderInstance;
 }
 
 //increase environmentPath
@@ -210,37 +229,42 @@ static NSArray* unixBins = nil;
   BOOL ok = YES;
   if ([sender action] == @selector(exportImage:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [myDocument hasImage];
   }
   else if ([sender action] == @selector(makeLatex:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy] && [self isPdfLatexAvailable];
+  }
+  else if ([sender action] == @selector(showOrHidePreamble:))
+  {
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+    ok = (myDocument != nil) && ![myDocument isBusy];
   }
   else if ([sender action] == @selector(showOrHideHistory:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy];
   }
   else if ([sender action] == @selector(showOrHideLibrary:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy];
   }
   else if ([sender action] == @selector(removeHistoryEntries:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ([[myDocument selectedHistoryItems] count]) && ![myDocument isBusy];
   }
   else if ([sender action] == @selector(removeLibraryItems:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     ok = (myDocument != nil) && ([[myDocument selectedLibraryItems] count]) && ![myDocument isBusy];
   }
   else if ([sender action] == @selector(refreshLibraryItems:))
   {
-    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
     NSArray* selectedLibraryItems = [myDocument selectedLibraryItems];
     BOOL isLibraryFileSelected = ([selectedLibraryItems count] == 1) && ([[selectedLibraryItems lastObject] isKindOfClass:[LibraryFile class]]);
     ok = (myDocument != nil) && isLibraryFileSelected && ![myDocument isBusy];
@@ -254,7 +278,13 @@ static NSArray* unixBins = nil;
 
 -(void) menuNeedsUpdate:(NSMenu*)menu
 {
-  MyDocument* myDocument = (MyDocument*) [self currentDocument];
+  MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+
+  BOOL isPreambleVisible = (myDocument && [myDocument isPreambleVisible]);
+  if (isPreambleVisible)
+    [showPreambleMenuItem setTitle:NSLocalizedString(@"Hide preamble", @"Hide preamble")];
+  else
+    [showPreambleMenuItem setTitle:NSLocalizedString(@"Show preamble", @"Show preamble")];
 
   BOOL isHistoryVisible = (myDocument && [myDocument isHistoryVisible]);
   if (isHistoryVisible)
@@ -281,9 +311,20 @@ static NSArray* unixBins = nil;
     [paletteMenuItem setTitle:NSLocalizedString(@"Show Palettes", @"Show Palettes")];
 }
 
+-(IBAction) showOrHidePreamble:(id)sender
+{
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+  if (document)
+  {
+    BOOL makePreambleVisible = ![document isPreambleVisible];
+    [document setPreambleVisible:makePreambleVisible];
+    [self menuNeedsUpdate:nil];
+  }
+}
+
 -(IBAction) showOrHideHistory:(id)sender
 {
-  MyDocument* document = (MyDocument*) [self currentDocument];
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (document)
   {
     BOOL makeHistoryVisible = ![document isHistoryVisible];
@@ -294,7 +335,7 @@ static NSArray* unixBins = nil;
 
 -(IBAction) showOrHideLibrary:(id)sender
 {
-  MyDocument* document = (MyDocument*) [self currentDocument];
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (document)
   {
     BOOL makeLibraryVisible = ![document isLibraryVisible];
@@ -326,12 +367,6 @@ static NSArray* unixBins = nil;
     [marginController updateWithUserDefaults];
     [marginController showWindow:self];
   }
-}
-
--(NSDocument*) currentDocument
-{
-  NSArray* documents = [NSApp orderedDocuments];
-  return [documents count] ? [documents objectAtIndex:0] : nil;
 }
 
 //looks for a programName in the given PATHs. Just tests that the file exists
@@ -413,21 +448,21 @@ static NSArray* unixBins = nil;
 
 -(IBAction) exportImage:(id)sender
 {
-  MyDocument* document = (MyDocument*) [self currentDocument];
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (document)
     [document exportImage:sender];
 }
 
 -(IBAction) makeLatex:(id)sender
 {
-  MyDocument* document = (MyDocument*) [self currentDocument];
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (document)
     [[document makeLatexButton] performClick:self];
 }
 
 -(IBAction) displayLog:(id)sender
 {
-  MyDocument* document = (MyDocument*) [self currentDocument];
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (document)
     [document displayLastLog:sender];
 }
@@ -446,22 +481,46 @@ static NSArray* unixBins = nil;
 
 -(IBAction) addCurrentEquationToLibrary:(id)sender
 {
-  [(MyDocument*)[self currentDocument] addCurrentEquationToLibrary:sender];
+  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] addCurrentEquationToLibrary:sender];
 }
 
 -(IBAction) addLibraryFolder:(id)sender
 {
-  [(MyDocument*)[self currentDocument] addLibraryFolder:sender];
+  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] addLibraryFolder:sender];
 }
 
 -(IBAction) removeLibraryItems:(id)sender
 {
-  [(MyDocument*)[self currentDocument] removeLibraryItems:sender];
+  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] removeLibraryItems:sender];
 }
 
 -(IBAction) refreshLibraryItems:(id)sender
 {
-  [(MyDocument*)[self currentDocument] refreshLibraryItems:sender];
+  [(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] refreshLibraryItems:sender];
+}
+
+-(IBAction) saveLibrary:(id)sender
+{
+  NSSavePanel* savePanel = [NSSavePanel savePanel];
+  [savePanel setTitle:NSLocalizedString(@"Save library as...", @"Save library as...")];
+  [savePanel setRequiredFileType:@"latexlib"];
+  [savePanel setCanSelectHiddenExtension:YES];
+  int ok = [savePanel runModal];
+  if (ok == NSFileHandlingPanelOKButton)
+  {
+    [[LibraryManager sharedManager] saveAs:[[savePanel URL] path]];
+  }
+}
+
+-(IBAction) loadLibrary:(id)sender
+{
+  NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+  [openPanel setTitle:NSLocalizedString(@"Open library...", @"Open library...")];
+  int ok = [openPanel runModalForTypes:[NSArray arrayWithObject:@"latexlib"]];
+  if (ok == NSOKButton)
+  {
+    [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path]];
+  }
 }
 
 //returns the preamble that should be used, according to the fact that color.sty is available or not
@@ -483,7 +542,7 @@ static NSArray* unixBins = nil;
 
 -(IBAction) removeHistoryEntries:(id)sender
 {
-  MyDocument* document = (MyDocument*) [self currentDocument];
+  MyDocument* document = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (document)
     [document removeHistoryEntries:sender];
 }
@@ -643,7 +702,7 @@ static NSArray* unixBins = nil;
   id cell = [sender selectedCell];
   NSString* string = cell ? [cell alternateTitle] : nil;
   if (!string || ![string length]) string = cell ? [cell title] : nil;
-  MyDocument* myDocument = (MyDocument*) [self currentDocument];
+  MyDocument* myDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (string && myDocument)
   {
     if ([cell tag])
@@ -664,19 +723,17 @@ static NSArray* unixBins = nil;
   NSData* historyItemData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
   NSArray* historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemData];
   HistoryItem* historyItem = (historyItems && [historyItems count]) ? [historyItems objectAtIndex:0] : nil;
-  MyDocument* currentDocument = (MyDocument*) [self currentDocument];
+  MyDocument* currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
   if (!currentDocument)
-  {
-    [[NSDocumentController sharedDocumentController] newDocument:self];
-    currentDocument = (MyDocument*) [self currentDocument];
-  }
+    currentDocument = (MyDocument*) [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
   if (currentDocument && historyItem)
   {
     [currentDocument setLinkBackLink:link];//automatically closes previous links
     [currentDocument applyHistoryItem:historyItem]; //defines the state of the document
     [currentDocument deselectItems];
     [NSApp activateIgnoringOtherApps:YES];
-    NSWindow* window = [currentDocument windowForSheet];
+    NSArray* windows = [currentDocument windowControllers];
+    NSWindow* window = [[windows lastObject] window];
     [currentDocument setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
                                                         @"Equation linked with another application")];
     [window makeKeyAndOrderFront:self];
@@ -787,212 +844,258 @@ static NSArray* unixBins = nil;
 }
 -(void) serviceLatexisationText:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-  [self _serviceLatexisation:pboard userData:userData mode:NORMAL error:error];
+  [self _serviceLatexisation:pboard userData:userData mode:TEXT error:error];
 }
 
 //performs the application service
 -(void) _serviceLatexisation:(NSPasteboard *)pboard userData:(NSString *)userData mode:(latex_mode_t)mode
                        error:(NSString **)error
 {
-  NSArray* types = [pboard types];
-
-  NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  BOOL useColor     = [userDefaults boolForKey:ServiceRespectsColorKey];
-  BOOL useBaseline  = [userDefaults boolForKey:ServiceRespectsBaselineKey];
-  BOOL usePointSize = [userDefaults boolForKey:ServiceRespectsPointSizeKey];
-  double defaultPointSize = [userDefaults floatForKey:DefaultPointSizeKey];
-  
-  //in the case of RTF input, we may deduce size, color, and change baseline
-  if ([types containsObject:NSRTFPboardType])
+  if (!isPdfLatexAvailable || !isGsAvailable)
   {
-    NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
-                                                           documentAttributes:NULL] autorelease];
-    NSDictionary* contextAttributes = [attrString attributesAtIndex:0 effectiveRange:NULL];
-    NSFont*  font  = usePointSize ? [contextAttributes objectForKey:NSFontAttributeName] : nil;
-    float pointSize = font ? [font pointSize] : defaultPointSize;
-    float magnification = pointSize;
-    NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
-    if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
-    NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
-    if (!originalBaseline) originalBaseline = [NSNumber numberWithFloat:0.0];
-    NSString* pboardString = [attrString string];
-    NSString* preamble = [self insertColorInPreamble:[[self preamble] string] color:color];
-    
-    //calls the effective latexisation
-    NSData* pdfData = [myDocumentServiceProvider latexiseWithPreamble:preamble body:pboardString color:color mode:mode
-                                                        magnification:magnification];
-
-    //if it has worked, put back data in the service pasteboard
-    if (pdfData)
+    NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration",
+                                          @"LaTeXiT cannot be run properly, please check its configuration");
+    *error = message;
+    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, @"OK", nil, nil);
+  }
+  else
+  {
+    @synchronized(self) //one latexisation at a time
     {
-      //creates the image file that will be attached to the rtfd
-      NSString* directory          = NSTemporaryDirectory();
-      NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
+      NSArray* types = [pboard types];
+
       NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-      NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-      NSArray* components          = [dragExportType componentsSeparatedByString:@" "];
-      NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
-      NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
-      float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
-      NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
-      NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
-      NSData*   attachedData       = [myDocumentServiceProvider dataForType:dragExportType pdfData:pdfData
-                                                                  jpegColor:color jpegQuality:quality];
-      [attachedData writeToFile:attachedFilePath atomically:NO];
-
-      //extracts the baseline of the equation, if possible
-      NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
-      BOOL needsToCheckLEEAnnotations = YES;
-      #ifndef PANTHER
-      PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-      NSArray* pdfMetaData     = [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute];
-      needsToCheckLEEAnnotations = !(pdfMetaData && ([pdfMetaData count] >= 6));
-      if (!needsToCheckLEEAnnotations)
-        [equationBaselineAsString setString:[pdfMetaData objectAtIndex:5]];
-      [pdfDocument release];
-      #endif
-
-      if (needsToCheckLEEAnnotations)
-      {
-        NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-        NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
-        if (testArray && ([testArray count] >= 2))
-        {
-          [equationBaselineAsString setString:[testArray objectAtIndex:1]];
-          NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
-          range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
-          [equationBaselineAsString deleteCharactersInRange:range];
-        }
-      }
+      BOOL useColor     = [userDefaults boolForKey:ServiceRespectsColorKey];
+      BOOL useBaseline  = [userDefaults boolForKey:ServiceRespectsBaselineKey];
+      BOOL usePointSize = [userDefaults boolForKey:ServiceRespectsPointSizeKey];
+      double defaultPointSize = [userDefaults floatForKey:DefaultPointSizeKey];
       
-      float newBaseline = [originalBaseline floatValue];
-      if (useBaseline)
-        newBaseline -= [equationBaselineAsString floatValue];
-
-      //creates a mutable attributed string containing the image file
-      NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
-      NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
-      NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
-      NSMutableAttributedString* mutableAttributedStringWithImage =
-        [[[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage] autorelease];
+      //in the case of RTF input, we may deduce size, color, and change baseline
+      if ([types containsObject:NSRTFPboardType])
+      {
+        NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
+                                                               documentAttributes:NULL] autorelease];
+        NSDictionary* contextAttributes = [attrString attributesAtIndex:0 effectiveRange:NULL];
+        NSFont*  font  = usePointSize ? [contextAttributes objectForKey:NSFontAttributeName] : nil;
+        float pointSize = font ? [font pointSize] : defaultPointSize;
+        float magnification = pointSize;
+        NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
+        if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
+        NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
+        if (!originalBaseline) originalBaseline = [NSNumber numberWithFloat:0.0];
+        NSString* pboardString = [attrString string];
+        NSString* preamble = [self insertColorInPreamble:[[self preamble] string] color:color];
         
-      //changes the baseline of the attachment to align it with the surrounding text
-      [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
-                                               value:[NSNumber numberWithFloat:newBaseline]
-                                               range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
-      
-      //add a space after the image, to restore the baseline of the surrounding text
-      //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
-      //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
-      //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-      NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
-      [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-      [mutableAttributedStringWithImage appendAttributedString:space];
+        //calls the effective latexisation
+        NSData* pdfData = [[self _myDocumentServiceProvider] latexiseWithPreamble:preamble body:pboardString color:color mode:mode
+                                                                    magnification:magnification];
 
-      //finally creates the rtdfData
-      NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:NSMakeRange(0, [mutableAttributedStringWithImage length])
-                                                      documentAttributes:nil];
+        //if it has worked, put back data in the service pasteboard
+        if (pdfData)
+        {
+          //we will create the image file that will be attached to the rtfd
+          NSString* directory          = NSTemporaryDirectory();
+          NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
+          NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+          NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
+          NSArray* components          = [dragExportType componentsSeparatedByString:@" "];
+          NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
+          NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
+          float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
+          NSString* attachedFile       = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
+          NSString* attachedFilePath   = [directory stringByAppendingPathComponent:attachedFile];
+          NSData*   attachedData       = [self dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+          
+          //Now we must feed the pasteboard
+          [pboard declareTypes:[NSArray array] owner:nil];
 
-      //Now we must feed the pasteboard
-      [pboard declareTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
-      
-      //RTFd data
-      [pboard setData:rtfdData forType:NSRTFDPboardType];
-      
-      //LinkBack data
-      HistoryItem* historyItem =
-        [HistoryItem historyItemWithPdfData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
-                                 sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
-                                      color:color pointSize:pointSize date:[NSDate date] mode:mode];
-      NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
-      NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
-      NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
-    
-      [pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
-      [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
-      
-      //and additional data according to the export type (pdf, eps, tiff, jpeg, png...)
-      if ([extension isEqualToString:@"pdf"])
-      {
-        [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:nil];
-        [pboard setData:pdfData forType:NSPDFPboardType];
-      }
-      else if ([extension isEqualToString:@"eps"])
-      {
-        [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:nil];
-        [pboard setData:attachedData forType:NSPostScriptPboardType];
-      }
-      else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
-      {
-        [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
-        [pboard setData:attachedData forType:NSTIFFPboardType];
-      }
-    }
-    else
-      *error = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
-                                 @"You can check it in LaTeXiT",
-                                 @"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
-                                 @"You can check it in LaTeXiT");
-  }
-  //if the input is not RTF but just string, we will use default color and size
-  else if ([types containsObject:NSStringPboardType])
-  {
-    NSAttributedString* preamble = [self preamble];
-    NSString* pboardString = [pboard stringForType:NSStringPboardType];
+           //we try to make RTFD data only if the user wants to use the baseline, because there is
+           //a side-effect : it "disables" LinkBack (can't click on an image embedded in RTFD)
+          if (useBaseline)
+          {
+            //extracts the baseline of the equation, if possible
+            NSMutableString* equationBaselineAsString = [NSMutableString stringWithString:@"0"];
+            BOOL needsToCheckLEEAnnotations = YES;
+            #ifndef PANTHER
+            PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+            NSArray* pdfMetaData     = [[pdfDocument documentAttributes] objectForKey:PDFDocumentKeywordsAttribute];
+            needsToCheckLEEAnnotations = !(pdfMetaData && ([pdfMetaData count] >= 6));
+            if (!needsToCheckLEEAnnotations)
+              [equationBaselineAsString setString:[pdfMetaData objectAtIndex:5]];
+            [pdfDocument release];
+            #endif
 
-    //performs effective latexisation
-    NSData* pdfData = [myDocumentServiceProvider latexiseWithPreamble:[preamble string] body:pboardString
-                                                        color:[NSColor blackColor] mode:mode
-                                                        magnification:defaultPointSize];
-
-    //if it has worked, put back data in the service pasteboard
-    if (pdfData)
-    {
-      //translates the data to the right format
-      NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-      NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-      NSArray* components          = [dragExportType componentsSeparatedByString:@" "];
-      NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
-      NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
-      float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
-      NSData*   data               = [myDocumentServiceProvider dataForType:dragExportType pdfData:pdfData
-                                                                  jpegColor:color jpegQuality:quality];
-
-      //now feed the pasteboard
-      [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
+            if (needsToCheckLEEAnnotations)
+            {
+              NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
+              NSArray*  testArray    = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
+              if (testArray && ([testArray count] >= 2))
+              {
+                [equationBaselineAsString setString:[testArray objectAtIndex:1]];
+                NSRange range = [equationBaselineAsString rangeOfString:@"EEbasend"];
+                range.length  = (range.location != NSNotFound) ? [equationBaselineAsString length]-range.location : 0;
+                [equationBaselineAsString deleteCharactersInRange:range];
+              }
+            }
             
-      //LinkBack data
-      HistoryItem* historyItem =
-      [HistoryItem historyItemWithPdfData:pdfData
-                                 preamble:preamble
-                               sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
-                                    color:[NSColor blackColor]
-                                pointSize:defaultPointSize date:[NSDate date] mode:mode];
-      NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
-      NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
-      NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
-      [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
-      
-      //additional data according to the export type (pdf, eps, tiff, jpeg, png...)
-      if ([extension isEqualToString:@"pdf"])
-      {
-        [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:nil];
-        [pboard setData:data forType:NSPDFPboardType];
+            float newBaseline = [originalBaseline floatValue];
+            if (useBaseline)
+              newBaseline -= [equationBaselineAsString floatValue];
+
+            //creates a mutable attributed string containing the image file
+            [attachedData writeToFile:attachedFilePath atomically:NO];
+            NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
+            NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
+            NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
+            NSMutableAttributedString* mutableAttributedStringWithImage =
+              [[[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage] autorelease];
+              
+            //changes the baseline of the attachment to align it with the surrounding text
+            [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
+                                                     value:[NSNumber numberWithFloat:newBaseline]
+                                                     range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
+            
+            //add a space after the image, to restore the baseline of the surrounding text
+            //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
+            //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
+            //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
+            NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+            [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
+            [mutableAttributedStringWithImage appendAttributedString:space];
+
+            //finally creates the rtdfData
+            NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:NSMakeRange(0, [mutableAttributedStringWithImage length])
+                                                            documentAttributes:nil];
+
+            //RTFd data
+            [pboard addTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
+            [pboard setData:rtfdData forType:NSRTFDPboardType];
+          }
+
+          //LinkBack data
+          HistoryItem* historyItem =
+            [HistoryItem historyItemWithPdfData:pdfData preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
+                                     sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
+                                          color:color pointSize:pointSize date:[NSDate date] mode:mode];
+          NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
+          NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
+          NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
+        
+          [pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
+          [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
+          
+          //and additional data according to the export type (pdf, eps, tiff, jpeg, png...)
+          if ([extension isEqualToString:@"pdf"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:nil];
+            [pboard setData:pdfData forType:NSPDFPboardType];
+          }
+          else if ([extension isEqualToString:@"eps"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:nil];
+            [pboard setData:attachedData forType:NSPostScriptPboardType];
+          }
+          else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
+            [pboard setData:attachedData forType:NSTIFFPboardType];
+          }
+        }
+        else
+        {
+          NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
+                                                @"You can check it in LaTeXiT",
+                                                @"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
+                                                @"You can check it in LaTeXiT");
+          *error = message;
+          [NSApp activateIgnoringOtherApps:YES];
+          int choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
+                                       NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+          if (choice == NSAlertAlternateReturn)
+          {
+           MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+           [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
+           [[document windowForSheet] makeFirstResponder:[document sourceTextView]];
+           [document makeLatex:self];
+          }
+        }//end if pdfData (LaTeXisation has worked)
       }
-      else if ([extension isEqualToString:@"eps"])
+      //if the input is not RTF but just string, we will use default color and size
+      else if ([types containsObject:NSStringPboardType])
       {
-        [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:nil];
-        [pboard setData:data forType:NSPostScriptPboardType];
-      }
-      else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
-      {
-        [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
-        [pboard setData:data forType:NSTIFFPboardType];
-      }
-    }
-    else
-      *error = NSLocalizedString(@"This text is not LaTeX compliant", @"This text is not LaTeX compliant");
-  }
+        NSAttributedString* preamble = [self preamble];
+        NSString* pboardString = [pboard stringForType:NSStringPboardType];
+
+        //performs effective latexisation
+        NSData* pdfData = [[self _myDocumentServiceProvider] latexiseWithPreamble:[preamble string] body:pboardString
+                                                                            color:[NSColor blackColor] mode:mode
+                                                                    magnification:defaultPointSize];
+
+        //if it has worked, put back data in the service pasteboard
+        if (pdfData)
+        {
+          //translates the data to the right format
+          NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+          NSString* dragExportType     = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
+          NSArray* components          = [dragExportType componentsSeparatedByString:@" "];
+          NSString* extension          = [components count] ? [components objectAtIndex:0] : nil;
+          NSColor* color               = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
+          float  quality               = [userDefaults floatForKey:DragExportJpegQualityKey];
+          NSData*   data               = [self dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+
+          //now feed the pasteboard
+          [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:nil];
+                
+          //LinkBack data
+          HistoryItem* historyItem =
+          [HistoryItem historyItemWithPdfData:pdfData
+                                     preamble:preamble
+                                   sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
+                                        color:[NSColor blackColor]
+                                    pointSize:defaultPointSize date:[NSDate date] mode:mode];
+          NSArray* historyItemArray = [NSArray arrayWithObject:historyItem];
+          NSData* historyItemData = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
+          NSDictionary* linkBackPlist = [NSDictionary linkBackDataWithServerName:[NSApp applicationName] appData:historyItemData]; 
+          [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
+          
+          //additional data according to the export type (pdf, eps, tiff, jpeg, png...)
+          if ([extension isEqualToString:@"pdf"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:NSPDFPboardType] owner:nil];
+            [pboard setData:data forType:NSPDFPboardType];
+          }
+          else if ([extension isEqualToString:@"eps"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:NSPostScriptPboardType] owner:nil];
+            [pboard setData:data forType:NSPostScriptPboardType];
+          }
+          else if ([extension isEqualToString:@"tiff"] || [extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"png"])
+          {
+            [pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
+            [pboard setData:data forType:NSTIFFPboardType];
+          }
+        }
+        else
+        {
+          NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
+                                                @"You can check it in LaTeXiT",
+                                                @"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
+                                                @"You can check it in LaTeXiT");
+          *error = message;
+          [NSApp activateIgnoringOtherApps:YES];
+          int choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
+                                       NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+          if (choice == NSAlertAlternateReturn)
+          {
+           MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+           [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
+           [[document windowForSheet] makeFirstResponder:[document sourceTextView]];
+           [document makeLatex:self];
+          }
+        }//end if pdfData (LaTeXisation has worked)
+      }//end if not RTF
+    }//end @synchronized(self)
+  }//end if latexisation can be performed
 }
 
 -(IBAction) showPreferencesPane:(id)sender
@@ -1013,6 +1116,12 @@ static NSArray* unixBins = nil;
     [readmeTextView readRTFDFromFile:file];
   }
   [readmeWindow makeKeyAndOrderFront:self];
+}
+
+//whenever a document is selected, we should change menuNeedsUpdate to ensure good show/hide state of library and history
+-(void) windowDidBecomeMain:(NSNotification *)aNotification
+{
+  [self menuNeedsUpdate:nil];
 }
 
 //if a path has changed in the preferences, pdflatex may become [un]available, so we must update
@@ -1056,4 +1165,169 @@ static NSArray* unixBins = nil;
   return preamble;
 }
 
+//returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
+-(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData
+             jpegColor:(NSColor*)color jpegQuality:(float)quality
+{
+  NSData* data = nil;
+  @synchronized(self) //only one person may ask that service at a time
+  {
+    //prepare file names
+    NSString* directory      = NSTemporaryDirectory();
+    NSString* filePrefix     = [NSString stringWithFormat:@"latexit-controller"];
+    NSString* pdfFile        = [NSString stringWithFormat:@"%@.pdf", filePrefix];
+    NSString* pdfFilePath    = [directory stringByAppendingPathComponent:pdfFile];
+    NSString* tmpEpsFile     = [NSString stringWithFormat:@"%@-2.eps", filePrefix];
+    NSString* tmpEpsFilePath = [directory stringByAppendingPathComponent:tmpEpsFile];
+
+     if (pdfData)
+    {
+      if ([format isEqualToString:@"pdf"])
+      {
+        data = pdfData;
+      }
+      else if ([format isEqualToString:@"eps"])
+      {
+        [pdfData writeToFile:pdfFilePath atomically:NO];
+        NSFileHandle* nullDevice = [NSFileHandle fileHandleWithNullDevice];
+        NSTask* gsTask = [[NSTask alloc] init];
+        NSPipe* errorPipe = [NSPipe pipe];
+        NSMutableString* errorString = [NSMutableString string];
+        @try
+        {
+          [gsTask setCurrentDirectoryPath:directory];
+          [gsTask setEnvironment:environmentDict];
+          [gsTask setLaunchPath:[self findUnixProgram:@"gs" tryPrefixes:unixBins environment:[gsTask environment]]];
+          [gsTask setArguments:[NSArray arrayWithObjects:@"-dNOPAUSE", @"-dNOCACHE", @"-dBATCH", @"-sDEVICE=epswrite",
+                                                         [NSString stringWithFormat:@"-sOutputFile=%@", tmpEpsFilePath],
+                                                         pdfFilePath, nil]];
+          [gsTask setStandardOutput:nullDevice];
+          [gsTask setStandardError:errorPipe];
+          [gsTask launch];
+          [gsTask waitUntilExit];
+        }
+        @catch(NSException* e)
+        {
+          [errorString appendString:[NSString stringWithFormat:@"exception ! name : %@ reason : %@\n", [e name], [e reason]]];
+        }
+        @finally
+        {
+          NSData*   errorData   = [[errorPipe fileHandleForReading] availableData];
+          [errorString appendString:[[[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding] autorelease]];
+
+          if ([gsTask terminationStatus] != 0)
+          {
+            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
+                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
+                                                                         @"An error occured while trying to create the file :\n%@"),
+                                                       errorString],
+                            @"Ok", nil, nil);
+          }
+          [gsTask release];
+        }
+        data = [NSData dataWithContentsOfFile:tmpEpsFilePath];
+      }
+      else if ([format isEqualToString:@"tiff"])
+      {
+        NSImage* image = [[NSImage alloc] initWithData:pdfData];
+        data = [image TIFFRepresentation];
+        [image release];
+      }
+      else if ([format isEqualToString:@"png"])
+      {
+        NSImage* image = [[NSImage alloc] initWithData:pdfData];
+        data = [image TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
+        NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:data];
+        data = [imageRep representationUsingType:NSPNGFileType properties:nil];
+        [image release];
+      }
+      else if ([format isEqualToString:@"jpeg"])
+      {
+        NSImage* image = [[NSImage alloc] initWithData:pdfData];
+        NSSize size = [image size];
+        NSImage* opaqueImage = [[NSImage alloc] initWithSize:size];
+        NSRect rect = NSMakeRect(0, 0, size.width, size.height);
+        [opaqueImage lockFocus];
+          [color set];
+          NSRectFill(rect);
+          [image drawInRect:rect fromRect:rect operation:NSCompositeSourceOver fraction:1.0];
+        [opaqueImage unlockFocus];
+        data = [opaqueImage TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
+        [opaqueImage release];
+        NSBitmapImageRep *opaqueImageRep = [NSBitmapImageRep imageRepWithData:data];
+        NSDictionary* properties =
+          [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithFloat:quality/100], NSImageCompressionFactor, nil];
+        data = [opaqueImageRep representationUsingType:NSJPEGFileType properties:properties];
+        [image release];
+      }
+    }//end if pdfData available
+  }//end @synchronized
+  return data;
+}
+
+//returns a file icon to represent the given PDF data
+-(NSImage*) makeIconForData:(NSData*)pdfData
+{
+  NSImage* icon = nil;
+  NSImage* image = [[[NSImage alloc] initWithData:pdfData] autorelease];
+  NSSize imageSize = [image size];
+  icon = [[[NSImage alloc] initWithSize:NSMakeSize(128, 128)] autorelease];
+  NSRect imageRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
+  NSRect srcRect = imageRect;
+  if (imageRect.size.width >= imageRect.size.height)
+    srcRect.size.width = MIN(srcRect.size.width, 2*srcRect.size.height);
+  else
+    srcRect.size.height = MIN(srcRect.size.height, 2*srcRect.size.width);
+  srcRect.origin.y = imageSize.height-srcRect.size.height;
+
+  float marginX = (srcRect.size.height > srcRect.size.width ) ? ((srcRect.size.height - srcRect.size.width )/2)*128/srcRect.size.height : 0;
+  float marginY = (srcRect.size.width  > srcRect.size.height) ? ((srcRect.size.width  - srcRect.size.height)/2)*128/srcRect.size.width  : 0;
+  NSRect dstRect = NSMakeRect(marginX, marginY, 128-2*marginX, 128-2*marginY);
+  NSColor* backgroundColor = [NSColor colorWithCalibratedRed:1 green:1 blue:1 alpha:0.25];
+  [icon lockFocus];
+    [backgroundColor set];
+    NSRectFill(NSMakeRect(0, 0, 128, 128));
+    [image drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:1];
+    if (imageSize.width > 2*imageSize.height) //if the equation is truncated, adds <...>
+    {
+      NSRectFill(NSMakeRect(100, 0, 28, 128));
+      [[NSColor blackColor] set];
+      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(102, 56, 6, 6)] fill];
+      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(112, 56, 6, 6)] fill];
+      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(122, 56, 6, 6)] fill];
+    }
+    else if (imageSize.height > 2*imageSize.width)
+    {
+      NSRectFill(NSMakeRect(0, 0, 128, 16));
+      [[NSColor blackColor] set];
+      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(51, 5, 6, 6)] fill];
+      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(61, 5, 6, 6)] fill];
+      [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(71, 5, 6, 6)] fill];
+    }
+  [icon unlockFocus];
+  return icon;
+}
+
+//application delegate methods
+-(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
+{
+  BOOL ok = NO;
+  NSString* type = [[filename pathExtension] lowercaseString];
+  if (![type isEqualTo:@"latexlib"])
+    ok = ([[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:filename display:YES] != nil);
+  else
+  {
+    NSString* title =
+      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @"Do you want to load the library <%@> ?"),
+                                 [[filename pathComponents] lastObject]];
+    int confirm = NSRunAlertPanel(title, NSLocalizedString(@"The current library will be lost", @"The current library will be lost"),
+                                  NSLocalizedString(@"Load the library", @"Load the library"), NSLocalizedString(@"Cancel", @"Cancel"), nil);
+    if (confirm == NSAlertDefaultReturn)
+      ok = [[LibraryManager sharedManager] loadFrom:filename];
+    else
+      ok = YES;
+  }
+  return ok;
+}
 @end

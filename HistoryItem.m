@@ -10,6 +10,7 @@
 
 #import "HistoryItem.h"
 
+#import "AppController.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
 #import "PreferencesController.h"
@@ -95,9 +96,16 @@
   return mode;
 }
 
+-(void) setPreamble:(NSAttributedString*)text
+{
+  [text retain];
+  [preamble release];
+  preamble = text;
+}
+
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"1.3"     forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"1.3.1"   forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:pdfData    forKey:@"pdfData"];
   [coder encodeObject:preamble   forKey:@"preamble"];
   [coder encodeObject:sourceText forKey:@"sourceText"];
@@ -209,6 +217,9 @@
     [pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:self];
   [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
 
+  [pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:self];
+  [pboard setData:pdfData forType:NSFileContentsPboardType];
+
   //Stores the data in the pasteboard corresponding to what the user asked for (pdf, jpeg, tiff...)
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
@@ -216,8 +227,8 @@
   NSString* extension      = [components count] ? [components objectAtIndex:0] : nil;
   NSColor*  jpegColor      = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
   float     quality        = [userDefaults floatForKey:DragExportJpegQualityKey];
-  NSData*   data           = lazyDataProvider ? nil
-                                              : [document dataForType:dragExportType pdfData:pdfData jpegColor:jpegColor jpegQuality:quality];
+  NSData*   data           = lazyDataProvider ? nil :
+                             [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:jpegColor jpegQuality:quality];
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   if ([extension isEqualToString:@"pdf"])
   {

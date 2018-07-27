@@ -17,6 +17,10 @@
 		9302548007F0BC6A00011996 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
 		930255D007F0C2A800011996 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 930255CF07F0C2A800011996 /* Localizable.strings */; };
 		9304224D082975ED00F2B555 /* NSIndexSetExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9304224B082975ED00F2B555 /* NSIndexSetExtended.m */; };
+		9308AC33088CF2850062A340 /* NSString+CarbonFSSpecCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AC2F088CF2850062A340 /* NSString+CarbonFSSpecCreation.m */; };
+		9308AC35088CF2850062A340 /* IconFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AC31088CF2850062A340 /* IconFamily.m */; };
+		9308AC5A088CF2FB0062A340 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9308AC59088CF2FB0062A340 /* Carbon.framework */; };
+		9308AD0C088CF3D50062A340 /* NSWorkspaceExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AD0A088CF3D50062A340 /* NSWorkspaceExtended.m */; };
 		9308E1EA07EE3A5900DD1B5F /* LineCountTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308E1E807EE3A5900DD1B5F /* LineCountTextView.m */; };
 		9308E39307EE46BB00DD1B5F /* error.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9308E39207EE46BB00DD1B5F /* error.tiff */; };
 		930AC4E407EDEEF400AC66FA /* LineCountRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930AC4E207EDEEF400AC66FA /* LineCountRulerView.m */; };
@@ -24,6 +28,7 @@
 		930BC2AA07ECBD6500EEB238 /* MyImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 930BC2A807ECBD6500EEB238 /* MyImageView.m */; };
 		9313BF26086C3B410056DB21 /* leqslant.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9313BF24086C3B410056DB21 /* leqslant.tiff */; };
 		9313BF27086C3B410056DB21 /* geqslant.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9313BF25086C3B410056DB21 /* geqslant.tiff */; };
+		93149F7E089438B10017C83A /* latexit-lib.png in Resources */ = {isa = PBXBuildFile; fileRef = 93149F7D089438B10017C83A /* latexit-lib.png */; };
 		9315A45207FD331800AFCCE9 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9315A45007FD331800AFCCE9 /* Preferences.nib */; };
 		9315A59A07FD36BD00AFCCE9 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9315A59807FD36BD00AFCCE9 /* PreferencesController.m */; };
 		931CB3080801311100CF9D2B /* PalettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 931CB3060801311100CF9D2B /* PalettesController.m */; };
@@ -87,6 +92,7 @@
 		93EF9D1F07EF7B6A0003FA6E /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D1D07EF7B6A0003FA6E /* HistoryItem.m */; };
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
+		93EFDB9F088FF163000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB9D088FF163000156A3 /* NSStringExtended.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -203,6 +209,13 @@
 		930255CD07F0C2A300011996 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9304224A082975ED00F2B555 /* NSIndexSetExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSIndexSetExtended.h; sourceTree = "<group>"; };
 		9304224B082975ED00F2B555 /* NSIndexSetExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSIndexSetExtended.m; sourceTree = "<group>"; };
+		9308AC2E088CF2850062A340 /* NSString+CarbonFSSpecCreation.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = "NSString+CarbonFSSpecCreation.h"; sourceTree = "<group>"; };
+		9308AC2F088CF2850062A340 /* NSString+CarbonFSSpecCreation.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = "NSString+CarbonFSSpecCreation.m"; sourceTree = "<group>"; };
+		9308AC30088CF2850062A340 /* IconFamily.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = IconFamily.h; sourceTree = "<group>"; };
+		9308AC31088CF2850062A340 /* IconFamily.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = IconFamily.m; sourceTree = "<group>"; };
+		9308AC59088CF2FB0062A340 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		9308AD09088CF3D50062A340 /* NSWorkspaceExtended.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = NSWorkspaceExtended.h; sourceTree = "<group>"; };
+		9308AD0A088CF3D50062A340 /* NSWorkspaceExtended.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = NSWorkspaceExtended.m; sourceTree = "<group>"; };
 		9308E1E707EE3A5900DD1B5F /* LineCountTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineCountTextView.h; sourceTree = "<group>"; };
 		9308E1E807EE3A5900DD1B5F /* LineCountTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineCountTextView.m; sourceTree = "<group>"; };
 		9308E39207EE46BB00DD1B5F /* error.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = error.tiff; path = Resources/error.tiff; sourceTree = "<group>"; };
@@ -214,11 +227,11 @@
 		930BC2A807ECBD6500EEB238 /* MyImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageView.m; sourceTree = "<group>"; };
 		9313BF24086C3B410056DB21 /* leqslant.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = leqslant.tiff; path = Resources/symbols/leqslant.tiff; sourceTree = "<group>"; };
 		9313BF25086C3B410056DB21 /* geqslant.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = geqslant.tiff; path = Resources/symbols/geqslant.tiff; sourceTree = "<group>"; };
+		93149F7D089438B10017C83A /* latexit-lib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "latexit-lib.png"; path = "Resources/latexit-lib.png"; sourceTree = "<group>"; };
 		9315A45107FD331800AFCCE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		9315A59807FD36BD00AFCCE9 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		9315A59907FD36BD00AFCCE9 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		93197FB7087D166E00C2E678 /* LinkBack-panther.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "LinkBack-panther.framework"; sourceTree = "<group>"; };
-		931AD67508491A8E00E8EE8B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		931CB3050801311100CF9D2B /* PalettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PalettesController.h; sourceTree = "<group>"; };
 		931CB3060801311100CF9D2B /* PalettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PalettesController.m; sourceTree = "<group>"; };
 		931CB32E0801325800CF9D2B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Palettes.nib; sourceTree = "<group>"; };
@@ -249,7 +262,6 @@
 		935A834A084EFF11005724CE /* NSApplicationExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSApplicationExtended.m; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
-		935A860C084F4F15005724CE /* LinkBack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LinkBack.framework; sourceTree = "<group>"; };
 		9372A1F2087819EF00A3A645 /* MarginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Margin.nib; sourceTree = "<group>"; };
@@ -308,6 +320,8 @@
 		93EF9D2107EF7B740003FA6E /* HistoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryManager.m; sourceTree = "<group>"; };
 		93EF9E8F07EF99910003FA6E /* HistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryView.h; sourceTree = "<group>"; };
 		93EF9E9007EF99910003FA6E /* HistoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryView.m; sourceTree = "<group>"; };
+		93EFDB9C088FF163000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
+		93EFDB9D088FF163000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,6 +333,7 @@
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
 				938E24BA0889C730000626E6 /* LinkBack-panther.framework in Frameworks */,
+				9308AC5A088CF2FB0062A340 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				93197FB7087D166E00C2E678 /* LinkBack-panther.framework */,
-				935A860C084F4F15005724CE /* LinkBack.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -339,8 +353,8 @@
 			isa = PBXGroup;
 			children = (
 				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
+				9308AC59088CF2FB0062A340 /* Carbon.framework */,
 				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
-				931AD67508491A8E00E8EE8B /* Quartz.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -434,6 +448,7 @@
 				93773C2107FFF2B6004AAB30 /* warning.tiff */,
 				9344D83C0825818B00B17B37 /* folder-icon.png */,
 				932CF45E0826C5A500434128 /* file-icon.png */,
+				93149F7D089438B10017C83A /* latexit-lib.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -456,6 +471,10 @@
 			children = (
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
+				9308AC30088CF2850062A340 /* IconFamily.h */,
+				9308AC31088CF2850062A340 /* IconFamily.m */,
+				9308AC2E088CF2850062A340 /* NSString+CarbonFSSpecCreation.h */,
+				9308AC2F088CF2850062A340 /* NSString+CarbonFSSpecCreation.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -497,8 +516,12 @@
 				93CD21DC0827E9230079C367 /* NSMutableArrayExtended.m */,
 				93E8196F087969BE0081B897 /* NSSegmentedControlExtended.h */,
 				93E81970087969BE0081B897 /* NSSegmentedControlExtended.m */,
+				93EFDB9C088FF163000156A3 /* NSStringExtended.h */,
+				93EFDB9D088FF163000156A3 /* NSStringExtended.m */,
 				93344CB308251BD500F00A49 /* NSTaskExtended.h */,
 				93344CB408251BD500F00A49 /* NSTaskExtended.m */,
+				9308AD09088CF3D50062A340 /* NSWorkspaceExtended.h */,
+				9308AD0A088CF3D50062A340 /* NSWorkspaceExtended.m */,
 			);
 			name = CocoaExtensions;
 			sourceTree = "<group>";
@@ -631,7 +654,7 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT - panther" */;
+			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-panther" */;
 			buildSettings = {
 			};
 			buildStyles = (
@@ -696,6 +719,7 @@
 				93D682F6086C3FAC0009A451 /* nleqslant.tiff in Resources */,
 				93D6833E086C45270009A451 /* nparallel.tiff in Resources */,
 				9372A2F4087827FF00A3A645 /* Margin.nib in Resources */,
+				93149F7E089438B10017C83A /* latexit-lib.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,6 +761,10 @@
 				9372A1F5087819EF00A3A645 /* MarginController.m in Sources */,
 				93E81972087969BE0081B897 /* NSSegmentedControlExtended.m in Sources */,
 				93E81AA2087978AD0081B897 /* NSFontExtended.m in Sources */,
+				9308AC33088CF2850062A340 /* NSString+CarbonFSSpecCreation.m in Sources */,
+				9308AC35088CF2850062A340 /* IconFamily.m in Sources */,
+				9308AD0C088CF3D50062A340 /* NSWorkspaceExtended.m in Sources */,
+				93EFDB9F088FF163000156A3 /* NSStringExtended.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -827,7 +855,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		932388570854FD210017F3BB /* Development */ = {
+		932388570854FD210017F3BB /* Development Panther */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -869,9 +897,8 @@
 				PREBINDING = YES;
 				PRODUCT_NAME = LaTeXiT;
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = "Development Panther";
 		};
 		932388590854FD210017F3BB /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -891,20 +918,23 @@
 			};
 			name = Default;
 		};
-		9323885B0854FD210017F3BB /* Development */ = {
+		9323885B0854FD210017F3BB /* Development Panther */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = ppc;
+				COPY_PHASE_STRIP = NO;
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_FAST_OBJC_DISPATCH = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = PANTHER;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.3.9.sdk;
 			};
-			name = Development;
+			name = "Development Panther";
 		};
 		9323885D0854FD210017F3BB /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -962,7 +992,6 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_LDFLAGS = "-lz";
-				PREBINDING = NO;
 				PRODUCT_NAME = LaTeXiT;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
@@ -1013,17 +1042,17 @@
 		932388560854FD210017F3BB /* Build configuration list for PBXNativeTarget "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				932388570854FD210017F3BB /* Development */,
+				932388570854FD210017F3BB /* Development Panther */,
 				93E94C71087D325C00B01A1B /* Deployment Panther */,
 				932388590854FD210017F3BB /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT - panther" */ = {
+		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-panther" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9323885B0854FD210017F3BB /* Development */,
+				9323885B0854FD210017F3BB /* Development Panther */,
 				93E94C73087D325C00B01A1B /* Deployment Panther */,
 				9323885D0854FD210017F3BB /* Default */,
 			);

@@ -10,12 +10,14 @@
 
 #import "MyImageView.h"
 
+#import "AppController.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LibraryManager.h"
 #import "MyDocument.h"
 #import "NSApplicationExtended.h"
 #import "NSColorExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 
 #ifdef PANTHER
@@ -90,7 +92,14 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   [someData retain];
   [pdfData release];
   pdfData = someData;
-  NSImage* image = cachedImage ? cachedImage : (pdfData ? [[[NSImage alloc] initWithData:pdfData] autorelease] : nil);
+  NSImage* image = cachedImage;
+  if (!image)
+  {
+    image = [[[NSImage alloc] initWithData:pdfData] autorelease];
+    [image setCacheMode:NSImageCacheNever];
+    [image setDataRetained:YES];
+    [image recache];
+  }
   [self setImage:image];
 }
 
@@ -127,7 +136,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   {
     NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
     [pasteboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-    [self dragPromisedFilesOfTypes:[NSArray arrayWithObject:@"pdf"]
+    [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil]
                           fromRect:[self frame] source:self slideBack:YES event:theEvent];
   }
 }
@@ -136,7 +145,6 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
 {
   NSImage* draggedImage = [self image];
-
   NSImage* iconDragged = draggedImage;
   NSSize   iconSize = [iconDragged size];
   NSPoint p = [self convertPoint:[event locationInWindow] fromView:nil];
@@ -165,13 +173,13 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
     
     NSColor* color = [NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]];
     float  quality = [userDefaults floatForKey:DragExportJpegQualityKey];
-    NSData* data = [document dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+    NSData* data   = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
 
     if (extension)
     {
       NSString* fileName = nil;
       NSString* filePath = nil;
-      unsigned long i = 0;
+      unsigned long i = 1;
       //we try to compute a name that is not already in use
       do
       {
@@ -183,6 +191,14 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
       if (![fileManager fileExistsAtPath:filePath])
       {
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
+        [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                                   atPath:filePath];
+        unsigned int options = 0;
+        #ifndef PANTHER
+        options = NSExclude10_4ElementsIconCreationOption;
+        #endif
+        if (![dragExportType isEqualTo:@"jpeg"])
+          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:pdfData] forFile:filePath options:options];
         [names addObject:fileName];
       }
     }
@@ -208,7 +224,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   else
   {
     NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
-    data = [document dataForType:dragExportType pdfData:pdfData
+    data = [[AppController appController] dataForType:dragExportType pdfData:pdfData
                        jpegColor:[NSColor colorWithData:[userDefaults objectForKey:DragExportJpegColorKey]]
                      jpegQuality:[userDefaults floatForKey:DragExportJpegQualityKey]];
   }
@@ -256,6 +272,14 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   return dragOperation;
 }
 
+//this fixes a bug of panther http://lists.apple.com/archives/cocoa-dev/2005/Jan/msg02129.html
+#ifdef PANTHER
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [[NSPasteboard pasteboardWithName:NSDragPboard] declareTypes:nil owner:nil];
+}
+#endif
+
 -(BOOL) performDragOperation:(id <NSDraggingInfo>)sender
 {
   BOOL ok = YES;
@@ -263,7 +287,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
   if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
   {
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:LibraryItemsPboardType]];
-    [document applyHistoryItem:[[libraryItemsArray lastObject] value]];
+    [document applyHistoryItem:(HistoryItem*)[[libraryItemsArray lastObject] value]];
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
   {

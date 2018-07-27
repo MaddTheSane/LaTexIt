@@ -18,11 +18,12 @@
 @class LogTableView;
 @class MyImageView;
 
-//useful to differenciate the different latex modes : DISPLAY (\[...\]), INLINE ($...$) and NORMAL (text)
-typedef enum {DISPLAY, INLINE, NORMAL} latex_mode_t;
+//useful to differenciate the different latex modes : DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
+typedef enum {DISPLAY, INLINE, TEXT} latex_mode_t;
 
 @interface MyDocument : NSDocument
 {
+  IBOutlet NSSplitView*         splitView;
   IBOutlet LineCountTextView*   preambleTextView;
   IBOutlet LineCountTextView*   sourceTextView;
   IBOutlet MyImageView*         imageView;
@@ -61,9 +62,6 @@ typedef enum {DISPLAY, INLINE, NORMAL} latex_mode_t;
   
   BOOL isBusy;
   
-  BOOL libraryHasBeenHidden;
-  BOOL historyHasBeenHidden;
-  
   unsigned long uniqueId;
   
   LinkBack* linkBackLink;//linkBack link, may be nil (most of the time, in fact)
@@ -87,6 +85,7 @@ typedef enum {DISPLAY, INLINE, NORMAL} latex_mode_t;
 -(IBAction) removeLibraryItems:(id)sender;
 -(IBAction) refreshLibraryItems:(id)sender;
 
+-(void) setNullId;//useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;
 
 //some accessors useful sometimes
@@ -97,13 +96,13 @@ typedef enum {DISPLAY, INLINE, NORMAL} latex_mode_t;
 -(NSData*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)mode
                   magnification:(double)magnification;
 
-//returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
--(NSData*) dataForType:(NSString*)format pdfData:(NSData*)pdfData jpegColor:(NSColor*)color jpegQuality:(float)quality;
-                  
 //updates interface according to whether the latexisation is possible or not
 -(void) updateAvailabilities;
 //tells whether the document is currently performing a latexisation
 -(BOOL) isBusy;
+
+-(void) setPreamble:(NSAttributedString*)aString;   //fills the preamble textfield
+-(void) setSourceText:(NSAttributedString*)aString; //fills the body     textfield
 
 -(NSArray*) selectedHistoryItems;
 -(NSArray*) selectedLibraryItems;
@@ -114,6 +113,8 @@ typedef enum {DISPLAY, INLINE, NORMAL} latex_mode_t;
 -(void) setHistoryVisible:(BOOL)visible;
 -(BOOL) isLibraryVisible;
 -(void) setLibraryVisible:(BOOL)visible;
+-(BOOL) isPreambleVisible;
+-(void) setPreambleVisible:(BOOL)visible;
 
 //text actions in the first responder
 -(NSString*) selectedText;

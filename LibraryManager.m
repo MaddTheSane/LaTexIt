@@ -23,6 +23,7 @@
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSIndexSetExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 
 #ifdef PANTHER
@@ -52,6 +53,7 @@ NSString* LibraryItemsPboardType = @"LibraryItemsPboardType";
 @implementation LibraryManager
 
 static LibraryManager* sharedManagerInstance = nil;
+static NSImage*        libraryFileIcon       = nil;
 
 +(void) initialize
 {
@@ -60,6 +62,13 @@ static LibraryManager* sharedManagerInstance = nil;
   {
     sharedManagerInstance = [[LibraryManager alloc] init];
     [sharedManagerInstance _loadLibrary];
+  }
+  if (!libraryFileIcon)
+  {
+    NSBundle* mainBundle = [NSBundle mainBundle];
+    NSString* resourcePath = [mainBundle resourcePath];
+    NSString* fileName = [resourcePath stringByAppendingPathComponent:@"latexit-lib.png"];
+    libraryFileIcon = [[NSImage alloc] initWithContentsOfFile:fileName];
   }
 }
 
@@ -108,6 +117,34 @@ static LibraryManager* sharedManagerInstance = nil;
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
   [self _saveLibrary];
+}
+
+//marks if library needs being saved
+-(void) setNeedsSaving:(BOOL)status
+{
+  @synchronized(library) 
+  {
+    libraryShouldBeSaved = status;
+  }
+}
+
+//returns all the values contained in LibraryFile items
+-(NSArray*) allValues
+{
+  NSMutableArray* values = [NSMutableArray arrayWithCapacity:100];
+  @synchronized(library)
+  {
+    NSMutableArray* items = [NSMutableArray arrayWithArray:[library children]];
+    while([items count])
+    {
+      LibraryItem* item = [items objectAtIndex:0];
+      [items removeObjectAtIndex:0];
+      if ([item isKindOfClass:[LibraryFile class]])
+        [values addObject:[(LibraryFile*)item value]];
+      [items addObjectsFromArray:[item children]];
+    }
+  }
+  return values;
 }
 
 //automatically and regularly saves the library on disk
@@ -162,40 +199,76 @@ static LibraryManager* sharedManagerInstance = nil;
   }//end @synchronized(library)
 }
 
+-(BOOL) saveAs:(NSString*)path
+{
+  BOOL ok = NO;
+  @synchronized(library) //to prevent concurrent saving, and conflicts, if library is modified in another thread
+  {
+    NSData* uncompressedData = [NSKeyedArchiver archivedDataWithRootObject:library];
+    NSData* compressedData = [Compressor zipcompress:uncompressedData];
+    ok = [compressedData writeToFile:path atomically:YES];
+    if (ok)
+    {
+      [[NSFileManager defaultManager]
+         changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                                                          atPath:path];
+      unsigned int options = 0;
+      #ifndef PANTHER
+      options = NSExclude10_4ElementsIconCreationOption;
+      #endif
+      [[NSWorkspace sharedWorkspace] setIcon:libraryFileIcon forFile:path options:options];
+    }//end if file has been created
+  }
+  return ok;
+}
+
 -(void) _loadLibrary
 {
-  //not that there is no @synchronization here, since no other threads will exist before _loadLibrary is complete
-  @try
+  //load from ~/Library/LaTeXiT/library.dat
+  NSString* libraryFilePath = [NSString string];
+  NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
+  if ([paths count])
   {
-    [library release];
-    library = nil;
-    
-    //load from ~/Library/LaTeXiT/history.dat
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-    if ([paths count])
+    NSString* path = [paths objectAtIndex:0];
+    CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary( CFBundleGetMainBundle() );
+    if (bundleInfoDict)
     {
-      NSString* path = [paths objectAtIndex:0];
-      CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary( CFBundleGetMainBundle() );
-      if (bundleInfoDict)
-      {
-        NSString* applicationName = (NSString*) CFDictionaryGetValue( bundleInfoDict, CFSTR("CFBundleExecutable") );
-        path = [path stringByAppendingPathComponent:applicationName];
-        NSString* libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
-        NSData* compressedData = [NSData dataWithContentsOfFile:libraryFilePath];
-        NSData* uncompressedData = [Compressor zipuncompress:compressedData];
-        if (uncompressedData)
-          library = [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] retain];
-      }
-    }//end if path ok
+      NSString* applicationName = (NSString*) CFDictionaryGetValue( bundleInfoDict, CFSTR("CFBundleExecutable") );
+      path = [path stringByAppendingPathComponent:applicationName];
+      libraryFilePath = [path stringByAppendingPathComponent:@"library.dat"];
+    }
   }
-  @catch(NSException* e) //reading may fail for some reason
+  [self loadFrom:libraryFilePath];
+}
+
+-(BOOL) loadFrom:(NSString*)path
+{
+  BOOL ok = YES;
+  @synchronized(self)
   {
+    LibraryFolder* newLibrary = nil;
+    @try
+    {
+      NSData* compressedData   = [NSData dataWithContentsOfFile:path];
+      NSData* uncompressedData = [Compressor zipuncompress:compressedData];
+      if (uncompressedData)
+        newLibrary = [NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData];
+    }
+    @catch(NSException* e) //reading may fail for some reason
+    {
+      ok = NO;
+    }
+
+    if (!newLibrary)
+      newLibrary = [[[LibraryFolder alloc] init] autorelease];
+
+    [library release];
+    library = [newLibrary retain];
   }
-  @finally //if the library could not be created, make it (empty) now
-  {
-    if (!library)
-      library = [[LibraryFolder alloc] init];
-  }
+
+  [[NSNotificationCenter defaultCenter] postNotificationName:LibraryDidChangeNotification object:nil];
+
+  return ok;
 }
 
 //NSOutlineViewDataSource protocol
@@ -387,7 +460,6 @@ static LibraryManager* sharedManagerInstance = nil;
 
   NSString* dropPath = [dropDestination path];
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  MyDocument* document = [(LibraryView*)outlineView document];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   NSString* dragExportType = [[userDefaults stringForKey:DragExportTypeKey] lowercaseString];
   NSArray* components = [dragExportType componentsSeparatedByString:@" "];
@@ -449,10 +521,20 @@ static LibraryManager* sharedManagerInstance = nil;
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //is the name free ?
       {
-        NSData* pdfData = [[libraryFile value] pdfData];
-        NSData* data = [document dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+        HistoryItem* historyItem = [libraryFile value];
+        NSData* pdfData = [historyItem pdfData];
+        NSData* data = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
+        [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                                   atPath:filePath];
+        unsigned int options = 0;
+        #ifndef PANTHER
+        options = NSExclude10_4ElementsIconCreationOption;
+        #endif
+        if (![dragExportType isEqualTo:@"jpeg"])
+          [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData]]
+                                         forFile:filePath options:options];
         [names addObject:fileName];
       }
       else //the name is not free, we must compute a new one by adding a number
@@ -466,10 +548,20 @@ static LibraryManager* sharedManagerInstance = nil;
         //We may have found a name; in this case, create the file
         if (![fileManager fileExistsAtPath:filePath])
         {
-          NSData* pdfData = [[libraryFile value] pdfData];
-          NSData* data = [document dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
+          HistoryItem* historyItem = [libraryFile value];
+          NSData* pdfData = [historyItem pdfData];
+          NSData* data = [[AppController appController] dataForType:dragExportType pdfData:pdfData jpegColor:color jpegQuality:quality];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
+          [fileManager changeFileAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
+                                     atPath:filePath];
+          unsigned int options = 0;
+          #ifndef PANTHER
+          options = NSExclude10_4ElementsIconCreationOption;
+          #endif
+          if (![dragExportType isEqualTo:@"jpeg"])
+            [[NSWorkspace sharedWorkspace] setIcon:[[AppController appController] makeIconForData:[historyItem pdfData]]
+                                           forFile:filePath options:options];
           [names addObject:fileName];
         }
       }//end if item of that title already exists
@@ -493,7 +585,7 @@ static LibraryManager* sharedManagerInstance = nil;
     NSMutableArray* itemsToSelect = nil;
     if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsPboardType]])
     {
-      NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+      NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
       LibraryManager* dragDataSource = [[info draggingSource] dataSource];
       itemsToSelect = [NSMutableArray arrayWithArray:[dragDataSource _draggedItems]];
       NSArray* tmpDraggedItems = [LibraryItem minimumNodeCoverFromItemsInArray:itemsToSelect];
@@ -550,7 +642,7 @@ static LibraryManager* sharedManagerInstance = nil;
     }
     else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:HistoryItemsPboardType]])
     {
-      NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+      NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
       NSData* data = [pboard dataForType:HistoryItemsPboardType];
       NSArray* array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
       NSEnumerator* enumerator = [array objectEnumerator];
@@ -602,7 +694,7 @@ static LibraryManager* sharedManagerInstance = nil;
 
 -(void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
-  NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+  NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
   [[undo prepareWithInvocationTarget:self] outlineView:outlineView setObjectValue:[item title] 
                                         forTableColumn:tableColumn byItem:item];
   if (![undo isUndoing])
@@ -647,7 +739,7 @@ static LibraryManager* sharedManagerInstance = nil;
     newFolder = [[LibraryFolder alloc] init];
     [parent insertChild:newFolder];
 
-    NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
     [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:newFolder]];
     if (![undo isUndoing])
       [undo setActionName:NSLocalizedString(@"Add Library folder", "Add Library folder")];
@@ -683,7 +775,7 @@ static LibraryManager* sharedManagerInstance = nil;
     [newLibraryFile setValue:historyItem setAutomaticTitle:YES];
     [parent insertChild:newLibraryFile];
 
-    NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
     [[undo prepareWithInvocationTarget:self] removeItems:[NSArray arrayWithObject:newLibraryFile]];
     if (![undo isUndoing])
       [undo setActionName:NSLocalizedString(@"Add Library item", "Add Library item")];
@@ -726,7 +818,7 @@ static LibraryManager* sharedManagerInstance = nil;
       itemToRemove = [enumerator nextObject];
     }
 
-    NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
     [[undo prepareWithInvocationTarget:self] _reinsertItems:items atParents:parents atIndexes:indexes];
     if (![undo isUndoing])
     {
@@ -766,7 +858,7 @@ static LibraryManager* sharedManagerInstance = nil;
       [parent insertChild:item atIndex:index];
     }
     
-    NSUndoManager* undo = [[[AppController appController] currentDocument] undoManager];
+    NSUndoManager* undo = [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
     if ([oldParents count])
       [[undo prepareWithInvocationTarget:self] _reinsertItems:items atParents:oldParents atIndexes:oldIndexes];
     else
