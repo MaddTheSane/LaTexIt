@@ -270,10 +270,10 @@
 		937CFAE11B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
 		937CFB8D1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */; };
 		937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB8C1B1E4864006AD93E /* IsKindOfClassTransformer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		937CFB971B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; };
+		937CFB981B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFB961B1E4934006AD93E /* OutlineViewSelectedItemsTransformer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		937CFBA71B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; };
+		937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
