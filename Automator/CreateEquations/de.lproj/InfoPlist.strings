@@ -1,8 +1,6 @@
-﻿AMName = "Erstelle Gleichungen mit LaTeXiT";
+AMName = "Erstelle Gleichungen mit LaTeXiT";
 AMDInput = "URLs und Dateien werden nach ihrem Textinhalt durchsucht. Ordner erster Ordnung werden durchsucht. So gut wie möglich wird nur das als Eingabe verwendet, was als Text erkannt wurde.";
-AMDNote = "Text kann direkt als Eingabe verwendet werden. Der Text wird von der LaTeXiT-Engine bearbeitet um eine Gleichung daraus zu machen. Es muss als LaTeX-Syntax geschrieben sein. Die Einleitung und \\begin{document}... 
-\\end{document} werden automatisch um den Text gelegt, damit Sie sich ganz auf die Formulierung der Gleichung konzentrieren können. Der <mode> Parameter meldet ob es zusätzlich noch mit einem $...$ (inline), $$...$$ (display) oder 
-\\begin{eqnarray}...\\end{eqnarray} eingeschlossen werden muss. Enthält der Text schon eine Einleitung wird dies verwendet, ansonsten wird die Einleitung aus den LaTeXiT Einstellungen angewendet.";
+AMDNote = "Text kann direkt als Eingabe verwendet werden. Der Text wird von der LaTeXiT-Engine bearbeitet um eine Gleichung daraus zu machen. Es muss als LaTeX-Syntax geschrieben sein. Die Einleitung und \\begin{document}... \n\\end{document} werden automatisch um den Text gelegt, damit Sie sich ganz auf die Formulierung der Gleichung konzentrieren können. Der <mode> Parameter meldet ob es zusätzlich noch mit einem $...$ (inline), $$...$$ (display) oder \n\\begin{eqnarray}...\\end{eqnarray} eingeschlossen werden muss. Enthält der Text schon eine Einleitung wird dies verwendet, ansonsten wird die Einleitung aus den LaTeXiT Einstellungen angewendet.";
 AMDOptions = "";
 AMDRelatedActions = "";
 AMDResult = "Dateien der erstellten Gleichungen.";

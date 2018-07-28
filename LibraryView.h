@@ -24,7 +24,7 @@
 
 @property (readonly, retain) LibraryController *libraryController;
 
-@property library_row_t libraryRowType;
+@property (nonatomic) library_row_t libraryRowType;
 
 -(void) expandOutlineItems;
 

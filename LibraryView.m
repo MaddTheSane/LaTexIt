@@ -38,7 +38,7 @@
 
 #import <Carbon/Carbon.h>
 
-@interface LibraryView (PrivateAPI)
+@interface LibraryView ()
 -(NSImage*) iconForRepresentedObject:(id)representedObject;
 -(void)     activateSelectedItem:(BOOL)makeLink;
 -(void)     performProgrammaticDragCancellation:(id)context;
@@ -46,6 +46,7 @@
 @end
 
 @implementation LibraryView
+@synthesize libraryRowType;
 
 -(id) initWithCoder:(NSCoder*)coder
 {
@@ -94,7 +95,7 @@
     //folderIcon = [[[NSWorkspace sharedWorkspace] iconForFile:[[NSBundle mainBundle] resourcePath]] copy];
     folderIcon = [[[NSWorkspace sharedWorkspace] iconForFileType:NSFileTypeForHFSTypeCode(kGenericFolderIcon)] copy];
   result =
-    [representedObject isKindOfClass:[LibraryEquation class]] ? [NSImage imageNamed:@"icon-file"] :
+    [representedObject isKindOfClass:[LibraryEquation class]] ? [[NSWorkspace sharedWorkspace] iconForFileType:NSFileTypeForHFSTypeCode(kGenericDocumentIcon)] :
     [representedObject isKindOfClass:[LibraryGroupItem class]] ? folderIcon :
     nil;
   return result;
@@ -118,12 +119,6 @@
   [managedObjectContext enableUndoRegistration];
 }
 //end expandOutlineItems
-
--(library_row_t) libraryRowType
-{
-  return self->libraryRowType;
-}
-//end libraryRowType
 
 -(void) setLibraryRowType:(library_row_t)type
 {
