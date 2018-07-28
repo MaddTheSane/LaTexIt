@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,7 +46,7 @@
                                     <rect key="frame" x="0.0" y="25" width="200" height="87"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <clipView key="contentView" autoresizesSubviews="NO" id="kcD-J4-Kny">
-                                        <rect key="frame" x="1" y="1" width="198" height="85"/>
+                                        <rect key="frame" x="1" y="1" width="183" height="85"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <matrix verticalHuggingPriority="750" drawsBackground="YES" selectionByRect="NO" id="670" customClass="PaletteMatrix">
@@ -77,7 +76,7 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="724">
-                                        <rect key="frame" x="183" y="1" width="16" height="85"/>
+                                        <rect key="frame" x="184" y="1" width="15" height="85"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
@@ -92,7 +91,7 @@
                                         <action selector="openOrHideDetails:" target="-2" id="691"/>
                                     </connections>
                                 </button>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="658">
+                                <textField verticalHuggingPriority="750" id="658">
                                     <rect key="frame" x="31" y="5" width="41" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Details" id="714">
@@ -138,7 +137,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="719"/>
                             </imageView>
-                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="646">
+                            <textField verticalHuggingPriority="750" id="646">
                                 <rect key="frame" x="2" y="22" width="74" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="LaTeX Code :" id="721">
@@ -147,7 +146,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="643">
+                            <textField verticalHuggingPriority="750" id="643">
                                 <rect key="frame" x="2" y="5" width="58" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Requires :" id="718">
@@ -156,7 +155,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="645">
+                            <textField verticalHuggingPriority="750" id="645">
                                 <rect key="frame" x="62" y="5" width="142" height="14"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="\usepackage{amsmath}" id="720">
@@ -165,7 +164,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="642">
+                            <textField verticalHuggingPriority="750" id="642">
                                 <rect key="frame" x="75" y="22" width="129" height="14"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="\bigtriangledown" id="717">
@@ -174,7 +173,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="695">
+                            <textField verticalHuggingPriority="750" id="695">
                                 <rect key="frame" x="5" y="142" width="190" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Author : Pierre Chatelier" id="722">

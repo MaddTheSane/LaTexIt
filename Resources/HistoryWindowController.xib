@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -41,7 +41,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Cfw-Ql-NEj">
                             <rect key="frame" x="1" y="1" width="211" height="197"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" autosaveColumns="NO" rowHeight="100" id="9" customClass="HistoryView">
                                     <rect key="frame" x="0.0" y="0.0" width="211" height="197"/>
@@ -89,12 +89,12 @@
                         </connections>
                     </button>
                     <segmentedControl verticalHuggingPriority="750" id="25">
-                        <rect key="frame" x="174" y="7" width="33" height="20"/>
+                        <rect key="frame" x="174" y="7" width="33" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectOne" id="62">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
-                                <segment image="magnifying-glass" imageScaling="none" width="27" tag="1"/>
+                                <segment image="magnifying-glass" width="27" tag="1"/>
                             </segments>
                         </segmentedCell>
                         <connections>
@@ -1010,8 +1010,8 @@ AK8AtAC3ALkAuwC9AL8AxADbAN0A37ftt/K3/bgGuBm4HbgouDG4Nrg+uEG4RrhVuFm4YLhouHW4erh8
 uH64g7iLuI64k7ibuJ64sLizuLgAAAAAAAACAQAAAAAAAABBAAAAAAAAAAAAAAAAAAC4ug
 </mutableData>
         </image>
-        <image name="locked" width="24.5" height="24"/>
-        <image name="magnifying-glass" width="23.5" height="18"/>
+        <image name="locked" width="25" height="24"/>
+        <image name="magnifying-glass" width="24" height="18"/>
         <image name="unlocked" width="24" height="24"/>
     </resources>
 </document>

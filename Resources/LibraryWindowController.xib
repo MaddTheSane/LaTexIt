@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -278,20 +278,20 @@
         <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="211" userLabel="commentTextView">
             <rect key="frame" x="0.0" y="0.0" width="240" height="135"/>
             <autoresizingMask key="autoresizingMask"/>
-            <clipView key="contentView" id="pn3-nm-x3G">
+            <clipView key="contentView" drawsBackground="NO" id="pn3-nm-x3G">
                 <rect key="frame" x="1" y="1" width="238" height="133"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="214">
                         <rect key="frame" x="0.0" y="0.0" width="238" height="133"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         <size key="minSize" width="238" height="133"/>
                         <size key="maxSize" width="463" height="10000000"/>
                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                     </textView>
                 </subviews>
-                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             </clipView>
             <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="213">
                 <rect key="frame" x="-100" y="-100" width="87" height="18"/>
@@ -310,7 +310,7 @@
                 <outlet property="parentWindow" destination="5" id="225"/>
             </connections>
         </drawer>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="238" userLabel="importTeXPanel" customClass="NSPanel">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="238" userLabel="importTeXPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="162" y="203" width="408" height="276"/>
@@ -338,7 +338,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="ppC-H1-jAM">
                             <rect key="frame" x="1" y="0.0" width="373" height="153"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" headerView="246" id="245">
                                     <rect key="frame" x="0.0" y="0.0" width="373" height="130"/>
@@ -483,7 +483,7 @@ DQ
         <image name="NSHomeTemplate" width="14" height="14"/>
         <image name="NSIconViewTemplate" width="10" height="10"/>
         <image name="NSListViewTemplate" width="14" height="10"/>
-        <image name="magnifying-glass" width="23.5" height="18"/>
+        <image name="magnifying-glass" width="24" height="18"/>
         <image name="view-icons-adjust" width="20" height="20"/>
     </resources>
 </document>

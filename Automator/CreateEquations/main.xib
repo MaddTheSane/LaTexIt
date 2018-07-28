@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -36,11 +36,11 @@
                     <tabViewItems>
                         <tabViewItem identifier="warning" id="100111">
                             <view key="view" id="100114">
-                                <rect key="frame" x="0.0" y="0.0" width="392" height="128"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="0.0" y="0.0" width="396" height="124"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="100038">
-                                        <rect key="frame" x="44" y="47" width="303" height="34"/>
+                                    <textField verticalHuggingPriority="750" id="100038">
+                                        <rect key="frame" x="44" y="46" width="307" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Vous devez exécuter LaTeXiT une fois, pour initialiser sa configuration" id="100039">
                                             <font key="font" metaFont="system"/>
@@ -57,7 +57,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <segmentedControl toolTip="Display math mode: \[...\], inline math mode : $...$" verticalHuggingPriority="750" id="100049">
-                                        <rect key="frame" x="30" y="96" width="336" height="20"/>
+                                        <rect key="frame" x="30" y="96" width="336" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectOne" id="100050">
                                             <font key="font" metaFont="smallSystem"/>
@@ -77,7 +77,7 @@
                                         <rect key="frame" x="18" y="4" width="360" height="88"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="100047">
+                                            <textField verticalHuggingPriority="750" id="100047">
                                                 <rect key="frame" x="67" y="63" width="33" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Size :" id="100052">
@@ -86,7 +86,7 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="100046">
+                                            <textField verticalHuggingPriority="750" id="100046">
                                                 <rect key="frame" x="101" y="61" width="69" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="36.00 pt" drawsBackground="YES" id="100053">
@@ -109,7 +109,7 @@
                                                         <decimal key="maximum" value="1000"/>
                                                     </numberFormatter>
                                                     <font key="font" metaFont="smallSystem"/>
-                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                                 <connections>
@@ -127,7 +127,7 @@
                                                     <binding destination="6" name="value" keyPath="selection.fontSize" id="100077"/>
                                                 </connections>
                                             </stepper>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="100048">
+                                            <textField verticalHuggingPriority="750" id="100048">
                                                 <rect key="frame" x="202" y="63" width="40" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Color :" id="100051">
@@ -171,7 +171,7 @@
                                                     <action selector="generalExportFormatOptionsOpen:" target="-2" id="100108"/>
                                                 </connections>
                                             </button>
-                                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="100073">
+                                            <textField verticalHuggingPriority="750" id="100073">
                                                 <rect key="frame" x="43" y="8" width="102" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Create equations :" id="100074">
@@ -220,6 +220,6 @@
                 <binding destination="-2" name="contentObject" keyPath="parameters" id="12"/>
             </connections>
         </objectController>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
     </objects>
 </document>
