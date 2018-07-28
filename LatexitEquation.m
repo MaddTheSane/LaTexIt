@@ -95,11 +95,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
   if (okString)
   {
     CFStringRef cfString = CGPDFStringCopyTextString(pdfString);
-    #ifdef ARC_ENABLED
-    NSString* string = (__bridge_transfer NSString*)cfString;
-    #else
-    NSString* string = [(NSString*)cfString autorelease];
-    #endif
+    NSString *string = CFBridgingRelease(cfString);
     DebugLogStatic(1, @"PDF scanning found <%@>", string);
     NSError* error = nil;
     NSArray* components =

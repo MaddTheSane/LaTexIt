@@ -322,19 +322,19 @@
 
 -(IBAction) changeGroup:(id)sender
 {
-  int tag = [sender selectedTag];
+  NSInteger tag = [sender selectedTag];
   if ((tag >= 0) && ((unsigned int)tag < [orderedPalettes count]))
   {
     NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
     NSString* author = [palette objectForKey:@"author"];
     [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author]];
     NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
-    unsigned int numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntValue] == 0) ?
+    NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
                                        4 : [numberOfItemsPerRowNumber unsignedIntValue];
     NSArray* items = [palette objectForKey:@"items"];
-    unsigned int nbItems = [items count];
-    int nbColumns = numberOfItemsPerRow;
-    int nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
+    NSUInteger nbItems = [items count];
+    NSInteger nbColumns = numberOfItemsPerRow;
+    NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
     PaletteCell* prototype = [[[PaletteCell alloc] initImageCell:nil] autorelease];
     [prototype setImageAlignment:NSImageAlignCenter];
     [prototype setImageScaling:NSScaleToFit];
@@ -342,11 +342,11 @@
       [matrix removeRow:0];
     [matrix setPrototype:prototype];
     [matrix renewRows:nbRows columns:nbColumns];
-    unsigned int i = 0;
+    NSUInteger i = 0;
     for(i = 0 ; i<nbItems ; ++i)
     {
-      int row    = i/numberOfItemsPerRow;
-      int column = i%numberOfItemsPerRow;
+      NSInteger row    = i/numberOfItemsPerRow;
+      NSInteger column = i%numberOfItemsPerRow;
       NSImageCell* cell = (NSImageCell*) [matrix cellAtRow:row column:column];
       PaletteItem* item = [items objectAtIndex:i];
       [cell setRepresentedObject:item];

@@ -355,7 +355,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           migrationError = YES;
           DebugLog(0, @"exception : %@", e);
         }
-        unsigned int count = [historyItems count];
+        NSUInteger count = [historyItems count];
         [migratingProgressIndicator setIndeterminate:NO];
         [migratingProgressIndicator setMinValue:0.];
         [migratingProgressIndicator setMaxValue:1.*count];
@@ -386,7 +386,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSError* error = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
       unsigned int progression = 0;
-      unsigned int count = [latexitEquations count];
+      NSUInteger count = [latexitEquations count];
       [migratingProgressIndicator setIndeterminate:NO];
       [migratingProgressIndicator setMaxValue:1.*count];
       [migratingProgressIndicator setDoubleValue:0.];
