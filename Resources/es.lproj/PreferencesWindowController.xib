@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -523,7 +524,7 @@
                                         <rect key="frame" x="20" y="53" width="514" height="113"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="aBO-nh-Q0i">
-                                            <rect key="frame" x="1" y="1" width="497" height="111"/>
+                                            <rect key="frame" x="1" y="1" width="512" height="111"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="947" customClass="LineCountTextView">
@@ -531,7 +532,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="497" height="111"/>
+                                                    <size key="minSize" width="512" height="111"/>
                                                     <size key="maxSize" width="907" height="10000000"/>
                                                     <attributedString key="textStorage">
                                                         <fragment>
@@ -1362,7 +1363,7 @@ algo de texto &amp; $algunas mates$ \\
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9212">
-                                                        <rect key="frame" x="-30" y="1" width="15" height="134"/>
+                                                        <rect key="frame" x="451" y="1" width="16" height="84"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
@@ -1389,7 +1390,7 @@ algo de texto &amp; $algunas mates$ \\
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn width="473" minWidth="38.27685546875" maxWidth="1000" id="1083">
+                                                                    <tableColumn identifier="" width="473" minWidth="38.27685546875" maxWidth="1000" id="1083">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Script">
                                                                             <font key="font" metaFont="smallSystem"/>
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1488,7 +1489,7 @@ algo de texto &amp; $algunas mates$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="335"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <tabView autoresizesSubviews="NO" id="9331">
+                <tabView id="9331">
                     <rect key="frame" x="13" y="10" width="574" height="311"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <font key="font" metaFont="system"/>
@@ -1496,7 +1497,7 @@ algo de texto &amp; $algunas mates$ \\
                         <tabViewItem label="Preámbulo" identifier="1" id="9332">
                             <view key="view" id="9335">
                                 <rect key="frame" x="10" y="33" width="554" height="265"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <box borderType="line" titlePosition="noTitle" id="5839">
                                         <rect key="frame" x="16" y="5" width="524" height="97"/>
@@ -1595,7 +1596,7 @@ algo de texto &amp; $algunas mates$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="7BI-Vg-nZg">
                                             <rect key="frame" x="1" y="1" width="391" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="391" height="132"/>
@@ -1639,7 +1640,7 @@ algo de texto &amp; $algunas mates$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="GKu-D6-M8b">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1749,15 +1750,15 @@ algo de texto &amp; $algunas mates$ \\
                                         <rect key="frame" x="144" y="195" width="393" height="67"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="m4G-s1-Eqt">
-                                            <rect key="frame" x="1" y="1" width="376" height="65"/>
+                                            <rect key="frame" x="1" y="1" width="391" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9260" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-6.01171875" width="391" height="96.01171875"/>
+                                                    <rect key="frame" x="0.0" y="-6.01171875" width="391" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="376" height="65"/>
+                                                    <size key="minSize" width="391" height="65"/>
                                                     <size key="maxSize" width="760" height="10000000"/>
                                                     <attributedString key="textStorage">
                                                         <fragment>
@@ -1790,15 +1791,15 @@ algo de texto &amp; $algunas mates$ \\
                                         <rect key="frame" x="144" y="128" width="393" height="68"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="kNr-YR-OSw">
-                                            <rect key="frame" x="1" y="1" width="376" height="66"/>
+                                            <rect key="frame" x="1" y="1" width="391" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9265" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-6.01171875" width="391" height="96.01171875"/>
+                                                    <rect key="frame" x="0.0" y="-6.01171875" width="391" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="376" height="66"/>
+                                                    <size key="minSize" width="391" height="66"/>
                                                     <size key="maxSize" width="760" height="10000000"/>
                                                     <attributedString key="textStorage">
                                                         <fragment>
@@ -1940,7 +1941,7 @@ algo de texto &amp; $algunas mates$ \\
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="G2O-EX-Gy6">
                                     <rect key="frame" x="1" y="1" width="397" height="152"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9315" customClass="EncapsulationsTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="397" height="152"/>
@@ -2067,7 +2068,7 @@ algo de texto &amp; $algunas mates$ \\
                         <tabViewItem label="Configuración" identifier="" id="1025">
                             <view key="view" id="1027">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <customView id="8921">
                                         <rect key="frame" x="80" y="2" width="394" height="244"/>
@@ -2233,14 +2234,14 @@ algo de texto &amp; $algunas mates$ \\
                         <tabViewItem label="Combinaciones de teclas" identifier="" id="1026">
                             <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1029">
                                         <rect key="frame" x="13" y="44" width="528" height="149"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="u8z-ek-JpX">
                                             <rect key="frame" x="1" y="0.0" width="526" height="148"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9219" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="527" height="125"/>
@@ -2291,7 +2292,7 @@ algo de texto &amp; $algunas mates$ \\
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
-                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="NSStatusNone" id="1032"/>
+                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="NSApplicationIcon" id="1032"/>
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
@@ -2322,8 +2323,8 @@ algo de texto &amp; $algunas mates$ \\
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button imageHugsTitle="YES" id="1045">
-                                        <rect key="frame" x="92" y="8" width="370" height="28"/>
+                                    <button misplaced="YES" imageHugsTitle="YES" id="1045">
+                                        <rect key="frame" x="86" y="8" width="382" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="left" imageScaling="proportionallyDown" inset="2" id="9170">
                                             <behavior key="behavior" lightByContents="YES"/>
@@ -2347,7 +2348,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                         <tabViewItem label="Filtros" identifier="Item 2" id="9357">
                             <view key="view" id="9358">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button toolTip="supprimer l'élément sélectionné" imageHugsTitle="YES" id="9359">
                                         <rect key="frame" x="39" y="88" width="23" height="20"/>
@@ -2373,7 +2374,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="7Kz-8C-OYJ">
                                             <rect key="frame" x="1" y="0.0" width="518" height="93"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9368" id="9371" customClass="ServiceRegularExpressionFiltersTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="519" height="70"/>
@@ -2462,7 +2463,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" drawsBackground="NO" id="uaN-mJ-OEy">
                                             <rect key="frame" x="1" y="1" width="254" height="61"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9398" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="254" height="61"/>
@@ -2489,7 +2490,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" drawsBackground="NO" id="cC9-Ze-Tp7">
                                             <rect key="frame" x="1" y="1" width="254" height="61"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9397" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="254" height="61"/>
@@ -2678,7 +2679,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9489">
-                                                                    <rect key="frame" x="179" y="1" width="15" height="13"/>
+                                                                    <rect key="frame" x="393" y="1" width="16" height="148"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
@@ -2705,7 +2706,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                             <tableColumns>
-                                                                                <tableColumn width="417" minWidth="38.27685546875" maxWidth="1000" id="9496">
+                                                                                <tableColumn identifier="" width="417" minWidth="38.27685546875" maxWidth="1000" id="9496">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Script">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -2990,7 +2991,7 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="XxP-1H-y7r">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9232" id="1130" customClass="CompositionConfigurationsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="145"/>
@@ -3168,8 +3169,8 @@ Es necesario asignar otra combinación de teclas para esta acción.</string>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSApplicationIcon" width="128" height="128"/>
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
-        <image name="NSStatusNone" width="16" height="16"/>
     </resources>
 </document>
