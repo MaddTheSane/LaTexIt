@@ -23,12 +23,6 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 }
 //end initWithCoder:
 
--(void) dealloc
-{
-  [errorLines release];
-  [super dealloc];
-}
-
 -(void) awakeFromNib
 {
   [self setDelegate:self];

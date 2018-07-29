@@ -37,7 +37,7 @@
 
 +(id) transformerWithReference:(id)reference
 {
-  id result = [[[[self class] alloc] initWithReference:reference] autorelease];
+  id result = [[[self class] alloc] initWithReference:reference];
   return result;
 }
 //end transformerWithReference:
@@ -46,16 +46,11 @@
 {
   if ((!(self = [super init])))
     return nil;
-  self->reference = [aReference retain];
+  self->reference = aReference;
   return self;
 }
 //end initWithFalseValue:
 
--(void) dealloc
-{
-  [self->reference release];
-  [super dealloc];
-}
 //end dealloc
 
 -(id) transformedValue:(id)value

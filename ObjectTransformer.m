@@ -37,7 +37,7 @@
 
 +(id) transformerWithDictionary:(NSDictionary*)dictionary
 {
-  id result = [[[[self class] alloc] initWithDictionary:dictionary] autorelease];
+  id result = [[[self class] alloc] initWithDictionary:dictionary];
   return result;
 }
 //end transformerWithDictionary:
@@ -50,13 +50,6 @@
   return self;
 }
 //end initWithDescriptors:
-
--(void) dealloc
-{
-  [self->dictionary release];
-  [super dealloc];
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

@@ -13,6 +13,6 @@
   NSColor* backgroundColor;
 }
 
-@property (retain) NSColor *backgroundColor;
+@property (strong) NSColor *backgroundColor;
 
 @end

@@ -30,7 +30,7 @@
 
 -(void) setTitle:(NSString*)value;//redefined to set title of equation with the same value
 
-@property (retain) LatexitEquation *equation;
+@property (strong) LatexitEquation *equation;
 
 -(id) plistDescription;
 

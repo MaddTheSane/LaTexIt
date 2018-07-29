@@ -41,8 +41,6 @@
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [self->orderedPalettes release];
-  [super dealloc];
 }
 //end dealloc
 
@@ -224,7 +222,6 @@
                                      ];
             if (paletteItem)
               [palette addObject:paletteItem];
-            [paletteItem release];
           }//end if item is a dictionary
         }//end for each item
         
@@ -243,10 +240,9 @@
   }//end for each bundle
   
   [palettesAsDictionariesByBundle makeObjectsPerformSelector:@selector(sortUsingDescriptors:)
-     withObject:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"localizedName" ascending:YES] autorelease],
-                                          [[[NSSortDescriptor alloc] initWithKey:@"index"         ascending:YES] autorelease], nil]];
+     withObject:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"localizedName" ascending:YES],
+                                          [[NSSortDescriptor alloc] initWithKey:@"index"         ascending:YES], nil]];
 
-  [self->orderedPalettes release];
   self->orderedPalettes = [[NSMutableArray alloc] init];
   NSEnumerator* enumerator = [palettesAsDictionariesByBundle objectEnumerator];
   NSArray* orderedPalettesInBundle = nil;
@@ -335,7 +331,7 @@
     NSUInteger nbItems = [items count];
     NSInteger nbColumns = numberOfItemsPerRow;
     NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
-    PaletteCell* prototype = [[[PaletteCell alloc] initImageCell:nil] autorelease];
+    PaletteCell* prototype = [[PaletteCell alloc] initImageCell:nil];
     [prototype setImageAlignment:NSImageAlignCenter];
     [prototype setImageScaling:NSImageScaleAxesIndependently];
     while([matrix numberOfRows])
@@ -369,7 +365,6 @@
     unsigned int oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
     [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];
 
-    [detailsBox retain];
     [detailsBox removeFromSuperviewWithoutNeedingDisplay];
     
     NSWindow* window = [self window];
@@ -397,7 +392,6 @@
     unsigned int oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
     [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];
 
-    [detailsBox retain];
     [detailsBox removeFromSuperviewWithoutNeedingDisplay];
     
     NSWindow* window = [self window];

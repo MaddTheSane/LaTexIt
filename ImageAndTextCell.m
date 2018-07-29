@@ -17,28 +17,18 @@
 
 @implementation ImageAndTextCell
 
--(void) dealloc
-{
-  [self->image release];
-  [self->imageBackgroundColor release];
-  [super dealloc];
-}
-//end dealloc
-
 //NSCopying protocol
 -(id) copyWithZone:(NSZone*)zone
 {
   ImageAndTextCell* clone = (ImageAndTextCell*) [super copyWithZone:zone];
   if (clone)
-    clone->image = [self->image retain];
+    clone->image = self->image;
   return clone;
 }
 //end copyWithZone:
 
 -(void) setImage:(NSImage*)anImage
 {
-  [anImage retain];
-  [self->image release];
   self->image = anImage;
 }
 //end setImage:
@@ -51,8 +41,6 @@
 
 -(void) setImageBackgroundColor:(NSColor*)anImageBackgroundColor
 {
-  [anImageBackgroundColor retain];
-  [self->imageBackgroundColor release];
   self->imageBackgroundColor = anImageBackgroundColor;
 }
 //end setImage:
@@ -153,7 +141,6 @@
     [wrapImage drawInRect:NSMakeRect(0.f, 0.f, imageFrame.size.width, imageFrame.size.height)
                    fromRect:NSMakeRect(0.f, 0.f, imageSize.width, imageSize.height)
                   operation:NSCompositeSourceOver fraction:1.0f];
-    [wrapImage release];
     [NSGraphicsContext restoreGraphicsState];
   }//end if image
   

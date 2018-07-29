@@ -89,7 +89,7 @@ static LibraryManager* sharedManagerInstance = nil;
 
 -(NSUInteger) retainCount
 {
-  return UINT_MAX;  //denotes an object that cannot be released
+  return NSUIntegerMax;  //denotes an object that cannot be released
 }
 
 -(oneway void) release
@@ -1142,7 +1142,7 @@ static LibraryManager* sharedManagerInstance = nil;
   NSMutableArray* texItems = [NSMutableArray array];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   NSString* fileUti = [fileManager UTIFromPath:filename];
-  BOOL conformsToTex = UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tex")) || UTTypeConformsTo((CFStringRef)fileUti, kUTTypePlainText);
+  BOOL conformsToTex = UTTypeConformsTo((__bridge CFStringRef)fileUti, CFSTR("public.tex")) || UTTypeConformsTo((__bridge CFStringRef)fileUti, kUTTypePlainText);
   if (conformsToTex)
   {
     NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename usedEncoding:NULL error:NULL];

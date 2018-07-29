@@ -74,13 +74,6 @@
 }
 //end awakeFromNib
 
--(void) dealloc
-{
-  [self->libraryController release];
-  [super dealloc];
-}
-//end dealloc
-
 -(LibraryController*) libraryController
 {
   return self->libraryController;
@@ -466,7 +459,7 @@
   NSText* fieldEditor = [[notification object] dynamicCastToClass:[NSText class]];
   if (fieldEditor)
   {
-    id newTitle = [[[fieldEditor string] copy] autorelease];
+    id newTitle = [[fieldEditor string] copy];
     LibraryItem* selectedItem = [self selectedItem];
     NSString* oldTitle = [selectedItem title];
     if (selectedItem && ![newTitle isEqualToString:oldTitle])
@@ -486,7 +479,7 @@
 -(BOOL) textShouldEndEditing:(NSText*)textObject
 {
   LibraryItem* libraryItem = [self selectedItem];
-  NSString* newTitle = [[[textObject string] copy] autorelease];
+  NSString* newTitle = [[textObject string] copy];
   [libraryItem setTitle:newTitle];
   return YES;
 }
@@ -636,7 +629,6 @@
       if (libraryEquation)
       {
         [libraryItems addObject:libraryEquation];
-        [libraryEquation release];
       }//end if (libraryEquation)
     }//end for each latexitEquation
   }
@@ -653,9 +645,7 @@
       if (libraryEquation)
       {
         libraryItems = [NSMutableArray arrayWithObject:libraryEquation];
-        [libraryEquation release];
       }//end if (libraryEquation)
-      [latexitEquation release];
     }//end if (pdfData)
   }//end if NSPDFPboardType
 

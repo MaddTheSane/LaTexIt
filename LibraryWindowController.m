@@ -68,11 +68,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) dealloc
 {
-  [self->importTeXOptions release];  
-  [self->importTeXArrayController release];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:LibraryDisplayPreviewPanelKey];
-  [super dealloc]; 
 }
 //end dealloc
 
@@ -136,7 +133,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
   [self->actionButton setMenu:actionMenu];
   [actionMenu setDelegate:self];
-  [actionMenu release];
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
   
   [self->libraryPreviewPanelSegmentedControl setToolTip:NSLocalizedString(@"Display the equations in real size on mouse over", @"Display the equations in real size on mouse over")];
@@ -242,7 +238,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   if ([aNotification object] == self->commentTextView)
   {
     LibraryEquation* libraryEquation = [[self->libraryView selectedItem] dynamicCastToClass:[LibraryEquation class]];
-    NSString* comment = [[[self->commentTextView string] copy] autorelease];
+    NSString* comment = [[self->commentTextView string] copy];
     [libraryEquation setComment:!comment || [comment isEqualToString:@""] ? nil : comment];
   }//end if ([aNotification object] == self->commentTextView)
 }
@@ -370,8 +366,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->libraryView reloadData];
   [self->libraryView sizeLastColumnToFit];
   [self->libraryView selectItem:newLibraryEquation byExtendingSelection:NO];
-  if (newLibraryEquation)
-    [newLibraryEquation release];
 }
 //end importCurrent:
 
@@ -438,8 +432,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->libraryView reloadData];
   [self->libraryView sizeLastColumnToFit];
   [self->libraryView selectItem:newLibraryGroupItem byExtendingSelection:NO];
-  if (newLibraryGroupItem)
-    [newLibraryGroupItem release];
   [self->libraryView performSelector:@selector(edit:) withObject:self afterDelay:0.];
 }
 //end newFolder:
@@ -473,7 +465,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         [alert addButtonWithTitle:NSLocalizedString(@"Update the equation", @"Update the equation")];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
         cancel = ([alert runModal] == NSAlertSecondButtonReturn);
-        [alert release];
       }
 
       if (!cancel)
@@ -544,7 +535,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   [openPanel setDelegate:self];
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
-  [openPanel setAccessoryView:[importAccessoryView retain]];
+  [openPanel setAccessoryView:importAccessoryView];
   openPanel.allowedFileTypes = @[@"latexlib", @"latexhist", @"library", @"plist", @"tex"];
   if ([[self window] isVisible]) {
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
@@ -568,7 +559,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       alert.messageText = NSLocalizedString(@"Loading error", @"Loading error");
       alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format");
       [alert runModal];
-      [alert release];
     }
     else
     {
@@ -610,11 +600,11 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(IBAction) saveAs:(id)sender
 {
-  self->savePanel = [[NSSavePanel savePanel] retain];
+  self->savePanel = [NSSavePanel savePanel];
   [self->savePanel setTitle:NSLocalizedString(@"Export library...", @"Export library...")];
   [self changeLibraryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
-  [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
+  [self->savePanel setAccessoryView:self->exportAccessoryView];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
   savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
@@ -647,10 +637,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       alert.informativeText = @"";
       
       [alert runModal];
-      [alert release];
     }//end if (ok)
   }
-  [self->savePanel release];
   self->savePanel = nil;
 }
 //end _savePanelDidEnd:returnCode:contextInfo:
@@ -779,7 +767,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     while((texItem = [enumerator nextObject]))
     {
       NSDictionary* texItemDict = [texItem dynamicCastToClass:[NSDictionary class]];
-      TeXItemWrapper* wrapper = !texItem ? nil : [[[TeXItemWrapper alloc] initWithItem:texItemDict] autorelease];
+      TeXItemWrapper* wrapper = !texItem ? nil : [[TeXItemWrapper alloc] initWithItem:texItemDict];
       [dataSource safeAddObject:wrapper];
     }//end while((texItem = [enumerator nextObject]))
     if (!self->importTeXArrayController)
@@ -830,7 +818,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                nil]], NSValueTransformerBindingOption,
          nil]];
 
-    [self->importTeXOptions release];
     self->importTeXOptions = [options copy];
     [NSApp beginSheet:self->importTeXPanel modalForWindow:[self window] modalDelegate:self
        didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
@@ -889,7 +876,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   NSArray* itemsToRemove = nil;
   if (importOption && ([importOption integerValue] == LIBRARY_IMPORT_OVERWRITE))
     itemsToRemove = [libraryManager allItems];
-  [self->importTeXOptions release];
   self->importTeXOptions = nil;
 
   souldImport = (sender == self->importTeXImportButton);
@@ -901,7 +887,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   }//end @autoreleasepool
   [NSApp endSheet:self->importTeXPanel returnCode:(souldImport ? 1 : 0)];
   [self->importTeXArrayController removeObserver:self forKeyPath:@"arrangedObjects.checked"];
-  [self->importTeXArrayController release];
   self->importTeXArrayController = nil;
 }
 //end closeImportTeXItems:
@@ -963,7 +948,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         [[proposedLocationAsEquation parent] dynamicCastToClass:[LibraryGroupItem class]];
       LatexitEquation* latexitEquation = teXItem.equation;
       LibraryEquation* libraryEquation = !latexitEquation ? nil :
-        [[[LibraryEquation alloc] initWithParent:parent equation:latexitEquation insertIntoManagedObjectContext:[libraryManager managedObjectContext]] autorelease];
+        [[LibraryEquation alloc] initWithParent:parent equation:latexitEquation insertIntoManagedObjectContext:[libraryManager managedObjectContext]];
       if (libraryEquation)
       {
        [libraryEquation setBestTitle];
@@ -981,7 +966,6 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     NSUInteger nbBrothers = [brothers count];
     while(nbBrothers--)
       [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
-    [newLibraryRootItems release];
   }//end if (isFullImport))
 
   [self->importTeXArrayController rearrangeObjects];
@@ -993,7 +977,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   TeXItemWrapper* teXItem = [[configuration objectForKey:@"context"] dynamicCastToClass:[TeXItemWrapper class]];
   NSData* pdfData = [[configuration objectForKey:@"outPdfData"] dynamicCastToClass:[NSData class]];
   LatexitEquation* latexitEquation = ![pdfData length] ? nil :
-    [[[LatexitEquation alloc] initWithData:pdfData sourceUTI:(NSString*)kUTTypePDF useDefaults:YES] autorelease];
+    [[LatexitEquation alloc] initWithData:pdfData sourceUTI:(NSString*)kUTTypePDF useDefaults:YES];
   teXItem.importState = !latexitEquation ? 3 : 2;
   teXItem.equation = latexitEquation;
   [self->importTeXArrayController rearrangeObjects];
@@ -1020,7 +1004,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     NSUInteger alignDisabledCount = 0;
     NSUInteger eqnarrayEnabledCount = 0;
     NSUInteger eqnarrayDisabledCount = 0;
-    NSArray* arrangedObjects = [[[self->importTeXArrayController arrangedObjects] mutableCopy] autorelease];
+    NSArray* arrangedObjects = [[self->importTeXArrayController arrangedObjects] mutableCopy];
     NSEnumerator* enumerator = [arrangedObjects objectEnumerator];
     TeXItemWrapper* teXItem = nil;
     while((teXItem = [enumerator nextObject]))

@@ -18,7 +18,7 @@ static NSImage* errorIcon = nil;
 +(void) initialize
 {
   if (!errorIcon)
-    errorIcon = [[NSImage imageNamed:@"error"] retain];
+    errorIcon = [NSImage imageNamed:@"error"];
 }
 //end initialize
 
@@ -36,7 +36,6 @@ static NSImage* errorIcon = nil;
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [super dealloc];
 }
 //end dealloc
 
@@ -73,8 +72,8 @@ static NSImage* errorIcon = nil;
     if (NSIntersectsRect(rect, visibleRect))
     {
       NSString* numberString = [NSString stringWithFormat:@"%ld", lineNumber+lineShift];
-      NSAttributedString* attrNumberString = [[[NSAttributedString alloc] initWithString:numberString
-                                                                          attributes:attributes] autorelease];
+      NSAttributedString* attrNumberString = [[NSAttributedString alloc] initWithString:numberString
+                                                                          attributes:attributes];
       NSPoint origin = NSMakePoint([self frame].size.width-[attrNumberString size].width-2,
                                    rect.origin.y-visibleRect.origin.y);
       [attrNumberString drawAtPoint:origin];
@@ -100,7 +99,6 @@ static NSImage* errorIcon = nil;
       [[NSRulerMarker alloc] initWithRulerView:self markerLocation:rect.origin.y image:errorIcon
                                    imageOrigin:NSMakePoint(0, iconSize.height)];
     [self addMarker:marker];
-    [marker release];
     [self addToolTipRect:NSMakeRect(0,rect.origin.y, iconSize.width, iconSize.height) owner:message userData:NULL];
     [self setNeedsDisplay:YES];
   }

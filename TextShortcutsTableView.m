@@ -27,12 +27,6 @@ static NSString* EditionTextShortcutsPboardType = @"EditionTextShortcutsPboardTy
 }
 //end initWithCoder:
 
--(void) dealloc
-{
-  [super dealloc];
-}
-//end dealloc
-
 -(void) awakeFromNib
 {
   [self setDelegate:(id)self];

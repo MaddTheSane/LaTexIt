@@ -17,17 +17,8 @@
 
 @implementation LibraryPreviewPanelImageView
 
--(void) dealloc
-{
-  [self->backgroundColor release];
-  [super dealloc];
-}
-//end dealloc
-
 -(void) setBackgroundColor:(NSColor*)color
 {
-  [color retain];
-  [self->backgroundColor release];
   self->backgroundColor = color;
 }
 //end setBackgroundColor:
@@ -40,7 +31,7 @@
 
 -(void) drawRect:(NSRect)rect
 {
-  NSImage* image = [[self image] retain];
+  NSImage* image = [self image];
   //[image setBackgroundColor:[NSColor clearColor]];
   [image setBackgroundColor:self->backgroundColor];
   NSSize size = image ? [image size] : NSZeroSize;
@@ -58,7 +49,6 @@
   else
     [[image bestImageRepresentationInContext:[NSGraphicsContext currentContext]] drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
   [self setImage:image];
-  [image release];
 }
 //end drawRect:
 

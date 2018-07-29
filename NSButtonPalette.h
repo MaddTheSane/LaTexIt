@@ -13,7 +13,7 @@
 @interface NSButtonPalette : NSObject {
   NSMutableArray<NSButton*>* buttons;
   BOOL isExclusive;
-  id<NSButtonPaletteDelegate> delegate;
+  id<NSButtonPaletteDelegate> __unsafe_unretained delegate;
 }
 
 @property (getter=isExclusive) BOOL exclusive;
@@ -23,7 +23,7 @@
 -(NSButton*) buttonWithState:(NSInteger)state;
 @property NSInteger selectedTag;
 
-@property (assign) id<NSButtonPaletteDelegate> delegate;
+@property (unsafe_unretained) id<NSButtonPaletteDelegate> delegate;
 -(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;
 
 @end

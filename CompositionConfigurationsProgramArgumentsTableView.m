@@ -31,17 +31,8 @@ static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"Composi
 }
 //end initWithCoder:
 
--(void) dealloc
-{
-  [self->controller release];
-  [super dealloc];
-}
-//end dealloc
-
 -(void) setController:(CompositionConfigurationsProgramArgumentsController*)aController
 {
-  [aController retain];
-  [self->controller release];
   self->controller = aController;
   [self bind:NSContentBinding toObject:self->controller withKeyPath:@"arrangedObjects" options:nil];
   [self bind:NSSelectionIndexesBinding toObject:self->controller withKeyPath:NSSelectionIndexesBinding options:nil];

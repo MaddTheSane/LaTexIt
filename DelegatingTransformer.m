@@ -38,7 +38,7 @@
 
 +(id) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context
 {
-  id result = [[[[self class] alloc] initWithDelegate:delegate context:context] autorelease];
+  id result = [[[self class] alloc] initWithDelegate:delegate context:context];
   return result;
 }
 //end transformerWithReference:
@@ -47,18 +47,11 @@
 {
   if ((!(self = [super init])))
     return nil;
-  self->context  = [aContext retain];
+  self->context  = aContext;
   self->delegate = aDelegate;
   return self;
 }
 //end initWithFalseValue:
-
--(void) dealloc
-{
-  [self->context release];
-  [super dealloc];
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

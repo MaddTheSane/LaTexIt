@@ -38,7 +38,7 @@ static NSEntityDescription* cachedEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -171,7 +171,6 @@ static NSEntityDescription* cachedEntity = nil;
     [fetchRequest setEntity:[LibraryItem entity]];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == nil"]];
     result = [NSMutableArray arrayWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:nil]];
-    [fetchRequest release];
   }//end if (!theParent)
   if (!includingMe)
     [result removeObject:self];
@@ -182,7 +181,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(NSArray*) titlePath
 {
   NSArray* result = nil;
-  NSString* titleClone = [[[self title] copy] autorelease];
+  NSString* titleClone = [[self title] copy];
   if (!titleClone)
     result = [NSArray array];
   else if (!self->parent)
@@ -191,7 +190,7 @@ static NSEntityDescription* cachedEntity = nil;
   {
     NSMutableArray* array = [NSMutableArray arrayWithArray:[[self parent] titlePath]];
     [array addObject:titleClone];
-    result = [[array copy] autorelease];
+    result = [array copy];
   }
   return result;
 }
@@ -212,7 +211,6 @@ static NSEntityDescription* cachedEntity = nil;
   }//end for each brother
   NSString* libraryItemTitle = makeStringDifferent(itemTitle, brothersTitles, 0);
   [self setTitle:libraryItemTitle];//sets current and equation
-  [brothersTitles release];
 }
 //end setBestTitle
 
@@ -256,7 +254,6 @@ static NSEntityDescription* cachedEntity = nil;
     return nil;
   if (![description isKindOfClass:[NSDictionary class]])
   {
-    [self release];
     return nil;
   }
   [self setTitle:[description objectForKey:@"title"]];
@@ -279,7 +276,7 @@ static NSEntityDescription* cachedEntity = nil;
     isEquation ? [LibraryEquation class] :
     [LibraryItem class];
   result = !instanceClass ? nil : [[instanceClass alloc] initWithDescription:description];
-  return [result autorelease];
+  return result;
 }
 //end libraryItemWithDescription:
 

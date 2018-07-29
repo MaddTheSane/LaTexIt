@@ -56,7 +56,7 @@ extern NSString* ImageDidChangeNotification;
 @property (readonly, copy) NSData *pdfData;
 @property (readonly) NSSize naturalPDFSize;
 
-@property (readonly, retain) NSColor *backgroundColor;
+@property (readonly, strong) NSColor *backgroundColor;
 -(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem;
 
 //used to update the pasteboard content for a live Linkback link

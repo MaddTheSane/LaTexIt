@@ -22,7 +22,7 @@
   BOOL               shouldRedrag;
 }
 
-@property (readonly, retain) LibraryController *libraryController;
+@property (readonly, strong) LibraryController *libraryController;
 
 @property (nonatomic) library_row_t libraryRowType;
 

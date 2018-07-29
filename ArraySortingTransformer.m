@@ -37,7 +37,7 @@
 
 +(id) transformerWithDescriptors:(NSArray*)descriptors
 {
-  id result = [[[[self class] alloc] initWithDescriptors:descriptors] autorelease];
+  id result = [[[self class] alloc] initWithDescriptors:descriptors];
   return result;
 }
 //end transformerWithValueTransformer:
@@ -47,17 +47,10 @@
   if ((!(self = [super init])))
     return nil;
   self->descriptors = theDescriptors ? [theDescriptors copy] : 
-    [[NSArray alloc] initWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil] autorelease], nil];
+    [[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil], nil];
   return self;
 }
 //end initWithDescriptors:
-
--(void) dealloc
-{
-  [self->descriptors release];
-  [super dealloc];
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

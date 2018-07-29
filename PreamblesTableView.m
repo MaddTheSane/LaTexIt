@@ -26,12 +26,6 @@ static NSString* PreamblesPboardType = @"PreamblesPboardType"; //pboard type for
 }
 //end awakeFromNib:
 
--(void) dealloc
-{
-  [super dealloc];
-}
-//end dealloc
-
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];

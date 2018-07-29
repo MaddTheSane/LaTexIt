@@ -57,6 +57,7 @@
 #import "TextViewWithPlaceHolder.h"
 #import "Utils.h"
 #import "AdditionalFilesTableView.h"
+#import "CompositionConfigurationsAdditionalScriptsController.h"
 
 #import "RegexKitLite.h"
 #import <Sparkle/Sparkle.h>
@@ -105,12 +106,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [viewsMinSizes release];
-  [toolbarItems release];
-  [applyPreambleToLibraryAlert release];
-  [compositionConfigurationsAdditionalScriptsHelpPanel release];
-  [synchronizationAdditionalScriptsHelpPanel release];
-  [super dealloc];
 }
 //end dealloc
 
@@ -196,7 +191,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [window setShowsToolbarButton:NO];
   [toolbar setSelectedItemIdentifier:GeneralToolbarItemIdentifier];
   [self toolbarHit:[toolbarItems objectForKey:[toolbar selectedItemIdentifier]]];
-  [toolbar release];
   
   NSUserDefaultsController* userDefaultsController = [NSUserDefaultsController sharedUserDefaultsController];
   PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -1156,7 +1150,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   NSToolbarItem* item = [toolbarItems objectForKey:itemIdentifier];
   if (!item)
   {
-    item = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+    item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
     
     NSString* label = nil;
     NSImage* image = nil;
@@ -1258,11 +1252,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     newFrame.size.width  += (newContentFrame.size.width  - oldContentFrame.size.width);
     newFrame.size.height += (newContentFrame.size.height - oldContentFrame.size.height);
     newFrame.origin.y    -= (newContentFrame.size.height - oldContentFrame.size.height);
-    [[window contentView] retain];
+    [window contentView];
     [emptyView setFrame:newContentFrame];
     [window setContentView:emptyView];
     [window setFrame:newFrame display:YES animate:YES];
-    [[window contentView] retain];
+    [window contentView];
     [window setContentView:view];
     [window setContentMinSize:contentMinSize];
   }//end if (view != contentView)
@@ -1447,7 +1441,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [self _preamblesValueResetDefault:nil returnCode:returnCode contextInfo:NULL];
   }];
   
-  [alert autorelease];
 }
 //end preamblesValueResetDefault:
 
@@ -1682,7 +1675,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   openPanel.directoryURL = [NSURL fileURLWithPath:path];
   openPanel.nameFieldStringValue = [filename lastPathComponent];
   [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-    [self didEndOpenPanel:openPanel returnCode:result contextInfo:[contextInfo copy]];
+    [self didEndOpenPanel:openPanel returnCode:result contextInfo:CFBridgingRetain([contextInfo copy])];
   }];
 }
 //end changePath:
@@ -1691,8 +1684,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 {
   if ((returnCode == NSModalResponseOK) && contextInfo)
   {
-    NSTextField* textField = [(NSDictionary*)contextInfo objectForKey:@"textField"];
-    NSString*    pathKey   = [(NSDictionary*)contextInfo objectForKey:@"pathKey"];
+    NSTextField* textField = [(__bridge NSDictionary*)contextInfo objectForKey:@"textField"];
+    NSString*    pathKey   = [(__bridge NSDictionary*)contextInfo objectForKey:@"pathKey"];
     NSArray* urls = [openPanel URLs];
     if (urls && [urls count])
     {
@@ -1713,7 +1706,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
         [textField setStringValue:path];
     }//end if (filenames && [filenames count])
   }//end if ((returnCode == NSOKButton) && contextInfo)
-  [(NSDictionary*)contextInfo release];
+  CFBridgingRelease(contextInfo);
 }
 //end didEndOpenPanel:returnCode:contextInfo:
 
@@ -1730,11 +1723,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [compositionConfigurationsAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on scripts", @"Help on scripts")];
     [compositionConfigurationsAdditionalScriptsHelpPanel center];
     NSScrollView* scrollView =
-      [[[NSScrollView alloc] initWithFrame:[[compositionConfigurationsAdditionalScriptsHelpPanel contentView] frame]] autorelease];
+      [[NSScrollView alloc] initWithFrame:[[compositionConfigurationsAdditionalScriptsHelpPanel contentView] frame]];
     [[compositionConfigurationsAdditionalScriptsHelpPanel contentView] addSubview:scrollView];
     [scrollView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     NSTextView* textView =
-      [[[NSTextView alloc] initWithFrame:[[compositionConfigurationsAdditionalScriptsHelpPanel contentView] frame]] autorelease];
+      [[NSTextView alloc] initWithFrame:[[compositionConfigurationsAdditionalScriptsHelpPanel contentView] frame]];
     [textView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [textView setEditable:NO];
     [scrollView setBorderType:NSNoBorder];
@@ -1745,7 +1738,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSString* rtfdFilePath = [[NSBundle mainBundle] pathForResource:@"additional-files-help" ofType:@"rtfd"];
     NSURL* rtfdUrl = !rtfdFilePath ? nil : [NSURL fileURLWithPath:rtfdFilePath];
     NSAttributedString* attributedString = !rtfdUrl ? nil :
-    [[[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:0 error:NULL] autorelease];
+    [[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:0 error:NULL];
     if (attributedString)
       [[textView textStorage] setAttributedString:attributedString];
     [textView setSelectedRange:NSMakeRange(0, 0)];
@@ -1886,10 +1879,10 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   {
     ServiceRegularExpressionFiltersController* serviceRegularExpressionFiltersController =
       [[PreferencesController sharedController] serviceRegularExpressionFiltersController];
-    NSAttributedString* input = [[[serviceRegularExpressionsTestInputTextView textStorage] copy] autorelease];
+    NSAttributedString* input = [[serviceRegularExpressionsTestInputTextView textStorage] copy];
     NSAttributedString* output = [serviceRegularExpressionFiltersController applyFilterToAttributedString:input];
     if (!output)
-      output = [[[NSAttributedString alloc] initWithString:@""] autorelease];
+      output = [[NSAttributedString alloc] initWithString:@""];
     [[serviceRegularExpressionsTestOutputTextView textStorage] setAttributedString:output];
   }//end if ([notification sender] == serviceRegularExpressionsTestInputTextField)
 }
@@ -1918,11 +1911,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [synchronizationAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on synchronization scripts", @"Help on synchronization scripts")];
     [synchronizationAdditionalScriptsHelpPanel center];
     NSScrollView* scrollView =
-    [[[NSScrollView alloc] initWithFrame:[[synchronizationAdditionalScriptsHelpPanel contentView] frame]] autorelease];
+    [[NSScrollView alloc] initWithFrame:[[synchronizationAdditionalScriptsHelpPanel contentView] frame]];
     [[synchronizationAdditionalScriptsHelpPanel contentView] addSubview:scrollView];
     [scrollView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     NSTextView* textView =
-    [[[NSTextView alloc] initWithFrame:[[synchronizationAdditionalScriptsHelpPanel contentView] frame]] autorelease];
+    [[NSTextView alloc] initWithFrame:[[synchronizationAdditionalScriptsHelpPanel contentView] frame]];
     [textView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [textView setEditable:NO];
     [scrollView setBorderType:NSNoBorder];
@@ -1933,7 +1926,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSString* rtfdFilePath = [[NSBundle mainBundle] pathForResource:@"synchronization-scripts-help" ofType:@"rtfd"];
     NSURL* rtfdUrl = !rtfdFilePath ? nil : [NSURL fileURLWithPath:rtfdFilePath];
     NSAttributedString* attributedString = !rtfdUrl ? nil :
-    [[[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:nil error:NULL] autorelease];
+    [[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:nil error:NULL];
     if (attributedString)
       [[textView textStorage] setAttributedString:attributedString];
     [textView setSelectedRange:NSMakeRange(0, 0)];
@@ -1980,15 +1973,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     if (selectedRow < 0)
     {
       [pluginCurrentlySelected dropConfigurationPanel];
-      [pluginCurrentlySelected release];
       pluginCurrentlySelected = nil;
     }//end if (selectedRow < 0)
     else//if (selectedRow >= 0)
     {
       Plugin* plugin = [[[PluginsManager sharedManager] plugins] objectAtIndex:(unsigned)selectedRow];
       [plugin importConfigurationPanelIntoView:[pluginsConfigurationBox contentView]];
-      [pluginCurrentlySelected release];
-      pluginCurrentlySelected = [plugin retain];
+      pluginCurrentlySelected = plugin;
     }//end if (selectedRow >= 0)
   }//end if (tableView == pluginsPluginTableView)
 }

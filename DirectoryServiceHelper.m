@@ -37,7 +37,6 @@
     dirStatus = dsCloseDirNode(self->nodeRef);
   if (self->gDirRef)
     dirStatus = dsCloseDirService(gDirRef);
-  [super dealloc];
 }
 //end dealloc
 
@@ -65,7 +64,7 @@
             if (attrValue)
             {
               NSData* data = [NSData dataWithBytes:attrValue->fAttributeValueData.fBufferData length:attrValue->fAttributeValueData.fBufferLength];
-              result = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+              result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
               dirStatus = dsDeallocAttributeValueEntry(gDirRef, attrValue);
             }//end if attrValue
             dirStatus = dsDataNodeDeAllocate(gDirRef, attrType);

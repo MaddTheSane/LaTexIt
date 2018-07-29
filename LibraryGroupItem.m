@@ -30,7 +30,7 @@ static NSEntityDescription* cachedEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -45,13 +45,6 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end initWithEquation:insertIntoManagedObjectContext:
 
--(void) dealloc
-{
-  [self->childrenSortDescriptors release];
-  [super dealloc];
-}
-//end dealloc
-
 -(id) copyWithZone:(NSZone*)zone
 {
   id clone = [super copyWithZone:zone];
@@ -65,10 +58,8 @@ static NSEntityDescription* cachedEntity = nil;
     LibraryItem* clonedChild = [child copyWithZone:zone];
     if (clonedChild)
       [clonedChildren addObject:clonedChild];
-    [clonedChild release];
   }
   [self setValue:clonedChildren forKey:@"children"];
-  [clonedChildren release]; 
   return clone;
 }
 //end copyWithZone:
@@ -101,7 +92,6 @@ static NSEntityDescription* cachedEntity = nil;
   result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
   if (error)
     {DebugLog(0, @"error = %@", error);}
-  [fetchRequest release];
   return result;
 /*  [self willAccessValueForKey:@"children"];
   result = [self primitiveValueForKey:@"children"];
@@ -118,7 +108,7 @@ static NSEntityDescription* cachedEntity = nil;
     {
       if (!self->childrenSortDescriptors)
         self->childrenSortDescriptors = [[NSArray alloc] initWithObjects:
-          [[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease], nil];
+          [[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES], nil];
     }//end @synchronized(self)
   }//end if (!self->childrenSortDescriptor)
   return self->childrenSortDescriptors;
@@ -192,7 +182,6 @@ static NSEntityDescription* cachedEntity = nil;
        [NSNumber numberWithBool:[self isExpanded]], @"expanded",
        childrenPlistDescription, @"children",
        nil]];
-  [childrenPlistDescription release];
   return plist;
 }
 //end plistDescription

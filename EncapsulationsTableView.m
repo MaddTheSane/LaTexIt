@@ -35,12 +35,6 @@ static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
 }
 //end initWithCoder:
 
--(void) dealloc
-{
-  [super dealloc];
-}
-//end dealloc
-
 #pragma mark events
 
 -(BOOL) acceptsFirstMouse:(NSEvent*)event //using the tableview does not need to activate the window first

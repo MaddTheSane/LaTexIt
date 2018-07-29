@@ -40,11 +40,7 @@
 
 +(id) transformerWithOutlineView:(NSOutlineView*)outlineView firstIfMultiple:(BOOL)firstIfMultiple
 {
-#ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithOutlineView:outlineView firstIfMultiple:firstIfMultiple];
-#else
-  id result = [[[[self class] alloc] initWithOutlineView:outlineView firstIfMultiple:firstIfMultiple] autorelease];
-#endif
   return result;
 }
 //end transformerWithClass:
@@ -53,25 +49,11 @@
 {
   if ((!(self = [super init])))
     return nil;
-#ifdef ARC_ENABLED
   self->outlineView = aOutlineView;
-#else
-  self->outlineView = [aOutlineView retain];
-#endif
   self->firstIfMultiple = aFirstIfMultiple;
   return self;
 }
 //end initWithOutlineView:
-
--(void) dealloc
-{
-#ifdef ARC_ENABLED
-#else
-  [self->outlineView release];
-  [super dealloc];
-#endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

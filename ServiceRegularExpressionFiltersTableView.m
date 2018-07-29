@@ -11,6 +11,7 @@
 #import "NSArrayControllerExtended.h"
 #import "PreferencesController.h"
 #import "ServiceRegularExpressionFiltersController.h"
+#import "EncapsulationsController.h"
 
 static NSString* RegularExpressionFilterPboardType = @"RegularExpressionFilterPboardType";
 
@@ -41,7 +42,6 @@ static NSString* RegularExpressionFilterPboardType = @"RegularExpressionFilterPb
   [[self tableColumnWithIdentifier:@"enabled"] unbind:NSValueBinding];
   [[self tableColumnWithIdentifier:@"inputPattern"] unbind:NSValueBinding];
   [[self tableColumnWithIdentifier:@"outputPattern"] unbind:NSValueBinding];
-  [super dealloc];
 }
 //end dealloc
 

@@ -34,10 +34,6 @@
 -(void) dealloc
 {
   [self->animationTimer invalidate];
-  [self->animationTimer release];
-  [self->animationStartDate release];
-  [self->buttonPalette release];
-  [super dealloc]; 
 }
 //end dealloc
 
@@ -111,28 +107,24 @@
     self->fromFrameOrigin = [[self window] isVisible] ? [window frame].origin : newFrameOrigin;
     self->toFrameOrigin = newFrameOrigin;
     [[self window] setFrameOrigin:self->fromFrameOrigin];
-    [self->animationStartDate release];
     self->animationStartDate = [[NSDate alloc] init];
     [self->animationTimer invalidate];
-    [self->animationTimer release];
     self->animationTimer = nil;
     self->animationStartAlphaValue = ![[self window] isVisible] ? 0 : [[self window] alphaValue];
     [[self window] setAlphaValue:self->animationStartAlphaValue];
     [self showWindow:self];
     if (animate)
-      self->animationTimer = [[NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES] retain];
+      self->animationTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES];
     else
       [[self window] setAlphaValue:1];
   }
   else// if (!visible)
   {
-    [self->animationStartDate release];
     self->animationStartDate = [[NSDate alloc] init];
     [self->animationTimer invalidate];
-    [self->animationTimer release];
     self->animationTimer = nil;
     if (animate)
-      self->animationTimer = [[NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES] retain];
+      self->animationTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES];
     else
       [[self window] close];
   }

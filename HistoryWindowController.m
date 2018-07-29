@@ -19,6 +19,7 @@
 #import "NSObjectExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
+#import "BorderlessPanel.h"
 #import "Utils.h"
 #import "LibraryPreviewPanelImageView.h"
 
@@ -45,7 +46,6 @@
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:HistoryDisplayPreviewPanelKey];
-  [super dealloc]; 
 }
 //end dealloc
 
@@ -163,7 +163,6 @@
     if (returnCode == NSAlertFirstButtonReturn)
       [self clearAll:NO];
   }
-  [alert autorelease];
 }
 //end clearHistory:
 
@@ -176,11 +175,11 @@
 
 -(IBAction) saveAs:(id)sender
 {
-  self->savePanel = [[NSSavePanel savePanel] retain];
+  self->savePanel = [NSSavePanel savePanel];
   [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"Export history...")];
   [self changeHistoryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
-  [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
+  [self->savePanel setAccessoryView:self->exportAccessoryView];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
   if ([[self window] isVisible]) {
@@ -207,10 +206,8 @@
       alert.messageText = NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.");
       alert.informativeText = @"";
       [alert runModal];
-      [alert release];
     }//end if (ok)
   }
-  [self->savePanel release];
   self->savePanel = nil;
 }
 //end _savePanelDidEnd:returnCode:contextInfo:
@@ -245,7 +242,7 @@
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   [openPanel setDelegate:(id)self];
   [openPanel setTitle:NSLocalizedString(@"Import history...", @"Import history...")];
-  [openPanel setAccessoryView:[self->importAccessoryView retain]];
+  [openPanel setAccessoryView:self->importAccessoryView];
   openPanel.allowedFileTypes = [NSArray arrayWithObjects:@"latexhist", @"plist", nil];
   if ([[self window] isVisible]) {
     [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
@@ -269,7 +266,6 @@
       alert.messageText = NSLocalizedString(@"Loading error", @"Loading error");
       alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format");
       [alert runModal];
-      [alert release];
     }
     else
     {

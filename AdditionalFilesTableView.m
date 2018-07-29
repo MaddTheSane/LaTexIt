@@ -39,9 +39,6 @@
 -(void) dealloc
 {
   [[[PreferencesController sharedController] additionalFilesController] removeObserver:self forKeyPath:@"arrangedObjects"];
-  [self->filesWithExtrasController release];
-  [self->previousDefaultsFiles release];
-  [super dealloc];
 }
 //end dealloc
 

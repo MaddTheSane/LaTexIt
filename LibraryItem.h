@@ -33,7 +33,7 @@
 
 @property (copy) NSString *title;
 -(void)         setBestTitle;//computes best title in current context
-@property (assign) LibraryItem *parent;
+@property (weak) LibraryItem *parent;
 @property NSUInteger sortIndex;
 @property (copy) NSString *comment;
 

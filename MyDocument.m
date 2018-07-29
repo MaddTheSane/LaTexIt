@@ -46,7 +46,10 @@
 #import "PreferencesWindowController.h"
 #import "PropertyStorage.h"
 #import "SMLSyntaxColouring.h"
+#import "HistoryWindowController.h"
 #import "SystemTask.h"
+#import "LibraryView.h"
+#import "LineCountRulerView.h"
 #import "Utils.h"
 
 #import <Carbon/Carbon.h>
@@ -1483,7 +1486,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self applyLatexitEquation:latexitEquation isRecentLatexisation:NO];
     [latexitEquation release];
   }//end if (latexitEquation)
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypePDF))
   {
     NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(data);
     ok = pdfString && ![pdfString isEqualToString:@""];
@@ -1498,7 +1501,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self updateDocumentFromString:string updatePreamble:YES updateEnvironment:YES updateBody:YES];
     [string release];
   }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")))
-  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeText))
   {
     NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     ok = (string != nil);

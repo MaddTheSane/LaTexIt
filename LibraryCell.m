@@ -28,13 +28,6 @@
 }
 //end initWithCoder:
 
--(void) dealloc
-{
-  [self->textBackgroundColor release];
-  [super dealloc];
-}
-//end dealloc
-
 -(id) copyWithZone:(NSZone*)zone
 {
   LibraryCell* cell = (LibraryCell*) [super copyWithZone:zone];
@@ -46,8 +39,6 @@
 
 -(void) setTextBackgroundColor:(NSColor*)color
 {
-  [color retain];
-  [self->textBackgroundColor release];
   self->textBackgroundColor = color;
 }
 //end setTextBackgroundColor:

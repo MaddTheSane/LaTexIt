@@ -22,7 +22,6 @@ static NSColor*       backgroundColor  = nil;
   {
     if (value != backgroundColor)
     {
-      [backgroundColor release];
       backgroundColor = [value copy];
     }//end if (value != backgroundColor)
   }//end @synchronized(self)
@@ -59,7 +58,7 @@ static NSColor*       backgroundColor  = nil;
 +(id) tipWithString:(NSString*)tip frame:(NSRect)frame display:(BOOL)display
 {
   id result =
-    [TooltipWindow tipWithAttributedString:[[[NSAttributedString alloc] initWithString:tip] autorelease] frame:frame display:display];
+    [TooltipWindow tipWithAttributedString:[[NSAttributedString alloc] initWithString:tip] frame:frame display:display];
   return result;
 }
 //end tipWithString:frame:display:
@@ -73,7 +72,7 @@ static NSColor*       backgroundColor  = nil;
     {
       [TooltipWindow setDefaultDuration:5];
       [window setTooltip:@" "]; // Just having at least 1 char to allow the next message...
-      textAttributes = [[[[window contentView] attributedStringValue] attributesAtIndex:0 effectiveRange:nil] retain];
+      textAttributes = [[[window contentView] attributedStringValue] attributesAtIndex:0 effectiveRange:nil];
     }//end if (!doneInitialSetup)
   }//end @synchronized(self)
   [window setTooltip:tip]; // set the tip
@@ -81,7 +80,7 @@ static NSColor*       backgroundColor  = nil;
   [window setFrame:frame display:YES];
   if (display)
     [window orderFrontWithDuration:[TooltipWindow defaultDuration]]; // this is affectively autoreleasing the window after 'defaultDuration'
-  return [window autorelease];
+  return window;
 }
 //end tipWithAttributedString:frame:display:
 
@@ -131,19 +130,13 @@ static NSColor*       backgroundColor  = nil;
     {
       [TooltipWindow setDefaultDuration:5];
       [field setStringValue:@" "]; // Just having at least 1 char to allow the next message...
-      textAttributes = [[[field attributedStringValue] attributesAtIndex:0 effectiveRange:nil] retain];
+      textAttributes = [[field attributedStringValue] attributesAtIndex:0 effectiveRange:nil];
     }//end if (!doneInitialSetup)
   }//end @synchronized([self class])
-  [field release];  
   return self;
 }
 //end init
 
--(void) dealloc
-{
-  [self->tooltipObject release];
-  [super dealloc];
-}
 //end dealloc
 
 -(id) tooltip
@@ -155,8 +148,6 @@ static NSColor*       backgroundColor  = nil;
 -(void) setTooltip:(id)tip
 {
   id contentView = [self contentView];
-  [tip retain];
-  [self->tooltipObject release];
   self->tooltipObject = tip;
   if ([contentView isKindOfClass:[NSTextField class]])
   {

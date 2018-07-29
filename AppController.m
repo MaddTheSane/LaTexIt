@@ -58,6 +58,7 @@
 #import "RegexKitLite.h"
 #import "Semaphore.h"
 #import "ServiceRegularExpressionFiltersController.h"
+#import "HistoryWindowController.h"
 #import "SystemTask.h"
 #import "Utils.h"
 
@@ -169,7 +170,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(NSUInteger) retainCount
 {
-  return UINT_MAX;  //denotes an object that cannot be released
+  return NSUIntegerMax;  //denotes an object that cannot be released
 }
 //end retainCount
 

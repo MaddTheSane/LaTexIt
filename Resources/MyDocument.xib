@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MyDocument">
             <connections>
-                <outlet property="colorWell" destination="103" id="118"/>
-                <outlet property="imageView" destination="98" id="117"/>
-                <outlet property="logTableView" destination="99" id="113"/>
                 <outlet property="lowerBox" destination="574" id="1073"/>
                 <outlet property="lowerBoxChangeBodyTemplateButton" destination="1113" id="1117"/>
                 <outlet property="lowerBoxChangePreambleButton" destination="659" id="1089"/>
@@ -27,17 +25,7 @@
                 <outlet property="lowerBoxPreambleTextView" destination="110" id="1082"/>
                 <outlet property="lowerBoxSourceTextView" destination="106" id="1081"/>
                 <outlet property="lowerBoxSplitView" destination="450" id="1090"/>
-                <outlet property="lowerControlsBox" destination="761" id="919"/>
-                <outlet property="lowerControlsColorTextField" destination="170" id="969"/>
-                <outlet property="lowerControlsSizeTextField" destination="169" id="968"/>
-                <outlet property="makeLatexButton" destination="108" id="191"/>
                 <outlet property="pointSizeFormatter" destination="1151" id="1153"/>
-                <outlet property="preambleTextView" destination="110" id="448"/>
-                <outlet property="progressIndicator" destination="189" id="190"/>
-                <outlet property="sizeText" destination="105" id="115"/>
-                <outlet property="sourceTextView" destination="106" id="449"/>
-                <outlet property="splitView" destination="450" id="455"/>
-                <outlet property="typeOfTextControl" destination="327" id="328"/>
                 <outlet property="upperBox" destination="576" id="1072"/>
                 <outlet property="upperBoxImageView" destination="98" id="1086"/>
                 <outlet property="upperBoxLogTableView" destination="99" id="1087"/>
@@ -45,8 +33,6 @@
                 <outlet property="upperBoxZoomBox" destination="759" id="1084"/>
                 <outlet property="upperBoxZoomBoxSlider" destination="336" id="1083"/>
                 <outlet property="upperImageBox" destination="758" id="1085"/>
-                <outlet property="upperZoomBox" destination="759" id="870"/>
-                <outlet property="upperZoomBoxSlider" destination="336" id="1050"/>
                 <outlet property="window" destination="1018" id="1158"/>
             </connections>
         </customObject>
@@ -92,11 +78,11 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="344" height="206"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <clipView key="contentView" id="vup-S5-8Hk">
-                                                    <rect key="frame" x="1" y="0.0" width="327" height="190"/>
+                                                    <rect key="frame" x="1" y="0.0" width="342" height="205"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="1112" id="99" customClass="LogTableView">
-                                                            <rect key="frame" x="0.0" y="0.0" width="327" height="167"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="342" height="182"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -115,7 +101,7 @@
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </textFieldCell>
                                                                 </tableColumn>
-                                                                <tableColumn identifier="message" width="281.17401123046875" minWidth="54.673999786376953" maxWidth="1000" id="111">
+                                                                <tableColumn identifier="message" width="296.17401123046875" minWidth="54.673999786376953" maxWidth="1000" id="111">
                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="message">
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -133,15 +119,15 @@
                                                     </subviews>
                                                 </clipView>
                                                 <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="1111">
-                                                    <rect key="frame" x="1" y="190" width="327" height="15"/>
+                                                    <rect key="frame" x="1" y="189" width="342" height="16"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="1110">
-                                                    <rect key="frame" x="328" y="23" width="15" height="167"/>
+                                                    <rect key="frame" x="327" y="23" width="16" height="182"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <tableHeaderView key="headerView" id="1112">
-                                                    <rect key="frame" x="0.0" y="0.0" width="327" height="23"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="342" height="23"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableHeaderView>
                                                 <connections>
@@ -207,7 +193,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="HaM-Ab-vQn">
-                                                <rect key="frame" x="1" y="1" width="325" height="1"/>
+                                                <rect key="frame" x="1" y="1" width="340" height="1"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="110" customClass="LineCountTextView">
@@ -215,7 +201,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="325" height="1"/>
+                                                        <size key="minSize" width="340" height="1"/>
                                                         <size key="maxSize" width="671" height="10000000"/>
                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     </textView>
@@ -226,7 +212,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="1106">
-                                                <rect key="frame" x="326" y="1" width="15" height="-1"/>
+                                                <rect key="frame" x="325" y="1" width="16" height="-1"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <connections>
@@ -237,7 +223,7 @@
                                             <rect key="frame" x="0.0" y="9" width="342" height="181"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="6pf-6J-RPs">
-                                                <rect key="frame" x="1" y="1" width="325" height="179"/>
+                                                <rect key="frame" x="1" y="1" width="340" height="179"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="106" customClass="LineCountTextView">
@@ -245,7 +231,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="325" height="179"/>
+                                                        <size key="minSize" width="340" height="179"/>
                                                         <size key="maxSize" width="671" height="10000000"/>
                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     </textView>
@@ -256,7 +242,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="1108">
-                                                <rect key="frame" x="326" y="1" width="15" height="179"/>
+                                                <rect key="frame" x="325" y="1" width="16" height="179"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <connections>

@@ -53,17 +53,8 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
 }
 //end initWithCoder:
 
--(void) dealloc
-{
-  [self->dateFormatter release];
-  [super dealloc];
-}
-//end dealloc
-
 -(void) setBackgroundColor:(NSColor*)color
 {
-  [color retain];
-  [self->backgroundColor release];
   self->backgroundColor = color;
 }
 //end setBackgroundColor:
@@ -73,7 +64,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   HistoryCell* cell = (HistoryCell*) [super copyWithZone:zone];
   if (cell)
   {
-    cell->dateFormatter = [self->dateFormatter retain];
+    cell->dateFormatter = self->dateFormatter;
     cell->backgroundColor = [self->backgroundColor copy];
   }
   return cell;
@@ -150,7 +141,6 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     [self drawGradientInRect:insideHeaderRect withColor:[NSColor grayColor]];
   }
   [attrString drawInRect:textRect]; //the date is displayed
-  [attrString release];
 }
 //end drawInteriorWithFrame:inView:
 

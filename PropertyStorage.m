@@ -28,13 +28,6 @@
 }
 //end initWithDictionary:
 
--(void) dealloc
-{
-  [dictionary release];
-  [super dealloc];
-}
-//end dealloc
-
 -(id) objectForKey:(id)key
 {
   id result = [dictionary objectForKey:key];
@@ -61,7 +54,7 @@
 
 -(NSDictionary*) dictionary
 {
-  NSDictionary* result = [[dictionary copy] autorelease];
+  NSDictionary* result = [dictionary copy];
   return result;
 }
 //end dictionary

@@ -45,8 +45,8 @@
   self->saveAccessoryViewExportFormat               = [preferencesController exportFormatCurrentSession];
   self->saveAccessoryViewExportScalePercent         = [preferencesController exportScalePercent];
   self->saveAccessoryViewOptionsJpegQualityPercent  = [preferencesController exportJpegQualityPercent];
-  self->saveAccessoryViewOptionsJpegBackgroundColor = [[preferencesController exportJpegBackgroundColor] retain];
-  self->saveAccessoryViewOptionsSvgPdfToSvgPath     = [[preferencesController exportSvgPdfToSvgPath] retain];
+  self->saveAccessoryViewOptionsJpegBackgroundColor = [preferencesController exportJpegBackgroundColor];
+  self->saveAccessoryViewOptionsSvgPdfToSvgPath     = [preferencesController exportSvgPdfToSvgPath];
   self->saveAccessoryViewOptionsTextExportPreamble         = [preferencesController exportTextExportPreamble];
   self->saveAccessoryViewOptionsTextExportEnvironment      = [preferencesController exportTextExportEnvironment];
   self->saveAccessoryViewOptionsTextExportBody             = [preferencesController exportTextExportBody];
@@ -61,17 +61,13 @@
   [self removeObserver:self forKeyPath:@"saveAccessoryViewOptionsSvgPdfToSvgPath"];
   [self->saveAccessoryViewPopupFormat unbind:NSSelectedTagBinding];
   [self->saveAccessoryViewScalePercentTextField unbind:NSValueBinding];
-  [self->saveAccessoryViewExportFormatOptionsPanes release];
-  [self->saveAccessoryViewOptionsJpegBackgroundColor release];
-  [self->saveAccessoryViewOptionsSvgPdfToSvgPath release];
-  [self->saveAccessoryView release]; //release the extra retain count
-  [super dealloc];
+  //[self->saveAccessoryView release]; //release the extra retain count
 }
 //end dealloc
 
 -(void) awakeFromNib
 {
-  [self->saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
+  //[self->saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
   [self->logWindow setTitle:NSLocalizedString(@"Execution log", @"Execution log")];
   [self->saveAccessoryViewFormatLabel setStringValue:
     [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"Format")]];
@@ -204,7 +200,6 @@
   if (value != self->saveAccessoryViewOptionsSvgPdfToSvgPath)
   {
     [self willChangeValueForKey:@"saveAccessoryViewOptionsSvgPdfToSvgPath"];
-    [self->saveAccessoryViewOptionsSvgPdfToSvgPath release];
     self->saveAccessoryViewOptionsSvgPdfToSvgPath = [value copy];
     [self didChangeValueForKey:@"saveAccessoryViewOptionsSvgPdfToSvgPath"];
   }//end if (value != self->saveAccessoryViewOptionsSvgPdfToSvgPath)

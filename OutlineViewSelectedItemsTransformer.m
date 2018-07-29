@@ -40,11 +40,7 @@
 
 +(id) transformerWithOutlineView:(NSOutlineView*)outlineView;
 {
-#ifdef ARC_ENABLED
   id result = [[[self class] alloc] initWithOutlineView:outlineView];
-#else
-  id result = [[[[self class] alloc] initWithOutlineView:outlineView] autorelease];
-#endif
   return result;
 }
 //end transformerWithClass:
@@ -53,24 +49,10 @@
 {
   if ((!(self = [super init])))
     return nil;
-#ifdef ARC_ENABLED
-	self->outlineView = aOutlineView;
-#else
-	self->outlineView = [aOutlineView retain];
-#endif
+  self->outlineView = aOutlineView;
   return self;
 }
 //end initWithOutlineView:
-
--(void) dealloc
-{
-#ifdef ARC_ENABLED
-#else
-  [outlineView release];
-  [super dealloc];
-#endif
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

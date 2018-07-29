@@ -31,12 +31,6 @@
 }
 //end init
 
--(void) dealloc
-{
-  [super dealloc];
-}
-//end dealloc
-
 -(void) awakeFromNib
 {
   [self->additionalFilesTableView setIsDefaultTableView:NO];
@@ -54,7 +48,6 @@
   [[menu addItemWithTitle:NSLocalizedString(@"Save as defaults", @"Save as defaults")
     action:@selector(additionalFilesSetAsDefaults:) keyEquivalent:@""] setTarget:self];
   [self->additionalFilesMenuButton setMenu:menu];
-  [menu release];
 }
 //end awakeFromNib
 

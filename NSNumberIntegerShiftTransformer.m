@@ -37,7 +37,7 @@
 
 +(id) transformerWithShift:(NSNumber*)shift
 {
-  id result = [[[[self class] alloc] initWithShift:shift] autorelease];
+  id result = [[[self class] alloc] initWithShift:shift];
   return result;
 }
 //end transformerWithShift:
@@ -50,13 +50,6 @@
   return self;
 }
 //end initWithShift:
-
--(void) dealloc
-{
-  [self->shift release];
-  [super dealloc];
-}
-//end dealloc
 
 -(id) transformedValue:(id)value
 {

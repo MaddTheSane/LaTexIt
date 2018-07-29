@@ -60,7 +60,7 @@
   }//end if (![imageRep isKindOfClass:[NSBitmapImageRep class]])
   if (!result)
   {
-    result = [[self newBitmapImageRepresentation] autorelease];
+    result = [self newBitmapImageRepresentation];
     if (result)
       [self addRepresentation:result];
   }//end if (!result)
@@ -155,7 +155,6 @@
     if (result)
     {
       [self addRepresentation:result];
-      [result release];
     }//end if (result)
   }//end if (!result)
   return result;
@@ -198,7 +197,7 @@
       result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height) 
                                        context:context hints:nil];
       if (!result)
-        result = [[self newBitmapImageRepresentation] autorelease];
+        result = [self newBitmapImageRepresentation];
     }//end if (!result)
   return result;
 }

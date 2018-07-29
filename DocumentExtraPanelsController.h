@@ -40,7 +40,7 @@
   NSString*       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
   BOOL            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
   
-  NSSavePanel* currentSavePanel;
+  NSSavePanel* __weak currentSavePanel;
 }
 
 -(instancetype) initWithLoadingFromNib;
@@ -52,7 +52,7 @@
 @property (nonatomic) export_format_t   saveAccessoryViewExportFormat;
 @property (nonatomic) CGFloat           saveAccessoryViewScalePercent;
 @property CGFloat           saveAccessoryViewOptionsJpegQualityPercent;
-@property (retain) NSColor* saveAccessoryViewOptionsJpegBackgroundColor;
+@property (strong) NSColor* saveAccessoryViewOptionsJpegBackgroundColor;
 @property (nonatomic, copy) NSString*    saveAccessoryViewOptionsSvgPdfToSvgPath;
 @property BOOL              saveAccessoryViewOptionsTextExportPreamble;
 @property BOOL              saveAccessoryViewOptionsTextExportEnvironment;
@@ -61,7 +61,7 @@
 @property (copy) NSString * saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
 @property BOOL              saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
 
-@property (nonatomic, assign) NSSavePanel *currentSavePanel;
+@property (nonatomic, weak) NSSavePanel *currentSavePanel;
 
 -(IBAction) openSaveAccessoryViewOptions:(id)sender;
 -(void) exportFormatOptionsPanel:(NSPanel*)exportFormatOptionsPanel didCloseWithOK:(BOOL)ok;

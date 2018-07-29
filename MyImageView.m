@@ -99,15 +99,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:DefaultDoNotClipPreviewKey];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [self->copyAsContextualMenu release];
-  [self->backgroundColor release];
-  [self->imageRep release];
-  [self->transientFilesPromisedFilePaths release];
-  [self->transientDragData release];
-  [self->transientDragEquation release];
-  [self->layerView release];
-  [self->layerArrows release];
-  [super dealloc];
 }
 //end dealloc
 
@@ -159,7 +150,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [subMenu addItemWithTitle:@"JPEG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(int)EXPORT_FORMAT_JPEG];
     [self->copyAsContextualMenu setSubmenu:subMenu forItem:superItem];
-    [subMenu release];
     result = self->copyAsContextualMenu;
   }//end if (!result)
   return result;
@@ -192,9 +182,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(void) setBackgroundColor:(NSColor*)newColor updateHistoryItem:(BOOL)updateHistoryItem
 {
   //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
-  [self->backgroundColor autorelease];
   NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
-  self->backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
+  self->backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : newColor;
 
   [self setNeedsDisplay:YES];
   if (updateHistoryItem && self->pdfData)
@@ -237,19 +226,14 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 //the data is full pdfdata (that may contain meta-data like keywords, creator...)
 -(void) setPDFData:(NSData*)someData cachedImage:(NSImage*)cachedImage
 {
-  [self->transientDragData release];
   self->transientDragData = nil;
-  [self->transientDragEquation release];
   self->transientDragEquation = nil;
 
-  [someData retain];
-  [self->pdfData release];
   self->pdfData = someData;
 
-  [self->imageRep release];
   self->imageRep = !self->pdfData ? nil : [[NSPDFImageRep alloc] initWithData:self->pdfData];
   self->naturalPDFSize = !self->imageRep ? NSZeroSize : [self->imageRep size];
-  NSImage* image = [[cachedImage copy] autorelease];
+  NSImage* image = [cachedImage copy];
   [image removeRepresentationsOfClass:[NSBitmapImageRep class]];
   if (image && ![image pdfImageRepresentation] && self->imageRep)
   {
@@ -259,7 +243,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }//end if (image && ![image pdfImageRepresentation] && self->imageRep)
   else if (!image && self->imageRep)
   {
-    image = [[[NSImage alloc] initWithSize:[self->imageRep size]] autorelease];
+    image = [[NSImage alloc] initWithSize:[self->imageRep size]];
     [image setCacheMode:NSImageCacheNever];
     [image addRepresentation:self->imageRep];
     //[image recache];
@@ -340,9 +324,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (draggedImage)
     {
       self->isDragging = YES;
-      [self->transientDragData release];
       self->transientDragData = nil;
-      [self->transientDragEquation release];
       self->transientDragEquation = nil;
       [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"svg", @"tiff", @"jpeg", @"png", @"html", nil]
                             fromRect:[self frame] source:self slideBack:YES event:event];
@@ -415,9 +397,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   if ([self->transientFilesPromisedFilePaths count] &&
       [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]])
     [self performSelector:@selector(waitForPromisedFiles:) withObject:[NSDate date] afterDelay:0.];
-  [self->transientDragData release];
   self->transientDragData = nil;
-  [self->transientDragEquation release];
   self->transientDragEquation = nil;
   DebugLog(1, @"<concludeDragOperation");
 }
@@ -449,7 +429,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSString* filePath = nil;
     while((filePath = [enumerator nextObject]))
       [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-    [self->transientFilesPromisedFilePaths release];
     self->transientFilesPromisedFilePaths = nil;
   }//end if (stop)
 }
@@ -613,8 +592,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   [self->document triggerSmartHistoryFeature];
 
   LatexitEquation* equation = [document latexitEquationWithCurrentStateTransient:NO];
-  [self->transientDragEquation release];
-  self->transientDragEquation = [equation retain];
+  self->transientDragEquation = equation;
   DebugLog(1, @"self->transientDragEquation = %p>", self->transientDragEquation);
   DebugLog(1, @"self->transientDragEquation.pdfData = %p>", [self->transientDragEquation pdfData]);
 
@@ -668,7 +646,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }//end if (!data)
   if (!hasAlreadyCachedData)
   {
-    [self->transientDragData release];
     self->transientDragData = [data copy];
   }//end if (!hasAlreadyCachedData)
   if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
@@ -751,7 +728,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       [pasteboard setData:data forType:type];
     else//if (exportFormat == EXPORT_FORMAT_MATHML)
     {
-      NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+      NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
       if (blockquoteString)
       {
@@ -793,7 +770,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSArray* plist = [[pboard propertyListForType:NSFilenamesPboardType] dynamicCastToClass:[NSArray class]];
     NSString* filepath = !([plist count] == 1) ? nil : [plist lastObject];
     NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:filepath];
-    ok = UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")) || [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
+    ok = UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.tex")) || [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]]))
   {
@@ -809,7 +786,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     ok = attributedString || (pdfWrapperData != nil);//now, allow string
-    [attributedString release];
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, NSStringPboardType, nil]])
     ok = YES;
@@ -822,9 +798,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   DebugLog(1, @">performDragOperation");
   BOOL result = [self _applyDataFromPasteboard:[sender draggingPasteboard] sender:sender];
-  [self->transientDragData release];
   self->transientDragData = nil;
-  [self->transientDragEquation release];
   self->transientDragEquation = nil;
   DebugLog(1, @"<performDragOperation");
   return result;
@@ -855,9 +829,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(IBAction) copy:(id)sender
 {
-  [self->transientDragData release];
   self->transientDragData = nil;
-  [self->transientDragEquation release];
   self->transientDragEquation = nil;
   NSInteger tag = sender ? [sender tag] : -1;
   export_format_t copyExportFormat = ((tag == -1) ? [[PreferencesController sharedController] exportFormatCurrentSession] : (export_format_t) tag);
@@ -867,9 +839,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) copyAsFormat:(export_format_t)copyExportFormat
 {
-  [self->transientDragData release];
   self->transientDragData = nil;
-  [self->transientDragEquation release];
   self->transientDragEquation = nil;
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard declareTypes:[NSArray array] owner:self];
@@ -958,7 +928,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   if (!done && ![sender draggingSource] &&
       ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]])))
   {
-    [self->transientFilesPromisedFilePaths release];
     self->transientFilesPromisedFilePaths = [[NSMutableArray alloc] init];
     NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
     NSURL* workingDirectoryURL = [NSURL fileURLWithPath:workingDirectory];
@@ -1071,7 +1040,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     if (pdfWrapperData)
       done = [self->document applyData:pdfWrapperData sourceUTI:(NSString*)kUTTypePDF];
-    [attributedString release];
   }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
   {
@@ -1083,7 +1051,6 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
     //[self->document applyString:string];
     [self->document applyData:data sourceUTI:(NSString*)kUTTypeText];
-    [attributedString release];
     done = YES;
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
@@ -1246,18 +1213,14 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
     if (clipView)
     {
-      NSScrollView* scrollView = (NSScrollView*)[[clipView superview] retain];
+      NSScrollView* scrollView = (NSScrollView*)[clipView superview];
       NSRect frame = [scrollView frame];
       NSView* superView = [scrollView superview];
-      NSView* selfView = [self retain];
+      NSView* selfView = self;
       [superView replaceSubview:scrollView with:selfView];
       [selfView setFrame:frame];
-      [selfView release];
-      [scrollView release];
       [self->layerView removeFromSuperview];
-      [self->layerView release];
       self->layerView = nil;
-      [self->layerArrows release];
       self->layerArrows = nil;
     }//end if (clipView)
   }//end if (doNotClipPreview)
@@ -1266,17 +1229,16 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
     if (!clipView)
     {
-      NSScrollView* scrollView = [[[NSScrollView alloc] initWithFrame:[self frame]] autorelease];
+      NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:[self frame]];
       [scrollView setAutoresizingMask:[self autoresizingMask]];
       NSView* superView = [self superview];
-      NSView* selfView = [self retain];
+      NSView* selfView = self;
       [superView replaceSubview:selfView with:scrollView];
       [scrollView setHasHorizontalScroller:NO];
       [scrollView setHasVerticalScroller:NO];
       clipView = (NSClipView*)[scrollView contentView];
       [clipView setCopiesOnScroll:NO];
       [scrollView setDocumentView:selfView];
-      [selfView release];
       
       if (isMacOS10_7OrAbove())
       {

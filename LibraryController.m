@@ -50,7 +50,7 @@
         [fetchRequest setEntity:[LibraryItem entity]];
         [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == nil"]];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:
-          [[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease], nil]];
+          [[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES], nil]];
         self->rootFetchRequest = fetchRequest;
       }//end if (!self->rootFetchRequest)
     }//end @synchronized(self)
@@ -76,13 +76,6 @@
 @end
 
 @implementation LibraryController
-
--(void) dealloc
-{
-  [self->rootFetchRequest release];
-  [super dealloc];
-}
-//end dealloc
 
 -(NSManagedObjectContext*) managedObjectContext
 {
@@ -390,7 +383,6 @@
                 ([fileManager fileExistsAtPath:subFile isDirectory:&isDirectory] && isDirectory))
               [candidateFilesQueue addObject:subFile];
           }
-          [libraryGroupItem release];
         }//end if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
         else if ([LatexitEquation latexitEquationPossibleWithUTI:filenameUTI])
         {
@@ -411,7 +403,6 @@
             [libraryEquation setBestTitle];
             if (!parent && libraryEquation)
               [newLibraryRootItems addObject:libraryEquation];
-            [libraryEquation release];
           }//end for each latexitEquation
         }//end if ([[filename pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame)
         else//if other file
@@ -426,12 +417,10 @@
       {
         LibraryWindowController* libraryWindowController =
           [[[outlineView window]  windowController] dynamicCastToClass:[LibraryWindowController class]];
-        NSDictionary* options = [[[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil] autorelease];
+        NSDictionary* options = [[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil];
         [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
       }//end if ([teXItems count] > 0)
       
-      [dictionaryOfFoldersByPath release];
-      [candidateFilesQueue release];
 
       //fix sortIndexes of root nodes
       NSMutableArray* brothers = [NSMutableArray arrayWithArray:
@@ -442,7 +431,6 @@
       NSUInteger nbBrothers = [brothers count];
       while(nbBrothers--)
         [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
-      [newLibraryRootItems release];
 
       result = YES;
     }//end if pdfFiles

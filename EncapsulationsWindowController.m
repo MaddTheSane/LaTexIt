@@ -24,12 +24,6 @@
 }
 //end init
 
--(void) dealloc
-{
-  [super dealloc];
-}
-//end dealloc:
-
 -(void) windowDidLoad
 {
   [[self window] setFrameAutosaveName:@"encapsulations"];

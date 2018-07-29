@@ -12,6 +12,7 @@
 #import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
 #import "PreferencesWindowController.h"
+#import "CompositionConfigurationsController.h"
 #import "Utils.h"
 
 @interface CompositionConfigurationsWindowController (PrivateAPI)
@@ -27,12 +28,6 @@
   return self;
 }
 //end init
-
--(void) dealloc
-{
-  [super dealloc];
-}
-//end dealloc
 
 -(void) awakeFromNib
 {

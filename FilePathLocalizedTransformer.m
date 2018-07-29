@@ -39,7 +39,7 @@
 
 +(id) transformer
 {
-  id result = [[[[self class] alloc] init] autorelease];
+  id result = [[[self class] alloc] init];
   return result;
 }
 //end transformer

@@ -87,7 +87,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(NSUInteger) retainCount
 {
-  return UINT_MAX;  //denotes an object that cannot be released
+  return NSUIntegerMax;  //denotes an object that cannot be released
 }
 
 -(oneway void) release

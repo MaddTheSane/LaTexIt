@@ -14,6 +14,6 @@
   BOOL isDown;
 }
 
-@property (retain) NSImage *image;
+@property (strong) NSImage *image;
 
 @end

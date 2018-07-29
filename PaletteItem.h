@@ -40,7 +40,7 @@ typedef enum {LATEX_ITEM_TYPE_STANDARD, LATEX_ITEM_TYPE_ENVIRONMENT} latex_item_
 @property (readonly, copy) NSString *argumentToken;
 @property (readonly, copy) NSString *argumentTokenDefaultReplace;
 
-@property (readonly, retain) NSImage *image;
+@property (readonly, strong) NSImage *image;
 -(NSString*) toolTip;
 -(NSString*) stringWithTextInserted:(NSString*)text;
 

@@ -35,7 +35,6 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   NSArrayController* serviceShortcutsController = [[PreferencesController sharedController] serviceShortcutsController];
   [serviceShortcutsController removeObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutEnabledKey]];
   [serviceShortcutsController removeObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutStringKey]];
-  [super dealloc];
 }
 //end dealloc
 

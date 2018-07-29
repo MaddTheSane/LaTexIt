@@ -16,7 +16,7 @@
   NSColor* textBackgroundColor;
 }
 
-@property (retain) NSColor *textBackgroundColor;
+@property (strong) NSColor *textBackgroundColor;
 
 -(void) editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent;
 -(void) selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength;

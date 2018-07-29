@@ -69,7 +69,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
       if (!version || [version compare:@"1.9.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
       {
       }
-      WellKnownLatexKeywords = [[plist objectForKey:@"packages"] retain];
+      WellKnownLatexKeywords = [plist objectForKey:@"packages"];
     }//end if WellKnownLatexKeywords
   }//end @synchronized
 }
@@ -129,12 +129,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
   [userDefaults removeObserver:self forKeyPath:EditionTabKeyInsertsSpacesEnabledKey];
   [userDefaults removeObserver:self forKeyPath:EditionTabKeyInsertsSpacesCountKey];
   [self removeObserver:self forKeyPath:NSAttributedStringBinding];
-  [self->syntaxColouring release];
-  [self->lineRanges release];
-  [self->forbiddenLines release];
-  [self->lineCountRulerView release];
-  [self->spacesString release];
-  [super dealloc];
 }
 //end dealloc
 
@@ -219,7 +213,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     [NSDictionary dictionaryWithObjectsAndKeys:
      [[PreferencesController sharedController] editionFont], NSFontAttributeName,
      nil];
-  NSMutableAttributedString* attributedString = [[value mutableCopy] autorelease];
+  NSMutableAttributedString* attributedString = [value mutableCopy];
   [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
   
   if (attributedString)
@@ -234,7 +228,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
   {
     if ([self->spacesString length] != self->tabKeyInsertsSpacesCount)
     {
-      [self->spacesString release];
       self->spacesString = nil;
     }//end if ([self->spacesString length] != self->tabKeyInsertsSpacesCount)
     if (!self->spacesString)
@@ -259,7 +252,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
   }//end if ([aString isKindOfClass:[NSString class]])
   else if ([aString isKindOfClass:[NSAttributedString class]])
   {
-    NSMutableAttributedString* attributedString = [[aString mutableCopy] autorelease];
+    NSMutableAttributedString* attributedString = [aString mutableCopy];
     [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
     NSRange range = [[attributedString string] rangeOfString:@"\t"];
     while(range.location != NSNotFound)
@@ -572,7 +565,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:colorStr];
     
     [[self textStorage] appendAttributedString:attributedString];
-    [attributedString release];
   }
   else if ((type = [pboard availableTypeFromArray:
         [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]]))
@@ -618,7 +610,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
-    [attributedString release];
     if (pdfWrapperData)
       [(id)[self nextResponder] performDragOperation:sender];
     else
@@ -634,7 +625,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [self insertTextAtMousePosition:attributedString];
     else
       [super performDragOperation:sender];
-    [attributedString release];
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])
   
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
@@ -642,7 +632,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     NSString* lastFilePath = [[pboard propertyListForType:NSFilenamesPboardType] lastObject];
     CFStringRef uti = !lastFilePath ? NULL :
                          UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
-                                                               (CFStringRef)[lastFilePath pathExtension], 
+                                                               (__bridge CFStringRef)[lastFilePath pathExtension], 
                                                                NULL);
     BOOL isPdf = UTTypeConformsTo(uti, CFSTR("com.adobe.pdf"));
     NSAttributedString* equationSourceAttributedString = nil;
@@ -652,15 +642,15 @@ static NSInteger SpellCheckerDocumentTag = 0;
       if (!CGPDFDocumentPossibleFromData(pdfContent))
         pdfContent = nil;
       LatexitEquation* latexitEquation = !pdfContent ? nil :
-        [[[LatexitEquation alloc] initWithPDFData:pdfContent useDefaults:NO] autorelease];
+        [[LatexitEquation alloc] initWithPDFData:pdfContent useDefaults:NO];
       equationSourceAttributedString = latexitEquation ? [latexitEquation sourceText] :
-        [[[NSAttributedString alloc] initWithString:CGPDFDocumentCreateStringRepresentationFromData(pdfContent)] autorelease];
+        [[NSAttributedString alloc] initWithString:CGPDFDocumentCreateStringRepresentationFromData(pdfContent)];
     }//end if (utiPdf)
 
     BOOL isRtf = !isPdf && !equationSourceAttributedString && UTTypeConformsTo(uti, CFSTR("public.rtf"));
     NSAttributedString* rtfContent = !isRtf ? nil :
-      [[[NSAttributedString alloc] initWithRTF:[NSData dataWithContentsOfFile:lastFilePath]
-                           documentAttributes:nil] autorelease];
+      [[NSAttributedString alloc] initWithRTF:[NSData dataWithContentsOfFile:lastFilePath]
+                           documentAttributes:nil];
 
     BOOL isText = !isPdf && !equationSourceAttributedString && !isRtf && !rtfContent && UTTypeConformsTo(uti, CFSTR("public.plain-text"));
     NSStringEncoding encoding = NSUTF8StringEncoding;
@@ -673,7 +663,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     else if (rtfContent)
       [[self textStorage] appendAttributedString:rtfContent];
     else if (plainTextContent)
-      [[self textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:plainTextContent] autorelease]];
+      [[self textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:plainTextContent]];
     
     if (uti) CFRelease(uti);
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
@@ -701,7 +691,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
   {
     NSData* pdfData = [pasteboard dataForType:type];
     //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/toto.pdf", NSHomeDirectory()] atomically:YES];
-    LatexitEquation* latexitEquation = [[[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO] autorelease];
+    LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO];
     if (latexitEquation)
     {
       [(id)[self nextResponder] paste:sender];
@@ -713,7 +703,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
   {
     NSData* pdfData = [pasteboard dataForType:type];
     //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/tmp.pdf", NSHomeDirectory()] atomically:YES];
-    LatexitEquation* latexitEquation = [[[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO] autorelease];
+    LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO];
     if (latexitEquation)
     {
       [(id)[self nextResponder] paste:sender];
@@ -740,8 +730,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
-    [attributedString release];
-    LatexitEquation* latexitEquation = !pdfWrapperData ? nil : [[[LatexitEquation alloc] initWithPDFData:pdfWrapperData useDefaults:NO] autorelease];
+    LatexitEquation* latexitEquation = !pdfWrapperData ? nil : [[LatexitEquation alloc] initWithPDFData:pdfWrapperData useDefaults:NO];
     if (latexitEquation)
     {
       [(id)[self nextResponder] paste:sender];
@@ -751,7 +740,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     {
       NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfWrapperData);
       if (pdfString) {
-        [[self textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:pdfString] autorelease]];
+        [[self textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:pdfString]];
       }
       done = YES;
     }
@@ -762,7 +751,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
       if (attributedString){
         [[self textStorage] appendAttributedString:attributedString];
       }
-      [attributedString release];
       //[super paste:sender];
       done = YES;
     }
@@ -857,7 +845,6 @@ static NSInteger SpellCheckerDocumentTag = 0;
       if (range.location == NSNotFound) {
         NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:[left stringByAppendingString:right]];
         [[self textStorage] appendAttributedString:attributedString];
-        [attributedString release];
       } else
       {
         NSString* selectedText = [[self string] substringWithRange:range];
@@ -875,51 +862,51 @@ static NSInteger SpellCheckerDocumentTag = 0;
 //it allows parenthesis detection for user friendly selection
 -(NSRange) selectionRangeForProposedRange:(NSRange)proposedSelRange granularity:(NSSelectionGranularity)granularity
 {
-	if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
-		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
-	
-	NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
-	NSUInteger originalLocation = location;
+  if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
+    return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+  
+  NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
+  NSUInteger originalLocation = location;
 
-	NSString *completeString = [self string];
-	unichar characterToCheck = [completeString characterAtIndex:location];
-	unsigned short skipMatchingBrace = 0;
-	NSUInteger lengthOfString = [completeString length];
-	if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
-		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
-	
-	BOOL triedToMatchBrace = NO;
+  NSString *completeString = [self string];
+  unichar characterToCheck = [completeString characterAtIndex:location];
+  unsigned short skipMatchingBrace = 0;
+  NSUInteger lengthOfString = [completeString length];
+  if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
+    return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+  
+  BOOL triedToMatchBrace = NO;
   static const unichar parenthesis[3][2] = {{'(', ')'}, {'[', ']'}, {'$', '$'}};
   NSInteger parenthesisIndex = 0;
   for(parenthesisIndex = 0 ;
       (parenthesisIndex<3) && (characterToCheck != parenthesis[parenthesisIndex][1]) ;
       ++parenthesisIndex);
-	
+  
   //detect if characterToCheck is a closing brace, and find the opening brace
-	if (parenthesisIndex < 3)
+  if (parenthesisIndex < 3)
   {
-		triedToMatchBrace = YES;
-		while (location--)
+    triedToMatchBrace = YES;
+    while (location--)
     {
-			characterToCheck = [completeString characterAtIndex:location];
-			if (characterToCheck == parenthesis[parenthesisIndex][0])
+      characterToCheck = [completeString characterAtIndex:location];
+      if (characterToCheck == parenthesis[parenthesisIndex][0])
       {
-				if (!skipMatchingBrace)
-					return NSMakeRange(location, originalLocation - location + 1);
-				else
-					--skipMatchingBrace;
-			}
+        if (!skipMatchingBrace)
+          return NSMakeRange(location, originalLocation - location + 1);
+        else
+          --skipMatchingBrace;
+      }
       else if (characterToCheck == parenthesis[parenthesisIndex][1])
         ++skipMatchingBrace;
-		}
-		NSBeep();
-	}
+    }
+    NSBeep();
+  }
 
-	// If it has a found a "starting" brace but not found a match, a double-click should only select the "starting" brace and not what it usually would select at a double-click
-	if (triedToMatchBrace)
-		return [super selectionRangeForProposedRange:NSMakeRange(proposedSelRange.location, 1) granularity:NSSelectByCharacter];
-	else
-		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+  // If it has a found a "starting" brace but not found a match, a double-click should only select the "starting" brace and not what it usually would select at a double-click
+  if (triedToMatchBrace)
+    return [super selectionRangeForProposedRange:NSMakeRange(proposedSelRange.location, 1) granularity:NSSelectByCharacter];
+  else
+    return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
 }
 //end selectionRangeForProposedRange:granularity:
 
@@ -1086,8 +1073,8 @@ static NSInteger SpellCheckerDocumentTag = 0;
         [[PreferencesController sharedController] editionFont], NSFontAttributeName,
         nil];
     NSMutableAttributedString* attributedString =
-      [object isKindOfClass:[NSAttributedString class]] ? [[object mutableCopy] autorelease] :
-      [[[NSMutableAttributedString alloc] initWithString:object] autorelease];
+      [object isKindOfClass:[NSAttributedString class]] ? [object mutableCopy] :
+      [[NSMutableAttributedString alloc] initWithString:object];
     [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
     [[self textStorage] insertAttributedString:attributedString atIndex:index];
     [self->syntaxColouring recolourCompleteDocument];

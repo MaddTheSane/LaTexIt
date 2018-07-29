@@ -36,9 +36,6 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 -(void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [self->tooltipWindow release];
-  [self->lastMoveDate release];
-  [super dealloc];
 }
 //end dealloc:
 
@@ -82,7 +79,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
     NSSize  toolTipSize = [TooltipWindow suggestedSizeForTooltip:[self toolTip]];
     NSRect  toolTipFrame = NSMakeRect(mouseLocation.x, mouseLocation.y, toolTipSize.width, toolTipSize.height);
     if (!self->tooltipWindow)
-      self->tooltipWindow = [[TooltipWindow tipWithString:[self toolTip] frame:toolTipFrame display:YES] retain];
+      self->tooltipWindow = [TooltipWindow tipWithString:[self toolTip] frame:toolTipFrame display:YES];
     [self->tooltipWindow orderFrontWithDuration:5];
   }
   if ([self isEnabled])
@@ -139,7 +136,6 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender
 {
-  [self->lastMoveDate release];
   self->lastMoveDate = [[NSDate alloc] init];
   if ([self state] != NSOnState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
@@ -150,7 +146,6 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 -(NSDragOperation) draggingUpdated:(id<NSDraggingInfo>)sender
 {
   [NSRunLoop cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkLastMove:) object:nil];
-  [self->lastMoveDate release];
   self->lastMoveDate = [[NSDate alloc] init];
   if ([self state] != NSOnState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];

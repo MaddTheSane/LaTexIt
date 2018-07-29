@@ -28,8 +28,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:NSStringFromClass([self class])] retain];
+        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
+          objectForKey:NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -43,8 +43,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     @synchronized(self)
     {
       if (!cachedWrapperEntity)
-        cachedWrapperEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:@"LibraryEquationWrapper"] retain];
+        cachedWrapperEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
+          objectForKey:@"LibraryEquationWrapper"];
     }//end @synchronized(self)
   }//end if (!cachedWrapperEntity)
   return cachedWrapperEntity;
@@ -65,7 +65,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   [self dispose];
   //in didTurnInToFault, a problem occurs with undo, that does not call any awakeFrom... to reactivate the observer
-  [super dealloc];
 }
 //end dealloc
 
@@ -74,7 +73,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   id clone = [super copyWithZone:zone];
   id clonedEquation = [[self equation] copy];
   [clone setEquation:clonedEquation];
-  [clonedEquation release];
   return clone;
 }
 //end copyWithZone:
@@ -230,7 +228,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
                                  insertIntoManagedObjectContext:[self managedObjectContext]];
       [equationWrapper setValue:self forKey:@"libraryEquation"]; //if current managedObjectContext is nil, this is necessary
       [self setValue:equationWrapper forKey:@"equationWrapper"];
-      [equationWrapper release];
     }//end if (!equationWrapper)
     [equationWrapper setEquation:equation];
     [equation setValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
@@ -276,7 +273,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     [self setTitle:libraryEquationTitle];//sets current and equation
   else
     [super setTitle:libraryEquationTitle];//sets only current item title, does not touch equation
-  [brothersTitles release];
 }
 //end setBestTitle
 
@@ -295,10 +291,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   {
     NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
     HistoryItem* historyItem = [coder decodeObjectForKey:@"value"];
-    LatexitEquation* latexitEquation = [[historyItem equation] retain];
+    LatexitEquation* latexitEquation = [historyItem equation];
     [historyItem setEquation:nil];
     [managedObjectContext safeInsertObject:latexitEquation];
-    [latexitEquation release];
     [self setEquation:latexitEquation];
     if (![self title])
       [self setBestTitle];
@@ -329,7 +324,6 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   id equationDescription = !isOldLibraryItem ? [description objectForKey:@"equation"] : description;
   LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithDescription:equationDescription];
   [self setEquation:latexitEquation];
-  [latexitEquation release];
   return self;
 }
 //end initWithDescription:

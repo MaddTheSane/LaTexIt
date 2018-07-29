@@ -39,7 +39,7 @@
   for(i = presetArgsCount ; i<self->numberOfArguments ; ++i)
     [stringOfArguments appendFormat:@"{%@}", bulletString];
   if (self->type == LATEX_ITEM_TYPE_STANDARD)
-    self->latexCode = [[[self->latexCode autorelease] stringByAppendingString:stringOfArguments] retain];
+    self->latexCode = [self->latexCode stringByAppendingString:stringOfArguments];
 
   self->requires = [package copy];
   self->argumentToken               = !anArgumentToken ? @"" : [anArgumentToken copy];
@@ -47,7 +47,6 @@
 
   if (!self->name || !self->localizedName || !self->latexCode || !self->resourcePath)
   {
-    [self autorelease];
     return nil;
   }
   
@@ -57,20 +56,6 @@
   return self;
 }
 //end initWithName:localizedName:resourcePath:type:numberOfArguments:latexCode:requires:
-
--(void) dealloc
-{
-  [self->name                        release];
-  [self->localizedName               release];
-  [self->latexCode                   release];
-  [self->requires                    release];
-  [self->argumentToken               release];
-  [self->argumentTokenDefaultReplace release];
-  [self->resourcePath                release];
-  [self->image                       release];
-  [super dealloc];
-}
-//end dealloc
 
 @synthesize name;
 @synthesize localizedName;
