@@ -32,7 +32,7 @@
 }
 
 -(instancetype)   init; ///< \c NSTemporaryDirectory() as workingDirectory
--(instancetype)   initWithWorkingDirectory:(NSString*)workingDirectory;
+-(instancetype)   initWithWorkingDirectory:(NSString*)workingDirectory NS_DESIGNATED_INITIALIZER;
 @property (copy)  NSDictionary<NSString *, NSString*> *environment;
 @property (copy)  NSString *launchPath;
 @property (copy)  NSArray<NSString *> *arguments;
@@ -40,13 +40,13 @@
 @property (getter=isUsingLoginShell) BOOL usingLoginShell;
 
 -(void) setTimeOut:(NSTimeInterval)timeOut;
--(NSString*) equivalentLaunchCommand;
+@property (readonly, copy) NSString *equivalentLaunchCommand;
 -(void) launch;
 -(void) waitUntilExit;
 @property (readonly) int terminationStatus;
 -(void) setStdInputData:(NSData*)data;
--(NSData*) dataForStdOutput;
--(NSData*) dataForStdError;
+@property (readonly, copy) NSData *dataForStdOutput;
+@property (readonly, copy) NSData *dataForStdError;
 @property (readonly) BOOL hasReachedTimeout;
 
 @end

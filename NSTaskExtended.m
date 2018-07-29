@@ -17,8 +17,8 @@
 //returns a string containing the equivalent command line of the NSTask
 -(NSString*) commandLine
 {
-  NSMutableString* commandLine = [NSMutableString stringWithFormat:@"%@", [self launchPath]];
-  NSEnumerator* enumerator = [[self arguments] objectEnumerator];
+  NSMutableString* commandLine = [NSMutableString stringWithFormat:@"%@", self.launchPath];
+  NSEnumerator* enumerator = [self.arguments objectEnumerator];
   NSString* argument = [enumerator nextObject];
   while(argument)
   {

@@ -75,7 +75,7 @@
 
 -(IBAction) librarySearchFieldChanged:(id)sender;
 
--(LibraryView*) libraryView;
+@property (readonly, strong) LibraryView *libraryView;
 
 @property (readonly) BOOL canRemoveSelectedItems;
 @property (readonly) BOOL canRenameSelectedItems;
@@ -83,7 +83,7 @@
 
 @property (readonly, getter=isCommentsPaneOpen) BOOL commentsPaneOpen;
 
--(NSMenu*) actionMenu;
+@property (readonly, copy) NSMenu *actionMenu;
 -(BOOL)    validateMenuItem:(NSMenuItem*)menuItem;
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;

@@ -12,28 +12,28 @@
 
 @interface NSDictionary (CompositionConfiguration)
 
--(composition_mode_t) compositionConfigurationCompositionMode;
--(NSString*)          compositionConfigurationProgramPathPdfLaTeX;
--(NSString*)          compositionConfigurationProgramPathXeLaTeX;
--(NSString*)          compositionConfigurationProgramPathLuaLaTeX;
--(NSString*)          compositionConfigurationProgramPathLaTeX;
--(NSString*)          compositionConfigurationProgramPathDviPdf;
--(NSString*)          compositionConfigurationProgramPathGs;
--(NSString*)          compositionConfigurationProgramPathPsToPdf;
+@property (readonly) composition_mode_t compositionConfigurationCompositionMode;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathPdfLaTeX;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathXeLaTeX;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathLuaLaTeX;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathLaTeX;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathDviPdf;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathGs;
+@property (readonly, copy) NSString *compositionConfigurationProgramPathPsToPdf;
 -(NSString*)          compositionConfigurationProgramPathForKey:(NSString*)key;
--(NSArray*)           compositionConfigurationProgramArgumentsPdfLaTeX;
--(NSArray*)           compositionConfigurationProgramArgumentsXeLaTeX;
--(NSArray*)           compositionConfigurationProgramArgumentsLuaLaTeX;
--(NSArray*)           compositionConfigurationProgramArgumentsLaTeX;
--(NSArray*)           compositionConfigurationProgramArgumentsDviPdf;
--(NSArray*)           compositionConfigurationProgramArgumentsGs;
--(NSArray*)           compositionConfigurationProgramArgumentsPsToPdf;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsPdfLaTeX;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsXeLaTeX;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsLuaLaTeX;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsLaTeX;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsDviPdf;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsGs;
+@property (readonly, copy) NSArray *compositionConfigurationProgramArgumentsPsToPdf;
 -(NSArray*)           compositionConfigurationProgramArgumentsForKey:(NSString*)key;
--(NSDictionary*)      compositionConfigurationAdditionalProcessingScripts;
--(NSDictionary*)      compositionConfigurationAdditionalProcessingScriptsPreProcessing;
--(NSDictionary*)      compositionConfigurationAdditionalProcessingScriptsMiddleProcessing;
--(NSDictionary*)      compositionConfigurationAdditionalProcessingScriptsPostProcessing;
+@property (readonly, copy) NSDictionary *compositionConfigurationAdditionalProcessingScripts;
+@property (readonly, copy) NSDictionary *compositionConfigurationAdditionalProcessingScriptsPreProcessing;
+@property (readonly, copy) NSDictionary *compositionConfigurationAdditionalProcessingScriptsMiddleProcessing;
+@property (readonly, copy) NSDictionary *compositionConfigurationAdditionalProcessingScriptsPostProcessing;
 -(NSDictionary*)      compositionConfigurationAdditionalProcessingScriptsForKey:(NSString*)key;
--(BOOL)               compositionConfigurationUseLoginShell;
+@property (readonly) BOOL compositionConfigurationUseLoginShell;
 
 @end

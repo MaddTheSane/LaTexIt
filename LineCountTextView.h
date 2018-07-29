@@ -34,18 +34,18 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
 
--(LineCountRulerView*) lineCountRulerView;
+@property (readonly, strong) LineCountRulerView *lineCountRulerView;
 -(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden; ///<change status (forbidden or not) of a line
 @property NSInteger lineShift;
 -(void) setLineShift:(NSInteger)aShift; ///<defines the shift in the displayed line numbers
 -(NSInteger)  lineShift;
--(NSArray*) lineRanges;
--(NSInteger) nbLines; ///<the number of lines in the text
+@property (readonly, copy) NSArray *lineRanges;
+@property (readonly) NSInteger nbLines; ///<the number of lines in the text
 -(void) clearErrors; ///<remove error markers
 -(void) setErrorAtLine:(NSUInteger)lineIndex message:(NSString*)message; ///<set error markers
 -(BOOL) gotoLine:(NSInteger)row;///<scroll to visible line <row>
 
--(SMLSyntaxColouring*) syntaxColouring;
+@property (readonly, strong) SMLSyntaxColouring *syntaxColouring;
 
 -(void) restorePreviousSelectedRangeLocation;
 

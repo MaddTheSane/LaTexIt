@@ -11,7 +11,7 @@
 
 @implementation DirectoryServiceHelper
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super init])))
     return nil;
@@ -46,7 +46,7 @@
   tDirStatus dirStatus = eDSNoErr;
   if (self->gDirRef && self->nodeRef)
   {
-    tDataNodePtr recName = dsDataNodeAllocateString(self->gDirRef, [userName UTF8String]);
+    tDataNodePtr recName = dsDataNodeAllocateString(self->gDirRef, userName.UTF8String);
     if (recName)
     {
       tDataNodePtr recType = dsDataNodeAllocateString(self->gDirRef, kDSStdRecordTypeUsers);

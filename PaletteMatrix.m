@@ -21,13 +21,13 @@
 -(void) scrollWheel:(NSEvent*)event
 {
   [super scrollWheel:event];
-  [[[self window] windowController] mouseMoved:event];
+  [self.window.windowController mouseMoved:event];
 }
 
 -(void) mouseDown:(NSEvent*)event
 {
-  [[self window] makeFirstResponder:self];
-  NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+  [self.window makeFirstResponder:self];
+  NSPoint point = [self convertPoint:event.locationInWindow fromView:nil];
   NSInteger row =0;
   NSInteger column = 0;
   BOOL ok = [self getRow:&row column:&column forPoint:point];
@@ -36,14 +36,14 @@
     PaletteCell* cell = [self cellAtRow:row column:column];
     [cell setHighlighted:YES];
     [self selectCellAtRow:row column:column];
-    [self sendAction:@selector(latexPalettesClick:) to:[self delegate]];
+    [self sendAction:@selector(latexPalettesClick:) to:self.delegate];
   }
 }
 
 -(void) keyDown:(NSEvent*)event
 {
-  NSCell* selectedCell = [self selectedCell];
-  NSString* characters = [event charactersIgnoringModifiers];
+  NSCell* selectedCell = self.selectedCell;
+  NSString* characters = event.charactersIgnoringModifiers;
   if (selectedCell && ![characters isEqualToString:@""])
   {
     NSInteger row = 0;
@@ -65,15 +65,15 @@
       row    = MAX(MIN(row,    [self numberOfRows]   -1), 0);
       column = MAX(MIN(column, [self numberOfColumns]-1), 0);
       [self selectCellAtRow:row column:column];
-      selectedCell = [self selectedCell];
+      selectedCell = self.selectedCell;
       [selectedCell setHighlighted:YES];
-      [self sendAction:@selector(latexPalettesSelect:) to:[self delegate]];
+      [self sendAction:@selector(latexPalettesSelect:) to:self.delegate];
     }
     else if ((c == ' ') || (c == 13))//return
-      [self sendAction:@selector(latexPalettesClick:) to:[self delegate]];
+      [self sendAction:@selector(latexPalettesClick:) to:self.delegate];
     else if (c == '\t')
     {
-      [[self window] makeFirstResponder:[self nextKeyView]];
+      [self.window makeFirstResponder:self.nextKeyView];
     }
   }
 }

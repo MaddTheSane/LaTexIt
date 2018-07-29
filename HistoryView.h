@@ -13,13 +13,13 @@
 @class HistoryItem;
 @class MyDocument;
 
-@interface HistoryView : NSTableView {
+@interface HistoryView : NSTableView <NSTableViewDataSource, NSTableViewDelegate> {
   HistoryController*  historyItemsController;
   NSPoint             lastDragStartPointSelfBased;
   BOOL                shouldRedrag;
 }
 
--(HistoryController*) historyItemsController;
+@property (readonly, strong) HistoryController *historyItemsController;
 
 -(IBAction) removeSelection:(id)sender;
 

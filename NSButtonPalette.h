@@ -29,7 +29,7 @@
 @end
 
 @protocol NSButtonPaletteDelegate <NSObject>
-
+@required
 -(void) buttonPalette:(NSButtonPalette*)buttonPalette buttonStateChanged:(NSButton*)button;
 
 @end

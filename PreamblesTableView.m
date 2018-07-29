@@ -17,18 +17,18 @@ static NSPasteboardType const PreamblesPboardType = @"PreamblesPboardType"; //pb
 
 -(void) awakeFromNib
 {
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
+  self.delegate = self;
+  self.dataSource = self;
   [self setAllowsMultipleSelection:NO];
-  [[[self tableColumns] lastObject] bind:NSValueBinding toObject:[[PreferencesController sharedController] preamblesController]
+  [self.tableColumns.lastObject bind:NSValueBinding toObject:[[PreferencesController sharedController] preamblesController]
     withKeyPath:@"arrangedObjects.name" options:nil];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:PreamblesPboardType]];
+  [self registerForDraggedTypes:@[PreamblesPboardType]];
 }
 //end awakeFromNib:
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:theEvent.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -37,8 +37,8 @@ static NSPasteboardType const PreamblesPboardType = @"PreamblesPboardType"; //pb
 
 -(void) keyDown:(NSEvent*)theEvent
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-  if (([theEvent keyCode] == 36) || ([theEvent keyCode] == 52) || ([theEvent keyCode] == 49))//Enter, space or ?? What did I do ???
+  [super interpretKeyEvents:@[theEvent]];
+  if ((theEvent.keyCode == 36) || (theEvent.keyCode == 52) || (theEvent.keyCode == 49))//Enter, space or ?? What did I do ???
     [self edit:self];
 }
 //end keyDown:
@@ -52,7 +52,7 @@ static NSPasteboardType const PreamblesPboardType = @"PreamblesPboardType"; //pb
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -78,8 +78,8 @@ static NSPasteboardType const PreamblesPboardType = @"PreamblesPboardType"; //pb
   //we put the moving rows in pasteboard
   self->draggedRowIndexes = rowIndexes;
   PreamblesController* preamblesController = [[PreferencesController sharedController] preamblesController];
-  NSArray* preamblesSelected = [preamblesController selectedObjects];
-  [pboard declareTypes:[NSArray arrayWithObject:PreamblesPboardType] owner:self];  
+  NSArray* preamblesSelected = preamblesController.selectedObjects;
+  [pboard declareTypes:@[PreamblesPboardType] owner:self];  
   [pboard setPropertyList:[NSKeyedArchiver archivedDataWithRootObject:preamblesSelected] forType:PreamblesPboardType];
   return YES;
 }
@@ -92,10 +92,10 @@ static NSPasteboardType const PreamblesPboardType = @"PreamblesPboardType"; //pb
   NSPasteboard* pboard = [info draggingPasteboard];
   NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = (tableView == [info draggingSource]) && pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:PreamblesPboardType]] &&
+            [pboard availableTypeFromArray:@[PreamblesPboardType]] &&
             [pboard propertyListForType:PreamblesPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+            indexSet && (indexSet.firstIndex != (NSUInteger)row) && (indexSet.firstIndex+1 != (NSUInteger)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

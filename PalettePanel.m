@@ -13,25 +13,25 @@
 
 -(void) awakeFromNib
 {
-  self->defaultMinSize = [self minSize];
-  self->defaultMaxSize = [self maxSize];  
+  self->defaultMinSize = self.minSize;
+  self->defaultMaxSize = self.maxSize;  
 }
 //end awakeFromNib
 
 -(void) becomeKeyWindow
 {
   [super becomeKeyWindow];
-  [self setMinSize:self->defaultMinSize];
-  [self setMaxSize:self->defaultMaxSize];
+  self.minSize = self->defaultMinSize;
+  self.maxSize = self->defaultMaxSize;
 }
 //end becomeKeyWindow
 
 -(void) resignKeyWindow
 {
   [super resignKeyWindow];
-  NSSize currentSize = [self frame].size;
-  [self setMinSize:currentSize];
-  [self setMaxSize:currentSize];
+  NSSize currentSize = self.frame.size;
+  self.minSize = currentSize;
+  self.maxSize = currentSize;
 }
 //end resignKeyWindow
 

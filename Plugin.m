@@ -11,7 +11,7 @@
 @implementation Plugin
 @synthesize bundle;
 
--(id) initWithPath:(NSString*)path
+-(instancetype) initWithPath:(NSString*)path
 {
   if (!(self = [super init]))
     return nil;
@@ -35,7 +35,7 @@
 {
   if ([bundle load])
   {
-    Class bundlePrincipalClass = [bundle principalClass];
+    Class bundlePrincipalClass = bundle.principalClass;
     if ([bundlePrincipalClass conformsToProtocol:@protocol(LaTeXiTPluginProtocol)])
       principalClassInstance = [[bundlePrincipalClass alloc] init];
   }//end if ([self->bundle load])
@@ -53,7 +53,7 @@
       if (!cachedImage)
         cachedImage = [principalClassInstance icon];
       if (!cachedImage)
-        cachedImage = [[NSWorkspace sharedWorkspace] iconForFile:[bundle bundlePath]];
+        cachedImage = [[NSWorkspace sharedWorkspace] iconForFile:bundle.bundlePath];
     }//end @synchronized(self)
   }//end if (!self->cachedImage)
   return cachedImage;

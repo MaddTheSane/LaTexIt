@@ -23,22 +23,22 @@
 -(BOOL) canRemove; //redefined
 -(void) add:(id)sender; //redefined
 
--(CompositionConfigurationsAdditionalScriptsController*) currentConfigurationScriptsController;
+@property (readonly, strong) CompositionConfigurationsAdditionalScriptsController *currentConfigurationScriptsController;
 
--(NSArray*)                                              currentConfigurationProgramArgumentsPdfLaTeX;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsPdfLaTeXController;
--(NSArray*)                                              currentConfigurationProgramArgumentsXeLaTeX;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsXeLaTeXController;
--(NSArray*)                                              currentConfigurationProgramArgumentsLuaLaTeX;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLuaLaTeXController;
--(NSArray*)                                              currentConfigurationProgramArgumentsLaTeX;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsLaTeXController;
--(NSArray*)                                              currentConfigurationProgramArgumentsDviPdf;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsDviPdfController;
--(NSArray*)                                              currentConfigurationProgramArgumentsGs;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsGsController;
--(NSArray*)                                              currentConfigurationProgramArgumentsPsToPdf;
--(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsPsToPdfController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsPdfLaTeX;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsPdfLaTeXController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsXeLaTeX;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsXeLaTeXController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsLuaLaTeX;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsLuaLaTeXController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsLaTeX;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsLaTeXController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsDviPdf;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsDviPdfController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsGs;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsGsController;
+@property (readonly, copy) NSArray *currentConfigurationProgramArgumentsPsToPdf;
+@property (readonly, strong) CompositionConfigurationsProgramArgumentsController *currentConfigurationProgramArgumentsPsToPdfController;
 -(NSArray*)                                              currentConfigurationProgramArgumentsForKey:(NSString*)key;
 -(CompositionConfigurationsProgramArgumentsController*)  currentConfigurationProgramArgumentsControllerForKey:(NSString*)key;
 

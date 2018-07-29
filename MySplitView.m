@@ -13,7 +13,7 @@
 
 -(CGFloat) dividerThickness
 {
-  CGFloat result = self->isCustomThickness ? self->thickness : [super dividerThickness];
+  CGFloat result = self->isCustomThickness ? self->thickness : super.dividerThickness;
   return result;
 }
 //end dividerThickness

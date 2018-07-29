@@ -21,26 +21,25 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 
 @implementation CompositionConfigurationsTableView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
+  self.delegate = self;
+  self.dataSource = self;
   [[self tableColumnWithIdentifier:@"name"] bind:NSValueBinding toObject:[[PreferencesController sharedController] compositionConfigurationsController]
     withKeyPath:[@"arrangedObjects." stringByAppendingString:CompositionConfigurationNameKey] options:nil];
   [[self tableColumnWithIdentifier:@"name"] bind:NSTextColorBinding toObject:[[PreferencesController sharedController] compositionConfigurationsController]
     withKeyPath:[@"arrangedObjects." stringByAppendingString:CompositionConfigurationIsDefaultKey]
-        options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [BoolTransformer transformerWithFalseValue:[NSColor blackColor] trueValue:[NSColor grayColor]], NSValueTransformerBindingOption, nil]];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:CompositionConfigurationsPboardType]];
+        options:@{NSValueTransformerBindingOption: [BoolTransformer transformerWithFalseValue:[NSColor blackColor] trueValue:[NSColor grayColor]]}];
+  [self registerForDraggedTypes:@[CompositionConfigurationsPboardType]];
   return self;
 }
 //end initWithCoder:
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:theEvent.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -49,8 +48,8 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 
 -(void) keyDown:(NSEvent*)theEvent
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-  if (([theEvent keyCode] == 36) || ([theEvent keyCode] == 52) || ([theEvent keyCode] == 49))//Enter, space or ?? What did I do ???
+  [super interpretKeyEvents:@[theEvent]];
+  if ((theEvent.keyCode == 36) || (theEvent.keyCode == 52) || (theEvent.keyCode == 49))//Enter, space or ?? What did I do ???
     [self edit:self];
 }
 //end keyDown:
@@ -58,7 +57,7 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -80,15 +79,15 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 {
   BOOL ok = YES;
   NSUndoManager* undoManager = [[PreferencesController sharedController] undoManager];
-  if ([sender action] == @selector(undo:))
+  if (sender.action == @selector(undo:))
   {
-    ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
+    ok = undoManager.canUndo;
+    [sender setTitleWithMnemonic:undoManager.undoMenuItemTitle];
   }
-  else if ([sender action] == @selector(redo:))
+  else if (sender.action == @selector(redo:))
   {
-    ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
+    ok = undoManager.canRedo;
+    [sender setTitleWithMnemonic:undoManager.redoMenuItemTitle];
   }
   return ok;
 }
@@ -102,7 +101,7 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 
 -(void) moveUp:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -112,8 +111,8 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 
 -(void) moveDown:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
-  if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
+  NSInteger selectedRow = self.selectedRow;
+  if ((selectedRow >= 0) && (selectedRow+1 < self.numberOfRows))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
@@ -123,7 +122,7 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification *)aNotification
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   [super textDidEndEditing:aNotification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }
@@ -132,7 +131,7 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
 #pragma mark delegate
 -(void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-  NSUInteger lastIndex = [[self selectedRowIndexes] lastIndex];
+  NSUInteger lastIndex = self.selectedRowIndexes.lastIndex;
   [self scrollRowToVisible:lastIndex];
 }
 //end tableViewSelectionDidChange:
@@ -157,8 +156,8 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
   //we put the moving rows in pasteboard
   self->draggedRowIndexes = rowIndexes;
   CompositionConfigurationsController* compositionConfigurationsController = [[PreferencesController sharedController] compositionConfigurationsController];
-  NSArray* compositionConfigurationsSelected = [compositionConfigurationsController selectedObjects];
-  [pboard declareTypes:[NSArray arrayWithObject:CompositionConfigurationsPboardType] owner:self];  
+  NSArray* compositionConfigurationsSelected = compositionConfigurationsController.selectedObjects;
+  [pboard declareTypes:@[CompositionConfigurationsPboardType] owner:self];  
   [pboard setPropertyList:[NSKeyedArchiver archivedDataWithRootObject:compositionConfigurationsSelected] forType:CompositionConfigurationsPboardType];
   return YES;
 }
@@ -171,10 +170,10 @@ static NSPasteboardType const CompositionConfigurationsPboardType = @"Compositio
   NSPasteboard* pboard = [info draggingPasteboard];
   NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = (tableView == [info draggingSource]) && pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:CompositionConfigurationsPboardType]] &&
+            [pboard availableTypeFromArray:@[CompositionConfigurationsPboardType]] &&
             [pboard propertyListForType:CompositionConfigurationsPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+            indexSet && (indexSet.firstIndex != (NSUInteger)row) && (indexSet.firstIndex+1 != (NSUInteger)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

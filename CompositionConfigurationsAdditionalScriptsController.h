@@ -11,6 +11,6 @@
 @interface CompositionConfigurationsAdditionalScriptsController : NSArrayController {
 }
 
--(id) selection;//redefined to avoid proxy objects
+@property (readonly, strong) id selection;//redefined to avoid proxy objects
 
 @end

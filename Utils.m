@@ -100,21 +100,21 @@ NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDi
   BOOL didChange = NO;
 
   NSString* radical =
-    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, [string length])
+    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, string.length)
                      capture:1 error:nil];
   NSString* identifierString =
-    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, [string length])
+    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, string.length)
                      capture:2 error:nil];
-  if (!radical || ![radical length])
+  if (!radical || !radical.length)
     radical = string;
   if (!identifierString)
     identifierString = @"";
 
-  unsigned int identifier = 2;
+  NSUInteger identifier = 2;
   if (radical)
   {
     result = radical;
-    identifier = (unsigned)([identifierString intValue]+1);
+    identifier = (NSUInteger)(identifierString.integerValue+1);
   }
 
   if ([otherStrings containsObject:result])

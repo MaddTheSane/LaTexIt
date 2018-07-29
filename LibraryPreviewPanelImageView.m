@@ -31,11 +31,11 @@
 
 -(void) drawRect:(NSRect)rect
 {
-  NSImage* image = [self image];
+  NSImage* image = self.image;
   //[image setBackgroundColor:[NSColor clearColor]];
-  [image setBackgroundColor:self->backgroundColor];
-  NSSize size = image ? [image size] : NSZeroSize;
-  NSRect bounds = [self bounds];
+  image.backgroundColor = self->backgroundColor;
+  NSSize size = image ? image.size : NSZeroSize;
+  NSRect bounds = self.bounds;
   NSRect reducedBounds = NSMakeRect(bounds.origin.x+5, bounds.origin.y+5, bounds.size.width-10, bounds.size.height-10);
   [self setImage:nil];
   [super drawRect:rect];
@@ -48,7 +48,7 @@
     [image drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
   else
     [[image bestImageRepresentationInContext:[NSGraphicsContext currentContext]] drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
-  [self setImage:image];
+  self.image = image;
 }
 //end drawRect:
 

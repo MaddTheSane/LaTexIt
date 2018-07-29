@@ -17,14 +17,14 @@
 @implementation NSDictionary (CompositionConfigurationAdditionalProcessingScript)
 
 -(BOOL) compositionConfigurationAdditionalProcessingScriptEnabled
-        {return [[self objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue];}
+        {return [self[CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue];}
 -(script_source_t) compositionConfigurationAdditionalProcessingScriptSource
-        {return (script_source_t)[[self objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] intValue];}
+        {return (script_source_t)[self[CompositionConfigurationAdditionalProcessingScriptTypeKey] intValue];}
 -(NSString*) compositionConfigurationAdditionalProcessingScriptFilePath
-        {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptPathKey];}
+        {return self[CompositionConfigurationAdditionalProcessingScriptPathKey];}
 -(NSString*) compositionConfigurationAdditionalProcessingScriptShell
-        {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptShellKey];}
+        {return self[CompositionConfigurationAdditionalProcessingScriptShellKey];}
 -(NSString*) compositionConfigurationAdditionalProcessingScriptBody
-        {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptContentKey];}
+        {return self[CompositionConfigurationAdditionalProcessingScriptContentKey];}
 
 @end

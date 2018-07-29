@@ -17,13 +17,13 @@
 
 @implementation NSData (Extended)
 
-+(id) dataWithBase64:(NSString*)base64
++(instancetype) dataWithBase64:(NSString*)base64
 {
   return [self dataWithBase64:base64 encodedWithNewlines:YES];
 }
 //end initWithBase64:
 
-+(id) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines
++(instancetype) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines
 {
   NSMutableData* result = [NSMutableData data];
   result = [[self alloc] initWithBase64EncodedString:base64 options:0];
@@ -51,7 +51,7 @@
 {
   NSString* result = nil;
   unsigned char sha[CC_SHA1_DIGEST_LENGTH] = {0};
-  CC_SHA1([self bytes], (CC_LONG)[self length], sha);
+  CC_SHA1(self.bytes, (CC_LONG)self.length, sha);
   NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:CC_SHA1_DIGEST_LENGTH freeWhenDone:NO];
   result = [wrapper encodeBase64WithNewlines:NO];
   return result;

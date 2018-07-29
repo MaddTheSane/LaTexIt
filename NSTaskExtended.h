@@ -11,6 +11,6 @@
 @interface NSTask (Extended)
 
 //returns a string containing the equivalent command line of the NSTask
--(NSString*) commandLine;
+@property (readonly, copy) NSString *commandLine;
 
 @end

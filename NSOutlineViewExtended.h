@@ -12,8 +12,8 @@
 @interface NSOutlineView (Extended)
 
 -(NSArray*) itemsAtRowIndexes:(NSIndexSet*)rowIndexes;
--(id)       selectedItem;
--(NSArray*) selectedItems;
+@property (readonly, strong) id selectedItem;
+@property (readonly, copy) NSArray *selectedItems;
 -(void)     selectItem:(id)item byExtendingSelection:(BOOL)extend;
 -(void)     selectItems:(NSArray*)item byExtendingSelection:(BOOL)extend;
 

@@ -17,7 +17,7 @@
 {
   NSPoint origin = cellFrame.origin;
   NSSize size = cellFrame.size;
-  NSSize imageSize = [[self image] size];
+  NSSize imageSize = self.image.size;
   CGFloat ratio = imageSize.width/imageSize.height;
   NSRect insideRect = NSMakeRect(origin.x, origin.y, size.width/2, size.height/2);
   if (ratio <= 1) //width <= height
@@ -26,7 +26,7 @@
     insideRect.size.height /= ratio;
   insideRect.origin = NSMakePoint(origin.x+(cellFrame.size.width-insideRect.size.width)/2,
                                   origin.y+(cellFrame.size.height-insideRect.size.height)/2);
-  if ([self isHighlighted])
+  if (self.highlighted)
   {
     [[NSColor colorWithCalibratedRed:181./255. green:213./255. blue:255./255. alpha:1] set];
     NSRectFill(cellFrame);

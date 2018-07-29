@@ -263,7 +263,6 @@
 		936C315E0C0DEEA90082F86D /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		936E5F920906E64000A26F7B /* SMLSyntaxColouring.m in Sources */ = {isa = PBXBuildFile; fileRef = 936E5F900906E64000A26F7B /* SMLSyntaxColouring.m */; };
 		9372A1F5087819EF00A3A645 /* MarginsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9372A1F3087819EF00A3A645 /* MarginsWindowController.m */; };
-		9375FC7C102ADDF000421561 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9375FC7B102ADDF000421561 /* PreferencesWindow.m */; };
 		937A39870FE2F1AC000BEE6E /* MySplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937A39860FE2F1AC000BEE6E /* MySplitView.m */; };
 		937CFAE01B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
 		937CFAE11B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
@@ -802,8 +801,6 @@
 		9372A1F2087819EF00A3A645 /* MarginsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginsWindowController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginsWindowController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* MarginsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarginsWindowController.xib; sourceTree = "<group>"; };
-		9375FC7A102ADDF000421561 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
-		9375FC7B102ADDF000421561 /* PreferencesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
 		93773C3207FFF541004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		93773C4607FFF6FB004AAB30 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -1327,8 +1324,6 @@
 				932E60B10F5DA745002B3136 /* PreferencesController.m */,
 				9315A59907FD36BD00AFCCE9 /* PreferencesWindowController.h */,
 				9315A59807FD36BD00AFCCE9 /* PreferencesWindowController.m */,
-				9375FC7A102ADDF000421561 /* PreferencesWindow.h */,
-				9375FC7B102ADDF000421561 /* PreferencesWindow.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -2335,7 +2330,6 @@
 				9318AEBD101DCB8E00F808E8 /* CGExtras.m in Sources */,
 				93A9FF4D10201DA70061DB60 /* NSObjectTreeNode.m in Sources */,
 				93A9FF761020436D0061DB60 /* NSOutlineViewExtended.m in Sources */,
-				9375FC7C102ADDF000421561 /* PreferencesWindow.m in Sources */,
 				93DD6393106A392300EDDF82 /* BodyTemplatesController.m in Sources */,
 				93DD6397106A393400EDDF82 /* BodyTemplatesTableView.m in Sources */,
 				9333458A1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */,

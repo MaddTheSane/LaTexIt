@@ -21,18 +21,18 @@ static NSPasteboardType const BodyTemplatesPboardType = @"BodyTemplatesPboardTyp
 
 -(void) awakeFromNib
 {
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
+  self.delegate = self;
+  self.dataSource = self;
   [self setAllowsMultipleSelection:NO];
-  [[[self tableColumns] lastObject] bind:NSValueBinding toObject:[[PreferencesController sharedController] bodyTemplatesController]
+  [self.tableColumns.lastObject bind:NSValueBinding toObject:[[PreferencesController sharedController] bodyTemplatesController]
     withKeyPath:@"arrangedObjects.name" options:nil];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:BodyTemplatesPboardType]];
+  [self registerForDraggedTypes:@[BodyTemplatesPboardType]];
 }
 //end awakeFromNib:
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:theEvent.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -41,8 +41,8 @@ static NSPasteboardType const BodyTemplatesPboardType = @"BodyTemplatesPboardTyp
 
 -(void) keyDown:(NSEvent*)theEvent
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-  if (([theEvent keyCode] == 36) || ([theEvent keyCode] == 52) || ([theEvent keyCode] == 49))//Enter, space or ?? What did I do ???
+  [super interpretKeyEvents:@[theEvent]];
+  if ((theEvent.keyCode == 36) || (theEvent.keyCode == 52) || (theEvent.keyCode == 49))//Enter, space or ?? What did I do ???
     [self edit:self];
 }
 //end keyDown:
@@ -50,7 +50,7 @@ static NSPasteboardType const BodyTemplatesPboardType = @"BodyTemplatesPboardTyp
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -82,8 +82,8 @@ static NSPasteboardType const BodyTemplatesPboardType = @"BodyTemplatesPboardTyp
   //we put the moving rows in pasteboard
   self->draggedRowIndexes = rowIndexes;
   BodyTemplatesController* bodyTemplatesController = [[PreferencesController sharedController] bodyTemplatesController];
-  NSArray* bodyTemplatesSelected = [bodyTemplatesController selectedObjects];
-  [pboard declareTypes:[NSArray arrayWithObject:BodyTemplatesPboardType] owner:self];  
+  NSArray* bodyTemplatesSelected = bodyTemplatesController.selectedObjects;
+  [pboard declareTypes:@[BodyTemplatesPboardType] owner:self];  
   [pboard setPropertyList:[NSKeyedArchiver archivedDataWithRootObject:bodyTemplatesSelected] forType:BodyTemplatesPboardType];
   return YES;
 }
@@ -96,10 +96,10 @@ static NSPasteboardType const BodyTemplatesPboardType = @"BodyTemplatesPboardTyp
   NSPasteboard* pboard = [info draggingPasteboard];
   NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = (tableView == [info draggingSource]) && pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:BodyTemplatesPboardType]] &&
+            [pboard availableTypeFromArray:@[BodyTemplatesPboardType]] &&
             [pboard propertyListForType:BodyTemplatesPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+            indexSet && (indexSet.firstIndex != (unsigned int)row) && (indexSet.firstIndex+1 != (unsigned int)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

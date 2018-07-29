@@ -36,14 +36,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context
++(instancetype) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context
 {
   id result = [[[self class] alloc] initWithDelegate:delegate context:context];
   return result;
 }
 //end transformerWithReference:
 
--(id) initWithDelegate:(id<DelegatingTransformerDelegate>)aDelegate context:(id)aContext
+-(instancetype) initWithDelegate:(id<DelegatingTransformerDelegate>)aDelegate context:(id)aContext
 {
   if ((!(self = [super init])))
     return nil;

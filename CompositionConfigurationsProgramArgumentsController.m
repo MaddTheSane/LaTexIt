@@ -16,7 +16,7 @@
 
 -(id) selection
 {
-  id result = [[self selectedObjects] lastObject];
+  id result = self.selectedObjects.lastObject;
   return result;
 }
 //end selection

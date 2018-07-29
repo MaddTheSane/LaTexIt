@@ -20,8 +20,8 @@
 
 -(void)drawRect:(NSRect)dirtyRect
 {
-  CGContextRef cgContext = [[NSGraphicsContext currentContext] graphicsPort];
-  CGRect roundedRect = CGRectFromNSRect([self bounds]);
+  CGContextRef cgContext = [NSGraphicsContext currentContext].graphicsPort;
+  CGRect roundedRect = CGRectFromNSRect(self.bounds);
   roundedRect.size.width -= 20;
   roundedRect.origin.x += 10;
   roundedRect.size.height -= 10;

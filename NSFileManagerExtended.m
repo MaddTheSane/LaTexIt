@@ -32,10 +32,10 @@ static NSMutableSet* createdTemporaryPaths = nil;
 {
   NSMutableArray* localizedPathComponents = [NSMutableArray array];
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  NSArray* components = [path pathComponents];
-  components = components ? components : [NSArray array];
+  NSArray* components = path.pathComponents;
+  components = components ? components : @[];
   unsigned int i = 0;
-  for(i = 1 ; (i <= [components count]) ; ++i)
+  for(i = 1 ; (i <= components.count) ; ++i)
   {
     NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
     [localizedPathComponents addObject:[fileManager displayNameAtPath:subPath]];
@@ -55,11 +55,11 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSUInteger length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     char* tmpString = (char*)calloc(length+1, sizeof(char));
     memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
-    int fd = mkstemps(tmpString, (int)([fileNameWithExtension length]-[templateString length]));
+    int fd = mkstemps(tmpString, (int)(fileNameWithExtension.length-templateString.length));
     if (fd != -1)
       fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
 
-    NSString* createdPath = [NSString stringWithUTF8String:tmpString];
+    NSString* createdPath = @(tmpString);
     if (createdPath)
       [self registerTemporaryPath:createdPath];
     if (outFilePath)
@@ -73,13 +73,13 @@ static NSMutableSet* createdTemporaryPaths = nil;
 -(BOOL) createLinkInDirectory:(NSString*)directoryPath toTarget:(NSString*)targetPath linkName:(NSString*)linkName outLinkPath:(NSString**)outLinkPath
 {
   BOOL result = NO;
-  NSString* linkPath = [directoryPath stringByAppendingPathComponent:(linkName ? linkName : [targetPath lastPathComponent])];
+  NSString* linkPath = [directoryPath stringByAppendingPathComponent:(linkName ? linkName : targetPath.lastPathComponent)];
   if (![self fileExistsAtPath:linkPath])
     result = [self createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
   else
   {
     NSDictionary* attributes = [self attributesOfItemAtPath:linkPath error:NULL];
-    if ([[attributes objectForKey:NSFileType] isEqualToString:NSFileTypeSymbolicLink])
+    if ([attributes[NSFileType] isEqualToString:NSFileTypeSymbolicLink])
       result = [[self destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
     if (!result)
       result = [self removeItemAtPath:linkPath error:nil] &&

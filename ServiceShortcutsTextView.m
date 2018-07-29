@@ -12,7 +12,7 @@
 
 @implementation ServiceShortcutsTextView
 
--(id) initWithFrame:(NSRect)frame
+-(instancetype) initWithFrame:(NSRect)frame
 {
   if ((!(self = [super initWithFrame:frame])))
     return nil;
@@ -30,9 +30,9 @@
 
 -(BOOL) performKeyEquivalent:(NSEvent*)event
 {
-  NSString* string = [[event charactersIgnoringModifiers] uppercaseString];
+  NSString* string = event.charactersIgnoringModifiers.uppercaseString;
   
-  const unichar lastCharacter = (string && ![string isEqualToString:@""]) ? [string characterAtIndex:[string length]-1] : '\0';
+  const unichar lastCharacter = (string && ![string isEqualToString:@""]) ? [string characterAtIndex:string.length-1] : '\0';
   const unichar shift = 0x21e7;
   const unichar command = 0x2318;
   const unichar tab[] = {shift, command, lastCharacter};
@@ -41,16 +41,16 @@
   int begin = [[NSCharacterSet letterCharacterSet] characterIsMember:lastCharacter] ? 0 : 1;
 
   string = lastCharacter ? [NSString stringWithCharacters:tab+begin length:3-begin] : @"";
-  [self setString:string];
+  self.string = string;
   return YES;
 }
 
 -(void) textDidChange:(NSNotification*)aNotification
 {
-  NSTextView* textView = [aNotification object];
-  NSString* string = [[textView string] uppercaseString];
+  NSTextView* textView = aNotification.object;
+  NSString* string = textView.string.uppercaseString;
   
-  const unichar lastCharacter = (string && ![string isEqualToString:@""]) ? [string characterAtIndex:[string length]-1] : '\0';
+  const unichar lastCharacter = (string && ![string isEqualToString:@""]) ? [string characterAtIndex:string.length-1] : '\0';
   const unichar shift = 0x21e7;
   const unichar command = 0x2318;
   const unichar tab[] = {shift, command, lastCharacter};
@@ -58,21 +58,21 @@
   //if the character is not a letter, do not display "shift"
   int begin = [[NSCharacterSet letterCharacterSet] characterIsMember:lastCharacter] ? 0 : 1;
 
-  [textView setString:lastCharacter ? [NSString stringWithCharacters:tab+begin length:3-begin] : @""];
+  textView.string = lastCharacter ? [NSString stringWithCharacters:tab+begin length:3-begin] : @"";
 }
 
 -(void) textDidEndEditing:(NSNotification *)aNotification
 {
-  NSString* string = [self string];
-  const unichar lastCharacter = (string && ![string isEqualToString:@""]) ? [string characterAtIndex:[string length]-1] : '\0';
+  NSString* string = self.string;
+  const unichar lastCharacter = (string && ![string isEqualToString:@""]) ? [string characterAtIndex:string.length-1] : '\0';
   if (![[NSCharacterSet alphanumericCharacterSet] characterIsMember:lastCharacter] &&
       ![[NSCharacterSet punctuationCharacterSet] characterIsMember:lastCharacter])
-    [self setString:@""];
+    self.string = @"";
 }
 
 -(void) deleteBackward:(id)sender
 {
-  [self setString:@""];
+  self.string = @"";
 }
 
 -(void) cancelOperation:(id)sender
@@ -82,7 +82,7 @@
 
 -(void) keyDown:(NSEvent*)event
 {
-  NSString* characters = [event charactersIgnoringModifiers];
+  NSString* characters = event.charactersIgnoringModifiers;
   if (![characters isEqualToString:@""] && ([characters characterAtIndex:0] == 13)) //return
     [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidEndEditingNotification object:self];
   else

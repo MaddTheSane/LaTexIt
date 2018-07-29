@@ -12,10 +12,10 @@
 
 @interface NSDictionary (CompositionConfigurationAdditionalProcessingScript)
 
--(BOOL)            compositionConfigurationAdditionalProcessingScriptEnabled;
--(script_source_t) compositionConfigurationAdditionalProcessingScriptSource;
--(NSString*)       compositionConfigurationAdditionalProcessingScriptFilePath;
--(NSString*)       compositionConfigurationAdditionalProcessingScriptShell;
--(NSString*)       compositionConfigurationAdditionalProcessingScriptBody;
+@property (readonly) BOOL compositionConfigurationAdditionalProcessingScriptEnabled;
+@property (readonly) script_source_t compositionConfigurationAdditionalProcessingScriptSource;
+@property (readonly, copy) NSString *compositionConfigurationAdditionalProcessingScriptFilePath;
+@property (readonly, copy) NSString *compositionConfigurationAdditionalProcessingScriptShell;
+@property (readonly, copy) NSString *compositionConfigurationAdditionalProcessingScriptBody;
 
 @end

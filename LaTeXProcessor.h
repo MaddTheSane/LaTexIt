@@ -23,11 +23,11 @@ extern NSString* LatexizationDidEndNotification;
 
 +(LaTeXProcessor*) sharedLaTeXProcessor;
 
--(NSManagedObjectModel*) managedObjectModel;
--(NSArray*)      unixBins;
--(NSString*)     environmentPath;
--(NSDictionary*) fullEnvironment;
--(NSDictionary*) extraEnvironment;
+@property (readonly, copy) NSManagedObjectModel *managedObjectModel;
+@property (readonly, copy) NSArray *unixBins;
+@property (readonly, copy) NSString *environmentPath;
+@property (readonly, copy) NSDictionary *fullEnvironment;
+@property (readonly, copy) NSDictionary *extraEnvironment;
 
 -(void) addInEnvironmentPath:(NSString*)path;
 

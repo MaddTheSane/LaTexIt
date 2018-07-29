@@ -25,7 +25,7 @@
 
 @implementation SystemTask
 
--(id) initWithWorkingDirectory:(NSString*)aWorkingDirectory
+-(instancetype) initWithWorkingDirectory:(NSString*)aWorkingDirectory
 {
   if ((!(self = [super init])))
     return nil;
@@ -49,7 +49,7 @@
 }
 //end initWithWorkingDirectory
 
--(id) init
+-(instancetype) init
 {
   return self = [self initWithWorkingDirectory:NSTemporaryDirectory()];
 }
@@ -59,10 +59,10 @@
 {
   if (DebugLogLevel < 1)
   {
-    unlink([self->tmpStdinFilePath fileSystemRepresentation]);
-    unlink([self->tmpStdoutFilePath fileSystemRepresentation]);
-    unlink([self->tmpStderrFilePath fileSystemRepresentation]);
-    unlink([self->tmpScriptFilePath fileSystemRepresentation]);
+    unlink(self->tmpStdinFilePath.fileSystemRepresentation);
+    unlink(self->tmpStdoutFilePath.fileSystemRepresentation);
+    unlink(self->tmpStderrFilePath.fileSystemRepresentation);
+    unlink(self->tmpScriptFilePath.fileSystemRepresentation);
   }//end if (DebugLogLevel < 1)
 }
 //end dealloc
@@ -84,16 +84,16 @@
 {
   NSMutableString* scriptContent = [NSMutableString stringWithString:@"#!/bin/sh\n"];
   //environment is now inherited with the call to bash -l
-  if (self->environment && [self->environment count])
+  if (self->environment && self->environment.count)
   {
     NSEnumerator* environmentEnumerator = [self->environment keyEnumerator];
     NSString* variable = nil;
     while((variable = [environmentEnumerator nextObject]))
     {
-      BOOL isDoubleQuoted = ([variable length] >= 2) && [variable startsWith:@"\"" options:0] && [variable endsWith:@"\"" options:0];
-      if ([variable length] && !isDoubleQuoted)
+      BOOL isDoubleQuoted = (variable.length >= 2) && [variable startsWith:@"\"" options:0] && [variable endsWith:@"\"" options:0];
+      if (variable.length && !isDoubleQuoted)
       {
-        NSString* variableValue = [[environment objectForKey:variable] stringByReplacingOccurrencesOfRegex:@"\"" withString:@"\\\""];
+        NSString* variableValue = [environment[variable] stringByReplacingOccurrencesOfRegex:@"\"" withString:@"\\\""];
         [scriptContent appendFormat:@"export %@=\"%@\" 1>/dev/null 2>&1 \n", variable, variableValue];
       }
     }
@@ -145,7 +145,7 @@
                                                   outFilePath:&timeLimitedScriptPath workingDirectory:self->workingDirectory];
     [timeLimitedScript writeToFile:timeLimitedScriptPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     NSString* systemCall = [NSString stringWithFormat:@"/bin/sh %@", timeLimitedScriptPath];
-    self->terminationStatus = system([systemCall UTF8String]);
+    self->terminationStatus = system(systemCall.UTF8String);
     self->selfExited        = WIFEXITED(self->terminationStatus) && !WIFSIGNALED(self->terminationStatus);
     self->terminationStatus = WIFEXITED(self->terminationStatus) ? WEXITSTATUS(self->terminationStatus) : -1;
     [self->runningLock unlock];

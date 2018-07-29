@@ -16,13 +16,13 @@
 @synthesize fileName;
 @synthesize uti;
 
-+(id) dragFileWrapperWithFileName:(NSString*)fileName uti:(NSString*)uti
++(instancetype) dragFileWrapperWithFileName:(NSString*)fileName uti:(NSString*)uti
 {
   return [[[self class] alloc] initWithFileName:fileName uti:uti];
 }
 //end dragFileWrapperWithFileName:
 
--(id) initWithFileName:(NSString*)aFileName uti:(NSString*)aUti
+-(instancetype) initWithFileName:(NSString*)aFileName uti:(NSString*)aUti
 {
   if (!(self = [super init]))
     return nil;
@@ -34,7 +34,7 @@
 
 -(NSArray*) writableTypesForPasteboard:(NSPasteboard*)pasteboard
 {
-  NSArray* result = [NSArray arrayWithObjects:self->uti, nil];
+  NSArray* result = @[self->uti];
   return result;
 }
 //end writableTypesForPasteboard:

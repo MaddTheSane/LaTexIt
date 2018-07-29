@@ -35,14 +35,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithDictionary:(NSDictionary*)dictionary
++(instancetype) transformerWithDictionary:(NSDictionary*)dictionary
 {
   id result = [[[self class] alloc] initWithDictionary:dictionary];
   return result;
 }
 //end transformerWithDictionary:
 
--(id) initWithDictionary:(NSDictionary*)aDictionary
+-(instancetype) initWithDictionary:(NSDictionary*)aDictionary
 {
   if ((!(self = [super init])))
     return nil;
@@ -53,7 +53,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [self->dictionary objectForKey:value];
+  id result = self->dictionary[value];
   return result;
 }
 //end transformedValue:

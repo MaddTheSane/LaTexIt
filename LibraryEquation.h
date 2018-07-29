@@ -22,7 +22,8 @@
 +(NSEntityDescription*) entity;
 +(NSEntityDescription*) wrapperEntity;
 
--(instancetype) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+-(instancetype) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext NS_DESIGNATED_INITIALIZER;
+-(instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 
 -(void) dispose;
 @property BOOL customKVOEnabled;
@@ -32,6 +33,7 @@
 
 @property (strong) LatexitEquation *equation;
 
--(id) plistDescription;
+@property (readonly, strong) id plistDescription;
+-(instancetype) initWithDescription:(id)description NS_DESIGNATED_INITIALIZER;
 
 @end

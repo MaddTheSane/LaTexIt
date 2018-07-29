@@ -39,14 +39,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue
++(instancetype) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue
 {
   id result = [[[self class] alloc] initWithFalseValue:falseValue trueValue:trueValue];
   return result;
 }
 //end transformerWithReference:
 
--(id) initWithFalseValue:(id)aFalseValue trueValue:(id)aTrueValue
+-(instancetype) initWithFalseValue:(id)aFalseValue trueValue:(id)aTrueValue
 {
   if ((!(self = [super init])))
     return nil;
@@ -65,7 +65,7 @@
 
 -(id) reverseTransformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:[value isEqualTo:self->trueValue]];
+  id result = @([value isEqualTo:self->trueValue]);
   return result;
 }
 //end reverseTransformedValue:

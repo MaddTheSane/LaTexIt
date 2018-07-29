@@ -20,7 +20,7 @@
 
 @implementation HistoryController
 
--(id) initWithContent:(id)content
+-(instancetype) initWithContent:(id)content
 {
   if ((!(self = [super initWithContent:content])))
     return nil;
@@ -41,7 +41,7 @@
 {
   if ([keyPath isEqualToString:NSContentBinding])
   {
-    if (![self automaticallyRearrangesObjects])
+    if (!self.automaticallyRearrangesObjects)
       [self rearrangeObjects];
   }//end if ([keyPath isEqualToString:NSContentBinding])
 }
@@ -50,7 +50,7 @@
 -(void) addObject:(id)object
 {
   [super addObject:object];
-  if (![self automaticallyRearrangesObjects])
+  if (!self.automaticallyRearrangesObjects)
     [self rearrangeObjects];
 }
 //end addObject:
@@ -58,7 +58,7 @@
 -(void) removeObject:(id)object
 {
   [super removeObject:object];
-  if (![self automaticallyRearrangesObjects])
+  if (!self.automaticallyRearrangesObjects)
     [self rearrangeObjects];
 }
 //end removeObject:
@@ -66,7 +66,7 @@
 -(void) addObjects:(NSArray*)objects
 {
   [super addObjects:objects];
-  if (![self automaticallyRearrangesObjects])
+  if (!self.automaticallyRearrangesObjects)
     [self rearrangeObjects];
 }
 //end addObjects:
@@ -74,7 +74,7 @@
 -(void) removeObjects:(NSArray*)objects
 {
   [super removeObjects:objects];
-  if (![self automaticallyRearrangesObjects])
+  if (!self.automaticallyRearrangesObjects)
     [self rearrangeObjects];
 }
 //end removeObjects:

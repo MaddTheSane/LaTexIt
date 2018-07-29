@@ -13,11 +13,11 @@
 
 -(void) centerInSuperviewHorizontally:(BOOL)horizontally vertically:(BOOL)vertically
 {
-  NSView* superview = [self superview];
+  NSView* superview = self.superview;
   if (superview)
   {
-    NSRect superFrame = [superview frame];
-    NSRect selfFrame  = [self frame];
+    NSRect superFrame = superview.frame;
+    NSRect selfFrame  = self.frame;
     NSPoint newFrameOrigin = NSMakePoint(
       !horizontally ? selfFrame.origin.x : (superFrame.size.width-selfFrame.size.width)/2,
       !vertically   ? selfFrame.origin.y : (superFrame.size.height-selfFrame.size.height)/2);

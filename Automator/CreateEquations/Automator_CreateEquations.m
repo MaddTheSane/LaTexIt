@@ -77,7 +77,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   NSUInteger result = 0;
   @synchronized(freeIds)
   {
-    result = [freeIds firstIndex];
+    result = freeIds.firstIndex;
     [freeIds removeIndex:result];
   }//end @synchronized(freeIds)
   return result;
@@ -112,7 +112,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 }
 //end workingDirectory
 
--(id) initWithDefinition:(NSDictionary*)dict fromArchive:(BOOL)archived
+-(instancetype) initWithDefinition:(NSDictionary*)dict fromArchive:(BOOL)archived
 {
   if ((!(self = [super initWithDefinition:dict fromArchive:archived])))
     return nil;
@@ -132,40 +132,40 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 {
   if (!self->fromArchive) //init from latexit preferences
   {
-    NSMutableDictionary* dict = [self parameters];
+    NSMutableDictionary* dict = self.parameters;
     PreferencesController* preferencesController = [PreferencesController sharedController];
     CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
-    NSString* latexitVersion = [preferencesController latexitVersion];
+    NSString* latexitVersion = preferencesController.latexitVersion;
     self->latexitPreferencesAvailable = latexitVersion && ![latexitVersion isEqualToString:@""];
     
     [self->tabView selectTabViewItemWithIdentifier:self->latexitPreferencesAvailable ?
       @"parameters" : @"warning"];
     
-    latex_mode_t equationMode = [preferencesController latexisationLaTeXMode];
+    latex_mode_t equationMode = preferencesController.latexisationLaTeXMode;
     if (equationMode == LATEX_MODE_AUTO)
       equationMode = LATEX_MODE_ALIGN;
-    [self->exportFormatPopupButton selectItemWithTag:[preferencesController exportFormatPersistent]];
-    CGFloat      fontSize       = [preferencesController latexisationFontSize];
-    NSData*      fontColorData  = [preferencesController latexisationFontColorData];
-    CGFloat exportJpegQualityPercent = [preferencesController exportJpegQualityPercent];
-    NSData* exportJpegBackgroundColorAsData = [preferencesController exportJpegBackgroundColorData];
-    NSString* exportSvgPdfToSvgPath = [preferencesController exportSvgPdfToSvgPath];
-    BOOL exportTextExportPreamble = [preferencesController exportTextExportPreamble];
-    BOOL exportTextExportEnvironment = [preferencesController exportTextExportEnvironment];
-    BOOL exportTextExportBody = [preferencesController exportTextExportBody];
-    [dict setObject:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
-    [dict setObject:[NSNumber numberWithFloat:fontSize] forKey:@"fontSize"];
-    [dict setObject:[NSNumber numberWithInt:equationMode] forKey:@"equationMode"];
-    [dict setObject:[NSNumber numberWithFloat:fontSize] forKey:@"fontSize"];
-    [dict setObject:[NSNumber numberWithDouble:exportJpegQualityPercent] forKey:@"exportJpegQualityPercent"];
-    [dict setObject:exportJpegBackgroundColorAsData forKey:@"exportJpegBackgroundColor"];
-    [dict setObject:exportSvgPdfToSvgPath forKey:@"exportSvgPdfToSvgPath"];
-    [dict setObject:[NSNumber numberWithBool:exportTextExportPreamble] forKey:@"exportTextExportPreamble"];
-    [dict setObject:[NSNumber numberWithBool:exportTextExportEnvironment] forKey:@"exportTextExportEnvironment"];
-    [dict setObject:[NSNumber numberWithBool:exportTextExportBody] forKey:@"exportTextExportBody"];
+    [self->exportFormatPopupButton selectItemWithTag:preferencesController.exportFormatPersistent];
+    CGFloat      fontSize       = preferencesController.latexisationFontSize;
+    NSData*      fontColorData  = preferencesController.latexisationFontColorData;
+    CGFloat exportJpegQualityPercent = preferencesController.exportJpegQualityPercent;
+    NSData* exportJpegBackgroundColorAsData = preferencesController.exportJpegBackgroundColorData;
+    NSString* exportSvgPdfToSvgPath = preferencesController.exportSvgPdfToSvgPath;
+    BOOL exportTextExportPreamble = preferencesController.exportTextExportPreamble;
+    BOOL exportTextExportEnvironment = preferencesController.exportTextExportEnvironment;
+    BOOL exportTextExportBody = preferencesController.exportTextExportBody;
+    dict[@"equationMode"] = @(equationMode);
+    dict[@"fontSize"] = @(fontSize);
+    dict[@"equationMode"] = @(equationMode);
+    dict[@"fontSize"] = @(fontSize);
+    dict[@"exportJpegQualityPercent"] = @(exportJpegQualityPercent);
+    dict[@"exportJpegBackgroundColor"] = exportJpegBackgroundColorAsData;
+    dict[@"exportSvgPdfToSvgPath"] = exportSvgPdfToSvgPath;
+    dict[@"exportTextExportPreamble"] = @(exportTextExportPreamble);
+    dict[@"exportTextExportEnvironment"] = @(exportTextExportEnvironment);
+    dict[@"exportTextExportBody"] = @(exportTextExportBody);
     if (fontColorData)
-      [dict setObject:fontColorData forKey:@"fontColorData"];
-    [self setParameters:dict];
+      dict[@"fontColorData"] = fontColorData;
+    self.parameters = dict;
   }//end if (!self->fromArchive) //init from latexit preferences
   [self parametersUpdated];
   [super opened];
@@ -183,20 +183,20 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   [self->warningMessage setStringValue:LocalLocalizedString(@"You must run LaTeXiT once, to init the configuration",
                                                             @"You must run LaTeXiT once, to init the configuration")];
 
-  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN   forSegment:0];
-  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
-  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
-  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_TEXT    forSegment:3];
-  [[self->latexModeSegmentedControl cell] setLabel:LocalLocalizedString(@"Align", @"Align") forSegment:0];
-  [[self->latexModeSegmentedControl cell] setLabel:LocalLocalizedString(@"Text", @"Text") forSegment:3];
+  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_ALIGN   forSegment:0];
+  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_DISPLAY forSegment:1];
+  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_INLINE  forSegment:2];
+  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_TEXT    forSegment:3];
+  [self->latexModeSegmentedControl.cell setLabel:LocalLocalizedString(@"Align", @"Align") forSegment:0];
+  [self->latexModeSegmentedControl.cell setLabel:LocalLocalizedString(@"Text", @"Text") forSegment:3];
 
   NSRect rect = NSZeroRect;
   CGFloat x = 0;
   CGFloat width = 0;
-  rect = [self->parametersView frame];
+  rect = self->parametersView.frame;
   rect.origin.x = 20;
-  rect.size.width = [[self->parametersView superview] frame].size.width-2*rect.origin.x;
-  [self->parametersView setFrame:rect];
+  rect.size.width = self->parametersView.superview.frame.size.width-2*rect.origin.x;
+  self->parametersView.frame = rect;
   
   [self->fontSizeLabel  setStringValue:LocalLocalizedString(@"Font size :", @"Font size :")];
   [self->fontSizeLabel sizeToFit];
@@ -224,27 +224,24 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
                                               tag:(int)EXPORT_FORMAT_MATHML];
   [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
                                               tag:(int)EXPORT_FORMAT_TEXT];
-  [self->exportFormatPopupButton setTarget:self];
-  [self->exportFormatPopupButton setAction:@selector(nilAction:)];
+  self->exportFormatPopupButton.target = self;
+  self->exportFormatPopupButton.action = @selector(nilAction:);
   [self->exportFormatPopupButton sizeToFit];
 
-  [self->exportFormatOptionsButton setTitle:[NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")]];
+  self->exportFormatOptionsButton.title = [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")];
   [self->exportFormatOptionsButton sizeToFit];
   [self->exportFormatOptionsButton bind:NSEnabledBinding toObject:self withKeyPath:@"parameters.exportFormat" options:
-    [NSDictionary dictionaryWithObjectsAndKeys:
-      [IsInTransformer transformerWithReferences:
-        [NSArray arrayWithObjects:[NSNumber numberWithInt:EXPORT_FORMAT_JPEG], [NSNumber numberWithInt:EXPORT_FORMAT_SVG], nil]],
-      NSValueTransformerBindingOption,
-      nil]];
+    @{NSValueTransformerBindingOption: [IsInTransformer transformerWithReferences:
+        @[@(EXPORT_FORMAT_JPEG), @(EXPORT_FORMAT_SVG)]]}];
 
-  NSRect superFrame = [[self->exportFormatPopupButton superview] frame];
+  NSRect superFrame = self->exportFormatPopupButton.superview.frame;
   NSRect frame = NSZeroRect;
-  frame = [self->exportFormatOptionsButton frame];
+  frame = self->exportFormatOptionsButton.frame;
   frame.origin.x = superFrame.size.width-frame.size.width-2;
-  [self->exportFormatOptionsButton setFrame:frame];
-  frame = [self->exportFormatPopupButton frame];
-  frame.origin.x = NSMinX([self->exportFormatOptionsButton frame])-4-frame.size.width;
-  [self->exportFormatPopupButton setFrame:frame];
+  self->exportFormatOptionsButton.frame = frame;
+  frame = self->exportFormatPopupButton.frame;
+  frame.origin.x = NSMinX(self->exportFormatOptionsButton.frame)-4-frame.size.width;
+  self->exportFormatPopupButton.frame = frame;
   
   [self->createEquationsOptionsLabel setStringValue:LocalLocalizedString(@"Create equations :", @"Create equations :")];
   [self->createEquationsOptionsLabel sizeToFit];
@@ -256,44 +253,44 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   [self->createEquationsOptionsPopUpButton sizeToFit];
   
   width =
-    [self->fontSizeLabel frame].size.width+4+[self->fontSizeTextField frame].size.width+4+[self->fontSizeStepper frame].size.width+
+    self->fontSizeLabel.frame.size.width+4+self->fontSizeTextField.frame.size.width+4+self->fontSizeStepper.frame.size.width+
     20+
-    [self->fontColorLabel frame].size.width+4+[self->fontColorWell frame].size.width;
-  x = ([self->parametersView frame].size.width-width)/2;
+    self->fontColorLabel.frame.size.width+4+self->fontColorWell.frame.size.width;
+  x = (self->parametersView.frame.size.width-width)/2;
 
-  rect = [self->fontSizeLabel frame];
+  rect = self->fontSizeLabel.frame;
   rect.origin.x = x;
-  [self->fontSizeLabel setFrame:rect];
-  rect = [self->fontSizeTextField frame];
-  rect.origin.x = NSMaxX([self->fontSizeLabel frame])+4;
-  [self->fontSizeTextField setFrame:rect];
-  rect = [self->fontSizeStepper frame];
-  rect.origin.x = NSMaxX([self->fontSizeTextField frame])+4;
-  [self->fontSizeStepper setFrame:rect];
-  rect = [self->fontColorLabel frame];
-  rect.origin.x = NSMaxX([self->fontSizeStepper frame])+20;
-  [self->fontColorLabel setFrame:rect];
-  rect = [self->fontColorWell frame];
-  rect.origin.x = NSMaxX([self->fontColorLabel frame])+4;
-  [self->fontColorWell setFrame:rect];
+  self->fontSizeLabel.frame = rect;
+  rect = self->fontSizeTextField.frame;
+  rect.origin.x = NSMaxX(self->fontSizeLabel.frame)+4;
+  self->fontSizeTextField.frame = rect;
+  rect = self->fontSizeStepper.frame;
+  rect.origin.x = NSMaxX(self->fontSizeTextField.frame)+4;
+  self->fontSizeStepper.frame = rect;
+  rect = self->fontColorLabel.frame;
+  rect.origin.x = NSMaxX(self->fontSizeStepper.frame)+20;
+  self->fontColorLabel.frame = rect;
+  rect = self->fontColorWell.frame;
+  rect.origin.x = NSMaxX(self->fontColorLabel.frame)+4;
+  self->fontColorWell.frame = rect;
   
-  width = [self->exportFormatPopupButton frame].size.width;
-  x = ([self->parametersView frame].size.width-width)/2;
-  rect = [self->exportFormatPopupButton frame];
+  width = self->exportFormatPopupButton.frame.size.width;
+  x = (self->parametersView.frame.size.width-width)/2;
+  rect = self->exportFormatPopupButton.frame;
   rect.origin.x = x;
-  [self->exportFormatPopupButton setFrame:rect];
-  rect = [self->exportFormatOptionsButton frame];
-  rect.origin.x = NSMaxX([self->exportFormatPopupButton frame])+10;
-  [self->exportFormatOptionsButton setFrame:rect];
+  self->exportFormatPopupButton.frame = rect;
+  rect = self->exportFormatOptionsButton.frame;
+  rect.origin.x = NSMaxX(self->exportFormatPopupButton.frame)+10;
+  self->exportFormatOptionsButton.frame = rect;
 
-  width = [self->createEquationsOptionsLabel frame].size.width+4+[self->createEquationsOptionsPopUpButton frame].size.width;
-  x = ([self->parametersView frame].size.width-width)/2;
-  rect = [self->createEquationsOptionsLabel frame];
+  width = self->createEquationsOptionsLabel.frame.size.width+4+self->createEquationsOptionsPopUpButton.frame.size.width;
+  x = (self->parametersView.frame.size.width-width)/2;
+  rect = self->createEquationsOptionsLabel.frame;
   rect.origin.x = x;
-  [self->createEquationsOptionsLabel setFrame:rect];
-  rect = [self->createEquationsOptionsPopUpButton frame];
-  rect.origin.x = NSMaxX([self->createEquationsOptionsLabel frame])+4;
-  [self->createEquationsOptionsPopUpButton setFrame:rect];
+  self->createEquationsOptionsLabel.frame = rect;
+  rect = self->createEquationsOptionsPopUpButton.frame;
+  rect.origin.x = NSMaxX(self->createEquationsOptionsLabel.frame)+4;
+  self->createEquationsOptionsPopUpButton.frame = rect;
 }
 //end awakeFromNib
 
@@ -305,52 +302,52 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 
   NSMutableArray* result = [[NSMutableArray alloc] initWithCapacity:[input count]];
 
-  NSDictionary* parameters = [self parameters];
-  latex_mode_t equationMode = (latex_mode_t)[[parameters objectForKey:@"equationMode"] intValue];
-  CGFloat      fontSize     = [[parameters objectForKey:@"fontSize"] floatValue];
-  NSData*      fontColorData = [parameters objectForKey:@"fontColorData"];
+  NSDictionary* parameters = self.parameters;
+  latex_mode_t equationMode = (latex_mode_t)[parameters[@"equationMode"] intValue];
+  CGFloat      fontSize     = [parameters[@"fontSize"] floatValue];
+  NSData*      fontColorData = parameters[@"fontColorData"];
   NSColor*     fontColor      = !fontColorData ? [NSColor blackColor] : [NSColor colorWithData:fontColorData];
-  equationDestination_t equationDestination = (equationDestination_t) [[parameters objectForKey:@"equationFilesDestination"] intValue];
+  equationDestination_t equationDestination = (equationDestination_t) [parameters[@"equationFilesDestination"] intValue];
   NSString*    workingDirectory = [self workingDirectory];
   NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
-  export_format_t exportFormat = (export_format_t)[[parameters objectForKey:@"exportFormat"] intValue];
+  export_format_t exportFormat = (export_format_t)[parameters[@"exportFormat"] intValue];
   if ((int)exportFormat < 0)
-    exportFormat = [preferencesController exportFormatPersistent];
-  NSNumber* exportJpegQualityPercentAsNumber = [parameters objectForKey:@"exportJpegQualityPercent"];
-  double   exportJpegQualityPercent = !exportJpegQualityPercentAsNumber ? 100. : [exportJpegQualityPercentAsNumber doubleValue];
-  NSData*  exportJpegBackgroundColorData = [parameters objectForKey:@"exportJpegBackgroundColor"];
+    exportFormat = preferencesController.exportFormatPersistent;
+  NSNumber* exportJpegQualityPercentAsNumber = parameters[@"exportJpegQualityPercent"];
+  float   exportJpegQualityPercent = !exportJpegQualityPercentAsNumber ? 100. : exportJpegQualityPercentAsNumber.floatValue;
+  NSData*  exportJpegBackgroundColorData = parameters[@"exportJpegBackgroundColor"];
   NSColor* exportJpegBackgroundColor = !exportJpegBackgroundColorData ? [NSColor whiteColor] :
                                        [NSColor colorWithData:exportJpegBackgroundColorData];
   //NSColor* exportSvgPdfToSvgPath = [parameters objectForKey:@"exportSvgPdfToSvgPath"];
-  BOOL exportTextExportPreamble = [[[parameters objectForKey:@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
-  BOOL exportTextExportEnvironment = [[[parameters objectForKey:@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
-  BOOL exportTextExportBody = [[[parameters objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
+  BOOL exportTextExportPreamble = [[parameters[@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
+  BOOL exportTextExportEnvironment = [[parameters[@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
+  BOOL exportTextExportBody = [[parameters[@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
   
   DebugLog(1, @"parameters = %@", parameters);
   DebugLog(1, @"equationMode = %d", equationMode);
   DebugLog(1, @"fontSize = %f", fontSize);
 
-  CGFloat leftMargin   = [preferencesController marginsAdditionalLeft];
-  CGFloat rightMargin  = [preferencesController marginsAdditionalRight];
-  CGFloat bottomMargin = [preferencesController marginsAdditionalBottom];
-  CGFloat topMargin    = [preferencesController marginsAdditionalTop];
+  CGFloat leftMargin   = preferencesController.marginsAdditionalLeft;
+  CGFloat rightMargin  = preferencesController.marginsAdditionalRight;
+  CGFloat bottomMargin = preferencesController.marginsAdditionalBottom;
+  CGFloat topMargin    = preferencesController.marginsAdditionalTop;
   
-  NSString* defaultPreamble = [[preferencesController preambleDocumentAttributedString] string];
+  NSString* defaultPreamble = [preferencesController preambleDocumentAttributedString].string;
   
-	// Add your code here, returning the data to be passed to the next action.
+  // Add your code here, returning the data to be passed to the next action.
   NSMutableSet* uniqueIdentifiers = [[NSMutableSet alloc] init];
   NSFileManager* fileManager      = [NSFileManager defaultManager];
   NSSet*          inputAsSet      = [NSSet setWithArray:input];
   NSMutableArray* mutableInput    = [NSMutableArray arrayWithArray:input];
-  NSMutableArray* filteredInput   = [NSMutableArray arrayWithCapacity:[mutableInput count]];
+  NSMutableArray* filteredInput   = [NSMutableArray arrayWithCapacity:mutableInput.count];
   unsigned int i = 0;
-  for(i = 0 ; defaultPreamble && (i<[mutableInput count]) ; ++i)
+  for(i = 0 ; defaultPreamble && (i<mutableInput.count) ; ++i)
   {
-    id object = [mutableInput objectAtIndex:i];
+    id object = mutableInput[i];
     NSURL* url = [object dynamicCastToClass:[NSURL class]];
     NSString* string = [object dynamicCastToClass:[NSString class]];
-    if (url && [url isFileURL])
-      string = [url path];
+    if (url && url.fileURL)
+      string = url.path;
     if (!string)
       [filteredInput addObject:object];
     else//if (string)
@@ -389,10 +386,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   BOOL didEncounterError = NO;
   if (errorInfo && !defaultPreamble)
   {
-    *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-      @(errOSAGeneralError), OSAScriptErrorNumber,
-      LocalLocalizedString(@"No preamble found", @"No preamble found"), OSAScriptErrorMessage,
-      nil];
+    *errorInfo = @{OSAScriptErrorNumber: @(errOSAGeneralError),
+      OSAScriptErrorMessage: LocalLocalizedString(@"No preamble found", @"No preamble found")};
   }//end if (errorInfo && !defaultPreamble)
 
   NSMutableArray* errorStrings = [NSMutableArray array];
@@ -413,10 +408,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [uniqueIdentifiers addObject:uniqueIdentifier];
     if (!body && errorInfo)
     {
-      *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-        @(errOSAGeneralError), OSAScriptErrorNumber,
-        [error localizedDescription], OSAScriptErrorMessage,
-        nil];
+      *errorInfo = @{OSAScriptErrorNumber: @(errOSAGeneralError),
+        OSAScriptErrorMessage: error.localizedDescription};
       didEncounterError = YES;
     }//end if (!body && errorInfo)
     else if (body)
@@ -437,9 +430,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       DebugLog(1, @"uniqueIdentifier = %ld", (unsigned long)uniqueIdentifier);
       NSString* outFilePath =
         [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:fontColor mode:latexMode magnification:fontSize
-          compositionConfiguration:[preferencesController compositionConfigurationDocument] backgroundColor:nil
+          compositionConfiguration:preferencesController.compositionConfigurationDocument backgroundColor:nil
           leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
-          additionalFilesPaths:[preferencesController additionalFilesPaths]
+          additionalFilesPaths:preferencesController.additionalFilesPaths
           workingDirectory:workingDirectory fullEnvironment:fullEnvironment uniqueIdentifier:uniqueIdentifier
           outFullLog:&outFullLog outErrors:&errors outPdfData:&pdfData];
       DebugLog(1, @"1outFilePath = %@", outFilePath);
@@ -448,18 +441,18 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       DebugLog(1, @"pdfData = %p (%ld)", pdfData, [pdfData length]);
       DebugLog(1, @"exportFormat = %d", exportFormat);
       NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithFloat:exportJpegQualityPercent], @"jpegQuality",
-        [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-        [NSNumber numberWithBool:exportTextExportPreamble], @"textExportPreamble",
-        [NSNumber numberWithBool:exportTextExportEnvironment], @"textExportEnvironment",
-        [NSNumber numberWithBool:exportTextExportBody], @"textExportBody",
+        @(exportJpegQualityPercent), @"jpegQuality",
+        @([preferencesController exportScalePercent]), @"scaleAsPercent",
+        @(exportTextExportPreamble), @"textExportPreamble",
+        @(exportTextExportEnvironment), @"textExportEnvironment",
+        @(exportTextExportBody), @"textExportBody",
         exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
         nil];
       NSData* convertedData = [[LaTeXProcessor sharedLaTeXProcessor]
         dataForType:exportFormat
             pdfData:pdfData
         exportOptions:exportOptions
-         compositionConfiguration:[preferencesController compositionConfigurationDocument]
+         compositionConfiguration:preferencesController.compositionConfigurationDocument
                  uniqueIdentifier:uniqueIdentifier];
       DebugLog(1, @"convertedData = %p (%ld)", convertedData, [convertedData length]);
       if (convertedData)
@@ -493,7 +486,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
             extension = @"tex";
             break;
         }
-        NSString* outFilePath2 = [[outFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
+        NSString* outFilePath2 = [outFilePath.stringByDeletingPathExtension stringByAppendingPathExtension:extension];
         DebugLog(1, @"outFilePath2 = %@", outFilePath2);
         if (![outFilePath2 isEqualToString:outFilePath])
         {
@@ -504,12 +497,12 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       }//end if (convertedData)
 
       DebugLog(1, @"outFilePath = %@, errors = %@", outFilePath, errors);
-      if (outFilePath && ![errors count])
+      if (outFilePath && !errors.count)
       {
         if (isInputFilePath && (equationDestination == EQUATION_DESTINATION_ALONGSIDE_INPUT))
         {
           NSString* destinationFolder = [object stringByDeletingLastPathComponent];
-          NSString* newPath = [destinationFolder stringByAppendingPathComponent:[outFilePath lastPathComponent]];
+          NSString* newPath = [destinationFolder stringByAppendingPathComponent:outFilePath.lastPathComponent];
           NSError* error = nil;
           if (![outFilePath isEqualToString:newPath])
           {
@@ -527,7 +520,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
           }//end if (![outFilePath isEqualToString:newPath])
         }
         [fileManager setAttributes:
-          [NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
+          @{NSFileHFSCreatorCode: @((OSType)'LTXt')}
                                 ofItemAtPath:outFilePath error:0];
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
@@ -539,9 +532,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       else
       {
         NSArray* latexErrors = 
-          [[LaTeXProcessor sharedLaTeXProcessor] filterLatexErrors:outFullLog shiftLinesBy:[[preamble componentsSeparatedByString:@"\n"] count]+1];
+          [[LaTeXProcessor sharedLaTeXProcessor] filterLatexErrors:outFullLog shiftLinesBy:[preamble componentsSeparatedByString:@"\n"].count+1];
         didEncounterError = YES;
-        NSString* errorMessage = [latexErrors count] ? [latexErrors componentsJoinedByString:@"\n"] :
+        NSString* errorMessage = latexErrors.count ? [latexErrors componentsJoinedByString:@"\n"] :
           LocalLocalizedString(@"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.",
                                @"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.");
         [errorStrings safeAddObject:errorMessage];
@@ -549,16 +542,14 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     }//end if (!body)
     //[ap drain];
   }//end or each object
-  if (didEncounterError && [errorStrings count] && errorInfo)
+  if (didEncounterError && errorStrings.count && errorInfo)
   {
-    *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-                   @(errOSAGeneralError), OSAScriptErrorNumber,
-                   [errorStrings componentsJoinedByString:@"\n"], OSAScriptErrorMessage,
-                   nil];
+    *errorInfo = @{OSAScriptErrorNumber: @(errOSAGeneralError),
+                   OSAScriptErrorMessage: [errorStrings componentsJoinedByString:@"\n"]};
     if (*errorInfo)
-      DebugLog(0, @"%@", [*errorInfo objectForKey:OSAScriptErrorMessage]);
+      DebugLog(0, @"%@", (*errorInfo)[OSAScriptErrorMessage]);
   }//end if (didEncounterError && [errorStrings count] && errorInfo)
-	return result;
+  return result;
 }
 //end runWithInput:fromAction:error:
 
@@ -590,13 +581,13 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       {
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
-        fullText = [attributedString string];
+        fullText = attributedString.string;
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeFlatRTFD))
       else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
       {
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
-        fullText = [attributedString string];
+        fullText = attributedString.string;
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeRTF))
       else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
         fullText = [NSString stringWithContentsOfFile:object guessEncoding:&encoding error:error];
@@ -619,13 +610,13 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
-      fullText = [attributedString string];
+      fullText = attributedString.string;
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeFlatRTFD))
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
-      fullText = [attributedString string];
+      fullText = attributedString.string;
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeRTF))
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
       fullText = [NSString stringWithContentsOfURL:object guessEncoding:&encoding error:error];
@@ -638,11 +629,11 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     NSError* error = nil;
     NSString* preamble =
       [fullText stringByMatching:@"(.*)[^%\n]*\\\\begin\\{document\\}(.*)[^%\n]*\\\\end\\{document\\}(.*)" options:RKLMultiline|RKLDotAll
-        inRange:NSMakeRange(0, [fullText length]) capture:1 error:&error];
+        inRange:NSMakeRange(0, fullText.length) capture:1 error:&error];
     NSString* body =
       [fullText stringByMatching:@"(.*)[^%\n]*\\\\begin\\{document\\}(.*)[^%\n]*\\\\end\\{document\\}(.*)" options:RKLMultiline|RKLDotAll
-        inRange:NSMakeRange(0, [fullText length]) capture:2 error:&error];
-    if ((!preamble || ![preamble length]) && (!body || ![body length]))
+        inRange:NSMakeRange(0, fullText.length) capture:2 error:&error];
+    if ((!preamble || !preamble.length) && (!body || !body.length))
       body = fullText;
     if (!body)     body     = @"";
     if (outPeamble) *outPeamble = preamble;
@@ -663,11 +654,11 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   BOOL ok  = YES;
   PreferencesController* preferencesController = [PreferencesController sharedController];
   CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
-  if ([sender tag] == EXPORT_FORMAT_EPS)
-    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[[preferencesController compositionConfigurationDocument] compositionConfigurationProgramPathGs]];
-  else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
-    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[[preferencesController compositionConfigurationDocument] compositionConfigurationProgramPathGs]] &&
-         [[NSFileManager defaultManager] isExecutableFileAtPath:[[preferencesController compositionConfigurationDocument] compositionConfigurationProgramPathPsToPdf]];
+  if (sender.tag == EXPORT_FORMAT_EPS)
+    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[preferencesController.compositionConfigurationDocument compositionConfigurationProgramPathGs]];
+  else if (sender.tag == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[preferencesController.compositionConfigurationDocument compositionConfigurationProgramPathGs]] &&
+         [[NSFileManager defaultManager] isExecutableFileAtPath:[preferencesController.compositionConfigurationDocument compositionConfigurationProgramPathPsToPdf]];
   /*else if ([sender tag] == EXPORT_FORMAT_SVG)
     ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[preferencesController exportSvgPdfToSvgPath]];*/
   return ok;
@@ -679,34 +670,25 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   if (!self->generalExportFormatOptionsPanes)
   {
     self->generalExportFormatOptionsPanes = [[ExportFormatOptionsPanes alloc] initWithLoadingFromNib];
-    [self->generalExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
-    [self->generalExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
-    [self->generalExportFormatOptionsPanes setExportFormatOptionsTextPanelDelegate:self];
+    self->generalExportFormatOptionsPanes.exportFormatOptionsJpegPanelDelegate = self;
+    self->generalExportFormatOptionsPanes.exportFormatOptionsSvgPanelDelegate = self;
+    self->generalExportFormatOptionsPanes.exportFormatOptionsTextPanelDelegate = self;
   }//end if (!self->generalExportFormatOptionsPanes)
-  [self->generalExportFormatOptionsPanes setJpegQualityPercent:
-    [[[self parameters] objectForKey:@"exportJpegQualityPercent"] doubleValue]];
-  [self->generalExportFormatOptionsPanes setJpegBackgroundColor:
-    [NSColor colorWithData:[[self parameters] objectForKey:@"exportJpegBackgroundColor"]]];
-  [self->generalExportFormatOptionsPanes setSvgPdfToSvgPath:
-    [[self parameters] objectForKey:@"exportSvgPdfToSvgPath"]];
-  [self->generalExportFormatOptionsPanes setTextExportPreamble:
-   [[[[self parameters] objectForKey:@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue]];
-  [self->generalExportFormatOptionsPanes setTextExportEnvironment:
-   [[[[self parameters] objectForKey:@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue]];
-  [self->generalExportFormatOptionsPanes setTextExportBody:
-   [[[[self parameters] objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue]];
-  [self->generalExportFormatOptionsPanes setPdfWofGSWriteEngine:
-   [[[self parameters] objectForKey:@"pdfWofGSWriteEngine"] dynamicCastToClass:[NSString class]]];
-  [self->generalExportFormatOptionsPanes setPdfWofGSPDFCompatibilityLevel:
-   [[[self parameters] objectForKey:@"pdfWofGSPDFCompatibilityLevel"] dynamicCastToClass:[NSString class]]];
-  [self->generalExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:
-   [[[[self parameters] objectForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"] dynamicCastToClass:[NSNumber class]] boolValue]];
+  self->generalExportFormatOptionsPanes.jpegQualityPercent = [self.parameters[@"exportJpegQualityPercent"] doubleValue];
+  self->generalExportFormatOptionsPanes.jpegBackgroundColor = [NSColor colorWithData:self.parameters[@"exportJpegBackgroundColor"]];
+  self->generalExportFormatOptionsPanes.svgPdfToSvgPath = self.parameters[@"exportSvgPdfToSvgPath"];
+  self->generalExportFormatOptionsPanes.textExportPreamble = [[self.parameters[@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
+  self->generalExportFormatOptionsPanes.textExportEnvironment = [[self.parameters[@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
+  self->generalExportFormatOptionsPanes.textExportBody = [[self.parameters[@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
+  self->generalExportFormatOptionsPanes.pdfWofGSWriteEngine = [self.parameters[@"pdfWofGSWriteEngine"] dynamicCastToClass:[NSString class]];
+  self->generalExportFormatOptionsPanes.pdfWofGSPDFCompatibilityLevel = [self.parameters[@"pdfWofGSPDFCompatibilityLevel"] dynamicCastToClass:[NSString class]];
+  self->generalExportFormatOptionsPanes.pdfWofMetaDataInvisibleGraphicsEnabled = [[self.parameters[@"pdfWofMetaDataInvisibleGraphicsEnabled"] dynamicCastToClass:[NSNumber class]] boolValue];
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = (export_format_t)[self->exportFormatPopupButton selectedTag];
+  export_format_t exportFormat = (export_format_t)self->exportFormatPopupButton.selectedTag;
   if (exportFormat == EXPORT_FORMAT_JPEG)
-    panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
+    panelToOpen = self->generalExportFormatOptionsPanes.exportFormatOptionsJpegPanel;
   else if (exportFormat == EXPORT_FORMAT_SVG)
-    panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
+    panelToOpen = self->generalExportFormatOptionsPanes.exportFormatOptionsSvgPanel;
   if (panelToOpen) {
     [tabView.window beginSheet:panelToOpen completionHandler:^(NSModalResponse returnCode) {
       
@@ -719,20 +701,20 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 {
   if (ok)
   {
-    if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel])
+    if (exportFormatOptionsPanel == self->generalExportFormatOptionsPanes.exportFormatOptionsJpegPanel)
     {
-      [[self parameters] setObject:[NSNumber numberWithDouble:[self->generalExportFormatOptionsPanes jpegQualityPercent]] forKey:@"exportJpegQualityPercent"];
-      [[self parameters] setObject:[[self->generalExportFormatOptionsPanes jpegBackgroundColor] colorAsData] forKey:@"exportJpegBackgroundColor"];
+      self.parameters[@"exportJpegQualityPercent"] = @([self->generalExportFormatOptionsPanes jpegQualityPercent]);
+      self.parameters[@"exportJpegBackgroundColor"] = [self->generalExportFormatOptionsPanes.jpegBackgroundColor colorAsData];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel])
-    else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    else if (exportFormatOptionsPanel == self->generalExportFormatOptionsPanes.exportFormatOptionsSvgPanel)
     {
-      [[self parameters] setObject:[self->generalExportFormatOptionsPanes svgPdfToSvgPath] forKey:@"exportSvgPdfToSvgPath"];
+      self.parameters[@"exportSvgPdfToSvgPath"] = self->generalExportFormatOptionsPanes.svgPdfToSvgPath;
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
-    else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
+    else if (exportFormatOptionsPanel == self->generalExportFormatOptionsPanes.exportFormatOptionsTextPanel)
     {
-      [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportPreamble]] forKey:@"exportTextExportPreamble"];
-      [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportEnvironment]] forKey:@"exportTextExportEnvironment"];
-      [[self parameters] setObject:[NSNumber numberWithBool:[self->generalExportFormatOptionsPanes textExportBody]] forKey:@"exportTextExportBody"];
+      self.parameters[@"exportTextExportPreamble"] = @(self->generalExportFormatOptionsPanes.textExportPreamble);
+      self.parameters[@"exportTextExportEnvironment"] = @(self->generalExportFormatOptionsPanes.textExportEnvironment);
+      self.parameters[@"exportTextExportBody"] = @(self->generalExportFormatOptionsPanes.textExportBody);
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
   }//end if (ok)
   [tabView.window endSheet:exportFormatOptionsPanel];

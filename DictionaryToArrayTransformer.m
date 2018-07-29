@@ -39,19 +39,19 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithDescriptors:(NSArray*)descriptors
++(instancetype) transformerWithDescriptors:(NSArray*)descriptors
 {
   id result = [[[self class] alloc] initWithDescriptors:descriptors];
   return result;
 }
 //end transformerWithValueTransformer:
 
--(id) initWithDescriptors:(NSArray*)theDescriptors
+-(instancetype) initWithDescriptors:(NSArray*)theDescriptors
 {
   if ((!(self = [super init])))
     return nil;
   self->descriptors = theDescriptors ? [theDescriptors copy] :
-    [[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil], nil];
+    @[[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil]];
   return self;
 }
 //end initWithDescriptors:
@@ -64,8 +64,8 @@
   id key = nil;
   while((key = [enumerator nextObject]))
   {
-    id valueForKey = [value objectForKey:key];
-    [result addObject:[NSDictionary dictionaryWithObjectsAndKeys:key, @"key", valueForKey, @"value", nil]];
+    id valueForKey = value[key];
+    [result addObject:@{@"key": key, @"value": valueForKey}];
   }
   return result;
 }
@@ -77,7 +77,7 @@
   NSEnumerator* enumerator = [value objectEnumerator];
   NSDictionary* entry = nil;
   while((entry = [enumerator nextObject]))
-    [result setObject:[entry objectForKey:@"value"] forKey:[entry objectForKey:@"key"]];
+    result[entry[@"key"]] = entry[@"value"];
   return result;
 }
 //end reverseTransformedValue:

@@ -16,7 +16,7 @@
 
 @implementation EncapsulationsWindowController
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super initWithWindowNibName:@"EncapsulationsWindowController"])))
     return nil;
@@ -26,15 +26,15 @@
 
 -(void) windowDidLoad
 {
-  [[self window] setFrameAutosaveName:@"encapsulations"];
-  [[self window] setTitle:NSLocalizedString(@"Encapsulations", @"Encapsulations")];
+  [self.window setFrameAutosaveName:@"encapsulations"];
+  [self.window setTitle:NSLocalizedString(@"Encapsulations", @"Encapsulations")];
   EncapsulationsController* encapsulationsController = [[PreferencesController sharedController] encapsulationsController];
   [self->addButton bind:NSEnabledBinding toObject:encapsulationsController withKeyPath:@"canAdd" options:nil];
-  [self->addButton setTarget:encapsulationsController];
-  [self->addButton setAction:@selector(add:)];
+  self->addButton.target = encapsulationsController;
+  self->addButton.action = @selector(add:);
   [self->removeButton bind:NSEnabledBinding toObject:encapsulationsController withKeyPath:@"canRemove" options:nil];
-  [self->removeButton setTarget:encapsulationsController];
-  [self->removeButton setAction:@selector(remove:)];
+  self->removeButton.target = encapsulationsController;
+  self->removeButton.action = @selector(remove:);
 }
 //end windowDidLoad:
 

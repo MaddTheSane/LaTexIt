@@ -17,7 +17,7 @@
 @implementation NSDictionary (CompositionConfiguration)
 
 -(composition_mode_t) compositionConfigurationCompositionMode
-             {return (composition_mode_t)[[self objectForKey:CompositionConfigurationCompositionModeKey] intValue];}
+             {return (composition_mode_t)[self[CompositionConfigurationCompositionModeKey] intValue];}
 
 -(NSString*) compositionConfigurationProgramPathPdfLaTeX
              {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationPdfLatexPathKey];}
@@ -35,7 +35,7 @@
              {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationPsToPdfPathKey];}
 -(NSString*) compositionConfigurationProgramPathForKey:(NSString*)key
 {
-  NSString* result = [self objectForKey:key];
+  NSString* result = self[key];
   return result;
 }
 //end compositionConfigurationProgramPathForKey:
@@ -56,24 +56,24 @@
             {return [self compositionConfigurationProgramArgumentsForKey:CompositionConfigurationPsToPdfPathKey];}
 -(NSArray*) compositionConfigurationProgramArgumentsForKey:(NSString*)key
 {
-  NSArray* result = [[self objectForKey:CompositionConfigurationProgramArgumentsKey] objectForKey:key];
-  if (!result) result = [NSArray array];
+  NSArray* result = self[CompositionConfigurationProgramArgumentsKey][key];
+  if (!result) result = @[];
   return result;
 }
 //end compositionConfigurationProgramArgumentsForKey:
 
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScripts
-                 {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];}
+                 {return self[CompositionConfigurationAdditionalProcessingScriptsKey];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPreProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInt:SCRIPT_PLACE_PREPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:@(SCRIPT_PLACE_PREPROCESSING).stringValue];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsMiddleProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInt:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:@(SCRIPT_PLACE_MIDDLEPROCESSING).stringValue];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPostProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInt:SCRIPT_PLACE_POSTPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:@(SCRIPT_PLACE_POSTPROCESSING).stringValue];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsForKey:(NSString*)key
-                 {return [[self compositionConfigurationAdditionalProcessingScripts] objectForKey:key];}
+                 {return [self compositionConfigurationAdditionalProcessingScripts][key];}
 
 -(BOOL)          compositionConfigurationUseLoginShell
-                 {return [[self objectForKey:CompositionConfigurationUseLoginShellKey] boolValue];}
+                 {return [self[CompositionConfigurationUseLoginShellKey] boolValue];}
 
 @end

@@ -75,7 +75,7 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
 //end autorelease
 
 //The init method can be called several times, it will only be applied once on the singleton
--(id) init
+-(instancetype) init
 {
   if (self && (self != sharedManagerInstance))  //do not recreate an instance
   {
@@ -116,10 +116,10 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
   while((domainPath = [domainPathsEnumerator nextObject]))
   {
     NSString* domainName = domainPath;
-    NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"PlugIns", nil];
+    NSArray* pathComponents = @[domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"PlugIns"];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
     NSArray* pluginsPath  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
-    NSMutableArray* pluginsFullPaths = [NSMutableArray arrayWithCapacity:[pluginsPath count]];
+    NSMutableArray* pluginsFullPaths = [NSMutableArray arrayWithCapacity:pluginsPath.count];
     NSEnumerator* pluginsEnumerator = [pluginsPath objectEnumerator];
     NSString* file = nil;
     while((file = [pluginsEnumerator nextObject]))
@@ -127,13 +127,13 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
       file = [directoryPath stringByAppendingPathComponent:file];
       BOOL isDirectory = NO;
       if ([fileManager fileExistsAtPath:file isDirectory:&isDirectory] && isDirectory &&
-          ([[file pathExtension] caseInsensitiveCompare:@"latexitplugin"] == NSOrderedSame))
+          ([file.pathExtension caseInsensitiveCompare:@"latexitplugin"] == NSOrderedSame))
         [pluginsFullPaths addObject:file];
     }//end for each latexpalette subfolder
     
     if (domainName)
       [allPluginsEntries addObject:
-        [NSDictionary dictionaryWithObjectsAndKeys:domainName, @"domainName", pluginsFullPaths, @"paths", nil]];
+        @{@"domainName": domainName, @"paths": pluginsFullPaths}];
   }//end for each domain
   
   //we got all the palettes
@@ -142,7 +142,7 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
   while((pluginEntry = [pluginsEntriesEnumerator nextObject]))
   {
     //NSString* domainName = [pluginEntry objectForKey:@"domainName"];
-    NSEnumerator* pluginsPathEnumerator = [[pluginEntry objectForKey:@"paths"] objectEnumerator];
+    NSEnumerator* pluginsPathEnumerator = [pluginEntry[@"paths"] objectEnumerator];
     NSString* pluginFilePath = nil;
     while((pluginFilePath = [pluginsPathEnumerator nextObject]))
     {

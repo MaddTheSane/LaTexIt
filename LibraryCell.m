@@ -19,7 +19,7 @@
 
 @implementation LibraryCell
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
@@ -54,7 +54,7 @@
   LibraryView* libraryTableView = [controlView dynamicCastToClass:[LibraryView class]];
   if (libraryTableView)
   {
-    library_row_t libraryRowType = [libraryTableView libraryRowType];
+    library_row_t libraryRowType = libraryTableView.libraryRowType;
     if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) || (aRect.size.height < 30))
       [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event: theEvent];
   }//end if (libraryTableView)
@@ -66,7 +66,7 @@
   LibraryView* libraryTableView = [controlView dynamicCastToClass:[LibraryView class]];
   if (libraryTableView)
   {
-    library_row_t libraryRowType = [libraryTableView libraryRowType];
+    library_row_t libraryRowType = libraryTableView.libraryRowType;
     if ((libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) || (aRect.size.height < 30))
       [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
   }//end if (libraryTableView)
@@ -78,13 +78,13 @@
   LibraryView* libraryTableView = [controlView dynamicCastToClass:[LibraryView class]];
   if (libraryTableView)
   {
-    library_row_t libraryRowType = [libraryTableView libraryRowType];
+    library_row_t libraryRowType = libraryTableView.libraryRowType;
     if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) || (libraryRowType == LIBRARY_ROW_IMAGE_ADJUST))
     {
-      BOOL saveDrawsBackground = [self drawsBackground];
+      BOOL saveDrawsBackground = self.drawsBackground;
       [self setDrawsBackground:NO];
       [super drawInteriorWithFrame:cellFrame inView:controlView]; //the image is displayed in a subrect of the cell
-      [self setDrawsBackground:saveDrawsBackground];
+      self.drawsBackground = saveDrawsBackground;
     }//end if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) || (libraryRowType == LIBRARY_ROW_IMAGE_ADJUST))
     else if (libraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
     {
@@ -97,18 +97,18 @@
 
       //if ([self isHighlighted])
       {
-        BOOL saveDrawsBackground = [self drawsBackground];
+        BOOL saveDrawsBackground = self.drawsBackground;
         [self setDrawsBackground:NO];
         [super drawInteriorWithFrame:cellFrame inView:controlView];
-        [self setDrawsBackground:saveDrawsBackground];
+        self.drawsBackground = saveDrawsBackground;
       }//end if (![self isHighlighted])
 
       if (self->textBackgroundColor)
       {
-        CGContextRef cgContext = [[NSGraphicsContext currentContext] graphicsPort];
+        CGContextRef cgContext = [NSGraphicsContext currentContext].graphicsPort;
 
         NSColor* rgbaColor = [self->textBackgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-        CGFloat hsba[4] = {[rgbaColor hueComponent], [rgbaColor saturationComponent], [rgbaColor brightnessComponent], [rgbaColor alphaComponent]};
+        CGFloat hsba[4] = {rgbaColor.hueComponent, rgbaColor.saturationComponent, rgbaColor.brightnessComponent, rgbaColor.alphaComponent};
         hsba[1] = MIN(1., 0.5*hsba[1]);
         hsba[2] = MIN(1., 1.5*hsba[2]);
         NSColor* lighterColor = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];

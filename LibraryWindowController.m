@@ -56,7 +56,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 @implementation LibraryWindowController
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super initWithWindowNibName:@"LibraryWindowController"])))
     return nil;
@@ -74,7 +74,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) awakeFromNib
 {
-  NSPanel* window = (NSPanel*)[self window];
+  NSPanel* window = (NSPanel*)self.window;
   [window setTitle:NSLocalizedString(@"Library", @"Library")];
   [window setHidesOnDeactivate:NO];//prevents from disappearing when LaTeXiT is not active
   [window setFloatingPanel:NO];//prevents from floating always above
@@ -85,23 +85,23 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->importHomeButton setToolTip:NSLocalizedString(@"Reach default library", @"Reach default library")];
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_MERGE];
+  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_MERGE;
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"Overwrite current library")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_OVERWRITE];
+  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OVERWRITE;
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_OPEN];
+  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OPEN;
 
   [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
   [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
-  NSPoint point = [self->exportFormatPopUpButton frame].origin;
-  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
+  NSPoint point = self->exportFormatPopUpButton.frame.origin;
+  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX(self->exportFormatLabel.frame)+6, point.y)];
   [self->exportFormatPopUpButton removeAllItems];
   [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"LaTeXiT", @"LaTeXiT")];
-  [[self->exportFormatPopUpButton lastItem] setTag:(int)LIBRARY_EXPORT_FORMAT_INTERNAL];
+  self->exportFormatPopUpButton.lastItem.tag = (int)LIBRARY_EXPORT_FORMAT_INTERNAL;
   [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"XML (Property list)", @"XML (Property list)")];
-  [[self->exportFormatPopUpButton lastItem] setTag:(int)LIBRARY_EXPORT_FORMAT_PLIST];
+  self->exportFormatPopUpButton.lastItem.tag = (int)LIBRARY_EXPORT_FORMAT_PLIST;
   [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"TeX Source", @"TeX Source")];
-  [[self->exportFormatPopUpButton lastItem] setTag:(int)LIBRARY_EXPORT_FORMAT_TEX_SOURCE];
+  self->exportFormatPopUpButton.lastItem.tag = (int)LIBRARY_EXPORT_FORMAT_TEX_SOURCE;
   
   [self->exportOptionCommentedPreamblesButton setTitle:NSLocalizedString(@"Export commented preambles", @"Export commented preambles")];
   [self->exportOptionUserCommentsButton setTitle:NSLocalizedString(@"Export user comments", @"Export user comments")];
@@ -113,44 +113,44 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   NSMenu* actionMenu = [[NSMenu alloc] init];
   NSMenuItem* menuItem = nil;  
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a document", @"Open the equation in a document") action:@selector(openEquation:) keyEquivalent:@""] setTarget:self];
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a document", @"Open the equation in a document") action:@selector(openEquation:) keyEquivalent:@""].target = self;
   menuItem = [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a linked document", @"Open the equation in a linked document") action:@selector(openLinkedEquation:) keyEquivalent:@""];
-  [menuItem setTarget:self];
-  [menuItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
+  menuItem.target = self;
+  menuItem.keyEquivalentModifierMask = NSAlternateKeyMask;
   [menuItem setAlternate:YES];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Add a folder", @"Add a folder") action:@selector(newFolder:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Add current equation", @"Add current equation") action:@selector(importCurrent:) keyEquivalent:@""] setTarget:self];
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Add a folder", @"Add a folder") action:@selector(newFolder:) keyEquivalent:@""].target = self;
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Add current equation", @"Add current equation") action:@selector(importCurrent:) keyEquivalent:@""].target = self;
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"Rename selection") action:@selector(renameItem:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"Remove selection") action:@selector(removeSelectedItems:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"Rename selection") action:@selector(renameItem:) keyEquivalent:@""].target = self;
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"Remove selection") action:@selector(removeSelectedItems:) keyEquivalent:@""].target = self;
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation") action:@selector(refreshItems:) keyEquivalent:@""].target = self;
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Show comments pane", @"Show comments pane") action:@selector(toggleCommentsPane:) keyEquivalent:@""] setTarget:self];
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Show comments pane", @"Show comments pane") action:@selector(toggleCommentsPane:) keyEquivalent:@""].target = self;
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
-  [self->actionButton setMenu:actionMenu];
-  [actionMenu setDelegate:self];
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""].target = self;
+  [actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""].target = self;
+  self->actionButton.menu = actionMenu;
+  actionMenu.delegate = self;
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
   
   [self->libraryPreviewPanelSegmentedControl setToolTip:NSLocalizedString(@"Display the equations in real size on mouse over", @"Display the equations in real size on mouse over")];
   
   [self->libraryPreviewPanel setFloatingPanel:YES];
-  [self->libraryPreviewPanel setBackgroundColor:[NSColor clearColor]];
-  [self->libraryPreviewPanel setLevel:NSStatusWindowLevel];
-  [self->libraryPreviewPanel setAlphaValue:1.0];
+  self->libraryPreviewPanel.backgroundColor = [NSColor clearColor];
+  self->libraryPreviewPanel.level = NSStatusWindowLevel;
+  self->libraryPreviewPanel.alphaValue = 1.0;
   [self->libraryPreviewPanel setOpaque:NO];
   [self->libraryPreviewPanel setHasShadow:YES];
 
-  [self->actionButton setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
+  self->actionButton.image = [NSImage imageNamed:NSImageNameActionTemplate];
   
   [self->libraryRowTypeSegmentedControl bind:NSSelectedTagBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryViewRowTypeKey] options:nil];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelectionIsChanging:) name:NSOutlineViewSelectionIsChangingNotification object:self->libraryView];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelectionDidChange:) name:NSOutlineViewSelectionDidChangeNotification object:self->libraryView];
-  [self->commentTextView setDelegate:self];
+  self->commentTextView.delegate = self;
   [self outlineViewSelectionDidChange:nil];
   
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:LibraryDisplayPreviewPanelKey options:NSKeyValueObservingOptionNew context:nil];
@@ -166,13 +166,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->importTeXCancelButton setTitle:NSLocalizedString(@"Cancel", @"")];
   [self->importTeXImportButton sizeToFit];
   [self->importTeXCancelButton sizeToFit];
-  CGRect cgrect1 = NSRectToCGRect([self->importTeXImportButton frame]);
-  CGRect cgrect2 = NSRectToCGRect([[self->importTeXImportButton superview] bounds]);
+  CGRect cgrect1 = NSRectToCGRect(self->importTeXImportButton.frame);
+  CGRect cgrect2 = NSRectToCGRect(self->importTeXImportButton.superview.bounds);
   cgrect1.origin.x = CGRectGetMaxX(cgrect2)-16-cgrect1.size.width;
-  [self->importTeXImportButton setFrame:NSRectFromCGRect(cgrect1)];
-  cgrect2 = NSRectToCGRect([self->importTeXCancelButton frame]);
+  self->importTeXImportButton.frame = NSRectFromCGRect(cgrect1);
+  cgrect2 = NSRectToCGRect(self->importTeXCancelButton.frame);
   cgrect2.origin.x = CGRectGetMinX(cgrect1)-8-cgrect2.size.width;
-  [self->importTeXCancelButton setFrame:NSRectFromCGRect(cgrect2)];
+  self->importTeXCancelButton.frame = NSRectFromCGRect(cgrect2);
   
   NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self selector:@selector(applicationWillBecomeActive:)
@@ -180,16 +180,16 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:NSWindowDidBecomeKeyNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:NSWindowDidResignMainNotification object:nil];
   [notificationCenter addObserver:self selector:@selector(_updateButtons:) name:ImageDidChangeNotification object:nil];
-  [notificationCenter addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:[self window]];
-  [notificationCenter addObserver:self selector:@selector(windowDidResignKey:) name:NSWindowDidResignKeyNotification object:[self window]];
+  [notificationCenter addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:self.window];
+  [notificationCenter addObserver:self selector:@selector(windowDidResignKey:) name:NSWindowDidResignKeyNotification object:self.window];
 }
 //end awakeFromNib
 
 -(void) notified:(NSNotification*)notification
 {
-  if ([[notification name] isEqualTo:LatexizationDidEndNotification])
+  if ([notification.name isEqualTo:LatexizationDidEndNotification])
   {
-    NSDictionary* configuration = [[notification object] dynamicCastToClass:[NSDictionary class]];
+    NSDictionary* configuration = [notification.object dynamicCastToClass:[NSDictionary class]];
     [self latexisationItemDidEndSelector:configuration];
     [self performSelectorOnMainThread:@selector(latexisationGroupDidEndSelector:) withObject:configuration waitUntilDone:YES];
   }//end if ([[notification name] isEqualTo:LatexizationDidEndNotification])
@@ -204,41 +204,41 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       [self updateImportTeXItemsGUI];
   }//end if (object && (object == self->importTeXArrayController))
   else if ([keyPath isEqualToString:LibraryDisplayPreviewPanelKey])
-    [[self->libraryPreviewPanelSegmentedControl cell] setSelected:
-      !change ? [[PreferencesController sharedController] libraryDisplayPreviewPanelState] : [[change objectForKey:NSKeyValueChangeNewKey] boolValue]
+    [self->libraryPreviewPanelSegmentedControl.cell setSelected:
+      !change ? [PreferencesController sharedController].libraryDisplayPreviewPanelState : [change[NSKeyValueChangeNewKey] boolValue]
       forSegment:0];
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
 -(void) outlineViewSelectionIsChanging:(NSNotification *)notification
 {
-  if ([notification object] == self->libraryView)
+  if (notification.object == self->libraryView)
   {
-    [[self window] makeFirstResponder:self->libraryView];
+    [self.window makeFirstResponder:self->libraryView];
   }//end if (object == self->libraryView)
 }
 //end outlineViewSelectionIsChanging:
 
 -(void) outlineViewSelectionDidChange:(NSNotification *)notification
 {
-  if (!notification || ([notification object] == self->libraryView))
+  if (!notification || (notification.object == self->libraryView))
   {
     LibraryEquation* libraryEquation = [[self->libraryView selectedItem] dynamicCastToClass:[LibraryEquation class]];
-    NSString* comment = [libraryEquation comment];
-    [self->commentTextView setBackgroundColor:(libraryEquation != nil) ? [NSColor controlBackgroundColor] : [NSColor windowBackgroundColor]];
-    [self->commentTextView setEditable:(libraryEquation != nil)];
-    [self->commentTextView setString:!comment ? @"" : comment];
+    NSString* comment = libraryEquation.comment;
+    self->commentTextView.backgroundColor = (libraryEquation != nil) ? [NSColor controlBackgroundColor] : [NSColor windowBackgroundColor];
+    self->commentTextView.editable = (libraryEquation != nil);
+    self->commentTextView.string = !comment ? @"" : comment;
   }//end if (!notification || ([notification object] == self->libraryView))
 }
 //end outlineViewSelectionDidChange:
 
 -(void) textDidEndEditing:(NSNotification*)aNotification
 {
-  if ([aNotification object] == self->commentTextView)
+  if (aNotification.object == self->commentTextView)
   {
     LibraryEquation* libraryEquation = [[self->libraryView selectedItem] dynamicCastToClass:[LibraryEquation class]];
-    NSString* comment = [[self->commentTextView string] copy];
-    [libraryEquation setComment:!comment || [comment isEqualToString:@""] ? nil : comment];
+    NSString* comment = [self->commentTextView.string copy];
+    libraryEquation.comment = !comment || [comment isEqualToString:@""] ? nil : comment;
   }//end if ([aNotification object] == self->commentTextView)
 }
 //end textDidEndEditing:
@@ -246,14 +246,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(IBAction) changeLibraryDisplayPreviewPanelState:(id)sender
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  [preferencesController setLibraryDisplayPreviewPanelState:![preferencesController libraryDisplayPreviewPanelState]];
+  preferencesController.libraryDisplayPreviewPanelState = !preferencesController.libraryDisplayPreviewPanelState;
 }
 //end changeLibraryDisplayPreviewPanelState:
 
 -(IBAction) showOrHideWindow:(id)sender
 {
-  NSWindow* window = [self window];
-  if ([window isVisible])
+  NSWindow* window = self.window;
+  if (window.visible)
     [window orderOut:self];
   else
     [self showWindow:self];
@@ -268,13 +268,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(BOOL) canRemoveSelectedItems
 {
-  return [[self window] isVisible] && ([self->libraryView selectedRow] >= 0);
+  return self.window.visible && (self->libraryView.selectedRow >= 0);
 }
 //end canRemoveSelectedItems
 
 -(BOOL) canRenameSelectedItems
 {
-  return [[self window] isVisible] && ([[self->libraryView selectedRowIndexes] count] == 1);
+  return self.window.visible && (self->libraryView.selectedRowIndexes.count == 1);
 }
 //end canRenameSelectedItems
 
@@ -282,9 +282,9 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 {
   BOOL result = NO;
   NSDocument* document = [AppController currentDocument];
-  NSIndexSet* selectedRowIndexes = [self->libraryView selectedRowIndexes];
-  BOOL onlyOneItemSelected = ([selectedRowIndexes count] == 1);
-  NSUInteger firstIndex = [selectedRowIndexes firstIndex];
+  NSIndexSet* selectedRowIndexes = self->libraryView.selectedRowIndexes;
+  BOOL onlyOneItemSelected = (selectedRowIndexes.count == 1);
+  NSUInteger firstIndex = selectedRowIndexes.firstIndex;
   result = (document != nil) && onlyOneItemSelected &&
            [[self->libraryView itemAtRow:firstIndex] isKindOfClass:[LibraryEquation class]];
   return result;
@@ -293,41 +293,40 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(NSMenu*) actionMenu
 {
-  return [self->actionButton menu];
+  return self->actionButton.menu;
 }
 //end actionMenu
 
 -(BOOL) isCommentsPaneOpen
 {
-  BOOL result = ([self->commentDrawer state] == NSDrawerOpenState) || ([self->commentDrawer state] == NSDrawerOpeningState);
+  BOOL result = (self->commentDrawer.state == NSDrawerOpenState) || (self->commentDrawer.state == NSDrawerOpeningState);
   return result;
 }
 //end isCommentsPaneOpen
 
 -(BOOL) validateMenuItem:(NSMenuItem*)menuItem
 {
-  BOOL ok = [[self window] isVisible];
-  if ([menuItem action] == @selector(openEquation:))
-    ok &= ([[[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
-  else if ([menuItem action] == @selector(openLinkedEquation:))
-    ok &= ([[[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
-  else if ([menuItem action] == @selector(importCurrent:))
+  BOOL ok = self.window.visible;
+  if (menuItem.action == @selector(openEquation:))
+    ok &= ([[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO].count != 0);
+  else if (menuItem.action == @selector(openLinkedEquation:))
+    ok &= ([[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO].count != 0);
+  else if (menuItem.action == @selector(importCurrent:))
   {
     MyDocument* document = (MyDocument*) [AppController currentDocument];
-    ok &= document && [document hasImage];
+    ok &= document && document.hasImage;
   }
-  else if ([menuItem action] == @selector(renameItem:))
-    ok &= [self canRenameSelectedItems];
-  else if ([menuItem action] == @selector(removeSelectedItems:))
-    ok &= [self canRemoveSelectedItems];
-  else if ([menuItem action] == @selector(refreshItems:))
-    ok &= [self canRefreshItems];
-  else if ([menuItem action] == @selector(toggleCommentsPane:))
+  else if (menuItem.action == @selector(renameItem:))
+    ok &= self.canRenameSelectedItems;
+  else if (menuItem.action == @selector(removeSelectedItems:))
+    ok &= self.canRemoveSelectedItems;
+  else if (menuItem.action == @selector(refreshItems:))
+    ok &= self.canRefreshItems;
+  else if (menuItem.action == @selector(toggleCommentsPane:))
   {
-    [menuItem setTitle:
-      [self isCommentsPaneOpen] ?
+    menuItem.title = self.commentsPaneOpen ?
         NSLocalizedString(@"Hide comments pane", @"Hide comments pane") :
-        NSLocalizedString(@"Show comments pane", @"Show comments pane")];
+        NSLocalizedString(@"Show comments pane", @"Show comments pane");
     ok = YES;
   }//end if ([menuItem action] == @selector(toggleCommentsPane:))
   return ok;
@@ -337,7 +336,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 //Creates a library item with the current document state
 -(IBAction) importCurrent:(id)sender
 {
-  LibraryController* libraryTreeController = [self->libraryView libraryController];
+  LibraryController* libraryTreeController = self->libraryView.libraryController;
   NSManagedObjectContext* managedObjectContext = [libraryTreeController managedObjectContext];
   NSUndoManager* undoManager = [libraryTreeController undoManager];
   [undoManager beginUndoGrouping];
@@ -345,18 +344,18 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   LatexitEquation* currentLatexitEquation = [document latexitEquationWithCurrentStateTransient:YES];
   [document triggerSmartHistoryFeature];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
-  NSUInteger nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
-  [[[document undoManager] prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation isRecentLatexisation:NO];
+  NSUInteger nbBrothers = [self->libraryView.dataSource outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
+  [[document.undoManager prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation isRecentLatexisation:NO];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
   LatexitEquation* latexitEquationToStore =
-    [LatexitEquation latexitEquationWithPDFData:[currentLatexitEquation pdfData] useDefaults:YES];
-  [latexitEquationToStore setBackgroundColor:[currentLatexitEquation backgroundColor]];
+    [LatexitEquation latexitEquationWithPDFData:currentLatexitEquation.pdfData useDefaults:YES];
+  latexitEquationToStore.backgroundColor = currentLatexitEquation.backgroundColor;
   LibraryEquation* newLibraryEquation =
     [[LibraryEquation alloc] initWithParent:parentOfSelection equation:latexitEquationToStore
              insertIntoManagedObjectContext:managedObjectContext];
   if (newLibraryEquation)
   {
-    [newLibraryEquation setSortIndex:nbBrothers];
+    newLibraryEquation.sortIndex = nbBrothers;
     [newLibraryEquation setBestTitle];
     [managedObjectContext processPendingChanges];
     [undoManager setActionName:NSLocalizedString(@"Add Library item", @"Add Library item")];
@@ -378,7 +377,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   while((object = [enumerator nextObject]))
   {
     MyDocument* document = (MyDocument*)[AppController currentDocument];
-    if (!document || (makeLink && [document linkedLibraryEquation]))
+    if (!document || (makeLink && document.linkedLibraryEquation))
     {
       [[NSDocumentController sharedDocumentController] newDocument:self];
       document = (MyDocument*)[AppController currentDocument];
@@ -398,7 +397,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   while((object = [enumerator nextObject]))
   {
     MyDocument* document = (MyDocument*)[AppController currentDocument];
-    if (!document || (makeLink && [document linkedLibraryEquation]))
+    if (!document || (makeLink && document.linkedLibraryEquation))
     {
       [[NSDocumentController sharedDocumentController] newDocument:self];
       document = (MyDocument*)[AppController currentDocument];
@@ -411,18 +410,18 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 //Creates a folder library item
 -(IBAction) newFolder:(id)sender
 {
-  LibraryController* libraryController = [self->libraryView libraryController];
+  LibraryController* libraryController = self->libraryView.libraryController;
   NSManagedObjectContext* managedObjectContext = [libraryController managedObjectContext];
   NSUndoManager* undoManager = [libraryController undoManager];
   [undoManager beginUndoGrouping];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
-  NSUInteger nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
+  NSUInteger nbBrothers = [self->libraryView.dataSource outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
   LibraryGroupItem* newLibraryGroupItem =
     [[LibraryGroupItem alloc] initWithParent:parentOfSelection
               insertIntoManagedObjectContext:managedObjectContext];
   if (newLibraryGroupItem)
   {
-    [newLibraryGroupItem setSortIndex:nbBrothers];
+    newLibraryGroupItem.sortIndex = nbBrothers;
     [newLibraryGroupItem setTitle:NSLocalizedString(@"Untitled", @"Untitled")];
     [managedObjectContext processPendingChanges];
     [undoManager setActionName:NSLocalizedString(@"Add Library folder", @"Add Library folder")];
@@ -448,14 +447,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   MyDocument*  document = (MyDocument*) [AppController currentDocument];
   if (document)
   {
-    NSUInteger   index = [[self->libraryView selectedRowIndexes] firstIndex];
+    NSUInteger   index = self->libraryView.selectedRowIndexes.firstIndex;
     id           item  = [self->libraryView itemAtRow:index];
     LibraryItem* libraryItem  = item;
     
     if ([libraryItem isKindOfClass:[LibraryEquation class]])
     {
       BOOL cancel = NO;
-      if (libraryItem && [document lastAppliedLibraryEquation] && (libraryItem != [document lastAppliedLibraryEquation]))
+      if (libraryItem && document.lastAppliedLibraryEquation && (libraryItem != document.lastAppliedLibraryEquation))
       {
         NSAlert* alert = [NSAlert new];
         alert.messageText = NSLocalizedString(@"You may not be updating the good equation", @"You may not be updating the good equation");
@@ -468,13 +467,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
       if (!cancel)
       {
-        NSUndoManager* undoManager = [[[LibraryManager sharedManager] managedObjectContext] undoManager];
+        NSUndoManager* undoManager = [[LibraryManager sharedManager] managedObjectContext].undoManager;
         [undoManager beginUndoGrouping];
         LibraryEquation* libraryEquation = (LibraryEquation*)libraryItem;
         LatexitEquation* newLatexitEquation = [document latexitEquationWithCurrentStateTransient:NO];
-        [newLatexitEquation setTitle:[libraryEquation title]];
+        newLatexitEquation.title = libraryEquation.title;
         [libraryEquation setComment:nil];
-        [libraryEquation setEquation:newLatexitEquation];
+        libraryEquation.equation = newLatexitEquation;
         [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];
         if (item)
           [self->libraryView reloadItem:item];
@@ -482,7 +481,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         //let's make it blink a little to inform the user that it has change
 
         //we un-register the selectionDidChange notification of the delegate to speed up blinking
-        [[NSNotificationCenter defaultCenter] removeObserver:[self->libraryView delegate]
+        [[NSNotificationCenter defaultCenter] removeObserver:self->libraryView.delegate
                                                         name:NSOutlineViewSelectionDidChangeNotification
                                                       object:self->libraryView];
         BOOL isSelected = YES;
@@ -505,7 +504,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         [undoManager endUndoGrouping];
         [self->libraryView selectRowIndexes:itemIndexes byExtendingSelection:NO];
         //we restore the delegate notification receiving
-        [[NSNotificationCenter defaultCenter] addObserver:[self->libraryView delegate]
+        [[NSNotificationCenter defaultCenter] addObserver:self->libraryView.delegate
                                                  selector:@selector(outlineViewSelectionDidChange:)
                                                      name:NSOutlineViewSelectionDidChangeNotification
                                                    object:self->libraryView];
@@ -532,12 +531,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setDelegate:self];
+  openPanel.delegate = self;
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
-  [openPanel setAccessoryView:importAccessoryView];
+  openPanel.accessoryView = importAccessoryView;
   openPanel.allowedFileTypes = @[@"latexlib", @"latexhist", @"library", @"plist", @"tex"];
-  if ([[self window] isVisible]) {
-    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+  if (self.window.visible) {
+    [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
       [self _openPanelDidEnd:openPanel returnCode:result contextInfo:nil];
     }];
   } else {
@@ -548,10 +547,10 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
-  library_import_option_t import_option = [importOptionPopUpButton selectedTag];
+  library_import_option_t import_option = importOptionPopUpButton.selectedTag;
   if (returnCode == NSFileHandlingPanelOKButton)
   {
-    BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
+    BOOL ok = [[LibraryManager sharedManager] loadFrom:openPanel.URLs.lastObject.path option:import_option parent:nil];
     if (!ok)
     {
       NSAlert* alert = [NSAlert new];
@@ -563,7 +562,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     {
       [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];
       [self->libraryView reloadData];
-      [self->libraryView scrollRowToVisible:[self->libraryView numberOfRows]-1];
+      [self->libraryView scrollRowToVisible:self->libraryView.numberOfRows-1];
     }
   }//end if (returnCode == NSOKButton)
 }
@@ -571,20 +570,20 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) panelSelectionDidChange:(id)sender
 {
-  NSString* selectedFileName = [[sender URL] path];
-  BOOL isLaTeXiTLibrary = [[selectedFileName pathExtension] isEqualToString:@"latexlib"];
-  NSUInteger selectedIndex = [self->importOptionPopUpButton indexOfSelectedItem];
+  NSString* selectedFileName = [sender URL].path;
+  BOOL isLaTeXiTLibrary = [selectedFileName.pathExtension isEqualToString:@"latexlib"];
+  NSUInteger selectedIndex = self->importOptionPopUpButton.indexOfSelectedItem;
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_MERGE];
+  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_MERGE;
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"Overwrite current library")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_OVERWRITE];
+  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OVERWRITE;
   if (isLaTeXiTLibrary)
   {
     [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
-    [[self->importOptionPopUpButton lastItem] setTag:(int)LIBRARY_IMPORT_OPEN];
+    self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OPEN;
   }//end if (isLaTeXiTLibrary)
-  if (selectedIndex >= [[self->importOptionPopUpButton itemArray] count])
+  if (selectedIndex >= self->importOptionPopUpButton.itemArray.count)
     selectedIndex = 0;
   [self->importOptionPopUpButton selectItemAtIndex:selectedIndex];
 }
@@ -592,8 +591,7 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(IBAction) openDefaultLibraryPath:(id)sender
 {
-  [(NSOpenPanel*)[importAccessoryView window]
-    setDirectoryURL:[NSURL fileURLWithPath:[[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent]]];
+  ((NSOpenPanel*)importAccessoryView.window).directoryURL = [NSURL fileURLWithPath:[[LibraryManager sharedManager] defaultLibraryPath].stringByDeletingLastPathComponent];
 }
 //end openDefaultLibraryPath:
 
@@ -603,13 +601,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   [self->savePanel setTitle:NSLocalizedString(@"Export library...", @"Export library...")];
   [self changeLibraryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
-  [self->savePanel setAccessoryView:self->exportAccessoryView];
-  [self->exportOnlySelectedButton setState:NSOffState];
-  [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
+  self->savePanel.accessoryView = self->exportAccessoryView;
+  self->exportOnlySelectedButton.state = NSOffState;
+  self->exportOnlySelectedButton.enabled = (self->libraryView.selectedRow >= 0);
   savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
-  if ([[self window] isVisible]) {
-    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-      [self _savePanelDidEnd:savePanel returnCode:result contextInfo:NULL];
+  if (self.window.visible) {
+    [savePanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+      [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:NULL];
     }];
   } else
     [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
@@ -619,15 +617,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 {
   if (returnCode == NSFileHandlingPanelOKButton)
   {
-    BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
+    BOOL onlySelection = (exportOnlySelectedButton.state == NSOnState);
     NSArray* selectedLibraryItems = [self->libraryView selectedItems];
-    NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:([self->exportOptionCommentedPreamblesButton state] == NSOnState)], @"exportCommentedPreambles",
-      [NSNumber numberWithBool:([self->exportOptionUserCommentsButton state] == NSOnState)], @"exportUserComments",
-      [NSNumber numberWithBool:([self->exportOptionIgnoreTitleHierarchyButton state] == NSOnState)], @"ignoreTitleHierarchy",
-      nil];
-    BOOL ok = [[LibraryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedLibraryItems
-                                              format:[exportFormatPopUpButton selectedTag]
+    NSDictionary* options = @{@"exportCommentedPreambles": [NSNumber numberWithBool:(self->exportOptionCommentedPreamblesButton.state == NSOnState)],
+      @"exportUserComments": [NSNumber numberWithBool:(self->exportOptionUserCommentsButton.state == NSOnState)],
+      @"ignoreTitleHierarchy": [NSNumber numberWithBool:(self->exportOptionIgnoreTitleHierarchyButton.state == NSOnState)]};
+    BOOL ok = [[LibraryManager sharedManager] saveAs:theSavePanel.URL.path onlySelection:onlySelection selection:selectedLibraryItems
+                                              format:exportFormatPopUpButton.selectedTag
                                              options:options];
     if (!ok)
     {
@@ -647,24 +643,21 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   switch((library_export_format_t)[sender selectedTag])
   {
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
-      [self->exportAccessoryView setFrame:
-        NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setAllowedFileTypes:@[@"latexlib"]];
+      self->exportAccessoryView.frame = NSMakeRect(0, 0, NSMaxX(self->exportFormatPopUpButton.frame)+20, 82);
+      self->savePanel.allowedFileTypes = @[@"latexlib"];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
-      [self->exportAccessoryView setFrame:
-       NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setAllowedFileTypes:@[@"plist"]];
+      self->exportAccessoryView.frame = NSMakeRect(0, 0, NSMaxX(self->exportFormatPopUpButton.frame)+20, 82);
+      self->savePanel.allowedFileTypes = @[@"plist"];
       break;
     case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
-      [self->exportAccessoryView setFrame:
-       NSMakeRect(0, 0, 
+      self->exportAccessoryView.frame = NSMakeRect(0, 0, 
          MAX(NSMaxX([self->exportFormatPopUpButton frame]),
              MAX(NSMaxX([self->exportOptionCommentedPreamblesButton frame]),
                  MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
                      NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
-                  156)];
-      [self->savePanel setAllowedFileTypes:@[@"tex"]];
+                  156);
+      self->savePanel.allowedFileTypes = @[@"tex"];
       break;
   }
 }
@@ -685,8 +678,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 {
   //maybe all documents are closed, so we must update the import button
   MyDocument* anyDocument = (MyDocument*) [AppController currentDocument];
-  [importCurrentButton setEnabled:(anyDocument && [anyDocument hasImage])];
-  [[[self->libraryView superview] superview] setNeedsDisplay:YES];//to bring scrollview to front and hide the top line of the button
+  importCurrentButton.enabled = (anyDocument && anyDocument.hasImage);
+  [self->libraryView.superview.superview setNeedsDisplay:YES];//to bring scrollview to front and hide the top line of the button
 }
 //end _updateButtons:
 
@@ -694,33 +687,33 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification
 {
   [self _updateButtons:nil];
-  if ([[self window] isVisible])
-    [[self window] orderFront:self];
+  if (self.window.visible)
+    [self.window orderFront:self];
 }
 //end applicationWillBecomeActive:
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
 {
-  if (!image && [libraryPreviewPanel isVisible])
+  if (!image && libraryPreviewPanel.visible)
     [libraryPreviewPanel orderOut:self];
   else if (image && self->enablePreviewImage)
   {
-    NSSize imageSize = [image size];
+    NSSize imageSize = image.size;
     NSRect naturalRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
     NSRect adaptedRect = adaptRectangle(naturalRect, NSMakeRect(0, 0, 512, 512), YES, NO, NO);
     NSPoint locationOnScreen = [NSEvent mouseLocation];
-    NSSize screenSize = [[NSScreen mainScreen] frame].size;
+    NSSize screenSize = [NSScreen mainScreen].frame.size;
     int shiftRight = 24;
     int shiftLeft = -24-adaptedRect.size.width-16;
     int shift = (locationOnScreen.x+shiftRight+adaptedRect.size.width+16 > screenSize.width) ? shiftLeft : shiftRight;
     NSRect newFrame = NSMakeRect(MAX(0, locationOnScreen.x+shift),
                                   MIN(locationOnScreen.y-adaptedRect.size.height/2, screenSize.height-adaptedRect.size.height-16),
                                  adaptedRect.size.width+16, adaptedRect.size.height+16);
-    if (image != [libraryPreviewPanelImageView image])
-      [libraryPreviewPanelImageView setImage:image];
-    [libraryPreviewPanelImageView setBackgroundColor:backgroundColor];
+    if (image != libraryPreviewPanelImageView.image)
+      libraryPreviewPanelImageView.image = image;
+    libraryPreviewPanelImageView.backgroundColor = backgroundColor;
     [libraryPreviewPanel setFrame:newFrame display:image ? YES : NO];
-    if (![libraryPreviewPanel isVisible])
+    if (!libraryPreviewPanel.visible)
       [libraryPreviewPanel orderFront:self];
   }
 }
@@ -757,8 +750,8 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) importTeXItemsWithOptions:(NSDictionary*)options
 {
-  NSArray* texItems = [[options objectForKey:@"teXItems"] dynamicCastToClass:[NSArray class]];
-  if ([texItems count] > 0)
+  NSArray* texItems = [options[@"teXItems"] dynamicCastToClass:[NSArray class]];
+  if (texItems.count > 0)
   {
     NSMutableArray* dataSource = [NSMutableArray array];
     NSDictionary* texItem = nil;
@@ -774,12 +767,12 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       self->importTeXArrayController = [[NSArrayController alloc] initWithContent:dataSource];
       [self->importTeXArrayController setAutomaticallyPreparesContent:YES];
       [self->importTeXArrayController setAutomaticallyRearrangesObjects:YES];
-      [self->importTeXArrayController setObjectClass:[TeXItemWrapper class]];
+      self->importTeXArrayController.objectClass = [TeXItemWrapper class];
       [self->importTeXArrayController addObserver:self forKeyPath:@"arrangedObjects.checked" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
     }//end if (!self->importTeXArrayController)
     [self changeImportTeXItems:nil];//updatePredicate
     [self->importTeXPanelTableView bind:NSContentBinding toObject:self->importTeXArrayController withKeyPath:@"arrangedObjects" options:nil];
-    [self->importTeXPanelTableView setDelegate:self];
+    self->importTeXPanelTableView.delegate = self;
     NSString* NSEnabled2Binding = [NSEnabledBinding stringByAppendingString:@"2"];
     NSString* NSEnabled3Binding = [NSEnabledBinding stringByAppendingString:@"3"];
     NSTableColumn* tableColumnChecked = [self->importTeXPanelTableView tableColumnWithIdentifier:@"checked"];
@@ -800,25 +793,19 @@ extern NSString* NSMenuDidBeginTrackingNotification;
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.checked"] options:nil];
     [tableColumnImportButton bind:NSEnabled3Binding toObject:self->importTeXArrayController
                       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
-       [NSDictionary dictionaryWithObjectsAndKeys:
-         [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:1]], NSValueTransformerBindingOption,
-        nil]];
+       @{NSValueTransformerBindingOption: [IsNotEqualToTransformer transformerWithReference:@1]}];
     [tableColumnImportState bind:NSEnabledBinding toObject:self->importTeXArrayController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
     [tableColumnImportState bind:NSValueBinding toObject:self->importTeXArrayController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
-        [NSDictionary dictionaryWithObjectsAndKeys:
-           [ObjectTransformer transformerWithDictionary:
-              [NSDictionary dictionaryWithObjectsAndKeys:
-                @"", [NSNumber numberWithInteger:0],
-                NSLocalizedString(@"_IMPORTING_", @""), [NSNumber numberWithInteger:1],
-                NSLocalizedString(@"_IMPORTED_", @""), [NSNumber numberWithInteger:2],
-                @"!", [NSNumber numberWithInteger:3],
-               nil]], NSValueTransformerBindingOption,
-         nil]];
+        @{NSValueTransformerBindingOption: [ObjectTransformer transformerWithDictionary:
+              @{@0: @"",
+                @1: NSLocalizedString(@"_IMPORTING_", @""),
+                @2: NSLocalizedString(@"_IMPORTED_", @""),
+                @3: @"!"}]}];
 
     self->importTeXOptions = [options copy];
-    [NSApp beginSheet:self->importTeXPanel modalForWindow:[self window] modalDelegate:self
+    [NSApp beginSheet:self->importTeXPanel modalForWindow:self.window modalDelegate:self
        didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
   }//end if ([texItems count] > 0)
 }
@@ -841,23 +828,23 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     NSPredicate* filterPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
     [self->importTeXArrayController setFilterPredicate:filterPredicate];*/
     
-    NSEnumerator* enumerator = [[self->importTeXArrayController arrangedObjects] objectEnumerator];
+    NSEnumerator* enumerator = [self->importTeXArrayController.arrangedObjects objectEnumerator];
     TeXItemWrapper* teXItem = nil;
     while((teXItem = [enumerator nextObject]))
     {
       teXItem = [teXItem dynamicCastToClass:[TeXItemWrapper class]];
       NSDictionary* teXItemData = teXItem.data;
-      latex_mode_t latexMode = (latex_mode_t)[[[teXItemData objectForKey:@"mode"] dynamicCastToClass:[NSNumber class]] integerValue];
+      latex_mode_t latexMode = (latex_mode_t)[[teXItemData[@"mode"] dynamicCastToClass:[NSNumber class]] integerValue];
       //teXItem.enabled = [filterPredicate evaluateWithObject:teXItem];
       teXItem.checked =
         (sender == self->importTeXPanelInlineCheckBox) && (latexMode == LATEX_MODE_INLINE) ?
-          ([self->importTeXPanelInlineCheckBox state] != NSOffState) :
+          (self->importTeXPanelInlineCheckBox.state != NSOffState) :
         (sender == self->importTeXPanelDisplayCheckBox) && (latexMode == LATEX_MODE_DISPLAY) ?
-          ([self->importTeXPanelDisplayCheckBox state] != NSOffState) :
+          (self->importTeXPanelDisplayCheckBox.state != NSOffState) :
         (sender == self->importTeXPanelAlignCheckBox) && (latexMode == LATEX_MODE_ALIGN) ?
-          ([self->importTeXPanelAlignCheckBox state] != NSOffState) :
+          (self->importTeXPanelAlignCheckBox.state != NSOffState) :
         (sender == self->importTeXPanelEqnarrayCheckBox) && (latexMode == LATEX_MODE_EQNARRAY) ?
-          ([self->importTeXPanelEqnarrayCheckBox state] != NSOffState) :
+          (self->importTeXPanelEqnarrayCheckBox.state != NSOffState) :
         teXItem.checked;
     }//end for each teXItem
     --self->updateLevel;
@@ -869,11 +856,11 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 -(IBAction) closeImportTeXItems:(id)sender
 {
   LibraryManager* libraryManager = [LibraryManager sharedManager];
-  NSNumber* importOption = [[self->importTeXOptions objectForKey:@"importOption"] dynamicCastToClass:[NSNumber class]];
+  NSNumber* importOption = [self->importTeXOptions[@"importOption"] dynamicCastToClass:[NSNumber class]];
   BOOL souldImport;
   @autoreleasepool {
   NSArray* itemsToRemove = nil;
-  if (importOption && ([importOption integerValue] == LIBRARY_IMPORT_OVERWRITE))
+  if (importOption && (importOption.integerValue == LIBRARY_IMPORT_OVERWRITE))
     itemsToRemove = [libraryManager allItems];
   self->importTeXOptions = nil;
 
@@ -899,10 +886,10 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(IBAction) performImportTeXItems:(id)sender
 {
-  NSInteger clickedRow = [self->importTeXPanelTableView clickedRow];
-  NSArray* arrangedObjects = [self->importTeXArrayController arrangedObjects];
-  TeXItemWrapper* teXItem = (clickedRow < 0) || ((unsigned)clickedRow >= [arrangedObjects count]) ? nil :
-    [[arrangedObjects objectAtIndex:clickedRow] dynamicCastToClass:[TeXItemWrapper class]];
+  NSInteger clickedRow = self->importTeXPanelTableView.clickedRow;
+  NSArray* arrangedObjects = self->importTeXArrayController.arrangedObjects;
+  TeXItemWrapper* teXItem = (clickedRow < 0) || ((unsigned)clickedRow >= arrangedObjects.count) ? nil :
+    [arrangedObjects[clickedRow] dynamicCastToClass:[TeXItemWrapper class]];
   BOOL isFullImport = !teXItem;
   NSMutableArray* teXItems = [NSMutableArray array];
   [teXItems safeAddObject:teXItem];
@@ -938,13 +925,13 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     while((teXItem = [enumerator nextObject]))
     {
       NSDictionary* teXItemData = teXItem.data;
-      proposedParentItem = [teXItemData objectForKey:@"proposedParentItem"];
-      proposedChildIndex = [[[teXItemData objectForKey:@"proposedChildIndex"] dynamicCastToClass:[NSNumber class]] integerValue];
+      proposedParentItem = teXItemData[@"proposedParentItem"];
+      proposedChildIndex = [[teXItemData[@"proposedChildIndex"] dynamicCastToClass:[NSNumber class]] integerValue];
       proposedLocationAsEquation = [proposedParentItem dynamicCastToClass:[LibraryEquation class]];
       proposedLocationAsGroup = [proposedParentItem dynamicCastToClass:[LibraryGroupItem class]];
       parent =
         (proposedLocationAsGroup != nil) ? proposedLocationAsGroup :
-        [[proposedLocationAsEquation parent] dynamicCastToClass:[LibraryGroupItem class]];
+        [proposedLocationAsEquation.parent dynamicCastToClass:[LibraryGroupItem class]];
       LatexitEquation* latexitEquation = teXItem.equation;
       LibraryEquation* libraryEquation = !latexitEquation ? nil :
         [[LibraryEquation alloc] initWithParent:parent equation:latexitEquation insertIntoManagedObjectContext:[libraryManager managedObjectContext]];
@@ -956,15 +943,15 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     }//end for each teXItem
     
     //fix sortIndexes of root nodes
-    LibraryController* libraryController = [self->libraryView libraryController];
+    LibraryController* libraryController = self->libraryView.libraryController;
     NSMutableArray* brothers = [NSMutableArray arrayWithArray:
                                 !parent  ? [libraryController rootItems] : [parent childrenOrdered]];
     [brothers removeObjectsInArray:newLibraryRootItems];
     [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
-      [brothers count] : MIN([brothers count], (unsigned)proposedChildIndex)];
-    NSUInteger nbBrothers = [brothers count];
+      brothers.count : MIN([brothers count], (unsigned)proposedChildIndex)];
+    NSUInteger nbBrothers = brothers.count;
     while(nbBrothers--)
-      [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
+      [brothers[nbBrothers] setSortIndex:nbBrothers];
   }//end if (isFullImport))
 
   [self->importTeXArrayController rearrangeObjects];
@@ -973,9 +960,9 @@ extern NSString* NSMenuDidBeginTrackingNotification;
 
 -(void) latexisationItemDidEndSelector:(NSDictionary*)configuration
 {
-  TeXItemWrapper* teXItem = [[configuration objectForKey:@"context"] dynamicCastToClass:[TeXItemWrapper class]];
-  NSData* pdfData = [[configuration objectForKey:@"outPdfData"] dynamicCastToClass:[NSData class]];
-  LatexitEquation* latexitEquation = ![pdfData length] ? nil :
+  TeXItemWrapper* teXItem = [configuration[@"context"] dynamicCastToClass:[TeXItemWrapper class]];
+  NSData* pdfData = [configuration[@"outPdfData"] dynamicCastToClass:[NSData class]];
+  LatexitEquation* latexitEquation = !pdfData.length ? nil :
     [[LatexitEquation alloc] initWithData:pdfData sourceUTI:(NSString*)kUTTypePDF useDefaults:YES];
   teXItem.importState = !latexitEquation ? 3 : 2;
   teXItem.equation = latexitEquation;
@@ -1003,14 +990,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     NSUInteger alignDisabledCount = 0;
     NSUInteger eqnarrayEnabledCount = 0;
     NSUInteger eqnarrayDisabledCount = 0;
-    NSArray* arrangedObjects = [[self->importTeXArrayController arrangedObjects] mutableCopy];
+    NSArray* arrangedObjects = [self->importTeXArrayController.arrangedObjects mutableCopy];
     NSEnumerator* enumerator = [arrangedObjects objectEnumerator];
     TeXItemWrapper* teXItem = nil;
     while((teXItem = [enumerator nextObject]))
     {
       teXItem = [teXItem dynamicCastToClass:[TeXItemWrapper class]];
       NSDictionary* teXItemData = teXItem.data;
-      latex_mode_t latexMode = (latex_mode_t)[[[teXItemData objectForKey:@"mode"] dynamicCastToClass:[NSNumber class]] integerValue];
+      latex_mode_t latexMode = (latex_mode_t)[[teXItemData[@"mode"] dynamicCastToClass:[NSNumber class]] integerValue];
       if (latexMode == LATEX_MODE_INLINE)
       {
         inlineEnabledCount += teXItem.checked ? 1 : 0;
@@ -1032,30 +1019,26 @@ extern NSString* NSMenuDidBeginTrackingNotification;
         eqnarrayDisabledCount += !teXItem.checked ? 1 : 0;
       }//end if (latexMode == LATEX_MODE_EQNARRAY)  
     }//end for each teXItem
-    [self->importTeXPanelInlineCheckBox setEnabled:((inlineEnabledCount+inlineDisabledCount)>0)];
-    [self->importTeXPanelInlineCheckBox setState:
-      !inlineEnabledCount && !inlineDisabledCount ? NSOffState :
+    self->importTeXPanelInlineCheckBox.enabled = ((inlineEnabledCount+inlineDisabledCount)>0);
+    self->importTeXPanelInlineCheckBox.state = !inlineEnabledCount && !inlineDisabledCount ? NSOffState :
       inlineEnabledCount && !inlineDisabledCount ? NSOnState :
       !inlineEnabledCount && inlineDisabledCount ? NSOffState :
-      NSMixedState];
-    [self->importTeXPanelDisplayCheckBox setEnabled:((displayEnabledCount+displayDisabledCount)>0)];
-    [self->importTeXPanelDisplayCheckBox setState:
-      !displayEnabledCount && !displayDisabledCount ? NSOffState :
+      NSMixedState;
+    self->importTeXPanelDisplayCheckBox.enabled = ((displayEnabledCount+displayDisabledCount)>0);
+    self->importTeXPanelDisplayCheckBox.state = !displayEnabledCount && !displayDisabledCount ? NSOffState :
       displayEnabledCount && !displayDisabledCount ? NSOnState :
       !displayEnabledCount && displayDisabledCount ? NSOffState :
-      NSMixedState];
-    [self->importTeXPanelAlignCheckBox setEnabled:((alignEnabledCount+alignDisabledCount)>0)];
-    [self->importTeXPanelAlignCheckBox setState:
-      !alignEnabledCount && !alignDisabledCount ? NSOffState :
+      NSMixedState;
+    self->importTeXPanelAlignCheckBox.enabled = ((alignEnabledCount+alignDisabledCount)>0);
+    self->importTeXPanelAlignCheckBox.state = !alignEnabledCount && !alignDisabledCount ? NSOffState :
       alignEnabledCount && !alignDisabledCount ? NSOnState :
       !alignEnabledCount && alignDisabledCount ? NSOffState :
-      NSMixedState];
-    [self->importTeXPanelEqnarrayCheckBox setEnabled:((eqnarrayEnabledCount+eqnarrayDisabledCount)>0)];
-    [self->importTeXPanelEqnarrayCheckBox setState:
-      !eqnarrayEnabledCount && !eqnarrayDisabledCount ? NSOffState :
+      NSMixedState;
+    self->importTeXPanelEqnarrayCheckBox.enabled = ((eqnarrayEnabledCount+eqnarrayDisabledCount)>0);
+    self->importTeXPanelEqnarrayCheckBox.state = !eqnarrayEnabledCount && !eqnarrayDisabledCount ? NSOffState :
       eqnarrayEnabledCount && !eqnarrayDisabledCount ? NSOnState :
       !eqnarrayEnabledCount && eqnarrayDisabledCount ? NSOffState :
-      NSMixedState];
+      NSMixedState;
     --self->updateLevel;
   }//end if (!self-updateLevel)
 }

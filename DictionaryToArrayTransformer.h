@@ -15,6 +15,6 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDescriptors:(NSArray*)descriptors;
--(instancetype) initWithDescriptors:(NSArray*)descriptors;
+-(instancetype) initWithDescriptors:(NSArray*)descriptors NS_DESIGNATED_INITIALIZER;
 
 @end

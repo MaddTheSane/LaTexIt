@@ -26,7 +26,7 @@
 
 @implementation UKMainThreadProxy
 
--(id)	initWithTarget: (id)targ
+-(instancetype)	initWithTarget: (id)targ
 {
 	self = [super init];
 	if( self )

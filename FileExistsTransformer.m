@@ -39,14 +39,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithDirectoryAllowed:(BOOL)directoryAllowed
++(instancetype) transformerWithDirectoryAllowed:(BOOL)directoryAllowed
 {
   id result = [[[self class] alloc] initWithDirectoryAllowed:directoryAllowed];
   return result;
 }
 //end transformerWithDirectoryAllowed:
 
--(id) initWithDirectoryAllowed:(BOOL)isDirectoryAllowed
+-(instancetype) initWithDirectoryAllowed:(BOOL)isDirectoryAllowed
 {
   if ((!(self = [super init])))
     return nil;
@@ -60,7 +60,7 @@
   id result = nil;
   BOOL isDirectory = NO;
   BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:value isDirectory:&isDirectory];
-  result = [NSNumber numberWithBool:exists && (!isDirectory || self->directoryAllowed)];
+  result = @((BOOL)(exists && (!isDirectory || self->directoryAllowed)));
   return result;
 }
 //end transformedValue:

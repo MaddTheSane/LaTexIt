@@ -22,13 +22,13 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 
 @implementation DragThroughButton
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if (!(self = [super initWithCoder:coder]))
     return nil;
   self->shouldBlink = YES;
   self->delay = .33;
-  [self registerForDraggedTypes:[NSArray arrayWithObjects:LatexitEquationsPboardType, LibraryItemsWrappedPboardType, nil]];
+  [self registerForDraggedTypes:@[LatexitEquationsPboardType, LibraryItemsWrappedPboardType]];
   return self;
 }
 //end initWithCoder:
@@ -41,7 +41,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 
 -(void) awakeFromNib
 {
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillCloseNotification:) name:NSWindowWillCloseNotification object:[self window]];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillCloseNotification:) name:NSWindowWillCloseNotification object:self.window];
 }
 //end awakeFromNib
 
@@ -73,27 +73,27 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 
 -(void) checkLastMove:(id)object
 {
-  if ([self toolTip])
+  if (self.toolTip)
   {
     NSPoint mouseLocation = [NSEvent mouseLocation];
-    NSSize  toolTipSize = [TooltipWindow suggestedSizeForTooltip:[self toolTip]];
+    NSSize  toolTipSize = [TooltipWindow suggestedSizeForTooltip:self.toolTip];
     NSRect  toolTipFrame = NSMakeRect(mouseLocation.x, mouseLocation.y, toolTipSize.width, toolTipSize.height);
     if (!self->tooltipWindow)
-      self->tooltipWindow = [TooltipWindow tipWithString:[self toolTip] frame:toolTipFrame display:YES];
+      self->tooltipWindow = [TooltipWindow tipWithString:self.toolTip frame:toolTipFrame display:YES];
     [self->tooltipWindow orderFrontWithDuration:5];
   }
-  if ([self isEnabled])
+  if (self.enabled)
   {
     if (!self->shouldBlink)
-      [self setState:NSOnState];
+      self.state = NSOnState;
     else//if (self->shouldBlink)
     {
       self->remainingSetStateWrapped += 5;
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOnState] afterDelay:0.05];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOffState] afterDelay:0.10];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOnState] afterDelay:0.15];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOffState] afterDelay:0.20];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOnState] afterDelay:0.25];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(NSOnState) afterDelay:0.05];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(NSOffState) afterDelay:0.10];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(NSOnState) afterDelay:0.15];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(NSOffState) afterDelay:0.20];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(NSOnState) afterDelay:0.25];
     }//end if (self->shouldBlink)
   }//end if ([self isEnabled])
 }
@@ -101,20 +101,20 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 
 -(void) setStateWrapped:(NSNumber*)number
 {
-  if ([self isEnabled])
+  if (self.enabled)
   {
     if (self->remainingSetStateWrapped)
       --self->remainingSetStateWrapped;
-    [self setState:[number intValue]];
+    self.state = number.integerValue;
   }//end if ([self isEnabled])
 }
 //end setStateWrapped:
 
 -(void) setState:(NSInteger)value
 {
-  if ([self isEnabled])
+  if (self.enabled)
   {
-    [super setState:value];
+    super.state = value;
     if (!self->remainingSetStateWrapped)
       [[NSNotificationCenter defaultCenter] postNotificationName:DragThroughButtonStateChangedNotification object:self userInfo:nil];
   }//end if ([self isEnabled])
@@ -137,7 +137,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender
 {
   self->lastMoveDate = [[NSDate alloc] init];
-  if ([self state] != NSOnState)
+  if (self.state != NSOnState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
   return NSDragOperationEvery;
 }
@@ -147,7 +147,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 {
   [NSRunLoop cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkLastMove:) object:nil];
   self->lastMoveDate = [[NSDate alloc] init];
-  if ([self state] != NSOnState)
+  if (self.state != NSOnState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
   return NSDragOperationEvery;
 }
@@ -168,10 +168,10 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 
 -(void) drawRect:(NSRect)rect
 {
-  if (![self isEnabled])
+  if (!self.enabled)
   {
     [[NSColor grayColor] set];
-    NSRectFill([self bounds]);
+    NSRectFill(self.bounds);
   }//end if (![self isEnabled])
   [super drawRect:rect];
 }

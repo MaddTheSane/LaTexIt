@@ -18,16 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
 -(BOOL) containsObjectIdenticalTo:(ObjectType)object;
 
 //returns a copy of the receiver in the reversed order
--(NSArray<ObjectType>*) reversed;
+@property (readonly, copy) NSArray<ObjectType> * _Nonnull reversed;
 
 -(NSArray<ObjectType>*) arrayByAddingObject:(ObjectType)object atIndex:(NSUInteger)index;
 -(NSArray<ObjectType>*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
 -(NSArray<ObjectType>*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 
--(id) deepCopy;
+@property (readonly, strong) id _Nonnull deepCopy;
 -(id) deepCopyWithZone:(nullable NSZone*)zone;
--(id) deepMutableCopy;
+@property (readonly, strong) id _Nonnull deepMutableCopy;
 -(id) deepMutableCopyWithZone:(nullable NSZone*)zone;
 
 @end

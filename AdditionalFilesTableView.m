@@ -17,21 +17,21 @@
 #import "PreferencesController.h"
 
 @interface AdditionalFilesTableView (PrivateAPI)
--(NSArrayController*) filesController;
+@property (readonly, strong) NSArrayController *filesController;
 -(void) openPanelDidEnd:(NSOpenPanel*)panel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 @end
 
 @implementation AdditionalFilesTableView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
   self->previousDefaultsFiles = [[NSMutableArray alloc] init];
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
+  self.delegate = self;
+  self.dataSource = self;
   [self setIsDefaultTableView:YES];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+  [self registerForDraggedTypes:@[NSFilenamesPboardType]];
   return self;
 }
 //end initWithCoder:
@@ -63,10 +63,9 @@
         withKeyPath:@"arrangedObjects.lastPathComponent" options:nil];
       [[self tableColumnWithIdentifier:@"filepath"] bind:NSTextColorBinding toObject:[[PreferencesController sharedController] additionalFilesController]
         withKeyPath:@"arrangedObjects.self"
-            options:[NSDictionary dictionaryWithObjectsAndKeys:
-              [ComposedTransformer transformerWithValueTransformer:[FileExistsTransformer transformerWithDirectoryAllowed:YES]
+            options:@{NSValueTransformerBindingOption: [ComposedTransformer transformerWithValueTransformer:[FileExistsTransformer transformerWithDirectoryAllowed:YES]
                 additionalValueTransformer:[BoolTransformer transformerWithFalseValue:[NSColor redColor] trueValue:[NSColor blackColor]]
-                         additionalKeyPath:nil], NSValueTransformerBindingOption, nil]];
+                         additionalKeyPath:nil]}];
     }
     else//if (!self->isDefaultTableView)
     {
@@ -75,7 +74,7 @@
         self->filesWithExtrasController = [[NSArrayController alloc] initWithContent:[NSMutableArray array]];
         [self->filesWithExtrasController setPreservesSelection:YES];
         [self->filesWithExtrasController setAutomaticallyPreparesContent:NO];
-        [self->filesWithExtrasController addObjects:[[PreferencesController sharedController] additionalFilesPaths]];
+        [self->filesWithExtrasController addObjects:[PreferencesController sharedController].additionalFilesPaths];
       }
       [self bind:NSContentBinding toObject:self->filesWithExtrasController withKeyPath:@"arrangedObjects" options:nil];
       [self bind:NSSelectionIndexesBinding toObject:self->filesWithExtrasController withKeyPath:@"selectionIndexes" options:nil];
@@ -83,10 +82,9 @@
         withKeyPath:@"arrangedObjects.lastPathComponent" options:nil];
       [[self tableColumnWithIdentifier:@"filepath"] bind:NSTextColorBinding toObject:self->filesWithExtrasController
         withKeyPath:@"arrangedObjects.self"
-            options:[NSDictionary dictionaryWithObjectsAndKeys:
-              [ComposedTransformer transformerWithValueTransformer:[FileExistsTransformer transformerWithDirectoryAllowed:YES]
+            options:@{NSValueTransformerBindingOption: [ComposedTransformer transformerWithValueTransformer:[FileExistsTransformer transformerWithDirectoryAllowed:YES]
                 additionalValueTransformer:[BoolTransformer transformerWithFalseValue:[NSColor redColor] trueValue:[NSColor blackColor]]
-                         additionalKeyPath:nil], NSValueTransformerBindingOption, nil]];
+                         additionalKeyPath:nil]}];
       [[[PreferencesController sharedController] additionalFilesController] addObserver:self forKeyPath:@"arrangedObjects"
         options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
       [self->filesWithExtrasController addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
@@ -105,15 +103,15 @@
 
 -(NSArray*) additionalFilesPaths
 {
-  NSArray* result = [[self filesController] arrangedObjects];
+  NSArray* result = [self filesController].arrangedObjects;
   return result;
 }
 //end filePaths
 
 -(IBAction) openSelection:(id)sender
 {
-  NSArray* selection = [[self filesController] selectedObjects];
-  NSMutableArray* urls = [NSMutableArray arrayWithCapacity:[selection count]];
+  NSArray* selection = [self filesController].selectedObjects;
+  NSMutableArray* urls = [NSMutableArray arrayWithCapacity:selection.count];
   NSEnumerator* enumerator = [selection objectEnumerator];
   NSString* filepath = nil;
   while((filepath = [enumerator nextObject]))
@@ -129,10 +127,10 @@
     [[self filesController] remove:sender];
   else//if (self->isDefaultTableView)
   {
-    NSSet* defaultsFiles = [NSSet setWithArray:[[[PreferencesController sharedController] additionalFilesController] arrangedObjects]];
-    NSMutableSet* selectedFiles =  [NSMutableSet setWithArray:[[self filesController] selectedObjects]];
+    NSSet* defaultsFiles = [NSSet setWithArray:[[PreferencesController sharedController] additionalFilesController].arrangedObjects];
+    NSMutableSet* selectedFiles =  [NSMutableSet setWithArray:[self filesController].selectedObjects];
     [selectedFiles minusSet:defaultsFiles];
-    [[self filesController] removeObjects:[selectedFiles allObjects]];
+    [[self filesController] removeObjects:selectedFiles.allObjects];
   }//end if (self->isDefaultTableView)
 }
 //end remove:
@@ -141,20 +139,20 @@
 
 -(BOOL) canAdd
 {
-  BOOL result = [[self filesController] canAdd];
+  BOOL result = [self filesController].canAdd;
   return result;
 }
 //end canAdd
 
 -(BOOL) canRemove
 {
-  BOOL result = [[self filesController] canRemove];
+  BOOL result = [self filesController].canRemove;
   if (!self->isDefaultTableView && result)
   {
-    NSSet* defaultsFiles = [NSSet setWithArray:[[[PreferencesController sharedController] additionalFilesController] arrangedObjects]];
-    NSMutableSet* selectedFiles =  [NSMutableSet setWithArray:[[self filesController] selectedObjects]];
+    NSSet* defaultsFiles = [NSSet setWithArray:[[PreferencesController sharedController] additionalFilesController].arrangedObjects];
+    NSMutableSet* selectedFiles =  [NSMutableSet setWithArray:[self filesController].selectedObjects];
     [selectedFiles minusSet:defaultsFiles];
-    result &= ([selectedFiles count] > 0);
+    result &= (selectedFiles.count > 0);
   }//end if (result)
   return result;
 }
@@ -169,16 +167,16 @@
       [keyPath isEqualToString:@"arrangedObjects"])
   {
     NSArray* defaultsOld = self->previousDefaultsFiles;
-    NSArray* defaultsNew = [[[PreferencesController sharedController] additionalFilesController] arrangedObjects];
+    NSArray* defaultsNew = [[PreferencesController sharedController] additionalFilesController].arrangedObjects;
     NSMutableArray* brandNewDefaults = [NSMutableArray arrayWithArray:defaultsNew];
     [brandNewDefaults removeObjectsInArray:defaultsOld];
     NSMutableArray* disappearedDefaults = [NSMutableArray arrayWithArray:defaultsOld];
     [disappearedDefaults removeObjectsInArray:defaultsNew];
     [self->previousDefaultsFiles setArray:defaultsNew];
-    NSMutableArray* current = [NSMutableArray arrayWithArray:[self->filesWithExtrasController arrangedObjects]];
+    NSMutableArray* current = [NSMutableArray arrayWithArray:self->filesWithExtrasController.arrangedObjects];
     [current removeObjectsInArray:disappearedDefaults];
-    [current insertObjects:brandNewDefaults atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [brandNewDefaults count])]];
-    [self->filesWithExtrasController setContent:current];
+    [current insertObjects:brandNewDefaults atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, brandNewDefaults.count)]];
+    self->filesWithExtrasController.content = current;
   }//end if (!self->isDefaultTableView)
   else if (object == self->filesWithExtrasController)
   {
@@ -194,7 +192,7 @@
 
 -(BOOL) acceptsFirstMouse:(NSEvent*)event //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:event.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -204,15 +202,15 @@
 -(void) mouseDown:(NSEvent*)event
 {
   [super mouseDown:event];
-  if ([event clickCount] == 2)
+  if (event.clickCount == 2)
     [self openSelection:self];
 }
 //end mouseDown:
 
 -(void) keyDown:(NSEvent*)event
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:event]];
-  if (([event keyCode] == 36) || ([event keyCode] == 52) || ([event keyCode] == 49))//Enter, space or ?? What did I do ???
+  [super interpretKeyEvents:@[event]];
+  if ((event.keyCode == 36) || (event.keyCode == 52) || (event.keyCode == 49))//Enter, space or ?? What did I do ???
     [self openSelection:self];
 }
 //end keyDown:
@@ -225,7 +223,7 @@
 
 -(void) moveUp:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -235,8 +233,8 @@
 
 -(void) moveDown:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
-  if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
+  NSInteger selectedRow = self.selectedRow;
+  if ((selectedRow >= 0) && (selectedRow+1 < self.numberOfRows))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
@@ -265,16 +263,16 @@
 {
   if (returnCode == NSModalResponseOK)
   {
-    NSArray* urls = [panel URLs];
-    NSMutableArray* fileNames = [NSMutableArray arrayWithCapacity:[urls count]];
+    NSArray* urls = panel.URLs;
+    NSMutableArray* fileNames = [NSMutableArray arrayWithCapacity:urls.count];
     for(NSURL *url in urls)
-      [fileNames addObject:[url path]];
+      [fileNames addObject:url.path];
     if (self->isDefaultTableView)
       [[[PreferencesController sharedController] additionalFilesController] addObjects:fileNames];
     else//if (!self->isDefaultTableView)
     {
       AdditionalFilesController* defaultAdditionalFilesController = [[PreferencesController sharedController] additionalFilesController];
-      NSArray* filesInDefaultAdditionalFilesController = [defaultAdditionalFilesController arrangedObjects];
+      NSArray* filesInDefaultAdditionalFilesController = defaultAdditionalFilesController.arrangedObjects;
       NSMutableArray* filesToAdd = [NSMutableArray arrayWithArray:fileNames];
       [filesToAdd removeObjectsInArray:filesInDefaultAdditionalFilesController];
       NSEnumerator* enumerator = [filesToAdd objectEnumerator];
@@ -290,13 +288,13 @@
 
 -(void) tableView:(NSTableView*)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex
 {
-  NSArray* objects = [[self filesController] arrangedObjects];
-  NSString* filepath = (rowIndex >= 0) && ((unsigned)rowIndex < [objects count]) ? [objects objectAtIndex:rowIndex] : nil;
+  NSArray* objects = [self filesController].arrangedObjects;
+  NSString* filepath = (rowIndex >= 0) && ((unsigned)rowIndex < objects.count) ? objects[rowIndex] : nil;
   [aCell setImage:[[NSWorkspace sharedWorkspace] iconForFile:filepath]];
   if (!self->isDefaultTableView)
   {
     AdditionalFilesController* defaultAdditionalFilesController = [[PreferencesController sharedController] additionalFilesController];
-    if ([[defaultAdditionalFilesController arrangedObjects] containsObject:filepath])
+    if ([defaultAdditionalFilesController.arrangedObjects containsObject:filepath])
       [aCell setTextColor:[[NSFileManager defaultManager] fileExistsAtPath:filepath] ? [NSColor grayColor] : [NSColor brownColor]];
   }
 }
@@ -321,8 +319,8 @@
   //we put the moving rows in pasteboard
   self->draggedRowIndexes = rowIndexes;
   NSArrayController* additionalFilesController = [[PreferencesController sharedController] additionalFilesController];
-  NSArray* additionalFilesControllerSelected = [additionalFilesController selectedObjects];
-  [pboard declareTypes:[NSArray arrayWithObject:NSFilenamesPboardType] owner:self];  
+  NSArray* additionalFilesControllerSelected = additionalFilesController.selectedObjects;
+  [pboard declareTypes:@[NSFilenamesPboardType] owner:self];  
   [pboard setPropertyList:additionalFilesControllerSelected forType:NSFilenamesPboardType];
   return YES;
 }
@@ -334,10 +332,10 @@
   NSPasteboard* pboard = [info draggingPasteboard];
   NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]] &&
+            [pboard availableTypeFromArray:@[NSFilenamesPboardType]] &&
             [pboard propertyListForType:NSFilenamesPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            (!indexSet || (indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row)));
+            (!indexSet || (indexSet && (indexSet.firstIndex != (NSUInteger)row) && (indexSet.firstIndex+1 != (NSUInteger)row)));
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

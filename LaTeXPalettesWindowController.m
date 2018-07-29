@@ -26,7 +26,7 @@
 
 @implementation LaTeXPalettesWindowController
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super initWithWindowNibName:@"LaTeXPalettesWindowController"])))
     return nil;
@@ -46,47 +46,47 @@
 
 -(void) windowDidResize:(NSNotification*)notification
 {
-  NSDictionary* palette = [self->orderedPalettes objectAtIndex:[self->matrixChoicePopUpButton selectedTag]];
-  NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
-  unsigned int numberOfItemsPerRow = ([numberOfItemsPerRowNumber intValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntValue] == 0) ?
-                                     4 : [numberOfItemsPerRowNumber unsignedIntValue];
-  CGFloat clipViewWidth = [[[self->matrix superview] superview] frame].size.width-[NSScroller scrollerWidthForControlSize:[[(NSScrollView*)[[matrix superview] superview] horizontalScroller] controlSize] scrollerStyle:[[(NSScrollView*)[[matrix superview] superview] horizontalScroller] scrollerStyle]]+1;
+  NSDictionary* palette = self->orderedPalettes[self->matrixChoicePopUpButton.selectedTag];
+  NSNumber* numberOfItemsPerRowNumber = palette[@"numberOfItemsPerRow"];
+  NSUInteger numberOfItemsPerRow = (numberOfItemsPerRowNumber.integerValue <= 0) || (numberOfItemsPerRowNumber.unsignedIntegerValue == 0) ?
+                                     4 : numberOfItemsPerRowNumber.unsignedIntValue;
+  CGFloat clipViewWidth = self->matrix.superview.superview.frame.size.width-[NSScroller scrollerWidthForControlSize:((NSScrollView*)matrix.superview.superview).horizontalScroller.controlSize scrollerStyle:((NSScrollView*)matrix.superview.superview).horizontalScroller.scrollerStyle]+1;
   CGFloat cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
-  [self->matrix setCellSize:NSMakeSize(cellWidth, cellWidth)];
-  [self->matrix setFrame:NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*[matrix numberOfRows])];
+  self->matrix.cellSize = NSMakeSize(cellWidth, cellWidth);
+  self->matrix.frame = NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*matrix.numberOfRows);
   [self->matrix setNeedsDisplay:YES];
 }
 //end windowDidResize:
 
 -(void) awakeFromNib
 {
-  self->smallWindowMinSize = [[self window] minSize];
-  [self->matrixChoicePopUpButton setFocusRingType:NSFocusRingTypeNone];
+  self->smallWindowMinSize = self.window.minSize;
+  self->matrixChoicePopUpButton.focusRingType = NSFocusRingTypeNone;
   [self->matrixChoicePopUpButton removeAllItems];
-  NSString* lastDomain = [self->orderedPalettes count] ? [[self->orderedPalettes objectAtIndex:0] objectForKey:@"domainName"] : nil;
+  NSString* lastDomain = self->orderedPalettes.count ? self->orderedPalettes[0][@"domainName"] : nil;
   unsigned int i = 0;
-  for(i = 0 ; i<[self->orderedPalettes count] ; ++i)
+  for(i = 0 ; i<self->orderedPalettes.count ; ++i)
   {
-    NSDictionary* paletteAsDictionary = [self->orderedPalettes objectAtIndex:i];
-    NSString* domainName = [[NSFileManager defaultManager] localizedPath:[paletteAsDictionary objectForKey:@"domainName"]];
+    NSDictionary* paletteAsDictionary = self->orderedPalettes[i];
+    NSString* domainName = [[NSFileManager defaultManager] localizedPath:paletteAsDictionary[@"domainName"]];
     if (![domainName isEqualToString:lastDomain])
     {
-      [[self->matrixChoicePopUpButton menu] addItem:[NSMenuItem separatorItem]];
-      [[self->matrixChoicePopUpButton lastItem] setToolTip:domainName];
+      [self->matrixChoicePopUpButton.menu addItem:[NSMenuItem separatorItem]];
+      self->matrixChoicePopUpButton.lastItem.toolTip = domainName;
     }
     lastDomain = domainName;
-    [self->matrixChoicePopUpButton addItemWithTitle:[paletteAsDictionary objectForKey:@"localizedName"]];
-    [[self->matrixChoicePopUpButton lastItem] setTag:i];
+    [self->matrixChoicePopUpButton addItemWithTitle:paletteAsDictionary[@"localizedName"]];
+    self->matrixChoicePopUpButton.lastItem.tag = i;
   }
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:)
-                                               name:NSWindowDidResizeNotification object:[self window]];
-  [self->matrix setDelegate:(id)self];
+                                               name:NSWindowDidResizeNotification object:self.window];
+  self->matrix.delegate = self;
   [self->matrixChoicePopUpButton bind:NSSelectedTagBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LatexPaletteGroupKey] options:nil];
-  [self->matrixChoicePopUpButton setAction:@selector(changeGroup:)];
-  [self->matrixChoicePopUpButton setTarget:self];
-  [self->matrix setNextKeyView:self->matrixChoicePopUpButton];
+  self->matrixChoicePopUpButton.action = @selector(changeGroup:);
+  self->matrixChoicePopUpButton.target = self;
+  self->matrix.nextKeyView = self->matrixChoicePopUpButton;
   [self changeGroup:matrixChoicePopUpButton];
   [self latexPalettesSelect:nil];
 }
@@ -94,17 +94,17 @@
 
 -(void) windowDidLoad
 {
-  NSWindow* window = [self window];
+  NSWindow* window = self.window;
   [window setAcceptsMouseMovedEvents:YES];
-  NSRect defaultFrame = [[PreferencesController sharedController] paletteLaTeXWindowFrame];
-  BOOL   defaultDetails = [[PreferencesController sharedController] paletteLaTeXDetailsOpened];
+  NSRect defaultFrame = [PreferencesController sharedController].paletteLaTeXWindowFrame;
+  BOOL   defaultDetails = [PreferencesController sharedController].paletteLaTeXDetailsOpened;
   if (defaultDetails)
   {
-    defaultFrame.size.height -= [self->detailsBox frame].size.height;
-    defaultFrame.origin.y    += [self->detailsBox frame].size.height;
+    defaultFrame.size.height -= self->detailsBox.frame.size.height;
+    defaultFrame.origin.y    += self->detailsBox.frame.size.height;
   }
   [window setFrame:defaultFrame display:YES];
-  [detailsButton setState:defaultDetails ? NSOnState : NSOffState];
+  detailsButton.state = defaultDetails ? NSOnState : NSOffState;
   
   [window setTitle:NSLocalizedString(@"LaTeX Palette", @"LaTeX Palette")];
   [self->detailsLabelTextField setStringValue:NSLocalizedString(@"Details", @"Details")];
@@ -112,11 +112,11 @@
 
   [self->detailsLatexCodeLabelTextField setStringValue:NSLocalizedString(@"LaTeX Code :", @"LaTeX Code :")];
   [self->detailsLatexCodeLabelTextField sizeToFit];
-  [self->detailsLatexCodeTextField setFrame:NSRectChange([self->detailsLatexCodeLabelTextField frame], YES, NSMaxX([self->detailsLatexCodeLabelTextField frame])+3, NO, 0, NO, 0, NO, 0)];
+  self->detailsLatexCodeTextField.frame = NSRectChange(self->detailsLatexCodeLabelTextField.frame, YES, NSMaxX(self->detailsLatexCodeLabelTextField.frame)+3, NO, 0, NO, 0, NO, 0);
   
   [self->detailsRequiresLabelTextField setStringValue:NSLocalizedString(@"Requires :", @"Requires :")];
   [self->detailsRequiresLabelTextField sizeToFit];
-  [self->detailsRequiresTextField setFrame:NSRectChange([self->detailsRequiresLabelTextField frame], YES, NSMaxX([self->detailsRequiresLabelTextField frame])+3,NO, 0, NO, 0, NO, 0)];
+  self->detailsRequiresTextField.frame = NSRectChange(self->detailsRequiresLabelTextField.frame, YES, NSMaxX(self->detailsRequiresLabelTextField.frame)+3,NO, 0, NO, 0, NO, 0);
 
   if (defaultDetails)
     [self openOrHideDetails:detailsButton];
@@ -128,18 +128,17 @@
   NSFileManager* fileManager =  [NSFileManager defaultManager];                           
   NSMutableArray* allPalettes = [NSMutableArray array];
   [allPalettes addObject:
-    [NSDictionary dictionaryWithObjectsAndKeys:@"built-in", @"domainName", 
-                                              [[NSBundle mainBundle] pathsForResourcesOfType:@"latexpalette" inDirectory:@"palettes"], @"paths",
-                                              nil]];
+    @{@"domainName": @"built-in", 
+                                              @"paths": [[NSBundle mainBundle] pathsForResourcesOfType:@"latexpalette" inDirectory:@"palettes"]}];
   NSEnumerator* domainPathsEnumerator = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask , YES) objectEnumerator];
   NSString* domainPath = nil;
   while((domainPath = [domainPathsEnumerator nextObject]))
   {
     NSString* domainName = domainPath;
-    NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"Palettes", nil];
+    NSArray* pathComponents = @[domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"Palettes"];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
     NSArray* palettesPaths  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
-    NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:[palettesPaths count]];
+    NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:palettesPaths.count];
     NSEnumerator* latexPalettesEnumerator = [palettesPaths objectEnumerator];
     NSString* file = nil;
     while((file = [latexPalettesEnumerator nextObject]))
@@ -147,13 +146,13 @@
       file = [directoryPath stringByAppendingPathComponent:file];
       BOOL isDirectory = NO;
       if ([fileManager fileExistsAtPath:file isDirectory:&isDirectory] && isDirectory &&
-          ([[file pathExtension] caseInsensitiveCompare:@"latexpalette"] == NSOrderedSame))
+          ([file.pathExtension caseInsensitiveCompare:@"latexpalette"] == NSOrderedSame))
         [palettesFullPaths addObject:file];
     }//end for each latexpalette subfolder
     
     if (domainName)
       [allPalettes addObject:
-        [NSDictionary dictionaryWithObjectsAndKeys:domainName, @"domainName", palettesFullPaths, @"paths", nil]];
+        @{@"domainName": domainName, @"paths": palettesFullPaths}];
   }//end for each domain
   
   //we got all the palettes
@@ -162,9 +161,9 @@
   NSDictionary* paletteInBundle = nil;
   while((paletteInBundle = [palettesEnumerator nextObject]))
   {
-    NSString* domainName = [paletteInBundle objectForKey:@"domainName"];
+    NSString* domainName = paletteInBundle[@"domainName"];
     NSMutableArray* palettesAsDictionaries = [NSMutableArray array];
-    NSEnumerator* palettesPathEnumerator = [[paletteInBundle objectForKey:@"paths"] objectEnumerator];
+    NSEnumerator* palettesPathEnumerator = [paletteInBundle[@"paths"] objectEnumerator];
     NSString* paletteFilePath = nil;
     while((paletteFilePath = [palettesPathEnumerator nextObject]))
     {
@@ -175,18 +174,18 @@
         [NSPropertyListSerialization propertyListWithData:infoPlistData options:NSPropertyListImmutable format:&format error:nil];
       if ([plist isKindOfClass:[NSDictionary class]])
       {
-        NSString* paletteName = [plist objectForKey:@"name"];
+        NSString* paletteName = plist[@"name"];
         paletteName = [paletteName isKindOfClass:[NSString class]] ? paletteName : nil;
-        NSString* paletteAuthor = [plist objectForKey:@"author"];
+        NSString* paletteAuthor = plist[@"author"];
         paletteAuthor = [paletteAuthor isKindOfClass:[NSString class]] ? paletteAuthor : @"";
-        NSNumber* numberOfItemsPerRow = [plist objectForKey:@"numberOfItemsPerRow"];
-        numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : [NSNumber numberWithUnsignedInt:4];
+        NSNumber* numberOfItemsPerRow = plist[@"numberOfItemsPerRow"];
+        numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : @4U;
         NSString* localizedName = paletteName ? [bundle localizedStringForKey:paletteName value:paletteName table:nil] : nil;
 
-        NSDictionary* itemDefault = [plist objectForKey:@"itemDefault"];
+        NSDictionary* itemDefault = plist[@"itemDefault"];
         itemDefault = [itemDefault isKindOfClass:[NSDictionary class]] ? itemDefault : nil;
 
-        NSArray*  items = [plist objectForKey:@"items"];
+        NSArray*  items = plist[@"items"];
         NSEnumerator* itemsEnumerator = [items isKindOfClass:[NSArray class]] ? [items objectEnumerator] : nil;
         NSDictionary* item = nil;
         NSMutableArray* palette = [NSMutableArray arrayWithCapacity:10];
@@ -214,8 +213,8 @@
 
             PaletteItem* paletteItem =
               [[PaletteItem alloc] initWithName:itemName localizedName:localizedItemName resourcePath:resourcePath
-                                           type:(isEnvironment && [isEnvironment boolValue] ? LATEX_ITEM_TYPE_ENVIRONMENT : LATEX_ITEM_TYPE_STANDARD)
-                                     numberOfArguments:[numberOfArguments unsignedIntValue]
+                                           type:(isEnvironment && isEnvironment.boolValue ? LATEX_ITEM_TYPE_ENVIRONMENT : LATEX_ITEM_TYPE_STANDARD)
+                                     numberOfArguments:numberOfArguments.unsignedIntValue
                                      latexCode:latexCode requires:requires
                                      argumentToken:argumentToken
                                      argumentTokenDefaultReplace:argumentTokenDefaultReplace
@@ -227,21 +226,20 @@
         
         if (palette)
           [palettesAsDictionaries addObject:
-            [NSDictionary dictionaryWithObjectsAndKeys:
-              paletteName, @"name",
-              localizedName, @"localizedName",
-              paletteAuthor, @"author",
-              numberOfItemsPerRow, @"numberOfItemsPerRow",
-              domainName, @"domainName",
-              palette, @"items", nil]];
+            @{@"name": paletteName,
+              @"localizedName": localizedName,
+              @"author": paletteAuthor,
+              @"numberOfItemsPerRow": numberOfItemsPerRow,
+              @"domainName": domainName,
+              @"items": palette}];
       }//end if plist is dictionary
     }//end for each palette path
     [palettesAsDictionariesByBundle addObject:palettesAsDictionaries];
   }//end for each bundle
   
   [palettesAsDictionariesByBundle makeObjectsPerformSelector:@selector(sortUsingDescriptors:)
-     withObject:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"localizedName" ascending:YES],
-                                          [[NSSortDescriptor alloc] initWithKey:@"index"         ascending:YES], nil]];
+     withObject:@[[[NSSortDescriptor alloc] initWithKey:@"localizedName" ascending:YES],
+                                          [[NSSortDescriptor alloc] initWithKey:@"index"         ascending:YES]]];
 
   self->orderedPalettes = [[NSMutableArray alloc] init];
   NSEnumerator* enumerator = [palettesAsDictionariesByBundle objectEnumerator];
@@ -260,10 +258,10 @@
 
 -(void) mouseMoved:(NSEvent*)event
 {
-  NSClipView* clipView = (NSClipView*) [self->matrix superview];
-  NSPoint locationInWindow = [event locationInWindow];
+  NSClipView* clipView = (NSClipView*) self->matrix.superview;
+  NSPoint locationInWindow = event.locationInWindow;
   NSPoint location = [clipView convertPoint:locationInWindow fromView:nil];
-  NSRect clipBounds = [clipView bounds];
+  NSRect clipBounds = clipView.bounds;
   if (NSPointInRect(location, clipBounds))
   {
     NSInteger row = -1;
@@ -273,7 +271,7 @@
     {
       [self->matrix selectCellAtRow:row column:column];
       [self latexPalettesSelect:self->matrix];
-      [clipView setBounds:clipBounds];
+      clipView.bounds = clipBounds;
       [clipView setNeedsDisplay:YES];
     }
   }
@@ -283,27 +281,27 @@
 //triggered when the user selects an element on the palette
 -(IBAction) latexPalettesSelect:(id)sender
 {
-  PaletteItem* selectedItem = [[self->matrix selectedCell] representedObject];
-  if (!selectedItem || ![selectedItem requires] || [[selectedItem requires] isEqualToString:@""] )
-    [self->detailsRequiresTextField setStringValue:@"-"];
+  PaletteItem* selectedItem = self->matrix.selectedCell.representedObject;
+  if (!selectedItem || !selectedItem.requires || [selectedItem.requires isEqualToString:@""] )
+    self->detailsRequiresTextField.stringValue = @"-";
   else
-    [self->detailsRequiresTextField setStringValue:[NSString stringWithFormat:@"\\usepackage{%@}", [selectedItem requires]]];
+    self->detailsRequiresTextField.stringValue = [NSString stringWithFormat:@"\\usepackage{%@}", selectedItem.requires];
   [self->detailsRequiresTextField sizeToFit];
-  NSImage* image = [selectedItem image];
+  NSImage* image = selectedItem.image;
   if (image) //expands the image to fill the imageView proportionnaly
   {
-    NSSize imageSize = [image size];
-    NSSize frameSize = [detailsImageView bounds].size;
+    NSSize imageSize = image.size;
+    NSSize frameSize = detailsImageView.bounds.size;
     CGFloat ratio = imageSize.height ? imageSize.width/imageSize.height : 1.f;
     imageSize = frameSize;
     if (ratio <= 1) //width <= height
       imageSize.width *= ratio;
     else
       imageSize.height /= ratio;
-    [image setSize:imageSize];
+    image.size = imageSize;
   }
-  [self->detailsImageView setImage:image];
-  [self->detailsLatexCodeTextField setStringValue:selectedItem ? [selectedItem latexCode] : @"-"];
+  self->detailsImageView.image = image;
+  self->detailsLatexCodeTextField.stringValue = selectedItem ? selectedItem.latexCode : @"-";
   [self->detailsLatexCodeTextField sizeToFit];
 }
 //end latexPalettesSelect:
@@ -319,24 +317,24 @@
 -(IBAction) changeGroup:(id)sender
 {
   NSInteger tag = [sender selectedTag];
-  if ((tag >= 0) && ((unsigned int)tag < [orderedPalettes count]))
+  if ((tag >= 0) && ((unsigned int)tag < orderedPalettes.count))
   {
-    NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
-    NSString* author = [palette objectForKey:@"author"];
-    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author]];
-    NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
-    NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
-                                       4 : [numberOfItemsPerRowNumber unsignedIntegerValue];
-    NSArray* items = [palette objectForKey:@"items"];
-    NSUInteger nbItems = [items count];
+    NSDictionary* palette = orderedPalettes[tag];
+    NSString* author = palette[@"author"];
+    authorTextField.stringValue = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author];
+    NSNumber* numberOfItemsPerRowNumber = palette[@"numberOfItemsPerRow"];
+    NSUInteger numberOfItemsPerRow = (numberOfItemsPerRowNumber.integerValue <= 0) || (numberOfItemsPerRowNumber.unsignedIntegerValue == 0) ?
+                                       4 : numberOfItemsPerRowNumber.unsignedIntegerValue;
+    NSArray* items = palette[@"items"];
+    NSUInteger nbItems = items.count;
     NSInteger nbColumns = numberOfItemsPerRow;
     NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
     PaletteCell* prototype = [[PaletteCell alloc] initImageCell:nil];
-    [prototype setImageAlignment:NSImageAlignCenter];
-    [prototype setImageScaling:NSImageScaleAxesIndependently];
-    while([matrix numberOfRows])
+    prototype.imageAlignment = NSImageAlignCenter;
+    prototype.imageScaling = NSImageScaleAxesIndependently;
+    while(matrix.numberOfRows)
       [matrix removeRow:0];
-    [matrix setPrototype:prototype];
+    matrix.prototype = prototype;
     [matrix renewRows:nbRows columns:nbColumns];
     NSUInteger i = 0;
     for(i = 0 ; i<nbItems ; ++i)
@@ -344,9 +342,9 @@
       NSInteger row    = i/numberOfItemsPerRow;
       NSInteger column = i%numberOfItemsPerRow;
       NSImageCell* cell = (NSImageCell*) [matrix cellAtRow:row column:column];
-      PaletteItem* item = [items objectAtIndex:i];
-      [cell setRepresentedObject:item];
-      [cell setImage:[item image]];
+      PaletteItem* item = items[i];
+      cell.representedObject = item;
+      cell.image = item.image;
       [matrix setToolTip:[item toolTip] forCell:cell]; 
     }
     [self windowDidResize:nil];
@@ -360,50 +358,50 @@
   if (!sender)
     sender = detailsButton;
 
-  if ([(NSButton*)sender state] == NSOnState)
+  if (((NSButton*)sender).state == NSOnState)
   {
-    unsigned int oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
-    [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];
+    unsigned int oldMatrixAutoresizingMask = matrixBox.autoresizingMask;
+    matrixBox.autoresizingMask = NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin;
 
     [detailsBox removeFromSuperviewWithoutNeedingDisplay];
     
-    NSWindow* window = [self window];
-    NSRect windowFrame = [window frame];
-    NSRect detailsBoxFrame = [detailsBox frame];
+    NSWindow* window = self.window;
+    NSRect windowFrame = window.frame;
+    NSRect detailsBoxFrame = detailsBox.frame;
     windowFrame.size.height += detailsBoxFrame.size.height;
     windowFrame.origin.y    -= detailsBoxFrame.size.height;
     [window setFrame:windowFrame display:YES animate:YES];
     
-    NSView* contentView = [window contentView];
-    NSRect contentViewFrame = [contentView frame];
+    NSView* contentView = window.contentView;
+    NSRect contentViewFrame = contentView.frame;
     [contentView addSubview:detailsBox];
-    [detailsBox setFrame:NSMakeRect(0, 0, contentViewFrame.size.width, [detailsBox frame].size.height)];
+    detailsBox.frame = NSMakeRect(0, 0, contentViewFrame.size.width, detailsBox.frame.size.height);
     
-    [matrixBox setAutoresizingMask:oldMatrixAutoresizingMask];
+    matrixBox.autoresizingMask = oldMatrixAutoresizingMask;
     
     NSSize minSize = self->smallWindowMinSize;
-    minSize.height += [detailsBox frame].size.height;
-    [window setMinSize:minSize];
+    minSize.height += detailsBox.frame.size.height;
+    window.minSize = minSize;
     
     [window display];
   }
   else
   {
-    unsigned int oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
-    [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];
+    NSUInteger oldMatrixAutoresizingMask = matrixBox.autoresizingMask;
+    matrixBox.autoresizingMask = NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin;
 
     [detailsBox removeFromSuperviewWithoutNeedingDisplay];
     
-    NSWindow* window = [self window];
-    NSRect windowFrame = [window frame];
-    NSRect detailsBoxFrame = [detailsBox frame];
+    NSWindow* window = self.window;
+    NSRect windowFrame = window.frame;
+    NSRect detailsBoxFrame = detailsBox.frame;
     windowFrame.size.height -= detailsBoxFrame.size.height;
     windowFrame.origin.y    += detailsBoxFrame.size.height;
     [window setFrame:windowFrame display:YES animate:YES];
 
-    [matrixBox setAutoresizingMask:oldMatrixAutoresizingMask];
+    matrixBox.autoresizingMask = oldMatrixAutoresizingMask;
 
-    [window setMinSize:self->smallWindowMinSize];
+    window.minSize = self->smallWindowMinSize;
     [window display];
   }
 }
@@ -412,8 +410,8 @@
 -(void) applicationWillTerminate:(NSNotification*)notification
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  [preferencesController setPaletteLaTeXWindowFrame:[[self window] frame]];
-  [preferencesController setPaletteLaTeXDetailsOpened:([detailsButton state] == NSOnState)];
+  preferencesController.paletteLaTeXWindowFrame = self.window.frame;
+  preferencesController.paletteLaTeXDetailsOpened = (detailsButton.state == NSOnState);
 }
 //end applicationWillTerminate:
 

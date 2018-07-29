@@ -24,11 +24,12 @@ typedef enum {LATEX_ITEM_TYPE_STANDARD, LATEX_ITEM_TYPE_ENVIRONMENT} latex_item_
   NSImage* image;
 }
 
--(id) initWithName:(NSString*)name localizedName:(NSString*)localizedName resourcePath:(NSString*)resourcePath 
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
+-(instancetype) initWithName:(NSString*)name localizedName:(NSString*)localizedName resourcePath:(NSString*)resourcePath 
               type:(latex_item_type_t)type numberOfArguments:(NSUInteger)numberOfArguments
               latexCode:(NSString*)latexCode requires:(NSString*)package
               argumentToken:(NSString*)argumentToken
-              argumentTokenDefaultReplace:(NSString*)argumentTokenDefaultReplace;
+              argumentTokenDefaultReplace:(NSString*)argumentTokenDefaultReplace NS_DESIGNATED_INITIALIZER;
 
 @property (readonly, copy) NSString *name;
 @property (readonly, copy) NSString *localizedName;
@@ -41,7 +42,7 @@ typedef enum {LATEX_ITEM_TYPE_STANDARD, LATEX_ITEM_TYPE_ENVIRONMENT} latex_item_
 @property (readonly, copy) NSString *argumentTokenDefaultReplace;
 
 @property (readonly, strong) NSImage *image;
--(NSString*) toolTip;
+@property (readonly, copy) NSString *toolTip;
 -(NSString*) stringWithTextInserted:(NSString*)text;
 
 @end

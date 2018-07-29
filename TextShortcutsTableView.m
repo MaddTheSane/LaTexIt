@@ -19,7 +19,7 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 
 @implementation TextShortcutsTableView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
@@ -29,21 +29,21 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 
 -(void) awakeFromNib
 {
-  [self setDelegate:(id)self];
+  self.delegate = self;
   NSArrayController* editionTextShortcutsController = [[PreferencesController sharedController] editionTextShortcutsController];
-  NSArray* tableColumns = [self tableColumns];
+  NSArray* tableColumns = self.tableColumns;
   NSEnumerator* enumerator = [tableColumns objectEnumerator];
   NSTableColumn* tableColumn = nil;
   while((tableColumn = [enumerator nextObject]))
     [tableColumn bind:NSValueBinding toObject:editionTextShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", [tableColumn identifier]] options:nil];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:EditionTextShortcutsPboardType]];
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", tableColumn.identifier] options:nil];
+  [self registerForDraggedTypes:@[EditionTextShortcutsPboardType]];
 }
 //end awakeFromNib
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:theEvent.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -52,8 +52,8 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 
 -(void) keyDown:(NSEvent*)theEvent
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-  if (([theEvent keyCode] == 36) || ([theEvent keyCode] == 52) || ([theEvent keyCode] == 49))//Enter, space or ?? What did I do ???
+  [super interpretKeyEvents:@[theEvent]];
+  if ((theEvent.keyCode == 36) || (theEvent.keyCode == 52) || (theEvent.keyCode == 49))//Enter, space or ?? What did I do ???
     [self edit:self];
 }
 //end keyDown:
@@ -61,7 +61,7 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -83,15 +83,15 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 {
   BOOL ok = YES;
   NSUndoManager* undoManager = [[PreferencesController sharedController] undoManager];
-  if ([sender action] == @selector(undo:))
+  if (sender.action == @selector(undo:))
   {
-    ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
+    ok = undoManager.canUndo;
+    [sender setTitleWithMnemonic:undoManager.undoMenuItemTitle];
   }
-  else if ([sender action] == @selector(redo:))
+  else if (sender.action == @selector(redo:))
   {
-    ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
+    ok = undoManager.canRedo;
+    [sender setTitleWithMnemonic:undoManager.redoMenuItemTitle];
   }
   return ok;
 }
@@ -105,7 +105,7 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 
 -(void) moveUp:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -115,8 +115,8 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 
 -(void) moveDown:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
-  if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
+  NSInteger selectedRow = self.selectedRow;
+  if ((selectedRow >= 0) && (selectedRow+1 < self.numberOfRows))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
@@ -126,7 +126,7 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification *)aNotification
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   [super textDidEndEditing:aNotification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }
@@ -135,7 +135,7 @@ static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShor
 //delegate methods
 -(void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-  NSUInteger lastIndex = [[self selectedRowIndexes] lastIndex];
+  NSUInteger lastIndex = self.selectedRowIndexes.lastIndex;
   [self scrollRowToVisible:lastIndex];
 }
 //end tableViewSelectionDidChange:

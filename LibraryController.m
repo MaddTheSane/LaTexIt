@@ -32,7 +32,7 @@
 #import "RegexKitLite.h"
 
 @interface LibraryController (PrivateAPI)
--(NSFetchRequest*) rootFetchRequest;
+@property (readonly, copy) NSFetchRequest *rootFetchRequest;
 -(BOOL) outlineView:(NSOutlineView*)outlineView isSelfMoveDrop:(id<NSDraggingInfo>)info;
 @end
 
@@ -47,10 +47,9 @@
       if (!self->rootFetchRequest)
       {
         NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-        [fetchRequest setEntity:[LibraryItem entity]];
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == nil"]];
-        [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:
-          [[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES], nil]];
+        fetchRequest.entity = [LibraryItem entity];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
+        fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES]];
         self->rootFetchRequest = fetchRequest;
       }//end if (!self->rootFetchRequest)
     }//end @synchronized(self)
@@ -65,7 +64,7 @@
   if (outlineView == [info draggingSource])
   {
     NSPasteboard* pboard = [info draggingPasteboard];
-    NSArray* wrappedItems = ![pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]] ? nil :
+    NSArray* wrappedItems = ![pboard availableTypeFromArray:@[LibraryItemsWrappedPboardType]] ? nil :
       [pboard propertyListForType:LibraryItemsWrappedPboardType];  
     result = (wrappedItems != nil);
   }//end if (outlineView == [info draggingSource])
@@ -85,7 +84,7 @@
 
 -(NSUndoManager*) undoManager
 {
-  return [[self managedObjectContext] undoManager];
+  return [self managedObjectContext].undoManager;
 }
 //end undoManager
 
@@ -125,7 +124,7 @@
 {
   NSInteger result = 0;
   if (item)
-    result = [[item children] count];
+    result = [item children].count;
   else
     result = [[self managedObjectContext] myCountForFetchRequest:[self rootFetchRequest] error:nil];
   return result;
@@ -135,7 +134,7 @@
 -(id) outlineView:(NSOutlineView*)outlineView objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item
 {
   id result = nil;
-  if (tableColumn == [outlineView outlineTableColumn])
+  if (tableColumn == outlineView.outlineTableColumn)
     result = [item title];
   return result;
 }
@@ -145,7 +144,7 @@
 {
   id result = nil;
   NSArray* childrenOrdered = !item ? [self rootItems] : [item childrenOrdered];
-  result = [childrenOrdered objectAtIndex:index];
+  result = childrenOrdered[index];
   return result;
 }
 //end outlineView:child:ofItem:
@@ -163,15 +162,15 @@
 -(BOOL) outlineView:(NSOutlineView*)outlineView writeItems:(NSArray*)items toPasteboard:(NSPasteboard*)pasteBoard
 {
   self->currentlyDraggedItems = nil;
-  [pasteBoard declareTypes:[NSArray array] owner:nil];
+  [pasteBoard declareTypes:@[] owner:nil];
   
   PreferencesController* preferencesController = [PreferencesController sharedController];
   BOOL isChangePasteboardOnTheFly = ([pasteBoard dataForType:NSFilesPromisePboardType] != nil);
   if (!isChangePasteboardOnTheFly)
-    [pasteBoard declareTypes:[NSArray array] owner:nil];
+    [pasteBoard declareTypes:@[] owner:nil];
   
   NSArray* minimumItemsCover = [NSObject minimumNodeCoverFromItemsInArray:items parentSelector:@selector(parent)];
-  NSUInteger count = [minimumItemsCover count];
+  NSUInteger count = minimumItemsCover.count;
   NSMutableArray* libraryItems     = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* libraryEquations = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* latexitEquations = [NSMutableArray arrayWithCapacity:count];
@@ -183,68 +182,68 @@
     LibraryEquation* libraryEquation = ![libraryItem isKindOfClass:[LibraryEquation class]] ? nil : (LibraryEquation*)libraryItem;
     if (libraryEquation)
       [libraryEquations addObject:libraryEquation];
-    LatexitEquation* latexitEquation = !libraryEquation ? nil : [libraryEquation equation];
+    LatexitEquation* latexitEquation = !libraryEquation ? nil : libraryEquation.equation;
     if (latexitEquation)
       [latexitEquations addObject:latexitEquation];
   }//end for each item
 
-  if ([libraryItems count])
+  if (libraryItems.count)
   {
     self->currentlyDraggedItems = (pasteBoard == [NSPasteboard pasteboardWithName:NSDragPboard]) ? libraryItems : nil;
-    NSMutableArray* wrappedLibraryItems = [NSMutableArray arrayWithCapacity:[libraryItems count]];
+    NSMutableArray* wrappedLibraryItems = [NSMutableArray arrayWithCapacity:libraryItems.count];
     NSEnumerator* enumerator = [libraryItems objectEnumerator];
     LibraryItem* libraryItem = nil;
     while((libraryItem = [enumerator nextObject]))
-      [wrappedLibraryItems addObject:[[[libraryItem objectID] URIRepresentation] absoluteString]];
-    [pasteBoard addTypes:[NSArray arrayWithObject:LibraryItemsWrappedPboardType] owner:self];
+      [wrappedLibraryItems addObject:[libraryItem.objectID URIRepresentation].absoluteString];
+    [pasteBoard addTypes:@[LibraryItemsWrappedPboardType] owner:self];
     [pasteBoard setPropertyList:wrappedLibraryItems forType:LibraryItemsWrappedPboardType];
 
-    [pasteBoard addTypes:[NSArray arrayWithObject:LibraryItemsArchivedPboardType] owner:self];
+    [pasteBoard addTypes:@[LibraryItemsArchivedPboardType] owner:self];
     [pasteBoard setData:[NSKeyedArchiver archivedDataWithRootObject:libraryItems] forType:LibraryItemsArchivedPboardType];
   }
 
-  if ([latexitEquations count])
+  if (latexitEquations.count)
   {
-    [pasteBoard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
+    [pasteBoard addTypes:@[LatexitEquationsPboardType] owner:self];
     [pasteBoard setData:[NSKeyedArchiver archivedDataWithRootObject:latexitEquations] forType:LatexitEquationsPboardType];
 
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-    LatexitEquation* lastLatexitEquation = [latexitEquations lastObject];
-    export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+    LatexitEquation* lastLatexitEquation = latexitEquations.lastObject;
+    export_format_t exportFormat = preferencesController.exportFormatCurrentSession;
     [lastLatexitEquation writeToPasteboard:pasteBoard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:lastLatexitEquation options:nil];
   }//end if ([latexitEquations count])
 
   if (count && !isChangePasteboardOnTheFly)
   {
     //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
-    [pasteBoard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-    [pasteBoard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", @"svg", @"html", nil] forType:NSFilesPromisePboardType];
+    [pasteBoard addTypes:@[NSFilesPromisePboardType] owner:self];
+    [pasteBoard setPropertyList:@[@"pdf", @"eps", @"tiff", @"jpeg", @"png", @"svg", @"html"] forType:NSFilesPromisePboardType];
   }
 
   //NSStringPBoardType may contain some info for LibraryFiles the label of the equations : useful for users that only want to \ref this equation
-  if ([libraryEquations count] && [preferencesController encapsulationsEnabled])
+  if (libraryEquations.count && preferencesController.encapsulationsEnabled)
   {
-    NSString*        encapsulation = [preferencesController encapsulationSelected];
+    NSString*        encapsulation = preferencesController.encapsulationSelected;
     NSMutableString* labels        = [NSMutableString string];
     NSEnumerator*    enumerator    = [libraryEquations objectEnumerator];
     LibraryEquation* libraryEquation = nil;
     while((libraryEquation = [enumerator nextObject]))
     {
-      LatexitEquation* latexitEquation = [libraryEquation equation];
-      NSString* title  = [libraryEquation title];
-      NSString* source = [[latexitEquation sourceText] string];
+      LatexitEquation* latexitEquation = libraryEquation.equation;
+      NSString* title  = libraryEquation.title;
+      NSString* source = latexitEquation.sourceText.string;
       NSMutableString* replacedText = [NSMutableString stringWithString:!encapsulation ? @"" : encapsulation];
       if (title)
-        [replacedText replaceOccurrencesOfString:@"@" withString:title options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
+        [replacedText replaceOccurrencesOfString:@"@" withString:title options:NSLiteralSearch range:NSMakeRange(0, replacedText.length)];
       if (source)
-        [replacedText replaceOccurrencesOfString:@"#" withString:source options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
+        [replacedText replaceOccurrencesOfString:@"#" withString:source options:NSLiteralSearch range:NSMakeRange(0, replacedText.length)];
       [labels appendString:replacedText];
     }//end for each libraryEquationItem
-    export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+    export_format_t exportFormat = preferencesController.exportFormatCurrentSession;
     if (exportFormat != EXPORT_FORMAT_MATHML)
     {
-      [pasteBoard addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+      [pasteBoard addTypes:@[NSStringPboardType] owner:nil];
       [pasteBoard setString:labels forType:NSStringPboardType];
     }//end if (exportFormat != EXPORT_FORMAT_MATHML)
   }//end if ([libraryEquationsItems count])
@@ -261,10 +260,10 @@
 
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
-  BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]] != nil);
-  BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
-  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeColor, nil]] != nil);
+  BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:@[LatexitEquationsPboardType]] != nil);
+  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:@[NSPasteboardTypePDF, (id)kUTTypePDF]] != nil);
+  BOOL isFileDrop = ([pasteboard availableTypeFromArray:@[NSFilenamesPboardType]] != nil);
+  BOOL isColorDrop = ([pasteboard availableTypeFromArray:@[NSPasteboardTypeColor]] != nil);
   if (isSelfMoveDrop)
   {
     BOOL targetIsValid = (proposedChildIndex != NSOutlineViewDropOnItemIndex) ||
@@ -297,8 +296,8 @@
   {
     LibraryItem* libraryItem = proposedParentItem;
     NSArray* filenames = [pasteboard propertyListForType:NSFilenamesPboardType];
-    NSString* filename = ([filenames count] == 1) ? [filenames lastObject] : nil;
-    NSString* extension = [filename pathExtension];
+    NSString* filename = (filenames.count == 1) ? filenames.lastObject : nil;
+    NSString* extension = filename.pathExtension;
     BOOL isLibraryFile = extension && (([extension caseInsensitiveCompare:@"latexlib"] == NSOrderedSame) ||
                                        ([extension caseInsensitiveCompare:@"latexhist"] == NSOrderedSame) ||
                                        ([extension caseInsensitiveCompare:@"plist"] == NSOrderedSame));
@@ -326,10 +325,10 @@
   BOOL result = NO;
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
-  BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]] != nil);
-  BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
-  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeColor, nil]] != nil);
+  BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:@[LatexitEquationsPboardType]] != nil);
+  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:@[NSPasteboardTypePDF, (id)kUTTypePDF]] != nil);
+  BOOL isFileDrop = ([pasteboard availableTypeFromArray:@[NSFilenamesPboardType]] != nil);
+  BOOL isColorDrop = ([pasteboard availableTypeFromArray:@[NSPasteboardTypeColor]] != nil);
   if (isSelfMoveDrop)
     result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
   else if (isLaTeXiTEquationsDrop)
@@ -339,8 +338,8 @@
   else if (isFileDrop)
   {
     NSArray* filenames = [pasteboard propertyListForType:NSFilenamesPboardType];
-    NSString* filename = ([filenames count] == 1) ? [filenames lastObject] : nil;
-    NSString* extension = [filename pathExtension];
+    NSString* filename = (filenames.count == 1) ? filenames.lastObject : nil;
+    NSString* extension = filename.pathExtension;
     BOOL isLibraryFile = extension && (([extension caseInsensitiveCompare:@"latexlib"]  == NSOrderedSame) ||
                                        ([extension caseInsensitiveCompare:@"latexhist"]  == NSOrderedSame) ||
                                        ([extension caseInsensitiveCompare:@"plist"]  == NSOrderedSame));
@@ -354,25 +353,25 @@
       NSFileManager* fileManager = [NSFileManager defaultManager];
       BOOL isDirectory = NO;
       NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
-      NSMutableDictionary* dictionaryOfFoldersByPath = [[NSMutableDictionary alloc] initWithCapacity:[filenames count]];
+      NSMutableDictionary* dictionaryOfFoldersByPath = [[NSMutableDictionary alloc] initWithCapacity:filenames.count];
       NSMutableArray* candidateFilesQueue = [filenames mutableCopy];
-      NSMutableArray* newLibraryRootItems = [[NSMutableArray alloc] initWithCapacity:[filenames count]];
+      NSMutableArray* newLibraryRootItems = [[NSMutableArray alloc] initWithCapacity:filenames.count];
       NSMutableArray* teXItems = [NSMutableArray array];
       unsigned int i = 0;
-      for(i = 0 ; i<[candidateFilesQueue count] ; ++i)
+      for(i = 0 ; i<candidateFilesQueue.count ; ++i)
       {
-        NSString* filename = [candidateFilesQueue objectAtIndex:i];
+        NSString* filename = candidateFilesQueue[i];
         NSString* filenameUTI = [fileManager UTIFromPath:filename];
         if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
         {
-          LibraryGroupItem* parent = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
+          LibraryGroupItem* parent = dictionaryOfFoldersByPath[filename.stringByDeletingLastPathComponent];
           LibraryGroupItem* libraryGroupItem  = [[LibraryGroupItem alloc] initWithParent:nil insertIntoManagedObjectContext:managedObjectContext];
-          [libraryGroupItem setTitle:[filename lastPathComponent]];
-          [libraryGroupItem setSortIndex:[[parent children] count]];
-          [libraryGroupItem setParent:parent];
+          libraryGroupItem.title = filename.lastPathComponent;
+          libraryGroupItem.sortIndex = [parent children].count;
+          libraryGroupItem.parent = parent;
           if (!parent && libraryGroupItem)
             [newLibraryRootItems addObject:libraryGroupItem];
-          [dictionaryOfFoldersByPath setObject:libraryGroupItem forKey:filename];
+          dictionaryOfFoldersByPath[filename] = libraryGroupItem;
           NSDirectoryEnumerator* directoryEnumerator = [fileManager enumeratorAtPath:filename];
           NSString* subFile = nil;
           while((subFile = [directoryEnumerator nextObject]))
@@ -392,14 +391,14 @@
           LatexitEquation* latexitEquation = nil;
           while((latexitEquation = [latexitEquationsEnumerator nextObject]))
           {
-            LibraryGroupItem* parent = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
+            LibraryGroupItem* parent = dictionaryOfFoldersByPath[filename.stringByDeletingLastPathComponent];
             if (!parent && [proposedParentItem isKindOfClass:[LibraryGroupItem class]])
               parent = proposedParentItem;
             LibraryEquation* libraryEquation = !latexitEquation ? nil :
               [[LibraryEquation alloc] initWithParent:nil insertIntoManagedObjectContext:managedObjectContext];
-            [libraryEquation setEquation:latexitEquation];
-            [libraryEquation setSortIndex:[[parent children] count]];
-            [libraryEquation setParent:parent];
+            libraryEquation.equation = latexitEquation;
+            libraryEquation.sortIndex = [parent children].count;
+            libraryEquation.parent = parent;
             [libraryEquation setBestTitle];
             if (!parent && libraryEquation)
               [newLibraryRootItems addObject:libraryEquation];
@@ -413,11 +412,11 @@
         }//end if other file
       }//end for each filename
      
-      if ([teXItems count] > 0)
+      if (teXItems.count > 0)
       {
         LibraryWindowController* libraryWindowController =
-          [[[outlineView window]  windowController] dynamicCastToClass:[LibraryWindowController class]];
-        NSDictionary* options = [[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil];
+          [outlineView.window.windowController dynamicCastToClass:[LibraryWindowController class]];
+        NSDictionary* options = @{@"teXItems": teXItems};
         [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
       }//end if ([teXItems count] > 0)
       
@@ -427,10 +426,10 @@
         !proposedParentItem ? [self rootItems] : [proposedParentItem childrenOrdered]];
       [brothers removeObjectsInArray:newLibraryRootItems];
       [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
-        [brothers count] : (unsigned)proposedChildIndex];
-      NSUInteger nbBrothers = [brothers count];
+        brothers.count : (unsigned)proposedChildIndex];
+      NSUInteger nbBrothers = brothers.count;
       while(nbBrothers--)
-        [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
+        [brothers[nbBrothers] setSortIndex:nbBrothers];
 
       result = YES;
     }//end if pdfFiles
@@ -440,7 +439,7 @@
     NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSPasteboardTypeColor]];
     if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
     {
-      [[(LibraryEquation*)proposedParentItem equation] setBackgroundColor:color];
+      ((LibraryEquation*)proposedParentItem).equation.backgroundColor = color;
       [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"Change Library item background color")];
     }//if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
     result = YES;
@@ -469,9 +468,9 @@
 
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
-  NSString* dropPath = [dropDestination path];
+  NSString* dropPath = dropDestination.path;
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+  export_format_t exportFormat = preferencesController.exportFormatCurrentSession;
   NSString* extension = nil;
   switch(exportFormat)
   {
@@ -502,14 +501,12 @@
       break;
   }
   
-  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
-                                 nil];
+  NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
+                                 @"scaleAsPercent": [NSNumber numberWithFloat:preferencesController.exportScalePercent],
+                                 @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
+                                 @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
+                                 @"textExportBody": @(preferencesController.exportTextExportBody),
+                                 @"jpegColor": preferencesController.exportJpegBackgroundColor};
   
   NSString* fileName = nil;
   NSString* filePath = nil;
@@ -520,7 +517,7 @@
     if ([libraryItem isKindOfClass:[LibraryGroupItem class]]) //if we create a folder...
     {
       LibraryGroupItem* libraryGroupItem = (LibraryGroupItem*)libraryItem;
-      fileName = [libraryItem title];
+      fileName = libraryItem.title;
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //does a folder of that name already exist ?
       {
@@ -529,7 +526,7 @@
         {
           //Recursive call to fill the folder
           [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
-            forDraggedItems:[[libraryGroupItem children] allObjects]];
+            forDraggedItems:[libraryGroupItem children].allObjects];
           [names addObject:fileName];
         }
       }//end if ok to create folder with title name
@@ -538,7 +535,7 @@
         unsigned long i = 1; //we will add a number
         do
         {
-          fileName = [NSString stringWithFormat:@"%@-%lu", [libraryItem title], (unsigned long)i++];
+          fileName = [NSString stringWithFormat:@"%@-%lu", libraryItem.title, (unsigned long)i++];
           filePath = [dropPath stringByAppendingPathComponent:fileName];
         } while (i && [fileManager fileExistsAtPath:filePath]);
         
@@ -550,7 +547,7 @@
           {
             //Recursive call to fill the folder
             [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
-              forDraggedItems:[[libraryGroupItem children] allObjects]];
+              forDraggedItems:[libraryGroupItem children].allObjects];
             [names addObject:fileName];
           }
         }
@@ -560,23 +557,23 @@
     {
       LibraryEquation* libraryEquation = (LibraryEquation*)libraryItem;
       unsigned long i = 1; //if the name is not free, we will have to compute a new one
-      NSString* filePrefix = [libraryEquation title];
+      NSString* filePrefix = libraryEquation.title;
       fileName = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //is the name free ?
       {
-        LatexitEquation* latexitEquation = [libraryEquation equation];
-        NSData* pdfData = [latexitEquation pdfData];
+        LatexitEquation* latexitEquation = libraryEquation.equation;
+        NSData* pdfData = latexitEquation.pdfData;
         NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
                          exportOptions:exportOptions
-                         compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                         compositionConfiguration:preferencesController.compositionConfigurationDocument
                          uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
+        [fileManager setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
                              ofItemAtPath:filePath error:0];
-        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
-        NSColor* autoBackgroundColor = [latexitEquation backgroundColor];
+        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? exportOptions[@"jpegColor"] : nil;
+        NSColor* autoBackgroundColor = latexitEquation.backgroundColor;
         NSColor* iconBackgroundColor =
           (jpegBackgroundColor != nil) ? jpegBackgroundColor :
           (autoBackgroundColor != nil) ? autoBackgroundColor :
@@ -599,18 +596,18 @@
         //We may have found a name; in this case, create the file
         if (![fileManager fileExistsAtPath:filePath])
         {
-          LatexitEquation* latexitEquation = [libraryEquation equation];
-          NSData* pdfData = [latexitEquation pdfData];
+          LatexitEquation* latexitEquation = libraryEquation.equation;
+          NSData* pdfData = latexitEquation.pdfData;
           NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
                            exportOptions:exportOptions
-                           compositionConfiguration:[preferencesController compositionConfigurationDocument]
+                           compositionConfiguration:preferencesController.compositionConfigurationDocument
                            uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
-          [fileManager setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
+          [fileManager setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
                                ofItemAtPath:filePath error:0];
-          NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
-          NSColor* autoBackgroundColor = [latexitEquation backgroundColor];
+          NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? exportOptions[@"jpegColor"] : nil;
+          NSColor* autoBackgroundColor = latexitEquation.backgroundColor;
           NSColor* iconBackgroundColor =
             (jpegBackgroundColor != nil) ? jpegBackgroundColor :
             (autoBackgroundColor != nil) ? autoBackgroundColor :

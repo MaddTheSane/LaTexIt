@@ -31,7 +31,7 @@
 
 -(NSString*) displayNameWithPointSize
 {
-  NSString* result = [NSString stringWithFormat:@"%@ %.1f", [self displayName], [self pointSize]];
+  NSString* result = [NSString stringWithFormat:@"%@ %.1f", self.displayName, self.pointSize];
   return result;
 }
 //end displayNameWithPointSize

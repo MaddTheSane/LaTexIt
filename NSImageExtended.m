@@ -12,16 +12,6 @@
 
 #import "Utils.h"
 
-@interface NSBitmapImageRep (UnimplementedOn10_4)
--(CGImageRef) CGImage;
--(id) initWithCGImage:(CGImageRef)cgImage;
-@end
-
-@interface NSImage (Bridge10_6)
--(NSImageRep*) bestRepresentationForRect:(NSRect)rect context:(NSGraphicsContext*)referenceContext hints:(NSDictionary*)hints;
-@end
-
-
 @implementation NSImage (Extended)
 
 -(void) removeRepresentationsOfClass:(Class)representationClass
@@ -29,7 +19,7 @@
   BOOL stop = !representationClass;
   while(!stop)
   {
-    NSArray* representations = [self representations];
+    NSArray* representations = self.representations;
     NSEnumerator* enumerator = [representations objectEnumerator];
     NSImageRep* representation = nil;
     NSImageRep* representationToRemove = nil;
@@ -50,7 +40,7 @@
     result = (NSBitmapImageRep*)imageRep;
   else//if (![imageRep isKindOfClass:[NSBitmapImageRep class]])
   {
-    NSEnumerator* enumerator = [[self representations] objectEnumerator];
+    NSEnumerator* enumerator = [self.representations objectEnumerator];
     NSImageRep* imageRep = nil;
     while(!result && (imageRep = [enumerator nextObject]))
     {
@@ -72,10 +62,10 @@
 {
   NSBitmapImageRep* result = nil;
   if (!isMacOS10_5OrAbove())
-    result = [[NSBitmapImageRep alloc] initWithData:[self TIFFRepresentation]];
+    result = [[NSBitmapImageRep alloc] initWithData:self.TIFFRepresentation];
   else//if (isMacOS10_5OrAbove())
   {
-    NSSize size          = [self size];
+    NSSize size          = self.size;
     size_t width         = size.width;
     size_t height        = size.height;
     size_t bitsPerComp   = 32;
@@ -90,7 +80,7 @@
       DebugLog(0, @"exception : %@", e);
     }
     CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-    CGContextRef ctx = !data ? 0 : CGBitmapContextCreate([data mutableBytes], width, height, bitsPerComp, bytesPerRow, space, kCGBitmapFloatComponents | kCGImageAlphaPremultipliedLast);
+    CGContextRef ctx = !data ? 0 : CGBitmapContextCreate(data.mutableBytes, width, height, bitsPerComp, bytesPerRow, space, kCGBitmapFloatComponents | kCGImageAlphaPremultipliedLast);
     if (ctx)
     {
       [NSGraphicsContext saveGraphicsState];
@@ -116,7 +106,7 @@
     result = (NSBitmapImageRep*)imageRep;
   else
   {
-    NSEnumerator* enumerator = [[self representations] objectEnumerator];
+    NSEnumerator* enumerator = [self.representations objectEnumerator];
     NSImageRep* imageRep = nil;
     while(!result && (imageRep = [enumerator nextObject]))
     {
@@ -128,7 +118,7 @@
   // if result is nil we create a new representation
   if (!result && imageRep)
   {
-    NSSize naturalSize = [imageRep size];
+    NSSize naturalSize = imageRep.size;
     NSRect adaptedRectangle = NSMakeRect(0, 0, naturalSize.width, naturalSize.height);
     if ((maxSize.width && (naturalSize.width > maxSize.width)) ||
         (maxSize.height && (naturalSize.height > maxSize.height)))
@@ -169,7 +159,7 @@
     result = (NSPDFImageRep*)imageRep;
   else//if (![imageRep isKindOfClass:[NSPDFImageRep class]])
   {
-    NSEnumerator* enumerator = [[self representations] objectEnumerator];
+    NSEnumerator* enumerator = [self.representations objectEnumerator];
     NSImageRep* imageRep = nil;
     while(!result && (imageRep = [enumerator nextObject]))
     {
@@ -184,7 +174,7 @@
 -(NSImageRep*) bestImageRepresentationInContext:(NSGraphicsContext*)context
 {
   NSImageRep* result = nil;
-    NSEnumerator* enumerator = [[self representations] objectEnumerator];
+    NSEnumerator* enumerator = [self.representations objectEnumerator];
     NSImageRep* imageRep = nil;
     while (!result && (imageRep = [enumerator nextObject]))
     {
@@ -193,7 +183,7 @@
     }//end for each imageRep
     if (!result)
     {
-      NSSize size = [self size];
+      NSSize size = self.size;
       result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height) 
                                        context:context hints:nil];
       if (!result)

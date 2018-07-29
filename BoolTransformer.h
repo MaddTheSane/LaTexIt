@@ -17,6 +17,6 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue;
--(instancetype) initWithFalseValue:(id)falseValue trueValue:(id)trueValue;
+-(instancetype) initWithFalseValue:(id)falseValue trueValue:(id)trueValue NS_DESIGNATED_INITIALIZER;
 
 @end

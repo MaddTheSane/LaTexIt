@@ -21,16 +21,14 @@
 -(id) newObject
 {
   id result = nil;
-  NSArray* objects = [self arrangedObjects];
-  NSArray* selectedObjects = [self selectedObjects];
-  id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
-                   (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
+  NSArray* objects = self.arrangedObjects;
+  NSArray* selectedObjects = self.selectedObjects;
+  id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
+                   (objects && objects.count) ? objects[0] : nil;
   result = modelObject ? [modelObject mutableCopy] :
-    [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], ServiceRegularExpressionFilterEnabledKey,
-      @"(\\(.*\\))", ServiceRegularExpressionFilterInputPatternKey,
-      @"\\1", ServiceRegularExpressionFilterOutputPatternKey,
-      nil];
+    @{ServiceRegularExpressionFilterEnabledKey: @NO,
+      ServiceRegularExpressionFilterInputPatternKey: @"(\\(.*\\))",
+      ServiceRegularExpressionFilterOutputPatternKey: @"\\1"};
   return result;
 }
 //end newObject
@@ -39,28 +37,28 @@
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [self setSelectedObjects:@[newObject]];
 }
 //end add:
 
 -(NSString*) applyFilter:(NSString*)value
 {
   NSMutableString* result = [value mutableCopy];
-  NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
+  NSEnumerator* enumerator = [self.arrangedObjects objectEnumerator];
   NSDictionary* filter = nil;
   while((filter = [enumerator nextObject]))
   {
-    BOOL enabled = [[filter objectForKey:ServiceRegularExpressionFilterEnabledKey] boolValue];
+    BOOL enabled = [filter[ServiceRegularExpressionFilterEnabledKey] boolValue];
     if (enabled)
     {
-      NSString* inputPattern = [filter objectForKey:ServiceRegularExpressionFilterInputPatternKey];
-      NSString* outputPattern = [filter objectForKey:ServiceRegularExpressionFilterOutputPatternKey];
+      NSString* inputPattern = filter[ServiceRegularExpressionFilterInputPatternKey];
+      NSString* outputPattern = filter[ServiceRegularExpressionFilterOutputPatternKey];
       if (!outputPattern)
         outputPattern = @"";
       if (inputPattern && ![inputPattern isEqualToString:@""])
       {
         @try{
-          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:NSMakeRange(0, [result length]) error:nil];
+          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:NSMakeRange(0, result.length) error:nil];
         }
         @catch(NSException*){
         }
@@ -75,21 +73,21 @@
 -(NSAttributedString*) applyFilterToAttributedString:(NSAttributedString*)value
 {
   NSMutableAttributedString* result = [value mutableCopy];
-  NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
+  NSEnumerator* enumerator = [self.arrangedObjects objectEnumerator];
   NSDictionary* filter = nil;
   while((filter = [enumerator nextObject]))
   {
-    BOOL enabled = [[filter objectForKey:ServiceRegularExpressionFilterEnabledKey] boolValue];
+    BOOL enabled = [filter[ServiceRegularExpressionFilterEnabledKey] boolValue];
     if (enabled)
     {
-      NSString* inputPattern = [filter objectForKey:ServiceRegularExpressionFilterInputPatternKey];
-      NSString* outputPattern = [filter objectForKey:ServiceRegularExpressionFilterOutputPatternKey];
+      NSString* inputPattern = filter[ServiceRegularExpressionFilterInputPatternKey];
+      NSString* outputPattern = filter[ServiceRegularExpressionFilterOutputPatternKey];
       if (!outputPattern)
         outputPattern = @"";
       if (inputPattern && ![inputPattern isEqualToString:@""])
       {
         @try{
-          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:NSMakeRange(0, [result length]) error:nil];
+          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:NSMakeRange(0, result.length) error:nil];
         }
         @catch(NSException*){
         }

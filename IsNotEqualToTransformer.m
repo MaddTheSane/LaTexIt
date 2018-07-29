@@ -35,14 +35,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithReference:(id)reference
++(instancetype) transformerWithReference:(id)reference
 {
   id result = [[[self class] alloc] initWithReference:reference];
   return result;
 }
 //end transformerWithReference:
 
--(id) initWithReference:(id)aReference
+-(instancetype) initWithReference:(id)aReference
 {
   if ((!(self = [super init])))
     return nil;

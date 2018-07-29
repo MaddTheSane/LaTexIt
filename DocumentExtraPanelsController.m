@@ -41,19 +41,19 @@
 
 #pragma mark init/load/dealloc
 
--(id) initWithLoadingFromNib
+-(instancetype) initWithLoadingFromNib
 {
   if ((!(self = [super initWithNibNamed:@"DocumentExtraPanelsController" bundle:nil])))
     return nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  self->saveAccessoryViewExportFormat               = [preferencesController exportFormatCurrentSession];
-  self->saveAccessoryViewExportScalePercent         = [preferencesController exportScalePercent];
-  self->saveAccessoryViewOptionsJpegQualityPercent  = [preferencesController exportJpegQualityPercent];
-  self->saveAccessoryViewOptionsJpegBackgroundColor = [preferencesController exportJpegBackgroundColor];
-  self->saveAccessoryViewOptionsSvgPdfToSvgPath     = [preferencesController exportSvgPdfToSvgPath];
-  self->saveAccessoryViewOptionsTextExportPreamble         = [preferencesController exportTextExportPreamble];
-  self->saveAccessoryViewOptionsTextExportEnvironment      = [preferencesController exportTextExportEnvironment];
-  self->saveAccessoryViewOptionsTextExportBody             = [preferencesController exportTextExportBody];
+  self->saveAccessoryViewExportFormat               = preferencesController.exportFormatCurrentSession;
+  self->saveAccessoryViewExportScalePercent         = preferencesController.exportScalePercent;
+  self->saveAccessoryViewOptionsJpegQualityPercent  = preferencesController.exportJpegQualityPercent;
+  self->saveAccessoryViewOptionsJpegBackgroundColor = preferencesController.exportJpegBackgroundColor;
+  self->saveAccessoryViewOptionsSvgPdfToSvgPath     = preferencesController.exportSvgPdfToSvgPath;
+  self->saveAccessoryViewOptionsTextExportPreamble         = preferencesController.exportTextExportPreamble;
+  self->saveAccessoryViewOptionsTextExportEnvironment      = preferencesController.exportTextExportEnvironment;
+  self->saveAccessoryViewOptionsTextExportBody             = preferencesController.exportTextExportBody;
   [self instantiateNibWithOwner:self topLevelObjects:nil];
   return self;
 }
@@ -73,8 +73,7 @@
 {
   //[self->saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
   [self->logWindow setTitle:NSLocalizedString(@"Execution log", @"Execution log")];
-  [self->saveAccessoryViewFormatLabel setStringValue:
-    [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"Format")]];
+  self->saveAccessoryViewFormatLabel.stringValue = [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"Format")];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"PDF vector format")
     tag:(int)EXPORT_FORMAT_PDF];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
@@ -93,18 +92,16 @@
     tag:(int)EXPORT_FORMAT_MATHML];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
     tag:(int)EXPORT_FORMAT_TEXT];
-  [self->saveAccessoryViewOptionsButton setStringValue:
-    [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")]];
-  [self->saveAccessoryViewScaleLabel setStringValue:
-    [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Scale", @"Scale")]];
+  self->saveAccessoryViewOptionsButton.stringValue = [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")];
+  self->saveAccessoryViewScaleLabel.stringValue = [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Scale", @"Scale")];
   [self->saveAccessoryViewJpegWarning setTitle:
     LocalLocalizedString(@"Warning : jpeg does not manage transparency", @"Warning : jpeg does not manage transparency")];
   [self->saveAccessoryViewSvgWarning setTitle:
     LocalLocalizedString(@"Warning : pdf2svg was not found", @"Warning : pdf2svg was not found")];
-  [self->saveAccessoryViewSvgWarning setTextColor:[NSColor redColor]];
+  self->saveAccessoryViewSvgWarning.textColor = [NSColor redColor];
   [self->saveAccessoryViewMathMLWarning setTitle:
    LocalLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"Warning : the XML::LibXML perl module was not found")];
-  [self->saveAccessoryViewMathMLWarning setTextColor:[NSColor redColor]];
+  self->saveAccessoryViewMathMLWarning.textColor = [NSColor redColor];
   
   [self->saveAccessoryViewFormatLabel sizeToFit];
   [self->saveAccessoryViewPopupFormat sizeToFit];
@@ -114,31 +111,31 @@
   [self->saveAccessoryViewSvgWarning sizeToFit];
   [self->saveAccessoryViewMathMLWarning sizeToFit];
   [self->saveAccessoryView setFrameSize:NSMakeSize(
-    [self->saveAccessoryViewFormatLabel frame].origin.x+
-    [self->saveAccessoryViewFormatLabel frame].size.width+8+
-    [self->saveAccessoryViewPopupFormat frame].size.width+8+
-    [self->saveAccessoryViewOptionsButton frame].size.width+
-    [self->saveAccessoryViewFormatLabel frame].origin.x,
-    [self->saveAccessoryView frame].size.height)];
+    self->saveAccessoryViewFormatLabel.frame.origin.x+
+    self->saveAccessoryViewFormatLabel.frame.size.width+8+
+    self->saveAccessoryViewPopupFormat.frame.size.width+8+
+    self->saveAccessoryViewOptionsButton.frame.size.width+
+    self->saveAccessoryViewFormatLabel.frame.origin.x,
+    self->saveAccessoryView.frame.size.height)];
   [self->saveAccessoryViewPopupFormat setFrameOrigin:
-    NSMakePoint(NSMaxX([self->saveAccessoryViewFormatLabel frame])+8,
-                [self->saveAccessoryViewPopupFormat frame].origin.y)];
+    NSMakePoint(NSMaxX(self->saveAccessoryViewFormatLabel.frame)+8,
+                self->saveAccessoryViewPopupFormat.frame.origin.y)];
   [self->saveAccessoryViewOptionsButton setFrameOrigin:
-    NSMakePoint(NSMaxX([self->saveAccessoryViewPopupFormat frame])+8,
-                [self->saveAccessoryViewOptionsButton frame].origin.y)];
+    NSMakePoint(NSMaxX(self->saveAccessoryViewPopupFormat.frame)+8,
+                self->saveAccessoryViewOptionsButton.frame.origin.y)];
   [self->saveAccessoryViewScaleLabel setFrameOrigin:
-    NSMakePoint(([[self->saveAccessoryViewScaleLabel superview] frame].size.width-
-                 [self->saveAccessoryViewScaleLabel frame].size.width-8-
-                 [self->saveAccessoryViewScalePercentTextField frame].size.width)/2,
-                [self->saveAccessoryViewScaleLabel frame].origin.y)];
+    NSMakePoint((self->saveAccessoryViewScaleLabel.superview.frame.size.width-
+                 self->saveAccessoryViewScaleLabel.frame.size.width-8-
+                 self->saveAccessoryViewScalePercentTextField.frame.size.width)/2,
+                self->saveAccessoryViewScaleLabel.frame.origin.y)];
   [self->saveAccessoryViewScalePercentTextField setFrameOrigin:
-    NSMakePoint(NSMaxX([self->saveAccessoryViewScaleLabel frame])+8,
-                [self->saveAccessoryViewScalePercentTextField frame].origin.y)];
+    NSMakePoint(NSMaxX(self->saveAccessoryViewScaleLabel.frame)+8,
+                self->saveAccessoryViewScalePercentTextField.frame.origin.y)];
   [self->saveAccessoryViewJpegWarning centerInSuperviewHorizontally:YES vertically:NO];
   [self->saveAccessoryViewSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
   [self->saveAccessoryViewMathMLWarning centerInSuperviewHorizontally:YES vertically:NO];
     
-  [self->saveAccessoryViewPopupFormat setTarget:self];
+  self->saveAccessoryViewPopupFormat.target = self;
   [self->saveAccessoryViewPopupFormat bind:NSSelectedTagBinding toObject:self
     withKeyPath:@"saveAccessoryViewExportFormat" options:nil];
   [self->saveAccessoryViewScalePercentTextField bind:NSValueBinding toObject:self
@@ -152,41 +149,18 @@
 
 #pragma mark getters/setters
 
--(NSWindow*) logWindow
-{
-  return self->logWindow;
-}
-//end logWindow
-
--(NSTextView*) logTextView
-{
-  return self->logTextView;
-}
-//end logTextView
-
 -(NSString*) log
 {
-  NSString* result = [self->logTextView string];
+  NSString* result = self->logTextView.string;
   return result;
 }
 //end log
 
 -(void) setLog:(NSString*)value
 {
-  [self->logTextView setString:value];
+  self->logTextView.string = value;
 }
 //end setLog:
-
--(void) setSaveAccessoryViewExportFormat:(export_format_t)value
-{
-  if (value != self->saveAccessoryViewExportFormat)
-  {
-    [self willChangeValueForKey:@"saveAccessoryViewExportFormat"];
-    self->saveAccessoryViewExportFormat = value;
-    [self didChangeValueForKey:@"saveAccessoryViewExportFormat"];
-  }//end if (value != self->saveAccessoryViewExportFormat)
-}
-//end setSaveAccessoryViewExportFormat:
 
 -(void) setSaveAccessoryViewScalePercent:(CGFloat)value
 {
@@ -199,23 +173,12 @@
 }
 //end setSaveAccessoryViewExportScalePercent:
 
--(void) setSaveAccessoryViewOptionsSvgPdfToSvgPath:(NSString*)value
-{
-  if (value != self->saveAccessoryViewOptionsSvgPdfToSvgPath)
-  {
-    [self willChangeValueForKey:@"saveAccessoryViewOptionsSvgPdfToSvgPath"];
-    self->saveAccessoryViewOptionsSvgPdfToSvgPath = [value copy];
-    [self didChangeValueForKey:@"saveAccessoryViewOptionsSvgPdfToSvgPath"];
-  }//end if (value != self->saveAccessoryViewOptionsSvgPdfToSvgPath)
-}
-//end setSaveAccessoryViewOptionsSvgPdfToSvgPath:
-
 -(void) setCurrentSavePanel:(NSSavePanel*)value
 {
   [self->currentSavePanel setAccessoryView:nil];
   self->currentSavePanel = value;
-  [self->currentSavePanel setAccessoryView:self->saveAccessoryView];
-  [[self->saveAccessoryView window] setDelegate:(id)self];
+  self->currentSavePanel.accessoryView = self->saveAccessoryView;
+  self->saveAccessoryView.window.delegate = self;
 }
 //end setCurrentSavePanel:
 
@@ -260,31 +223,28 @@
     BOOL isSvgFormat = (exportFormat == EXPORT_FORMAT_SVG);
     BOOL isPdfWofFormat = (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS);
     allowOptions = isJpegFormat || isSvgFormat || isPdfWofFormat;
-    [self->saveAccessoryViewOptionsButton setEnabled:allowOptions];
-    [self->saveAccessoryViewScaleLabel setHidden:isMathMLFormat];
-    [self->saveAccessoryViewScalePercentTextField setHidden:isMathMLFormat];
-    [self->saveAccessoryViewJpegWarning setHidden:!isJpegFormat];
+    self->saveAccessoryViewOptionsButton.enabled = allowOptions;
+    self->saveAccessoryViewScaleLabel.hidden = isMathMLFormat;
+    self->saveAccessoryViewScalePercentTextField.hidden = isMathMLFormat;
+    self->saveAccessoryViewJpegWarning.hidden = !isJpegFormat;
     BOOL isDirectory = NO;
-    [self->saveAccessoryViewSvgWarning setHidden:
-      (!isSvgFormat ||
+    self->saveAccessoryViewSvgWarning.hidden = (!isSvgFormat ||
        ([[NSFileManager defaultManager]
-         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory))];
-    [self->saveAccessoryViewMathMLWarning setHidden:
-     (!isMathMLFormat || [[AppController appController] isPerlWithLibXMLAvailable])];
+         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory));
+    self->saveAccessoryViewMathMLWarning.hidden = (!isMathMLFormat || [AppController appController].perlWithLibXMLAvailable);
     if (isJpegFormat)
-      [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"jpg", @"jpeg", kUTTypeJPEG, nil]];
+      self->currentSavePanel.allowedFileTypes = @[@"jpg", @"jpeg", (id)kUTTypeJPEG];
     else
-      [self->currentSavePanel setAllowedFileTypes:@[extension]];
+      self->currentSavePanel.allowedFileTypes = @[extension];
   }//end if ([keyPath isEqualToString:@"saveAccessoryViewExportFormat"])
   else if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
   {
     export_format_t exportFormat = self->saveAccessoryViewExportFormat;
     BOOL isSvgFormat = (exportFormat == EXPORT_FORMAT_SVG);
     BOOL isDirectory = NO;
-    [self->saveAccessoryViewSvgWarning setHidden:
-      (!isSvgFormat ||
+    self->saveAccessoryViewSvgWarning.hidden = (!isSvgFormat ||
        ([[NSFileManager defaultManager]
-         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory))];
+         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory));
   }//end if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
 }
 //end observeValueForKeyPath:ofObject:change:context:
@@ -301,25 +261,25 @@
   if (!self->saveAccessoryViewExportFormatOptionsPanes)
   {
     self->saveAccessoryViewExportFormatOptionsPanes = [[ExportFormatOptionsPanes alloc] initWithLoadingFromNib];
-    [self->saveAccessoryViewExportFormatOptionsPanes setExportFormatOptionsJpegPanelDelegate:self];
-    [self->saveAccessoryViewExportFormatOptionsPanes setExportFormatOptionsSvgPanelDelegate:self];
-    [self->saveAccessoryViewExportFormatOptionsPanes setExportFormatOptionsTextPanelDelegate:self];
+    self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsJpegPanelDelegate = self;
+    self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsSvgPanelDelegate = self;
+    self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsTextPanelDelegate = self;
   }//end if (!self->saveAccessoryViewExportFormatOptionsPanes)
-  [self->saveAccessoryViewExportFormatOptionsPanes setJpegQualityPercent:self->saveAccessoryViewOptionsJpegQualityPercent];
-  [self->saveAccessoryViewExportFormatOptionsPanes setJpegBackgroundColor:self->saveAccessoryViewOptionsJpegBackgroundColor];
-  [self->saveAccessoryViewExportFormatOptionsPanes setSvgPdfToSvgPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath];
-  [self->saveAccessoryViewExportFormatOptionsPanes setTextExportPreamble:self->saveAccessoryViewOptionsTextExportPreamble];
-  [self->saveAccessoryViewExportFormatOptionsPanes setTextExportEnvironment:self->saveAccessoryViewOptionsTextExportEnvironment];
-  [self->saveAccessoryViewExportFormatOptionsPanes setTextExportBody:self->saveAccessoryViewOptionsTextExportBody];
-  [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofGSWriteEngine:self->saveAccessoryViewOptionsPDFWofGSWriteEngine];
-  [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofGSPDFCompatibilityLevel:self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel];
-  [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled];
+  self->saveAccessoryViewExportFormatOptionsPanes.jpegQualityPercent = self->saveAccessoryViewOptionsJpegQualityPercent;
+  self->saveAccessoryViewExportFormatOptionsPanes.jpegBackgroundColor = self->saveAccessoryViewOptionsJpegBackgroundColor;
+  self->saveAccessoryViewExportFormatOptionsPanes.svgPdfToSvgPath = self->saveAccessoryViewOptionsSvgPdfToSvgPath;
+  self->saveAccessoryViewExportFormatOptionsPanes.textExportPreamble = self->saveAccessoryViewOptionsTextExportPreamble;
+  self->saveAccessoryViewExportFormatOptionsPanes.textExportEnvironment = self->saveAccessoryViewOptionsTextExportEnvironment;
+  self->saveAccessoryViewExportFormatOptionsPanes.textExportBody = self->saveAccessoryViewOptionsTextExportBody;
+  self->saveAccessoryViewExportFormatOptionsPanes.pdfWofGSWriteEngine = self->saveAccessoryViewOptionsPDFWofGSWriteEngine;
+  self->saveAccessoryViewExportFormatOptionsPanes.pdfWofGSPDFCompatibilityLevel = self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
+  self->saveAccessoryViewExportFormatOptionsPanes.pdfWofMetaDataInvisibleGraphicsEnabled = self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = (export_format_t)[self->saveAccessoryViewPopupFormat selectedTag];
+  export_format_t exportFormat = (export_format_t)self->saveAccessoryViewPopupFormat.selectedTag;
   if (exportFormat == EXPORT_FORMAT_JPEG)
-    panelToOpen = [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsJpegPanel];
+    panelToOpen = self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsJpegPanel;
   else if (exportFormat == EXPORT_FORMAT_SVG)
-    panelToOpen = [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsSvgPanel];
+    panelToOpen = self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsSvgPanel;
   if (panelToOpen)
     [NSApp runModalForWindow:panelToOpen];
 }
@@ -329,20 +289,20 @@
 {
   if (ok)
   {
-    if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsJpegPanel])
+    if (exportFormatOptionsPanel == self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsJpegPanel)
     {
-      [self setSaveAccessoryViewOptionsJpegQualityPercent:[self->saveAccessoryViewExportFormatOptionsPanes jpegQualityPercent]];
-      [self setSaveAccessoryViewOptionsJpegBackgroundColor:[self->saveAccessoryViewExportFormatOptionsPanes jpegBackgroundColor]];
+      self.saveAccessoryViewOptionsJpegQualityPercent = self->saveAccessoryViewExportFormatOptionsPanes.jpegQualityPercent;
+      self.saveAccessoryViewOptionsJpegBackgroundColor = self->saveAccessoryViewExportFormatOptionsPanes.jpegBackgroundColor;
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsJpegPanel])
-    else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    else if (exportFormatOptionsPanel == self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsSvgPanel)
     {
-      [self setSaveAccessoryViewOptionsSvgPdfToSvgPath:[self->saveAccessoryViewExportFormatOptionsPanes svgPdfToSvgPath]];
+      self.saveAccessoryViewOptionsSvgPdfToSvgPath = self->saveAccessoryViewExportFormatOptionsPanes.svgPdfToSvgPath;
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsSvgPanel])
-    else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
+    else if (exportFormatOptionsPanel == self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsPDFWofPanel)
     {
-      [self setSaveAccessoryViewOptionsPDFWofGSWriteEngine:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSWriteEngine]];
-      [self setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSPDFCompatibilityLevel]];
-      [self setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofMetaDataInvisibleGraphicsEnabled]];
+      self.saveAccessoryViewOptionsPDFWofGSWriteEngine = self->saveAccessoryViewExportFormatOptionsPanes.pdfWofGSWriteEngine;
+      self.saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel = self->saveAccessoryViewExportFormatOptionsPanes.pdfWofGSPDFCompatibilityLevel;
+      self.saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled = self->saveAccessoryViewExportFormatOptionsPanes.pdfWofMetaDataInvisibleGraphicsEnabled;
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
   }//end if (ok)
   [NSApp stopModal];
@@ -353,10 +313,10 @@
 -(BOOL) validateMenuItem:(NSMenuItem*)sender
 {
   BOOL ok  = YES;
-  if ([sender tag] == EXPORT_FORMAT_EPS)
-    ok = [[AppController appController] isGsAvailable];
-  else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
-    ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPsToPdfAvailable];
+  if (sender.tag == EXPORT_FORMAT_EPS)
+    ok = [AppController appController].gsAvailable;
+  else if (sender.tag == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
+    ok = [AppController appController].gsAvailable && [AppController appController].psToPdfAvailable;
   /*else if ([sender tag] == EXPORT_FORMAT_SVG)
     ok = [[AppController appController] isPdfToSvgAvailable];*/
   return ok;

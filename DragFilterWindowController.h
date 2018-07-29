@@ -34,11 +34,9 @@
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate atPoint:(NSPoint)point;
 -(void) setWindowVisible:(BOOL)visible withAnimation:(BOOL)animate atPoint:(NSPoint)point isHintOnly:(BOOL)isHintOnly;
 
--(export_format_t) exportFormat;
--(void) setExportFormat:(export_format_t)value;
+@property  export_format_t exportFormat;
 
--(id) delegate;
--(void) setDelegate:(id)value;
+@property (assign) id delegate;
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat;
 

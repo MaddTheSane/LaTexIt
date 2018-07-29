@@ -39,14 +39,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithReferences:(id)references
++(instancetype) transformerWithReferences:(id)references
 {
   id result = [[[self class] alloc] initWithReferences:references];
   return result;
 }
 //end transformerWithReference:
 
--(id) initWithReferences:(id)theReferences
+-(instancetype) initWithReferences:(id)theReferences
 {
   if ((!(self = [super init])))
     return nil;
@@ -57,7 +57,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:[self->references containsObject:value]];
+  id result = @([self->references containsObject:value]);
   return result;
 }
 //end transformedValue:

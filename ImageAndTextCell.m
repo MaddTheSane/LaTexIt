@@ -48,7 +48,7 @@
   result.origin.x += 3;
   if (self->image)
   {
-    NSSize imageSize = [self->image size];
+    NSSize imageSize = self->image.size;
     NSRect imageRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
     imageRect = adaptRectangle(imageRect, cellFrame, YES, NO, NO);
     result.origin.y = imageRect.origin.y;
@@ -66,7 +66,7 @@
   CGFloat delta = (!self->image ? 0 : 3);
   textFrame.origin.x += delta;
   textFrame.size.width = MAX(0, textFrame.size.width-delta);
-  NSAttributedString* attributedString = [self attributedStringValue];
+  NSAttributedString* attributedString = self.attributedStringValue;
   if (attributedString)
   {
     NSSize textSize = [attributedString size];
@@ -87,7 +87,7 @@
   CGFloat delta = (!self->image ? 0 : 3);
   textFrame.origin.x += delta;
   textFrame.size.width = MAX(0, textFrame.size.width-delta);
-  NSAttributedString* attributedString = [self attributedStringValue];
+  NSAttributedString* attributedString = self.attributedStringValue;
   if (attributedString)
   {
     NSSize textSize = [attributedString size];
@@ -104,7 +104,7 @@
 {
   NSRect imageFrame = NSZeroRect;
   NSRect textFrame  = NSZeroRect;
-  NSSize imageSize = [self->image size];
+  NSSize imageSize = self->image.size;
   NSDivideRect(cellFrame, &imageFrame, &textFrame, NSMaxX([self imageFrameForCellFrame:cellFrame relativeToCellOrigin:YES]), NSMinXEdge);
   imageFrame = [self imageFrameForCellFrame:cellFrame relativeToCellOrigin:NO];
   CGFloat delta = (!self->image ? 0 : 3);
@@ -118,11 +118,11 @@
       NSRectFill(imageFrame);
     }
     [NSGraphicsContext saveGraphicsState];
-    [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+    [NSGraphicsContext currentContext].imageInterpolation = NSImageInterpolationHigh;
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:imageFrame.origin.x yBy:imageFrame.origin.y];
     [transform translateXBy:0 yBy:imageFrame.size.height/2];
-    [transform scaleXBy:1.f yBy:[controlView isFlipped] ? -1.f : 1.f];
+    [transform scaleXBy:1.f yBy:controlView.flipped ? -1.f : 1.f];
     [transform translateXBy:0 yBy:-imageFrame.size.height/2];
     [transform concat];
     NSImage* wrapImage = [[NSImage alloc] initWithSize:imageSize];
@@ -133,7 +133,7 @@
     [NSGraphicsContext restoreGraphicsState];
   }//end if image
   
-  NSAttributedString* attributedString = [self attributedStringValue];
+  NSAttributedString* attributedString = self.attributedStringValue;
   if (attributedString)
   {
     NSSize textSize = [attributedString size];

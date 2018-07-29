@@ -70,7 +70,7 @@
   __weak id<ExportFormatOptionsDelegate>        exportFormatOptionsPDFWofPanelDelegate;
 }
 
--(instancetype) initWithLoadingFromNib;
+-(instancetype) initWithLoadingFromNib NS_DESIGNATED_INITIALIZER;
 
 @property (weak) IBOutlet NSPanel *exportFormatOptionsJpegPanel;
 @property float jpegQualityPercent;

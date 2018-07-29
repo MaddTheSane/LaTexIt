@@ -107,7 +107,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 //		2004-03-13	UK	Documented.
 // -----------------------------------------------------------------------------
 
--(id)   init
+-(instancetype)   init
 {
 	self = [super init];
 	if( self )
@@ -174,7 +174,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 	NSNumber*		fdNum;
 	while( (fdNum = [enny nextObject]) )
 	{
-    	if( close( [fdNum intValue] ) == -1 )
+    	if( close( fdNum.intValue ) == -1 )
             NSLog(@"dealloc: Couldn't close file descriptor (%d)", errno);
     }
 	
@@ -230,7 +230,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 {
 	struct timespec		nullts = { 0, 0 };
 	struct kevent		ev;
-	int					fd = open( [path fileSystemRepresentation], O_EVTONLY, 0 );
+	int					fd = open( path.fileSystemRepresentation, O_EVTONLY, 0 );
 	
     if( fd >= 0 )
     {
@@ -241,7 +241,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
         AT_SYNCHRONIZED( self )
         {
             [watchedPaths addObject: path];
-            [watchedFDs addObject: [NSNumber numberWithInt: fd]];
+            [watchedFDs addObject: @(fd)];
             kevent( queueFD, &ev, 1, NULL, 0, &nullts );
         }
     }
@@ -276,7 +276,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
         if( index == NSNotFound )
             return;
         
-        fd = [[watchedFDs objectAtIndex: index] intValue];
+        fd = [watchedFDs[index] intValue];
         
         [watchedFDs removeObjectAtIndex: index];
         [watchedPaths removeObjectAtIndex: index];
@@ -304,7 +304,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
         NSNumber     *  anFD;
         
         while( (anFD = [fdEnumerator nextObject]) != nil )
-            close( [anFD intValue] );
+            close( anFD.intValue );
 
         [watchedFDs removeAllObjects];
         [watchedPaths removeAllObjects];
@@ -422,8 +422,8 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 		#if UKKQUEUE_SEND_STUPID_NOTIFICATIONS
 		[[[NSWorkspace sharedWorkspace] notificationCenter] postNotificationName: nm object: fp];
 		#else
-		[[[NSWorkspace sharedWorkspace] notificationCenter] postNotificationName: nm object: self
-																userInfo: [NSDictionary dictionaryWithObjectsAndKeys: fp, @"path", nil]];
+		[[NSWorkspace sharedWorkspace].notificationCenter postNotificationName: nm object: self
+																userInfo: @{@"path": fp}];
 		#endif
 	}
 }

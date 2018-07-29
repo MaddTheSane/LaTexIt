@@ -39,14 +39,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator
++(instancetype) transformerWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator
 {
   id result = [[[self class] alloc] initWithTransformers:transformers logicOperator:logicOperator];
   return result;
 }
 //end transformerWithTransformers:
 
--(id) initWithTransformers:(NSArray*)theTransformers logicOperator:(logic_transformer_operator_t)aLogicOperator
+-(instancetype) initWithTransformers:(NSArray*)theTransformers logicOperator:(logic_transformer_operator_t)aLogicOperator
 {
   if ((!(self = [super init])))
     return nil;
@@ -76,7 +76,7 @@
     while(!localResult && ((transformer = [enumerator nextObject])))
       localResult |= [[transformer transformedValue:value] boolValue];
   }//end if (self->logicOperator == LOGIC_TRANSFORMER_OPERATOR_OR)
-  result = [NSNumber numberWithBool:localResult];
+  result = @(localResult);
   return result;
 }
 //end transformedValue:

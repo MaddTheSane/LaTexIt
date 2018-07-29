@@ -39,7 +39,7 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
++(instancetype) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
            additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath
 {
   id result = [[[self class] alloc] initWithValueTransformer:valueTransformer
@@ -48,7 +48,7 @@
 }
 //end transformerWithValueTransformer:
 
--(id) initWithValueTransformer:(NSValueTransformer*)aValueTransformer
+-(instancetype) initWithValueTransformer:(NSValueTransformer*)aValueTransformer
     additionalValueTransformer:(NSValueTransformer*)anAdditionalValueTransformer additionalKeyPath:(NSString*)anAdditionalKeyPath
 {
   if ((!(self = [super init])))

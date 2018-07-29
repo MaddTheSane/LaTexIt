@@ -18,11 +18,11 @@
 {
   if (oldKey && ![oldKey isEqual:newKey])
   {
-    id value = !oldKey ? nil : [self objectForKey:oldKey];
+    id value = !oldKey ? nil : self[oldKey];
     if (oldKey)
       [self removeObjectForKey:oldKey];
     if (value && newKey)
-      [self setObject:value forKey:newKey];
+      self[newKey] = value;
   }//end if (oldKey && ![oldKey isEqual:newKey])
 }
 //end replaceKey:withKey:

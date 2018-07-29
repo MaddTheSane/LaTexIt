@@ -14,7 +14,7 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
 
 @implementation LogTableView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
@@ -25,8 +25,8 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
 
 -(void) awakeFromNib
 {
-  [self setDelegate:self];
-  [self setDataSource:self];
+  self.delegate = self;
+  self.dataSource = self;
 }
 
 //updates contents thnaks to the array of error strings
@@ -36,13 +36,13 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
   for(NSString *line in errors)
   {
     NSArray* components = [line componentsSeparatedByString:@":"];
-    if ([components count] >= 3)
+    if (components.count >= 3)
     {
-      NSNumber* lineNumber = @([[components objectAtIndex:1] integerValue]);
-      NSString* message    = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)]
+      NSNumber* lineNumber = @([components[1] integerValue]);
+      NSString* message    = [[components subarrayWithRange:NSMakeRange(2, components.count-2)]
                                     componentsJoinedByString:@""];
       NSDictionary* dictionary =
-        [NSDictionary dictionaryWithObjectsAndKeys:lineNumber, @"line", message, @"message", nil];
+        @{@"line": lineNumber, @"message": message};
       [errorLines addObject:dictionary];
     }
     else
@@ -53,7 +53,7 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
         NSNumber* lineNumber = @0; //dummy line number error
         NSString* message    = [line substringFromIndex:(separator.location+separator.length)];
         NSDictionary* dictionary =
-          [NSDictionary dictionaryWithObjectsAndKeys:lineNumber, @"line", message, @"message", nil];
+          @{@"line": lineNumber, @"message": message};
         [errorLines addObject:dictionary];
       }
     }
@@ -64,15 +64,15 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
 //NSTableViewDataSource protocol
 -(NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView
 {
-  return [errorLines count];
+  return errorLines.count;
 }
 //end numberOfRowsInTableView:
 
 -(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-  id object = [[errorLines objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
+  id object = errorLines[rowIndex][aTableColumn.identifier];
   //if the line number is equal to 0, do not display it
-  if ([[aTableColumn identifier] isEqualToString:@"line"] && ![object intValue])
+  if ([aTableColumn.identifier isEqualToString:@"line"] && ![object intValue])
     object = nil;
   return object;
 }
@@ -81,14 +81,14 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
 -(void) mouseDown:(NSEvent*) theEvent
 {
   [super mouseDown:theEvent];
-  NSInteger row = [self selectedRow];
+  NSInteger row = self.selectedRow;
   if (row >= 0)
   {
     NSNumber* lineError = [self tableView:self objectValueForTableColumn:[self tableColumnWithIdentifier:@"line"] row:row];
     NSString* message = [self tableView:self objectValueForTableColumn:[self tableColumnWithIdentifier:@"message"] row:row];
     [[NSNotificationCenter defaultCenter] postNotificationName:ClickErrorLineNotification object:self
-       userInfo:lineError ? [NSDictionary dictionaryWithObjectsAndKeys:lineError, @"lineError", message, @"message", nil]
-                          : [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", nil]];
+       userInfo:lineError ? @{@"lineError": lineError, @"message": message}
+                          : @{@"message": message}];
   }
 }
 

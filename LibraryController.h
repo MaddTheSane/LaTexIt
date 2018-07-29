@@ -15,10 +15,10 @@
   NSArray*        currentlyDraggedItems;
 }
 
--(NSManagedObjectContext*) managedObjectContext;
--(NSUndoManager*) undoManager;
+@property (readonly, strong) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong) NSUndoManager *undoManager;
 
--(NSArray*) rootItems;
+@property (readonly, copy) NSArray *rootItems;
 -(void) fixChildrenSortIndexesForParent:(LibraryGroupItem*)parent recursively:(BOOL)recursively;
 -(void) removeItem:(id)item;
 -(void) removeItems:(NSArray*)items;

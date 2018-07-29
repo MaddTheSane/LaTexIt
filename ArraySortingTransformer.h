@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors;
--(instancetype) initWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors;
+-(instancetype) initWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors NS_DESIGNATED_INITIALIZER;
 
 @end
 

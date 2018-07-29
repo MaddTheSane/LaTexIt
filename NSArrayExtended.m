@@ -58,7 +58,7 @@
 -(NSArray*) reversed
 {
   NSEnumerator* enumerator = [self reverseObjectEnumerator];
-  return [enumerator allObjects];
+  return enumerator.allObjects;
 }
 //end reversed
 
@@ -80,7 +80,7 @@
 
 -(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass
 {
-  NSMutableArray* result = [NSMutableArray arrayWithCapacity:[self count]];
+  NSMutableArray* result = [NSMutableArray arrayWithCapacity:self.count];
   NSEnumerator* enumerator = [self objectEnumerator];
   id object = nil;
   if (exactClass)
@@ -107,7 +107,7 @@
 -(id) deepCopy {return [self deepCopyWithZone:nil];}
 -(id) deepCopyWithZone:(NSZone*)zone
 {
-  NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:[self count]];
+  NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:self.count];
   NSEnumerator* enumerator = [self objectEnumerator];
   for(id object in enumerator)
   {
@@ -123,7 +123,7 @@
 -(id) deepMutableCopy {return [self deepMutableCopyWithZone:nil];}
 -(id) deepMutableCopyWithZone:(NSZone*)zone
 {
-  NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:[self count]];
+  NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:self.count];
   NSEnumerator* enumerator = [self objectEnumerator];
   for(id object in enumerator)
   {

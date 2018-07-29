@@ -16,9 +16,9 @@
                   tag:(NSInteger)tag;
 {
   NSMenuItem* result = [self addItemWithTitle:aString action:aSelector keyEquivalent:keyEquivalent];
-  [result setTarget:target];
-  [result setKeyEquivalentModifierMask:keyEquivalentModifierMask];
-  [result setTag:tag];
+  result.target = target;
+  result.keyEquivalentModifierMask = keyEquivalentModifierMask;
+  result.tag = tag;
   return result;
 }
 //end addItemWithTitle:target:action:keyEquivalent:keyEquivalentModifierMask:

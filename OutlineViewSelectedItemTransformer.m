@@ -38,14 +38,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithOutlineView:(NSOutlineView*)outlineView firstIfMultiple:(BOOL)firstIfMultiple
++(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView firstIfMultiple:(BOOL)firstIfMultiple
 {
   id result = [[[self class] alloc] initWithOutlineView:outlineView firstIfMultiple:firstIfMultiple];
   return result;
 }
 //end transformerWithClass:
 
--(id) initWithOutlineView:(NSOutlineView*)aOutlineView firstIfMultiple:(BOOL)aFirstIfMultiple
+-(instancetype) initWithOutlineView:(NSOutlineView*)aOutlineView firstIfMultiple:(BOOL)aFirstIfMultiple
 {
   if ((!(self = [super init])))
     return nil;
@@ -59,9 +59,9 @@
 {
   id result = nil;
   NSIndexSet* indexSet = [value dynamicCastToClass:[NSIndexSet class]];
-  NSUInteger count = [indexSet count];
+  NSUInteger count = indexSet.count;
   result = !count ? nil :
-  (self->firstIfMultiple || (count == 1)) ? [[self->outlineView itemsAtRowIndexes:indexSet] objectAtIndex:0] :
+  (self->firstIfMultiple || (count == 1)) ? [self->outlineView itemsAtRowIndexes:indexSet][0] :
     nil;
   return result;
 }

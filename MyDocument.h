@@ -121,10 +121,10 @@
 -(void) formatComment:(id)sender;
 -(void) formatUncomment:(id)sender;
 
--(MyImageView*) imageView;
--(NSButton*)    lowerBoxLatexizeButton;
--(NSResponder*) preferredFirstResponder;
--(NSResponder*) previousFirstResponder;
+@property (readonly, strong) MyImageView *imageView;
+@property (readonly, strong) NSButton *lowerBoxLatexizeButton;
+@property (readonly, strong) NSResponder *preferredFirstResponder;
+@property (readonly, strong) NSResponder *previousFirstResponder;
 
 -(void) gotoLine:(NSInteger)row;
 
@@ -133,7 +133,7 @@
 
 @property (retain) LibraryEquation *lastAppliedLibraryEquation;
 
--(latex_mode_t) detectLatexMode;
+@property (readonly) latex_mode_t detectLatexMode;
 @property (nonatomic) latex_mode_t latexModeApplied;
 @property (nonatomic) latex_mode_t latexModeRequested;
 -(void) setColor:(NSColor*)color;
@@ -159,7 +159,7 @@
 @property BOOL shouldApplyToPasteboardAfterLatexization;
 
 //text actions in the first responder
--(NSString*) selectedText;
+@property (readonly, copy) NSString *selectedText;
 -(void) insertText:(id)text;
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient;
@@ -184,7 +184,7 @@
 -(void) splitViewDidResizeSubviews:(NSNotification*)notification;
 
 //backsync file
--(BOOL) hasBackSyncFile;
+@property (readonly) BOOL hasBackSyncFile;
 -(void) closeBackSyncFile;
 -(void) openBackSyncFile:(NSString*)path options:(NSDictionary*)options;
 -(IBAction) save:(id)sender;

@@ -14,8 +14,8 @@
 //Unfortunately, so far, an NSFont does not know how to transform itself into data, or built itself with data
 //We have to make that by hand
 +(NSFont*) fontWithData:(NSData*)data;
--(NSData*) data;
+@property (readonly, copy) NSData *data;
 
--(NSString*) displayNameWithPointSize;
+@property (readonly, copy) NSString *displayNameWithPointSize;
 
 @end

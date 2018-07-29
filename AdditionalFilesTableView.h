@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AdditionalFilesTableView : NSTableView <NSTableViewDelegate> {
+@interface AdditionalFilesTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource> {
   BOOL isDefaultTableView;
   NSIndexSet* draggedRowIndexes;//transient, used only during drag'n drop
   NSArrayController* filesWithExtrasController;
@@ -18,12 +18,11 @@
 -(IBAction) addFiles:(id)sender;
 -(IBAction) remove:(id)sender;
 
--(BOOL) isDefaultTableView;
--(void) setIsDefaultTableView:(BOOL)value;
+@property  BOOL isDefaultTableView;
 
--(NSArray*) additionalFilesPaths;
+@property (readonly, copy) NSArray<NSString*> *additionalFilesPaths;
 
--(BOOL) canAdd;
--(BOOL) canRemove;
+@property (readonly) BOOL canAdd;
+@property (readonly) BOOL canRemove;
 
 @end

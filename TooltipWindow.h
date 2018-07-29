@@ -24,7 +24,7 @@
 // setting and getting the default bgColor
 @property (class, strong) NSColor *defaultBackgroundColor;
 
--(instancetype) init;
+-(instancetype) init NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, copy) id tooltip;
 

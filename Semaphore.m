@@ -15,7 +15,7 @@
 @implementation Semaphore
 
 //designated initializer
--(id) initWithValue:(unsigned int)initialValue
+-(instancetype) initWithValue:(unsigned int)initialValue
 {
   if ((!(self = [super init])))
     return nil;
@@ -33,7 +33,7 @@
 }
 //end initWithValue:
 
--(id) init
+-(instancetype) init
 {
   return [self initWithValue:0];
 }
@@ -96,7 +96,7 @@
 //end Z
 
 //NSCoding protocol
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   return [self initWithValue:[coder decodeIntForKey:@"value"]];
 }

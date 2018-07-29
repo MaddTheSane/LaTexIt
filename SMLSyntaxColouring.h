@@ -65,7 +65,7 @@
 	NSString *completeString;
 	NSString *searchString;
 	NSScanner *scanner;
-	NSScanner *completeDocumentScanner;	
+	NSScanner *completeDocumentScanner;
 	NSUInteger beginning;
 	NSUInteger end;
 	NSUInteger endOfLine;
@@ -106,7 +106,7 @@
 
 +(NSArray *)syntaxDefinitionsArray;
 
--(id) initWithTextView:(NSTextView*)aTextView;
+-(instancetype) initWithTextView:(NSTextView*)aTextView NS_DESIGNATED_INITIALIZER;
 
 -(void) setColours;
 -(void) setSyntaxDefinitionsForExtension:(NSString *)extension;
@@ -116,21 +116,15 @@
 -(void) removeAllColours;
 -(void) removeAllTimers;
 
--(NSEnumerator*) wordEnumerator;
--(void)          setWordEnumerator:(NSEnumerator*)newWordEnumerator;
+@property (strong) NSEnumerator *wordEnumerator;
 
--(NSSet*)   keywords;
--(void)     setKeywords:(NSSet*)newKeywords;
--(NSArray*) autocompleteWords;
--(void)     setAutocompleteWords:(NSArray*)newAutocompleteWords;
--(NSArray*) keywordsAndAutocompleteWords;
--(void)     setKeywordsAndAutocompleteWords:(NSArray*)newKeywordsAndAutocompleteWords;
+@property (copy) NSSet<NSString*> *keywords;
+@property (copy) NSArray<NSString*> *autocompleteWords;
+@property (copy) NSArray<NSString*> *keywordsAndAutocompleteWords;
 
--(BOOL) recolourKeywordIfAlreadyColoured;
--(void) setRecolourKeywordIfAlreadyColoured:(BOOL)flag;
+@property  BOOL recolourKeywordIfAlreadyColoured;
 
--(BOOL) keywordsCaseSensitive;
--(void) setKeywordsCaseSensitive:(BOOL)flag;
+@property  BOOL keywordsCaseSensitive;
 
 -(void) setBeginCommand:(NSString *)newBeginCommand;
 -(void) setEndCommand:(NSString *)newEndCommand;
@@ -149,11 +143,10 @@
 -(void) setBeginSecondMultiLineComment:(NSString *)newBeginSecondMultiLineComment;
 -(void) setEndSecondMultiLineComment:(NSString *)newEndSecondMultiLineComment;
 
--(NSUndoManager*) undoManager;
--(NSDictionary*)  highlightColour;
+@property (readonly, strong) NSUndoManager *undoManager;
+@property (readonly, copy) NSDictionary *highlightColour;
 
--(NSString*) syntaxDefinitionName;
--(void)      setSyntaxDefinitionName:(NSString *)newSyntaxDefinitionName;
+@property (copy) NSString *syntaxDefinitionName;
 
 -(NSString*) guessSyntaxDefinitionFromFirstLine:(NSString *)firstLine;
 

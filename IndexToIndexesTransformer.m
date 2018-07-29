@@ -39,7 +39,7 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformer
++(instancetype) transformer
 {
   id result = [[[self class] alloc] init];
   return result;

@@ -16,7 +16,7 @@
 #import "Utils.h"
 
 @interface LibraryGroupItem (PrivateAPI)
--(NSArray*) childrenSortDescriptors;
+@property (readonly, copy) NSArray *childrenSortDescriptors;
 @end
 
 @implementation LibraryGroupItem
@@ -30,14 +30,14 @@ static NSEntityDescription* cachedEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
+        cachedEntity = [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel].entitiesByName[NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
 }
 //end entity
 
--(id) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
+-(instancetype) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
   if (!((self = [super initWithParent:aParent insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
@@ -48,9 +48,9 @@ static NSEntityDescription* cachedEntity = nil;
 -(id) copyWithZone:(NSZone*)zone
 {
   id clone = [super copyWithZone:zone];
-  [clone setExpanded:[self isExpanded]];
+  [clone setExpanded:self.expanded];
   NSSet* theChildren = [self children];
-  NSMutableSet* clonedChildren = [[NSMutableSet alloc] initWithCapacity:[theChildren count]];
+  NSMutableSet* clonedChildren = [[NSMutableSet alloc] initWithCapacity:theChildren.count];
   NSEnumerator* enumerator = [theChildren objectEnumerator];
   LibraryItem* child = nil;
   while((child = [enumerator nextObject]))
@@ -77,7 +77,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) setExpanded:(BOOL)value
 {
   [self willChangeValueForKey:@"expanded"];
-  [self setPrimitiveValue:[NSNumber numberWithBool:value] forKey:@"expanded"];
+  [self setPrimitiveValue:@(value) forKey:@"expanded"];
   [self didChangeValueForKey:@"expanded"];
 }
 //end setExpanded:
@@ -86,10 +86,10 @@ static NSEntityDescription* cachedEntity = nil;
 {
   NSSet* result = nil; //on Tiger, calling the primitiveKey does not work
   NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-  [fetchRequest setEntity:[LibraryItem entity]];
-  [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == %@", self]];
+  fetchRequest.entity = [LibraryItem entity];
+  fetchRequest.predicate = [NSPredicate predicateWithFormat:@"parent == %@", self];
   NSError* error = nil;
-  result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
+  result = [NSSet setWithArray:[self.managedObjectContext executeFetchRequest:fetchRequest error:&error]];
   if (error)
     {DebugLog(0, @"error = %@", error);}
   return result;
@@ -107,8 +107,7 @@ static NSEntityDescription* cachedEntity = nil;
     @synchronized(self)
     {
       if (!self->childrenSortDescriptors)
-        self->childrenSortDescriptors = [[NSArray alloc] initWithObjects:
-          [[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES], nil];
+        self->childrenSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES]];
     }//end @synchronized(self)
   }//end if (!self->childrenSortDescriptor)
   return self->childrenSortDescriptors;
@@ -119,7 +118,7 @@ static NSEntityDescription* cachedEntity = nil;
 {
   NSMutableArray* result = nil;
   NSSet* theChildren = [self children];
-  result = !theChildren ? [NSMutableArray array] : [NSMutableArray arrayWithArray:[theChildren allObjects]];
+  result = !theChildren ? [NSMutableArray array] : [NSMutableArray arrayWithArray:theChildren.allObjects];
   [result sortUsingDescriptors:[self childrenSortDescriptors]];
   return result;
 }
@@ -128,12 +127,12 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) fixChildrenSortIndexesRecursively:(BOOL)recursively
 {
   NSArray* theChildren = [self childrenOrdered];
-  NSUInteger n = [theChildren count];
+  NSUInteger n = theChildren.count;
   NSUInteger i = 0;
   for(i = 0 ; i<n ; ++i)
   {
-    LibraryItem* libraryItem = [theChildren objectAtIndex:i];
-    [libraryItem setSortIndex:i];
+    LibraryItem* libraryItem = theChildren[i];
+    libraryItem.sortIndex = i;
     if (recursively && [libraryItem isKindOfClass:[LibraryGroupItem class]])
       [(LibraryGroupItem*)libraryItem fixChildrenSortIndexesRecursively:recursively];
   }//end for each child
@@ -143,19 +142,19 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) encodeWithCoder:(NSCoder*)coder
 {
   [super encodeWithCoder:coder];
-  [coder encodeBool:[self isExpanded] forKey:@"expanded"];
+  [coder encodeBool:self.expanded forKey:@"expanded"];
   [coder encodeObject:[self children] forKey:@"children"];
 }
 //end encodeWithCoder:
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if (!((self = [super initWithCoder:coder])))
     return nil;
   if ([coder containsValueForKey:@"isExpanded"])//legacy
-    [self setExpanded:[coder decodeBoolForKey:@"isExpanded"]];  
+    self.expanded = [coder decodeBoolForKey:@"isExpanded"];  
   else
-    [self setExpanded:[coder decodeBoolForKey:@"expanded"]];
+    self.expanded = [coder decodeBoolForKey:@"expanded"];
   NSArray* theChildren = [coder decodeObjectForKey:@"children"];
   [theChildren makeObjectsPerformSelector:@selector(setParent:) withObject:self];
   return self;
@@ -172,40 +171,38 @@ static NSEntityDescription* cachedEntity = nil;
 -(id) plistDescription
 {
   NSArray* theChildren = [self childrenOrdered];
-  NSMutableArray* childrenPlistDescription = [[NSMutableArray alloc] initWithCapacity:[theChildren count]];
+  NSMutableArray* childrenPlistDescription = [[NSMutableArray alloc] initWithCapacity:theChildren.count];
   NSEnumerator* enumerator = [theChildren objectEnumerator];
   LibraryItem* child = nil;
   while((child = [enumerator nextObject]))
     [childrenPlistDescription addObject:[child plistDescription]];
   NSMutableDictionary* plist = [super plistDescription];
-    [plist addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithBool:[self isExpanded]], @"expanded",
-       childrenPlistDescription, @"children",
-       nil]];
+    [plist addEntriesFromDictionary:@{@"expanded": @(self.expanded),
+       @"children": childrenPlistDescription}];
   return plist;
 }
 //end plistDescription
 
--(id) initWithDescription:(id)description
+-(instancetype) initWithDescription:(id)description
 {
   if (!((self = [super initWithDescription:description])))
     return nil;
-  NSString* version = [description objectForKey:@"version"];
+  NSString* version = description[@"version"];
   BOOL isOldLibraryItem = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
-  [self setExpanded:[[description objectForKey:@"expanded"] boolValue]];
-  NSArray* childrenDescriptions = isOldLibraryItem ? [description objectForKey:@"content"] : [description objectForKey:@"children"];
-  NSMutableArray* theChildren = [NSMutableArray arrayWithCapacity:[childrenDescriptions count]];
-  NSUInteger count = [childrenDescriptions count];
+  self.expanded = [description[@"expanded"] boolValue];
+  NSArray* childrenDescriptions = isOldLibraryItem ? description[@"content"] : description[@"children"];
+  NSMutableArray* theChildren = [NSMutableArray arrayWithCapacity:childrenDescriptions.count];
+  NSUInteger count = childrenDescriptions.count;
   NSUInteger index = 0;
   for(NSUInteger i = 0 ; i<count ; ++i)
   {
-    id childDescription = [childrenDescriptions objectAtIndex:i];
+    id childDescription = childrenDescriptions[i];
     LibraryItem* child = [LibraryItem libraryItemWithDescription:childDescription];
     if (child)
     {
       [theChildren addObject:child];
       if (isOldLibraryItem)
-        [child setSortIndex:index++];
+        child.sortIndex = index++;
     }//end if (child)
   }//end for each childDescription
   [theChildren makeObjectsPerformSelector:@selector(setParent:) withObject:self];

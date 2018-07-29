@@ -21,7 +21,7 @@
 
 @implementation DragFilterWindowController
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super initWithWindowNibName:@"DragFilterWindowController"])))
     return nil;
@@ -42,7 +42,7 @@
   [self->dragFilterViewLabel setStringValue:NSLocalizedString(@"Drag through areas to change export type", @"Drag through areas to change export type")];
   self->buttonPalette = [[NSButtonPalette alloc] init];
   [self->buttonPalette setExclusive:YES];
-  NSEnumerator* enumerator = [[self->dragFilterButtonsView subviews] objectEnumerator];
+  NSEnumerator* enumerator = [self->dragFilterButtonsView.subviews objectEnumerator];
   NSView* view = nil;
   while((view = [enumerator nextObject]))
   {
@@ -50,24 +50,24 @@
       [self->buttonPalette add:(NSButton*)view];
   }//end while((view = [enumerator nextObject]))
   [self->closeButton setShouldBlink:NO];
-  [self->closeButton setDelay:.05];
+  self->closeButton.delay = .05;
 
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS] setTitle:
     NSLocalizedString(@"PDF w.o.f.", @"PDF w.o.f.")];
 
-  BOOL isPdfToSvgAvailable = [[AppController appController] isPdfToSvgAvailable];
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable];
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:isPdfToSvgAvailable ? nil :
-    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @"%@ is required"), @"pdf2svg"]];
+  BOOL isPdfToSvgAvailable = [AppController appController].pdfToSvgAvailable;
+  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG].enabled = isPdfToSvgAvailable;
+  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG].toolTip = isPdfToSvgAvailable ? nil :
+    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @"%@ is required"), @"pdf2svg"];
   
-  BOOL isPerlWithLibXMLAvailable = [[AppController appController] isPerlWithLibXMLAvailable];
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setEnabled:isPerlWithLibXMLAvailable];
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setToolTip:isPerlWithLibXMLAvailable ? nil :
-    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"The XML::LibXML perl module must be installed")];
+  BOOL isPerlWithLibXMLAvailable = [AppController appController].perlWithLibXMLAvailable;
+  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML].enabled = isPerlWithLibXMLAvailable;
+  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML].toolTip = isPerlWithLibXMLAvailable ? nil :
+    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"The XML::LibXML perl module must be installed");
 
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"Text")];
   
-  [self setExportFormat:[[PreferencesController sharedController] exportFormatCurrentSession]];
+  [self setExportFormat:[PreferencesController sharedController].exportFormatCurrentSession];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:DragThroughButtonStateChangedNotification object:nil];
 }
@@ -90,12 +90,12 @@
 {
   if (visible)
   {
-    [self setExportFormat:[[PreferencesController sharedController] exportFormatCurrentSession]];
-    NSWindow* screenWindow = [NSApp keyWindow];
-    screenWindow = screenWindow ? screenWindow: [NSApp mainWindow];
-    NSRect screenVisibleFrame = [(!screenWindow ? [NSScreen mainScreen] : [screenWindow screen]) visibleFrame];
-    NSWindow* window = [self window];
-    NSRect windowFrame = [window frame];
+    [self setExportFormat:[PreferencesController sharedController].exportFormatCurrentSession];
+    NSWindow* screenWindow = NSApp.keyWindow;
+    screenWindow = screenWindow ? screenWindow: NSApp.mainWindow;
+    NSRect screenVisibleFrame = (!screenWindow ? [NSScreen mainScreen] : screenWindow.screen).visibleFrame;
+    NSWindow* window = self.window;
+    NSRect windowFrame = window.frame;
     NSPoint newFrameOrigin = !isHintOnly ? point : NSMakePoint(point.x-windowFrame.size.width/2, point.y+32);
     if (isHintOnly)
     {
@@ -104,19 +104,19 @@
       newFrameOrigin.y = MAX(0, newFrameOrigin.y);
       newFrameOrigin.y = MIN(screenVisibleFrame.size.height-windowFrame.size.height, newFrameOrigin.y);
     }//end if (isHintOnly)
-    self->fromFrameOrigin = [[self window] isVisible] ? [window frame].origin : newFrameOrigin;
+    self->fromFrameOrigin = self.window.visible ? window.frame.origin : newFrameOrigin;
     self->toFrameOrigin = newFrameOrigin;
-    [[self window] setFrameOrigin:self->fromFrameOrigin];
+    [self.window setFrameOrigin:self->fromFrameOrigin];
     self->animationStartDate = [[NSDate alloc] init];
     [self->animationTimer invalidate];
     self->animationTimer = nil;
-    self->animationStartAlphaValue = ![[self window] isVisible] ? 0 : [[self window] alphaValue];
-    [[self window] setAlphaValue:self->animationStartAlphaValue];
+    self->animationStartAlphaValue = !self.window.visible ? 0 : self.window.alphaValue;
+    self.window.alphaValue = self->animationStartAlphaValue;
     [self showWindow:self];
     if (animate)
-      self->animationTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES];
+      self->animationTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:@(visible) repeats:YES];
     else
-      [[self window] setAlphaValue:1];
+      self.window.alphaValue = 1;
   }
   else// if (!visible)
   {
@@ -124,9 +124,9 @@
     [self->animationTimer invalidate];
     self->animationTimer = nil;
     if (animate)
-      self->animationTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES];
+      self->animationTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:@(visible) repeats:YES];
     else
-      [[self window] close];
+      [self.window close];
   }
 }
 //end setVisible:withAnimation:atPoint:isHintOnly:
@@ -135,40 +135,40 @@
 {
   NSTimeInterval timeElapsed = !self->animationStartDate ? 0. :
     [[NSDate date] timeIntervalSinceDate:self->animationStartDate];
-  BOOL toVisible = [[timer userInfo] boolValue];
+  BOOL toVisible = [timer.userInfo boolValue];
   NSTimeInterval animationDuration = toVisible ? self->animationDurationIn : self->animationDurationOut;
   timeElapsed = Clip_d(0., timeElapsed, animationDuration);
   double evolution = !animationDuration ? 1. : Clip_d(0., timeElapsed/animationDuration, 1.);
   if (toVisible)
-    [[self window] setAlphaValue:(1-evolution)*self->animationStartAlphaValue+evolution*1.];
+    self.window.alphaValue = (1-evolution)*self->animationStartAlphaValue+evolution*1.;
   else
-    [[self window] setAlphaValue:(1-evolution)*self->animationStartAlphaValue+evolution*0.];
+    self.window.alphaValue = (1-evolution)*self->animationStartAlphaValue+evolution*0.;
   NSPoint currentFrameOrigin = NSMakePoint((1-evolution)*fromFrameOrigin.x+evolution*toFrameOrigin.x,
                                            (1-evolution)*fromFrameOrigin.y+evolution*toFrameOrigin.y);
-  [[self window] setFrameOrigin:currentFrameOrigin];
+  [self.window setFrameOrigin:currentFrameOrigin];
   if (evolution >= 1)
   {
-    self->fromFrameOrigin = [[self window] frame].origin;
+    self->fromFrameOrigin = self.window.frame.origin;
     if (!toVisible)
-      [[self window] close];
+      [self.window close];
   }//end if (evolution >=1)
 }
 //end updateAnimation:
 
 -(void) notified:(NSNotification*)notification
 {
-  if ([[notification name] isEqualToString:DragThroughButtonStateChangedNotification])
+  if ([notification.name isEqualToString:DragThroughButtonStateChangedNotification])
   {
-    DragThroughButton* dragThroughButton = [notification object];
-    if ([dragThroughButton state] == NSOnState)
+    DragThroughButton* dragThroughButton = notification.object;
+    if (dragThroughButton.state == NSOnState)
     {
-      NSInteger tag = [dragThroughButton tag];
+      NSInteger tag = dragThroughButton.tag;
       if (tag < 0)
         [self setWindowVisible:NO withAnimation:YES];
       else//if (tag >= 0)
       {
-        [[PreferencesController sharedController] setExportFormatCurrentSession:(export_format_t)tag];
-        [self dragFilterWindowController:self exportFormatDidChange:[[PreferencesController sharedController] exportFormatCurrentSession]];
+        [PreferencesController sharedController].exportFormatCurrentSession = (export_format_t)tag;
+        [self dragFilterWindowController:self exportFormatDidChange:[PreferencesController sharedController].exportFormatCurrentSession];
       }//end if (tag >= 0)
     }//end if ([dragThroughButton state] == NSOnState)
   }//end if ([[notification name] isEqualToString:DragThroughButtonStateChangedNotification])
@@ -177,14 +177,14 @@
 
 -(export_format_t) exportFormat
 {
-  export_format_t result = (export_format_t)[self->buttonPalette selectedTag];
+  export_format_t result = (export_format_t)self->buttonPalette.selectedTag;
   return result;
 }
 //end exportFormat
 
 -(void) setExportFormat:(export_format_t)value
 {
-  [self->buttonPalette setSelectedTag:(int)value];
+  self->buttonPalette.selectedTag = (int)value;
 }
 //end setExportFormat:
 

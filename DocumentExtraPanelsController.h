@@ -12,7 +12,7 @@
 
 @class ExportFormatOptionsPanes;
 
-@interface DocumentExtraPanelsController : NSNib {
+@interface DocumentExtraPanelsController : NSNib <NSWindowDelegate> {
   NSView*        saveAccessoryView;
   IBOutlet NSTextField*   saveAccessoryViewFormatLabel;
   IBOutlet NSPopUpButton* saveAccessoryViewPopupFormat;
@@ -43,7 +43,7 @@
   NSSavePanel* __weak currentSavePanel;
 }
 
--(instancetype) initWithLoadingFromNib;
+-(instancetype) initWithLoadingFromNib NS_DESIGNATED_INITIALIZER;
 
 @property (strong) IBOutlet NSView *saveAccessoryView;
 @property (weak) IBOutlet NSWindow *logWindow;

@@ -38,14 +38,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithOutlineView:(NSOutlineView*)outlineView;
++(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView;
 {
   id result = [[[self class] alloc] initWithOutlineView:outlineView];
   return result;
 }
 //end transformerWithClass:
 
--(id) initWithOutlineView:(NSOutlineView*)aOutlineView;
+-(instancetype) initWithOutlineView:(NSOutlineView*)aOutlineView;
 {
   if ((!(self = [super init])))
     return nil;

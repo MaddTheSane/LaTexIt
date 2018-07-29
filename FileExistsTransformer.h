@@ -15,6 +15,6 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithDirectoryAllowed:(BOOL)directoryAllowed;
--(instancetype) initWithDirectoryAllowed:(BOOL)directoryAllowed;
+-(instancetype) initWithDirectoryAllowed:(BOOL)directoryAllowed NS_DESIGNATED_INITIALIZER;
 
 @end

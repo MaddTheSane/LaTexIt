@@ -16,6 +16,6 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithShift:(NSNumber*)shift;
--(instancetype) initWithShift:(NSNumber*)shift;
+-(instancetype) initWithShift:(NSNumber*)shift NS_DESIGNATED_INITIALIZER;
 
 @end

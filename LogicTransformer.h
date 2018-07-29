@@ -19,6 +19,6 @@ typedef enum {LOGIC_TRANSFORMER_OPERATOR_AND, LOGIC_TRANSFORMER_OPERATOR_OR} log
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator;
--(instancetype) initWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator;
+-(instancetype) initWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator NS_DESIGNATED_INITIALIZER;
 
 @end

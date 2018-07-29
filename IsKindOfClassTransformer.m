@@ -39,14 +39,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithClass:(id)aClass
++(instancetype) transformerWithClass:(id)aClass
 {
   id result = [[[self class] alloc] initWithClass:aClass];
   return result;
 }
 //end transformerWithClass:
 
--(id) initWithClass:(Class)aClass
+-(instancetype) initWithClass:(Class)aClass
 {
   if ((!(self = [super init])))
     return nil;
@@ -57,7 +57,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:[value isKindOfClass:self->theClass]];
+  id result = @([value isKindOfClass:self->theClass]);
   return result;
 }
 //end transformedValue:

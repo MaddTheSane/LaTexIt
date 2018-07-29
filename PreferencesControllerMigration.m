@@ -114,8 +114,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
 
 +(NSArray*) oldKeys
 {
-  return [NSArray arrayWithObjects:
-            Old_LaTeXiTVersionKey,
+  return @[Old_LaTeXiTVersionKey,
             Old_DragExportTypeKey,
             Old_DragExportJpegColorKey,
             Old_DragExportJpegQualityKey,
@@ -187,8 +186,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
             Old_CompositionConfigurationAdditionalProcessingScriptsTypeKey,
             Old_CompositionConfigurationAdditionalProcessingScriptsPathKey,
             Old_CompositionConfigurationAdditionalProcessingScriptsShellKey,
-            Old_CompositionConfigurationAdditionalProcessingScriptsContentKey,
-           nil];
+            Old_CompositionConfigurationAdditionalProcessingScriptsContentKey];
 }
 //end oldKeys
 
@@ -287,34 +285,31 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     else
       servicesItems = [NSMutableArray arrayWithArray:
         CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFStringRef)LaTeXiTAppKey)) ];
-    NSUInteger count = [servicesItems count];
+    NSUInteger count = servicesItems.count;
     while(count--)
     {
-      NSDictionary* serviceItem = [servicesItems objectAtIndex:count];
-      if ([[serviceItem objectForKey:ServiceShortcutIdentifierKey] intValue] == SERVICE_LATEXIZE_EQNARRAY)
+      NSDictionary* serviceItem = servicesItems[count];
+      if ([serviceItem[ServiceShortcutIdentifierKey] intValue] == SERVICE_LATEXIZE_EQNARRAY)
       {
-        [servicesItems replaceObjectAtIndex:count withObject:
-          [NSDictionary dictionaryWithObjectsAndKeys:
-            [serviceItem objectForKey:ServiceShortcutEnabledKey], ServiceShortcutEnabledKey,
-            [serviceItem objectForKey:ServiceShortcutStringKey], ServiceShortcutStringKey,
-            [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
-            [serviceItem objectForKey:ServiceShortcutClipBoardOptionKey], ServiceShortcutClipBoardOptionKey,
-            nil]];
+        servicesItems[count] = @{ServiceShortcutEnabledKey: serviceItem[ServiceShortcutEnabledKey],
+            ServiceShortcutStringKey: serviceItem[ServiceShortcutStringKey],
+            ServiceShortcutIdentifierKey: @(SERVICE_LATEXIZE_ALIGN),
+            ServiceShortcutClipBoardOptionKey: serviceItem[ServiceShortcutClipBoardOptionKey]};
       }
     }//end for each serviceItem
     if (self->isLaTeXiT)
       [[NSUserDefaults standardUserDefaults] setObject:servicesItems forKey:ServiceShortcutsKey];
     else
       CFPreferencesSetAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFPropertyListRef)servicesItems, (__bridge CFStringRef)LaTeXiTAppKey);
-    if ([self latexisationLaTeXMode] == LATEX_MODE_EQNARRAY)
-      [self setLatexisationLaTeXMode:LATEX_MODE_ALIGN];
+    if (self.latexisationLaTeXMode == LATEX_MODE_EQNARRAY)
+      self.latexisationLaTeXMode = LATEX_MODE_ALIGN;
 
     NSArrayController* localBodyTemplatesController = [self bodyTemplatesController];
-    NSEnumerator* enumerator = [[localBodyTemplatesController arrangedObjects] objectEnumerator];
+    NSEnumerator* enumerator = [localBodyTemplatesController.arrangedObjects objectEnumerator];
     NSDictionary* entry = nil;
     BOOL foundEqnarray = NO;
     while(!foundEqnarray && ((entry = [enumerator nextObject])))
-      foundEqnarray |= [[entry objectForKey:@"name"] isEqualToString:@"eqnarray*"];
+      foundEqnarray |= [entry[@"name"] isEqualToString:@"eqnarray*"];
     if (!foundEqnarray)
       [localBodyTemplatesController addObject:[[localBodyTemplatesController class] bodyTemplateDictionaryEncodedForEnvironment:@"eqnarray*"]];
   }//end if (!newLatexitVersion || ([newLatexitVersion compare:@"2.1.0" options:NSNumericSearch] == NSOrderedAscending))
@@ -366,7 +361,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
                        CFPreferencesGetAppBooleanValue((CFStringRef)Old_UseLoginShellKey, (CFStringRef)LaTeXiTAppKey, 0);
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
-  NSMutableArray* newCompositionConfigurations = [[self compositionConfigurations] deepMutableCopy];
+  NSMutableArray* newCompositionConfigurations = [self.compositionConfigurations deepMutableCopy];
   NSEnumerator* enumerator = [newCompositionConfigurations objectEnumerator];
   NSMutableDictionary* compositionConfiguration = nil;
   while((compositionConfiguration = [enumerator nextObject]))
@@ -382,9 +377,9 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     [compositionConfiguration replaceKey:Old_CompositionConfigurationLatexPathKey withKey:CompositionConfigurationLatexPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationDvipdfPathKey withKey:CompositionConfigurationDviPdfPathKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationGsPathKey withKey:CompositionConfigurationGsPathKey];
-    [compositionConfiguration setObject:[NSNumber numberWithBool:useLoginShell] forKey:CompositionConfigurationUseLoginShellKey];
-    NSMutableDictionary* additionalScripts = [compositionConfiguration objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];
-    NSEnumerator* scriptEnumerator = [[additionalScripts allValues] objectEnumerator];
+    compositionConfiguration[CompositionConfigurationUseLoginShellKey] = @(useLoginShell);
+    NSMutableDictionary* additionalScripts = compositionConfiguration[CompositionConfigurationAdditionalProcessingScriptsKey];
+    NSEnumerator* scriptEnumerator = [additionalScripts.allValues objectEnumerator];
     NSMutableDictionary* additionalScript = nil;
     while((additionalScript = [scriptEnumerator nextObject]))
     {
@@ -430,29 +425,21 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   NSUInteger count = MIN(6U, MIN([oldServiceShortcutsEnabled count], [oldServiceShortcutsEnabled count]));
   NSUInteger i = 0;
   for(i = 0 ; i<count ; ++i)
-    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-      [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
-      [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
-      [NSNumber numberWithInteger:i+((count == 3) ? 1 : 0)], ServiceShortcutIdentifierKey,
-      nil]];
-  if ([newServiceShortcuts count] == 3)
-    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-      [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
-      [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
-      [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
-      nil]];
-  if ([newServiceShortcuts count] == 4)
-    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
-      @"", ServiceShortcutStringKey,
-      [NSNumber numberWithInt:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
-      nil]];
-  if ([newServiceShortcuts count] == 5)
-    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
-      @"", ServiceShortcutStringKey,
-      [NSNumber numberWithInt:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
-      nil]];
+    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: oldServiceShortcutsEnabled[i],
+      ServiceShortcutStringKey: oldServiceShortcutsStrings[i],
+      ServiceShortcutIdentifierKey: [NSNumber numberWithInteger:i+((count == 3) ? 1 : 0)]}];
+  if (newServiceShortcuts.count == 3)
+    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: oldServiceShortcutsEnabled[i],
+      ServiceShortcutStringKey: oldServiceShortcutsStrings[i],
+      ServiceShortcutIdentifierKey: @(SERVICE_LATEXIZE_EQNARRAY)}];
+  if (newServiceShortcuts.count == 4)
+    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: @YES,
+      ServiceShortcutStringKey: @"",
+      ServiceShortcutIdentifierKey: @(SERVICE_MULTILATEXIZE)}];
+  if (newServiceShortcuts.count == 5)
+    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: @YES,
+      ServiceShortcutStringKey: @"",
+      ServiceShortcutIdentifierKey: @(SERVICE_DELATEXIZE)}];
   [self removeKey:Old_ServiceShortcutEnabledKey];
   [self removeKey:Old_ServiceShortcutStringsKey];
   if (self->isLaTeXiT)

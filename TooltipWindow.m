@@ -72,11 +72,11 @@ static NSColor*       backgroundColor  = nil;
     if (!doneInitialSetup)
     {
       [TooltipWindow setDefaultDuration:5];
-      [window setTooltip:@" "]; // Just having at least 1 char to allow the next message...
-      textAttributes = [[[window contentView] attributedStringValue] attributesAtIndex:0 effectiveRange:nil];
+      window.tooltip = @" "; // Just having at least 1 char to allow the next message...
+      textAttributes = [[window.contentView attributedStringValue] attributesAtIndex:0 effectiveRange:nil];
     }//end if (!doneInitialSetup)
   }//end @synchronized(self)
-  [window setTooltip:tip]; // set the tip
+  window.tooltip = tip; // set the tip
   [window setReleasedWhenClosed:NO]; // if we display right away we release on close
   [window setFrame:frame display:YES];
   if (display)
@@ -100,7 +100,7 @@ static NSColor*       backgroundColor  = nil;
 }
 //end suggestedSizeForTooltip:
 
--(id) init
+-(instancetype) init
 {
   if (!(self = [super initWithContentRect:NSMakeRect(0,0,0,0)
                               styleMask:NSBorderlessWindowMask
@@ -108,11 +108,11 @@ static NSColor*       backgroundColor  = nil;
                                   defer:NO]))
     return nil;
   //window setup
-  [self setAlphaValue:0.90];
+  self.alphaValue = 0.90;
   [self setOpaque:NO];
-  [self setBackgroundColor:[TooltipWindow defaultBackgroundColor]];
+  self.backgroundColor = [TooltipWindow defaultBackgroundColor];
   [self setHasShadow:YES];
-  [self setLevel:NSScreenSaverWindowLevel];
+  self.level = NSScreenSaverWindowLevel;
   [self setHidesOnDeactivate:YES];
   [self setIgnoresMouseEvents:YES];
   //textfield setup...
@@ -122,16 +122,16 @@ static NSColor*       backgroundColor  = nil;
   [field setBezeled:NO];
   [field setBordered:NO];
   [field setDrawsBackground:NO];
-  [field setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-  [self setContentView:field];
-  [self setFrame:[self frameRectForContentRect:[field frame]] display:NO];
+  field.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+  self.contentView = field;
+  [self setFrame:[self frameRectForContentRect:field.frame] display:NO];
   @synchronized([self class])
   {          
     if (!doneInitialSetup)
     {
       [TooltipWindow setDefaultDuration:5];
-      [field setStringValue:@" "]; // Just having at least 1 char to allow the next message...
-      textAttributes = [[field attributedStringValue] attributesAtIndex:0 effectiveRange:nil];
+      field.stringValue = @" "; // Just having at least 1 char to allow the next message...
+      textAttributes = [field.attributedStringValue attributesAtIndex:0 effectiveRange:nil];
     }//end if (!doneInitialSetup)
   }//end @synchronized([self class])
   return self;
@@ -140,7 +140,7 @@ static NSColor*       backgroundColor  = nil;
 
 -(void) setTooltip:(id)tip
 {
-  id contentView = [self contentView];
+  id contentView = self.contentView;
   tooltipObject = [tip copy];
   if ([contentView isKindOfClass:[NSTextField class]])
   {

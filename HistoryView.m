@@ -37,13 +37,13 @@
 
 @implementation HistoryView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:NSPasteboardTypeColor]];
+  self.delegate = self;
+  self.dataSource = self;
+  [self registerForDraggedTypes:@[NSPasteboardTypeColor]];
   return self;
 }
 //end initWithCoder:
@@ -56,16 +56,14 @@
 
 -(void) awakeFromNib
 {
-  [[self window] setAcceptsMouseMovedEvents:YES]; //to allow history to detect mouse moved events
+  [self.window setAcceptsMouseMovedEvents:YES]; //to allow history to detect mouse moved events
   self->historyItemsController = [[HistoryController alloc] initWithContent:nil];
   [self->historyItemsController setAutomaticallyPreparesContent:YES];
-  [self->historyItemsController setEntityName:[HistoryItem className]];
-  [self->historyItemsController setManagedObjectContext:[[HistoryManager sharedManager] managedObjectContext]];
-  [self->historyItemsController setSortDescriptors:
-    //[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"equationWrapper.equation.date" ascending:NO] autorelease], nil]];
-    [NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"self.date" ascending:NO], nil]];
+  self->historyItemsController.entityName = [HistoryItem className];
+  self->historyItemsController.managedObjectContext = [[HistoryManager sharedManager] managedObjectContext];
+  self->historyItemsController.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"self.date" ascending:NO]];
   [self->historyItemsController prepareContent];
-  NSTableColumn* tableColumn = [[self tableColumns] objectAtIndex:0];
+  NSTableColumn* tableColumn = self.tableColumns[0];
   NSDictionary* bindingOptions = nil;
   [self bind:NSContentBinding toObject:self->historyItemsController withKeyPath:@"arrangedObjects" options:bindingOptions];
   [self bind:NSSelectionIndexesBinding toObject:self->historyItemsController withKeyPath:@"selectionIndexes" options:bindingOptions];
@@ -82,7 +80,7 @@
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:theEvent.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -92,7 +90,7 @@
 -(IBAction) undo:(id)sender
 {
   NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];
-  if ([undoManager canUndo])
+  if (undoManager.canUndo)
     [undoManager undo];
 }
 //end undo:
@@ -100,7 +98,7 @@
 -(IBAction) redo:(id)sender
 {
   NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];
-  if ([undoManager canRedo])
+  if (undoManager.canRedo)
     [undoManager redo];
 }
 //end redo:
@@ -109,19 +107,19 @@
 {
   BOOL ok = YES;
   NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];
-  if ([sender action] == @selector(copy:))
-    ok = ([self selectedRow] >= 0);
-  else if ([sender action] == @selector(paste:))
+  if (sender.action == @selector(copy:))
+    ok = (self.selectedRow >= 0);
+  else if (sender.action == @selector(paste:))
     ok = NO;
-  else if ([sender action] == @selector(undo:))
+  else if (sender.action == @selector(undo:))
   {
-    ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
+    ok = undoManager.canUndo;
+    [sender setTitleWithMnemonic:undoManager.undoMenuItemTitle];
   }
-  else if ([sender action] == @selector(redo:))
+  else if (sender.action == @selector(redo:))
   {
-    ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
+    ok = undoManager.canRedo;
+    [sender setTitleWithMnemonic:undoManager.redoMenuItemTitle];
   }
   return ok;
 }
@@ -139,33 +137,33 @@
   }
   if (document)
   {
-    LatexitEquation* equation = [[[self->historyItemsController selectedObjects] lastObject] equation];
+    LatexitEquation* equation = [self->historyItemsController.selectedObjects.lastObject equation];
     if (equation)
     {
-      NSUndoManager* documentUndoManager = [document undoManager];
+      NSUndoManager* documentUndoManager = document.undoManager;
       [document applyLatexitEquation:equation isRecentLatexisation:NO];
       [documentUndoManager setActionName:NSLocalizedString(@"Apply History item", @"Apply History item")];
     }
-    [[document windowForSheet] makeKeyAndOrderFront:nil];
+    [document.windowForSheet makeKeyAndOrderFront:nil];
   }//end if (document)
 }
 //end activateSelectedItem:
 
 -(void) keyDown:(NSEvent*)theEvent
 {
-  unsigned short keyCode = [theEvent keyCode];
+  unsigned short keyCode = theEvent.keyCode;
   if ((keyCode == 36) || (keyCode == 76) || (keyCode == 49)) //enter or return or space
     [self activateSelectedItem];
   else
-    [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+    [super interpretKeyEvents:@[theEvent]];
 }
 //end keyDown:
 
 -(void) mouseDown:(NSEvent*)theEvent
 {
-  if ([theEvent clickCount] == 1)
+  if (theEvent.clickCount == 1)
     [super mouseDown:theEvent];
-  else if ([theEvent clickCount] == 2)
+  else if (theEvent.clickCount == 2)
     [self activateSelectedItem];
 }
 //end mouseDown:
@@ -196,16 +194,16 @@
 
 -(IBAction) removeSelection:(id)sender
 {
-  [self->historyItemsController removeObjects:[self->historyItemsController selectedObjects]];
+  [self->historyItemsController removeObjects:self->historyItemsController.selectedObjects];
 }
 //end removeSelection:
 
 -(void) moveDownAndModifySelection:(id)sender
 {
   //selection to down
-  NSUInteger lastSelectedRow   = [self selectedRow];
-  NSIndexSet* selectedRowIndexes = [self selectedRowIndexes];
-  if (lastSelectedRow == [selectedRowIndexes lastIndex]) //if the selection is going down, and down, increase it
+  NSUInteger lastSelectedRow   = self.selectedRow;
+  NSIndexSet* selectedRowIndexes = self.selectedRowIndexes;
+  if (lastSelectedRow == selectedRowIndexes.lastIndex) //if the selection is going down, and down, increase it
   {
     if (lastSelectedRow != NSNotFound)
       ++lastSelectedRow;
@@ -214,7 +212,7 @@
   }
   else //if we are going down after an upwards selection, deselect last selected item
   {
-    NSUInteger firstIndex = [selectedRowIndexes firstIndex];
+    NSUInteger firstIndex = selectedRowIndexes.firstIndex;
     [self deselectRow:firstIndex];
     [self scrollRowToVisible:firstIndex+1];
   }
@@ -224,9 +222,9 @@
 -(void) moveUpAndModifySelection:(id)sender
 {
   //selection to up
-  NSUInteger   lastSelectedRow   = [self selectedRow];
-  NSIndexSet* selectedRowIndexes = [self selectedRowIndexes];
-  if (lastSelectedRow == [selectedRowIndexes firstIndex]) //if the selection is going up, and up, increase it
+  NSUInteger   lastSelectedRow   = self.selectedRow;
+  NSIndexSet* selectedRowIndexes = self.selectedRowIndexes;
+  if (lastSelectedRow == selectedRowIndexes.firstIndex) //if the selection is going up, and up, increase it
   {
     if (lastSelectedRow > 0)
       --lastSelectedRow;
@@ -235,7 +233,7 @@
   }
   else //if we are going up after an downwards selection, deselect last selected item
   {
-    NSUInteger lastIndex = [selectedRowIndexes lastIndex];
+    NSUInteger lastIndex = selectedRowIndexes.lastIndex;
     [self deselectRow:lastIndex];
     [self scrollRowToVisible:lastIndex-1];
   }
@@ -244,7 +242,7 @@
 
 -(void) moveUp:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -254,8 +252,8 @@
 
 -(void) moveDown:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
-  if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
+  NSInteger selectedRow = self.selectedRow;
+  if ((selectedRow >= 0) && (selectedRow+1 < self.numberOfRows))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
@@ -272,20 +270,20 @@
 -(void) mouseMoved:(NSEvent*)event
 {
   [super mouseMoved:event];
-  HistoryWindowController* historyWindowController = (HistoryWindowController*) [[self window] windowController];
-  NSClipView*        clipView          = (NSClipView*) [self superview];
-  NSPoint            location          = [clipView convertPoint:[event locationInWindow] fromView:nil];
-  if (!NSPointInRect(location, [clipView bounds]))
+  HistoryWindowController* historyWindowController = (HistoryWindowController*) self.window.windowController;
+  NSClipView*        clipView          = (NSClipView*) self.superview;
+  NSPoint            location          = [clipView convertPoint:event.locationInWindow fromView:nil];
+  if (!NSPointInRect(location, clipView.bounds))
     [historyWindowController displayPreviewImage:nil backgroundColor:nil];
-  else if ([[self window] isKeyWindow]) //if NSPointInRect(location, [clipView bounds])
+  else if (self.window.keyWindow) //if NSPointInRect(location, [clipView bounds])
   {
     location = [self convertPoint:location fromView:clipView];
     NSInteger row = [self rowAtPoint:location];
-    id historyItem = (row >= 0) && (row < [self numberOfRows]) ?
-       [[self->historyItemsController arrangedObjects] objectAtIndex:row] : nil;
+    id historyItem = (row >= 0) && (row < self.numberOfRows) ?
+       self->historyItemsController.arrangedObjects[row] : nil;
     LatexitEquation* equation = [historyItem equation];
     NSImage* image            = [equation pdfCachedImage];
-    NSColor* backgroundColor  = [equation backgroundColor];
+    NSColor* backgroundColor  = equation.backgroundColor;
     [historyWindowController displayPreviewImage:image backgroundColor:backgroundColor];
   }//end if NSPointInRect(location, [clipView bounds])
 }
@@ -296,12 +294,12 @@
 -(IBAction) copy:(id)sender
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-  [pasteboard declareTypes:[NSArray array] owner:self];
+  [pasteboard declareTypes:@[] owner:self];
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  export_format_t oldExportFormatCurrentSession = [preferencesController exportFormatCurrentSession];
-  [preferencesController setExportFormatCurrentSession:[preferencesController exportFormatPersistent]];
-  [self tableView:self writeRowsWithIndexes:[self selectedRowIndexes] toPasteboard:pasteboard];
-  [preferencesController setExportFormatCurrentSession:oldExportFormatCurrentSession];
+  export_format_t oldExportFormatCurrentSession = preferencesController.exportFormatCurrentSession;
+  preferencesController.exportFormatCurrentSession = preferencesController.exportFormatPersistent;
+  [self tableView:self writeRowsWithIndexes:self.selectedRowIndexes toPasteboard:pasteboard];
+  preferencesController.exportFormatCurrentSession = oldExportFormatCurrentSession;
   
   /*
   //LatexitEquationsPboardType
@@ -339,8 +337,8 @@
 
 -(void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-  LatexitEquation* latexitEquation = [[[self->historyItemsController arrangedObjects] objectAtIndex:rowIndex] equation];
-  [aCell setBackgroundColor:[latexitEquation backgroundColor]];
+  LatexitEquation* latexitEquation = [self->historyItemsController.arrangedObjects[rowIndex] equation];
+  [aCell setBackgroundColor:latexitEquation.backgroundColor];
   [aCell setRepresentedObject:latexitEquation];
 }
 //end tableView:willDisplayCell:forTableColumn:row:
@@ -363,12 +361,12 @@
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
 {
   if (self->shouldRedrag)
-    [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:NO];
+    [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:NO];
   if (!self->shouldRedrag)
   {
-    self->lastDragStartPointSelfBased = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    self->lastDragStartPointSelfBased = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
     [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [[self window] convertBaseToScreen:[event locationInWindow]]];
+      [self.window convertBaseToScreen:event.locationInWindow]];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -380,7 +378,7 @@
 {
   NSDragOperation result = NSDragOperationNone;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  result = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] ? NSDragOperationEvery : NSDragOperationNone;
+  result = [pboard availableTypeFromArray:@[NSPasteboardTypeColor]] ? NSDragOperationEvery : NSDragOperationNone;
   return result;
 }
 //end draggingEntered:
@@ -389,7 +387,7 @@
 {
   BOOL result = NO;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  result = ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] != nil);
+  result = ([pboard availableTypeFromArray:@[NSPasteboardTypeColor]] != nil);
   return result;
 }
 //end prepareForDragOperation:
@@ -398,10 +396,10 @@
 {
   BOOL result = NO;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  result = ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] != nil);
+  result = ([pboard availableTypeFromArray:@[NSPasteboardTypeColor]] != nil);
   if (result)
   {
-    NSPoint mouseLocation = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    NSPoint mouseLocation = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
     NSInteger row = [self rowAtPoint:mouseLocation];
     result = (row >= 0) && [self tableView:self acceptDrop:sender row:row dropOperation:NSTableViewDropOn];
     [self draggingExited:sender];//fixes a drop-ring-does-not-disappear bug
@@ -438,13 +436,13 @@
 -(void) performProgrammaticRedrag:(id)context
 {
   self->shouldRedrag = YES;
-  [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
+  [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
   NSRect bleh = NSZeroRect;
   bleh.origin = [self convertPoint:center toView:nil];
   bleh.size = NSMakeSize(1, 1);
-  bleh = [[self window] convertRectToScreen:bleh];
+  bleh = [self.window convertRectToScreen:bleh];
   NSPoint mouseLocation2 = bleh.origin;
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
@@ -469,36 +467,36 @@
 -(BOOL) tableView:(NSTableView*)aTableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
   BOOL result = YES;
-  if ([rowIndexes count])
+  if (rowIndexes.count)
   {
     BOOL isChangePasteboardOnTheFly = ([pboard dataForType:NSFilesPromisePboardType] != nil);
     if (!isChangePasteboardOnTheFly)
-      [pboard declareTypes:[NSArray array] owner:self];
+      [pboard declareTypes:@[] owner:self];
     
     //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
     if (!isChangePasteboardOnTheFly)
     {
-      [pboard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-      [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
+      [pboard addTypes:@[NSFilesPromisePboardType] owner:self];
+      [pboard setPropertyList:@[@"pdf", @"eps", @"tiff", @"jpeg", @"png"] forType:NSFilesPromisePboardType];
     }
 
     //stores the array of selected history items in the HistoryItemsPboardType
-    NSArray* selectedHistoryItems = [[self->historyItemsController arrangedObjects] objectsAtIndexes:rowIndexes];
-    NSMutableArray* selectedLatexitEquations = [NSMutableArray arrayWithCapacity:[selectedHistoryItems count]];
+    NSArray* selectedHistoryItems = [self->historyItemsController.arrangedObjects objectsAtIndexes:rowIndexes];
+    NSMutableArray* selectedLatexitEquations = [NSMutableArray arrayWithCapacity:selectedHistoryItems.count];
     NSEnumerator* enumerator = [selectedHistoryItems objectEnumerator];
     HistoryItem* historyItem = nil;
     while((historyItem = [enumerator nextObject]))
       [selectedLatexitEquations addObject:[historyItem equation]];
 
-    [pboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
+    [pboard addTypes:@[LatexitEquationsPboardType] owner:self];
     [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:selectedLatexitEquations] forType:LatexitEquationsPboardType];
     
     //Get the last selected item
-    historyItem = [selectedHistoryItems lastObject];
+    historyItem = selectedHistoryItems.lastObject;
     
     //bonus : we can also feed other pasteboards with one of the selected items
     //The pasteboard (PDF, PostScript, TIFF... will depend on the user's preferences
-    export_format_t exportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
+    export_format_t exportFormat = [PreferencesController sharedController].exportFormatCurrentSession;
     [historyItem writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:[historyItem equation]];
   }//end if ([rowIndexes count])
   return result;
@@ -511,12 +509,12 @@
 {
   NSMutableArray* names = [NSMutableArray arrayWithCapacity:1];
   
-  NSString* dropPath = [dropDestination path];
+  NSString* dropPath = dropDestination.path;
   NSFileManager* fileManager = [NSFileManager defaultManager];
   
   //the problem will be to avoid overwritting files when they already exist
   NSString* filePrefix = @"latex-image";
-  export_format_t exportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
+  export_format_t exportFormat = [PreferencesController sharedController].exportFormatCurrentSession;
   NSString* extension = nil;
   switch(exportFormat)
   {
@@ -547,46 +545,44 @@
       break;
   }
   
-  NSUInteger index = [indexSet firstIndex]; //we will have to do that for each item of the pasteboard
+  NSUInteger index = indexSet.firstIndex; //we will have to do that for each item of the pasteboard
   while (index != NSNotFound) 
   {
     NSString* filePath = [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:index];
     //now, we may have found a proper filename to save our data
     if (![fileManager fileExistsAtPath:filePath])
     {
-      HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:index];
+      HistoryItem* historyItem = self->historyItemsController.arrangedObjects[index];
       NSString* oldFilePath = filePath;
       LatexitEquation* equation = [historyItem equation];
       BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
-      filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:[[equation sourceText] string]];
+      filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:equation.sourceText.string];
       filePath = !filePrefix || [filePrefix isEqualToString:@""] ? filePath :
         [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:index];
       if (!filePath || [filePath isEqualToString:@""])
         filePath = oldFilePath;
-      NSString* fileName = [filePath lastPathComponent];
+      NSString* fileName = filePath.lastPathComponent;
       
-      NSData* pdfData = [equation pdfData];
+      NSData* pdfData = equation.pdfData;
       
       PreferencesController* preferencesController = [PreferencesController sharedController];
-      NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                     [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                     [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                     [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                     [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                     [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
-                                     nil];
+      NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
+                                     @"scaleAsPercent": @(preferencesController.exportScalePercent),
+                                     @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
+                                     @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
+                                     @"textExportBody": @(preferencesController.exportTextExportBody),
+                                     @"jpegColor": preferencesController.exportJpegBackgroundColor};
       NSData* data = nil;
       if (!data)
         data = [[LaTeXProcessor sharedLaTeXProcessor]
           dataForType:exportFormat pdfData:pdfData exportOptions:exportOptions
-               compositionConfiguration:[preferencesController compositionConfigurationDocument]
+               compositionConfiguration:preferencesController.compositionConfigurationDocument
                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
-      [fileManager setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
+      [fileManager setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
                            ofItemAtPath:filePath error:0];
-      NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
-      NSColor* autoBackgroundColor = [equation backgroundColor];
+      NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? exportOptions[@"jpegColor"] : nil;
+      NSColor* autoBackgroundColor = equation.backgroundColor;
       NSColor* iconBackgroundColor =
         (jpegBackgroundColor != nil) ? jpegBackgroundColor :
         (autoBackgroundColor != nil) ? autoBackgroundColor :
@@ -594,7 +590,7 @@
       if ((exportFormat != EXPORT_FORMAT_PNG) &&
           (exportFormat != EXPORT_FORMAT_TIFF) &&
           (exportFormat != EXPORT_FORMAT_JPEG))
-        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[[historyItem equation] pdfData] backgroundColor:iconBackgroundColor]
+        [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[historyItem equation].pdfData backgroundColor:iconBackgroundColor]
                                        forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
       [names addObject:fileName];
     }//end if (![fileManager fileExistsAtPath:filePath])
@@ -612,7 +608,7 @@
   NSPasteboard* pboard = [info draggingPasteboard];
   //we only accept drops on items, not above them.
   BOOL ok = pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] &&
+            [pboard availableTypeFromArray:@[NSPasteboardTypeColor]] &&
             [pboard propertyListForType:NSPasteboardTypeColor] &&
             (operation == NSTableViewDropOn);
   result = ok ? NSDragOperationEvery : NSDragOperationNone;
@@ -625,14 +621,14 @@
 {
   BOOL ok = NO;
   NSPasteboard* pboard = [info draggingPasteboard];
-  ok = pboard && [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] &&
+  ok = pboard && [pboard availableTypeFromArray:@[NSPasteboardTypeColor]] &&
                  [pboard propertyListForType:NSPasteboardTypeColor] && (operation == NSTableViewDropOn);
   if (ok)
   {
     NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];
     NSColor* color = [NSColor colorFromPasteboard:pboard];
-    HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:row];
-    [[historyItem equation] setBackgroundColor:color];
+    HistoryItem* historyItem = self->historyItemsController.arrangedObjects[row];
+    [historyItem equation].backgroundColor = color;
     [undoManager setActionName:NSLocalizedString(@"Change History item background color", @"Change History item background color")];
   }//end if (ok)
   return ok;

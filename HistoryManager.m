@@ -101,7 +101,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 #endif
 
 //The init method can be called several times, it will only be applied once on the singleton
--(id) init
+-(instancetype) init
 {
   if (self && (self != sharedManagerInstance))  //do not recreate an instance
   {
@@ -145,8 +145,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [[NSWorkspace sharedWorkspace] getBestStandardPast:NSApplicationSupportDirectory domain:NSAllDomainsMask
                                           defaultValue:[userLibraryPath stringByAppendingString:@"Application Support"]];
   NSArray* libraryPathComponents =
-    [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName],
-                              @"history.latexhist", nil];
+    @[userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName],
+                              @"history.latexhist"];
   result = [NSString pathWithComponents:libraryPathComponents];
   return result;
 }
@@ -160,7 +160,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
 -(NSUndoManager*) undoManager
 {
-  return [[self managedObjectContext] undoManager];
+  return [self managedObjectContext].undoManager;
 }
 //end undoManager
 
@@ -184,11 +184,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   NSManagedObjectContext* moc = [self managedObjectContext];
   NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
   NSError* error = nil;
-  [fetchRequest setEntity:[HistoryItem entity]];
+  fetchRequest.entity = [HistoryItem entity];
   if ([moc respondsToSelector:@selector(countForFetchRequest:error:)])
     result = [moc countForFetchRequest:fetchRequest error:&error];
   else
-    result = [[moc executeFetchRequest:fetchRequest error:&error] count];
+    result = [moc executeFetchRequest:fetchRequest error:&error].count;
   #ifdef ARC_ENABLED
   #else
   [fetchRequest release];
@@ -202,21 +202,21 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 -(void) deleteOldEntries
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSNumber* historyDeleteOldEntriesLimit = ![preferencesController historyDeleteOldEntriesEnabled] ? nil :
-    [preferencesController historyDeleteOldEntriesLimit];
+  NSNumber* historyDeleteOldEntriesLimit = !preferencesController.historyDeleteOldEntriesEnabled ? nil :
+    preferencesController.historyDeleteOldEntriesLimit;
   NSDate* oldestDate = nil;
   if (historyDeleteOldEntriesLimit)
   {
     oldestDate = [NSDate date];
     NSCalendar *cal = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-    oldestDate = [cal dateByAddingUnit:NSCalendarUnitDay value:[historyDeleteOldEntriesLimit intValue] toDate:oldestDate options:NSCalendarSearchBackwards];
+    oldestDate = [cal dateByAddingUnit:NSCalendarUnitDay value:historyDeleteOldEntriesLimit.intValue toDate:oldestDate options:NSCalendarSearchBackwards];
   }
   if (oldestDate)
   {
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"date < %@" argumentArray:[NSArray arrayWithObjects:oldestDate, nil]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"date < %@" argumentArray:@[oldestDate]];
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[LatexitEquation entity]];
-    [fetchRequest setPredicate:predicate];
+    fetchRequest.entity = [LatexitEquation entity];
+    fetchRequest.predicate = predicate;
     NSError* error = nil;
     NSArray* oldEntries = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error)
@@ -226,7 +226,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     #else
     [fetchRequest release];
     #endif
-    if ([oldHistoryItems count])
+    if (oldHistoryItems.count)
     {
       [managedObjectContext disableUndoRegistration];
       [managedObjectContext safeDeleteObjects:oldHistoryItems];
@@ -268,7 +268,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!oldFilePathDat)
     {
       NSArray* pathComponents =
-        [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat", nil];
+        @[userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat"];
       NSString* filePath = [NSString pathWithComponents:pathComponents];
       if ([fileManager isReadableFileAtPath:filePath])
         oldFilePathDat = filePath;
@@ -276,7 +276,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!oldFilePathDat)
     {
       NSArray* pathComponents =
-        [NSArray arrayWithObjects:userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat", nil];
+        @[userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.dat"];
       NSString* filePath = [NSString pathWithComponents:pathComponents];
       if ([fileManager isReadableFileAtPath:filePath])
         oldFilePathDat = filePath;
@@ -286,7 +286,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!oldFilePathDb)
     {
       NSArray* pathComponents =
-      [NSArray arrayWithObjects:userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.db", nil];
+      @[userLibraryApplicationSupportPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.db"];
       NSString* filePath = [NSString pathWithComponents:pathComponents];
       if ([fileManager isReadableFileAtPath:filePath])
         oldFilePathDb = filePath;
@@ -294,7 +294,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (!oldFilePathDb)
     {
       NSArray* pathComponents =
-      [NSArray arrayWithObjects:userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.db", nil];
+      @[userLibraryPath, [[NSWorkspace sharedWorkspace] applicationName], @"history.db"];
       NSString* filePath = [NSString pathWithComponents:pathComponents];
       if ([fileManager isReadableFileAtPath:filePath])
         oldFilePathDb = filePath;
@@ -316,17 +316,17 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     BOOL exists = [fileManager fileExistsAtPath:newFilePath isDirectory:&isDirectory] && !isDirectory &&
                   [fileManager isReadableFileAtPath:newFilePath];
     if (!exists)
-      [fileManager createDirectoryAtPath:[newFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
+      [fileManager createDirectoryAtPath:newFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:0];
 
     #ifdef ARC_ENABLED
     self->managedObjectContext = [self managedObjectContextAtPath:newFilePath setVersion:NO];
     #else
     self->managedObjectContext = [[self managedObjectContextAtPath:newFilePath setVersion:NO] retain];
     #endif
-    NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
-    NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
+    NSPersistentStoreCoordinator* persistentStoreCoordinator = self->managedObjectContext.persistentStoreCoordinator;
+    NSArray* persistentStores = persistentStoreCoordinator.persistentStores;
     id oldVersionObject =
-      [[persistentStoreCoordinator metadataForPersistentStore:[persistentStores lastObject]] objectForKey:@"version"];
+      [persistentStoreCoordinator metadataForPersistentStore:persistentStores.lastObject][@"version"];
     #ifdef ARC_ENABLED
     NSString* oldVersion = [oldVersionObject isKindOfClass:[NSString class]] ? (NSString*)[oldVersionObject copy] : nil;
     #else
@@ -352,7 +352,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       if (!plist)
         compressedData = legacyHistoryData;
       else
-        compressedData = [plist objectForKey:@"data"];
+        compressedData = plist[@"data"];
 
       NSData* uncompressedData = [Compressor zipuncompress:compressedData];
       if (uncompressedData)
@@ -365,21 +365,21 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           migrationError = YES;
           DebugLog(0, @"exception : %@", e);
         }
-        NSUInteger count = [historyItems count];
+        NSUInteger count = historyItems.count;
         [migratingProgressIndicator setIndeterminate:NO];
-        [migratingProgressIndicator setMinValue:0.];
-        [migratingProgressIndicator setMaxValue:1.*count];
-        [migratingProgressIndicator setDoubleValue:0.];
+        migratingProgressIndicator.minValue = 0.;
+        migratingProgressIndicator.maxValue = 1.*count;
+        migratingProgressIndicator.doubleValue = 0.;
         HistoryItem* historyItem = nil;
         NSEnumerator* enumerator = [historyItems objectEnumerator];
         unsigned int progression = 0;
-        [[self->managedObjectContext undoManager] removeAllActions];
+        [self->managedObjectContext.undoManager removeAllActions];
         [self->managedObjectContext disableUndoRegistration];
         while((historyItem = [enumerator nextObject]))
         {
           [self->managedObjectContext safeInsertObject:historyItem];
           [self->managedObjectContext safeInsertObject:[historyItem equation]];
-          [migratingProgressIndicator setDoubleValue:1.*(progression++)];
+          migratingProgressIndicator.doubleValue = 1.*(progression++);
           if (!(progression%25))
             [migratingProgressIndicator display];
         }//end for each historyItem
@@ -392,14 +392,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     else if (shouldMigrateHistoryToAlign)
     {
       NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-      [fetchRequest setEntity:[LatexitEquation entity]];
+      fetchRequest.entity = [LatexitEquation entity];
       NSError* error = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
       unsigned int progression = 0;
-      NSUInteger count = [latexitEquations count];
+      NSUInteger count = latexitEquations.count;
       [migratingProgressIndicator setIndeterminate:NO];
-      [migratingProgressIndicator setMaxValue:1.*count];
-      [migratingProgressIndicator setDoubleValue:0.];
+      migratingProgressIndicator.maxValue = 1.*count;
+      migratingProgressIndicator.doubleValue = 0.;
       [migratingProgressIndicator display];
       if (error)
         DebugLog(0, @"error : %@", error);
@@ -409,7 +409,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         while((latexitEquation = [enumerator nextObject]))
         {
           [latexitEquation checkAndMigrateAlign];//force fetch and update
-          [migratingProgressIndicator setDoubleValue:1.*(progression++)];
+          migratingProgressIndicator.doubleValue = 1.*(progression++);
           if (!(progression%25))
             [migratingProgressIndicator display];
         }//end for each latexitEquation
@@ -435,7 +435,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.10.1", @"version", nil]
+        [persistentStoreCoordinator setMetadata:@{@"version": @"2.10.1"}
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -472,7 +472,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     if (isMacOS10_5OrAbove())
     {
       [options setValue:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
-      NSDictionary* journalMode = [NSDictionary dictionaryWithObjectsAndKeys:@"DELETE", @"journal_mode", nil];
+      NSDictionary* journalMode = @{@"journal_mode": @"DELETE"};
       [options setValue:journalMode forKey:NSSQLitePragmasOption];
     }//end if (isMacOS10_5OrAbove())
     if (isMacOS10_6OrAbove())
@@ -501,11 +501,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.10.1", @"version", nil]
+    [persistentStoreCoordinator setMetadata:@{@"version": @"2.10.1"}
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
-  [result setPersistentStoreCoordinator:persistentStoreCoordinator];
+  result.persistentStoreCoordinator = persistentStoreCoordinator;
   [result setRetainsRegisteredObjects:YES];
   #ifdef ARC_ENABLED
   #else
@@ -528,7 +528,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   else
   {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[HistoryItem entity]];
+    fetchRequest.entity = [HistoryItem entity];
     itemsToSave = [[self managedObjectContext] executeFetchRequest:fetchRequest error:nil];
     #ifdef ARC_ENABLED
     #else
@@ -536,7 +536,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     #endif
   }
   if (!itemsToSave)
-    itemsToSave = [NSArray array];
+    itemsToSave = @[];
 
   switch(format)
   {
@@ -562,24 +562,22 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       break;
     case HISTORY_EXPORT_FORMAT_PLIST:
       {
-        NSMutableArray* descriptions = [NSMutableArray arrayWithCapacity:[itemsToSave count]];
+        NSMutableArray* descriptions = [NSMutableArray arrayWithCapacity:itemsToSave.count];
         NSEnumerator* enumerator = [itemsToSave objectEnumerator];
         LatexitEquation* equation = nil;
         while((equation = [enumerator nextObject]))
           [descriptions addObject:[equation plistDescription]];
-        NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.10.1", @"version",
-          nil];
+        NSDictionary* library = !descriptions ? nil : @{@"history": @{@"content": descriptions},
+          @"version": @"2.10.1"};
         NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-		  [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];
+      [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
           [[NSFileManager defaultManager]
-             setAttributes:[NSDictionary dictionaryWithObject:@((OSType)'LTXt') forKey:NSFileHFSCreatorCode]
+             setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
                      ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
@@ -594,7 +592,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 {
   BOOL ok = NO;
 
-  NSUndoManager* undoManager = [self->managedObjectContext undoManager];
+  NSUndoManager* undoManager = self->managedObjectContext.undoManager;
   [undoManager removeAllActions];
   [undoManager disableUndoRegistration];
 
@@ -602,7 +600,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if (option == HISTORY_IMPORT_OVERWRITE)
   {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[HistoryItem entity]];
+    fetchRequest.entity = [HistoryItem entity];
     NSError* error = nil;
     [itemsToRemove setArray:[self->managedObjectContext executeFetchRequest:fetchRequest error:&error]];
     if (error)
@@ -613,11 +611,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     #endif
   }//end if (option == HISTORY_IMPORT_OVERWRITE)
 
-  if ([[path pathExtension] isEqualToString:@"latexhist"])
+  if ([path.pathExtension isEqualToString:@"latexhist"])
   {
     NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path setVersion:NO];
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[HistoryItem entity]];
+    fetchRequest.entity = [HistoryItem entity];
     NSError* error = nil;
     NSArray* historyItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error)
@@ -652,7 +650,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [historyItem dispose];
     }//end for each historyItem
   }//end if ([[path pathExtension] isEqualToString:@"latexhist"])
-  else if ([[path pathExtension] isEqualToString:@"plist"])
+  else if ([path.pathExtension isEqualToString:@"plist"])
   {
     NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
     NSError* errorDescription = nil;
@@ -665,12 +663,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     }
     else if ([plist isKindOfClass:[NSDictionary class]])
     {
-      NSString* version = [plist objectForKey:@"version"];
+      NSString* version = plist[@"version"];
       BOOL isOldLibrary = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
-      id content = isOldLibrary ? nil : [plist objectForKey:@"history"];
-      content = ![content isKindOfClass:[NSDictionary class]] ? nil : [content objectForKey:@"content"];
+      id content = isOldLibrary ? nil : plist[@"history"];
+      content = ![content isKindOfClass:[NSDictionary class]] ? nil : content[@"content"];
       if (isOldLibrary && !content)
-        content = [plist objectForKey:@"content"];
+        content = plist[@"content"];
       if ([content isKindOfClass:[NSArray class]])
       {
         [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
@@ -707,7 +705,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   BOOL isManagedObjectModelPrevious250 = NO;
   BOOL isManagedObjectModelPrevious260 = NO;
 
-  NSArray* oldDataModelNames = [NSArray arrayWithObjects:/*@"Latexit-2.5.0",*/ @"Latexit-2.4.0", nil];
+  NSArray* oldDataModelNames = @[/*@"Latexit-2.5.0",*/ @"Latexit-2.4.0"];
   NSEnumerator* enumerator = [oldDataModelNames objectEnumerator];
   NSString* oldDataModelName = nil;
   id oldPersistentStore = nil;
@@ -758,7 +756,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   }//end for each oldDataModelName
   NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [oldManagedObjectContext setUndoManager:nil];
-  [oldManagedObjectContext setPersistentStoreCoordinator:oldPersistentStoreCoordinator];
+  oldManagedObjectContext.persistentStoreCoordinator = oldPersistentStoreCoordinator;
 
   NSManagedObjectModel* newManagedObjectModel = !isManagedObjectModelPrevious250 && !isManagedObjectModelPrevious260 ? nil :
     [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel];
@@ -767,7 +765,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   NSString* newPath = nil;
   NSFileHandle* newPathFileHandle = !newPersistentStoreCoordinator ? nil :
     [[NSFileManager defaultManager]
-      temporaryFileWithTemplate:[NSString stringWithFormat:@"%@.XXXXXXXX", [oldPath lastPathComponent]] extension:@"db"
+      temporaryFileWithTemplate:[NSString stringWithFormat:@"%@.XXXXXXXX", oldPath.lastPathComponent] extension:@"db"
                     outFilePath:&newPath workingDirectory:[[NSWorkspace sharedWorkspace] temporaryDirectory]];
   newPathFileHandle = nil;
   NSURL* newStoreURL = !newPath ? nil : [NSURL fileURLWithPath:newPath];
@@ -787,7 +785,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
 
   NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [newManagedObjectContext setUndoManager:nil];
-  [newManagedObjectContext setPersistentStoreCoordinator:newPersistentStoreCoordinator];
+  newManagedObjectContext.persistentStoreCoordinator = newPersistentStoreCoordinator;
 
   NSModalSession migratingModalSession = 0;
   NSWindowController* migratingWindowController = nil;
@@ -809,7 +807,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         [NSEntityDescription entityForName:NSStringFromClass([HistoryItem class])
                     inManagedObjectContext:oldManagedObjectContext];
       NSFetchRequest* oldFetchRequest = !oldHistoryItemEntityDescription ? nil : [[NSFetchRequest alloc] init];
-      [oldFetchRequest setEntity:oldHistoryItemEntityDescription];
+      oldFetchRequest.entity = oldHistoryItemEntityDescription;
       NSError* error = nil;
       NSArray* oldHistoryItems = !oldFetchRequest ? nil :
         [oldManagedObjectContext executeFetchRequest:oldFetchRequest error:&error];
@@ -826,9 +824,9 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       @try{
         NSUInteger progression = 0;
         [migratingProgressIndicator setIndeterminate:NO];
-        [migratingProgressIndicator setMinValue:0];
-        [migratingProgressIndicator setMaxValue:[oldHistoryItems count]];
-        [migratingProgressIndicator setDoubleValue:0.];
+        migratingProgressIndicator.minValue = 0;
+        migratingProgressIndicator.maxValue = oldHistoryItems.count;
+        migratingProgressIndicator.doubleValue = 0.;
         [migratingProgressIndicator display];
         while((oldHistoryItem = [oldEnumerator nextObject]))
         {
@@ -843,9 +841,9 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [oldHistoryItem dispose];
           HistoryItem* newHistoryItem = !oldHistoryItemDescription ? nil :
             [HistoryItem historyItemWithDescription:oldHistoryItemDescription];
-          [newHistoryItem setDate:[[newHistoryItem equation] date]];
+          [newHistoryItem setDate:[newHistoryItem equation].date];
           [newHistoryItem dispose];
-          [migratingProgressIndicator setDoubleValue:1.*(progression++)];
+          migratingProgressIndicator.doubleValue = 1.*(progression++);
           if (!(progression%25))
             [migratingProgressIndicator display];
           #ifdef ARC_ENABLED
@@ -948,10 +946,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   #endif
   [migratingWindow center];
   [migratingWindow setTitle:NSLocalizedString(@"Migrating history to new format", @"Migrating history to new format")];
-  NSRect contentView = [[migratingWindow contentView] frame];
+  NSRect contentView = migratingWindow.contentView.frame;
   NSProgressIndicator* progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSInsetRect(contentView, 8, 8)];
-  [[migratingWindow contentView] addSubview:progressIndicator];
-  [progressIndicator setMinValue:0.];
+  [migratingWindow.contentView addSubview:progressIndicator];
+  progressIndicator.minValue = 0.;
   [progressIndicator setUsesThreadedAnimation:YES];
   [progressIndicator startAnimation:self];
   #ifdef ARC_ENABLED

@@ -16,6 +16,7 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithReference:(id)reference;
--(instancetype) initWithReference:(id)reference;
+-(instancetype) initWithReference:(id)reference NS_DESIGNATED_INITIALIZER;
 
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 @end

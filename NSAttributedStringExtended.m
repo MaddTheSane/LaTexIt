@@ -13,16 +13,16 @@
 
 -(NSDictionary*) attachmentsOfType:(NSString*)type docAttributes:(NSDictionary*)docAttributes
 {
-  NSFileWrapper* fileWrapper = [self RTFDFileWrapperFromRange:NSMakeRange(0, [self length]) documentAttributes:docAttributes];
-  NSDictionary* fileWrappers = [fileWrapper fileWrappers];
-  NSArray* fileWrappersKeys = [fileWrappers allKeys];
-  NSMutableDictionary* fileWrappersOfMatchingType = [NSMutableDictionary dictionaryWithCapacity:[fileWrappersKeys count]];
+  NSFileWrapper* fileWrapper = [self RTFDFileWrapperFromRange:NSMakeRange(0, self.length) documentAttributes:docAttributes];
+  NSDictionary* fileWrappers = fileWrapper.fileWrappers;
+  NSArray* fileWrappersKeys = fileWrappers.allKeys;
+  NSMutableDictionary* fileWrappersOfMatchingType = [NSMutableDictionary dictionaryWithCapacity:fileWrappersKeys.count];
   NSEnumerator* enumerator = [fileWrappersKeys objectEnumerator];
   NSString* key = nil;
   while((key = [enumerator nextObject]))
   {
-    if ([[key pathExtension] caseInsensitiveCompare:type] == NSOrderedSame)
-      [fileWrappersOfMatchingType setObject:[fileWrappers objectForKey:key] forKey:key];
+    if ([key.pathExtension caseInsensitiveCompare:type] == NSOrderedSame)
+      fileWrappersOfMatchingType[key] = fileWrappers[key];
   }
   return fileWrappersOfMatchingType;
 }

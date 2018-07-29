@@ -18,7 +18,7 @@
 @implementation MarginsWindowController
 
 //The init method can be called several times, it will only be applied once on the singleton
--(id) init
+-(instancetype) init
 {
   if (!((self = [super initWithWindowNibName:@"MarginsWindowController"])))
     return nil;
@@ -30,17 +30,17 @@
 -(void) windowDidLoad
 {
   //get rid of formatter localization problems
-  [self->pointSizeFormatter setLocale:[NSLocale currentLocale]];
-  [self->pointSizeFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
-  [self->pointSizeFormatter setDecimalSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator]];
+  self->pointSizeFormatter.locale = [NSLocale currentLocale];
+  self->pointSizeFormatter.groupingSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator];
+  self->pointSizeFormatter.decimalSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator];
   NSString* pointSizeZeroSymbol =
   [NSString stringWithFormat:@"0%@%0*d%@",
-   [self->pointSizeFormatter decimalSeparator], 2, 0, 
-   [self->pointSizeFormatter positiveSuffix]];
-  [self->pointSizeFormatter setZeroSymbol:pointSizeZeroSymbol];
+   self->pointSizeFormatter.decimalSeparator, 2, 0, 
+   self->pointSizeFormatter.positiveSuffix];
+  self->pointSizeFormatter.zeroSymbol = pointSizeZeroSymbol;
   
-  [[self window] setFrameAutosaveName:@"margins"];
-  [[self window] setTitle:NSLocalizedString(@"Custom margins", @"Custom margins")];
+  [self.window setFrameAutosaveName:@"margins"];
+  [self.window setTitle:NSLocalizedString(@"Custom margins", @"Custom margins")];
   [self->saveAsDefaultButton setTitle:NSLocalizedString(@"Save as default margins", @"Save as default margins")];
   [self->saveAsDefaultButton sizeToFit];
   [self->saveAsDefaultButton centerInSuperviewHorizontally:YES vertically:NO];
@@ -58,16 +58,16 @@
 -(void) _updateWithUserDefaults
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  [topMarginButton setFloatValue:[preferencesController marginsAdditionalTop]];
-  [leftMarginButton setFloatValue:[preferencesController marginsAdditionalLeft]];
-  [rightMarginButton setFloatValue:[preferencesController marginsAdditionalRight]];
-  [bottomMarginButton setFloatValue:[preferencesController marginsAdditionalBottom]];
+  topMarginButton.floatValue = preferencesController.marginsAdditionalTop;
+  leftMarginButton.floatValue = preferencesController.marginsAdditionalLeft;
+  rightMarginButton.floatValue = preferencesController.marginsAdditionalRight;
+  bottomMarginButton.floatValue = preferencesController.marginsAdditionalBottom;
 }
 //end _updateWithUserDefaults
 
 -(IBAction) showWindow:(id)sender
 {
-  if (![[self window] isVisible])
+  if (!self.window.visible)
     [self _updateWithUserDefaults];
   [super showWindow:sender];
 }
@@ -75,31 +75,31 @@
 
 -(CGFloat) topMargin
 {
-  return [topMarginButton floatValue];
+  return topMarginButton.floatValue;
 }
 
 -(CGFloat) leftMargin
 {
-  return [leftMarginButton floatValue];
+  return leftMarginButton.floatValue;
 }
 
 -(CGFloat) rightMargin
 {
-  return [rightMarginButton floatValue];
+  return rightMarginButton.floatValue;
 }
 
 -(CGFloat) bottomMargin
 {
-  return [bottomMarginButton floatValue];
+  return bottomMarginButton.floatValue;
 }
 
 -(IBAction) makeDefaultsMargins:(id)sender
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  [preferencesController setMarginsAdditionalTop:[topMarginButton floatValue]];
-  [preferencesController setMarginsAdditionalLeft:[leftMarginButton floatValue]];
-  [preferencesController setMarginsAdditionalRight:[rightMarginButton floatValue]];
-  [preferencesController setMarginsAdditionalBottom:[bottomMarginButton floatValue]];
+  preferencesController.marginsAdditionalTop = topMarginButton.floatValue;
+  preferencesController.marginsAdditionalLeft = leftMarginButton.floatValue;
+  preferencesController.marginsAdditionalRight = rightMarginButton.floatValue;
+  preferencesController.marginsAdditionalBottom = bottomMarginButton.floatValue;
 }
 //end makeDefaultsMargins:
 

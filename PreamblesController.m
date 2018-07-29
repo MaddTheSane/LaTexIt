@@ -65,7 +65,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 }
 //end defaultLocalizedPreambleDictionaryEncoded
 
--(id) initWithContent:(id)content
+-(instancetype) initWithContent:(id)content
 {
   if ((!(self = [super initWithContent:content])))
     return nil;
@@ -95,9 +95,9 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   else if ([keyPath isEqualToString:LatexisationSelectedPreambleIndexKey] ||
            [keyPath isEqualToString:ServiceSelectedPreambleIndexKey])
   {
-    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [change[NSKeyValueChangeNewKey] integerValue];
     NSInteger newIndex = curIndex;
-    NSInteger count = (NSInteger)[[self arrangedObjects] count];
+    NSInteger count = (NSInteger)[self.arrangedObjects count];
     if ((curIndex<0) && count)
       newIndex = 0;
     else if (curIndex>=count)
@@ -111,14 +111,14 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 
 -(void) ensureDefaultPreamble
 {
-  if (![[self arrangedObjects] count])
+  if (![self.arrangedObjects count])
     [self addObject:[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy]];
 }
 //end ensureDefaultPreamble
 
 -(BOOL) canRemove
 {
-  BOOL result = [super canRemove] && ([[self arrangedObjects] count] > 1);//at least one preamble !
+  BOOL result = super.canRemove && ([self.arrangedObjects count] > 1);//at least one preamble !
   return result;
 }
 //end canRemove:
@@ -126,16 +126,16 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 -(id) newObject
 {
   id result = nil;
-  NSArray* objects = [self arrangedObjects];
-  NSArray* selectedObjects = [self selectedObjects];
-  id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
-                   (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
+  NSArray* objects = self.arrangedObjects;
+  NSArray* selectedObjects = self.selectedObjects;
+  id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
+                   (objects && objects.count) ? objects[0] : nil;
   if (!modelObject)
     result = [[[self class] defaultLocalizedPreambleDictionary] deepMutableCopy];
   else
   {
     result = [modelObject deepMutableCopy];
-    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), [result objectForKey:@"name"]] forKey:@"name"];
+    result[@"name"] = [NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), result[@"name"]];
   }
   return result;
 }
@@ -145,7 +145,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [self setSelectedObjects:@[newObject]];
 }
 //end add:
 
@@ -155,12 +155,12 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   NSInteger preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
   NSInteger preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];
   id preambleLaTeXisation = !IsBetween_N(1, preambleLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
-    [[self arrangedObjects] objectAtIndex:preambleLaTeXisationIndex];
+    self.arrangedObjects[preambleLaTeXisationIndex];
   id preambleService = !IsBetween_N(1, preambleServiceIndex+1, [[self arrangedObjects] count]) ? nil :
-    [[self arrangedObjects] objectAtIndex:preambleServiceIndex];
+    self.arrangedObjects[preambleServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
-  NSUInteger newPreambleLaTeXisationIndex = [[self arrangedObjects] indexOfObject:preambleLaTeXisation];
-  NSUInteger newPreambleServiceIndex      = [[self arrangedObjects] indexOfObject:preambleService];
+  NSUInteger newPreambleLaTeXisationIndex = [self.arrangedObjects indexOfObject:preambleLaTeXisation];
+  NSUInteger newPreambleServiceIndex      = [self.arrangedObjects indexOfObject:preambleService];
   [[NSUserDefaults standardUserDefaults]
     setInteger:(newPreambleLaTeXisationIndex == NSNotFound) ? -1 : (signed)newPreambleLaTeXisationIndex
         forKey:LatexisationSelectedPreambleIndexKey];

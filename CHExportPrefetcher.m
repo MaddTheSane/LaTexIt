@@ -23,7 +23,7 @@
 
 @implementation CHExportPrefetcher
 
--(id) init
+-(instancetype) init
 {
   if (!((self = [super init])))
     return nil;
@@ -45,14 +45,12 @@
   [self->fetchSemaphore P];
   @synchronized(self->cache)
   {
-    [self->cache setObject:self->isFetchingData forKey:[NSNumber numberWithInt:exportFormat]];
+    self->cache[@(exportFormat)] = self->isFetchingData;
   }//end @synchronized(self->cache)
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithInt:exportFormat], @"exportFormat",
-       [pdfData copy], @"pdfData",
-       [NSMutableDictionary dictionary], @"alertInformationWrapper",
-       nil]];
+     @{@"exportFormat": @(exportFormat),
+       @"pdfData": [pdfData copy],
+       @"alertInformationWrapper": [NSMutableDictionary dictionary]}];
 }
 //end prefetchForFormat:
 
@@ -62,7 +60,7 @@
   NSData* data = nil;
   @synchronized(self->cache)
   {
-    data = [self->cache objectForKey:[NSNumber numberWithInt:exportFormat]];
+    data = self->cache[@(exportFormat)];
   }//end @synchronized(self->cache)
   if (data != self->isFetchingData)
     result = data;
@@ -71,7 +69,7 @@
     [self->fetchSemaphore P];
     @synchronized(self->cache)
     {
-      data = [self->cache objectForKey:[NSNumber numberWithInt:exportFormat]];
+      data = self->cache[@(exportFormat)];
     }//end @synchronized(self->cache)
     [self->fetchSemaphore V];
     result = data;
@@ -96,7 +94,7 @@
   [self->fetchSemaphore P];
   @synchronized(self->cache)
   {
-    [self->cache removeObjectForKey:[NSNumber numberWithInt:exportFormat]];
+    [self->cache removeObjectForKey:@(exportFormat)];
   }//end @synchronized(self->cache)
   [self->fetchSemaphore V];
 }
@@ -105,40 +103,40 @@
 -(void) _fetchForFormat:(id)object
 {
   NSDictionary* configuration = [object dynamicCastToClass:[NSDictionary class]]; 
-  NSNumber* exportFormatNumber = [[configuration objectForKey:@"exportFormat"] dynamicCastToClass:[NSNumber class]];
-  NSData* pdfData = [[configuration objectForKey:@"pdfData"] dynamicCastToClass:[NSData class]];
-  export_format_t exportFormat = (export_format_t)[exportFormatNumber intValue];
+  NSNumber* exportFormatNumber = [configuration[@"exportFormat"] dynamicCastToClass:[NSNumber class]];
+  NSData* pdfData = [configuration[@"pdfData"] dynamicCastToClass:[NSData class]];
+  export_format_t exportFormat = (export_format_t)exportFormatNumber.intValue;
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSMutableDictionary* alertInformationWrapper =
-    [[configuration objectForKey:@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];
+    [configuration[@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];
   NSMutableDictionary* exportOptions =
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-       [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-       [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-       [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-       [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+       @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
+       @(preferencesController.exportScalePercent), @"scaleAsPercent",
+       @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
+       @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
+       @(preferencesController.exportTextExportBody), @"textExportBody",
        nil];
-  if ([preferencesController exportJpegBackgroundColor])
-    [exportOptions setObject:[preferencesController exportJpegBackgroundColor] forKey:@"jpegColor"];
-  if ([preferencesController exportJpegBackgroundColor])
-    [exportOptions setObject:alertInformationWrapper forKey:@"alertInformationWrapper"];
+  if (preferencesController.exportJpegBackgroundColor)
+    exportOptions[@"jpegColor"] = preferencesController.exportJpegBackgroundColor;
+  if (preferencesController.exportJpegBackgroundColor)
+    exportOptions[@"alertInformationWrapper"] = alertInformationWrapper;
 
   NSData* data = !pdfData ? nil : [[LaTeXProcessor sharedLaTeXProcessor]
     dataForType:exportFormat pdfData:pdfData
     exportOptions:exportOptions
-    compositionConfiguration:[preferencesController compositionConfigurationDocument]
+    compositionConfiguration:preferencesController.compositionConfigurationDocument
     uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   @synchronized(self->cache)
   {
     if (!data)
       [self->cache removeObjectForKey:exportFormatNumber];
     else
-      [self->cache setObject:data forKey:exportFormatNumber];
+      self->cache[exportFormatNumber] = data;
   }//end @synchronized(self->cache)
   [self->fetchSemaphore V];
   NSDictionary* alertInformation =
-    [[alertInformationWrapper objectForKey:@"alertInformation"] dynamicCastToClass:[NSDictionary class]];
+    [alertInformationWrapper[@"alertInformation"] dynamicCastToClass:[NSDictionary class]];
   if (alertInformation)
     [[LaTeXProcessor sharedLaTeXProcessor] performSelectorOnMainThread:@selector(displayAlertError:)
                                                             withObject:alertInformation

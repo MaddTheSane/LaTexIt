@@ -64,31 +64,31 @@ static NSInteger SpellCheckerDocumentTag = 0;
       NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:dataKeywordsPlist
                                                              options:NSPropertyListImmutable
                                                                        format:&format error:&errorString];
-      NSString* version = [plist objectForKey:@"version"];
+      NSString* version = plist[@"version"];
       //we can check the version...
       if (!version || [version compare:@"1.9.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
       {
       }
-      WellKnownLatexKeywords = [plist objectForKey:@"packages"];
+      WellKnownLatexKeywords = plist[@"packages"];
     }//end if WellKnownLatexKeywords
   }//end @synchronized
 }
 //end initialize
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
   self->lineRanges = [[NSMutableArray alloc] init];
   self->forbiddenLines = [[NSMutableSet alloc] init];
-  [self setDelegate:(id)self];
+  self.delegate = (id)self;
 
-  NSArray* registeredDraggedTypes = [self registeredDraggedTypes];
+  NSArray* registeredDraggedTypes = self.registeredDraggedTypes;
 
   //strange fix for splitview
-  NSRect frame = [self frame];
+  NSRect frame = self.frame;
   frame.origin.y = MAX(0,   frame.origin.y);
-  [self setFrame:frame];
+  self.frame = frame;
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
   [userDefaults addObserver:self forKeyPath:SyntaxColoringEnableKey options:NSKeyValueObservingOptionNew context:nil];
@@ -104,12 +104,12 @@ static NSInteger SpellCheckerDocumentTag = 0;
   [self _computeLineRanges];
 
   NSArray* typesToAdd =
-    [NSArray arrayWithObjects:NSPasteboardTypeString, NSPasteboardTypeColor, NSPasteboardTypePDF,
+    @[NSPasteboardTypeString, NSPasteboardTypeColor, NSPasteboardTypePDF,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSPasteboardTypeRTFD, LatexitEquationsPboardType, LibraryItemsArchivedPboardType,
-                              LibraryItemsWrappedPboardType,
-                              //@"com.apple.iWork.TSPNativeMetadata",
-                              nil];
+                              LibraryItemsWrappedPboardType
+      //@"com.apple.iWork.TSPNativeMetadata"
+      ];
   [self registerForDraggedTypes:[registeredDraggedTypes arrayByAddingObjectsFromArray:typesToAdd]];
   return self;
 }
@@ -139,27 +139,27 @@ static NSInteger SpellCheckerDocumentTag = 0;
   if (!spellCheckerHasBeenInitialized)
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? WellKnownLatexKeywords.count : 0;
     while(nbPackages--)
     {
-      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
-      [keywordsToCheck addObject:[package objectForKey:@"name"]];
-      NSArray* kw = [package objectForKey:@"keywords"];
-      NSUInteger count = [kw count];
+      NSDictionary* package = WellKnownLatexKeywords[nbPackages];
+      [keywordsToCheck addObject:package[@"name"]];
+      NSArray* kw = package[@"keywords"];
+      NSUInteger count = kw.count;
       while(count--)
-        [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
+        [keywordsToCheck addObject:kw[count][@"word"]];
     }
-    [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
-    NSUInteger count = [keywordsToCheck count];
+    [keywordsToCheck setArray:[NSSet setWithArray:keywordsToCheck].allObjects];
+    NSUInteger count = keywordsToCheck.count;
     while(count--)
     {
-      NSString* w = [keywordsToCheck objectAtIndex:count];
+      NSString* w = keywordsToCheck[count];
       if ([w startsWith:@"\\" options:0])
         [keywordsToCheck addObject:[w substringFromIndex:1]];
     }
-    [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+    [keywordsToCheck setArray:[NSSet setWithArray:keywordsToCheck].allObjects];
     if (SpellCheckerDocumentTag == 0)
-      [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
+      [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:self.spellCheckerDocumentTag];
     spellCheckerHasBeenInitialized = YES;
   }
 }
@@ -167,13 +167,13 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(void) awakeFromNib
 {
-  NSScrollView* scrollView = (NSScrollView*) [[self superview] superview];
+  NSScrollView* scrollView = (NSScrollView*) self.superview.superview;
   [self setRulerVisible:YES];
   [scrollView setHasHorizontalRuler:NO];
   [scrollView setHasVerticalRuler:YES];
   self->lineCountRulerView = [[LineCountRulerView alloc] initWithScrollView:scrollView orientation:NSVerticalRuler];
-  [scrollView setVerticalRulerView:self->lineCountRulerView];
-  [self->lineCountRulerView setClientView:self];
+  scrollView.verticalRulerView = self->lineCountRulerView;
+  self->lineCountRulerView.clientView = self;
   self->syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 
   [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_initializeSpellChecker:) userInfo:nil repeats:NO];
@@ -210,14 +210,12 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(void) setAttributedString:(NSAttributedString*)value//triggers recolouring
 {
   NSDictionary* attributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-     [[PreferencesController sharedController] editionFont], NSFontAttributeName,
-     nil];
+    @{NSFontAttributeName: [PreferencesController sharedController].editionFont};
   NSMutableAttributedString* attributedString = [value mutableCopy];
-  [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
+  [attributedString addAttributes:attributes range:NSMakeRange(0, attributedString.length)];
   
   if (attributedString)
-    [[self textStorage] setAttributedString:attributedString];
+    [self.textStorage setAttributedString:attributedString];
   [self->syntaxColouring recolourCompleteDocument];
 }
 //end setAttributedString:
@@ -226,7 +224,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   if (self->tabKeyInsertsSpacesEnabled)
   {
-    if ([self->spacesString length] != self->tabKeyInsertsSpacesCount)
+    if (self->spacesString.length != self->tabKeyInsertsSpacesCount)
     {
       self->spacesString = nil;
     }//end if ([self->spacesString length] != self->tabKeyInsertsSpacesCount)
@@ -253,14 +251,14 @@ static NSInteger SpellCheckerDocumentTag = 0;
   else if ([aString isKindOfClass:[NSAttributedString class]])
   {
     NSMutableAttributedString* attributedString = [aString mutableCopy];
-    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
-    NSRange range = [[attributedString string] rangeOfString:@"\t"];
+    [attributedString setAttributes:nil range:NSMakeRange(0, attributedString.length)];
+    NSRange range = [attributedString.string rangeOfString:@"\t"];
     while(range.location != NSNotFound)
     {
       [attributedString replaceCharactersInRange:range withString:self->spacesString];
-      range.location += [self->spacesString length];
-      range.length = [attributedString length]-range.location;
-      range = [[attributedString string] rangeOfString:@"\t" options:0 range:range];
+      range.location += self->spacesString.length;
+      range.length = attributedString.length-range.location;
+      range = [attributedString.string rangeOfString:@"\t" options:0 range:range];
     }//while(range.location != NSNotFound)
     aString = attributedString;
   }//end if ([aString isKindOfClass:[NSAttributedString class]])
@@ -277,7 +275,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(NSInteger) spellCheckerDocumentTag
 {
   if (SpellCheckerDocumentTag == 0)
-    SpellCheckerDocumentTag = [super spellCheckerDocumentTag];
+    SpellCheckerDocumentTag = super.spellCheckerDocumentTag;
   return SpellCheckerDocumentTag;
 }
 //end spellCheckerDocumentTag
@@ -285,7 +283,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 //since the nextResponder is the imageView (see MyDocument.m), we must override the behaviour for scrollWheel
 -(void) scrollWheel:(NSEvent*)event
 {
-  [[[self superview] superview] scrollWheel:event];
+  [self.superview.superview scrollWheel:event];
 }
 //end scrollWheel:
 
@@ -297,10 +295,8 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
   //normal lines are displayed with the default foregound color
   NSDictionary* normalAttributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-      [[PreferencesController sharedController] editionSyntaxColoringTextForegroundColor],
-      NSForegroundColorAttributeName, nil];
-  [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
+    @{NSForegroundColorAttributeName: [[PreferencesController sharedController] editionSyntaxColoringTextForegroundColor]};
+  [self.textStorage addAttributes:normalAttributes range:NSMakeRange(0, self.textStorage.length)];
 
   //line count
   [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
@@ -314,20 +310,19 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
   //forbidden lines are displayed in gray
   NSDictionary* forbiddenAttributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1],
-                                               NSForegroundColorAttributeName, nil];
+    @{NSForegroundColorAttributeName: [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1]};
 
   //updates text attributes to set the color
   NSEnumerator* enumerator = [forbiddenLines objectEnumerator];
   NSNumber*    numberIndex = [enumerator nextObject];
   while(numberIndex)
   {
-    unsigned int index = [numberIndex intValue];
-    if (index < [lineRanges count])
+    unsigned int index = numberIndex.intValue;
+    if (index < lineRanges.count)
     {
-      NSRange range = NSRangeFromString([lineRanges objectAtIndex:index]);
+      NSRange range = NSRangeFromString(lineRanges[index]);
       [syntaxColouring removeColoursFromRange:range];
-      [[self textStorage] addAttributes:forbiddenAttributes range:range];
+      [self.textStorage addAttributes:forbiddenAttributes range:range];
     }
     numberIndex = [enumerator nextObject];
   }
@@ -342,7 +337,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(NSInteger) nbLines
 {
-  return lineRanges ? [lineRanges count] : 0;
+  return lineRanges ? lineRanges.count : 0;
 }
 //end nbLines
 
@@ -350,17 +345,17 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   [lineRanges removeAllObjects];
   
-  NSString* string = [self string];
+  NSString* string = self.string;
   NSArray* lines = [(string ? string : [NSString string]) componentsSeparatedByString:@"\n"];
-  const NSInteger count = [lines count];
+  const NSInteger count = lines.count;
   NSInteger index = 0;
   NSInteger location = 0;
   for(index = 0 ; index < count ; ++index)
   {
-    NSString* line = [lines objectAtIndex:index];
-    NSRange lineRange = NSMakeRange(location, [line length]);
+    NSString* line = lines[index];
+    NSRange lineRange = NSMakeRange(location, line.length);
     [lineRanges addObject:NSStringFromRange(lineRange)];
-    location += [line length]+1;
+    location += line.length+1;
   }
 }
 //end _computeLineRanges
@@ -383,7 +378,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(void) setLineShift:(NSInteger)aShift
 {
   lineShift = aShift;
-  [lineCountRulerView setLineShift:aShift];
+  lineCountRulerView.lineShift = aShift;
 }
 //end setLineShift:
 
@@ -398,9 +393,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden
 {
   if (forbidden)
-    [forbiddenLines addObject:[NSNumber numberWithUnsignedInteger:index]];
+    [forbiddenLines addObject:@(index)];
   else
-    [forbiddenLines removeObject:[NSNumber numberWithUnsignedInteger:index]];
+    [forbiddenLines removeObject:@(index)];
 }
 //end setForbiddenLine:forbidden
 
@@ -415,10 +410,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
   NSNumber* forbiddenLineNumber = nil;
   while(accepts && (forbiddenLineNumber = [enumerator nextObject]))
   {
-    unsigned int index = [forbiddenLineNumber unsignedIntValue];
-    if (index < [lineRanges count])
+    NSUInteger index = forbiddenLineNumber.unsignedIntegerValue;
+    if (index < lineRanges.count)
     {
-      NSRange lineRange = NSRangeFromString([lineRanges objectAtIndex:index]);
+      NSRange lineRange = NSRangeFromString(lineRanges[index]);
       ++lineRange.length;
       NSRange intersection = NSIntersectionRange(lineRange, affectedCharRange);
       if (intersection.length)
@@ -447,10 +442,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
   BOOL ok = NO;
   --row; //the first line is at 0, but the user thinks it is 1
   row -= lineShift;
-  ok = (row >=0) && ((unsigned int) row < [lineRanges count]);
+  ok = (row >=0) && ((unsigned int) row < lineRanges.count);
   if (ok)
   {
-    NSRange range = NSRangeFromString([lineRanges objectAtIndex:row]);
+    NSRange range = NSRangeFromString(lineRanges[row]);
     [self setSelectedRange:range];
     [self scrollRangeToVisible:range];
   }
@@ -462,13 +457,13 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(void) changeFont:(id)sender
 {
   NSRange range   = [self selectedRange];
-  NSFont* oldFont = [self font];
+  NSFont* oldFont = self.font;
   NSFont* newFont = [sender convertFont:oldFont];
-  NSMutableDictionary* typingAttributes = [NSMutableDictionary dictionaryWithDictionary:[self typingAttributes]];
+  NSMutableDictionary* typingAttributes = [NSMutableDictionary dictionaryWithDictionary:self.typingAttributes];
   if (!range.length)
   {
-    [typingAttributes setObject:newFont forKey:NSFontAttributeName];
-    [self setTypingAttributes:typingAttributes];
+    typingAttributes[NSFontAttributeName] = newFont;
+    self.typingAttributes = typingAttributes;
   }
   else
     [self setFont:newFont range:range];
@@ -486,30 +481,30 @@ static NSInteger SpellCheckerDocumentTag = 0;
   NSData* data = nil;
   
   NSPasteboard* pboard = [sender draggingPasteboard];
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]])
+  if ([pboard availableTypeFromArray:@[LibraryItemsWrappedPboardType]])
     ok = YES;
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]])
+  else if ([pboard availableTypeFromArray:@[LibraryItemsArchivedPboardType]])
     ok = YES;
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])
+  else if ([pboard availableTypeFromArray:@[LatexitEquationsPboardType]])
     ok = YES;
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]])
+  else if ([pboard availableTypeFromArray:@[NSPasteboardTypeColor]])
     ok = YES;
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypePDF]])
+  else if ([pboard availableTypeFromArray:@[NSPasteboardTypePDF]])
   {
     shouldBePDFData = YES;
     data = [pboard dataForType:NSPasteboardTypePDF];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypePDF]])
+  else if ([pboard availableTypeFromArray:@[(NSString*)kUTTypePDF]])
   {
     shouldBePDFData = YES;
     data = [pboard dataForType:(NSString*)kUTTypePDF];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])
+  else if ([pboard availableTypeFromArray:@[NSFileContentsPboardType]])
   {
     shouldBePDFData = YES;
     data = [pboard dataForType:NSFileContentsPboardType];
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
+  else if ([pboard availableTypeFromArray:@[NSFilenamesPboardType]])
   {
     ok = YES;
     /*shouldBePDFData = YES;
@@ -520,11 +515,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
       data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
     }*/
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeRTFD]])
+  else if ([pboard availableTypeFromArray:@[NSPasteboardTypeRTFD]])
   {
     ok = YES;
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeString]])
+  else if ([pboard availableTypeFromArray:@[NSPasteboardTypeString]])
   {
     ok = YES;
   }
@@ -555,84 +550,84 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   NSPasteboard* pboard = [sender draggingPasteboard];
   NSString* type = nil;
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]])
+  if ([pboard availableTypeFromArray:@[NSPasteboardTypeColor]])
   {
     NSColor* color = [NSColor colorWithData:[pboard dataForType:NSPasteboardTypeColor]];
     NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
     
     NSString *colorStr = [NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}",
-                          [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
+                          rgbColor.redComponent, rgbColor.greenComponent, rgbColor.blueComponent];
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:colorStr];
     
-    [[self textStorage] appendAttributedString:attributedString];
+    [self.textStorage appendAttributedString:attributedString];
   }
   else if ((type = [pboard availableTypeFromArray:
-        [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPasteboardTypePDF, nil]]))
+        @[LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPasteboardTypePDF]]))
   {
     LatexitEquation* equation = nil;
     if ([type isEqualToString:LibraryItemsWrappedPboardType])
     {
       NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
-      NSUInteger count = [libraryItemsWrappedArray count];
+      NSUInteger count = libraryItemsWrappedArray.count;
       while(count-- && !equation)
       {
-        NSString* objectIDAsString = [libraryItemsWrappedArray objectAtIndex:count];
+        NSString* objectIDAsString = libraryItemsWrappedArray[count];
         NSManagedObject* libraryItem = [[[LibraryManager sharedManager] managedObjectContext] managedObjectForURIRepresentation:[NSURL URLWithString:objectIDAsString]];
         LibraryEquation* libraryEquation =
           ![libraryItem isKindOfClass:[LibraryEquation class]] ? nil : (LibraryEquation*)libraryItem;
-        equation = [libraryEquation equation];
+        equation = libraryEquation.equation;
       }//end while(count-- && !equation)
     }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
     else if ([type isEqualToString:LibraryItemsArchivedPboardType])
     {
       NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-      NSUInteger count = [libraryItemsArray count];
+      NSUInteger count = libraryItemsArray.count;
       while(count-- && !equation)
       {
         LibraryEquation* libraryEquation =
-          [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryEquation class]] ? [libraryItemsArray objectAtIndex:count] : nil;
-        equation = [libraryEquation equation];
+          [libraryItemsArray[count] isKindOfClass:[LibraryEquation class]] ? libraryItemsArray[count] : nil;
+        equation = libraryEquation.equation;
       }
     }//end if ([type isEqualToString:LibraryItemsArchivedPboardType])
     else if ([type isEqualToString:LatexitEquationsPboardType])
     {
       NSArray* latexitEquationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-      equation = [latexitEquationsArray lastObject];
+      equation = latexitEquationsArray.lastObject;
     }//end if ([type isEqualToString:LatexitEquationsPboardType])
-    NSAttributedString* sourceText = [equation sourceText];
-    if (sourceText && ![[sourceText string] isEqualToString:@""])
+    NSAttributedString* sourceText = equation.sourceText;
+    if (sourceText && ![sourceText.string isEqualToString:@""])
       [self insertTextAtMousePosition:sourceText];
   }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]]))
+  else if ((type = [pboard availableTypeFromArray:@[(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
-    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    NSData* pdfWrapperData = pdfAttachments.count ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     if (pdfWrapperData)
-      [(id)[self nextResponder] performDragOperation:sender];
+      [(id)self.nextResponder performDragOperation:sender];
     else
       [super performDragOperation:sender];
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]])
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, nil]]))
+  else if ((type = [pboard availableTypeFromArray:@[NSPasteboardTypeRTF]]))
   {
     NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
-    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    [attributedString setAttributes:nil range:NSMakeRange(0, attributedString.length)];
     if (attributedString)
       [self insertTextAtMousePosition:attributedString];
     else
       [super performDragOperation:sender];
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, nil]])
   
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
+  else if ((type = [pboard availableTypeFromArray:@[NSFilenamesPboardType]]))
   {
     NSString* lastFilePath = [[pboard propertyListForType:NSFilenamesPboardType] lastObject];
     CFStringRef uti = !lastFilePath ? NULL :
                          UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
-                                                               (__bridge CFStringRef)[lastFilePath pathExtension], 
+                                                               (__bridge CFStringRef)lastFilePath.pathExtension, 
                                                                NULL);
     BOOL isPdf = UTTypeConformsTo(uti, kUTTypePDF);
     NSAttributedString* equationSourceAttributedString = nil;
@@ -643,7 +638,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
         pdfContent = nil;
       LatexitEquation* latexitEquation = !pdfContent ? nil :
         [[LatexitEquation alloc] initWithPDFData:pdfContent useDefaults:NO];
-      equationSourceAttributedString = latexitEquation ? [latexitEquation sourceText] :
+      equationSourceAttributedString = latexitEquation ? latexitEquation.sourceText :
         [[NSAttributedString alloc] initWithString:CGPDFDocumentCreateStringRepresentationFromData(pdfContent)];
     }//end if (utiPdf)
 
@@ -659,11 +654,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [NSString stringWithContentsOfFile:lastFilePath guessEncoding:&encoding error:&error];
       
     if (equationSourceAttributedString)
-      [[self textStorage] appendAttributedString:equationSourceAttributedString];
+      [self.textStorage appendAttributedString:equationSourceAttributedString];
     else if (rtfContent)
-      [[self textStorage] appendAttributedString:rtfContent];
+      [self.textStorage appendAttributedString:rtfContent];
     else if (plainTextContent)
-      [[self textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:plainTextContent]];
+      [self.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:plainTextContent]];
     
     if (uti) CFRelease(uti);
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
@@ -682,31 +677,31 @@ static NSInteger SpellCheckerDocumentTag = 0;
   BOOL done = NO;
   
   if ((type = [pasteboard availableTypeFromArray:
-                [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, nil]]))
+                @[LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType]]))
   {
     //do nothing, pass to next responder
   }//end LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType
   
-  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, nil]]))
+  if (!done && (type = [pasteboard availableTypeFromArray:@[(NSString*)kUTTypePDF]]))
   {
     NSData* pdfData = [pasteboard dataForType:type];
     //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/toto.pdf", NSHomeDirectory()] atomically:YES];
     LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO];
     if (latexitEquation)
     {
-      [(id)[self nextResponder] paste:sender];
+      [(id)self.nextResponder paste:sender];
       done = YES;
     }//end if (latexitEquation)
   }//end kUTTypePDF
 
-  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, nil]]))
+  if (!done && (type = [pasteboard availableTypeFromArray:@[NSPasteboardTypePDF]]))
   {
     NSData* pdfData = [pasteboard dataForType:type];
     //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/tmp.pdf", NSHomeDirectory()] atomically:YES];
     LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:NO];
     if (latexitEquation)
     {
-      [(id)[self nextResponder] paste:sender];
+      [(id)self.nextResponder paste:sender];
       done = YES;
     }//end if (latexitEquation)
   }//end NSPasteboardTypePDF
@@ -717,53 +712,53 @@ static NSInteger SpellCheckerDocumentTag = 0;
     done = YES;
   }//end @"com.apple.iWork.TSPNativeMetadata"*/
 
-  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilesPromisePboardType, nil]]))
+  if (!done && (type = [pasteboard availableTypeFromArray:@[NSFilesPromisePboardType]]))
   {
-    [(id)[self nextResponder] paste:sender];
+    [(id)self.nextResponder paste:sender];
     done = YES;
   }//end NSFilesPromisePboardType
   
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]])))
+  if (!done && ((type = [pasteboard availableTypeFromArray:@[(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD]])))
   {
     NSData* rtfdData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
-    NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
+    NSData* pdfWrapperData = pdfAttachments.count ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     LatexitEquation* latexitEquation = !pdfWrapperData ? nil : [[LatexitEquation alloc] initWithPDFData:pdfWrapperData useDefaults:NO];
     if (latexitEquation)
     {
-      [(id)[self nextResponder] paste:sender];
+      [(id)self.nextResponder paste:sender];
       done = YES;
     }
     else if (pdfWrapperData)
     {
       NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfWrapperData);
       if (pdfString) {
-        [[self textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:pdfString]];
+        [self.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:pdfString]];
       }
       done = YES;
     }
     else
     {
         NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
-      [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+      [attributedString setAttributes:nil range:NSMakeRange(0, attributedString.length)];
       if (attributedString){
-        [[self textStorage] appendAttributedString:attributedString];
+        [self.textStorage appendAttributedString:attributedString];
       }
       //[super paste:sender];
       done = YES;
     }
   }//end kUTTypeFlatRTFD
 
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, nil]])))
+  if (!done && ((type = [pasteboard availableTypeFromArray:@[NSPasteboardTypeRTF]])))
   {
     NSData* rtfData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
-    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    [attributedString setAttributes:nil range:NSMakeRange(0, attributedString.length)];
     if (attributedString)
-      [[self textStorage] appendAttributedString:attributedString];
+      [self.textStorage appendAttributedString:attributedString];
     //[super paste:sender];
     done = YES;
   }//end @NSPasteboardTypeRTF
@@ -771,11 +766,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
   if (!done)
     [super paste:sender];
 
-  NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];
-  currentFont = [[PreferencesController sharedController] editionFont];
+  NSFont* currentFont = self.typingAttributes[NSFontAttributeName];
+  currentFont = [PreferencesController sharedController].editionFont;
   if (currentFont)
   {
-    NSRange range = NSMakeRange(0, [[self textStorage] length]);
+    NSRange range = NSMakeRange(0, self.textStorage.length);
     [self setFont:currentFont range:range];
     //[self setAlignment:NSLeftTextAlignment range:range];
   }//end if (currentFont)
@@ -804,7 +799,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(void) restorePreviousSelectedRangeLocation
 {
-  NSRange currentTextRange = NSMakeRange(0, [[[self textStorage] string] length]);
+  NSRange currentTextRange = NSMakeRange(0, self.textStorage.string.length);
   if (self->previousSelectedRangeLocation <= currentTextRange.length)
     [self setSelectedRange:NSMakeRange(self->previousSelectedRangeLocation, 0)];
 }
@@ -813,7 +808,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(void) keyDown:(NSEvent*)theEvent
 {
   BOOL isSmallReturn = NO;
-  NSString* charactersIgnoringModifiers = [theEvent charactersIgnoringModifiers];
+  NSString* charactersIgnoringModifiers = theEvent.charactersIgnoringModifiers;
   if (![charactersIgnoringModifiers isEqualToString:@""])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
@@ -821,35 +816,35 @@ static NSInteger SpellCheckerDocumentTag = 0;
   }
   if (!isSmallReturn)
   {
-    NSString* characters = [theEvent characters];
-    NSArray* textShortcuts = [[PreferencesController  sharedController] editionTextShortcuts];
+    NSString* characters = theEvent.characters;
+    NSArray* textShortcuts = [PreferencesController  sharedController].editionTextShortcuts;
     NSEnumerator* enumerator = [textShortcuts objectEnumerator];
     NSDictionary* dict = nil;
     NSDictionary* textShortcut = nil;
     while(!textShortcut && (dict = [enumerator nextObject]))
     {
-      if ([[dict objectForKey:@"input"] isEqualToString:characters] && [[dict objectForKey:@"enabled"] boolValue])
+      if ([dict[@"input"] isEqualToString:characters] && [dict[@"enabled"] boolValue])
         textShortcut = dict;
     }
     if (!textShortcut)
       [super keyDown:theEvent];
     else
     {
-      if (![[theEvent charactersIgnoringModifiers] isEqualToString:characters])
+      if (![theEvent.charactersIgnoringModifiers isEqualToString:characters])
         [self deleteBackward:self];
       NSRange range = [self selectedRange];
-      NSString* left = [textShortcut objectForKey:@"left"];
-      NSString* right = [textShortcut objectForKey:@"right"];
+      NSString* left = textShortcut[@"left"];
+      NSString* right = textShortcut[@"right"];
       if (!left)  left  = @"";
       if (!right) right = @"";
       if (range.location == NSNotFound) {
         NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:[left stringByAppendingString:right]];
-        [[self textStorage] appendAttributedString:attributedString];
+        [self.textStorage appendAttributedString:attributedString];
       } else
       {
-        NSString* selectedText = [[self string] substringWithRange:range];
+        NSString* selectedText = [self.string substringWithRange:range];
         [self replaceCharactersInRange:range withString:[NSString stringWithFormat:@"%@%@%@",left,selectedText,right]];
-        [self setSelectedRange:NSMakeRange(range.location+[left length]+range.length, 0)];
+        [self setSelectedRange:NSMakeRange(range.location+left.length+range.length, 0)];
       }
     }
   }
@@ -862,16 +857,16 @@ static NSInteger SpellCheckerDocumentTag = 0;
 //it allows parenthesis detection for user friendly selection
 -(NSRange) selectionRangeForProposedRange:(NSRange)proposedSelRange granularity:(NSSelectionGranularity)granularity
 {
-  if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
+  if (granularity != NSSelectByWord || self.string.length == proposedSelRange.location)// If it's not a double-click return unchanged
     return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
   
   NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
   NSUInteger originalLocation = location;
 
-  NSString *completeString = [self string];
+  NSString *completeString = self.string;
   unichar characterToCheck = [completeString characterAtIndex:location];
   unsigned short skipMatchingBrace = 0;
-  NSUInteger lengthOfString = [completeString length];
+  NSUInteger lengthOfString = completeString.length;
   if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
     return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
   
@@ -918,11 +913,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(NSRange) rangeForUserCompletion
 {
-  NSRange range = [super rangeForUserCompletion];
+  NSRange range = super.rangeForUserCompletion;
   BOOL canExtendRange = (range.location != 0) && (range.location != NSNotFound) && (range.length+1 != NSNotFound);
   NSRange extendedRange = canExtendRange ? NSMakeRange(range.location-1, range.length+1) : range;
-  NSString* extendedWord = [[self string] substringWithRange:extendedRange];
-  BOOL isBackslashedWord = ([extendedWord length] && [extendedWord characterAtIndex:0] == '\\');
+  NSString* extendedWord = [self.string substringWithRange:extendedRange];
+  BOOL isBackslashedWord = (extendedWord.length && [extendedWord characterAtIndex:0] == '\\');
   return isBackslashedWord ? extendedRange : range;
 }
 //end rangeForUserCompletion
@@ -934,32 +929,32 @@ static NSInteger SpellCheckerDocumentTag = 0;
     [NSMutableArray arrayWithArray:[super completionsForPartialWordRange:charRange indexOfSelectedItem:index]];
 
   //then, check the LaTeX dictionary (will work for a backslashed word)    
-  NSString* text = [self string];
+  NSString* text = self.string;
   NSString* word = [text substringWithRange:charRange];
-  BOOL isBackslashedWord = ([word length] && [word characterAtIndex:0] == '\\');
+  BOOL isBackslashedWord = (word.length && [word characterAtIndex:0] == '\\');
   NSMutableArray* newPropositions = [NSMutableArray array];
 
   if (isBackslashedWord)
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? WellKnownLatexKeywords.count : 0;
     while(nbPackages--)
     {
-      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+      NSDictionary* package = WellKnownLatexKeywords[nbPackages];
       //NSString*     packageName = [package objectForKey:@"name"];
       //if ([text rangeOfString:packageName options:NSCaseInsensitiveSearch].location != NSNotFound)
-        [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
+        [keywordsToCheck addObjectsFromArray:package[@"keywords"]];
     }
   
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
-    NSUInteger nbPropositions = [newPropositions count];
+    NSUInteger nbPropositions = newPropositions.count;
     while(nbPropositions--)
     {
-      NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
-      NSString* type    = [typeAndKeyword objectForKey:@"type"];
-      NSString* keyword = [typeAndKeyword objectForKey:@"word"];
+      NSDictionary* typeAndKeyword = newPropositions[nbPropositions];
+      NSString* type    = typeAndKeyword[@"type"];
+      NSString* keyword = typeAndKeyword[@"word"];
       if ([type isEqualToString:@"normal"])
         [propositions addObject:keyword];
       else if ([type isEqualToString:@"braces"])
@@ -970,16 +965,16 @@ static NSInteger SpellCheckerDocumentTag = 0;
   }
   
   //if no proposition is found, do as if the backslash was not there
-  if (isBackslashedWord && ![propositions count])
+  if (isBackslashedWord && !propositions.count)
   {
     NSRange reducedRange = NSMakeRange(charRange.location+1, charRange.length-1);
     [newPropositions setArray:[super completionsForPartialWordRange:reducedRange indexOfSelectedItem:index]];
     //add the missing backslashes
-    NSUInteger count = [newPropositions count];
+    NSUInteger count = newPropositions.count;
     while(count--)
     {
-      NSString* proposition = [newPropositions objectAtIndex:count];
-      [newPropositions replaceObjectAtIndex:count withObject:[NSString stringWithFormat:@"\\%@", proposition]];
+      NSString* proposition = newPropositions[count];
+      newPropositions[count] = [NSString stringWithFormat:@"\\%@", proposition];
     }
     [propositions setArray:newPropositions];
   }
@@ -987,24 +982,24 @@ static NSInteger SpellCheckerDocumentTag = 0;
   if (!isBackslashedWord) //try a latex environment and add normal completions
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? WellKnownLatexKeywords.count : 0;
     while(nbPackages--)
     {
-      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+      NSDictionary* package = WellKnownLatexKeywords[nbPackages];
       //NSString*     packageName = [package objectForKey:@"name"];
       //if ([text rangeOfString:packageName options:NSCaseInsensitiveSearch].location != NSNotFound)
-        [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
+        [keywordsToCheck addObjectsFromArray:package[@"keywords"]];
     }
   
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
-    NSUInteger nbPropositions = [newPropositions count];
+    NSUInteger nbPropositions = newPropositions.count;
     while(nbPropositions--)
     {
-      NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
-      NSString* type    = [typeAndKeyword objectForKey:@"type"];
-      NSString* keyword = [typeAndKeyword objectForKey:@"word"];
+      NSDictionary* typeAndKeyword = newPropositions[nbPropositions];
+      NSString* type    = typeAndKeyword[@"type"];
+      NSString* keyword = typeAndKeyword[@"word"];
       if ([type isEqualToString:@"environment"])
         [propositions addObject:keyword];
     }
@@ -1024,24 +1019,24 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(void) colorDidChange:(NSNotification*)notification
 {
-  NSColor* color = [[NSColorPanel sharedColorPanel] color];
+  NSColor* color = [NSColorPanel sharedColorPanel].color;
   NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
-  NSString* input = !selectedRange.length ? nil : [[[self textStorage] string] substringWithRange:selectedRange];
+  NSString* input = !selectedRange.length ? nil : [self.textStorage.string substringWithRange:selectedRange];
   NSString* output = nil;
   if (input)
   {
     NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
     NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
-      [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
+      rgbColor.redComponent, rgbColor.greenComponent, rgbColor.blueComponent];
     BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLMultiline
-                                       inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
+                                       inRange:NSMakeRange(0, input.length) capture:1 error:nil] != nil);
     if (replacement)
       output = !isMatching ? nil :
         [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
-                                           options:RKLMultiline range:NSMakeRange(0, [input length]) error:nil];
+                                           options:RKLMultiline range:NSMakeRange(0, input.length) error:nil];
     if (!output)
       output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
-                     [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
+                     rgbColor.redComponent, rgbColor.greenComponent, rgbColor.blueComponent, input];
     if (output)
       [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
   }//end if (input)
@@ -1050,12 +1045,12 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo
 {
-  NSString* input = !range.length ? nil : [[[self textStorage] string] substringWithRange:range];
+  NSString* input = !range.length ? nil : [self.textStorage.string substringWithRange:range];
   if (input && string)
   {
-    NSRange newRange = NSMakeRange(range.location, [string length]);
+    NSRange newRange = NSMakeRange(range.location, string.length);
     if (withUndo)
-      [[[self undoManager] prepareWithInvocationTarget:self] replaceCharactersInRange:newRange withString:input withUndo:withUndo];
+      [[self.undoManager prepareWithInvocationTarget:self] replaceCharactersInRange:newRange withString:input withUndo:withUndo];
     [self replaceCharactersInRange:range withString:string];
     [self setSelectedRange:newRange];
   }//end if (input && string)
@@ -1065,18 +1060,16 @@ static NSInteger SpellCheckerDocumentTag = 0;
 -(void) insertTextAtMousePosition:(id)object
 {
   NSUInteger index = [self characterIndexForPoint:[NSEvent mouseLocation]];
-  NSUInteger length = [[self textStorage] length];
+  NSUInteger length = self.textStorage.length;
   if (index <= length)
   {
     NSDictionary* attributes =
-      [NSDictionary dictionaryWithObjectsAndKeys:
-        [[PreferencesController sharedController] editionFont], NSFontAttributeName,
-        nil];
+      @{NSFontAttributeName: [PreferencesController sharedController].editionFont};
     NSMutableAttributedString* attributedString =
       [object isKindOfClass:[NSAttributedString class]] ? [object mutableCopy] :
       [[NSMutableAttributedString alloc] initWithString:object];
-    [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
-    [[self textStorage] insertAttributedString:attributedString atIndex:index];
+    [attributedString addAttributes:attributes range:NSMakeRange(0, attributedString.length)];
+    [self.textStorage insertAttributedString:attributedString atIndex:index];
     [self->syntaxColouring recolourCompleteDocument];
   }//end if (index <= length)
 }

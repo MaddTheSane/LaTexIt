@@ -28,8 +28,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:NSStringFromClass([self class])];
+        cachedEntity = [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel].entitiesByName[NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -43,20 +42,19 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     @synchronized(self)
     {
       if (!cachedWrapperEntity)
-        cachedWrapperEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:@"LibraryEquationWrapper"];
+        cachedWrapperEntity = [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel].entitiesByName[@"LibraryEquationWrapper"];
     }//end @synchronized(self)
   }//end if (!cachedWrapperEntity)
   return cachedWrapperEntity;
 }
 //end wrapperEntity
 
--(id) initWithParent:(LibraryItem*)aParent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
+-(instancetype) initWithParent:(LibraryItem*)aParent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
   if (!((self = [super initWithParent:aParent insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
-  [self setEquation:equation];
-  [super setTitle:[equation title]];
+  self.equation = equation;
+  super.title = equation.title;
   return self;
 }
 //end initWithParent:equation:insertIntoManagedObjectContext:
@@ -71,7 +69,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(id) copyWithZone:(NSZone*)zone
 {
   id clone = [super copyWithZone:zone];
-  id clonedEquation = [[self equation] copy];
+  id clonedEquation = [self.equation copy];
   [clone setEquation:clonedEquation];
   return clone;
 }
@@ -110,9 +108,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   [super awakeFromInsert];
   [self setCustomKVOEnabled:YES];
   LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
-  [[self managedObjectContext] safeInsertObject:equationWrapper];
-  LatexitEquation* equation = [equationWrapper equation];
-  [[self managedObjectContext] safeInsertObject:equation];
+  [self.managedObjectContext safeInsertObject:equationWrapper];
+  LatexitEquation* equation = equationWrapper.equation;
+  [self.managedObjectContext safeInsertObject:equation];
 }
 //end awakeFromInsert
 
@@ -120,7 +118,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
   {
-    NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
+    NSManagedObjectContext* managedObjectContext = self.managedObjectContext;
     if (managedObjectContext)
       [managedObjectContext disableUndoRegistration];
     [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
@@ -130,10 +128,10 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   }//end if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
   else if ([keyPath isEqualToString:@"equationWrapper.equation.pdfData"])
   {
-    NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
+    NSManagedObjectContext* managedObjectContext = self.managedObjectContext;
     if (managedObjectContext)
       [managedObjectContext disableUndoRegistration];
-    [[self equation] resetPdfCachedImage];
+    [self.equation resetPdfCachedImage];
     [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
     [self didChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
     if (managedObjectContext)
@@ -199,8 +197,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) setTitle:(NSString*)value
 {
-  [super setTitle:value];
-  [[self equation] setTitle:value];
+  super.title = value;
+  self.equation.title = value;
 }
 //end setTitle:
 
@@ -208,43 +206,43 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   LatexitEquation* result = nil;
   LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
-  result = [equationWrapper equation];
+  result = equationWrapper.equation;
   return result;
 }
 //end equation
 
 -(void) setEquation:(LatexitEquation*)equation
 {
-  [[self managedObjectContext] safeInsertObject:equation];
-  LatexitEquation* oldEquation = [self equation];
+  [self.managedObjectContext safeInsertObject:equation];
+  LatexitEquation* oldEquation = self.equation;
   if (equation != oldEquation)
   {
     LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
     if (equationWrapper)
-      [[self managedObjectContext] safeInsertObject:equationWrapper];
+      [self.managedObjectContext safeInsertObject:equationWrapper];
     else
     {
       equationWrapper = [[LatexitEquationWrapper alloc] initWithEntity:[[self class] wrapperEntity]
-                                 insertIntoManagedObjectContext:[self managedObjectContext]];
+                                 insertIntoManagedObjectContext:self.managedObjectContext];
       [equationWrapper setValue:self forKey:@"libraryEquation"]; //if current managedObjectContext is nil, this is necessary
       [self setValue:equationWrapper forKey:@"equationWrapper"];
     }//end if (!equationWrapper)
-    [equationWrapper setEquation:equation];
+    equationWrapper.equation = equation;
     [equation setValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
-    [[self managedObjectContext] safeDeleteObject:oldEquation];
+    [self.managedObjectContext safeDeleteObject:oldEquation];
   }//end if (equation != oldEquation)
 }
 //end setEquation:
 
 -(void) setEquation:(LatexitEquation*)equation setAutomaticTitle:(BOOL)setAutomaticTitle
 {
-  [self setEquation:equation];
-  if (!setAutomaticTitle || ([equation title] && ![[equation title] isEqualToString:@""]))
-    [self setTitle:[equation title]];
+  self.equation = equation;
+  if (!setAutomaticTitle || (equation.title && ![equation.title isEqualToString:@""]))
+    [self setTitle:equation.title];
   else
   {
     NSString* string =
-      [[[equation sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      [equation.sourceText.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSUInteger endIndex = MIN(17U, [string length]);
     [self setTitle:[string substringToIndex:endIndex]];
   }
@@ -253,18 +251,18 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) setBestTitle//computes best title in current context
 {
-  NSString* equationTitle = [self title];
-  LatexitEquation* equation = [(LibraryEquation*)self equation]; 
-  equationTitle = [equation title];
+  NSString* equationTitle = self.title;
+  LatexitEquation* equation = ((LibraryEquation*)self).equation; 
+  equationTitle = equation.title;
   if (!equationTitle || [equationTitle isEqualToString:@""])
     equationTitle = [equation titleAuto];
   NSArray* brothers = [self brothersIncludingMe:NO];
-  NSMutableArray* brothersTitles = [[NSMutableArray alloc] initWithCapacity:[brothers count]];
+  NSMutableArray* brothersTitles = [[NSMutableArray alloc] initWithCapacity:brothers.count];
   NSEnumerator* enumerator = [brothers objectEnumerator];
   LibraryItem* brother = nil;
   while((brother = [enumerator nextObject]))
   {
-    NSString* brotherTitle = [brother title];
+    NSString* brotherTitle = brother.title;
     if (brotherTitle)
       [brothersTitles addObject:brotherTitle];
   }//end for each brother
@@ -272,18 +270,18 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   if (!equationTitle)
     [self setTitle:libraryEquationTitle];//sets current and equation
   else
-    [super setTitle:libraryEquationTitle];//sets only current item title, does not touch equation
+    super.title = libraryEquationTitle;//sets only current item title, does not touch equation
 }
 //end setBestTitle
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
   [super encodeWithCoder:coder];
-  [coder encodeObject:[self equation] forKey:@"equation"];
+  [coder encodeObject:self.equation forKey:@"equation"];
 }
 //end encodeWithCoder:
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if (!((self = [super initWithCoder:coder])))
     return nil;
@@ -294,13 +292,13 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     LatexitEquation* latexitEquation = [historyItem equation];
     [historyItem setEquation:nil];
     [managedObjectContext safeInsertObject:latexitEquation];
-    [self setEquation:latexitEquation];
-    if (![self title])
+    self.equation = latexitEquation;
+    if (!self.title)
       [self setBestTitle];
     [managedObjectContext safeDeleteObject:historyItem];
   }//end if ([coder containsValueForKey:@"value"])//legacy
   else
-    [self setEquation:[coder decodeObjectForKey:@"equation"]];
+    self.equation = [coder decodeObjectForKey:@"equation"];
   return self;
 }
 //end initWithCoder:
@@ -308,22 +306,20 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(id) plistDescription
 {
   NSMutableDictionary* plist = [super plistDescription];
-    [plist addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
-       [[self equation] plistDescription], @"equation",
-       nil]];
+    [plist addEntriesFromDictionary:@{@"equation": [self.equation plistDescription]}];
   return plist;
 }
 //end plistDescription
 
--(id) initWithDescription:(id)description
+-(instancetype) initWithDescription:(id)description
 {
   if (!((self = [super initWithDescription:description])))
     return nil;
-  NSString* version = [description objectForKey:@"version"];
+  NSString* version = description[@"version"];
   BOOL isOldLibraryItem = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
-  id equationDescription = !isOldLibraryItem ? [description objectForKey:@"equation"] : description;
+  id equationDescription = !isOldLibraryItem ? description[@"equation"] : description;
   LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithDescription:equationDescription];
-  [self setEquation:latexitEquation];
+  self.equation = latexitEquation;
   return self;
 }
 //end initWithDescription:

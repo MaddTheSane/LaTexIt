@@ -28,7 +28,7 @@
 
 -(void) validateVisibleColumns2
 {
-  id aContentView = [self respondsToSelector:@selector(contentView)] ? [self contentView] : nil;
+  id aContentView = [self respondsToSelector:@selector(contentView)] ? self.contentView : nil;
   [self validateVisibleColumns2_helper:aContentView];
 }
 //end validateVisibleColumns2

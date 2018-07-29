@@ -35,14 +35,14 @@
 {
   NSArray* objectsToMove = [self objectsAtIndexes:indices];
   NSUInteger shift = 0;
-  NSUInteger i = [indices firstIndex];
+  NSUInteger i = indices.firstIndex;
   while((i != NSNotFound) && i<index)
   {
     ++shift;
     i = [indices indexGreaterThanIndex:i];
   }
   [self removeObjectsAtIndexes:indices];
-  [self insertObjects:objectsToMove atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(index-shift, [objectsToMove count])]];
+  [self insertObjects:objectsToMove atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(index-shift, objectsToMove.count)]];
 }
 //end moveObjectsAtIndices:toIndex:
 

@@ -161,7 +161,7 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 
 @property (class, readonly) PreferencesController* sharedController;
 
--(NSUndoManager*) undoManager;
+@property (readonly, strong) NSUndoManager *undoManager;
 
 @property (readonly) NSString* latexitVersion;
 
@@ -203,30 +203,30 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 @property (copy) NSData* editionFontData;
 @property (assign) NSFont* editionFont;
 @property (readonly) BOOL editionSyntaxColoringEnabled;
--(NSData*)    editionSyntaxColoringTextForegroundColorData;
--(NSColor*)   editionSyntaxColoringTextForegroundColor;
--(NSData*)    editionSyntaxColoringTextBackgroundColorData;
--(NSColor*)   editionSyntaxColoringTextBackgroundColor;
--(NSData*)    editionSyntaxColoringCommandColorData;
--(NSColor*)   editionSyntaxColoringCommandColor;
--(NSData*)    editionSyntaxColoringCommentColorData;
--(NSColor*)   editionSyntaxColoringCommentColor;
--(NSData*)    editionSyntaxColoringKeywordColorData;
--(NSColor*)   editionSyntaxColoringKeywordColor;
--(NSData*)    editionSyntaxColoringMathsColorData;
--(NSColor*)   editionSyntaxColoringMathsColor;
+@property (readonly, copy) NSData *editionSyntaxColoringTextForegroundColorData;
+@property (readonly, copy) NSColor *editionSyntaxColoringTextForegroundColor;
+@property (readonly, copy) NSData *editionSyntaxColoringTextBackgroundColorData;
+@property (readonly, copy) NSColor *editionSyntaxColoringTextBackgroundColor;
+@property (readonly, copy) NSData *editionSyntaxColoringCommandColorData;
+@property (readonly, copy) NSColor *editionSyntaxColoringCommandColor;
+@property (readonly, copy) NSData *editionSyntaxColoringCommentColorData;
+@property (readonly, copy) NSColor *editionSyntaxColoringCommentColor;
+@property (readonly, copy) NSData *editionSyntaxColoringKeywordColorData;
+@property (readonly, copy) NSColor *editionSyntaxColoringKeywordColor;
+@property (readonly, copy) NSData *editionSyntaxColoringMathsColorData;
+@property (readonly, copy) NSColor *editionSyntaxColoringMathsColor;
 @property (readonly) BOOL editionTabKeyInsertsSpacesEnabled;
 @property (readonly) NSUInteger editionTabKeyInsertsSpacesCount;
 
 @property (readonly) NSArray* editionTextShortcuts;
--(NSArrayController*) editionTextShortcutsController;
+@property (readonly, strong) NSArrayController *editionTextShortcutsController;
 
 @property (readonly) NSArray* preambles;
 @property (readonly) NSInteger preambleDocumentIndex;
 @property (readonly) NSInteger preambleServiceIndex;
--(NSAttributedString*)  preambleDocumentAttributedString;
--(NSAttributedString*)  preambleServiceAttributedString;
--(PreamblesController*) preamblesController;
+@property (readonly, copy) NSAttributedString *preambleDocumentAttributedString;
+@property (readonly, copy) NSAttributedString *preambleServiceAttributedString;
+@property (readonly, strong) PreamblesController *preamblesController;
 
 @property (readonly) NSArray* bodyTemplates;
 @property (readonly) NSArray* bodyTemplatesWithNone;
@@ -234,9 +234,9 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 @property (readonly) NSInteger bodyTemplateServiceIndex;
 @property (readonly) NSDictionary* bodyTemplateDocumentDictionary;
 @property (readonly) NSDictionary* bodyTemplateServiceDictionary;
--(BodyTemplatesController*) bodyTemplatesController;
+@property (readonly, strong) BodyTemplatesController *bodyTemplatesController;
 
--(CompositionConfigurationsController*) compositionConfigurationsController;
+@property (readonly, strong) CompositionConfigurationsController *compositionConfigurationsController;
 @property (copy) NSArray* compositionConfigurations;
 
 @property NSInteger   compositionConfigurationsDocumentIndex;
@@ -251,20 +251,20 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 
 -(NSString*)          serviceDescriptionForIdentifier:(service_identifier_t)identifier;
 @property (copy) NSArray* serviceShortcuts;
--(NSArrayController*) serviceShortcutsController;
+@property (readonly, strong) NSArrayController *serviceShortcutsController;
 -(BOOL) changeServiceShortcutsWithDiscrepancyFallback:(change_service_shortcuts_fallback_t)discrepancyFallback
                                authenticationFallback:(change_service_shortcuts_fallback_t)authenticationFallback;
 @property (copy) NSArray<NSString*>* serviceRegularExpressionFilters;
--(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController;
+@property (readonly, strong) ServiceRegularExpressionFiltersController *serviceRegularExpressionFiltersController;
 
 @property (readonly) BOOL encapsulationsEnabled;
 @property (readonly) NSArray* encapsulations;
 @property (readonly) NSInteger encapsulationsSelectedIndex;
 @property (readonly) NSString* encapsulationSelected;
--(EncapsulationsController*) encapsulationsController;
+@property (readonly, strong) EncapsulationsController *encapsulationsController;
 
 @property (copy) NSArray<NSString*>* additionalFilesPaths;
--(AdditionalFilesController*) additionalFilesController;
+@property (readonly, strong) AdditionalFilesController *additionalFilesController;
 
 @property BOOL synchronizationNewDocumentsEnabled;
 @property (copy) NSString* synchronizationNewDocumentsPath;
@@ -272,7 +272,7 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 @property BOOL synchronizationNewDocumentsSynchronizeEnvironment;
 @property BOOL synchronizationNewDocumentsSynchronizeBody;
 @property (readonly) NSDictionary *synchronizationAdditionalScripts;
--(SynchronizationAdditionalScriptsController*) synchronizationAdditionalScriptsController;
+@property (readonly, strong) SynchronizationAdditionalScriptsController *synchronizationAdditionalScriptsController;
 
 @property NSInteger paletteLaTeXGroupSelectedTag;
 @property NSRect paletteLaTeXWindowFrame;

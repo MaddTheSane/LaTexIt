@@ -52,14 +52,14 @@
 -(NSString*) rgbaString
 {
   NSColor* colorRGB = [self colorUsingColorSpaceName:NSCalibratedRGBColorSpace]; //the color must be RGB
-  return [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
-                                                    [colorRGB blueComponent], [colorRGB alphaComponent]];
+  return [NSString stringWithFormat:@"%f %f %f %f", colorRGB.redComponent , colorRGB.greenComponent,
+                                                    colorRGB.blueComponent, colorRGB.alphaComponent];
 }
 //end rgbaString
 
 -(CGFloat) grayLevel
 {
-  return [[self colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] whiteComponent];
+  return [self colorUsingColorSpaceName:NSCalibratedWhiteColorSpace].whiteComponent;
 }
 //end grayLevel
 

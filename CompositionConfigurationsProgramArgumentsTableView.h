@@ -10,7 +10,7 @@
 
 @class CompositionConfigurationsProgramArgumentsController;
 
-@interface CompositionConfigurationsProgramArgumentsTableView : NSTableView {
+@interface CompositionConfigurationsProgramArgumentsTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource> {
   CompositionConfigurationsProgramArgumentsController* controller;
   NSIndexSet* draggedRowIndexes;//transient, used only during drag'n drop
 }

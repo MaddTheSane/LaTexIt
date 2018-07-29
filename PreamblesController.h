@@ -18,8 +18,8 @@
 
 -(void) ensureDefaultPreamble;
 
--(id)   newObject; //redefined
--(BOOL) canRemove; //redefined
+@property (readonly, strong) id newObject; //redefined
+@property (readonly) BOOL canRemove; //redefined
 -(void) add:(id)sender; //redefined
 
 @end

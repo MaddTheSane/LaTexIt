@@ -47,17 +47,17 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 //constructors
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti;
 +(BOOL) latexitEquationPossibleWithData:(NSData*)data sourceUTI:(NSString*)sourceUTI;
-+(NSArray*) latexitEquationsWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithMetaData:(NSDictionary*)someData useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
++(NSArray<LatexitEquation*>*) latexitEquationsWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithMetaData:(NSDictionary*)someData useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor;
--(id) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
--(id) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
--(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
--(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
+-(instancetype) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
                                             mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
 -(void) dispose;
@@ -75,28 +75,28 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 @property (copy) NSString *title;
 
 //transient
--(NSImage*) pdfCachedImage;
+@property (readonly, copy) NSImage *pdfCachedImage;
 -(void) resetPdfCachedImage;
 
 //on the fly
 +(NSString*)    latexModeToString:(latex_mode_t)mode;
 +(latex_mode_t) latexModeFromString:(NSString*)modeAsString;
--(NSString*) modeAsString;
--(NSString*) string;
--(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
+@property (readonly, copy) NSString *modeAsString;
+@property (readonly, copy) NSString *string;
+@property (readonly, copy) NSAttributedString *encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
 
 //utils
 -(void) beginUpdate;
 -(void) endUpdate;
 -(void) checkAndMigrateAlign;
 //+(double) baselineFromData:(NSData*)someData;
--(NSString*) titleAuto;
+@property (readonly, copy) NSString *titleAuto;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider options:(NSDictionary*)options;
--(id) plistDescription;
--(id) initWithDescription:(id)description;
--(CHExportPrefetcher*) exportPrefetcher;
+@property (readonly, strong) id plistDescription;
+-(instancetype) initWithDescription:(id)description;
+@property (readonly, strong) CHExportPrefetcher *exportPrefetcher;
 
 +(NSString*) computeFileNameFromContent:(NSString*)content;
 

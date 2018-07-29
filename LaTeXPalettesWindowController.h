@@ -10,7 +10,7 @@
 
 @class PaletteView;
 
-@interface LaTeXPalettesWindowController : NSWindowController
+@interface LaTeXPalettesWindowController : NSWindowController <NSMatrixDelegate>
 {
   IBOutlet NSBox*         matrixBox;
   IBOutlet NSPopUpButton* matrixChoicePopUpButton;

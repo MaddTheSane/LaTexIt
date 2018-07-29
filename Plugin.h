@@ -18,14 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
   id<LaTeXiTPluginProtocol> principalClassInstance;
 }
 
--(nullable instancetype) initWithPath:(NSString*)path;
+-(nullable instancetype) initWithPath:(NSString*)path NS_DESIGNATED_INITIALIZER;
 
 @property (readonly, retain) NSBundle *bundle;
 -(void)      load;
 @property (readonly, copy) NSString *localizedName;
 
 #pragma mark LaTeXiTPluginProtocol
--(nullable NSImage*) icon;
+@property (readonly, copy) NSImage * _Nullable icon;
 -(void) importConfigurationPanelIntoView:(NSView*)view;
 -(void) dropConfigurationPanel;
 

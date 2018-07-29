@@ -40,8 +40,8 @@
   id parent = [self performSelector:parentSelector];
   NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
   NSUInteger index = [brothers indexOfObject:self];
-  if (index+1 < [brothers count])
-    result = [brothers objectAtIndex:index+1];
+  if (index+1 < brothers.count)
+    result = brothers[index+1];
   return result;
 }
 //end nextBrotherWithParentSelector:childrenSelector:rootNodes:
@@ -53,7 +53,7 @@
   NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
   NSUInteger index = [brothers indexOfObject:self];
   if (index > 0)
-    result = [brothers objectAtIndex:index-1];
+    result = brothers[index-1];
   return result;
 }
 //end prevBrotherWithParentSelector:childrenSelector:rootNodes:
@@ -72,9 +72,9 @@
   NSMutableArray* minimumCover = [NSMutableArray array];
   NSMutableArray* itemQueue    = [NSMutableArray arrayWithArray:allItems];
   id              item         = nil;
-  while ([itemQueue count])
+  while (itemQueue.count)
   {
-    item = [itemQueue objectAtIndex:0];
+    item = itemQueue[0];
     [itemQueue removeObjectAtIndex:0];
     id parent = [item performSelector:parentSelector];
     while (parent && [itemQueue containsObjectIdenticalTo:parent])

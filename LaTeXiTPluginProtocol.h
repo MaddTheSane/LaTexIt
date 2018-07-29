@@ -11,7 +11,7 @@
 
 @protocol LaTeXiTPluginProtocol <NSObject>
 
--(nullable NSImage*) icon;
+@property (readonly, copy) NSImage * _Nullable icon;
 -(void) importConfigurationPanelIntoView:(nonnull NSView*)view;
 -(void) dropConfigurationPanel;
 

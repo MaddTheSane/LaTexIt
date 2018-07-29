@@ -41,14 +41,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformer
++(instancetype) transformer
 {
   id result = [[[self class] alloc] init];
   return result;
 }
 //end transformerWithDictionary:
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super init])))
     return nil;

@@ -22,7 +22,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 
 @implementation ServiceShortcutsTableView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
@@ -41,7 +41,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 -(void) awakeFromNib
 {
   [self->serviceWarningShortcutConflictButton setHidden:YES];
-  [self setDelegate:(id)self];
+  self.delegate = (id)self;
   NSArrayController* serviceShortcutsController = [[PreferencesController sharedController] serviceShortcutsController];
   [serviceShortcutsController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutEnabledKey] options:0 context:0];
   [serviceShortcutsController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutStringKey]  options:0 context:0];
@@ -50,18 +50,14 @@ extern NSString *NSMenuDidBeginTrackingNotification;
       options:nil];
   [[self tableColumnWithIdentifier:@"description"] bind:NSValueBinding toObject:serviceShortcutsController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self", ServiceShortcutIdentifierKey]
-          options:[NSDictionary dictionaryWithObjectsAndKeys:
-            [DelegatingTransformer transformerWithDelegate:self context:@"description"], NSValueTransformerBindingOption, nil]];
+          options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"description"]}];
   [[self tableColumnWithIdentifier:@"string"] bind:NSValueBinding toObject:serviceShortcutsController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.string", ServiceShortcutStringKey]
-          options:[NSDictionary dictionaryWithObjectsAndKeys:
-            [DelegatingTransformer transformerWithDelegate:self context:@"string"], NSValueTransformerBindingOption,
-            NSLocalizedString(@"none", @"none"), NSNullPlaceholderBindingOption,
-             nil]];
+          options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"string"],
+            NSNullPlaceholderBindingOption: NSLocalizedString(@"none", @"none")}];
   [[self tableColumnWithIdentifier:@"warning"] bind:NSValueBinding toObject:serviceShortcutsController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self", ServiceShortcutIdentifierKey]
-          options:[NSDictionary dictionaryWithObjectsAndKeys:
-            [DelegatingTransformer transformerWithDelegate:self context:@"warning"], NSValueTransformerBindingOption, nil]];
+          options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"warning"]}];
 }
 //end awakeFromNib
 
@@ -82,12 +78,12 @@ extern NSString *NSMenuDidBeginTrackingNotification;
     if ([context isEqual:@"description"])
     {
       NSString* serviceIdentifier = [[PreferencesController sharedController]
-        serviceDescriptionForIdentifier:(service_identifier_t)[[value objectForKey:ServiceShortcutIdentifierKey] intValue]];
+        serviceDescriptionForIdentifier:(service_identifier_t)[value[ServiceShortcutIdentifierKey] intValue]];
       result = NSLocalizedString(serviceIdentifier, serviceIdentifier);
     }
     else if ([context isEqual:@"string"])  
     {//add shift+command in front of the upper-case, one-character-shortcut
-      NSString* normalShortcut = [[value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
+      NSString* normalShortcut = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].uppercaseString;
       const unichar firstCharacter = [normalShortcut isEqualToString:@""] ? '\0' : [normalShortcut characterAtIndex:0];
       const unichar shift = 0x21e7;
       const unichar command = 0x2318;
@@ -98,18 +94,18 @@ extern NSString *NSMenuDidBeginTrackingNotification;
     }//end if ([context isEqualToString:@"string"])
     else if ([context isEqual:@"warning"])
     {
-      NSArray* serviceShortcuts = [[PreferencesController sharedController] serviceShortcuts];
-      NSString* valueShortcutString = [[value objectForKey:ServiceShortcutStringKey] uppercaseString];
+      NSArray* serviceShortcuts = [PreferencesController sharedController].serviceShortcuts;
+      NSString* valueShortcutString = [value[ServiceShortcutStringKey] uppercaseString];
       BOOL valueHasShortcut = valueShortcutString && ![valueShortcutString isEqualToString:@""];
       BOOL conflict = NO;
       
       #warning Is it possible to detect conflicts in current Service menu without displaying it once ?
-      NSMutableArray* systemWideServiceMenuItems = [NSMutableArray arrayWithArray:[[NSApp servicesMenu] itemArray]];
+      NSMutableArray* systemWideServiceMenuItems = [NSMutableArray arrayWithArray:NSApp.servicesMenu.itemArray];
       NSMutableArray* alreadyUsedServiceShortcuts = [NSMutableArray array];
       unsigned int index = 0;
-      while(index < [systemWideServiceMenuItems count])
+      while(index < systemWideServiceMenuItems.count)
       {
-        id object = [systemWideServiceMenuItems objectAtIndex:index];
+        id object = systemWideServiceMenuItems[index];
         if ([object isKindOfClass:[NSMenu class]])
         {
           [systemWideServiceMenuItems addObjectsFromArray:[object itemArray]];
@@ -119,12 +115,12 @@ extern NSString *NSMenuDidBeginTrackingNotification;
         {
           if ([object hasSubmenu] && ![[object title] isEqualToString:@"LaTeXiT"])
           {
-            [systemWideServiceMenuItems addObjectsFromArray:[[object submenu] itemArray]];
+            [systemWideServiceMenuItems addObjectsFromArray:[object submenu].itemArray];
             [systemWideServiceMenuItems removeObjectAtIndex:index];
           }
           else
           {
-            NSString* upperCaseShortcut = [[object keyEquivalent] uppercaseString];
+            NSString* upperCaseShortcut = [object keyEquivalent].uppercaseString;
             if (![upperCaseShortcut isEqualToString:@""])
               [alreadyUsedServiceShortcuts addObject:upperCaseShortcut];
             ++index;
@@ -138,11 +134,11 @@ extern NSString *NSMenuDidBeginTrackingNotification;
       NSEnumerator* enumerator = conflict ? nil : [serviceShortcuts objectEnumerator];
       NSDictionary* service = nil;
       while(!conflict && ((service = [enumerator nextObject])))
-        conflict |= (service != value) && valueHasShortcut && [[value objectForKey:ServiceShortcutEnabledKey] boolValue] &&
-                    [[service objectForKey:ServiceShortcutEnabledKey] boolValue] &&
-                    [[[service objectForKey:ServiceShortcutStringKey] uppercaseString] isEqualToString:valueShortcutString];
+        conflict |= (service != value) && valueHasShortcut && [value[ServiceShortcutEnabledKey] boolValue] &&
+                    [service[ServiceShortcutEnabledKey] boolValue] &&
+                    [[service[ServiceShortcutStringKey] uppercaseString] isEqualToString:valueShortcutString];
       result = !conflict ? nil : [NSImage imageNamed:NSImageNameCaution];
-      [self->serviceWarningShortcutConflictButton setHidden:!conflict && [self->serviceWarningShortcutConflictButton isHidden]];
+      self->serviceWarningShortcutConflictButton.hidden = !conflict && self->serviceWarningShortcutConflictButton.hidden;
     }
   }//end if (!reverse)
   else if (reverse)
@@ -170,17 +166,17 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification *)aNotification
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   //the shortcut must be only one character long
-  NSArray* serviceShortcuts = [[PreferencesController sharedController] serviceShortcuts];
-  NSString* normalShortcut = ((selectedRow>=0) && ((unsigned)selectedRow<[serviceShortcuts count])) ?
-    [[[serviceShortcuts objectAtIndex:selectedRow] objectForKey:ServiceShortcutStringKey] uppercaseString] : nil;
-  NSUInteger length = [normalShortcut length];
+  NSArray* serviceShortcuts = [PreferencesController sharedController].serviceShortcuts;
+  NSString* normalShortcut = ((selectedRow>=0) && ((unsigned)selectedRow<serviceShortcuts.count)) ?
+    [serviceShortcuts[selectedRow][ServiceShortcutStringKey] uppercaseString] : nil;
+  NSUInteger length = normalShortcut.length;
   if (!normalShortcut)
     normalShortcut = @"";
   else if (length > 0)
     normalShortcut = [normalShortcut substringWithRange:NSMakeRange(0, 1)];
-  [[serviceShortcuts objectAtIndex:selectedRow] setObject:normalShortcut forKey:ServiceShortcutStringKey];
+  serviceShortcuts[selectedRow][ServiceShortcutStringKey] = normalShortcut;
   [super textDidEndEditing:aNotification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }

@@ -30,10 +30,10 @@ typedef NS_ENUM(NSInteger, library_export_format_t) {LIBRARY_EXPORT_FORMAT_INTER
 
 -(NSString*) defaultLibraryPath;
 
--(NSManagedObjectContext*) managedObjectContext;
--(NSUndoManager*) undoManager;
+@property (readonly, strong) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong) NSUndoManager *undoManager;
 
--(NSArray*) allItems;
+@property (readonly, copy) NSArray *allItems;
 -(void) removeAllItems;
 -(void) removeItems:(NSArray*)items;
 
@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, library_export_format_t) {LIBRARY_EXPORT_FORMAT_INTER
 -(BOOL) loadFrom:(NSString*)path option:(library_import_option_t)option parent:(LibraryItem*)parent;
 
 -(void) fixChildrenSortIndexesForParent:(LibraryGroupItem*)parent recursively:(BOOL)recursively;
--(NSArray*) libraryEquations;
+@property (readonly, copy) NSArray *libraryEquations;
 
 -(NSArray*) createTeXItemsFromFile:(NSString*)filename proposedParentItem:(id)proposedParentItem proposedChildIndex:(NSInteger)proposedChildIndex;
 

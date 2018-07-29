@@ -12,10 +12,10 @@
 
 @interface NSWorkspace (Extended)
 
--(NSString*) applicationName;
--(NSString*) applicationVersion;
--(NSString*) applicationBundleIdentifier;
--(NSString*) temporaryDirectory;
+@property (readonly, copy) NSString *applicationName;
+@property (readonly, copy) NSString *applicationVersion;
+@property (readonly, copy) NSString *applicationBundleIdentifier;
+@property (readonly, copy) NSString *temporaryDirectory;
 -(NSString*) getBestStandardPast:(NSSearchPathDirectory)searchPathDirectory domain:(NSSearchPathDomainMask)domain defaultValue:(NSString*)defaultValue;
 -(BOOL)      closeApplicationWithBundleIdentifier:(NSString*)bundleIdentifier;
 @end

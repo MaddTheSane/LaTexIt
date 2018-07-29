@@ -55,8 +55,7 @@ static NSDictionary* noneBodyTemplate = nil;
     {
       if (!result)
       {
-        noneBodyTemplate = [[NSDictionary alloc] initWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"none", @"none")], @"name", nil];
+        noneBodyTemplate = @{@"name": [NSMutableString stringWithString:NSLocalizedString(@"none", @"none")]};
         result = noneBodyTemplate;
       }//end if (!result)
     }//end @synchronized(self)
@@ -105,7 +104,7 @@ static NSDictionary* noneBodyTemplate = nil;
 }
 //end defaultLocalizedBodyTemplateDictionaryEncoded
 
--(id) initWithContent:(id)content
+-(instancetype) initWithContent:(id)content
 {
   if ((!(self = [super initWithContent:content])))
     return nil;
@@ -143,9 +142,9 @@ static NSDictionary* noneBodyTemplate = nil;
   else if ([keyPath isEqualToString:LatexisationSelectedBodyTemplateIndexKey] ||
            [keyPath isEqualToString:ServiceSelectedBodyTemplateIndexKey])
   {
-    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [change[NSKeyValueChangeNewKey] integerValue];
     NSInteger newIndex = curIndex;
-    NSInteger count = (NSInteger)[[self arrangedObjects] count];
+    NSInteger count = (NSInteger)[self.arrangedObjects count];
     if ((curIndex<0) && count)
       newIndex = -1;
     else if (curIndex>=count)
@@ -161,14 +160,14 @@ static NSDictionary* noneBodyTemplate = nil;
 {
   id result = [self valueForKeyPath:@"arrangedObjects.name"];
   if ([result isKindOfClass:[NSArray class]])
-    result = [result arrayByAddingObject:[[[self class] noneBodyTemplate] objectForKey:@"name"] atIndex:0];
+    result = [result arrayByAddingObject:[[self class] noneBodyTemplate][@"name"] atIndex:0];
   return result;
 }
 //end arrangedObjectsNamesWithNone
 
 -(BOOL) canRemove
 {
-  BOOL result = [super canRemove];
+  BOOL result = super.canRemove;
   return result;
 }
 //end canRemove:
@@ -176,16 +175,16 @@ static NSDictionary* noneBodyTemplate = nil;
 -(id) newObject
 {
   id result = nil;
-  NSArray* objects = [self arrangedObjects];
-  NSArray* selectedObjects = [self selectedObjects];
-  id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
-                   (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
+  NSArray* objects = self.arrangedObjects;
+  NSArray* selectedObjects = self.selectedObjects;
+  id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
+                   (objects && objects.count) ? objects[0] : nil;
   if (!modelObject)
     result = [[[self class] defaultLocalizedBodyTemplateDictionaryEncoded] deepMutableCopy];
   else
   {
     result = [modelObject deepMutableCopy];
-    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), [result objectForKey:@"name"]] forKey:@"name"];
+    result[@"name"] = [NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), result[@"name"]];
   }
   return result;
 }
@@ -195,7 +194,7 @@ static NSDictionary* noneBodyTemplate = nil;
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [self setSelectedObjects:@[newObject]];
 }
 //end add:
 
@@ -205,12 +204,12 @@ static NSDictionary* noneBodyTemplate = nil;
   NSInteger bodyTemplateLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedBodyTemplateIndexKey];
   NSInteger bodyTemplateServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedBodyTemplateIndexKey];
   id bodyTemplateLaTeXisation = !IsBetween_N(1, bodyTemplateLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
-    [[self arrangedObjects] objectAtIndex:bodyTemplateLaTeXisationIndex];
+    self.arrangedObjects[bodyTemplateLaTeXisationIndex];
   id bodyTemplateService = !IsBetween_N(1, bodyTemplateServiceIndex+1, [[self arrangedObjects] count]) ? nil :
-    [[self arrangedObjects] objectAtIndex:bodyTemplateServiceIndex];
+    self.arrangedObjects[bodyTemplateServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
-  NSUInteger newBodyTemplateLaTeXisationIndex = [[self arrangedObjects] indexOfObject:bodyTemplateLaTeXisation];
-  NSUInteger newBodyTemplateServiceIndex      = [[self arrangedObjects] indexOfObject:bodyTemplateService];
+  NSUInteger newBodyTemplateLaTeXisationIndex = [self.arrangedObjects indexOfObject:bodyTemplateLaTeXisation];
+  NSUInteger newBodyTemplateServiceIndex      = [self.arrangedObjects indexOfObject:bodyTemplateService];
   [[NSUserDefaults standardUserDefaults]
     setInteger:(newBodyTemplateLaTeXisationIndex == NSNotFound) ? -1 : (signed)newBodyTemplateLaTeXisationIndex
         forKey:LatexisationSelectedBodyTemplateIndexKey];

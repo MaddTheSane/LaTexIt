@@ -35,19 +35,19 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformerWithDescriptors:(NSArray*)descriptors
++(instancetype) transformerWithDescriptors:(NSArray*)descriptors
 {
   id result = [[[self class] alloc] initWithDescriptors:descriptors];
   return result;
 }
 //end transformerWithValueTransformer:
 
--(id) initWithDescriptors:(NSArray*)theDescriptors
+-(instancetype) initWithDescriptors:(NSArray*)theDescriptors
 {
   if ((!(self = [super init])))
     return nil;
   self->descriptors = theDescriptors ? [theDescriptors copy] : 
-    [[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil], nil];
+    @[[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:nil]];
   return self;
 }
 //end initWithDescriptors:

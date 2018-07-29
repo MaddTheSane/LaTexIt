@@ -30,10 +30,10 @@ typedef NS_ENUM(NSInteger, history_export_format_t) {
 
 +(HistoryManager*) sharedManager; //getting the history manager singleton
 
--(NSManagedObjectContext*) managedObjectContext;
--(NSUndoManager*)          undoManager;
+@property (readonly, strong) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong) NSUndoManager *undoManager;
 
--(NSObjectController*) bindController;
+@property (readonly, strong) NSObjectController *bindController;
 @property (getter=isLocked) BOOL locked;
 
 @property (readonly) NSUInteger numberOfItems;

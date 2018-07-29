@@ -35,14 +35,14 @@
 }
 //end allowsReverseTransformation
 
-+(id) transformer
++(instancetype) transformer
 {
   id result = [[[self class] alloc] init];
   return result;
 }
 //end transformer
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super init])))
     return nil;
@@ -55,7 +55,7 @@
   id result = nil;
   BOOL isDirectory = NO;
   BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:value isDirectory:&isDirectory];
-  result = [NSNumber numberWithBool:(exists && isDirectory)];
+  result = @((BOOL)(exists && isDirectory));
   return result;
 }
 //end transformedValue:

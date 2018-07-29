@@ -38,7 +38,7 @@
 @synthesize exportFormatOptionsPDFWofPanelDelegate;
 
 
--(id) initWithLoadingFromNib
+-(instancetype) initWithLoadingFromNib
 {
   NSBundle* bundle = [NSBundle bundleForClass:[self class]];
   if (!(self = [super initWithNibNamed:@"ExportFormatOptionsPanes" bundle:bundle]))
@@ -65,8 +65,8 @@
   [exportFormatOptionsJpegQualityMediumLabel setStringValue:LocalLocalizedString(@"medium", @"medium")];
   [exportFormatOptionsJpegQualityHighLabel   setStringValue:LocalLocalizedString(@"high", @"high")];
   [exportFormatOptionsJpegQualityMaxiLabel   setStringValue:LocalLocalizedString(@"maxi", @"maxi")];
-  [exportFormatOptionsJpegQualityLabel setStringValue:[NSString stringWithFormat:@"%@ :", LocalLocalizedString(@"Quality", @"Quality")]];
-  [exportFormatOptionsJpegBackgroundColorLabel setStringValue:[NSString stringWithFormat:@"%@ :", LocalLocalizedString(@"Background color", @"Background color")]];
+  exportFormatOptionsJpegQualityLabel.stringValue = [NSString stringWithFormat:@"%@ :", LocalLocalizedString(@"Quality", @"Quality")];
+  exportFormatOptionsJpegBackgroundColorLabel.stringValue = [NSString stringWithFormat:@"%@ :", LocalLocalizedString(@"Background color", @"Background color")];
   [exportFormatOptionsJpegOKButton setTitle:LocalLocalizedString(@"OK", @"OK")];
   [exportFormatOptionsJpegCancelButton setTitle:LocalLocalizedString(@"Cancel", @"Cancel")];
   [exportFormatOptionsJpegQualityLeastLabel  sizeToFit];
@@ -80,84 +80,83 @@
   [exportFormatOptionsJpegCancelButton sizeToFit];
 
   [exportFormatOptionsJpegQualityLeastLabel setFrameOrigin:
-    NSMakePoint([exportFormatOptionsJpegQualitySlider frame].origin.x,
-                [exportFormatOptionsJpegQualityLeastLabel frame].origin.y)];
+    NSMakePoint(exportFormatOptionsJpegQualitySlider.frame.origin.x,
+                exportFormatOptionsJpegQualityLeastLabel.frame.origin.y)];
   [exportFormatOptionsJpegQualityLowLabel setFrameOrigin:
-    NSMakePoint([exportFormatOptionsJpegQualitySlider frame].origin.x+
-                1*[exportFormatOptionsJpegQualitySlider frame].size.width/4-[exportFormatOptionsJpegQualityLowLabel frame].size.width/2,
-                [exportFormatOptionsJpegQualityLowLabel frame].origin.y)];
+    NSMakePoint(exportFormatOptionsJpegQualitySlider.frame.origin.x+
+                1*exportFormatOptionsJpegQualitySlider.frame.size.width/4-exportFormatOptionsJpegQualityLowLabel.frame.size.width/2,
+                exportFormatOptionsJpegQualityLowLabel.frame.origin.y)];
   [exportFormatOptionsJpegQualityMediumLabel setFrameOrigin:
-    NSMakePoint([exportFormatOptionsJpegQualitySlider frame].origin.x+
-                2*[exportFormatOptionsJpegQualitySlider frame].size.width/4-[exportFormatOptionsJpegQualityMediumLabel frame].size.width/2,
-                [exportFormatOptionsJpegQualityMediumLabel frame].origin.y)];
+    NSMakePoint(exportFormatOptionsJpegQualitySlider.frame.origin.x+
+                2*exportFormatOptionsJpegQualitySlider.frame.size.width/4-exportFormatOptionsJpegQualityMediumLabel.frame.size.width/2,
+                exportFormatOptionsJpegQualityMediumLabel.frame.origin.y)];
   [exportFormatOptionsJpegQualityHighLabel setFrameOrigin:
-    NSMakePoint([exportFormatOptionsJpegQualitySlider frame].origin.x+
-                3*[exportFormatOptionsJpegQualitySlider frame].size.width/4-[exportFormatOptionsJpegQualityHighLabel frame].size.width/2,
-                [exportFormatOptionsJpegQualityHighLabel frame].origin.y)];
+    NSMakePoint(exportFormatOptionsJpegQualitySlider.frame.origin.x+
+                3*exportFormatOptionsJpegQualitySlider.frame.size.width/4-exportFormatOptionsJpegQualityHighLabel.frame.size.width/2,
+                exportFormatOptionsJpegQualityHighLabel.frame.origin.y)];
   [exportFormatOptionsJpegQualityMaxiLabel setFrameOrigin:
-    NSMakePoint([exportFormatOptionsJpegQualitySlider frame].origin.x+
-                [exportFormatOptionsJpegQualitySlider frame].size.width-[exportFormatOptionsJpegQualityMaxiLabel frame].size.width,
-                [exportFormatOptionsJpegQualityMaxiLabel frame].origin.y)];
+    NSMakePoint(exportFormatOptionsJpegQualitySlider.frame.origin.x+
+                exportFormatOptionsJpegQualitySlider.frame.size.width-exportFormatOptionsJpegQualityMaxiLabel.frame.size.width,
+                exportFormatOptionsJpegQualityMaxiLabel.frame.origin.y)];
   [exportFormatOptionsJpegQualityLabel setFrameOrigin:
-    NSMakePoint(([exportFormatOptionsJpegBox frame].size.width-
-                 [exportFormatOptionsJpegQualityLabel frame].size.width-
+    NSMakePoint((exportFormatOptionsJpegBox.frame.size.width-
+                 exportFormatOptionsJpegQualityLabel.frame.size.width-
                  8-
-                 [exportFormatOptionsJpegQualityTextField frame].size.width)/2,
-                [exportFormatOptionsJpegQualityLabel frame].origin.y)];
+                 exportFormatOptionsJpegQualityTextField.frame.size.width)/2,
+                exportFormatOptionsJpegQualityLabel.frame.origin.y)];
   [exportFormatOptionsJpegQualityTextField setFrameOrigin:
-    NSMakePoint(NSMaxX([exportFormatOptionsJpegQualityLabel frame])+8,
-                [exportFormatOptionsJpegQualityTextField frame].origin.y)];
+    NSMakePoint(NSMaxX(exportFormatOptionsJpegQualityLabel.frame)+8,
+                exportFormatOptionsJpegQualityTextField.frame.origin.y)];
   [exportFormatOptionsJpegBackgroundColorLabel setFrameOrigin:
-    NSMakePoint(([exportFormatOptionsJpegBox frame].size.width-
-                 [exportFormatOptionsJpegBackgroundColorLabel frame].size.width-
+    NSMakePoint((exportFormatOptionsJpegBox.frame.size.width-
+                 exportFormatOptionsJpegBackgroundColorLabel.frame.size.width-
                  8-
-                 [exportFormatOptionsJpegBackgroundColorWell frame].size.width)/2,
-                [exportFormatOptionsJpegBackgroundColorLabel frame].origin.y)];
+                 exportFormatOptionsJpegBackgroundColorWell.frame.size.width)/2,
+                exportFormatOptionsJpegBackgroundColorLabel.frame.origin.y)];
   [exportFormatOptionsJpegBackgroundColorWell setFrameOrigin:
-    NSMakePoint(NSMaxX([exportFormatOptionsJpegBackgroundColorLabel frame])+8,
-                [exportFormatOptionsJpegBackgroundColorWell frame].origin.y)];
+    NSMakePoint(NSMaxX(exportFormatOptionsJpegBackgroundColorLabel.frame)+8,
+                exportFormatOptionsJpegBackgroundColorWell.frame.origin.y)];
   [exportFormatOptionsJpegCancelButton setFrameSize:
     NSMakeSize(MAX(90, [exportFormatOptionsJpegCancelButton frame].size.width),
-               [exportFormatOptionsJpegCancelButton frame].size.height)];
-  [exportFormatOptionsJpegOKButton setFrameSize:[exportFormatOptionsJpegCancelButton frame].size];
+               exportFormatOptionsJpegCancelButton.frame.size.height)];
+  [exportFormatOptionsJpegOKButton setFrameSize:exportFormatOptionsJpegCancelButton.frame.size];
   [exportFormatOptionsJpegOKButton setFrameOrigin:
-    NSMakePoint(NSMaxX([exportFormatOptionsJpegBox frame])-[exportFormatOptionsJpegOKButton frame].size.width,
-                [exportFormatOptionsJpegOKButton frame].origin.y)];
+    NSMakePoint(NSMaxX(exportFormatOptionsJpegBox.frame)-exportFormatOptionsJpegOKButton.frame.size.width,
+                exportFormatOptionsJpegOKButton.frame.origin.y)];
   [exportFormatOptionsJpegCancelButton setFrameOrigin:
-    NSMakePoint([exportFormatOptionsJpegOKButton frame].origin.x-12-[exportFormatOptionsJpegCancelButton frame].size.width,
-                [exportFormatOptionsJpegCancelButton frame].origin.y)];
+    NSMakePoint(exportFormatOptionsJpegOKButton.frame.origin.x-12-exportFormatOptionsJpegCancelButton.frame.size.width,
+                exportFormatOptionsJpegCancelButton.frame.origin.y)];
 
   [exportFormatOptionsSvgBox setTitle:LocalLocalizedString(@"Path to pdf2svg", @"Path to pdf2svg")];
-  [exportFormatOptionsSvgPdfToSvgPathModifyButton setTitle:[NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Change", @"Change")]];
+  exportFormatOptionsSvgPdfToSvgPathModifyButton.title = [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Change", @"Change")];
   [exportFormatOptionsSvgOKButton setTitle:LocalLocalizedString(@"OK", @"OK")];
   [exportFormatOptionsSvgCancelButton setTitle:LocalLocalizedString(@"Cancel", @"Cancel")];
   [exportFormatOptionsSvgPdfToSvgPathModifyButton sizeToFit];
   [exportFormatOptionsSvgOKButton sizeToFit];
   [exportFormatOptionsSvgCancelButton sizeToFit];
   [exportFormatOptionsSvgPdfToSvgPathModifyButton setFrameOrigin:
-    NSMakePoint([exportFormatOptionsSvgBox frame].size.width-16-
-                [exportFormatOptionsSvgPdfToSvgPathModifyButton frame].size.width,
-                [exportFormatOptionsSvgPdfToSvgPathModifyButton frame].origin.y)];
+    NSMakePoint(exportFormatOptionsSvgBox.frame.size.width-16-
+                exportFormatOptionsSvgPdfToSvgPathModifyButton.frame.size.width,
+                exportFormatOptionsSvgPdfToSvgPathModifyButton.frame.origin.y)];
   [exportFormatOptionsSvgPdfToSvgPathTextField setFrameSize:
-    NSMakeSize([exportFormatOptionsSvgPdfToSvgPathModifyButton frame].origin.x-8-10,
-               [exportFormatOptionsSvgPdfToSvgPathTextField frame].size.height)];
+    NSMakeSize(exportFormatOptionsSvgPdfToSvgPathModifyButton.frame.origin.x-8-10,
+               exportFormatOptionsSvgPdfToSvgPathTextField.frame.size.height)];
   [exportFormatOptionsSvgCancelButton setFrameSize:
     NSMakeSize(MAX(90, [exportFormatOptionsSvgCancelButton frame].size.width),
-               [exportFormatOptionsSvgCancelButton frame].size.height)];
-  [exportFormatOptionsSvgOKButton setFrameSize:[exportFormatOptionsSvgCancelButton frame].size];
+               exportFormatOptionsSvgCancelButton.frame.size.height)];
+  [exportFormatOptionsSvgOKButton setFrameSize:exportFormatOptionsSvgCancelButton.frame.size];
   [exportFormatOptionsSvgOKButton setFrameOrigin:
-    NSMakePoint(NSMaxX([exportFormatOptionsSvgBox frame])-[exportFormatOptionsSvgOKButton frame].size.width,
-                [exportFormatOptionsSvgOKButton frame].origin.y)];
+    NSMakePoint(NSMaxX(exportFormatOptionsSvgBox.frame)-exportFormatOptionsSvgOKButton.frame.size.width,
+                exportFormatOptionsSvgOKButton.frame.origin.y)];
   [exportFormatOptionsSvgCancelButton setFrameOrigin:
-    NSMakePoint([exportFormatOptionsSvgOKButton frame].origin.x-12-[exportFormatOptionsSvgCancelButton frame].size.width,
-                [exportFormatOptionsSvgCancelButton frame].origin.y)];
+    NSMakePoint(exportFormatOptionsSvgOKButton.frame.origin.x-12-exportFormatOptionsSvgCancelButton.frame.size.width,
+                exportFormatOptionsSvgCancelButton.frame.origin.y)];
 
   NSDictionary* colorForFileExistsBindingOptions =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-      [ComposedTransformer
+    @{NSValueTransformerBindingOption: [ComposedTransformer
         transformerWithValueTransformer:[FileExistsTransformer transformerWithDirectoryAllowed:NO]
              additionalValueTransformer:[BoolTransformer transformerWithFalseValue:[NSColor redColor] trueValue:[NSColor controlTextColor]]
-             additionalKeyPath:nil], NSValueTransformerBindingOption, nil];
+             additionalKeyPath:nil]};
 
   [exportFormatOptionsTextExportPreambleButton setTitle:LocalLocalizedString(@"Export preamble", @"Export preamble")];
   [exportFormatOptionsTextExportPreambleButton sizeToFit];
@@ -171,18 +170,18 @@
   [exportFormatOptionsTextCancelButton sizeToFit];
   [exportFormatOptionsTextCancelButton setFrameSize:
    NSMakeSize(MAX(90, [exportFormatOptionsTextCancelButton frame].size.width),
-              [exportFormatOptionsTextCancelButton frame].size.height)];
-  [exportFormatOptionsTextOKButton setFrameSize:[exportFormatOptionsTextCancelButton frame].size];
+              exportFormatOptionsTextCancelButton.frame.size.height)];
+  [exportFormatOptionsTextOKButton setFrameSize:exportFormatOptionsTextCancelButton.frame.size];
   [exportFormatOptionsTextOKButton setFrameOrigin:
-   NSMakePoint(NSMaxX([exportFormatOptionsTextBox frame])-[exportFormatOptionsTextOKButton frame].size.width,
-               [exportFormatOptionsTextOKButton frame].origin.y)];
+   NSMakePoint(NSMaxX(exportFormatOptionsTextBox.frame)-exportFormatOptionsTextOKButton.frame.size.width,
+               exportFormatOptionsTextOKButton.frame.origin.y)];
   [exportFormatOptionsTextCancelButton setFrameOrigin:
-   NSMakePoint([exportFormatOptionsTextOKButton frame].origin.x-12-[exportFormatOptionsTextCancelButton frame].size.width,
-               [exportFormatOptionsTextCancelButton frame].origin.y)];
+   NSMakePoint(exportFormatOptionsTextOKButton.frame.origin.x-12-exportFormatOptionsTextCancelButton.frame.size.width,
+               exportFormatOptionsTextCancelButton.frame.origin.y)];
   
   [self->exportFormatOptionsPDFWofGSBox setTitle:LocalLocalizedString(@"Ghostscript options", @"Ghostscript options")];
-  [self->exportFormatOptionsPDFWofGSWriteEngineLabel setStringValue:[NSString stringWithFormat:@"%@:",LocalLocalizedString(@"Write engine", @"Write engine")]];
-  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel setStringValue:[NSString stringWithFormat:@"%@:",LocalLocalizedString(@"PDF Compatibility level", @"PDF Compatibility level")]];
+  self->exportFormatOptionsPDFWofGSWriteEngineLabel.stringValue = [NSString stringWithFormat:@"%@:",LocalLocalizedString(@"Write engine", @"Write engine")];
+  self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel.stringValue = [NSString stringWithFormat:@"%@:",LocalLocalizedString(@"PDF Compatibility level", @"PDF Compatibility level")];
   [self->exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox setTitle:NSLocalizedString(@"Add invisible graphic commands", @"Add invisible graphic commands")];
   [self->exportFormatOptionsPDFWofGSWriteEngineLabel sizeToFit];
   [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel sizeToFit];
@@ -193,36 +192,34 @@
   [self->exportFormatOptionsPDFWofOKButton sizeToFit];
   [self->exportFormatOptionsPDFWofCancelButton sizeToFit];
   
-  [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton setFrame:
-   NSMakeRect(MAX(CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSWriteEngineLabel frame])),
+  self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton.frame = NSMakeRect(MAX(CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSWriteEngineLabel frame])),
                   CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel frame]))),
-              [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].origin.y,
+              self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton.frame.origin.y,
               MAX([self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].size.width,
                   [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].size.width),
-              [self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].size.height)];
-  [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton setFrame:
-   NSMakeRect(MAX(CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSWriteEngineLabel frame])),
+              self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton.frame.size.height);
+  self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton.frame = NSMakeRect(MAX(CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSWriteEngineLabel frame])),
                    CGRectGetMaxX(NSRectToCGRect([self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel frame]))),
-              [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].origin.y,
+              self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton.frame.origin.y,
               MAX([self->exportFormatOptionsPDFWofGSWriteEnginePopUpButton frame].size.width,
                   [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].size.width),
-              [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton frame].size.height)];
+              self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton.frame.size.height);
   
   [self->exportFormatOptionsPDFWofCancelButton setFrameSize:
    NSMakeSize(MAX(90, [self->exportFormatOptionsPDFWofCancelButton frame].size.width),
-              [self->exportFormatOptionsPDFWofCancelButton frame].size.height)];
-  [self->exportFormatOptionsPDFWofOKButton setFrameSize:[self->exportFormatOptionsPDFWofCancelButton frame].size];
+              self->exportFormatOptionsPDFWofCancelButton.frame.size.height)];
+  [self->exportFormatOptionsPDFWofOKButton setFrameSize:self->exportFormatOptionsPDFWofCancelButton.frame.size];
   [self->exportFormatOptionsPDFWofOKButton setFrameOrigin:
-   NSMakePoint(NSMaxX([self->exportFormatOptionsPDFWofGSBox frame])-[self->exportFormatOptionsPDFWofOKButton frame].size.width,
-               [self->exportFormatOptionsPDFWofOKButton frame].origin.y)];
+   NSMakePoint(NSMaxX(self->exportFormatOptionsPDFWofGSBox.frame)-self->exportFormatOptionsPDFWofOKButton.frame.size.width,
+               self->exportFormatOptionsPDFWofOKButton.frame.origin.y)];
   [self->exportFormatOptionsPDFWofCancelButton setFrameOrigin:
-   NSMakePoint([self->exportFormatOptionsPDFWofOKButton frame].origin.x-12-[self->exportFormatOptionsPDFWofCancelButton frame].size.width,
-               [self->exportFormatOptionsPDFWofCancelButton frame].origin.y)];
+   NSMakePoint(self->exportFormatOptionsPDFWofOKButton.frame.origin.x-12-self->exportFormatOptionsPDFWofCancelButton.frame.size.width,
+               self->exportFormatOptionsPDFWofCancelButton.frame.origin.y)];
 
   [exportFormatOptionsJpegQualitySlider bind:NSValueBinding toObject:self withKeyPath:@"jpegQualityPercent"
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption, nil]];
+    options:@{NSContinuouslyUpdatesValueBindingOption: @YES}];
   [exportFormatOptionsJpegQualityTextField bind:NSValueBinding toObject:self withKeyPath:@"jpegQualityPercent"
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption, nil]];
+    options:@{NSContinuouslyUpdatesValueBindingOption: @YES}];
   [exportFormatOptionsJpegBackgroundColorWell bind:NSValueBinding toObject:self withKeyPath:@"jpegBackgroundColor" options:nil];
   [exportFormatOptionsSvgPdfToSvgPathTextField bind:NSValueBinding toObject:self withKeyPath:@"svgPdfToSvgPath" options:nil];
   [exportFormatOptionsSvgPdfToSvgPathTextField bind:NSTextColorBinding toObject:self withKeyPath:@"svgPdfToSvgPath"
@@ -244,16 +241,16 @@
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   [openPanel setResolvesAliases:YES];
-  NSString* filePath = [self svgPdfToSvgPath];
-  NSString* filename =[filePath lastPathComponent];
-  NSString* directory = [filePath stringByDeletingLastPathComponent];
+  NSString* filePath = self.svgPdfToSvgPath;
+  NSString* filename =filePath.lastPathComponent;
+  NSString* directory = filePath.stringByDeletingLastPathComponent;
   openPanel.directoryURL = [NSURL fileURLWithPath:directory];
   openPanel.nameFieldStringValue = filename;
   NSInteger result = [openPanel runModal];
   if (result == NSFileHandlingPanelOKButton)
   {
-    filePath = [[openPanel URL] path];
-    [self setSvgPdfToSvgPath:filePath];
+    filePath = openPanel.URL.path;
+    self.svgPdfToSvgPath = filePath;
   }//end if (result == NSFileHandlingPanelOKButton)
 }
 //end svgPdfToSvgPathModify:

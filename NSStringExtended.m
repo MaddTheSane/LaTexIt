@@ -19,7 +19,7 @@
 @implementation NSString (Extended)
 
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
-+(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
++(instancetype) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
 {
   NSString* string = nil;
   string = [NSString stringWithContentsOfFile:path usedEncoding:enc error:error];
@@ -56,7 +56,7 @@
 }
 //end stringWithContentsOfFile:guessEncoding:error:
 
-+(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
++(instancetype) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error
 {
   NSString* string = nil;
   string = [NSString stringWithContentsOfURL:url usedEncoding:enc error:error];
@@ -114,8 +114,8 @@
 -(BOOL) startsWith:(NSString*)substring options:(NSStringCompareOptions)mask
 {
   BOOL ok = NO;
-  NSUInteger selfLength = [self length];
-  NSUInteger subLength = [substring length];
+  NSUInteger selfLength = self.length;
+  NSUInteger subLength = substring.length;
   if (selfLength >= subLength)
   {
     NSRange rangeOfBegin = NSMakeRange(0, subLength);
@@ -128,8 +128,8 @@
 -(BOOL) endsWith:(NSString*)substring options:(NSStringCompareOptions)mask
 {
   BOOL ok = NO;
-  NSUInteger selfLength = [self length];
-  NSUInteger subLength = [substring length];
+  NSUInteger selfLength = self.length;
+  NSUInteger subLength = substring.length;
   if (selfLength >= subLength)
   {
     NSRange rangeOfEnd = NSMakeRange(selfLength-subLength, subLength);
@@ -144,7 +144,7 @@
   NSMutableData* data = [NSMutableData dataWithData:[self dataUsingEncoding:encoding allowLossyConversion:flag]];
   const unichar zero = 0;
   [data appendBytes:&zero length:sizeof(zero)];
-  return [data bytes];
+  return data.bytes;
 }
 //end cStringUsingEncoding:allowLossyConversion:
 
@@ -153,8 +153,8 @@
   NSString* softbreakString = @"\u2028";
   NSString* unbreakableSpaceString = @"\u00A0";
   NSMutableString* string = [NSMutableString stringWithString:self];
-  [string replaceOccurrencesOfString:softbreakString withString:@"\n" options:0 range:NSMakeRange(0, [string length])];
-  [string replaceOccurrencesOfString:unbreakableSpaceString withString:@" " options:0 range:NSMakeRange(0, [string length])];
+  [string replaceOccurrencesOfString:softbreakString withString:@"\n" options:0 range:NSMakeRange(0, string.length)];
+  [string replaceOccurrencesOfString:unbreakableSpaceString withString:@" " options:0 range:NSMakeRange(0, string.length)];
   return string;
 }
 //end stringWithFilteredStringForLatex
@@ -189,16 +189,16 @@
 {
   [self replaceOccurrencesOfRegex:@"¥([[:space:]]+)"
                        withString:@"\\\\yen{}$1" options:RKLCaseless|RKLMultiline
-                            range:NSMakeRange(0, [self length]) error:nil];
+                            range:NSMakeRange(0, self.length) error:nil];
   [self replaceOccurrencesOfRegex:@"¥¥"
                        withString:@"\\\\\\\\" options:RKLCaseless|RKLMultiline
-                            range:NSMakeRange(0, [self length]) error:nil];
+                            range:NSMakeRange(0, self.length) error:nil];
   [self replaceOccurrencesOfRegex:@"¥([^[[:space:]]0-9])"
                        withString:@"\\\\$1" options:RKLCaseless|RKLMultiline
-                            range:NSMakeRange(0, [self length]) error:nil];
+                            range:NSMakeRange(0, self.length) error:nil];
   [self replaceOccurrencesOfRegex:@"¥"
                        withString:@"\\\\yen{}" options:RKLCaseless|RKLMultiline
-                            range:NSMakeRange(0, [self length]) error:nil];
+                            range:NSMakeRange(0, self.length) error:nil];
 }
 @end
 

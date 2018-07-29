@@ -76,17 +76,17 @@
 ///getting the unique instance of appController
 @property (class, readonly, retain) AppController *appController;
 +(NSDocument*)              currentDocument;
--(NSDocument*)              currentDocument;
--(NSWindow*)                whiteColorWarningWindow;
--(AdditionalFilesWindowController*)           additionalFilesWindowController;
--(CompositionConfigurationsWindowController*) compositionConfigurationWindowController;
--(DragFilterWindowController*)                dragFilterWindowController;
--(EncapsulationsWindowController*)            encapsulationsWindowController;
--(HistoryWindowController*)                   historyWindowController;
--(LaTeXPalettesWindowController*)             latexPalettesWindowController;
--(LibraryWindowController*)                   libraryWindowController;
--(MarginsWindowController*)                   marginsWindowController;
--(PreferencesWindowController*)               preferencesWindowController;
+@property (readonly, strong) NSDocument *currentDocument;
+@property (readonly, strong) NSWindow *whiteColorWarningWindow;
+@property (readonly, strong) AdditionalFilesWindowController *additionalFilesWindowController;
+@property (readonly, strong) CompositionConfigurationsWindowController *compositionConfigurationWindowController;
+@property (readonly, strong) DragFilterWindowController *dragFilterWindowController;
+@property (readonly, strong) EncapsulationsWindowController *encapsulationsWindowController;
+@property (readonly, strong) HistoryWindowController *historyWindowController;
+@property (readonly, strong) LaTeXPalettesWindowController *latexPalettesWindowController;
+@property (readonly, strong) LibraryWindowController *libraryWindowController;
+@property (readonly, strong) MarginsWindowController *marginsWindowController;
+@property (readonly, strong) PreferencesWindowController *preferencesWindowController;
 
 -(HistoryItem*) addEquationToHistory:(LatexitEquation*)latexitEquation;
 -(HistoryItem*) addHistoryItemToHistory:(HistoryItem*)latexitEquation;
@@ -162,8 +162,8 @@
 -(NSString*) findUnixProgram:(NSString*)programName tryPrefixes:(NSArray<NSString*>*)prefixes environment:(NSDictionary*)environment useLoginShell:(BOOL)useLoginShell;
 
 ///returns the default preamble. If color.sty is not available, it may add % in front of \usepackage{color}
--(NSAttributedString*) preambleLatexisationAttributedString;
--(NSAttributedString*) preambleServiceAttributedString;
+@property (readonly, copy) NSAttributedString *preambleLatexisationAttributedString;
+@property (readonly, copy) NSAttributedString *preambleServiceAttributedString;
 
 //returns some configuration info
 @property (readonly, getter=isPdfLaTeXAvailable) BOOL pdfLaTeXAvailable;
@@ -184,7 +184,7 @@
 @property (readonly) CGFloat marginsCurrentRightMargin;
 
 //if the additionalFilesWindowController is not loaded, just use the user defaults values
--(NSArray*) additionalFilesPaths;
+@property (readonly, copy) NSArray<NSString*> *additionalFilesPaths;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSString*) nameOfType:(export_format_t)format;
@@ -213,7 +213,7 @@
 -(BOOL) installLatexPalette:(NSURL*)palettePath;
 
 //Sparkle
--(SUUpdater*) sparkleUpdater;
+@property (readonly, strong) SUUpdater *sparkleUpdater;
 
 //NSApplicationDelegate
 -(BOOL) application:(NSApplication*)theApplication openFile:(NSString*)filename;

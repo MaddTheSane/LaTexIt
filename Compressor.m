@@ -25,17 +25,17 @@
   NSData* result = nil;
   if (data)
   {
-    uLong srcLength = [data length];
+    uLong srcLength = data.length;
     uLongf buffLength = srcLength * 1.001 + 12;
     NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:buffLength+sizeof(uLong)];
     uLong swappedSrclength = CFSwapInt32HostToBig((uint32_t)srcLength);
     [compData appendBytes:&swappedSrclength length:sizeof(uLong)];
     [compData increaseLengthBy:buffLength];
-    int error=compress([compData mutableBytes]+sizeof(uLong),&buffLength,[data bytes],srcLength);
+    int error=compress(compData.mutableBytes+sizeof(uLong),&buffLength,data.bytes,srcLength);
     switch(error)
     {
       case Z_OK:
-        [compData setLength:buffLength+sizeof(uLong)];
+        compData.length = buffLength+sizeof(uLong);
         result = [compData copy];
         break;
       default:
@@ -60,17 +60,17 @@
   NSData* result = nil;
   if (data)
   {
-    uLongf sourceLen = [data length];
+    uLongf sourceLen = data.length;
     uLongf destLen   = compressBound(sourceLen);
     NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:sizeof(unsigned int)+destLen];
     unsigned int bigSourceLen = CFSwapInt32HostToBig((unsigned int)sourceLen);
     [compData appendBytes:&bigSourceLen length:sizeof(unsigned int)];
     [compData increaseLengthBy:destLen];
-    int error = compress2([compData mutableBytes]+sizeof(unsigned int), &destLen, [data bytes], sourceLen, level);
+    int error = compress2(compData.mutableBytes+sizeof(unsigned int), &destLen, data.bytes, sourceLen, level);
     switch(error)
     {
       case Z_OK:
-        [compData setLength:sizeof(unsigned int)+destLen];
+        compData.length = sizeof(unsigned int)+destLen;
         result = [compData copy];
         break;
       default:
@@ -97,8 +97,8 @@
     uLongf swappedDestLen = CFSwapInt32((uint32_t)unswappedDestLen);
     uLongf destLen = MIN(swappedDestLen, unswappedDestLen);
     NSMutableData* decompData = [[NSMutableData alloc] initWithLength:destLen];
-    int error = uncompress( [decompData mutableBytes], &destLen,
-                            [data bytes]+sizeof(uLong), [data length]-sizeof(uLong) );
+    int error = uncompress( decompData.mutableBytes, &destLen,
+                            data.bytes+sizeof(uLong), data.length-sizeof(uLong) );
     switch(error)
     {
       case Z_OK:
@@ -119,8 +119,8 @@
       if (test)
         free(test);
       decompData = ok ? [[NSMutableData alloc] initWithLength:destLen] : nil;
-      error = !decompData ? -1 : uncompress( [decompData mutableBytes], &destLen,
-                                             [data bytes]+sizeof(uLong), [data length]-sizeof(uLong) );
+      error = !decompData ? -1 : uncompress( decompData.mutableBytes, &destLen,
+                                             data.bytes+sizeof(uLong), data.length-sizeof(uLong) );
       switch(error)
       {
         case Z_OK:
@@ -150,8 +150,8 @@
     unsigned int destLen = CFSwapInt32BigToHost(bigDestLen);
     uLongf destLenf = destLen;
     NSMutableData* decompData = [[NSMutableData alloc] initWithLength:destLen];
-    int error = uncompress([decompData mutableBytes], &destLenf,
-                           [data bytes]+sizeof(unsigned int), [data length]-sizeof(unsigned int));
+    int error = uncompress(decompData.mutableBytes, &destLenf,
+                           data.bytes+sizeof(unsigned int), data.length-sizeof(unsigned int));
     switch(error)
     {
       case Z_OK:

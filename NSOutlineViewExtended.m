@@ -12,8 +12,8 @@
 
 -(NSArray*) itemsAtRowIndexes:(NSIndexSet*)rowIndexes
 {
-  NSMutableArray* result = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
-  NSUInteger row = [rowIndexes firstIndex];
+  NSMutableArray* result = [NSMutableArray arrayWithCapacity:rowIndexes.count];
+  NSUInteger row = rowIndexes.firstIndex;
   while(row != NSNotFound)
   {
     [result addObject:[self itemAtRow:row]];
@@ -25,14 +25,14 @@
 
 -(id) selectedItem
 {
-  id result = [self itemAtRow:[self selectedRow]];
+  id result = [self itemAtRow:self.selectedRow];
   return result;
 }
 //end selectedItem
 
 -(NSArray*) selectedItems
 {
-  NSArray* result = [self itemsAtRowIndexes:[self selectedRowIndexes]];
+  NSArray* result = [self itemsAtRowIndexes:self.selectedRowIndexes];
   return result;
 }
 //end selectedItems

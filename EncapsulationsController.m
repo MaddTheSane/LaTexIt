@@ -17,10 +17,10 @@
 -(id) newObject
 {
   id result = nil;
-  NSArray* objects = [self arrangedObjects];
-  NSArray* selectedObjects = [self selectedObjects];
-  id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
-                   (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
+  NSArray* objects = self.arrangedObjects;
+  NSArray* selectedObjects = self.selectedObjects;
+  id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
+                   (objects && objects.count) ? objects[0] : nil;
   result = !modelObject ? @"" : [modelObject mutableCopy];
   return result;
 }
@@ -30,7 +30,7 @@
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [self setSelectedObjects:@[newObject]];
 }
 //end add:
 

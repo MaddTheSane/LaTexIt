@@ -17,12 +17,12 @@
 -(NSColor*) textColor
 {
   NSColor* result = nil;
-  NSAttributedString* attributedTitle = [self attributedTitle];
-  NSUInteger length = [attributedTitle length];
+  NSAttributedString* attributedTitle = self.attributedTitle;
+  NSUInteger length = attributedTitle.length;
   NSRange range = NSMakeRange(0, MIN(length, 1U)); // take color from first char
   NSDictionary* attributes = [attributedTitle fontAttributesInRange:range];
   result = !attributes ? [NSColor controlTextColor] :
-    [attributes objectForKey:NSForegroundColorAttributeName];
+    attributes[NSForegroundColorAttributeName];
   return result;
 }
 //end textColor
@@ -30,12 +30,12 @@
 -(void) setTextColor:(NSColor*)textColor
 {
   NSMutableAttributedString* attributedTitle =
-    [[NSMutableAttributedString alloc] initWithAttributedString:[self attributedTitle]];
-  NSUInteger length = [attributedTitle length];
+    [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedTitle];
+  NSUInteger length = attributedTitle.length;
   NSRange range = NSMakeRange(0, length);
   [attributedTitle addAttribute:NSForegroundColorAttributeName value:textColor range:range];
   [attributedTitle fixAttributesInRange:range];
-  [self setAttributedTitle:attributedTitle];
+  self.attributedTitle = attributedTitle;
 }
 //end setTextColor:
 

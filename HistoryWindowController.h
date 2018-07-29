@@ -33,7 +33,7 @@
   NSSavePanel* savePanel;
 }
 
--(HistoryView*) historyView;
+@property (readonly, strong) HistoryView *historyView;
 
 -(IBAction) historySearchFieldChanged:(id)sender;
 
@@ -46,7 +46,7 @@
 
 -(IBAction) changeHistoryExportFormat:(id)sender;
 
--(BOOL) canRemoveEntries;
+@property (readonly) BOOL canRemoveEntries;
 -(void) deselectAll:(id)sender;
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;

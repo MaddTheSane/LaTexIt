@@ -11,13 +11,13 @@
 
 @implementation PropertyStorage
 
--(id) init
+-(instancetype) init
 {
   return [self initWithDictionary:nil];
 }
 //end init
 
--(id) initWithDictionary:(NSDictionary*)aDictionary
+-(instancetype) initWithDictionary:(NSDictionary*)aDictionary
 {
   if (!((self = [super init])))
     return nil;
@@ -30,7 +30,7 @@
 
 -(id) objectForKey:(id)key
 {
-  id result = [dictionary objectForKey:key];
+  id result = dictionary[key];
   return result;
 }
 //end objectForKey:
@@ -38,7 +38,7 @@
 -(void) setObject:(id)object forKey:(id)key
 {
   [self willChangeValueForKey:key];
-  [dictionary setObject:object forKey:key];
+  dictionary[key] = object;
   [self didChangeValueForKey:key];
 }
 //end setObject:forKey:
@@ -61,25 +61,25 @@
 
 -(id) valueForKey:(NSString*)key
 {
-  id result = [self objectForKey:key];
+  id result = self[key];
   return result;
 }
 //end valueForKey:
 
 -(void) setValue:(id)object forKey:(id)key
 {
-  [self setObject:object forKey:key];
+  self[key] = object;
 }
 //end setValue:forKey:
 
 - (nullable NSNumber*)objectForKeyedSubscript:(NSString*)key
 {
-  return [self objectForKey:key];
+  return self[key];
 }
 
 - (void)setObject:(nullable NSNumber*)obj forKeyedSubscript:(NSString*)key
 {
-  [self setObject:obj forKey:key];
+  self[key] = obj;
 }
 
 

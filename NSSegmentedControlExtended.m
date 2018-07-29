@@ -13,15 +13,15 @@
 -(NSInteger) selectedSegmentTag
 {
   NSInteger result = -1;
-  NSInteger selectedSegment = [self selectedSegment];
-  result = [[self cell] tagForSegment:selectedSegment];
+  NSInteger selectedSegment = self.selectedSegment;
+  result = [self.cell tagForSegment:selectedSegment];
   return result;
 }
 //end selectedSegmentTag
 
 -(void) sizeToFitWithSegmentWidth:(CGFloat)segmentWidth useSameSize:(BOOL)useSameSize
 {
-  NSInteger nbSegments = [self segmentCount];
+  NSInteger nbSegments = self.segmentCount;
   NSInteger i = 0;
   CGFloat maxSize = 0;
   for(i = 0 ; i<nbSegments ; ++i)

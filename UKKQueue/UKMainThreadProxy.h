@@ -51,6 +51,6 @@
 	IBOutlet id		target;
 }
 
--(id)	initWithTarget: (id)targ;
+-(instancetype)	initWithTarget: (id)targ NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -13,7 +13,7 @@
 
 @implementation PaletteItem
 
--(id) initWithName:(NSString*)aName localizedName:(NSString*)aLocalizedName resourcePath:(NSString*)aResourcePath 
+-(instancetype) initWithName:(NSString*)aName localizedName:(NSString*)aLocalizedName resourcePath:(NSString*)aResourcePath 
               type:(latex_item_type_t)aType numberOfArguments:(NSUInteger)aNumberOfArguments
               latexCode:(NSString*)aLatexCode requires:(NSString*)package
               argumentToken:(NSString*)anArgumentToken
@@ -33,7 +33,7 @@
                               [[NSString alloc] initWithFormat:@"\\%@", name]);
   const unichar bulletChar = 0x2026;
   NSString* bulletString = [NSString stringWithCharacters:&bulletChar length:1];
-  NSUInteger presetArgsCount = [[self->latexCode componentsMatchedByRegex:@"\\{.*?(\\{.*\\})*\\}"] count];
+  NSUInteger presetArgsCount = [self->latexCode componentsMatchedByRegex:@"\\{.*?(\\{.*\\})*\\}"].count;
   NSMutableString* stringOfArguments = [NSMutableString string];
   NSUInteger i = 0;
   for(i = presetArgsCount ; i<self->numberOfArguments ; ++i)
@@ -51,7 +51,7 @@
   }
   
   self->image = [[NSImage alloc] initWithContentsOfFile:aResourcePath];
-  [self->image setCacheMode:NSImageCacheNever];
+  self->image.cacheMode = NSImageCacheNever;
   [self->image recache];
   return self;
 }
@@ -82,12 +82,12 @@
   if (self->type == LATEX_ITEM_TYPE_STANDARD)
   {
     [string replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", self->argumentToken]
-                            withString:[NSString stringWithFormat:@"{%@}", [text length] ? text : self->argumentTokenDefaultReplace]
-                               options:0 range:NSMakeRange(0, [string length])];
+                            withString:[NSString stringWithFormat:@"{%@}", text.length ? text : self->argumentTokenDefaultReplace]
+                               options:0 range:NSMakeRange(0, string.length)];
   }
   else if (self->type == LATEX_ITEM_TYPE_ENVIRONMENT)
   {
-    NSUInteger length = [string length];
+    NSUInteger length = string.length;
     NSRange beginRange = [string rangeOfString:@"\\begin{"];
     NSRange endBeginRange =
       (beginRange.location != NSNotFound) ? [string rangeOfString:@"}" options:0 range:NSMakeRange(beginRange.location, length-beginRange.location)]
@@ -97,7 +97,7 @@
                                              : endBeginRange;
     if ((endRange.location != NSNotFound) && (endBeginRange.location+1 < length) && (endRange.location >= endBeginRange.location+1))
     {
-      NSString* replacement = ([text length] ? text : self->argumentTokenDefaultReplace);
+      NSString* replacement = (text.length ? text : self->argumentTokenDefaultReplace);
       if (replacement)
         [string replaceCharactersInRange:NSMakeRange(endBeginRange.location+1, endRange.location-endBeginRange.location-1)
                               withString:replacement];

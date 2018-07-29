@@ -19,20 +19,20 @@
 -(void) disableUndoRegistration
 {
   [self processPendingChanges];
-  [[self undoManager] disableUndoRegistration];
+  [self.undoManager disableUndoRegistration];
 }
 //end disableUndoRegistration
 
 -(void) enableUndoRegistration
 {
   [self processPendingChanges];
-  [[self undoManager] enableUndoRegistration];
+  [self.undoManager enableUndoRegistration];
 }
 //end enableUndoRegistration
 
 -(void) safeInsertObject:(NSManagedObject*)object
 {
-  if (object && ([object managedObjectContext] != self))
+  if (object && (object.managedObjectContext != self))
     [self insertObject:object];
 }
 //end safeInsertObject:
@@ -46,7 +46,7 @@
 
 -(void) safeDeleteObject:(NSManagedObject*)object
 {
-  if ([object managedObjectContext] == self)
+  if (object.managedObjectContext == self)
     [self deleteObject:object];
 }
 //end safeDeleteObject:
@@ -62,14 +62,14 @@
 {
   NSUInteger result = 0;
   NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-  [fetchRequest setEntity:entity];
+  fetchRequest.entity = entity;
   if (predicateFormat)
   {
     va_list va;
     va_start(va, predicateFormat);
     NSPredicate* predicate = [NSPredicate predicateWithFormat:predicateFormat arguments:va];
     va_end(va);
-    [fetchRequest setPredicate:predicate];
+    fetchRequest.predicate = predicate;
   }
 
   result = [super countForFetchRequest:fetchRequest error:error];
@@ -88,7 +88,7 @@
 -(NSManagedObject*) managedObjectForURIRepresentation:(NSURL*)url
 {
   NSManagedObject* result = nil;
-  NSManagedObjectID* managedObjectID = [[self persistentStoreCoordinator] managedObjectIDForURIRepresentation:url];
+  NSManagedObjectID* managedObjectID = [self.persistentStoreCoordinator managedObjectIDForURIRepresentation:url];
   result = [self objectWithID:managedObjectID];
   return result;
 }

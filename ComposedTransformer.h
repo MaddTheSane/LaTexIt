@@ -20,6 +20,6 @@
 +(instancetype) transformerWithValueTransformer:(NSValueTransformer*)valueTransformer
                      additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
 -(instancetype) initWithValueTransformer:(NSValueTransformer*)valueTransformer
-              additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
+              additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath NS_DESIGNATED_INITIALIZER;
 
 @end

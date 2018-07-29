@@ -34,7 +34,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
+        cachedEntity = [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel].entitiesByName[NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -48,26 +48,24 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     @synchronized(self)
     {
       if (!cachedWrapperEntity)
-        cachedWrapperEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:@"HistoryEquationWrapper"];
+        cachedWrapperEntity = [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel].entitiesByName[@"HistoryEquationWrapper"];
     }//end @synchronized(self)
   }//end if (!cachedWrapperEntity)
   return cachedWrapperEntity;
 }
 //end wrapperEntity
 
--(id) initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
+-(instancetype) initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
 {
   if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:context])))
     return nil;
   self->isModelPrior250 = context &&
-    ![[[[context persistentStoreCoordinator] managedObjectModel] entitiesByName]
-      objectForKey:NSStringFromClass([LatexitEquationData class])];
+    !context.persistentStoreCoordinator.managedObjectModel.entitiesByName[NSStringFromClass([LatexitEquationData class])];
   return self;
 }
 //end initWithEntity:insertIntoManagedObjectContext:
 
--(id) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
+-(instancetype) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
   if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
@@ -115,9 +113,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   [super awakeFromInsert];
   [self setCustomKVOEnabled:YES];
   NSManagedObject* equationWrapper = [self valueForKey:@"equationWrapper"];
-  [[self managedObjectContext] safeInsertObject:equationWrapper];
+  [self.managedObjectContext safeInsertObject:equationWrapper];
   NSManagedObject* equation = [equationWrapper valueForKey:@"equation"];
-  [[self managedObjectContext] safeInsertObject:equation];
+  [self.managedObjectContext safeInsertObject:equation];
 }
 //end awakeFromInsert
 
@@ -131,8 +129,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   if ([keyPath isEqualToString:@"equationWrapper.equation.backgroundColor"])
   {
-    NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
-    NSUndoManager* undoManager = [managedObjectContext undoManager];
+    NSManagedObjectContext* managedObjectContext = self.managedObjectContext;
+    NSUndoManager* undoManager = managedObjectContext.undoManager;
     if (undoManager)
       [managedObjectContext disableUndoRegistration];
     [self willChangeValueForKey:@"dummyPropertyToForceUIRefresh"];
@@ -213,7 +211,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     [self setPrimitiveValue:value forKey:@"date"];
     [self didChangeValueForKey:@"date"];
   }//end if (!self->isModelPrior250)
-  [[self equation] setDate:value];
+  [self equation].date = value;
 }
 //end setDate:
 
@@ -223,7 +221,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   [self willAccessValueForKey:@"equationWrapper"];
   LatexitEquationWrapper* equationWrapper = [self primitiveValueForKey:@"equationWrapper"];
   [equationWrapper willAccessValueForKey:@"equation"];
-  result = [equationWrapper equation];
+  result = equationWrapper.equation;
   [equationWrapper didAccessValueForKey:@"equation"];
   [self didAccessValueForKey:@"equationWrapper"];
   return result;
@@ -234,14 +232,14 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   if (equation != [self equation])
   {
-    [[self managedObjectContext] safeInsertObject:equation];
+    [self.managedObjectContext safeInsertObject:equation];
     [self willAccessValueForKey:@"equationWrapper"];
     LatexitEquationWrapper* equationWrapper = [self primitiveValueForKey:@"equationWrapper"];
     [self didAccessValueForKey:@"equationWrapper"];
     if (!equationWrapper)
     {
       equationWrapper = [[LatexitEquationWrapper alloc]
-        initWithEntity:[[self class] wrapperEntity] insertIntoManagedObjectContext:[self managedObjectContext]];
+        initWithEntity:[[self class] wrapperEntity] insertIntoManagedObjectContext:self.managedObjectContext];
       [equationWrapper willChangeValueForKey:@"historyItem"];
       [equationWrapper setPrimitiveValue:self forKey:@"historyItem"]; //if current managedObjectContext is nil, this is necessary
       [equationWrapper didChangeValueForKey:@"historyItem"];
@@ -250,9 +248,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       [self didChangeValueForKey:@"equationWrapper"];
     }//end if (!equationWrapper)
     else
-      [[self managedObjectContext] safeInsertObject:equationWrapper];
-    [equationWrapper setEquation:equation];
-    [self setDate:[equation date]];
+      [self.managedObjectContext safeInsertObject:equationWrapper];
+    equationWrapper.equation = equation;
+    [self setDate:equation.date];
     [equation willChangeValueForKey:@"wrapper"];
     [equation setPrimitiveValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
     [equation didChangeValueForKey:@"wrapper"];
@@ -268,7 +266,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   [[self equation] writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
 
   //overwrite linkBack pasteboard
-  NSArray* historyItemArray = [NSArray arrayWithObject:self];
+  NSArray* historyItemArray = @[self];
   NSData*  historyItemData  = [NSKeyedArchiver archivedDataWithRootObject:historyItemArray];
   NSDictionary* linkBackPlist =
     isLinkBackRefresh ? [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:historyItemData
@@ -276,9 +274,9 @@ static NSEntityDescription* cachedWrapperEntity = nil;
                      : [NSDictionary linkBackDataWithServerName:[[NSWorkspace sharedWorkspace] applicationName] appData:historyItemData]; 
   
   if (isLinkBackRefresh)
-    [pboard declareTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:self];
+    [pboard declareTypes:@[LinkBackPboardType] owner:self];
   else
-    [pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:self];
+    [pboard addTypes:@[LinkBackPboardType] owner:self];
   [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
 }
 //end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
@@ -294,14 +292,14 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 }
 //end plistDescription
 
--(id) initWithDescription:(id)description
+-(instancetype) initWithDescription:(id)description
 {
   NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
   if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
-  NSString* version = [description objectForKey:@"version"];
+  NSString* version = description[@"version"];
   BOOL isOldLibraryItem = ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending);
-  id equationDescription = !isOldLibraryItem ? [description objectForKey:@"equation"] : description;
+  id equationDescription = !isOldLibraryItem ? description[@"equation"] : description;
   LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithDescription:equationDescription];
   [self setEquation:latexitEquation];
   return self;
@@ -312,10 +310,10 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 {
   HistoryItem* result = nil;
   BOOL ok = [description isKindOfClass:[NSDictionary class]];
-  NSString* version = !ok ? nil : [description objectForKey:@"version"];
+  NSString* version = !ok ? nil : description[@"version"];
   BOOL isOldLibraryItem = (ok && ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending));
-  BOOL isGroupItem = ok && ((!isOldLibraryItem && [description objectForKey:@"children"]) || (isOldLibraryItem && [description objectForKey:@"content"]));
-  BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && [description objectForKey:@"equation"]));
+  BOOL isGroupItem = ok && ((!isOldLibraryItem && description[@"children"]) || (isOldLibraryItem && description[@"content"]));
+  BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && description[@"equation"]));
   Class instanceClass = isEquation ? [HistoryItem class] : 0;
   result = !instanceClass ? nil : [[instanceClass alloc] initWithDescription:description];
   return result;
@@ -330,7 +328,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 //end encodeWithCoder:
 
 #pragma mark legacy code
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   NSString* version = [coder decodeObjectForKey:@"version"];
   NSManagedObjectContext* managedObjectContext = ([@"2.0.0" compare:version options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedDescending) ? nil :
@@ -359,7 +357,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       pdfData     = [coder decodeObjectForKey:@"pdfData"];
       NSMutableString* tempPreamble = [NSMutableString stringWithString:[coder decodeObjectForKey:@"preamble"]];
       [tempPreamble replaceOccurrencesOfString:@"\\usepackage[dvips]{color}" withString:@"\\usepackage{color}"
-                                       options:0 range:NSMakeRange(0, [tempPreamble length])];
+                                       options:0 range:NSMakeRange(0, tempPreamble.length)];
       preamble    = [[NSAttributedString alloc] initWithString:tempPreamble];
       sourceText  = [[NSAttributedString alloc] initWithString:[coder decodeObjectForKey:@"sourceText"]];
       color       = [coder decodeObjectForKey:@"color"];
@@ -382,7 +380,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       title       = [coder decodeObjectForKey:@"title"];//may be nil
     }
     //old versions of LaTeXiT would use \usepackage[pdftex]{color} in the preamble. [pdftex] is useless, in fact
-    NSRange rangeOfColorPackage = [[preamble string] rangeOfString:@"\\usepackage[pdftex]{color}"];
+    NSRange rangeOfColorPackage = [preamble.string rangeOfString:@"\\usepackage[pdftex]{color}"];
     if (rangeOfColorPackage.location != NSNotFound)
     {
       NSMutableAttributedString* newPreamble = [[NSMutableAttributedString alloc] initWithAttributedString:preamble];
@@ -393,7 +391,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor];
 
 
-    [equation setTitle:title];
+    equation.title = title;
 
     //for versions < 1.5.4, we must reannotate the pdfData to retreive the diacritic characters
     if (!version || [version compare:@"1.5.4" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)

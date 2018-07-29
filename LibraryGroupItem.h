@@ -14,19 +14,21 @@
 
 @interface LibraryGroupItem : LibraryItem <NSCopying, NSCoding> {
   BOOL     expanded;//seems to be needed on Tiger
-  NSArray* childrenSortDescriptors;
+  NSArray<NSSortDescriptor*>* childrenSortDescriptors;
 }
 
 +(NSEntityDescription*) entity;
 
--(id) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+-(instancetype) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext NS_DESIGNATED_INITIALIZER;
+-(instancetype) initWithCoder:(NSCoder*)coder NS_DESIGNATED_INITIALIZER;
 
 @property (getter=isExpanded) BOOL expanded;
--(NSSet*)   children;
--(NSArray*) childrenOrdered;
+@property (readonly, copy) NSSet *children;
+@property (readonly, copy) NSArray *childrenOrdered;
 -(void)     fixChildrenSortIndexesRecursively:(BOOL)recursively;
 
 //for readable export
--(id) plistDescription;
+@property (readonly, strong) id plistDescription;
+-(instancetype) initWithDescription:(id)description NS_DESIGNATED_INITIALIZER;
 
 @end

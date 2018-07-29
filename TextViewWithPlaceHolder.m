@@ -25,10 +25,8 @@
   {
     self->placeHolder = [value copy];
     NSColor *textColor = [NSColor disabledControlTextColor];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSFont controlContentFontOfSize:0], NSFontAttributeName,
-      textColor, NSForegroundColorAttributeName,
-      nil];
+    NSDictionary *attributes = @{NSFontAttributeName: [NSFont controlContentFontOfSize:0],
+      NSForegroundColorAttributeName: textColor};
     self->attributedPlaceHolder = !self->placeHolder ? nil :
       [[NSAttributedString alloc] initWithString:self->placeHolder attributes:attributes];
   }//end if (value != self->placeHolder)
@@ -37,7 +35,7 @@
 
 -(BOOL) becomeFirstResponder
 {
-  BOOL result = [self isEditable] && [super becomeFirstResponder];
+  BOOL result = self.editable && [super becomeFirstResponder];
   [self setNeedsDisplay:YES];
   return result;
 }
@@ -53,11 +51,10 @@
 -(void) drawRect:(NSRect)rect
 {
   [super drawRect:rect];
-  if (self->placeHolder && ![self->placeHolder isEqualToString:@""] && (self != [[self window]
-firstResponder] && [[[self textStorage] string] isEqualToString:@""]))
+  if (self->placeHolder && ![self->placeHolder isEqualToString:@""] && (self != self.window.firstResponder && [self.textStorage.string isEqualToString:@""]))
   {
-    NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
-    [self->attributedPlaceHolder drawInRect:!clipView ? [self bounds] : [clipView documentVisibleRect]];
+    NSClipView* clipView = [self.superview dynamicCastToClass:[NSClipView class]];
+    [self->attributedPlaceHolder drawInRect:!clipView ? self.bounds : clipView.documentVisibleRect];
   }
 }
 //end drawRect:

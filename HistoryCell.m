@@ -42,12 +42,12 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
 
 @implementation HistoryCell
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
   self->dateFormatter = [[NSDateFormatter alloc] init];
-  [self->dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+  self->dateFormatter.formatterBehavior = NSDateFormatterBehavior10_4;
   self->backgroundColor = nil;//there may be no color
   return self;
 }
@@ -86,17 +86,17 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     [super drawInteriorWithFrame:imageRect inView:controlView]; //the image is displayed in a subrect of the cell
   else
   {
-    NSImage* image = [self image];
+    NSImage* image = self.image;
     NSImageRep* imageRep = [image bestImageRepresentationInContext:[NSGraphicsContext currentContext]];
     NSPDFImageRep* pdfImageRep = ![imageRep isKindOfClass:[NSPDFImageRep class]] ? nil : (NSPDFImageRep*)imageRep;
-    NSRect bounds = !pdfImageRep ? NSMakeRect(0.0, 0.0, [imageRep pixelsWide], [imageRep pixelsHigh]) :
-                    [pdfImageRep bounds];
+    NSRect bounds = !pdfImageRep ? NSMakeRect(0.0, 0.0, imageRep.pixelsWide, imageRep.pixelsHigh) :
+                    pdfImageRep.bounds;
     NSRect imageDrawRect = adaptRectangle(bounds, imageRect, YES, NO, YES);
     [NSGraphicsContext saveGraphicsState];
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:imageDrawRect.origin.x yBy:imageDrawRect.origin.y];
     [transform translateXBy:0 yBy:imageDrawRect.size.height/2];
-    [transform scaleXBy:1.0 yBy:[controlView isFlipped] ? -1.0 : 1.0];
+    [transform scaleXBy:1.0 yBy:controlView.flipped ? -1.0 : 1.0];
     [transform translateXBy:0 yBy:-imageDrawRect.size.height/2];
     [transform concat];
     [imageRep drawInRect:NSMakeRect(0, 0, imageDrawRect.size.width, imageDrawRect.size.height)];
@@ -104,15 +104,15 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   }//end if (drawScaled)
 
   //now we add the date
-  NSDate* date = [[self representedObject] date];
-  [self->dateFormatter setDateStyle:NSDateFormatterNoStyle];
-  [self->dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-  [self->dateFormatter setDateStyle:NSDateFormatterFullStyle];
+  NSDate* date = [self.representedObject date];
+  self->dateFormatter.dateStyle = NSDateFormatterNoStyle;
+  self->dateFormatter.timeStyle = NSDateFormatterNoStyle;
+  self->dateFormatter.dateStyle = NSDateFormatterFullStyle;
   NSString* dateString = [self->dateFormatter stringFromDate:date];
-  [self->dateFormatter setDateStyle:NSDateFormatterNoStyle];
-  [self->dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+  self->dateFormatter.dateStyle = NSDateFormatterNoStyle;
+  self->dateFormatter.timeStyle = NSDateFormatterMediumStyle;
   NSString* timeString = [self->dateFormatter stringFromDate:date];
-  [self->dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+  self->dateFormatter.timeStyle = NSDateFormatterNoStyle;
   NSString* dateTimeString = [NSString stringWithFormat:@"%@, %@", dateString, timeString];
   NSAttributedString* attrString = !dateTimeString ? nil :
     [[NSAttributedString alloc] initWithString:dateTimeString attributes:nil];
@@ -123,8 +123,8 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   textRect.origin.x = MAX(headerRect.origin.x, textRect.origin.x);
     
   BOOL isSelectedCell = NO;
-  NSIndexSet* indexSet = [(NSTableView*)controlView selectedRowIndexes];
-  NSUInteger index = [indexSet firstIndex];
+  NSIndexSet* indexSet = ((NSTableView*)controlView).selectedRowIndexes;
+  NSUInteger index = indexSet.firstIndex;
   while(!isSelectedCell && (index != NSNotFound))
   {
     isSelectedCell |= NSIntersectsRect(headerRect, [(NSTableView*)controlView rectOfRow:index]);
@@ -173,7 +173,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   CGFunctionRef linearBlendFunctionRef = CGFunctionCreate(twoColors, 1, domainAndRange, 4, domainAndRange, &linearFunctionCallbacks);
   
   // Draw a soft wash underneath it
-  CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+  CGContextRef context = [NSGraphicsContext currentContext].graphicsPort;
   CGContextSaveGState(context);
   CGContextClipToRect(context, CGRectMake(NSMinX(rect), NSMinY(rect), NSWidth(rect), NSHeight(rect)));
   CGShadingRef cgShading = CGShadingCreateAxial(colorSpace, CGPointMake(0, NSMinY(rect)),

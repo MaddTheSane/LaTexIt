@@ -16,6 +16,6 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView;
--(instancetype) initWithOutlineView:(NSOutlineView*)outlineView;
+-(instancetype) initWithOutlineView:(NSOutlineView*)outlineView NS_DESIGNATED_INITIALIZER;
 
 @end

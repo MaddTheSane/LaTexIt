@@ -17,6 +17,6 @@
   IBOutlet NSPopUpButton*            additionalFilesMenuButton;
 }
 
--(NSArray*) additionalFilesPaths;
+@property (readonly, copy) NSArray<NSString*> *additionalFilesPaths;
 
 @end

@@ -33,7 +33,7 @@
 
 @implementation HistoryWindowController
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super initWithWindowNibName:@"HistoryWindowController"])))
     return nil;
@@ -51,7 +51,7 @@
 
 -(void) awakeFromNib
 {
-  NSPanel* window = (NSPanel*)[self window];
+  NSPanel* window = (NSPanel*)self.window;
   [window setHidesOnDeactivate:NO];//prevents from disappearing when LaTeXiT is not active
   [window setFloatingPanel:NO];//prevents from floating always above
   [window setFrameAutosaveName:@"history"];
@@ -61,28 +61,26 @@
   //but this prevents keyDown events
   
   NSImage* image = nil;
-  image = [self->historyLockButton image];
-  [image setSize:[self->historyLockButton frame].size];
-  [self->historyLockButton setImage:image];
-  image = [self->historyLockButton alternateImage];
-  [image setSize:[self->historyLockButton frame].size];
-  [self->historyLockButton setAlternateImage:image];
-  [self->historyLockButton setState:[[HistoryManager sharedManager] isLocked] ? NSOnState : NSOffState];
+  image = self->historyLockButton.image;
+  image.size = self->historyLockButton.frame.size;
+  self->historyLockButton.image = image;
+  image = self->historyLockButton.alternateImage;
+  image.size = self->historyLockButton.frame.size;
+  self->historyLockButton.alternateImage = image;
+  self->historyLockButton.state = [HistoryManager sharedManager].locked ? NSOnState : NSOffState;
   [self->historyLockButton bind:NSValueBinding toObject:[[HistoryManager sharedManager] bindController] withKeyPath:@"content.locked"
-    options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
-      NSValueTransformerBindingOption, nil]];
+    options:@{NSValueTransformerBindingOption: [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]]}];
 
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"Add to current history")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)HISTORY_IMPORT_MERGE];
+  self->importOptionPopUpButton.lastItem.tag = (int)HISTORY_IMPORT_MERGE;
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"Overwrite current history")];
-  [[self->importOptionPopUpButton lastItem] setTag:(int)HISTORY_IMPORT_OVERWRITE];
+  self->importOptionPopUpButton.lastItem.tag = (int)HISTORY_IMPORT_OVERWRITE;
 
   [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
   [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
-  NSPoint point = [self->exportFormatPopUpButton frame].origin;
-  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
+  NSPoint point = self->exportFormatPopUpButton.frame.origin;
+  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX(self->exportFormatLabel.frame)+6, point.y)];
   
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:HistoryDisplayPreviewPanelKey options:NSKeyValueObservingOptionNew context:nil];
   [self observeValueForKeyPath:HistoryDisplayPreviewPanelKey ofObject:nil change:nil context:nil];
@@ -90,9 +88,9 @@
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:HistoryDisplayPreviewPanelKey] options:nil];
 
   [self->historyPreviewPanel setFloatingPanel:YES];
-  [self->historyPreviewPanel setBackgroundColor:[NSColor clearColor]];
-  [self->historyPreviewPanel setLevel:NSStatusWindowLevel];
-  [self->historyPreviewPanel setAlphaValue:1.0];
+  self->historyPreviewPanel.backgroundColor = [NSColor clearColor];
+  self->historyPreviewPanel.level = NSStatusWindowLevel;
+  self->historyPreviewPanel.alphaValue = 1.0;
   [self->historyPreviewPanel setOpaque:NO];
   [self->historyPreviewPanel setHasShadow:YES];
 
@@ -110,28 +108,28 @@
 {
   if ([keyPath isEqualToString:@"arrangedObjects"])
   {
-    BOOL isKeyWindow = [[self window] isKeyWindow];
-    NSUInteger nbItems = [self->historyView numberOfRows];
-    [self->clearHistoryButton setEnabled:(isKeyWindow && nbItems)];
-    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"History", @"History"), (unsigned long)nbItems]];
+    BOOL isKeyWindow = self.window.keyWindow;
+    NSUInteger nbItems = self->historyView.numberOfRows;
+    self->clearHistoryButton.enabled = (isKeyWindow && nbItems);
+    self.window.title = [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"History", @"History"), (unsigned long)nbItems];
   }//end if ([keyPath isEqualToString:@"arrangedObjects"])
   else if ([keyPath isEqualToString:HistoryDisplayPreviewPanelKey])
-    [[self->historyPreviewPanelSegmentedControl cell] setSelected:
-      !change ? [[PreferencesController sharedController] historyDisplayPreviewPanelState] : [[change objectForKey:NSKeyValueChangeNewKey] boolValue]
+    [self->historyPreviewPanelSegmentedControl.cell setSelected:
+      !change ? [PreferencesController sharedController].historyDisplayPreviewPanelState : [change[NSKeyValueChangeNewKey] boolValue]
       forSegment:0];
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
 -(IBAction) changeLockedState:(id)sender
 {
-  [[HistoryManager sharedManager] setLocked:([(NSButton*)sender state] == NSOnState)];
+  [HistoryManager sharedManager].locked = (((NSButton*)sender).state == NSOnState);
 }
 //end changeLockedState:
 
 -(IBAction) changeHistoryDisplayPreviewPanelState:(id)sender
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  [preferencesController setHistoryDisplayPreviewPanelState:![preferencesController historyDisplayPreviewPanelState]];
+  preferencesController.historyDisplayPreviewPanelState = !preferencesController.historyDisplayPreviewPanelState;
 }
 //end changeHistoryDisplayPreviewPanelState:
 
@@ -149,7 +147,7 @@
                                             @"Are you sure you want to clear the whole history ?\nThis operation is irreversible.");
   [alert addButtonWithTitle:NSLocalizedString(@"Clear History",@"Clear History")];
   [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
-  if ([[self window] isVisible])
+  if (self.window.visible)
   {
     [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
       if (returnCode == NSAlertFirstButtonReturn) {
@@ -179,10 +177,10 @@
   [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"Export history...")];
   [self changeHistoryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
-  [self->savePanel setAccessoryView:self->exportAccessoryView];
-  [self->exportOnlySelectedButton setState:NSOffState];
-  [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
-  if ([[self window] isVisible]) {
+  self->savePanel.accessoryView = self->exportAccessoryView;
+  self->exportOnlySelectedButton.state = NSOffState;
+  self->exportOnlySelectedButton.enabled = (self->historyView.selectedRow >= 0);
+  if (self.window.visible) {
     savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
     [savePanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
       [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:NULL];
@@ -196,10 +194,10 @@
 {
   if (returnCode == NSFileHandlingPanelOKButton)
   {
-    BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
-    NSArray* selectedHistoryItems = [[[self->historyView historyItemsController] arrangedObjects] objectsAtIndexes:[self->historyView selectedRowIndexes]];
-    BOOL ok = [[HistoryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedHistoryItems
-                                              format:[exportFormatPopUpButton selectedTag]];
+    BOOL onlySelection = (exportOnlySelectedButton.state == NSOnState);
+    NSArray* selectedHistoryItems = [[self->historyView historyItemsController].arrangedObjects objectsAtIndexes:self->historyView.selectedRowIndexes];
+    BOOL ok = [[HistoryManager sharedManager] saveAs:theSavePanel.URL.path onlySelection:onlySelection selection:selectedHistoryItems
+                                              format:exportFormatPopUpButton.selectedTag];
     if (!ok)
     {
       NSAlert* alert = [NSAlert new];
@@ -233,18 +231,18 @@
     [NSString stringWithFormat:@"equation.sourceText.string contains[cd] '%@'", searchString];
   NSPredicate* predicate = !predicateString? nil :
     [NSPredicate predicateWithFormat:predicateString];
-  [[self->historyView historyItemsController] setFilterPredicate:predicate];
+  [self->historyView historyItemsController].filterPredicate = predicate;
 }
 //end historySearchFieldChanged:
 
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setDelegate:(id)self];
+  openPanel.delegate = (id)self;
   [openPanel setTitle:NSLocalizedString(@"Import history...", @"Import history...")];
-  [openPanel setAccessoryView:self->importAccessoryView];
-  openPanel.allowedFileTypes = [NSArray arrayWithObjects:@"latexhist", @"plist", nil];
-  if ([[self window] isVisible]) {
+  openPanel.accessoryView = self->importAccessoryView;
+  openPanel.allowedFileTypes = @[@"latexhist", @"plist"];
+  if (self.window.visible) {
     [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
       [self _openPanelDidEnd:openPanel returnCode:result contextInfo:NULL];
     }];
@@ -256,10 +254,10 @@
 
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
-  history_import_option_t import_option = [self->importOptionPopUpButton selectedTag];
+  history_import_option_t import_option = self->importOptionPopUpButton.selectedTag;
   if (returnCode == NSModalResponseOK)
   {
-    BOOL ok = [[HistoryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
+    BOOL ok = [[HistoryManager sharedManager] loadFrom:openPanel.URLs.lastObject.path option:import_option];
     if (!ok)
     {
       NSAlert* alert = [NSAlert new];
@@ -278,7 +276,7 @@
 
 -(BOOL) canRemoveEntries
 {
-  BOOL result = [[historyView historyItemsController] canRemove];
+  BOOL result = [historyView historyItemsController].canRemove;
   return result;
 }
 //end canRemoveEntries
@@ -292,15 +290,15 @@
 //the clear history button is not available if the history is not the key window
 -(void) windowDidBecomeKey:(NSNotification *)aNotification
 {
-  NSUInteger nbItems = [self->historyView numberOfRows];
-  [self->clearHistoryButton setEnabled:nbItems];
+  NSUInteger nbItems = self->historyView.numberOfRows;
+  self->clearHistoryButton.enabled = nbItems;
 }
 //end windowDidBecomeKey:
 
 -(void) windowDidBecomeMain:(NSNotification *)aNotification
 {
-  NSUInteger nbItems = [self->historyView numberOfRows];
-  [self->clearHistoryButton setEnabled:nbItems];
+  NSUInteger nbItems = self->historyView.numberOfRows;
+  self->clearHistoryButton.enabled = nbItems;
 }
 //end windowDidBecomeMain:
 
@@ -314,33 +312,33 @@
 //display history when application becomes active
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification
 {
-  if ([[self window] isVisible])
-    [[self window] orderFront:self];
+  if (self.window.visible)
+    [self.window orderFront:self];
 }
 //end applicationWillBecomeActive:
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;
 {
-  if (!image && [self->historyPreviewPanel isVisible])
+  if (!image && self->historyPreviewPanel.visible)
     [self->historyPreviewPanel orderOut:self];
   else if (image && self->enablePreviewImage)
   {
-    NSSize imageSize = [image size];
+    NSSize imageSize = image.size;
     NSRect naturalRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
     NSRect adaptedRect = adaptRectangle(naturalRect, NSMakeRect(0, 0, 512, 512), YES, NO, NO);
     NSPoint locationOnScreen = [NSEvent mouseLocation];
-    NSSize screenSize = [[NSScreen mainScreen] frame].size;
+    NSSize screenSize = [NSScreen mainScreen].frame.size;
     int shiftRight = 24;
     int shiftLeft = -24-adaptedRect.size.width-16;
     int shift = (locationOnScreen.x+shiftRight+adaptedRect.size.width+16 > screenSize.width) ? shiftLeft : shiftRight;
     NSRect newFrame = NSMakeRect(MAX(0, locationOnScreen.x+shift),
                                   MIN(locationOnScreen.y-adaptedRect.size.height/2, screenSize.height-adaptedRect.size.height-16),
                                  adaptedRect.size.width+16, adaptedRect.size.height+16);
-    if (image != [self->historyPreviewPanelImageView image])
-      [self->historyPreviewPanelImageView setImage:image];
-    [self->historyPreviewPanelImageView setBackgroundColor:backgroundColor];
+    if (image != self->historyPreviewPanelImageView.image)
+      self->historyPreviewPanelImageView.image = image;
+    self->historyPreviewPanelImageView.backgroundColor = backgroundColor;
     [self->historyPreviewPanel setFrame:newFrame display:image ? YES : NO];
-    if (![self->historyPreviewPanel isVisible])
+    if (!self->historyPreviewPanel.visible)
       [self->historyPreviewPanel orderFront:self];
   }
 }
@@ -361,13 +359,13 @@
 -(void) clearAll:(BOOL)undoable
 {
   NSArrayController* controller = [self->historyView historyItemsController];
-  NSArray* allItems = [controller arrangedObjects];
+  NSArray* allItems = controller.arrangedObjects;
   NSManagedObjectContext* managedObjectContext = [[HistoryManager sharedManager] managedObjectContext];
   if (undoable)
     [controller removeObjects:allItems];
   else//if (!undoable)
   {
-    [[managedObjectContext undoManager] removeAllActions];
+    [managedObjectContext.undoManager removeAllActions];
     [managedObjectContext disableUndoRegistration];
     [controller removeObjects:allItems];
     [managedObjectContext enableUndoRegistration];

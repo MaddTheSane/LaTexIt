@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface BodyTemplatesTableView : NSTableView {
+@interface BodyTemplatesTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource> {
   NSIndexSet* draggedRowIndexes;//transient, used only during drag'n drop
 }
 

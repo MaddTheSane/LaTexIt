@@ -14,7 +14,6 @@
   NSAttributedString* attributedPlaceHolder;
 }
 
--(NSString*) placeHolder;
--(void) setPlaceHolder:(NSString*)value;
+@property (copy) NSString *placeHolder;
 
 @end

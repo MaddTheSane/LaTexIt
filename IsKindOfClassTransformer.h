@@ -16,6 +16,6 @@
 @property (class, readonly, copy) NSString *name;
 
 +(instancetype) transformerWithClass:(Class)aClass;
--(instancetype) initWithClass:(Class)aClass;
+-(instancetype) initWithClass:(Class)aClass NS_DESIGNATED_INITIALIZER;
 
 @end

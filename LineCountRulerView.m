@@ -22,11 +22,11 @@ static NSImage* errorIcon = nil;
 }
 //end initialize
 
--(id) initWithScrollView:(NSScrollView*)scrollView orientation:(NSRulerOrientation)orientation
+-(instancetype) initWithScrollView:(NSScrollView*)scrollView orientation:(NSRulerOrientation)orientation
 {
   if ((!(self = [super initWithScrollView:scrollView orientation:orientation])))
     return nil;
-  [self setRuleThickness:32];
+  self.ruleThickness = 32;
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)
                                                name:LineCountDidChangeNotification object:nil];
   return self;
@@ -41,7 +41,7 @@ static NSImage* errorIcon = nil;
 
 -(void) textDidChange:(NSNotification*)aNotification
 {
-  if ([aNotification object] == [self clientView])
+  if (aNotification.object == self.clientView)
     [self setNeedsDisplay:YES];
 }
 //end textDidChange:
@@ -57,16 +57,16 @@ static NSImage* errorIcon = nil;
 //draws error markers and line numbers
 -(void) drawHashMarksAndLabelsInRect:(NSRect)aRect
 {
-  NSRect visibleRect  = [(NSClipView*)[[self clientView] superview] documentVisibleRect];
-  NSLayoutManager* lm = [(NSTextView*)[self clientView] layoutManager];
-  NSTextContainer* tc = [(NSTextView*)[self clientView] textContainer];
-  NSArray* lineRanges = [(LineCountTextView*)[self clientView] lineRanges];
+  NSRect visibleRect  = ((NSClipView*)self.clientView.superview).documentVisibleRect;
+  NSLayoutManager* lm = ((NSTextView*)self.clientView).layoutManager;
+  NSTextContainer* tc = ((NSTextView*)self.clientView).textContainer;
+  NSArray* lineRanges = [(LineCountTextView*)self.clientView lineRanges];
   
-  NSDictionary* attributes = [NSDictionary dictionaryWithObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName];
+  NSDictionary* attributes = @{NSForegroundColorAttributeName: [NSColor grayColor]};
   unsigned int lineNumber = 0;
-  for(lineNumber = 1 ; lineNumber <= [lineRanges count] ; ++lineNumber)
+  for(lineNumber = 1 ; lineNumber <= lineRanges.count ; ++lineNumber)
   {
-    NSRange lineRange = NSRangeFromString([lineRanges objectAtIndex:lineNumber-1]);
+    NSRange lineRange = NSRangeFromString(lineRanges[lineNumber-1]);
     NSRect rect = [lm boundingRectForGlyphRange:lineRange inTextContainer:tc];
     rect.size.width = MAX(rect.size.width, 1);
     if (NSIntersectsRect(rect, visibleRect))
@@ -74,7 +74,7 @@ static NSImage* errorIcon = nil;
       NSString* numberString = [NSString stringWithFormat:@"%ld", lineNumber+lineShift];
       NSAttributedString* attrNumberString = [[NSAttributedString alloc] initWithString:numberString
                                                                           attributes:attributes];
-      NSPoint origin = NSMakePoint([self frame].size.width-[attrNumberString size].width-2,
+      NSPoint origin = NSMakePoint(self.frame.size.width-[attrNumberString size].width-2,
                                    rect.origin.y-visibleRect.origin.y);
       [attrNumberString drawAtPoint:origin];
     }
@@ -87,14 +87,14 @@ static NSImage* errorIcon = nil;
 {
   --lineIndex; //0 based-system
   lineIndex -= lineShift;
-  NSArray* lineRanges = [(LineCountTextView*)[self clientView] lineRanges];
-  if ((lineIndex >= 0) && ((unsigned int) lineIndex < [lineRanges count]))
+  NSArray* lineRanges = [(LineCountTextView*)self.clientView lineRanges];
+  if ((lineIndex >= 0) && ((unsigned int) lineIndex < lineRanges.count))
   {
-    NSRange lineRange = NSRangeFromString([lineRanges objectAtIndex:lineIndex]);
-    NSLayoutManager* lm = [(NSTextView*)[self clientView] layoutManager];
-    NSTextContainer* tc = [(NSTextView*)[self clientView] textContainer];
+    NSRange lineRange = NSRangeFromString(lineRanges[lineIndex]);
+    NSLayoutManager* lm = ((NSTextView*)self.clientView).layoutManager;
+    NSTextContainer* tc = ((NSTextView*)self.clientView).textContainer;
     NSRect rect = [lm boundingRectForGlyphRange:lineRange inTextContainer:tc];
-    NSSize iconSize = [errorIcon size];
+    NSSize iconSize = errorIcon.size;
     NSRulerMarker* marker =
       [[NSRulerMarker alloc] initWithRulerView:self markerLocation:rect.origin.y image:errorIcon
                                    imageOrigin:NSMakePoint(0, iconSize.height)];
@@ -109,7 +109,7 @@ static NSImage* errorIcon = nil;
 -(void) clearErrors
 {
   [self removeAllToolTips];
-  NSArray* markers = [NSArray arrayWithArray:[self markers]];
+  NSArray* markers = [NSArray arrayWithArray:self.markers];
   NSEnumerator* enumerator = [markers objectEnumerator];
   NSRulerMarker* marker = nil;
   while((marker = [enumerator nextObject]))

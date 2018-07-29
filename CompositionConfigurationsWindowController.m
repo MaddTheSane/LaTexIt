@@ -21,7 +21,7 @@
 
 @implementation CompositionConfigurationsWindowController
 
--(id) init
+-(instancetype) init
 {
   if ((!(self = [super initWithWindowNibName:@"CompositionConfigurationsWindowController"])))
     return nil;
@@ -40,15 +40,15 @@
   [self observeValueForKeyPath:@"arrangedObjects" ofObject:compositionConfigurationsController change:nil context:nil];
   [self observeValueForKeyPath:[userDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey] ofObject:userDefaultsController
     change:nil context:nil];
-  [self->compositionConfigurationsCurrentPopUpButton setTarget:self];
-  [self->compositionConfigurationsCurrentPopUpButton setAction:@selector(compositionConfigurationsManagerOpen:)];
+  self->compositionConfigurationsCurrentPopUpButton.target = self;
+  self->compositionConfigurationsCurrentPopUpButton.action = @selector(compositionConfigurationsManagerOpen:);
 }
 //end awakeFromNib
 
 -(void) windowDidLoad
 {
-  [[self window] setFrameAutosaveName:@"compositionConfiguration"];
-  [[self window] setTitle:NSLocalizedString(@"Composition configurations", @"Composition configurations")];
+  [self.window setFrameAutosaveName:@"compositionConfiguration"];
+  [self.window setTitle:NSLocalizedString(@"Composition configurations", @"Composition configurations")];
 }
 //end windowDidLoad
 
@@ -60,13 +60,13 @@
     [self->compositionConfigurationsCurrentPopUpButton addItemsWithTitles:
       [[[PreferencesController sharedController] compositionConfigurationsController]
         valueForKeyPath:[@"arrangedObjects." stringByAppendingString:CompositionConfigurationNameKey]]];
-    [[self->compositionConfigurationsCurrentPopUpButton menu] addItem:[NSMenuItem separatorItem]];
+    [self->compositionConfigurationsCurrentPopUpButton.menu addItem:[NSMenuItem separatorItem]];
     [self->compositionConfigurationsCurrentPopUpButton addItemWithTitle:NSLocalizedString(@"Edit the configurations...", @"Edit the configurations...")];
   }
   else if ((object == [NSUserDefaultsController sharedUserDefaultsController]) &&
            [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
   {
-    NSInteger index = [[PreferencesController sharedController] compositionConfigurationsDocumentIndex];
+    NSInteger index = [PreferencesController sharedController].compositionConfigurationsDocumentIndex;
     //for some reason, this GUI modification must be delayed
     [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:@(index) afterDelay:0.];
   }
@@ -75,21 +75,21 @@
 
 -(void) compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:(NSNumber*)index
 {
-  [self->compositionConfigurationsCurrentPopUpButton selectItemAtIndex:[index intValue]];
+  [self->compositionConfigurationsCurrentPopUpButton selectItemAtIndex:index.integerValue];
 }
 
 -(IBAction) compositionConfigurationsManagerOpen:(id)sender
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
-  NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
+  NSArray* compositionConfigurations = preferencesController.compositionConfigurations;
+  NSInteger selectedIndex = self->compositionConfigurationsCurrentPopUpButton.indexOfSelectedItem;
   if (!IsBetween_N(1, selectedIndex+1, [compositionConfigurations count]))
   {
     [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier options:nil];
     [[[AppController appController] preferencesWindowController] compositionConfigurationsManagerOpen:sender];
   }
   else
-    [preferencesController setCompositionConfigurationsDocumentIndex:selectedIndex];
+    preferencesController.compositionConfigurationsDocumentIndex = selectedIndex;
 }
 //end compositionConfigurationsManagerOpen:
 @end

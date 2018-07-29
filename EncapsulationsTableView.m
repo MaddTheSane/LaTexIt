@@ -17,20 +17,20 @@
 static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardType";
 
 @interface EncapsulationsTableView ()
--(NSIndexSet*) _draggedRowIndexes; //!<utility method to access draggedItems when working with pasteboard sender
+@property (readonly, copy) NSIndexSet *_draggedRowIndexes; //!<utility method to access draggedItems when working with pasteboard sender
 @end
 
 @implementation EncapsulationsTableView
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   if ((!(self = [super initWithCoder:coder])))
     return nil;
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self];
+  self.delegate = self;
+  self.dataSource = self;
   [[self tableColumnWithIdentifier:@"encapsulations"] bind:NSValueBinding toObject:[[PreferencesController sharedController] encapsulationsController] withKeyPath:@"arrangedObjects.string" options:nil];
 
-  [self registerForDraggedTypes:[NSArray arrayWithObject:EncapsulationsPboardType]];
+  [self registerForDraggedTypes:@[EncapsulationsPboardType]];
   return self;
 }
 //end initWithCoder:
@@ -39,7 +39,7 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 
 -(BOOL) acceptsFirstMouse:(NSEvent*)event //using the tableview does not need to activate the window first
 {
-  NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+  NSPoint point = [self convertPoint:event.locationInWindow fromView:nil];
   NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
@@ -48,8 +48,8 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 
 -(void) keyDown:(NSEvent*)event
 {
-  [super interpretKeyEvents:[NSArray arrayWithObject:event]];
-  if (([event keyCode] == 36) || ([event keyCode] == 52) || ([event keyCode] == 49))//Enter, space or ?? What did I do ???
+  [super interpretKeyEvents:@[event]];
+  if ((event.keyCode == 36) || (event.keyCode == 52) || (event.keyCode == 49))//Enter, space or ?? What did I do ???
     [self edit:self];
 }
 //end keyDown:
@@ -57,7 +57,7 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -79,15 +79,15 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 {
   BOOL ok = YES;
   NSUndoManager* undoManager = [[PreferencesController sharedController] undoManager];
-  if ([sender action] == @selector(undo:))
+  if (sender.action == @selector(undo:))
   {
-    ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
+    ok = undoManager.canUndo;
+    [sender setTitleWithMnemonic:undoManager.undoMenuItemTitle];
   }
-  else if ([sender action] == @selector(redo:))
+  else if (sender.action == @selector(redo:))
   {
-    ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
+    ok = undoManager.canRedo;
+    [sender setTitleWithMnemonic:undoManager.redoMenuItemTitle];
   }
   return ok;
 }
@@ -101,7 +101,7 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 
 -(void) moveUp:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -111,8 +111,8 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 
 -(void) moveDown:(id)sender
 {
-  NSInteger selectedRow = [self selectedRow];
-  if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
+  NSInteger selectedRow = self.selectedRow;
+  if ((selectedRow >= 0) && (selectedRow+1 < self.numberOfRows))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
   [self scrollRowToVisible:selectedRow];
@@ -122,7 +122,7 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification*)notification
 {
-  NSInteger selectedRow = [self selectedRow];
+  NSInteger selectedRow = self.selectedRow;
   [super textDidEndEditing:notification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }
@@ -131,7 +131,7 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
 //delegate methods
 -(void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-  NSUInteger lastIndex = [[self selectedRowIndexes] lastIndex];
+  NSUInteger lastIndex = self.selectedRowIndexes.lastIndex;
   [self scrollRowToVisible:lastIndex];
 }
 //end tableViewSelectionDidChange:
@@ -156,8 +156,8 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
   //we put the moving rows in pasteboard
   self->draggedRowIndexes = rowIndexes;
   EncapsulationsController* encapsulationsController = [[PreferencesController sharedController] encapsulationsController];
-  NSArray* encapsulationsSelected = [encapsulationsController selectedObjects];
-  [pboard declareTypes:[NSArray arrayWithObject:EncapsulationsPboardType] owner:self];  
+  NSArray* encapsulationsSelected = encapsulationsController.selectedObjects;
+  [pboard declareTypes:@[EncapsulationsPboardType] owner:self];  
   [pboard setPropertyList:[NSKeyedArchiver archivedDataWithRootObject:encapsulationsSelected] forType:EncapsulationsPboardType];
   return YES;
 }
@@ -170,10 +170,10 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
   NSPasteboard* pboard = [info draggingPasteboard];
   NSIndexSet* indexSet =  [(id)[[info draggingSource] dataSource] _draggedRowIndexes];
   BOOL ok = (tableView == [info draggingSource]) && pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:EncapsulationsPboardType]] &&
+            [pboard availableTypeFromArray:@[EncapsulationsPboardType]] &&
             [pboard propertyListForType:EncapsulationsPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+            indexSet && (indexSet.firstIndex != (unsigned int)row) && (indexSet.firstIndex+1 != (unsigned int)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

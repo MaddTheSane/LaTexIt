@@ -17,7 +17,7 @@
 -(void) setAnimationEnabled:(BOOL)value
 {
   if ([self respondsToSelector:@selector(setAnimationBehavior:)])
-    [self setAnimationBehavior:(value ? 0 : 2)];
+    self.animationBehavior = (value ? 0 : 2);
 }
 //end setAnimationEnabled:
 

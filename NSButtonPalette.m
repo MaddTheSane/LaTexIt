@@ -13,7 +13,7 @@
 @synthesize exclusive = isExclusive;
 @synthesize delegate;
 
--(id) init
+-(instancetype) init
 {
   if (!(self = [super init]))
     return nil;
@@ -43,7 +43,7 @@
   NSButton* button = nil;
   while(!result && ((button = [enumerator nextObject])))
   {
-    if ([button tag] == tag)
+    if (button.tag == tag)
       result = button;
   }
   //end for each button
@@ -58,7 +58,7 @@
   NSButton* button = nil;
   while(!result && ((button = [enumerator nextObject])))
   {
-    if ([button state] == state)
+    if (button.state == state)
       result = button;
   }
   //end for each button
@@ -71,9 +71,9 @@
   NSInteger result = 0;
   for(NSButton* button in buttons)
   {
-    if ([button state] == NSOnState)
+    if (button.state == NSOnState)
     {
-      result = [button tag];
+      result = button.tag;
       break;
     }//end if ([button state] == NSOnState)
   }//end for each button
@@ -87,7 +87,7 @@
   NSButton* button = nil;
   while((button = [enumerator nextObject]))
   {
-    [button setState:([button tag] == tag) ? NSOnState : NSOffState];
+    button.state = (button.tag == tag) ? NSOnState : NSOffState;
   }//end for each button
 }
 //end setSelectedTag
@@ -96,14 +96,14 @@
 {
   if ([keyPath isEqualToString:@"state"] && [self->buttons containsObject:object])
   {
-    if (isExclusive && ([(NSButton*)object state] == NSOnState))
+    if (isExclusive && (((NSButton*)object).state == NSOnState))
     {
-      NSUInteger count = [self->buttons count];
+      NSUInteger count = self->buttons.count;
       while(count--)
       {
-        NSButton* button = [self->buttons objectAtIndex:count];
+        NSButton* button = self->buttons[count];
         if (button != object)
-          [button setState:NSOffState];
+          button.state = NSOffState;
       }//end for each button
     }//end if (self->isExclusive && ([object state] == NSOnState))
     if ([delegate respondsToSelector:@selector(buttonPalette:buttonStateChanged:)])

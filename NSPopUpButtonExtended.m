@@ -13,7 +13,7 @@
 
 -(id) addItemWithTitle:(NSString*)title tag:(NSInteger)tag
 {
-  NSInteger nbItemsBefore = [self numberOfItems];
+  NSInteger nbItemsBefore = self.numberOfItems;
   id item = [self itemWithTitle:title];
   if (!item)
   {
@@ -28,8 +28,8 @@
 -(NSMenuItem*) addItemWithTitle:(NSString*)aString target:(id)target action:(SEL)action tag:(NSInteger)tag
 {
   NSMenuItem* result = [self addItemWithTitle:aString tag:tag];
-  [result setTarget:target];
-  [result setAction:action];
+  result.target = target;
+  result.action = action;
   return result;
 }
 //end addItemWithTitle:target:action:tag:

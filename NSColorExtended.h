@@ -13,13 +13,13 @@
 //Unfortunately, so far, an NSColor does not know how to transform itself into data, or built itself with data
 //We have to make that by hand
 +(NSColor*) colorWithData:(NSData*)data;
--(NSData*) colorAsData;
+@property (readonly, copy) NSData *colorAsData;
 
 //same thing for color as rgba string (%f %f %f %f)
 +(NSColor*) colorWithRgbaString:(NSString*)string;
--(NSString*) rgbaString;
+@property (readonly, copy) NSString *rgbaString;
 
--(CGFloat) grayLevel;
+@property (readonly) CGFloat grayLevel;
 -(BOOL)  isRGBEqualTo:(NSColor*)other;
 
 @end

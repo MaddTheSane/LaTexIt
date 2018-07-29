@@ -15,16 +15,16 @@
 +(NSString*) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 +(NSString*) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 
--(NSRange) range;
--(NSString*) string;//useful for binding
--(NSString*)trim;
+@property (readonly) NSRange range;
+@property (readonly, copy) NSString *string;//useful for binding
+@property (readonly, copy) NSString *trim;
 -(BOOL) startsWith:(NSString*)substring options:(NSStringCompareOptions)mask;
 -(BOOL) endsWith:(NSString*)substring options:(NSStringCompareOptions)mask;
--(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag;
--(NSString*) stringWithFilteredStringForLatex;
--(NSString*) stringByReplacingYenSymbol;
+-(const char*) cStringUsingEncoding:(NSStringEncoding)encoding allowLossyConversion:(BOOL)flag NS_RETURNS_INNER_POINTER;
+@property (readonly, copy) NSString *stringWithFilteredStringForLatex;
+@property (readonly, copy) NSString *stringByReplacingYenSymbol;
 -(NSString*) filteredStringForLatex DEPRECATED_ATTRIBUTE;
--(NSString*) replaceYenSymbol NS_UNAVAILABLE;
+@property (readonly, copy) NSString *replaceYenSymbol NS_UNAVAILABLE;
 
 @end
 

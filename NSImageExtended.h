@@ -12,10 +12,10 @@
 @interface NSImage (Extended)
 
 -(void)              removeRepresentationsOfClass:(Class)representationClass;
--(NSBitmapImageRep*) bitmapImageRepresentation;
--(NSBitmapImageRep*) newBitmapImageRepresentation;
+@property (readonly, copy) NSBitmapImageRep *bitmapImageRepresentation;
+@property (readonly, copy) NSBitmapImageRep *newBitmapImageRepresentation;
 -(NSBitmapImageRep*) bitmapImageRepresentationWithMaxSize:(NSSize)maxSize;
--(NSPDFImageRep*)    pdfImageRepresentation;
+@property (readonly, copy) NSPDFImageRep *pdfImageRepresentation;
 -(NSImageRep*)       bestImageRepresentationInContext:(NSGraphicsContext*)context;
 
 @end

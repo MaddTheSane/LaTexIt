@@ -10,28 +10,32 @@
 
 @class LatexitEquation;
 
+typedef NS_ENUM(NSInteger, TeXItemWrapperState) {
+  TeXItemWrapperStateNotImported = 0,
+  TeXItemWrapperStateImporting = 1,
+  TeXItemWrapperStateImported = 2,
+  TeXItemWrapperStateError = 3
+};
+
 @interface TeXItemWrapper : NSObject
 {
   NSDictionary* data;
   NSString* title;
   BOOL enabled;
   BOOL checked;
-  NSInteger importState;//0 not imported, 1 importing, 2 imported, 3 error
+  TeXItemWrapperState importState;//0 not imported, 1 importing, 2 imported, 3 error
   LatexitEquation* equation;
 }
 
--(id) initWithItem:(NSDictionary*)aData;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
+-(instancetype) initWithItem:(NSDictionary*)aData NS_DESIGNATED_INITIALIZER;
 
--(NSString*) title;
--(NSDictionary*) data;
--(BOOL) enabled;
--(void) setEnabled:(BOOL)value;
--(BOOL) checked;
--(void) setChecked:(BOOL)value;
--(NSInteger) importState;
--(void) setImportState:(NSInteger)value;
--(LatexitEquation*) equation;
--(void) setEquation:(LatexitEquation*)value;
+@property (readonly, copy) NSString *title;
+@property (readonly, copy) NSDictionary *data;
+@property  BOOL enabled;
+@property  BOOL checked;
+@property  TeXItemWrapperState importState;
+@property (strong) LatexitEquation *equation;
 
 @end
 

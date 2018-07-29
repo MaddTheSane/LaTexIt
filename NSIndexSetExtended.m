@@ -13,8 +13,8 @@
 //returns a representation of the receiver as an array of unsigned NSNumbers
 -(NSArray*) array
 {
-  NSMutableArray* array = [NSMutableArray arrayWithCapacity:[self count]];
-  NSUInteger index = [self firstIndex];
+  NSMutableArray* array = [NSMutableArray arrayWithCapacity:self.count];
+  NSUInteger index = self.firstIndex;
   while(index != NSNotFound)
   {
     [array addObject:@(index)];

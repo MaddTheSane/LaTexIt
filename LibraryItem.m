@@ -38,18 +38,18 @@ static NSEntityDescription* cachedEntity = nil;
     @synchronized(self)
     {
       if (!cachedEntity)
-        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
+        cachedEntity = [[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel].entitiesByName[NSStringFromClass([self class])];
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
 }
 //end entity
 
--(id) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
+-(instancetype) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
-  [self setParent:aParent];
+  self.parent = aParent;
   return self;
 }
 //end initWithParent:insertIntoManagedObjectContext:
@@ -61,10 +61,10 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(id) copyWithZone:(NSZone*)zone
 {
-  id clone = [[[self class] allocWithZone:zone] initWithParent:[self parent] insertIntoManagedObjectContext:[self managedObjectContext]];
-  [clone setTitle:[self title]];
-  [clone setSortIndex:[self sortIndex]];
-  [clone setComment:[self comment]];
+  id clone = [[[self class] allocWithZone:zone] initWithParent:self.parent insertIntoManagedObjectContext:self.managedObjectContext];
+  [clone setTitle:self.title];
+  [clone setSortIndex:self.sortIndex];
+  [clone setComment:self.comment];
   return clone;
 }
 //end copyWithZone:
@@ -87,7 +87,7 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) setTitle:(NSString*)value
 {
-  NSString* oldTitle = [self title];
+  NSString* oldTitle = self.title;
   if ((value != oldTitle) && ![value isEqualToString:oldTitle])
   {
     [self willChangeValueForKey:@"title"];
@@ -109,7 +109,7 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) setSortIndex:(NSUInteger)value
 {
-  if (value != [self sortIndex])
+  if (value != self.sortIndex)
   {
     [self willChangeValueForKey:@"sortIndex"];
     [self setPrimitiveValue:@(value) forKey:@"sortIndex"];
@@ -130,7 +130,7 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) setComment:(NSString*)value
 {
-  NSString* oldComment = [self comment];
+  NSString* oldComment = self.comment;
   if ((value != oldComment) && ![value isEqualToString:oldComment])
   {
     [self willChangeValueForKey:@"comment"];
@@ -153,7 +153,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) setParent:(LibraryItem*)value
 {
   [self willChangeValueForKey:@"parent"];
-  [[value managedObjectContext] safeInsertObject:self];
+  [value.managedObjectContext safeInsertObject:self];
   [self setPrimitiveValue:value forKey:@"parent"];
   [self didChangeValueForKey:@"parent"];
 }
@@ -162,15 +162,15 @@ static NSEntityDescription* cachedEntity = nil;
 -(NSArray*) brothersIncludingMe:(BOOL)includingMe
 {
   NSMutableArray* result = nil;
-  LibraryGroupItem* theParent = (LibraryGroupItem*)[self parent];
+  LibraryGroupItem* theParent = (LibraryGroupItem*)self.parent;
   if (theParent)
     result = [NSMutableArray arrayWithArray:[theParent childrenOrdered]];
   else//if (!theParent)
   {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[LibraryItem entity]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == nil"]];
-    result = [NSMutableArray arrayWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:nil]];
+    fetchRequest.entity = [LibraryItem entity];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
+    result = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:fetchRequest error:nil]];
   }//end if (!theParent)
   if (!includingMe)
     [result removeObject:self];
@@ -181,14 +181,14 @@ static NSEntityDescription* cachedEntity = nil;
 -(NSArray*) titlePath
 {
   NSArray* result = nil;
-  NSString* titleClone = [[self title] copy];
+  NSString* titleClone = [self.title copy];
   if (!titleClone)
-    result = [NSArray array];
+    result = @[];
   else if (!self->parent)
-    result = [NSArray arrayWithObject:titleClone];
+    result = @[titleClone];
   else
   {
-    NSMutableArray* array = [NSMutableArray arrayWithArray:[[self parent] titlePath]];
+    NSMutableArray* array = [NSMutableArray arrayWithArray:[self.parent titlePath]];
     [array addObject:titleClone];
     result = [array copy];
   }
@@ -198,30 +198,30 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) setBestTitle//computes best title in current context
 {
-  NSString* itemTitle = [self title];
+  NSString* itemTitle = self.title;
   NSArray* brothers = [self brothersIncludingMe:NO];
-  NSMutableArray* brothersTitles = [[NSMutableArray alloc] initWithCapacity:[brothers count]];
+  NSMutableArray* brothersTitles = [[NSMutableArray alloc] initWithCapacity:brothers.count];
   NSEnumerator* enumerator = [brothers objectEnumerator];
   LibraryItem* brother = nil;
   while((brother = [enumerator nextObject]))
   {
-    NSString* brotherTitle = [brother title];
+    NSString* brotherTitle = brother.title;
     if (brotherTitle)
       [brothersTitles addObject:brotherTitle];
   }//end for each brother
   NSString* libraryItemTitle = makeStringDifferent(itemTitle, brothersTitles, 0);
-  [self setTitle:libraryItemTitle];//sets current and equation
+  self.title = libraryItemTitle;//sets current and equation
 }
 //end setBestTitle
 
--(id) initWithCoder:(NSCoder*)coder
+-(instancetype) initWithCoder:(NSCoder*)coder
 {
   NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
-  [self setTitle:[coder decodeObjectForKey:@"title"]];
-  [self setSortIndex:[coder decodeIntegerForKey:@"sortIndex"]];
-  [self setComment:[coder decodeObjectForKey:@"comment"]];  
+  self.title = [coder decodeObjectForKey:@"title"];
+  self.sortIndex = [coder decodeIntegerForKey:@"sortIndex"];
+  self.comment = [coder decodeObjectForKey:@"comment"];  
   return self;
 }
 //end initWithCoder:
@@ -229,9 +229,9 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) encodeWithCoder:(NSCoder*)coder
 {
   [coder encodeObject:@"2.10.1" forKey:@"version"];
-  [coder encodeObject:[self title] forKey:@"title"];
-  [coder encodeInteger:[self sortIndex] forKey:@"sortIndex"];
-  [coder encodeObject:[self comment] forKey:@"comment"];
+  [coder encodeObject:self.title forKey:@"title"];
+  [coder encodeInteger:self.sortIndex forKey:@"sortIndex"];
+  [coder encodeObject:self.comment forKey:@"comment"];
 }
 //end encodeWithCoder:
 
@@ -239,15 +239,15 @@ static NSEntityDescription* cachedEntity = nil;
 {
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
      @"2.10.1", @"version",
-     [self title], @"title",
+     self.title, @"title",
      @(self.sortIndex), @"sortIndex",
-     [self comment], @"comment",
+     self.comment, @"comment",
      nil];
   return plist;
 }
 //end plistDescription
 
--(id) initWithDescription:(id)description
+-(instancetype) initWithDescription:(id)description
 {
   NSManagedObjectContext* managedObjectContext = [LatexitEquation currentManagedObjectContext];
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
@@ -256,9 +256,9 @@ static NSEntityDescription* cachedEntity = nil;
   {
     return nil;
   }
-  [self setTitle:[description objectForKey:@"title"]];
-  [self setSortIndex:[[description objectForKey:@"sortIndex"] unsignedIntValue]];
-  [self setComment:[description objectForKey:@"comment"]];
+  self.title = description[@"title"];
+  self.sortIndex = [description[@"sortIndex"] unsignedIntValue];
+  self.comment = description[@"comment"];
   return self;
 }
 //end initWithDescription:
@@ -267,10 +267,10 @@ static NSEntityDescription* cachedEntity = nil;
 {
   LibraryItem* result = nil;
   BOOL ok = [description isKindOfClass:[NSDictionary class]];
-  NSString* version = !ok ? nil : [description objectForKey:@"version"];
+  NSString* version = !ok ? nil : description[@"version"];
   BOOL isOldLibraryItem = (ok && ([version compare:@"2.0.0" options:NSNumericSearch] == NSOrderedAscending));
-  BOOL isGroupItem = ok && ((!isOldLibraryItem && [description objectForKey:@"children"]) || (isOldLibraryItem && [description objectForKey:@"content"]));
-  BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && [description objectForKey:@"equation"]));
+  BOOL isGroupItem = ok && ((!isOldLibraryItem && description[@"children"]) || (isOldLibraryItem && description[@"content"]));
+  BOOL isEquation  = ok && ((isOldLibraryItem && !isGroupItem) || (!isOldLibraryItem && description[@"equation"]));
   Class instanceClass = !ok ? 0 :
     isGroupItem ? [LibraryGroupItem class] :
     isEquation ? [LibraryEquation class] :

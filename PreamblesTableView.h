@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface PreamblesTableView : NSTableView {
+@interface PreamblesTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource> {
   NSIndexSet* draggedRowIndexes;//transient, used only during drag'n drop
 }
 
