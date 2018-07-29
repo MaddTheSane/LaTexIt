@@ -855,12 +855,12 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     NSError* error = nil;
     if (error)
       DebugLog(1, @"error : %@", error);
-    if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.rtf")))
+    if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeRTF))
     {
       NSData* data = [NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error];
       NSString* string = [[[[NSAttributedString alloc] initWithRTF:data documentAttributes:nil] autorelease] string];
       [self _decomposeString:string preamble:&self->initialPreamble body:&self->initialBody];
-    }//end if (UTTypeConformsTo((CFStringRef)self->initialUTI, CFSTR("public.rtf")))
+    }//end if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeRTF))
     else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypePDF))
       self->initialData = [[NSData dataWithContentsOfURL:absoluteURL options:NSUncachedRead error:&error] copy];
     else if (UTTypeConformsTo((CFStringRef)self->initialUTI, kUTTypeTIFF))
@@ -1491,7 +1491,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     ok = pdfString && ![pdfString isEqualToString:@""];
     if (pdfString && ![pdfString isEqualToString:@""])
       [self applyString:pdfString];
-  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypePDF))
   else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")))
   {
     NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -1507,7 +1507,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     if (ok)
       [self applyString:string];
     [string release];
-  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeText))
   return ok;
 }
 //end applyData:sourceUTI:

@@ -115,7 +115,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
   }//end if (okString)
 }//end CHCGPDFOperatorCallback_Tj
 
-NSString* LatexitEquationsPboardType = @"LatexitEquationsPboardType";
+NSString* const LatexitEquationsPboardType = @"LatexitEquationsPboardType";
 
 static NSEntityDescription* cachedEntity = nil;
 static NSMutableArray*      managedObjectContextStackInstance = nil;
@@ -1159,16 +1159,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   }//end if (!sourceUTI)
   else//if (sourceUTI)
   {
-    if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.adobe.pdf")))
+    if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypePDF))
       result = [self initWithPDFData:someData useDefaults:useDefaults];
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.tiff"))||
-             UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.png"))||
-             UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.jpeg")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeTIFF)||
+             UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypePNG)||
+             UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeJPEG))
     {
       CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)someData, (__bridge CFDictionaryRef)
-        [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
-      CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
-      id infos = [(__bridge NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
+        [NSDictionary dictionaryWithObjectsAndKeys:@NO, (NSString*)kCGImageSourceShouldCache, nil]);
+      NSDictionary *properties = CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil));
+      id infos = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
       id annotationBase64 = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifUserComment];
       NSData* annotationData = ![annotationBase64 isKindOfClass:[NSString class]] ? nil :
         [NSData dataWithBase64:annotationBase64];
@@ -1176,7 +1176,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-      if (properties) CFRelease(properties);
       if (imageSource) CFRelease(imageSource);
     }//end if (tiff, png, jpeg)
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
@@ -1221,7 +1220,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         result = nil;
       else
         result = [self initWithMetaData:metaData useDefaults:useDefaults];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeText))
     else
     {
     }
@@ -1985,21 +1984,21 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     case EXPORT_FORMAT_PDF:
       extension = @"pdf";
       uti = (NSString*)kUTTypePDF;
-      [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, (NSString*)kUTTypePDF, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
-        [pboard setData:data forType:NSPDFPboardType];
+        [pboard setData:data forType:NSPasteboardTypePDF];
         [pboard setData:data forType:(NSString*)kUTTypePDF];
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
       extension = @"pdf";
       uti = (NSString*)kUTTypePDF;
-      [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, (NSString*)kUTTypePDF, nil]
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil]
                  owner:lazyDataProvider ? lazyDataProvider : self];
       if (data && (!lazyDataProvider || (lazyDataProvider != self)))
       {
-        [pboard setData:data forType:NSPDFPboardType];
+        [pboard setData:data forType:NSPasteboardTypePDF];
         [pboard setData:data forType:(NSString*)kUTTypePDF];
       }//end if (data && (!lazyDataProvider || (lazyDataProvider != self)))
       break;
@@ -2034,10 +2033,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     case EXPORT_FORMAT_TIFF:
       extension = @"tiff";
       uti = (NSString*)kUTTypeTIFF;
-      [pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, (NSString*)kUTTypeTIFF, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeTIFF, (NSString*)kUTTypeTIFF, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
-        [pboard setData:data forType:NSTIFFPboardType];
+        [pboard setData:data forType:NSPasteboardTypeTIFF];
         [pboard setData:data forType:(NSString*)kUTTypeTIFF];
       }//end if (!lazyDataProvider)
       break;
@@ -2048,7 +2047,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
         //[pboard addTypes:[NSArray arrayWithObjects:NSHTMLPboardType, kUTTypeHTML, nil] owner:lazyDataProvider];
-        [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, kUTTypeText, nil] owner:lazyDataProvider];
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, kUTTypeText, nil] owner:lazyDataProvider];
         if (blockquoteString)
         {
           NSError* error = nil;
@@ -2065,7 +2064,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           }//end if (!lazyDataProvider)*/
           if (!lazyDataProvider)
           {
-            [pboard setString:(!mathString ? blockquoteString : mathString) forType:NSStringPboardType];
+            [pboard setString:(!mathString ? blockquoteString : mathString) forType:NSPasteboardTypeString];
             [pboard setString:(!mathString ? blockquoteString : mathString) forType:(NSString*)kUTTypeText];
           }//end if (!lazyDataProvider)
         }//end if (blockquoteString)
@@ -2074,21 +2073,21 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     case EXPORT_FORMAT_SVG:
       extension = @"svg";
       uti = (NSString*)kUTTypeScalableVectorGraphics;
-      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), kUTTypeScalableVectorGraphics, NSStringPboardType, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), kUTTypeScalableVectorGraphics, NSPasteboardTypeString, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
         [pboard setData:data forType:GetMySVGPboardType()];
         [pboard setData:data forType:@"public.svg-image"];
-        [pboard setData:data forType:NSStringPboardType];
+        [pboard setData:data forType:NSPasteboardTypeString];
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_TEXT:
       extension = @"txt";
       uti = (NSString*)kUTTypeText;
-      [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, (NSString*)kUTTypeText, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, (NSString*)kUTTypeText, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
-        [pboard setData:data forType:NSStringPboardType];
+        [pboard setData:data forType:NSPasteboardTypeString];
         [pboard setData:data forType:(NSString*)kUTTypeText];
       }//end if (!lazyDataProvider)
       break;
@@ -2097,7 +2096,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   BOOL fillFilenames = NO;
   if (fillFilenames)
   {
-    [pboard addTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, NSURLPboardType, nil] owner:lazyDataProvider];
+    [pboard addTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, kUTTypeFileURL, nil] owner:lazyDataProvider];
     if (!lazyDataProvider)
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
@@ -2200,7 +2199,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
                                                     options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
       if (error)
         DebugLog(1, @"error = <%@>", error);
-      BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:NSHTMLPboardType];
+      BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:NSPasteboardTypeHTML];
       if (isHTML)
         [pasteboard setString:blockquoteString forType:type];
       else//if (!isHTML)

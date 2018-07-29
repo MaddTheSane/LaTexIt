@@ -43,7 +43,7 @@
     return nil;
   [self setDelegate:(id)self];
   [self setDataSource:(id)self];
-  [self registerForDraggedTypes:[NSArray arrayWithObject:NSColorPboardType]];
+  [self registerForDraggedTypes:[NSArray arrayWithObject:NSPasteboardTypeColor]];
   return self;
 }
 //end initWithCoder:
@@ -380,7 +380,7 @@
 {
   NSDragOperation result = NSDragOperationNone;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  result = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] ? NSDragOperationEvery : NSDragOperationNone;
+  result = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] ? NSDragOperationEvery : NSDragOperationNone;
   return result;
 }
 //end draggingEntered:
@@ -389,7 +389,7 @@
 {
   BOOL result = NO;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  result = ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
+  result = ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] != nil);
   return result;
 }
 //end prepareForDragOperation:
@@ -398,7 +398,7 @@
 {
   BOOL result = NO;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  result = ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] != nil);
+  result = ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] != nil);
   if (result)
   {
     NSPoint mouseLocation = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
@@ -612,8 +612,8 @@
   NSPasteboard* pboard = [info draggingPasteboard];
   //we only accept drops on items, not above them.
   BOOL ok = pboard &&
-            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] &&
-            [pboard propertyListForType:NSColorPboardType] &&
+            [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] &&
+            [pboard propertyListForType:NSPasteboardTypeColor] &&
             (operation == NSTableViewDropOn);
   result = ok ? NSDragOperationEvery : NSDragOperationNone;
   return result;
@@ -625,8 +625,8 @@
 {
   BOOL ok = NO;
   NSPasteboard* pboard = [info draggingPasteboard];
-  ok = pboard && [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]] &&
-                 [pboard propertyListForType:NSColorPboardType] && (operation == NSTableViewDropOn);
+  ok = pboard && [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]] &&
+                 [pboard propertyListForType:NSPasteboardTypeColor] && (operation == NSTableViewDropOn);
   if (ok)
   {
     NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];

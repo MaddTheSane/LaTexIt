@@ -167,10 +167,10 @@ __tg_IsBetween_N(double inf, double x, double sup) {return IsBetween_d(inf, x, s
     __tg_promote3((__x), (__y), (__z))(__z))
 
 
-NSString* GetMySVGPboardType(void);
-NSString* GetMyPNGPboardType(void);
-NSString* GetMyJPEGPboardType(void);
-NSString* GetWebURLsWithTitlesPboardType(void);
+NSPasteboardType GetMySVGPboardType(void);
+NSPasteboardType GetMyPNGPboardType(void);
+NSPasteboardType GetMyJPEGPboardType(void);
+NSPasteboardType GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
 
 FOUNDATION_EXTERN_INLINE int EndianI_BtoN(int x);
@@ -182,13 +182,13 @@ FOUNDATION_EXTERN_INLINE long EndianL_NtoB(long x);
 FOUNDATION_EXTERN_INLINE unsigned long EndianUL_BtoN(unsigned long x);
 FOUNDATION_EXTERN_INLINE unsigned long EndianUL_NtoB(unsigned long x);
 
-NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* didChange);
+NSString* makeStringDifferent(NSString* string, NSArray<NSString*>* otherStrings, BOOL* didChange);
 
 FOUNDATION_STATIC_INLINE NSRect NSRectDelta(NSRect rect, CGFloat deltaX, CGFloat deltaY, CGFloat deltaWidth, CGFloat deltaHeight)
 {return NSMakeRect(rect.origin.x+deltaX, rect.origin.y+deltaY, rect.size.width+deltaWidth, rect.size.height+deltaHeight);}
 
-FOUNDATION_STATIC_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, float newX, BOOL setY, float newY,
-                                             BOOL setWidth, float newWidth, BOOL setHeight, float newHeight)
+FOUNDATION_STATIC_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, CGFloat newX, BOOL setY, CGFloat newY,
+                                             BOOL setWidth, CGFloat newWidth, BOOL setHeight, CGFloat newHeight)
 {return NSMakeRect(setX ? newX : rect.origin.x, setY ? newY : rect.origin.y,
                    setWidth ? newWidth : rect.size.width, setHeight ? newHeight : rect.size.height);}
 

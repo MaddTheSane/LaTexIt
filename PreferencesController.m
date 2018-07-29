@@ -2546,21 +2546,21 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
       //build services as found in user defaults
       NSMutableArray* equivalentServicesToCurrentUserDefaults = [NSMutableArray arrayWithCapacity:6];
-      NSArray* standardReturnTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD,
-                                        @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF,
+      NSArray* standardReturnTypes = [NSArray arrayWithObjects:NSPasteboardTypeRTFD, @"NSRTFDPboardType", kUTTypeFlatRTFD,
+                                        NSPasteboardTypePDF, @"NSPDFPboardType", kUTTypePDF,
                                         @"NSPostScriptPboardType", @"com.adobe.encapsulated-postscript",
-                                        @"NSPasteboardTypeTIFF", @"NSTIFFPboardType", kUTTypeTIFF,
+                                        NSPasteboardTypeTIFF, @"NSTIFFPboardType", kUTTypeTIFF,
                                         @"NSPNGPboardType", kUTTypePNG,
                                         kUTTypeJPEG, nil];
-      NSArray* standardSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTF", @"NSRTFPboardType", kUTTypeRTF,
-                                        @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF,
-                                        @"NSPasteboardTypeString", @"NSStringPboardType", @"public.utf8-plain-text", nil];
-      NSArray* multiLatexisationReturnTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD, nil];
-      NSArray* multiLatexisationSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD, @"NSRTFPboardType", kUTTypeRTF, nil];
-      NSArray* deLatexisationReturnTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD,
-                                                                     @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF,
-                                                                     @"NSPasteboardTypeRTF", @"NSRTFPboardType", kUTTypeRTF, nil];
-      NSArray* deLatexisationSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD, @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF, nil];
+      NSArray* standardSendTypes = [NSArray arrayWithObjects:NSPasteboardTypeRTF, @"NSRTFPboardType", kUTTypeRTF,
+                                        NSPasteboardTypePDF, @"NSPDFPboardType", kUTTypePDF,
+                                        NSPasteboardTypeString, @"NSStringPboardType", kUTTypeUTF8PlainText, nil];
+      NSArray* multiLatexisationReturnTypes = [NSArray arrayWithObjects:NSPasteboardTypeRTFD, @"NSRTFDPboardType", kUTTypeFlatRTFD, nil];
+      NSArray* multiLatexisationSendTypes = [NSArray arrayWithObjects:NSPasteboardTypeRTFD, @"NSRTFDPboardType", kUTTypeFlatRTFD, @"NSRTFPboardType", kUTTypeRTF, nil];
+      NSArray* deLatexisationReturnTypes = [NSArray arrayWithObjects:NSPasteboardTypeRTFD, @"NSRTFDPboardType", kUTTypeFlatRTFD,
+                                                                     NSPasteboardTypePDF, @"NSPDFPboardType", kUTTypePDF,
+                                                                     NSPasteboardTypeRTF, @"NSRTFPboardType", kUTTypeRTF, nil];
+      NSArray* deLatexisationSendTypes = [NSArray arrayWithObjects:NSPasteboardTypeRTFD, @"NSRTFDPboardType", kUTTypeFlatRTFD, NSPasteboardTypePDF, @"NSPDFPboardType", kUTTypePDF, nil];
       NSDictionary* returnTypesByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
         standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN],
         standardReturnTypes, [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN_CLIPBOARD],

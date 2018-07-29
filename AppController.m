@@ -835,17 +835,17 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
     ok = ([pasteboard availableTypeFromArray:
-            [NSArray arrayWithObjects:NSPDFPboardType,  kUTTypePDF,
+            [NSArray arrayWithObjects:NSPasteboardTypePDF,  kUTTypePDF,
                                       //@"com.apple.iWork.TSPNativeMetadata",             
-                                      NSRTFDPboardType, kUTTypeRTFD,
-                                      NSStringPboardType, @"public.utf8-plain-text", nil]] != nil);
+                                      NSPasteboardTypeRTFD, kUTTypeFlatRTFD,
+                                      NSPasteboardTypeString, kUTTypeUTF8PlainText, nil]] != nil);
     if (![pasteboard availableTypeFromArray:
-           [NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, 
+           [NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF,
                                      //@"com.apple.iWork.TSPNativeMetadata",
-                                     NSStringPboardType, @"public.utf8-plain-text", nil]])//RTFD
+                                     NSPasteboardTypeString, kUTTypeUTF8PlainText, nil]])//RTFD
     {
-      NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
-      if (!rtfdData) rtfdData = [pasteboard dataForType:(NSString*)kUTTypeRTFD];
+      NSData* rtfdData = [pasteboard dataForType:NSPasteboardTypeRTFD];
+      if (!rtfdData) rtfdData = [pasteboard dataForType:(NSString*)kUTTypeFlatRTFD];
       NSDictionary* docAttributes = nil;
       NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
       NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
@@ -1141,10 +1141,10 @@ static NSMutableDictionary* cachePaths = nil;
   NSData* data = nil;
   NSString* filename = NSLocalizedString(@"clipboard", @"clipboard");
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-  if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)NSPDFPboardType]])
+  if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypePDF]])
   {
     filename = [filename stringByAppendingPathExtension:@"pdf"];
-    data = [pasteboard dataForType:NSPDFPboardType];
+    data = [pasteboard dataForType:NSPasteboardTypePDF];
   }
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypePDF]])
   {
@@ -1156,10 +1156,10 @@ static NSMutableDictionary* cachePaths = nil;
     filename = nil;
     data = [pasteboard dataForType:@"com.apple.iWork.TSPNativeMetadata"];
   }*/
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeRTFD]])
   {
     filename = [filename stringByAppendingPathExtension:@"pdf"];
-    NSData* rtfdData = [pasteboard dataForType:NSRTFDPboardType];
+    NSData* rtfdData = [pasteboard dataForType:NSPasteboardTypeRTFD];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
@@ -1173,10 +1173,10 @@ static NSMutableDictionary* cachePaths = nil;
     }
     [attributedString release];
   }
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeRTFD]])
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeFlatRTFD]])
   {
     filename = [filename stringByAppendingPathExtension:@"pdf"];
-    NSData* rtfdData = [pasteboard dataForType:(NSString*)kUTTypeRTFD];
+    NSData* rtfdData = [pasteboard dataForType:(NSString*)kUTTypeFlatRTFD];
     NSDictionary* docAttributes = nil;
     NSAttributedString* attributedString = [[NSAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
@@ -1190,15 +1190,15 @@ static NSMutableDictionary* cachePaths = nil;
     }
     [attributedString release];
   }
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeString]])
   {
     filename = [filename stringByAppendingPathExtension:@"tex"];
-    data = [pasteboard dataForType:NSStringPboardType];
+    data = [pasteboard dataForType:NSPasteboardTypeString];
   }
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:@"public.utf8-plain-text"]])
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeUTF8PlainText]])
   {
     filename = [filename stringByAppendingPathExtension:@"tex"];
-    data = [pasteboard dataForType:@"public.utf8-plain-text"];
+    data = [pasteboard dataForType:(NSString*)kUTTypeUTF8PlainText];
   }
   
   NSString* filepath = nil;
@@ -2543,10 +2543,10 @@ static NSMutableDictionary* cachePaths = nil;
       double defaultPointSize = [userDefaults floatForKey:DefaultPointSizeKey];
       
       //in the case of RTF input, we may deduce size, color, and change baseline
-      if ([types containsObject:NSRTFPboardType] || [types containsObject:(NSString*)kUTTypeRTF])
+      if ([types containsObject:NSPasteboardTypeRTF] || [types containsObject:(NSString*)kUTTypeRTF])
       {
         NSDictionary* documentAttributes = nil;
-        NSData* pboardData = [pboard dataForType:NSRTFPboardType];
+        NSData* pboardData = [pboard dataForType:NSPasteboardTypeRTF];
         if (!pboardData)
           pboardData = [pboard dataForType:(NSString*)kUTTypeRTF];
         NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTF:pboardData
@@ -2705,8 +2705,8 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:rtfdData forType:kUTTypeRTFD];
             if (rtfdData)
             {
-              [dummyPboard setObject:rtfdData forKey:NSRTFDPboardType];
-              [dummyPboard setObject:rtfdData forKey:(NSString*)kUTTypeRTFD];
+              [dummyPboard setObject:rtfdData forKey:NSPasteboardTypeRTFD];
+              [dummyPboard setObject:rtfdData forKey:(NSString*)kUTTypeFlatRTFD];
             }
           }//end if useBaseline
 
@@ -2741,7 +2741,7 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:pdfData forType:(NSString*)kUTTypePDF];
             if (pdfData)
             {
-              [dummyPboard setObject:pdfData forKey:NSPDFPboardType];
+              [dummyPboard setObject:pdfData forKey:NSPasteboardTypePDF];
               [dummyPboard setObject:pdfData forKey:(NSString*)kUTTypePDF];
             }//end if (pdfData)
           }//end if ([extension isEqualToString:@"pdf"])
@@ -2772,7 +2772,7 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:attachedData forType:(NSString*)kUTTypeTIFF];
             if (attachedData)
             {
-              [dummyPboard setObject:attachedData forKey:NSTIFFPboardType];
+              [dummyPboard setObject:attachedData forKey:NSPasteboardTypeTIFF];
               [dummyPboard setObject:attachedData forKey:(NSString*)kUTTypeTIFF];
             }//end if (attachedData)
           }//end if ([extension isEqualToString:@"tiff"])
@@ -2784,7 +2784,7 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:attachedData forType:kUTTypeJPEG];
             if (attachedData)
             {
-              [dummyPboard setObject:attachedData forKey:NSTIFFPboardType];
+              [dummyPboard setObject:attachedData forKey:NSPasteboardTypeTIFF];
               [dummyPboard setObject:attachedData forKey:(NSString*)kUTTypeJPEG];
             }//end if (attachedData)
           }//end if ([extension isEqualToString:@"jpeg"])
@@ -2818,26 +2818,26 @@ static NSMutableDictionary* cachePaths = nil;
         }//end //if (![pdfData length])
       }
       //if the input is not RTF but just string, we will use default color and size
-      else if ([types containsObject:NSStringPboardType] || [types containsObject:NSPDFPboardType])
+      else if ([types containsObject:NSPasteboardTypeString] || [types containsObject:NSPasteboardTypePDF])
       {
         NSAttributedString* preamble = [self preambleServiceAttributedString];
         NSString* pboardString = nil;
-        if ([types containsObject:NSPDFPboardType])
+        if ([types containsObject:NSPasteboardTypePDF])
         {
-          NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+          NSData* pdfData = [pboard dataForType:NSPasteboardTypePDF];
           NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfData);
           pboardString = pdfString;
         }//end if ([types containsObject:NSPDFPboardType])
         else if ([types containsObject:(NSString*)kUTTypePDF])
         {
-          NSData* pdfData = [pboard dataForType:NSPDFPboardType];
+          NSData* pdfData = [pboard dataForType:(NSString*)kUTTypePDF];
           NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfData);
           pboardString = pdfString;
         }//end if ([types containsObject:(NSString*)kUTTypePDF])
         if (!pboardString)
-          pboardString = [pboard stringForType:NSStringPboardType];
+          pboardString = [pboard stringForType:NSPasteboardTypeString];
         if (!pboardString)
-          pboardString = [pboard stringForType:@"public.utf8-plain-text"];
+          pboardString = [pboard stringForType:(NSString*)kUTTypeUTF8PlainText];
         NSString* body = pboardString;
 
         //perform effective latexisation
@@ -2940,7 +2940,7 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:data forType:(NSString*)kUTTypePDF];
             if (pdfData)
             {
-              [dummyPboard setObject:pdfData forKey:NSPDFPboardType];
+              [dummyPboard setObject:pdfData forKey:NSPasteboardTypePDF];
               [dummyPboard setObject:pdfData forKey:(NSString*)kUTTypePDF];
             }//end if (pdfData)
           }//end if ([extension isEqualToString:@"pdf"])
@@ -2971,11 +2971,11 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:data forType:kUTTypeTIFF];
             if (data)
             {
-              [dummyPboard setObject:data forKey:NSTIFFPboardType];
+              [dummyPboard setObject:data forKey:NSPasteboardTypeTIFF];
               [dummyPboard setObject:data forKey:(NSString*)kUTTypeTIFF];
             }//end if (data)
           }//end if ([extension isEqualToString:@"tiff"])
-          else if ([extension isEqualToString:@"jpeg"])
+          else if ([extension isEqualToString:@"jpeg"] || [extension isEqualToString:@"jpg"])
           {
             //[pboard addTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
             //[pboard setData:data forType:NSTIFFPboardType];
@@ -2983,7 +2983,7 @@ static NSMutableDictionary* cachePaths = nil;
             //[pboard setData:data forType:kUTTypeJPEG];
             if (data)
             {
-              [dummyPboard setObject:data forKey:NSTIFFPboardType];
+              //[dummyPboard setObject:data forKey:NSTIFFPboardType];
               [dummyPboard setObject:data forKey:(NSString*)kUTTypeJPEG];
             }//end if (data)
           }//end if ([extension isEqualToString:@"jpeg"])
@@ -3068,11 +3068,11 @@ static NSMutableDictionary* cachePaths = nil;
       //the input must be RTF, so that we can insert images in it      
       //in the case of RTF input, we may deduce size, color, and change baseline
       NSDictionary* documentAttributes = nil;
-      NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTFD:[pboard dataForType:NSRTFDPboardType]
+      NSAttributedString* attrString = [[[NSAttributedString alloc] initWithRTFD:[pboard dataForType:NSPasteboardTypeRTFD]
                                                              documentAttributes:&documentAttributes] autorelease];
-      attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:(NSString*)kUTTypeRTFD]
+      attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTFD:[pboard dataForType:(NSString*)kUTTypeFlatRTFD]
                                                                    documentAttributes:&documentAttributes] autorelease];
-      attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSRTFPboardType]
+      attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:NSPasteboardTypeRTF]
                                                                    documentAttributes:&documentAttributes] autorelease];
       attrString = attrString ? attrString : [[[NSAttributedString alloc] initWithRTF:[pboard dataForType:(NSString*)kUTTypeRTF]
                                                                    documentAttributes:&documentAttributes] autorelease];
@@ -3085,7 +3085,7 @@ static NSMutableDictionary* cachePaths = nil;
           [serviceRegularExpressionFiltersController applyFilterToAttributedString:mutableAttrString]];
       
       NSRange remainingRange = NSMakeRange(0, [mutableAttrString length]);
-      int numberOfFailures = 0;
+      NSInteger numberOfFailures = 0;
 
       //we must find some places where latexisations should be done. We look for "$$..$$", "\[..\]", and "$...$"
       NSArray* delimiters =
@@ -3100,7 +3100,7 @@ static NSMutableDictionary* cachePaths = nil;
           nil];
 
       NSMutableArray* errorDocuments = [NSMutableArray array];
-      unsigned int delimiterIndex = 0;
+      NSUInteger delimiterIndex = 0;
       for(delimiterIndex = 0 ; delimiterIndex < [delimiters count] ; ++delimiterIndex)
       {
         NSArray* delimiter = [delimiters objectAtIndex:delimiterIndex];
@@ -3345,8 +3345,8 @@ static NSMutableDictionary* cachePaths = nil;
       NSMutableDictionary* dummyPboard = [NSMutableDictionary dictionary];
       NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length])
                                        documentAttributes:documentAttributes];
-      [dummyPboard setObject:rtfdData forKey:NSRTFDPboardType];
-      [dummyPboard setObject:rtfdData forKey:(NSString*)kUTTypeRTFD];
+      [dummyPboard setObject:rtfdData forKey:NSPasteboardTypeRTFD];
+      [dummyPboard setObject:rtfdData forKey:(NSString*)kUTTypeFlatRTFD];
 
       NSPasteboard* generalPboard = !putIntoClipBoard ? nil : [NSPasteboard generalPasteboard];
       [pboard declareTypes:[dummyPboard allKeys] owner:nil];
@@ -3375,7 +3375,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(void) _serviceDeLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
   NSString* type = nil;
-  if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]]))
+  if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]]))
   {
     NSData* pdfData = [pboard dataForType:type];
     LatexitEquation* latexitEquation = [[LatexitEquation alloc] initWithPDFData:pdfData useDefaults:YES];
@@ -3392,17 +3392,17 @@ static NSMutableDictionary* cachePaths = nil;
           [NSString stringWithFormat:@"%f",  [latexitEquation pointSize]], NSFontSizeAttribute,
           [latexitEquation color], NSForegroundColorAttributeName, nil];
       [source addAttributes:attributes range:NSMakeRange(0, [source length])];
-      [pboard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, @"public.utf8-plain-text",
-                                                     NSRTFPboardType, kUTTypeRTF, nil]  owner:nil];
-      [pboard setString:[source string] forType:NSStringPboardType];
-      [pboard setString:[source string] forType:@"public.utf8-plain-text"];
+      [pboard declareTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, kUTTypeUTF8PlainText,
+                                                     NSPasteboardTypeRTF, kUTTypeRTF, nil]  owner:nil];
+      [pboard setString:[source string] forType:NSPasteboardTypeString];
+      [pboard setString:[source string] forType:(NSString*)kUTTypeUTF8PlainText];
       NSData* rtfData = [source RTFFromRange:NSMakeRange(0, [source length]) documentAttributes:@{}];
-      [pboard setData:rtfData forType:NSRTFPboardType];
+      [pboard setData:rtfData forType:NSPasteboardTypeRTF];
       [pboard setData:rtfData forType:(NSString*)kUTTypeRTF];
     }//end if (source)
     [latexitEquation release];
-  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]]))
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, kUTTypeFlatRTFD, nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -3422,7 +3422,7 @@ static NSMutableDictionary* cachePaths = nil;
         NSString* filename = [fileWrapper filename];
         NSString* textAttachmentUTI = ![fileWrapper isRegularFile] ? nil :
           [[NSFileManager defaultManager] UTIFromPath:filename];
-        BOOL canBeEquation = (textAttachmentUTI && UTTypeConformsTo((CFStringRef)textAttachmentUTI, CFSTR("com.adobe.pdf"))) ||
+        BOOL canBeEquation = (textAttachmentUTI && UTTypeConformsTo((CFStringRef)textAttachmentUTI, kUTTypePDF)) ||
                              (!textAttachmentUTI && [[[filename pathExtension] lowercaseString] isEqualToString:@"pdf"]);
         if (!canBeEquation)
           location += effectiveRange.length;
@@ -3469,18 +3469,18 @@ static NSMutableDictionary* cachePaths = nil;
         }//end if (canBeEquation)
       }//end if textAttachment
     }//end while ! at the end of the string
-    [pboard declareTypes:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD,
-                                                   NSRTFPboardType, kUTTypeRTF, nil] owner:nil];
+    [pboard declareTypes:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, kUTTypeFlatRTFD,
+                                                   NSPasteboardTypeRTF, kUTTypeRTF, nil] owner:nil];
     NSData* outRtfdData = [attributedString RTFDFromRange:NSMakeRange(0, [attributedString length])
                           documentAttributes:docAttributes];
-    [pboard setData:outRtfdData forType:NSRTFDPboardType];
-    [pboard setData:outRtfdData forType:(NSString*)kUTTypeRTFD];
+    [pboard setData:outRtfdData forType:NSPasteboardTypeRTFD];
+    [pboard setData:outRtfdData forType:(NSString*)kUTTypeFlatRTFD];
     NSData* outRtfData = [attributedString RTFFromRange:NSMakeRange(0, [attributedString length])
                           documentAttributes:docAttributes];
-    [pboard setData:outRtfData forType:NSRTFPboardType];
+    [pboard setData:outRtfData forType:NSPasteboardTypeRTF];
     [pboard setData:outRtfData forType:(NSString*)kUTTypeRTF];
     [attributedString release];
-  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, kUTTypeFlatRTFD, nil]]))
 }
 //end _serviceDeLatexisation:userData:error:
 

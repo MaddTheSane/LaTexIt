@@ -104,9 +104,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
   [self _computeLineRanges];
 
   NSArray* typesToAdd =
-    [NSArray arrayWithObjects:NSStringPboardType, NSColorPboardType, NSPDFPboardType,
+    [NSArray arrayWithObjects:NSPasteboardTypeString, NSPasteboardTypeColor, NSPasteboardTypePDF,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
-                              NSRTFDPboardType, LatexitEquationsPboardType, LibraryItemsArchivedPboardType,
+                              NSPasteboardTypeRTFD, LatexitEquationsPboardType, LibraryItemsArchivedPboardType,
                               LibraryItemsWrappedPboardType,
                               //@"com.apple.iWork.TSPNativeMetadata",
                               nil];
@@ -492,12 +492,12 @@ static NSInteger SpellCheckerDocumentTag = 0;
     ok = YES;
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])
     ok = YES;
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]])
     ok = YES;
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPDFPboardType]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypePDF]])
   {
     shouldBePDFData = YES;
-    data = [pboard dataForType:NSPDFPboardType];
+    data = [pboard dataForType:NSPasteboardTypePDF];
   }
   else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypePDF]])
   {
@@ -520,11 +520,11 @@ static NSInteger SpellCheckerDocumentTag = 0;
       data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
     }*/
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSRTFDPboardType]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeRTFD]])
   {
     ok = YES;
   }
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]])
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeString]])
   {
     ok = YES;
   }
@@ -555,9 +555,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   NSPasteboard* pboard = [sender draggingPasteboard];
   NSString* type = nil;
-  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])
+  if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]])
   {
-    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
+    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSPasteboardTypeColor]];
     NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
     
     NSString *colorStr = [NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}",
@@ -567,7 +567,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     [[self textStorage] appendAttributedString:attributedString];
   }
   else if ((type = [pboard availableTypeFromArray:
-        [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]]))
+        [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPasteboardTypePDF, nil]]))
   {
     LatexitEquation* equation = nil;
     if ([type isEqualToString:LibraryItemsWrappedPboardType])
@@ -603,7 +603,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     if (sourceText && ![[sourceText string] isEqualToString:@""])
       [self insertTextAtMousePosition:sourceText];
   }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -614,8 +614,8 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [(id)[self nextResponder] performDragOperation:sender];
     else
       [super performDragOperation:sender];
-  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]]))
+  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]])
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, nil]]))
   {
     NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -625,7 +625,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [self insertTextAtMousePosition:attributedString];
     else
       [super performDragOperation:sender];
-  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])
+  }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, nil]])
   
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   {
@@ -634,7 +634,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
                          UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
                                                                (__bridge CFStringRef)[lastFilePath pathExtension], 
                                                                NULL);
-    BOOL isPdf = UTTypeConformsTo(uti, CFSTR("com.adobe.pdf"));
+    BOOL isPdf = UTTypeConformsTo(uti, kUTTypePDF);
     NSAttributedString* equationSourceAttributedString = nil;
     if (isPdf)
     {
@@ -647,12 +647,12 @@ static NSInteger SpellCheckerDocumentTag = 0;
         [[NSAttributedString alloc] initWithString:CGPDFDocumentCreateStringRepresentationFromData(pdfContent)];
     }//end if (utiPdf)
 
-    BOOL isRtf = !isPdf && !equationSourceAttributedString && UTTypeConformsTo(uti, CFSTR("public.rtf"));
+    BOOL isRtf = !isPdf && !equationSourceAttributedString && UTTypeConformsTo(uti, kUTTypeRTF);
     NSAttributedString* rtfContent = !isRtf ? nil :
       [[NSAttributedString alloc] initWithRTF:[NSData dataWithContentsOfFile:lastFilePath]
                            documentAttributes:nil];
 
-    BOOL isText = !isPdf && !equationSourceAttributedString && !isRtf && !rtfContent && UTTypeConformsTo(uti, CFSTR("public.plain-text"));
+    BOOL isText = !isPdf && !equationSourceAttributedString && !isRtf && !rtfContent && UTTypeConformsTo(uti, kUTTypeText);
     NSStringEncoding encoding = NSUTF8StringEncoding;
     NSError* error = nil;
     NSString* plainTextContent = !isText ? nil :
@@ -699,7 +699,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     }//end if (latexitEquation)
   }//end kUTTypePDF
 
-  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, nil]]))
+  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, nil]]))
   {
     NSData* pdfData = [pasteboard dataForType:type];
     //[pdfData writeToFile:[NSString stringWithFormat:@"%@/Desktop/tmp.pdf", NSHomeDirectory()] atomically:YES];
@@ -709,7 +709,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [(id)[self nextResponder] paste:sender];
       done = YES;
     }//end if (latexitEquation)
-  }//end NSPDFPboardType
+  }//end NSPasteboardTypePDF
 
   /*if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.iWork.TSPNativeMetadata", nil]]))
   {
@@ -723,7 +723,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     done = YES;
   }//end NSFilesPromisePboardType
   
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]])))
   {
     NSData* rtfdData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -754,9 +754,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
       //[super paste:sender];
       done = YES;
     }
-  }//end kUTTypeRTFD
+  }//end kUTTypeFlatRTFD
 
-  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])))
+  if (!done && ((type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, nil]])))
   {
     NSData* rtfData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -766,7 +766,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
       [[self textStorage] appendAttributedString:attributedString];
     //[super paste:sender];
     done = YES;
-  }//end @"NSRTFPboardType"
+  }//end @NSPasteboardTypeRTF
 
   if (!done)
     [super paste:sender];

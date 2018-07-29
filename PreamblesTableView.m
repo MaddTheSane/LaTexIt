@@ -11,7 +11,7 @@
 #import "PreamblesController.h"
 #import "PreferencesController.h"
 
-static NSString* PreamblesPboardType = @"PreamblesPboardType"; //pboard type for drag'n drop of tableviews rows
+static NSPasteboardType const PreamblesPboardType = @"PreamblesPboardType"; //pboard type for drag'n drop of tableviews rows
 
 @implementation PreamblesTableView
 

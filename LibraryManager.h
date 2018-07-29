@@ -12,8 +12,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* LibraryItemsArchivedPboardType;
-extern NSString* LibraryItemsWrappedPboardType;
+extern NSPasteboardType LibraryItemsArchivedPboardType;
+extern NSPasteboardType LibraryItemsWrappedPboardType;
 
 typedef NS_ENUM(NSInteger, library_import_option_t) {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN};
 typedef NS_ENUM(NSInteger, library_export_format_t) {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRARY_EXPORT_FORMAT_TEX_SOURCE};

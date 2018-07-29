@@ -11,7 +11,7 @@
 
 #import "PreferencesController.h"
 
-static NSString* EditionTextShortcutsPboardType = @"EditionTextShortcutsPboardType";
+static NSPasteboardType const EditionTextShortcutsPboardType = @"EditionTextShortcutsPboardType";
 
 @interface TextShortcutsTableView (PrivateAPI)
 -(void) textDidEndEditing:(NSNotification *)aNotification;

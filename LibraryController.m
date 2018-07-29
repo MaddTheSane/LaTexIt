@@ -262,9 +262,9 @@
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
   BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
+  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]] != nil);
   BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
-  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
+  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeColor, nil]] != nil);
   if (isSelfMoveDrop)
   {
     BOOL targetIsValid = (proposedChildIndex != NSOutlineViewDropOnItemIndex) ||
@@ -327,9 +327,9 @@
   NSPasteboard* pasteboard = [info draggingPasteboard];
   BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
   BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
+  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]] != nil);
   BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
-  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
+  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeColor, nil]] != nil);
   if (isSelfMoveDrop)
     result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
   else if (isLaTeXiTEquationsDrop)
@@ -437,7 +437,7 @@
   }//end if (isFileDrop)
   else if (isColorDrop)
   {
-    NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSColorPboardType]];
+    NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSPasteboardTypeColor]];
     if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
     {
       [[(LibraryEquation*)proposedParentItem equation] setBackgroundColor:color];

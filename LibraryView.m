@@ -70,7 +70,7 @@
   [self performSelector:@selector(expandOutlineItems) withObject:nil afterDelay:0.];
 
   [[self window] setAcceptsMouseMovedEvents:YES]; //to allow library to detect mouse moved events
-  [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSFilenamesPboardType, NSColorPboardType, nil]];
+  [self registerForDraggedTypes:[NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSFilenamesPboardType, NSPasteboardTypeColor, nil]];
 }
 //end awakeFromNib
 
@@ -493,7 +493,7 @@
     ok = ([self selectedRow] >= 0);
   else if ([sender action] == @selector(paste:))
     ok = ([[NSPasteboard generalPasteboard] availableTypeFromArray:
-            [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]] != nil);
+            [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPasteboardTypePDF, nil]] != nil);
   else if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
@@ -632,9 +632,9 @@
       }//end if (libraryEquation)
     }//end for each latexitEquation
   }
-  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, (NSString*)kUTTypePDF, nil]])
+  else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil]])
   {
-    NSData* pdfData = [pasteboard dataForType:NSPDFPboardType];
+    NSData* pdfData = [pasteboard dataForType:NSPasteboardTypePDF];
     if (!pdfData)
       pdfData = [pasteboard dataForType:(NSString*)kUTTypePDF];
     if (pdfData)
@@ -647,7 +647,7 @@
         libraryItems = [NSMutableArray arrayWithObject:libraryEquation];
       }//end if (libraryEquation)
     }//end if (pdfData)
-  }//end if NSPDFPboardType
+  }//end if NSPasteboardTypePDF
 
   NSUInteger count = [libraryItems count];
   if (count)

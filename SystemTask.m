@@ -59,10 +59,10 @@
 {
   if (DebugLogLevel < 1)
   {
-    unlink([self->tmpStdinFilePath UTF8String]);
-    unlink([self->tmpStdoutFilePath UTF8String]);
-    unlink([self->tmpStderrFilePath UTF8String]);
-    unlink([self->tmpScriptFilePath UTF8String]);
+    unlink([self->tmpStdinFilePath fileSystemRepresentation]);
+    unlink([self->tmpStdoutFilePath fileSystemRepresentation]);
+    unlink([self->tmpStderrFilePath fileSystemRepresentation]);
+    unlink([self->tmpScriptFilePath fileSystemRepresentation]);
   }//end if (DebugLogLevel < 1)
 }
 //end dealloc

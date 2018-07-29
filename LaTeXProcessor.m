@@ -1918,7 +1918,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* tmpSvgFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpSvgFile];
     
     NSColor* jpegColor = [[exportOptions objectForKey:@"jpegColor"] dynamicCastToClass:[NSColor class]];
-    CGFloat jpegQuality = [[[exportOptions objectForKey:@"jpegQuality"] dynamicCastToClass:[NSNumber class]] floatValue];
+    float jpegQuality = [[[exportOptions objectForKey:@"jpegQuality"] dynamicCastToClass:[NSNumber class]] floatValue];
     CGFloat scaleAsPercent = [[[exportOptions objectForKey:@"scaleAsPercent"] dynamicCastToClass:[NSNumber class]] floatValue];
     BOOL textExportPreamble = [[[exportOptions objectForKey:@"textExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportEnvironment = [[[exportOptions objectForKey:@"textExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
@@ -2245,12 +2245,12 @@ static LaTeXProcessor* sharedInstance = nil;
 
         NSMutableData* mutableData = !cgImage ? nil : [NSMutableData data];
         CGImageDestinationRef cgImageDestination = !mutableData ? 0 : CGImageDestinationCreateWithData(
-          (__bridge CFMutableDataRef)mutableData, CFSTR("public.jpeg"), 1, 0);
+          (__bridge CFMutableDataRef)mutableData, kUTTypeJPEG, 1, 0);
         if (cgImageDestination && cgImage)
         {
           CGImageDestinationAddImage(cgImageDestination, cgImage,
             (__bridge CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
-              [NSNumber numberWithFloat:jpegQuality/100], (NSString*)kCGImageDestinationLossyCompressionQuality,
+              @(jpegQuality/100.0f), (NSString*)kCGImageDestinationLossyCompressionQuality,
               nil]);
           CGImageDestinationFinalize(cgImageDestination);
           CFRelease(cgImageDestination);
@@ -2424,20 +2424,20 @@ static LaTeXProcessor* sharedInstance = nil;
   if (inputData && annotationData)
   {
     if (!sourceUTI ||//may be guessed
-        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.tiff")) ||
-        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.png")) ||
-        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.jpeg")))
+        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeTIFF) ||
+        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypePNG) ||
+        UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeJPEG))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];
       NSMutableData* annotatedData = !annotationDataBase64 ? nil : [[NSMutableData alloc] initWithCapacity:[inputData length]];
       CGImageSourceRef imageSource = !annotatedData ? 0 :
         CGImageSourceCreateWithData((__bridge CFDataRef)inputData, (__bridge CFDictionaryRef)
-          [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+          [NSDictionary dictionaryWithObjectsAndKeys:@NO, (NSString*)kCGImageSourceShouldCache, nil]);
       CFStringRef detectedUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
       if (( sourceUTI && UTTypeConformsTo(detectedUTI, (__bridge CFStringRef)sourceUTI)) ||
-          (!sourceUTI && (UTTypeConformsTo(detectedUTI, CFSTR("public.tiff")) ||
-                          UTTypeConformsTo(detectedUTI, CFSTR("public.png")) || 
-                          UTTypeConformsTo(detectedUTI, CFSTR("public.jpeg")))))
+          (!sourceUTI && (UTTypeConformsTo(detectedUTI, kUTTypeTIFF) ||
+                          UTTypeConformsTo(detectedUTI, kUTTypePNG) ||
+                          UTTypeConformsTo(detectedUTI, kUTTypePNG))))
       {
         CGImageDestinationRef imageDestination = !imageSource ? 0 :
           CGImageDestinationCreateWithData((__bridge CFMutableDataRef)annotatedData,
@@ -2478,7 +2478,7 @@ static LaTeXProcessor* sharedInstance = nil;
       if (error)
         DebugLog(0, @"error : %@", error);
       result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeHTML))
     {
       NSString* annotationDataBase64 = [annotationData encodeBase64];

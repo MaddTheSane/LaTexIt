@@ -13,7 +13,7 @@
 #import "ServiceRegularExpressionFiltersController.h"
 #import "EncapsulationsController.h"
 
-static NSString* RegularExpressionFilterPboardType = @"RegularExpressionFilterPboardType";
+static NSPasteboardType const RegularExpressionFilterPboardType = @"RegularExpressionFilterPboardType";
 
 @interface ServiceRegularExpressionFiltersTableView (PrivateAPI)
 -(ServiceRegularExpressionFiltersController*) serviceRegularExpressionFiltersController;

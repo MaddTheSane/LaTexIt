@@ -12,7 +12,7 @@
 #import "NSArrayControllerExtended.h"
 #import "PreferencesController.h"
 
-static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"CompositionConfigurationsProgramArgumentsPboardType";
+static NSPasteboardType const CompositionConfigurationsProgramArgumentsPboardType = @"CompositionConfigurationsProgramArgumentsPboardType";
 
 @interface CompositionConfigurationsProgramArgumentsTableView (PrivateAPI)
 -(void) textDidEndEditing:(NSNotification *)aNotification;

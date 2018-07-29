@@ -14,10 +14,10 @@
 #import "NSArrayControllerExtended.h"
 #import "PreferencesController.h"
 
-static NSString* EncapsulationsPboardType = @"EncapsulationsPboardType";
+static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardType";
 
-@interface EncapsulationsTableView (PrivateAPI)
--(NSIndexSet*) _draggedRowIndexes; //utility method to access draggedItems when working with pasteboard sender
+@interface EncapsulationsTableView ()
+-(NSIndexSet*) _draggedRowIndexes; //!<utility method to access draggedItems when working with pasteboard sender
 @end
 
 @implementation EncapsulationsTableView

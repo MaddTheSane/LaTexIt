@@ -363,11 +363,11 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         if (!isDirectory)
         {//keep it if it is a file text
           NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:string];
-          if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
+          if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeFlatRTFD))
             [filteredInput addObject:object];
-          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
+          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
             [filteredInput addObject:object];
-          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
+          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
             [filteredInput addObject:object];
         }//end if (!isDirectory)
         else //if (isDirectory)
@@ -586,19 +586,19 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       if (error && *error)
         {DebugLog(0, @"error: %@", *error);}
       NSStringEncoding encoding = NSUTF8StringEncoding;
-      if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
+      if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeFlatRTFD))
       {
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
         fullText = [attributedString string];
-      }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-      else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
+      }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeFlatRTFD))
+      else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
       {
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
         fullText = [attributedString string];
-      }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-      else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
+      }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeRTF))
+      else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
         fullText = [NSString stringWithContentsOfFile:object guessEncoding:&encoding error:error];
       result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
     }//end if ([[NSFileManager defaultManager] fileExistsAtPath:object isDirectory:&isDirectory])
@@ -615,19 +615,19 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     if (error && *error)
       {DebugLog(0, @"error: %@", *error);}
     NSStringEncoding encoding = NSUTF8StringEncoding;
-    if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
+    if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeFlatRTFD))
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
       fullText = [attributedString string];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeFlatRTFD))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
       fullText = [attributedString string];
-    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
+    }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeRTF))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
       fullText = [NSString stringWithContentsOfURL:object guessEncoding:&encoding error:error];
     result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
   }//end if ([object isKindOfClass:[NSURL class]])

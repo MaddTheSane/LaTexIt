@@ -13,9 +13,9 @@
 #import "BoolTransformer.h"
 #import "PreferencesController.h"
 
-static NSString* CompositionConfigurationsPboardType = @"CompositionConfigurationsPboardType";
+static NSPasteboardType const CompositionConfigurationsPboardType = @"CompositionConfigurationsPboardType";
 
-@interface CompositionConfigurationsTableView (PrivateAPI)
+@interface CompositionConfigurationsTableView ()
 -(void) textDidEndEditing:(NSNotification *)aNotification;
 @end
 

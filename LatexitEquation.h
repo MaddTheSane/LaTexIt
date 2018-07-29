@@ -10,7 +10,7 @@
 
 #import "LaTeXiTSharedTypes.h" //for latex_mode_t
 
-extern NSString* LatexitEquationsPboardType;
+extern NSPasteboardType const LatexitEquationsPboardType;
 
 @class CHExportPrefetcher;
 

@@ -84,9 +84,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
                                                name:CopyCurrentImageNotification object:nil];
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:DefaultDoNotClipPreviewKey options:NSKeyValueObservingOptionNew context:nil];
   [self registerForDraggedTypes:
-    [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType,
+    [NSArray arrayWithObjects:NSPasteboardTypeColor, NSPasteboardTypePDF,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
-                              NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType,
+                              NSPasteboardTypeRTFD, NSPasteboardTypeRTF, GetWebURLsWithTitlesPboardType(), NSPasteboardTypeString,
                               kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, kUTTypeScalableVectorGraphics,
                               kUTTypeHTML,
                               //@"com.apple.iWork.TSPNativeMetadata",
@@ -605,7 +605,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     BOOL fillFilenames = NO;
     if (fillFilenames)
       [types addObjectsFromArray:[NSArray arrayWithObjects:
-        NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType,
+        NSFileContentsPboardType, NSFilenamesPboardType, (NSString*)kUTTypeFileURL,
         nil]];
     [pasteboard addTypes:types owner:lazyDataProvider];
   }//end if (self->isDragging && (lazyDataProvider == self))
@@ -648,7 +648,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   {
     self->transientDragData = [data copy];
   }//end if (!hasAlreadyCachedData)
-  if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
+  if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:(NSString*)kUTTypeFileURL])
   {
     NSString* extension = nil;
     NSString* uti = nil;
@@ -707,7 +707,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
             [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
         }//end if (filePath)
       }//end if ([type isEqualToString:NSFilenamesPboardType])
-      else if ([type isEqualToString:NSURLPboardType])
+      else if ([type isEqualToString:(NSString*)kUTTypeFileURL])
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePath = !extension ? nil :
@@ -719,10 +719,10 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
           NSURL* fileURL = [NSURL fileURLWithPath:filePath];
           [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
         }//end if (filePath)
-      }//end if ([type isEqualToString:NSURLPboardType])
+      }//end if ([type isEqualToString:(NSString*)kUTTypeFileURL])
     }//end if (data)
-  }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
-  else//if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
+  }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:(NSString*)kUTTypeFileURL])
+  else//if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:(NSString*)kUTTypeFileURL])
   {
     if (exportFormat != EXPORT_FORMAT_MATHML)
       [pasteboard setData:data forType:type];
@@ -739,14 +739,14 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
                                                         options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
         if (error)
           DebugLog(1, @"error = <%@>", error);
-        BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:(NSString*)NSHTMLPboardType];
+        BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:NSPasteboardTypeHTML];
         if (isHTML)
           [pasteboard setString:blockquoteString forType:type];
         else//if (!isHTML)
           [pasteboard setString:(!mathString ? blockquoteString : mathString) forType:type];
       }//end if (blockquoteString)
     }//end if (exportFormat == EXPORT_FORMAT_MATHML)
-  }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
+  }//end if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:(NSString*)kUTTypeFileURL])
   DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);
 }
 //end pasteboard:provideDataForType:
@@ -759,9 +759,9 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   BOOL ok = NO;
   NSString* type = nil;
   NSPasteboard* pboard = [sender draggingPasteboard];
-  if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]]))
+  if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]]))
     ok = YES;
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypePDF, kUTTypePDF, nil]]))
     ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]]))
     ok = YES;
@@ -778,7 +778,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]]))
     ok = YES;
-  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, kUTTypeFlatRTFD, nil]]))
   {
     NSData* rtfdData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
@@ -786,8 +786,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSDictionary* pdfAttachments = [attributedString attachmentsOfType:@"pdf" docAttributes:docAttributes];
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     ok = attributedString || (pdfWrapperData != nil);//now, allow string
-  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD, nil]]))
-  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, NSStringPboardType, nil]])
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, kUTTypeFlatRTFD, nil]]))
+  else if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPasteboardTypeRTF, NSPasteboardTypeString, nil]])
     ok = YES;
   result = ok ? NSDragOperationCopy : NSDragOperationNone;
   return result;
@@ -865,12 +865,12 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
   NSString* type = nil;
   BOOL done = NO;
   
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     [self setBackgroundColor:[NSColor colorWithData:[pboard dataForType:type]] updateHistoryItem:YES];
     done = YES;
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSColorPboardType]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSPasteboardTypeColor]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsWrappedPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
@@ -906,11 +906,11 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     [self->document applyLatexitEquation:[latexitEquationsArray lastObject] isRecentLatexisation:NO];
     done = YES;
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, NSPDFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, NSPasteboardTypePDF, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypePDF];
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:kUTTypePDF, NSPDFPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:kUTTypePDF, NSPasteboardTypePDF, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
@@ -1030,7 +1030,7 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
       [self->document applyString:concats];
     done = (concats != nil);
   }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:GetWebURLsWithTitlesPboardType(), nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfdData = [pboard dataForType:type];
@@ -1040,8 +1040,8 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* pdfWrapperData = [pdfAttachments count] ? [[[pdfAttachments objectEnumerator] nextObject] regularFileContents] : nil;
     if (pdfWrapperData)
       done = [self->document applyData:pdfWrapperData sourceUTI:(NSString*)kUTTypePDF];
-  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTFD, NSRTFDPboardType, nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
+  }//end (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeFlatRTFD, NSPasteboardTypeRTFD, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSPasteboardTypeRTF, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSData* rtfData = [pboard dataForType:type];
@@ -1052,15 +1052,15 @@ NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
     //[self->document applyString:string];
     [self->document applyData:data sourceUTI:(NSString*)kUTTypeText];
     done = YES;
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSRTFPboardType, nil]])))
-  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeRTF, NSPasteboardTypeRTF, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSPasteboardTypeString, nil]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     //NSString* string = [pboard stringForType:type];
     //[self->document applyString:string];
     [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypeText];
     done = YES;
-  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSStringPboardType, nil]])))
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeText, NSPasteboardTypeString, nil]])))
   if (!done)
     ok = NO;
   return ok;

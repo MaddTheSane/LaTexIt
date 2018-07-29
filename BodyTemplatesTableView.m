@@ -15,7 +15,7 @@
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
 #endif
 
-static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard type for drag'n drop of tableviews rows
+static NSPasteboardType const BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard type for drag'n drop of tableviews rows
 
 @implementation BodyTemplatesTableView
 

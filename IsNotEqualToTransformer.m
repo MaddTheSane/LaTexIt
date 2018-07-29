@@ -51,8 +51,6 @@
 }
 //end initWithFalseValue:
 
-//end dealloc
-
 -(id) transformedValue:(id)value
 {
   id result = [NSNumber numberWithBool:![value isEqualTo:self->reference]];
