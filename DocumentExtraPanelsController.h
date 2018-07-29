@@ -13,7 +13,7 @@
 @class ExportFormatOptionsPanes;
 
 @interface DocumentExtraPanelsController : NSNib {
-  IBOutlet NSView*        saveAccessoryView;
+  NSView*        saveAccessoryView;
   IBOutlet NSTextField*   saveAccessoryViewFormatLabel;
   IBOutlet NSPopUpButton* saveAccessoryViewPopupFormat;
   IBOutlet NSButton*      saveAccessoryViewOptionsButton;
@@ -23,8 +23,8 @@
   IBOutlet NSTextField*   saveAccessoryViewScaleLabel;
   IBOutlet NSTextField*   saveAccessoryViewScalePercentTextField;
   
-  IBOutlet NSWindow*   logWindow;
-  IBOutlet NSTextView* logTextView;
+  __weak NSWindow*   logWindow;
+  __unsafe_unretained NSTextView* logTextView;
 
   ExportFormatOptionsPanes* saveAccessoryViewExportFormatOptionsPanes;
   
@@ -45,8 +45,9 @@
 
 -(instancetype) initWithLoadingFromNib;
 
--(NSWindow*)   logWindow;
--(NSTextView*) logTextView;
+@property (strong) IBOutlet NSView *saveAccessoryView;
+@property (weak) IBOutlet NSWindow *logWindow;
+@property (unsafe_unretained) IBOutlet NSTextView *logTextView;
 @property (atomic, copy) NSString *log;
 
 @property (nonatomic) export_format_t   saveAccessoryViewExportFormat;

@@ -35,6 +35,10 @@
 @synthesize saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
 @synthesize saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
 
+@synthesize saveAccessoryView;
+@synthesize logWindow;
+@synthesize logTextView;
+
 #pragma mark init/load/dealloc
 
 -(id) initWithLoadingFromNib
