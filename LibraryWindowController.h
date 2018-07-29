@@ -9,7 +9,6 @@
 #import <Cocoa/Cocoa.h>
 
 @class BorderlessPanel;
-@class ImagePopupButton;
 @class LibraryEquation;
 @class LibraryView;
 @class LibraryPreviewPanelImageView;
@@ -17,7 +16,7 @@
 @interface LibraryWindowController : NSWindowController <NSTableViewDelegate, NSTextViewDelegate, NSOpenSavePanelDelegate, NSMenuDelegate> {
   IBOutlet NSSearchField*                librarySearchField;
   IBOutlet NSButton*                     importCurrentButton;
-  IBOutlet ImagePopupButton*             actionButton;
+  IBOutlet NSPopUpButton*                actionButton;
   IBOutlet LibraryView*                  libraryView;
   IBOutlet NSSegmentedControl*           libraryRowTypeSegmentedControl;
   IBOutlet BorderlessPanel*              libraryPreviewPanel;

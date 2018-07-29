@@ -14,7 +14,6 @@
 @class AppController;
 @class DocumentExtraPanelsController;
 @class ExportFormatOptionsPanes;
-@class ImagePopupButton;
 @class LatexitEquation;
 @class LibraryEquation;
 @class LineCountTextView;
@@ -38,8 +37,8 @@
   IBOutlet MySplitView*         lowerBoxSplitView;
   IBOutlet LineCountTextView*   lowerBoxPreambleTextView;
   IBOutlet LineCountTextView*   lowerBoxSourceTextView;
-  IBOutlet ImagePopupButton*    lowerBoxChangePreambleButton;
-  IBOutlet ImagePopupButton*    lowerBoxChangeBodyTemplateButton;
+  IBOutlet NSPopUpButton*       lowerBoxChangePreambleButton;
+  IBOutlet NSPopUpButton*       lowerBoxChangeBodyTemplateButton;
   IBOutlet NSBox*               lowerBoxControlsBox;
   IBOutlet NSView*              lowerBoxControlsBoxLatexModeView;
   IBOutlet NSButton*            lowerBoxControlsBoxLatexModeAutoButton;

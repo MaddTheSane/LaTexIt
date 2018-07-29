@@ -16,8 +16,7 @@
 -(NSImage*) image;
 -(void)     setImage:(NSImage*)image;
 
--(NSColor*) imageBackgroundColor;
--(void) setImageBackgroundColor:(NSColor*)color;
+@property (strong) NSColor *imageBackgroundColor;
 
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView;
 

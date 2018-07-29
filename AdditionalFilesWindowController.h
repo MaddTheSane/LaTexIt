@@ -9,13 +9,12 @@
 #import <Cocoa/Cocoa.h>
 
 @class AdditionalFilesTableView;
-@class ImagePopupButton;
 
 @interface AdditionalFilesWindowController : NSWindowController {
   IBOutlet AdditionalFilesTableView* additionalFilesTableView;
   IBOutlet NSButton*                 additionalFilesAddButton;
   IBOutlet NSButton*                 additionalFilesRemoveButton;
-  IBOutlet ImagePopupButton*         additionalFilesMenuButton;
+  IBOutlet NSPopUpButton*            additionalFilesMenuButton;
 }
 
 -(NSArray*) additionalFilesPaths;

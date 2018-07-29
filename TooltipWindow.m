@@ -15,6 +15,7 @@ static NSDictionary*  textAttributes   = nil;
 static NSColor*       backgroundColor  = nil;
 
 @implementation TooltipWindow
+@synthesize tooltip = tooltipObject;
 
 +(void) setDefaultBackgroundColor:(NSColor*)value
 {
@@ -58,14 +59,14 @@ static NSColor*       backgroundColor  = nil;
 +(id) tipWithString:(NSString*)tip frame:(NSRect)frame display:(BOOL)display
 {
   id result =
-    [TooltipWindow tipWithAttributedString:[[NSAttributedString alloc] initWithString:tip] frame:frame display:display];
+    [self tipWithAttributedString:[[NSAttributedString alloc] initWithString:tip] frame:frame display:display];
   return result;
 }
 //end tipWithString:frame:display:
 
 +(id) tipWithAttributedString:(NSAttributedString*)tip frame:(NSRect)frame display:(BOOL)display
 {
-  TooltipWindow* window = [[TooltipWindow alloc] init]; // blank slate
+  TooltipWindow* window = [[self alloc] init]; // blank slate
   @synchronized(self)
   {
     if (!doneInitialSetup)
@@ -137,24 +138,16 @@ static NSColor*       backgroundColor  = nil;
 }
 //end init
 
-//end dealloc
-
--(id) tooltip
-{
-  return self->tooltipObject;
-}
-//end tooltip
-
 -(void) setTooltip:(id)tip
 {
   id contentView = [self contentView];
-  self->tooltipObject = tip;
+  tooltipObject = [tip copy];
   if ([contentView isKindOfClass:[NSTextField class]])
   {
     if ([tip isKindOfClass:[NSString class]])
-      [contentView setStringValue:tip];
+      [contentView setStringValue:tooltipObject];
     else if ([tip isKindOfClass:[NSAttributedString class]])
-      [contentView setAttributedStringValue:tip];
+      [contentView setAttributedStringValue:tooltipObject];
   }//end if ([contentView isKindOfClass:[NSTextField class]])
 }
 //end setTooltip:

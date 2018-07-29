@@ -38,7 +38,6 @@
 #import "PreferencesController.h"
 #import "TeXItemWrapper.h"
 #import "Utils.h"
-#import "ImagePopupButton.h"
 
 extern NSString* NSMenuDidBeginTrackingNotification;
 

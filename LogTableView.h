@@ -10,16 +10,13 @@
 
 //when the user clicks a line, he will be teleported to the error in the body of the latex source,
 //in another view of the document window. A notification suits well.
-extern NSString* ClickErrorLineNotification;
+extern NSNotificationName const ClickErrorLineNotification;
 
 @interface LogTableView : NSTableView <NSTableViewDataSource, NSTableViewDelegate> {
   NSMutableArray* errorLines;//the lines where the errors are located
 }
 
-//updates contents thanks to the array of error strings
--(void) setErrors:(NSArray*)errors;
-
-//NSTableViewDataSource
--(id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex;
+//! updates contents thanks to the array of error strings
+-(void) setErrors:(NSArray<NSString*>*)errors;
 
 @end

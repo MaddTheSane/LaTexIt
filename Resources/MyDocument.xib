@@ -258,7 +258,7 @@
                                         <outlet property="delegate" destination="-2" id="636"/>
                                     </connections>
                                 </splitView>
-                                <popUpButton id="659" customClass="ImagePopupButton">
+                                <popUpButton id="659">
                                     <rect key="frame" x="20" y="250" width="32" height="20"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" pullsDown="YES" arrowPosition="noArrow" id="1094">
@@ -270,7 +270,7 @@
                                         <action selector="changePreamble:" target="-2" id="1092"/>
                                     </connections>
                                 </popUpButton>
-                                <popUpButton id="1113" customClass="ImagePopupButton">
+                                <popUpButton id="1113">
                                     <rect key="frame" x="22" y="250" width="33" height="20"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" pullsDown="YES" arrowPosition="noArrow" id="1114">

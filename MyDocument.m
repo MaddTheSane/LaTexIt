@@ -16,7 +16,6 @@
 #import "ExportFormatOptionsPanes.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
-#import "ImagePopupButton.h"
 #import "LatexitEquation.h"
 #import "LaTeXProcessor.h"
 #import "LibraryManager.h"

@@ -16,6 +16,7 @@
 @end
 
 @implementation ImageAndTextCell
+@synthesize imageBackgroundColor;
 
 //NSCopying protocol
 -(id) copyWithZone:(NSZone*)zone
@@ -38,18 +39,6 @@
   return self->image;
 }
 //end image
-
--(void) setImageBackgroundColor:(NSColor*)anImageBackgroundColor
-{
-  self->imageBackgroundColor = anImageBackgroundColor;
-}
-//end setImage:
-
--(NSColor*) imageBackgroundColor
-{
-  return self->imageBackgroundColor;
-}
-//end imageBackgroundColor
 
 -(NSRect) imageFrameForCellFrame:(NSRect)cellFrame relativeToCellOrigin:(BOOL)relativeToCellOrigin
 {

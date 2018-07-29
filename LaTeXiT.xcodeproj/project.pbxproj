@@ -124,7 +124,6 @@
 		9310AA1B124943DF007EFF23 /* Plugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310AA1A124943DF007EFF23 /* Plugin.m */; };
 		9310CDEB101753BF0077E0D5 /* NSMutableDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310CDEA101753BF0077E0D5 /* NSMutableDictionaryExtended.m */; };
 		9310CDEC101753BF0077E0D5 /* NSMutableDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9310CDEA101753BF0077E0D5 /* NSMutableDictionaryExtended.m */; };
-		9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C64308A0C409009AC959 /* ImagePopupButton.m */; };
 		9311C80408A0FA95009AC959 /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C80208A0FA95009AC959 /* LibraryWindowController.m */; };
 		9311C8E708A10931009AC959 /* HistoryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9311C8E508A10931009AC959 /* HistoryWindowController.m */; };
 		93155CB116AAFC3000456273 /* Latexit-2.5.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 93155CB016AAFC3000456273 /* Latexit-2.5.0.xcdatamodel */; };
@@ -634,8 +633,6 @@
 		9310AC4B1249E907007EFF23 /* LaTeXiTPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiTPluginProtocol.h; sourceTree = "<group>"; };
 		9310CDE9101753BF0077E0D5 /* NSMutableDictionaryExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableDictionaryExtended.h; sourceTree = "<group>"; };
 		9310CDEA101753BF0077E0D5 /* NSMutableDictionaryExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableDictionaryExtended.m; sourceTree = "<group>"; };
-		9311C64208A0C409009AC959 /* ImagePopupButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePopupButton.h; sourceTree = "<group>"; };
-		9311C64308A0C409009AC959 /* ImagePopupButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePopupButton.m; sourceTree = "<group>"; };
 		9311C80108A0FA95009AC959 /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
 		9311C80208A0FA95009AC959 /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		9311C8E408A10931009AC959 /* HistoryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryWindowController.h; sourceTree = "<group>"; };
@@ -1378,8 +1375,6 @@
 				936368C91194BA4900C5DE49 /* DragThroughButton.m */,
 				934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */,
 				934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */,
-				9311C64208A0C409009AC959 /* ImagePopupButton.h */,
-				9311C64308A0C409009AC959 /* ImagePopupButton.m */,
 				93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */,
 				93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */,
 				937A39850FE2F1AC000BEE6E /* MySplitView.h */,
@@ -2268,7 +2263,6 @@
 				93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */,
 				93F73C9D0898DEF800EFFA5E /* EncapsulationsTableView.m in Sources */,
 				93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */,
-				9311C64508A0C409009AC959 /* ImagePopupButton.m in Sources */,
 				9311C80408A0FA95009AC959 /* LibraryWindowController.m in Sources */,
 				9311C8E708A10931009AC959 /* HistoryWindowController.m in Sources */,
 				9324D34F08A63E540010DB95 /* ButtonNotClickThrough.m in Sources */,
