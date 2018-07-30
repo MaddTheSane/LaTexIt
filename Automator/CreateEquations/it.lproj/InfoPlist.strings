@@ -1,4 +1,4 @@
-﻿AMName = "Create equations with LaTeXiT";
+AMName = "Create equations with LaTeXiT";
 AMDInput = "URLs and file paths are read for their text content. Top-level folders are explored. As much as possible, only files considered as text are kept for input.";
 AMDNote = "Text can be directly used as input. The text is processed by the LaTeXiT engine to make an equation with it. It must be written using a LaTeX syntax. The preamble, and \\begin{document}...\\end{document}, are automaticaly added around the text, that can thus focus on the equation formula. The \"mode\" parameter tells if it must additionnaly be enclosed within $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray}, or not. If the input text already contains a preambule, this one is used; otherwise, the preamble is taken from the LaTeXiT's preferences.";
 AMDOptions = "";
