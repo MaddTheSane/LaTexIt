@@ -18,5 +18,6 @@
 
 +(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView firstIfMultiple:(BOOL)firstIfMultiple;
 -(instancetype) initWithOutlineView:(NSOutlineView*)outlineView firstIfMultiple:(BOOL)firstIfMultiple NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

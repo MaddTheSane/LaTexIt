@@ -21,5 +21,6 @@
                      additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath;
 -(instancetype) initWithValueTransformer:(NSValueTransformer*)valueTransformer
               additionalValueTransformer:(NSValueTransformer*)additionalValueTransformer additionalKeyPath:(NSString*)additionalKeyPath NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

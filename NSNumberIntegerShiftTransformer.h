@@ -17,5 +17,6 @@
 
 +(instancetype) transformerWithShift:(NSNumber*)shift;
 -(instancetype) initWithShift:(NSNumber*)shift NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

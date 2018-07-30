@@ -23,6 +23,7 @@
 
 +(instancetype) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
 -(instancetype) initWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 
 @end

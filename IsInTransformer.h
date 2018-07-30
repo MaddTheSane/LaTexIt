@@ -17,5 +17,5 @@
 
 +(instancetype) transformerWithReferences:(id)references;
 -(instancetype) initWithReferences:(id)references NS_DESIGNATED_INITIALIZER;
-
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 @end

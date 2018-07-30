@@ -17,5 +17,5 @@
 
 +(instancetype) transformerWithOutlineView:(NSOutlineView*)outlineView;
 -(instancetype) initWithOutlineView:(NSOutlineView*)outlineView NS_DESIGNATED_INITIALIZER;
-
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 @end

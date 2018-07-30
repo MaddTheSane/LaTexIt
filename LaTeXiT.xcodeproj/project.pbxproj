@@ -797,7 +797,7 @@
 		936C315C0C0DEEA90082F86D /* Semaphore.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Semaphore.m; sourceTree = "<group>"; };
 		936C315D0C0DEEA90082F86D /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; };
 		936E5F900906E64000A26F7B /* SMLSyntaxColouring.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = SMLSyntaxColouring.m; sourceTree = "<group>"; };
-		936E5F910906E64000A26F7B /* SMLSyntaxColouring.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = SMLSyntaxColouring.h; sourceTree = "<group>"; };
+		936E5F910906E64000A26F7B /* SMLSyntaxColouring.h */ = {isa = PBXFileReference; fileEncoding = 5; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = SMLSyntaxColouring.h; sourceTree = "<group>"; usesTabs = 1; };
 		9372A1F2087819EF00A3A645 /* MarginsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginsWindowController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginsWindowController.m; sourceTree = "<group>"; };
 		9372A26A08781EC800A3A645 /* MarginsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarginsWindowController.xib; sourceTree = "<group>"; };
@@ -827,7 +827,7 @@
 		9387FA941930E7D500888628 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKFileWatcher.h; path = UKKQueue/UKFileWatcher.h; sourceTree = "<group>"; };
 		9387FA951930E7D500888628 /* UKFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFileWatcher.m; path = UKKQueue/UKFileWatcher.m; sourceTree = "<group>"; };
 		9387FA961930E7D500888628 /* UKFNSubscribeFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKFNSubscribeFileWatcher.h; path = UKKQueue/UKFNSubscribeFileWatcher.h; sourceTree = "<group>"; };
-		9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFNSubscribeFileWatcher.m; path = UKKQueue/UKFNSubscribeFileWatcher.m; sourceTree = "<group>"; usesTabs = 0; };
+		9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFNSubscribeFileWatcher.m; path = UKKQueue/UKFNSubscribeFileWatcher.m; sourceTree = "<group>"; usesTabs = 1; };
 		9387FA981930E7D500888628 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKKQueue.h; path = UKKQueue/UKKQueue.h; sourceTree = "<group>"; };
 		9387FA991930E7D500888628 /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKKQueue.m; path = UKKQueue/UKKQueue.m; sourceTree = "<group>"; };
 		9387FA9A1930E7D500888628 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKMainThreadProxy.h; path = UKKQueue/UKMainThreadProxy.h; sourceTree = "<group>"; };

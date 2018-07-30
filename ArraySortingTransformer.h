@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) transformerWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors;
 -(instancetype) initWithDescriptors:(nullable NSArray<NSSortDescriptor*>*)descriptors NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end
 

@@ -107,6 +107,7 @@
 +(NSArray *)syntaxDefinitionsArray;
 
 -(instancetype) initWithTextView:(NSTextView*)aTextView NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 -(void) setColours;
 -(void) setSyntaxDefinitionsForExtension:(NSString *)extension;

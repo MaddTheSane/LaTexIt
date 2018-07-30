@@ -24,6 +24,7 @@
 
 -(instancetype) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext NS_DESIGNATED_INITIALIZER;
 -(instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
+-(instancetype)initWithParent:(LibraryItem *)parent insertIntoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext UNAVAILABLE_ATTRIBUTE;
 
 -(void) dispose;
 @property BOOL customKVOEnabled;

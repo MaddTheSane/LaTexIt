@@ -8,7 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum {LOGIC_TRANSFORMER_OPERATOR_AND, LOGIC_TRANSFORMER_OPERATOR_OR} logic_transformer_operator_t;
+typedef NS_ENUM(NSInteger, logic_transformer_operator_t) {
+  LOGIC_TRANSFORMER_OPERATOR_AND,
+  LOGIC_TRANSFORMER_OPERATOR_OR
+};
 
 @interface LogicTransformer : NSValueTransformer {
   NSArray* transformers;
@@ -20,5 +23,6 @@ typedef enum {LOGIC_TRANSFORMER_OPERATOR_AND, LOGIC_TRANSFORMER_OPERATOR_OR} log
 
 +(instancetype) transformerWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator;
 -(instancetype) initWithTransformers:(NSArray*)transformers logicOperator:(logic_transformer_operator_t)logicOperator NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

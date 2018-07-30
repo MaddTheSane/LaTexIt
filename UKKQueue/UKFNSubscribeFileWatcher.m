@@ -36,7 +36,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
 //		Singleton accessor.
 // -----------------------------------------------------------------------------
 
-+(id) sharedFileWatcher
++(UKFNSubscribeFileWatcher*) sharedFileWatcher
 {
 	static UKFNSubscribeFileWatcher* sSharedFileWatcher = nil;
 	
@@ -51,7 +51,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
 //  * CONSTRUCTOR:
 // -----------------------------------------------------------------------------
 
--(id)   init
+-(instancetype)   init
 {
     self = [super init];
     if( !self ) 
@@ -74,7 +74,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
     
     while( (subValue = [enny nextObject]) )
     {
-        FNSubscriptionRef   subscription = [subValue pointerValue];
+        FNSubscriptionRef   subscription = subValue.pointerValue;
         FNUnsubscribe( subscription );
     }
     
@@ -99,7 +99,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
     if( !subscriptionUPP )
         subscriptionUPP = NewFNSubscriptionUPP( UKFileSubscriptionProc );
     
-    err = FNSubscribeByPath( (UInt8*) [path fileSystemRepresentation], subscriptionUPP, (void*)self,
+    err = FNSubscribeByPath( (UInt8*) path.fileSystemRepresentation, subscriptionUPP, (void*)self,
                                 kNilOptions, &subscription );
     if( err != noErr )
     {
@@ -107,7 +107,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
         return;
     }
     
-    [subscriptions setObject: [NSValue valueWithPointer: subscription] forKey: path];
+    subscriptions[path] = [NSValue valueWithPointer: subscription];
 }
 
 
@@ -121,13 +121,13 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
     NSValue*            subValue = nil;
     @synchronized( self )
     {
-        subValue = [[[subscriptions objectForKey: path] retain] autorelease];
+        subValue = [[subscriptions[path] retain] autorelease];
         [subscriptions removeObjectForKey: path];
     }
     
 	if( subValue )
 	{
-		FNSubscriptionRef   subscription = [subValue pointerValue];
+		FNSubscriptionRef   subscription = subValue.pointerValue;
 		
 		FNUnsubscribe( subscription );
 	}
@@ -136,21 +136,21 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
 
 // -----------------------------------------------------------------------------
 //  sendDelegateMessage:forSubscription:
-//		Bottleneck for change notifications. This is called by our callback
-//		function to actually inform the delegate and send out notifications.
+//        Bottleneck for change notifications. This is called by our callback
+//        function to actually inform the delegate and send out notifications.
 //
-//		This *only* sends out write notifications, as FNSubscribe doesn't tell
-//		what changed about our folder.
+//        This *only* sends out write notifications, as FNSubscribe doesn't tell
+//        what changed about our folder.
 // -----------------------------------------------------------------------------
 
 -(void) sendDelegateMessage: (FNMessage)message forSubscription: (FNSubscriptionRef)subscription
 {
     NSValue*                    subValue = [NSValue valueWithPointer: subscription];
-    NSString*                   path = [[subscriptions allKeysForObject: subValue] objectAtIndex: 0];
+    NSString*                   path = [subscriptions allKeysForObject: subValue][0];
     
-	[[[NSWorkspace sharedWorkspace] notificationCenter] postNotificationName: UKFileWatcherWriteNotification
-															object: self
-															userInfo: [NSDictionary dictionaryWithObjectsAndKeys: path, @"path", nil]];
+	[[NSWorkspace sharedWorkspace].notificationCenter postNotificationName: UKFileWatcherWriteNotification
+																	object: self
+																  userInfo: @{@"path": path}];
 	
     [delegate watcher: self receivedNotification: UKFileWatcherWriteNotification forPath: path];
     //NSLog( @"UKFNSubscribeFileWatcher noticed change to %@", path );	// DEBUG ONLY!

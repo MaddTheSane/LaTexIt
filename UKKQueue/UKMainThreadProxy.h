@@ -52,5 +52,6 @@
 }
 
 -(instancetype)	initWithTarget: (id)targ NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

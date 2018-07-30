@@ -16,5 +16,6 @@
 
 +(instancetype) transformerWithDescriptors:(NSArray*)descriptors;
 -(instancetype) initWithDescriptors:(NSArray*)descriptors NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

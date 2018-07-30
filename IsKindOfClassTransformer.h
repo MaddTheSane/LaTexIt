@@ -17,5 +17,6 @@
 
 +(instancetype) transformerWithClass:(Class)aClass;
 -(instancetype) initWithClass:(Class)aClass NS_DESIGNATED_INITIALIZER;
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end
