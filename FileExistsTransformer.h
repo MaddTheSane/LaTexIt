@@ -16,5 +16,5 @@
 
 +(instancetype) transformerWithDirectoryAllowed:(BOOL)directoryAllowed;
 -(instancetype) initWithDirectoryAllowed:(BOOL)directoryAllowed NS_DESIGNATED_INITIALIZER;
-
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 @end

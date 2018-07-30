@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
   id<LaTeXiTPluginProtocol> principalClassInstance;
 }
 
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 -(nullable instancetype) initWithPath:(NSString*)path NS_DESIGNATED_INITIALIZER;
 
 @property (readonly, retain) NSBundle *bundle;

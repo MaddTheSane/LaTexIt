@@ -40,7 +40,7 @@ NSString* const FontDidChangeNotification      = @"FontDidChangeNotification";
 
 @interface LineCountTextView ()
 -(void) _computeLineRanges;
--(void) _initializeSpellChecker;
+-(void) _initializeSpellChecker:(id)object;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
 -(void) insertTextAtMousePosition:(id)object;
 @end

@@ -17,5 +17,5 @@
 
 +(instancetype) transformerWithDictionary:(NSDictionary*)dictionary;
 -(instancetype) initWithDictionary:(NSDictionary*)dictionary NS_DESIGNATED_INITIALIZER;
-
+-(instancetype)init UNAVAILABLE_ATTRIBUTE;
 @end
