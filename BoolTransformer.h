@@ -18,5 +18,6 @@
 
 +(instancetype) transformerWithFalseValue:(id)falseValue trueValue:(id)trueValue;
 -(instancetype) initWithFalseValue:(id)falseValue trueValue:(id)trueValue NS_DESIGNATED_INITIALIZER;
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 @end

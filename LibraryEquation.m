@@ -140,11 +140,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
--(BOOL) customKVOInhibited
-{
-  return self->customKVOInhibited;
-}
-//end customKVOEnabled
+@synthesize customKVOInhibited;
 
 -(void) setCustomKVOInhibited:(BOOL)value
 {
@@ -163,11 +159,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 }
 //end customKVOInhibited:
 
--(BOOL) customKVOEnabled
-{
-  return self->customKVOEnabled;
-}
-//end customKVOEnabled
+@synthesize customKVOEnabled;
 
 -(void) setCustomKVOEnabled:(BOOL)value
 {
@@ -323,5 +315,12 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   return self;
 }
 //end initWithDescription:
+
+-(instancetype)initWithParent:(LibraryItem *)parent insertIntoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+  if (self = [self initWithParent:parent equation:NULL insertIntoManagedObjectContext:managedObjectContext]) {
+  }
+  return self;
+}
 
 @end

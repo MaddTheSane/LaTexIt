@@ -20,7 +20,7 @@ extern NSString* ImageDidChangeNotification;
 @class LinkBack;
 @class MyDocument;
 
-@interface MyImageView : NSImageView <CALayerDelegate> {
+@interface MyImageView : NSImageView <CALayerDelegate, NSDraggingDestination, NSDraggingSource> {
   IBOutlet    MyDocument* document; //link to the parent document
   CGFloat     zoomLevel;
   NSData*     pdfData; //full pdfdata (that may contain meta-data like keywords, creator...)

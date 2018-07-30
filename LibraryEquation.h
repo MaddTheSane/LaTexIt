@@ -24,11 +24,11 @@
 
 -(instancetype) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext NS_DESIGNATED_INITIALIZER;
 -(instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
--(instancetype)initWithParent:(LibraryItem *)parent insertIntoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext UNAVAILABLE_ATTRIBUTE;
+-(instancetype)initWithParent:(LibraryItem *)parent insertIntoManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 -(void) dispose;
-@property BOOL customKVOEnabled;
-@property BOOL customKVOInhibited;
+@property (nonatomic) BOOL customKVOEnabled;
+@property (nonatomic) BOOL customKVOInhibited;
 
 -(void) setTitle:(NSString*)value;//redefined to set title of equation with the same value
 
