@@ -48,8 +48,8 @@
 //static inline CGFloat sqr(CGFloat x) {return x*x;}
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
-NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
-NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
+NSString* const CopyCurrentImageNotification = @"CopyCurrentImageNotification";
+NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 @interface TransparentView : NSView
 @end

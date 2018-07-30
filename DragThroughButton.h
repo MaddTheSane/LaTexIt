@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* DragThroughButtonStateChangedNotification;
+extern NSNotificationName const DragThroughButtonStateChangedNotification;
 
 @class TooltipWindow;
 

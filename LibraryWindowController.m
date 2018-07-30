@@ -39,8 +39,6 @@
 #import "TeXItemWrapper.h"
 #import "Utils.h"
 
-extern NSString* NSMenuDidBeginTrackingNotification;
-
 @interface LibraryWindowController ()
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
 -(void) _updateButtons:(NSNotification*)aNotification;

@@ -8,7 +8,7 @@
 
 #import "NotifyingScrollView.h"
 
-NSString* NotifyingScrollViewDidScrollNotification = @"NotifyingScrollViewDidScrollNotification";
+NSString* const NotifyingScrollViewDidScrollNotification = @"NotifyingScrollViewDidScrollNotification";
 
 @implementation NotifyingScrollView
 

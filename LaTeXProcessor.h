@@ -10,7 +10,7 @@
 
 #import "LaTeXiTSharedTypes.h"
 
-extern NSString* LatexizationDidEndNotification;
+extern NSNotificationName const LatexizationDidEndNotification;
 
 @interface LaTeXProcessor : NSObject {
   NSManagedObjectModel* managedObjectModel;

@@ -28,11 +28,11 @@
 // Do not rely on the actual contents of these constants. They will eventually
 //	be changed to be more generic and less KQueue-specific.
 
-NSString* UKFileWatcherRenameNotification				= @"UKKQueueFileRenamedNotification";
-NSString* UKFileWatcherWriteNotification				= @"UKKQueueFileWrittenToNotification";
-NSString* UKFileWatcherDeleteNotification				= @"UKKQueueFileDeletedNotification";
-NSString* UKFileWatcherAttributeChangeNotification		= @"UKKQueueFileAttributesChangedNotification";
-NSString* UKFileWatcherSizeIncreaseNotification			= @"UKKQueueFileSizeIncreasedNotification";
-NSString* UKFileWatcherLinkCountChangeNotification		= @"UKKQueueFileLinkCountChangedNotification";
-NSString* UKFileWatcherAccessRevocationNotification		= @"UKKQueueFileAccessRevocationNotification";
+NSString*const UKFileWatcherRenameNotification				= @"UKKQueueFileRenamedNotification";
+NSString*const UKFileWatcherWriteNotification				= @"UKKQueueFileWrittenToNotification";
+NSString*const UKFileWatcherDeleteNotification				= @"UKKQueueFileDeletedNotification";
+NSString*const UKFileWatcherAttributeChangeNotification		= @"UKKQueueFileAttributesChangedNotification";
+NSString*const UKFileWatcherSizeIncreaseNotification		= @"UKKQueueFileSizeIncreasedNotification";
+NSString*const UKFileWatcherLinkCountChangeNotification		= @"UKKQueueFileLinkCountChangedNotification";
+NSString*const UKFileWatcherAccessRevocationNotification	= @"UKKQueueFileAccessRevocationNotification";
 

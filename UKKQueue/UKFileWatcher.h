@@ -61,12 +61,12 @@ typedef NSString *UKFileWatcherNotifications NS_STRING_ENUM;
 /*  object			= the file watcher object
 	userInfo.path	= file path watched
 	These notifications are sent via the NSWorkspace notification center */
-extern UKFileWatcherNotifications UKFileWatcherRenameNotification;
-extern UKFileWatcherNotifications UKFileWatcherWriteNotification;
-extern UKFileWatcherNotifications UKFileWatcherDeleteNotification;
-extern UKFileWatcherNotifications UKFileWatcherAttributeChangeNotification;
-extern UKFileWatcherNotifications UKFileWatcherSizeIncreaseNotification;
-extern UKFileWatcherNotifications UKFileWatcherLinkCountChangeNotification;
-extern UKFileWatcherNotifications UKFileWatcherAccessRevocationNotification;
+extern UKFileWatcherNotifications const UKFileWatcherRenameNotification;
+extern UKFileWatcherNotifications const UKFileWatcherWriteNotification;
+extern UKFileWatcherNotifications const UKFileWatcherDeleteNotification;
+extern UKFileWatcherNotifications const UKFileWatcherAttributeChangeNotification;
+extern UKFileWatcherNotifications const UKFileWatcherSizeIncreaseNotification;
+extern UKFileWatcherNotifications const UKFileWatcherLinkCountChangeNotification;
+extern UKFileWatcherNotifications const UKFileWatcherAccessRevocationNotification;
 
 NS_ASSUME_NONNULL_END

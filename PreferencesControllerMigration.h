@@ -10,7 +10,7 @@
 
 #import "PreferencesController.h"
 
-extern NSString* Old_CheckForNewVersionsKey;
+extern NSString* const Old_CheckForNewVersionsKey;
 
 @interface PreferencesController (Migration)
 

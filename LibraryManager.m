@@ -38,8 +38,8 @@
 
 #import <LinkBack/LinkBack.h>
 
-NSString* LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
-NSString* LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
+NSString* const LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
+NSString* const LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
 
 @interface LibraryManager ()
 -(void) _migrateLatexitManagedModel:(NSString*)path;

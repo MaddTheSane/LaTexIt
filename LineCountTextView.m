@@ -35,10 +35,10 @@
 
 #include <Carbon/Carbon.h>
 
-NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
-NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
+NSString* const LineCountDidChangeNotification = @"LineCountDidChangeNotification";
+NSString* const FontDidChangeNotification      = @"FontDidChangeNotification";
 
-@interface LineCountTextView (PrivateAPI)
+@interface LineCountTextView ()
 -(void) _computeLineRanges;
 -(void) _initializeSpellChecker;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;

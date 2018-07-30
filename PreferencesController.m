@@ -39,136 +39,136 @@
 
 static PreferencesController* sharedInstance = nil;
 
-NSString* LaTeXiTAppKey = @"fr.chachatelier.pierre.LaTeXiT";
-NSString* Old_LaTeXiTAppKey = @"fr.club.ktd.LaTeXiT";
+NSString*const LaTeXiTAppKey = @"fr.chachatelier.pierre.LaTeXiT";
+NSString*const Old_LaTeXiTAppKey = @"fr.club.ktd.LaTeXiT";
 
-NSString* LaTeXiTVersionKey = @"version";
+NSString*const LaTeXiTVersionKey = @"version";
 
-NSString* DocumentStyleKey = @"DocumentStyle";
+NSString*const DocumentStyleKey = @"DocumentStyle";
 
-NSString* DragExportTypeKey                                   = @"DragExportType";
-NSString* DragExportJpegColorKey                              = @"DragExportJpegColor";
-NSString* DragExportJpegQualityKey                            = @"DragExportJpegQuality";
-NSString* DragExportPDFWOFGsWriteEngineKey                    = @"DragExportPDFWOFGsWriteEngine";
-NSString* DragExportPDFWOFGsPDFCompatibilityLevelKey          = @"DragExportPDFWOFGsPDFCompatibilityLevel";
-NSString* DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey = @"DragExportPDFWOFMetadataInvisibleGraphicsEnabled";
-NSString* DragExportSvgPdfToSvgPathKey                        = @"DragExportSvgPdfToSvgPath";
-NSString* DragExportTextExportPreambleKey                     = @"DragExportTextExportPreambleKey";
-NSString* DragExportTextExportEnvironmentKey                  = @"DragExportTextExportEnvironmentKey";
-NSString* DragExportTextExportBodyKey                         = @"DragExportTextExportBodyKey";
-NSString* DragExportScaleAsPercentKey                         = @"DragExportScaleAsPercent";
+NSString*const DragExportTypeKey                                   = @"DragExportType";
+NSString*const DragExportJpegColorKey                              = @"DragExportJpegColor";
+NSString*const DragExportJpegQualityKey                            = @"DragExportJpegQuality";
+NSString*const DragExportPDFWOFGsWriteEngineKey                    = @"DragExportPDFWOFGsWriteEngine";
+NSString*const DragExportPDFWOFGsPDFCompatibilityLevelKey          = @"DragExportPDFWOFGsPDFCompatibilityLevel";
+NSString*const DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey = @"DragExportPDFWOFMetadataInvisibleGraphicsEnabled";
+NSString*const DragExportSvgPdfToSvgPathKey                        = @"DragExportSvgPdfToSvgPath";
+NSString*const DragExportTextExportPreambleKey                     = @"DragExportTextExportPreambleKey";
+NSString*const DragExportTextExportEnvironmentKey                  = @"DragExportTextExportEnvironmentKey";
+NSString*const DragExportTextExportBodyKey                         = @"DragExportTextExportBodyKey";
+NSString*const DragExportScaleAsPercentKey                         = @"DragExportScaleAsPercent";
 
-NSString* DefaultImageViewBackgroundKey                      = @"DefaultImageViewBackground";
-NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey = @"DefaultAutomaticHighContrastedPreviewBackground";
-NSString* DefaultDoNotClipPreviewKey                         = @"DefaultDoNotClipPreview";
-NSString* DefaultColorKey                                    = @"DefaultColor";
-NSString* DefaultPointSizeKey                                = @"DefaultPointSize";
-NSString* DefaultModeKey                                     = @"DefaultMode";
+NSString*const DefaultImageViewBackgroundKey                      = @"DefaultImageViewBackground";
+NSString*const DefaultAutomaticHighContrastedPreviewBackgroundKey = @"DefaultAutomaticHighContrastedPreviewBackground";
+NSString*const DefaultDoNotClipPreviewKey                         = @"DefaultDoNotClipPreview";
+NSString*const DefaultColorKey                                    = @"DefaultColor";
+NSString*const DefaultPointSizeKey                                = @"DefaultPointSize";
+NSString*const DefaultModeKey                                     = @"DefaultMode";
 
-NSString* SpellCheckingEnableKey               = @"SpellCheckingEnabled";
-NSString* SyntaxColoringEnableKey              = @"SyntaxColoringEnabled";
-NSString* SyntaxColoringTextForegroundColorKey = @"SyntaxColoringTextForegroundColor";
-NSString* SyntaxColoringTextBackgroundColorKey = @"SyntaxColoringTextBackgroundColor";
-NSString* SyntaxColoringCommandColorKey        = @"SyntaxColoringCommandColor";
-NSString* SyntaxColoringMathsColorKey          = @"SyntaxColoringMathsColor";
-NSString* SyntaxColoringKeywordColorKey        = @"SyntaxColoringKeywordColor";
-NSString* SyntaxColoringCommentColorKey        = @"SyntaxColoringCommentColor";
-NSString* ReducedTextAreaStateKey              = @"ReducedTextAreaState";
+NSString*const SpellCheckingEnableKey               = @"SpellCheckingEnabled";
+NSString*const SyntaxColoringEnableKey              = @"SyntaxColoringEnabled";
+NSString*const SyntaxColoringTextForegroundColorKey = @"SyntaxColoringTextForegroundColor";
+NSString*const SyntaxColoringTextBackgroundColorKey = @"SyntaxColoringTextBackgroundColor";
+NSString*const SyntaxColoringCommandColorKey        = @"SyntaxColoringCommandColor";
+NSString*const SyntaxColoringMathsColorKey          = @"SyntaxColoringMathsColor";
+NSString*const SyntaxColoringKeywordColorKey        = @"SyntaxColoringKeywordColor";
+NSString*const SyntaxColoringCommentColorKey        = @"SyntaxColoringCommentColor";
+NSString*const ReducedTextAreaStateKey              = @"ReducedTextAreaState";
 
-NSString* DefaultFontKey               = @"DefaultFont";
-NSString* PreamblesKey                         = @"Preambles";
-NSString* LatexisationSelectedPreambleIndexKey = @"LatexisationSelectedPreambleIndex";
-NSString* BodyTemplatesKey                         = @"BodyTemplates";
-NSString* LatexisationSelectedBodyTemplateIndexKey = @"LatexisationSelectedBodyTemplateIndexKey";
+NSString*const DefaultFontKey               = @"DefaultFont";
+NSString*const PreamblesKey                         = @"Preambles";
+NSString*const LatexisationSelectedPreambleIndexKey = @"LatexisationSelectedPreambleIndex";
+NSString*const BodyTemplatesKey                         = @"BodyTemplates";
+NSString*const LatexisationSelectedBodyTemplateIndexKey = @"LatexisationSelectedBodyTemplateIndexKey";
 
-NSString* ServiceSelectedPreambleIndexKey     = @"ServiceSelectedPreambleIndex";
-NSString* ServiceSelectedBodyTemplateIndexKey = @"ServiceSelectedBodyTemplateIndexKey";
-NSString* ServiceShortcutsKey                 = @"ServiceShortcuts";
-NSString* ServiceShortcutEnabledKey           = @"enabled";
-NSString* ServiceShortcutClipBoardOptionKey   = @"clipBoardOption";
-NSString* ServiceShortcutStringKey            = @"string";
-NSString* ServiceShortcutIdentifierKey        = @"identifier";
+NSString*const ServiceSelectedPreambleIndexKey     = @"ServiceSelectedPreambleIndex";
+NSString*const ServiceSelectedBodyTemplateIndexKey = @"ServiceSelectedBodyTemplateIndexKey";
+NSString*const ServiceShortcutsKey                 = @"ServiceShortcuts";
+NSString*const ServiceShortcutEnabledKey           = @"enabled";
+NSString*const ServiceShortcutClipBoardOptionKey   = @"clipBoardOption";
+NSString*const ServiceShortcutStringKey            = @"string";
+NSString*const ServiceShortcutIdentifierKey        = @"identifier";
 
-NSString* ServiceRespectsBaselineKey      = @"ServiceRespectsBaseline";
-NSString* ServiceRespectsPointSizeKey     = @"ServiceRespectsPointSize";
-NSString* ServicePointSizeFactorKey       = @"ServicePointSizeFactor";
-NSString* ServiceRespectsColorKey         = @"ServiceRespectsColor";
-NSString* ServiceUsesHistoryKey           = @"ServiceUsesHistory";
-NSString* ServiceRegularExpressionFiltersKey         = @"ServiceRegularExpressionFilters";
-NSString* ServiceRegularExpressionFilterEnabledKey   = @"ServiceRegularExpressionFilterEnabled";
-NSString* ServiceRegularExpressionFilterInputPatternKey     = @"ServiceRegularExpressionFilterInputPattern";
-NSString* ServiceRegularExpressionFilterOutputPatternKey    = @"ServiceRegularExpressionFilterOutputPattern";
+NSString*const ServiceRespectsBaselineKey      = @"ServiceRespectsBaseline";
+NSString*const ServiceRespectsPointSizeKey     = @"ServiceRespectsPointSize";
+NSString*const ServicePointSizeFactorKey       = @"ServicePointSizeFactor";
+NSString*const ServiceRespectsColorKey         = @"ServiceRespectsColor";
+NSString*const ServiceUsesHistoryKey           = @"ServiceUsesHistory";
+NSString*const ServiceRegularExpressionFiltersKey         = @"ServiceRegularExpressionFilters";
+NSString*const ServiceRegularExpressionFilterEnabledKey   = @"ServiceRegularExpressionFilterEnabled";
+NSString*const ServiceRegularExpressionFilterInputPatternKey     = @"ServiceRegularExpressionFilterInputPattern";
+NSString*const ServiceRegularExpressionFilterOutputPatternKey    = @"ServiceRegularExpressionFilterOutputPattern";
 
-NSString* AdditionalTopMarginKey          = @"AdditionalTopMargin";
-NSString* AdditionalLeftMarginKey         = @"AdditionalLeftMargin";
-NSString* AdditionalRightMarginKey        = @"AdditionalRightMargin";
-NSString* AdditionalBottomMarginKey       = @"AdditionalBottomMargin";
-NSString* EncapsulationsEnabledKey        = @"EncapsulationsEnabled";
-NSString* EncapsulationsKey               = @"Encapsulations";
-NSString* CurrentEncapsulationIndexKey    = @"CurrentEncapsulationIndex";
-NSString* TextShortcutsKey                = @"TextShortcuts";
+NSString*const AdditionalTopMarginKey          = @"AdditionalTopMargin";
+NSString*const AdditionalLeftMarginKey         = @"AdditionalLeftMargin";
+NSString*const AdditionalRightMarginKey        = @"AdditionalRightMargin";
+NSString*const AdditionalBottomMarginKey       = @"AdditionalBottomMargin";
+NSString*const EncapsulationsEnabledKey        = @"EncapsulationsEnabled";
+NSString*const EncapsulationsKey               = @"Encapsulations";
+NSString*const CurrentEncapsulationIndexKey    = @"CurrentEncapsulationIndex";
+NSString*const TextShortcutsKey                = @"TextShortcuts";
 
-NSString* EditionTabKeyInsertsSpacesEnabledKey = @"EditionTabKeyInsertsSpacesEnabled";
-NSString* EditionTabKeyInsertsSpacesCountKey   = @"EditionTabKeyInsertsSpacesCount";
+NSString*const EditionTabKeyInsertsSpacesEnabledKey = @"EditionTabKeyInsertsSpacesEnabled";
+NSString*const EditionTabKeyInsertsSpacesCountKey   = @"EditionTabKeyInsertsSpacesCount";
 
-NSString* CompositionConfigurationsKey             = @"CompositionConfigurations";
-NSString* CompositionConfigurationDocumentIndexKey = @"CompositionConfigurationDocumentIndexKey";
+NSString*const CompositionConfigurationsKey             = @"CompositionConfigurations";
+NSString*const CompositionConfigurationDocumentIndexKey = @"CompositionConfigurationDocumentIndexKey";
 
-NSString* HistoryDeleteOldEntriesEnabledKey = @"HistoryDeleteOldEntriesEnabled";
-NSString* HistoryDeleteOldEntriesLimitKey   = @"HistoryDeleteOldEntriesLimit";
-NSString* HistorySmartEnabledKey            = @"HistorySmartEnabled";
+NSString*const HistoryDeleteOldEntriesEnabledKey = @"HistoryDeleteOldEntriesEnabled";
+NSString*const HistoryDeleteOldEntriesLimitKey   = @"HistoryDeleteOldEntriesLimit";
+NSString*const HistorySmartEnabledKey            = @"HistorySmartEnabled";
 
-NSString* LastEasterEggsDatesKey       = @"LastEasterEggsDates";
+NSString*const LastEasterEggsDatesKey       = @"LastEasterEggsDates";
 
-NSString* CompositionConfigurationsControllerVisibleAtStartupKey = @"CompositionConfigurationsControllerVisibleAtStartup";
-NSString* EncapsulationsControllerVisibleAtStartupKey = @"EncapsulationsControllerVisibleAtStartup";
-NSString* HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibleAtStartup";
-NSString* LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartup";
-NSString* LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibleAtStartup";
-NSString* MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartup";
-NSString* AdditionalFilesWindowControllerVisibleAtStartupKey = @"AdditionalFilesWindowControllerVisibleAtStartup";
+NSString*const CompositionConfigurationsControllerVisibleAtStartupKey = @"CompositionConfigurationsControllerVisibleAtStartup";
+NSString*const EncapsulationsControllerVisibleAtStartupKey = @"EncapsulationsControllerVisibleAtStartup";
+NSString*const HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibleAtStartup";
+NSString*const LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartup";
+NSString*const LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibleAtStartup";
+NSString*const MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartup";
+NSString*const AdditionalFilesWindowControllerVisibleAtStartupKey = @"AdditionalFilesWindowControllerVisibleAtStartup";
 
-NSString* LibraryPathKey                = @"LibraryPath";
-NSString* LibraryViewRowTypeKey         = @"LibraryViewRowType";
-NSString* LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanel";
-NSString* HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanel";
+NSString*const LibraryPathKey                = @"LibraryPath";
+NSString*const LibraryViewRowTypeKey         = @"LibraryViewRowType";
+NSString*const LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanel";
+NSString*const HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanel";
 
-NSString* LatexPaletteGroupKey        = @"LatexPaletteGroup";
-NSString* LatexPaletteFrameKey        = @"LatexPaletteFrame";
-NSString* LatexPaletteDetailsStateKey = @"LatexPaletteDetailsState";
+NSString*const LatexPaletteGroupKey        = @"LatexPaletteGroup";
+NSString*const LatexPaletteFrameKey        = @"LatexPaletteFrame";
+NSString*const LatexPaletteDetailsStateKey = @"LatexPaletteDetailsState";
 
-NSString* ShowWhiteColorWarningKey       = @"ShowWhiteColorWarning";
+NSString*const ShowWhiteColorWarningKey       = @"ShowWhiteColorWarning";
 
-NSString* CompositionModeDidChangeNotification = @"CompositionModeDidChangeNotification";
-NSString* CurrentCompositionConfigurationDidChangeNotification = @"CurrentCompositionConfigurationDidChangeNotification";
+NSString* const CompositionModeDidChangeNotification = @"CompositionModeDidChangeNotification";
+NSString* const CurrentCompositionConfigurationDidChangeNotification = @"CurrentCompositionConfigurationDidChangeNotification";
 
-NSString* CompositionConfigurationNameKey                        = @"name";
-NSString* CompositionConfigurationIsDefaultKey                   = @"isDefault";
-NSString* CompositionConfigurationCompositionModeKey             = @"compositionMode";
-NSString* CompositionConfigurationUseLoginShellKey               = @"useLoginShell";
-NSString* CompositionConfigurationPdfLatexPathKey                = @"pdfLatexPath";
-NSString* CompositionConfigurationPsToPdfPathKey                 = @"psToPdfPath";
-NSString* CompositionConfigurationXeLatexPathKey                 = @"xeLatexPath";
-NSString* CompositionConfigurationLuaLatexPathKey                = @"luaLatexPath";
-NSString* CompositionConfigurationLatexPathKey                   = @"latexPath";
-NSString* CompositionConfigurationDviPdfPathKey                  = @"dviPdfPath";
-NSString* CompositionConfigurationGsPathKey                      = @"gsPath";
-NSString* CompositionConfigurationProgramArgumentsKey            = @"programArguments";
-NSString* CompositionConfigurationAdditionalProcessingScriptsKey = @"additionalProcessingScripts";
-NSString* CompositionConfigurationAdditionalProcessingScriptEnabledKey = @"enabled";
-NSString* CompositionConfigurationAdditionalProcessingScriptTypeKey    = @"sourceType";
-NSString* CompositionConfigurationAdditionalProcessingScriptPathKey    = @"file";
-NSString* CompositionConfigurationAdditionalProcessingScriptShellKey   = @"shell";
-NSString* CompositionConfigurationAdditionalProcessingScriptContentKey = @"body";
+NSString*const CompositionConfigurationNameKey                        = @"name";
+NSString*const CompositionConfigurationIsDefaultKey                   = @"isDefault";
+NSString*const CompositionConfigurationCompositionModeKey             = @"compositionMode";
+NSString*const CompositionConfigurationUseLoginShellKey               = @"useLoginShell";
+NSString*const CompositionConfigurationPdfLatexPathKey                = @"pdfLatexPath";
+NSString*const CompositionConfigurationPsToPdfPathKey                 = @"psToPdfPath";
+NSString*const CompositionConfigurationXeLatexPathKey                 = @"xeLatexPath";
+NSString*const CompositionConfigurationLuaLatexPathKey                = @"luaLatexPath";
+NSString*const CompositionConfigurationLatexPathKey                   = @"latexPath";
+NSString*const CompositionConfigurationDviPdfPathKey                  = @"dviPdfPath";
+NSString*const CompositionConfigurationGsPathKey                      = @"gsPath";
+NSString*const CompositionConfigurationProgramArgumentsKey            = @"programArguments";
+NSString*const CompositionConfigurationAdditionalProcessingScriptsKey = @"additionalProcessingScripts";
+NSString*const CompositionConfigurationAdditionalProcessingScriptEnabledKey = @"enabled";
+NSString*const CompositionConfigurationAdditionalProcessingScriptTypeKey    = @"sourceType";
+NSString*const CompositionConfigurationAdditionalProcessingScriptPathKey    = @"file";
+NSString*const CompositionConfigurationAdditionalProcessingScriptShellKey   = @"shell";
+NSString*const CompositionConfigurationAdditionalProcessingScriptContentKey = @"body";
 
-NSString* AdditionalFilesPathsKey = @"AdditionalFilesPaths";
+NSString*const AdditionalFilesPathsKey = @"AdditionalFilesPaths";
 
-NSString* SynchronizationNewDocumentsEnabledKey = @"SynchronizationNewDocumentsEnabled";
-NSString* SynchronizationNewDocumentsSynchronizePreambleKey = @"SynchronizationNewDocumentsSynchronizePreamble";
-NSString* SynchronizationNewDocumentsSynchronizeEnvironmentKey = @"SynchronizationNewDocumentsSynchronizeEnvironment";
-NSString* SynchronizationNewDocumentsSynchronizeBodyKey = @"SynchronizationNewDocumentsSynchronizeBody";
-NSString* SynchronizationNewDocumentsPathKey = @"SynchronizationNewDocumentsPath";
-NSString* SynchronizationAdditionalScriptsKey = @"SynchronizationAdditionalScripts";
+NSString*const SynchronizationNewDocumentsEnabledKey = @"SynchronizationNewDocumentsEnabled";
+NSString*const SynchronizationNewDocumentsSynchronizePreambleKey = @"SynchronizationNewDocumentsSynchronizePreamble";
+NSString*const SynchronizationNewDocumentsSynchronizeEnvironmentKey = @"SynchronizationNewDocumentsSynchronizeEnvironment";
+NSString*const SynchronizationNewDocumentsSynchronizeBodyKey = @"SynchronizationNewDocumentsSynchronizeBody";
+NSString*const SynchronizationNewDocumentsPathKey = @"SynchronizationNewDocumentsPath";
+NSString*const SynchronizationAdditionalScriptsKey = @"SynchronizationAdditionalScripts";
 
 @interface PreferencesController (PrivateAPI)
 -(NSArrayController*) lazyEditionTextShortcutsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
@@ -2502,7 +2502,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                         NSPasteboardTypePDF, @"NSPDFPboardType", (id)kUTTypePDF,
                                         @"NSPostScriptPboardType", @"com.adobe.encapsulated-postscript",
                                         NSPasteboardTypeTIFF, @"NSTIFFPboardType", (id)kUTTypeTIFF,
-                                        @"NSPNGPboardType", (id)kUTTypePNG,
+                                        NSPasteboardTypePNG, @"NSPNGPboardType", (id)kUTTypePNG,
                                         (id)kUTTypeJPEG];
       NSArray* standardSendTypes = @[NSPasteboardTypeRTF, @"NSRTFPboardType", (id)kUTTypeRTF,
                                         NSPasteboardTypePDF, @"NSPDFPboardType", (id)kUTTypePDF,
