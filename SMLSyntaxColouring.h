@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 //@class SMLTextView;
 
-@interface SMLSyntaxColouring : NSObject {
+@interface SMLSyntaxColouring : NSObject <NSTextStorageDelegate> {
 	NSUndoManager *undoManager;
 	NSTextView *textView;
 	NSLayoutManager *layoutManager;

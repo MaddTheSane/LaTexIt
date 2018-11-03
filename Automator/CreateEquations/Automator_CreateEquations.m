@@ -294,7 +294,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 }
 //end awakeFromNib
 
--(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary**)errorInfo
+-(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary<NSString *, id>**)errorInfo
 {
   Boolean synchronized = CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
   DebugLog(1, @"synchronized = %d", synchronized);

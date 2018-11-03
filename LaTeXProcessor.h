@@ -81,4 +81,6 @@ extern NSNotificationName const LatexizationDidEndNotification;
              exportOptions:(NSDictionary*)exportOptions
              compositionConfiguration:(NSDictionary*)compositionConfiguration
              uniqueIdentifier:(NSString*)uniqueIdentifier;
+
+-(void) displayAlertError:(id)object;
 @end

@@ -2376,8 +2376,11 @@ static NSMutableDictionary* cachePaths = nil;
     nil;
 
   MyDocument* document = [self documentForLink:link];
-  if (!document)
-    document = (MyDocument*)[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+  if (!document){
+    document = (MyDocument*)[[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:@"MyDocumentType" error:nil];
+    [document makeWindowControllers];
+  }
+  
   if (document && latexitEquation)
   {
     if (document.linkBackLink != link)
@@ -2766,7 +2769,8 @@ static NSMutableDictionary* cachePaths = nil;
           [alert release];
           if (choice == NSAlertSecondButtonReturn)
           {
-           MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+           MyDocument* document = [[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:@"MyDocumentType" error:NULL];
+            [document makeWindowControllers];
            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
            document.latexModeRequested = mode;
            [document setColor:color];
@@ -2962,7 +2966,8 @@ static NSMutableDictionary* cachePaths = nil;
           [alert release];
           if (choice == NSAlertSecondButtonReturn)
           {
-           MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+           MyDocument* document = [[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:@"MyDocumentType" error:NULL];
+           [document makeWindowControllers];
            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
            document.latexModeRequested = mode;
            [document.windowForSheet makeFirstResponder:[document preferredFirstResponder]];
@@ -3146,7 +3151,8 @@ static NSMutableDictionary* cachePaths = nil;
               remainingRange.length = mutableAttrString.length-remainingRange.location;
               
               //builds a document containing the error
-              MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+              MyDocument* document = [[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:@"MyDocumentType" error:NULL];
+              [document makeWindowControllers];
               [document.windowControllers makeObjectsPerformSelector:@selector(window)];//calls windowDidLoad
               [document setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
               document.latexModeRequested = mode;

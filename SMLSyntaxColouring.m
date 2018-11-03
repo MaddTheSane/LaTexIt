@@ -82,12 +82,12 @@ static NSArray *syntaxDefinitionsArray;
   return self;
 }
 
--(void) textStorageDidProcessEditing:(NSNotification*)aNotification
+-(void) textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-  NSTextStorage* textStorage = self->layoutManager.textStorage;
+  //NSTextStorage* textStorage = self->layoutManager.textStorage;
   [textStorage removeAttribute:NSLinkAttributeName range:NSMakeRange(0, textStorage.length)];
 }
-//end textStorageDidProcessEditing:
+//end textStorage:didProcessEditing:range:changeInLength:
 
 
 -(NSUndoManager*) undoManagerForTextView:(NSTextView*)aTextView
