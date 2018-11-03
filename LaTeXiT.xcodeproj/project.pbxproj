@@ -176,7 +176,6 @@
 		93362C0D15BF500A00EA0679 /* NSWindowExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93362C0C15BF500A00EA0679 /* NSWindowExtended.m */; };
 		933A1249156C055A00DCC7D4 /* current-version-ja.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933A1247156C055A00DCC7D4 /* current-version-ja.rtf */; };
 		933A73CD0F9B29AE00DFA78B /* NSViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */; };
-		933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 930255CF07F0C2A800011996 /* Localizable.strings */; };
 		933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9357846A0E9D2A9C00736F31 /* CoreData.framework */; };
 		933C72FA13A951FC0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */; };
 		933C72FB13A9520C0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */; };
@@ -2142,7 +2141,6 @@
 				93C27F9A139A5A1600410595 /* main.xib in Resources */,
 				934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */,
 				932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */,
-				933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
 				9341922E1281C70C009D3E97 /* Localizable.strings in Resources */,
 				558E21D81DD1AAED00251C1A /* ExportFormatOptionsPanes.xib in Resources */,
@@ -2833,6 +2831,7 @@
 		9323885B0854FD210017F3BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2883,6 +2882,7 @@
 		9323885C0854FD210017F3BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

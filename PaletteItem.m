@@ -9,7 +9,7 @@
 
 #import "PaletteItem.h"
 
-#import <RegexKitLite.h>
+#import "RegexKitLite.h"
 
 @implementation PaletteItem
 
