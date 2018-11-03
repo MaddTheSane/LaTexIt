@@ -2409,7 +2409,7 @@ static LaTeXProcessor* sharedInstance = nil;
       if (( sourceUTI && UTTypeConformsTo(detectedUTI, (__bridge CFStringRef)sourceUTI)) ||
           (!sourceUTI && (UTTypeConformsTo(detectedUTI, kUTTypeTIFF) ||
                           UTTypeConformsTo(detectedUTI, kUTTypePNG) ||
-                          UTTypeConformsTo(detectedUTI, kUTTypePNG))))
+                          UTTypeConformsTo(detectedUTI, kUTTypeJPEG))))
       {
         CGImageDestinationRef imageDestination = !imageSource ? 0 :
           CGImageDestinationCreateWithData((__bridge CFMutableDataRef)annotatedData,
