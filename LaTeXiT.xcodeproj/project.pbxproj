@@ -2042,7 +2042,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1010;
 			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2731,7 +2731,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2768,7 +2767,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_CFLAGS = "";
-				PREBINDING = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
 				WRAPPER_EXTENSION = app;
@@ -2790,7 +2788,6 @@
 				);
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -2826,7 +2823,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_CFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
 				WRAPPER_EXTENSION = app;
@@ -2954,7 +2950,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
@@ -2987,7 +2982,6 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
-				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CreateEquations;
 				WRAPPER_EXTENSION = action;
@@ -3009,7 +3003,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
@@ -3041,7 +3034,6 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CreateEquations;
 				WRAPPER_EXTENSION = action;
@@ -3064,7 +3056,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Packaging;
 				ZERO_LINK = NO;
 			};
@@ -3085,7 +3076,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
 				ZERO_LINK = NO;
 			};
@@ -3102,7 +3092,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3149,7 +3138,6 @@
 				);
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -3200,7 +3188,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
 				ZERO_LINK = NO;
 			};
@@ -3221,7 +3208,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
 				ZERO_LINK = NO;
 			};
@@ -3242,7 +3228,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
 				ZERO_LINK = NO;
 			};
