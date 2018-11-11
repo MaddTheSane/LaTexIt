@@ -1317,19 +1317,25 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
              UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.png"))||
              UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.jpeg")))
     {
-      CGImageSourceRef imageSource = CGImageSourceCreateWithData((CHBRIDGE CFDataRef)someData, (CHBRIDGE CFDictionaryRef)
-        [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+      CGImageSourceRef imageSource = CGImageSourceCreateWithData((CHBRIDGE CFDataRef)someData,
+        (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
       CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
+      DebugLog(1, @"properties = %@", properties);
       id infos = [(CHBRIDGE NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
       id annotationBase64 = ![infos isKindOfClass:[NSDictionary class]] ? nil : [infos objectForKey:(NSString*)kCGImagePropertyExifUserComment];
       NSData* annotationData = ![annotationBase64 isKindOfClass:[NSString class]] ? nil :
         [NSData dataWithBase64:annotationBase64];
+      DebugLog(1, @"annotationData(64) = %@", annotationData);
       annotationData = [Compressor zipuncompress:annotationData];
+      DebugLog(1, @"annotationData(z) = %@", annotationData);
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      DebugLog(1, @"metaData = %@", metaData);
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-      if (properties) CFRelease(properties);
-      if (imageSource) CFRelease(imageSource);
+      if (properties)
+        CFRelease(properties);
+      if (imageSource)
+        CFRelease(imageSource);
     }//end if (tiff, png, jpeg)
     else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.svg-image")))
     {
@@ -1449,7 +1455,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.10.1"             forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.11.0"            forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -2193,6 +2199,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
                                  [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
@@ -2365,6 +2372,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
                                  [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
@@ -2476,7 +2484,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.10.1", @"version",
+       @"2.11.0", @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",

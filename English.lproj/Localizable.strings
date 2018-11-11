@@ -251,6 +251,7 @@
 "Change" = "Change";
 "Options" = "Options";
 "Scale" = "Scale";
+"Include background color" = "Include background color";
 "Warning : jpeg does not manage transparency" = "Warning : jpeg does not manage transparency";
 "Warning : pdf2svg path is invalid" = "Warning : pdf2svg path is invalid";
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";

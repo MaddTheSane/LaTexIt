@@ -368,7 +368,7 @@ static LaTeXProcessor* sharedInstance = nil;
     if (annotateWithTransparentData)
     {
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.10.1", @"version",
+        @"2.11.0", @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -2044,19 +2044,25 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSDictionary* objects = [object dynamicCastToClass:[NSDictionary class]];
   NSString* informativeText1 = [[objects objectForKey:@"informativeText1"] dynamicCastToClass:[NSString class]];
-  DebugLog(1, @"displayAlertError:<%@>", informativeText1);
-  int displayError =
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), informativeText1,
-                    NSLocalizedString(@"OK", @"OK"),
-                    NSLocalizedString(@"Display the error message", @"Display the error message"),
-                    nil);
-  if (displayError == NSAlertAlternateReturn)
+  DebugLog(1, @"displayAlertError:informativeText1:<%@>", informativeText1);
+  NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+  [alert setMessageText:NSLocalizedString(@"Error", @"Error")];
+  [alert setInformativeText:!informativeText1 ? @"" : informativeText1];
+  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Display the error message", @"Display the error message")];
+  [alert setAlertStyle:NSCriticalAlertStyle];
+  int displayError = [alert runModal];
+  if (displayError == NSAlertSecondButtonReturn)
   {
     NSString* informativeText2 = [[objects objectForKey:@"informativeText2"] dynamicCastToClass:[NSString class]];
-    [[NSAlert alertWithMessageText:NSLocalizedString(@"Error message", @"Error message")
-                     defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil
-         informativeTextWithFormat:@"%@", informativeText2] runModal];
-  }//end if (displayError == NSAlertAlternateReturn)
+    DebugLog(1, @"displayAlertError:informativeText2:<%@>", informativeText2);
+    NSAlert* alert2 = [[[NSAlert alloc] init] autorelease];
+    [alert2 setMessageText:NSLocalizedString(@"Error message", @"Error message")];
+    [alert2 setInformativeText:!informativeText2 ? @"" : informativeText2];
+    [alert2 addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+    [alert2 setAlertStyle:NSInformationalAlertStyle];
+    [alert2 runModal];
+  }//end if (displayError == NSAlertSecondButtonReturn)
 }
 //end displayAlertError:
 
@@ -2084,15 +2090,61 @@ static LaTeXProcessor* sharedInstance = nil;
     NSColor* jpegColor = [[exportOptions objectForKey:@"jpegColor"] dynamicCastToClass:[NSColor class]];
     CGFloat jpegQuality = [[[exportOptions objectForKey:@"jpegQuality"] dynamicCastToClass:[NSNumber class]] floatValue];
     CGFloat scaleAsPercent = [[[exportOptions objectForKey:@"scaleAsPercent"] dynamicCastToClass:[NSNumber class]] floatValue];
+    BOOL exportIncludeBackgroundColor = [[[exportOptions objectForKey:@"exportIncludeBackgroundColor"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportPreamble = [[[exportOptions objectForKey:@"textExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportEnvironment = [[[exportOptions objectForKey:@"textExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportBody = [[[exportOptions objectForKey:@"textExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
     
     if (pdfData)
     {
-      if (scaleAsPercent != 100)//if scale is not 100%, change image scale
+      NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];
+      NSColor* backgroundColor = [equationMetaData objectForKey:@"backgroundColor"];
+      
+      BOOL shouldRecreatePDF =
+        (backgroundColor && exportIncludeBackgroundColor) ||
+        (scaleAsPercent != 100);
+      if (shouldRecreatePDF)
       {
-        NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
+        CGDataProviderRef pdfOriginalDataProvider = !pdfData ? 0 : CGDataProviderCreateWithCFData((CFDataRef)pdfData);
+        CGPDFDocumentRef pdfOriginalDocument = !pdfOriginalDataProvider ? 0 : CGPDFDocumentCreateWithProvider(pdfOriginalDataProvider);
+        CGPDFPageRef pdfOriginalPage = !pdfOriginalDocument ? 0 : CGPDFDocumentGetPage(pdfOriginalDocument, 1);
+        //CGRect pdfOriginalMediaBox = !pdfOriginalPage ? CGRectZero : CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFMediaBox);
+        CGRect pdfOriginalCropBox = !pdfOriginalPage ? CGRectZero : CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFCropBox);
+        CGRect pdfOriginalBox = pdfOriginalCropBox;
+        
+        CGFloat backgroundColorRgba[4] = {0};
+        [backgroundColor getRed:&backgroundColorRgba[0] green:&backgroundColorRgba[1] blue:&backgroundColorRgba[2] alpha:&backgroundColorRgba[3]];
+       
+        NSMutableData* pdfScaledMutableData = [NSMutableData data];
+        CGDataConsumerRef pdfScaledDataConsumer = !pdfScaledMutableData ? 0 :
+          CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfScaledMutableData);
+        CGRect pdfScaledMediaBox = (scaleAsPercent == 100) ? pdfOriginalBox :
+          CGRectMake(0, 0,
+            ceil((scaleAsPercent/100)*pdfOriginalBox.size.width),
+            ceil((scaleAsPercent/100)*pdfOriginalBox.size.height));
+        CGContextRef pdfContext = !pdfScaledDataConsumer ? 0 : CGPDFContextCreate(pdfScaledDataConsumer, &pdfScaledMediaBox, 0);
+        CGPDFContextBeginPage(pdfContext, 0);
+        if (backgroundColor)
+        {
+          CGContextSetRGBFillColor(pdfContext, backgroundColorRgba[0], backgroundColorRgba[1], backgroundColorRgba[2], backgroundColorRgba[3]);
+          CGContextFillRect(pdfContext, pdfScaledMediaBox);
+        }//end if (backgroundColor)
+        CGContextScaleCTM(pdfContext,
+          !pdfOriginalBox.size.width ? 1 : pdfScaledMediaBox.size.width/pdfOriginalBox.size.width,
+          !pdfOriginalBox.size.height ? 1 : pdfScaledMediaBox.size.height/pdfOriginalBox.size.height);
+        CGContextTranslateCTM(pdfContext, -pdfOriginalBox.origin.x, -pdfOriginalBox.origin.y);
+        CGContextDrawPDFPage(pdfContext, pdfOriginalPage);
+        CGContextEndPage(pdfContext);
+        CGContextFlush(pdfContext);
+        CGContextRelease(pdfContext);
+        CGDataConsumerRelease(pdfScaledDataConsumer);
+       
+       CGPDFDocumentRelease(pdfOriginalDocument);
+       CGDataProviderRelease(pdfOriginalDataProvider);
+       
+       NSData* resizedPdfData = [[pdfScaledMutableData copy] autorelease];
+        
+        /*NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
         NSSize originalSize = [pdfImageRep size];
         NSImage* pdfImage = [[NSImage alloc] initWithSize:originalSize];
         [pdfImage setCacheMode:NSImageCacheNever];
@@ -2104,8 +2156,8 @@ static LaTeXProcessor* sharedInstance = nil;
             NSMakeRect(0, 0, ceil(originalSize.width*scaleAsPercent/100), ceil(originalSize.height*scaleAsPercent/100))];
         [imageView setImageScaling:NSScaleToFit];
         [imageView setImage:pdfImage];
-        NSData* resizedPdfData = [imageView dataWithPDFInsideRect:[imageView bounds]];
-        NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];
+        NSData* resizedPdfData = [imageView dataWithPDFInsideRect:[imageView bounds]];*/
+                          
         pdfData =
           [self annotatePdfDataInLEEFormat:resizedPdfData exportFormat:format
             preamble:[[equationMetaData objectForKey:@"preamble"] string]
@@ -2144,11 +2196,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
         #ifdef ARC_ENABLED
         #else
-        [imageView release];
+        /*[imageView release];
         [pdfImage release];
-        [pdfImageRep release];
+        [pdfImageRep release];*/
         #endif
-      }//end if (scaleAsPercent != 100)
+      }//end if (shouldRecreatePDF)
       
       BOOL      useLoginShell    = [compositionConfiguration compositionConfigurationUseLoginShell];
       NSString* gsPath           = [compositionConfiguration compositionConfigurationProgramPathGs];
@@ -2245,8 +2297,11 @@ static LaTeXProcessor* sharedInstance = nil;
             NSString* output = [[[NSString alloc] initWithData:[tmpFileHandle availableData] encoding:NSUTF8StringEncoding] autorelease];
             #endif
             NSString* formatString1 = NSLocalizedString(@"An error occured while trying to create the file with command:\n%@", @"");
+            DebugLog(1, @"formatString1 = %@", formatString1);
             NSString* informativeText1 = [NSString stringWithFormat:formatString1, systemCall];
-            NSString* informativeText2 = [NSString stringWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, !output ? @"" : output];
+            DebugLog(1, @"informativeText1 = %@", informativeText1);
+            NSString* informativeText2 = [NSString stringWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, !output ? @"..." : output];
+            DebugLog(1, @"informativeText2 = %@", informativeText2);
             NSDictionary* alertInformation = [NSDictionary dictionaryWithObjectsAndKeys:
               informativeText1, @"informativeText1",
               informativeText2, @"informativeText2",
@@ -2684,6 +2739,7 @@ static LaTeXProcessor* sharedInstance = nil;
         #else
         [propertiesImmutable release];
         #endif
+        DebugLog(1, @"properties = %@", properties);
         CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CHBRIDGE CFDictionaryRef)properties);
         if (imageDestination) CGImageDestinationFinalize(imageDestination);
         if (imageDestination) CFRelease(imageDestination);

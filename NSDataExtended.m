@@ -37,20 +37,22 @@
   NSMutableData* result = [NSMutableData data];
   #if defined(__clang__)
   #else
-  BIO* mem = BIO_new_mem_buf((void*)[base64 UTF8String], [base64 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+  const char* utf8String = [base64 UTF8String];
+  NSUInteger utf8Length = [base64 lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+  BIO* mem = BIO_new_mem_buf((void*)utf8String, utf8Length);
   BIO* b64 = BIO_new(BIO_f_base64());
   if (!encodedWithNewlines)
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-  mem = BIO_push(b64, mem);
-   
+  BIO_push(b64, mem);
+
   // Decode into an NSMutableData
   char inbuf[512] = {0};
   int inlen = 0;
-  while ((inlen = BIO_read(mem, inbuf, sizeof(inbuf))) > 0)
+  while ((inlen = BIO_read(b64, inbuf, MIN(utf8Length, sizeof(inbuf)))) > 0)
     [result appendBytes:inbuf length:inlen];
     
   //Clean up and go home
-  BIO_free_all(mem);
+  BIO_free_all(b64);
   #endif
   
   return result;

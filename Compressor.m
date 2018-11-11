@@ -186,6 +186,9 @@
         break;
       default:
         DebugLog(0, @"Error while decompressing data : Insufficient memory" );
+        DebugLog(0, @"destLen = %u", destLen);
+        DebugLog(0, @"destLenf = %u", destLenf);
+        DebugLog(0, @"error = %d", error);
         break;
     }//end switch(error)
     #ifdef ARC_ENABLED

@@ -598,6 +598,7 @@ typedef NSInteger NSDraggingContext;
     NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
                                    [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                   [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
                                    [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
                                    [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
                                    [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
@@ -692,6 +693,7 @@ typedef NSInteger NSDraggingContext;
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
                                  [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",

@@ -246,6 +246,17 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
+  [self->generalExportIncludeBackgroundColorCheckBox setTitle:NSLocalizedString(@"Include background color", @"Include background color")];
+  [self->generalExportIncludeBackgroundColorCheckBox bind:NSEnabledBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
+        options:[NSDictionary dictionaryWithObjectsAndKeys:
+                  [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInt:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
+  [self->generalExportIncludeBackgroundColorCheckBox bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:DragExportIncludeBackgroundColorKey]
+        options:[NSDictionary dictionaryWithObjectsAndKeys:
+                  [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]],
+                  NSValueTransformerBindingOption, nil]];
+
   [self->generalExportFormatOptionsButton bind:NSEnabledBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:

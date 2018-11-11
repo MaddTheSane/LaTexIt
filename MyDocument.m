@@ -1785,6 +1785,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:aJpegQuality], @"jpegQuality",
                                  [NSNumber numberWithFloat:scaleAsPercent], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",

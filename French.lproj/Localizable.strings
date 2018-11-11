@@ -252,6 +252,7 @@
 "Change" = "Modifier";
 "Options" = "Options";
 "Scale" = "Échelle";
+"Include background color" = "Inclure la couleur d'arrière-plan";
 "Warning : jpeg does not manage transparency" = "Attention : jpeg ne gère pas la transparence";
 "Warning : pdf2svg path is invalid" = "Attention : Le chemin vers pdf2svg est invalide";
 "Warning : pdf2svg was not found" = "Attention : pdf2svg n'a pas été détecté";

@@ -662,5 +662,25 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFBFsTPffxx7/NU1WPHRYLQJsluVeAhQhVc07LnpM/SBCoRyfbEpl4LQtlg=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.11.0</guid>
+      <title>Version 2.11.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>possibilité d'inclure la couleur de fond dans les exports d'équations&nbsp;;</li>
+          <li>suppression de l'UTI déclarée public.tex pour éviter les conflits avec d'autres applications.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.11.0</sparkle:releaseNotesLink>
+			<pubDate>Fri, 21 Sep 2018 08:29:30 +0200</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_11_0.dmg"
+				sparkle:version="2.11.0"
+                   sparkle:shortVersionString="2.11.0"
+				type="application/octet-stream"
+				length="11815768"
+				sparkle:dsaSignature="MCwCFCHWdVYa2HvNcL1KCdANhj18VierAhQugo1WxKaOGPWgGGpqeKZHZMeZVQ=="
+			/>
+    </item>
   </channel> 
 </rss>

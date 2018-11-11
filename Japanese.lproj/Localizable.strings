@@ -251,6 +251,7 @@
 "Change" = "変更";
 "Options" = "オプション";
 "Scale" = "スケール";
+"Include background color" = "背景色を含める";
 "Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
 "Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";
 "Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
