@@ -443,6 +443,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
         @(exportJpegQualityPercent), @"jpegQuality",
         @([preferencesController exportScalePercent]), @"scaleAsPercent",
+        @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
         @(exportTextExportPreamble), @"textExportPreamble",
         @(exportTextExportEnvironment), @"textExportEnvironment",
         @(exportTextExportBody), @"textExportBody",

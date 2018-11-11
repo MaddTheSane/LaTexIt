@@ -169,6 +169,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   NSScrollView* scrollView = (NSScrollView*) self.superview.superview;
   [self setRulerVisible:YES];
+  [scrollView setRulersVisible:YES];
   [scrollView setHasHorizontalRuler:NO];
   [scrollView setHasVerticalRuler:YES];
   self->lineCountRulerView = [[LineCountRulerView alloc] initWithScrollView:scrollView orientation:NSVerticalRuler];

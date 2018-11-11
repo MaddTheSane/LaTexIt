@@ -1159,15 +1159,20 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)someData, (__bridge CFDictionaryRef)
         @{(NSString*)kCGImageSourceShouldCache: @NO});
       NSDictionary *properties = CFBridgingRelease(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil));
+      DebugLog(1, @"properties = %@", properties);
       id infos = properties[(NSString*)kCGImagePropertyExifDictionary];
       id annotationBase64 = ![infos isKindOfClass:[NSDictionary class]] ? nil : infos[(NSString*)kCGImagePropertyExifUserComment];
       NSData* annotationData = ![annotationBase64 isKindOfClass:[NSString class]] ? nil :
         [NSData dataWithBase64:annotationBase64];
+      DebugLog(1, @"annotationData(64) = %@", annotationData);
       annotationData = [Compressor zipuncompress:annotationData];
+      DebugLog(1, @"annotationData(z) = %@", annotationData);
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      DebugLog(1, @"metaData = %@", metaData);
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
-      if (imageSource) CFRelease(imageSource);
+      if (imageSource)
+        CFRelease(imageSource);
     }//end if (tiff, png, jpeg)
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeScalableVectorGraphics))
     {
@@ -1263,7 +1268,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.10.1"             forKey:@"version"];//we encode the current LaTeXiT version number
+  [coder encodeObject:@"2.11.0"            forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:self.pdfData         forKey:@"pdfData"];
   [coder encodeObject:self.preamble        forKey:@"preamble"];
   [coder encodeObject:self.sourceText      forKey:@"sourceText"];
@@ -1947,12 +1952,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self->exportPrefetcher invalidateAllData];
   if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     [self->exportPrefetcher prefetchForFormat:exportFormat pdfData:pdfData];
-  NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
-                                 @"scaleAsPercent": [NSNumber numberWithFloat:preferencesController.exportScalePercent],
-                                 @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
-                                 @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
-                                 @"textExportBody": @(preferencesController.exportTextExportBody),
-                                 @"jpegColor": preferencesController.exportJpegBackgroundColor};
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 nil];
   NSData* data = lazyDataProvider ? nil :
     (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?
   [self->exportPrefetcher fetchDataForFormat:exportFormat wait:YES] : 
@@ -2113,12 +2121,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   DebugLog(1, @">pasteboard:%p provideDataForType:%@", pasteboard, type);
-  NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
-                                 @"scaleAsPercent": [NSNumber numberWithFloat:preferencesController.exportScalePercent],
-                                 @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
-                                 @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
-                                 @"textExportBody": @(preferencesController.exportTextExportBody),
-                                 @"jpegColor": preferencesController.exportJpegBackgroundColor};
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 nil];
   export_format_t exportFormat = preferencesController.exportFormatCurrentSession;
   NSData* data = (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?
     [self->exportPrefetcher fetchDataForFormat:exportFormat wait:YES] :
@@ -2221,7 +2232,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.10.1", @"version",
+       @"2.11.0", @"version",
        self.pdfData, @"pdfData",
        self.preamble.string, @"preamble",
        self.sourceText.string, @"sourceText",

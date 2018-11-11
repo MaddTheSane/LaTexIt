@@ -566,12 +566,15 @@
       NSData* pdfData = equation.pdfData;
       
       PreferencesController* preferencesController = [PreferencesController sharedController];
-      NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
-                                     @"scaleAsPercent": @(preferencesController.exportScalePercent),
-                                     @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
-                                     @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
-                                     @"textExportBody": @(preferencesController.exportTextExportBody),
-                                     @"jpegColor": preferencesController.exportJpegBackgroundColor};
+      NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                     [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                     [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
+                                     [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                     [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                     [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                     [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                     nil];
       NSData* data = nil;
       if (!data)
         data = [[LaTeXProcessor sharedLaTeXProcessor]

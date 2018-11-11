@@ -57,6 +57,7 @@ NSString*const DragExportTextExportPreambleKey                     = @"DragExpor
 NSString*const DragExportTextExportEnvironmentKey                  = @"DragExportTextExportEnvironmentKey";
 NSString*const DragExportTextExportBodyKey                         = @"DragExportTextExportBodyKey";
 NSString*const DragExportScaleAsPercentKey                         = @"DragExportScaleAsPercent";
+NSString* DragExportIncludeBackgroundColorKey                 = @"DragExportIncludeBackgroundColor";
 
 NSString*const DefaultImageViewBackgroundKey                      = @"DefaultImageViewBackground";
 NSString*const DefaultAutomaticHighContrastedPreviewBackgroundKey = @"DefaultAutomaticHighContrastedPreviewBackground";
@@ -267,6 +268,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                DragExportTextExportEnvironmentKey: @YES,
                                                DragExportTextExportBodyKey: @YES,
                                                DragExportScaleAsPercentKey: @100.0f,
+                                               DragExportIncludeBackgroundColorKey: @NO,
                                                DefaultImageViewBackgroundKey: [[NSColor whiteColor] colorAsData],
                                                DefaultAutomaticHighContrastedPreviewBackgroundKey: @NO,
                                                DefaultDoNotClipPreviewKey: @NO,
@@ -381,7 +383,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                SynchronizationNewDocumentsSynchronizeBodyKey: @YES,
                                                SynchronizationNewDocumentsPathKey: desktopPath,
                                                SynchronizationAdditionalScriptsKey: [self defaultSynchronizationAdditionalScripts]};
-                                               
+  
   //read old LaTeXiT preferences if any
   {
     NSMutableArray* allKeys = [NSMutableArray arrayWithArray:defaults.allKeys];
@@ -761,6 +763,36 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     CFPreferencesSetAppValue((__bridge CFStringRef)DragExportScaleAsPercentKey, (__bridge CFPropertyListRef)@(value), (__bridge CFStringRef)LaTeXiTAppKey);
 }
 //end setExportScalePercent:
+
+-(BOOL) exportIncludeBackgroundColor
+{
+  BOOL result = NO;
+  NSNumber* number = nil;
+  if (self->isLaTeXiT)
+    number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportIncludeBackgroundColorKey];
+  else
+#ifdef ARC_ENABLED
+    number = (__bridge NSNumber*)CFPreferencesCopyAppValue((__bridge CFStringRef)DragExportIncludeBackgroundColorKey, (__bridge CFStringRef)LaTeXiTAppKey);
+#else
+  number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CFStringRef)DragExportIncludeBackgroundColorKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+#endif
+  result = !number ? NO : [number boolValue];
+  return result;
+}
+//end exportIncludeBackgroundColor
+
+-(void) setExportIncludeBackgroundColor:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportIncludeBackgroundColorKey];
+  else
+#ifdef ARC_ENABLED
+    CFPreferencesSetAppValue((__bridge CFStringRef)DragExportIncludeBackgroundColorKey, (__bridge const void*)[NSNumber numberWithBool:value], (__bridge CFStringRef)LaTeXiTAppKey);
+#else
+  CFPreferencesSetAppValue((CFStringRef)DragExportIncludeBackgroundColorKey, [NSNumber numberWithBool:value], (CFStringRef)LaTeXiTAppKey);
+#endif
+}
+//end setExportIncludeBackgroundColor:
 
 -(BOOL) doNotClipPreview
 {

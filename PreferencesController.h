@@ -27,6 +27,7 @@ extern NSString *const DragExportTextExportPreambleKey;
 extern NSString *const DragExportTextExportEnvironmentKey;
 extern NSString *const DragExportTextExportBodyKey;
 extern NSString *const DragExportScaleAsPercentKey;
+extern NSString* DragExportIncludeBackgroundColorKey;
 extern NSString *const DefaultImageViewBackgroundKey;
 extern NSString *const DefaultAutomaticHighContrastedPreviewBackgroundKey;
 extern NSString *const DefaultDoNotClipPreviewKey;
@@ -177,6 +178,8 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 @property BOOL exportTextExportEnvironment;
 @property BOOL exportTextExportBody;
 @property CGFloat exportScalePercent;
+-(BOOL)            exportIncludeBackgroundColor;
+-(void)            setExportIncludeBackgroundColor:(BOOL)value;
 
 @property (copy) NSString* exportPDFWOFGsWriteEngine;
 @property (copy) NSString* exportPDFWOFGsPDFCompatibilityLevel;

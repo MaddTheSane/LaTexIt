@@ -62,6 +62,7 @@ extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
   ExportFormatOptionsPanes* generalExportFormatOptionsPanes;
   IBOutlet NSTextField*     generalExportScaleLabel;
   IBOutlet NSTextField*     generalExportScalePercentTextField;
+  IBOutlet NSButton*        generalExportIncludeBackgroundColorCheckBox;
   IBOutlet NSColorWell*     generalDummyBackgroundColorWell;
   IBOutlet NSButton*        generalDummyBackgroundAutoStateButton;
   IBOutlet NSButton*        generalDoNotClipPreviewButton;

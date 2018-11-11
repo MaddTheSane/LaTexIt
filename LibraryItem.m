@@ -228,7 +228,7 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.10.1" forKey:@"version"];
+  [coder encodeObject:@"2.11.0" forKey:@"version"];
   [coder encodeObject:self.title forKey:@"title"];
   [coder encodeInteger:self.sortIndex forKey:@"sortIndex"];
   [coder encodeObject:self.comment forKey:@"comment"];
@@ -238,7 +238,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(id) plistDescription
 {
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"2.10.1", @"version",
+     @"2.11.0", @"version",
      self.title, @"title",
      @(self.sortIndex), @"sortIndex",
      self.comment, @"comment",

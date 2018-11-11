@@ -96,7 +96,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) _decomposeString:(NSString*)string preamble:(NSString**)preamble body:(NSString**)body;
 
 -(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)exportFormat scaleAsPercent:(CGFloat)scaleAsPercent
-                  jpegColor:(NSColor*)jpegColor jpegQuality:(CGFloat)jpegQuality filePath:(NSString*)filePath;
+                  jpegColor:(NSColor*)jpegColor jpegQuality:(float)jpegQuality filePath:(NSString*)filePath;
                   
 -(void) latexizeCoreRunWithConfiguration:(NSDictionary*)configuration;
 -(void) removeObsoleteFiles;
@@ -1741,15 +1741,18 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 //end exportChooseFileDidEnd:returnCode:contextInfo:
 
 -(void) exportImageWithData:(NSData*)pdfData format:(export_format_t)exportFormat scaleAsPercent:(CGFloat)scaleAsPercent
-                  jpegColor:(NSColor*)aJpegColor jpegQuality:(CGFloat)aJpegQuality filePath:(NSString*)filePath
+                  jpegColor:(NSColor*)aJpegColor jpegQuality:(float)aJpegQuality filePath:(NSString*)filePath
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
-  NSDictionary* exportOptions = @{@"jpegQuality": [NSNumber numberWithFloat:aJpegQuality],
-                                 @"scaleAsPercent": @(scaleAsPercent),
-                                 @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
-                                 @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
-                                 @"textExportBody": @(preferencesController.exportTextExportBody),
-                                 @"jpegColor": aJpegColor};
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:aJpegQuality], @"jpegQuality",
+                                 [NSNumber numberWithFloat:scaleAsPercent], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 aJpegColor, @"jpegColor",//at the end for the case it is null
+                                 nil];
   
   NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData exportOptions:exportOptions
                                                 compositionConfiguration:preferencesController.compositionConfigurationDocument

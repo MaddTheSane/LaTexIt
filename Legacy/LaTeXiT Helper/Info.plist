@@ -15,11 +15,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.10.1</string>
+	<string>2.11.0</string>
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.10.1</string>
+	<string>2.11.0</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>LinkBackApplicationURL</key>
@@ -30,27 +30,5 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>UTImportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.text</string>
-			</array>
-			<key>UTTypeIdentifier</key>
-			<string>public.tex</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>tex</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/x-tex</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
 </dict>
 </plist>

@@ -435,7 +435,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:@{@"version": @"2.10.1"}
+        [persistentStoreCoordinator setMetadata:@{@"version": @"2.11.0"}
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -501,7 +501,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:@{@"version": @"2.10.1"}
+    [persistentStoreCoordinator setMetadata:@{@"version": @"2.11.0"}
                          forPersistentStore:persistentStore];
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -568,7 +568,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         while((equation = [enumerator nextObject]))
           [descriptions addObject:[equation plistDescription]];
         NSDictionary* library = !descriptions ? nil : @{@"history": @{@"content": descriptions},
-          @"version": @"2.10.1"};
+          @"version": @"2.11.0"};
         NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
       [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];

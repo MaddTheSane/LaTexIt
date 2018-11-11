@@ -527,12 +527,15 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
         break;
     }
 
-    NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
-                                   @"scaleAsPercent": [NSNumber numberWithFloat:preferencesController.exportScalePercent],
-                                   @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
-                                   @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
-                                   @"textExportBody": @(preferencesController.exportTextExportBody),
-                                   @"jpegColor": preferencesController.exportJpegBackgroundColor};
+    NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                   [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                   [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
+                                   [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                   [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                   [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                   [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                   nil];
     NSData* data = nil;
     NSData* currentPdfData = nil;
     if (!data && self->transientDragEquation)
@@ -616,12 +619,15 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
   BOOL hasAlreadyCachedData = (self->transientDragData != nil) && (exportFormat == self->transientLastExportFormat);
   self->transientLastExportFormat = exportFormat;
   
-  NSDictionary* exportOptions = @{@"jpegQuality": @(preferencesController.exportJpegQualityPercent),
-                                 @"scaleAsPercent": [NSNumber numberWithFloat:preferencesController.exportScalePercent],
-                                 @"textExportPreamble": @(preferencesController.exportTextExportPreamble),
-                                 @"textExportEnvironment": @(preferencesController.exportTextExportEnvironment),
-                                 @"textExportBody": @(preferencesController.exportTextExportBody),
-                                 @"jpegColor": preferencesController.exportJpegBackgroundColor};
+  NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
+                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 nil];
   NSData* data = hasAlreadyCachedData ? self->transientDragData : nil;
   if (!data && self->transientDragEquation)
     data = [[self->transientDragEquation exportPrefetcher] fetchDataForFormat:exportFormat wait:YES];
