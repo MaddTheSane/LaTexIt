@@ -43,7 +43,7 @@
   NSBundle* bundle = [NSBundle bundleForClass:[self class]];
   if (!(self = [super initWithNibNamed:@"ExportFormatOptionsPanes" bundle:bundle]))
     return nil;
-  [self instantiateNibWithOwner:self topLevelObjects:nil];
+  [self instantiateWithOwner:self topLevelObjects:nil];
   jpegQualityPercent  = 90.f;
   jpegBackgroundColor = [NSColor whiteColor];
   textExportPreamble = YES;

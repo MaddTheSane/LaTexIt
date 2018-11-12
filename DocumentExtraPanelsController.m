@@ -54,7 +54,7 @@
   self->saveAccessoryViewOptionsTextExportPreamble         = preferencesController.exportTextExportPreamble;
   self->saveAccessoryViewOptionsTextExportEnvironment      = preferencesController.exportTextExportEnvironment;
   self->saveAccessoryViewOptionsTextExportBody             = preferencesController.exportTextExportBody;
-  [self instantiateNibWithOwner:self topLevelObjects:nil];
+  [self instantiateWithOwner:self topLevelObjects:nil];
   return self;
 }
 //end initWithLoadingFromNib

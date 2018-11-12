@@ -47,14 +47,14 @@
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutEnabledKey]
       options:nil];
   [[self tableColumnWithIdentifier:@"description"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self", ServiceShortcutIdentifierKey]
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
           options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"description"]}];
   [[self tableColumnWithIdentifier:@"string"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.string", ServiceShortcutStringKey]
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.string"]
           options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"string"],
             NSNullPlaceholderBindingOption: NSLocalizedString(@"none", @"none")}];
   [[self tableColumnWithIdentifier:@"warning"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self", ServiceShortcutIdentifierKey]
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
           options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"warning"]}];
 }
 //end awakeFromNib
