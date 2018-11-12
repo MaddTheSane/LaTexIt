@@ -318,8 +318,8 @@
 /* palette : LaTeX */
 "LaTeX Palette" = "LaTeX Palette";
 "Details" = "Details";
-"LaTeX Code :" = "LaTeX Code :";
-"Requires :" = "Requires :";
+"LaTeX Code :" = "LaTeX Code:";
+"Requires :" = "Requires:";
 
 /* palette : margins */
 "Custom margins" = "Custom margins";

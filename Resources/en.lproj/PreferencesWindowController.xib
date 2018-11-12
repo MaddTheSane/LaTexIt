@@ -498,7 +498,7 @@
                         <tabViewItem label="Appearance" identifier="" id="1170">
                             <view key="view" id="1172">
                                 <rect key="frame" x="10" y="33" width="554" height="425"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" imageHugsTitle="YES" id="620">
                                         <rect key="frame" x="435" y="377" width="105" height="32"/>
@@ -535,7 +535,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="l1t-Ik-Jfk">
                                             <rect key="frame" x="1" y="1" width="512" height="111"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="947" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="512" height="111"/>
@@ -776,7 +776,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Key mapping" identifier="" id="1171">
                             <view key="view" id="1173">
                                 <rect key="frame" x="10" y="33" width="554" height="425"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1197">
                                         <rect key="frame" x="42" y="20" width="23" height="20"/>
@@ -802,7 +802,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="eoC-Ta-7Gh">
                                             <rect key="frame" x="1" y="0.0" width="512" height="340"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9520" id="1175" customClass="TextShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="513" height="315"/>
@@ -901,7 +901,7 @@ some text &amp; $some maths$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <tabView autoresizesSubviews="NO" id="9642">
+                <tabView id="9642">
                     <rect key="frame" x="13" y="10" width="574" height="310"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <font key="font" metaFont="system"/>
@@ -909,7 +909,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Preambles" identifier="1" id="9643">
                             <view key="view" id="9646">
                                 <rect key="frame" x="10" y="33" width="554" height="264"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <box borderType="line" titlePosition="noTitle" id="5839">
                                         <rect key="frame" x="6" y="5" width="542" height="96"/>
@@ -1008,7 +1008,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="IGe-gA-x9E">
                                             <rect key="frame" x="1" y="1" width="407" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="407" height="132"/>
@@ -1053,7 +1053,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="BNP-Gl-kw0">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1099,7 +1099,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Body templates" identifier="2" id="9644">
                             <view key="view" id="9645">
                                 <rect key="frame" x="10" y="33" width="554" height="264"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <box borderType="line" titlePosition="noTitle" id="9554">
                                         <rect key="frame" x="6" y="5" width="542" height="97"/>
@@ -1167,7 +1167,7 @@ some text &amp; $some maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9572" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="0.4765625" width="407" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="0.98828125" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1209,7 +1209,7 @@ some text &amp; $some maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9577" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="0.4765625" width="407" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="0.98828125" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1339,7 +1339,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Behaviour" identifier="" id="1063">
                             <view key="view" id="1065">
                                 <rect key="frame" x="10" y="33" width="554" height="325"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8236">
                                         <rect key="frame" x="405" y="263" width="28" height="24"/>
@@ -1674,7 +1674,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Additional scripts" identifier="" id="1064">
                             <view key="view" id="1066">
                                 <rect key="frame" x="10" y="33" width="554" height="325"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1068">
                                         <rect key="frame" x="130" y="245" width="294" height="75"/>
@@ -1931,7 +1931,7 @@ some text &amp; $some maths$ \\
                                 </textFieldCell>
                             </textField>
                             <button toolTip="remove selected item" verticalHuggingPriority="750" imageHugsTitle="YES" id="9616">
-                                <rect key="frame" x="104" y="10" width="23" height="20"/>
+                                <rect key="frame" x="99" y="10" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9623">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1942,7 +1942,7 @@ some text &amp; $some maths$ \\
                                 </connections>
                             </button>
                             <button toolTip="add an element" verticalHuggingPriority="750" imageHugsTitle="YES" id="9615">
-                                <rect key="frame" x="82" y="10" width="22" height="20"/>
+                                <rect key="frame" x="79" y="10" width="22" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9624">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1957,7 +1957,7 @@ some text &amp; $some maths$ \\
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="ibM-Di-opd">
                                     <rect key="frame" x="1" y="1" width="398" height="152"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9627" customClass="EncapsulationsTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="398" height="152"/>
@@ -2083,7 +2083,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Configuration" identifier="" id="1025">
                             <view key="view" id="1027">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <customView id="8921">
                                         <rect key="frame" x="80" y="0.0" width="393" height="246"/>
@@ -2249,7 +2249,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Keyboard Shortcuts" identifier="" id="1026">
                             <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1029">
                                         <rect key="frame" x="17" y="44" width="520" height="132"/>
@@ -2361,7 +2361,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="Filters" identifier="Item 2" id="9678">
                             <view key="view" id="9679">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="9680">
                                         <rect key="frame" x="39" y="88" width="23" height="20"/>
@@ -2553,7 +2553,7 @@ some text &amp; $some maths$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <tabView autoresizesSubviews="NO" id="9728">
+                <tabView id="9728">
                     <rect key="frame" x="13" y="10" width="574" height="576"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <font key="font" metaFont="system"/>
@@ -2568,7 +2568,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="OHn-qg-nXS">
                                             <rect key="frame" x="1" y="1" width="397" height="474"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" id="7744" customClass="AdditionalFilesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="397" height="474"/>
@@ -3007,7 +3007,7 @@ some text &amp; $some maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="ezk-0B-N4h">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9544" id="1130" customClass="CompositionConfigurationsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="143"/>
@@ -3109,7 +3109,7 @@ some text &amp; $some maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Q9v-Bb-kvJ">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9547" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="143"/>
