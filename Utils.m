@@ -82,7 +82,7 @@ NSString* GetMyJPEGPboardType(void)
 }
 //end GetMyPNGPboardType()
 
-latex_mode_t validateLatexMode(latex_mode_t mode)
+latex_mode_t validateLatexMode(int mode)
 {
   latex_mode_t result = (mode != LATEX_MODE_ALIGN) &&
                         (mode != LATEX_MODE_DISPLAY) &&

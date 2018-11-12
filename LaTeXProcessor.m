@@ -1900,7 +1900,7 @@ static LaTeXProcessor* sharedInstance = nil;
     
     NSColor* jpegColor = [exportOptions[@"jpegColor"] dynamicCastToClass:[NSColor class]];
     float jpegQuality = [[exportOptions[@"jpegQuality"] dynamicCastToClass:[NSNumber class]] floatValue];
-    CGFloat scaleAsPercent = [[exportOptions[@"scaleAsPercent"] dynamicCastToClass:[NSNumber class]] floatValue];
+    CGFloat scaleAsPercent = [[exportOptions[@"scaleAsPercent"] dynamicCastToClass:[NSNumber class]] doubleValue];
     BOOL exportIncludeBackgroundColor = [[[exportOptions objectForKey:@"exportIncludeBackgroundColor"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportPreamble = [[exportOptions[@"textExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportEnvironment = [[exportOptions[@"textExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];

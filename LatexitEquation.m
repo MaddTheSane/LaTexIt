@@ -57,22 +57,18 @@ static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object,
       else if (CGPDFArrayGetStream(array, i, &stream))
       {
         CGPDFDataFormat dataFormat = 0;
-        CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
+        NSData *data = CFBridgingRelease(CGPDFStreamCopyData(stream, &dataFormat));
         if (data && (dataFormat == CGPDFDataFormatRaw))
-          [((__bridge NSMutableArray*) info) addObject:(__bridge NSData*)data];
-        else if (data)
-          CFRelease(data);
+          [((__bridge NSMutableArray*) info) addObject:data];
       }//end if (CGPDFArrayGetStream(array, i, &stream))
     }//end for each object
   }//end if (CGPDFObjectGetValue(object, kCGPDFObjectTypeArray, &array))
   else if (CGPDFObjectGetValue(object, kCGPDFObjectTypeStream, &stream))
   {
     CGPDFDataFormat dataFormat = 0;
-    CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
+    NSData *data = CFBridgingRelease(CGPDFStreamCopyData(stream, &dataFormat));
     if (data && (dataFormat == CGPDFDataFormatRaw))
-      [((__bridge NSMutableArray*) info) addObject:(__bridge NSData*)data];
-    else if (data)
-      CFRelease(data);
+      [((__bridge NSMutableArray*) info) addObject:data];
   }//end if (CGPDFObjectGetValue(object, kCGPDFObjectTypeStream, &stream))
 }
 //end extractStreamObjectsFunction()
@@ -1239,16 +1235,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
-  self.pdfData = [coder decodeObjectForKey:@"pdfData"];
-  self.preamble = [coder decodeObjectForKey:@"preamble"];
-  self.sourceText = [coder decodeObjectForKey:@"sourceText"];
-  self.color = [coder decodeObjectForKey:@"color"];
+  self.pdfData = [coder decodeObjectOfClass:[NSData class] forKey:@"pdfData"];
+  self.preamble = [coder decodeObjectOfClass:[NSAttributedString class] forKey:@"preamble"];
+  self.sourceText = [coder decodeObjectOfClass:[NSAttributedString class] forKey:@"sourceText"];
+  self.color = [coder decodeObjectOfClass:[NSColor class] forKey:@"color"];
   self.pointSize = [coder decodeDoubleForKey:@"pointSize"];
-  self.date = [coder decodeObjectForKey:@"date"];
+  self.date = [coder decodeObjectOfClass:[NSDate class] forKey:@"date"];
   self.mode = (latex_mode_t)[coder decodeIntForKey:@"mode"];
   self.baseline = [coder decodeDoubleForKey:@"baseline"];
-  self.backgroundColor = [coder decodeObjectForKey:@"backgroundColor"];
-  self.title = [coder decodeObjectForKey:@"title"];
+  self.backgroundColor = [coder decodeObjectOfClass:[NSColor class] forKey:@"backgroundColor"];
+  self.title = [coder decodeObjectOfClass:[NSString class] forKey:@"title"];
   return self;
 }
 //end initWithCoder:
@@ -1954,7 +1950,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self->exportPrefetcher prefetchForFormat:exportFormat pdfData:pdfData];
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
+                                 @(preferencesController.exportScalePercent), @"scaleAsPercent",
                                  [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
                                  [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
@@ -2122,13 +2118,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
   DebugLog(1, @">pasteboard:%p provideDataForType:%@", pasteboard, type);
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
+                                 @(preferencesController.exportScalePercent), @"scaleAsPercent",
+                                 @(preferencesController.exportIncludeBackgroundColor), @"exportIncludeBackgroundColor",
+                                 @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
+                                 @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
+                                 @(preferencesController.exportTextExportBody), @"textExportBody",
+                                 preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
                                  nil];
   export_format_t exportFormat = preferencesController.exportFormatCurrentSession;
   NSData* data = (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?

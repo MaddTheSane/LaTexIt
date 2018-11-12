@@ -528,13 +528,13 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     }
 
     NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                   [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                   [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                   [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                   [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                   [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                   [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                   @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
+                                   @(preferencesController.exportScalePercent), @"scaleAsPercent",
+                                   @(preferencesController.exportIncludeBackgroundColor), @"exportIncludeBackgroundColor",
+                                   @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
+                                   @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
+                                   @(preferencesController.exportTextExportBody), @"textExportBody",
+                                   preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
                                    nil];
     NSData* data = nil;
     NSData* currentPdfData = nil;
@@ -620,13 +620,13 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
   self->transientLastExportFormat = exportFormat;
   
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
+                                 @(preferencesController.exportScalePercent), @"scaleAsPercent",
+                                 @(preferencesController.exportIncludeBackgroundColor), @"exportIncludeBackgroundColor",
+                                 @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
+                                 @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
+                                 @(preferencesController.exportTextExportBody), @"textExportBody",
+                                 preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
                                  nil];
   NSData* data = hasAlreadyCachedData ? self->transientDragData : nil;
   if (!data && self->transientDragEquation)

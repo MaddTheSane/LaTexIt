@@ -113,7 +113,7 @@
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
        @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
        @(preferencesController.exportScalePercent), @"scaleAsPercent",
-       @([preferencesController exportIncludeBackgroundColor]),@"exportIncludeBackgroundColor",
+       @(preferencesController.exportIncludeBackgroundColor),@"exportIncludeBackgroundColor",
        @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
        @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
        @(preferencesController.exportTextExportBody), @"textExportBody",

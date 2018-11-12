@@ -74,7 +74,7 @@ extern NSNotificationName const LatexizationDidEndNotification;
         workingDirectory:(NSString*)workingDirectory uniqueIdentifier:(NSString*)uniqueIdentifier
         compositionConfiguration:(NSDictionary*)compositionConfiguration;
 
-//returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
+//! returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
 
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
