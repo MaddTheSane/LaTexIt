@@ -2,7 +2,7 @@
 
 TEXPLIST="latex-keywords.plist"
 echo -e "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $TEXPLIST
-echo -e "<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> $TEXPLIST
+echo -e "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> $TEXPLIST
 echo -e "<plist version=\"1.0\">" >> $TEXPLIST
 echo -e "<dict>" >> $TEXPLIST
 
