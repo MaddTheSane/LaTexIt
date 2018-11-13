@@ -222,7 +222,7 @@
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
-		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
@@ -250,9 +250,9 @@
 		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
 		9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
-		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
-		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
 		9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
