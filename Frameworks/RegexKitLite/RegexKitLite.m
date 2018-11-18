@@ -263,7 +263,7 @@ NSString * const RKLICURegexReplacementStringErrorKey  = @"RKLICURegexReplacemen
 NSString * const RKLICURegexSubjectRangeErrorKey       = @"RKLICURegexSubjectRange";
 NSString * const RKLICURegexSubjectStringErrorKey      = @"RKLICURegexSubjectString";
 
-// Used internally by rkl_userInfoDictionary to specify which arguments should be set in the NSError userInfo dictionary.
+//! Used internally by rkl_userInfoDictionary to specify which arguments should be set in the NSError userInfo dictionary.
 typedef NS_OPTIONS(NSUInteger, RKLUserInfoOptions) {
   RKLUserInfoNone                    = 0UL,
   RKLUserInfoSubjectRange            = 1UL << 0,
@@ -283,7 +283,7 @@ typedef NS_OPTIONS(NSUInteger, RKLUserInfoOptions) {
 #define U_BUFFER_OVERFLOW_ERROR           15
 #define U_PARSE_CONTEXT_LEN               16
 
-typedef struct uregex uregex; // Opaque ICU regex type.
+typedef struct uregex uregex; //!< Opaque ICU regex type.
 
 typedef struct UParseError { // This must be exactly the same as the 'real' ICU declaration.
   int32_t line;
@@ -292,8 +292,8 @@ typedef struct UParseError { // This must be exactly the same as the 'real' ICU 
   UniChar postContext[U_PARSE_CONTEXT_LEN];
 } UParseError;
 
-// For use with GCC's cleanup() __attribute__.
-enum {
+//! For use with GCC's cleanup() __attribute__.
+typedef NS_OPTIONS(NSUInteger, RKLCacheSpinLock) {
   RKLLockedCacheSpinLock   = 1UL << 0,
   RKLUnlockedCacheSpinLock = 1UL << 1,
 };
@@ -360,7 +360,7 @@ typedef struct {
 
 static RKLLRUCacheSet_t     rkl_lruFixedBufferCacheSet = _RKL_LRU_CACHE_SET_INIT, rkl_lruDynamicBufferCacheSet = _RKL_LRU_CACHE_SET_INIT;
 static RKLBuffer            rkl_lruDynamicBuffer[_RKL_LRU_CACHE_SET_WAYS];
-static UniChar              rkl_lruFixedUniChar[_RKL_LRU_CACHE_SET_WAYS][_RKL_FIXED_LENGTH]; // This is the fixed sized UTF-16 conversion buffer.
+static UniChar              rkl_lruFixedUniChar[_RKL_LRU_CACHE_SET_WAYS][_RKL_FIXED_LENGTH]; //!< This is the fixed sized UTF-16 conversion buffer.
 static RKLBuffer            rkl_lruFixedBuffer[_RKL_LRU_CACHE_SET_WAYS] = {{NULL, 0UL, 0L, &rkl_lruFixedUniChar[0][0]}, {NULL, 0UL, 0L, &rkl_lruFixedUniChar[1][0]}, {NULL, 0UL, 0L, &rkl_lruFixedUniChar[2][0]}, {NULL, 0UL, 0L, &rkl_lruFixedUniChar[3][0]}};
 static RKLCachedRegex       rkl_cachedRegexes[_RKL_REGEX_CACHE_LINES];
 #if       defined(__GNUC__) && (__GNUC__ == 4) && defined(__GNUC_MINOR__) && (__GNUC_MINOR__ == 2)
@@ -668,7 +668,7 @@ extern int  __dtrace_isenabled$RegexKitLite$utf16ConversionCache$v1(void);
 
 ////////////////////////////
 
-enum {
+typedef NS_OPTIONS(unsigned int, RKLLookupFlag) {
   RKLCacheHitLookupFlag           = 1 << 0,
   RKLConversionRequiredLookupFlag = 1 << 1,
   RKLSetTextLookupFlag            = 1 << 2,
@@ -1998,7 +1998,7 @@ static id rkl_performEnumerationUsingBlock(id self, SEL _cmd,
 
   if((((enumerationOptions & RKLRegexEnumerationCapturedStringsNotRequired)              != 0UL) && ((enumerationOptions & RKLRegexEnumerationFastCapturedStringsXXX) != 0UL)) ||
      (((enumerationOptions & RKLRegexEnumerationReleaseStringReturnedByReplacementBlock) != 0UL) && (blockEnumerationOp != RKLBlockEnumerationReplaceOp)) ||
-     ((enumerationOptions & (~((RKLRegexEnumerationOptions)(RKLRegexEnumerationCapturedStringsNotRequired | RKLRegexEnumerationReleaseStringReturnedByReplacementBlock | RKLRegexEnumerationFastCapturedStringsXXX)))) != 0UL)) {
+     ((enumerationOptions & (~(RKLRegexEnumerationCapturedStringsNotRequired | RKLRegexEnumerationReleaseStringReturnedByReplacementBlock | RKLRegexEnumerationFastCapturedStringsXXX))) != 0UL)) {
     exception = (id)RKL_EXCEPTION(NSInvalidArgumentException, @"The RKLRegexEnumerationOptions argument is not valid.");
     goto exitNow;
   }
