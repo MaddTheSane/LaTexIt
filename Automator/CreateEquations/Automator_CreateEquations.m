@@ -27,6 +27,7 @@
 
 #import <OSAKit/OSAKit.h>
 #import "RegexKitLite.h"
+#import <Automator/AutomatorErrors.h>
 
 #if !__has_feature(objc_arc)
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
@@ -294,7 +295,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 }
 //end awakeFromNib
 
--(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary<NSString *, id>**)errorInfo
+-(id)runWithInput:(id)input error:(NSError * _Nullable __autoreleasing *)errorInfo
 {
   Boolean synchronized = CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
   DebugLog(1, @"synchronized = %d", synchronized);
@@ -386,8 +387,10 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   BOOL didEncounterError = NO;
   if (errorInfo && !defaultPreamble)
   {
-    *errorInfo = @{OSAScriptErrorNumber: @(errOSAGeneralError),
-      OSAScriptErrorMessage: LocalLocalizedString(@"No preamble found", @"No preamble found")};
+    *errorInfo = [NSError errorWithDomain:AMAutomatorErrorDomain
+                                     code:AMWorkflowPropertyListInvalidError
+                                 userInfo:@{OSAScriptErrorNumber: @(errOSAGeneralError),
+                                            OSAScriptErrorMessage: LocalLocalizedString(@"No preamble found", @"No preamble found")}];
   }//end if (errorInfo && !defaultPreamble)
 
   NSMutableArray* errorStrings = [NSMutableArray array];
@@ -408,8 +411,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [uniqueIdentifiers addObject:uniqueIdentifier];
     if (!body && errorInfo)
     {
-      *errorInfo = @{OSAScriptErrorNumber: @(errOSAGeneralError),
-        OSAScriptErrorMessage: error.localizedDescription};
+      *errorInfo = error;
       didEncounterError = YES;
     }//end if (!body && errorInfo)
     else if (body)
@@ -545,14 +547,16 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   }//end or each object
   if (didEncounterError && errorStrings.count && errorInfo)
   {
-    *errorInfo = @{OSAScriptErrorNumber: @(errOSAGeneralError),
-                   OSAScriptErrorMessage: [errorStrings componentsJoinedByString:@"\n"]};
+    *errorInfo = [NSError errorWithDomain:AMAutomatorErrorDomain
+                                     code:AMConversionFailedError
+                                 userInfo:@{OSAScriptErrorNumber: @(errOSAGeneralError),
+                                            OSAScriptErrorMessage: [errorStrings componentsJoinedByString:@"\n"]}];
     if (*errorInfo)
-      DebugLog(0, @"%@", (*errorInfo)[OSAScriptErrorMessage]);
+      DebugLog(0, @"%@", (*errorInfo).userInfo[OSAScriptErrorMessage]);
   }//end if (didEncounterError && [errorStrings count] && errorInfo)
   return result;
 }
-//end runWithInput:fromAction:error:
+//end runWithInput:error:
 
 -(NSString*) extractFromObject:(id)object preamble:(NSString**)outPeamble body:(NSString**)outBody isFilePath:(BOOL*)isFilePath
                          error:(NSError**)error
