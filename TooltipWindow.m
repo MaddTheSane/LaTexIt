@@ -100,6 +100,11 @@ static NSColor*       backgroundColor  = nil;
 }
 //end suggestedSizeForTooltip:
 
+- (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag
+{
+  return [self init];
+}
+
 -(instancetype) init
 {
   if (!(self = [super initWithContentRect:NSMakeRect(0,0,0,0)

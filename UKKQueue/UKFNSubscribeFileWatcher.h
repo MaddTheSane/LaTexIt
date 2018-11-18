@@ -36,7 +36,7 @@
 @interface UKFNSubscribeFileWatcher : NSObject <UKFileWatcher>
 {
     __unsafe_unretained id<UKFileWatcherDelegate> delegate;           ///< Delegate must respond to \c UKFileWatcherDelegate protocol.
-    NSMutableDictionary*      subscriptions;      ///< List of \c FNSubscription pointers in NSValues, with the pathnames as their keys.
+    NSMutableDictionary<NSString*,NSValue*>*      subscriptions;      ///< List of \c FNSubscription pointers in NSValues, with the pathnames as their keys.
 }
 
 +(UKFNSubscribeFileWatcher*) sharedFileWatcher;

@@ -390,7 +390,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     *errorInfo = [NSError errorWithDomain:AMAutomatorErrorDomain
                                      code:AMWorkflowPropertyListInvalidError
                                  userInfo:@{OSAScriptErrorNumber: @(errOSAGeneralError),
-                                            OSAScriptErrorMessage: LocalLocalizedString(@"No preamble found", @"No preamble found")}];
+                                            OSAScriptErrorMessage: LocalLocalizedString(@"No preamble found", @"No preamble found"),
+                                            AMActionErrorKey: self}];
   }//end if (errorInfo && !defaultPreamble)
 
   NSMutableArray* errorStrings = [NSMutableArray array];
@@ -550,7 +551,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     *errorInfo = [NSError errorWithDomain:AMAutomatorErrorDomain
                                      code:AMConversionFailedError
                                  userInfo:@{OSAScriptErrorNumber: @(errOSAGeneralError),
-                                            OSAScriptErrorMessage: [errorStrings componentsJoinedByString:@"\n"]}];
+                                            OSAScriptErrorMessage: [errorStrings componentsJoinedByString:@"\n"],
+                                            AMActionErrorKey: self}];
     if (*errorInfo)
       DebugLog(0, @"%@", (*errorInfo).userInfo[OSAScriptErrorMessage]);
   }//end if (didEncounterError && [errorStrings count] && errorInfo)
