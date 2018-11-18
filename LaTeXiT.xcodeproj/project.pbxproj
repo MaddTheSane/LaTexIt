@@ -365,11 +365,8 @@
 		93D23257101836B700768782 /* NSObjectExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */; };
 		93D232F11018491C00768782 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
 		93D232F21018492000768782 /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
-		93D4947910C1051700A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
 		93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
-		93D4947E10C1057000A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
 		93D4947F10C1057000A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
-		93D4948010C1057100A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
 		93D4948110C1057100A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
 		93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
 		93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
@@ -953,8 +950,6 @@
 		93CFB9AD16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewWithPlaceHolder.m; sourceTree = "<group>"; };
 		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
 		93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringExtended.m; sourceTree = "<group>"; };
-		93D4947410C1051700A0D06A /* NDProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = NDProcess.h; path = Frameworks/NDProcess/NDProcess.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
-		93D4947510C1051700A0D06A /* NDProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = NDProcess.m; path = Frameworks/NDProcess/NDProcess.m; sourceTree = "<group>"; usesTabs = 1; };
 		93D4947610C1051700A0D06A /* NDSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = NDSDKCompatibility.h; path = Frameworks/NDProcess/NDSDKCompatibility.h; sourceTree = "<group>"; usesTabs = 1; };
 		93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+NDCarbonUtilities.h"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.h"; sourceTree = "<group>"; usesTabs = 1; };
 		93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+NDCarbonUtilities.m"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.m"; sourceTree = "<group>"; usesTabs = 1; };
@@ -1860,8 +1855,6 @@
 		93D4947110C1050700A0D06A /* NDProcess */ = {
 			isa = PBXGroup;
 			children = (
-				93D4947410C1051700A0D06A /* NDProcess.h */,
-				93D4947510C1051700A0D06A /* NDProcess.m */,
 				93D4947610C1051700A0D06A /* NDSDKCompatibility.h */,
 				93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */,
 				93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */,
@@ -2325,7 +2318,6 @@
 				936091A21087084300F4B39A /* RegexKitLite.m in Sources */,
 				934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */,
 				938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */,
-				93D4947910C1051700A0D06A /* NDProcess.m in Sources */,
 				93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 				936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */,
 				936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */,
@@ -2415,7 +2407,6 @@
 				9333458B1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */,
 				936091A31087084300F4B39A /* RegexKitLite.m in Sources */,
 				934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */,
-				93D4947E10C1057000A0D06A /* NDProcess.m in Sources */,
 				93D4947F10C1057000A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 				93257A4E12366ABC006EF4E8 /* NSUserDefaultsControllerExtended.m in Sources */,
 				93102836127A136600170119 /* NSMutableSetExtended.m in Sources */,
@@ -2453,7 +2444,6 @@
 				938DBE4610BDC4B1002350CF /* main.m in Sources */,
 				9349515D10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m in Sources */,
 				934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */,
-				93D4948010C1057100A0D06A /* NDProcess.m in Sources */,
 				93D4948110C1057100A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 				93102837127A136600170119 /* NSMutableSetExtended.m in Sources */,
 			);

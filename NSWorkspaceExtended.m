@@ -11,7 +11,6 @@
 #import "NSWorkspaceExtended.h"
 
 #import "NSFileManagerExtended.h"
-#import "NDProcess.h"
 
 @implementation NSWorkspace (Extended)
 

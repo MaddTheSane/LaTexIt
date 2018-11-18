@@ -327,7 +327,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
   else//!if (!self->isLaTeXiT)
-    CFPreferencesSetAppValue((CFStringRef)key, 0, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CFStringRef)key, NULL, (CFStringRef)LaTeXiTAppKey);
 }
 //end removeKey:
 
@@ -427,7 +427,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   for(i = 0 ; i<count ; ++i)
     [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: oldServiceShortcutsEnabled[i],
       ServiceShortcutStringKey: oldServiceShortcutsStrings[i],
-      ServiceShortcutIdentifierKey: [NSNumber numberWithInteger:i+((count == 3) ? 1 : 0)]}];
+      ServiceShortcutIdentifierKey: @(i+((count == 3) ? 1 : 0))}];
   if (newServiceShortcuts.count == 3)
     [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: oldServiceShortcutsEnabled[i],
       ServiceShortcutStringKey: oldServiceShortcutsStrings[i],
