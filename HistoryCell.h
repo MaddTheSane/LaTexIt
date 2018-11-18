@@ -14,6 +14,6 @@
   NSColor*         backgroundColor;
 }
 
--(void) setBackgroundColor:(NSColor*)color;
+@property (strong) NSColor *backgroundColor;
 
 @end

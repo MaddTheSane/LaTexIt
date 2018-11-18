@@ -36,7 +36,7 @@ static void _linearColorReleaseInfoFunction(void *info)
 static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlendFunction, &_linearColorReleaseInfoFunction};
 // end CoreGraphics gradient helpers
 
-@interface HistoryCell (PrivateAPI)
+@interface HistoryCell ()
 -(void) drawGradientInRect:(NSRect)rect withColor:(NSColor*)color;
 @end
 
@@ -53,10 +53,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
 }
 //end initWithCoder:
 
--(void) setBackgroundColor:(NSColor*)color
-{
-  self->backgroundColor = color;
-}
+@synthesize backgroundColor;
 //end setBackgroundColor:
 
 -(id) copyWithZone:(NSZone*)zone
