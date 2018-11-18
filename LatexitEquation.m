@@ -1949,13 +1949,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   if (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     [self->exportPrefetcher prefetchForFormat:exportFormat pdfData:pdfData];
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
+                                 @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
                                  @(preferencesController.exportScalePercent), @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
-                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
+                                 @(preferencesController.exportIncludeBackgroundColor), @"exportIncludeBackgroundColor",
+                                 @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
+                                 @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
+                                 @(preferencesController.exportTextExportBody), @"textExportBody",
+                                 preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
                                  nil];
   NSData* data = lazyDataProvider ? nil :
     (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?

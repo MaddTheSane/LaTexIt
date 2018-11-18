@@ -28,7 +28,7 @@
     if (error)
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
-    NSData* data = !path ? nil : [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
+    NSData* data = !path ? nil : [NSData dataWithContentsOfFile:path options:NSUncachedRead error:error];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;
@@ -51,6 +51,9 @@
     }
     if (enc)
       *enc = usedEncoding;
+    if (data && !string && error) {
+      *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadInapplicableStringEncodingError userInfo:@{NSStringEncodingErrorKey: @(NSMacOSRomanStringEncoding), NSFilePathErrorKey: path}];
+    }
   }
   return [[self alloc] initWithString:string];
 }
@@ -65,7 +68,7 @@
     if (error)
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
-    NSData* data = [NSData dataWithContentsOfURL:url];
+    NSData* data = [NSData dataWithContentsOfURL:url options:NSDataReadingMappedIfSafe error:error];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;
@@ -88,6 +91,9 @@
     }
     if (enc)
       *enc = usedEncoding;
+    if (data && !string && error) {
+      *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadInapplicableStringEncodingError userInfo:@{NSStringEncodingErrorKey: @(NSMacOSRomanStringEncoding), NSURLErrorKey: url}];
+    }
   }
   return [[self alloc] initWithString:string];
 }
