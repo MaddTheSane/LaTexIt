@@ -264,13 +264,12 @@ NSString * const RKLICURegexSubjectRangeErrorKey       = @"RKLICURegexSubjectRan
 NSString * const RKLICURegexSubjectStringErrorKey      = @"RKLICURegexSubjectString";
 
 // Used internally by rkl_userInfoDictionary to specify which arguments should be set in the NSError userInfo dictionary.
-enum {
+typedef NS_OPTIONS(NSUInteger, RKLUserInfoOptions) {
   RKLUserInfoNone                    = 0UL,
   RKLUserInfoSubjectRange            = 1UL << 0,
   RKLUserInfoReplacedCount           = 1UL << 1,
   RKLUserInfoRegexEnumerationOptions = 1UL << 2,
 };
-typedef NSUInteger RKLUserInfoOptions;
 
 ////////////
 #pragma mark -
@@ -299,7 +298,7 @@ enum {
   RKLUnlockedCacheSpinLock = 1UL << 1,
 };
 
-enum {
+typedef NS_OPTIONS(NSUInteger, RKLRegexOp) {
   RKLSplitOp                         = 1UL,
   RKLReplaceOp                       = 2UL,
   RKLRangeOp                         = 3UL,
@@ -312,7 +311,6 @@ enum {
   RKLReplaceMutable                  = 1UL << 4,
   RKLSubcapturesArray                = 1UL << 5,
 };
-typedef NSUInteger RKLRegexOp;
 
 typedef NS_ENUM(NSUInteger, RKLBlockEnumerationOp) {
   RKLBlockEnumerationMatchOp   = 1UL,
@@ -565,8 +563,8 @@ static NSDictionary   *rkl_userInfoDictionary        (RKLUserInfoOptions userInf
 static NSError        *rkl_makeNSError               (RKLUserInfoOptions userInfoOptions, NSString *regexString, RKLRegexOptions options, const UParseError *parseError, int32_t status, NSString *matchString, NSRange matchRange, NSString *replacementString, NSString *replacedString, NSInteger replacedCount, RKLRegexEnumerationOptions enumerationOptions, NSString *errorDescription) RKL_WARN_UNUSED;
 
 static NSException    *rkl_NSExceptionForRegex       (NSString *regexString, RKLRegexOptions options, const UParseError *parseError, int32_t status) RKL_WARN_UNUSED_NONNULL_ARGS(1);
-static NSDictionary   *rkl_makeAssertDictionary      (const char *function, const char *file, int line, NSString *format, ...)                       RKL_WARN_UNUSED_NONNULL_ARGS(1,2,4);
-static NSString       *rkl_stringFromClassAndMethod  (id object, SEL selector, NSString *format, ...)                                                RKL_WARN_UNUSED_NONNULL_ARGS(3);
+static NSDictionary   *rkl_makeAssertDictionary      (const char *function, const char *file, int line, NSString *format, ...)                       RKL_WARN_UNUSED_NONNULL_ARGS(1,2,4) NS_FORMAT_FUNCTION(4,5);
+static NSString       *rkl_stringFromClassAndMethod  (id object, SEL selector, NSString *format, ...)                                                RKL_WARN_UNUSED_NONNULL_ARGS(3) NS_FORMAT_FUNCTION(3,4);
 
 RKL_STATIC_INLINE int32_t rkl_getRangeForCapture(RKLCachedRegex *cr, int32_t *s, int32_t c, NSRange *r) RKL_WARN_UNUSED_NONNULL_ARGS(1,2,4);
 RKL_STATIC_INLINE int32_t rkl_getRangeForCapture(RKLCachedRegex *cr, int32_t *s, int32_t c, NSRange *r) { uregex *re = cr->icu_regex; int32_t start = RKL_ICU_FUNCTION_APPEND(uregex_start)(re, c, s); if(RKL_EXPECTED((*s > U_ZERO_ERROR), 0L) || (start == -1)) { *r = NSNotFoundRange; } else { r->location = (NSUInteger)start; r->length = (NSUInteger)RKL_ICU_FUNCTION_APPEND(uregex_end)(re, c, s) - r->location; r->location += cr->setToRange.location; } return(*s); }
@@ -1195,7 +1193,7 @@ exitNow:
 
 static void rkl_handleDelayedAssert(id self, SEL _cmd, id exception) {
   if(RKL_EXPECTED(exception != NULL, 1L)) {
-    if([exception isKindOfClass:[NSException class]]) { [[NSException exceptionWithName:[(NSException*)exception name] reason:rkl_stringFromClassAndMethod(self, _cmd, [exception reason]) userInfo:[exception userInfo]] raise]; }
+    if([exception isKindOfClass:[NSException class]]) { [[NSException exceptionWithName:[(NSException*)exception name] reason:rkl_stringFromClassAndMethod(self, _cmd, @"%@", [exception reason]) userInfo:[exception userInfo]] raise]; }
     else {
       id functionString = [exception objectForKey:@"function"], fileString = [exception objectForKey:@"file"], descriptionString = [exception objectForKey:@"description"], lineNumber = [exception objectForKey:@"line"];
       RKLCHardAbortAssert((functionString != NULL) && (fileString != NULL) && (descriptionString != NULL) && (lineNumber != NULL));
@@ -1721,23 +1719,23 @@ static NSDictionary *rkl_userInfoDictionary(RKLUserInfoOptions userInfoOptions, 
   NSString * RKL_GC_VOLATILE errorNameString = [NSString stringWithUTF8String:RKL_ICU_FUNCTION_APPEND(u_errorName)(status)];
   
   addKeyAndObject(objects, keys, count, RKLICURegexRegexErrorKey,        regexString);
-  addKeyAndObject(objects, keys, count, RKLICURegexRegexOptionsErrorKey, [NSNumber numberWithUnsignedInt:options]);
-  addKeyAndObject(objects, keys, count, RKLICURegexErrorCodeErrorKey,    [NSNumber numberWithInt:status]);
+  addKeyAndObject(objects, keys, count, RKLICURegexRegexOptionsErrorKey, @(options));
+  addKeyAndObject(objects, keys, count, RKLICURegexErrorCodeErrorKey,    @(status));
   addKeyAndObject(objects, keys, count, RKLICURegexErrorNameErrorKey,    errorNameString);
 
   if(matchString                                            != NULL) { addKeyAndObject(objects, keys, count, RKLICURegexSubjectStringErrorKey,      matchString);                                             }  
   if((userInfoOptions & RKLUserInfoSubjectRange)            != 0UL)  { addKeyAndObject(objects, keys, count, RKLICURegexSubjectRangeErrorKey,       [NSValue valueWithRange:matchRange]);                     }
   if(replacementString                                      != NULL) { addKeyAndObject(objects, keys, count, RKLICURegexReplacementStringErrorKey,  replacementString);                                       }
   if(replacedString                                         != NULL) { addKeyAndObject(objects, keys, count, RKLICURegexReplacedStringErrorKey,     replacedString);                                          }
-  if((userInfoOptions & RKLUserInfoReplacedCount)           != 0UL)  { addKeyAndObject(objects, keys, count, RKLICURegexReplacedCountErrorKey,      [NSNumber numberWithInteger:replacedCount]);              }
-  if((userInfoOptions & RKLUserInfoRegexEnumerationOptions) != 0UL)  { addKeyAndObject(objects, keys, count, RKLICURegexEnumerationOptionsErrorKey, [NSNumber numberWithUnsignedInteger:enumerationOptions]); }
+  if((userInfoOptions & RKLUserInfoReplacedCount)           != 0UL)  { addKeyAndObject(objects, keys, count, RKLICURegexReplacedCountErrorKey,      @(replacedCount));              }
+  if((userInfoOptions & RKLUserInfoRegexEnumerationOptions) != 0UL)  { addKeyAndObject(objects, keys, count, RKLICURegexEnumerationOptionsErrorKey, @(enumerationOptions)); }
   
   if((parseError != NULL) && (parseError->line != -1)) {
     NSString *preContextString  = [NSString stringWithCharacters:&parseError->preContext[0]  length:(NSUInteger)RKL_ICU_FUNCTION_APPEND(u_strlen)(&parseError->preContext[0])];
     NSString *postContextString = [NSString stringWithCharacters:&parseError->postContext[0] length:(NSUInteger)RKL_ICU_FUNCTION_APPEND(u_strlen)(&parseError->postContext[0])];
     
-    addKeyAndObject(objects, keys, count, RKLICURegexLineErrorKey,        [NSNumber numberWithInt:parseError->line]);
-    addKeyAndObject(objects, keys, count, RKLICURegexOffsetErrorKey,      [NSNumber numberWithInt:parseError->offset]);
+    addKeyAndObject(objects, keys, count, RKLICURegexLineErrorKey,        @(parseError->line));
+    addKeyAndObject(objects, keys, count, RKLICURegexOffsetErrorKey,      @(parseError->offset));
     addKeyAndObject(objects, keys, count, RKLICURegexPreContextErrorKey,  preContextString);
     addKeyAndObject(objects, keys, count, RKLICURegexPostContextErrorKey, postContextString);
     addKeyAndObject(objects, keys, count, @"NSLocalizedFailureReason",    ([NSString stringWithFormat:@"The error %@ occurred at line %d, column %d: %@<<HERE>>%@", errorNameString, parseError->line, parseError->offset, preContextString, postContextString]));
@@ -1766,7 +1764,7 @@ static NSDictionary *rkl_makeAssertDictionary(const char *function, const char *
   NSString * RKL_GC_VOLATILE formatString   = [[[NSString alloc] initWithFormat:format arguments:varArgsList] autorelease];
   va_end(varArgsList);
   NSString * RKL_GC_VOLATILE functionString = [NSString stringWithUTF8String:function], *fileString = [NSString stringWithUTF8String:file];
-  return([NSDictionary dictionaryWithObjectsAndKeys:formatString, @"description", functionString, @"function", fileString, @"file", [NSNumber numberWithInt:line], @"line", NSInternalInconsistencyException, @"exceptionName", NULL]);
+  return([NSDictionary dictionaryWithObjectsAndKeys:formatString, @"description", functionString, @"function", fileString, @"file", @(line), @"line", NSInternalInconsistencyException, @"exceptionName", NULL]);
 }
 
 static NSString *rkl_stringFromClassAndMethod(id object, SEL selector, NSString *format, ...) {
