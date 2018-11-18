@@ -28,7 +28,7 @@
     if (error)
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
-    NSData* data = !path ? nil : [NSData dataWithContentsOfFile:path options:NSUncachedRead error:error];
+    NSData* data = !path ? nil : [NSData dataWithContentsOfFile:path options:NSDataReadingUncached error:error];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;
@@ -68,7 +68,7 @@
     if (error)
       *error = nil;
     NSStringEncoding usedEncoding = NSUTF8StringEncoding;
-    NSData* data = [NSData dataWithContentsOfURL:url options:NSDataReadingMappedIfSafe error:error];
+    NSData* data = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:error];
     if (!string)
     {
       usedEncoding = NSUTF8StringEncoding;
