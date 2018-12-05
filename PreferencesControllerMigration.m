@@ -348,7 +348,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
     id value = (id)CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)oldKey, (__bridge CFStringRef)LaTeXiTAppKey));
     if (value)
     {
-      CFPreferencesSetAppValue((CFStringRef)oldKey, 0, (CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CFStringRef)oldKey, NULL, (CFStringRef)LaTeXiTAppKey);
       CFPreferencesSetAppValue((__bridge CFStringRef)newKey, (__bridge CFPropertyListRef)value, (__bridge CFStringRef)LaTeXiTAppKey);
     }
   }//end if (!self->isLaTeXiT)
@@ -362,9 +362,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
   NSMutableArray* newCompositionConfigurations = [self.compositionConfigurations deepMutableCopy];
-  NSEnumerator* enumerator = [newCompositionConfigurations objectEnumerator];
-  NSMutableDictionary* compositionConfiguration = nil;
-  while((compositionConfiguration = [enumerator nextObject]))
+  for(NSMutableDictionary* compositionConfiguration in newCompositionConfigurations)
   {
     [compositionConfiguration replaceKey:Old_CompositionConfigurationCompositionModeKey withKey:CompositionConfigurationCompositionModeKey];
     [compositionConfiguration replaceKey:Old_CompositionConfigurationIsDefaultKey withKey:CompositionConfigurationIsDefaultKey];
@@ -380,8 +378,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
     compositionConfiguration[CompositionConfigurationUseLoginShellKey] = @(useLoginShell);
     NSMutableDictionary* additionalScripts = compositionConfiguration[CompositionConfigurationAdditionalProcessingScriptsKey];
     NSEnumerator* scriptEnumerator = [additionalScripts.allValues objectEnumerator];
-    NSMutableDictionary* additionalScript = nil;
-    while((additionalScript = [scriptEnumerator nextObject]))
+    for(NSMutableDictionary* additionalScript in scriptEnumerator)
     {
       [additionalScript replaceKey:Old_CompositionConfigurationAdditionalProcessingScriptsEnabledKey
                            withKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey];
