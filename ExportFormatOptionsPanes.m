@@ -290,74 +290,6 @@
 }
 //end svgPdfToSvgPathModify:
 
-#pragma mark TEXT
-
-#pragma mark PDF Wof
-
--(void) setPdfWofGSWriteEngine:(NSString*)value
-{
-#ifdef ARC_ENABLED
-#else
-  [value retain];
-#endif
-  [self willChangeValueForKey:@"pdfWofGSWriteEngine"];
-#ifdef ARC_ENABLED
-#else
-  [self->pdfWofGSWriteEngine release];
-#endif
-  self->pdfWofGSWriteEngine = value;
-  [self didChangeValueForKey:@"pdfWofGSWriteEngine"];
-}
-//end setPdfWofGSWriteEngine:
-
--(NSString*) pdfWofGSPDFCompatibilityLevel
-{
-  return self->pdfWofGSPDFCompatibilityLevel;
-}
-//end pdfWofGSPDFCompatibilityLevel
-
--(void) setPdfWofGSPDFCompatibilityLevel:(NSString*)value
-{
-  #ifdef ARC_ENABLED
-  #else
-  [value retain];
-  #endif
-  [self willChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
-  #ifdef ARC_ENABLED
-  #else
-  [self->pdfWofGSPDFCompatibilityLevel release];
-  #endif
-  self->pdfWofGSPDFCompatibilityLevel = value;
-  [self didChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
-}
-//end setPdfWofGSPDFCompatibilityLevel:
-
--(BOOL) pdfWofMetaDataInvisibleGraphicsEnabled
-{
-  return self->pdfWofMetaDataInvisibleGraphicsEnabled;
-}
-//end pdfWofMetaDataInvisibleGraphicsEnabled
-
--(void) setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value
-{
-  [self willChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
-  self->pdfWofMetaDataInvisibleGraphicsEnabled = value;
-  [self didChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
-}
-//end setPdfWofMetaDataInvisibleGraphicsEnabled
-
--(id) exportFormatOptionsPDFWofPanelDelegate
-{
-  return self->exportFormatOptionsPDFWofPanelDelegate;
-}
-//end exportFormatOptionsPDFWofPanelDelegate
-
--(void) setExportFormatOptionsPDFWofPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsPDFWofPanelDelegate = delegate;
-}
-//end setExportFormatOptionsPDFWofPanelDelegate:
-
 #pragma mark PDF
 
 -(NSPanel*) exportFormatOptionsPDFPanel
@@ -366,31 +298,8 @@
 }
 //end exportFormatOptionsPDFPanel
 
--(BOOL) pdfMetaDataInvisibleGraphicsEnabled
-{
-  return self->pdfMetaDataInvisibleGraphicsEnabled;
-}
-//end pdfMetaDataInvisibleGraphicsEnabled
-
--(void) setPdfMetaDataInvisibleGraphicsEnabled:(BOOL)value
-{
-  [self willChangeValueForKey:@"pdfMetaDataInvisibleGraphicsEnabled"];
-  self->pdfMetaDataInvisibleGraphicsEnabled = value;
-  [self didChangeValueForKey:@"pdfMetaDataInvisibleGraphicsEnabled"];
-}
-//end setPdfMetaDataInvisibleGraphicsEnabled
-
--(id) exportFormatOptionsPDFPanelDelegate
-{
-  return self->exportFormatOptionsPDFPanelDelegate;
-}
-//end exportFormatOptionsPDFfPanelDelegate
-
--(void) setExportFormatOptionsPDFPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsPDFPanelDelegate = delegate;
-}
-//end setExportFormatOptionsPDFPanelDelegate:
+@synthesize pdfMetaDataInvisibleGraphicsEnabled;
+@synthesize exportFormatOptionsPDFPanelDelegate;
 
 #pragma mark ALL
 

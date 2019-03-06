@@ -525,9 +525,7 @@ static LaTeXProcessor* sharedInstance = nil;
         [NSNumber numberWithDouble:baseline], @"baseline",
         nil];
       NSData* dictionaryContentPlistData =
-        isMacOS10_6OrAbove() ?
-          [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] :
-          [NSPropertyListSerialization dataFromPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 errorDescription:nil];
+      [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil];
       NSData* annotationContentRawData = dictionaryContentPlistData;
       NSData* annotationContentCompressedData = [Compressor zipcompress:annotationContentRawData];
       NSString* annotationContentBase64 = [annotationContentCompressedData encodeBase64WithNewlines:NO];

@@ -499,7 +499,7 @@ static NSMutableDictionary* cachePaths = nil;
       CompositionConfigurationPsToPdfPathKey, @"path",
       [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil],
     [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey],
-    [NSDictionary dictionaryWithObjectsAndKeys:nil],
+    [NSDictionary dictionary],
     [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey],
     [NSDictionary dictionaryWithObjectsAndKeys:
       DragExportSvgPdfToSvgPathKey, @"path",

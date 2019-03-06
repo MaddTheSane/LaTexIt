@@ -248,10 +248,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         NSString*  textShortcutsPlistPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"textShortcuts" ofType:@"plist"];
         NSData*    dataTextShortcutsPlist = [NSData dataWithContentsOfFile:textShortcutsPlistPath options:NSUncachedRead error:nil];
         NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
-        NSString* errorString = nil;
-        NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataTextShortcutsPlist
-                                                               mutabilityOption:NSPropertyListImmutable
-                                                                         format:&format errorDescription:&errorString];
+        NSError* errorString = nil;
+        NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:dataTextShortcutsPlist
+                                                                        options:NSPropertyListImmutable
+                                                                         format:&format error:&errorString];
         NSString* version = [plist objectForKey:@"version"];
         //we can check the version...
         if (!version || [version compare:@"1.13.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
@@ -2682,15 +2682,15 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     NSString* infoPlistPath =
       [[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
     NSURL* infoPlistURL = [NSURL fileURLWithPath:infoPlistPath];
-    CFStringRef cfStringError = nil;
+    CFErrorRef cfStringError = nil;
     #ifdef ARC_ENABLED
-    CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
+    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
                                                                     (CHBRIDGE CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
-                                                                    kCFPropertyListMutableContainersAndLeaves, &cfStringError);
+                                                                    kCFPropertyListMutableContainersAndLeaves, NULL, &cfStringError);
     #else
-    CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
+    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
                                                                     (CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
-                                                                    kCFPropertyListMutableContainersAndLeaves, &cfStringError);
+                                                                    kCFPropertyListMutableContainersAndLeaves, NULL, &cfStringError);
     #endif
     if (cfInfoPlist && !cfStringError)
     {

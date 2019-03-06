@@ -332,7 +332,7 @@
     NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
     PaletteCell* prototype = [[PaletteCell alloc] initImageCell:nil];
     [prototype setImageAlignment:NSImageAlignCenter];
-    [prototype setImageScaling:NSScaleToFit];
+    [prototype setImageScaling:NSImageScaleAxesIndependently];
     while([matrix numberOfRows])
       [matrix removeRow:0];
     matrix.prototype = prototype;

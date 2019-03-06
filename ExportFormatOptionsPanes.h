@@ -76,7 +76,7 @@
   IBOutlet NSButton*      exportFormatOptionsPDFCancelButton;
   
   BOOL      pdfMetaDataInvisibleGraphicsEnabled;
-  id        exportFormatOptionsPDFPanelDelegate;
+  __weak id<ExportFormatOptionsDelegate> exportFormatOptionsPDFPanelDelegate;
 }
 
 -(instancetype) initWithLoadingFromNib NS_DESIGNATED_INITIALIZER;
@@ -105,10 +105,8 @@
 @property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsPDFWofPanelDelegate;
 
 -(NSPanel*)  exportFormatOptionsPDFPanel;
--(BOOL)      pdfMetaDataInvisibleGraphicsEnabled;
--(void)      setPdfMetaDataInvisibleGraphicsEnabled:(BOOL)value;
--(id)        exportFormatOptionsPDFPanelDelegate;
--(void)      setExportFormatOptionsPDFPanelDelegate:(id)delegate;
+@property BOOL pdfMetaDataInvisibleGraphicsEnabled;
+@property (weak) id<ExportFormatOptionsDelegate> exportFormatOptionsPDFPanelDelegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 

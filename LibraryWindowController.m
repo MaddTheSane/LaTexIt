@@ -678,14 +678,14 @@ static int kExportContext = 0;
   openPanel.delegate = self;
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
   openPanel.accessoryView = importAccessoryView;
-  if ([[self window] isVisible])
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil] modalForWindow:[self window]
-                        modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:&kImportContext];
-  else if (!isMacOS10_6OrAbove())
-    [self sheetDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]] contextInfo:&kImportContext];
+  openPanel.allowedFileTypes = @[@"latexlib", @"latexhist", @"library", @"plist", @"tex"];
+  if ([[self window] isVisible]) {
+    [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
+      [self sheetDidEnd:openPanel returnCode:result contextInfo:&kImportContext];
+    }];
+  }
   else//if (isMacOS10_6OrAbove())
   {
-    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]];
     NSInteger returnCode = [openPanel runModal];
     [self sheetDidEnd:openPanel returnCode:returnCode contextInfo:&kImportContext];
   }//end if (isMacOS10_6OrAbove())
@@ -728,10 +728,11 @@ static int kExportContext = 0;
   [self->savePanel setAccessoryView:self->exportAccessoryView];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
-  if ([[self window] isVisible])
-    [self->savePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled") modalForWindow:[self window] modalDelegate:self
-                       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:&kExportContext];
-  else
+  if ([[self window] isVisible]) {
+    [self->savePanel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
+      [self sheetDidEnd:self->savePanel returnCode:result contextInfo:&kExportContext];
+    }];
+  } else
     [self sheetDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:&kExportContext];
 }
 //end saveAs:
@@ -743,18 +744,12 @@ static int kExportContext = 0;
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
       [self->exportAccessoryView setFrame:
         NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      if (!isMacOS10_6OrAbove())
-        [self->savePanel setRequiredFileType:@"latexlib"];
-      else
-        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", nil]];
+      [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", nil]];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
       [self->exportAccessoryView setFrame:
        NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      if (!isMacOS10_6OrAbove())
-        [self->savePanel setRequiredFileType:@"plist"];
-      else
-        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
+      [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
       break;
     case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
       self->exportAccessoryView.frame = NSMakeRect(0, 0, 
@@ -763,10 +758,7 @@ static int kExportContext = 0;
                  MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
                      NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
                   156);
-      if (!isMacOS10_6OrAbove())
-        [self->savePanel setRequiredFileType:@"tex"];
-      else
-        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
+      [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
       break;
   }
 }

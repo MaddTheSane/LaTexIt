@@ -67,7 +67,7 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
 -(void) drawRect:(NSRect)rect;
 @end
 
-@interface MyImageViewDelegate : NSObject {
+@interface MyImageViewDelegate : NSObject <CALayerDelegate> {
   MyImageView* myImageView;
 }
 -(MyImageView*) myImageView;
@@ -275,8 +275,6 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
   if (newImage && ![newImage pdfImageRepresentation] && self->imageRep)
   {
     [newImage setCacheMode:NSImageCacheNever];
-    [newImage setDataRetained:YES];
-    [newImage setScalesWhenResized:YES];
     [newImage addRepresentation:self->imageRep];
     //[newImage recache];
   }//end if (newImage && ![newImage pdfImageRepresentation] && self->imageRep)
@@ -284,8 +282,6 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
   {
     newImage = [[NSImage alloc] initWithSize:[self->imageRep size]];
     [newImage setCacheMode:NSImageCacheNever];
-    [newImage setDataRetained:YES];
-    [newImage setScalesWhenResized:YES];
     [newImage addRepresentation:self->imageRep];
     //[newImage recache];
   }//end if (!newImage && self->imageRep)
@@ -302,7 +298,6 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
 
 -(void) setImage:(NSImage*)aImage
 {
-  [aImage setScalesWhenResized:YES];
   super.image = aImage;
   [[NSNotificationCenter defaultCenter] postNotificationName:ImageDidChangeNotification object:self];
 }
