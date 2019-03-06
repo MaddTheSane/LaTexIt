@@ -753,5 +753,27 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFEFny9yt7ZihwzZqCx3D3I8EKR60AhQz5ie3DNwNbcan3MW6xaB+7xDPXA=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.13.1</guid>
+      <title>Version 2.13.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>Changed &quot;invisible graphic metadata&quot; to a more clever data watermarking for PDF with outlined fonts and EPS;</li>
+          <li>restore some automatic \color[...]{} text insertion on color change in the inspector;</li>
+          <li>dark mode adjustments.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.13.1</sparkle:releaseNotesLink>
+			<pubDate>Tue, 05 Mar 2019 22:31:25 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_1.dmg"
+				sparkle:version="2.13.1"
+                   sparkle:shortVersionString="2.13.1"
+				type="application/octet-stream"
+				length="15551253"
+				sparkle:dsaSignature="MCwCFCo3scTE94HOQUE0bEVzQX7spdtRAhQ05WSqHL/PzxBUnIpfwRN73pPHRQ=="
+			/>
+    </item>
   </channel>
 </rss>

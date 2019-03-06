@@ -30,6 +30,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   BOOL                tabKeyInsertsSpacesEnabled;
   NSUInteger          tabKeyInsertsSpacesCount;
   NSString*           spacesString;
+  NSUInteger          disableAutoColorChangeLevel;
 }
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring

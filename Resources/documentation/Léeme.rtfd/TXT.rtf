@@ -10,7 +10,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 2.13.0\
+\b \cf0 LaTeXiT 2.13.1\
 
 \b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -57,7 +57,7 @@ Feedback e-mail address: \cf3 pierre@chachatelier.fr
 System Requirements\
 
 \fs22 \ulnone \
-LaTeXiT 2.13.0 requires Mac OS X version 10.6 or above, and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 2.13.1 requires Mac OS X version 10.6 or above, and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \b\fs26 \cf0 \
@@ -458,7 +458,12 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone v 2.13.0 (02/02/2019)\
+\fs22 \cf0 \ulnone v 2.13.1 (05/03/2019)\
+-changed "invisible graphic metadata" to a more clever data watermarking for PDF with outlined fonts and EPS;\
+-restore some automatic \\color[...]\{\} text insertion on color change in the inspector;\
+-dark mode adjustments.\
+\
+v 2.13.0 (02/02/2019)\
 \pard\tx566\pardeftab720\qj
 \cf0 -restored the recently broken "invisible graphic commands" metadata annotations, hoping that copy/paste from stupid third party softwares like Keynote or Powerpoint will work better in the future;\
 -reworked the "invisible graphic commands" metadata to avoid piling them over and over in equations; it is now optional and added on the fly (when enabled) only when exporting to PDF or PDF with outlined fonts;\

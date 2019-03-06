@@ -1096,9 +1096,20 @@ static NSArray* WellKnownLatexKeywords = nil;
 }
 //end viewDidChangeEffectiveAppearance
 
+-(void) setTypingAttributes:(NSDictionary*)attrs
+{
+  ++self->disableAutoColorChangeLevel;
+  [super setTypingAttributes:attrs];
+  --self->disableAutoColorChangeLevel;
+}
+//end setTypingAttributes:
+
 -(void) colorDidChange:(NSNotification*)notification
 {
-  if ([self isEditable])
+  NSWindow* window = [self window];
+  BOOL isKeyWindow = [window isKeyWindow];
+  BOOL shouldReactToColorChange = !self->disableAutoColorChangeLevel && isKeyWindow && ([window firstResponder] == self);
+  if (shouldReactToColorChange && [self isEditable])
   {
     NSColorPanel* colorPanel = [NSColorPanel sharedColorPanel];
     NSColor* color = [colorPanel color];
@@ -1111,19 +1122,26 @@ static NSArray* WellKnownLatexKeywords = nil;
       NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
       NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
         [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
-      BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLMultiline
-                                         inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
+      BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll
+        //options:RKLMultiline
+        inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
       if (replacement)
         output = !isMatching ? nil :
           [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
-                                             options:RKLMultiline range:NSMakeRange(0, [input length]) error:nil];
-      /*if (!output)
+               options:RKLDotAll
+               //options:RKLMultiline
+                 range:NSMakeRange(0, [input length]) error:nil];
+      if (!output && selectedRange.length)
         output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
-                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];*/
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
       if (output)
+      {
         [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
+        [self->syntaxColouring recolourCompleteDocument];
+        [self setNeedsDisplay:YES];
+      }//end if (output)
     }//end if (input)
-  }//end if ([self isEditable])
+  }//end if (shouldReactToColorChange && [self isEditable])
 }
 //end colorDidChange:
 

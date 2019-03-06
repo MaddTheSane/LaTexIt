@@ -623,48 +623,86 @@ static LaTeXProcessor* sharedInstance = nil;
         CGContextSetTextDrawingMode(cgPDFContext, debugVisibleAnnotations ? kCGTextFill : kCGTextInvisible);
         CGContextDrawPDFPage(cgPDFContext, pdfPage);
         //CGContextFlush(cgPDFContext);
-        CGFloat fontSize = debugLargeAnnotations ? 10 : 1e-6;
-        CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
-        DebugLog(1, @"mediaBox = %@", NSStringFromRect(NSRectFromCGRect(mediaBox)));
-        NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
-        CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
-        BOOL useOldFonts = NO;
-        if (useOldFonts)
-          CGContextSelectFont(cgPDFContext, "Courier", fontSize, kCGEncodingMacRoman);
-        else//if (!useOldFonts)
+        BOOL useFullyGraphicMetadata = (exportFormat == EXPORT_FORMAT_EPS) || (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS);
+        DebugLog(1, @"useFullyGraphicMetadata = %d", (int)useFullyGraphicMetadata);
+        if (useFullyGraphicMetadata)
         {
-          CGContextSetFont(cgPDFContext, cgFont);
-          CGContextSetFontSize(cgPDFContext, fontSize);
-        }//end if (!useOldFonts)
-
-        size_t charactersCount = [annotationContentBase64CompleteString length];
-        unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
-        CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
-        if (unichars && glyphs)
-        {
-          [annotationContentBase64CompleteString getCharacters:unichars];
-          bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
-          DebugLog(1, @"ok = %d", ok);
-          if (ok)
+          const unsigned char* annotationBytes = (const unsigned char*)[annotationContentBase64CompleteString UTF8String];
+          size_t annotationBytesLength = [annotationContentBase64CompleteString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+          float tmp[6] = {0};
+          const unsigned char* src = annotationBytes;
+          size_t remainingBytes = annotationBytesLength;
+          CGContextSaveGState(cgPDFContext);
+          CGMutablePathRef path = CGPathCreateMutable();
+          CGPathMoveToPoint(path, 0, 0, 0);
+          while(remainingBytes)
           {
-            if (useOldFonts)
+            int i = 0 ;
+            for(i = 0 ; i<6 ; ++i)
             {
-              NSData* annotationContentBase64CompleteUTF8 = [annotationContentBase64CompleteString dataUsingEncoding:NSUTF8StringEncoding];
-              DebugLog(1, @"annotationContentBase64CompleteUTF8 = %@", annotationContentBase64CompleteUTF8);
-              CGContextShowTextAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, [annotationContentBase64CompleteUTF8 bytes], [annotationContentBase64CompleteUTF8 length]);
-            }//end if (useOldFonts)
-            else//if (!useOldFonts)
+              tmp[i] = 0;
+              if (remainingBytes)
+              {
+                tmp[i] = (float)(*src++);
+                --remainingBytes;
+              }//end if (remainingBytes)
+            }//end for each i
+            CGPathAddCurveToPoint(path, 0, tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
+          }//end while(remainingBytes)
+          CGPathCloseSubpath(path);
+          CGContextConcatCTM(cgPDFContext, CGAffineTransformMakeTranslation(mediaBox.origin.x+mediaBox.size.width/2, mediaBox.origin.y+mediaBox.size.height/2));
+          CGContextConcatCTM(cgPDFContext, CGAffineTransformMakeScale(1e-6, 1e-6));
+          CGContextAddPath(cgPDFContext, path);
+          CGContextSetRGBStrokeColor(cgPDFContext, 0, 0, 0, 0);
+          CGContextStrokePath(cgPDFContext);
+          CGPathRelease(path);
+          CGContextRestoreGState(cgPDFContext);
+        }//end if (useFullyGraphicMetadata)
+        else//if (!useFullyGraphicMetadata)
+        {
+          CGFloat fontSize = debugLargeAnnotations ? 10 : 1e-6;
+          CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
+          DebugLog(1, @"mediaBox = %@", NSStringFromRect(NSRectFromCGRect(mediaBox)));
+          NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
+          CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
+          BOOL useOldFonts = NO;
+          if (useOldFonts)
+            CGContextSelectFont(cgPDFContext, "Courier", fontSize, kCGEncodingMacRoman);
+          else//if (!useOldFonts)
+          {
+            CGContextSetFont(cgPDFContext, cgFont);
+            CGContextSetFontSize(cgPDFContext, fontSize);
+          }//end if (!useOldFonts)
+
+          size_t charactersCount = [annotationContentBase64CompleteString length];
+          unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
+          CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
+          if (unichars && glyphs)
+          {
+            [annotationContentBase64CompleteString getCharacters:unichars];
+            bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
+            DebugLog(1, @"ok = %d", ok);
+            if (ok)
             {
-              DebugLog(1, @"Show %lu glyphs", (unsigned long)charactersCount);
-              CGContextShowGlyphsAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, glyphs, charactersCount);
-            }//end if (!useOldFonts)
-          }//end if (ok)
-        }//end if (unichars && glyphs)
-        if (unichars)
-          free(unichars);
-        if (glyphs)
-          free(glyphs);
-        CGFontRelease(cgFont);
+              if (useOldFonts)
+              {
+                NSData* annotationContentBase64CompleteUTF8 = [annotationContentBase64CompleteString dataUsingEncoding:NSUTF8StringEncoding];
+                DebugLog(1, @"annotationContentBase64CompleteUTF8 = %@", annotationContentBase64CompleteUTF8);
+                CGContextShowTextAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, [annotationContentBase64CompleteUTF8 bytes], [annotationContentBase64CompleteUTF8 length]);
+              }//end if (useOldFonts)
+              else//if (!useOldFonts)
+              {
+                DebugLog(1, @"Show %lu glyphs", (unsigned long)charactersCount);
+                CGContextShowGlyphsAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, glyphs, charactersCount);
+              }//end if (!useOldFonts)
+            }//end if (ok)
+          }//end if (unichars && glyphs)
+          if (unichars)
+            free(unichars);
+          if (glyphs)
+            free(glyphs);
+          CGFontRelease(cgFont);
+        }//end if (!useFullyGraphicMetadata)
         CGPDFContextEndPage(cgPDFContext);
         if (boxData)
           CFRelease(boxData);
