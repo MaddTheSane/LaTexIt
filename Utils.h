@@ -8,6 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+#ifdef ARC_ENABLED
+#define CHBRIDGE __bridge
+#else
+#define CHBRIDGE
+#endif
+
 #import "LaTeXiTSharedTypes.h"
 
 extern int DebugLogLevel;
@@ -22,11 +28,24 @@ extern int DebugLogLevel;
 #define NSAppKitVersionNumber10_6 1038
 #define NSAppKitVersionNumber10_7 1110
 #define NSAppKitVersionNumber10_8 1187
+#define NSAppKitVersionNumber10_9 1265
+#define NSAppKitVersionNumber10_10 1343
+#define NSAppKitVersionNumber10_11 1404
+#define NSAppKitVersionNumber10_12 1504
+#define NSAppKitVersionNumber10_13 1561
 
 BOOL isMacOS10_5OrAbove(void);
 BOOL isMacOS10_6OrAbove(void);
 BOOL isMacOS10_7OrAbove(void);
 BOOL isMacOS10_8OrAbove(void);
+BOOL isMacOS10_9OrAbove(void);
+BOOL isMacOS10_10OrAbove(void);
+BOOL isMacOS10_11OrAbove(void);
+BOOL isMacOS10_12OrAbove(void);
+BOOL isMacOS10_13OrAbove(void);
+BOOL isMacOS10_14OrAbove(void);
+
+extern NSString* NSAppearanceDidChangeNotification;
 
 FOUNDATION_STATIC_INLINE          char  IsBetween_c(char inf, char x, char sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned char  IsBetween_uc(unsigned char inf, unsigned char x, unsigned char sup) {return (inf <= x) && (x <= sup);}
@@ -57,14 +76,14 @@ NSString* GetMyJPEGPboardType(void);
 NSString* GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
 
-FOUNDATION_EXTERN_INLINE int EndianI_BtoN(int x);
-FOUNDATION_EXTERN_INLINE int EndianI_NtoB(int x);
-FOUNDATION_EXTERN_INLINE unsigned int EndianUI_BtoN(unsigned int x);
-FOUNDATION_EXTERN_INLINE unsigned int EndianUI_NtoB(unsigned int x);
-FOUNDATION_EXTERN_INLINE long EndianL_BtoN(long x);
-FOUNDATION_EXTERN_INLINE long EndianL_NtoB(long x);
-FOUNDATION_EXTERN_INLINE unsigned long EndianUL_BtoN(unsigned long x);
-FOUNDATION_EXTERN_INLINE unsigned long EndianUL_NtoB(unsigned long x);
+FOUNDATION_EXTERN int EndianI_BtoN(int x);
+FOUNDATION_EXTERN int EndianI_NtoB(int x);
+FOUNDATION_EXTERN unsigned int EndianUI_BtoN(unsigned int x);
+FOUNDATION_EXTERN unsigned int EndianUI_NtoB(unsigned int x);
+FOUNDATION_EXTERN long EndianL_BtoN(long x);
+FOUNDATION_EXTERN long EndianL_NtoB(long x);
+FOUNDATION_EXTERN unsigned long EndianUL_BtoN(unsigned long x);
+FOUNDATION_EXTERN unsigned long EndianUL_NtoB(unsigned long x);
 
 NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* didChange);
 
@@ -78,3 +97,5 @@ FOUNDATION_STATIC_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, float newX,
 
 NSRect adaptRectangle(NSRect rectangle, NSRect containerRectangle, BOOL allowScaleDown, BOOL allowScaleUp, BOOL integerScale);
 NSComparisonResult compareVersions(NSString* version1, NSString* version2);
+
+void MethodSwizzle(Class aClass, SEL orig_sel, SEL alt_sel, BOOL isInstanceMethod);

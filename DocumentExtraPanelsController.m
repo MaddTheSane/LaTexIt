@@ -388,8 +388,10 @@
      (!isMathMLFormat || [[AppController appController] isPerlWithLibXMLAvailable])];
     if (isJpegFormat)
       [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"jpg", @"jpeg", nil]];
-    else
+    else if (!isMacOS10_6OrAbove())
       [self->currentSavePanel setRequiredFileType:extension];
+    else//if (isMacOS10_6OrAbove())
+      [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:extension, nil]];
   }//end if ([keyPath isEqualToString:@"saveAccessoryViewExportFormat"])
   else if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
   {

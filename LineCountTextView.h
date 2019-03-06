@@ -25,7 +25,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   LineCountRulerView* lineCountRulerView;
   int                 lineShift; //the displayed numerotation of the lines may start at a value different from 1
   NSDragOperation     acceptDrag;
-  BOOL                spellCheckerHasBeenInitialized;
+  NSInteger           spellCheckerDocumentTag;
   NSUInteger          previousSelectedRangeLocation;
   BOOL                tabKeyInsertsSpacesEnabled;
   NSUInteger          tabKeyInsertsSpacesCount;
@@ -44,6 +44,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 -(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message; //set error markers
 -(BOOL) gotoLine:(int)row;//scroll to visible line <row>
 
+-(void) refreshCheckSpelling;
 -(SMLSyntaxColouring*) syntaxColouring;
 
 -(void) restorePreviousSelectedRangeLocation;

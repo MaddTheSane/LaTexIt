@@ -300,7 +300,7 @@
 		935B8B290FB426C800448B03 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
 		935B8FDD0FB6E5CF00448B03 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 935B8FDC0FB6E5CF00448B03 /* LibraryController.m */; };
 		936091A21087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
-		936091A31087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; };
+		936091A31087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 936368C91194BA4900C5DE49 /* DragThroughButton.m */; };
 		936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 936369E01194C9BD00C5DE49 /* NSButtonPalette.m */; };
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
@@ -2240,6 +2240,9 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
@@ -2473,7 +2476,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -o errexit\n\n[ $BUILD_STYLE = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
+			shellScript = "set -o errexit\n\necho \"\" > /Users/chacha/Desktop/debug.txt\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\" >> /Users/chacha/Desktop/debug.txt\necho \"CONFIGURATION = $CONFIGURATION\" >> /Users/chacha/Desktop/debug.txt\necho \"PROJECT_NAME.app = $PROJECT_NAME.app\" >> /Users/chacha/Desktop/debug.txt\n\n[ $BUILD_STYLE = Deployment ] || [ $CONFIGURATION = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2936,10 +2939,7 @@
 		932388570854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3000,10 +3000,7 @@
 		932388580854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3024,7 +3021,6 @@
 				GCC_PREFIX_HEADER = LaTeXiT_Prefix.pch;
 				GCC_STRICT_ALIASING = YES;
 				GCC_UNROLL_LOOPS = YES;
-				GCC_VERSION = 4.2;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3068,40 +3064,33 @@
 		9323885B0854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-					ppc64,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_FAST_OBJC_DISPATCH = NO;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = "";
 				IBC_FLATTEN_NIBS = NO;
 				IBC_STRIP_NIBS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.5;
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
+				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.4;
+				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.4;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.9;
 			};
 			name = Development;
 		};
 		9323885C0854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_BIT)",
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -3123,11 +3112,11 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.5;
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
+				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.4;
+				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.4;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
-				VALID_ARCHS = "i386 ppc ppc7400 ppc970";
+				SDKROOT = macosx10.9;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 			};
 			name = Deployment;
 		};
@@ -3135,11 +3124,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-					ppc7400,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3150,7 +3135,6 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3200,11 +3184,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-					ppc7400,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3217,7 +3197,6 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -3280,6 +3259,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Packaging;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -3301,6 +3281,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -3308,10 +3289,7 @@
 		938DBE1110BDC2E0002350CF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3363,10 +3341,7 @@
 		938DBE1210BDC2E0002350CF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_64_BIT)",
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -3435,6 +3410,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -3456,6 +3432,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -3477,6 +3454,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;

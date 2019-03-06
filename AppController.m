@@ -503,7 +503,9 @@ static NSMutableDictionary* cachePaths = nil;
     [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
     [NSNumber numberWithBool:YES], @"updateGUIfromSystemAvailabilities",
     nil];
-  if ([[dict allKeys] containsObject:keyPath])
+  if ((object == NSApp) && [keyPath isEqualToString:@"effectiveAppearance"])
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSAppearanceDidChangeNotification object:self];
+  else if ([[dict allKeys] containsObject:keyPath])
   {
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingDictionary:[dict objectForKey:keyPath]]];
@@ -678,7 +680,10 @@ static NSMutableDictionary* cachePaths = nil;
   CFURLRef  latexitHelperURL = CFURLCreateWithFileSystemPath(0, (CFStringRef)latexitHelperFilePath, kCFURLPOSIXPathStyle, FALSE);
   OSStatus status = LSRegisterURL(latexitHelperURL, true);
   if (status != noErr)
-    DebugLog(0, @"LSRegisterURL : %d", status);
+    DebugLog(0, @"LSRegisterURL : %ld", (long int)status);
+  if ([NSApp respondsToSelector:NSSelectorFromString(@"effectiveAppearance")])
+    [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options:NSKeyValueObservingOptionNew context:0];
+
   [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
   //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
 
@@ -775,6 +780,8 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
+  if ([NSApp respondsToSelector:NSSelectorFromString(@"effectiveAppearance")])
+    [NSApp removeObserver:self forKeyPath:@"effectiveAppearance"];
   [LinkBack retractServerWithName:[[NSWorkspace sharedWorkspace] applicationName]];
   
   [[NSWorkspace sharedWorkspace] closeApplicationWithBundleIdentifier:@"fr.club.ktd.LaTeXiT"];//LaTeXiT Helper
@@ -1396,7 +1403,8 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setResolvesAliases:YES];
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
   [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
-  int result = [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil];
+  int result = !isMacOS10_6OrAbove() ? [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil] :
+    [self->openFileTypeOpenPanel runModal];
   if (result == NSOKButton)
   {
     NSString* filePath = [[[self->openFileTypeOpenPanel URLs] lastObject] path];
@@ -1523,6 +1531,15 @@ static NSMutableDictionary* cachePaths = nil;
   }//end if (document)
 }
 //end makeLatexAndExport:
+
+-(BOOL) isContinuousSpellCheckingAvailable
+{
+  BOOL result = NO;
+  id firstResponder = [[NSApp keyWindow] firstResponder];
+  result = [firstResponder respondsToSelector:@selector(setContinuousSpellCheckingEnabled:)];
+  return result;
+}
+//end isContinuousSpellCheckingEnabled
 
 -(IBAction) fontSizeChange:(id)sender
 {
@@ -2231,7 +2248,10 @@ static NSMutableDictionary* cachePaths = nil;
           NSFileManager* fileManager = [NSFileManager defaultManager];
           NSOpenPanel* openPanel = [NSOpenPanel openPanel];
           [openPanel setResolvesAliases:NO];
-          int ret2 = [openPanel runModalForDirectory:@"/usr" file:nil types:nil];
+          if (isMacOS10_6OrAbove())
+            [openPanel setDirectoryURL:[NSURL fileURLWithPath:@"/usr" isDirectory:YES]];
+          int ret2 = !isMacOS10_6OrAbove() ? [openPanel runModalForDirectory:@"/usr" file:nil types:nil] :
+            [openPanel runModal];
           ok = (ret2 == NSOKButton) && ([[openPanel URLs] count]);
           if (ok)
           {

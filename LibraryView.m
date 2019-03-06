@@ -27,6 +27,7 @@
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSImageExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSObjectExtended.h"
@@ -759,6 +760,8 @@
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
 
+  //if ([self isDarkMode])
+    image = [image imageWithBackground:[NSColor colorWithCalibratedRed:0.66f green:0.66f blue:0.66f alpha:.5f] rounded:4.f];
   [super dragImage:image at:at offset:offset event:event pasteboard:pasteboard source:object slideBack:slideBack];
 }
 //end dragImage:at:offset:event:pasteboard:source:slideBack:

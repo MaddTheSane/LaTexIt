@@ -88,6 +88,11 @@
   if (libraryTableView)
   {
     library_row_t libraryRowType = [libraryTableView libraryRowType];
+    if ([NSApp isDarkMode])
+    {
+      [[NSColor colorWithCalibratedRed:0.45f green:0.45f blue:0.45f alpha:1.0f] set];
+      NSRectFill(cellFrame);
+    }//end if ([NSApp isDarkMode])
     if ((libraryRowType == LIBRARY_ROW_IMAGE_LARGE) || (libraryRowType == LIBRARY_ROW_IMAGE_ADJUST))
     {
       BOOL saveDrawsBackground = [self drawsBackground];

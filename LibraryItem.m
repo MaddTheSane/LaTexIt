@@ -21,6 +21,7 @@
 #import "LibraryManager.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "Utils.h"
 
 static NSEntityDescription* cachedEntity = nil;
@@ -226,7 +227,8 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.11.0" forKey:@"version"];
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+  [coder encodeObject:applicationVersion forKey:@"version"];
   [coder encodeObject:[self title] forKey:@"title"];
   [coder encodeInt:[self sortIndex] forKey:@"sortIndex"];
   [coder encodeObject:[self comment] forKey:@"comment"];
@@ -235,8 +237,9 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(id) plistDescription
 {
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"2.11.0", @"version",
+     applicationVersion, @"version",
      [self title], @"title",
      [NSNumber numberWithUnsignedInt:[self sortIndex]], @"sortIndex",
      [self comment], @"comment",

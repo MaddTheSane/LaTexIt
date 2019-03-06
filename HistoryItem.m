@@ -300,9 +300,10 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(id) plistDescription
 {
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.11.0", @"version",
+       applicationVersion, @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -347,7 +348,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.11.0"     forKey:@"version"];
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+  [coder encodeObject:applicationVersion forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:

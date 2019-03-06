@@ -24,15 +24,13 @@
 	SUHost *host;
 	IBOutlet id delegate;
 }
+@property (assign) id delegate;
 
 + (SUUpdater *)sharedUpdater;
 + (SUUpdater *)updaterForBundle:(NSBundle *)bundle;
-- initForBundle:(NSBundle *)bundle;
+- (instancetype)initForBundle:(NSBundle *)bundle;
 
 - (NSBundle *)hostBundle;
-
-- (void)setDelegate:(id)delegate;
-- delegate;
 
 - (void)setAutomaticallyChecksForUpdates:(BOOL)automaticallyChecks;
 - (BOOL)automaticallyChecksForUpdates;
@@ -75,6 +73,20 @@
 
 @end
 
+// -----------------------------------------------------------------------------
+// SUUpdater Notifications for events that might be interesting to more than just the delegate
+// The updater will be the notification object
+// -----------------------------------------------------------------------------
+extern NSString *const SUUpdaterDidFinishLoadingAppCastNotification;
+extern NSString *const SUUpdaterDidFindValidUpdateNotification;
+extern NSString *const SUUpdaterDidNotFindUpdateNotification;
+extern NSString *const SUUpdaterWillInstallUpdateNotification;
+extern NSString *const SUUpdaterWillRelaunchApplicationNotification;
+
+// Key for the SUAppcastItem object in the SUUpdaterDidFindValidUpdateNotification & SUUpdaterWillInstallUpdateNotification userInfos
+extern NSString *const SUUpdaterAppcastItemNotificationKey;
+// Key for the SUAppcast object in the SUUpdaterDidFinishLoadingAppCastNotification userInfo
+extern NSString *const SUUpdaterAppcastNotificationKey;
 
 // -----------------------------------------------------------------------------
 //	SUUpdater Delegate:
@@ -138,12 +150,21 @@
 -(void)	updaterWillShowModalAlert:(SUUpdater *)updater;
 -(void)	updaterDidShowModalAlert:(SUUpdater *)updater;
 
+// Called when an update is scheduled to be silently installed on quit.
+// The invocation can be used to trigger an immediate silent install and relaunch.
+- (void)updater:(SUUpdater *)updater willInstallUpdateOnQuit:(SUAppcastItem *)update immediateInstallationInvocation:(NSInvocation *)invocation;
+- (void)updater:(SUUpdater *)updater didCancelInstallUpdateOnQuit:(SUAppcastItem *)update;
+
 @end
 
 
 // -----------------------------------------------------------------------------
 //	Constants:
 // -----------------------------------------------------------------------------
+
+#ifndef DEBUG
+#define DEBUG	0
+#endif
 
 // Define some minimum intervals to avoid DOS-like checking attacks. These are in seconds.
 #if defined(DEBUG) && DEBUG && 0

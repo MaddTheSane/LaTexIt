@@ -25,22 +25,33 @@
 
 -(void) dealloc
 {
+  #ifdef ARC_ENABLED
+  #else
   [self->data release];
   [self->equation release];
   [super dealloc];
+  #endif
 }
 //end dealloc
 
 -(NSString*) title
 {
   NSString* result = [[self->data objectForKey:@"sourceText"] dynamicCastToClass:[NSString class]];
+  #ifdef ARC_ENABLED
+  return [result copy];
+  #else
   return [[result copy] autorelease];
+  #endif
 }
 //end title
 
 -(NSDictionary*) data
 {
+  #ifdef ARC_ENABLED
+  return self->data;
+  #else
   return [[self->data retain] autorelease];
+  #endif
 }
 //end data
 
@@ -97,7 +108,11 @@
 
 -(LatexitEquation*) equation
 {
+  #ifdef ARC_ENABLED
+  return self->equation;
+  #else
   return [[self->equation retain] autorelease];
+  #endif
 }
 //end equation
 
@@ -106,8 +121,12 @@
   if (value != self->equation)
   {
     [self willChangeValueForKey:@"equation"];
+    #ifdef ARC_ENABLED
+    self->equation = value;
+    #else
     [self->equation release];
     self->equation = [value retain];
+    #endif
     [self didChangeValueForKey:@"equation"];
   }//end if (value != self->equation)
 }

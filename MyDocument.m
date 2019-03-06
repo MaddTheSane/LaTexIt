@@ -349,6 +349,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [self->lowerBoxSourceTextView   setDefaultParagraphStyle:paragraphStyle];
   
   [self->upperBoxImageView setBackgroundColor:[preferencesController documentImageViewBackgroundColor] updateHistoryItem:NO];
+  
   [self->upperBoxZoomBoxSlider bind:NSEnabledBinding toObject:self->upperBoxImageView withKeyPath:@"image" options:
     [NSDictionary dictionaryWithObjectsAndKeys:NSIsNotNilTransformerName, NSValueTransformerNameBindingOption, nil]];
   [self->upperBoxZoomBoxSlider bind:NSValueBinding toObject:self->upperBoxImageView withKeyPath:@"zoomLevel" options:
@@ -626,8 +627,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         
         [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSRegularControlSize];
         [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSRegularControlSize];
-      [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSRegularControlSize];
-
+        [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSRegularControlSize];
 
         superviewFrame = [self->lowerBox frame];
         NSScrollView* sourceTextScrollView = (NSScrollView*)[[self->lowerBoxSourceTextView superview] superview];
@@ -759,8 +759,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     self->unzoomedFrame = [window frame];
   else
     proposedFrame = self->unzoomedFrame;
-  //OOL optionIsPressed = ((GetCurrentEventKeyModifiers() & optionKey) != 0);
-  if (/*optionIsPressed &&*/ (self->documentStyle == DOCUMENT_STYLE_NORMAL))
+  if (self->documentStyle == DOCUMENT_STYLE_NORMAL)
     [self setDocumentStyle:DOCUMENT_STYLE_MINI];
   else if (self->documentStyle == DOCUMENT_STYLE_MINI)
     [self setDocumentStyle:DOCUMENT_STYLE_NORMAL];
@@ -927,6 +926,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [self->lowerBoxPreambleTextView clearErrors];
   [self->lowerBoxPreambleTextView setAttributedString:aString];
   [[self->lowerBoxPreambleTextView syntaxColouring] recolourCompleteDocument];
+  [self->lowerBoxPreambleTextView  refreshCheckSpelling];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->lowerBoxPreambleTextView];
   [self->lowerBoxPreambleTextView setNeedsDisplay:YES];
 }
@@ -939,6 +939,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [self->lowerBoxSourceTextView clearErrors];
   [[self->lowerBoxSourceTextView textStorage] setAttributedString:(aString ? aString : [[[NSAttributedString alloc] init] autorelease])];
   [[self->lowerBoxSourceTextView syntaxColouring] recolourCompleteDocument];
+  [self->lowerBoxSourceTextView refreshCheckSpelling];
   [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->lowerBoxSourceTextView];
   [self->lowerBoxSourceTextView setNeedsDisplay:YES];
 }
@@ -2349,21 +2350,33 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(IBAction) fontSizeChange:(id)sender
 {
   CGFloat fontSizeDelta = ([sender tag] == 1) ? -1 : 1;
-  NSTextStorage* textStorage = [self->lowerBoxSourceTextView textStorage];
+  NSView* focusedView = [[[self windowForSheet] firstResponder] dynamicCastToClass:[NSView class]];
+  NSView* targetView =
+    (focusedView == self->lowerBoxPreambleTextView) ? focusedView :
+    (focusedView == self->lowerBoxSourceTextView) ? focusedView :
+    nil;
+  NSTextView* targetTextView = [targetView dynamicCastToClass:[NSTextView class]];
+  NSTextStorage* textStorage = [targetTextView textStorage];
   NSRange fullRange = NSMakeRange(0, [textStorage length]);
-  NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
-  if (![selectedRanges count])
-    selectedRanges = [NSArray arrayWithObject:[NSValue valueWithRange:fullRange]];
-  NSUInteger i = 0;
-  for(i = 0 ; i<[selectedRanges count] ; ++i)
+  if (fullRange.length)
   {
-    NSRange range = [[selectedRanges objectAtIndex:i] rangeValue];
-    NSRange effectiveRange = {0};
-    NSFont* font = [[textStorage attribute:NSFontAttributeName atIndex:range.location effectiveRange:&effectiveRange] dynamicCastToClass:[NSFont class]];
-    font = !font ? nil : [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]+fontSizeDelta];
-    if (font)
-      [textStorage addAttribute:NSFontAttributeName value:font range:range];
-  }//end for each range
+    NSArray* selectedRanges = [targetTextView selectedRanges];
+    if (![selectedRanges count])
+      selectedRanges = [NSArray arrayWithObject:[NSValue valueWithRange:fullRange]];
+    NSUInteger i = 0;
+    for(i = 0 ; i<[selectedRanges count] ; ++i)
+    {
+      NSRange range = [[selectedRanges objectAtIndex:i] rangeValue];
+      NSRange rangeValid = NSIntersectionRange(range, fullRange);
+      if (!rangeValid.length)
+        rangeValid = fullRange;
+      NSRange effectiveRange = {0};
+      NSFont* font = [[textStorage attribute:NSFontAttributeName atIndex:rangeValid.location effectiveRange:&effectiveRange] dynamicCastToClass:[NSFont class]];
+      font = !font ? nil : [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]+fontSizeDelta];
+      if (font)
+        [textStorage addAttribute:NSFontAttributeName value:font range:rangeValid];
+    }//end for each range
+  }//end if (fullRange.length)
 }
 //end fontSizeChange:
 
@@ -2818,7 +2831,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (returnCode == NSFileHandlingPanelOKButton)
   {
     [self closeBackSyncFile];
-    NSString* filename = [panel filename];
+    NSString* filename = !isMacOS10_6OrAbove() ? [panel filename] : [[panel URL] path];
     [self setFileURL:[NSURL fileURLWithPath:filename]];
     [self save:self];
     if (synchronizeEnabled)

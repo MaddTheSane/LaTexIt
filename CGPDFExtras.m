@@ -8,14 +8,9 @@
  */
 
 #include "CGPDFExtras.h"
+#import "Utils.h"
 
 #import <QuartzCore/QuartzCore.h>
-
-#ifdef ARC_ENABLED
-#define CHBRIDGE __bridge
-#else
-#define CHBRIDGE
-#endif
 
 static void arrayCallback(CGPDFScannerRef inScanner, void* userInfo)
 {

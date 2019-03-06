@@ -275,7 +275,8 @@ static LibraryManager* sharedManagerInstance = nil;
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
-        if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
+        if (errorDescription)
+          {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
@@ -353,7 +354,8 @@ static LibraryManager* sharedManagerInstance = nil;
 
   NSError* error = nil;
   [self->managedObjectContext save:&error];
-  if (error) {DebugLog(0, @"error : %@", error);}
+  if (error)
+    {DebugLog(0, @"error : %@", error);}
   return ok;
 }
 //end saveAs:onlySelection:selection:format:
@@ -394,12 +396,14 @@ static LibraryManager* sharedManagerInstance = nil;
         BOOL migrationError = NO;
         NSError* error = nil;
         NSData* fileData = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:&error];
-        if (error) {DebugLog(0, @"error : %@", error);}
+        if (error)
+          {DebugLog(0, @"error : %@", error);}
         NSPropertyListFormat format = 0;
         NSString* errorDescription = nil;
         id plist =
           [NSPropertyListSerialization propertyListFromData:fileData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&errorDescription];
-        if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
+        if (errorDescription)
+          {DebugLog(0, @"errorDescription : %@", errorDescription);}
         NSData* compressedData = nil;
         if (!plist)
           compressedData = fileData;
@@ -452,14 +456,22 @@ static LibraryManager* sharedManagerInstance = nil;
       {
         NSError* error = nil;
         unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
-        if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+        if (error)
+        {
+          ok = NO;
+          DebugLog(0, @"error : %@", error);
+        }//end if (error)
         NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[LibraryItem entity]];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:
                                           [NSSortDescriptor sortDescriptorWithKey:@"sortIndex" ascending:YES], nil]];
         error = nil;
         NSArray* libraryItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
-        if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+        if (error)
+        {
+          ok = NO;
+          DebugLog(0, @"error : %@", error);
+        }//end if (error)
         [fetchRequest release];
         NSData* libraryItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:libraryItemsToAdd];
         [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
@@ -490,12 +502,20 @@ static LibraryManager* sharedManagerInstance = nil;
       NSError* error = nil;
       unsigned int nbRootLibraryItemsBeforeAdding =
         [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
-      if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+      if (error)
+      {
+        ok = NO;
+        DebugLog(0, @"error : %@", error);
+      }//end if (error)
       NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
       [fetchRequest setEntity:[HistoryItem entity]];
       error = nil;
       NSArray* historyItemsToAdd = [sourceManagedObjectContext executeFetchRequest:fetchRequest error:&error];
-      if (error) {ok = NO; DebugLog(0, @"error : %@", error);}
+      if (error)
+      {
+        ok = NO;
+        DebugLog(0, @"error : %@", error);
+      }//end if (error)
       [fetchRequest release];
       NSData* historyItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
       [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
@@ -533,9 +553,7 @@ static LibraryManager* sharedManagerInstance = nil;
       id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format
         errorDescription:&errorDescription];
       if (errorDescription)
-      {
-        DebugLog(0, @"error : %@", errorDescription);
-      }
+        {DebugLog(0, @"error : %@", errorDescription);}
       else if ([plist isKindOfClass:[NSDictionary class]])
       {
         NSString* version = [plist objectForKey:@"version"];
@@ -611,9 +629,7 @@ static LibraryManager* sharedManagerInstance = nil;
       id plist = [NSPropertyListSerialization propertyListFromData:[NSData dataWithContentsOfFile:xmlDescriptionPath options:NSUncachedRead error:nil]
                                                   mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&errorDescription];
       if (errorDescription)
-      {
-        DebugLog(0, @"error : %@", errorDescription);
-      }
+        {DebugLog(0, @"error : %@", errorDescription);}
       else if ([plist isKindOfClass:[NSDictionary class]])
       {
         NSMutableArray* latexitEquations = [NSMutableArray arrayWithCapacity:[plist count]];
@@ -680,7 +696,8 @@ static LibraryManager* sharedManagerInstance = nil;
       [[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease], nil]];
     NSError* error = nil;
     NSArray* rootItemsOrdered = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (error) {DebugLog(0, @"error : %@", error);}
+    if (error)
+      {DebugLog(0, @"error : %@", error);}
     [fetchRequest release];
 
     unsigned int i = 0;
@@ -752,8 +769,11 @@ static LibraryManager* sharedManagerInstance = nil;
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.11.0", @"version", nil]
+  {
+    NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:applicationVersion, @"version", nil]
                          forPersistentStore:persistentStore];
+  }//end if (setVersion && persistentStore)
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
@@ -769,7 +789,7 @@ static LibraryManager* sharedManagerInstance = nil;
     NSError* error = nil;
     BOOL saved = [self->managedObjectContext save:&error];
     if (!saved || error)
-    {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
   }//end @try
   @catch(NSException* e){
     DebugLog(0, @"exception : %@", e);
@@ -876,7 +896,7 @@ static LibraryManager* sharedManagerInstance = nil;
       [migratingProgressIndicator setDoubleValue:0.];
       [migratingProgressIndicator display];
       if (error)
-        DebugLog(0, @"error : %@", error);
+        {DebugLog(0, @"error : %@", error);}
       NSEnumerator* enumerator = [latexitEquations objectEnumerator];
       LatexitEquation* latexitEquation = nil;
       @try{
@@ -898,15 +918,16 @@ static LibraryManager* sharedManagerInstance = nil;
       error = nil;
       [self->managedObjectContext save:&error];
       if (error)
-        DebugLog(0, @"error : %@", error);
+        {DebugLog(0, @"error : %@", error);}
     }//end if (shouldMigrateLibraryToAlign)
     
     if (!migrationError)
     {
+      NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.11.0", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:applicationVersion, @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
   }
@@ -1166,8 +1187,9 @@ static LibraryManager* sharedManagerInstance = nil;
   BOOL conformsToTex = UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tex")) || UTTypeConformsTo((CFStringRef)fileUti, kUTTypePlainText);
   if (conformsToTex)
   {
-    NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename];
     NSError* error = nil;
+    NSStringEncoding encoding = NSUTF8StringEncoding;
+    NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename usedEncoding:&encoding error:&error];
     NSArray* components = [fileContent captureComponentsMatchedByRegex:@"^(.*?)\\s*\\\\begin\\{document\\}(.*)\\\\end\\{document\\}" options:RKLDotAll|RKLMultiline|RKLCaseless range:[fileContent range] error:&error];
     if (error)
       DebugLog(0, @"error = <%@>", error);

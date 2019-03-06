@@ -30,7 +30,7 @@
 #import <Quartz/Quartz.h>
 
 #ifdef ARC_ENABLED
-#define CHBRIDGE __bridge
+#define CHBRIDGE CHBRIDGE
 #else
 #define CHBRIDGE
 #endif
@@ -62,7 +62,7 @@ static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object,
         CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
         if (data && (dataFormat == CGPDFDataFormatRaw))
           #ifdef ARC_ENABLED
-          [((__bridge NSMutableArray*) info) addObject:(__bridge NSData*)data];
+          [((CHBRIDGE NSMutableArray*) info) addObject:(CHBRIDGE NSData*)data];
           #else
           [((NSMutableArray*) info) addObject:[(NSData*)data autorelease]];
           #endif
@@ -77,7 +77,7 @@ static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object,
     CFDataRef data = CGPDFStreamCopyData(stream, &dataFormat);
     if (data && (dataFormat == CGPDFDataFormatRaw))
       #ifdef ARC_ENABLED
-      [((__bridge NSMutableArray*) info) addObject:(__bridge NSData*)data];
+      [((CHBRIDGE NSMutableArray*) info) addObject:(CHBRIDGE NSData*)data];
       #else
       [((NSMutableArray*) info) addObject:[(NSData*)data autorelease]];
       #endif
@@ -96,7 +96,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
   {
     CFStringRef cfString = CGPDFStringCopyTextString(pdfString);
     #ifdef ARC_ENABLED
-    NSString* string = (__bridge NSString*)cfString;
+    NSString* string = (CHBRIDGE NSString*)cfString;
     #else
     NSString* string = [(NSString*)cfString autorelease];
     #endif
@@ -108,7 +108,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
                                  range:NSMakeRange(0, [string length]) error:&error];
     if ([components count] == 3)
     {
-      DebugLogStatic(1, @"this is metadata", string);
+      DebugLogStatic(1, @"this is metadata : %@", string);
       NSString* sha1Base64 = [components objectAtIndex:1];
       NSString* dataBase64Encoded = [components objectAtIndex:2];
       NSString* dataBase64EncodedSha1Base64 = [[dataBase64Encoded dataUsingEncoding:NSUTF8StringEncoding] sha1Base64];
@@ -372,7 +372,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [preambleString rangeOfString:@"ESannopend"];
@@ -399,7 +399,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [preambleString rangeOfString:@"ESannoepend"];
@@ -428,7 +428,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
@@ -444,7 +444,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       [sourceString appendString:[testArray objectAtIndex:1]];
       NSRange range = [sourceString rangeOfString:@"ESannotend"];
@@ -467,7 +467,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       [sourceString setString:@""];
       [sourceString appendString:[testArray objectAtIndex:1]];
@@ -518,7 +518,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
@@ -532,7 +532,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [colorAsString rangeOfString:@"EEcolend"];
@@ -549,7 +549,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
@@ -565,7 +565,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       baselineAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
@@ -578,7 +578,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %d", [testArray objectAtIndex:1]);
+      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
@@ -1318,7 +1318,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
              UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.jpeg")))
     {
       CGImageSourceRef imageSource = CGImageSourceCreateWithData((CHBRIDGE CFDataRef)someData,
-        (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+        (CHBRIDGE CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
       CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil);
       DebugLog(1, @"properties = %@", properties);
       id infos = [(CHBRIDGE NSDictionary*)properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
@@ -1455,7 +1455,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.11.0"            forKey:@"version"];//we encode the current LaTeXiT version number
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+  [coder encodeObject:applicationVersion forKey:@"version"];//we encode the current LaTeXiT version number
   [coder encodeObject:[self pdfData]         forKey:@"pdfData"];
   [coder encodeObject:[self preamble]        forKey:@"preamble"];
   [coder encodeObject:[self sourceText]      forKey:@"sourceText"];
@@ -2359,8 +2360,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end if (filePath)
     }//end if (!lazyDataProvider)
   }//end if (fillFilenames)
-  
-  DebugLog(1, @"<", lazyDataProvider, lazyDataProvider);
 }
 //end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
@@ -2482,9 +2481,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 //end pasteboard:provideDataForType:
 -(id) plistDescription
 {
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.11.0", @"version",
+       applicationVersion, @"version",
        [self pdfData], @"pdfData",
        [[self preamble] string], @"preamble",
        [[self sourceText] string], @"sourceText",
@@ -2535,7 +2535,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSString* result = nil;
   #ifdef ARC_ENABLED
-  NSMutableString* mutableString = [[content mutableCopy] autorelease];
+  NSMutableString* mutableString = [content mutableCopy];
   #else
   NSMutableString* mutableString = [[content mutableCopy] autorelease];
   #endif
@@ -2553,7 +2553,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [mutableString replaceOccurrencesOfRegex:@"([[:space:]]+)" withString:@"_" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
     [mutableString replaceOccurrencesOfRegex:@"(_*)\\^(_*)" withString:@"\\^" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
     [mutableString replaceOccurrencesOfRegex:@"__" withString:@"_" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"^(_+)" withString:@""];
+    [mutableString replaceOccurrencesOfRegex:@"^([_%]+)" withString:@""];
     [mutableString replaceOccurrencesOfRegex:@"(_+)$" withString:@""];
     [mutableString replaceOccurrencesOfRegex:@"\\/" withString:@"\xE2\x88\x95"];
     NSUInteger newLength = [mutableString length];

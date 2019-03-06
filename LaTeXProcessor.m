@@ -33,12 +33,6 @@
 #import <libxml/xpath.h>
 #import <libxml/xpathInternals.h>
 
-#ifdef ARC_ENABLED
-#define CHBRIDGE __bridge
-#else
-#define CHBRIDGE
-#endif
-
 NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
 
 //In MacOS 10.4.0, 10.4.1 and 10.4.2, these constants are declared but not defined in the PDFKit.framework!
@@ -88,14 +82,22 @@ static NSString* mathMLFix(NSString* value)
       xmlDocDumpMemory(doc, &mem, &size);
     if (mem && size)
     {
+      #ifdef ARC_ENABLED
+      NSMutableString* modified = [[NSMutableString alloc] initWithBytes:mem length:size encoding:NSUTF8StringEncoding];
+      #else
       NSMutableString* modified = [[[NSMutableString alloc] initWithBytes:mem length:size encoding:NSUTF8StringEncoding] autorelease];
+      #endif
       [modified replaceOccurrencesOfRegex:@"<latexitDummyTableRow.*?>" withString:@"<mtr><mtd>" options:RKLDotAll|RKLMultiline|RKLCaseless range:[modified range] error:&error];
       if (error)
         DebugLogStatic(1, @"error = %@", error);
       [modified replaceOccurrencesOfRegex:@"</latexitDummyTableRow.*?>" withString:@"</mtd></mtr>" options:RKLDotAll|RKLMultiline|RKLCaseless range:[modified range] error:&error];
       if (error)
         DebugLogStatic(1, @"error = %@", error);
+      #ifdef ARC_ENABLED
+      result = [modified copy];
+      #else
       result = [[modified copy] autorelease];
+      #endif
     }//end if (mem && size)
     if (mem)
       xmlFree(mem);
@@ -367,8 +369,9 @@ static LaTeXProcessor* sharedInstance = nil;
       ([[PreferencesController sharedController] exportPDFWOFMetaDataInvisibleGraphicsEnabled]);
     if (annotateWithTransparentData)
     {
+      NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
       NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"2.11.0", @"version",
+        applicationVersion, @"version",
         !preamble ? @"" : preamble, @"preamble",
         !source ? @"" : source, @"source",
         type, @"type",
@@ -394,7 +397,7 @@ static LaTeXProcessor* sharedInstance = nil;
         CGDataConsumerCreateWithCFData((CFMutableDataRef)dataConsumerData);
       CGDataProviderRef dataProvider = !data2 ? 0 :
         CGDataProviderCreateWithCFData((CFDataRef)data2);
-      DebugLog(1, @"original pdf data :%u bytes", [data2 length]);
+      DebugLog(1, @"original pdf data :%lu bytes", (unsigned long)[data2 length]);
       CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
         CGPDFDocumentCreateWithProvider(dataProvider);
       CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
@@ -450,7 +453,7 @@ static LaTeXProcessor* sharedInstance = nil;
             }//end if (useOldFonts)
             else//if (!useOldFonts)
             {
-              DebugLog(1, @"Show %d glyphs", charactersCount);
+              DebugLog(1, @"Show %lu glyphs", (unsigned long)charactersCount);
               CGContextShowGlyphsAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, glyphs, charactersCount);
             }//end if (!useOldFonts)
           }//end if (ok)
@@ -624,7 +627,7 @@ static LaTeXProcessor* sharedInstance = nil;
        "/Magnification (EEmag%fEEmagend)\n"
        "/Baseline (EEbas%fEEbasend)\n"
        ">>\nendobj\n",
-       !useAnnotationObjectIndex ? @"" : [NSString stringWithFormat:@"%u 0 ", annotationObjectIndex],
+       !useAnnotationObjectIndex ? @"" : [NSString stringWithFormat:@"%lu 0 ", (unsigned long)annotationObjectIndex],
        [replacedPreamble cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
        [escapedPreamble  cStringUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES],
        [replacedSource  cStringUsingEncoding:NSMacOSRomanStringEncoding allowLossyConversion:YES],
@@ -661,14 +664,14 @@ static LaTeXProcessor* sharedInstance = nil;
         [buildData appendData:[annotation dataUsingEncoding:NSMacOSRomanStringEncoding]];
       if (r1.location != NSNotFound)
       {
-        [buildData appendData:[[NSString stringWithFormat:@"xref\n%u %u\n", 0, annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"xref\n%u %lu\n", 0, (unsigned long)annotationObjectIndex+1] dataUsingEncoding:NSUTF8StringEncoding]];
         [buildData appendData:[afterObjCountString dataUsingEncoding:NSUTF8StringEncoding]];
-        [buildData appendData:[[NSString stringWithFormat:@"%010ld %05ld n \n", r1.location, 0U] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"%010lu %05lu n \n", (unsigned long)r1.location, 0UL] dataUsingEncoding:NSUTF8StringEncoding]];
       }//end if (r1.location != NSNotFound)
       if (r2.location != NSNotFound)
       {
-        [buildData appendData:[[NSString stringWithFormat:@"trailer\n<< /Size %u", 
-                                annotationObjectIndex+(useAnnotationObjectIndex ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"trailer\n<< /Size %lu",
+                                (unsigned long)annotationObjectIndex+(useAnnotationObjectIndex ? 1 : 0)] dataUsingEncoding:NSUTF8StringEncoding]];
         [buildData appendData:[trailerAfterSize dataUsingEncoding:NSUTF8StringEncoding]];
       }//end if (r2.location != NSNotFound)
       if (r3.location != NSNotFound)
@@ -756,29 +759,29 @@ static LaTeXProcessor* sharedInstance = nil;
       CGFloat bottomMargin = [[[appController valueForKey:@"marginsCurrentBottomMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
       CGFloat topMargin    = [[[appController valueForKey:@"marginsCurrentTopMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
       NSMutableDictionary* configuration = !preamble || !sourceText ? nil :
-      [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
-        [NSNumber numberWithBool:backgroundly], @"runInBackgroundThread",
-        preamble, @"preamble",
-        sourceText, @"body",
-        [preferencesController latexisationFontColor], @"color",
-        !latexMode ? [NSNumber numberWithInteger:LATEX_MODE_AUTO] : latexMode, @"mode",
-        [NSNumber numberWithDouble:[preferencesController latexisationFontSize]], @"magnification",
-        [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
-        [NSNull null], @"backgroundColor",
-        [NSNumber numberWithDouble:leftMargin], @"leftMargin",
-        [NSNumber numberWithDouble:rightMargin], @"rightMargin",
-        [NSNumber numberWithDouble:topMargin], @"topMargin",
-        [NSNumber numberWithDouble:bottomMargin], @"bottomMargin",
-        [appController valueForKey:@"additionalFilesPaths"], @"additionalFilesPaths",
-        !workingDirectory ? @"" : workingDirectory, @"workingDirectory",
-        !fullEnvironment ? [NSDictionary dictionary] : fullEnvironment, @"fullEnvironment",
-        [NSString stringWithFormat:@"latexit-import-lib-from-text-%p", teXItem], @"uniqueIdentifier",
-        @"", @"outFullLog",
-        [NSArray array], @"outErrors",
-        [NSData data], @"outPdfData",
-        [NSNumber numberWithBool:NO], @"applyToPasteboard",
-        teXItem, @"context",
-        nil] autorelease];
+        [NSMutableDictionary dictionaryWithObjectsAndKeys:
+          [NSNumber numberWithBool:backgroundly], @"runInBackgroundThread",
+          preamble, @"preamble",
+          sourceText, @"body",
+          [preferencesController latexisationFontColor], @"color",
+          !latexMode ? [NSNumber numberWithInteger:LATEX_MODE_AUTO] : latexMode, @"mode",
+          [NSNumber numberWithDouble:[preferencesController latexisationFontSize]], @"magnification",
+          [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
+          [NSNull null], @"backgroundColor",
+          [NSNumber numberWithDouble:leftMargin], @"leftMargin",
+          [NSNumber numberWithDouble:rightMargin], @"rightMargin",
+          [NSNumber numberWithDouble:topMargin], @"topMargin",
+          [NSNumber numberWithDouble:bottomMargin], @"bottomMargin",
+          [appController valueForKey:@"additionalFilesPaths"], @"additionalFilesPaths",
+          !workingDirectory ? @"" : workingDirectory, @"workingDirectory",
+          !fullEnvironment ? [NSDictionary dictionary] : fullEnvironment, @"fullEnvironment",
+          [NSString stringWithFormat:@"latexit-import-lib-from-text-%p", teXItem], @"uniqueIdentifier",
+          @"", @"outFullLog",
+          [NSArray array], @"outErrors",
+          [NSData data], @"outPdfData",
+          [NSNumber numberWithBool:NO], @"applyToPasteboard",
+          teXItem, @"context",
+          nil];
       if (configuration)
       {
         teXItem.importState = 1;
@@ -1233,7 +1236,6 @@ static LaTeXProcessor* sharedInstance = nil;
           "\\usepackage[papersize={%fbp,%fbp},margin=%fbp]{geometry}\n"
           "\\pagestyle{empty}\n"
           "\\usepackage{graphicx}\n"
-          "\\pdfminorversion=3\n"
           "\\begin{document}\\includegraphics*[scale=%f,clip=%@,viewport=%fbp %fbp %fbp %fbp,hiresbb=true]{%@}\n\\end{document}\n", 
           (int)ptSizeBase,
           ceil((boundingBox.origin.x+boundingBox.size.width)*magnification/ptSizeBase),
@@ -1257,7 +1259,9 @@ static LaTeXProcessor* sharedInstance = nil;
       if (!failed)
         pdfData = [self composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
                      compositionConfiguration:[compositionConfiguration dictionaryByAddingObjectsAndKeys:
-                       [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey, nil]
+                       [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
+                       [NSNumber numberWithUnsignedInt:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
+                       nil]
                      fullEnvironment:fullEnvironment];
       failed |= !pdfData;
       //call pdfcrop
@@ -1319,7 +1323,6 @@ static LaTeXProcessor* sharedInstance = nil;
               "\\pagestyle{empty}\n"
               "\\usepackage{geometry}\n"
               "\\usepackage{graphicx}\n"
-              "\\pdfminorversion=3\n"
               "\\newsavebox{\\latexitbox}\n"
               "\\newcommand{\\latexitscalefactor}{%f}\n"
               "\\newlength{\\latexitwidth}\n\\newlength{\\latexitheight}\n\\newlength{\\latexitdepth}\n"
@@ -1356,7 +1359,9 @@ static LaTeXProcessor* sharedInstance = nil;
           if (!failed)
             pdfData = [self composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
                         compositionConfiguration:[compositionConfiguration dictionaryByAddingObjectsAndKeys:
-                          [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey, nil]
+                          [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
+                          [NSNumber numberWithUnsignedInt:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
+                          nil]
                         fullEnvironment:fullEnvironment];
           failed |= !pdfData;
         }//if pdfcrop cropping fails
@@ -1537,6 +1542,12 @@ static LaTeXProcessor* sharedInstance = nil;
     (compositionMode == COMPOSITION_MODE_LUALATEX) ? [compositionConfiguration compositionConfigurationProgramArgumentsLuaLaTeX] :
     (compositionMode == COMPOSITION_MODE_PDFLATEX) ? [compositionConfiguration compositionConfigurationProgramArgumentsPdfLaTeX] :
     [compositionConfiguration compositionConfigurationProgramArgumentsLaTeX];
+  
+  NSNumber* pdfMinorVersionNumber = [[compositionConfiguration objectForKey:@"pdfMinorVersion"] dynamicCastToClass:[NSNumber class]];
+  unsigned int pdfMinorVersion = [pdfMinorVersionNumber unsignedIntValue];
+  BOOL usePdfMinorVersion = pdfMinorVersion && (compositionMode == COMPOSITION_MODE_PDFLATEX);
+  NSString* texFileArg = !usePdfMinorVersion ? texFile :
+    [NSString stringWithFormat:@"\"\\pdfminorversion=%u \\input \\\"%@\\\"\"", pdfMinorVersion, texFile];
 
   #ifdef ARC_ENABLED
   SystemTask* systemTask = [[SystemTask alloc] initWithWorkingDirectory:workingDirectory];
@@ -1548,7 +1559,7 @@ static LaTeXProcessor* sharedInstance = nil;
   [systemTask setCurrentDirectoryPath:workingDirectory];
   [systemTask setLaunchPath:executablePath];
   [systemTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
-    [NSArray arrayWithObjects:@"-file-line-error", @"-interaction", @"nonstopmode", texFile, nil]]];
+    [NSArray arrayWithObjects:@"-file-line-error", @"-interaction", @"nonstopmode", texFileArg, nil]]];
   [systemTask setEnvironment:fullEnvironment];
   [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @"processing"),
@@ -1804,10 +1815,11 @@ static LaTeXProcessor* sharedInstance = nil;
   BOOL result = YES;
   
   //Call pdfCrop
+  NSString* pdfVersion = isMacOS10_14OrAbove() ? @"1.5" : @"1.3";
   BOOL useLoginShell = [compositionConfiguration compositionConfigurationUseLoginShell];
   NSString* pdfCropPath  = [[NSBundle bundleForClass:[self class]] pathForResource:@"pdfcrop" ofType:@"pl"];
   NSMutableArray* arguments = [NSMutableArray arrayWithObjects:
-    [NSString stringWithFormat:@"\"%@\"", pdfCropPath], (canClip ? @"--clip" : nil), @"--pdfversion", @"1.3", nil];
+    [NSString stringWithFormat:@"\"%@\"", pdfCropPath], (canClip ? @"--clip" : nil), @"--pdfversion", pdfVersion, nil];
   if (extraArguments)
     [arguments addObjectsFromArray:extraArguments];
   [arguments addObjectsFromArray:[NSArray arrayWithObjects:inoutPdfFilePath, outputPdfFilePath, nil]];
@@ -2045,7 +2057,11 @@ static LaTeXProcessor* sharedInstance = nil;
   NSDictionary* objects = [object dynamicCastToClass:[NSDictionary class]];
   NSString* informativeText1 = [[objects objectForKey:@"informativeText1"] dynamicCastToClass:[NSString class]];
   DebugLog(1, @"displayAlertError:informativeText1:<%@>", informativeText1);
+  #ifdef ARC_ENABLED
+  NSAlert* alert = [[NSAlert alloc] init];
+  #else
   NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+  #endif
   [alert setMessageText:NSLocalizedString(@"Error", @"Error")];
   [alert setInformativeText:!informativeText1 ? @"" : informativeText1];
   [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
@@ -2056,7 +2072,11 @@ static LaTeXProcessor* sharedInstance = nil;
   {
     NSString* informativeText2 = [[objects objectForKey:@"informativeText2"] dynamicCastToClass:[NSString class]];
     DebugLog(1, @"displayAlertError:informativeText2:<%@>", informativeText2);
+    #ifdef ARC_ENABLED
+    NSAlert* alert2 = [[NSAlert alloc] init];
+    #else
     NSAlert* alert2 = [[[NSAlert alloc] init] autorelease];
+    #endif
     [alert2 setMessageText:NSLocalizedString(@"Error message", @"Error message")];
     [alert2 setInformativeText:!informativeText2 ? @"" : informativeText2];
     [alert2 addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
@@ -2142,7 +2162,11 @@ static LaTeXProcessor* sharedInstance = nil;
        CGPDFDocumentRelease(pdfOriginalDocument);
        CGDataProviderRelease(pdfOriginalDataProvider);
        
+       #ifdef ARC_ENABLED
+       NSData* resizedPdfData = [pdfScaledMutableData copy];
+       #else
        NSData* resizedPdfData = [[pdfScaledMutableData copy] autorelease];
+       #endif
         
         /*NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
         NSSize originalSize = [pdfImageRep size];
@@ -2589,7 +2613,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSColor* rgbaColor = [[metaData objectForKey:@"color"] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
         CGFloat rgba_f[4] = {0};
         [rgbaColor getRed:&rgba_f[0] green:&rgba_f[1] blue:&rgba_f[2] alpha:&rgba_f[3]];
-        NSUInteger rgba_i[4] = {0};
+        int rgba_i[4] = {0};
         NSUInteger i = 0;
         for(i = 0 ; i<4 ; ++i)
           rgba_i[i] = MAX(0, MIN(255, round(255*rgba_f[i])));
@@ -2643,7 +2667,11 @@ static LaTeXProcessor* sharedInstance = nil;
           [laTeXMathMLTask release];
           #endif
           data = [NSData dataWithContentsOfFile:outputFile];
+          #ifdef ARC_ENABLED
+          NSString* rawResult = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+          #else
           NSString* rawResult = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+          #endif
           NSString* fixedResult = !rawResult ? nil : mathMLFix(rawResult);
           data = !fixedResult ? data : [fixedResult dataUsingEncoding:NSUTF8StringEncoding];
           NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
@@ -2741,8 +2769,10 @@ static LaTeXProcessor* sharedInstance = nil;
         #endif
         DebugLog(1, @"properties = %@", properties);
         CGImageDestinationAddImageFromSource(imageDestination, imageSource, 0, (CHBRIDGE CFDictionaryRef)properties);
-        if (imageDestination) CGImageDestinationFinalize(imageDestination);
-        if (imageDestination) CFRelease(imageDestination);
+        if (imageDestination)
+          CGImageDestinationFinalize(imageDestination);
+        if (imageDestination)
+          CFRelease(imageDestination);
       }//end if (UTTypeConformsTo(detectedUTI, sourceUTI))
       if (imageSource)
         CFRelease(imageSource);

@@ -682,5 +682,48 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFCHWdVYa2HvNcL1KCdANhj18VierAhQugo1WxKaOGPWgGGpqeKZHZMeZVQ=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.11.1</guid>
+      <title>Version 2.11.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>meilleur support des version anciennes de pdflatex&nbsp;;</li>
+          <li>retouche du nommage automatique des fichiers lors d'un export vers le Finder&nbsp;;</li>
+          <li>correction d'un nom de fichier dans la traduction italienne&nbsp;;</li>
+          <li>correction de bugs mineurs.</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.11.1</sparkle:releaseNotesLink>
+			<pubDate>Tue, 11 Dec 2018 23:19:41 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_11_1.dmg"
+				sparkle:version="2.11.1"
+                   sparkle:shortVersionString="2.11.1"
+				type="application/octet-stream"
+				length="11575221"
+				sparkle:dsaSignature="MCwCFF2EIt8noqJFzdTMG3FRRfl+J5euAhQ+HJTOvOXStNI5kx2Vnds74WBEcg=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.12.0</guid>
+      <title>Version 2.12.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>support du Dark Mode de MacOS Mojave&nbsp;;</li>
+          <li>abandon de la compatibilité avec MacOS 10.4 et 10.5.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.12.0</sparkle:releaseNotesLink>
+			<pubDate>Thu, 13 Dec 2018 07:38:26 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_12_0.dmg"
+				sparkle:version="2.12.0"
+                   sparkle:shortVersionString="2.12.0"
+				type="application/octet-stream"
+				length="15642905"
+				sparkle:dsaSignature="MC4CFQCoNUu3PkDdMTCTBHYkq7/CPZl/VwIVAKI9f2q+1/rkTErS2gvRe5KMj8A0"
+			/>
+    </item>
   </channel> 
 </rss>

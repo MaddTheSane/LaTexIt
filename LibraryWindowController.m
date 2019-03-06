@@ -553,8 +553,14 @@ extern NSString* NSMenuDidBeginTrackingNotification;
   if ([[self window] isVisible])
     [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil] modalForWindow:[self window]
                         modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else
+  else if (!isMacOS10_6OrAbove())
     [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]] contextInfo:NULL];
+  else//if (isMacOS10_6OrAbove())
+  {
+    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]];
+    NSInteger returnCode = [openPanel runModal];
+    [self _openPanelDidEnd:openPanel returnCode:returnCode contextInfo:NULL];
+  }//end if (isMacOS10_6OrAbove())
 }
 //end open:
 
@@ -663,12 +669,18 @@ extern NSString* NSMenuDidBeginTrackingNotification;
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
       [self->exportAccessoryView setFrame:
         NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setRequiredFileType:@"latexlib"];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"latexlib"];
+      else
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", nil]];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
       [self->exportAccessoryView setFrame:
        NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setRequiredFileType:@"plist"];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"plist"];
+      else
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
       break;
     case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
       [self->exportAccessoryView setFrame:
@@ -678,7 +690,10 @@ extern NSString* NSMenuDidBeginTrackingNotification;
                  MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
                      NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
                   156)];
-      [self->savePanel setRequiredFileType:@"tex"];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"tex"];
+      else
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
       break;
   }
 }

@@ -114,11 +114,21 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
   if ((object == [[PreferencesController sharedController] preamblesController]) && [keyPath isEqualToString:@"selection.value"])
+  {
+    [self->preamblesValueTextView refreshCheckSpelling];
     [self->preamblesValueTextView textDidChange:nil];//to force recoulouring
-  else if ((object == [[PreferencesController sharedController] bodyTemplatesController]) && [keyPath isEqualToString:@"selection.head"])
+  }
+  else if ((object == [[PreferencesController sharedController] bodyTemplatesController]) && [keyPath
+  isEqualToString:@"selection.head"])
+  {
+    [self->bodyTemplatesHeadTextView refreshCheckSpelling];
     [self->bodyTemplatesHeadTextView textDidChange:nil];//to force recoulouring
+  }
   else if ((object == [[PreferencesController sharedController] bodyTemplatesController]) && [keyPath isEqualToString:@"selection.tail"])
+  {
+    [self->bodyTemplatesTailTextView refreshCheckSpelling];
     [self->bodyTemplatesTailTextView textDidChange:nil];//to force recoulouring
+  }
   else if ((object == [[PreferencesController sharedController] compositionConfigurationsController]) && 
            ([keyPath isEqualToString:@"arrangedObjects"] ||
             [keyPath isEqualToString:[@"arrangedObjects." stringByAppendingString:CompositionConfigurationNameKey]]))
@@ -366,24 +376,24 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->editionSyntaxColoringStateButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringEnableKey]
     options:nil];
-  [self->editionSyntaxColoringTextForegroundColorWell bind:NSValueBinding toObject:userDefaultsController
-    withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringTextForegroundColorKey]
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
-  [self->editionSyntaxColoringTextBackgroundColorWell bind:NSValueBinding toObject:userDefaultsController
-    withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringTextBackgroundColorKey]
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
-  [self->editionSyntaxColoringCommandColorWell bind:NSValueBinding toObject:userDefaultsController
-    withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringCommandColorKey]
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
-  [self->editionSyntaxColoringKeywordColorWell bind:NSValueBinding toObject:userDefaultsController
-    withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringKeywordColorKey]
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
-  [self->editionSyntaxColoringMathsColorWell bind:NSValueBinding toObject:userDefaultsController
-    withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringMathsColorKey]
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
-  [self->editionSyntaxColoringCommentColorWell bind:NSValueBinding toObject:userDefaultsController
-    withKeyPath:[userDefaultsController adaptedKeyPath:SyntaxColoringCommentColorKey]
-    options:[NSDictionary dictionaryWithObjectsAndKeys:[KeyedUnarchiveFromDataTransformer name], NSValueTransformerNameBindingOption, nil]];
+  [self->editionSyntaxColoringTextForegroundColorWell bind:NSValueBinding toObject:preferencesController
+    withKeyPath:@"editionSyntaxColoringTextForegroundColor"
+        options:nil];
+  [self->editionSyntaxColoringTextBackgroundColorWell bind:NSValueBinding toObject:preferencesController
+    withKeyPath:@"editionSyntaxColoringTextBackgroundColor"
+       options:nil];
+  [self->editionSyntaxColoringCommandColorWell bind:NSValueBinding toObject:preferencesController
+    withKeyPath:@"editionSyntaxColoringCommandColor"
+       options:nil];
+  [self->editionSyntaxColoringCommentColorWell bind:NSValueBinding toObject:preferencesController
+    withKeyPath:@"editionSyntaxColoringCommentColor"
+       options:nil];
+  [self->editionSyntaxColoringKeywordColorWell bind:NSValueBinding toObject:preferencesController
+    withKeyPath:@"editionSyntaxColoringKeywordColor"
+       options:nil];
+  [self->editionSyntaxColoringMathsColorWell bind:NSValueBinding toObject:preferencesController
+    withKeyPath:@"editionSyntaxColoringMathsColor"
+       options:nil];
   [self->editionSpellCheckingStateButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:SpellCheckingEnableKey]
     options:nil];
@@ -901,7 +911,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->additionalFilesAddButton setAction:@selector(addFiles:)];
   [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:additionalFilesController withKeyPath:@"canRemove" options:nil];
   [self->additionalFilesRemoveButton setTarget:additionalFilesController];
-  [self->additionalFilesRemoveButton setAction:@selector(remove:)];
+  [self->additionalFilesRemoveButton setAction:@selector(removeSelection:)];
   [self->additionalFilesHelpButton setTarget:self];
   [self->additionalFilesHelpButton setAction:@selector(additionalFilesHelpOpen:)];
   
@@ -1679,7 +1689,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       nil];
   else if (sender == self->synchronizationNewDocumentsPathChangeButton)
   {
-    [openPanel setDirectory:[[PreferencesController sharedController] synchronizationNewDocumentsPath]];
+    NSString* directoryPath = [[PreferencesController sharedController] synchronizationNewDocumentsPath];
+    if (!isMacOS10_6OrAbove())
+      [openPanel setDirectory:directoryPath];
+    else//if (isMacOS10_6OrAbove())
+      [openPanel setDirectoryURL:[NSURL fileURLWithPath:directoryPath isDirectory:YES]];
     [openPanel setCanChooseDirectories:YES];
     [openPanel setCanChooseFiles:NO];
     contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:

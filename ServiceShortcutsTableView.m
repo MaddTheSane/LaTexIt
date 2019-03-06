@@ -50,17 +50,17 @@ extern NSString *NSMenuDidBeginTrackingNotification;
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutEnabledKey]
       options:nil];
   [[self tableColumnWithIdentifier:@"description"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self", ServiceShortcutIdentifierKey]
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
           options:[NSDictionary dictionaryWithObjectsAndKeys:
             [DelegatingTransformer transformerWithDelegate:self context:@"description"], NSValueTransformerBindingOption, nil]];
   [[self tableColumnWithIdentifier:@"string"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.string", ServiceShortcutStringKey]
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutStringKey]
           options:[NSDictionary dictionaryWithObjectsAndKeys:
             [DelegatingTransformer transformerWithDelegate:self context:@"string"], NSValueTransformerBindingOption,
             NSLocalizedString(@"none", @"none"), NSNullPlaceholderBindingOption,
              nil]];
   [[self tableColumnWithIdentifier:@"warning"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self", ServiceShortcutIdentifierKey]
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
           options:[NSDictionary dictionaryWithObjectsAndKeys:
             [DelegatingTransformer transformerWithDelegate:self context:@"warning"], NSValueTransformerBindingOption, nil]];
 }

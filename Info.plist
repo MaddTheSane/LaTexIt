@@ -150,9 +150,9 @@
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.11.0</string>
+	<string>2.12.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.11.0</string>
+	<string>2.12.0</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
@@ -717,5 +717,7 @@
 	<string>http://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-en.rss</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_sparkle_latexit_pub.pem</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<false/>
 </dict>
 </plist>

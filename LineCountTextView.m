@@ -25,6 +25,7 @@
 #import "NSFontExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "NSObjectExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
@@ -39,16 +40,17 @@ NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
 @interface LineCountTextView (PrivateAPI)
++(NSArray*) syntaxColoringKeys;
 -(void) _computeLineRanges;
 -(void) _initializeSpellChecker;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
 -(void) insertTextAtMousePosition:(id)object;
+-(void) invalidateColors;
 @end
 
 @implementation LineCountTextView
 
 static NSArray* WellKnownLatexKeywords = nil;
-static int SpellCheckerDocumentTag = 0;
 
 +(void) initialize
 {
@@ -91,16 +93,10 @@ static int SpellCheckerDocumentTag = 0;
   [self setFrame:frame];
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringEnableKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringTextForegroundColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringTextBackgroundColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringCommandColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringMathsColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringKeywordColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringCommentColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:EditionTabKeyInsertsSpacesEnabledKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:EditionTabKeyInsertsSpacesCountKey options:NSKeyValueObservingOptionNew context:nil];
-  
+  NSEnumerator* enumerator = [[[self class] syntaxColoringKeys] objectEnumerator];
+  NSString* syntaxColoringKey = nil;
+  while((syntaxColoringKey = [enumerator nextObject]))
+    [userDefaults addObserver:self forKeyPath:syntaxColoringKey options:NSKeyValueObservingOptionNew context:nil];
   [self _computeLineRanges];
 
   NSArray* typesToAdd =
@@ -119,15 +115,10 @@ static int SpellCheckerDocumentTag = 0;
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringEnableKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringTextForegroundColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringTextBackgroundColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringCommandColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringMathsColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringKeywordColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringCommentColorKey];
-  [userDefaults removeObserver:self forKeyPath:EditionTabKeyInsertsSpacesEnabledKey];
-  [userDefaults removeObserver:self forKeyPath:EditionTabKeyInsertsSpacesCountKey];
+  NSEnumerator* enumerator = [[[self class] syntaxColoringKeys] objectEnumerator];
+  NSString* syntaxColoringKey = nil;
+  while((syntaxColoringKey = [enumerator nextObject]))
+    [userDefaults removeObserver:self forKeyPath:syntaxColoringKey];
   [self removeObserver:self forKeyPath:NSAttributedStringBinding];
   [self->syntaxColouring release];
   [self->lineRanges release];
@@ -142,9 +133,13 @@ static int SpellCheckerDocumentTag = 0;
 {
   if ([self respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
     [self setAutomaticTextReplacementEnabled:NO];
-  if (!spellCheckerHasBeenInitialized)
+  static NSMutableArray* keywordsToCheck = nil;
+  if (!keywordsToCheck)
   {
-    NSMutableArray* keywordsToCheck = [NSMutableArray array];
+    keywordsToCheck = [[NSMutableArray alloc] init];
+    [keywordsToCheck addObject:@"utf8"];
+    [keywordsToCheck addObject:@"inputenc"];
+    [keywordsToCheck addObject:@"usenames"];
     unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
@@ -154,7 +149,7 @@ static int SpellCheckerDocumentTag = 0;
       unsigned int count = [kw count];
       while(count--)
         [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
-    }
+    }//end for each package
     [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
     unsigned int count = [keywordsToCheck count];
     while(count--)
@@ -162,14 +157,39 @@ static int SpellCheckerDocumentTag = 0;
       NSString* w = [keywordsToCheck objectAtIndex:count];
       if ([w startsWith:@"\\" options:0])
         [keywordsToCheck addObject:[w substringFromIndex:1]];
-    }
+    }//end for each keyword
     [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
-    if (SpellCheckerDocumentTag == 0)
-      [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
-    spellCheckerHasBeenInitialized = YES;
-  }
+  }//end if (!keywordsToCheck)
+  [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
+  [self refreshCheckSpelling];
 }
 //end _initializeSpellChecker:
+
+-(void) refreshCheckSpelling
+{
+  [[NSSpellChecker sharedSpellChecker] checkSpellingOfString:[[self textStorage] string] startingAt:0 language:nil wrap:YES inSpellDocumentWithTag:[self spellCheckerDocumentTag] wordCount:0];
+}
+//end refreshCheckSpelling:
+
++(NSArray*) syntaxColoringKeys
+{
+  return [NSArray arrayWithObjects:
+    SyntaxColoringEnableKey,
+    SyntaxColoringTextForegroundColorKey,
+    SyntaxColoringTextForegroundColorDarkModeKey,
+    SyntaxColoringTextBackgroundColorKey,
+    SyntaxColoringTextBackgroundColorDarkModeKey,
+    SyntaxColoringCommandColorKey,
+    SyntaxColoringCommandColorDarkModeKey,
+    SyntaxColoringMathsColorKey,
+    SyntaxColoringMathsColorDarkModeKey,
+    SyntaxColoringKeywordColorKey,
+    SyntaxColoringKeywordColorDarkModeKey,
+    SyntaxColoringCommentColorKey,
+    SyntaxColoringCommentColorDarkModeKey,
+    nil];
+}
+//end syntaxColoringKeys
 
 -(void) awakeFromNib
 {
@@ -183,7 +203,7 @@ static int SpellCheckerDocumentTag = 0;
   [self->lineCountRulerView setClientView:self];
   self->syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 
-  [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_initializeSpellChecker:) userInfo:nil repeats:NO];
+  [self performSelector:@selector(_initializeSpellChecker:) withObject:nil afterDelay:2];
   
   [self bind:@"continuousSpellCheckingEnabled" toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:SpellCheckingEnableKey] options:nil];
@@ -195,6 +215,7 @@ static int SpellCheckerDocumentTag = 0;
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesCountKey] options:nil];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorDidChange:) name:NSColorPanelColorDidChangeNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearanceDidChange:) name:NSAppearanceDidChangeNotification object:nil];
 }
 //end awakeFromNib
 
@@ -202,15 +223,12 @@ static int SpellCheckerDocumentTag = 0;
 {
   if ([keyPath isEqualToString:NSAttributedStringBinding])
     [[self syntaxColouring] recolourCompleteDocument];
-  else if ([keyPath isEqualToString:SyntaxColoringEnableKey] ||
-           [keyPath isEqualToString:SyntaxColoringTextForegroundColorKey] || [keyPath isEqualToString:SyntaxColoringTextBackgroundColorKey] ||
-           [keyPath isEqualToString:SyntaxColoringCommandColorKey] || [keyPath isEqualToString:SyntaxColoringMathsColorKey] ||
-           [keyPath isEqualToString:SyntaxColoringKeywordColorKey] || [keyPath isEqualToString:SyntaxColoringCommentColorKey])
+  else if ([[[self class] syntaxColoringKeys] containsObject:keyPath])
   {
     [self->syntaxColouring setColours];
     [self->syntaxColouring recolourCompleteDocument];
     [self setNeedsDisplay:YES];
-  }//end if syntax colouring options change
+  }//end if (object == [NSUserDefaults standardUserDefaults])
 }
 //end observeValueForKeyPath:
 
@@ -284,9 +302,9 @@ static int SpellCheckerDocumentTag = 0;
 
 -(NSInteger) spellCheckerDocumentTag
 {
-  if (SpellCheckerDocumentTag == 0)
-    SpellCheckerDocumentTag = [super spellCheckerDocumentTag];
-  return SpellCheckerDocumentTag;
+  if (!self->spellCheckerDocumentTag)
+    self->spellCheckerDocumentTag = [NSSpellChecker uniqueSpellDocumentTag];
+  return self->spellCheckerDocumentTag;
 }
 //end spellCheckerDocumentTag
 
@@ -795,6 +813,8 @@ static int SpellCheckerDocumentTag = 0;
     return [super validateMenuItem:sender];
   else if ([sender action] == @selector(paste:))
     return YES;
+  else if ([sender action] == @selector(toggleContinuousSpellChecking:))
+    [sender setState:[self isContinuousSpellCheckingEnabled] ? NSOnState : NSOffState];
   return ok;
 }
 //end validateMenuItem:
@@ -971,8 +991,8 @@ static int SpellCheckerDocumentTag = 0;
         [propositions addObject:[keyword stringByAppendingString:@"{}"]];
       else if ([type isEqualToString:@"braces2"])
         [propositions addObject:[keyword stringByAppendingString:@"{}{}"]];
-    }
-  }
+    }//end for each proposition
+  }//end if (isBackslashedWord)
   
   //if no proposition is found, do as if the backslash was not there
   if (isBackslashedWord && ![propositions count])
@@ -1012,8 +1032,8 @@ static int SpellCheckerDocumentTag = 0;
       NSString* keyword = [typeAndKeyword objectForKey:@"word"];
       if ([type isEqualToString:@"environment"])
         [propositions addObject:keyword];
-    }
-  }
+    }//end for each proposition
+  }//end if (!isBackslashedWord)
   
   [propositions sortUsingSelector:@selector(caseInsensitiveCompare:)];
   
@@ -1027,29 +1047,55 @@ static int SpellCheckerDocumentTag = 0;
 }
 //end changeColor:
 
+-(void) appearanceDidChange:(NSNotification*)notification
+{
+  [self performSelector:@selector(invalidateColors) withObject:nil afterDelay:0];
+}
+//end appearanceDidChange:
+
+-(void) invalidateColors
+{
+  [self->syntaxColouring setColours];
+  [self->syntaxColouring recolourCompleteDocument];
+  [self setNeedsDisplay:YES];
+}
+//end invalidateColors
+
+-(void) viewDidChangeEffectiveAppearance
+{
+  [self->syntaxColouring setColours];
+  [self->syntaxColouring recolourCompleteDocument];
+  [self setNeedsDisplay:YES];
+}
+//end viewDidChangeEffectiveAppearance
+
 -(void) colorDidChange:(NSNotification*)notification
 {
-  NSColor* color = [[NSColorPanel sharedColorPanel] color];
-  NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
-  NSString* input = !selectedRange.length ? nil : [[[self textStorage] string] substringWithRange:selectedRange];
-  NSString* output = nil;
-  if (input)
+  if ([self isEditable])
   {
-    NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-    NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
-      [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
-    BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLMultiline
-                                       inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
-    if (replacement)
-      output = !isMatching ? nil :
-        [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
-                                           options:RKLMultiline range:NSMakeRange(0, [input length]) error:nil];
-    if (!output)
-      output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
-                     [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
-    if (output)
-      [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
-  }//end if (input)
+    NSColor* color = [[NSColorPanel sharedColorPanel] color];
+    NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
+    NSString* fullString = [[self textStorage] string];
+    NSString* input = !selectedRange.length ? nil : [fullString substringWithRange:selectedRange];
+    NSString* output = nil;
+    if (input)
+    {
+      NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+      NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
+        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
+      BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLMultiline
+                                         inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
+      if (replacement)
+        output = !isMatching ? nil :
+          [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
+                                             options:RKLMultiline range:NSMakeRange(0, [input length]) error:nil];
+      if (!output)
+        output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
+      if (output)
+        [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
+    }//end if (input)
+  }//end if ([self isEditable])
 }
 //end colorDidChange:
 

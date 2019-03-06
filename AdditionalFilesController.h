@@ -12,4 +12,6 @@
 @interface AdditionalFilesController : NSArrayController {
 }
 
+-(void) removeSelection:(id)sender;
+
 @end

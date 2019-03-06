@@ -640,7 +640,7 @@ NSString		* kBundleExecutableKey = @"CFBundleExecutable";
 		
 			if( [self fillProcessInfoRec] && infoRec.processName != NULL )
 			{
-				name = [[NSString alloc] initWithCString:(const char *)(theProcessName + 1) length:*theProcessName];
+				name = [[NSString alloc] initWithBytes:(const char *)(theProcessName + 1) length:*theProcessName encoding:NSUTF8StringEncoding];
 				infoRec.processName = NULL;		// not valid after this method call
 			}
 		}

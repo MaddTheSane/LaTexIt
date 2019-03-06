@@ -12,6 +12,7 @@
 #import "NSArrayExtended.h"
 #import "NSMutableDictionaryExtended.h"
 #import "NSWorkspaceExtended.h"
+#import "Utils.h"
 
 static NSString* Old_LaTeXiTVersionKey = @"LaTeXiT_Version";
 
@@ -200,11 +201,11 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   else
   {
     #ifdef ARC_ENABLED
-    oldLatexitVersion = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)Old_LaTeXiTVersionKey, (__bridge CFStringRef)LaTeXiTAppKey);
-    newLatexitVersion = (__bridge NSString*)CFPreferencesCopyAppValue((__bridge CFStringRef)LaTeXiTVersionKey, (__bridge CFStringRef)LaTeXiTAppKey);
+    oldLatexitVersion = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    newLatexitVersion = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    oldLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)Old_LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
-    newLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CFStringRef)LaTeXiTVersionKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    oldLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
+    newLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
   }
 
@@ -288,10 +289,10 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     else
       #ifdef ARC_ENABLED
       servicesItems = [NSMutableArray arrayWithArray:
-        (__bridge NSArray*)CFPreferencesCopyAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFStringRef)LaTeXiTAppKey) ];
+        (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) ];
       #else
       servicesItems = [NSMutableArray arrayWithArray:
-        [(NSArray*)CFPreferencesCopyAppValue((CFStringRef)ServiceShortcutsKey, (CFStringRef)LaTeXiTAppKey) autorelease]];
+        [(NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) autorelease]];
       #endif
     NSUInteger count = [servicesItems count];
     while(count--)
@@ -312,9 +313,9 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
       [[NSUserDefaults standardUserDefaults] setObject:servicesItems forKey:ServiceShortcutsKey];
     else
       #ifdef ARC_ENABLED
-      CFPreferencesSetAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFPropertyListRef)servicesItems, (__bridge CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFPropertyListRef)servicesItems, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #else
-      CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, servicesItems, (CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, servicesItems, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #endif
     if ([self latexisationLaTeXMode] == LATEX_MODE_EQNARRAY)
       [self setLatexisationLaTeXMode:LATEX_MODE_ALIGN];
@@ -342,7 +343,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
   else//!if (!self->isLaTeXiT)
-    CFPreferencesSetAppValue((CFStringRef)key, 0, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)key, 0, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 }
 //end removeKey:
 
@@ -361,18 +362,18 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   else//!if (!self->isLaTeXiT)
   {
     #ifdef ARC_ENABLED
-    id value = (__bridge id)CFPreferencesCopyAppValue((__bridge CFStringRef)oldKey, (__bridge CFStringRef)LaTeXiTAppKey);
+    id value = (CHBRIDGE id)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)oldKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    id value = NSMakeCollectable((id)CFPreferencesCopyAppValue((CFStringRef)oldKey, (CFStringRef)LaTeXiTAppKey));
+    id value = NSMakeCollectable((id)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)oldKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #endif
     if (value)
     {
-      CFPreferencesSetAppValue((CFStringRef)oldKey, 0, (CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)oldKey, 0, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #ifdef ARC_ENABLED
-      CFPreferencesSetAppValue((__bridge CFStringRef)newKey, (__bridge CFPropertyListRef)value, (__bridge CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)newKey, (CHBRIDGE CFPropertyListRef)value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       
       #else
-      CFPreferencesSetAppValue((CFStringRef)newKey, value, (CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)newKey, value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #endif
       #ifdef ARC_ENABLED
       #else
@@ -386,7 +387,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
 -(void) migrateCompositionConfigurations
 {
   BOOL useLoginShell = self->isLaTeXiT ? [[NSUserDefaults standardUserDefaults] boolForKey:Old_UseLoginShellKey] :
-                       CFPreferencesGetAppBooleanValue((CFStringRef)Old_UseLoginShellKey, (CFStringRef)LaTeXiTAppKey, 0);
+                       CFPreferencesGetAppBooleanValue((CHBRIDGE CFStringRef)Old_UseLoginShellKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, 0);
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
   #ifdef ARC_ENABLED
@@ -431,7 +432,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:newCompositionConfigurations forKey:CompositionConfigurationsKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)CompositionConfigurationsKey, (CFPropertyListRef)newCompositionConfigurations, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFPropertyListRef)newCompositionConfigurations, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 
   //[self replaceKey:Old_UseLoginShellKey withKey:UseLoginShellKey];
 }
@@ -450,11 +451,11 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   else
   {
     #ifdef ARC_ENABLED
-    oldServiceShortcutsEnabled = ((__bridge NSArray*)CFPreferencesCopyAppValue((__bridge CFStringRef)Old_ServiceShortcutEnabledKey, (__bridge CFStringRef)LaTeXiTAppKey));
-    oldServiceShortcutsStrings = ((__bridge NSArray*)CFPreferencesCopyAppValue((__bridge CFStringRef)Old_ServiceShortcutStringsKey, (__bridge CFStringRef)LaTeXiTAppKey));
+    oldServiceShortcutsEnabled = ((CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
+    oldServiceShortcutsStrings = ((CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutStringsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
-    oldServiceShortcutsEnabled = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutEnabledKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
-    oldServiceShortcutsStrings = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CFStringRef)Old_ServiceShortcutStringsKey, (CFStringRef)LaTeXiTAppKey)) autorelease];
+    oldServiceShortcutsEnabled = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
+    oldServiceShortcutsStrings = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutStringsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
   }
   
@@ -490,7 +491,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:newServiceShortcuts forKey:ServiceShortcutsKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, (CFPropertyListRef)newServiceShortcuts, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFPropertyListRef)newServiceShortcuts, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 }
 //end migrateServiceShortcuts
 

@@ -239,15 +239,6 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       NSValueTransformerBindingOption,
       nil]];
 
-  NSRect superFrame = [[self->exportFormatPopupButton superview] frame];
-  NSRect frame = NSZeroRect;
-  frame = [self->exportFormatOptionsButton frame];
-  frame.origin.x = superFrame.size.width-frame.size.width-2;
-  [self->exportFormatOptionsButton setFrame:frame];
-  frame = [self->exportFormatPopupButton frame];
-  frame.origin.x = NSMinX([self->exportFormatOptionsButton frame])-4-frame.size.width;
-  [self->exportFormatPopupButton setFrame:frame];
-  
   [self->createEquationsOptionsLabel setStringValue:LocalLocalizedString(@"Create equations :", @"Create equations :")];
   [self->createEquationsOptionsLabel sizeToFit];
   [self->createEquationsOptionsPopUpButton removeAllItems];
@@ -279,13 +270,13 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   rect.origin.x = NSMaxX([self->fontColorLabel frame])+4;
   [self->fontColorWell setFrame:rect];
   
-  width = [self->exportFormatPopupButton frame].size.width;
+  width = [self->exportFormatPopupButton frame].size.width+4+[self->exportFormatOptionsButton frame].size.width;
   x = ([self->parametersView frame].size.width-width)/2;
   rect = [self->exportFormatPopupButton frame];
   rect.origin.x = x;
   [self->exportFormatPopupButton setFrame:rect];
   rect = [self->exportFormatOptionsButton frame];
-  rect.origin.x = NSMaxX([self->exportFormatPopupButton frame])+10;
+  rect.origin.x = NSMaxX([self->exportFormatPopupButton frame])+4;
   [self->exportFormatOptionsButton setFrame:rect];
 
   width = [self->createEquationsOptionsLabel frame].size.width+4+[self->createEquationsOptionsPopUpButton frame].size.width;
@@ -474,7 +465,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       DebugLog(1, @"1outFilePath = %@", outFilePath);
       DebugLog(1, @"outFullLog = %@", outFullLog);
       DebugLog(1, @"errors = %@", errors);
-      DebugLog(1, @"pdfData = %p (%ld)", pdfData, [pdfData length]);
+      DebugLog(1, @"pdfData = %p (%lu)", pdfData, (unsigned long)[pdfData length]);
       DebugLog(1, @"exportFormat = %d", exportFormat);
       NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
         [NSNumber numberWithFloat:exportJpegQualityPercent], @"jpegQuality",
@@ -491,7 +482,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         exportOptions:exportOptions
          compositionConfiguration:[preferencesController compositionConfigurationDocument]
                  uniqueIdentifier:uniqueIdentifier];
-      DebugLog(1, @"convertedData = %p (%ld)", convertedData, [convertedData length]);
+      DebugLog(1, @"convertedData = %p (%lu)", convertedData, (unsigned long)[convertedData length]);
       if (convertedData)
       {
         NSString* extension = nil;

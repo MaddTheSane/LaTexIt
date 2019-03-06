@@ -11,4 +11,14 @@
 
 @implementation AdditionalFilesController
 
+-(void) removeSelection:(id)sender
+{
+  NSArray* selectedObjects = [self selectedObjects];
+  [self removeSelectedObjects:selectedObjects];
+  NSMutableArray* newArrangedObjects = [NSMutableArray arrayWithArray:[self arrangedObjects]];
+  [newArrangedObjects removeObjectsInArray:selectedObjects];
+  [self setContent:newArrangedObjects];
+}
+//end removeSelection:
+
 @end

@@ -13,6 +13,7 @@
 #import "HistoryController.h"
 #import "HistoryManager.h"
 #import "HistoryView.h"
+#import "LibraryPreviewPanelImageView.h"
 #import "MyDocument.h"
 #import "NSManagedObjectContextExtended.h"
 #import "PreferencesController.h"
@@ -219,10 +220,16 @@
   switch((history_export_format_t)[sender selectedTag])
   {
     case HISTORY_EXPORT_FORMAT_INTERNAL:
-      [self->savePanel setRequiredFileType:@"latexhist"];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"latexhist"];
+      else//if (isMacOS10_6OrAbove())
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexhist", nil]];
       break;
     case HISTORY_EXPORT_FORMAT_PLIST:
-      [self->savePanel setRequiredFileType:@"plist"];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"plist"];
+      else//if (isMacOS10_6OrAbove())
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
       break;
   }
 }
@@ -248,8 +255,14 @@
   if ([[self window] isVisible])
     [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexhist", @"plist", nil] modalForWindow:[self window]
                         modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else
+  else if (!isMacOS10_6OrAbove())
     [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexhist", @"plist", nil]] contextInfo:NULL];
+  else//if (isMacOS10_6OrAbove())
+  {
+    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexhist", @"plist", nil]];
+    NSInteger returnCode = [openPanel runModal];
+    [self _openPanelDidEnd:openPanel returnCode:returnCode contextInfo:NULL];
+  }//end if (isMacOS10_6OrAbove())
 }
 //end open:
 

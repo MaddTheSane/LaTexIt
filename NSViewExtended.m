@@ -8,6 +8,7 @@
 
 #import "NSViewExtended.h"
 
+#import "Utils.h"
 
 @implementation NSView (Extended)
 

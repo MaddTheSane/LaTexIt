@@ -108,7 +108,7 @@
 
 -(NSArray*) additionalFilesPaths
 {
-  NSArray* result = [[self filesController] arrangedObjects];
+  NSArray* result = [[[[self filesController] arrangedObjects] mutableCopy] autorelease];
   return result;
 }
 //end filePaths
@@ -180,6 +180,7 @@
     [self->previousDefaultsFiles setArray:defaultsNew];
     NSMutableArray* current = [NSMutableArray arrayWithArray:[self->filesWithExtrasController arrangedObjects]];
     [current removeObjectsInArray:disappearedDefaults];
+    [current removeObjectsInArray:brandNewDefaults];
     [current insertObjects:brandNewDefaults atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [brandNewDefaults count])]];
     [self->filesWithExtrasController setContent:current];
   }//end if (!self->isDefaultTableView)

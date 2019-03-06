@@ -422,10 +422,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     
     if (!migrationError)
     {
+      NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.11.0", @"version", nil]
+        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:applicationVersion, @"version", nil]
                              forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
@@ -491,8 +492,11 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }
   if (setVersion && persistentStore)
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:@"2.11.0", @"version", nil]
+  {
+    NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:applicationVersion, @"version", nil]
                          forPersistentStore:persistentStore];
+  }//end if (setVersion && persistentStore)
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
@@ -557,9 +561,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         LatexitEquation* equation = nil;
         while((equation = [enumerator nextObject]))
           [descriptions addObject:[equation plistDescription]];
+        NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          @"2.11.0", @"version",
+          applicationVersion, @"version",
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :

@@ -65,4 +65,29 @@
 }
 //end isRGBEqualTo:
 
+-(NSColor*) darker:(CGFloat)factor
+{
+  NSColor* result = self;
+  CGFloat hsba[4] = {0};
+  [[self colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hsba[0] saturation:&hsba[1] brightness:&hsba[2] alpha:&hsba[3]];
+  hsba[1] = MAX(0, MIN(1, hsba[1]*(1+factor)));
+  hsba[2] = MAX(0, MIN(1, hsba[2]*(1-factor)));
+  result = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];
+  return result;
+}
+//end darker:
+
+-(NSColor*) lighter:(CGFloat)factor
+{
+  NSColor* result = self;
+  CGFloat hsba[4] = {0};
+  [[self colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hsba[0] saturation:&hsba[1] brightness:&hsba[2] alpha:&hsba[3]];
+  hsba[1] = MAX(0, MIN(1, hsba[1]*(1-factor)));
+  hsba[2] = MAX(0, MIN(1, hsba[2]*(1+factor)));
+  result = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];
+  return result;
+}
+//end lighter:
+
+
 @end

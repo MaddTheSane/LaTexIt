@@ -346,7 +346,14 @@
   NSString* filePath = [self svgPdfToSvgPath];
   NSString* filename =[filePath lastPathComponent];
   NSString* directory = [filePath stringByDeletingLastPathComponent];
-  int result = [openPanel runModalForDirectory:directory file:filename];
+  int result = 0;
+  if (!isMacOS10_6OrAbove())
+    result = [openPanel runModalForDirectory:directory file:filename];
+  else//if (isMacOS10_6OrAbove())
+  {
+    [openPanel setDirectoryURL:[NSURL fileURLWithPath:directory isDirectory:YES]];
+    [openPanel setNameFieldStringValue:filename];
+  }//end if (isMacOS10_6OrAbove())
   if (result == NSFileHandlingPanelOKButton)
   {
     filePath = [[openPanel URL] path];

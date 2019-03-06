@@ -101,7 +101,8 @@
   NSArray* result = nil;
   NSError* error = nil;
   result = [[self managedObjectContext] executeFetchRequest:[self rootFetchRequest] error:&error];
-  if (error) {DebugLog(0, @"error : %@", error);}
+  if (error)
+    {DebugLog(0, @"error : %@", error);}
   return result;
 }
 //end rootItems

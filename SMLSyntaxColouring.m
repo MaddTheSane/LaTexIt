@@ -114,14 +114,14 @@ static NSArray *syntaxDefinitionsArray;
   NSColor* color = [preferencesController editionSyntaxColoringTextForegroundColor];
   color = syntaxColoring ? [preferencesController editionSyntaxColoringCommandColor] : color;
   self->commandsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
-	
+  
 	if (self->commentsColour) {
 		[self->commentsColour release];
 		self->commentsColour = nil;
 	}
   color = syntaxColoring ? [preferencesController editionSyntaxColoringCommentColor] : color;
   self->commentsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
-	
+  
 	if (self->instructionsColour) {
 		[self->instructionsColour release];
 		self->instructionsColour = nil;
@@ -142,7 +142,7 @@ static NSArray *syntaxDefinitionsArray;
 	}
   color = syntaxColoring ? [preferencesController editionSyntaxColoringMathsColor] : color;
   self->stringsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
-	
+  
 	if (self->variablesColour) {
 		[self->variablesColour release];
 		self->variablesColour = nil;

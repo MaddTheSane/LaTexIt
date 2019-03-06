@@ -53,7 +53,11 @@
 {
   if ((!(self = [super init])))
     return nil;
+  #ifdef ARC_ENABLED
+  self->outlineView = aOutlineView;
+  #else
   self->outlineView = [aOutlineView retain];
+  #endif
   self->firstIfMultiple = aFirstIfMultiple;
   return self;
 }

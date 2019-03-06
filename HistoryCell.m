@@ -10,6 +10,7 @@
 #import "HistoryCell.h"
 
 #import "NSImageExtended.h"
+#import "NSObjectExtended.h"
 #import "Utils.h"
 
 // CoreGraphics gradient helpers
@@ -87,6 +88,11 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     [self->backgroundColor set];
     NSRectFill(cellFrame);
   }
+  else if ([NSApp isDarkMode])
+  {
+    [[NSColor colorWithCalibratedRed:0.45f green:0.45f blue:0.45f alpha:1.0f] set];
+    NSRectFill(cellFrame);
+  }//end if ([NSApp isDarkMode])
   NSRect headerRect = NSMakeRect(cellFrame.origin.x-1, cellFrame.origin.y-1, cellFrame.size.width+3, 16);
   NSRect imageRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+headerRect.size.height,
                                 cellFrame.size.width, cellFrame.size.height-headerRect.size.height);

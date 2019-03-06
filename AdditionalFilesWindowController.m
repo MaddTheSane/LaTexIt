@@ -46,8 +46,9 @@
   [self->additionalFilesRemoveButton setAction:@selector(remove:)];
   [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:self->additionalFilesTableView withKeyPath:@"canRemove" options:nil];
   [self->additionalFilesMenuButton setImage:[NSImage imageNamed:@"button-menu"]];
+  [self->additionalFilesMenuButton setAlternateImage:[NSImage imageNamed:@"button-menu"]];
   NSMenu* menu = [[NSMenu alloc] init];
-  [menu addItem:[NSMenuItem separatorItem]];
+  [[menu addItemWithTitle:@"" action:nil keyEquivalent:@""] setTarget:nil];//dummy item
   [[menu addItemWithTitle:NSLocalizedString(@"Open defaults", @"Open defaults")
     action:@selector(additionalFilesOpenDefaults:) keyEquivalent:@""] setTarget:self];
   [[menu addItemWithTitle:NSLocalizedString(@"Save as defaults", @"Save as defaults")
