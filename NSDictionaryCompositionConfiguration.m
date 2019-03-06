@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 06/05/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDictionaryCompositionConfiguration.h"
@@ -13,7 +13,7 @@
 @implementation NSDictionary (CompositionConfiguration)
 
 -(composition_mode_t) compositionConfigurationCompositionMode
-             {return (composition_mode_t)[[self objectForKey:CompositionConfigurationCompositionModeKey] intValue];}
+             {return (composition_mode_t)[[self objectForKey:CompositionConfigurationCompositionModeKey] integerValue];}
 
 -(NSString*) compositionConfigurationProgramPathPdfLaTeX
              {return [self compositionConfigurationProgramPathForKey:CompositionConfigurationPdfLatexPathKey];}
@@ -61,11 +61,11 @@
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScripts
                  {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPreProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInt:SCRIPT_PLACE_PREPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsMiddleProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInt:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPostProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInt:SCRIPT_PLACE_POSTPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsForKey:(NSString*)key
                  {return [[self compositionConfigurationAdditionalProcessingScripts] objectForKey:key];}
 

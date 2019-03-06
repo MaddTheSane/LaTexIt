@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSImageExtended.h"
@@ -139,8 +139,8 @@
         NSMakeRect(0, 0, !maxSize.width  ? naturalSize.width : maxSize.width,
                          !maxSize.height ? naturalSize.height : maxSize.height),
         YES, NO, NO);
-      adaptedRectangle.size.width  = (int)round(adaptedRectangle.size.width);
-      adaptedRectangle.size.height = (int)round(adaptedRectangle.size.height);
+      adaptedRectangle.size.width  = (NSInteger)round(adaptedRectangle.size.width);
+      adaptedRectangle.size.height = (NSInteger)round(adaptedRectangle.size.height);
     }
     result = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:0 pixelsWide:adaptedRectangle.size.width pixelsHigh:adaptedRectangle.size.height bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bitmapFormat:0 bytesPerRow:0 bitsPerPixel:0];
    NSImage* image = !result ? nil : [[NSImage alloc] initWithSize:adaptedRectangle.size];

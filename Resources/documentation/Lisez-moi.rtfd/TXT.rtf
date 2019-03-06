@@ -11,7 +11,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 2.12.0\
+\b \cf0 LaTeXiT 2.13.0\
 
 \b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -56,7 +56,7 @@ Adresse e-mail (commentaires, suggestions, probl\'e8mes,...): \cf3 pierre@chacha
 Syst\'e8me Requis\
 
 \fs22 \ulnone \
-LaTeXiT 2.12.0 requiert Mac OS X version 10.6 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 2.13.0 requiert Mac OS X version 10.6 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \b\fs26 \cf0 \
@@ -309,7 +309,7 @@ Un \'e9l\'e9ment de palette (item) est form\'e9 ainsi (sous forme de dictionnair
 [requis]		clef : "name"						type:cha\'eene\
 			valeur : un nom pour l'\'e9l\'e9ment (exemple: looparrowleft), \'e9ventuellement traduit dans les Localizable.strings des dossiers lproj\
 [optionnel]	clef : "latexCode"					type:cha\'eene (d\'e9faut : \\"name")\
-			valeur : le code latex correspondant (exemple: \\looparrowleft), par d\'e9faut identique "name" (non traduit) pr\'e9c\'e9d\'e9 d'un antislash\
+			valeur : le code latex correspondant (exemple: \\looparrowleft), par d\'e9faut identique "name" (non traduit) pr\'e9c\'e9d\'e9 d'un anti-slash\
 [optionnel]	clef : "resourceName"				type:cha\'eene (d\'e9faut : "name")\
 			valeur : le nom du fichier image correspondant (extension optionnelle). Par d\'e9faut, identique au "name" (non traduit)\
 [optionnel]	clef : "requires"						type:cha\'eene (d\'e9faut : vide)\
@@ -317,14 +317,17 @@ Un \'e9l\'e9ment de palette (item) est form\'e9 ainsi (sous forme de dictionnair
 [optionnel]	clef : "numberOfArguments"			type:entier (d\'e9faut : 0)\
 			valeur : indique le nombre de paires d'accolades \{\'85\} que doit avoir le code latex (utile pour les fonctions ayant des arguments)\
 [optionnel]	clef : "argumentToken"				type:cha\'eene (d\'e9faut : vide)\
-			valeur : les occurences de \{argumentToken\} sont remplac\'e9es par \{le texte actuellement s\'e9lectionn\'e9\} ou par \{argumentTokenDefaultReplace\} sinon\
+			valeur : les occurrences de \{argumentToken\} sont remplac\'e9es par \{le texte actuellement s\'e9lectionn\'e9\} ou par \{argumentTokenDefaultReplace\} sinon\
 [optionnel]	clef : "argumentTokenDefaultReplace"	type:cha\'eene (d\'e9faut : vide)\
 			valeur : voir ci-dessus\
-[optionnel]	clef : "isEnvironment"				type:bool\'e9en (d\'e9faut:faux)\
+[optionnel]	clef: "argumentTokenRemoveBraces"		type:bool\'e9en (d\'e9faut : faux)\
+			valeur : les occurrences de \{argumentToken\} sont remplac\'e9es par <le jeton> plut\'f4t que \{<le jeton>\}\
+\
+[optionnel]	clef : "isEnvironment"				type:bool\'e9en (d\'e9faut : faux)\
 			valeur : indique si le mot-clef devrait s'\'e9crire \\begin\{name\}...\\end\{name\}\
 \
 Les fichiers images sont dispos\'e9s dans le sous-dossier Resources.\
-Les valeurs des "name" de la palette ou des \'e9l\'e9ments peuvent \'eatre traduits dans des fichiers Localizable.strings de sous-dossiers langue.lproj\
+Les valeurs des "name" de la palette ou des \'e9l\'e9ments peuvent \'eatre traduits dans des fichiers Localizable.strings de sous-dossiers <langue>.lproj\
 Un fichier Localizable.strings est un fichier texte brut UTF-8 qui contient des lignes du type "clef" = "valeur", termin\'e9es par des points-virgules.\
 En voici un exemple :\
 "arrows" = "Fl\'e8ches";\
@@ -445,8 +448,20 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.13.0 (02/022019)\
+\pard\tx566\pardeftab720\qj
+\cf0 -r\'e9paration des meta-donn\'e9es "commandes graphiques invisibles" r\'e9cemment cass\'e9es, esp\'e9rant que le copier/coller stupide des programmes tiers tels Keynote ou Powerpoint fonctionneront mieux \'e0 l'avenir\'a0;\
+-travail sur les meta-donn\'e9es "commandes graphiques invisibles" pour \'e9viter qu'elles s'entassent avec le temps dans les \'e9quations ; elle ssont maintenant optionnelles et ajout\'e9es \'e0 la vol\'e9es lors des exports PDF ou PDF avec polices vectoris\'e9es\'a0;\
+-ajout d'un champt de recherche dans la biblioth\'e8que\'a0;\
+-il est maintenant possible de re-latexiser l'ensemble de la biblioth\'e8que et de l'historique, pour les nettoyer des meta-donn\'e9es obsol\'e8tes qui alourdissent les fichiers\'a0sous-jacents ; cela permet de r\'e9duire la taille de la biblioth\'e8que et de l'historique\'a0;\
+-la biblioth\'e8que et l'historique peuvent maintenant \'eatre "compact\'e9es" (un simple vacuum pour ceux qui connaissent)\'a0;\
+-travail sur la cr\'e9ation d'\'e9l\'e9ments de palettes LaTeX pour un meilleur comportement lors de l'insertion et le remplacement de texte\'a0;\
+-ajout de deux palettes LaTeX, contribution de Sherman Gregory\'a0;\
+-d\'e9sactivation de la plupart des remplacement automatiques de raccourcis de texte (venant des pr\'e9f\'e9rences g\'e9n\'e9rales de MacOS) dans les zones de texte destin\'e9es au code LaTeX\'a0;\
+-am\'e9liorations et corrections diverses.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 v 2.12.0 (13 d\'e9cembre 2018)\
+\cf0 \
+v 2.12.0 (13 d\'e9cembre 2018)\
 \pard\tx566\pardeftab720\qj
 \cf0 -support du Dark Mode de MacOS Mojave\'a0;\
 -abandon de la compatibilit\'e9 avec MacOS 10.4 et 10.5.\

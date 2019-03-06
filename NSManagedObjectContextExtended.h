@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -17,13 +17,13 @@
 -(void) safeInsertObjects:(NSArray*)objects;
 -(void) safeDeleteObject:(NSManagedObject*)object;
 -(void) safeDeleteObjects:(NSArray*)objects;
--(unsigned int) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...;
+-(NSUInteger) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...;
 -(NSManagedObject*) managedObjectForURIRepresentation:(NSURL*)url;
--(unsigned int) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
+-(NSUInteger) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
 
 @end
 
 @interface NSObject (NSManagedObjectContextExtendedAvoidWarning)
--(unsigned int) countForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
+-(NSUInteger) countForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
 @end
 

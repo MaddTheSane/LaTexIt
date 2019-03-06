@@ -3,7 +3,7 @@
 //  LaTeXiT Helper
 //
 //  Created by Pierre Chatelier on 25/11/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXiT_HelperAppDelegate.h"
@@ -18,7 +18,7 @@
   if (!published)
     NSLog(@"LaTeXiT_Helper : published server failed");
   NSArray* componentsOfSelfPath = [[[NSBundle mainBundle] bundlePath] pathComponents];
-  unsigned int count = [componentsOfSelfPath count];
+  NSUInteger count = [componentsOfSelfPath count];
   NSArray* componentsOfOwnerPath = (count < 3) ? nil : [componentsOfSelfPath subarrayWithRange:NSMakeRange(0, count-3)];
   NSString* ownerPath = [NSString pathWithComponents:componentsOfOwnerPath];
   if ([[[ownerPath pathExtension] lowercaseString] isEqualToString:@"app"])

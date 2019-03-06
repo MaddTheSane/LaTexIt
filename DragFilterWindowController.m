@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragFilterWindowController.h"
@@ -170,7 +170,7 @@
     DragThroughButton* dragThroughButton = [notification object];
     if ([dragThroughButton state] == NSOnState)
     {
-      int tag = [dragThroughButton tag];
+      NSInteger tag = [dragThroughButton tag];
       if (tag < 0)
         [self setWindowVisible:NO withAnimation:YES];
       else//if (tag >= 0)
@@ -192,7 +192,7 @@
 
 -(void) setExportFormat:(export_format_t)value
 {
-  [self->buttonPalette setSelectedTag:(int)value];
+  [self->buttonPalette setSelectedTag:(NSInteger)value];
 }
 //end setExportFormat:
 

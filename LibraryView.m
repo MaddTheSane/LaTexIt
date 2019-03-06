@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -106,7 +106,7 @@
 {
   NSManagedObjectContext* managedObjectContext = [self->libraryController managedObjectContext];
   [managedObjectContext disableUndoRegistration];
-  int row = 0;
+  NSInteger row = 0;
   for (row = 0; row < [self numberOfRows]; ++row)
   {
     id itemAtRow = [self itemAtRow:row];
@@ -155,11 +155,9 @@
     LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentStateTransient:YES];
     NSUndoManager* documentUndoManager = [document undoManager];
     [documentUndoManager beginUndoGrouping];
-    if (makeLink)
-    {
-      [[documentUndoManager prepareWithInvocationTarget:document] setLinkedLibraryEquation:nil];
-      [document setLinkedLibraryEquation:equation];
-    }//end if (makeLink)
+    LibraryEquation* newLinkedLibraryEquation = !makeLink ? nil : equation;
+    [[documentUndoManager prepareWithInvocationTarget:document] setLinkedLibraryEquation:[document linkedLibraryEquation]];
+    [document setLinkedLibraryEquation:newLinkedLibraryEquation];
     [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
     [document applyLibraryEquation:equation];
     [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
@@ -209,7 +207,7 @@
   {
     NSArray* previousSelectedItems = [self itemsAtRowIndexes:[self selectedRowIndexes]];
     NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    int row = [self rowAtPoint:point];
+    NSInteger row = [self rowAtPoint:point];
     id candidateToSelection = [self itemAtRow:row];
     if (![previousSelectedItems containsObject:candidateToSelection])
       [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
@@ -218,8 +216,8 @@
     {
       [super mouseDown:theEvent];
       NSPoint pointInView = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-      int row = [self rowAtPoint:pointInView];
-      int column = [self columnAtPoint:pointInView];
+      NSInteger row = [self rowAtPoint:pointInView];
+      NSInteger column = [self columnAtPoint:pointInView];
       NSRect rect = ((row >= 0) && (column >= 0)) ? [self frameOfCellAtColumn:column row:row] : NSZeroRect;
       NSRect imageFrame = NSZeroRect;
       NSRect titleFrame = NSZeroRect;
@@ -281,7 +279,7 @@
   else if ([[self window] isKeyWindow])//if (NSPointInRect(location, [clipView bounds]))
   {
     location = [self convertPoint:location fromView:clipView];
-    int row = [self rowAtPoint:location];
+    NSInteger row = [self rowAtPoint:location];
     id libraryItem = (row >= 0) && (row < [self numberOfRows]) ? [self itemAtRow:row] : nil;
     NSImage* image = nil;
     NSColor* backgroundColor = nil;
@@ -299,7 +297,7 @@
 
 -(void) cancelOperation:(id)sender
 {
-  int editedRow = [self editedRow];
+  NSInteger editedRow = [self editedRow];
   if (editedRow >= 0)
   {
     LibraryItem* libraryItem = [self itemAtRow:editedRow];
@@ -329,7 +327,7 @@
 
 -(void) edit:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -370,7 +368,7 @@
   }
   else //if we are going down after an upwards selection, deselect last selected item
   {
-    unsigned int firstIndex = [selectedRowIndexes firstIndex];
+    NSUInteger firstIndex = [selectedRowIndexes firstIndex];
     [self deselectRow:firstIndex];
   }
 }
@@ -379,9 +377,9 @@
 -(void) moveUpAndModifySelection:(id)sender
 {
   //selection to up
-  unsigned int lastSelectedRow   = [self selectedRow];
+  NSInteger lastSelectedRow   = [self selectedRow];
   NSIndexSet* selectedRowIndexes = [self selectedRowIndexes];
-  if (lastSelectedRow == [selectedRowIndexes firstIndex]) //if the selection is going up, and up, increase it
+  if ((NSUInteger)lastSelectedRow == [selectedRowIndexes firstIndex]) //if the selection is going up, and up, increase it
   {
     if (lastSelectedRow > 0)
       --lastSelectedRow;
@@ -389,7 +387,7 @@
   }
   else //if we are going up after an downwards selection, deselect last selected item
   {
-    unsigned int lastIndex = [selectedRowIndexes lastIndex];
+    NSUInteger lastIndex = [selectedRowIndexes lastIndex];
     [self deselectRow:lastIndex];
   }
 }
@@ -397,7 +395,7 @@
 
 -(void) moveUp:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -407,7 +405,7 @@
 
 -(void) moveDown:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -431,11 +429,12 @@
   NSUndoManager* undoManager = [self->libraryController undoManager];
   [undoManager beginUndoGrouping];
   NSArray* selectedItems = [LibraryItem minimumNodeCoverFromItemsInArray:[self selectedItems] parentSelector:@selector(parent)];
-  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:[self->libraryController rootItems]];
+  NSArray* rootNodes = [self->libraryController rootItems:[self->libraryController filterPredicate]];
+  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem :
-    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:[self->libraryController rootItems]];
+    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem : [[selectedItems lastObject] parent];
-  unsigned int nbSelectedItems = [selectedItems count];
+  NSUInteger nbSelectedItems = [selectedItems count];
   NSMutableSet* parentOfSelectedItems = [NSMutableSet setWithCapacity:[selectedItems count]];
   NSEnumerator* enumerator = [selectedItems objectEnumerator];
   LibraryItem* libraryItem = nil;
@@ -533,7 +532,7 @@
     [managedObjectContext processPendingChanges];
     [self reloadData];
     [self sizeLastColumnToFit];
-  }
+  }//end if ([undoManager canUndo])
 }
 //end undo:
 
@@ -547,7 +546,7 @@
     [managedObjectContext processPendingChanges];
     [self reloadData];
     [self sizeLastColumnToFit];
-  }
+  }//end if ([undoManager canRedo])
 }
 //end redo:
 
@@ -591,14 +590,15 @@
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   LibraryItem* selectedItem = [self selectedItem];
   LibraryGroupItem* parentOfSelectedItem = (LibraryGroupItem*)[selectedItem parent];
-  NSArray* brothers = !parentOfSelectedItem ? [self->libraryController rootItems] : [parentOfSelectedItem childrenOrdered];
-  int childIndex = !selectedItem ? [[self dataSource] outlineView:self numberOfChildrenOfItem:nil] :
-                   ((int)[brothers indexOfObject:selectedItem]+1);
+  NSPredicate* predicate = [self->libraryController filterPredicate];
+  NSArray* brothers = !parentOfSelectedItem ? [self->libraryController rootItems:predicate] : [parentOfSelectedItem childrenOrdered:predicate];
+  NSInteger childIndex = !selectedItem ? [[self dataSource] outlineView:self numberOfChildrenOfItem:nil] :
+                   ((NSInteger)[brothers indexOfObject:selectedItem]+1);
   [self pasteContentOfPasteboard:pasteboard onItem:parentOfSelectedItem childIndex:childIndex];
 }
 //end paste:
 
--(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(int)index
+-(BOOL) pasteContentOfPasteboard:(NSPasteboard*)pasteboard onItem:(id)item childIndex:(NSInteger)index
 {
   BOOL result = NO;
   
@@ -668,8 +668,9 @@
   NSUInteger count = [libraryItems count];
   if (count)
   {
+    NSPredicate* filterPredicate = [self->libraryController filterPredicate];
     NSMutableArray* brothers = [NSMutableArray arrayWithArray:
-      !item ? [self->libraryController rootItems] : [item childrenOrdered]];
+      !item ? [self->libraryController rootItems:filterPredicate] : [item childrenOrdered:filterPredicate]];
     NSEnumerator* enumerator = [libraryItems objectEnumerator];
     LibraryItem* libraryItem = nil;
     while((libraryItem = [enumerator nextObject]))
@@ -922,11 +923,18 @@
     NSColor* cellTextColor = nil;
     if (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
     {
-      NSString* title = [representedObject title];
+      LibraryItem* libraryItem = [representedObject dynamicCastToClass:[LibraryItem class]];
+      LibraryEquation* libraryEquation = [libraryItem dynamicCastToClass:[LibraryEquation class]];
+      LatexitEquation* latexitEquation = [libraryEquation equation];
+      BOOL showSize = (DebugLogLevel > 0);
+      NSString* title =
+        showSize && (latexitEquation != nil) ? [NSString stringWithFormat:@"%@ (%lluKo)", [libraryItem title], (unsigned long long)([[latexitEquation pdfData] length]/1024)] :
+        (libraryItem != nil) ? [libraryItem title] :
+        @"";
       [cell setStringValue:!title ? @"" : title];
       cellImage = [self iconForRepresentedObject:representedObject];
       cellDrawsBackground = YES;
-    }
+    }//end if (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
     else if (![representedObject isKindOfClass:[LibraryGroupItem class]])
     {
       [cell setStringValue:@""];

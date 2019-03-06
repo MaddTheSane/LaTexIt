@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreamblesController.h"
@@ -95,9 +95,9 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   else if ([keyPath isEqualToString:LatexisationSelectedPreambleIndexKey] ||
            [keyPath isEqualToString:ServiceSelectedPreambleIndexKey])
   {
-    int curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] intValue];
-    int newIndex = curIndex;
-    int count = (signed)[[self arrangedObjects] count];
+    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+    NSInteger newIndex = curIndex;
+    NSInteger count = (signed)[[self arrangedObjects] count];
     if ((curIndex<0) && count)
       newIndex = 0;
     else if (curIndex>=count)
@@ -155,7 +155,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 //end add:
 
 //redefined from NSArrayControllerExtended
--(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
   int preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
   int preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];

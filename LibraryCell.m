@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LibraryCell is the kind of cell displayed in the NSOutlineView of the Library drawer
 //It contains an image and a text. It is a copy of the ImageAndTextCell provided by Apple
@@ -70,7 +70,7 @@
 }
 //end editWithFrame:inView:editor:delegate:event:
 
--(void) selectWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
+-(void) selectWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
 {
   LibraryView* libraryTableView = [controlView dynamicCastToClass:[LibraryView class]];
   if (libraryTableView)

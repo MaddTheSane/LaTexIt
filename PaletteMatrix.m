@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/12/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "PaletteMatrix.h"
@@ -16,12 +16,14 @@
 {
   return YES;
 }
+//end acceptsFirstResponder
 
 -(void) scrollWheel:(NSEvent*)event
 {
   [super scrollWheel:event];
   [[[self window] windowController] mouseMoved:event];
 }
+//end scrollWheel:
 
 -(void) mouseDown:(NSEvent*)event
 {
@@ -35,9 +37,11 @@
     PaletteCell* cell = [self cellAtRow:row column:column];
     [cell setHighlighted:YES];
     [self selectCellAtRow:row column:column];
-    [self sendAction:@selector(latexPalettesClick:) to:[self delegate]];
-  }
+    if ([event clickCount] > 1)
+      [self sendAction:@selector(latexPalettesDoubleClick:) to:[self delegate]];
+  }//end if (ok)
 }
+//end mouseDown:
 
 -(void) keyDown:(NSEvent*)event
 {
@@ -69,12 +73,13 @@
       [self sendAction:@selector(latexPalettesSelect:) to:[self delegate]];
     }
     else if ((c == ' ') || (c == 13))//return
-      [self sendAction:@selector(latexPalettesClick:) to:[self delegate]];
+      [self sendAction:@selector(latexPalettesDoubleClick:) to:[self delegate]];
     else if (c == '\t')
     {
       [[self window] makeFirstResponder:[self nextKeyView]];
-    }
-  }
+    }//end if (c == '\t')
+  }//end if (selectedCell && ![characters isEqualToString:@""])
 }
+//end keyDown:
 
 @end

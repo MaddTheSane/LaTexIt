@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -357,8 +357,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
   [self->lowerBoxLinkbackButton bind:NSValueBinding toObject:self withKeyPath:@"linkBackAllowed" options:
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState]
-                                       trueValue:[NSNumber numberWithInt:NSOnState]], NSValueTransformerBindingOption,
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState]
+                                       trueValue:[NSNumber numberWithInteger:NSOnState]], NSValueTransformerBindingOption,
       nil]];
   [self->lowerBoxLinkbackButton bind:NSEnabledBinding toObject:self withKeyPath:@"linkBackAllowed" options:
     [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1013,7 +1013,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   NSError* error = nil;
   NSArray* result = ![self->poolOfObsoleteUniqueIds count] ? nil :
   [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:&error];
-  unsigned int count = [result count];
+  NSUInteger count = [result count];
   if (count)
   {
     NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
@@ -1112,7 +1112,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                         otherButton:nil
           informativeTextWithFormat:NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.",
                                                       @"You did not type any text in the body. The result will certainly be empty.")];
-     int result = [alert runModal];
+     NSInteger result = [alert runModal];
      mustProcess = (result == NSAlertDefaultReturn);
   }//end if (runBegin && !mustProcess)
   
@@ -1123,7 +1123,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       [self->lowerBoxControlsBoxFontColorWell deactivate];
       [[[AppController appController] whiteColorWarningWindow] center];
-      int result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
+      NSInteger result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
       if (result == NSCancelButton)
         mustProcess = NO;
     }
@@ -1189,6 +1189,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
     NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
     
+    LatexitEquation* linkedEquation = [self->linkedLibraryEquation equation];
+    NSString* title = [linkedEquation title];
     CGFloat leftMargin   = [[AppController appController] marginsCurrentLeftMargin];
     CGFloat rightMargin  = [[AppController appController] marginsCurrentRightMargin];
     CGFloat bottomMargin = [[AppController appController] marginsCurrentBottomMargin];
@@ -1197,10 +1199,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     NSMutableDictionary* configuration = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
       [NSNumber numberWithBool:YES], @"runInBackgroundThread",
       self, @"document",
-      preamble, @"preamble", body, @"body", color, @"color", [NSNumber numberWithInt:mode], @"mode",
+      preamble, @"preamble", body, @"body", color, @"color", [NSNumber numberWithInteger:mode], @"mode",
       [NSNumber numberWithDouble:[self->lowerBoxControlsBoxFontSizeTextField doubleValue]], @"magnification",
       [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
       ![self->upperBoxImageView backgroundColor] ? (id)[NSNull null] : (id)[self->upperBoxImageView backgroundColor], @"backgroundColor",
+      !title ? [NSNull null] : title, @"title",
       [NSNumber numberWithDouble:leftMargin], @"leftMargin",
       [NSNumber numberWithDouble:rightMargin], @"rightMargin",
       [NSNumber numberWithDouble:topMargin], @"topMargin",
@@ -1274,7 +1277,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [[self undoManager] enableUndoRegistration];
       
       //reupdate for easter egg
-      [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:[self _checkEasterEgg]];
+      NSImage* easterEggImage = [self _checkEasterEgg];
+      if (easterEggImage)
+        [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:easterEggImage];
 
       //updates the pasteboard content for a live Linkback link, and triggers a sendEdit
       if ([self linkBackAllowed])
@@ -1386,16 +1391,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   
   [self->lowerBoxPreambleTextView clearErrors];
   [self->lowerBoxSourceTextView clearErrors];
-  int numberOfRows = [self->upperBoxLogTableView numberOfRows];
-  int i = 0;
+  NSInteger numberOfRows = [self->upperBoxLogTableView numberOfRows];
+  NSInteger i = 0;
   for(i = 0 ; i<numberOfRows ; ++i)
   {
     NSNumber* lineNumber = [self->upperBoxLogTableView tableView:self->upperBoxLogTableView
                             objectValueForTableColumn:[self->upperBoxLogTableView tableColumnWithIdentifier:@"line"] row:i];
     NSString* message = [self->upperBoxLogTableView tableView:self->upperBoxLogTableView
                       objectValueForTableColumn:[self->upperBoxLogTableView tableColumnWithIdentifier:@"message"] row:i];
-    int line = [lineNumber intValue];
-    int nbLinesInUserPreamble = [self->lowerBoxPreambleTextView nbLines];
+    NSInteger line = [lineNumber integerValue];
+    NSInteger nbLinesInUserPreamble = [self->lowerBoxPreambleTextView nbLines];
     if (line <= nbLinesInUserPreamble)
       [self->lowerBoxPreambleTextView setErrorAtLine:line message:message];
     else
@@ -1429,7 +1434,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     const CGFloat height = preambleFrame.size.height + sourceFrame.size.height;
     const CGFloat newPreambleHeight = visible ? height/2 : 0;
     const CGFloat newSourceHeight   = visible ? height/2 : height;
-    int i = 0;
+    NSInteger i = 0;
     for(i = animate ? 0 : 10; i<=10 ; ++i)
     {
       const CGFloat factor = i/10.0f;
@@ -1470,8 +1475,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient
 {
   LatexitEquation* result = nil;
-  /*int tag = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegmentTag];
-  latex_mode_t mode = (latex_mode_t) tag;*/
   PreferencesController* preferencesController = [PreferencesController sharedController];
   BOOL automaticHighContrastedPreviewBackground = [preferencesController documentUseAutomaticHighContrastedPreviewBackground];
   NSColor* backgroundColor = /*!automaticHighContrastedPreviewBackground ? nil :*/ [self->upperBoxImageView backgroundColor];
@@ -1484,7 +1487,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                                         color:[self->lowerBoxControlsBoxFontColorWell color]
                                     pointSize:[self->lowerBoxControlsBoxFontSizeTextField doubleValue] date:[NSDate date]
                                          mode:[self latexModeApplied]
-                              backgroundColor:backgroundColor] autorelease];
+                              backgroundColor:backgroundColor
+                                        title:[self->linkedLibraryEquation title]
+                              ] autorelease];
   if (backgroundColor)
     [result setBackgroundColor:backgroundColor];
   return result;
@@ -1603,7 +1608,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [[self windowForSheet] makeFirstResponder:self->upperBoxImageView];
 
     [self _setLogTableViewVisible:NO];
-    [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:[latexitEquation pdfCachedImage]];
+    if (!self->currentEquationIsARecentLatexisation)
+      [self->upperBoxImageView setPDFData:[latexitEquation pdfData] cachedImage:[latexitEquation pdfCachedImage]];
 
     NSParagraphStyle* paragraphStyle = [self->lowerBoxPreambleTextView defaultParagraphStyle];
     [self setPreamble:[latexitEquation preamble]];
@@ -1763,7 +1769,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end reexportImage:
 
--(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(int)code contextInfo:(void*)contextInfo
+-(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)code contextInfo:(void*)contextInfo
 {
   DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
   if ((code == NSOKButton) && [self->upperBoxImageView image])
@@ -1823,26 +1829,31 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end triggerSmartHistoryFeature
 
--(NSString*) selectedText
+-(NSString*) selectedTextFromRange:(NSRange*)outRange
 {
   NSString* text = [NSString string];
   NSResponder* firstResponder = [[self windowForSheet] firstResponder];
   if ((firstResponder == self->lowerBoxPreambleTextView) || (firstResponder == self->lowerBoxSourceTextView))
   {
     NSTextView* textView = (NSTextView*) firstResponder;
+    NSRange selectedRange = [textView selectedRange];
     text = [[textView string] substringWithRange:[textView selectedRange]];
-  }
+    if (outRange)
+      *outRange = selectedRange;
+  }//end if ((firstResponder == self->lowerBoxPreambleTextView) || (firstResponder == self->lowerBoxSourceTextView))
   return text;
 }
-//end selectedText
+//end selectedTextFromRange:
 
--(void) insertText:(id)text
+-(void) insertText:(id)text newSelectedRange:(NSRange)selectedRange
 {
   NSResponder* firstResponder = [[self windowForSheet] firstResponder];
-  if ((firstResponder == self->lowerBoxPreambleTextView) || (firstResponder == self->lowerBoxSourceTextView))
-    [firstResponder insertText:text];
+  NSTextView* textView = [firstResponder dynamicCastToClass:[NSTextView class]];
+  LineCountTextView* lineCountTextView = [textView dynamicCastToClass:[LineCountTextView class]];
+  if ((lineCountTextView == self->lowerBoxPreambleTextView) || (lineCountTextView == self->lowerBoxSourceTextView))
+    [lineCountTextView insertText:text newSelectedRange:selectedRange];
 }
-//end insertText:
+//end insertText:newSelectedRange:
 
 -(BOOL) isBusy
 {
@@ -1919,11 +1930,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     }
   }
   else
-    [self gotoLine:[number intValue]];
+    [self gotoLine:[number integerValue]];
 }
 //end _clickErrorLine:
 
--(void) gotoLine:(int)row
+-(void) gotoLine:(NSInteger)row
 {
   if ([self->lowerBoxPreambleTextView gotoLine:row])
     [self setPreambleVisible:YES animate:YES];
@@ -2124,7 +2135,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   NSMutableString* description = [NSMutableString string];
   if (script)
   {
-    switch([[script objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] intValue])
+    switch([[script objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] integerValue])
     {
       case SCRIPT_SOURCE_STRING :
         [description appendFormat:@"%@\t: %@\n%@\t:\n%@\n",
@@ -2304,7 +2315,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self setPreamble:preambleAttributedString];
   }
   else
-    [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInt:0]]; 
+    [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInteger:0]];
 }
 //end changePreamble:
 
@@ -2318,7 +2329,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self setBodyTemplate:bodyTemplate moveCursor:YES];
   }
   else
-    [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInt:1]]; 
+    [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:[NSNumber numberWithInteger:1]]; 
 }
 //end changeBodyTemplate:
 
@@ -2823,7 +2834,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end saveAsDidEnd:
 
--(void) saveAsDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) saveAsDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   NSSavePanel* panel = (NSSavePanel*)contextInfo;
   BOOL synchronizeEnabled =

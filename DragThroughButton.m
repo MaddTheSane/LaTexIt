@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 07/05/10.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragThroughButton.h"
@@ -92,11 +92,11 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
     else//if (self->shouldBlink)
     {
       self->remainingSetStateWrapped += 5;
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOnState] afterDelay:0.05];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOffState] afterDelay:0.10];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOnState] afterDelay:0.15];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOffState] afterDelay:0.20];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInt:NSOnState] afterDelay:0.25];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOnState] afterDelay:0.05];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOffState] afterDelay:0.10];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOnState] afterDelay:0.15];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOffState] afterDelay:0.20];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOnState] afterDelay:0.25];
     }//end if (self->shouldBlink)
   }//end if ([self isEnabled])
 }
@@ -108,7 +108,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
   {
     if (self->remainingSetStateWrapped)
       --self->remainingSetStateWrapped;
-    [self setState:[number intValue]];
+    [self setState:[number integerValue]];
   }//end if ([self isEnabled])
 }
 //end setStateWrapped:

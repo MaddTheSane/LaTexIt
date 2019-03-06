@@ -4,10 +4,17 @@
 \paperw12240\paperh15840\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\qc
 
-\f0\b\fs24 \cf0 version 2.12.0 (13 dicembre 2018)\
+\f0\b\fs24 \cf0 version 2.13.0 (02/02/2019)\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\qc
 
 \f1\b0\fs22 \cf0 \
 \pard\tx566\pardeftab720\qj
-\cf0 -added MacOS Mojave Dark mode support;\
--dropped MacOS 10.4 and 10.5 compatibility.}
+\cf0 -restored the recently broken "invisible graphic commands" metadata annotations, hoping that copy/paste from stupid third party softwares like Keynote or Powerpoint will work better in the future;\
+-reworked the "invisible graphic commands" metadata to avoid piling them over and over in equations; it is now optional and added on the fly (when enabled) only when exporting to PDF or PDF with outlined fonts;\
+-added a search field in the library;\
+-it is now possible to re-latexize all history and library items to strip obsolete, oversized, metadata (and reduce history and library size);\
+-history and library can also be "compacted" (a simple vacuum for those who know);\
+-some work on LaTeX palette items creation and behavior for more clever insertion and text replacement;\
+-added two LaTeX palettes contributed by Sherman Gregory;\
+-disable most automatic text-shortcuts replacements (from MacOS general preferences) in LaTeX-related text areas;\
+-various fixes and improvements.}

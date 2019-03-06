@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -34,6 +34,13 @@
 #else
 #define CHBRIDGE
 #endif
+
+static BOOL objectDiffers(id o1, id o2)
+{
+  BOOL result = (o1 && !o2) || (!o1 && o2) || ((o1 != o2) && ![o1 isEqualTo:o2]);
+  return result;
+}
+//end objectDiffers()
 
 static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object, void* info)
 {
@@ -87,7 +94,6 @@ static void extractStreamObjectsFunction(const char *key, CGPDFObjectRef object,
 }
 //end extractStreamObjectsFunction()
 
-static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info);
 static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
 {
   CGPDFStringRef pdfString = 0;
@@ -101,14 +107,36 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
     NSString* string = [(NSString*)cfString autorelease];
     #endif
     DebugLogStatic(1, @"PDF scanning found <%@>", string);
+    
+    NSMutableDictionary* pdfScanningInfos = [(id)info dynamicCastToClass:[NSMutableDictionary class]];
+
+    BOOL isStartingLatexitMetadata = [string isMatchedByRegex:@"^\\<latexit sha1_base64=\""];
+    if (isStartingLatexitMetadata)
+    {
+      [pdfScanningInfos setObject:[NSNumber numberWithBool:YES] forKey:@"latexitMetadataStarted"];
+      [pdfScanningInfos setObject:[NSMutableString string] forKey:@"latexitMedatataString"];
+    }//end if (isStartingLatexitMetadata)
+
+    BOOL isLatexitMetadataStarted = [[[pdfScanningInfos objectForKey:@"latexitMetadataStarted"] dynamicCastToClass:[NSNumber class]] boolValue];
+    NSMutableString* latexitMedatataString = [[pdfScanningInfos objectForKey:@"latexitMedatataString"] dynamicCastToClass:[NSMutableString class]];
+
+    if (isLatexitMetadataStarted)
+      [latexitMedatataString appendString:string];
+    
+    BOOL isStoppingLatexitMetadata = isLatexitMetadataStarted && [string isMatchedByRegex:@"\\</latexit\\>$"];
+    if (isStoppingLatexitMetadata)
+      [pdfScanningInfos setObject:[NSNumber numberWithBool:NO] forKey:@"latexitMetadataStarted"];
+
+    NSString* stringToMatch = latexitMedatataString;
+    
     NSError* error = nil;
     NSArray* components =
-      [string captureComponentsMatchedByRegex:@"^\\<latexit sha1_base64=\"(.*?)\"\\>(.*?)\\</latexit\\>$"
-                               options:RKLMultiline|RKLDotAll
-                                 range:NSMakeRange(0, [string length]) error:&error];
+      [stringToMatch captureComponentsMatchedByRegex:@"^\\<latexit sha1_base64=\"(.*?)\"\\>(.*?)\\</latexit\\>$"
+                                             options:RKLMultiline|RKLDotAll
+                                               range:NSMakeRange(0, [stringToMatch length]) error:&error];
     if ([components count] == 3)
     {
-      DebugLogStatic(1, @"this is metadata : %@", string);
+      DebugLogStatic(1, @"this is metadata : %@", stringToMatch);
       NSString* sha1Base64 = [components objectAtIndex:1];
       NSString* dataBase64Encoded = [components objectAtIndex:2];
       NSString* dataBase64EncodedSha1Base64 = [[dataBase64Encoded dataUsingEncoding:NSUTF8StringEncoding] sha1Base64];
@@ -125,16 +153,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
             mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
       NSDictionary* plistAsDictionary = [plist dynamicCastToClass:[NSDictionary class]];
       if (plistAsDictionary)
-      {
-        #ifdef ARC_ENABLED
-        if (info)
-          memcpy((void**)info, &plistAsDictionary, sizeof(NSDictionary*));
-        #else
-        NSDictionary** outLatexitMetadata = (NSDictionary**)info;
-        if (outLatexitMetadata)
-          *outLatexitMetadata = plistAsDictionary;
-        #endif
-      }//end if (plistAsDictionary)
+        [pdfScanningInfos setObject:plistAsDictionary forKey:@"latexitMetadata"];
     }//end if ([components count] == 3)
   }//end if (okString)
 }//end CHCGPDFOperatorCallback_Tj
@@ -293,9 +312,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       #endif
 
       NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
-      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
+      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
-      [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+      [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
 
       NSString* sourceAsString = [embeddedInfos objectForKey:@"source"];
       NSAttributedString* sourceText =
@@ -435,10 +454,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
       [modeAsString deleteCharactersInRange:range];
     }
-    latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
+    latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString integerValue]
                         : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
     mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
-    [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+    [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
 
     NSMutableString* sourceString = [NSMutableString string];
     testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
@@ -642,12 +661,20 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         CGPDFContentStreamCreateWithPage(page);
       CGPDFOperatorTableRef operatorTable = CGPDFOperatorTableCreate();
       CGPDFOperatorTableSetCallback(operatorTable, "Tj", &CHCGPDFOperatorCallback_Tj);
+      NSMutableDictionary* pdfScanningInfos = [[NSMutableDictionary alloc] init];
       CGPDFScannerRef pdfScanner = !contentStream ? 0 :
-        CGPDFScannerCreate(contentStream, operatorTable, &latexitMetadata);
+        CGPDFScannerCreate(contentStream, operatorTable, pdfScanningInfos);
       CGPDFScannerScan(pdfScanner);
       CGPDFScannerRelease(pdfScanner);
       CGPDFOperatorTableRelease(operatorTable);
       CGPDFContentStreamRelease(contentStream);
+      latexitMetadata = [[[pdfScanningInfos dynamicCastToClass:[NSDictionary class]] objectForKey:@"latexitMetadata"] dynamicCastToClass:[NSDictionary class]];
+      latexitMetadata = [latexitMetadata copy];
+      #ifdef ARC_ENABLED
+      #else
+      [latexitMetadata autorelease];
+      [pdfScanningInfos release];
+      #endif
       DebugLog(1, @"<PDF scanning");
     }//end if (!isLaTeXiTPDF)
     CGPDFDocumentRelease(pdfDocument);
@@ -665,9 +692,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       #endif
 
       NSNumber* modeAsNumber = [latexitMetadata objectForKey:@"mode"];
-      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
+      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
-      [result setObject:[NSNumber numberWithInt:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+      [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
 
       NSString* sourceAsString = [latexitMetadata objectForKey:@"source"];
       NSAttributedString* sourceText =
@@ -730,6 +757,38 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   return result;
 }
 //end metaDataFromPDFData:useDefaults:
+
++(BOOL) hasInvisibleGraphicCommandsInPDFData:(NSData*)someData
+{
+  BOOL result = NO;
+  CGDataProviderRef dataProvider = !someData ? 0 :
+    CGDataProviderCreateWithCFData((CFDataRef)someData);
+  CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
+    CGPDFDocumentCreateWithProvider(dataProvider);
+  CGPDFPageRef page = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
+    CGPDFDocumentGetPage(pdfDocument, 1);
+  NSMutableDictionary* pdfScanningInfos = [[NSMutableDictionary alloc] init];
+    CGPDFContentStreamRef contentStream = !page ? 0 :
+      CGPDFContentStreamCreateWithPage(page);
+    CGPDFOperatorTableRef operatorTable = CGPDFOperatorTableCreate();
+    CGPDFOperatorTableSetCallback(operatorTable, "Tj", &CHCGPDFOperatorCallback_Tj);
+    CGPDFScannerRef pdfScanner = !contentStream ? 0 :
+      CGPDFScannerCreate(contentStream, operatorTable, pdfScanningInfos);
+    CGPDFScannerScan(pdfScanner);
+    CGPDFScannerRelease(pdfScanner);
+    CGPDFOperatorTableRelease(operatorTable);
+    CGPDFContentStreamRelease(contentStream);
+  CGPDFDocumentRelease(pdfDocument);
+  CGDataProviderRelease(dataProvider);
+  NSDictionary* latexitMetadata = [[[pdfScanningInfos dynamicCastToClass:[NSDictionary class]] objectForKey:@"latexitMetadata"] dynamicCastToClass:[NSDictionary class]];
+  result = ([latexitMetadata count] > 0);
+  #ifdef ARC_ENABLED
+  #else
+  [pdfScanningInfos release];
+  #endif
+  return result;
+}
+//end hasInvisibleGraphicCommandsInPDFData:
 
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti
 {
@@ -839,10 +898,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 +(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
                  backgroundColor:(NSColor*)backgroundColor
+                           title:(NSString*)aTitle
 {
   id instance = [[[self class] alloc] initWithPDFData:someData preamble:aPreamble sourceText:aSourceText
                                               color:aColor pointSize:aPointSize date:aDate mode:aMode
-                                              backgroundColor:backgroundColor];
+                                              backgroundColor:backgroundColor title:aTitle];
   #ifdef ARC_ENABLED
   #else
   [instance autorelease];
@@ -895,7 +955,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
               color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)aDate mode:(latex_mode_t)aMode
-              backgroundColor:(NSColor*)aBackgroundColor
+              backgroundColor:(NSColor*)aBackgroundColor title:(NSString*)aTitle
 {
   if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
@@ -911,11 +971,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self setDate:aDate ? [[aDate copy] autorelease] : [NSDate date]];
   #endif
   [self setMode:aMode];
-  [self setTitle:nil];
+  [self setTitle:aTitle];
     
   if (!aBackgroundColor && [[PreferencesController sharedController] documentUseAutomaticHighContrastedPreviewBackground])
     aBackgroundColor = ([aColor grayLevel] > .5) ? [NSColor blackColor] : nil;
   [self setBackgroundColor:aBackgroundColor];
+  self->annotateDataDirtyState = NO;
   [self endUpdate];
   return self;
 }
@@ -933,7 +994,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
   NSNumber* mode = [metaData objectForKey:@"mode"];
   if (mode)
-    [self setMode:(latex_mode_t)[mode intValue]];
+    [self setMode:(latex_mode_t)[mode integerValue]];
 
   NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
   if (sourceText)
@@ -985,7 +1046,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSNumber* mode = [metaData objectForKey:@"mode"];
   isLaTeXiTPDF &= (mode != nil);
   if (mode)
-    [self setMode:(latex_mode_t)[mode intValue]];
+    [self setMode:(latex_mode_t)[mode integerValue]];
 
   NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
   isLaTeXiTPDF &= (sourceText != nil);
@@ -1017,7 +1078,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   NSDate* date = [metaData objectForKey:@"date"];
   if (date)
     [self setDate:date];
-    
+  
+  self->annotateDataDirtyState = NO;
   [self endUpdate];
 
   if (!isLaTeXiTPDF)
@@ -1075,7 +1137,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [preamble release];
 
       NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
-      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber intValue] :
+      latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
       [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
 
@@ -1177,7 +1239,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       range.length = (range.location != NSNotFound) ? [modeAsString length]-range.location : 0;
       [modeAsString deleteCharactersInRange:range];
     }
-    latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString intValue]
+    latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString integerValue]
                         : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
     mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
     [self setMode:(mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode];
@@ -1408,7 +1470,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   id clone = [[[self class] alloc] initWithPDFData:[self pdfData] preamble:[self preamble] sourceText:[self sourceText]
                                              color:[self color] pointSize:[self pointSize] date:[self date]
-                                            mode:[self mode] backgroundColor:[self backgroundColor]];
+                                            mode:[self mode] backgroundColor:[self backgroundColor]
+                                            title:[self title]];
   [[self managedObjectContext] safeInsertObject:clone];
   return clone;
 }
@@ -1418,6 +1481,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   if (!((self = [self initWithEntity:[[self class] entity] insertIntoManagedObjectContext:nil])))
     return nil;
+  [self beginUpdate];
   [self setPdfData:[coder decodeObjectForKey:@"pdfData"]];
   [self setPreamble:[coder decodeObjectForKey:@"preamble"]];
   [self setSourceText:[coder decodeObjectForKey:@"sourceText"]];
@@ -1428,6 +1492,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self setBaseline:[coder decodeDoubleForKey:@"baseline"]];
   [self setBackgroundColor:[coder decodeObjectForKey:@"backgroundColor"]];
   [self setTitle:[coder decodeObjectForKey:@"title"]];
+  self->annotateDataDirtyState = NO;
+  [self endUpdate];
   return self;
 }
 //end initWithCoder:
@@ -1642,13 +1708,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self didAccessValueForKey:@"preambleAsData"];
     result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
     [self setPrimitiveValue:result forKey:@"preamble"];
-  }
+  }//end if (!result)
   return result;
 } 
 //end preamble
 
 -(void) setPreamble:(NSAttributedString*)value
 {
+  [self beginUpdate];
+  self->annotateDataDirtyState |= objectDiffers(value, [self preamble]);
   [self willChangeValueForKey:@"preamble"];
   [self setPrimitiveValue:value forKey:@"preamble"];
   [self didChangeValueForKey:@"preamble"];
@@ -1656,7 +1724,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"preambleAsData"];
   [self setPrimitiveValue:archivedData forKey:@"preambleAsData"];
   [self didChangeValueForKey:@"preambleAsData"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setPreamble:
 
@@ -1680,6 +1748,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setSourceText:(NSAttributedString*)value
 {
+  [self beginUpdate];
+  self->annotateDataDirtyState |= objectDiffers(value, [self sourceText]);
   [self willChangeValueForKey:@"sourceText"];
   [self setPrimitiveValue:value forKey:@"sourceText"];
   [self didChangeValueForKey:@"sourceText"];
@@ -1687,7 +1757,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"sourceTextAsData"];
   [self setPrimitiveValue:archivedData forKey:@"sourceTextAsData"];
   [self didChangeValueForKey:@"sourceTextAsData"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setSourceText:
 
@@ -1711,6 +1781,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setColor:(NSColor*)value
 {
+  [self beginUpdate];
+  self->annotateDataDirtyState |= objectDiffers(value, [self color]);
   [self willChangeValueForKey:@"color"];
   [self setPrimitiveValue:value forKey:@"color"];
   [self didChangeValueForKey:@"color"];
@@ -1718,7 +1790,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"colorAsData"];
   [self setPrimitiveValue:archivedData forKey:@"colorAsData"];
   [self didChangeValueForKey:@"colorAsData"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setColor:
 
@@ -1734,10 +1806,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setBaseline:(double)value
 {
+  [self beginUpdate];
+  self->annotateDataDirtyState |= (value != [self baseline]);
   [self willChangeValueForKey:@"baseline"];
   [self setPrimitiveValue:[NSNumber numberWithDouble:value] forKey:@"baseline"];
   [self didChangeValueForKey:@"baseline"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setBaseline:
 
@@ -1753,10 +1827,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setPointSize:(double)value
 {
+  [self beginUpdate];
+  self->annotateDataDirtyState |= (value != [self pointSize]);
   [self willChangeValueForKey:@"pointSize"];
   [self setPrimitiveValue:[NSNumber numberWithDouble:value] forKey:@"pointSize"];
   [self didChangeValueForKey:@"pointSize"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setPointSize:
 
@@ -1772,9 +1848,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setDate:(NSDate*)value
 {
+  [self beginUpdate];
   [self willChangeValueForKey:@"date"];
   [self setPrimitiveValue:value forKey:@"date"];
   [self didChangeValueForKey:@"date"];
+  [self endUpdate];
 }
 //end setDate:
 
@@ -1782,7 +1860,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   latex_mode_t result = 0;
   [self willAccessValueForKey:@"modeAsInteger"];
-  result = (latex_mode_t)[[self primitiveValueForKey:@"modeAsInteger"] intValue];
+  result = (latex_mode_t)[[self primitiveValueForKey:@"modeAsInteger"] integerValue];
   [self didAccessValueForKey:@"modeAsInteger"];
   return result;
 }
@@ -1790,10 +1868,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setMode:(latex_mode_t)value
 {
+  [self beginUpdate];
+  self->annotateDataDirtyState |= (value != [self mode]);
   [self willChangeValueForKey:@"modeAsInteger"];
-  [self setPrimitiveValue:[NSNumber numberWithInt:(int)value] forKey:@"modeAsInteger"];
+  [self setPrimitiveValue:[NSNumber numberWithInteger:(NSInteger)value] forKey:@"modeAsInteger"];
   [self didChangeValueForKey:@"modeAsInteger"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setMode:
 
@@ -1819,6 +1899,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSColor* grayLevelColor = [value colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
   value = ([grayLevelColor whiteComponent] == 1.0f) ? nil : value;
+  [self beginUpdate];
+  self->annotateDataDirtyState |= objectDiffers(value, [self backgroundColor]);
   [self willChangeValueForKey:@"backgroundColor"];
   [self setPrimitiveValue:value forKey:@"backgroundColor"];
   [self didChangeValueForKey:@"backgroundColor"];
@@ -1826,7 +1908,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"backgroundColorAsData"];
   [self setPrimitiveValue:archivedData forKey:@"backgroundColorAsData"];
   [self didChangeValueForKey:@"backgroundColorAsData"];
-  [self reannotatePDFDataUsingPDFKeywords:YES];
+  [self endUpdate];
 }
 //end setBackgroundColor:
 
@@ -1843,13 +1925,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) setTitle:(NSString*)value
 {
   NSString* oldTitle = [self title];
-  if ((value != oldTitle) && ![value isEqualToString:oldTitle])
+  BOOL bothEmpty = ![oldTitle length] && ![value length];
+  BOOL isDifferent = !bothEmpty && objectDiffers(value, [self title]);
+  [self beginUpdate];
+  self->annotateDataDirtyState |= isDifferent;
+  if (isDifferent)
   {
     [self willChangeValueForKey:@"title"];
     [self setPrimitiveValue:value forKey:@"title"];
     [self didChangeValueForKey:@"title"];
-    [self reannotatePDFDataUsingPDFKeywords:YES];
-  }//end if ((value != oldTitle) && ![value isEqualToString:oldTitle])
+  }//end if (isDifferent)
+  [self endUpdate];
 }
 //end setTitle:
 
@@ -1864,8 +1950,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     {
       BOOL hasPdfOrBitmapImageRep = NO;
       NSArray* representations = [result representations];
-      int i = 0;
-      int count = [representations count];
+      NSUInteger i = 0;
+      NSUInteger count = [representations count];
       for(i = 0 ; !hasPdfOrBitmapImageRep && (i<count) ; ++i)
       {
         id representation = [representations objectAtIndex:i];
@@ -2094,7 +2180,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(NSString*) titleAuto
 {
   NSString* result = [[[self sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  unsigned int endIndex = MIN(17U, [result length]);
+  NSUInteger endIndex = MIN(17U, [result length]);
   result = [result substringToIndex:endIndex];
   return result;
 }
@@ -2116,7 +2202,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(NSData*) annotatedPDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords
 {
   NSData* result = [self pdfData];
-
+  DebugLog(1, @"annotatedPDFDataUsingPDFKeywords %p, from %llu", result, (unsigned long long)[result length]);
    /*
   //first, we retreive the baseline if possible
   double baseline = 0;
@@ -2154,11 +2240,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   */
 
   //annotate in LEE format
-  export_format_t exportFormat = EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS;//prevent default embedding of invisible annotations
+  export_format_t exportFormat = EXPORT_FORMAT_PDF;
   result = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:result exportFormat:exportFormat
               preamble:[[self preamble] string] source:[[self sourceText] string]
                  color:[self color] mode:[self mode] magnification:[self pointSize] baseline:[self baseline]
-       backgroundColor:[self backgroundColor] title:[self title]];
+       backgroundColor:[self backgroundColor] title:[self title] annotateWithTransparentData:NO];
+  DebugLog(1, @"annotatedPDFDataUsingPDFKeywords %p, to %llu", result, (unsigned long long)[result length]);
   return result;
 }
 //end annotatedPDFDataUsingPDFKeywords:usingPDFKeywords

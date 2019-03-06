@@ -3,13 +3,18 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/12/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This class is useful to describe a palette item
 
 #import "PaletteItem.h"
 
+#import "NSStringExtended.h"
+#import "Utils.h"
+
 #import <RegexKitLite.h>
+
+static NSString* bulletString = @"\u2026";
 
 @implementation PaletteItem
 
@@ -18,6 +23,7 @@
               latexCode:(NSString*)aLatexCode requires:(NSString*)package
               argumentToken:(NSString*)anArgumentToken
               argumentTokenDefaultReplace:(NSString*)anArgumentTokenDefaultReplace
+              argumentTokenRemoveBraces:(BOOL)anArgumentTokenRemoveBraces
 {
   if ((!(self = [super init])) || !aName)
     return nil;
@@ -31,19 +37,18 @@
                             (self->type == LATEX_ITEM_TYPE_ENVIRONMENT ?
                               [[NSString alloc] initWithFormat:@"\\begin{%@}...\\end{%@}", name, name] :
                               [[NSString alloc] initWithFormat:@"\\%@", name]);
-  const unichar bulletChar = 0x2026;
-  NSString* bulletString = [NSString stringWithCharacters:&bulletChar length:1];
   NSUInteger presetArgsCount = [[self->latexCode componentsMatchedByRegex:@"\\{.*?(\\{.*\\})*\\}"] count];
   NSMutableString* stringOfArguments = [NSMutableString string];
-  unsigned int i = 0;
+  NSUInteger i = 0;
   for(i = presetArgsCount ; i<self->numberOfArguments ; ++i)
     [stringOfArguments appendFormat:@"{%@}", bulletString];
   if (self->type == LATEX_ITEM_TYPE_STANDARD)
     self->latexCode = [[[self->latexCode autorelease] stringByAppendingString:stringOfArguments] retain];
 
   self->requires = [package copy];
-  self->argumentToken               = !anArgumentToken ? @"" : [anArgumentToken copy];
-  self->argumentTokenDefaultReplace = !anArgumentTokenDefaultReplace ? @"" : [anArgumentTokenDefaultReplace copy];
+  self->argumentToken               = [anArgumentToken copy];
+  self->argumentTokenDefaultReplace = [anArgumentTokenDefaultReplace copy];
+  self->argumentTokenRemoveBraces = anArgumentTokenRemoveBraces;
 
   if (!self->name || !self->localizedName || !self->latexCode || !self->resourcePath)
   {
@@ -81,6 +86,7 @@
 -(NSString*)         requires                    {return self->requires;}
 -(NSString*)         argumentToken               {return self->argumentToken;}
 -(NSString*)         argumentTokenDefaultReplace {return self->argumentTokenDefaultReplace;}
+-(BOOL)              argumentTokenRemoveBraces   {return self->argumentTokenRemoveBraces;}
 -(NSString*)         resourcePath                {return self->resourcePath;}
 -(NSImage*)          image                       {return self->image;}
 
@@ -92,18 +98,40 @@
 }
 //end toolTip
 
--(NSString*) stringWithTextInserted:(NSString*)text
+-(NSString*) stringWithTextInserted:(NSString*)text outInterestingRange:(NSRange*)outInterestingRange
 {
   NSMutableString* string = [NSMutableString stringWithString:self->latexCode];
+  NSRange interestingRange = NSMakeRange(0, 0);
   if (self->type == LATEX_ITEM_TYPE_STANDARD)
   {
-    [string replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", self->argumentToken]
-                            withString:[NSString stringWithFormat:@"{%@}", [text length] ? text : self->argumentTokenDefaultReplace]
-                               options:0 range:NSMakeRange(0, [string length])];
-  }
+    NSError* error = nil;
+    NSString* textBackslashed = [text stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    NSString* pattern =
+      [NSString stringWithFormat:@"(\\{.*\\})*\\{%@\\}", NSStringWithNilDefault(self->argumentToken, bulletString)];
+    NSString* patternReplacement =
+      [NSString stringWithFormat:@"$1%@%@%@",
+        self->argumentTokenRemoveBraces ? @"" : @"{",
+        [textBackslashed length] ? textBackslashed : NSStringWithNilDefault(self->argumentTokenDefaultReplace, bulletString),
+        self->argumentTokenRemoveBraces ? @"" : @"}"];
+    NSRange searchRange = [string range];
+    NSRange lastPatternRange = NSMakeRange(NSNotFound, 0);
+    NSRange lastReplacementRange = NSMakeRange(NSNotFound, 0);
+    lastPatternRange = [string rangeOfRegex:pattern options:0 inRange:searchRange capture:0 error:&error];
+    while((lastPatternRange.location != NSNotFound) && lastPatternRange.length)
+    {
+      NSUInteger oldStringLength = [string length];
+      [string replaceOccurrencesOfRegex:pattern withString:patternReplacement options:0 range:lastPatternRange error:&error];
+      NSUInteger newStringLength = [string length];
+      lastReplacementRange = NSMakeRange(lastPatternRange.location, lastPatternRange.length+newStringLength-oldStringLength);
+      NSUInteger newSearchRangeLocation = NSMaxRange(lastReplacementRange);
+      searchRange = NSMakeRange(newSearchRangeLocation, newStringLength-newSearchRangeLocation);
+      lastPatternRange = [string rangeOfRegex:pattern options:0 inRange:searchRange capture:0 error:&error];
+    }//end while pattern found
+    interestingRange = ![textBackslashed length] ? lastReplacementRange : [string range];
+  }//end if (self->type == LATEX_ITEM_TYPE_STANDARD)
   else if (self->type == LATEX_ITEM_TYPE_ENVIRONMENT)
   {
-    unsigned int length = [string length];
+    NSUInteger length = [string length];
     NSRange beginRange = [string rangeOfString:@"\\begin{"];
     NSRange endBeginRange =
       (beginRange.location != NSNotFound) ? [string rangeOfString:@"}" options:0 range:NSMakeRange(beginRange.location, length-beginRange.location)]
@@ -113,12 +141,14 @@
                                              : endBeginRange;
     if ((endRange.location != NSNotFound) && (endBeginRange.location+1 < length) && (endRange.location >= endBeginRange.location+1))
     {
-      NSString* replacement = ([text length] ? text : self->argumentTokenDefaultReplace);
+      NSString* replacement = ([text length] ? text : NSStringWithNilDefault(self->argumentTokenDefaultReplace, bulletString));
       if (replacement)
         [string replaceCharactersInRange:NSMakeRange(endBeginRange.location+1, endRange.location-endBeginRange.location-1)
                               withString:replacement];
     }//end if ((endRange.location != NSNotFound) && (endBeginRange.location+1 < length) && (endRange.location >= endBeginRange.location+1))
-  }
+  }//end if (self->type == LATEX_ITEM_TYPE_ENVIRONMENT)
+  if (outInterestingRange)
+    *outInterestingRange = interestingRange;
   return string;
 }
 //end stringWithTextInserted:

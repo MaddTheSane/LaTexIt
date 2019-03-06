@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 06/08/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesWindow.h"
@@ -12,7 +12,7 @@
 
 @implementation PreferencesWindow
 
--(id) initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
+-(id) initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
 {
   if (!isMacOS10_5OrAbove())
     windowStyle = windowStyle & ~NSUnifiedTitleAndToolbarWindowMask;//fixes a Tiger bug with segmented controls
@@ -22,7 +22,7 @@
 }
 //end initWithContentRect:styleMask:backing:defer:screen:
 
--(id) initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen
+-(id) initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen *)screen
 {
   if (!isMacOS10_5OrAbove())
     windowStyle = windowStyle & ~NSUnifiedTitleAndToolbarWindowMask;//fixes a Tiger bug with segmented controls

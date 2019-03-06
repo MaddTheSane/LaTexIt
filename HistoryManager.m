@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -28,6 +28,8 @@
 #import "Utils.h"
 
 #import <LinkBack/LinkBack.h>
+
+#include <sqlite3.h>
 
 @interface HistoryManager (PrivateAPI)
 -(void) _migrateLatexitManagedModel:(NSString*)path;
@@ -200,7 +202,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   NSNumber* historyDeleteOldEntriesLimit = ![preferencesController historyDeleteOldEntriesEnabled] ? nil :
     [preferencesController historyDeleteOldEntriesLimit];
   NSDate* oldestDate = !historyDeleteOldEntriesLimit ? nil :
-    [[NSCalendarDate calendarDate] dateByAddingYears:0 months:0 days:-[historyDeleteOldEntriesLimit intValue] hours:0 minutes:0 seconds:0];
+    [[NSCalendarDate calendarDate] dateByAddingYears:0 months:0 days:-[historyDeleteOldEntriesLimit integerValue] hours:0 minutes:0 seconds:0];
   if (oldestDate)
   {
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"date < %@" argumentArray:[NSArray arrayWithObjects:oldestDate, nil]];
@@ -355,14 +357,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           migrationError = YES;
           DebugLog(0, @"exception : %@", e);
         }
-        unsigned int count = [historyItems count];
+        NSUInteger count = [historyItems count];
         [migratingProgressIndicator setIndeterminate:NO];
         [migratingProgressIndicator setMinValue:0.];
         [migratingProgressIndicator setMaxValue:1.*count];
         [migratingProgressIndicator setDoubleValue:0.];
         HistoryItem* historyItem = nil;
         NSEnumerator* enumerator = [historyItems objectEnumerator];
-        unsigned int progression = 0;
+        NSUInteger progression = 0;
         [[self->managedObjectContext undoManager] removeAllActions];
         [self->managedObjectContext disableUndoRegistration];
         while((historyItem = [enumerator nextObject]))
@@ -385,8 +387,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       [fetchRequest setEntity:[LatexitEquation entity]];
       NSError* error = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
-      unsigned int progression = 0;
-      unsigned int count = [latexitEquations count];
+      NSUInteger progression = 0;
+      NSUInteger count = [latexitEquations count];
       [migratingProgressIndicator setIndeterminate:NO];
       [migratingProgressIndicator setMaxValue:1.*count];
       [migratingProgressIndicator setDoubleValue:0.];
@@ -460,6 +462,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSMutableDictionary* options = [NSMutableDictionary dictionary];
+    if (DebugLogLevel >= 1)
+    {
+      if (isMacOS10_6OrAbove())
+        [options setObject:[NSNumber numberWithBool:YES] forKey:NSSQLiteManualVacuumOption];
+    }//end if (DebugLogLevel >= 1)
+    
     if (isMacOS10_5OrAbove())
     {
       [options setValue:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
@@ -541,16 +549,57 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager bridge_removeItemAtPath:path error:0]));
         if (ok)
         {
-          NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
-          NSData* data = [NSKeyedArchiver archivedDataWithRootObject:itemsToSave];
-          [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
-          NSArray* savedItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-          [LatexitEquation popManagedObjectContext];
-          NSError* error = nil;
-          [saveManagedObjectContext save:&error];
-          if (error)
-            {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
-          [savedItems makeObjectsPerformSelector:@selector(dispose)];
+          BOOL done = NO;
+          if (!onlySelection)
+          {
+            NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
+            NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
+            NSPersistentStore* singlePersistentStore = ([persistentStores count] != 1) ? nil : [persistentStores lastObject];
+            NSURL* singlePersistentStoreURL = [singlePersistentStore URL];
+            NSString* singlePersistentStorePath = [singlePersistentStoreURL path];
+            if ([singlePersistentStorePath length])
+            {
+              NSError* error = nil;
+              if ([self->managedObjectContext save:&error] && !error)
+              {
+                sqlite3* srcDB = 0;
+                sqlite3* dstDB = 0;
+                sqlite3_backup* backup = 0;
+                NSInteger error = SQLITE_OK;
+                if (error == SQLITE_OK)
+                  error = sqlite3_open_v2([singlePersistentStorePath UTF8String], &srcDB, SQLITE_OPEN_READONLY, 0);
+                if (error == SQLITE_OK)
+                  error = sqlite3_open_v2([path UTF8String], &dstDB, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, 0);
+                if (srcDB && dstDB && (error == SQLITE_OK))
+                  backup = sqlite3_backup_init(dstDB, "main", srcDB, "main");
+                if (backup && (error == SQLITE_OK))
+                  sqlite3_backup_step(backup, -1);
+                if (backup)
+                  sqlite3_backup_finish(backup);
+                done = (error == SQLITE_OK);
+                if (dstDB)
+                  sqlite3_close(dstDB);
+                if (srcDB)
+                  sqlite3_close(srcDB);
+              }//end if ([self->managedObjectContext save:&error] && !error)
+              else
+                {DebugLog(0, @"error %@", error);}
+            }//end if ([singlePersistentStorePath length])
+          }//end if (!onlySelection)
+          if (!done)
+          {
+            NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
+            NSData* data = [NSKeyedArchiver archivedDataWithRootObject:itemsToSave];
+            [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
+            NSArray* savedItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            [LatexitEquation popManagedObjectContext];
+            NSError* error = nil;
+            [saveManagedObjectContext save:&error];
+            if (error)
+              {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
+            [savedItems makeObjectsPerformSelector:@selector(dispose)];
+            done = YES;
+          }//end if (!done)
         }//end if (ok)
       }//end case HISTORY_EXPORT_FORMAT_INTERNAL
       break;
@@ -568,7 +617,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
+          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListBinaryFormat_v1_0 errorDescription:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
@@ -971,5 +1020,29 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   [windowController close]; 
 }
 //end hideMigratingProgressionWindow:windowController:
+
+-(void) vacuum
+{
+  NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
+  NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
+  NSEnumerator* enumerator = [persistentStores objectEnumerator];
+  NSPersistentStore* persistentStore = nil;
+  while((persistentStore = [enumerator nextObject]))
+  {
+    NSURL* url = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
+    NSString* filePath = [url path];
+    sqlite3* db = 0;
+    sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE, 0);
+    if (db)
+    {
+      char* errmsg = 0;
+      sqlite3_exec(db, "VACUUM", 0, 0, &errmsg);
+      if (errmsg)
+        DebugLog(0, @"VACUUM : %s", errmsg);
+      sqlite3_close(db);
+    }//end if (db)
+  }//end for each persistentStore
+}
+//end vacuum
 
 @end

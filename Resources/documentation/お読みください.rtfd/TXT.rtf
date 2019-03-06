@@ -11,7 +11,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 2.12.0\
+\b \cf0 LaTeXiT 2.13.0\
 
 \b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -71,7 +71,7 @@ LaTeXiT
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
-\fs22 \cf0 \ulnone LaTeXiT 2.12.0 
+\fs22 \cf0 \ulnone LaTeXiT 2.13.0 
 \f2 \'82\'cd
 \f1  Mac OS X 10.6 
 \f2 \'82\'a9\'82\'bb\'82\'ea\'88\'c8\'8d\'7e\'82\'cc\'83\'6f\'81\'5b\'83\'57\'83\'87\'83\'93\'82\'aa\'95\'4b\'97\'76\'82\'c5\'82\'b7\'81\'42\'82\'dc\'82\'bd\'81\'41\'8f\'ad\'82\'c8\'82\'ad\'82\'c6\'82\'e0 pdflatex \'82\'c6 GhostScript (gs) \'82\'aa\'93\'ae\'8d\'ec\'82\'b7\'82\'e9 LaTeX \'82\'f0\'83\'43\'83\'93\'83\'58\'83\'67\'81\'5b\'83\'8b\'82\'b5\'82\'c4\'82\'a8\'82\'ad\'95\'4b\'97\'76\'82\'aa\'82\'a0\'82\'e8\'82\'dc\'82\'b7\'81\'42\'82\'e0\'82\'b5\'82\'bb\'82\'ea\'82\'e7\'82\'cc\'83\'76\'83\'8d\'83\'4f\'83\'89\'83\'80\'82\'aa\'82\'c7\'82\'a4\'82\'a2\'82\'a4\'82\'e0\'82\'cc\'82\'c5\'82\'a0\'82\'e9\'82\'a9\'82\'aa\'95\'aa\'82\'a9\'82\'e7\'82\'c8\'82\'a2\'8f\'ea\'8d\'87\'82\'cd\'81\'41\'82\'b1\'82\'cc\'8f\'91\'97\'de\'82\'cc\'8c\'e3\'82\'c9\'82\'a0\'82\'e9\'81\'75LaTeX \'82\'cc\'83\'43\'83\'93\'83\'58\'83\'67\'81\'5b\'83\'8b\'82\'c9\'82\'c2\'82\'a2\'82\'c4\'81\'76\'82\'f0\'8c\'a9\'82\'c4\'82\'ad\'82\'be\'82\'b3\'82\'a2\'81\'42
@@ -384,7 +384,7 @@ name.latexpalette\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 \cf0 [required]		key : "name"						type:string\
 			value : a name for the item (example: looparrowleft), that can be localized in the Localizable.strings files of the lproj folders\
-[optional]		key : "latexCode"					type:string (default : \\"name")\
+[optional]		key : "latexCode"					type:string (default : "name")\
 			value : the latex code (example: \\looparrowleft), by default equal to the "name" (not localized) prefixed by a backslash\
 [optional]		key : "resourceName"				type:string (default : "name")\
 			value : the name of the image file (the extension is optional). By default, equal to the "name" (not localized)\
@@ -393,14 +393,16 @@ name.latexpalette\
 [optional]		key : "numberOfArguments"			type:integer (default : 0)\
 			value : number of pairs of curly brackets \{\'85\} of the resulting latex code (useful for functions with arguments)\
 [optional]		key : "argumentToken"				type:string (default : empty)\
-			value : occurences of \{argumentToken\} are searched and replaced by \{current selected text\} or by \{argumentTokenDefaultReplace\} if there is none\
+			value : occurrences of \{argumentToken\} are searched and replaced by \{current selected text\} or by \{argumentTokenDefaultReplace\} if there is none\
 [optional]		key : "argumentTokenDefaultReplace"	type:string (default : empty)\
 			value : see above\
-[optional]		key : "isEnvironment"				type:boolean (default:false)\
+[optional]		key : "argumentTokenRemoveBraces"	type:boolean (default : false)\
+			value : occurrences of \{argumentToken\} are searched and replaced by <the token> instead of \{<the token>\}\
+[optional]		key : "isEnvironment"				type:boolean (default : false)\
 			value : tells whether the keyword should be written \\begin\{name\}...\\end\{name\}\
 \
 The images files must be in the Resources sub-folder.\
-The "name" values of the palette and its items can be localized in Localizable.strings files in the sub-folders lang.lproj\
+The "name" values of the palette and its items can be localized in Localizable.strings files in the sub-folders <lang>.lproj\
 A Localizable.strings file is a raw-text UTF-8 file containing lines like "key" = "value", ending with semi-colons.\
 Here is an example :\
 "arrows" = "Fl\'e8ches";\
@@ -532,13 +534,24 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.13.0 (2019/02/02)\
+\pard\tx566\pardeftab720\qj
+\cf0 -restored the recently broken "invisible graphic commands" metadata annotations, hoping that copy/paste from stupid third party softwares like Keynote or Powerpoint will work better in the future;\
+-reworked the "invisible graphic commands" metadata to avoid piling them over and over in equations; it is now optional and added on the fly (when enabled) only when exporting to PDF or PDF with outlined fonts;\
+-added a search field in the library;\
+-it is now possible to re-latexize all history and library items to strip obsolete, oversized, metadata (and reduce history and library size);\
+-history and library can also be "compacted" (a simple vacuum for those who know);\
+-some work on LaTeX palette items creation and behavior for more clever insertion and text replacement;\
+-added two LaTeX palettes contributed by Sherman Gregory;\
+-disable most automatic text-shortcuts replacements (from MacOS general preferences) in LaTeX-related text areas;\
+-various fixes and improvements.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 v 2.12.0 (2018/12/13)\
+\cf0 \
+v 2.12.0 (2018/12/13)\
 \pard\tx566\pardeftab720\qj
 \cf0 -added MacOS Mojave Dark mode support;\
 -dropped MacOS 10.4 and 10.5 compatibility.\
-\pard\tx566\pardeftab720\qj
-\cf0 \
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 \cf0 v 2.11.1 (2018/12/11)\
 \pard\tx566\pardeftab720\qj

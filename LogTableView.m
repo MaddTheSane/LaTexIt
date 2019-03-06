@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This NSTableView reports errors at certain lines of the latex source code
 
@@ -46,7 +46,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
     NSArray* components = [line componentsSeparatedByString:@":"];
     if ([components count] >= 3)
     {
-      NSNumber* lineNumber = [NSNumber numberWithInt:[[components objectAtIndex:1] intValue]];
+      NSNumber* lineNumber = [NSNumber numberWithInteger:[[components objectAtIndex:1] integerValue]];
       NSString* message    = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)]
                                     componentsJoinedByString:@""];
       NSDictionary* dictionary =
@@ -58,7 +58,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
       NSRange separator = [line rangeOfString:@"! LaTeX Error:"];
       if (separator.location != NSNotFound)
       {
-        NSNumber* lineNumber = [NSNumber numberWithInt:0]; //dummy line number error
+        NSNumber* lineNumber = [NSNumber numberWithInteger:0]; //dummy line number error
         NSString* message    = [line substringFromIndex:(separator.location+separator.length)];
         NSDictionary* dictionary =
           [NSDictionary dictionaryWithObjectsAndKeys:lineNumber, @"line", message, @"message", nil];
@@ -77,11 +77,11 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 }
 //end numberOfRowsInTableView:
 
--(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+-(id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
   id object = [[errorLines objectAtIndex:rowIndex] objectForKey:[aTableColumn identifier]];
   //if the line number is equal to 0, do not display it
-  if ([[aTableColumn identifier] isEqualToString:@"line"] && ![object intValue])
+  if ([[aTableColumn identifier] isEqualToString:@"line"] && ![object integerValue])
     object = nil;
   return object;
 }
@@ -90,7 +90,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
 -(void) mouseDown:(NSEvent*) theEvent
 {
   [super mouseDown:theEvent];
-  int row = [self selectedRow];
+  NSInteger row = [self selectedRow];
   if (row >= 0)
   {
     NSNumber* lineError = [self tableView:self objectValueForTableColumn:[self tableColumnWithIdentifier:@"line"] row:row];

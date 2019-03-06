@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -82,7 +82,7 @@
   LibraryEquation* lastAppliedLibraryEquation;
   BOOL             isReducedTextArea;
   NSString*        busyIdentifier;
-  int              nbBackgroundLatexizations;
+  NSInteger        nbBackgroundLatexizations;
   BOOL             isClosed;
   NSMutableArray*  poolOfObsoleteUniqueIds;
   
@@ -129,7 +129,7 @@
 -(NSResponder*) preferredFirstResponder;
 -(NSResponder*) previousFirstResponder;
 
--(void) gotoLine:(int)row;
+-(void) gotoLine:(NSInteger)row;
 
 -(void) setNullId;//useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;
@@ -166,8 +166,8 @@
 -(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value;
 
 //text actions in the first responder
--(NSString*) selectedText;
--(void) insertText:(id)text;
+-(NSString*) selectedTextFromRange:(NSRange*)outRange;
+-(void) insertText:(id)text newSelectedRange:(NSRange)selectedRange;
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient;
 -(BOOL) applyData:(NSData*)data sourceUTI:(NSString*)sourceUTI; //updates the document according to the given data

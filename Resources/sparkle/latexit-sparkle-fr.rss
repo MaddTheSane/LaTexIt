@@ -725,5 +725,33 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MC4CFQCoNUu3PkDdMTCTBHYkq7/CPZl/VwIVAKI9f2q+1/rkTErS2gvRe5KMj8A0"
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.13.0</guid>
+      <title>Version 2.13.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>réparation des meta-données &quot;commandes graphiques invisibles&quot; récemment cassées, espérant que le copier/coller stupide des programmes tiers tels Keynote ou Powerpoint fonctionneront mieux à l'avenir&nbsp;</li>
+          <li>travail sur les meta-données &quot;commandes graphiques invisibles&quot; pour éviter qu'elles s'entassent avec le temps dans les équations ; elle ssont maintenant optionnelles et ajoutées à la volées lors des exports PDF ou PDF avec polices vectorisées&nbsp;</li>
+          <li>ajout d'un champt de recherche dans la bibliothèque&nbsp;</li>
+          <li>il est maintenant possible de re-latexiser l'ensemble de la bibliothèque et de l'historique, pour les nettoyer des meta-données obsolètes qui alourdissent les fichiers sous-jacents ; cela permet de réduire la taille de la bibliothèque et de l'historique&nbsp;</li>
+          <li>la bibliothèque et l'historique peuvent maintenant être &quot;compactées&quot; (un simple vacuum pour ceux qui connaissent)&nbsp;</li>
+          <li>travail sur la création d'éléments de palettes LaTeX pour un meilleur comportement lors de l'insertion et le remplacement de texte&nbsp;</li>
+          <li>ajout de deux palettes LaTeX, contribution de Sherman Gregory&nbsp;</li>
+          <li>désactivation de la plupart des remplacement automatiques de raccourcis de texte (venant des préférences générales de MacOS) dans les zones de texte destinées au code LaTeX&nbsp;</li>;
+          <li>améliorations et corrections diverses.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.13.0</sparkle:releaseNotesLink>
+			<pubDate>Sat, 02 Feb 2019 23:25:13 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_0.dmg"
+				sparkle:version="2.13.0"
+                   sparkle:shortVersionString="2.13.0"
+				type="application/octet-stream"
+				length="15549375"
+				sparkle:dsaSignature="MCwCFEFny9yt7ZihwzZqCx3D3I8EKR60AhQz5ie3DNwNbcan3MW6xaB+7xDPXA=="
+			/>
+    </item>
   </channel> 
 </rss>

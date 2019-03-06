@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -23,7 +23,7 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   NSMutableArray*     lineRanges;      //contains the ranges of each line
   NSMutableSet*       forbiddenLines;  //lines that cannot be edited
   LineCountRulerView* lineCountRulerView;
-  int                 lineShift; //the displayed numerotation of the lines may start at a value different from 1
+  NSInteger           lineShift; //the displayed numerotation of the lines may start at a value different from 1
   NSDragOperation     acceptDrag;
   NSInteger           spellCheckerDocumentTag;
   NSUInteger          previousSelectedRangeLocation;
@@ -33,16 +33,17 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
 }
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
+-(void) insertText:(id)aString newSelectedRange:(NSRange)selectedRange;
 
 -(LineCountRulerView*) lineCountRulerView;
--(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line
--(void) setLineShift:(int)aShift; //defines the shift in the displayed line numbers
--(int)  lineShift;
+-(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden; //change status (forbidden or not) of a line
+-(void) setLineShift:(NSInteger)aShift; //defines the shift in the displayed line numbers
+-(NSInteger) lineShift;
 -(NSArray*) lineRanges;
--(unsigned int) nbLines; //the number of lines in the text
+-(NSUInteger) nbLines; //the number of lines in the text
 -(void) clearErrors; //remove error markers
--(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message; //set error markers
--(BOOL) gotoLine:(int)row;//scroll to visible line <row>
+-(void) setErrorAtLine:(NSUInteger)lineIndex message:(NSString*)message; //set error markers
+-(BOOL) gotoLine:(NSInteger)row;//scroll to visible line <row>
 
 -(void) refreshCheckSpelling;
 -(SMLSyntaxColouring*) syntaxColouring;

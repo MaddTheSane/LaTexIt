@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -37,7 +37,10 @@
   IBOutlet NSButton* exportOptionIgnoreTitleHierarchyButton;
   
   IBOutlet NSDrawer* commentDrawer;
+  IBOutlet NSView* commentView;
+  IBOutlet NSTextField* commentTextField;
   IBOutlet NSTextView* commentTextView;
+  IBOutlet NSNumberFormatter* commentSizeFormatter;
 
   IBOutlet NSPanel*     importTeXPanel;
   IBOutlet NSButton*    importTeXPanelInlineCheckBox;
@@ -47,6 +50,10 @@
   IBOutlet NSTableView* importTeXPanelTableView;
   IBOutlet NSButton*    importTeXImportButton;
   IBOutlet NSButton*    importTeXCancelButton;
+  IBOutlet NSWindow*    relatexizeWindow;
+  IBOutlet NSTextField* relatexizeProgressTextField;
+  IBOutlet NSProgressIndicator* relatexizeProgressIndicator;
+  IBOutlet NSButton* relatexizeAbortButton;
   
   BOOL              enablePreviewImage;  
   NSSavePanel*      savePanel;
@@ -54,17 +61,23 @@
   NSArrayController* importTeXArrayController;
   NSDictionary*      importTeXOptions;
   NSInteger updateLevel;
+  NSTimer* relatexizeTimer;
+  NSConditionLock* relatexizeMonitor;
+  volatile BOOL relatexizeAbortMonitor;
+  volatile NSUInteger relatexizeCurrentIndex;
+  volatile NSUInteger relatexizeCurrentCount;
 }
 
 -(IBAction) changeLibraryDisplayPreviewPanelState:(id)sender;
 
 -(IBAction) openEquation:(id)sender;
 -(IBAction) openLinkedEquation:(id)sender;
--(IBAction) importCurrent:(id)sender;       //creates a library item with the current document state
--(IBAction) newFolder:(id)sender;           //creates a folder
--(IBAction) removeSelectedItems:(id)sender; //removes some items
--(IBAction) refreshItems:(id)sender;        //refresh an item
--(IBAction) renameItem:(id)sender;          //refresh an item
+-(IBAction) importCurrent:(id)sender;//creates a library item with the current document state
+-(IBAction) newFolder:(id)sender;
+-(IBAction) removeSelectedItems:(id)sender;
+-(IBAction) refreshItems:(id)sender;
+-(IBAction) relatexizeSelectedItems:(id)sender;
+-(IBAction) renameItem:(id)sender;
 
 -(IBAction) toggleCommentsPane:(id)sender;
 

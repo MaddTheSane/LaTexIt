@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "IndexToIndexesTransformer.h"
@@ -49,7 +49,7 @@
 -(id) transformedValue:(id)value
 {
   id result = nil;
-  NSUInteger index = [value unsignedIntValue];
+  NSUInteger index = [value unsignedIntegerValue];
   result = (index == NSNotFound) ? [NSIndexSet indexSet] : [NSIndexSet indexSetWithIndex:index];
   return result;
 }
@@ -58,8 +58,8 @@
 -(id) reverseTransformedValue:(id)value
 {
   id result = nil;
-  unsigned int lastIndex = ![value count] ? NSNotFound : [value lastIndex];
-  result = [NSNumber numberWithUnsignedInt:lastIndex];
+  NSUInteger lastIndex = ![value count] ? NSNotFound : [value lastIndex];
+  result = [NSNumber numberWithUnsignedInteger:lastIndex];
   return result;
 }
 //end reverseTransformedValue:

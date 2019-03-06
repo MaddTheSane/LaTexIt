@@ -223,6 +223,7 @@
 "Reset..." = "Réinitialiser…";
 "Do you really want to reset the paths ?" = "Voulez-vous vraiment réinitialiser les chemins ?";
 "Invalid paths will be replaced by the result of auto-detection" = "Tous les chemins seront remplacés par les résultats de l'auto-détection.";
+"Compact database" = "Compacter la base de données";
 
 /* document */
 "clipboard" = "presse-papiers";
@@ -291,7 +292,6 @@
 "Export commented preambles" = "Exporter les préambules commentés";
 "Export user comments" = "Exporter les commentaires utilisateur";
 "Ignore title hierarchy" = "Ignorer la hiérarchie des titres";
-
 "_IMPORTING_" = "…";
 "_IMPORTED_" = "⎷";
 "\"Inline\" items" = "\"Inline\" items";
@@ -299,6 +299,8 @@
 "\"Align\" items" = "\"Align\" items";
 "\"Eqnarray\" items" = "\"Eqnarray\" items";
 "Import selection" = "Importer la sélection";
+"latexize selection again" = "Re-latexiser la sélection";
+"KB" = "Ko";
 
 /* History */
 "Add to current history" = "Ajouter à l'historique";

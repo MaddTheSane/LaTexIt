@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -68,7 +68,7 @@
   MarginsWindowController*                   marginsWindowController;
   PreferencesWindowController*               preferencesWindowController;
     
-  int  checkLevel;
+  NSInteger checkLevel;
   BOOL updateGUIFlag;
   BOOL shouldOpenInstallLaTeXHelp;
 }
@@ -125,6 +125,8 @@
 -(IBAction) historyChangeLock:(id)sender;
 -(IBAction) historyOpen:(id)sender;
 -(IBAction) historySaveAs:(id)sender;
+-(IBAction) historyRelatexizeItems:(id)sender;
+-(IBAction) historyCompact:(id)sender;
 -(IBAction) showOrHideHistory:(id)sender;
 
 -(IBAction) libraryOpenEquation:(id)sender;
@@ -134,9 +136,11 @@
 -(IBAction) libraryRemoveSelectedItems:(id)sender;
 -(IBAction) libraryRenameItem:(id)sender;
 -(IBAction) libraryRefreshItems:(id)sender;
+-(IBAction) libraryRelatexizeItems:(id)sender;
 -(IBAction) libraryToggleCommentsPane:(id)sender;
 -(IBAction) libraryOpen:(id)sender;
 -(IBAction) librarySaveAs:(id)sender;
+-(IBAction) libraryCompact:(id)sender;
 -(IBAction) showOrHideLibrary:(id)sender;
 
 -(IBAction) showOrHideColorInspector:(id)sender;
@@ -146,7 +150,7 @@
 -(IBAction) showOrHideEncapsulation:(id)sender;
 -(IBAction) showOrHideMargin:(id)sender;
 -(IBAction) showOrHideLatexPalettes:(id)sender;
--(IBAction) latexPalettesClick:(id)sender;
+-(IBAction) latexPalettesDoubleClick:(id)sender;
 -(IBAction) showPreferencesPane:(id)sender;
 -(void)     showPreferencesPaneWithItemIdentifier:(NSString*)itemIdentifier options:(id)options;//showPreferencesPane + select one pane
 -(IBAction) showHelp:(id)sender;

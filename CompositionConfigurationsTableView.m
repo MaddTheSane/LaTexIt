@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/03/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsTableView.h"
@@ -47,7 +47,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
+  NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
@@ -64,7 +64,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -108,7 +108,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
 
 -(void) moveUp:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -118,7 +118,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
 
 -(void) moveDown:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -129,7 +129,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
 //prevents from selecting next line when finished editing
 -(void) textDidEndEditing:(NSNotification *)aNotification
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   [super textDidEndEditing:aNotification];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 }
@@ -138,7 +138,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
 #pragma mark delegate
 -(void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-  unsigned int lastIndex = [[self selectedRowIndexes] lastIndex];
+  NSUInteger lastIndex = [[self selectedRowIndexes] lastIndex];
   [self scrollRowToVisible:lastIndex];
 }
 //end tableViewSelectionDidChange:
@@ -180,7 +180,7 @@ static NSString* CompositionConfigurationsPboardType = @"CompositionConfiguratio
             [pboard availableTypeFromArray:[NSArray arrayWithObject:CompositionConfigurationsPboardType]] &&
             [pboard propertyListForType:CompositionConfigurationsPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+            indexSet && ([indexSet firstIndex] != (NSUInteger)row) && ([indexSet firstIndex]+1 != (NSUInteger)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

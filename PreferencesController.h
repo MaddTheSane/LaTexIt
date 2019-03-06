@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -12,8 +12,8 @@
 
 extern NSString* LaTeXiTAppKey;
 extern NSString* Old_LaTeXiTAppKey;
-
 extern NSString* LaTeXiTVersionKey;
+
 extern NSString* DocumentStyleKey;
 extern NSString* DragExportTypeKey;
 extern NSString* DragExportJpegColorKey;
@@ -21,6 +21,7 @@ extern NSString* DragExportJpegQualityKey;
 extern NSString* DragExportPDFWOFGsWriteEngineKey;
 extern NSString* DragExportPDFWOFGsPDFCompatibilityLevelKey;
 extern NSString* DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey;
+extern NSString* DragExportPDFMetadataInvisibleGraphicsEnabledKey;
 
 extern NSString* DragExportSvgPdfToSvgPathKey;
 extern NSString* DragExportTextExportPreambleKey;
@@ -204,6 +205,9 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(BOOL) exportPDFWOFMetaDataInvisibleGraphicsEnabled;
 -(void) setExportPDFWOFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
+-(BOOL) exportPDFMetaDataInvisibleGraphicsEnabled;
+-(void) setExportPDFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+
 -(BOOL) doNotClipPreview;
 -(void) setDoNotClipPreview:(BOOL)value;
 
@@ -253,16 +257,16 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSArrayController*) editionTextShortcutsController;
 
 -(NSArray*)             preambles;
--(int)                  preambleDocumentIndex;
--(int)                  preambleServiceIndex;
+-(NSInteger)            preambleDocumentIndex;
+-(NSInteger)            preambleServiceIndex;
 -(NSAttributedString*)  preambleDocumentAttributedString;
 -(NSAttributedString*)  preambleServiceAttributedString;
 -(PreamblesController*) preamblesController;
 
 -(NSArray*)                 bodyTemplates;
 -(NSArray*)                 bodyTemplatesWithNone;
--(int)                      bodyTemplateDocumentIndex;
--(int)                      bodyTemplateServiceIndex;
+-(NSInteger)                bodyTemplateDocumentIndex;
+-(NSInteger)                bodyTemplateServiceIndex;
 -(NSDictionary*)            bodyTemplateDocumentDictionary;
 -(NSDictionary*)            bodyTemplateServiceDictionary;
 -(BodyTemplatesController*) bodyTemplatesController;
@@ -271,8 +275,8 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSArray*)           compositionConfigurations;
 -(void)               setCompositionConfigurations:(NSArray*)value;
 
--(int)                compositionConfigurationsDocumentIndex;
--(void)               setCompositionConfigurationsDocumentIndex:(int)value;
+-(NSInteger)          compositionConfigurationsDocumentIndex;
+-(void)               setCompositionConfigurationsDocumentIndex:(NSInteger)value;
 -(NSDictionary*)      compositionConfigurationDocument;
 -(void)               setCompositionConfigurationDocument:(NSDictionary*)value;
 
@@ -295,7 +299,7 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 
 -(BOOL)                      encapsulationsEnabled;
 -(NSArray*)                  encapsulations;
--(int)                       encapsulationsSelectedIndex;
+-(NSInteger)                 encapsulationsSelectedIndex;
 -(NSString*)                 encapsulationSelected;
 -(EncapsulationsController*) encapsulationsController;
 
@@ -316,12 +320,12 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(NSDictionary*)                               synchronizationAdditionalScripts;
 -(SynchronizationAdditionalScriptsController*) synchronizationAdditionalScriptsController;
 
--(int)    paletteLaTeXGroupSelectedTag;
--(void)   setPaletteLaTeXGroupSelectedTag:(int)value;
--(NSRect) paletteLaTeXWindowFrame;
--(void)   setPaletteLaTeXWindowFrame:(NSRect)value;
--(BOOL)   paletteLaTeXDetailsOpened;
--(void)   setPaletteLaTeXDetailsOpened:(BOOL)value;
+-(NSInteger) paletteLaTeXGroupSelectedTag;
+-(void)      setPaletteLaTeXGroupSelectedTag:(NSInteger)value;
+-(NSRect)    paletteLaTeXWindowFrame;
+-(void)      setPaletteLaTeXWindowFrame:(NSRect)value;
+-(BOOL)      paletteLaTeXDetailsOpened;
+-(void)      setPaletteLaTeXDetailsOpened:(BOOL)value;
 
 -(BOOL) historyDisplayPreviewPanelState;
 -(void) setHistoryDisplayPreviewPanelState:(BOOL)value;

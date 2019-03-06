@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -19,10 +19,10 @@
 -(void) setExclusive:(BOOL)value;
 -(void) add:(NSButton*)button;
 -(void) remove:(NSButton*)button;
--(NSButton*) buttonWithTag:(int)tag;
--(NSButton*) buttonWithState:(int)state;
--(int) selectedTag;
--(void) setSelectedTag:(int)tag;
+-(NSButton*) buttonWithTag:(NSInteger)tag;
+-(NSButton*) buttonWithState:(NSInteger)state;
+-(NSInteger) selectedTag;
+-(void) setSelectedTag:(NSInteger)tag;
 
 -(id) delegate;
 -(void) setDelegate:(id)delegate;

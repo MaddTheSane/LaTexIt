@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSButtonPalette.h"
@@ -58,7 +58,7 @@
 }
 //end setDelegate:
 
--(NSButton*) buttonWithTag:(int)tag
+-(NSButton*) buttonWithTag:(NSInteger)tag
 {
   NSButton* result = nil;
   NSEnumerator* enumerator = [self->buttons objectEnumerator];
@@ -73,7 +73,7 @@
 }
 //end buttonWithTag:
 
--(NSButton*) buttonWithState:(int)state
+-(NSButton*) buttonWithState:(NSInteger)state
 {
   NSButton* result = nil;
   NSEnumerator* enumerator = [self->buttons objectEnumerator];
@@ -88,9 +88,9 @@
 }
 //end buttonWithState:
 
--(int) selectedTag
+-(NSInteger) selectedTag
 {
-  int result = 0;
+  NSInteger result = 0;
   NSEnumerator* enumerator = [self->buttons objectEnumerator];
   NSButton* button = nil;
   while((button = [enumerator nextObject]))
@@ -105,7 +105,7 @@
 }
 //end selectedTag
 
--(void) setSelectedTag:(int)tag
+-(void) setSelectedTag:(NSInteger)tag
 {
   NSEnumerator* enumerator = [self->buttons objectEnumerator];
   NSButton* button = nil;
@@ -122,7 +122,7 @@
   {
     if (self->isExclusive && ([object state] == NSOnState))
     {
-      unsigned int count = [self->buttons count];
+      NSUInteger count = [self->buttons count];
       while(count--)
       {
         NSButton* button = [self->buttons objectAtIndex:count];

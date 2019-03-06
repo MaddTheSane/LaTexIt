@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LibraryGroupItem is a libraryItem (that can appear in the library outlineview)
 //But it represents a "folder", that is to say a parent for other library items
@@ -12,6 +12,7 @@
 
 #import "LaTeXProcessor.h"
 #import "LibraryManager.h"
+#import "NSManagedObjectContextExtended.h"
 
 #import "Utils.h"
 
@@ -56,7 +57,7 @@ static NSEntityDescription* cachedEntity = nil;
 {
   id clone = [super copyWithZone:zone];
   [clone setExpanded:[self isExpanded]];
-  NSSet* theChildren = [self children];
+  NSSet* theChildren = [self children:nil];
   NSMutableSet* clonedChildren = [[NSMutableSet alloc] initWithCapacity:[theChildren count]];
   NSEnumerator* enumerator = [theChildren objectEnumerator];
   LibraryItem* child = nil;
@@ -91,24 +92,44 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end setExpanded:
 
--(NSSet*) children
+-(NSSet*) children:(NSPredicate*)predicate
 {
   NSSet* result = nil; //on Tiger, calling the primitiveKey does not work
+  if (isMacOS10_5OrAbove())
+  {
+    [self willAccessValueForKey:@"children"];
+    result = [self primitiveValueForKey:@"children"];
+    [self didAccessValueForKey:@"children"];
+  }//end if (isMacOS10_5OrAbove())
+  else//if (!isMacOS10_5OrAbove())
+  {
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[LibraryItem entity]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == %@", self]];
+    NSError* error = nil;
+    result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
+    if (error)
+      {DebugLog(0, @"error = %@", error);}
+    [fetchRequest release];
+  }//end if (!isMacOS10_5OrAbove())
+  return result;
+}
+//end children:
+
+-(NSUInteger) childrenCount:(NSPredicate*)predicate
+{
+  NSUInteger result = 0;
   NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
   [fetchRequest setEntity:[LibraryItem entity]];
   [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == %@", self]];
   NSError* error = nil;
-  result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
+  result = [[self managedObjectContext] myCountForFetchRequest:fetchRequest error:&error];
   if (error)
     {DebugLog(0, @"error = %@", error);}
   [fetchRequest release];
   return result;
-/*  [self willAccessValueForKey:@"children"];
-  result = [self primitiveValueForKey:@"children"];
-  [self didAccessValueForKey:@"children"];*/
-  return result;
 }
-//end children
+//end childrenCount:
 
 -(NSArray*) childrenSortDescriptors
 {
@@ -125,10 +146,10 @@ static NSEntityDescription* cachedEntity = nil;
 }
 //end childrenSortDescriptors
 
--(NSArray*) childrenOrdered
+-(NSArray*) childrenOrdered:(NSPredicate*)predicate
 {
   NSMutableArray* result = nil;
-  NSSet* theChildren = [self children];
+  NSSet* theChildren = [self children:predicate];
   result = !theChildren ? [NSMutableArray array] : [NSMutableArray arrayWithArray:[theChildren allObjects]];
   [result sortUsingDescriptors:[self childrenSortDescriptors]];
   return result;
@@ -137,9 +158,9 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) fixChildrenSortIndexesRecursively:(BOOL)recursively
 {
-  NSArray* theChildren = [self childrenOrdered];
-  unsigned int n = [theChildren count];
-  unsigned int i = 0;
+  NSArray* theChildren = [self childrenOrdered:nil];
+  NSUInteger n = [theChildren count];
+  NSUInteger i = 0;
   for(i = 0 ; i<n ; ++i)
   {
     LibraryItem* libraryItem = [theChildren objectAtIndex:i];
@@ -154,7 +175,7 @@ static NSEntityDescription* cachedEntity = nil;
 {
   [super encodeWithCoder:coder];
   [coder encodeBool:[self isExpanded] forKey:@"expanded"];
-  [coder encodeObject:[self children] forKey:@"children"];
+  [coder encodeObject:[self children:nil] forKey:@"children"];
 }
 //end encodeWithCoder:
 
@@ -174,14 +195,14 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(void) dispose
 {
-  [[self children] makeObjectsPerformSelector:@selector(dispose)];
+  [[self children:nil] makeObjectsPerformSelector:@selector(dispose)];
 }
 //end dispose
 
 //for readable export
 -(id) plistDescription
 {
-  NSArray* theChildren = [self childrenOrdered];
+  NSArray* theChildren = [self childrenOrdered:nil];
   NSMutableArray* childrenPlistDescription = [[NSMutableArray alloc] initWithCapacity:[theChildren count]];
   NSEnumerator* enumerator = [theChildren objectEnumerator];
   LibraryItem* child = nil;
@@ -206,9 +227,9 @@ static NSEntityDescription* cachedEntity = nil;
   [self setExpanded:[[description objectForKey:@"expanded"] boolValue]];
   NSArray* childrenDescriptions = isOldLibraryItem ? [description objectForKey:@"content"] : [description objectForKey:@"children"];
   NSMutableArray* theChildren = [NSMutableArray arrayWithCapacity:[childrenDescriptions count]];
-  unsigned int count = [childrenDescriptions count];
-  unsigned int i = 0;
-  unsigned int index = 0;
+  NSUInteger count = [childrenDescriptions count];
+  NSUInteger i = 0;
+  NSUInteger index = 0;
   for(i = 0 ; i<count ; ++i)
   {
     id childDescription = [childrenDescriptions objectAtIndex:i];

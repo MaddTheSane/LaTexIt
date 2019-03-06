@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -53,6 +53,8 @@ FOUNDATION_STATIC_INLINE          short IsBetween_s(short inf, short x, short su
 FOUNDATION_STATIC_INLINE unsigned short IsBetween_us(unsigned short inf, unsigned short x, unsigned short sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE          int   IsBetween_i(int inf, int x, int sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned int   IsBetween_ui(unsigned int inf, unsigned int x, unsigned int sup) {return (inf <= x) && (x <= sup);}
+FOUNDATION_STATIC_INLINE     NSInteger  IsBetween_nsi(NSInteger inf, NSInteger x, NSInteger sup) {return (inf <= x) && (x <= sup);}
+FOUNDATION_STATIC_INLINE    NSUInteger  IsBetween_nsui(NSUInteger inf, NSUInteger x, NSUInteger sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE          long  IsBetween_l(long inf, long x, long sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned long  IsBetween_ul(unsigned long inf, unsigned long x, unsigned long sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE         float  IsBetween_f(float inf, float x, float sup) {return (inf <= x) && (x <= sup);}
@@ -64,6 +66,8 @@ FOUNDATION_STATIC_INLINE          short Clip_s(short inf, short x, short sup) {r
 FOUNDATION_STATIC_INLINE unsigned short Clip_us(unsigned short inf, unsigned short x, unsigned short sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE          int   Clip_i(int inf, int x, int sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE unsigned int   Clip_ui(unsigned int inf, unsigned int x, unsigned int sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
+FOUNDATION_STATIC_INLINE    NSInteger   Clip_nsi(NSInteger inf, NSInteger x, NSInteger sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
+FOUNDATION_STATIC_INLINE   NSUInteger   Clip_nsui(NSUInteger inf, NSUInteger x, NSUInteger sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE          long  Clip_l(long inf, long x, long sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE unsigned long  Clip_ul(unsigned long inf, unsigned long x, unsigned long sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE          float Clip_f(float inf, float x, float sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
@@ -85,6 +89,7 @@ FOUNDATION_EXTERN long EndianL_NtoB(long x);
 FOUNDATION_EXTERN unsigned long EndianUL_BtoN(unsigned long x);
 FOUNDATION_EXTERN unsigned long EndianUL_NtoB(unsigned long x);
 
+FOUNDATION_STATIC_INLINE NSString* NSStringWithNilDefault(NSString* s, NSString* nilDefault) {return !s ? nilDefault : s;}
 NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* didChange);
 
 FOUNDATION_STATIC_INLINE NSRect NSRectDelta(NSRect rect, CGFloat deltaX, CGFloat deltaY, CGFloat deltaWidth, CGFloat deltaHeight)

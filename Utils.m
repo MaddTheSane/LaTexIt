@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "Utils.h"
@@ -172,11 +172,11 @@ NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDi
   if (!identifierString)
     identifierString = @"";
 
-  unsigned int identifier = 2;
+  NSUInteger identifier = 2;
   if (radical)
   {
     result = radical;
-    identifier = (unsigned)([identifierString intValue]+1);
+    identifier = (NSUInteger)([identifierString integerValue]+1);
   }
 
   if ([otherStrings containsObject:result])

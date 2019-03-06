@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSIndexSet class
 
@@ -17,7 +17,7 @@
   NSUInteger index = [self firstIndex];
   while(index != NSNotFound)
   {
-    [array addObject:[NSNumber numberWithUnsignedInt:index]];
+    [array addObject:[NSNumber numberWithUnsignedInteger:index]];
     index = [self indexGreaterThanIndex:index];
   }
   return array;

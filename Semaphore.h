@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -15,18 +15,18 @@
   pthread_cond_t        cond;
   pthread_mutexattr_t   mutex_attr;
   pthread_mutex_t       mutex;
-  volatile unsigned int value;
+  volatile NSUInteger value;
 }
 
--(id) initWithValue:(unsigned int)initialValue; //designated initializer
+-(id) initWithValue:(NSUInteger)initialValue; //designated initializer
 -(id) init;//init with value 0
 
--(void) P:(unsigned int)n;
--(void) V:(unsigned int)n;
+-(void) P:(NSUInteger)n;
+-(void) V:(NSUInteger)n;
 -(void) P;//P with 1
 -(void) V;//V with 1
--(unsigned int) R;
--(void)         Z;
+-(NSUInteger) R;
+-(void)       Z;
 
 //NSCoding protocol
 -(id)   initWithCoder:(NSCoder*)coder;

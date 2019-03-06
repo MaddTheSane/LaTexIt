@@ -1,7 +1,7 @@
 //  NSArrayExtended.h
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 
@@ -19,8 +19,8 @@
 //returns a copy of the receiver in the reversed order
 -(NSArray*) reversed;
 
--(NSArray*) arrayByAddingObject:(id)object atIndex:(unsigned int)index;
--(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index;
+-(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index;
+-(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
 -(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 

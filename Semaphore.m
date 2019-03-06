@@ -3,22 +3,24 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "Semaphore.h"
 
+#import "NSObjectExtended.h"
+
 @implementation Semaphore
 
 //designated initializer
--(id) initWithValue:(unsigned int)initialValue
+-(id) initWithValue:(NSUInteger)initialValue
 {
   if ((!(self = [super init])))
     return nil;
-  int error = pthread_condattr_init(&cond_attr);
-  error = error ? error : pthread_cond_init(&cond, &cond_attr);
-  error = error ? error : pthread_mutexattr_init(&mutex_attr);
-  error = error ? error : pthread_mutex_init(&mutex, &mutex_attr);
+  int error = pthread_condattr_init(&self->cond_attr);
+  error = error ? error : pthread_cond_init(&self->cond, &self->cond_attr);
+  error = error ? error : pthread_mutexattr_init(&self->mutex_attr);
+  error = error ? error : pthread_mutex_init(&self->mutex, &self->mutex_attr);
   if (error)
   {
     #ifdef ARC_ENABLED
@@ -28,7 +30,7 @@
     self = nil;
     return nil;
   }
-  value = initialValue;
+  self->value = initialValue;
   return self;
 }
 //end initWithValue:
@@ -41,10 +43,10 @@
 
 -(void) dealloc
 {
-  pthread_condattr_destroy(&cond_attr);
-  pthread_cond_destroy(&cond);
-  pthread_mutexattr_destroy(&mutex_attr);
-  pthread_mutex_destroy(&mutex);
+  pthread_condattr_destroy(&self->cond_attr);
+  pthread_cond_destroy(&self->cond);
+  pthread_mutexattr_destroy(&self->mutex_attr);
+  pthread_mutex_destroy(&self->mutex);
   #ifdef ARC_ENABLED
   #else
   [super dealloc];
@@ -52,14 +54,14 @@
 }
 //end dealloc
 
--(void) P:(unsigned int)n
+-(void) P:(NSUInteger)n
 {
-  pthread_mutex_lock(&mutex);
-  while(value<n)
-    pthread_cond_wait(&cond, &mutex);
-  value -= n;
-  pthread_mutex_unlock(&mutex);
-  pthread_cond_broadcast(&cond);
+  pthread_mutex_lock(&self->mutex);
+  while(self->value<n)
+    pthread_cond_wait(&self->cond, &self->mutex);
+  self->value -= n;
+  pthread_mutex_unlock(&self->mutex);
+  pthread_cond_broadcast(&self->cond);
 }
 //end P:
 
@@ -69,12 +71,12 @@
 }
 //end P
 
--(void) V:(unsigned int)n
+-(void) V:(NSUInteger)n
 {
-  pthread_mutex_lock(&mutex);
-  value += n;
-  pthread_mutex_unlock(&mutex);
-  pthread_cond_broadcast(&cond);
+  pthread_mutex_lock(&self->mutex);
+  self->value += n;
+  pthread_mutex_unlock(&self->mutex);
+  pthread_cond_broadcast(&self->cond);
 }
 //end V:
 
@@ -84,30 +86,32 @@
 }
 //end V
 
--(unsigned int) R
+-(NSUInteger) R
 {
-  return value;
+  return self->value;
 }
 //end R
 
 -(void) Z
 {
-  pthread_mutex_lock(&mutex);
-  while(value)
-    pthread_cond_wait(&cond, &mutex);
-  pthread_mutex_unlock(&mutex);
+  pthread_mutex_lock(&self->mutex);
+  while(self->value)
+    pthread_cond_wait(&self->cond, &self->mutex);
+  pthread_mutex_unlock(&self->mutex);
 }
 //end Z
 
 //NSCoding protocol
 -(id) initWithCoder:(NSCoder*)coder
 {
-  return [self initWithValue:[coder decodeIntForKey:@"value"]];
+  return [self initWithValue:[[[coder decodeObjectForKey:@"value"] dynamicCastToClass:[NSNumber class]] unsignedIntegerValue]];
 }
+//end initWithCoder:
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeInt:[self R] forKey:@"value"];
+  [coder encodeObject:[NSNumber numberWithUnsignedInteger:[self R]] forKey:@"value"];
 }
+//end encodeWithCoder:
 
 @end

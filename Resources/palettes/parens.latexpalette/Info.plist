@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>author</key>
+	<string>Sherman Gregory</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>latexCode</key>
+			<string>\left( {x} \right)</string>
+			<key>name</key>
+			<string>parentheses</string>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>latexCode</key>
+			<string>\left[ {x} \right]</string>
+			<key>name</key>
+			<string>squarebrackets</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>latexCode</key>
+			<string>\left\{ {x} \right\}</string>
+			<key>name</key>
+			<string>curlybrackets</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>latexCode</key>
+			<string>\left| {x} \right|</string>
+			<key>name</key>
+			<string>bars</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>name</key>
+			<string>doublebars</string>
+			<key>latexCode</key>
+			<string>\left\| {x} \right\|</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>name</key>
+			<string>anglebrackets</string>
+			<key>latexCode</key>
+			<string>\left\langle {x} \right\rangle</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>name</key>
+			<string>floorbrackets</string>
+			<key>latexCode</key>
+			<string>\left\lfloor {x} \right\rfloor</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>name</key>
+			<string>ceilbracket</string>
+			<key>latexCode</key>
+			<string>\left\lceil {x} \right\rceil</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>argumentToken</key>
+			<string>x</string>
+			<key>name</key>
+			<string>uppercornerbracket</string>
+			<key>latexCode</key>
+			<string>\left\ulcorner {x} \right\urcorner</string>
+			<key>argumentTokenRemoveBraces</key>
+			<true/>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>Delimiters</string>
+	<key>numberOfItemsPerRow</key>
+	<integer>3</integer>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

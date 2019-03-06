@@ -462,10 +462,6 @@
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
 		93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
 		93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C5D80A30D9130009FB59 /* latex-keywords.plist */; };
-		93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
-		93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
-		93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
-		93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */; };
 		93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.nib */; };
@@ -1110,8 +1106,6 @@
 		93EFDB72088FEFA6000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB73088FEFA6000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; };
 		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.plist.xml; name = "latex-keywords.plist"; path = "Resources/latex-keywords/latex-keywords.plist"; sourceTree = "<group>"; };
-		93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; path = "Frameworks/libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; sourceTree = "<group>"; };
-		93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; path = "Frameworks/libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib"; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
@@ -1155,8 +1149,6 @@
 				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
 				9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */,
 				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
-				93F4F17E16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
-				93F4F17F16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1172,8 +1164,6 @@
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
 				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */,
-				93F4F18016B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
-				93F4F18116B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1206,8 +1196,6 @@
 				931AD67508491A8E00E8EE8B /* Quartz.framework */,
 				93B8E92B19C0F99A00263C1F /* QuartzCore.framework */,
 				93C5318F0D9E2781003AF7FC /* Security.framework */,
-				93F4F17C16B87DC7008600B1 /* libcryptoWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
-				93F4F17D16B87DC7008600B1 /* libsslWorkaroundForCompatibilityPriorMacOS10_5-0.9.7.dylib */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -2476,7 +2464,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -o errexit\n\necho \"\" > /Users/chacha/Desktop/debug.txt\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\" >> /Users/chacha/Desktop/debug.txt\necho \"CONFIGURATION = $CONFIGURATION\" >> /Users/chacha/Desktop/debug.txt\necho \"PROJECT_NAME.app = $PROJECT_NAME.app\" >> /Users/chacha/Desktop/debug.txt\n\n[ $BUILD_STYLE = Deployment ] || [ $CONFIGURATION = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
+			shellScript = "set -o errexit\n\necho \"\" > /Users/chacha/Desktop/debug.txt\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\" >> /Users/chacha/Desktop/debug.txt\necho \"CONFIGURATION = $CONFIGURATION\" >> /Users/chacha/Desktop/debug.txt\necho \"PROJECT_NAME.app = $PROJECT_NAME.app\" >> /Users/chacha/Desktop/debug.txt\n\n[ \"$BUILD_STYLE\" = \"Deployment\" ] || [ \"$CONFIGURATION\" = \"Deployment\" ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2985,7 +2973,9 @@
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+					"-lcrypto",
 					"-licucore",
+					"-lsqlite3",
 					"-lxml2",
 					"-lz",
 				);
@@ -3049,7 +3039,9 @@
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+					"-lcrypto",
 					"-licucore",
+					"-lsqlite3",
 					"-lxml2",
 					"-lz",
 				);
@@ -3168,7 +3160,9 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
+					"-lcrypto",
 					"-licucore",
+					"-lsqlite3",
 					"-lxml2",
 					"-lz",
 				);
@@ -3230,7 +3224,9 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = (
+					"-lcrypto",
 					"-licucore",
+					"-lsqlite3",
 					"-lxml2",
 					"-lz",
 				);

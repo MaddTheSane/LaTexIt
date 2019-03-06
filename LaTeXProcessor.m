@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
@@ -69,7 +69,7 @@ static NSString* mathMLFix(NSString* value)
     }//end if (ctxt)
     if (xpathRes && (xpathRes->type == XPATH_NODESET))
     {
-      int i = 0;
+      NSInteger i = 0;
       for(i = 0 ; i< xpathRes->nodesetval->nodeNr ; ++i)
       {
         xmlNodePtr n = xpathRes->nodesetval->nodeTab[i];
@@ -168,8 +168,7 @@ static LaTeXProcessor* sharedInstance = nil;
       {
         NSString* temporaryPathFileName = @"latexit-paths";
         NSString* temporaryPathFilePath = [[[NSWorkspace sharedWorkspace] temporaryDirectory] stringByAppendingPathComponent:temporaryPathFileName];
-        NSString* systemCall = [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" >| %@",
-                                temporaryPathFilePath, temporaryPathFilePath];
+        NSString* systemCall = [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" >| %@", temporaryPathFilePath];
         int error = system([systemCall UTF8String]);
         NSError* nserror = nil;
         NSStringEncoding encoding = NSUTF8StringEncoding;
@@ -283,6 +282,7 @@ static LaTeXProcessor* sharedInstance = nil;
                              preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
                                  backgroundColor:(NSColor*)backgroundColor title:(NSString*)title
+                                 annotateWithTransparentData:(BOOL)annotateWithTransparentData
 {
   NSData* newData = nil;
   
@@ -310,7 +310,7 @@ static LaTeXProcessor* sharedInstance = nil;
             preamble, @"preamble",
             source, @"source",
             [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
-            [NSNumber numberWithInt:mode], @"mode",
+            [NSNumber numberWithInteger:mode], @"mode",
             [NSNumber numberWithDouble:magnification], @"magnification",
             [NSNumber numberWithDouble:baseline], @"baseline",
             [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
@@ -362,122 +362,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSMutableString* escapedSource = [NSMutableString stringWithString:(CHBRIDGE NSString*)cfEscapedSource];
     CFRelease(cfEscapedSource);
 
-    NSString* type = [[NSNumber numberWithInt:mode] stringValue];
-    
-    BOOL annotateWithTransparentData =
-      (exportFormat != EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ||
-      ([[PreferencesController sharedController] exportPDFWOFMetaDataInvisibleGraphicsEnabled]);
-    if (annotateWithTransparentData)
-    {
-      NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
-      NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
-        applicationVersion, @"version",
-        !preamble ? @"" : preamble, @"preamble",
-        !source ? @"" : source, @"source",
-        type, @"type",
-        colorAsString, @"color",
-        bkColorAsString, @"bkColor",
-        !title ? @"" : title, @"title",
-        [NSNumber numberWithDouble:magnification], @"magnification",
-        [NSNumber numberWithDouble:baseline], @"baseline",
-        nil];
-      NSData* dictionaryContentPlistData =
-        isMacOS10_6OrAbove() ?
-          [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] :
-          [NSPropertyListSerialization dataFromPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 errorDescription:nil];
-      NSData* annotationContentRawData = dictionaryContentPlistData;
-      NSData* annotationContentCompressedData = [Compressor zipcompress:annotationContentRawData];
-      NSString* annotationContentBase64 = [annotationContentCompressedData encodeBase64WithNewlines:NO];
-      NSString* annotationContentBase64CompleteString =
-        [NSString stringWithFormat:@"<latexit sha1_base64=\"%@\">%@</latexit>",
-          [[annotationContentBase64 dataUsingEncoding:NSUTF8StringEncoding] sha1Base64],
-          annotationContentBase64];
-      NSMutableData* dataConsumerData = [NSMutableData data];
-      CGDataConsumerRef dataConsumer = !dataConsumerData ? 0 :
-        CGDataConsumerCreateWithCFData((CFMutableDataRef)dataConsumerData);
-      CGDataProviderRef dataProvider = !data2 ? 0 :
-        CGDataProviderCreateWithCFData((CFDataRef)data2);
-      DebugLog(1, @"original pdf data :%lu bytes", (unsigned long)[data2 length]);
-      CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
-        CGPDFDocumentCreateWithProvider(dataProvider);
-      CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
-        CGPDFDocumentGetPage(pdfDocument, 1);
-      CGRect mediaBox = !pdfPage ? CGRectZero :
-        CGPDFPageGetBoxRect(pdfPage, kCGPDFMediaBox);
-      CGContextRef cgPDFContext = !dataConsumer || !pdfPage ? 0 :
-        CGPDFContextCreate(dataConsumer, &mediaBox, 0);
-      BOOL dataRewritten = NO;
-      if (cgPDFContext && pdfPage)
-      {
-        CFMutableDictionaryRef pageDictionary = CFDictionaryCreateMutable(0, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        CFDataRef boxData = CFDataCreate(0, (const UInt8*)&mediaBox, sizeof(CGRect)/sizeof(const UInt8));
-        if (pageDictionary && boxData)
-          CFDictionarySetValue(pageDictionary, kCGPDFContextMediaBox, boxData);
-        CGPDFContextBeginPage(cgPDFContext, pageDictionary);
-        BOOL debugVisibleAnnotations = NO;
-        BOOL debugLargeAnnotations = NO;
-        CGContextSetRGBStrokeColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0, 0, debugVisibleAnnotations ? 1. : 0.);
-        CGContextSetRGBFillColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0, 0, debugVisibleAnnotations ? 1. : 0.);
-        CGContextSetTextDrawingMode(cgPDFContext, debugVisibleAnnotations ? kCGTextFill : kCGTextInvisible);
-        CGContextDrawPDFPage(cgPDFContext, pdfPage);
-        //CGContextFlush(cgPDFContext);
-        CGFloat fontSize = debugLargeAnnotations ? 10 : 1e-6;
-        CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
-        DebugLog(1, @"mediaBox = %@", NSStringFromRect(NSRectFromCGRect(mediaBox)));
-        NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
-        CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
-        BOOL useOldFonts = NO;
-        if (useOldFonts)
-          CGContextSelectFont(cgPDFContext, "Courier", fontSize, kCGEncodingMacRoman);
-        else//if (!useOldFonts)
-        {
-          CGContextSetFont(cgPDFContext, cgFont);
-          CGContextSetFontSize(cgPDFContext, fontSize);
-        }//end if (!useOldFonts)
-
-        size_t charactersCount = [annotationContentBase64CompleteString length];
-        unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
-        CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
-        if (unichars && glyphs)
-        {
-          [annotationContentBase64CompleteString getCharacters:unichars];
-          bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
-          DebugLog(1, @"ok = %d", ok);
-          if (ok)
-          {
-            if (useOldFonts)
-            {
-              NSData* annotationContentBase64CompleteUTF8 = [annotationContentBase64CompleteString dataUsingEncoding:NSUTF8StringEncoding];
-              DebugLog(1, @"annotationContentBase64CompleteUTF8 = %@", annotationContentBase64CompleteUTF8);
-              CGContextShowTextAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, [annotationContentBase64CompleteUTF8 bytes], [annotationContentBase64CompleteUTF8 length]);
-            }//end if (useOldFonts)
-            else//if (!useOldFonts)
-            {
-              DebugLog(1, @"Show %lu glyphs", (unsigned long)charactersCount);
-              CGContextShowGlyphsAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, glyphs, charactersCount);
-            }//end if (!useOldFonts)
-          }//end if (ok)
-        }//end if (unichars && glyphs)
-        if (unichars)
-          free(unichars);
-        if (glyphs)
-          free(glyphs);
-        CGFontRelease(cgFont);
-        CGPDFContextEndPage(cgPDFContext);
-        if (boxData)
-          CFRelease(boxData);
-        if (pageDictionary)
-          CFRelease(pageDictionary);
-        CGContextFlush(cgPDFContext);
-        CGContextRelease(cgPDFContext);
-        dataRewritten = YES;
-      }//end if (cgPDFContext && pdfPage)
-      CGPDFDocumentRelease(pdfDocument);
-      CGDataProviderRelease(dataProvider);
-      CGDataConsumerRelease(dataConsumer);
-      if (dataRewritten)
-        data2 = dataConsumerData;
-     }//end if (annotateWithTransparentData)
+    NSString* type = [[NSNumber numberWithInteger:mode] stringValue];
     
     BOOL annotateWithXML = YES;
     if (annotateWithXML)
@@ -647,10 +532,10 @@ static LaTeXProcessor* sharedInstance = nil;
     NSNumberFormatter* numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     #endif
     [numberFormatter setFormatterBehavior:NSNumberFormatterBehaviorDefault];
-    [numberFormatter setMinimum:[NSNumber numberWithUnsignedInt:0]];
-    [numberFormatter setMaximum:[NSNumber numberWithUnsignedInt:(unsigned int)(-1)]];
+    [numberFormatter setMinimum:[NSNumber numberWithUnsignedInteger:0]];
+    [numberFormatter setMaximum:[NSNumber numberWithUnsignedInteger:NSUIntegerMax]];
     NSNumber* number = !byteCountString ? nil : [numberFormatter numberFromString:byteCountString];
-    NSUInteger byte_count = [number unsignedIntValue];
+    NSUInteger byte_count = [number unsignedIntegerValue];
 
     BOOL annotateWithPDF = YES;
     if (!annotateWithPDF)
@@ -679,10 +564,122 @@ static LaTeXProcessor* sharedInstance = nil;
         NSUInteger newByteCount = byte_count;
         if (r1.location != NSNotFound)
           newByteCount += [annotation length]-1;
-        [buildData appendData:[[NSString stringWithFormat:@"startxref\n%ld\n%%%%EOF", newByteCount] dataUsingEncoding:NSUTF8StringEncoding]];
+        [buildData appendData:[[NSString stringWithFormat:@"startxref\n%llu\n%%%%EOF", (unsigned long long)newByteCount] dataUsingEncoding:NSUTF8StringEncoding]];
       }//end if (r3.location != NSNotFound)
       newData = buildData;
     }//end if (annotateWithPDF)
+    
+    if (annotateWithTransparentData)
+    {
+      NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+      NSDictionary* dictionaryContent = [NSDictionary dictionaryWithObjectsAndKeys:
+        applicationVersion, @"version",
+        !preamble ? @"" : preamble, @"preamble",
+        !source ? @"" : source, @"source",
+        type, @"type",
+        colorAsString, @"color",
+        bkColorAsString, @"bkColor",
+        !title ? @"" : title, @"title",
+        [NSNumber numberWithDouble:magnification], @"magnification",
+        [NSNumber numberWithDouble:baseline], @"baseline",
+        nil];
+      NSData* dictionaryContentPlistData =
+        isMacOS10_6OrAbove() ?
+          [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] :
+          [NSPropertyListSerialization dataFromPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 errorDescription:nil];
+      NSData* annotationContentRawData = dictionaryContentPlistData;
+      NSData* annotationContentCompressedData = [Compressor zipcompress:annotationContentRawData];
+      NSString* annotationContentBase64 = [annotationContentCompressedData encodeBase64WithNewlines:NO];
+      NSString* annotationContentBase64CompleteString =
+        [NSString stringWithFormat:@"<latexit sha1_base64=\"%@\">%@</latexit>",
+          [[annotationContentBase64 dataUsingEncoding:NSUTF8StringEncoding] sha1Base64],
+          annotationContentBase64];
+      NSMutableData* dataConsumerData = [NSMutableData data];
+      CGDataConsumerRef dataConsumer = !dataConsumerData ? 0 :
+        CGDataConsumerCreateWithCFData((CFMutableDataRef)dataConsumerData);
+      CGDataProviderRef dataProvider = !newData ? 0 :
+        CGDataProviderCreateWithCFData((CFDataRef)newData);
+      DebugLog(1, @"original pdf data :%lu bytes", (unsigned long)[newData length]);
+      CGPDFDocumentRef pdfDocument = !dataProvider ? 0 :
+        CGPDFDocumentCreateWithProvider(dataProvider);
+      CGPDFPageRef pdfPage = !pdfDocument || !CGPDFDocumentGetNumberOfPages(pdfDocument) ? 0 :
+        CGPDFDocumentGetPage(pdfDocument, 1);
+      CGRect mediaBox = !pdfPage ? CGRectZero :
+        CGPDFPageGetBoxRect(pdfPage, kCGPDFMediaBox);
+      CGContextRef cgPDFContext = !dataConsumer || !pdfPage ? 0 :
+        CGPDFContextCreate(dataConsumer, &mediaBox, 0);
+      BOOL dataRewritten = NO;
+      if (cgPDFContext && pdfPage)
+      {
+        CFMutableDictionaryRef pageDictionary = CFDictionaryCreateMutable(0, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CFDataRef boxData = CFDataCreate(0, (const UInt8*)&mediaBox, sizeof(CGRect)/sizeof(const UInt8));
+        if (pageDictionary && boxData)
+          CFDictionarySetValue(pageDictionary, kCGPDFContextMediaBox, boxData);
+        CGPDFContextBeginPage(cgPDFContext, pageDictionary);
+        BOOL debugVisibleAnnotations = NO;
+        BOOL debugLargeAnnotations = NO;
+        CGContextSetRGBStrokeColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0, 0, debugVisibleAnnotations ? 1. : 0.);
+        CGContextSetRGBFillColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0, 0, debugVisibleAnnotations ? 1. : 0.);
+        CGContextSetTextDrawingMode(cgPDFContext, debugVisibleAnnotations ? kCGTextFill : kCGTextInvisible);
+        CGContextDrawPDFPage(cgPDFContext, pdfPage);
+        //CGContextFlush(cgPDFContext);
+        CGFloat fontSize = debugLargeAnnotations ? 10 : 1e-6;
+        CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
+        DebugLog(1, @"mediaBox = %@", NSStringFromRect(NSRectFromCGRect(mediaBox)));
+        NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
+        CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
+        BOOL useOldFonts = NO;
+        if (useOldFonts)
+          CGContextSelectFont(cgPDFContext, "Courier", fontSize, kCGEncodingMacRoman);
+        else//if (!useOldFonts)
+        {
+          CGContextSetFont(cgPDFContext, cgFont);
+          CGContextSetFontSize(cgPDFContext, fontSize);
+        }//end if (!useOldFonts)
+
+        size_t charactersCount = [annotationContentBase64CompleteString length];
+        unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
+        CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
+        if (unichars && glyphs)
+        {
+          [annotationContentBase64CompleteString getCharacters:unichars];
+          bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
+          DebugLog(1, @"ok = %d", ok);
+          if (ok)
+          {
+            if (useOldFonts)
+            {
+              NSData* annotationContentBase64CompleteUTF8 = [annotationContentBase64CompleteString dataUsingEncoding:NSUTF8StringEncoding];
+              DebugLog(1, @"annotationContentBase64CompleteUTF8 = %@", annotationContentBase64CompleteUTF8);
+              CGContextShowTextAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, [annotationContentBase64CompleteUTF8 bytes], [annotationContentBase64CompleteUTF8 length]);
+            }//end if (useOldFonts)
+            else//if (!useOldFonts)
+            {
+              DebugLog(1, @"Show %lu glyphs", (unsigned long)charactersCount);
+              CGContextShowGlyphsAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, glyphs, charactersCount);
+            }//end if (!useOldFonts)
+          }//end if (ok)
+        }//end if (unichars && glyphs)
+        if (unichars)
+          free(unichars);
+        if (glyphs)
+          free(glyphs);
+        CGFontRelease(cgFont);
+        CGPDFContextEndPage(cgPDFContext);
+        if (boxData)
+          CFRelease(boxData);
+        if (pageDictionary)
+          CFRelease(pageDictionary);
+        CGContextFlush(cgPDFContext);
+        CGContextRelease(cgPDFContext);
+        dataRewritten = YES;
+      }//end if (cgPDFContext && pdfPage)
+      CGPDFDocumentRelease(pdfDocument);
+      CGDataProviderRelease(dataProvider);
+      CGDataConsumerRelease(dataConsumer);
+      if (dataRewritten)
+        newData = dataConsumerData;
+    }//end if (annotateWithTransparentData)
   }//end if (data2)
   
   return newData;
@@ -768,6 +765,7 @@ static LaTeXProcessor* sharedInstance = nil;
           [NSNumber numberWithDouble:[preferencesController latexisationFontSize]], @"magnification",
           [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
           [NSNull null], @"backgroundColor",
+          [NSNull null], @"title",
           [NSNumber numberWithDouble:leftMargin], @"leftMargin",
           [NSNumber numberWithDouble:rightMargin], @"rightMargin",
           [NSNumber numberWithDouble:topMargin], @"topMargin",
@@ -815,12 +813,14 @@ static LaTeXProcessor* sharedInstance = nil;
     NSArray*  errors  = [configuration2 objectForKey:@"outErrors"];
     NSData*   pdfData = [configuration2 objectForKey:@"outPdfData"];
     id backgroundColor = [configuration2 objectForKey:@"backgroundColor"];
+    id title = [configuration2 objectForKey:@"title"];
     NSString* result = [self latexiseWithPreamble:[configuration2 objectForKey:@"preamble"]
                           body:[configuration objectForKey:@"body"] color:[configuration2 objectForKey:@"color"]
-                          mode:(latex_mode_t)[[configuration2 objectForKey:@"mode"] intValue]
+                          mode:(latex_mode_t)[[configuration2 objectForKey:@"mode"] integerValue]
                           magnification:[[configuration2 objectForKey:@"magnification"] doubleValue]
                           compositionConfiguration:[configuration2 objectForKey:@"compositionConfiguration"]
                           backgroundColor:(backgroundColor == [NSNull null]) ? nil : backgroundColor
+                          title:(title == [NSNull null]) ? nil : title
                           leftMargin:[[configuration2 objectForKey:@"leftMargin"] doubleValue]
                          rightMargin:[[configuration2 objectForKey:@"rightMargin"] doubleValue]
                            topMargin:[[configuration2 objectForKey:@"topMargin"] doubleValue]
@@ -852,6 +852,7 @@ static LaTeXProcessor* sharedInstance = nil;
 -(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
                     magnification:(double)magnification compositionConfiguration:(NSDictionary*)compositionConfiguration
                     backgroundColor:(NSColor*)backgroundColor
+                    title:(NSString*)title
                     leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin
                     topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin
                     additionalFilesPaths:(NSArray*)additionalFilesPaths
@@ -1009,8 +1010,8 @@ static LaTeXProcessor* sharedInstance = nil;
   NSRange firstCharLocation = [body rangeOfString:firstChar];
   NSRange rangeOfTrimmedHeader = NSMakeRange(0, (firstCharLocation.location != NSNotFound) ? firstCharLocation.location : 0);
   NSString* trimmedHeader = [body substringWithRange:rangeOfTrimmedHeader];
-  unsigned int nbNewLinesInTrimmedHeader = MAX(1U, [[trimmedHeader componentsSeparatedByString:@"\n"] count]);
-  int errorLineShift = MAX((int)0, (int)nbNewLinesInTrimmedHeader-1);
+  NSUInteger nbNewLinesInTrimmedHeader = MAX(1U, [[trimmedHeader componentsSeparatedByString:@"\n"] count]);
+  NSInteger errorLineShift = MAX((NSInteger)0, (NSInteger)nbNewLinesInTrimmedHeader-1);
   
   NSDictionary* additionalProcessingScripts = [compositionConfiguration compositionConfigurationAdditionalProcessingScripts];
   
@@ -1259,8 +1260,8 @@ static LaTeXProcessor* sharedInstance = nil;
       if (!failed)
         pdfData = [self composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
                      compositionConfiguration:[compositionConfiguration dictionaryByAddingObjectsAndKeys:
-                       [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
-                       [NSNumber numberWithUnsignedInt:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
+                       [NSNumber numberWithInteger:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
+                       [NSNumber numberWithUnsignedInteger:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
                        nil]
                      fullEnvironment:fullEnvironment];
       failed |= !pdfData;
@@ -1359,8 +1360,8 @@ static LaTeXProcessor* sharedInstance = nil;
           if (!failed)
             pdfData = [self composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
                         compositionConfiguration:[compositionConfiguration dictionaryByAddingObjectsAndKeys:
-                          [NSNumber numberWithInt:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
-                          [NSNumber numberWithUnsignedInt:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
+                          [NSNumber numberWithInteger:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
+                          [NSNumber numberWithUnsignedInteger:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
                           nil]
                         fullEnvironment:fullEnvironment];
           failed |= !pdfData;
@@ -1413,11 +1414,12 @@ static LaTeXProcessor* sharedInstance = nil;
     }
 
     //adds some meta-data to be compatible with Latex Equation Editor
-    export_format_t exportFormat = EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS;//prevent default embedding of invisible annotations
+    export_format_t exportFormat = EXPORT_FORMAT_PDF;
     if (!failed && pdfData)
       pdfData = [self annotatePdfDataInLEEFormat:pdfData exportFormat:exportFormat preamble:preamble source:body color:color
                                             mode:latexMode magnification:magnification baseline:baseline
-                                 backgroundColor:backgroundColor title:nil];
+                                 backgroundColor:backgroundColor title:title
+                     annotateWithTransparentData:NO];//prevent graphic metadata to be generated too early
     [pdfData writeToFile:pdfFilePath atomically:NO];//Recreates the document with the new meta-data
   }//end if latex source could be compiled
 
@@ -1544,10 +1546,10 @@ static LaTeXProcessor* sharedInstance = nil;
     [compositionConfiguration compositionConfigurationProgramArgumentsLaTeX];
   
   NSNumber* pdfMinorVersionNumber = [[compositionConfiguration objectForKey:@"pdfMinorVersion"] dynamicCastToClass:[NSNumber class]];
-  unsigned int pdfMinorVersion = [pdfMinorVersionNumber unsignedIntValue];
+  NSUInteger pdfMinorVersion = [pdfMinorVersionNumber unsignedIntegerValue];
   BOOL usePdfMinorVersion = pdfMinorVersion && (compositionMode == COMPOSITION_MODE_PDFLATEX);
   NSString* texFileArg = !usePdfMinorVersion ? texFile :
-    [NSString stringWithFormat:@"\"\\pdfminorversion=%u \\input \\\"%@\\\"\"", pdfMinorVersion, texFile];
+    [NSString stringWithFormat:@"\"\\pdfminorversion=%@ \\input \\\"%@\\\"\"", [NSNumber numberWithUnsignedInteger:pdfMinorVersion], texFile];
 
   #ifdef ARC_ENABLED
   SystemTask* systemTask = [[SystemTask alloc] initWithWorkingDirectory:workingDirectory];
@@ -1667,7 +1669,7 @@ static LaTeXProcessor* sharedInstance = nil;
 //end composeLaTeX:customLog:stdoutLog:stderrLog:compositionMode:fullEnvironment:
 
 //returns an array of the errors. Each case will contain an error string
--(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift
+-(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(NSInteger)errorLineShift
 {
   NSArray* rawLogLines = [fullErrorLog componentsSeparatedByString:@"\n"];
   NSMutableArray* errorLines = [NSMutableArray arrayWithCapacity:[rawLogLines count]];
@@ -1682,7 +1684,7 @@ static LaTeXProcessor* sharedInstance = nil;
   }
   
   //first pass : pdflatex truncates lines at COLUMN=80. This is stupid. I must try to concatenate lines
-  unsigned int errorLineIndex = 0;
+  NSUInteger errorLineIndex = 0;
   while(errorLineIndex<[errorLines count])
   {
     NSString* line = [errorLines objectAtIndex:errorLineIndex];
@@ -1712,7 +1714,7 @@ static LaTeXProcessor* sharedInstance = nil;
   }//end for each line
 
   NSMutableArray* filteredErrors = [NSMutableArray arrayWithCapacity:[errorLines count]];
-  const unsigned int errorLineIndexCount = [errorLines count];
+  const NSUInteger errorLineIndexCount = [errorLines count];
   errorLineIndex = 0;
   for(errorLineIndex = 0 ; errorLineIndex<errorLineIndexCount ; ++errorLineIndex)
   {
@@ -1726,7 +1728,7 @@ static LaTeXProcessor* sharedInstance = nil;
         [[lineComponent stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""];
       NSString* errorComponent = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)] componentsJoinedByString:@":"];
       if (lineComponentIsANumber)
-        lineComponent = [[NSNumber numberWithInt:[lineComponent intValue]+errorLineShift] stringValue];
+        lineComponent = [[NSNumber numberWithInteger:[lineComponent integerValue]+errorLineShift] stringValue];
       if (lineComponentIsANumber || ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
       {
         NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
@@ -1776,7 +1778,7 @@ static LaTeXProcessor* sharedInstance = nil;
         if (lineComponentIsANumber && nextLine)
           fullLine = [line stringByAppendingString:nextLine];
           
-          lineComponent = [[NSNumber numberWithInt:[lineComponent intValue]+errorLineShift] stringValue];
+          lineComponent = [[NSNumber numberWithInteger:[lineComponent integerValue]+errorLineShift] stringValue];
         if (lineComponentIsANumber && errorComponent)
         {
           NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
@@ -1860,7 +1862,7 @@ static LaTeXProcessor* sharedInstance = nil;
   NSMutableString* description = [NSMutableString string];
   if (script)
   {
-    switch([[script objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] intValue])
+    switch([[script objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] integerValue])
     {
       case SCRIPT_SOURCE_STRING :
         [description appendFormat:@"%@\t: %@\n%@\t:\n%@\n",
@@ -1901,7 +1903,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* scriptBody = nil;
 
     NSNumber* scriptType = [script objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey];
-    script_source_t source = scriptType ? [scriptType intValue] : SCRIPT_SOURCE_STRING;
+    script_source_t source = scriptType ? [scriptType integerValue] : SCRIPT_SOURCE_STRING;
 
     NSStringEncoding encoding = NSUTF8StringEncoding;
     NSError* error = nil;
@@ -2067,7 +2069,7 @@ static LaTeXProcessor* sharedInstance = nil;
   [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
   [alert addButtonWithTitle:NSLocalizedString(@"Display the error message", @"Display the error message")];
   [alert setAlertStyle:NSCriticalAlertStyle];
-  int displayError = [alert runModal];
+  NSInteger displayError = [alert runModal];
   if (displayError == NSAlertSecondButtonReturn)
   {
     NSString* informativeText2 = [[objects objectForKey:@"informativeText2"] dynamicCastToClass:[NSString class]];
@@ -2120,7 +2122,13 @@ static LaTeXProcessor* sharedInstance = nil;
       NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];
       NSColor* backgroundColor = [equationMetaData objectForKey:@"backgroundColor"];
       
+      PreferencesController* preferencesController = [PreferencesController sharedController];
+      BOOL annotationsGraphicCommandsInvisibleEnabled =
+        (format == EXPORT_FORMAT_PDF) ? [preferencesController exportPDFMetaDataInvisibleGraphicsEnabled] :
+        (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ? [preferencesController exportPDFWOFMetaDataInvisibleGraphicsEnabled] :
+        NO;
       BOOL shouldRecreatePDF =
+        (annotationsGraphicCommandsInvisibleEnabled && ![LatexitEquation hasInvisibleGraphicCommandsInPDFData:pdfData]) ||
         (backgroundColor && exportIncludeBackgroundColor) ||
         (scaleAsPercent != 100);
       if (shouldRecreatePDF)
@@ -2132,9 +2140,6 @@ static LaTeXProcessor* sharedInstance = nil;
         CGRect pdfOriginalCropBox = !pdfOriginalPage ? CGRectZero : CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFCropBox);
         CGRect pdfOriginalBox = pdfOriginalCropBox;
         
-        CGFloat backgroundColorRgba[4] = {0};
-        [backgroundColor getRed:&backgroundColorRgba[0] green:&backgroundColorRgba[1] blue:&backgroundColorRgba[2] alpha:&backgroundColorRgba[3]];
-       
         NSMutableData* pdfScaledMutableData = [NSMutableData data];
         CGDataConsumerRef pdfScaledDataConsumer = !pdfScaledMutableData ? 0 :
           CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfScaledMutableData);
@@ -2144,11 +2149,13 @@ static LaTeXProcessor* sharedInstance = nil;
             ceil((scaleAsPercent/100)*pdfOriginalBox.size.height));
         CGContextRef pdfContext = !pdfScaledDataConsumer ? 0 : CGPDFContextCreate(pdfScaledDataConsumer, &pdfScaledMediaBox, 0);
         CGPDFContextBeginPage(pdfContext, 0);
-        if (backgroundColor)
+        if (backgroundColor && exportIncludeBackgroundColor)
         {
+          CGFloat backgroundColorRgba[4] = {0};
+          [backgroundColor getRed:&backgroundColorRgba[0] green:&backgroundColorRgba[1] blue:&backgroundColorRgba[2] alpha:&backgroundColorRgba[3]];
           CGContextSetRGBFillColor(pdfContext, backgroundColorRgba[0], backgroundColorRgba[1], backgroundColorRgba[2], backgroundColorRgba[3]);
           CGContextFillRect(pdfContext, pdfScaledMediaBox);
-        }//end if (backgroundColor)
+        }//end if (backgroundColor && exportIncludeBackgroundColor)
         CGContextScaleCTM(pdfContext,
           !pdfOriginalBox.size.width ? 1 : pdfScaledMediaBox.size.width/pdfOriginalBox.size.width,
           !pdfOriginalBox.size.height ? 1 : pdfScaledMediaBox.size.height/pdfOriginalBox.size.height);
@@ -2187,11 +2194,12 @@ static LaTeXProcessor* sharedInstance = nil;
             preamble:[[equationMetaData objectForKey:@"preamble"] string]
             source:[[equationMetaData objectForKey:@"sourceText"] string]
             color:[equationMetaData objectForKey:@"color"]
-            mode:[[equationMetaData objectForKey:@"mode"] intValue]
+            mode:[[equationMetaData objectForKey:@"mode"] integerValue]
             magnification:[[equationMetaData objectForKey:@"magnification"] doubleValue]
             baseline:[[equationMetaData objectForKey:@"baseline"] doubleValue]
             backgroundColor:[equationMetaData objectForKey:@"backgroundColor"]
-            title:[equationMetaData objectForKey:@"title"]];
+            title:[equationMetaData objectForKey:@"title"]
+            annotateWithTransparentData:annotationsGraphicCommandsInvisibleEnabled];
             
         #warning 64bits problem
         BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
@@ -2231,12 +2239,13 @@ static LaTeXProcessor* sharedInstance = nil;
       NSArray*  gsArguments      = [compositionConfiguration compositionConfigurationProgramArgumentsGs];
       NSString* psToPdfPath      = [compositionConfiguration compositionConfigurationProgramPathPsToPdf];
       NSArray*  psToPdfArguments = [compositionConfiguration compositionConfigurationProgramArgumentsPsToPdf];
-      NSString* pdf2svgPath      = [[PreferencesController sharedController] exportSvgPdfToSvgPath];
+      NSString* pdf2svgPath      = [preferencesController exportSvgPdfToSvgPath];
     
       if (format == EXPORT_FORMAT_PDF)
       {
         data = pdfData;
-        NSDictionary* metaData = [LatexitEquation metaDataFromPDFData:data useDefaults:NO outPdfData:nil];
+        BOOL reannotate = NO;
+        NSDictionary* metaData = !reannotate ? nil : [LatexitEquation metaDataFromPDFData:data useDefaults:NO outPdfData:nil];
         if (metaData)
         {
           NSAttributedString* preamble = [[metaData objectForKey:@"preamble"] dynamicCastToClass:[NSAttributedString class]];
@@ -2251,10 +2260,11 @@ static LaTeXProcessor* sharedInstance = nil;
                                                                       exportFormat:format
                                                                           preamble:[preamble string]
                                                                             source:[sourceText string]
-                                                                             color:color mode:(latex_mode_t)[mode intValue]
+                                                                             color:color mode:(latex_mode_t)[mode integerValue]
                                                                      magnification:[magnification doubleValue]
                                                                           baseline:0
-                                                                   backgroundColor:backgroundColor title:title];
+                                                                   backgroundColor:backgroundColor title:title
+                                                       annotateWithTransparentData:annotationsGraphicCommandsInvisibleEnabled];
         }//end if (metaData)
         /*CGDataProviderRef pdfOriginalDataProvider = !pdfData ? 0 :
           CGDataProviderCreateWithCFData((CFDataRef)pdfData);
@@ -2396,7 +2406,8 @@ static LaTeXProcessor* sharedInstance = nil;
                                               color:[latexitEquation color] mode:[latexitEquation mode]
                                       magnification:[latexitEquation pointSize]
                                            baseline:0
-                                    backgroundColor:[latexitEquation backgroundColor] title:[latexitEquation title]];
+                                    backgroundColor:[latexitEquation backgroundColor] title:[latexitEquation title]
+                                    annotateWithTransparentData:annotationsGraphicCommandsInvisibleEnabled];
           }//end if (!error)
           [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpFilePath error:0];
         }//if (gsPath && ![gsPath isEqualToString:@""] && psToPdfPath && ![psToPdfPath isEqualToString:@""])
@@ -2595,7 +2606,7 @@ static LaTeXProcessor* sharedInstance = nil;
       {
         NSDictionary* metaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];
         NSAttributedString* sourceText = [metaData objectForKey:@"sourceText"];
-        latex_mode_t latexMode = (latex_mode_t)[[metaData objectForKey:@"mode"] intValue];
+        latex_mode_t latexMode = (latex_mode_t)[[metaData objectForKey:@"mode"] integerValue];
         NSString* addSymbolLeft  =
           (latexMode == LATEX_MODE_ALIGN) ? @"$\\begin{eqnarray}\n" ://unfortunately, align is not supported
           (latexMode == LATEX_MODE_EQNARRAY) ? @"$\\begin{eqnarray}\n" :
@@ -2686,7 +2697,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];
         NSString* preamble = [[equationMetaData objectForKey:@"preamble"] string];
         NSString* source = [[equationMetaData objectForKey:@"sourceText"] string];
-        latex_mode_t latexMode = (latex_mode_t)[[equationMetaData objectForKey:@"mode"] intValue];
+        latex_mode_t latexMode = (latex_mode_t)[[equationMetaData objectForKey:@"mode"] integerValue];
         NSString* addSymbolLeft  =
           (latexMode == LATEX_MODE_ALIGN) ? @"\\begin{align*}" :
           (latexMode == LATEX_MODE_EQNARRAY) ? @"\\begin{eqnarray*}" :

@@ -3,21 +3,21 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
 @interface LineCountRulerView : NSRulerView {
-  int lineShift;
+  NSInteger lineShift;
 }
 
 //the shift allows to start the numeratation at another number than 1
--(int)  lineShift;
--(void) setLineShift:(int)aShift;
+-(NSInteger) lineShift;
+-(void) setLineShift:(NSInteger)aShift;
 
 //we can add/remove error markers
 -(void) clearErrors;
--(void) setErrorAtLine:(int)lineIndex message:(NSString*)message;
+-(void) setErrorAtLine:(NSInteger)lineIndex message:(NSString*)message;
 
 @end

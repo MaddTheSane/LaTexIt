@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 #import "BodyTemplatesTableView.h"
 
@@ -38,7 +38,7 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
+  NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
@@ -55,7 +55,7 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }
@@ -104,7 +104,7 @@ static NSString* BodyTemplatesPboardType = @"BodyTemplatesPboardType"; //pboard 
             [pboard availableTypeFromArray:[NSArray arrayWithObject:BodyTemplatesPboardType]] &&
             [pboard propertyListForType:BodyTemplatesPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && ([indexSet firstIndex] != (unsigned int)row) && ([indexSet firstIndex]+1 != (unsigned int)row);
+            indexSet && ([indexSet firstIndex] != (NSUInteger)row) && ([indexSet firstIndex]+1 != (NSUInteger)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 //this file is an extension of the NSWorkspace class
@@ -157,16 +157,5 @@
   return result;
 }
 //end getBestStandardPast:domain:defaultValue:
-
-@end
-
-@implementation NSWorkspace (Bridge10_5)
-
--(BOOL) filenameExtension:(NSString*)filenameExtension isValidForType:(NSString *)typeName
-{
-  BOOL result = YES;
-  return result;
-}
-//end filenameExtension:isValidForType:
 
 @end

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -82,10 +82,18 @@
 }
 //end historyItemsController
 
+-(NSArray*) selectedItems
+{
+  NSArray* result = nil;
+  result = [self->historyItemsController selectedObjects];
+  return result;
+}
+//end selectedItems
+
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
+  NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
@@ -216,7 +224,7 @@
   }
   else //if we are going down after an upwards selection, deselect last selected item
   {
-    unsigned int firstIndex = [selectedRowIndexes firstIndex];
+    NSUInteger firstIndex = [selectedRowIndexes firstIndex];
     [self deselectRow:firstIndex];
     [self scrollRowToVisible:firstIndex+1];
   }
@@ -226,7 +234,7 @@
 -(void) moveUpAndModifySelection:(id)sender
 {
   //selection to up
-  unsigned int lastSelectedRow   = [self selectedRow];
+  NSUInteger lastSelectedRow   = [self selectedRow];
   NSIndexSet* selectedRowIndexes = [self selectedRowIndexes];
   if (lastSelectedRow == [selectedRowIndexes firstIndex]) //if the selection is going up, and up, increase it
   {
@@ -237,7 +245,7 @@
   }
   else //if we are going up after an downwards selection, deselect last selected item
   {
-    unsigned int lastIndex = [selectedRowIndexes lastIndex];
+    NSUInteger lastIndex = [selectedRowIndexes lastIndex];
     [self deselectRow:lastIndex];
     [self scrollRowToVisible:lastIndex-1];
   }
@@ -246,7 +254,7 @@
 
 -(void) moveUp:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow > 0)
     --selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -256,7 +264,7 @@
 
 -(void) moveDown:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if ((selectedRow >= 0) && (selectedRow+1 < [self numberOfRows]))
     ++selectedRow;
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
@@ -282,7 +290,7 @@
   else if ([[self window] isKeyWindow]) //if NSPointInRect(location, [clipView bounds])
   {
     location = [self convertPoint:location fromView:clipView];
-    int row = [self rowAtPoint:location];
+    NSInteger row = [self rowAtPoint:location];
     id historyItem = (row >= 0) && (row < [self numberOfRows]) ?
        [[self->historyItemsController arrangedObjects] objectAtIndex:row] : nil;
     LatexitEquation* equation = [historyItem equation];

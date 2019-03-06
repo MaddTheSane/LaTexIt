@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesControllerMigration.h"
@@ -298,13 +298,13 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
     while(count--)
     {
       NSDictionary* serviceItem = [servicesItems objectAtIndex:count];
-      if ([[serviceItem objectForKey:ServiceShortcutIdentifierKey] intValue] == SERVICE_LATEXIZE_EQNARRAY)
+      if ([[serviceItem objectForKey:ServiceShortcutIdentifierKey] integerValue] == SERVICE_LATEXIZE_EQNARRAY)
       {
         [servicesItems replaceObjectAtIndex:count withObject:
           [NSDictionary dictionaryWithObjectsAndKeys:
             [serviceItem objectForKey:ServiceShortcutEnabledKey], ServiceShortcutEnabledKey,
             [serviceItem objectForKey:ServiceShortcutStringKey], ServiceShortcutStringKey,
-            [NSNumber numberWithInt:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+            [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
             [serviceItem objectForKey:ServiceShortcutClipBoardOptionKey], ServiceShortcutClipBoardOptionKey,
             nil]];
       }
@@ -460,31 +460,31 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   }
   
   NSMutableArray* newServiceShortcuts = [NSMutableArray arrayWithCapacity:6];
-  unsigned int count = MIN(6U, MIN([oldServiceShortcutsEnabled count], [oldServiceShortcutsEnabled count]));
-  unsigned int i = 0;
+  NSUInteger count = MIN(6U, MIN([oldServiceShortcutsEnabled count], [oldServiceShortcutsEnabled count]));
+  NSUInteger i = 0;
   for(i = 0 ; i<count ; ++i)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
       [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
-      [NSNumber numberWithInt:i+((count == 3) ? 1 : 0)], ServiceShortcutIdentifierKey,
+      [NSNumber numberWithInteger:i+((count == 3) ? 1 : 0)], ServiceShortcutIdentifierKey,
       nil]];
   if ([newServiceShortcuts count] == 3)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
       [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
-      [NSNumber numberWithInt:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
+      [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
       nil]];
   if ([newServiceShortcuts count] == 4)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
       @"", ServiceShortcutStringKey,
-      [NSNumber numberWithInt:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
+      [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
       nil]];
   if ([newServiceShortcuts count] == 5)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
       @"", ServiceShortcutStringKey,
-      [NSNumber numberWithInt:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
+      [NSNumber numberWithInteger:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
       nil]];
   [self removeKey:Old_ServiceShortcutEnabledKey];
   [self removeKey:Old_ServiceShortcutStringsKey];

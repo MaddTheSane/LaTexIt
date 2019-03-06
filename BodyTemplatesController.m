@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "BodyTemplatesController.h"
@@ -158,9 +158,9 @@ static NSDictionary* noneBodyTemplate = nil;
   else if ([keyPath isEqualToString:LatexisationSelectedBodyTemplateIndexKey] ||
            [keyPath isEqualToString:ServiceSelectedBodyTemplateIndexKey])
   {
-    int curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] intValue];
-    int newIndex = curIndex;
-    int count = (signed)[[self arrangedObjects] count];
+    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+    NSInteger newIndex = curIndex;
+    NSInteger count = (signed)[[self arrangedObjects] count];
     if ((curIndex<0) && count)
       newIndex = -1;
     else if (curIndex>=count)
@@ -215,7 +215,7 @@ static NSDictionary* noneBodyTemplate = nil;
 //end add:
 
 //redefined from NSArrayControllerExtended
--(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(unsigned int)index
+-(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
   NSInteger bodyTemplateLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedBodyTemplateIndexKey];
   NSInteger bodyTemplateServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedBodyTemplateIndexKey];

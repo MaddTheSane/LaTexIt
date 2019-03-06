@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSManagedObjectContextExtended.h"
@@ -58,9 +58,9 @@
 }
 //end safeDeleteObjects:
 
--(unsigned int) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...
+-(NSUInteger) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...
 {
-  unsigned int result = 0;
+  NSUInteger result = 0;
   NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
   [fetchRequest setEntity:entity];
   if (predicateFormat)
@@ -87,9 +87,9 @@
 }
 //end countForEntity:predicate:error:
 
--(unsigned int) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error
+-(NSUInteger) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error
 {
-  unsigned int result = 0;
+  NSUInteger result = 0;
   if (isMacOS10_5OrAbove())
     result = [self countForFetchRequest:request error:error];
   else

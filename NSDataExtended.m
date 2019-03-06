@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/11/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDataExtended.h"
@@ -35,8 +35,6 @@
 +(id) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines
 {
   NSMutableData* result = [NSMutableData data];
-  #if defined(__clang__)
-  #else
   const char* utf8String = [base64 UTF8String];
   NSUInteger utf8Length = [base64 lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
   BIO* mem = BIO_new_mem_buf((void*)utf8String, utf8Length);
@@ -52,9 +50,7 @@
     [result appendBytes:inbuf length:inlen];
     
   //Clean up and go home
-  BIO_free_all(b64);
-  #endif
-  
+  BIO_free_all(b64);  
   return result;
 }
 //end dataWithBase64:encodedWithNewlines:
@@ -69,8 +65,6 @@
 -(NSString*) encodeBase64WithNewlines:(BOOL)encodeWithNewlines
 {
   NSString* result = nil;
-  #if defined(__clang__)
-  #else
   BIO* mem = BIO_new(BIO_s_mem());
   BIO* b64 = BIO_new(BIO_f_base64());
   if (!encodeWithNewlines)
@@ -88,7 +82,6 @@
   result = [[[NSString alloc] initWithBytes:base64Pointer length:base64Length encoding:NSUTF8StringEncoding] autorelease];
   #endif
   BIO_free_all(mem);
-  #endif
   return result;
 }
 //end encodeBase64WithNewlines:

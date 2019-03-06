@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LineCountRulerView.h"
@@ -47,16 +47,16 @@ static NSImage* errorIcon = nil;
 //end textDidChange:
 
 //the shift allows to start the numeratation at another number than 1
--(void) setLineShift:(int)aShift
+-(void) setLineShift:(NSInteger)aShift
 {
-  lineShift = aShift;
+  self->lineShift = aShift;
   [self setNeedsDisplay:YES];
 }
 //end setLineShift:
 
--(int) lineShift
+-(NSInteger) lineShift
 {
-  return lineShift;
+  return self->lineShift;
 }
 //end lineShift:
 
@@ -69,7 +69,7 @@ static NSImage* errorIcon = nil;
   NSArray* lineRanges = [(LineCountTextView*)[self clientView] lineRanges];
   
   NSDictionary* attributes = [NSDictionary dictionaryWithObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName];
-  unsigned int lineNumber = 0;
+  NSUInteger lineNumber = 0;
   for(lineNumber = 1 ; lineNumber <= [lineRanges count] ; ++lineNumber)
   {
     NSRange lineRange = NSRangeFromString([lineRanges objectAtIndex:lineNumber-1]);
@@ -77,7 +77,7 @@ static NSImage* errorIcon = nil;
     rect.size.width = MAX(rect.size.width, 1);
     if (NSIntersectsRect(rect, visibleRect))
     {
-      NSString* numberString = [NSString stringWithFormat:@"%d", lineNumber+lineShift];
+      NSString* numberString = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:(lineNumber+self->lineShift)]];
       NSAttributedString* attrNumberString = [[[NSAttributedString alloc] initWithString:numberString
                                                                           attributes:attributes] autorelease];
       NSPoint origin = NSMakePoint([self frame].size.width-[attrNumberString size].width-2,
@@ -89,12 +89,12 @@ static NSImage* errorIcon = nil;
 //end drawHashMarksAndLabelsInRect:
 
 //adds an error marker
--(void) setErrorAtLine:(int)lineIndex message:(NSString*)message
+-(void) setErrorAtLine:(NSInteger)lineIndex message:(NSString*)message
 {
   --lineIndex; //0 based-system
   lineIndex -= lineShift;
   NSArray* lineRanges = [(LineCountTextView*)[self clientView] lineRanges];
-  if ((lineIndex >= 0) && ((unsigned int) lineIndex < [lineRanges count]))
+  if ((lineIndex >= 0) && ((NSUInteger) lineIndex < [lineRanges count]))
   {
     NSRange lineRange = NSRangeFromString([lineRanges objectAtIndex:lineIndex]);
     NSLayoutManager* lm = [(NSTextView*)[self clientView] layoutManager];

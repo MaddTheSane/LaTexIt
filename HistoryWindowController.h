@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -29,8 +29,19 @@
   IBOutlet NSTextField*        exportFormatLabel;
   IBOutlet NSPopUpButton*      exportFormatPopUpButton;
 
+  IBOutlet NSWindow*    relatexizeWindow;
+  IBOutlet NSTextField* relatexizeProgressTextField;
+  IBOutlet NSProgressIndicator* relatexizeProgressIndicator;
+  IBOutlet NSButton* relatexizeAbortButton;
+
   BOOL         enablePreviewImage;
   NSSavePanel* savePanel;
+  
+  NSTimer* relatexizeTimer;
+  NSConditionLock* relatexizeMonitor;
+  volatile BOOL relatexizeAbortMonitor;
+  volatile NSUInteger relatexizeCurrentIndex;
+  volatile NSUInteger relatexizeCurrentCount;
 }
 
 -(HistoryView*) historyView;
@@ -43,6 +54,8 @@
 -(IBAction) clearHistory:(id)sender;
 -(IBAction) open:(id)sender;
 -(IBAction) saveAs:(id)sender;
+
+-(IBAction) relatexizeSelectedItems:(id)sender;
 
 -(IBAction) changeHistoryExportFormat:(id)sender;
 

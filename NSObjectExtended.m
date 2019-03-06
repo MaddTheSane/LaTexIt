@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/07.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSObjectExtended.h"
@@ -43,7 +43,6 @@
 -(BOOL) isDarkMode
 {
   BOOL result = NO;
-  DebugLogStatic(1, @"isDarkMode : isMacOS10_14OrAbove() => %d", isMacOS10_14OrAbove());
   if (isMacOS10_14OrAbove())
   {
     NSString* _NSAppearanceNameAqua = @"NSAppearanceNameAqua";

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -46,6 +46,7 @@ NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
 -(void) insertTextAtMousePosition:(id)object;
 -(void) invalidateColors;
+-(NSString*) spacesString;
 @end
 
 @implementation LineCountTextView
@@ -140,18 +141,18 @@ static NSArray* WellKnownLatexKeywords = nil;
     [keywordsToCheck addObject:@"utf8"];
     [keywordsToCheck addObject:@"inputenc"];
     [keywordsToCheck addObject:@"usenames"];
-    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
       NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
       [keywordsToCheck addObject:[package objectForKey:@"name"]];
       NSArray* kw = [package objectForKey:@"keywords"];
-      unsigned int count = [kw count];
+      NSUInteger count = [kw count];
       while(count--)
         [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
     }//end for each package
     [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
-    unsigned int count = [keywordsToCheck count];
+    NSUInteger count = [keywordsToCheck count];
     while(count--)
     {
       NSString* w = [keywordsToCheck objectAtIndex:count];
@@ -203,6 +204,12 @@ static NSArray* WellKnownLatexKeywords = nil;
   [self->lineCountRulerView setClientView:self];
   self->syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 
+  [self setAutomaticDashSubstitutionEnabled:NO];
+  [self setAutomaticDataDetectionEnabled:NO];
+  [self setAutomaticLinkDetectionEnabled:NO];
+  [self setAutomaticQuoteSubstitutionEnabled:NO];
+  [self setAutomaticSpellingCorrectionEnabled:NO];
+  [self setAutomaticTextReplacementEnabled:NO];
   [self performSelector:@selector(_initializeSpellChecker:) withObject:nil afterDelay:2];
   
   [self bind:@"continuousSpellCheckingEnabled" toObject:[NSUserDefaultsController sharedUserDefaultsController]
@@ -247,8 +254,9 @@ static NSArray* WellKnownLatexKeywords = nil;
 }
 //end setAttributedString:
 
--(void) insertText:(id)aString
+-(NSString*) spacesString
 {
+  NSString* result = nil;
   if (self->tabKeyInsertsSpacesEnabled)
   {
     if ([self->spacesString length] != self->tabKeyInsertsSpacesCount)
@@ -267,15 +275,34 @@ static NSArray* WellKnownLatexKeywords = nil;
         free(spaces);
       }//end if (spaces)
     }//end if (!self->spacesString)
+    result = self->spacesString;
   }//end if (self->tabKeyInsertsSpacesEnabled)
+  return result;
+}
+//end spacesString
 
-  if (!self->spacesString){//do nothing
+-(void) insertText:(id)aString newSelectedRange:(NSRange)selectedRange
+{
+  NSString* tabToSpacesString = [self spacesString];
+  NSRange adaptedRange = selectedRange;
+  if (tabToSpacesString != nil)
+  {
+    NSUInteger tabsCount = [[aString componentsMatchedByRegex:@"\\t"] count];
+    adaptedRange.length = adaptedRange.length+tabsCount*[tabToSpacesString length]-tabsCount;
+  }//end if (tabToSpacesString != nil)
+  [self insertText:aString];
+  NSRange fullRange = [[[self textStorage] string] range];
+  [self setSelectedRange:NSIntersectionRange(adaptedRange, fullRange)];
+}
+//end insertText:
+
+-(void) insertText:(id)aString
+{
+  NSString* tabToSpacesString = [self spacesString];
+  if (!tabToSpacesString){//do nothing
   }
   else if ([aString isKindOfClass:[NSString class]])
-  {
-    if (self->spacesString)
-      aString = [aString stringByReplacingOccurrencesOfRegex:@"\t" withString:self->spacesString];
-  }//end if ([aString isKindOfClass:[NSString class]])
+    aString = [aString stringByReplacingOccurrencesOfRegex:@"\t" withString:tabToSpacesString];
   else if ([aString isKindOfClass:[NSAttributedString class]])
   {
     NSMutableAttributedString* attributedString = [[aString mutableCopy] autorelease];
@@ -283,8 +310,8 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSRange range = [[attributedString string] rangeOfString:@"\t"];
     while(range.location != NSNotFound)
     {
-      [attributedString replaceCharactersInRange:range withString:self->spacesString];
-      range.location += [self->spacesString length];
+      [attributedString replaceCharactersInRange:range withString:tabToSpacesString];
+      range.location += [tabToSpacesString length];
       range.length = [attributedString length]-range.location;
       range = [[attributedString string] rangeOfString:@"\t" options:0 range:range];
     }//while(range.location != NSNotFound)
@@ -348,10 +375,10 @@ static NSArray* WellKnownLatexKeywords = nil;
   NSNumber*    numberIndex = [enumerator nextObject];
   while(numberIndex)
   {
-    unsigned int index = [numberIndex intValue];
-    if (index < [lineRanges count])
+    NSUInteger index = [numberIndex unsignedIntegerValue];
+    if (index < [self->lineRanges count])
     {
-      NSRange range = NSRangeFromString([lineRanges objectAtIndex:index]);
+      NSRange range = NSRangeFromString([self->lineRanges objectAtIndex:index]);
       [syntaxColouring removeColoursFromRange:range];
       [[self textStorage] addAttributes:forbiddenAttributes range:range];
     }
@@ -362,30 +389,30 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(NSArray*) lineRanges
 {
-  return lineRanges;
+  return self->lineRanges;
 }
 //end lineRanges
 
--(unsigned int) nbLines
+-(NSUInteger) nbLines
 {
-  return lineRanges ? [lineRanges count] : 0;
+  return self->lineRanges ? [self->lineRanges count] : 0;
 }
 //end nbLines
 
 -(void) _computeLineRanges
 {
-  [lineRanges removeAllObjects];
+  [self->lineRanges removeAllObjects];
   
   NSString* string = [self string];
   NSArray* lines = [(string ? string : [NSString string]) componentsSeparatedByString:@"\n"];
-  const int count = [lines count];
-  int index = 0;
-  int location = 0;
+  const NSInteger count = [lines count];
+  NSInteger index = 0;
+  NSInteger location = 0;
   for(index = 0 ; index < count ; ++index)
   {
     NSString* line = [lines objectAtIndex:index];
     NSRange lineRange = NSMakeRange(location, [line length]);
-    [lineRanges addObject:NSStringFromRange(lineRange)];
+    [self->lineRanges addObject:NSStringFromRange(lineRange)];
     location += [line length]+1;
   }
 }
@@ -399,34 +426,34 @@ static NSArray* WellKnownLatexKeywords = nil;
 //end clearErrors
 
 //add error markers
--(void) setErrorAtLine:(unsigned int)lineIndex message:(NSString*)message
+-(void) setErrorAtLine:(NSUInteger)lineIndex message:(NSString*)message
 {
   [lineCountRulerView setErrorAtLine:lineIndex message:message];
 }
 //end setErrorAtLine:message:
 
 //change the shift in displayed numerotation
--(void) setLineShift:(int)aShift
+-(void) setLineShift:(NSInteger)aShift
 {
-  lineShift = aShift;
+  self->lineShift = aShift;
   [lineCountRulerView setLineShift:aShift];
 }
 //end setLineShift:
 
 //the shift in displayed numerotation
--(int) lineShift
+-(NSInteger) lineShift
 {
-  return lineShift;
+  return self->lineShift;
 }
 //end lineShift
 
 //change the status (forbidden or not) of a line (forbidden means : cannot be edited)
--(void) setForbiddenLine:(unsigned int)index forbidden:(BOOL)forbidden
+-(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden
 {
   if (forbidden)
-    [forbiddenLines addObject:[NSNumber numberWithUnsignedInt:index]];
+    [forbiddenLines addObject:[NSNumber numberWithUnsignedInteger:index]];
   else
-    [forbiddenLines removeObject:[NSNumber numberWithUnsignedInt:index]];
+    [forbiddenLines removeObject:[NSNumber numberWithUnsignedInteger:index]];
 }
 //end setForbiddenLine:forbidden
 
@@ -441,10 +468,10 @@ static NSArray* WellKnownLatexKeywords = nil;
   NSNumber* forbiddenLineNumber = nil;
   while(accepts && (forbiddenLineNumber = [enumerator nextObject]))
   {
-    unsigned int index = [forbiddenLineNumber unsignedIntValue];
-    if (index < [lineRanges count])
+    NSUInteger index = [forbiddenLineNumber unsignedIntegerValue];
+    if (index < [self->lineRanges count])
     {
-      NSRange lineRange = NSRangeFromString([lineRanges objectAtIndex:index]);
+      NSRange lineRange = NSRangeFromString([self->lineRanges objectAtIndex:index]);
       ++lineRange.length;
       NSRange intersection = NSIntersectionRange(lineRange, affectedCharRange);
       if (intersection.length)
@@ -468,15 +495,15 @@ static NSArray* WellKnownLatexKeywords = nil;
 }
 //end rulerView:shouldAddMarker:
 
--(BOOL) gotoLine:(int)row
+-(BOOL) gotoLine:(NSInteger)row
 {
   BOOL ok = NO;
   --row; //the first line is at 0, but the user thinks it is 1
   row -= lineShift;
-  ok = (row >=0) && ((unsigned int) row < [lineRanges count]);
+  ok = (row >=0) && ((NSUInteger) row < [self->lineRanges count]);
   if (ok)
   {
-    NSRange range = NSRangeFromString([lineRanges objectAtIndex:row]);
+    NSRange range = NSRangeFromString([self->lineRanges objectAtIndex:row]);
     [self setSelectedRange:range];
     [self scrollRangeToVisible:range];
   }
@@ -595,7 +622,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     if ([type isEqualToString:LibraryItemsWrappedPboardType])
     {
       NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
-      unsigned int count = [libraryItemsWrappedArray count];
+      NSUInteger count = [libraryItemsWrappedArray count];
       while(count-- && !equation)
       {
         NSString* objectIDAsString = [libraryItemsWrappedArray objectAtIndex:count];
@@ -608,7 +635,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     else if ([type isEqualToString:LibraryItemsArchivedPboardType])
     {
       NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-      unsigned int count = [libraryItemsArray count];
+      NSUInteger count = [libraryItemsArray count];
       while(count-- && !equation)
       {
         LibraryEquation* libraryEquation =
@@ -890,19 +917,19 @@ static NSArray* WellKnownLatexKeywords = nil;
 	if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
 		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
 	
-	unsigned int location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
-	unsigned int originalLocation = location;
+	NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
+	NSUInteger originalLocation = location;
 
 	NSString *completeString = [self string];
 	unichar characterToCheck = [completeString characterAtIndex:location];
 	unsigned short skipMatchingBrace = 0;
-	unsigned int lengthOfString = [completeString length];
+	NSUInteger lengthOfString = [completeString length];
 	if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
 		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
 	
 	BOOL triedToMatchBrace = NO;
   static const unichar parenthesis[3][2] = {{'(', ')'}, {'[', ']'}, {'$', '$'}};
-  int parenthesisIndex = 0;
+  NSInteger parenthesisIndex = 0;
   for(parenthesisIndex = 0 ;
       (parenthesisIndex<3) && (characterToCheck != parenthesis[parenthesisIndex][1]) ;
       ++parenthesisIndex);
@@ -967,7 +994,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   if (isBackslashedWord)
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
       NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
@@ -979,7 +1006,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
-    unsigned int nbPropositions = [newPropositions count];
+    NSUInteger nbPropositions = [newPropositions count];
     while(nbPropositions--)
     {
       NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
@@ -1000,7 +1027,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSRange reducedRange = NSMakeRange(charRange.location+1, charRange.length-1);
     [newPropositions setArray:[super completionsForPartialWordRange:reducedRange indexOfSelectedItem:index]];
     //add the missing backslashes
-    unsigned int count = [newPropositions count];
+    NSUInteger count = [newPropositions count];
     while(count--)
     {
       NSString* proposition = [newPropositions objectAtIndex:count];
@@ -1012,7 +1039,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   if (!isBackslashedWord) //try a latex environment and add normal completions
   {
     NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    unsigned int nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
       NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
@@ -1024,7 +1051,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
-    unsigned int nbPropositions = [newPropositions count];
+    NSUInteger nbPropositions = [newPropositions count];
     while(nbPropositions--)
     {
       NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
@@ -1073,7 +1100,8 @@ static NSArray* WellKnownLatexKeywords = nil;
 {
   if ([self isEditable])
   {
-    NSColor* color = [[NSColorPanel sharedColorPanel] color];
+    NSColorPanel* colorPanel = [NSColorPanel sharedColorPanel];
+    NSColor* color = [colorPanel color];
     NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
     NSString* fullString = [[self textStorage] string];
     NSString* input = !selectedRange.length ? nil : [fullString substringWithRange:selectedRange];
@@ -1089,9 +1117,9 @@ static NSArray* WellKnownLatexKeywords = nil;
         output = !isMatching ? nil :
           [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
                                              options:RKLMultiline range:NSMakeRange(0, [input length]) error:nil];
-      if (!output)
+      /*if (!output)
         output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
-                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];*/
       if (output)
         [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
     }//end if (input)
@@ -1115,8 +1143,8 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) insertTextAtMousePosition:(id)object
 {
-  unsigned int index = [self characterIndexForPoint:[NSEvent mouseLocation]];
-  unsigned int length = [[self textStorage] length];
+  NSUInteger index = [self characterIndexForPoint:[NSEvent mouseLocation]];
+  NSUInteger length = [[self textStorage] length];
   if (index <= length)
   {
     NSDictionary* attributes =

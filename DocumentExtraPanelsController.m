@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -64,23 +64,23 @@
   [self->saveAccessoryViewFormatLabel setStringValue:
     [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"Format")]];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"PDF vector format")
-    tag:(int)EXPORT_FORMAT_PDF];
+    tag:(NSInteger)EXPORT_FORMAT_PDF];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
-    tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+    tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"EPS vector format", @"EPS vector format")
-    tag:(int)EXPORT_FORMAT_EPS];
+    tag:(NSInteger)EXPORT_FORMAT_EPS];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"SVG vector format", @"SVG vector format")
-    tag:(int)EXPORT_FORMAT_SVG];
+    tag:(NSInteger)EXPORT_FORMAT_SVG];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
-    tag:(int)EXPORT_FORMAT_TIFF];
+    tag:(NSInteger)EXPORT_FORMAT_TIFF];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
-    tag:(int)EXPORT_FORMAT_PNG];
+    tag:(NSInteger)EXPORT_FORMAT_PNG];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
-    tag:(int)EXPORT_FORMAT_JPEG];
+    tag:(NSInteger)EXPORT_FORMAT_JPEG];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"MathML text format", @"MathML text format")
-    tag:(int)EXPORT_FORMAT_MATHML];
+    tag:(NSInteger)EXPORT_FORMAT_MATHML];
   [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
-    tag:(int)EXPORT_FORMAT_TEXT];
+    tag:(NSInteger)EXPORT_FORMAT_TEXT];
   [self->saveAccessoryViewOptionsButton setStringValue:
     [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")]];
   [self->saveAccessoryViewScaleLabel setStringValue:

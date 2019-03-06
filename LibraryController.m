@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/05/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryController.h"
@@ -33,6 +33,7 @@
 
 @interface LibraryController (PrivateAPI)
 -(NSFetchRequest*) rootFetchRequest;
+-(NSArray*) flattenedGroupItems;
 -(BOOL) outlineView:(NSOutlineView*)outlineView isSelfMoveDrop:(id<NSDraggingInfo>)info;
 @end
 
@@ -59,6 +60,35 @@
 }
 //end rootFetchRequest
 
+-(NSArray*) flattenedGroupItems
+{
+  NSMutableArray* result = [NSMutableArray array];
+  NSMutableArray* explorationQueue = [NSMutableArray array];
+  NSArray* rootItems = [self rootItems:nil];
+  if (rootItems)
+  {
+    Class LibraryGroupItemClass = [LibraryGroupItem class];
+    [explorationQueue setArray:rootItems];
+    [explorationQueue sortUsingDescriptors:[NSArray arrayWithObjects:
+          [[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease], nil]];
+    while([explorationQueue count] != 0)
+    {
+      id item = [explorationQueue objectAtIndex:0];
+      [explorationQueue removeObjectAtIndex:0];
+      LibraryGroupItem* libraryGroupItem = [item dynamicCastToClass:LibraryGroupItemClass];
+      if (libraryGroupItem)
+      {
+        [result addObject:libraryGroupItem];
+        NSArray* children = [libraryGroupItem childrenOrdered:nil];
+        if ([children count])
+          [explorationQueue insertObjectsFromArray:children atIndex:0];
+      }//end if (libraryGroupItem)
+    }//end while([explorationQueue count] != 0)
+  }//end if (rootItems)
+  return [[result copy] autorelease];
+}
+//end flattenedGroupItems:
+
 -(BOOL) outlineView:(NSOutlineView*)outlineView isSelfMoveDrop:(id<NSDraggingInfo>)info
 {
   BOOL result = NO;
@@ -79,6 +109,8 @@
 
 -(void) dealloc
 {
+  [self->rootItemsCache release];
+  [self->filterPredicate release];
   [self->rootFetchRequest release];
   [super dealloc];
 }
@@ -96,16 +128,102 @@
 }
 //end undoManager
 
--(NSArray*) rootItems
+-(NSPredicate*) filterPredicate
+{
+  return [[self->filterPredicate retain] autorelease];
+}
+//end filterPredicate:
+
+-(void) setFilterPredicate:(NSPredicate*)value
+{
+  if (value != self->filterPredicate)
+  {
+    [self->filterPredicate release];
+    self->filterPredicate = [value retain];
+    [self invalidateRootItemsCache];
+    if (self->filterPredicate)
+      self->rootItemsCache = [[self rootItems:self->filterPredicate] retain];
+  }//end if (value != self->filterPredicate)
+}
+//end setFilterPredicate:
+
+-(void) invalidateRootItemsCache
+{
+  [self->rootItemsCache release];
+  self->rootItemsCache = nil;
+}
+//end invalidateRootItemsCache
+
+CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* context)
+{
+  NSInteger result = NSOrderedSame;
+  LibraryEquation* equation1 = [object1 dynamicCastToClass:[LibraryEquation class]];
+  LibraryEquation* equation2 = [object2 dynamicCastToClass:[LibraryEquation class]];
+  NSMutableDictionary* flattenedGroupItemsOrder = (NSMutableDictionary*)context;
+  LibraryGroupItem* parent1 = [[equation1 parent] dynamicCastToClass:[LibraryGroupItem class]];
+  LibraryGroupItem* parent2 = [[equation2 parent] dynamicCastToClass:[LibraryGroupItem class]];
+  NSUInteger parentOrder1 = [[flattenedGroupItemsOrder objectForKey:[NSValue valueWithPointer:parent1]]unsignedIntegerValue];
+  NSUInteger parentOrder2 = [[flattenedGroupItemsOrder objectForKey:[NSValue valueWithPointer:parent2]] unsignedIntegerValue];
+  result =
+    (parentOrder1 == parentOrder2) ?
+      (equation1 < equation2) ? NSOrderedAscending :
+      (equation1 > equation2) ? NSOrderedDescending :
+      NSOrderedSame :
+    (parentOrder1 < parentOrder2) ? NSOrderedAscending :
+    (parentOrder1 > parentOrder2) ? NSOrderedDescending :
+    NSOrderedSame;
+  return result;
+}
+//end filteredItemSortFunction()
+
+-(NSArray*) rootItems:(NSPredicate*)predicate
 {
   NSArray* result = nil;
   NSError* error = nil;
-  result = [[self managedObjectContext] executeFetchRequest:[self rootFetchRequest] error:&error];
-  if (error)
-    {DebugLog(0, @"error : %@", error);}
+  if (!predicate)
+  {
+    result = [[self managedObjectContext] executeFetchRequest:[self rootFetchRequest] error:&error];
+    if (error)
+      {DebugLog(0, @"error : %@", error);}
+  }//end if (!predicate)
+  else//if (predicate)
+  {
+    if (self->rootItemsCache)
+      result = [[self->rootItemsCache retain] autorelease];
+    else//if (!self->rootItemsCache)
+    {
+      NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+      [fetchRequest setEntity:[LibraryEquation entity]];
+      //[fetchRequest setPredicate:predicate];//doesn't work, don't know why...
+      NSMutableArray* filteredItems = [NSMutableArray array];
+      @try{
+        NSArray* items = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+        if (items)
+          [filteredItems setArray:items];
+        [filteredItems filterUsingPredicate:predicate];//...so predicate is deported here
+      }
+      @catch(NSException* e){
+        DebugLog(0, @"exception : %@", e);
+      }
+      [fetchRequest release];
+      if (error)
+        {DebugLog(0, @"error : %@", error);}
+      if ([filteredItems count])
+      {
+        NSArray* flattenedGroupItems = [self flattenedGroupItems];
+        NSUInteger count = [flattenedGroupItems count];
+        NSMutableDictionary* flattenedGroupItemsOrder = [NSMutableDictionary dictionaryWithCapacity:count];
+        NSUInteger i = 0;
+        for(i = 0 ; i<count ; ++i)
+          [flattenedGroupItemsOrder setObject:[NSNumber numberWithUnsignedInteger:i] forKey:[NSValue valueWithPointer:[flattenedGroupItems objectAtIndex:i]]];
+        [filteredItems sortUsingFunction:&filteredItemSortFunction context:flattenedGroupItemsOrder];
+        result = [NSArray arrayWithArray:filteredItems];
+      }//end if ([filteredItems count])
+    }//end if (!self->rootItemsCache)
+  }//end if (predicate)
   return result;
 }
-//end rootItems
+//end rootItems:
 
 -(void) fixChildrenSortIndexesForParent:(LibraryGroupItem*)parent recursively:(BOOL)recursively
 {
@@ -131,11 +249,20 @@
 
 -(NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
-  int result = 0;
-  if (item)
-    result = [[item children] count];
-  else
-    result = [[self managedObjectContext] myCountForFetchRequest:[self rootFetchRequest] error:nil];
+  NSInteger result = 0;
+  LibraryGroupItem* libraryGroupItem = [item dynamicCastToClass:[LibraryGroupItem class]];
+  if (libraryGroupItem)
+    result = [libraryGroupItem childrenCount:self->filterPredicate];
+  else if (!item)
+  {
+    if (!self->filterPredicate)
+      result = [[self managedObjectContext] myCountForFetchRequest:[self rootFetchRequest] error:nil];
+    else//if (self->filterPredicate)
+    {
+      NSArray* rootItems = [self rootItems:self->filterPredicate];
+      result = [rootItems count];
+    }//end if (self->filterPredicate)
+  }//end if (!item)
   return result;
 }
 //end outlineView:numberOfChildrenOfItem:
@@ -152,7 +279,7 @@
 -(id) outlineView:(NSOutlineView*)outlineView child:(NSInteger)index ofItem:(id)item
 {
   id result = nil;
-  NSArray* childrenOrdered = !item ? [self rootItems] : [item childrenOrdered];
+  NSArray* childrenOrdered = !item ? [self rootItems:self->filterPredicate] : [item childrenOrdered:self->filterPredicate];
   result = [childrenOrdered objectAtIndex:index];
   return result;
 }
@@ -179,7 +306,7 @@
     [pasteBoard declareTypes:[NSArray array] owner:nil];
   
   NSArray* minimumItemsCover = [NSObject minimumNodeCoverFromItemsInArray:items parentSelector:@selector(parent)];
-  unsigned int count = [minimumItemsCover count];
+  NSUInteger count = [minimumItemsCover count];
   NSMutableArray* libraryItems     = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* libraryEquations = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* latexitEquations = [NSMutableArray arrayWithCapacity:count];
@@ -266,64 +393,66 @@
                   proposedItem:(id)proposedParentItem proposedChildIndex:(NSInteger)proposedChildIndex
 {
   NSDragOperation result = NSDragOperationNone;
-
-  NSPasteboard* pasteboard = [info draggingPasteboard];
-  BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
-  BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
-  BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
-  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
-  if (isSelfMoveDrop)
+  if (!self->filterPredicate)
   {
-    BOOL targetIsValid = (proposedChildIndex != NSOutlineViewDropOnItemIndex) ||
-                         [proposedParentItem isKindOfClass:[LibraryGroupItem class]];
-    NSEnumerator* enumerator = [self->currentlyDraggedItems objectEnumerator];
-    LibraryItem*  draggedLibraryItem = nil;
-    while(targetIsValid && ((draggedLibraryItem = [enumerator nextObject])))
+    NSPasteboard* pasteboard = [info draggingPasteboard];
+    BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
+    BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
+    BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
+    BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
+    BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
+    if (isSelfMoveDrop)
     {
-      if ([draggedLibraryItem isKindOfClass:[LibraryGroupItem class]])
+      BOOL targetIsValid = (proposedChildIndex != NSOutlineViewDropOnItemIndex) ||
+                           [proposedParentItem isKindOfClass:[LibraryGroupItem class]];
+      NSEnumerator* enumerator = [self->currentlyDraggedItems objectEnumerator];
+      LibraryItem*  draggedLibraryItem = nil;
+      while(targetIsValid && ((draggedLibraryItem = [enumerator nextObject])))
       {
-        if ([proposedParentItem isDescendantOfNode:draggedLibraryItem strictly:NO parentSelector:@selector(parent)])// can't drop a group on one of its descendants
-          targetIsValid = NO;
-      }//end if (![treeNode isLeaf])
-    }//end for each indexPath
-    result = targetIsValid ? NSDragOperationMove : NSDragOperationNone;
-  }
-  else if (isLaTeXiTEquationsDrop)
-  {
-    LibraryItem* libraryItem = proposedParentItem;
-    if ((proposedChildIndex != NSOutlineViewDropOnItemIndex) || [libraryItem isKindOfClass:[LibraryGroupItem class]])
-      result = NSDragOperationCopy;
-  }
-  else if (isPDFDrop)
-  {
-    LibraryItem* libraryItem = proposedParentItem;
-    if ((proposedChildIndex != NSOutlineViewDropOnItemIndex) || [libraryItem isKindOfClass:[LibraryGroupItem class]])
-      result = NSDragOperationCopy;
-  }//end if (isPDFDrop)
-  else if (isFileDrop)
-  {
-    LibraryItem* libraryItem = proposedParentItem;
-    NSArray* filenames = [pasteboard propertyListForType:NSFilenamesPboardType];
-    NSString* filename = ([filenames count] == 1) ? [filenames lastObject] : nil;
-    NSString* extension = [filename pathExtension];
-    BOOL isLibraryFile = extension && (([extension caseInsensitiveCompare:@"latexlib"] == NSOrderedSame) ||
-                                       ([extension caseInsensitiveCompare:@"latexhist"] == NSOrderedSame) ||
-                                       ([extension caseInsensitiveCompare:@"plist"] == NSOrderedSame));
-    if (isLibraryFile)
-    {
-      [outlineView setDropItem:nil dropChildIndex:NSOutlineViewDropOnItemIndex];
-      result = NSDragOperationCopy;
+        if ([draggedLibraryItem isKindOfClass:[LibraryGroupItem class]])
+        {
+          if ([proposedParentItem isDescendantOfNode:draggedLibraryItem strictly:NO parentSelector:@selector(parent)])// can't drop a group on one of its descendants
+            targetIsValid = NO;
+        }//end if (![treeNode isLeaf])
+      }//end for each indexPath
+      result = targetIsValid ? NSDragOperationMove : NSDragOperationNone;
     }
-    else if (!proposedParentItem || (proposedChildIndex != NSOutlineViewDropOnItemIndex) || [libraryItem isKindOfClass:[LibraryGroupItem class]])
-      result = NSDragOperationCopy;
-  }//end if (isFileDrop)
-  else if (isColorDrop)
-  {
-    LibraryItem* libraryItem = proposedParentItem;
-    if ([libraryItem isKindOfClass:[LibraryEquation class]] && (proposedChildIndex == NSOutlineViewDropOnItemIndex))
-      result = NSDragOperationCopy;
-  }//end if (isColorDrop)
+    else if (isLaTeXiTEquationsDrop)
+    {
+      LibraryItem* libraryItem = proposedParentItem;
+      if ((proposedChildIndex != NSOutlineViewDropOnItemIndex) || [libraryItem isKindOfClass:[LibraryGroupItem class]])
+        result = NSDragOperationCopy;
+    }
+    else if (isPDFDrop)
+    {
+      LibraryItem* libraryItem = proposedParentItem;
+      if ((proposedChildIndex != NSOutlineViewDropOnItemIndex) || [libraryItem isKindOfClass:[LibraryGroupItem class]])
+        result = NSDragOperationCopy;
+    }//end if (isPDFDrop)
+    else if (isFileDrop)
+    {
+      LibraryItem* libraryItem = proposedParentItem;
+      NSArray* filenames = [pasteboard propertyListForType:NSFilenamesPboardType];
+      NSString* filename = ([filenames count] == 1) ? [filenames lastObject] : nil;
+      NSString* extension = [filename pathExtension];
+      BOOL isLibraryFile = extension && (([extension caseInsensitiveCompare:@"latexlib"] == NSOrderedSame) ||
+                                         ([extension caseInsensitiveCompare:@"latexhist"] == NSOrderedSame) ||
+                                         ([extension caseInsensitiveCompare:@"plist"] == NSOrderedSame));
+      if (isLibraryFile)
+      {
+        [outlineView setDropItem:nil dropChildIndex:NSOutlineViewDropOnItemIndex];
+        result = NSDragOperationCopy;
+      }
+      else if (!proposedParentItem || (proposedChildIndex != NSOutlineViewDropOnItemIndex) || [libraryItem isKindOfClass:[LibraryGroupItem class]])
+        result = NSDragOperationCopy;
+    }//end if (isFileDrop)
+    else if (isColorDrop)
+    {
+      LibraryItem* libraryItem = proposedParentItem;
+      if ([libraryItem isKindOfClass:[LibraryEquation class]] && (proposedChildIndex == NSOutlineViewDropOnItemIndex))
+        result = NSDragOperationCopy;
+    }//end if (isColorDrop)
+  }//end if (self->filterPredicate)
   return result;
 }
 //end outlineView:validateDrop:proposedItem:proposedChildIndex:
@@ -332,136 +461,139 @@
 -(BOOL) outlineView:(NSOutlineView*)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)proposedParentItem childIndex:(NSInteger)proposedChildIndex
 {
   BOOL result = NO;
-  NSPasteboard* pasteboard = [info draggingPasteboard];
-  BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
-  BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
-  BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
-  BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
-  BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
-  if (isSelfMoveDrop)
-    result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
-  else if (isLaTeXiTEquationsDrop)
-    result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
-  else if (isPDFDrop)
-    result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
-  else if (isFileDrop)
+  if (!self->filterPredicate)
   {
-    NSArray* filenames = [pasteboard propertyListForType:NSFilenamesPboardType];
-    NSString* filename = ([filenames count] == 1) ? [filenames lastObject] : nil;
-    NSString* extension = [filename pathExtension];
-    BOOL isLibraryFile = extension && (([extension caseInsensitiveCompare:@"latexlib"]  == NSOrderedSame) ||
-                                       ([extension caseInsensitiveCompare:@"latexhist"]  == NSOrderedSame) ||
-                                       ([extension caseInsensitiveCompare:@"plist"]  == NSOrderedSame));
-    if (isLibraryFile)
+    NSPasteboard* pasteboard = [info draggingPasteboard];
+    BOOL isSelfMoveDrop = [self outlineView:outlineView isSelfMoveDrop:info];
+    BOOL isLaTeXiTEquationsDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]] != nil);
+    BOOL isPDFDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]] != nil);
+    BOOL isFileDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]] != nil);
+    BOOL isColorDrop = ([pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSColorPboardType, nil]] != nil);
+    if (isSelfMoveDrop)
+      result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
+    else if (isLaTeXiTEquationsDrop)
+      result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
+    else if (isPDFDrop)
+      result = [(LibraryView*)outlineView pasteContentOfPasteboard:[info draggingPasteboard] onItem:proposedParentItem childIndex:proposedChildIndex];
+    else if (isFileDrop)
     {
-      [[AppController appController] application:NSApp openFile:filename];
-      result = YES;
-    }
-    else //create folders and equations from folders of PDF files
-    {
-      NSFileManager* fileManager = [NSFileManager defaultManager];
-      BOOL isDirectory = NO;
-      NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
-      NSMutableDictionary* dictionaryOfFoldersByPath = [[NSMutableDictionary alloc] initWithCapacity:[filenames count]];
-      NSMutableArray* candidateFilesQueue = [filenames mutableCopy];
-      NSMutableArray* newLibraryRootItems = [[NSMutableArray alloc] initWithCapacity:[filenames count]];
-      NSMutableArray* teXItems = [NSMutableArray array];
-      unsigned int i = 0;
-      for(i = 0 ; i<[candidateFilesQueue count] ; ++i)
+      NSArray* filenames = [pasteboard propertyListForType:NSFilenamesPboardType];
+      NSString* filename = ([filenames count] == 1) ? [filenames lastObject] : nil;
+      NSString* extension = [filename pathExtension];
+      BOOL isLibraryFile = extension && (([extension caseInsensitiveCompare:@"latexlib"]  == NSOrderedSame) ||
+                                         ([extension caseInsensitiveCompare:@"latexhist"]  == NSOrderedSame) ||
+                                         ([extension caseInsensitiveCompare:@"plist"]  == NSOrderedSame));
+      if (isLibraryFile)
       {
-        NSString* filename = [candidateFilesQueue objectAtIndex:i];
-        NSString* filenameUTI = [fileManager UTIFromPath:filename];
-        if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
+        [[AppController appController] application:NSApp openFile:filename];
+        result = YES;
+      }
+      else //create folders and equations from folders of PDF files
+      {
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        BOOL isDirectory = NO;
+        NSManagedObjectContext* managedObjectContext = [self managedObjectContext];
+        NSMutableDictionary* dictionaryOfFoldersByPath = [[NSMutableDictionary alloc] initWithCapacity:[filenames count]];
+        NSMutableArray* candidateFilesQueue = [filenames mutableCopy];
+        NSMutableArray* newLibraryRootItems = [[NSMutableArray alloc] initWithCapacity:[filenames count]];
+        NSMutableArray* teXItems = [NSMutableArray array];
+        NSUInteger i = 0;
+        for(i = 0 ; i<[candidateFilesQueue count] ; ++i)
         {
-          LibraryGroupItem* parent = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
-          LibraryGroupItem* libraryGroupItem  = [[LibraryGroupItem alloc] initWithParent:nil insertIntoManagedObjectContext:managedObjectContext];
-          [libraryGroupItem setTitle:[filename lastPathComponent]];
-          [libraryGroupItem setSortIndex:[[parent children] count]];
-          [libraryGroupItem setParent:parent];
-          if (!parent && libraryGroupItem)
-            [newLibraryRootItems addObject:libraryGroupItem];
-          [dictionaryOfFoldersByPath setObject:libraryGroupItem forKey:filename];
-          NSDirectoryEnumerator* directoryEnumerator = [fileManager enumeratorAtPath:filename];
-          NSString* subFile = nil;
-          while((subFile = [directoryEnumerator nextObject]))
-          {
-            subFile = [filename stringByAppendingPathComponent:subFile];
-            NSString* subFileUti = [fileManager UTIFromPath:subFile];
-            if ([LatexitEquation latexitEquationPossibleWithUTI:subFileUti] ||
-                ([fileManager fileExistsAtPath:subFile isDirectory:&isDirectory] && isDirectory))
-              [candidateFilesQueue addObject:subFile];
-          }
-          [libraryGroupItem release];
-        }//end if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
-        else if ([LatexitEquation latexitEquationPossibleWithUTI:filenameUTI])
-        {
-          NSData* data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
-          NSArray* latexitEquations = [LatexitEquation latexitEquationsWithData:data sourceUTI:filenameUTI useDefaults:YES];
-          NSEnumerator* latexitEquationsEnumerator = [latexitEquations objectEnumerator];
-          LatexitEquation* latexitEquation = nil;
-          while((latexitEquation = [latexitEquationsEnumerator nextObject]))
+          NSString* filename = [candidateFilesQueue objectAtIndex:i];
+          NSString* filenameUTI = [fileManager UTIFromPath:filename];
+          if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
           {
             LibraryGroupItem* parent = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
-            if (!parent && [proposedParentItem isKindOfClass:[LibraryGroupItem class]])
-              parent = proposedParentItem;
-            LibraryEquation* libraryEquation = !latexitEquation ? nil :
-              [[LibraryEquation alloc] initWithParent:nil insertIntoManagedObjectContext:managedObjectContext];
-            [libraryEquation setEquation:latexitEquation];
-            [libraryEquation setSortIndex:[[parent children] count]];
-            [libraryEquation setParent:parent];
-            [libraryEquation setBestTitle];
-            if (!parent && libraryEquation)
-              [newLibraryRootItems addObject:libraryEquation];
-            [libraryEquation release];
-          }//end for each latexitEquation
-        }//end if ([[filename pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame)
-        else//if other file
+            LibraryGroupItem* libraryGroupItem  = [[LibraryGroupItem alloc] initWithParent:nil insertIntoManagedObjectContext:managedObjectContext];
+            [libraryGroupItem setTitle:[filename lastPathComponent]];
+            [libraryGroupItem setSortIndex:[[parent children:self->filterPredicate] count]];
+            [libraryGroupItem setParent:parent];
+            if (!parent && libraryGroupItem)
+              [newLibraryRootItems addObject:libraryGroupItem];
+            [dictionaryOfFoldersByPath setObject:libraryGroupItem forKey:filename];
+            NSDirectoryEnumerator* directoryEnumerator = [fileManager enumeratorAtPath:filename];
+            NSString* subFile = nil;
+            while((subFile = [directoryEnumerator nextObject]))
+            {
+              subFile = [filename stringByAppendingPathComponent:subFile];
+              NSString* subFileUti = [fileManager UTIFromPath:subFile];
+              if ([LatexitEquation latexitEquationPossibleWithUTI:subFileUti] ||
+                  ([fileManager fileExistsAtPath:subFile isDirectory:&isDirectory] && isDirectory))
+                [candidateFilesQueue addObject:subFile];
+            }
+            [libraryGroupItem release];
+          }//end if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
+          else if ([LatexitEquation latexitEquationPossibleWithUTI:filenameUTI])
+          {
+            NSData* data = [NSData dataWithContentsOfFile:filename options:NSUncachedRead error:nil];
+            NSArray* latexitEquations = [LatexitEquation latexitEquationsWithData:data sourceUTI:filenameUTI useDefaults:YES];
+            NSEnumerator* latexitEquationsEnumerator = [latexitEquations objectEnumerator];
+            LatexitEquation* latexitEquation = nil;
+            while((latexitEquation = [latexitEquationsEnumerator nextObject]))
+            {
+              LibraryGroupItem* parent = [dictionaryOfFoldersByPath objectForKey:[filename stringByDeletingLastPathComponent]];
+              if (!parent && [proposedParentItem isKindOfClass:[LibraryGroupItem class]])
+                parent = proposedParentItem;
+              LibraryEquation* libraryEquation = !latexitEquation ? nil :
+                [[LibraryEquation alloc] initWithParent:nil insertIntoManagedObjectContext:managedObjectContext];
+              [libraryEquation setEquation:latexitEquation];
+              [libraryEquation setSortIndex:[[parent children:self->filterPredicate] count]];
+              [libraryEquation setParent:parent];
+              [libraryEquation setBestTitle];
+              if (!parent && libraryEquation)
+                [newLibraryRootItems addObject:libraryEquation];
+              [libraryEquation release];
+            }//end for each latexitEquation
+          }//end if ([[filename pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame)
+          else//if other file
+          {
+            NSArray* newTeXItems = [[LibraryManager sharedManager] createTeXItemsFromFile:filename proposedParentItem:proposedParentItem proposedChildIndex:proposedChildIndex];
+            if (newTeXItems)
+              [teXItems addObjectsFromArray:newTeXItems];
+          }//end if other file
+        }//end for each filename
+       
+        if ([teXItems count] > 0)
         {
-          NSArray* newTeXItems = [[LibraryManager sharedManager] createTeXItemsFromFile:filename proposedParentItem:proposedParentItem proposedChildIndex:proposedChildIndex];
-          if (newTeXItems)
-            [teXItems addObjectsFromArray:newTeXItems];
-        }//end if other file
-      }//end for each filename
-     
-      if ([teXItems count] > 0)
-      {
-        LibraryWindowController* libraryWindowController =
-          [[[outlineView window]  windowController] dynamicCastToClass:[LibraryWindowController class]];
-        NSDictionary* options = [[[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil] autorelease];
-        [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
-      }//end if ([teXItems count] > 0)
-      
-      [dictionaryOfFoldersByPath release];
-      [candidateFilesQueue release];
+          LibraryWindowController* libraryWindowController =
+            [[[outlineView window]  windowController] dynamicCastToClass:[LibraryWindowController class]];
+          NSDictionary* options = [[[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil] autorelease];
+          [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
+        }//end if ([teXItems count] > 0)
+        
+        [dictionaryOfFoldersByPath release];
+        [candidateFilesQueue release];
 
-      //fix sortIndexes of root nodes
-      NSMutableArray* brothers = [NSMutableArray arrayWithArray:
-        !proposedParentItem ? [self rootItems] : [proposedParentItem childrenOrdered]];
-      [brothers removeObjectsInArray:newLibraryRootItems];
-      [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
-        [brothers count] : (unsigned)proposedChildIndex];
-      unsigned int nbBrothers = [brothers count];
-      while(nbBrothers--)
-        [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
-      [newLibraryRootItems release];
+        //fix sortIndexes of root nodes
+        NSMutableArray* brothers = [NSMutableArray arrayWithArray:
+          !proposedParentItem ? [self rootItems:self->filterPredicate] : [proposedParentItem childrenOrdered:self->filterPredicate]];
+        [brothers removeObjectsInArray:newLibraryRootItems];
+        [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
+          [brothers count] : (unsigned)proposedChildIndex];
+        NSUInteger nbBrothers = [brothers count];
+        while(nbBrothers--)
+          [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
+        [newLibraryRootItems release];
 
-      result = YES;
-    }//end if pdfFiles
-  }//end if (isFileDrop)
-  else if (isColorDrop)
-  {
-    NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSColorPboardType]];
-    if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
+        result = YES;
+      }//end if pdfFiles
+    }//end if (isFileDrop)
+    else if (isColorDrop)
     {
-      [[(LibraryEquation*)proposedParentItem equation] setBackgroundColor:color];
-      [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"Change Library item background color")];
-    }//if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
-    result = YES;
-  }//end if (isColorDrop)
-  [[self managedObjectContext] processPendingChanges];
-  [outlineView reloadData];
-  [outlineView sizeLastColumnToFit];
-  self->currentlyDraggedItems = nil;
+      NSColor* color = [NSColor colorWithData:[pasteboard dataForType:NSColorPboardType]];
+      if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
+      {
+        [[(LibraryEquation*)proposedParentItem equation] setBackgroundColor:color];
+        [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"Change Library item background color")];
+      }//if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
+      result = YES;
+    }//end if (isColorDrop)
+    [[self managedObjectContext] processPendingChanges];
+    [outlineView reloadData];
+    [outlineView sizeLastColumnToFit];
+    self->currentlyDraggedItems = nil;
+  }//end if (!self->filterPredicate)
   return result;
 }
 //end outlineView:acceptDrop:item:childIndex:
@@ -543,13 +675,13 @@
         {
           //Recursive call to fill the folder
           [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
-            forDraggedItems:[[libraryGroupItem children] allObjects]];
+            forDraggedItems:[[libraryGroupItem children:self->filterPredicate] allObjects]];
           [names addObject:fileName];
         }
       }//end if ok to create folder with title name
       else //if a folder of that name already exist, we must compute a new "free" name
       {
-        unsigned long i = 1; //we will add a number
+        NSUInteger i = 1; //we will add a number
         do
         {
           fileName = [NSString stringWithFormat:@"%@-%lu", [libraryItem title], (unsigned long)i++];
@@ -564,7 +696,7 @@
           {
             //Recursive call to fill the folder
             [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
-              forDraggedItems:[[libraryGroupItem children] allObjects]];
+              forDraggedItems:[[libraryGroupItem children:self->filterPredicate] allObjects]];
             [names addObject:fileName];
           }
         }

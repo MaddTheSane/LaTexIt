@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -37,6 +37,8 @@
 #import "Utils.h"
 
 #import <LinkBack/LinkBack.h>
+
+#include <sqlite3.h>
 
 NSString* LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
 NSString* LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
@@ -249,21 +251,63 @@ static LibraryManager* sharedManagerInstance = nil;
         ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager bridge_removeItemAtPath:path error:0]));
         if (ok)
         {
-          NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
-          NSData* data = [NSKeyedArchiver archivedDataWithRootObject:rootLibraryItemsToSave];
-          [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
-          NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-          [LatexitEquation popManagedObjectContext];
-          NSError* error = nil;
-          [saveManagedObjectContext save:&error];
-          if (error)
-            {DebugLog(0, @"error : %@", error);}
-          [libraryItems makeObjectsPerformSelector:@selector(dispose)];
+          BOOL done = NO;
+          if (!onlySelection)
+          {
+            NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
+            NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
+            NSPersistentStore* singlePersistentStore = ([persistentStores count] != 1) ? nil : [persistentStores lastObject];
+            NSURL* singlePersistentStoreURL = [singlePersistentStore URL];
+            NSString* singlePersistentStorePath = [singlePersistentStoreURL path];
+            if ([singlePersistentStorePath length])
+            {
+              NSError* error = nil;
+              if ([self->managedObjectContext save:&error] && !error)
+              {
+                sqlite3* srcDB = 0;
+                sqlite3* dstDB = 0;
+                sqlite3_backup* backup = 0;
+                int error = SQLITE_OK;
+                if (error == SQLITE_OK)
+                  error = sqlite3_open_v2([singlePersistentStorePath UTF8String], &srcDB, SQLITE_OPEN_READONLY, 0);
+                if (error == SQLITE_OK)
+                  error = sqlite3_open_v2([path UTF8String], &dstDB, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, 0);
+                if (srcDB && dstDB && (error == SQLITE_OK))
+                  backup = sqlite3_backup_init(dstDB, "main", srcDB, "main");
+                if (backup && (error == SQLITE_OK))
+                  sqlite3_backup_step(backup, -1);
+                if (backup)
+                  sqlite3_backup_finish(backup);
+                done = (error == SQLITE_OK);
+                if (dstDB)
+                  sqlite3_close(dstDB);
+                if (srcDB)
+                  sqlite3_close(srcDB);
+              }//end if ([self->managedObjectContext save:&error] && !error)
+              else
+                {DebugLog(0, @"error %@", error);}
+            }//end if ([singlePersistentStorePath length])
+          }//end if (!onlySelection)
+          if (!done)
+          {
+            NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
+            NSData* data = [NSKeyedArchiver archivedDataWithRootObject:rootLibraryItemsToSave];
+            [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
+            NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            [LatexitEquation popManagedObjectContext];
+            NSError* error = nil;
+            [saveManagedObjectContext save:&error];
+            if (error)
+              {DebugLog(0, @"error : %@", error);}
+            [libraryItems makeObjectsPerformSelector:@selector(dispose)];
+            done = YES;
+          }//end if (!done)
         }//end if (ok)
       }//end case LIBRARY_EXPORT_FORMAT_INTERNAL
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
       {
+        NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
         NSMutableArray* descriptions = [NSMutableArray arrayWithCapacity:[rootLibraryItemsToSave count]];
         NSEnumerator* enumerator = [rootLibraryItemsToSave objectEnumerator];
         LibraryItem* libraryItem = nil;
@@ -271,10 +315,10 @@ static LibraryManager* sharedManagerInstance = nil;
           [descriptions addObject:[libraryItem plistDescription]];
         NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
           [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          @"2.8.1", @"version", nil];
+          applicationVersion, @"version", nil];
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDescription];
+          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListBinaryFormat_v1_0 errorDescription:&errorDescription];
         if (errorDescription)
           {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
@@ -298,7 +342,7 @@ static LibraryManager* sharedManagerInstance = nil;
         LibraryEquation* libraryEquation = [libraryItem dynamicCastToClass:[LibraryEquation class]];
         LibraryGroupItem* libraryGroupItem = [libraryItem dynamicCastToClass:[LibraryGroupItem class]];
         if (libraryGroupItem)
-          [queue addObjectsFromArray:[libraryGroupItem childrenOrdered]];
+          [queue addObjectsFromArray:[libraryGroupItem childrenOrdered:nil]];
         else if (libraryEquation)
         {
           BOOL exportCommentedPreambles = [[[options objectForKey:@"exportCommentedPreambles"] dynamicCastToClass:[NSNumber class]] boolValue];
@@ -413,7 +457,7 @@ static LibraryManager* sharedManagerInstance = nil;
         if (!uncompressedData) uncompressedData = [Compressor zipuncompressDeprecated:compressedData];
         if (uncompressedData)
         {
-          unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+          NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
           [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
           NSArray* libraryItemsAdded = nil;
           @try{
@@ -427,7 +471,7 @@ static LibraryManager* sharedManagerInstance = nil;
             DebugLog(0, @"exception : %@", e);
           }
           [LatexitEquation popManagedObjectContext];
-          unsigned int sortIndex = 0;
+          NSUInteger sortIndex = 0;
           NSEnumerator* parentEnumerator = [libraryItemsAdded objectEnumerator];
           LibraryGroupItem* parentLibraryItem = nil;
           while((parentLibraryItem = [parentEnumerator nextObject]))
@@ -436,7 +480,7 @@ static LibraryManager* sharedManagerInstance = nil;
             if ([parentLibraryItem isKindOfClass:[LibraryGroupItem class]] && ![parentLibraryItem parent])
             {
               [itemsToRemove addObject:parentLibraryItem];
-              NSArray* childrenOrdered = [NSArray arrayWithArray:[(LibraryGroupItem*)parentLibraryItem childrenOrdered]];
+              NSArray* childrenOrdered = [NSArray arrayWithArray:[(LibraryGroupItem*)parentLibraryItem childrenOrdered:nil]];
               NSEnumerator* childEnumerator = [childrenOrdered objectEnumerator];
               LibraryItem* child = nil;
               while((child = [childEnumerator nextObject]))
@@ -455,7 +499,7 @@ static LibraryManager* sharedManagerInstance = nil;
       else
       {
         NSError* error = nil;
-        unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+        NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
         if (error)
         {
           ok = NO;
@@ -477,8 +521,8 @@ static LibraryManager* sharedManagerInstance = nil;
         [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
         NSArray* libraryItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:libraryItemsToAddAsData];
         [LatexitEquation popManagedObjectContext];
-        unsigned int i = 0;
-        unsigned int count = [libraryItemsAdded count];
+        NSUInteger i = 0;
+        NSUInteger count = [libraryItemsAdded count];
         for(i = 0 ; i<count ; ++i)
           [[libraryItemsAdded objectAtIndex:i] setSortIndex:nbRootLibraryItemsBeforeAdding+i];
           
@@ -500,7 +544,7 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       NSManagedObjectContext* sourceManagedObjectContext = [self managedObjectContextAtPath:path setVersion:NO];
       NSError* error = nil;
-      unsigned int nbRootLibraryItemsBeforeAdding =
+      NSUInteger nbRootLibraryItemsBeforeAdding =
         [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
       if (error)
       {
@@ -521,8 +565,8 @@ static LibraryManager* sharedManagerInstance = nil;
       [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
       NSArray* historyItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
       [LatexitEquation popManagedObjectContext];
-      unsigned int i = 0;
-      unsigned int count = [historyItemsAdded count];
+      NSUInteger i = 0;
+      NSUInteger count = [historyItemsAdded count];
       for(i = 0 ; i<count ; ++i)
       {
         HistoryItem* historyItem = [historyItemsAdded objectAtIndex:i];
@@ -571,12 +615,12 @@ static LibraryManager* sharedManagerInstance = nil;
         if ([content isKindOfClass:[NSArray class]])
         {
           NSError* error = nil;
-          unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+          NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
           [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
           NSMutableArray* libraryItemsAdded = [NSMutableArray arrayWithCapacity:[content count]];
           NSEnumerator* enumerator = [content objectEnumerator];
           id description = nil;
-          unsigned int sortIndex = 0;
+          NSUInteger sortIndex = 0;
           while((description = [enumerator nextObject]))
           {
             LibraryItem* libraryItem = [LibraryItem libraryItemWithDescription:description];
@@ -590,8 +634,8 @@ static LibraryManager* sharedManagerInstance = nil;
               [libraryItem setBestTitle];
           }//end for each libraryItemDescription
           [LatexitEquation popManagedObjectContext];
-          unsigned int i = 0;
-          unsigned int count = [libraryItemsAdded count];
+          NSUInteger i = 0;
+          NSUInteger count = [libraryItemsAdded count];
           for(i = 0 ; i<count ; ++i)
             [[libraryItemsAdded objectAtIndex:i] setSortIndex:nbRootLibraryItemsBeforeAdding+i];
           ok = YES;
@@ -650,9 +694,9 @@ static LibraryManager* sharedManagerInstance = nil;
         if ([latexitEquations count])
         {
           NSError* error = nil;
-          unsigned int nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
-          unsigned int count = [latexitEquations count];
-          unsigned int i = 0;
+          NSUInteger nbRootLibraryItemsBeforeAdding = [self->managedObjectContext countForEntity:[LibraryItem entity] error:&error predicateFormat:@"parent == nil"];
+          NSUInteger count = [latexitEquations count];
+          NSUInteger i = 0;
           for(i = 0 ; i<count ; ++i)
           {
             LatexitEquation* latexitEquation = [latexitEquations objectAtIndex:i];
@@ -700,8 +744,8 @@ static LibraryManager* sharedManagerInstance = nil;
       {DebugLog(0, @"error : %@", error);}
     [fetchRequest release];
 
-    unsigned int i = 0;
-    unsigned int n = [rootItemsOrdered count];
+    NSUInteger i = 0;
+    NSUInteger n = [rootItemsOrdered count];
     for(i = 0 ; i<n ; ++i)
     {
       LibraryItem* libraryItem = [rootItemsOrdered objectAtIndex:i];
@@ -738,6 +782,12 @@ static LibraryManager* sharedManagerInstance = nil;
     NSURL* storeURL = [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSMutableDictionary* options = [NSMutableDictionary dictionary];
+    if (DebugLogLevel >= 1)
+    {
+      if (isMacOS10_6OrAbove())
+        [options setObject:[NSNumber numberWithBool:YES] forKey:NSSQLiteManualVacuumOption];
+    }//end if (DebugLogLevel >= 1)
+
     if (isMacOS10_5OrAbove())
     {
       [options setValue:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
@@ -889,8 +939,8 @@ static LibraryManager* sharedManagerInstance = nil;
       [fetchRequest setEntity:[LatexitEquation entity]];
       NSError* error = nil;
       NSArray* latexitEquations = [self->managedObjectContext executeFetchRequest:fetchRequest error:&error];
-      unsigned int progression = 0;
-      unsigned int count = [latexitEquations count];
+      NSUInteger progression = 0;
+      NSUInteger count = [latexitEquations count];
       [migratingProgressIndicator setIndeterminate:NO];
       [migratingProgressIndicator setMaxValue:1.*count];
       [migratingProgressIndicator setDoubleValue:0.];
@@ -1272,9 +1322,9 @@ static LibraryManager* sharedManagerInstance = nil;
           filename, @"filename",
           preamble, @"preamble",
           sourceText, @"sourceText",
-          [NSNumber numberWithInt:latexMode], @"mode",
+          [NSNumber numberWithInteger:latexMode], @"mode",
           !proposedParentItem ? [NSNull null] : proposedParentItem, @"proposedParentItem",
-          [NSNumber numberWithUnsignedInt:proposedChildIndex], @"proposedChildIndex",
+          [NSNumber numberWithUnsignedInteger:proposedChildIndex], @"proposedChildIndex",
           nil] autorelease];
         if (texItem)
           [texItems addObject:texItem];
@@ -1285,5 +1335,29 @@ static LibraryManager* sharedManagerInstance = nil;
   return result;
 }
 //end createTeXItemsFromFile:proposedParentItem:proposedChildIndex:
+
+-(void) vacuum
+{
+  NSPersistentStoreCoordinator* persistentStoreCoordinator = [self->managedObjectContext persistentStoreCoordinator];
+  NSArray* persistentStores = [persistentStoreCoordinator persistentStores];
+  NSEnumerator* enumerator = [persistentStores objectEnumerator];
+  NSPersistentStore* persistentStore = nil;
+  while((persistentStore = [enumerator nextObject]))
+  {
+    NSURL* url = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
+    NSString* filePath = [url path];
+    sqlite3* db = 0;
+    sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE, 0);
+    if (db)
+    {
+      char* errmsg = 0;
+      sqlite3_exec(db, "VACUUM", 0, 0, &errmsg);
+      if (errmsg)
+        DebugLog(0, @"VACUUM : %s", errmsg);
+      sqlite3_close(db);
+    }//end if (db)
+  }//end for each persistentStore
+}
+//end vacuum
 
 @end

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -189,24 +189,24 @@ typedef NSInteger NSDraggingContext;
                 keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
     [subMenu addItem:[NSMenuItem separatorItem]];
     [subMenu addItemWithTitle:@"PDF" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_PDF];
+                          tag:(NSInteger)EXPORT_FORMAT_PDF];
     [subMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts") target:self action:@selector(copy:)
                 keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
-                          tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+                          tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
     [subMenu addItemWithTitle:@"EPS" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_EPS];
+                          tag:(NSInteger)EXPORT_FORMAT_EPS];
     [subMenu addItemWithTitle:@"SVG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_SVG];
+                          tag:(NSInteger)EXPORT_FORMAT_SVG];
     [subMenu addItemWithTitle:@"TIFF" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_TIFF];
+                          tag:(NSInteger)EXPORT_FORMAT_TIFF];
     [subMenu addItemWithTitle:@"PNG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_PNG];
+                          tag:(NSInteger)EXPORT_FORMAT_PNG];
     [subMenu addItemWithTitle:@"JPEG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_JPEG];
+                          tag:(NSInteger)EXPORT_FORMAT_JPEG];
     [subMenu addItemWithTitle:@"MathML" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_MATHML];
+                          tag:(NSInteger)EXPORT_FORMAT_MATHML];
     [subMenu addItemWithTitle:NSLocalizedString(@"Text", @"Text") target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_TEXT];
+                          tag:(NSInteger)EXPORT_FORMAT_TEXT];
     [self->copyAsContextualMenu setSubmenu:subMenu forItem:superItem];
     [subMenu release];
     result = self->copyAsContextualMenu;
@@ -961,7 +961,7 @@ typedef NSInteger NSDraggingContext;
   self->transientDragData = nil;
   [self->transientDragEquation release];
   self->transientDragEquation = nil;
-  int tag = sender ? [sender tag] : -1;
+  NSInteger tag = sender ? [sender tag] : -1;
   export_format_t copyExportFormat = ((tag == -1) ? [[PreferencesController sharedController] exportFormatCurrentSession] : (export_format_t) tag);
   [self copyAsFormat:copyExportFormat];
 }
@@ -1007,7 +1007,7 @@ typedef NSInteger NSDraggingContext;
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* libraryItemsWrappedArray = [pboard propertyListForType:type];
-    unsigned int count = [libraryItemsWrappedArray count];
+    NSUInteger count = [libraryItemsWrappedArray count];
     LibraryEquation* libraryEquation = nil;
     while(count-- && !libraryEquation)
     {
@@ -1023,7 +1023,7 @@ typedef NSInteger NSDraggingContext;
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
-    unsigned int count = [libraryItemsArray count];
+    NSUInteger count = [libraryItemsArray count];
     LibraryEquation* libraryEquation = nil;
     while(count-- && !libraryEquation)
       libraryEquation = [[libraryItemsArray objectAtIndex:count] isKindOfClass:[LibraryEquation class]] ? [libraryItemsArray objectAtIndex:count] : nil;
@@ -1057,14 +1057,15 @@ typedef NSInteger NSDraggingContext;
     NSData* data = !filepath ? nil : [NSData dataWithContentsOfFile:filepath options:NSUncachedRead error:nil];
     done = [self->document applyData:data sourceUTI:sourceUTI];
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])))
-  if (!done && ![sender draggingSource] &&
+  id<NSDraggingInfo> sendAsNSDraggingInfo = ![sender conformsToProtocol:@protocol(NSDraggingInfo)] ? nil : sender;
+  if (!done && ![sendAsNSDraggingInfo draggingSource] &&
       ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]])))
   {
     [self->transientFilesPromisedFilePaths release];
     self->transientFilesPromisedFilePaths = [[NSMutableArray alloc] init];
     NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
     NSURL* workingDirectoryURL = [NSURL fileURLWithPath:workingDirectory];
-    NSArray* files = [sender namesOfPromisedFilesDroppedAtDestination:workingDirectoryURL];
+    NSArray* files = [sendAsNSDraggingInfo namesOfPromisedFilesDroppedAtDestination:workingDirectoryURL];
     NSEnumerator* enumerator = [files objectEnumerator];
     NSString* fileName = nil;
     while((fileName = [enumerator nextObject]))
@@ -1436,7 +1437,7 @@ typedef NSInteger NSDraggingContext;
     if (clipView)
     {
       NSScrollView* scrollView = (NSScrollView*)[[clipView superview] retain];
-      unsigned int autoresizingMask = [scrollView autoresizingMask];
+      NSUInteger autoresizingMask = [scrollView autoresizingMask];
       NSRect frame = [scrollView frame];
       NSView* superView = [scrollView superview];
       NSView* selfView = [self retain];
@@ -1459,7 +1460,7 @@ typedef NSInteger NSDraggingContext;
     if (!clipView)
     {
       NSScrollView* scrollView = [[[NSScrollView alloc] initWithFrame:[self frame]] autorelease];
-      unsigned int autoresizingMask = [self autoresizingMask];
+      NSUInteger autoresizingMask = [self autoresizingMask];
       NSRect frame = [self frame];
       NSView* superView = [self superview];
       NSView* selfView = [self retain];
@@ -1478,8 +1479,8 @@ typedef NSInteger NSDraggingContext;
       [scrollView setDocumentView:selfView];
       if (isMacOS10_7OrAbove())
       {
-        [scrollView performSelector:@selector(setHorizontalScrollElasticity:) withObject:[NSNumber numberWithInt:1]/*NSScrollElasticityNone*/];
-        [scrollView performSelector:@selector(setVerticalScrollElasticity:) withObject:[NSNumber numberWithInt:1]/*NSScrollElasticityNone*/];
+        [scrollView performSelector:@selector(setHorizontalScrollElasticity:) withObject:[NSNumber numberWithInteger:1]/*NSScrollElasticityNone*/];
+        [scrollView performSelector:@selector(setVerticalScrollElasticity:) withObject:[NSNumber numberWithInteger:1]/*NSScrollElasticityNone*/];
       }//end if (isMacOS10_7OrAbove())
       [selfView release];
       

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "ExportFormatOptionsPanes.h"
@@ -41,6 +41,8 @@
   self->pdfWofGSPDFCompatibilityLevel = [@"1.5" copy];
   #endif
   self->pdfWofMetaDataInvisibleGraphicsEnabled = YES;
+  
+  self->pdfMetaDataInvisibleGraphicsEnabled = YES;
   
   return self;
 }
@@ -219,6 +221,23 @@
   [self->exportFormatOptionsPDFWofCancelButton setFrameOrigin:
    NSMakePoint([self->exportFormatOptionsPDFWofOKButton frame].origin.x-12-[self->exportFormatOptionsPDFWofCancelButton frame].size.width,
                [self->exportFormatOptionsPDFWofCancelButton frame].origin.y)];
+  
+  [self->exportFormatOptionsPDFMetadataBox setTitle:LocalLocalizedString(@"LaTeXiT medata", @"LaTeXiT medata")];
+  [self->exportFormatOptionsPDFMetaDataInvisibleGraphicsEnabledCheckBox setTitle:NSLocalizedString(@"Add invisible graphic commands", @"Add invisible graphic commands")];
+  [self->exportFormatOptionsPDFMetaDataInvisibleGraphicsEnabledCheckBox sizeToFit];
+  [self->exportFormatOptionsPDFOKButton sizeToFit];
+  [self->exportFormatOptionsPDFCancelButton sizeToFit];
+  
+  [self->exportFormatOptionsPDFCancelButton setFrameSize:
+   NSMakeSize(MAX(90, [self->exportFormatOptionsPDFCancelButton frame].size.width),
+              [self->exportFormatOptionsPDFCancelButton frame].size.height)];
+  [self->exportFormatOptionsPDFOKButton setFrameSize:[self->exportFormatOptionsPDFCancelButton frame].size];
+  [self->exportFormatOptionsPDFOKButton setFrameOrigin:
+   NSMakePoint(NSMaxX([self->exportFormatOptionsPDFMetadataBox frame])-[self->exportFormatOptionsPDFOKButton frame].size.width,
+               [self->exportFormatOptionsPDFOKButton frame].origin.y)];
+  [self->exportFormatOptionsPDFCancelButton setFrameOrigin:
+   NSMakePoint([self->exportFormatOptionsPDFOKButton frame].origin.x-12-[self->exportFormatOptionsPDFCancelButton frame].size.width,
+               [self->exportFormatOptionsPDFCancelButton frame].origin.y)];
 
   [self->exportFormatOptionsJpegQualitySlider bind:NSValueBinding toObject:self withKeyPath:@"jpegQualityPercent"
     options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSContinuouslyUpdatesValueBindingOption, nil]];
@@ -238,6 +257,8 @@
   [self->exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton bind:NSSelectedValueBinding toObject:self withKeyPath:@"pdfWofGSPDFCompatibilityLevel" options:nil];
   
   [self->exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox bind:NSValueBinding toObject:self withKeyPath:@"pdfWofMetaDataInvisibleGraphicsEnabled" options:nil];
+
+  [self->exportFormatOptionsPDFMetaDataInvisibleGraphicsEnabledCheckBox bind:NSValueBinding toObject:self withKeyPath:@"pdfMetaDataInvisibleGraphicsEnabled" options:nil];
 }
 //end awakeFromNib
 
@@ -346,7 +367,7 @@
   NSString* filePath = [self svgPdfToSvgPath];
   NSString* filename =[filePath lastPathComponent];
   NSString* directory = [filePath stringByDeletingLastPathComponent];
-  int result = 0;
+  NSInteger result = 0;
   if (!isMacOS10_6OrAbove())
     result = [openPanel runModalForDirectory:directory file:filename];
   else//if (isMacOS10_6OrAbove())
@@ -508,11 +529,45 @@
 }
 //end setExportFormatOptionsPDFWofPanelDelegate:
 
+#pragma mark PDF
+
+-(NSPanel*) exportFormatOptionsPDFPanel
+{
+  return self->exportFormatOptionsPDFPanel;
+}
+//end exportFormatOptionsPDFPanel
+
+-(BOOL) pdfMetaDataInvisibleGraphicsEnabled
+{
+  return self->pdfMetaDataInvisibleGraphicsEnabled;
+}
+//end pdfMetaDataInvisibleGraphicsEnabled
+
+-(void) setPdfMetaDataInvisibleGraphicsEnabled:(BOOL)value
+{
+  [self willChangeValueForKey:@"pdfMetaDataInvisibleGraphicsEnabled"];
+  self->pdfMetaDataInvisibleGraphicsEnabled = value;
+  [self didChangeValueForKey:@"pdfMetaDataInvisibleGraphicsEnabled"];
+}
+//end setPdfMetaDataInvisibleGraphicsEnabled
+
+-(id) exportFormatOptionsPDFPanelDelegate
+{
+  return self->exportFormatOptionsPDFPanelDelegate;
+}
+//end exportFormatOptionsPDFfPanelDelegate
+
+-(void) setExportFormatOptionsPDFPanelDelegate:(id)delegate
+{
+  self->exportFormatOptionsPDFPanelDelegate = delegate;
+}
+//end setExportFormatOptionsPDFPanelDelegate:
+
 #pragma mark ALL
 
 -(IBAction) close:(id)sender
 {
-  int senderTag = [sender tag];
+  NSInteger senderTag = [sender tag];
   if ((senderTag == 0) || (senderTag == 1))
     [self exportFormatOptionsPanel:self->exportFormatOptionsJpegPanel didCloseWithOK:(senderTag == 0)];
   else if ((senderTag == 2) || (senderTag == 3))
@@ -521,6 +576,8 @@
     [self exportFormatOptionsPanel:self->exportFormatOptionsTextPanel didCloseWithOK:(senderTag == 4)];
   else if ((senderTag == 6) || (senderTag == 7))
     [self exportFormatOptionsPanel:self->exportFormatOptionsPDFWofPanel didCloseWithOK:(senderTag == 6)];
+  else if ((senderTag == 8) || (senderTag == 9))
+    [self exportFormatOptionsPanel:self->exportFormatOptionsPDFPanel didCloseWithOK:(senderTag == 8)];
 }
 //end close:
 
@@ -539,6 +596,9 @@
   else if ((exportFormatOptionsPanel == self->exportFormatOptionsPDFWofPanel) &&
            [self->exportFormatOptionsPDFWofPanelDelegate respondsToSelector:@selector(exportFormatOptionsPanel:didCloseWithOK:)])
     [self->exportFormatOptionsPDFWofPanelDelegate exportFormatOptionsPanel:exportFormatOptionsPanel didCloseWithOK:ok];
+  else if ((exportFormatOptionsPanel == self->exportFormatOptionsPDFPanel) &&
+           [self->exportFormatOptionsPDFPanelDelegate respondsToSelector:@selector(exportFormatOptionsPanel:didCloseWithOK:)])
+    [self->exportFormatOptionsPDFPanelDelegate exportFormatOptionsPanel:exportFormatOptionsPanel didCloseWithOK:ok];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:
 

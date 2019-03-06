@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -35,7 +35,8 @@ extern NSString* LatexizationDidEndNotification;
 -(NSData*) annotateData:(NSData*)inputData ofUTI:(NSString*)sourceUTI withData:(NSData*)annotationData;
 -(NSData*) annotatePdfDataInLEEFormat:(NSData*)data exportFormat:(export_format_t)exportFormat preamble:(NSString*)preamble source:(NSString*)source color:(NSColor*)color
                                  mode:(mode_t)mode magnification:(double)magnification baseline:(double)baseline
-                                 backgroundColor:(NSColor*)backgroundColor title:(NSString*)title;
+                                 backgroundColor:(NSColor*)backgroundColor title:(NSString*)title
+                                 annotateWithTransparentData:(BOOL)annotateWithTransparentData;
 
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable;
 
@@ -44,6 +45,7 @@ extern NSString* LatexizationDidEndNotification;
 -(NSString*) latexiseWithPreamble:(NSString*)preamble body:(NSString*)body color:(NSColor*)color mode:(latex_mode_t)latexMode 
                     magnification:(double)magnification compositionConfiguration:(NSDictionary*)compositionConfiguration
                     backgroundColor:(NSColor*)backgroundColor
+                              title:(NSString*)title
                     leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin
                     topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin
                     additionalFilesPaths:(NSArray*)additionalFilesPaths
@@ -60,7 +62,7 @@ extern NSString* LatexizationDidEndNotification;
               compositionConfiguration:(NSDictionary*)compositionConfiguration
               fullEnvironment:(NSDictionary*)fullEnvironment;
 
--(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(int)errorLineShift;
+-(NSArray*) filterLatexErrors:(NSString*)fullErrorLog shiftLinesBy:(NSInteger)errorLineShift;
 -(BOOL) crop:(NSString*)inoutPdfFilePath to:(NSString*)outputPdfFilePath canClip:(BOOL)canClip extraArguments:(NSArray*)extraArguments
         compositionConfiguration:(NSDictionary*)compositionConfiguration
         workingDirectory:(NSString*)workingDirectory

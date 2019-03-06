@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/03/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsWindowController.h"
@@ -71,23 +71,23 @@
   else if ((object == [NSUserDefaultsController sharedUserDefaultsController]) &&
            [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
   {
-    int index = [[PreferencesController sharedController] compositionConfigurationsDocumentIndex];
+    NSInteger index = [[PreferencesController sharedController] compositionConfigurationsDocumentIndex];
     //for some reason, this GUI modification must be delayed
-    [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:0.];
+    [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:[NSNumber numberWithInteger:index] afterDelay:0.];
   }
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
 -(void) compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:(NSNumber*)index
 {
-  [self->compositionConfigurationsCurrentPopUpButton selectItemAtIndex:[index intValue]];
+  [self->compositionConfigurationsCurrentPopUpButton selectItemAtIndex:[index integerValue]];
 }
 
 -(IBAction) compositionConfigurationsManagerOpen:(id)sender
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
-  int selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
+  NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
   if (!IsBetween_i(1, selectedIndex+1, [compositionConfigurations count]))
   {
     [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier options:nil];

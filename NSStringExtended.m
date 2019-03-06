@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //this file is an extension of the NSWorkspace class
 
@@ -118,8 +118,8 @@
 -(BOOL) startsWith:(NSString*)substring options:(unsigned)mask
 {
   BOOL ok = NO;
-  unsigned int selfLength = [self length];
-  unsigned int subLength = [substring length];
+  NSUInteger selfLength = [self length];
+  NSUInteger subLength = [substring length];
   if (selfLength >= subLength)
   {
     NSRange rangeOfBegin = NSMakeRange(0, subLength);
@@ -132,8 +132,8 @@
 -(BOOL) endsWith:(NSString*)substring options:(unsigned)mask
 {
   BOOL ok = NO;
-  unsigned int selfLength = [self length];
-  unsigned int subLength = [substring length];
+  NSUInteger selfLength = [self length];
+  NSUInteger subLength = [substring length];
   if (selfLength >= subLength)
   {
     NSRange rangeOfEnd = NSMakeRange(selfLength-subLength, subLength);

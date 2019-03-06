@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -55,7 +55,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     BOOL isDirectory = NO;
     NSArray* components = [path pathComponents];
     components = components ? components : [NSArray array];
-    unsigned int i = 0;
+    NSUInteger i = 0;
     for(i = 1 ; result && (i <= [components count]) ; ++i)
     {
       NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
@@ -160,7 +160,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
   NSFileManager* fileManager = [NSFileManager defaultManager];
   NSArray* components = [path pathComponents];
   components = components ? components : [NSArray array];
-  unsigned int i = 0;
+  NSUInteger i = 0;
   for(i = 1 ; (i <= [components count]) ; ++i)
   {
     NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];
@@ -178,7 +178,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSString* fileNameWithExtension = (extension && ![extension isEqualToString:@""])
                                         ? [templateString stringByAppendingPathExtension:extension] : templateString;
     NSString* tempFilenameTemplate = [workingDirectory stringByAppendingPathComponent:fileNameWithExtension];
-    unsigned int length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    NSUInteger length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     char* tmpString = (char*)calloc(length+1, sizeof(char));
     memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
     int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);

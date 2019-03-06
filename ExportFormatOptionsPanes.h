@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -66,6 +66,15 @@
   NSString* pdfWofGSPDFCompatibilityLevel;
   BOOL      pdfWofMetaDataInvisibleGraphicsEnabled;
   id        exportFormatOptionsPDFWofPanelDelegate;
+
+  IBOutlet NSPanel*       exportFormatOptionsPDFPanel;
+  IBOutlet NSBox*         exportFormatOptionsPDFMetadataBox;
+  IBOutlet NSButton*      exportFormatOptionsPDFMetaDataInvisibleGraphicsEnabledCheckBox;
+  IBOutlet NSButton*      exportFormatOptionsPDFOKButton;
+  IBOutlet NSButton*      exportFormatOptionsPDFCancelButton;
+  
+  BOOL      pdfMetaDataInvisibleGraphicsEnabled;
+  id        exportFormatOptionsPDFPanelDelegate;
 }
 
 -(id) initWithLoadingFromNib;
@@ -104,6 +113,12 @@
 -(void)      setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 -(id)        exportFormatOptionsPDFWofPanelDelegate;
 -(void)      setExportFormatOptionsPDFWofPanelDelegate:(id)delegate;
+
+-(NSPanel*)  exportFormatOptionsPDFPanel;
+-(BOOL)      pdfMetaDataInvisibleGraphicsEnabled;
+-(void)      setPdfMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+-(id)        exportFormatOptionsPDFPanelDelegate;
+-(void)      setExportFormatOptionsPDFPanelDelegate:(id)delegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSObjectTreeNode.h"
@@ -39,7 +39,7 @@
   id result = nil;
   id parent = [self performSelector:parentSelector];
   NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
-  unsigned int index = [brothers indexOfObject:self];
+  NSUInteger index = [brothers indexOfObject:self];
   if (index+1 < [brothers count])
     result = [brothers objectAtIndex:index+1];
   return result;
@@ -51,7 +51,7 @@
   id result = nil;
   id parent = [self performSelector:parentSelector];
   NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
-  unsigned int index = [brothers indexOfObject:self];
+  NSUInteger index = [brothers indexOfObject:self];
   if (index > 0)
     result = [brothers objectAtIndex:index-1];
   return result;

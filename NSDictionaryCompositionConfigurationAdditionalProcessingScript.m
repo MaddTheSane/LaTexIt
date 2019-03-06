@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 06/05/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDictionaryCompositionConfigurationAdditionalProcessingScript.h"
@@ -15,7 +15,7 @@
 -(BOOL) compositionConfigurationAdditionalProcessingScriptEnabled
         {return [[self objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue];}
 -(script_source_t) compositionConfigurationAdditionalProcessingScriptSource
-        {return (script_source_t)[[self objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] intValue];}
+        {return (script_source_t)[[self objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey] integerValue];}
 -(NSString*) compositionConfigurationAdditionalProcessingScriptFilePath
         {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptPathKey];}
 -(NSString*) compositionConfigurationAdditionalProcessingScriptShell

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryEquation.h"
@@ -27,9 +27,13 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   {
     @synchronized(self)
     {
+      #ifdef ARC_ENABLED
       if (!cachedEntity)
-        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName]
-          objectForKey:NSStringFromClass([self class])] retain];
+        cachedEntity = [[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])];
+      #else
+      if (!cachedEntity)
+        cachedEntity = [[[[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel] entitiesByName] objectForKey:NSStringFromClass([self class])] retain];
+      #endif
     }//end @synchronized(self)
   }//end if (!cachedEntity)
   return cachedEntity;
@@ -113,10 +117,11 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   [self setCustomKVOEnabled:YES];
   LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
   [[self managedObjectContext] safeInsertObject:equationWrapper];
-  LatexitEquation* equation = [equationWrapper equation];
+  NSManagedObject* equation = [equationWrapper valueForKey:@"equation"];
   [[self managedObjectContext] safeInsertObject:equation];
 }
 //end awakeFromInsert
+
 
 -(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
@@ -209,15 +214,48 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 -(LatexitEquation*) equation
 {
   LatexitEquation* result = nil;
-  LatexitEquationWrapper* equationWrapper = [self valueForKey:@"equationWrapper"];
+  [self willAccessValueForKey:@"equationWrapper"];
+  LatexitEquationWrapper* equationWrapper = [self primitiveValueForKey:@"equationWrapper"];
+  [equationWrapper willAccessValueForKey:@"equation"];
   result = [equationWrapper equation];
+  [equationWrapper didAccessValueForKey:@"equation"];
+  [self didAccessValueForKey:@"equationWrapper"];
   return result;
 }
 //end equation
 
 -(void) setEquation:(LatexitEquation*)equation
 {
-  [[self managedObjectContext] safeInsertObject:equation];
+  if (equation != [self equation])
+  {
+    [[self managedObjectContext] safeInsertObject:equation];
+    [self willAccessValueForKey:@"equationWrapper"];
+    LatexitEquationWrapper* equationWrapper = [self primitiveValueForKey:@"equationWrapper"];
+    [self didAccessValueForKey:@"equationWrapper"];
+    if (!equationWrapper)
+    {
+      equationWrapper = [[LatexitEquationWrapper alloc]
+        initWithEntity:[[self class] wrapperEntity] insertIntoManagedObjectContext:[self managedObjectContext]];
+      [equationWrapper willChangeValueForKey:@"libraryEquation"];
+      [equationWrapper setPrimitiveValue:self forKey:@"libraryEquation"]; //if current managedObjectContext is nil, this is necessary
+      [equationWrapper didChangeValueForKey:@"libraryEquation"];
+      [self willChangeValueForKey:@"equationWrapper"];
+      [self setPrimitiveValue:equationWrapper forKey:@"equationWrapper"];
+      [self didChangeValueForKey:@"equationWrapper"];
+      #ifdef ARC_ENABLED
+      #else
+      [equationWrapper release];
+      #endif
+    }//end if (!equationWrapper)
+    else
+      [[self managedObjectContext] safeInsertObject:equationWrapper];
+    [equationWrapper setEquation:equation];
+    [equation willChangeValueForKey:@"wrapper"];
+    [equation setPrimitiveValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
+    [equation didChangeValueForKey:@"wrapper"];
+  }//end if (equation != [self equation])
+  
+  /*[[self managedObjectContext] safeInsertObject:equation];
   LatexitEquation* oldEquation = [self equation];
   if (equation != oldEquation)
   {
@@ -235,7 +273,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
     [equationWrapper setEquation:equation];
     [equation setValue:equationWrapper forKey:@"wrapper"]; //if current managedObjectContext is nil, this is necessary
     [[self managedObjectContext] safeDeleteObject:oldEquation];
-  }//end if (equation != oldEquation)
+  }//end if (equation != oldEquation)*/
 }
 //end setEquation:
 
@@ -248,7 +286,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   {
     NSString* string =
       [[[equation sourceText] string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    unsigned int endIndex = MIN(17U, [string length]);
+    NSUInteger endIndex = MIN(17U, [string length]);
     [self setTitle:[string substringToIndex:endIndex]];
   }
 }

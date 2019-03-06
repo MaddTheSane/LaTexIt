@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryItem.h"
@@ -450,7 +450,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       preamble = newPreamble;
     }
     
-    equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor];
+    equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor title:nil];
 
     #ifdef ARC_ENABLED
     #else
