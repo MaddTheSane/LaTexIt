@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/12/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 
 //The ServiceShortcutsTableView is the class used to display the application service shortcut preferences.
@@ -50,12 +50,15 @@
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
           options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"description"]}];
   [[self tableColumnWithIdentifier:@"string"] bind:NSValueBinding toObject:serviceShortcutsController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.string"]
-          options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"string"],
-            NSNullPlaceholderBindingOption: NSLocalizedString(@"none", @"none")}];
+      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutStringKey]
+          options:[NSDictionary dictionaryWithObjectsAndKeys:
+            [DelegatingTransformer transformerWithDelegate:self context:@"string"], NSValueTransformerBindingOption,
+            NSLocalizedString(@"none", @"none"), NSNullPlaceholderBindingOption,
+             nil]];
   [[self tableColumnWithIdentifier:@"warning"] bind:NSValueBinding toObject:serviceShortcutsController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
-          options:@{NSValueTransformerBindingOption: [DelegatingTransformer transformerWithDelegate:self context:@"warning"]}];
+          options:[NSDictionary dictionaryWithObjectsAndKeys:
+            [DelegatingTransformer transformerWithDelegate:self context:@"warning"], NSValueTransformerBindingOption, nil]];
 }
 //end awakeFromNib
 
@@ -76,7 +79,7 @@
     if ([context isEqual:@"description"])
     {
       NSString* serviceIdentifier = [[PreferencesController sharedController]
-        serviceDescriptionForIdentifier:(service_identifier_t)[value[ServiceShortcutIdentifierKey] intValue]];
+        serviceDescriptionForIdentifier:(service_identifier_t)[[value objectForKey:ServiceShortcutIdentifierKey] integerValue]];
       result = NSLocalizedString(serviceIdentifier, serviceIdentifier);
     }
     else if ([context isEqual:@"string"])  
@@ -86,7 +89,7 @@
       const unichar shift = 0x21e7;
       const unichar command = 0x2318;
       const unichar tab[] = {shift, command, firstCharacter};
-      int begin = [[NSCharacterSet letterCharacterSet] characterIsMember:firstCharacter] ? 0 : 1;
+      NSInteger begin = [[NSCharacterSet letterCharacterSet] characterIsMember:firstCharacter] ? 0 : 1;
       NSString* displayShortcut = firstCharacter ? [NSString stringWithCharacters:tab+begin length:3-begin] : @"";
       result = displayShortcut;
     }//end if ([context isEqualToString:@"string"])
@@ -100,7 +103,7 @@
       #warning Is it possible to detect conflicts in current Service menu without displaying it once ?
       NSMutableArray* systemWideServiceMenuItems = [NSMutableArray arrayWithArray:NSApp.servicesMenu.itemArray];
       NSMutableArray* alreadyUsedServiceShortcuts = [NSMutableArray array];
-      unsigned int index = 0;
+      NSUInteger index = 0;
       while(index < systemWideServiceMenuItems.count)
       {
         id object = systemWideServiceMenuItems[index];
@@ -166,10 +169,10 @@
 {
   NSInteger selectedRow = self.selectedRow;
   //the shortcut must be only one character long
-  NSArray* serviceShortcuts = [PreferencesController sharedController].serviceShortcuts;
-  NSString* normalShortcut = ((selectedRow>=0) && ((unsigned)selectedRow<serviceShortcuts.count)) ?
-    [serviceShortcuts[selectedRow][ServiceShortcutStringKey] uppercaseString] : nil;
-  NSUInteger length = normalShortcut.length;
+  NSArray* serviceShortcuts = [[PreferencesController sharedController] serviceShortcuts];
+  NSString* normalShortcut = ((selectedRow>=0) && ((unsigned)selectedRow<[serviceShortcuts count])) ?
+    [[[serviceShortcuts objectAtIndex:selectedRow] objectForKey:ServiceShortcutStringKey] uppercaseString] : nil;
+  NSUInteger length = [normalShortcut length];
   if (!normalShortcut)
     normalShortcut = @"";
   else if (length > 0)

@@ -243,7 +243,7 @@
 		935AECEE0CB16ECC001A5067 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
 		935B8B260FB426B700448B03 /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		935B8B290FB426C800448B03 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
-		935B8FDD0FB6E5CF00448B03 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 935B8FDC0FB6E5CF00448B03 /* LibraryController.m */; };
+		935B8FDD0FB6E5CF00448B03 /* LibraryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 935B8FDC0FB6E5CF00448B03 /* LibraryController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		936091A21087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		936091A31087084300F4B39A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 936091A11087084300F4B39A /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 936368C91194BA4900C5DE49 /* DragThroughButton.m */; };
@@ -2198,7 +2198,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -o errexit\n\n[ $BUILD_STYLE = Deployment ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
+			shellScript = "set -o errexit\n\necho \"\" > /Users/chacha/Desktop/debug.txt\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\" >> /Users/chacha/Desktop/debug.txt\necho \"CONFIGURATION = $CONFIGURATION\" >> /Users/chacha/Desktop/debug.txt\necho \"PROJECT_NAME.app = $PROJECT_NAME.app\" >> /Users/chacha/Desktop/debug.txt\n\n[ \"$BUILD_STYLE\" = \"Deployment\" ] || [ \"$CONFIGURATION\" = \"Deployment\" ] || { echo Distribution target requires \"'Deployment'\" build style; false; }\n\nVERSION=$(defaults read \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.app/Contents/Info\" CFBundleShortVersionString)\nDOWNLOAD_BASE_URL=\"http://pierre.chachatelier.fr/latexit/downloads\"\nRELEASENOTES_URL=\"http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-$VERSION\"\n\nVERSION=$(defaults read \"${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info\" CFBundleShortVersionString)\nVERSION2=`echo \"${VERSION}\" | sed \"s/\\\\./_/g\" | sed \"s/\\\\ /-/g\"`\necho \"VERSION=<$VERSION>, VERSION2=<$VERSION2>\"\nVOLNAME=\"LaTeXiT ${VERSION}\"\nDMGNAME=\"${PROJECT_NAME}-${VERSION2}\"\nSPARSEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.sparseimage\"\nDMGPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\n#ARCHIVE_FILENAME=\"$PROJECT_NAME $VERSION.zip\"\nARCHIVE_FILENAME=\"${DMGNAME}.dmg\"\nARCHIVE_FILEPATH=\"${BUILT_PRODUCTS_DIR}/${DMGNAME}.dmg\"\nDOWNLOAD_URL=\"$DOWNLOAD_BASE_URL/$ARCHIVE_FILENAME\"\nKEYCHAIN_PRIVKEY_NAME=\"Sparkle LaTeXiT keys private\"\necho \"ARCHIVE_FILEPATH = $ARCHIVE_FILEPATH\"\n\nWD=$PWD\n\n#cd \"$BUILT_PRODUCTS_DIR\"\n#rm -f \"$PROJECT_NAME\"*.zip\n#zip -qr \"$ARCHIVE_FILENAME\" \"$PROJECT_NAME.app\"\n\nSIZE=$(stat -f %z \"${ARCHIVE_FILEPATH}\")\nPUBDATE=$(date +\"%a, %d %b %G %T %z\")\nPRIKEYFILE=\"key.pri\"\nsecurity find-generic-password -g -s \"$KEYCHAIN_PRIVKEY_NAME\" 2>&1 1>/dev/null | perl -pe '($_) = /\"(.+)\"/; s/\\\\012/\\n/g' > $PRIKEYFILE\ncat $PRIKEYFILE\nSIGNATURE=$(openssl dgst -sha1 -binary \"${ARCHIVE_FILEPATH}\" | openssl dgst -dss1 -sign \"$PRIKEYFILE\" | openssl enc -base64)\nrm -f $PRIKEYFILE\n\n[ $SIGNATURE ] || { echo Unable to load signing private key with name \"'$KEYCHAIN_PRIVKEY_NAME'\" from keychain; false; }\n\ncat <<EOF\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/sparkle.rss.part\"\n\t\t<item>\n\t\t\t<title>Version $VERSION</title>\n\t\t\t<sparkle:releaseNotesLink>$RELEASENOTES_URL</sparkle:releaseNotesLink>\n\t\t\t<pubDate>$PUBDATE</pubDate>\n\t\t\t<enclosure\n\t\t\t\turl=\"$DOWNLOAD_URL\"\n\t\t\t\tsparkle:version=\"$VERSION\"\n                   sparkle:shortVersionString=\"$VERSION\"\n\t\t\t\ttype=\"application/octet-stream\"\n\t\t\t\tlength=\"$SIZE\"\n\t\t\t\tsparkle:dsaSignature=\"$SIGNATURE\"\n\t\t\t/>\n\t\t</item>\nEOF\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3032,6 +3032,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = Packaging;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -3052,6 +3053,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = All;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -3164,6 +3166,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = "Create dmg";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -3184,6 +3187,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = "Create dmg";
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -3204,6 +3208,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = All;
+				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
 			name = Release;

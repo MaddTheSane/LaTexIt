@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LineCountRulerView.h"
@@ -49,7 +49,7 @@ static NSImage* errorIcon = nil;
 //the shift allows to start the numeratation at another number than 1
 -(void) setLineShift:(NSInteger)aShift
 {
-  lineShift = aShift;
+  self->lineShift = aShift;
   [self setNeedsDisplay:YES];
 }
 //end setLineShift:
@@ -62,19 +62,19 @@ static NSImage* errorIcon = nil;
   NSTextContainer* tc = ((NSTextView*)self.clientView).textContainer;
   NSArray* lineRanges = [(LineCountTextView*)self.clientView lineRanges];
   
-  NSDictionary* attributes = @{NSForegroundColorAttributeName: [NSColor grayColor]};
-  unsigned int lineNumber = 0;
-  for(lineNumber = 1 ; lineNumber <= lineRanges.count ; ++lineNumber)
+  NSDictionary* attributes = [NSDictionary dictionaryWithObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName];
+  NSUInteger lineNumber = 0;
+  for(lineNumber = 1 ; lineNumber <= [lineRanges count] ; ++lineNumber)
   {
     NSRange lineRange = NSRangeFromString(lineRanges[lineNumber-1]);
     NSRect rect = [lm boundingRectForGlyphRange:lineRange inTextContainer:tc];
     rect.size.width = MAX(rect.size.width, 1);
     if (NSIntersectsRect(rect, visibleRect))
     {
-      NSString* numberString = [NSString stringWithFormat:@"%ld", lineNumber+lineShift];
+      NSString* numberString = [NSString stringWithFormat:@"%ld", (long)(lineNumber+lineShift)];
       NSAttributedString* attrNumberString = [[NSAttributedString alloc] initWithString:numberString
                                                                           attributes:attributes];
-      NSPoint origin = NSMakePoint(self.frame.size.width-[attrNumberString size].width-2,
+      NSPoint origin = NSMakePoint([self frame].size.width-[attrNumberString size].width-2,
                                    rect.origin.y-visibleRect.origin.y);
       [attrNumberString drawAtPoint:origin];
     }
@@ -87,8 +87,8 @@ static NSImage* errorIcon = nil;
 {
   --lineIndex; //0 based-system
   lineIndex -= lineShift;
-  NSArray* lineRanges = [(LineCountTextView*)self.clientView lineRanges];
-  if ((lineIndex >= 0) && ((unsigned int) lineIndex < lineRanges.count))
+  NSArray* lineRanges = [(LineCountTextView*)[self clientView] lineRanges];
+  if ((lineIndex >= 0) && ((NSUInteger) lineIndex < [lineRanges count]))
   {
     NSRange lineRange = NSRangeFromString(lineRanges[lineIndex]);
     NSLayoutManager* lm = ((NSTextView*)self.clientView).layoutManager;

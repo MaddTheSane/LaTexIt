@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -25,6 +25,7 @@
 #import "NSFontExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "NSObjectExtended.h"
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "PreferencesController.h"
@@ -39,16 +40,18 @@ NSString* const LineCountDidChangeNotification = @"LineCountDidChangeNotificatio
 NSString* const FontDidChangeNotification      = @"FontDidChangeNotification";
 
 @interface LineCountTextView ()
++(NSArray*) syntaxColoringKeys;
 -(void) _computeLineRanges;
 -(void) _initializeSpellChecker:(id)object;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
 -(void) insertTextAtMousePosition:(id)object;
+-(void) invalidateColors;
+-(NSString*) spacesString;
 @end
 
 @implementation LineCountTextView
 
 static NSArray* WellKnownLatexKeywords = nil;
-static NSInteger SpellCheckerDocumentTag = 0;
 
 +(void) initialize
 {
@@ -91,16 +94,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
   self.frame = frame;
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringEnableKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringTextForegroundColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringTextBackgroundColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringCommandColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringMathsColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringKeywordColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:SyntaxColoringCommentColorKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:EditionTabKeyInsertsSpacesEnabledKey options:NSKeyValueObservingOptionNew context:nil];
-  [userDefaults addObserver:self forKeyPath:EditionTabKeyInsertsSpacesCountKey options:NSKeyValueObservingOptionNew context:nil];
-  
+  NSEnumerator* enumerator = [[[self class] syntaxColoringKeys] objectEnumerator];
+  NSString* syntaxColoringKey = nil;
+  while((syntaxColoringKey = [enumerator nextObject]))
+    [userDefaults addObserver:self forKeyPath:syntaxColoringKey options:NSKeyValueObservingOptionNew context:nil];
   [self _computeLineRanges];
 
   NSArray* typesToAdd =
@@ -119,15 +116,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringEnableKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringTextForegroundColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringTextBackgroundColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringCommandColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringMathsColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringKeywordColorKey];
-  [userDefaults removeObserver:self forKeyPath:SyntaxColoringCommentColorKey];
-  [userDefaults removeObserver:self forKeyPath:EditionTabKeyInsertsSpacesEnabledKey];
-  [userDefaults removeObserver:self forKeyPath:EditionTabKeyInsertsSpacesCountKey];
+  NSEnumerator* enumerator = [[[self class] syntaxColoringKeys] objectEnumerator];
+  NSString* syntaxColoringKey = nil;
+  while((syntaxColoringKey = [enumerator nextObject]))
+    [userDefaults removeObserver:self forKeyPath:syntaxColoringKey];
   [self removeObserver:self forKeyPath:NSAttributedStringBinding];
 }
 //end dealloc
@@ -136,34 +128,63 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   if ([self respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
     [self setAutomaticTextReplacementEnabled:NO];
-  if (!spellCheckerHasBeenInitialized)
+  static NSMutableArray* keywordsToCheck = nil;
+  if (!keywordsToCheck)
   {
-    NSMutableArray* keywordsToCheck = [NSMutableArray array];
-    NSUInteger nbPackages = WellKnownLatexKeywords ? WellKnownLatexKeywords.count : 0;
+    keywordsToCheck = [[NSMutableArray alloc] init];
+    [keywordsToCheck addObject:@"utf8"];
+    [keywordsToCheck addObject:@"inputenc"];
+    [keywordsToCheck addObject:@"usenames"];
+    NSUInteger nbPackages = WellKnownLatexKeywords ? [WellKnownLatexKeywords count] : 0;
     while(nbPackages--)
     {
-      NSDictionary* package = WellKnownLatexKeywords[nbPackages];
-      [keywordsToCheck addObject:package[@"name"]];
-      NSArray* kw = package[@"keywords"];
-      NSUInteger count = kw.count;
+      NSDictionary* package = [WellKnownLatexKeywords objectAtIndex:nbPackages];
+      [keywordsToCheck addObject:[package objectForKey:@"name"]];
+      NSArray* kw = [package objectForKey:@"keywords"];
+      NSUInteger count = [kw count];
       while(count--)
-        [keywordsToCheck addObject:kw[count][@"word"]];
-    }
-    [keywordsToCheck setArray:[NSSet setWithArray:keywordsToCheck].allObjects];
-    NSUInteger count = keywordsToCheck.count;
+        [keywordsToCheck addObject:[[kw objectAtIndex:count] objectForKey:@"word"]];
+    }//end for each package
+    [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+    NSUInteger count = [keywordsToCheck count];
     while(count--)
     {
       NSString* w = keywordsToCheck[count];
       if ([w startsWith:@"\\" options:0])
         [keywordsToCheck addObject:[w substringFromIndex:1]];
-    }
-    [keywordsToCheck setArray:[NSSet setWithArray:keywordsToCheck].allObjects];
-    if (SpellCheckerDocumentTag == 0)
-      [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:self.spellCheckerDocumentTag];
-    spellCheckerHasBeenInitialized = YES;
-  }
+    }//end for each keyword
+    [keywordsToCheck setArray:[[NSSet setWithArray:keywordsToCheck] allObjects]];
+  }//end if (!keywordsToCheck)
+  [[NSSpellChecker sharedSpellChecker] setIgnoredWords:keywordsToCheck inSpellDocumentWithTag:[self spellCheckerDocumentTag]];
+  [self refreshCheckSpelling];
 }
 //end _initializeSpellChecker:
+
+-(void) refreshCheckSpelling
+{
+  [[NSSpellChecker sharedSpellChecker] checkSpellingOfString:[[self textStorage] string] startingAt:0 language:nil wrap:YES inSpellDocumentWithTag:[self spellCheckerDocumentTag] wordCount:0];
+}
+//end refreshCheckSpelling:
+
++(NSArray*) syntaxColoringKeys
+{
+  return [NSArray arrayWithObjects:
+    SyntaxColoringEnableKey,
+    SyntaxColoringTextForegroundColorKey,
+    SyntaxColoringTextForegroundColorDarkModeKey,
+    SyntaxColoringTextBackgroundColorKey,
+    SyntaxColoringTextBackgroundColorDarkModeKey,
+    SyntaxColoringCommandColorKey,
+    SyntaxColoringCommandColorDarkModeKey,
+    SyntaxColoringMathsColorKey,
+    SyntaxColoringMathsColorDarkModeKey,
+    SyntaxColoringKeywordColorKey,
+    SyntaxColoringKeywordColorDarkModeKey,
+    SyntaxColoringCommentColorKey,
+    SyntaxColoringCommentColorDarkModeKey,
+    nil];
+}
+//end syntaxColoringKeys
 
 -(void) awakeFromNib
 {
@@ -177,7 +198,13 @@ static NSInteger SpellCheckerDocumentTag = 0;
   self->lineCountRulerView.clientView = self;
   self->syntaxColouring = [[SMLSyntaxColouring alloc] initWithTextView:self];
 
-  [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(_initializeSpellChecker:) userInfo:nil repeats:NO];
+  [self setAutomaticDashSubstitutionEnabled:NO];
+  [self setAutomaticDataDetectionEnabled:NO];
+  [self setAutomaticLinkDetectionEnabled:NO];
+  [self setAutomaticQuoteSubstitutionEnabled:NO];
+  [self setAutomaticSpellingCorrectionEnabled:NO];
+  [self setAutomaticTextReplacementEnabled:NO];
+  [self performSelector:@selector(_initializeSpellChecker:) withObject:nil afterDelay:2];
   
   [self bind:@"continuousSpellCheckingEnabled" toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:SpellCheckingEnableKey] options:nil];
@@ -189,6 +216,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesCountKey] options:nil];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorDidChange:) name:NSColorPanelColorDidChangeNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearanceDidChange:) name:NSAppearanceDidChangeNotification object:nil];
 }
 //end awakeFromNib
 
@@ -196,15 +224,12 @@ static NSInteger SpellCheckerDocumentTag = 0;
 {
   if ([keyPath isEqualToString:NSAttributedStringBinding])
     [[self syntaxColouring] recolourCompleteDocument];
-  else if ([keyPath isEqualToString:SyntaxColoringEnableKey] ||
-           [keyPath isEqualToString:SyntaxColoringTextForegroundColorKey] || [keyPath isEqualToString:SyntaxColoringTextBackgroundColorKey] ||
-           [keyPath isEqualToString:SyntaxColoringCommandColorKey] || [keyPath isEqualToString:SyntaxColoringMathsColorKey] ||
-           [keyPath isEqualToString:SyntaxColoringKeywordColorKey] || [keyPath isEqualToString:SyntaxColoringCommentColorKey])
+  else if ([[[self class] syntaxColoringKeys] containsObject:keyPath])
   {
     [self->syntaxColouring setColours];
     [self->syntaxColouring recolourCompleteDocument];
     [self setNeedsDisplay:YES];
-  }//end if syntax colouring options change
+  }//end if (object == [NSUserDefaults standardUserDefaults])
 }
 //end observeValueForKeyPath:
 
@@ -221,8 +246,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
 }
 //end setAttributedString:
 
--(void) insertText:(id)aString
+-(NSString*) spacesString
 {
+  NSString* result = nil;
   if (self->tabKeyInsertsSpacesEnabled)
   {
     if (self->spacesString.length != self->tabKeyInsertsSpacesCount)
@@ -240,15 +266,34 @@ static NSInteger SpellCheckerDocumentTag = 0;
         free(spaces);
       }//end if (spaces)
     }//end if (!self->spacesString)
+    result = self->spacesString;
   }//end if (self->tabKeyInsertsSpacesEnabled)
+  return result;
+}
+//end spacesString
 
-  if (!self->spacesString){//do nothing
+-(void) insertText:(id)aString newSelectedRange:(NSRange)selectedRange
+{
+  NSString* tabToSpacesString = [self spacesString];
+  NSRange adaptedRange = selectedRange;
+  if (tabToSpacesString != nil)
+  {
+    NSUInteger tabsCount = [[aString componentsMatchedByRegex:@"\\t"] count];
+    adaptedRange.length = adaptedRange.length+tabsCount*[tabToSpacesString length]-tabsCount;
+  }//end if (tabToSpacesString != nil)
+  [self insertText:aString];
+  NSRange fullRange = [[[self textStorage] string] range];
+  [self setSelectedRange:NSIntersectionRange(adaptedRange, fullRange)];
+}
+//end insertText:
+
+-(void) insertText:(id)aString
+{
+  NSString* tabToSpacesString = [self spacesString];
+  if (!tabToSpacesString){//do nothing
   }
   else if ([aString isKindOfClass:[NSString class]])
-  {
-    if (self->spacesString)
-      aString = [aString stringByReplacingOccurrencesOfRegex:@"\t" withString:self->spacesString];
-  }//end if ([aString isKindOfClass:[NSString class]])
+    aString = [aString stringByReplacingOccurrencesOfRegex:@"\t" withString:tabToSpacesString];
   else if ([aString isKindOfClass:[NSAttributedString class]])
   {
     NSMutableAttributedString* attributedString = [aString mutableCopy];
@@ -256,9 +301,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
     NSRange range = [attributedString.string rangeOfString:@"\t"];
     while(range.location != NSNotFound)
     {
-      [attributedString replaceCharactersInRange:range withString:self->spacesString];
-      range.location += self->spacesString.length;
-      range.length = attributedString.length-range.location;
+      [attributedString replaceCharactersInRange:range withString:tabToSpacesString];
+      range.location += [tabToSpacesString length];
+      range.length = [attributedString length]-range.location;
       range = [attributedString.string rangeOfString:@"\t" options:0 range:range];
     }//while(range.location != NSNotFound)
     aString = attributedString;
@@ -275,9 +320,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(NSInteger) spellCheckerDocumentTag
 {
-  if (SpellCheckerDocumentTag == 0)
-    SpellCheckerDocumentTag = super.spellCheckerDocumentTag;
-  return SpellCheckerDocumentTag;
+  if (!self->spellCheckerDocumentTag)
+    self->spellCheckerDocumentTag = [NSSpellChecker uniqueSpellDocumentTag];
+  return self->spellCheckerDocumentTag;
 }
 //end spellCheckerDocumentTag
 
@@ -318,10 +363,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
   NSNumber*    numberIndex = [enumerator nextObject];
   while(numberIndex)
   {
-    unsigned int index = numberIndex.intValue;
-    if (index < lineRanges.count)
+    NSUInteger index = [numberIndex unsignedIntegerValue];
+    if (index < [self->lineRanges count])
     {
-      NSRange range = NSRangeFromString(lineRanges[index]);
+      NSRange range = NSRangeFromString([self->lineRanges objectAtIndex:index]);
       [syntaxColouring removeColoursFromRange:range];
       [self.textStorage addAttributes:forbiddenAttributes range:range];
     }
@@ -332,19 +377,19 @@ static NSInteger SpellCheckerDocumentTag = 0;
 
 -(NSArray*) lineRanges
 {
-  return lineRanges;
+  return self->lineRanges;
 }
 //end lineRanges
 
--(NSInteger) nbLines
+-(NSUInteger) nbLines
 {
-  return lineRanges ? lineRanges.count : 0;
+  return self->lineRanges ? [self->lineRanges count] : 0;
 }
 //end nbLines
 
 -(void) _computeLineRanges
 {
-  [lineRanges removeAllObjects];
+  [self->lineRanges removeAllObjects];
   
   NSString* string = self.string;
   NSArray* lines = [(string ? string : [NSString string]) componentsSeparatedByString:@"\n"];
@@ -353,9 +398,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
   NSInteger location = 0;
   for(index = 0 ; index < count ; ++index)
   {
-    NSString* line = lines[index];
+    NSString* line = [lines objectAtIndex:index];
     NSRange lineRange = NSMakeRange(location, line.length);
-    [lineRanges addObject:NSStringFromRange(lineRange)];
+    [self->lineRanges addObject:NSStringFromRange(lineRange)];
     location += line.length+1;
   }
 }
@@ -378,7 +423,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 //change the shift in displayed numerotation
 -(void) setLineShift:(NSInteger)aShift
 {
-  lineShift = aShift;
+  self->lineShift = aShift;
   lineCountRulerView.lineShift = aShift;
 }
 //end setLineShift:
@@ -386,7 +431,7 @@ static NSInteger SpellCheckerDocumentTag = 0;
 //the shift in displayed numerotation
 -(NSInteger) lineShift
 {
-  return lineShift;
+  return self->lineShift;
 }
 //end lineShift
 
@@ -412,9 +457,9 @@ static NSInteger SpellCheckerDocumentTag = 0;
   while(accepts && (forbiddenLineNumber = [enumerator nextObject]))
   {
     NSUInteger index = forbiddenLineNumber.unsignedIntegerValue;
-    if (index < lineRanges.count)
+    if (index < [self->lineRanges count])
     {
-      NSRange lineRange = NSRangeFromString(lineRanges[index]);
+      NSRange lineRange = NSRangeFromString([self->lineRanges objectAtIndex:index]);
       ++lineRange.length;
       NSRange intersection = NSIntersectionRange(lineRange, affectedCharRange);
       if (intersection.length)
@@ -443,10 +488,10 @@ static NSInteger SpellCheckerDocumentTag = 0;
   BOOL ok = NO;
   --row; //the first line is at 0, but the user thinks it is 1
   row -= lineShift;
-  ok = (row >=0) && ((unsigned int) row < lineRanges.count);
+  ok = (row >=0) && ((NSUInteger) row < [self->lineRanges count]);
   if (ok)
   {
-    NSRange range = NSRangeFromString(lineRanges[row]);
+    NSRange range = NSRangeFromString([self->lineRanges objectAtIndex:row]);
     [self setSelectedRange:range];
     [self scrollRangeToVisible:range];
   }
@@ -785,6 +830,8 @@ static NSInteger SpellCheckerDocumentTag = 0;
     return [super validateMenuItem:sender];
   else if ([sender action] == @selector(paste:))
     return YES;
+  else if ([sender action] == @selector(toggleContinuousSpellChecking:))
+    [sender setState:[self isContinuousSpellCheckingEnabled] ? NSOnState : NSOffState];
   return ok;
 }
 //end validateMenuItem:
@@ -858,20 +905,20 @@ static NSInteger SpellCheckerDocumentTag = 0;
 //it allows parenthesis detection for user friendly selection
 -(NSRange) selectionRangeForProposedRange:(NSRange)proposedSelRange granularity:(NSSelectionGranularity)granularity
 {
-  if (granularity != NSSelectByWord || self.string.length == proposedSelRange.location)// If it's not a double-click return unchanged
-    return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
-  
-  NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
-  NSUInteger originalLocation = location;
+	if (granularity != NSSelectByWord || [[self string] length] == proposedSelRange.location)// If it's not a double-click return unchanged
+		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+	
+	NSUInteger location = [super selectionRangeForProposedRange:proposedSelRange granularity:NSSelectByCharacter].location;
+	NSUInteger originalLocation = location;
 
-  NSString *completeString = self.string;
-  unichar characterToCheck = [completeString characterAtIndex:location];
-  unsigned short skipMatchingBrace = 0;
-  NSUInteger lengthOfString = completeString.length;
-  if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
-    return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
-  
-  BOOL triedToMatchBrace = NO;
+	NSString *completeString = [self string];
+	unichar characterToCheck = [completeString characterAtIndex:location];
+	unsigned short skipMatchingBrace = 0;
+	NSUInteger lengthOfString = [completeString length];
+	if (lengthOfString == proposedSelRange.location) // to avoid crash if a double-click occurs after any text
+		return [super selectionRangeForProposedRange:proposedSelRange granularity:granularity];
+	
+	BOOL triedToMatchBrace = NO;
   static const unichar parenthesis[3][2] = {{'(', ')'}, {'[', ']'}, {'$', '$'}};
   NSInteger parenthesisIndex = 0;
   for(parenthesisIndex = 0 ;
@@ -962,8 +1009,8 @@ static NSInteger SpellCheckerDocumentTag = 0;
         [propositions addObject:[keyword stringByAppendingString:@"{}"]];
       else if ([type isEqualToString:@"braces2"])
         [propositions addObject:[keyword stringByAppendingString:@"{}{}"]];
-    }
-  }
+    }//end for each proposition
+  }//end if (isBackslashedWord)
   
   //if no proposition is found, do as if the backslash was not there
   if (isBackslashedWord && !propositions.count)
@@ -1003,8 +1050,8 @@ static NSInteger SpellCheckerDocumentTag = 0;
       NSString* keyword = typeAndKeyword[@"word"];
       if ([type isEqualToString:@"environment"])
         [propositions addObject:keyword];
-    }
-  }
+    }//end for each proposition
+  }//end if (!isBackslashedWord)
   
   [propositions sortUsingSelector:@selector(caseInsensitiveCompare:)];
   
@@ -1018,29 +1065,74 @@ static NSInteger SpellCheckerDocumentTag = 0;
 }
 //end changeColor:
 
+-(void) appearanceDidChange:(NSNotification*)notification
+{
+  [self performSelector:@selector(invalidateColors) withObject:nil afterDelay:0];
+}
+//end appearanceDidChange:
+
+-(void) invalidateColors
+{
+  [self->syntaxColouring setColours];
+  [self->syntaxColouring recolourCompleteDocument];
+  [self setNeedsDisplay:YES];
+}
+//end invalidateColors
+
+-(void) viewDidChangeEffectiveAppearance
+{
+  [self->syntaxColouring setColours];
+  [self->syntaxColouring recolourCompleteDocument];
+  [self setNeedsDisplay:YES];
+}
+//end viewDidChangeEffectiveAppearance
+
+-(void) setTypingAttributes:(NSDictionary*)attrs
+{
+  ++self->disableAutoColorChangeLevel;
+  [super setTypingAttributes:attrs];
+  --self->disableAutoColorChangeLevel;
+}
+//end setTypingAttributes:
+
 -(void) colorDidChange:(NSNotification*)notification
 {
-  NSColor* color = [NSColorPanel sharedColorPanel].color;
-  NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
-  NSString* input = !selectedRange.length ? nil : [self.textStorage.string substringWithRange:selectedRange];
-  NSString* output = nil;
-  if (input)
+  NSWindow* window = [self window];
+  BOOL isKeyWindow = [window isKeyWindow];
+  BOOL shouldReactToColorChange = !self->disableAutoColorChangeLevel && isKeyWindow && ([window firstResponder] == self);
+  if (shouldReactToColorChange && [self isEditable])
   {
-    NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-    NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
-      rgbColor.redComponent, rgbColor.greenComponent, rgbColor.blueComponent];
-    BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLMultiline
-                                       inRange:NSMakeRange(0, input.length) capture:1 error:nil] != nil);
-    if (replacement)
-      output = !isMatching ? nil :
-        [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
-                                           options:RKLMultiline range:NSMakeRange(0, input.length) error:nil];
-    if (!output)
-      output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
-                     rgbColor.redComponent, rgbColor.greenComponent, rgbColor.blueComponent, input];
-    if (output)
-      [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
-  }//end if (input)
+    NSColorPanel* colorPanel = [NSColorPanel sharedColorPanel];
+    NSColor* color = [colorPanel color];
+    NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
+    NSString* fullString = [[self textStorage] string];
+    NSString* input = !selectedRange.length ? nil : [fullString substringWithRange:selectedRange];
+    NSString* output = nil;
+    if (input)
+    {
+      NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+      NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
+        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
+      BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll
+        //options:RKLMultiline
+        inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
+      if (replacement)
+        output = !isMatching ? nil :
+          [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
+               options:RKLDotAll
+               //options:RKLMultiline
+                 range:NSMakeRange(0, [input length]) error:nil];
+      if (!output && selectedRange.length)
+        output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];
+      if (output)
+      {
+        [self replaceCharactersInRange:selectedRange withString:output withUndo:YES];
+        [self->syntaxColouring recolourCompleteDocument];
+        [self setNeedsDisplay:YES];
+      }//end if (output)
+    }//end if (input)
+  }//end if (shouldReactToColorChange && [self isEditable])
 }
 //end colorDidChange:
 

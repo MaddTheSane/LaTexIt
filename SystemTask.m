@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "SystemTask.h"
@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <crt_externs.h>
 
 #if !__has_feature(objc_arc)
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
@@ -115,7 +116,7 @@
 -(void) launch
 {
   NSError* error = nil;
-  DebugLog(1, @"><%@>", [self equivalentLaunchCommand]);
+  DebugLog(2, @"><%@>", [self equivalentLaunchCommand]);
   if (![[self equivalentLaunchCommand] writeToFile:self->tmpScriptFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error])
     self->terminationStatus = -1;
   else
@@ -135,17 +136,40 @@
     int       intTimeOutLimit = (int)self->timeOutLimit;
     NSString* userScriptCall = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
     [self->runningLock lock];
-    //terminationStatus = system([systemCommand UTF8String]);
     NSString* timeLimitedScript = !intTimeOutLimit ?
       [NSString stringWithFormat:@"#!/bin/bash\n%@", userScriptCall] :
-      [NSString stringWithFormat:@"#!/bin/bash\nsleep %d && kill -9 $$&\nKILLPID=$!\n%@\nRETURNCODE=$?\nkill -9 $KILLPID\nexit $RETURNCODE",
-                                 intTimeOutLimit, userScriptCall];
+      [NSString stringWithFormat:
+        @"#!/bin/bash\n"\
+         "PID=$$\n"\
+         "sleep %d && kill -9 \"$PID\" &\n"
+         "KILLER=$!\n"\
+         "(%@)\n"\
+         "RETURNCODE=$?\n"\
+         "kill -9 $KILLER\n"\
+         "exit $RETURNCODE\n",
+         intTimeOutLimit, userScriptCall];
     NSString* timeLimitedScriptPath = nil;
     [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-timelimited.XXXXXXXX" extension:@"script"
                                                   outFilePath:&timeLimitedScriptPath workingDirectory:self->workingDirectory];
     [timeLimitedScript writeToFile:timeLimitedScriptPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     NSString* systemCall = [NSString stringWithFormat:@"/bin/sh %@", timeLimitedScriptPath];
     self->terminationStatus = system(systemCall.UTF8String);
+    /*pid_t pid = fork();
+    if (!pid)
+    {
+      system([userScriptCall UTF8String]);
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid, &self->terminationStatus, WNOHANG);
+      printf("r = %d\n", self->terminationStatus);
+      while(self->terminationStatus == -1)
+      {
+        waitpid(pid, &self->terminationStatus, WNOHANG);
+        printf("r = %d\n", self->terminationStatus);
+      }
+    }*/
     self->selfExited        = WIFEXITED(self->terminationStatus) && !WIFSIGNALED(self->terminationStatus);
     self->terminationStatus = WIFEXITED(self->terminationStatus) ? WEXITSTATUS(self->terminationStatus) : -1;
     [self->runningLock unlock];
@@ -158,7 +182,7 @@
 {
   [self->runningLock lock];
   [self->runningLock unlock];
-  DebugLog(1, @"<<%@>", [self equivalentLaunchCommand]);
+  DebugLog(2, @"<<%@>", [self equivalentLaunchCommand]);
 }
 //end waitUntilExit
 

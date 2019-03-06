@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LibraryCell is the kind of cell displayed in the NSOutlineView of the Library drawer
 //It contains an image and a text. It is a copy of the ImageAndTextCell provided by Apple
@@ -11,6 +11,7 @@
 #import "LibraryCell.h"
 
 #import "LibraryView.h"
+#import "NSColorExtended.h"
 #import "NSImageExtended.h"
 #import "NSObjectExtended.h"
 
@@ -61,7 +62,7 @@
 }
 //end editWithFrame:inView:editor:delegate:event:
 
--(void) selectWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
+-(void) selectWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
 {
   LibraryView* libraryTableView = [controlView dynamicCastToClass:[LibraryView class]];
   if (libraryTableView)
@@ -72,6 +73,29 @@
   }//end if (libraryTableView)
 }
 //end selectWithFrame:inView:editor:delegate:start:length
+
+-(void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+{
+  if ([controlView isDarkMode])
+  {
+    LibraryView* libraryTableView = [controlView dynamicCastToClass:[LibraryView class]];
+    NSInteger row = [libraryTableView rowAtPoint:cellFrame.origin];
+    NSRect rowRect = [libraryTableView rectOfRow:row];
+    /*NSArray* colors = [NSColor controlAlternatingRowBackgroundColors];
+    NSColor* color = ([colors count] < 2) ? [colors lastObject] : [colors objectAtIndex:(row%2)];
+    NSColor* lighterColor = [color lighter:.75f];*/
+    static const CGFloat gray1 = .33f;
+    static const CGFloat gray2 = .25f;
+    static const CGFloat rgba1[4] = {gray1, gray1, gray1, 1.f};
+    static const CGFloat rgba2[4] = {gray2, gray2, gray2, 1.f};
+    const CGFloat* rgba = !(row%2) ? rgba1 : rgba2;
+    NSColor* lighterColor = [NSColor colorWithCalibratedRed:rgba[0] green:rgba[1] blue:rgba[2] alpha:rgba[3]];
+    [lighterColor set];
+    NSRectFill(rowRect);
+  }//end if ([controlView isDarkMode])
+  [super drawWithFrame:cellFrame inView:controlView];
+}
+//end drawWithFrame:inView:
 
 -(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {

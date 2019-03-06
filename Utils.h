@@ -3,11 +3,17 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #include <tgmath.h>
 #import <Cocoa/Cocoa.h>
+
+#ifdef ARC_ENABLED
+#define CHBRIDGE __bridge
+#else
+#define CHBRIDGE
+#endif
 
 #import "LaTeXiTSharedTypes.h"
 
@@ -33,6 +39,11 @@ extern int DebugLogLevel;
 #ifndef NSAppKitVersionNumber10_8
 #define NSAppKitVersionNumber10_8 1187
 #endif
+#define NSAppKitVersionNumber10_9 1265
+#define NSAppKitVersionNumber10_10 1343
+#define NSAppKitVersionNumber10_11 1404
+#define NSAppKitVersionNumber10_12 1504
+#define NSAppKitVersionNumber10_13 1561
 
 #define isMacOS10_5OrAbove() (YES)
 #define isMacOS10_6OrAbove() (YES)
@@ -46,6 +57,14 @@ BOOL isMacOS10_7OrAbove(void);
 #else
 BOOL isMacOS10_8OrAbove(void);
 #endif
+BOOL isMacOS10_9OrAbove(void);
+BOOL isMacOS10_10OrAbove(void);
+BOOL isMacOS10_11OrAbove(void);
+BOOL isMacOS10_12OrAbove(void);
+BOOL isMacOS10_13OrAbove(void);
+BOOL isMacOS10_14OrAbove(void);
+
+extern NSString* NSAppearanceDidChangeNotification;
 
 FOUNDATION_STATIC_INLINE          char  IsBetween_c(char inf, char x, char sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned char  IsBetween_uc(unsigned char inf, unsigned char x, unsigned char sup) {return (inf <= x) && (x <= sup);}
@@ -53,6 +72,8 @@ FOUNDATION_STATIC_INLINE          short IsBetween_s(short inf, short x, short su
 FOUNDATION_STATIC_INLINE unsigned short IsBetween_us(unsigned short inf, unsigned short x, unsigned short sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE          int   IsBetween_i(int inf, int x, int sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned int   IsBetween_ui(unsigned int inf, unsigned int x, unsigned int sup) {return (inf <= x) && (x <= sup);}
+FOUNDATION_STATIC_INLINE     NSInteger  IsBetween_nsi(NSInteger inf, NSInteger x, NSInteger sup) {return (inf <= x) && (x <= sup);}
+FOUNDATION_STATIC_INLINE    NSUInteger  IsBetween_nsui(NSUInteger inf, NSUInteger x, NSUInteger sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE          long  IsBetween_l(long inf, long x, long sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE unsigned long  IsBetween_ul(unsigned long inf, unsigned long x, unsigned long sup) {return (inf <= x) && (x <= sup);}
 FOUNDATION_STATIC_INLINE         float  IsBetween_f(float inf, float x, float sup) {return (inf <= x) && (x <= sup);}
@@ -64,6 +85,8 @@ FOUNDATION_STATIC_INLINE          short Clip_s(short inf, short x, short sup) {r
 FOUNDATION_STATIC_INLINE unsigned short Clip_us(unsigned short inf, unsigned short x, unsigned short sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE          int   Clip_i(int inf, int x, int sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE unsigned int   Clip_ui(unsigned int inf, unsigned int x, unsigned int sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
+FOUNDATION_STATIC_INLINE    NSInteger   Clip_nsi(NSInteger inf, NSInteger x, NSInteger sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
+FOUNDATION_STATIC_INLINE   NSUInteger   Clip_nsui(NSUInteger inf, NSUInteger x, NSUInteger sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE          long  Clip_l(long inf, long x, long sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE unsigned long  Clip_ul(unsigned long inf, unsigned long x, unsigned long sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 FOUNDATION_STATIC_INLINE          float Clip_f(float inf, float x, float sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
@@ -173,15 +196,16 @@ NSPasteboardType GetMyJPEGPboardType(void);
 NSPasteboardType GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
 
-FOUNDATION_EXTERN_INLINE int EndianI_BtoN(int x);
-FOUNDATION_EXTERN_INLINE int EndianI_NtoB(int x);
-FOUNDATION_EXTERN_INLINE unsigned int EndianUI_BtoN(unsigned int x);
-FOUNDATION_EXTERN_INLINE unsigned int EndianUI_NtoB(unsigned int x);
-FOUNDATION_EXTERN_INLINE long EndianL_BtoN(long x);
-FOUNDATION_EXTERN_INLINE long EndianL_NtoB(long x);
-FOUNDATION_EXTERN_INLINE unsigned long EndianUL_BtoN(unsigned long x);
-FOUNDATION_EXTERN_INLINE unsigned long EndianUL_NtoB(unsigned long x);
+FOUNDATION_EXTERN int EndianI_BtoN(int x);
+FOUNDATION_EXTERN int EndianI_NtoB(int x);
+FOUNDATION_EXTERN unsigned int EndianUI_BtoN(unsigned int x);
+FOUNDATION_EXTERN unsigned int EndianUI_NtoB(unsigned int x);
+FOUNDATION_EXTERN long EndianL_BtoN(long x);
+FOUNDATION_EXTERN long EndianL_NtoB(long x);
+FOUNDATION_EXTERN unsigned long EndianUL_BtoN(unsigned long x);
+FOUNDATION_EXTERN unsigned long EndianUL_NtoB(unsigned long x);
 
+FOUNDATION_STATIC_INLINE NSString* NSStringWithNilDefault(NSString* s, NSString* nilDefault) {return !s ? nilDefault : s;}
 NSString* makeStringDifferent(NSString* string, NSArray<NSString*>* otherStrings, BOOL* didChange);
 
 FOUNDATION_STATIC_INLINE NSRect NSRectDelta(NSRect rect, CGFloat deltaX, CGFloat deltaY, CGFloat deltaWidth, CGFloat deltaHeight)
@@ -194,3 +218,5 @@ FOUNDATION_STATIC_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, CGFloat new
 
 NSRect adaptRectangle(NSRect rectangle, NSRect containerRectangle, BOOL allowScaleDown, BOOL allowScaleUp, BOOL integerScale);
 NSComparisonResult compareVersions(NSString* version1, NSString* version2);
+
+void MethodSwizzle(Class aClass, SEL orig_sel, SEL alt_sel, BOOL isInstanceMethod);

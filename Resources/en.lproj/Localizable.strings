@@ -222,6 +222,7 @@
 "Reset..." = "Reset…";
 "Do you really want to reset the paths ?" = "Do you really want to reset the paths?";
 "Invalid paths will be replaced by the result of auto-detection" = "All paths will be replaced by the result of auto-detection.";
+"Compact database" = "Compact database";
 
 /* document */
 "clipboard" = "clipboard";
@@ -298,6 +299,8 @@
 "\"Align\" items" = "\"Align\" items";
 "\"Eqnarray\" items" = "\"Eqnarray\" items";
 "Import selection" = "Import selection";
+"latexize selection again" = "Re-latexize selection";
+"KB" = "KB";
 
 /* History */
 "Add to current history" = "Add to current history";

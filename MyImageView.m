@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -44,12 +44,14 @@
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 
-//static inline CGFloat frac(CGFloat x) {return x-floor(x);}
-//static inline CGFloat sqr(CGFloat x) {return x*x;}
-
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
 NSString* const CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
+
+static const CGFloat rgba1_light[4] = {0.95f, 0.95f, 0.95f, 1.0f};
+static const CGFloat rgba1_dark[4] = {0.45f, 0.45f, 0.45f, 1.0f};
+static const CGFloat rgba2_light[4] = {0.68f, 0.68f, 0.68f, 1.f};
+static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
 
 @interface TransparentView : NSView
 @end
@@ -60,6 +62,18 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(NSView*) hitTest:(NSPoint)aPoint {return nil;}
 @end
 
+@interface BorderView : NSView
+-(BOOL) isOpaque;
+-(void) drawRect:(NSRect)rect;
+@end
+
+@interface MyImageViewDelegate : NSObject {
+  MyImageView* myImageView;
+}
+-(MyImageView*) myImageView;
+-(void) setMyImageView:(MyImageView*)value;
+-(void) drawLayer:(CALayer*)layer inContext:(CGContextRef)cgContext;
+@end
 
 @interface MyImageView ()
 @property (readonly, copy) NSImage *imageForDrag;
@@ -69,6 +83,7 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard sender:(id <NSDraggingInfo>)sender;
 -(void) performProgrammaticDragCancellation:(id)context;
 -(void) performProgrammaticRedrag:(id)context;
+-(void) drawRect:(NSRect)rect inContext:(CGContextRef)cgContext;
 @end
 
 @implementation MyImageView
@@ -78,6 +93,8 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
   if ((!(self = [super initWithCoder:coder])))
     return nil;
   self->zoomLevel = 1.f;
+  self->myImageViewDelegate = [[MyImageViewDelegate alloc] init];
+  [self->myImageViewDelegate setMyImageView:self];
   [self lazyCopyAsContextualMenu];
   self.menu = self->copyAsContextualMenu;
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_copyCurrentImageNotification:)
@@ -97,13 +114,24 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 {
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:DefaultDoNotClipPreviewKey];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  CGPDFDocumentRelease(self->cgPdfDocument);
 }
 //end dealloc
 
 -(void) awakeFromNib
 {
+  BorderView* borderView = [[BorderView alloc] init];
+  [[self superview] addSubview:borderView positioned:NSWindowAbove relativeTo:self];
+  [borderView setFrame:[self frame]];
+  [borderView setAutoresizingMask:[self autoresizingMask]];
 }
 //end awakeFromNib
+
+-(BOOL) isOpaque
+{
+  return NO;
+}
+//end isOpaque
 
 -(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
@@ -135,18 +163,24 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
                 keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
     [subMenu addItem:[NSMenuItem separatorItem]];
     [subMenu addItemWithTitle:@"PDF" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_PDF];
+                          tag:(NSInteger)EXPORT_FORMAT_PDF];
     [subMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts") target:self action:@selector(copy:)
                 keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
-                          tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+                          tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
     [subMenu addItemWithTitle:@"EPS" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_EPS];
+                          tag:(NSInteger)EXPORT_FORMAT_EPS];
+    [subMenu addItemWithTitle:@"SVG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
+                          tag:(NSInteger)EXPORT_FORMAT_SVG];
     [subMenu addItemWithTitle:@"TIFF" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_TIFF];
+                          tag:(NSInteger)EXPORT_FORMAT_TIFF];
     [subMenu addItemWithTitle:@"PNG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_PNG];
+                          tag:(NSInteger)EXPORT_FORMAT_PNG];
     [subMenu addItemWithTitle:@"JPEG" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
-                          tag:(int)EXPORT_FORMAT_JPEG];
+                          tag:(NSInteger)EXPORT_FORMAT_JPEG];
+    [subMenu addItemWithTitle:@"MathML" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
+                          tag:(NSInteger)EXPORT_FORMAT_MATHML];
+    [subMenu addItemWithTitle:NSLocalizedString(@"Text", @"Text") target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
+                          tag:(NSInteger)EXPORT_FORMAT_TEXT];
     [self->copyAsContextualMenu setSubmenu:subMenu forItem:superItem];
     result = self->copyAsContextualMenu;
   }//end if (!result)
@@ -227,33 +261,49 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
   self->transientDragData = nil;
   self->transientDragEquation = nil;
 
+  CGPDFDocumentRelease(self->cgPdfDocument);
+  self->cgPdfDocument = 0;
   self->pdfData = someData;
+  /*CGDataProviderRef cgDataProvider = CGDataProviderCreateWithCFData((CFDataRef)self->pdfData);
+  self->cgPdfDocument = CGPDFDocumentCreateWithProvider(cgDataProvider);
+  CGDataProviderRelease(cgDataProvider);*/
 
   self->imageRep = !self->pdfData ? nil : [[NSPDFImageRep alloc] initWithData:self->pdfData];
-  self->naturalPDFSize = !self->imageRep ? NSZeroSize : self->imageRep.size;
-  NSImage* image = [cachedImage copy];
-  [image removeRepresentationsOfClass:[NSBitmapImageRep class]];
-  if (image && ![image pdfImageRepresentation] && self->imageRep)
+  self->naturalPDFSize = !self->imageRep ? NSZeroSize : [self->imageRep size];
+  NSImage* newImage = [cachedImage copy];
+  [newImage removeRepresentationsOfClass:[NSBitmapImageRep class]];
+  if (newImage && ![newImage pdfImageRepresentation] && self->imageRep)
   {
-    image.cacheMode = NSImageCacheNever;
-    [image addRepresentation:self->imageRep];
-    //[image recache];
-  }//end if (image && ![image pdfImageRepresentation] && self->imageRep)
-  else if (!image && self->imageRep)
+    [newImage setCacheMode:NSImageCacheNever];
+    [newImage setDataRetained:YES];
+    [newImage setScalesWhenResized:YES];
+    [newImage addRepresentation:self->imageRep];
+    //[newImage recache];
+  }//end if (newImage && ![newImage pdfImageRepresentation] && self->imageRep)
+  else if (!newImage && self->imageRep)
   {
-    image = [[NSImage alloc] initWithSize:self->imageRep.size];
-    image.cacheMode = NSImageCacheNever;
-    [image addRepresentation:self->imageRep];
-    //[image recache];
-  }//end if (!image && self->imageRep)
-  [self setImage:image];
+    newImage = [[NSImage alloc] initWithSize:[self->imageRep size]];
+    [newImage setCacheMode:NSImageCacheNever];
+    [newImage setDataRetained:YES];
+    [newImage setScalesWhenResized:YES];
+    [newImage addRepresentation:self->imageRep];
+    //[newImage recache];
+  }//end if (!newImage && self->imageRep)
+  [self setImage:newImage];
   [self updateViewSize];
 }
 //end setPDFData:cachedImage:
 
--(void) setImage:(NSImage*)image
+-(NSImage*) image
 {
-  super.image = image;
+  return [super image];
+}
+//end image
+
+-(void) setImage:(NSImage*)aImage
+{
+  [aImage setScalesWhenResized:YES];
+  super.image = aImage;
   [[NSNotificationCenter defaultCenter] postNotificationName:ImageDidChangeNotification object:self];
 }
 //end setImage:
@@ -383,6 +433,13 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 -(NSImage*) imageForDrag
 {
   NSImage* result = self.image;
+  if (!isMacOS10_5OrAbove())
+  {
+    NSImage* tiffImage = [[NSImage alloc] initWithData:[result TIFFRepresentation]];
+    result = tiffImage;
+  }//end if (!isMacOS10_5OrAbove())
+  if ([self isDarkMode])
+    result = [result imageWithBackground:[NSColor colorWithCalibratedRed:0.66f green:0.66f blue:0.66f alpha:.5f] rounded:4.f];
   return result;
 }
 //end imageForDrag
@@ -923,13 +980,14 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSData* data = !filepath ? nil : [NSData dataWithContentsOfFile:filepath options:NSUncachedRead error:nil];
     done = [self->document applyData:data sourceUTI:sourceUTI];
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])))
-  if (!done && ![sender draggingSource] &&
+  id<NSDraggingInfo> sendAsNSDraggingInfo = ![sender conformsToProtocol:@protocol(NSDraggingInfo)] ? nil : sender;
+  if (!done && ![sendAsNSDraggingInfo draggingSource] &&
       ((type = [pboard availableTypeFromArray:@[NSFilesPromisePboardType]])))
   {
     self->transientFilesPromisedFilePaths = [[NSMutableArray alloc] init];
     NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
     NSURL* workingDirectoryURL = [NSURL fileURLWithPath:workingDirectory];
-    NSArray* files = [sender namesOfPromisedFilesDroppedAtDestination:workingDirectoryURL];
+    NSArray* files = [sendAsNSDraggingInfo namesOfPromisedFilesDroppedAtDestination:workingDirectoryURL];
     NSEnumerator* enumerator = [files objectEnumerator];
     NSString* fileName = nil;
     while((fileName = [enumerator nextObject]))
@@ -1073,30 +1131,49 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 -(void) drawRect:(NSRect)rect
 {
-  BOOL doNotClipPreview = [PreferencesController sharedController].doNotClipPreview;
-  if (doNotClipPreview)
+  CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+  CGContextSaveGState(cgContext);
+  [self drawRect:rect inContext:cgContext];
+  CGContextRestoreGState(cgContext);
+}
+//end drawRect:
+
+-(void) drawRect:(NSRect)rect inContext:(CGContextRef)cgContext
+{
+  NSRect bounds = [self bounds];
+  
+  BOOL isDark = [self isDarkMode];
+  const CGFloat* rgba1 = isDark ? rgba1_dark : rgba1_light;
+  //const CGFloat* rgba2 = isDark ? rgba2_dark : rgba2_light;
+    
+  BOOL doNotClipPreview = [[PreferencesController sharedController] doNotClipPreview];
+  BOOL fitToView = doNotClipPreview;
+  if (fitToView)
   {
-    NSRect bounds = self.bounds;
-    NSRect inRoundedRect1 = NSInsetRect(bounds, 1, 1);
+    //NSRect inRoundedRect1 = NSInsetRect(bounds, 1, 1);
     NSRect inRoundedRect2 = NSInsetRect(bounds, 2, 2);
     NSRect inRoundedRect3 = NSInsetRect(bounds, 3, 3);
     NSRect inRect = NSInsetRect(bounds, 7, 7);
-    CGContextRef cgContext = (CGContextRef)[NSGraphicsContext currentContext].graphicsPort;
-    CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+
+    /*CGContextBeginPath(cgContext);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+    CGContextClip(cgContext);*/
+    
+    /*CGContextSetRGBFillColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
     CGContextFillPath(cgContext);
-    CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
+    CGContextSetRGBStrokeColor(cgContext, rgba2[0], rgba2[1], rgba2[2], rgba2[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
     CGContextStrokePath(cgContext);
-    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextSetRGBStrokeColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
     CGContextStrokePath(cgContext);
-    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextSetRGBStrokeColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
-    CGContextStrokePath(cgContext);
+    CGContextStrokePath(cgContext);*/
 
-    NSImage* image = self.image;
-    NSSize naturalImageSize = image ? image.size : NSZeroSize;
+    NSImage* currentImage = [self image];
+    NSSize naturalImageSize = currentImage ? [currentImage size] : NSZeroSize;
     CGFloat factor = exp(3*(self->zoomLevel-1));
     NSSize newSize = naturalImageSize;
     newSize.width *= factor;
@@ -1106,17 +1183,47 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
     if (self->backgroundColor)
     {
-      [self->backgroundColor set];
-      NSRectFill(inRect);
-    }
+      CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
+      [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+       getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
+      CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
+      CGContextBeginPath(cgContext);
+      CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+      CGContextFillPath(cgContext);
+    }//end if (self->backgroundColor)
+
     //[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
-    if (self->imageRep)
+    CGContextSaveGState(cgContext);
+    CGContextBeginPath(cgContext);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+    CGContextClip(cgContext);
+    if (self->cgPdfDocument)
+    {
+      CGPDFPageRef cgPdfPage = !cgPdfDocument || !CGPDFDocumentGetNumberOfPages(cgPdfDocument) ? 0 :
+        CGPDFDocumentGetPage(cgPdfDocument, 1);
+      CGRect rect = CGRectNull;
+      if (CGRectIsEmpty(rect))
+        rect = CGPDFPageGetBoxRect(cgPdfPage, kCGPDFMediaBox);
+      if (CGRectIsEmpty(rect))
+        rect = CGPDFPageGetBoxRect(cgPdfPage, kCGPDFCropBox);
+      if (!CGRectIsEmpty(rect))
+      {
+        CGContextSaveGState(cgContext);
+        CGContextTranslateCTM(cgContext, destRect.origin.x, destRect.origin.y);
+        CGContextScaleCTM(cgContext, destRect.size.width/rect.size.width, destRect.size.height/rect.size.height);
+        CGContextTranslateCTM(cgContext, -rect.origin.x, -rect.origin.y);
+        CGContextDrawPDFPage(cgContext, cgPdfPage);
+        CGContextRestoreGState(cgContext);
+      }//end if (!CGRectIsEmpty(rect))
+    }//end if (self->cgPdfDocument)
+    else if (self->imageRep)
       [self->imageRep drawInRect:destRect];
     else
       [self.image drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)
               operation:NSCompositeSourceOver fraction:1.];
-  }//end if (doNotClipPreview)
-  else//if (!doNotClipPreview)
+    CGContextRestoreGState(cgContext);
+  }//end if (fitToView)
+  else//if (!fitToView)
   {
     NSRect inRect = NSInsetRect(self.bounds, 7, 7);
 
@@ -1125,46 +1232,83 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     newSize.width *= factor;
     newSize.height *= factor;
 
-    NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
-    destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
-    if (self->backgroundColor)
-    {
-      [self->backgroundColor set];
-      NSRectFill(inRect);
-    }//end if (self->backgroundColor)
-    
-    CGContextRef cgContext = (CGContextRef)[NSGraphicsContext currentContext].graphicsPort;
-    NSClipView* clipView = [self.superview dynamicCastToClass:[NSClipView class]];
-    NSScrollView* scrollView = (NSScrollView*)clipView.superview;
-    NSRect borderRect = !clipView ? self.bounds : clipView.visibleRect;
+    NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
+    NSScrollView* scrollView = (NSScrollView*)[clipView superview];
+    NSRect borderRect = !clipView ? bounds : NSIntersectionRect(bounds, [clipView visibleRect]);
     NSRect inRoundedRect1 = NSInsetRect(borderRect, 0, 0);
     NSRect inRoundedRect2 = NSInsetRect(borderRect, 2, 2);
     NSRect inRoundedRect3 = NSInsetRect(borderRect, 3, 3);
-    CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
-    CGFloat backgroundRGBcomponents[4] = {0.95f, 0.95f, 0.95f, 1.0f};
+    CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
     [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
-      getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
-    CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
+     getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
 
-    CGContextAddRect(cgContext, CGRectFromNSRect(self.bounds));
-    CGContextFillPath(cgContext);
+    CGContextBeginPath(cgContext);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+    CGContextClip(cgContext);
+    
+    NSRect destRect = NSMakeRect(0, 0, newSize.width, newSize.height);
+    destRect = adaptRectangle(destRect, inRect, YES, NO, NO);
+    if (!self->backgroundColor)
+    {
+      CGContextSetRGBFillColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
+      CGContextBeginPath(cgContext);
+      CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+      CGContextFillPath(cgContext);
+    }
+    else
+    {
+      CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
+      //CGContextFillRect(cgContext, CGRectFromNSRect(inRect));
+      CGContextBeginPath(cgContext);
+      CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+      CGContextFillPath(cgContext);
+    }//end if (self->backgroundColor)
 
-    if (self->imageRep)
+    /*CGContextBeginPath(cgContext);
+    CGContextAddRect(cgContext, CGRectFromNSRect(bounds));
+    CGContextFillPath(cgContext);*/
+
+    CGContextSaveGState(cgContext);
+    CGContextBeginPath(cgContext);
+    CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+    CGContextClip(cgContext);
+    if (self->cgPdfDocument)
+    {
+      CGPDFPageRef cgPdfPage = !cgPdfDocument || !CGPDFDocumentGetNumberOfPages(cgPdfDocument) ? 0 :
+        CGPDFDocumentGetPage(cgPdfDocument, 1);
+      CGRect rect = CGRectNull;
+      if (CGRectIsEmpty(rect))
+        rect = CGPDFPageGetBoxRect(cgPdfPage, kCGPDFMediaBox);
+      if (CGRectIsEmpty(rect))
+        rect = CGPDFPageGetBoxRect(cgPdfPage, kCGPDFCropBox);
+      if (!CGRectIsEmpty(rect))
+      {
+        CGContextSaveGState(cgContext);
+        CGContextTranslateCTM(cgContext, destRect.origin.x, destRect.origin.y);
+        CGContextScaleCTM(cgContext, destRect.size.width/rect.size.width, destRect.size.height/rect.size.height);
+        CGContextTranslateCTM(cgContext, -rect.origin.x, -rect.origin.y);
+        CGContextDrawPDFPage(cgContext, cgPdfPage);
+        CGContextRestoreGState(cgContext);
+      }//end if (!CGRectIsEmpty(rect))
+    }//end if (self->cgPdfDocument)
+    else if (self->imageRep)
       [self->imageRep drawInRect:destRect];
     else
       [self.image drawInRect:destRect fromRect:NSMakeRect(0, 0, self->naturalPDFSize.width, self->naturalPDFSize.height)
               operation:NSCompositeSourceOver fraction:1.];
+    CGContextRestoreGState(cgContext);
 
     NSRect documentRect = self.frame;
     NSRect documentVisibleRect = !clipView ? NSZeroRect : clipView.documentVisibleRect;
+    BOOL forceDisplayArrows = NO;
     BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
     BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
     BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
     BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
-    BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && scrollView.verticalScroller.scrollerStyle);
-    BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && scrollView.horizontalScroller.scrollerStyle);
-    BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && scrollView.verticalScroller.scrollerStyle);
-    BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && scrollView.horizontalScroller.scrollerStyle);
+    BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.verticalScroller.scrollerStyle));
+    BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.horizontalScroller.scrollerStyle));
+    BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.verticalScroller.scrollerStyle));
+    BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.horizontalScroller.scrollerStyle));
     BOOL shouldDisplayArrows = shouldDisplayScrollUp || shouldDisplayScrollRight || shouldDisplayScrollDown || shouldDisplayScrollLeft;
     BOOL arrowsVisibleChanged =
       (self->previousArrowsVisible[0] != shouldDisplayScrollUp) ||
@@ -1179,22 +1323,23 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     self->previousArrowsVisible[2] = shouldDisplayScrollDown;
     self->previousArrowsVisible[3] = shouldDisplayScrollLeft;
     
-    CGContextSetRGBFillColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    /*CGContextBeginPath(cgContext);
+    CGContextSetRGBFillColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
     CGContextEOFillPath(cgContext);
-    CGContextSetRGBStrokeColor(cgContext, 0.68f, 0.68f, 0.68f, 1.f);
+    CGContextSetRGBStrokeColor(cgContext, rgba2[0], rgba2[1], rgba2[2], rgba2[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
     CGContextStrokePath(cgContext);
-    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextSetRGBStrokeColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
     CGContextStrokePath(cgContext);
-    CGContextSetRGBStrokeColor(cgContext, 0.95f, 0.95f, 0.95f, 1.0f);
+    CGContextSetRGBStrokeColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
     CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
-    CGContextStrokePath(cgContext);
-  }//end if (!doNotClipPreview)
+    CGContextStrokePath(cgContext);*/
+  }//end if (!fitToView)
 }
-//end drawRect:
+//end drawRect:inContext:
 
 -(void) magnifyWithEvent:(NSEvent*)event
 {
@@ -1211,12 +1356,15 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     NSClipView* clipView = [self.superview dynamicCastToClass:[NSClipView class]];
     if (clipView)
     {
-      NSScrollView* scrollView = (NSScrollView*)clipView.superview;
-      NSRect frame = scrollView.frame;
-      NSView* superView = scrollView.superview;
+      NSScrollView* scrollView = (NSScrollView*)[clipView superview];
+      NSUInteger autoresizingMask = [scrollView autoresizingMask];
+      NSRect frame = [scrollView frame];
+      NSView* superView = [scrollView superview];
       NSView* selfView = self;
       [superView replaceSubview:scrollView with:selfView];
-      selfView.frame = frame;
+      [selfView setAutoresizingMask:autoresizingMask];
+      [selfView setFrame:frame];
+      [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:clipView];
       [self->layerView removeFromSuperview];
       self->layerView = nil;
       self->layerArrows = nil;
@@ -1228,15 +1376,28 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
     if (!clipView)
     {
       NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:self.frame];
-      scrollView.autoresizingMask = self.autoresizingMask;
+      NSUInteger autoresizingMask = [self autoresizingMask];
+      NSRect frame = [self frame];
       NSView* superView = self.superview;
       NSView* selfView = self;
       [superView replaceSubview:selfView with:scrollView];
+      [scrollView setAutoresizingMask:autoresizingMask];
+      [scrollView setFrame:frame];
+      [scrollView setDrawsBackground:NO];
+      [scrollView setHidden:NO];
       [scrollView setHasHorizontalScroller:NO];
       [scrollView setHasVerticalScroller:NO];
-      clipView = (NSClipView*)scrollView.contentView;
+      clipView = (NSClipView*)[scrollView contentView];
+      if (isMacOS10_14OrAbove())
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewBoundsChanged:) name:NSViewBoundsDidChangeNotification object:clipView];
       [clipView setCopiesOnScroll:NO];
-      scrollView.documentView = selfView;
+      [selfView setFrame:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
+      [scrollView setDocumentView:selfView];
+      if (isMacOS10_7OrAbove())
+      {
+        [scrollView performSelector:@selector(setHorizontalScrollElasticity:) withObject:[NSNumber numberWithInteger:1]/*NSScrollElasticityNone*/];
+        [scrollView performSelector:@selector(setVerticalScrollElasticity:) withObject:[NSNumber numberWithInteger:1]/*NSScrollElasticityNone*/];
+      }//end if (isMacOS10_7OrAbove())
       
       if (isMacOS10_7OrAbove())
       {
@@ -1262,7 +1423,7 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
           self->layerArrows = [[CALayer alloc] init];
           self->layerArrows.frame = self->layerView.layer.bounds;
           [self->layerArrows setHidden:YES];
-          self->layerArrows.delegate = self;
+          [self->layerArrows setDelegate:self->myImageViewDelegate];
           [self->layerArrows addAnimation:opacityAnimation forKey:@"animateOpacity"];
           [self->layerView.layer addSublayer:self->layerArrows];
           [self->layerArrows setNeedsDisplay];
@@ -1290,23 +1451,90 @@ NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 }
 //end updateViewSize
 
+-(void) viewBoundsChanged:(NSNotification*)notification
+{
+  [self setNeedsDisplay:YES];
+}
+//end viewBoundsChanged:
+
+@end
+
+@implementation BorderView
+-(BOOL) acceptsFirstMouse:(NSEvent *)theEvent {return NO;}
+-(BOOL) acceptsFirstResponder {return NO;}
+-(BOOL) becomeFirstResponder {return NO;}
+-(NSView*) hitTest:(NSPoint)aPoint {return nil;}
+
+-(BOOL) isOpaque
+{
+  return NO;
+}
+//end isOpaque
+
+-(void) drawRect:(NSRect)rect
+{
+  CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+  NSRect bounds = [self bounds];
+  NSRect inRoundedRect1 = NSInsetRect(bounds, 1, 1);
+  NSRect inRoundedRect2 = NSInsetRect(bounds, 2, 2);
+  NSRect inRoundedRect3 = NSInsetRect(bounds, 3, 3);
+  
+  BOOL isDark = [self isDarkMode];
+  const CGFloat* rgba1 = isDark ? rgba1_dark : rgba1_light;
+  const CGFloat* rgba2 = isDark ? rgba2_dark : rgba2_light;
+  
+  CGContextSetRGBFillColor(cgContext, 0, 0, 0, 0);
+  CGContextFillRect(cgContext, CGRectFromNSRect(bounds));
+  CGContextBeginPath(cgContext);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+  CGContextClip(cgContext);
+  CGContextSetRGBStrokeColor(cgContext, rgba2[0], rgba2[1], rgba2[2], rgba2[3]);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect3), 4.f, 4.f);
+  CGContextStrokePath(cgContext);
+  CGContextSetRGBStrokeColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect1), 4.f, 4.f);
+  CGContextStrokePath(cgContext);
+  CGContextSetRGBStrokeColor(cgContext, rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
+  CGContextAddRoundedRect(cgContext, CGRectFromNSRect(inRoundedRect2), 4.f, 4.f);
+  CGContextStrokePath(cgContext);
+}
+//end drawRect:
+
+@end
+
+
+@implementation MyImageViewDelegate
+
+-(MyImageView*) myImageView
+{
+  return self->myImageView;
+}
+//end //end setMyImageView
+
+-(void) setMyImageView:(MyImageView*)value
+{
+  self->myImageView = value;
+}
+//end setMyImageView:
+
 -(void) drawLayer:(CALayer*)layer inContext:(CGContextRef)cgContext
 {
-  NSClipView* clipView = [self.superview dynamicCastToClass:[NSClipView class]];
-  NSScrollView* scrollView = (NSScrollView*)clipView.superview;
-  NSRect documentRect = self.frame;
-  NSRect documentVisibleRect = !clipView ? NSZeroRect : clipView.documentVisibleRect;
+  NSClipView* clipView = [[self->myImageView superview] dynamicCastToClass:[NSClipView class]];
+  NSScrollView* scrollView = (NSScrollView*)[clipView superview];
+  NSRect documentRect = [self->myImageView frame];
+  NSRect documentVisibleRect = !clipView ? NSZeroRect : [clipView documentVisibleRect];
+  BOOL forceDisplayArrows = NO;
   BOOL canScrollUp    = clipView && (NSMaxY(documentVisibleRect) < NSMaxY(documentRect));
   BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
   BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
   BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
-  BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && scrollView.verticalScroller.scrollerStyle);
-  BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && scrollView.horizontalScroller.scrollerStyle);
-  BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && scrollView.verticalScroller.scrollerStyle);
-  BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && scrollView.horizontalScroller.scrollerStyle);
+  BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.verticalScroller.scrollerStyle));
+  BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.horizontalScroller.scrollerStyle));
+  BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.verticalScroller.scrollerStyle));
+  BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && (forceDisplayArrows || scrollView.horizontalScroller.scrollerStyle));
   BOOL shouldDisplayArrow[4] = {shouldDisplayScrollUp, shouldDisplayScrollRight, shouldDisplayScrollDown, shouldDisplayScrollLeft};
   
-  //NSRect borderRect = !clipView ? [self bounds] : NSMakeRect(0, 0, [clipView bounds].size.width, [clipView bounds].size.height);
+  //NSRect borderRect = !clipView ? bounds : NSMakeRect(0, 0, [clipView bounds].size.width, [clipView bounds].size.height);
   NSRect inRoundedRect3 = scrollView.bounds;//NSInsetRect(borderRect, 3, 3);
   CGPoint trianglePoints[] = {CGPointMake(-2, -1), CGPointMake(0, 1), CGPointMake(2, -1)};
   NSUInteger i = 0;

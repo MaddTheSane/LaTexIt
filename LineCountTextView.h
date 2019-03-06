@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -25,26 +25,29 @@ extern NSNotificationName const LineCountTextViewDidReceivePDFDataNotification;
   LineCountRulerView* lineCountRulerView;
   NSInteger           lineShift; ///<the displayed numerotation of the lines may start at a value different from 1
   NSDragOperation     acceptDrag;
-  BOOL                spellCheckerHasBeenInitialized;
+  NSInteger           spellCheckerDocumentTag;
   NSUInteger          previousSelectedRangeLocation;
   BOOL                tabKeyInsertsSpacesEnabled;
   NSUInteger          tabKeyInsertsSpacesCount;
   NSString*           spacesString;
+  NSUInteger          disableAutoColorChangeLevel;
 }
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring
+-(void) insertText:(id)aString newSelectedRange:(NSRange)selectedRange;
 
 @property (readonly, strong) LineCountRulerView *lineCountRulerView;
 -(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden; ///<change status (forbidden or not) of a line
 @property NSInteger lineShift;
 -(void) setLineShift:(NSInteger)aShift; ///<defines the shift in the displayed line numbers
--(NSInteger)  lineShift;
+-(NSInteger) lineShift;
 @property (readonly, copy) NSArray *lineRanges;
-@property (readonly) NSInteger nbLines; ///<the number of lines in the text
+@property (readonly) NSUInteger nbLines; ///<the number of lines in the text
 -(void) clearErrors; ///<remove error markers
 -(void) setErrorAtLine:(NSUInteger)lineIndex message:(NSString*)message; ///<set error markers
 -(BOOL) gotoLine:(NSInteger)row;///<scroll to visible line <row>
 
+-(void) refreshCheckSpelling;
 @property (readonly, strong) SMLSyntaxColouring *syntaxColouring;
 
 -(void) restorePreviousSelectedRangeLocation;

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/07/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //EncapsulationsTableView presents custom encapsulations from an encapsulation manager. I has user friendly capabilities
 
@@ -173,7 +173,7 @@ static NSPasteboardType const EncapsulationsPboardType = @"EncapsulationsPboardT
             [pboard availableTypeFromArray:@[EncapsulationsPboardType]] &&
             [pboard propertyListForType:EncapsulationsPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            indexSet && (indexSet.firstIndex != (unsigned int)row) && (indexSet.firstIndex+1 != (unsigned int)row);
+            indexSet && ([indexSet firstIndex] != (NSUInteger)row) && ([indexSet firstIndex]+1 != (NSUInteger)row);
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

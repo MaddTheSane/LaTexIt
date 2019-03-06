@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //A LibraryItem is similar to an XMLNode, in the way that it has parent (weak link to prevent cycling)
 //and children (strong link)
@@ -17,11 +17,14 @@
 @class LibraryGroupItem;
 
 @interface LibraryItem : NSManagedObject <NSCopying, NSCoding> {
+  /*
   LibraryItem* parent;//seems to be needed on Tiger
   NSSet* children;//seems to be needed on Tiger
   NSString* title;//seems to be needed on Tiger
   NSString* comment;//seems to be needed on Tiger
   NSUInteger sortIndex;//seems to be needed on Tiger
+  */
+  NSUInteger cachedSortIndex;
 }
 
 +(NSEntityDescription*) entity;

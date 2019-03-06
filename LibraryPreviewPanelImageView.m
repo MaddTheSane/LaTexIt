@@ -3,12 +3,13 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/05/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryPreviewPanelImageView.h"
 
 #import "NSImageExtended.h"
+#import "NSObjectExtended.h"
 
 @interface NSImageRep (Bridge10_6)
 - (BOOL)drawInRect:(NSRect)dstSpacePortionRect fromRect:(NSRect)srcSpacePortionRect operation:(NSCompositingOperation)op fraction:(CGFloat)requestedAlpha respectFlipped:(BOOL)respectContextIsFlipped hints:(NSDictionary *)hints;
@@ -31,11 +32,19 @@
 
 -(void) drawRect:(NSRect)rect
 {
-  NSImage* image = self.image;
+  NSRect bounds = [self bounds];
+
+  if ([self isDarkMode])
+  {
+    [[NSColor colorWithCalibratedRed:0.45f green:0.45f blue:0.45f alpha:1.0f] set];
+    NSRectFill(bounds);
+  }//end if ([self isDarkMode])
+
+  NSImage* image = [self image];
   //[image setBackgroundColor:[NSColor clearColor]];
-  image.backgroundColor = self->backgroundColor;
-  NSSize size = image ? image.size : NSZeroSize;
-  NSRect bounds = self.bounds;
+  [image setBackgroundColor:self->backgroundColor];
+
+  NSSize size = image ? [image size] : NSZeroSize;
   NSRect reducedBounds = NSMakeRect(bounds.origin.x+5, bounds.origin.y+5, bounds.size.width-10, bounds.size.height-10);
   [self setImage:nil];
   [super drawRect:rect];

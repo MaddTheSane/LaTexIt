@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -34,7 +34,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
   NSFileManager* fileManager = [NSFileManager defaultManager];
   NSArray* components = path.pathComponents;
   components = components ? components : @[];
-  unsigned int i = 0;
+  NSUInteger i = 0;
   for(i = 1 ; (i <= components.count) ; ++i)
   {
     NSString* subPath = [NSString pathWithComponents:[components subarrayWithRange:NSMakeRange(0, i)]];

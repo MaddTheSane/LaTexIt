@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSColor class
 
@@ -20,6 +20,9 @@
 @property (readonly, copy) NSString *rgbaString;
 
 @property (readonly) CGFloat grayLevel;
--(BOOL)  isRGBEqualTo:(NSColor*)other;
+-(BOOL) isRGBEqualTo:(NSColor*)other;
+
+-(NSColor*) darker:(CGFloat)factor;
+-(NSColor*) lighter:(CGFloat)factor;
 
 @end

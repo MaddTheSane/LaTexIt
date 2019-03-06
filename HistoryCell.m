@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This class is the kind of cell used to display history items in the history drawer
 //It may take in account the different fields of an history item (image, date...)
@@ -10,6 +10,7 @@
 #import "HistoryCell.h"
 
 #import "NSImageExtended.h"
+#import "NSObjectExtended.h"
 #import "Utils.h"
 
 // CoreGraphics gradient helpers
@@ -75,6 +76,11 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     [self->backgroundColor set];
     NSRectFill(cellFrame);
   }
+  else if ([NSApp isDarkMode])
+  {
+    [[NSColor colorWithCalibratedRed:0.45f green:0.45f blue:0.45f alpha:1.0f] set];
+    NSRectFill(cellFrame);
+  }//end if ([NSApp isDarkMode])
   NSRect headerRect = NSMakeRect(cellFrame.origin.x-1, cellFrame.origin.y-1, cellFrame.size.width+3, 16);
   NSRect imageRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+headerRect.size.height,
                                 cellFrame.size.width, cellFrame.size.height-headerRect.size.height);

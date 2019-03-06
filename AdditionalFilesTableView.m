@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/08/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "AdditionalFilesTableView.h"
@@ -103,7 +103,7 @@
 
 -(NSArray*) additionalFilesPaths
 {
-  NSArray* result = [self filesController].arrangedObjects;
+  NSArray* result = [[self filesController].arrangedObjects mutableCopy];
   return result;
 }
 //end filePaths
@@ -175,8 +175,9 @@
     [self->previousDefaultsFiles setArray:defaultsNew];
     NSMutableArray* current = [NSMutableArray arrayWithArray:self->filesWithExtrasController.arrangedObjects];
     [current removeObjectsInArray:disappearedDefaults];
-    [current insertObjects:brandNewDefaults atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, brandNewDefaults.count)]];
-    self->filesWithExtrasController.content = current;
+    [current removeObjectsInArray:brandNewDefaults];
+    [current insertObjects:brandNewDefaults atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [brandNewDefaults count])]];
+    [self->filesWithExtrasController setContent:current];
   }//end if (!self->isDefaultTableView)
   else if (object == self->filesWithExtrasController)
   {

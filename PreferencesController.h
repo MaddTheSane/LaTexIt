@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -12,8 +12,8 @@
 
 extern NSString *const LaTeXiTAppKey;
 extern NSString *const Old_LaTeXiTAppKey;
-
 extern NSString *const LaTeXiTVersionKey;
+
 extern NSString *const DocumentStyleKey;
 extern NSString *const DragExportTypeKey;
 extern NSString *const DragExportJpegColorKey;
@@ -38,10 +38,16 @@ extern NSString *const SpellCheckingEnableKey;
 extern NSString *const SyntaxColoringEnableKey;
 extern NSString *const SyntaxColoringTextForegroundColorKey;
 extern NSString *const SyntaxColoringTextBackgroundColorKey;
+extern NSString* SyntaxColoringTextForegroundColorDarkModeKey;
+extern NSString* SyntaxColoringTextBackgroundColorDarkModeKey;
 extern NSString *const SyntaxColoringCommandColorKey;
+extern NSString* SyntaxColoringCommandColorDarkModeKey;
 extern NSString *const SyntaxColoringMathsColorKey;
+extern NSString* SyntaxColoringMathsColorDarkModeKey;
 extern NSString *const SyntaxColoringKeywordColorKey;
+extern NSString* SyntaxColoringKeywordColorDarkModeKey;
 extern NSString *const SyntaxColoringCommentColorKey;
+extern NSString* SyntaxColoringCommentColorDarkModeKey;
 extern NSString *const ReducedTextAreaStateKey;
 extern NSString *const DefaultFontKey;
 extern NSString *const PreamblesKey;
@@ -183,6 +189,9 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 @property (copy) NSString* exportPDFWOFGsWriteEngine;
 @property (copy) NSString* exportPDFWOFGsPDFCompatibilityLevel;
 @property BOOL exportPDFWOFMetaDataInvisibleGraphicsEnabled;
+
+-(BOOL) exportPDFMetaDataInvisibleGraphicsEnabled;
+-(void) setExportPDFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
 @property BOOL doNotClipPreview;
 

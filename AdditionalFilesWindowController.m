@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/08/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "AdditionalFilesWindowController.h"
@@ -38,14 +38,15 @@
   self->additionalFilesRemoveButton.target = self->additionalFilesTableView;
   self->additionalFilesRemoveButton.action = @selector(remove:);
   [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:self->additionalFilesTableView withKeyPath:@"canRemove" options:nil];
-  self->additionalFilesMenuButton.image = [NSImage imageNamed:@"button-menu"];
+  [self->additionalFilesMenuButton setImage:[NSImage imageNamed:@"button-menu"]];
+  [self->additionalFilesMenuButton setAlternateImage:[NSImage imageNamed:@"button-menu"]];
   NSMenu* menu = [[NSMenu alloc] init];
-  [menu addItem:[NSMenuItem separatorItem]];
-  [menu addItemWithTitle:NSLocalizedString(@"Open defaults", @"Open defaults")
-    action:@selector(additionalFilesOpenDefaults:) keyEquivalent:@""].target = self;
-  [menu addItemWithTitle:NSLocalizedString(@"Save as defaults", @"Save as defaults")
-    action:@selector(additionalFilesSetAsDefaults:) keyEquivalent:@""].target = self;
-  self->additionalFilesMenuButton.menu = menu;
+  [[menu addItemWithTitle:@"" action:nil keyEquivalent:@""] setTarget:nil];//dummy item
+  [[menu addItemWithTitle:NSLocalizedString(@"Open defaults", @"Open defaults")
+    action:@selector(additionalFilesOpenDefaults:) keyEquivalent:@""] setTarget:self];
+  [[menu addItemWithTitle:NSLocalizedString(@"Save as defaults", @"Save as defaults")
+    action:@selector(additionalFilesSetAsDefaults:) keyEquivalent:@""] setTarget:self];
+  [self->additionalFilesMenuButton setMenu:menu];
 }
 //end awakeFromNib
 

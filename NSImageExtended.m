@@ -3,13 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSImageExtended.h"
 
 #import "NSObjectExtended.h"
 
+#import "CGExtras.h"
 #import "Utils.h"
 
 @implementation NSImage (Extended)
@@ -128,8 +129,8 @@
         NSMakeRect(0, 0, !maxSize.width  ? naturalSize.width : maxSize.width,
                          !maxSize.height ? naturalSize.height : maxSize.height),
         YES, NO, NO);
-      adaptedRectangle.size.width  = (int)round(adaptedRectangle.size.width);
-      adaptedRectangle.size.height = (int)round(adaptedRectangle.size.height);
+      adaptedRectangle.size.width  = (NSInteger)round(adaptedRectangle.size.width);
+      adaptedRectangle.size.height = (NSInteger)round(adaptedRectangle.size.height);
     }
     result = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:0 pixelsWide:adaptedRectangle.size.width pixelsHigh:adaptedRectangle.size.height bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bitmapFormat:0 bytesPerRow:0 bitsPerPixel:0];
    NSImage* image = !result ? nil : [[NSImage alloc] initWithSize:adaptedRectangle.size];
@@ -192,5 +193,69 @@
   return result;
 }
 //end bestImageRepresentation
+
+-(NSImage*) imageWithBackground:(NSColor*)color rounded:(CGFloat)rounded
+{
+  NSImage* result = self;
+  if (color || rounded)
+  {
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CGRect bounds = CGRectMake(0, 0, [self size].width, [self size].height);
+    NSUInteger width = [self size].width;
+    NSUInteger height = [self size].height;
+    NSUInteger bytesPerRow = 16*((4*width+15)/16);
+    NSUInteger bitmapBytesLength = bytesPerRow*height;
+    void* bytes = isMacOS10_6OrAbove() ? 0 : calloc(bitmapBytesLength, sizeof(unsigned char));
+    CGContextRef cgContext = !colorSpace || !bytesPerRow || (!bytes && !isMacOS10_6OrAbove()) ? 0 :
+      CGBitmapContextCreate(bytes, width, height, 8, !bytes ? 0 : bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
+    if (cgContext)
+    {
+      CGContextAddRoundedRect(cgContext, bounds, rounded, rounded);
+      CGContextClip(cgContext);
+      if (color)
+      {
+        NSColor* colorRGB = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+        CGFloat rgba[4] = {0};
+        [colorRGB getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
+        CGContextSetRGBFillColor(cgContext, rgba[0], rgba[1], rgba[2], rgba[3]);
+        CGContextFillRect(cgContext, bounds);
+      }//end if (color)
+      
+      NSGraphicsContext* oldContext = [NSGraphicsContext currentContext];
+      NSGraphicsContext* newContext = [NSGraphicsContext graphicsContextWithGraphicsPort:cgContext flipped:NO];
+      [NSGraphicsContext setCurrentContext:newContext];
+      [self drawInRect:NSRectFromCGRect(bounds) fromRect:NSMakeRect(0, 0, [self size].width, [self size].height) operation:NSCompositeSourceOver fraction:1.0];
+      [NSGraphicsContext setCurrentContext:oldContext];
+    }//end if (cgContext)
+    
+    CGContextFlush(cgContext);
+    CGImageRef cgImage = CGBitmapContextCreateImage(cgContext);
+    CGContextRelease(cgContext);
+    if (bytes)
+      free(bytes);
+    if (!cgImage){
+    }
+    else if (isMacOS10_6OrAbove())
+      result = [[NSImage alloc] initWithCGImage:cgImage size:NSSizeFromCGSize(bounds.size)];
+    else//if (!isMacOS10_6OrAbove())
+    {
+      NSMutableData* data = [[NSMutableData alloc] init];
+      CGImageDestinationRef cgImageDestination = !data ? 0 :
+        CGImageDestinationCreateWithData((CHBRIDGE CFMutableDataRef)data, CFSTR("public.png"), 1, 0);
+      if (cgImageDestination && cgImage)
+      {
+        CGImageDestinationAddImage(cgImageDestination, cgImage, 0);
+        CGImageDestinationFinalize(cgImageDestination);
+        result = [[NSImage alloc] initWithData:data];
+      }//end if (cgImageDestination && cgImage)
+      if (cgImageDestination)
+        CFRelease(cgImageDestination);
+    }//end if (!isMacOS10_6OrAbove())
+    CGImageRelease(cgImage);
+  }//end if (color || rounded)
+  return result;
+}
+//end imageWithBackground:rounded:
 
 @end

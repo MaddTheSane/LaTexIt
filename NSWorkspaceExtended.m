@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/07/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 //this file is an extension of the NSWorkspace class
@@ -12,22 +12,30 @@
 
 #import "NSFileManagerExtended.h"
 
+@interface BlankNoUseClass : NSObject
+@end
+
+@implementation BlankNoUseClass
+@end
+
 @implementation NSWorkspace (Extended)
 
 -(NSString*) applicationName
 {
   NSString* result = nil;
-  CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(CFBundleGetMainBundle());
-  result = (NSString*) CFDictionaryGetValue(bundleInfoDict, CFSTR("AMName"));
+  NSBundle* bundle = [NSBundle bundleForClass:[BlankNoUseClass class]];//use bundleForClass because the Automator action would otherwise return info for Automator
+  result = [[bundle infoDictionary] objectForKey:@"AMName"];
   if (!result)
-    result = (NSString*) CFDictionaryGetValue(bundleInfoDict, kCFBundleExecutableKey);
+    result = [[bundle infoDictionary] objectForKey:(NSString*)kCFBundleExecutableKey];
   return result;
 }
 //end applicationName
 
 -(NSString*) applicationVersion
 {
-  NSString* result = [NSBundle mainBundle].infoDictionary[(NSString*)kCFBundleVersionKey];
+  NSString* result = nil;
+  NSBundle* bundle = [NSBundle bundleForClass:[BlankNoUseClass class]];//use bundleForClass because the Automator action would otherwise return info for Automator
+  result = [[bundle infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
   return result;
 }
 //end applicationVersion
@@ -35,8 +43,8 @@
 -(NSString*) applicationBundleIdentifier
 {
   NSString* result = nil;
-  CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(CFBundleGetMainBundle());
-  result = (NSString*) CFDictionaryGetValue(bundleInfoDict, kCFBundleIdentifierKey);
+  NSBundle* bundle = [NSBundle bundleForClass:[BlankNoUseClass class]];//use bundleForClass because the Automator action would otherwise return info for Automator
+  result = [[bundle infoDictionary] objectForKey:(NSString*)kCFBundleIdentifierKey];
   return result;
 }
 //end applicationName
@@ -57,7 +65,7 @@
 
 -(NSString*) temporaryDirectory
 {
-  NSString* thisVersion = [NSBundle mainBundle].infoDictionary[(NSString*)kCFBundleVersionKey];
+  NSString* thisVersion = [self applicationVersion];
   if (!thisVersion)
     thisVersion = @"";
   NSArray* components = [thisVersion componentsSeparatedByString:@" "];

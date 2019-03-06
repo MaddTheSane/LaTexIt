@@ -8,6 +8,9 @@ fi
 if [[ -z "${PROJECT_NAME}" ]]; then
   PROJECT_NAME="LaTeXiT"
 fi
+if [[ "${PROJECT_NAME}" == "LaTeXiT-legacy" ]]; then
+  PROJECT_NAME="LaTeXiT"
+fi
 
 VERSION=$(defaults read "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.app/Contents/Info" CFBundleShortVersionString)
 VERSION2=`echo "${VERSION}" | sed "s/\\./_/g" | sed "s/\\ /-/g"`

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/05/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -13,12 +13,19 @@
 @interface LibraryController : NSObject {
   NSFetchRequest* rootFetchRequest;
   NSArray*        currentlyDraggedItems;
+  NSPredicate*    filterPredicate;
+  NSArray*        rootItemsCache;
 }
 
 @property (readonly, strong) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong) NSUndoManager *undoManager;
 
-@property (readonly, copy) NSArray *rootItems;
+-(void) setFilterPredicate:(NSPredicate*)filterPredicate;
+-(NSPredicate*) filterPredicate;
+
+-(NSArray*) rootItems:(NSPredicate*)predicate;
+-(void) invalidateRootItemsCache;
+
 -(void) fixChildrenSortIndexesForParent:(LibraryGroupItem*)parent recursively:(BOOL)recursively;
 -(void) removeItem:(id)item;
 -(void) removeItems:(NSArray*)items;

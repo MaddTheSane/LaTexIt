@@ -671,7 +671,7 @@
           <li>removed declared public.tex UTI to avoid clashing with other applications.</li>
         </ul>
       ]]></description>
-      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.11.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.11.0</sparkle:releaseNotesLink>
 			<pubDate>Fri, 21 Sep 2018 08:29:30 +0200</pubDate>
 			<enclosure
 				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_11_0.dmg"
@@ -680,6 +680,99 @@
 				type="application/octet-stream"
 				length="11815768"
 				sparkle:dsaSignature="MCwCFCHWdVYa2HvNcL1KCdANhj18VierAhQugo1WxKaOGPWgGGpqeKZHZMeZVQ=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.11.1</guid>
+      <title>Version 2.11.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>better support of old pdflatex versions;</li>
+          <li>slightly modified auto-naming of files when exporting to the Finder;</li>
+          <li>fixed a file name in Italian localization;</li>
+          <li>fixed minor bugs;</li>
+        </ul>
+      ]]></description>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.11.1</sparkle:releaseNotesLink>
+			<pubDate>Tue, 11 Dec 2018 23:19:41 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_11_1.dmg"
+				sparkle:version="2.11.1"
+                   sparkle:shortVersionString="2.11.1"
+				type="application/octet-stream"
+				length="11575221"
+				sparkle:dsaSignature="MCwCFF2EIt8noqJFzdTMG3FRRfl+J5euAhQ+HJTOvOXStNI5kx2Vnds74WBEcg=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.12.0</guid>
+      <title>Version 2.12.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>added MacOS Mojave Dark mode support;</li>
+          <li>dropped MacOS 10.4 and 10.5 compatibility.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.12.0</sparkle:releaseNotesLink>
+			<pubDate>Thu, 13 Dec 2018 07:38:26 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_12_0.dmg"
+				sparkle:version="2.12.0"
+                   sparkle:shortVersionString="2.12.0"
+				type="application/octet-stream"
+				length="15642905"
+				sparkle:dsaSignature="MC4CFQCoNUu3PkDdMTCTBHYkq7/CPZl/VwIVAKI9f2q+1/rkTErS2gvRe5KMj8A0"
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.13.0</guid>
+      <title>Version 2.13.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>restored the recently broken &quot;invisible graphic commands&quot; metadata annotations, hoping that copy/paste from stupid third party softwares like Keynote or Powerpoint will work better in the future;</li>
+          <li>reworked the &quot;invisible graphic commands&quot; metadata to avoid piling them over and over in equations; it is now optional and added on the fly (when enabled) only when exporting to PDF or PDF with outlined fonts;</li>
+          <li>added a search field in the library;</li>
+          <li>it is now possible to re-latexize all history and library items to strip obsolete, oversized, metadata (and reduce history and library size);</li>
+          <li>history and library can also be &quot;compacted&quot; (a simple vacuum for those who know);</li>
+          <li>some work on LaTeX palette items creation and behavior for more clever insertion and text replacement;</li>
+          <li>added two LaTeX palettes contributed by Sherman Gregory;</li>
+          <li>disable most automatic text-shortcuts replacements (from MacOS general preferences) in LaTeX-related text areas;</li>
+          <li>various fixes and improvements.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.13.0</sparkle:releaseNotesLink>
+			<pubDate>Sat, 02 Feb 2019 23:25:13 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_0.dmg"
+				sparkle:version="2.13.0"
+                   sparkle:shortVersionString="2.13.0"
+				type="application/octet-stream"
+				length="15549375"
+				sparkle:dsaSignature="MCwCFEFny9yt7ZihwzZqCx3D3I8EKR60AhQz5ie3DNwNbcan3MW6xaB+7xDPXA=="
+			/>
+    </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.13.1</guid>
+      <title>Version 2.13.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>Changed &quot;invisible graphic metadata&quot; to a more clever data watermarking for PDF with outlined fonts and EPS;</li>
+          <li>restore some automatic \color[...]{} text insertion on color change in the inspector;</li>
+          <li>dark mode adjustments.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.13.1</sparkle:releaseNotesLink>
+			<pubDate>Tue, 05 Mar 2019 22:31:25 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_1.dmg"
+				sparkle:version="2.13.1"
+                   sparkle:shortVersionString="2.13.1"
+				type="application/octet-stream"
+				length="15551253"
+				sparkle:dsaSignature="MCwCFCo3scTE94HOQUE0bEVzQX7spdtRAhQ05WSqHL/PzxBUnIpfwRN73pPHRQ=="
 			/>
     </item>
   </channel> 

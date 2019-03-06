@@ -223,6 +223,7 @@
 "Reset..." = "Reset…";
 "Do you really want to reset the paths ?" = "Do you really want to reset the paths ?";
 "Invalid paths will be replaced by the result of auto-detection" = "All paths will be replaced by the result of auto-detection.";
+"Compact database" = "Komprimieren die Datenbank";
 
 /* document */
 "clipboard" = "Zwischenablage";
@@ -298,7 +299,9 @@
 "\"Display\" items" = "\"Display\" items";
 "\"Align\" items" = "\"Align\" items";
 "\"Eqnarray\" items" = "\"Eqnarray\" items";
-"Import selection" = "Import selection";
+"Import selection" = "Auswahl importieren";
+"latexize selection again" = "Auswhal Re-Latexizen";
+"KB" = "KB";
 
 /* History */
 "Add to current history" = "Zur aktuellen Verlauf hinzufügen";

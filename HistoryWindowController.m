@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -11,8 +11,12 @@
 #import "AppController.h"
 #import "BoolTransformer.h"
 #import "HistoryController.h"
+#import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "HistoryView.h"
+#import "LatexitEquation.h"
+#import "LaTeXProcessor.h"
+#import "LibraryPreviewPanelImageView.h"
 #import "MyDocument.h"
 #import "NSManagedObjectContextExtended.h"
 #import "PreferencesController.h"
@@ -20,6 +24,7 @@
 #import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "BorderlessPanel.h"
+#import "NSWorkspaceExtended.h"
 #import "Utils.h"
 #import "LibraryPreviewPanelImageView.h"
 
@@ -29,6 +34,9 @@
 -(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
 -(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 -(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
+-(IBAction) relatexizeRefreshGUI:(id)sender;
+-(IBAction) relatexizeAbort:(id)sender;
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 @end
 
 @implementation HistoryWindowController
@@ -69,13 +77,15 @@
   self->historyLockButton.alternateImage = image;
   self->historyLockButton.state = [HistoryManager sharedManager].locked ? NSOnState : NSOffState;
   [self->historyLockButton bind:NSValueBinding toObject:[[HistoryManager sharedManager] bindController] withKeyPath:@"content.locked"
-    options:@{NSValueTransformerBindingOption: [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInt:NSOffState] trueValue:[NSNumber numberWithInt:NSOnState]]}];
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      NSValueTransformerBindingOption, nil]];
 
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"Add to current history")];
-  self->importOptionPopUpButton.lastItem.tag = (int)HISTORY_IMPORT_MERGE;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)HISTORY_IMPORT_MERGE];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"Overwrite current history")];
-  self->importOptionPopUpButton.lastItem.tag = (int)HISTORY_IMPORT_OVERWRITE;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)HISTORY_IMPORT_OVERWRITE];
 
   [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
   [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
@@ -108,10 +118,10 @@
 {
   if ([keyPath isEqualToString:@"arrangedObjects"])
   {
-    BOOL isKeyWindow = self.window.keyWindow;
-    NSUInteger nbItems = self->historyView.numberOfRows;
-    self->clearHistoryButton.enabled = (isKeyWindow && nbItems);
-    self.window.title = [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"History", @"History"), (unsigned long)nbItems];
+    BOOL isKeyWindow = [[self window] isKeyWindow];
+    NSInteger nbItems = [self->historyView numberOfRows];
+    [self->clearHistoryButton setEnabled:(isKeyWindow && nbItems)];
+    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%@)", NSLocalizedString(@"History", @"History"), [NSNumber numberWithInteger:nbItems]]];
   }//end if ([keyPath isEqualToString:@"arrangedObjects"])
   else if ([keyPath isEqualToString:HistoryDisplayPreviewPanelKey])
     [self->historyPreviewPanelSegmentedControl.cell setSelected:
@@ -291,14 +301,14 @@
 -(void) windowDidBecomeKey:(NSNotification *)aNotification
 {
   NSUInteger nbItems = self->historyView.numberOfRows;
-  self->clearHistoryButton.enabled = nbItems;
+  [self->clearHistoryButton setEnabled:(nbItems>0)];
 }
 //end windowDidBecomeKey:
 
 -(void) windowDidBecomeMain:(NSNotification *)aNotification
 {
   NSUInteger nbItems = self->historyView.numberOfRows;
-  self->clearHistoryButton.enabled = nbItems;
+  [self->clearHistoryButton setEnabled:(nbItems>0)];
 }
 //end windowDidBecomeMain:
 
@@ -328,9 +338,9 @@
     NSRect adaptedRect = adaptRectangle(naturalRect, NSMakeRect(0, 0, 512, 512), YES, NO, NO);
     NSPoint locationOnScreen = [NSEvent mouseLocation];
     NSSize screenSize = [NSScreen mainScreen].frame.size;
-    int shiftRight = 24;
-    int shiftLeft = -24-adaptedRect.size.width-16;
-    int shift = (locationOnScreen.x+shiftRight+adaptedRect.size.width+16 > screenSize.width) ? shiftLeft : shiftRight;
+    NSInteger shiftRight = 24;
+    NSInteger shiftLeft = -24-adaptedRect.size.width-16;
+    NSInteger shift = (locationOnScreen.x+shiftRight+adaptedRect.size.width+16 > screenSize.width) ? shiftLeft : shiftRight;
     NSRect newFrame = NSMakeRect(MAX(0, locationOnScreen.x+shift),
                                   MIN(locationOnScreen.y-adaptedRect.size.height/2, screenSize.height-adaptedRect.size.height-16),
                                  adaptedRect.size.width+16, adaptedRect.size.height+16);
@@ -372,5 +382,142 @@
   }//end if (!undoable)
 }
 //end clearAll:
+
+-(IBAction) relatexizeRefreshGUI:(id)sender
+{
+  NSString* title = [NSString stringWithFormat:@"%@... (%llu/%llu)", NSLocalizedString(@"latexize selection again", @""), (unsigned long long)self->relatexizeCurrentIndex+1, (unsigned long long)self->relatexizeCurrentCount];
+  [self->relatexizeProgressTextField setStringValue:title];
+  [self->relatexizeProgressIndicator setDoubleValue:!self->relatexizeCurrentCount ? 0. : (1.*(self->relatexizeCurrentIndex+1)/self->relatexizeCurrentCount)];
+}
+//end relatexizeRefreshGUI:
+
+-(IBAction) relatexizeAbort:(id)sender
+{
+  self->relatexizeAbortMonitor = YES;
+}
+//end relatexizeAbort:
+
+-(IBAction) relatexizeSelectedItems:(id)sender
+{
+  NSArray* selectedLibraryItems = [self->historyView selectedItems];
+  NSMutableArray* inputQueue = [NSMutableArray arrayWithArray:selectedLibraryItems];
+  NSMutableArray* flattenedEquations = [NSMutableArray arrayWithCapacity:[inputQueue count]];
+  while([inputQueue count] != 0)
+  {
+    HistoryItem* historyItem = [[inputQueue objectAtIndex:0] dynamicCastToClass:[HistoryItem class]];
+    [inputQueue removeObjectAtIndex:0];
+    LatexitEquation* equation = [historyItem equation];
+    if (equation)
+      [flattenedEquations addObject:equation];
+  }//end while([inputQueue count] != 0)
+  NSUInteger itemsToLatexizeCount = [flattenedEquations count];
+  if (itemsToLatexizeCount)
+  {
+    self->relatexizeAbortMonitor = NO;
+    self->relatexizeCurrentIndex = 0;
+    self->relatexizeCurrentCount = itemsToLatexizeCount;
+    [self->relatexizeProgressIndicator setMinValue:0.];
+    [self->relatexizeProgressIndicator setMaxValue:1.];
+    [self->relatexizeProgressIndicator setDoubleValue:0.];
+    [self->relatexizeProgressIndicator startAnimation:self];
+    [self->relatexizeAbortButton setTarget:self];
+    [self->relatexizeAbortButton setAction:@selector(relatexizeAbort:)];
+    [NSApp beginSheet:self->relatexizeWindow modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
+    self->relatexizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(relatexizeRefreshGUI:) userInfo:nil repeats:YES];
+    [self relatexizeRefreshGUI:self];
+    self->relatexizeMonitor = [[NSConditionLock alloc] initWithCondition:0];
+    [NSApplication detachDrawingThread:@selector(relatexizeItemsThreadFunction:) toTarget:self withObject:flattenedEquations];
+  }//end itemsToLatexizeCount
+}
+//end relatexizeSelectedItems:
+
+-(void) relatexizeItemsThreadFunction:(id)object
+{
+  [self->relatexizeMonitor lockWhenCondition:0];
+  NSArray* flattenedLibraryEquations = [object dynamicCastToClass:[NSArray class]];
+  
+  LaTeXProcessor* latexProcessor = [LaTeXProcessor sharedLaTeXProcessor];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSDictionary* compositionConfiguration = [preferencesController compositionConfigurationDocument];
+  CGFloat topMargin = [preferencesController marginsAdditionalTop];
+  CGFloat leftMargin = [preferencesController marginsAdditionalLeft];
+  CGFloat bottomMargin = [preferencesController marginsAdditionalBottom];
+  CGFloat rightMargin = [preferencesController marginsAdditionalRight];
+  NSArray* additionalFilesPaths = [preferencesController additionalFilesPaths];
+  NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+  NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-library"];
+  NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+  NSString* fullLog = nil;
+  NSArray* errors = nil;
+  self->relatexizeCurrentIndex = 0;
+  self->relatexizeCurrentCount = [flattenedLibraryEquations count];
+  NSEnumerator* enumerator = [flattenedLibraryEquations objectEnumerator];
+  id flattenedItem = nil;
+  while(!self->relatexizeAbortMonitor && ((flattenedItem = [enumerator nextObject])))
+  {
+    #ifdef ARC_ENABLED
+    @autoreleasepool {
+    #else
+    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
+    #endif
+    @try{
+      LatexitEquation* latexitEquation = [flattenedItem dynamicCastToClass:[LatexitEquation class]];
+      if (latexitEquation)
+      {
+        NSData* newPdfData = nil;
+        [latexProcessor
+          latexiseWithPreamble:[[latexitEquation preamble] string]
+                          body:[[latexitEquation sourceText] string]
+                         color:[latexitEquation color]
+                          mode:[latexitEquation mode]
+                 magnification:[latexitEquation pointSize]
+      compositionConfiguration:compositionConfiguration
+               backgroundColor:[latexitEquation backgroundColor]
+                         title:[latexitEquation title]
+                    leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
+          additionalFilesPaths:additionalFilesPaths
+              workingDirectory:workingDirectory
+               fullEnvironment:fullEnvironment
+              uniqueIdentifier:uniqueIdentifier outFullLog:&fullLog outErrors:&errors
+               outPdfData:&newPdfData];
+        if (newPdfData)
+          [latexitEquation setPdfData:newPdfData];
+      }//end if (latexitEquation)
+      ++self->relatexizeCurrentIndex;
+    }
+    @catch(NSException* e){
+      DebugLog(0, @"exception : <%@>", e);
+    }
+    #ifdef ARC_ENABLED
+    }//@autoreleasepool
+    #else
+    [ap release];
+    #endif
+  }//end for each libraryItem
+  [self->relatexizeMonitor unlockWithCondition:1];
+  [NSApp performSelectorOnMainThread:@selector(endSheet:) withObject:self->relatexizeWindow waitUntilDone:NO];
+}
+//end relatexizeItemsThreadFunction:
+
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
+{
+  if (sheet == self->relatexizeWindow)
+  {
+    [self->relatexizeMonitor lockWhenCondition:1];
+    [self->relatexizeMonitor unlockWithCondition:1];
+    self->relatexizeMonitor = nil;
+    [self->relatexizeTimer invalidate];
+    self->relatexizeTimer = nil;
+    [[HistoryManager sharedManager] vacuum];
+    [self->relatexizeProgressIndicator stopAnimation:self];
+    [sheet orderOut:self];
+  }//end if (sheet == self->relatexizeWindow)
+  else//if (sheet != self->relatexizeWindow)
+  {
+    [sheet orderOut:self];
+    [self->historyView reloadData];
+  }//end if (sheet != self->relatexizeWindow)
+}
+//end sheetDidEnd:returnCode:contextInfo:
 
 @end

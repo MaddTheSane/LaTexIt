@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 30/05/14.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "CHExportPrefetcher.h"
@@ -45,12 +45,23 @@
   [self->fetchSemaphore P];
   @synchronized(self->cache)
   {
-    self->cache[@(exportFormat)] = self->isFetchingData;
+    [self->cache setObject:self->isFetchingData forKey:[NSNumber numberWithInteger:exportFormat]];
   }//end @synchronized(self->cache)
+  #ifdef ARC_ENABLED
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
-     @{@"exportFormat": @(exportFormat),
-       @"pdfData": [pdfData copy],
-       @"alertInformationWrapper": [NSMutableDictionary dictionary]}];
+     [NSDictionary dictionaryWithObjectsAndKeys:
+       [NSNumber numberWithInteger:exportFormat], @"exportFormat",
+       [pdfData copy], @"pdfData",
+       [NSMutableDictionary dictionary], @"alertInformationWrapper",
+       nil]];
+  #else
+  [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+       [NSNumber numberWithInteger:exportFormat], @"exportFormat",
+       [[pdfData copy] autorelease], @"pdfData",
+       [NSMutableDictionary dictionary], @"alertInformationWrapper",
+       nil]];
+  #endif
 }
 //end prefetchForFormat:
 
@@ -60,7 +71,7 @@
   NSData* data = nil;
   @synchronized(self->cache)
   {
-    data = self->cache[@(exportFormat)];
+    data = [self->cache objectForKey:[NSNumber numberWithInteger:exportFormat]];
   }//end @synchronized(self->cache)
   if (data != self->isFetchingData)
     result = data;
@@ -69,7 +80,7 @@
     [self->fetchSemaphore P];
     @synchronized(self->cache)
     {
-      data = self->cache[@(exportFormat)];
+      data = [self->cache objectForKey:[NSNumber numberWithInteger:exportFormat]];
     }//end @synchronized(self->cache)
     [self->fetchSemaphore V];
     result = data;
@@ -94,7 +105,7 @@
   [self->fetchSemaphore P];
   @synchronized(self->cache)
   {
-    [self->cache removeObjectForKey:@(exportFormat)];
+    [self->cache removeObjectForKey:[NSNumber numberWithInteger:exportFormat]];
   }//end @synchronized(self->cache)
   [self->fetchSemaphore V];
 }
@@ -103,9 +114,9 @@
 -(void) _fetchForFormat:(id)object
 {
   NSDictionary* configuration = [object dynamicCastToClass:[NSDictionary class]]; 
-  NSNumber* exportFormatNumber = [configuration[@"exportFormat"] dynamicCastToClass:[NSNumber class]];
-  NSData* pdfData = [configuration[@"pdfData"] dynamicCastToClass:[NSData class]];
-  export_format_t exportFormat = (export_format_t)exportFormatNumber.intValue;
+  NSNumber* exportFormatNumber = [[configuration objectForKey:@"exportFormat"] dynamicCastToClass:[NSNumber class]];
+  NSData* pdfData = [[configuration objectForKey:@"pdfData"] dynamicCastToClass:[NSData class]];
+  export_format_t exportFormat = (export_format_t)[exportFormatNumber integerValue];
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSMutableDictionary* alertInformationWrapper =
     [configuration[@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];

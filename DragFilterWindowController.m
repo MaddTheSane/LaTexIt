@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragFilterWindowController.h"
@@ -184,7 +184,7 @@
 
 -(void) setExportFormat:(export_format_t)value
 {
-  self->buttonPalette.selectedTag = (int)value;
+  [self->buttonPalette setSelectedTag:(NSInteger)value];
 }
 //end setExportFormat:
 

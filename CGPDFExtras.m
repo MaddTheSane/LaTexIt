@@ -3,11 +3,12 @@
  *  LaTeXiT
  *
  *  Created by Pierre Chatelier on 06/06/11.
- *  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+ *  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
  *
  */
 
 #include "CGPDFExtras.h"
+#import "Utils.h"
 
 #import <QuartzCore/QuartzCore.h>
 

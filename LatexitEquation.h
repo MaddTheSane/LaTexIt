@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -27,7 +27,7 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 
   //NSColor* backgroundColor;//not really background of the image, just useful when previewing, to prevent text to blend with the background
   //NSString* title;
-  int updateLevel;
+  NSInteger updateLevel;
   BOOL annotateDataDirtyState;
   NSImage* pdfCachedImage;
   BOOL isModelPrior250;
@@ -43,6 +43,7 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 
 //
 +(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults outPdfData:(NSData**)outPdfData;
++(BOOL)          hasInvisibleGraphicCommandsInPDFData:(NSData*)someData;
 
 //constructors
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti;
@@ -53,13 +54,15 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 +(instancetype) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 +(instancetype) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
-                     backgroundColor:(NSColor*)backgroundColor;
+                     backgroundColor:(NSColor*)backgroundColor
+                     title:(NSString*)aTitle;
 -(instancetype) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
 -(instancetype) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
 -(instancetype) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(instancetype) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
-                                            mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor;
+                                            mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor
+                                            title:(NSString*)aTitle;
 -(void) dispose;
 
 //accessors

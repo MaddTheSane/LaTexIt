@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -27,6 +27,7 @@
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSImageExtended.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
 #import "NSObjectExtended.h"
@@ -99,7 +100,7 @@
 {
   NSManagedObjectContext* managedObjectContext = [self->libraryController managedObjectContext];
   [managedObjectContext disableUndoRegistration];
-  int row = 0;
+  NSInteger row = 0;
   for (row = 0; row < self.numberOfRows; ++row)
   {
     id itemAtRow = [self itemAtRow:row];
@@ -142,11 +143,9 @@
     LatexitEquation* previousDocumentState = [document latexitEquationWithCurrentStateTransient:YES];
     NSUndoManager* documentUndoManager = document.undoManager;
     [documentUndoManager beginUndoGrouping];
-    if (makeLink)
-    {
-      [[documentUndoManager prepareWithInvocationTarget:document] setLinkedLibraryEquation:nil];
-      document.linkedLibraryEquation = equation;
-    }//end if (makeLink)
+    LibraryEquation* newLinkedLibraryEquation = !makeLink ? nil : equation;
+    [[documentUndoManager prepareWithInvocationTarget:document] setLinkedLibraryEquation:[document linkedLibraryEquation]];
+    [document setLinkedLibraryEquation:newLinkedLibraryEquation];
     [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
     [document applyLibraryEquation:equation];
     [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
@@ -366,9 +365,9 @@
 -(void) moveUpAndModifySelection:(id)sender
 {
   //selection to up
-  NSUInteger lastSelectedRow   = self.selectedRow;
+  NSInteger lastSelectedRow   = self.selectedRow;
   NSIndexSet* selectedRowIndexes = self.selectedRowIndexes;
-  if (lastSelectedRow == selectedRowIndexes.firstIndex) //if the selection is going up, and up, increase it
+  if ((NSUInteger)lastSelectedRow == [selectedRowIndexes firstIndex]) //if the selection is going up, and up, increase it
   {
     if (lastSelectedRow > 0)
       --lastSelectedRow;
@@ -418,10 +417,11 @@
   NSUndoManager* undoManager = [self->libraryController undoManager];
   [undoManager beginUndoGrouping];
   NSArray* selectedItems = [LibraryItem minimumNodeCoverFromItemsInArray:[self selectedItems] parentSelector:@selector(parent)];
-  id nextSelectedItem = [selectedItems.lastObject nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:[self->libraryController rootItems]];
+  NSArray* rootNodes = [self->libraryController rootItems:[self->libraryController filterPredicate]];
+  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem :
-    [selectedItems.lastObject prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:[self->libraryController rootItems]];
-  nextSelectedItem = nextSelectedItem ? nextSelectedItem : [selectedItems.lastObject parent];
+    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
+  nextSelectedItem = nextSelectedItem ? nextSelectedItem : [[selectedItems lastObject] parent];
   NSUInteger nbSelectedItems = selectedItems.count;
   NSMutableSet* parentOfSelectedItems = [NSMutableSet setWithCapacity:selectedItems.count];
   NSEnumerator* enumerator = [selectedItems objectEnumerator];
@@ -520,7 +520,7 @@
     [managedObjectContext processPendingChanges];
     [self reloadData];
     [self sizeLastColumnToFit];
-  }
+  }//end if ([undoManager canUndo])
 }
 //end undo:
 
@@ -534,7 +534,7 @@
     [managedObjectContext processPendingChanges];
     [self reloadData];
     [self sizeLastColumnToFit];
-  }
+  }//end if ([undoManager canRedo])
 }
 //end redo:
 
@@ -577,10 +577,11 @@
 {
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   LibraryItem* selectedItem = [self selectedItem];
-  LibraryGroupItem* parentOfSelectedItem = (LibraryGroupItem*)selectedItem.parent;
-  NSArray* brothers = !parentOfSelectedItem ? [self->libraryController rootItems] : [parentOfSelectedItem childrenOrdered];
-  NSInteger childIndex = !selectedItem ? [self.dataSource outlineView:self numberOfChildrenOfItem:nil] :
-                   ([brothers indexOfObject:selectedItem]+1);
+  LibraryGroupItem* parentOfSelectedItem = (LibraryGroupItem*)[selectedItem parent];
+  NSPredicate* predicate = [self->libraryController filterPredicate];
+  NSArray* brothers = !parentOfSelectedItem ? [self->libraryController rootItems:predicate] : [parentOfSelectedItem childrenOrdered:predicate];
+  NSInteger childIndex = !selectedItem ? [[self dataSource] outlineView:self numberOfChildrenOfItem:nil] :
+                   ((NSInteger)[brothers indexOfObject:selectedItem]+1);
   [self pasteContentOfPasteboard:pasteboard onItem:parentOfSelectedItem childIndex:childIndex];
 }
 //end paste:
@@ -652,8 +653,9 @@
   NSUInteger count = libraryItems.count;
   if (count)
   {
+    NSPredicate* filterPredicate = [self->libraryController filterPredicate];
     NSMutableArray* brothers = [NSMutableArray arrayWithArray:
-      !item ? [self->libraryController rootItems] : [item childrenOrdered]];
+      !item ? [self->libraryController rootItems:filterPredicate] : [item childrenOrdered:filterPredicate]];
     NSEnumerator* enumerator = [libraryItems objectEnumerator];
     LibraryItem* libraryItem = nil;
     while((libraryItem = [enumerator nextObject]))
@@ -744,6 +746,8 @@
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
 
+  //if ([self isDarkMode])
+    image = [image imageWithBackground:[NSColor colorWithCalibratedRed:0.66f green:0.66f blue:0.66f alpha:.5f] rounded:4.f];
   [super dragImage:image at:at offset:offset event:event pasteboard:pasteboard source:object slideBack:slideBack];
 }
 //end dragImage:at:offset:event:pasteboard:source:slideBack:
@@ -880,11 +884,18 @@
     NSColor* cellTextColor = nil;
     if (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
     {
-      NSString* title = [representedObject title];
+      LibraryItem* libraryItem = [representedObject dynamicCastToClass:[LibraryItem class]];
+      LibraryEquation* libraryEquation = [libraryItem dynamicCastToClass:[LibraryEquation class]];
+      LatexitEquation* latexitEquation = [libraryEquation equation];
+      BOOL showSize = (DebugLogLevel > 0);
+      NSString* title =
+        showSize && (latexitEquation != nil) ? [NSString stringWithFormat:@"%@ (%lluKo)", [libraryItem title], (unsigned long long)([[latexitEquation pdfData] length]/1024)] :
+        (libraryItem != nil) ? [libraryItem title] :
+        @"";
       [cell setStringValue:!title ? @"" : title];
       cellImage = [self iconForRepresentedObject:representedObject];
       cellDrawsBackground = YES;
-    }
+    }//end if (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT)
     else if (![representedObject isKindOfClass:[LibraryGroupItem class]])
     {
       [cell setStringValue:@""];

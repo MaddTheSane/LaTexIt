@@ -8,7 +8,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindowController">
             <connections>
-                <outlet property="additionalFilesAddButton" destination="7741" id="7912"/>
                 <outlet property="additionalFilesHelpButton" destination="7754" id="7914"/>
                 <outlet property="additionalFilesRemoveButton" destination="7740" id="7913"/>
                 <outlet property="additionalFilesTableView" destination="7744" id="7911"/>
@@ -112,7 +111,9 @@
                 <outlet property="historyDeleteOldEntriesLimitTextField" destination="9422" id="9440"/>
                 <outlet property="historySaveServiceResultsCheckbox" destination="9425" id="9438"/>
                 <outlet property="historySmartCheckbox" destination="9427" id="9442"/>
+                <outlet property="historyVacuumButton" destination="9724" id="9726"/>
                 <outlet property="historyView" destination="9421" id="9437"/>
+                <outlet property="libraryVacuumButton" destination="9727" id="9729"/>
                 <outlet property="libraryView" destination="9443" id="9466"/>
                 <outlet property="marginsAdditionalBottomTextField" destination="688" id="7036"/>
                 <outlet property="marginsAdditionalLeftTextField" destination="691" id="7034"/>
@@ -225,7 +226,7 @@
                             <box boxType="oldStyle" borderType="line" titlePosition="noTitle" id="8758">
                                 <rect key="frame" x="199" y="3" width="220" height="140"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="jiN-17-8MA">
+                                <view key="contentView" id="Aen-Hg-p2R">
                                     <rect key="frame" x="1" y="1" width="218" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -288,7 +289,7 @@
                         </subviews>
                     </view>
                 </box>
-                <button toolTip="Zur besseren Lesbarkeit heller Gleichungen ist der Bildschirm verdunkelt" imageHugsTitle="YES" id="1213">
+                <button toolTip="Zur besseren Lesbarkeit heller Gleichungen ist der Bildschirm verdunkelt" id="1213">
                     <rect key="frame" x="124" y="304" width="441" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Hintergrundfarbe des Vorschaufensters automatisch kontraststark" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9244">
@@ -401,7 +402,7 @@
                         <outlet property="nextKeyView" destination="574" id="844"/>
                     </connections>
                 </colorWell>
-                <button imageHugsTitle="YES" id="582">
+                <button id="582">
                     <rect key="frame" x="191" y="364" width="308" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" title="Warnung: JPEG unterstützt keine Transparenz" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="9235">
@@ -409,7 +410,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button imageHugsTitle="YES" id="9498">
+                <button id="9498">
                     <rect key="frame" x="231" y="364" width="228" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" title="Warnung: pdf2svg Pfad ist ungültig" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="9499">
@@ -417,7 +418,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button imageHugsTitle="YES" id="9695">
+                <button id="9695">
                     <rect key="frame" x="231" y="364" width="228" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="9696">
@@ -425,7 +426,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="581">
+                <button verticalHuggingPriority="750" id="581">
                     <rect key="frame" x="496" y="442" width="111" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Optionen..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9234">
@@ -437,7 +438,7 @@
                         <outlet property="nextKeyView" destination="1162" id="1166"/>
                     </connections>
                 </button>
-                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="574">
+                <popUpButton verticalHuggingPriority="750" id="574">
                     <rect key="frame" x="268" y="446" width="229" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9233">
@@ -466,7 +467,7 @@
                         <outlet property="nextKeyView" destination="585" id="9551"/>
                     </connections>
                 </segmentedControl>
-                <button toolTip="For better readability of bright equations, the background is darkened" imageHugsTitle="YES" id="9552">
+                <button toolTip="For better readability of bright equations, the background is darkened" id="9552">
                     <rect key="frame" x="124" y="284" width="250" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Vorschaugröße an Fenster anpassen" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9553">
@@ -474,7 +475,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button toolTip="Die Hintergrundfarbe des Vorschaufensters kann als echter Hintergrund hinzugefügt werden" imageHugsTitle="YES" id="9721">
+                <button toolTip="Die Hintergrundfarbe des Vorschaufensters kann als echter Hintergrund hinzugefügt werden" id="9721">
                     <rect key="frame" x="239" y="387" width="212" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Hintergrundfarbe einbeziehen" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9722">
@@ -498,7 +499,7 @@
                                 <rect key="frame" x="10" y="33" width="644" height="425"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="620">
+                                    <button verticalHuggingPriority="750" id="620">
                                         <rect key="frame" x="525" y="377" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9252">
@@ -583,7 +584,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                     <box boxType="oldStyle" borderType="line" title="Title" titlePosition="noTitle" id="963">
                                         <rect key="frame" x="20" y="200" width="604" height="167"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="UpW-hh-hwn">
+                                        <view key="contentView" id="AyC-sx-xvz">
                                             <rect key="frame" x="1" y="1" width="602" height="165"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -629,7 +630,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         <outlet property="nextKeyView" destination="608" id="1230"/>
                                                     </connections>
                                                 </colorWell>
-                                                <button imageHugsTitle="YES" id="605">
+                                                <button id="605">
                                                     <rect key="frame" x="282" y="134" width="161" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Syntax-Einfärbung" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9257">
@@ -709,7 +710,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <button imageHugsTitle="YES" id="1208">
+                                                <button id="1208">
                                                     <rect key="frame" x="32" y="18" width="203" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Rechtschreibung überprüfen" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9263">
@@ -725,7 +726,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9492"/>
                                                 </stepper>
-                                                <button imageHugsTitle="YES" id="9486">
+                                                <button id="9486">
                                                     <rect key="frame" x="32" y="44" width="144" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Tabulatortaste fügt" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9491">
@@ -757,7 +758,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                         </view>
                                     </box>
-                                    <button imageHugsTitle="YES" id="1220">
+                                    <button id="1220">
                                         <rect key="frame" x="18" y="18" width="278" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="check" title="Die Größe des Textbereiches verkleinern" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9264">
@@ -776,7 +777,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                 <rect key="frame" x="10" y="33" width="644" height="425"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1197">
+                                    <button verticalHuggingPriority="750" id="1197">
                                         <rect key="frame" x="42" y="22" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9265">
@@ -784,7 +785,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1198">
+                                    <button verticalHuggingPriority="750" id="1198">
                                         <rect key="frame" x="20" y="22" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9266">
@@ -798,7 +799,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1174">
                                         <rect key="frame" x="20" y="41" width="604" height="322"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="Vmi-Mw-Adc">
+                                        <clipView key="contentView" id="oFU-o0-hg4">
                                             <rect key="frame" x="1" y="0.0" width="602" height="321"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -817,7 +818,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="1206">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="input" width="92" minWidth="92" maxWidth="1000" id="1177">
@@ -908,7 +909,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" tag="-1" imageHugsTitle="YES" id="1140">
+                <popUpButton verticalHuggingPriority="750" tag="-1" id="1140">
                     <rect key="frame" x="293" y="387" width="187" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Konfiguration ändern..." bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="-1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1146" id="9300">
@@ -944,7 +945,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                 <rect key="frame" x="10" y="33" width="644" height="325"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="638">
+                                    <button verticalHuggingPriority="750" id="638">
                                         <rect key="frame" x="528" y="257" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9268">
@@ -979,7 +980,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="639" id="867"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="4" imageHugsTitle="YES" id="641">
+                                    <button verticalHuggingPriority="750" tag="4" id="641">
                                         <rect key="frame" x="528" y="87" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="4" inset="2" id="9271">
@@ -1011,7 +1012,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="642" id="871"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="3" imageHugsTitle="YES" id="644">
+                                    <button verticalHuggingPriority="750" tag="3" id="644">
                                         <rect key="frame" x="528" y="120" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="3" inset="2" id="9274">
@@ -1046,7 +1047,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="645" id="870"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="647">
+                                    <button verticalHuggingPriority="750" tag="1" id="647">
                                         <rect key="frame" x="528" y="223" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="9277">
@@ -1081,7 +1082,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="648" id="868"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="2" imageHugsTitle="YES" id="650">
+                                    <button verticalHuggingPriority="750" tag="2" id="650">
                                         <rect key="frame" x="528" y="155" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" state="on" borderStyle="border" tag="2" inset="2" id="9280">
@@ -1116,7 +1117,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="651" id="869"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="5" imageHugsTitle="YES" id="1054">
+                                    <button verticalHuggingPriority="750" tag="5" id="1054">
                                         <rect key="frame" x="528" y="53" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="5" inset="2" id="9283">
@@ -1148,7 +1149,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="1055" id="1057"/>
                                         </connections>
                                     </textField>
-                                    <button toolTip="Eine richtige Login Shell, wie .bashrc oder .profile verwenden" imageHugsTitle="YES" id="4917">
+                                    <button toolTip="Eine richtige Login Shell, wie .bashrc oder .profile verwenden" id="4917">
                                         <rect key="frame" x="222" y="18" width="199" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="check" title="Meine Login-Shell benutzen" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9286">
@@ -1156,7 +1157,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8236">
+                                    <button verticalHuggingPriority="750" id="8236">
                                         <rect key="frame" x="498" y="263" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9287">
@@ -1164,7 +1165,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8238">
+                                    <button verticalHuggingPriority="750" id="8238">
                                         <rect key="frame" x="498" y="161" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9288">
@@ -1172,7 +1173,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" tag="2" imageHugsTitle="YES" id="9705">
+                                    <button verticalHuggingPriority="750" tag="2" id="9705">
                                         <rect key="frame" x="528" y="189" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" state="on" borderStyle="border" tag="2" inset="2" id="9712">
@@ -1207,7 +1208,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="9706" id="9713"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9708">
+                                    <button verticalHuggingPriority="750" id="9708">
                                         <rect key="frame" x="498" y="195" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9709">
@@ -1215,7 +1216,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8240">
+                                    <button verticalHuggingPriority="750" id="8240">
                                         <rect key="frame" x="498" y="229" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9289">
@@ -1223,7 +1224,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8242">
+                                    <button verticalHuggingPriority="750" id="8242">
                                         <rect key="frame" x="498" y="127" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9290">
@@ -1231,7 +1232,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8244">
+                                    <button verticalHuggingPriority="750" id="8244">
                                         <rect key="frame" x="498" y="93" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9291">
@@ -1239,7 +1240,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8246">
+                                    <button verticalHuggingPriority="750" id="8246">
                                         <rect key="frame" x="498" y="59" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9292">
@@ -1247,7 +1248,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9692">
+                                    <button verticalHuggingPriority="750" id="9692">
                                         <rect key="frame" x="3" y="2" width="66" height="16"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="push" title="Reset..." bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9693">
@@ -1255,7 +1256,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
                                     </button>
-                                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9699">
+                                    <popUpButton verticalHuggingPriority="750" id="9699">
                                         <rect key="frame" x="258" y="298" width="128" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <popUpButtonCell key="cell" type="push" title="lualatex" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="9720" id="9700">
@@ -1286,7 +1287,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <rect key="frame" x="3" y="3" width="598" height="47"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1088">
+                                                <button verticalHuggingPriority="750" id="1088">
                                                     <rect key="frame" x="505" y="9" width="81" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Ändern..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9295">
@@ -1344,7 +1345,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="1072">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                     </tableColumns>
@@ -1464,7 +1465,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                         </view>
                                     </box>
-                                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="1094">
+                                    <popUpButton verticalHuggingPriority="750" id="1094">
                                         <rect key="frame" x="235" y="214" width="174" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <popUpButtonCell key="cell" type="push" title="Existierendes Skript" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1098" id="9297">
@@ -1478,7 +1479,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="1113">
+                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="1113">
                                         <rect key="frame" x="599" y="296" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" inset="2" id="9298">
@@ -1517,7 +1518,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <rect key="frame" x="3" y="3" width="610" height="91"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="920">
+                                                <button verticalHuggingPriority="750" id="920">
                                                     <rect key="frame" x="83" y="9" width="251" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Auf offenes Dokument anwenden" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9334">
@@ -1528,7 +1529,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         <outlet property="nextKeyView" destination="913" id="4611"/>
                                                     </connections>
                                                 </button>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="913">
+                                                <button verticalHuggingPriority="750" id="913">
                                                     <rect key="frame" x="334" y="9" width="197" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Auf Bibliothek anwenden" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9333">
@@ -1539,7 +1540,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         <outlet property="nextKeyView" destination="1810" id="4612"/>
                                                     </connections>
                                                 </button>
-                                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="4156">
+                                                <popUpButton verticalHuggingPriority="750" id="4156">
                                                     <rect key="frame" x="304" y="53" width="167" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="4161" id="9335">
@@ -1569,7 +1570,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                         </view>
                                     </box>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="4436">
+                                    <button verticalHuggingPriority="750" id="4436">
                                         <rect key="frame" x="17" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9332">
@@ -1580,7 +1581,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="4435" id="4606"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="4435">
+                                    <button verticalHuggingPriority="750" id="4435">
                                         <rect key="frame" x="39" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9331">
@@ -1591,7 +1592,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <outlet property="nextKeyView" destination="916" id="4607"/>
                                         </connections>
                                     </button>
-                                    <button imageHugsTitle="YES" id="919">
+                                    <button id="919">
                                         <rect key="frame" x="333" y="107" width="104" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="square" title="Standard-Präambel" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="9330">
@@ -1707,7 +1708,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <rect key="frame" x="3" y="3" width="610" height="91"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9387">
+                                                <button verticalHuggingPriority="750" id="9387">
                                                     <rect key="frame" x="181" y="9" width="251" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Auf offenes Dokument anwenden" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9396">
@@ -1715,7 +1716,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                 </button>
-                                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9388">
+                                                <popUpButton verticalHuggingPriority="750" id="9388">
                                                     <rect key="frame" x="371" y="53" width="167" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="9395" id="9391">
@@ -1742,7 +1743,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                         </view>
                                     </box>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9385">
+                                    <button verticalHuggingPriority="750" id="9385">
                                         <rect key="frame" x="17" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9397">
@@ -1750,7 +1751,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9384">
+                                    <button verticalHuggingPriority="750" id="9384">
                                         <rect key="frame" x="39" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9398">
@@ -1761,7 +1762,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9382">
                                         <rect key="frame" x="144" y="194" width="483" height="67"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="9yP-Bn-B2B">
+                                        <clipView key="contentView" id="3ev-7D-ent">
                                             <rect key="frame" x="1" y="1" width="481" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1892,11 +1893,11 @@ Etwas Text &amp; $etwas Mathe$ \\
             </subviews>
         </customView>
         <customView id="9443" userLabel="libraryView">
-            <rect key="frame" x="0.0" y="0.0" width="690" height="299"/>
+            <rect key="frame" x="0.0" y="0.0" width="690" height="325"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button imageHugsTitle="YES" id="9445">
-                    <rect key="frame" x="18" y="263" width="279" height="18"/>
+                <button id="9445">
+                    <rect key="frame" x="18" y="289" width="279" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Klammerungs-Einträge für Text-Exports" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9446">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1904,14 +1905,14 @@ Etwas Text &amp; $etwas Mathe$ \\
                     </buttonCell>
                 </button>
                 <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9444">
-                    <rect key="frame" x="17" y="16" width="656" height="243"/>
+                    <rect key="frame" x="17" y="42" width="656" height="243"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <view key="contentView" id="LAw-NL-eyb">
                         <rect key="frame" x="3" y="3" width="650" height="237"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" id="9451">
-                                <rect key="frame" x="441" y="10" width="87" height="17"/>
+                                <rect key="frame" x="440" y="10" width="87" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="# : LaTeX-Kode" id="9454">
                                     <font key="font" metaFont="smallSystem"/>
@@ -1920,7 +1921,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" id="9450">
-                                <rect key="frame" x="387" y="10" width="48" height="17"/>
+                                <rect key="frame" x="376" y="13" width="48" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="@ : Titel" id="9455">
                                     <font key="font" metaFont="smallSystem"/>
@@ -1928,7 +1929,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button toolTip="Ausgewähltes Element entfernen" verticalHuggingPriority="750" imageHugsTitle="YES" id="9449">
+                            <button toolTip="Ausgewähltes Element entfernen" verticalHuggingPriority="750" id="9449">
                                 <rect key="frame" x="148" y="10" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9456">
@@ -1939,7 +1940,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                     <outlet property="nextKeyView" destination="9460" id="9463"/>
                                 </connections>
                             </button>
-                            <button toolTip="Ein Element hinzufügen" verticalHuggingPriority="750" imageHugsTitle="YES" id="9448">
+                            <button toolTip="Ein Element hinzufügen" verticalHuggingPriority="750" id="9448">
                                 <rect key="frame" x="126" y="10" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9457">
@@ -2006,22 +2007,30 @@ Etwas Text &amp; $etwas Mathe$ \\
                         </subviews>
                     </view>
                 </box>
+                <button verticalHuggingPriority="750" id="9727">
+                    <rect key="frame" x="15" y="14" width="125" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Compact database" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9728">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
             </subviews>
         </customView>
         <customView id="9421" userLabel="historyView">
-            <rect key="frame" x="0.0" y="0.0" width="690" height="106"/>
+            <rect key="frame" x="0.0" y="0.0" width="690" height="132"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button imageHugsTitle="YES" id="9425">
-                    <rect key="frame" x="95" y="70" width="196" height="18"/>
+                <button id="9425">
+                    <rect key="frame" x="95" y="96" width="196" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Dienste-Ergebnisse sichern" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9430">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button imageHugsTitle="YES" id="9426">
-                    <rect key="frame" x="95" y="44" width="230" height="18"/>
+                <button id="9426">
+                    <rect key="frame" x="95" y="70" width="230" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Lösche Einträge die älter sind als" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9429">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2029,7 +2038,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                     </buttonCell>
                 </button>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9424">
-                    <rect key="frame" x="359" y="39" width="19" height="27"/>
+                    <rect key="frame" x="359" y="65" width="19" height="27"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9431"/>
                     <connections>
@@ -2037,7 +2046,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" id="9422">
-                    <rect key="frame" x="328" y="42" width="34" height="22"/>
+                    <rect key="frame" x="328" y="68" width="34" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9433">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="9434">
@@ -2052,7 +2061,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9423">
-                    <rect key="frame" x="378" y="45" width="35" height="17"/>
+                    <rect key="frame" x="378" y="71" width="35" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tage" id="9432">
                         <font key="font" metaFont="system"/>
@@ -2060,12 +2069,20 @@ Etwas Text &amp; $etwas Mathe$ \\
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button imageHugsTitle="YES" id="9427">
-                    <rect key="frame" x="95" y="18" width="499" height="18"/>
+                <button id="9427">
+                    <rect key="frame" x="95" y="44" width="499" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Intelligenter Verlauf (Einträge sichern, wenn sie tatsächlich genutzt werden)" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9428">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" id="9724">
+                    <rect key="frame" x="92" y="14" width="125" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Compact database" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9725">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                 </button>
             </subviews>
@@ -2097,7 +2114,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="2494">
+                                            <popUpButton verticalHuggingPriority="750" id="2494">
                                                 <rect key="frame" x="167" y="207" width="128" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="2501" id="9311">
@@ -2137,7 +2154,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button imageHugsTitle="YES" id="676">
+                                            <button id="676">
                                                 <rect key="frame" x="102" y="50" width="180" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" title="Dies verhindert LinkBack!" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="9306">
@@ -2218,7 +2235,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     </column>
                                                 </cells>
                                             </matrix>
-                                            <button imageHugsTitle="YES" id="667">
+                                            <button id="667">
                                                 <rect key="frame" x="57" y="73" width="279" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="check" title="Gleichung an Originaltext anpassen" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9303">
@@ -2229,7 +2246,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <outlet property="nextKeyView" destination="677" id="854"/>
                                                 </connections>
                                             </button>
-                                            <button imageHugsTitle="YES" id="677">
+                                            <button id="677">
                                                 <rect key="frame" x="91" y="18" width="211" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="check" title="Ergebnis im Verlauf speichern" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9307">
@@ -2272,7 +2289,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="1037">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="description" editable="NO" width="439.0908203125" minWidth="353" maxWidth="1000" id="1035">
@@ -2337,7 +2354,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button imageHugsTitle="YES" id="1045">
+                                    <button id="1045">
                                         <rect key="frame" x="119" y="8" width="405" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="justified" imageScaling="proportionallyDown" inset="2" id="9314">
@@ -2364,7 +2381,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                 <rect key="frame" x="10" y="33" width="644" height="246"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="9504">
+                                    <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" id="9504">
                                         <rect key="frame" x="39" y="88" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9524">
@@ -2372,7 +2389,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button toolTip="ajouter un élément" verticalHuggingPriority="750" imageHugsTitle="YES" id="9505">
+                                    <button toolTip="ajouter un élément" verticalHuggingPriority="750" id="9505">
                                         <rect key="frame" x="17" y="88" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9523">
@@ -2386,7 +2403,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9506">
                                         <rect key="frame" x="17" y="107" width="610" height="94"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="a4o-HD-Sl3">
+                                        <clipView key="contentView" id="1rk-2T-hGh">
                                             <rect key="frame" x="1" y="0.0" width="608" height="93"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2405,7 +2422,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="9520">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="inputPattern" width="273" minWidth="273" maxWidth="1000" id="9518">
@@ -2464,7 +2481,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="9535">
+                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9535">
                                         <rect key="frame" x="605" y="84" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="9536">
@@ -2503,7 +2520,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9539">
                                         <rect key="frame" x="326" y="17" width="301" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <clipView key="contentView" id="WLT-pz-Cya">
+                                        <clipView key="contentView" id="QwX-zV-pBF">
                                             <rect key="frame" x="1" y="1" width="299" height="61"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2554,7 +2571,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <tabView autoresizesSubviews="NO" id="9555">
+                <tabView id="9555">
                     <rect key="frame" x="13" y="10" width="574" height="576"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <font key="font" metaFont="system"/>
@@ -2562,7 +2579,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                         <tabViewItem label="Zusätzliche Dateien" identifier="1" id="9556">
                             <view key="view" id="9559">
                                 <rect key="frame" x="10" y="33" width="554" height="530"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="7739">
                                         <rect key="frame" x="42" y="46" width="469" height="457"/>
@@ -2614,7 +2631,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="7754">
+                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="7754">
                                         <rect key="frame" x="515" y="13" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" inset="2" id="9320">
@@ -2622,7 +2639,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="7740">
+                                    <button verticalHuggingPriority="750" id="7740">
                                         <rect key="frame" x="64" y="27" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9316">
@@ -2630,7 +2647,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="7741">
+                                    <button verticalHuggingPriority="750" id="7741">
                                         <rect key="frame" x="42" y="27" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9317">
@@ -2644,10 +2661,10 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                 </subviews>
                             </view>
                         </tabViewItem>
-                        <tabViewItem label="Synchronization additional scripts" identifier="2" id="9557">
+                        <tabViewItem label="Synchronisation im Hintergrund" identifier="2" id="9557">
                             <view key="view" id="9558">
                                 <rect key="frame" x="10" y="33" width="554" height="530"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <box autoresizesSubviews="NO" borderType="line" title="Zusätzliche Skripte" id="9612">
                                         <rect key="frame" x="14" y="5" width="526" height="389"/>
@@ -2675,7 +2692,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                                     <outlet property="nextKeyView" destination="9624" id="9657"/>
                                                                 </connections>
                                                             </textField>
-                                                            <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9624">
+                                                            <button verticalHuggingPriority="750" id="9624">
                                                                 <rect key="frame" x="356" y="9" width="81" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="push" title="Ändern…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9627">
@@ -2721,7 +2738,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                                         </tableHeaderCell>
                                                                         <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="9649">
                                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                            <font key="font" metaFont="cellTitle"/>
+                                                                            <font key="font" metaFont="titleBar" size="12"/>
                                                                         </buttonCell>
                                                                     </tableColumn>
                                                                 </tableColumns>
@@ -2741,7 +2758,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </tableHeaderView>
                                                 </scrollView>
-                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="9619">
+                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9619">
                                                     <rect key="frame" x="492" y="337" width="25" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9655">
@@ -2752,7 +2769,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                         <action selector="synchronizationAdditionalScriptsOpenHelp:" target="-2" id="9662"/>
                                                     </connections>
                                                 </button>
-                                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9620">
+                                                <popUpButton verticalHuggingPriority="750" id="9620">
                                                     <rect key="frame" x="173" y="239" width="174" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Existierendes Skript" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9654" id="9651">
@@ -2894,7 +2911,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9672">
+                                                <button verticalHuggingPriority="750" id="9672">
                                                     <rect key="frame" x="408" y="5" width="100" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Ändern…" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9685">
@@ -2902,34 +2919,34 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9677">
-                                                    <rect key="frame" x="16" y="101" width="359" height="18"/>
+                                                <button id="9677">
+                                                    <rect key="frame" x="16" y="100" width="402" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="New documents automatically have a background file" bezelStyle="regularSquare" imagePosition="left" alignment="justified" lineBreakMode="truncatingTail" state="on" inset="2" id="9680">
+                                                    <buttonCell key="cell" type="check" title="Neue Dokumente haben automatisch eine Hintergrunddatei." bezelStyle="regularSquare" imagePosition="left" alignment="justified" lineBreakMode="truncatingTail" state="on" inset="2" id="9680">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9676">
-                                                    <rect key="frame" x="47" y="79" width="141" height="18"/>
+                                                <button id="9676">
+                                                    <rect key="frame" x="38" y="79" width="160" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Synchronize preamble" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9681">
+                                                    <buttonCell key="cell" type="check" title="Synchronisieren preamble" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9681">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9675">
-                                                    <rect key="frame" x="47" y="59" width="158" height="18"/>
+                                                <button id="9675">
+                                                    <rect key="frame" x="38" y="59" width="177" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Synchronize environment" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9682">
+                                                    <buttonCell key="cell" type="check" title="Synchronisieren environment" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9682">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9674">
-                                                    <rect key="frame" x="47" y="39" width="117" height="18"/>
+                                                <button id="9674">
+                                                    <rect key="frame" x="38" y="39" width="136" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Synchronize body" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9683">
+                                                    <buttonCell key="cell" type="check" title="Synchronisieren body" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" lineBreakMode="truncatingTail" state="on" inset="2" id="9683">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </buttonCell>
@@ -2948,7 +2965,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
             <rect key="frame" x="0.0" y="0.0" width="690" height="133"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="712">
+                <button verticalHuggingPriority="750" id="712">
                     <rect key="frame" x="258" y="58" width="174" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Jetzt prüfen..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9329">
@@ -2960,8 +2977,8 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                         <outlet property="nextKeyView" destination="711" id="857"/>
                     </connections>
                 </button>
-                <button imageHugsTitle="YES" id="711">
-                    <rect key="frame" x="233" y="19" width="223" height="29"/>
+                <button id="711">
+                    <rect key="frame" x="235" y="19" width="220" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title="Zur LaTeXiT-Webseite gehen... " bezelStyle="regularSquare" alignment="center" borderStyle="border" inset="2" id="9328">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2972,7 +2989,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                         <outlet property="nextKeyView" destination="710" id="858"/>
                     </connections>
                 </button>
-                <button imageHugsTitle="YES" id="710">
+                <button id="710">
                     <rect key="frame" x="191" y="104" width="308" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Beim Programmstart auf neue Version prüfen" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9327">
@@ -3047,7 +3064,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1132">
+                    <button verticalHuggingPriority="750" id="1132">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9337">
@@ -3058,7 +3075,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                             <outlet property="nextKeyView" destination="1130" id="1139"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1135">
+                    <button verticalHuggingPriority="750" id="1135">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9338">
@@ -3069,7 +3086,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                             <outlet property="nextKeyView" destination="1132" id="1138"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1153">
+                    <button verticalHuggingPriority="750" id="1153">
                         <rect key="frame" x="184" y="1" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9339">
@@ -3149,7 +3166,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8055">
+                    <button verticalHuggingPriority="750" id="8055">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9342">
@@ -3160,7 +3177,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                             <outlet property="nextKeyView" destination="8060" id="8067"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8054">
+                    <button verticalHuggingPriority="750" id="8054">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9341">
@@ -3171,7 +3188,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                             <outlet property="nextKeyView" destination="8055" id="8066"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8053">
+                    <button verticalHuggingPriority="750" id="8053">
                         <rect key="frame" x="184" y="1" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9340">
@@ -3186,8 +3203,8 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSApplicationIcon" width="128" height="128"/>
-        <image name="NSCaution" width="128" height="128"/>
+        <image name="NSApplicationIcon" width="32" height="32"/>
+        <image name="NSCaution" width="32" height="32"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

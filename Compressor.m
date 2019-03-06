@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 17/02/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This file is useful to zip-[un]compress NSData
 
@@ -163,7 +163,7 @@
       default:
         DebugLog(0, @"Error while decompressing data : Insufficient memory" );
         DebugLog(0, @"destLen = %u", destLen);
-        DebugLog(0, @"destLenf = %lu", destLenf);
+        DebugLog(0, @"destLenf = %u", (unsigned int)destLenf);
         DebugLog(0, @"error = %d", error);
         break;
     }//end switch(error)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,14 +22,19 @@
                 <outlet property="exportFormatOptionsJpegQualityMediumLabel" destination="12" id="41"/>
                 <outlet property="exportFormatOptionsJpegQualitySlider" destination="8" id="33"/>
                 <outlet property="exportFormatOptionsJpegQualityTextField" destination="15" id="35"/>
+                <outlet property="exportFormatOptionsPDFCancelButton" destination="177" id="202"/>
+                <outlet property="exportFormatOptionsPDFMetaDataInvisibleGraphicsEnabledCheckBox" destination="196" id="212"/>
+                <outlet property="exportFormatOptionsPDFMetadataBox" destination="174" id="211"/>
+                <outlet property="exportFormatOptionsPDFOKButton" destination="176" id="203"/>
+                <outlet property="exportFormatOptionsPDFPanel" destination="172" id="201"/>
                 <outlet property="exportFormatOptionsPDFWofCancelButton" destination="124" id="158"/>
                 <outlet property="exportFormatOptionsPDFWofGSBox" destination="126" id="170"/>
                 <outlet property="exportFormatOptionsPDFWofGSPDFCompatibilityLevelLabel" destination="149" id="165"/>
                 <outlet property="exportFormatOptionsPDFWofGSPDFCompatibilityLevelPopUpButton" destination="148" id="162"/>
                 <outlet property="exportFormatOptionsPDFWofGSWriteEngineLabel" destination="146" id="164"/>
                 <outlet property="exportFormatOptionsPDFWofGSWriteEnginePopUpButton" destination="140" id="161"/>
-                <outlet property="exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox" destination="166" id="168"/>
-                <outlet property="exportFormatOptionsPDFWofMetadataBox" destination="169" id="171"/>
+                <outlet property="exportFormatOptionsPDFWofMetaDataInvisibleGraphicsEnabledCheckBox" destination="166" id="210"/>
+                <outlet property="exportFormatOptionsPDFWofMetadataBox" destination="169" id="208"/>
                 <outlet property="exportFormatOptionsPDFWofOKButton" destination="125" id="157"/>
                 <outlet property="exportFormatOptionsPDFWofPanel" destination="122" id="156"/>
                 <outlet property="exportFormatOptionsSvgBox" destination="50" id="64"/>
@@ -53,14 +58,15 @@
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="490" y="223" width="403" height="211"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" id="2">
+            <view key="contentView" misplaced="YES" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="403" height="211"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5">
-                        <rect key="frame" x="225" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" tag="1" id="5">
+                        <rect key="frame" x="229" y="12" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="6">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -73,14 +79,15 @@ Gw
                             <outlet property="nextKeyView" destination="4" id="29"/>
                         </connections>
                     </button>
-                    <box title="Quality" translatesAutoresizingMaskIntoConstraints="NO" id="3">
-                        <rect key="frame" x="17" y="57" width="369" height="150"/>
+                    <box ambiguous="YES" title="Quality" id="3">
+                        <rect key="frame" x="17" y="56" width="369" height="151"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="HSv-qh-Da8">
-                            <rect key="frame" x="2" y="2" width="365" height="131"/>
+                            <rect key="frame" x="3" y="3" width="363" height="131"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8">
-                                    <rect key="frame" x="15" y="96" width="335" height="24"/>
+                                    <rect key="frame" x="15" y="96" width="335" height="25"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" doubleValue="90" tickMarkPosition="below" numberOfTickMarks="5" sliderType="linear" id="26">
                                         <font key="font" size="12" name="Helvetica"/>
@@ -160,7 +167,7 @@ Gw
                                         <outlet property="nextKeyView" destination="5" id="31"/>
                                     </connections>
                                 </colorWell>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="17">
+                                <textField verticalHuggingPriority="750" id="17">
                                     <rect key="frame" x="90" y="18" width="123" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Background color:" id="18">
@@ -173,8 +180,9 @@ Gw
                         </view>
                         <font key="titleFont" metaFont="cellTitle"/>
                     </box>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4">
-                        <rect key="frame" x="307" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" ambiguous="YES" id="4">
+                        <rect key="frame" x="311" y="12" width="78" height="32"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="7">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -208,15 +216,16 @@ DQ
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="46" userLabel="svgPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="427" y="427" width="403" height="142"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="contentRect" x="427" y="427" width="403" height="124"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" id="47">
-                <rect key="frame" x="0.0" y="0.0" width="403" height="142"/>
+            <view key="contentView" misplaced="YES" id="47">
+                <rect key="frame" x="0.0" y="0.0" width="403" height="124"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" tag="3" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49">
-                        <rect key="frame" x="225" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" tag="3" id="49">
+                        <rect key="frame" x="229" y="12" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="55">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -229,14 +238,16 @@ Gw
                             <outlet property="nextKeyView" destination="48" id="78"/>
                         </connections>
                     </button>
-                    <box title="Path to pdf2svg" translatesAutoresizingMaskIntoConstraints="NO" id="50">
-                        <rect key="frame" x="17" y="57" width="369" height="81"/>
-                        <view key="contentView" id="sNQ-Qj-ZV8">
-                            <rect key="frame" x="2" y="2" width="365" height="62"/>
+                    <box ambiguous="YES" title="Path to pdf2svg" id="50">
+                        <rect key="frame" x="17" y="56" width="369" height="64"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <view key="contentView" ambiguous="YES" id="sNQ-Qj-ZV8">
+                            <rect key="frame" x="3" y="3" width="363" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="52">
-                                    <rect key="frame" x="11" y="20" width="251" height="22"/>
+                                <textField verticalHuggingPriority="750" ambiguous="YES" id="52">
+                                    <rect key="frame" x="11" y="12" width="249" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="53">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -246,8 +257,9 @@ Gw
                                         <outlet property="nextKeyView" destination="51" id="76"/>
                                     </connections>
                                 </textField>
-                                <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="51">
-                                    <rect key="frame" x="264" y="13" width="87" height="32"/>
+                                <button verticalHuggingPriority="750" ambiguous="YES" id="51">
+                                    <rect key="frame" x="262" y="6" width="92" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="54">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
@@ -269,8 +281,9 @@ Gw
                         </view>
                         <font key="titleFont" metaFont="cellTitle"/>
                     </box>
-                    <button verticalHuggingPriority="750" tag="2" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="48">
-                        <rect key="frame" x="307" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" ambiguous="YES" tag="2" id="48">
+                        <rect key="frame" x="311" y="12" width="78" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="56">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -305,14 +318,15 @@ DQ
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="427" y="395" width="410" height="156"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" id="83">
+            <view key="contentView" misplaced="YES" id="83">
                 <rect key="frame" x="0.0" y="0.0" width="410" height="156"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" tag="5" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="84">
-                        <rect key="frame" x="232" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" tag="5" id="84">
+                        <rect key="frame" x="236" y="12" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="92">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -325,8 +339,9 @@ Gw
                             <outlet property="nextKeyView" destination="86" id="93"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" tag="4" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="86">
-                        <rect key="frame" x="314" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" tag="4" id="86">
+                        <rect key="frame" x="318" y="12" width="78" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="87">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -338,28 +353,32 @@ DQ
                             <action selector="close:" target="-2" id="98"/>
                         </connections>
                     </button>
-                    <box titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="101">
-                        <rect key="frame" x="17" y="57" width="376" height="81"/>
+                    <box titlePosition="noTitle" id="101">
+                        <rect key="frame" x="17" y="56" width="376" height="82"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="FZK-v1-U8l">
-                            <rect key="frame" x="2" y="2" width="372" height="77"/>
+                            <rect key="frame" x="3" y="3" width="370" height="76"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="109">
-                                    <rect key="frame" x="15" y="50" width="123" height="18"/>
+                                <button id="109">
+                                    <rect key="frame" x="15" y="49" width="127" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Export preamble" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="110">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
                                 </button>
-                                <button imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="111">
-                                    <rect key="frame" x="15" y="30" width="141" height="18"/>
+                                <button id="111">
+                                    <rect key="frame" x="15" y="29" width="147" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Export environment" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="112">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
                                 </button>
-                                <button imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="113">
-                                    <rect key="frame" x="15" y="10" width="96" height="18"/>
+                                <button id="113">
+                                    <rect key="frame" x="15" y="9" width="147" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Export body" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="114">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
@@ -398,15 +417,16 @@ DQ
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="122" userLabel="pdfWofPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="427" y="339" width="473" height="220"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="contentRect" x="427" y="339" width="473" height="210"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" id="123">
-                <rect key="frame" x="0.0" y="0.0" width="473" height="220"/>
+            <view key="contentView" misplaced="YES" id="123">
+                <rect key="frame" x="0.0" y="0.0" width="473" height="210"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" tag="7" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="124">
-                        <rect key="frame" x="295" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" tag="7" id="124">
+                        <rect key="frame" x="299" y="12" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="134">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -419,8 +439,9 @@ Gw
                             <outlet property="nextKeyView" destination="125" id="135"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" tag="6" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="125">
-                        <rect key="frame" x="377" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" tag="6" id="125">
+                        <rect key="frame" x="381" y="12" width="78" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="133">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -432,14 +453,16 @@ DQ
                             <action selector="close:" target="-2" id="136"/>
                         </connections>
                     </button>
-                    <box title="Ghostscript options" translatesAutoresizingMaskIntoConstraints="NO" id="126">
-                        <rect key="frame" x="17" y="117" width="439" height="97"/>
+                    <box title="Ghostscript options" id="126">
+                        <rect key="frame" x="17" y="108" width="439" height="96"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="P6x-me-uOW">
-                            <rect key="frame" x="2" y="2" width="435" height="78"/>
+                            <rect key="frame" x="3" y="3" width="433" height="76"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="140">
-                                    <rect key="frame" x="167" y="45" width="97" height="26"/>
+                                <popUpButton verticalHuggingPriority="750" id="140">
+                                    <rect key="frame" x="183" y="43" width="121" height="26"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="pdfwrite" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="143" id="141">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="menu"/>
@@ -453,23 +476,16 @@ DQ
                                     </popUpButtonCell>
                                 </popUpButton>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="146">
-                                    <rect key="frame" x="14" y="51" width="151" height="17"/>
+                                    <rect key="frame" x="14" y="47" width="88" height="17"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Write engine :" id="147">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="149">
-                                    <rect key="frame" x="14" y="20" width="149" height="17"/>
-                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="PDF compatibility level :" id="150">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
-                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="148">
-                                    <rect key="frame" x="167" y="14" width="97" height="26"/>
+                                <popUpButton verticalHuggingPriority="750" id="148">
+                                    <rect key="frame" x="183" y="13" width="121" height="26"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="1.5" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="153" id="151">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="menu"/>
@@ -482,12 +498,21 @@ DQ
                                         </menu>
                                     </popUpButtonCell>
                                 </popUpButton>
+                                <textField verticalHuggingPriority="750" id="149">
+                                    <rect key="frame" x="14" y="21" width="155" height="17"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="PDF compatibility level :" id="150">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="148" firstAttribute="firstBaseline" secondItem="149" secondAttribute="firstBaseline" id="1jn-gn-tSj"/>
                                 <constraint firstItem="140" firstAttribute="leading" secondItem="148" secondAttribute="leading" id="B7K-C4-bVP"/>
                                 <constraint firstItem="148" firstAttribute="top" secondItem="140" secondAttribute="bottom" constant="10" symbolic="YES" id="EEX-oS-AMg"/>
-                                <constraint firstItem="140" firstAttribute="leading" secondItem="146" secondAttribute="trailing" constant="6" id="HjI-mF-oi8"/>
+                                <constraint firstItem="140" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="146" secondAttribute="trailing" constant="8" symbolic="YES" id="HjI-mF-oi8"/>
                                 <constraint firstItem="140" firstAttribute="trailing" secondItem="148" secondAttribute="trailing" id="IV0-Ju-Sbb"/>
                                 <constraint firstItem="146" firstAttribute="leading" secondItem="P6x-me-uOW" secondAttribute="leading" constant="16" id="KGN-NW-ouu"/>
                                 <constraint firstItem="140" firstAttribute="top" secondItem="P6x-me-uOW" secondAttribute="top" constant="9" id="aGN-eO-yip"/>
@@ -498,14 +523,16 @@ DQ
                         </view>
                         <font key="titleFont" metaFont="cellTitle"/>
                     </box>
-                    <box title="LaTeXit metadata" translatesAutoresizingMaskIntoConstraints="NO" id="169">
-                        <rect key="frame" x="17" y="57" width="439" height="56"/>
+                    <box title="LaTeXit metadata" id="169">
+                        <rect key="frame" x="17" y="48" width="439" height="56"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="gJm-EK-DEZ">
-                            <rect key="frame" x="2" y="2" width="435" height="37"/>
+                            <rect key="frame" x="3" y="3" width="433" height="36"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="166">
-                                    <rect key="frame" x="15" y="11" width="218" height="18"/>
+                                <button id="166">
+                                    <rect key="frame" x="15" y="10" width="228" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Add invisible graphic commands" bezelStyle="regularSquare" imagePosition="left" alignment="justified" state="on" inset="2" id="167">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
@@ -538,7 +565,68 @@ DQ
                     <constraint firstAttribute="trailing" secondItem="126" secondAttribute="trailing" constant="20" symbolic="YES" id="zEh-dr-3IF"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="-387.5" y="166"/>
+        </window>
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="172" userLabel="pdfPanel" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="427" y="339" width="463" height="133"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <value key="minSize" type="size" width="213" height="107"/>
+            <view key="contentView" id="173">
+                <rect key="frame" x="0.0" y="0.0" width="463" height="133"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" tag="9" id="177">
+                        <rect key="frame" x="289" y="13" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="178">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="close:" target="-2" id="200"/>
+                            <outlet property="nextKeyView" destination="176" id="198"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" tag="8" id="176">
+                        <rect key="frame" x="371" y="13" width="78" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="179">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="close:" target="-2" id="199"/>
+                        </connections>
+                    </button>
+                    <box title="LaTeXit metadata" id="174">
+                        <rect key="frame" x="17" y="57" width="429" height="56"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="YUC-Ua-LJw">
+                            <rect key="frame" x="3" y="3" width="423" height="36"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <button id="196">
+                                    <rect key="frame" x="15" y="10" width="228" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="check" title="Add invisible graphic commands" bezelStyle="regularSquare" imagePosition="left" alignment="justified" state="on" inset="2" id="197">
+                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                </button>
+                            </subviews>
+                        </view>
+                        <font key="titleFont" metaFont="titleBar" size="12"/>
+                    </box>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="259.5" y="-209.5"/>
         </window>
     </objects>
 </document>

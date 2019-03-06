@@ -4,7 +4,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -30,6 +30,7 @@
 #import "NSObjectExtended.h"
 #import "NSOutlineViewExtended.h"
 #import "NSSegmentedControlExtended.h"
+#import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "ObjectTransformer.h"
@@ -39,17 +40,23 @@
 #import "TeXItemWrapper.h"
 #import "Utils.h"
 
+extern NSString* NSMenuDidBeginTrackingNotification;
+static int kImportContext = 0;
+static int kExportContext = 0;
+
 @interface LibraryWindowController ()
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
 -(void) _updateButtons:(NSNotification*)aNotification;
--(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
--(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 -(void) updateImportTeXItemsGUI;
 -(void) windowWillClose:(NSNotification*)notification;
 -(void) windowDidResignKey:(NSNotification*)notification;
 -(void) notified:(NSNotification *)notification;
 -(void) latexisationItemDidEndSelector:(NSDictionary*)configuration;
 -(void) latexisationGroupDidEndSelector:(NSDictionary*)configuration;
+-(IBAction) relatexizeRefreshGUI:(id)sender;
+-(IBAction) relatexizeAbort:(id)sender;
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
+-(void) refreshCommentsPane:(LibraryEquation*)libraryEquation;
 @end
 
 @implementation LibraryWindowController
@@ -83,11 +90,11 @@
   [self->importHomeButton setToolTip:NSLocalizedString(@"Reach default library", @"Reach default library")];
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
-  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_MERGE;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_MERGE];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"Overwrite current library")];
-  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OVERWRITE;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OVERWRITE];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
-  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OPEN;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OPEN];
 
   [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
   [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
@@ -95,11 +102,11 @@
   [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX(self->exportFormatLabel.frame)+6, point.y)];
   [self->exportFormatPopUpButton removeAllItems];
   [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"LaTeXiT", @"LaTeXiT")];
-  self->exportFormatPopUpButton.lastItem.tag = (int)LIBRARY_EXPORT_FORMAT_INTERNAL;
+  [[self->exportFormatPopUpButton lastItem] setTag:(NSInteger)LIBRARY_EXPORT_FORMAT_INTERNAL];
   [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"XML (Property list)", @"XML (Property list)")];
-  self->exportFormatPopUpButton.lastItem.tag = (int)LIBRARY_EXPORT_FORMAT_PLIST;
+  [[self->exportFormatPopUpButton lastItem] setTag:(NSInteger)LIBRARY_EXPORT_FORMAT_PLIST];
   [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"TeX Source", @"TeX Source")];
-  self->exportFormatPopUpButton.lastItem.tag = (int)LIBRARY_EXPORT_FORMAT_TEX_SOURCE;
+  [[self->exportFormatPopUpButton lastItem] setTag:(NSInteger)LIBRARY_EXPORT_FORMAT_TEX_SOURCE];
   
   [self->exportOptionCommentedPreamblesButton setTitle:NSLocalizedString(@"Export commented preambles", @"Export commented preambles")];
   [self->exportOptionUserCommentsButton setTitle:NSLocalizedString(@"Export user comments", @"Export user comments")];
@@ -126,9 +133,11 @@
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [actionMenu addItemWithTitle:NSLocalizedString(@"Show comments pane", @"Show comments pane") action:@selector(toggleCommentsPane:) keyEquivalent:@""].target = self;
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""].target = self;
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""].target = self;
-  self->actionButton.menu = actionMenu;
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"latexize selection again", @"latexize selection again") action:@selector(relatexizeSelectedItems:) keyEquivalent:@""] setTarget:self];
+  [actionMenu addItem:[NSMenuItem separatorItem]];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
+  [self->actionButton setMenu:actionMenu];
   actionMenu.delegate = self;
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
   
@@ -222,13 +231,25 @@
   if (!notification || (notification.object == self->libraryView))
   {
     LibraryEquation* libraryEquation = [[self->libraryView selectedItem] dynamicCastToClass:[LibraryEquation class]];
-    NSString* comment = libraryEquation.comment;
-    self->commentTextView.backgroundColor = (libraryEquation != nil) ? [NSColor controlBackgroundColor] : [NSColor windowBackgroundColor];
-    self->commentTextView.editable = (libraryEquation != nil);
-    self->commentTextView.string = !comment ? @"" : comment;
+    [self refreshCommentsPane:libraryEquation];
   }//end if (!notification || ([notification object] == self->libraryView))
 }
 //end outlineViewSelectionDidChange:
+
+-(void) refreshCommentsPane:(LibraryEquation*)libraryEquation
+{
+  LatexitEquation* latexitEquation = [libraryEquation equation];
+  NSString* comment = [libraryEquation comment];
+  [self->commentTextView setBackgroundColor:(libraryEquation != nil) ? [NSColor controlBackgroundColor] : [NSColor windowBackgroundColor]];
+  [self->commentTextView setEditable:(libraryEquation != nil)];
+  [self->commentTextView setString:!comment ? @"" : comment];
+  NSUInteger pdfDataSizeKB = ([[latexitEquation pdfData] length]+1023)/1024;
+  NSString* sizeKBAsString = !pdfDataSizeKB ? nil :
+    [self->commentSizeFormatter stringFromNumber:[NSNumber numberWithUnsignedInteger:pdfDataSizeKB]];
+  [self->commentTextField setStringValue:!sizeKBAsString ? @"" :
+    [NSString stringWithFormat:@"%@ %@", sizeKBAsString, NSLocalizedString(@"KB", @"KB")]];
+}
+//end refreshCommentsPane:
 
 -(void) textDidEndEditing:(NSNotification*)aNotification
 {
@@ -306,13 +327,15 @@
 {
   BOOL ok = self.window.visible;
   if (menuItem.action == @selector(openEquation:))
-    ok &= ([[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO].count != 0);
+    ok &= ([[[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
   else if (menuItem.action == @selector(openLinkedEquation:))
-    ok &= ([[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO].count != 0);
+    ok &= ([[[self->libraryView selectedItems] filteredArrayWithItemsOfClass:[LibraryEquation class] exactClass:NO] count] != 0);
+  else if (menuItem.action == @selector(newFolder:))
+    ok &= ![[[self libraryView] libraryController] filterPredicate];
   else if (menuItem.action == @selector(importCurrent:))
   {
     MyDocument* document = (MyDocument*) [AppController currentDocument];
-    ok &= document && document.hasImage;
+    ok &= document && [document hasImage] && ![[[self libraryView] libraryController] filterPredicate];
   }
   else if (menuItem.action == @selector(renameItem:))
     ok &= self.canRenameSelectedItems;
@@ -342,8 +365,8 @@
   LatexitEquation* currentLatexitEquation = [document latexitEquationWithCurrentStateTransient:YES];
   [document triggerSmartHistoryFeature];
   id parentOfSelection = [[self->libraryView selectedItem] parent];
-  NSUInteger nbBrothers = [self->libraryView.dataSource outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
-  [[document.undoManager prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation isRecentLatexisation:NO];
+  NSUInteger nbBrothers = [[self->libraryView dataSource] outlineView:self->libraryView numberOfChildrenOfItem:parentOfSelection];
+  [[[document undoManager] prepareWithInvocationTarget:document] applyLatexitEquation:currentLatexitEquation isRecentLatexisation:NO];
   //maybe the user did modify parameter since the equation was computed : we correct it from the pdfData inside the history item
   LatexitEquation* latexitEquationToStore =
     [LatexitEquation latexitEquationWithPDFData:currentLatexitEquation.pdfData useDefaults:YES];
@@ -439,6 +462,129 @@
 }
 //end removeSelectedItems:
 
+-(IBAction) relatexizeRefreshGUI:(id)sender
+{
+  NSString* title = [NSString stringWithFormat:@"%@... (%llu/%llu)", NSLocalizedString(@"latexize selection again", @""), (unsigned long long)self->relatexizeCurrentIndex+1, (unsigned long long)self->relatexizeCurrentCount];
+  [self->relatexizeProgressTextField setStringValue:title];
+  [self->relatexizeProgressIndicator setDoubleValue:!self->relatexizeCurrentCount ? 0. : (1.*(self->relatexizeCurrentIndex+1)/self->relatexizeCurrentCount)];
+}
+//end relatexizeRefreshGUI:
+
+-(IBAction) relatexizeAbort:(id)sender
+{
+  self->relatexizeAbortMonitor = YES;
+}
+//end relatexizeAbort:
+
+-(IBAction) relatexizeSelectedItems:(id)sender
+{
+  NSArray* selectedLibraryItems = [self->libraryView selectedItems];
+  NSMutableArray* inputQueue = [NSMutableArray arrayWithArray:selectedLibraryItems];
+  NSMutableArray* flattenedLibraryEquations = [NSMutableArray arrayWithCapacity:[inputQueue count]];
+  NSPredicate* filterPredicate = [[self->libraryView libraryController] filterPredicate];
+  while([inputQueue count] != 0)
+  {
+    LibraryItem* libraryItem = [[inputQueue objectAtIndex:0] dynamicCastToClass:[LibraryItem class]];
+    [inputQueue removeObjectAtIndex:0];
+    LibraryEquation* libraryEquation = [libraryItem dynamicCastToClass:[LibraryEquation class]];
+    LibraryGroupItem* libraryGroupItem = [libraryItem dynamicCastToClass:[LibraryGroupItem class]];
+    if (libraryEquation)
+      [flattenedLibraryEquations addObject:libraryEquation];
+    else if (libraryGroupItem)
+      [inputQueue insertObjectsFromArray:[libraryGroupItem childrenOrdered:filterPredicate] atIndex:0];
+  }//end while([inputQueue count] != 0)
+  NSUInteger itemsToLatexizeCount = [flattenedLibraryEquations count];
+  if (itemsToLatexizeCount)
+  {
+    self->relatexizeAbortMonitor = NO;
+    self->relatexizeCurrentIndex = 0;
+    self->relatexizeCurrentCount = itemsToLatexizeCount;
+    [self->relatexizeProgressIndicator setMinValue:0.];
+    [self->relatexizeProgressIndicator setMaxValue:1.];
+    [self->relatexizeProgressIndicator setDoubleValue:0.];
+    [self->relatexizeProgressIndicator startAnimation:self];
+    [self->relatexizeAbortButton setTarget:self];
+    [self->relatexizeAbortButton setAction:@selector(relatexizeAbort:)];
+    [NSApp beginSheet:self->relatexizeWindow modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
+    self->relatexizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(relatexizeRefreshGUI:) userInfo:nil repeats:YES];
+    [self relatexizeRefreshGUI:self];
+    self->relatexizeMonitor = [[NSConditionLock alloc] initWithCondition:0];
+    [NSApplication detachDrawingThread:@selector(relatexizeItemsThreadFunction:) toTarget:self withObject:flattenedLibraryEquations];
+  }//end itemsToLatexizeCount
+}
+//end relatexizeSelectedItems:
+
+-(void) relatexizeItemsThreadFunction:(id)object
+{
+  [self->relatexizeMonitor lockWhenCondition:0];
+  NSArray* flattenedLibraryEquations = [object dynamicCastToClass:[NSArray class]];
+  
+  LaTeXProcessor* latexProcessor = [LaTeXProcessor sharedLaTeXProcessor];
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  NSDictionary* compositionConfiguration = [preferencesController compositionConfigurationDocument];
+  CGFloat topMargin = [preferencesController marginsAdditionalTop];
+  CGFloat leftMargin = [preferencesController marginsAdditionalLeft];
+  CGFloat bottomMargin = [preferencesController marginsAdditionalBottom];
+  CGFloat rightMargin = [preferencesController marginsAdditionalRight];
+  NSArray* additionalFilesPaths = [preferencesController additionalFilesPaths];
+  NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+  NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-library"];
+  NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+  NSString* fullLog = nil;
+  NSArray* errors = nil;
+  self->relatexizeCurrentIndex = 0;
+  self->relatexizeCurrentCount = [flattenedLibraryEquations count];
+  NSEnumerator* enumerator = [flattenedLibraryEquations objectEnumerator];
+  id flattenedItem = nil;
+  while(!self->relatexizeAbortMonitor && ((flattenedItem = [enumerator nextObject])))
+  {
+    #ifdef ARC_ENABLED
+    @autoreleasepool {
+    #else
+    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
+    #endif
+    @try{
+      LibraryEquation* libraryEquation = [flattenedItem dynamicCastToClass:[LibraryEquation class]];
+      LatexitEquation* latexitEquation = [libraryEquation equation];
+      if (latexitEquation)
+      {
+        NSData* newPdfData = nil;
+        [latexProcessor
+          latexiseWithPreamble:[[latexitEquation preamble] string]
+                          body:[[latexitEquation sourceText] string]
+                         color:[latexitEquation color]
+                          mode:[latexitEquation mode]
+                 magnification:[latexitEquation pointSize]
+      compositionConfiguration:compositionConfiguration
+               backgroundColor:[latexitEquation backgroundColor]
+                         title:[latexitEquation title]
+                    leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
+          additionalFilesPaths:additionalFilesPaths
+              workingDirectory:workingDirectory
+               fullEnvironment:fullEnvironment
+              uniqueIdentifier:uniqueIdentifier outFullLog:&fullLog outErrors:&errors
+               outPdfData:&newPdfData];
+        if (newPdfData)
+          [latexitEquation setPdfData:newPdfData];
+        else
+          DebugLog(0, @"fullLog = <%@>, errors = <%@>", fullLog, errors);
+      }//end if (latexitEquation)
+      ++self->relatexizeCurrentIndex;
+    }
+    @catch(NSException* e){
+      DebugLog(0, @"exception : <%@>", e);
+    }
+    #ifdef ARC_ENABLED
+    }//@autoreleasepool
+    #else
+    [ap release];
+    #endif
+  }//end for each libraryItem
+  [self->relatexizeMonitor unlockWithCondition:1];
+  [NSApp performSelectorOnMainThread:@selector(endSheet:) withObject:self->relatexizeWindow waitUntilDone:NO];
+}
+//end relatexizeItemsThreadFunction:
+
 //if one LibraryFile item is selected, update it with current document's state
 -(IBAction) refreshItems:(id)sender
 {
@@ -483,8 +629,8 @@
                                                         name:NSOutlineViewSelectionDidChangeNotification
                                                       object:self->libraryView];
         BOOL isSelected = YES;
-        NSUInteger itemIndex   = index;
-        NSIndexSet*  itemIndexes = [NSIndexSet indexSetWithIndex:itemIndex];
+        NSUInteger  itemIndex   = index;
+        NSIndexSet* itemIndexes = [NSIndexSet indexSetWithIndex:itemIndex];
         NSInteger i = 0;
         for(i = 0 ; i<7 ; ++i)
         {
@@ -532,54 +678,34 @@
   openPanel.delegate = self;
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
   openPanel.accessoryView = importAccessoryView;
-  openPanel.allowedFileTypes = @[@"latexlib", @"latexhist", @"library", @"plist", @"tex"];
-  if (self.window.visible) {
-    [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-      [self _openPanelDidEnd:openPanel returnCode:result contextInfo:nil];
-    }];
-  } else {
-    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModal] contextInfo:NULL];
-  }
+  if ([[self window] isVisible])
+    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil] modalForWindow:[self window]
+                        modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:&kImportContext];
+  else if (!isMacOS10_6OrAbove())
+    [self sheetDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]] contextInfo:&kImportContext];
+  else//if (isMacOS10_6OrAbove())
+  {
+    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", @"latexhist", @"library", @"plist", @"tex", nil]];
+    NSInteger returnCode = [openPanel runModal];
+    [self sheetDidEnd:openPanel returnCode:returnCode contextInfo:&kImportContext];
+  }//end if (isMacOS10_6OrAbove())
 }
 //end open:
 
--(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
-{
-  library_import_option_t import_option = importOptionPopUpButton.selectedTag;
-  if (returnCode == NSFileHandlingPanelOKButton)
-  {
-    BOOL ok = [[LibraryManager sharedManager] loadFrom:openPanel.URLs.lastObject.path option:import_option parent:nil];
-    if (!ok)
-    {
-      NSAlert* alert = [NSAlert new];
-      alert.messageText = NSLocalizedString(@"Loading error", @"Loading error");
-      alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format");
-      [alert runModal];
-    }
-    else
-    {
-      [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];
-      [self->libraryView reloadData];
-      [self->libraryView scrollRowToVisible:self->libraryView.numberOfRows-1];
-    }
-  }//end if (returnCode == NSOKButton)
-}
-//end _openPanelDidEnd:returnCode:contextInfo;
-
 -(void) panelSelectionDidChange:(id)sender
 {
-  NSString* selectedFileName = [sender URL].path;
-  BOOL isLaTeXiTLibrary = [selectedFileName.pathExtension isEqualToString:@"latexlib"];
-  NSUInteger selectedIndex = self->importOptionPopUpButton.indexOfSelectedItem;
+  NSString* selectedFileName = [[sender URL] path];
+  BOOL isLaTeXiTLibrary = [[selectedFileName pathExtension] isEqualToString:@"latexlib"];
+  NSUInteger selectedIndex = [self->importOptionPopUpButton indexOfSelectedItem];
   [self->importOptionPopUpButton removeAllItems];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
-  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_MERGE;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_MERGE];
   [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"Overwrite current library")];
-  self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OVERWRITE;
+  [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OVERWRITE];
   if (isLaTeXiTLibrary)
   {
     [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
-    self->importOptionPopUpButton.lastItem.tag = (int)LIBRARY_IMPORT_OPEN;
+    [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OPEN];
   }//end if (isLaTeXiTLibrary)
   if (selectedIndex >= self->importOptionPopUpButton.itemArray.count)
     selectedIndex = 0;
@@ -599,54 +725,36 @@
   [self->savePanel setTitle:NSLocalizedString(@"Export library...", @"Export library...")];
   [self changeLibraryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
-  self->savePanel.accessoryView = self->exportAccessoryView;
-  self->exportOnlySelectedButton.state = NSOffState;
-  self->exportOnlySelectedButton.enabled = (self->libraryView.selectedRow >= 0);
-  savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
-  if (self.window.visible) {
-    [savePanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-      [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:NULL];
-    }];
-  } else
-    [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
+  [self->savePanel setAccessoryView:self->exportAccessoryView];
+  [self->exportOnlySelectedButton setState:NSOffState];
+  [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
+  if ([[self window] isVisible])
+    [self->savePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled") modalForWindow:[self window] modalDelegate:self
+                       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:&kExportContext];
+  else
+    [self sheetDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:&kExportContext];
 }
-
--(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
-{
-  if (returnCode == NSFileHandlingPanelOKButton)
-  {
-    BOOL onlySelection = (exportOnlySelectedButton.state == NSOnState);
-    NSArray* selectedLibraryItems = [self->libraryView selectedItems];
-    NSDictionary* options = @{@"exportCommentedPreambles": [NSNumber numberWithBool:(self->exportOptionCommentedPreamblesButton.state == NSOnState)],
-      @"exportUserComments": [NSNumber numberWithBool:(self->exportOptionUserCommentsButton.state == NSOnState)],
-      @"ignoreTitleHierarchy": [NSNumber numberWithBool:(self->exportOptionIgnoreTitleHierarchyButton.state == NSOnState)]};
-    BOOL ok = [[LibraryManager sharedManager] saveAs:theSavePanel.URL.path onlySelection:onlySelection selection:selectedLibraryItems
-                                              format:exportFormatPopUpButton.selectedTag
-                                             options:options];
-    if (!ok)
-    {
-      NSAlert* alert = [NSAlert new];
-      alert.messageText = NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.");
-      alert.informativeText = @"";
-      
-      [alert runModal];
-    }//end if (ok)
-  }
-  self->savePanel = nil;
-}
-//end _savePanelDidEnd:returnCode:contextInfo:
+//end saveAs:
 
 -(IBAction) changeLibraryExportFormat:(id)sender
 {
   switch((library_export_format_t)[sender selectedTag])
   {
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
-      self->exportAccessoryView.frame = NSMakeRect(0, 0, NSMaxX(self->exportFormatPopUpButton.frame)+20, 82);
-      self->savePanel.allowedFileTypes = @[@"latexlib"];
+      [self->exportAccessoryView setFrame:
+        NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"latexlib"];
+      else
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", nil]];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
-      self->exportAccessoryView.frame = NSMakeRect(0, 0, NSMaxX(self->exportFormatPopUpButton.frame)+20, 82);
-      self->savePanel.allowedFileTypes = @[@"plist"];
+      [self->exportAccessoryView setFrame:
+       NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"plist"];
+      else
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
       break;
     case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
       self->exportAccessoryView.frame = NSMakeRect(0, 0, 
@@ -655,7 +763,10 @@
                  MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
                      NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
                   156);
-      self->savePanel.allowedFileTypes = @[@"tex"];
+      if (!isMacOS10_6OrAbove())
+        [self->savePanel setRequiredFileType:@"tex"];
+      else
+        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
       break;
   }
 }
@@ -663,12 +774,15 @@
 
 -(IBAction) librarySearchFieldChanged:(id)sender
 {
-  /*NSString* searchString = [[[sender dynamicCastToClass:[NSSearchField class]] stringValue] trim];
+  NSString* searchString = [[[sender dynamicCastToClass:[NSSearchField class]] stringValue] trim];
   NSString* predicateString = !searchString || [searchString isEqualToString:@""] ? nil :
-    [NSString stringWithFormat:@"(title contains[cd] '%@') OR (equation.sourceText.string contains[cd] '%@')", searchString, searchString];
-  NSPredicate* predicate = !predicateString? nil :
-  [NSPredicate predicateWithFormat:predicateString];
-  [[self->libraryView libraryController] setFilterPredicate:predicate];*/
+    [NSString stringWithFormat:@"title contains[cd] '%@' OR equation.sourceText.string contains[cd] '%@'",
+      searchString, searchString];
+  NSPredicate* predicate = !predicateString? nil : [NSPredicate predicateWithFormat:predicateString];
+  LibraryController* libraryController = [self->libraryView libraryController];
+  [libraryController setFilterPredicate:predicate];
+  [self _updateButtons:nil];
+  [self->libraryView reloadData];
 }
 //end librarySearchFieldChanged:
 
@@ -676,8 +790,8 @@
 {
   //maybe all documents are closed, so we must update the import button
   MyDocument* anyDocument = (MyDocument*) [AppController currentDocument];
-  importCurrentButton.enabled = (anyDocument && anyDocument.hasImage);
-  [self->libraryView.superview.superview setNeedsDisplay:YES];//to bring scrollview to front and hide the top line of the button
+  [self->importCurrentButton setEnabled:(anyDocument && [anyDocument hasImage] && ![[self->libraryView libraryController] filterPredicate])];
+  [[[self->libraryView superview] superview] setNeedsDisplay:YES];//to bring scrollview to front and hide the top line of the button
 }
 //end _updateButtons:
 
@@ -701,9 +815,9 @@
     NSRect adaptedRect = adaptRectangle(naturalRect, NSMakeRect(0, 0, 512, 512), YES, NO, NO);
     NSPoint locationOnScreen = [NSEvent mouseLocation];
     NSSize screenSize = [NSScreen mainScreen].frame.size;
-    int shiftRight = 24;
-    int shiftLeft = -24-adaptedRect.size.width-16;
-    int shift = (locationOnScreen.x+shiftRight+adaptedRect.size.width+16 > screenSize.width) ? shiftLeft : shiftRight;
+    NSInteger shiftRight = 24;
+    NSInteger shiftLeft = -24-adaptedRect.size.width-16;
+    NSInteger shift = (locationOnScreen.x+shiftRight+adaptedRect.size.width+16 > screenSize.width) ? shiftLeft : shiftRight;
     NSRect newFrame = NSMakeRect(MAX(0, locationOnScreen.x+shift),
                                   MIN(locationOnScreen.y-adaptedRect.size.height/2, screenSize.height-adaptedRect.size.height-16),
                                  adaptedRect.size.width+16, adaptedRect.size.height+16);
@@ -814,18 +928,6 @@
   if (!self->updateLevel)
   {
     ++self->updateLevel;
-    /*NSMutableArray* predicates = [NSMutableArray array];
-    if ([self->importTeXPanelInlineCheckBox state] == NSOnState)
-      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_INLINE]];
-    if ([self->importTeXPanelDisplayCheckBox state] == NSOnState)
-      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_DISPLAY]];
-    if ([self->importTeXPanelAlignCheckBox state] == NSOnState)
-      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_ALIGN]];
-    if ([self->importTeXPanelEqnarrayCheckBox state] == NSOnState)
-      [predicates addObject:[NSPredicate predicateWithFormat:@"self.data.mode == %d", (int)LATEX_MODE_EQNARRAY]];
-    NSPredicate* filterPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
-    [self->importTeXArrayController setFilterPredicate:filterPredicate];*/
-    
     NSEnumerator* enumerator = [self->importTeXArrayController.arrangedObjects objectEnumerator];
     TeXItemWrapper* teXItem = nil;
     while((teXItem = [enumerator nextObject]))
@@ -875,10 +977,76 @@
 }
 //end closeImportTeXItems:
 
--(void) sheetDidEnd:(NSWindow*)sheet returnCode:(int)returnCode contextInfo:(void*)contextInfo
+-(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
-  [sheet orderOut:self];
-  [self->libraryView reloadData];
+  if (contextInfo == &kImportContext)
+  {
+    NSOpenPanel* openPanel = [sheet dynamicCastToClass:[NSOpenPanel class]];
+    library_import_option_t import_option = [importOptionPopUpButton selectedTag];
+    if (returnCode == NSModalResponseOK)
+    {
+      BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
+      if (!ok)
+      {
+        NSAlert* alert = [NSAlert
+          alertWithMessageText:NSLocalizedString(@"Loading error", @"Loading error")
+                 defaultButton:NSLocalizedString(@"OK", @"OK")
+               alternateButton:nil otherButton:nil
+     informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
+       [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+      }
+      else
+      {
+        [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];
+        [self->libraryView reloadData];
+        [self->libraryView scrollRowToVisible:[self->libraryView numberOfRows]-1];
+      }
+    }//end if (returnCode == NSOKButton)
+  }//end if (contextInfo == &kImportContext)
+  else if (contextInfo == &kExportContext)
+  {
+    NSSavePanel* theSavePanel = [sheet dynamicCastToClass:[NSSavePanel class]];
+    if (returnCode == NSFileHandlingPanelOKButton)
+    {
+      BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
+      NSArray* selectedLibraryItems = [self->libraryView selectedItems];
+      NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithBool:([self->exportOptionCommentedPreamblesButton state] == NSOnState)], @"exportCommentedPreambles",
+        [NSNumber numberWithBool:([self->exportOptionUserCommentsButton state] == NSOnState)], @"exportUserComments",
+        [NSNumber numberWithBool:([self->exportOptionIgnoreTitleHierarchyButton state] == NSOnState)], @"ignoreTitleHierarchy",
+        nil];
+      BOOL ok = [[LibraryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedLibraryItems
+                                                format:[exportFormatPopUpButton selectedTag]
+                                               options:options];
+      if (!ok)
+      {
+        NSAlert* alert = [NSAlert
+          alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
+                 defaultButton:NSLocalizedString(@"OK", @"OK")
+               alternateButton:nil otherButton:nil
+     informativeTextWithFormat:nil];
+       [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+      }//end if (ok)
+    }
+    self->savePanel = nil;
+  }//end if (contextInfo == &kExportContext)
+  else if (sheet == self->relatexizeWindow)
+  {
+    [self->relatexizeMonitor lockWhenCondition:1];
+    [self->relatexizeMonitor unlockWithCondition:1];
+    self->relatexizeMonitor = nil;
+    [self->relatexizeTimer invalidate];
+    self->relatexizeTimer = nil;
+    [[LibraryManager sharedManager] vacuum];
+    [self->relatexizeProgressIndicator stopAnimation:self];
+    [sheet orderOut:self];
+    [self outlineViewSelectionDidChange:nil];
+  }//end if (sheet == self->relatexizeWindow)
+  else//if (sheet != self->relatexizeWindow)
+  {
+    [sheet orderOut:self];
+    [self->libraryView reloadData];
+  }//end if (sheet != self->relatexizeWindow)
 }
 //end sheetDidEnd:returnCode:contextInfo:
 
@@ -941,12 +1109,13 @@
     }//end for each teXItem
     
     //fix sortIndexes of root nodes
-    LibraryController* libraryController = self->libraryView.libraryController;
+    LibraryController* libraryController = [self->libraryView libraryController];
+    NSPredicate* filterPredicate = [libraryController filterPredicate];
     NSMutableArray* brothers = [NSMutableArray arrayWithArray:
-                                !parent  ? [libraryController rootItems] : [parent childrenOrdered]];
+                                !parent  ? [libraryController rootItems:filterPredicate] : [parent childrenOrdered:filterPredicate]];
     [brothers removeObjectsInArray:newLibraryRootItems];
     [brothers insertObjectsFromArray:newLibraryRootItems atIndex:(proposedChildIndex == NSOutlineViewDropOnItemIndex) ?
-      brothers.count : MIN([brothers count], (unsigned)proposedChildIndex)];
+      [brothers count] : MIN([brothers count], (unsigned)proposedChildIndex)];
     NSUInteger nbBrothers = brothers.count;
     while(nbBrothers--)
       [brothers[nbBrothers] setSortIndex:nbBrothers];

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreamblesController.h"
@@ -97,7 +97,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   {
     NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [change[NSKeyValueChangeNewKey] integerValue];
     NSInteger newIndex = curIndex;
-    NSInteger count = (NSInteger)[self.arrangedObjects count];
+    NSInteger count = (NSInteger)[[self arrangedObjects] count];
     if ((curIndex<0) && count)
       newIndex = 0;
     else if (curIndex>=count)

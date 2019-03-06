@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryItem.h"
@@ -283,9 +283,10 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(id) plistDescription
 {
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
   NSMutableDictionary* plist = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @"2.11.0", @"version",
+       applicationVersion, @"version",
        [[self equation] plistDescription], @"equation",
        nil];
   return plist;
@@ -322,7 +323,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.11.0"     forKey:@"version"];
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+  [coder encodeObject:applicationVersion forKey:@"version"];
   [coder encodeObject:[self equation] forKey:@"equation"];
 }
 //end encodeWithCoder:
@@ -388,7 +390,7 @@ static NSEntityDescription* cachedWrapperEntity = nil;
       preamble = newPreamble;
     }
     
-    equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor];
+    equation = [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble sourceText:sourceText color:color pointSize:pointSize date:date mode:mode backgroundColor:backgroundColor title:nil];
 
 
     equation.title = title;

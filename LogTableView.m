@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This NSTableView reports errors at certain lines of the latex source code
 
@@ -72,7 +72,7 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
 {
   id object = errorLines[rowIndex][aTableColumn.identifier];
   //if the line number is equal to 0, do not display it
-  if ([aTableColumn.identifier isEqualToString:@"line"] && ![object intValue])
+  if ([aTableColumn.identifier isEqualToString:@"line"] && ![object integerValue])
     object = nil;
   return object;
 }

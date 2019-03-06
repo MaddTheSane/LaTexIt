@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>author</key>
+	<string>Sherman Gregory</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>cancel</string>
+			<key>requires</key>
+			<string>cancel</string>
+			<key>latexCode</key>
+			<string>\cancel</string>
+			<key>numberOfArguments</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>numberOfArguments</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>bcancel</string>
+			<key>requires</key>
+			<string>cancel</string>
+			<key>latexCode</key>
+			<string>\bcancel</string>
+		</dict>
+		<dict>
+			<key>numberOfArguments</key>
+			<integer>1</integer>
+			<key>name</key>
+			<string>xcancel</string>
+			<key>requires</key>
+			<string>cancel</string>
+			<key>latexCode</key>
+			<string>\xcancel</string>
+		</dict>
+		<dict>
+			<key>numberOfArguments</key>
+			<integer>2</integer>
+			<key>name</key>
+			<string>cancelto</string>
+			<key>requires</key>
+			<string>cancel</string>
+			<key>latexCode</key>
+			<string>\cancelto{a}</string>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>slash cancelers</string>
+	<key>numberOfItemsPerRow</key>
+	<integer>4</integer>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

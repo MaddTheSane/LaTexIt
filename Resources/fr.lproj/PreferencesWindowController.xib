@@ -112,7 +112,9 @@
                 <outlet property="historyDeleteOldEntriesLimitTextField" destination="9499" id="9514"/>
                 <outlet property="historySaveServiceResultsCheckbox" destination="9491" id="9509"/>
                 <outlet property="historySmartCheckbox" destination="9503" id="9511"/>
+                <outlet property="historyVacuumButton" destination="9798" id="9800"/>
                 <outlet property="historyView" destination="9489" id="9490"/>
+                <outlet property="libraryVacuumButton" destination="9795" id="9797"/>
                 <outlet property="libraryView" destination="9515" id="9559"/>
                 <outlet property="marginsAdditionalBottomTextField" destination="688" id="7036"/>
                 <outlet property="marginsAdditionalLeftTextField" destination="691" id="7034"/>
@@ -171,9 +173,9 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="-3" userLabel="Application"/>
         <window title="Préférences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="preferences" animationBehavior="default" id="129" userLabel="Preferences" customClass="PreferencesWindow">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="449" y="416" width="548" height="228"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
@@ -199,7 +201,7 @@
                 <box boxType="oldStyle" borderType="none" titlePosition="noTitle" id="7738">
                     <rect key="frame" x="34" y="13" width="532" height="174"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <view key="contentView" id="K4K-Jk-lFd">
+                    <view key="contentView" id="CXp-fx-URe">
                         <rect key="frame" x="0.0" y="0.0" width="532" height="174"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -215,7 +217,7 @@
                             <box boxType="oldStyle" borderType="line" titlePosition="noTitle" id="8758">
                                 <rect key="frame" x="156" y="0.0" width="220" height="140"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="Gu9-qi-g31">
+                                <view key="contentView" id="gGw-eS-2EX">
                                     <rect key="frame" x="1" y="1" width="218" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -267,7 +269,7 @@
                                         <box boxType="oldStyle" borderType="line" titlePosition="noTitle" id="8759">
                                             <rect key="frame" x="77" y="37" width="64" height="64"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <view key="contentView" id="Nrz-YM-Src">
+                                            <view key="contentView" id="zGA-e3-vlQ">
                                                 <rect key="frame" x="1" y="1" width="62" height="62"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </view>
@@ -278,7 +280,7 @@
                         </subviews>
                     </view>
                 </box>
-                <button toolTip="Pour la lisibilité des équations de couleur claire, le fond de l'aperçu est assombri" imageHugsTitle="YES" id="1213">
+                <button toolTip="Pour la lisibilité des équations de couleur claire, le fond de l'aperçu est assombri" id="1213">
                     <rect key="frame" x="136" y="305" width="352" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Arrière-plan de l'aperçu automatiquement contrasté" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9291">
@@ -286,7 +288,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button toolTip="Pour la lisibilité des équations de couleur claire, le fond de l'aperçu est assombri" imageHugsTitle="YES" id="9678">
+                <button toolTip="Pour la lisibilité des équations de couleur claire, le fond de l'aperçu est assombri" id="9678">
                     <rect key="frame" x="136" y="285" width="196" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Ajuster l'aperçu à la fenêtre" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9679">
@@ -411,31 +413,31 @@
                         <outlet property="nextKeyView" destination="574" id="844"/>
                     </connections>
                 </colorWell>
-                <button imageHugsTitle="YES" id="582">
+                <button id="582">
                     <rect key="frame" x="151" y="364" width="298" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Attention : jpeg ne gère pas la transparence" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="9282">
+                    <buttonCell key="cell" type="square" title="Attention : jpeg ne gère pas la transparence" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="9282">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button imageHugsTitle="YES" id="9613">
+                <button id="9613">
                     <rect key="frame" x="186" y="364" width="228" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : pdf2svg path is invalid" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="9614">
+                    <buttonCell key="cell" type="square" title="Warning : pdf2svg path is invalid" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" state="on" inset="2" id="9614">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button imageHugsTitle="YES" id="9762">
+                <button id="9762">
                     <rect key="frame" x="186" y="364" width="228" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="9763">
+                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" state="on" inset="2" id="9763">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="581">
+                <button verticalHuggingPriority="750" id="581">
                     <rect key="frame" x="463" y="442" width="102" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Options..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9281">
@@ -447,12 +449,12 @@
                         <outlet property="nextKeyView" destination="1162" id="1166"/>
                     </connections>
                 </button>
-                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="574">
+                <popUpButton verticalHuggingPriority="750" id="574">
                     <rect key="frame" x="231" y="446" width="233" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9280">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="system"/>
                         <menu key="menu" title="OtherViews" id="575"/>
                     </popUpButtonCell>
                     <connections>
@@ -460,7 +462,7 @@
                     </connections>
                 </popUpButton>
                 <segmentedControl toolTip="Display mode : \[...\], inline mode : $...$" focusRingType="none" verticalHuggingPriority="750" id="9673">
-                    <rect key="frame" x="181" y="244" width="360" height="24"/>
+                    <rect key="frame" x="181" y="244" width="360" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" state="on" borderStyle="border" focusRingType="none" alignment="left" segmentDistribution="fill" style="automatic" trackingMode="selectOne" id="9674">
                         <font key="font" metaFont="system"/>
@@ -476,10 +478,10 @@
                         <outlet property="nextKeyView" destination="585" id="9677"/>
                     </connections>
                 </segmentedControl>
-                <button toolTip="La couleur d'arrière-plan de l'aperçu peut être ajoutée en tant que réelle couleur de fond" imageHugsTitle="YES" id="9792">
+                <button toolTip="La couleur d'arrière-plan de l'aperçu peut être ajoutée en tant que réelle couleur de fond" id="9792">
                     <rect key="frame" x="188" y="387" width="223" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Inclure la couleur d'arrière-plan" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9793">
+                    <buttonCell key="cell" type="check" title="Inclure la couleur d'arrière-plan" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9793">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -500,7 +502,7 @@
                                 <rect key="frame" x="10" y="33" width="554" height="425"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="620">
+                                    <button verticalHuggingPriority="750" id="620">
                                         <rect key="frame" x="435" y="377" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9299">
@@ -533,9 +535,9 @@
                                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="946">
                                         <rect key="frame" x="20" y="53" width="514" height="113"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="Xon-se-vSK">
+                                        <clipView key="contentView" id="bfh-6Q-ea2">
                                             <rect key="frame" x="1" y="1" width="512" height="111"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="947" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="512" height="111"/>
@@ -585,7 +587,7 @@ du texte &amp; $des maths$ \\
                                     <box boxType="oldStyle" borderType="line" title="Title" titlePosition="noTitle" id="963">
                                         <rect key="frame" x="20" y="200" width="514" height="167"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="Q4u-yU-lCT">
+                                        <view key="contentView" id="EkT-9Z-wEO">
                                             <rect key="frame" x="1" y="1" width="512" height="165"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -631,7 +633,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="608" id="1230"/>
                                                     </connections>
                                                 </colorWell>
-                                                <button imageHugsTitle="YES" id="605">
+                                                <button id="605">
                                                     <rect key="frame" x="284" y="134" width="161" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Coloration syntaxique" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9304">
@@ -711,7 +713,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <button imageHugsTitle="YES" id="1208">
+                                                <button id="1208">
                                                     <rect key="frame" x="32" y="18" width="203" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Vérification de l'orthographe" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9310">
@@ -727,7 +729,7 @@ du texte &amp; $des maths$ \\
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9601"/>
                                                 </stepper>
-                                                <button imageHugsTitle="YES" id="9602">
+                                                <button id="9602">
                                                     <rect key="frame" x="32" y="44" width="154" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="La touche Tab insère" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9603">
@@ -759,7 +761,7 @@ du texte &amp; $des maths$ \\
                                             </subviews>
                                         </view>
                                     </box>
-                                    <button imageHugsTitle="YES" id="1220">
+                                    <button id="1220">
                                         <rect key="frame" x="18" y="18" width="246" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="check" title="Réduire la taille de la zone de texte" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9311">
@@ -776,22 +778,22 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Raccourcis" identifier="" id="1171">
                             <view key="view" id="1173">
                                 <rect key="frame" x="10" y="33" width="554" height="425"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="1197">
+                                    <button toolTip="supprimer l'élément sélectionné" id="1197">
                                         <rect key="frame" x="42" y="26" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9312">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9312">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
-                                    <button toolTip="ajouter un élément" verticalHuggingPriority="750" imageHugsTitle="YES" id="1198">
+                                    <button toolTip="ajouter un élément" id="1198">
                                         <rect key="frame" x="20" y="26" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9313">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9313">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="1197" id="1199"/>
@@ -800,9 +802,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1174">
                                         <rect key="frame" x="20" y="45" width="514" height="318"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="u7Y-YU-JXH">
-                                            <rect key="frame" x="1" y="0.0" width="512" height="317"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <clipView key="contentView" id="B5N-tN-8tG">
+                                            <rect key="frame" x="1" y="25" width="512" height="292"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9399" id="1175" customClass="TextShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="513" height="292"/>
@@ -819,7 +821,7 @@ du texte &amp; $des maths$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="1206">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="input" width="70" minWidth="70" maxWidth="1000" id="1177">
@@ -829,7 +831,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="center" title="Text Cell" id="1185">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -841,7 +843,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="1184">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -854,7 +856,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="1183">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -911,29 +913,29 @@ du texte &amp; $des maths$ \\
                                 <rect key="frame" x="10" y="33" width="554" height="264"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button toolTip="ajouter un élément" verticalHuggingPriority="750" imageHugsTitle="YES" id="4436">
+                                    <button toolTip="ajouter un élément" id="4436">
                                         <rect key="frame" x="9" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9379">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9379">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="4435" id="4606"/>
                                         </connections>
                                     </button>
-                                    <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="4435">
+                                    <button toolTip="supprimer l'élément sélectionné" id="4435">
                                         <rect key="frame" x="31" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9378">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9378">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="916" id="4607"/>
                                         </connections>
                                     </button>
-                                    <button imageHugsTitle="YES" id="919">
+                                    <button id="919">
                                         <rect key="frame" x="294" y="108" width="93" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="square" title="valeur par défaut" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="9377">
@@ -947,12 +949,12 @@ du texte &amp; $des maths$ \\
                                     <box borderType="line" titlePosition="noTitle" id="5839">
                                         <rect key="frame" x="6" y="5" width="542" height="97"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" id="qrM-2d-99q">
+                                        <view key="contentView" id="I15-Jc-PdR">
                                             <rect key="frame" x="3" y="3" width="536" height="91"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="920">
-                                                    <rect key="frame" x="21" y="9" width="254" height="32"/>
+                                                <button verticalHuggingPriority="750" id="920">
+                                                    <rect key="frame" x="21.5" y="9" width="254" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Appliquer aux documents ouverts" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9381">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -962,7 +964,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="913" id="4611"/>
                                                     </connections>
                                                 </button>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="913">
+                                                <button verticalHuggingPriority="750" id="913">
                                                     <rect key="frame" x="302" y="9" width="212" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Appliquer à la bibliothèque" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9380">
@@ -973,7 +975,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="1810" id="4612"/>
                                                     </connections>
                                                 </button>
-                                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="4156">
+                                                <popUpButton verticalHuggingPriority="750" id="4156">
                                                     <rect key="frame" x="277" y="53" width="167" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="4161" id="9382">
@@ -1006,9 +1008,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="915">
                                         <rect key="frame" x="136" y="127" width="409" height="134"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="yor-Cy-rCO">
+                                        <clipView key="contentView" id="SrX-eo-W43">
                                             <rect key="frame" x="1" y="1" width="407" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="407" height="132"/>
@@ -1027,7 +1029,46 @@ du texte &amp; $des maths$ \\
                                                             <attributes>
                                                                 <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                 <font key="NSFont" size="12" name="Monaco"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="56">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="84">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="112">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="140">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="168">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="196">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="224">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="252">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="280">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="308">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="336">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
                                                             </attributes>
                                                         </fragment>
                                                     </attributedString>
@@ -1051,9 +1092,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="1807">
                                         <rect key="frame" x="9" y="127" width="128" height="134"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" drawsBackground="NO" id="CFt-wO-TzX">
+                                        <clipView key="contentView" id="MYf-6W-WXj">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1079,7 +1120,6 @@ du texte &amp; $des maths$ \\
                                                     </tableColumns>
                                                 </tableView>
                                             </subviews>
-                                            <nil key="backgroundColor"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9418">
                                             <rect key="frame" x="1" y="100" width="111" height="15"/>
@@ -1099,25 +1139,25 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Modèles de corps" identifier="2" id="9569">
                             <view key="view" id="9570">
                                 <rect key="frame" x="10" y="33" width="554" height="264"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9429">
+                                    <button id="9429">
                                         <rect key="frame" x="9" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9444">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9444">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="4435" id="9469"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9430">
+                                    <button id="9430">
                                         <rect key="frame" x="31" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9443">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9443">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="916" id="9472"/>
@@ -1126,11 +1166,11 @@ du texte &amp; $des maths$ \\
                                     <box borderType="line" titlePosition="noTitle" id="9428">
                                         <rect key="frame" x="6" y="5" width="542" height="97"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" id="Jlu-E7-qgB">
+                                        <view key="contentView" id="Q4B-nc-ljY">
                                             <rect key="frame" x="3" y="3" width="536" height="91"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9448">
+                                                <button verticalHuggingPriority="750" id="9448">
                                                     <rect key="frame" x="141" y="9" width="254" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Appliquer aux documents ouverts" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9449">
@@ -1142,7 +1182,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="913" id="9471"/>
                                                     </connections>
                                                 </button>
-                                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9446">
+                                                <popUpButton verticalHuggingPriority="750" id="9446">
                                                     <rect key="frame" x="330" y="53" width="168" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="9453" id="9451">
@@ -1175,12 +1215,12 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9433">
                                         <rect key="frame" x="136" y="194" width="409" height="67"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="A4Y-ky-rHh">
+                                        <clipView key="contentView" id="R24-3Q-9jJ">
                                             <rect key="frame" x="1" y="1" width="407" height="65"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9436" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="1" width="407" height="96"/>
+                                                    <rect key="frame" x="0.0" y="6" width="407" height="90"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1196,7 +1236,46 @@ du texte &amp; $des maths$ \\
                                                             <attributes>
                                                                 <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                 <font key="NSFont" size="12" name="Monaco"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="56">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="84">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="112">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="140">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="168">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="196">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="224">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="252">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="280">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="308">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="336">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
                                                             </attributes>
                                                         </fragment>
                                                     </attributedString>
@@ -1220,12 +1299,12 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9473">
                                         <rect key="frame" x="136" y="127" width="409" height="68"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="2fu-dG-nwO">
+                                        <clipView key="contentView" id="mYH-49-Xgs">
                                             <rect key="frame" x="1" y="1" width="407" height="66"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9474" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="1" width="407" height="96"/>
+                                                    <rect key="frame" x="0.0" y="6" width="407" height="90"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1241,7 +1320,46 @@ du texte &amp; $des maths$ \\
                                                             <attributes>
                                                                 <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                 <font key="NSFont" size="12" name="Monaco"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                                    <tabStops>
+                                                                        <textTab alignment="left" location="28">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="56">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="84">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="112">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="140">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="168">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="196">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="224">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="252">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="280">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="308">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                        <textTab alignment="left" location="336">
+                                                                            <options/>
+                                                                        </textTab>
+                                                                    </tabStops>
+                                                                </paragraphStyle>
                                                             </attributes>
                                                         </fragment>
                                                     </attributedString>
@@ -1265,9 +1383,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="9431">
                                         <rect key="frame" x="9" y="127" width="128" height="134"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" drawsBackground="NO" id="mK7-4T-A63">
+                                        <clipView key="contentView" id="vko-5Z-jqo">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9440" customClass="BodyTemplatesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1293,7 +1411,6 @@ du texte &amp; $des maths$ \\
                                                     </tableColumns>
                                                 </tableView>
                                             </subviews>
-                                            <nil key="backgroundColor"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9438">
                                             <rect key="frame" x="1" y="100" width="111" height="15"/>
@@ -1327,7 +1444,7 @@ du texte &amp; $des maths$ \\
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" tag="-1" imageHugsTitle="YES" id="1140">
+                <popUpButton verticalHuggingPriority="750" tag="-1" id="1140">
                     <rect key="frame" x="250" y="387" width="187" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Modifier les configurations..." bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="-1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1146" id="9347">
@@ -1361,9 +1478,9 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Comportement" identifier="" id="1063">
                             <view key="view" id="1065">
                                 <rect key="frame" x="10" y="33" width="554" height="325"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="638">
+                                    <button verticalHuggingPriority="750" id="638">
                                         <rect key="frame" x="438" y="257" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9315">
@@ -1375,7 +1492,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="639">
-                                        <rect key="frame" x="110" y="264" width="298" height="22"/>
+                                        <rect key="frame" x="109.5" y="264" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9316">
                                             <font key="font" metaFont="system"/>
@@ -1398,7 +1515,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="639" id="867"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="4" imageHugsTitle="YES" id="641">
+                                    <button verticalHuggingPriority="750" tag="4" id="641">
                                         <rect key="frame" x="438" y="87" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="4" inset="2" id="9318">
@@ -1407,7 +1524,7 @@ du texte &amp; $des maths$ \\
                                         </buttonCell>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="642">
-                                        <rect key="frame" x="110" y="94" width="298" height="22"/>
+                                        <rect key="frame" x="109.5" y="94" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9319">
                                             <font key="font" metaFont="system"/>
@@ -1430,7 +1547,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="642" id="871"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="3" imageHugsTitle="YES" id="644">
+                                    <button verticalHuggingPriority="750" tag="3" id="644">
                                         <rect key="frame" x="438" y="120" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="3" inset="2" id="9321">
@@ -1442,7 +1559,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="645">
-                                        <rect key="frame" x="110" y="128" width="298" height="22"/>
+                                        <rect key="frame" x="109.5" y="128" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9322">
                                             <font key="font" metaFont="system"/>
@@ -1465,7 +1582,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="645" id="870"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="647">
+                                    <button verticalHuggingPriority="750" tag="1" id="647">
                                         <rect key="frame" x="438" y="223" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="9324">
@@ -1477,7 +1594,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="648">
-                                        <rect key="frame" x="110" y="230" width="298" height="22"/>
+                                        <rect key="frame" x="109.5" y="230" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9325">
                                             <font key="font" metaFont="system"/>
@@ -1500,7 +1617,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="648" id="868"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="2" imageHugsTitle="YES" id="650">
+                                    <button verticalHuggingPriority="750" tag="2" id="650">
                                         <rect key="frame" x="438" y="155" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="2" inset="2" id="9327">
@@ -1512,7 +1629,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="651">
-                                        <rect key="frame" x="110" y="162" width="298" height="22"/>
+                                        <rect key="frame" x="109.5" y="162" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9328">
                                             <font key="font" metaFont="system"/>
@@ -1535,7 +1652,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="651" id="869"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" tag="5" imageHugsTitle="YES" id="1054">
+                                    <button verticalHuggingPriority="750" tag="5" id="1054">
                                         <rect key="frame" x="438" y="53" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="5" inset="2" id="9330">
@@ -1544,7 +1661,7 @@ du texte &amp; $des maths$ \\
                                         </buttonCell>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="1055">
-                                        <rect key="frame" x="110" y="60" width="298" height="22"/>
+                                        <rect key="frame" x="109.5" y="60" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9331">
                                             <font key="font" metaFont="system"/>
@@ -1567,7 +1684,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="1055" id="1057"/>
                                         </connections>
                                     </textField>
-                                    <button toolTip="Utilise un véritable shell de login prenant en compte les fichiers de configuration comme .bashrc et .profile" imageHugsTitle="YES" id="4917">
+                                    <button toolTip="Utilise un véritable shell de login prenant en compte les fichiers de configuration comme .bashrc et .profile" id="4917">
                                         <rect key="frame" x="118" y="18" width="318" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="check" title="Utiliser la configuration du shell de l'utilisateur" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9333">
@@ -1575,7 +1692,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8236">
+                                    <button verticalHuggingPriority="750" id="8236">
                                         <rect key="frame" x="408" y="263" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9334">
@@ -1583,7 +1700,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8238">
+                                    <button verticalHuggingPriority="750" id="8238">
                                         <rect key="frame" x="408" y="161" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9335">
@@ -1591,7 +1708,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8240">
+                                    <button verticalHuggingPriority="750" id="8240">
                                         <rect key="frame" x="408" y="229" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9336">
@@ -1599,7 +1716,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="9772">
+                                    <button verticalHuggingPriority="750" tag="1" id="9772">
                                         <rect key="frame" x="438" y="189" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="9779">
@@ -1634,7 +1751,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="9773" id="9780"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9775">
+                                    <button verticalHuggingPriority="750" id="9775">
                                         <rect key="frame" x="408" y="195" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9776">
@@ -1642,7 +1759,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8242">
+                                    <button verticalHuggingPriority="750" id="8242">
                                         <rect key="frame" x="408" y="127" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9337">
@@ -1650,7 +1767,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8244">
+                                    <button verticalHuggingPriority="750" id="8244">
                                         <rect key="frame" x="408" y="93" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9338">
@@ -1658,7 +1775,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8246">
+                                    <button verticalHuggingPriority="750" id="8246">
                                         <rect key="frame" x="408" y="59" width="28" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9339">
@@ -1666,7 +1783,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9759">
+                                    <button verticalHuggingPriority="750" id="9759">
                                         <rect key="frame" x="3" y="2" width="66" height="16"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="push" title="Reset..." bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9760">
@@ -1674,7 +1791,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
                                     </button>
-                                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9765">
+                                    <popUpButton verticalHuggingPriority="750" id="9765">
                                         <rect key="frame" x="212" y="298" width="128" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <popUpButtonCell key="cell" type="push" title="lualatex" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="9791" id="9766">
@@ -1696,14 +1813,14 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Scripts additionnels" identifier="" id="1064">
                             <view key="view" id="1066">
                                 <rect key="frame" x="10" y="33" width="554" height="325"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1068">
                                         <rect key="frame" x="123" y="245" width="308" height="75"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <clipView key="contentView" id="KFa-pd-UKK">
-                                            <rect key="frame" x="1" y="0.0" width="306" height="74"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <clipView key="contentView" id="Ioy-Tw-gs4">
+                                            <rect key="frame" x="1" y="25" width="306" height="49"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9402" id="1069">
                                                     <rect key="frame" x="0.0" y="0.0" width="307" height="49"/>
@@ -1719,7 +1836,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="1075">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -1733,7 +1850,7 @@ du texte &amp; $des maths$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="1072">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                     </tableColumns>
@@ -1756,7 +1873,7 @@ du texte &amp; $des maths$ \\
                                     <box titlePosition="noTitle" id="1086">
                                         <rect key="frame" x="40" y="35" width="474" height="176"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <view key="contentView" id="b3q-LY-Ya4">
+                                        <view key="contentView" id="VSW-3w-lT9">
                                             <rect key="frame" x="3" y="3" width="468" height="170"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -1772,9 +1889,9 @@ du texte &amp; $des maths$ \\
                                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1077">
                                                     <rect key="frame" x="16" y="11" width="436" height="102"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <clipView key="contentView" id="GGE-ng-P5R">
+                                                    <clipView key="contentView" id="fDs-HX-XqJ">
                                                         <rect key="frame" x="1" y="1" width="434" height="100"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1078">
                                                                 <rect key="frame" x="0.0" y="0.0" width="434" height="100"/>
@@ -1793,7 +1910,7 @@ du texte &amp; $des maths$ \\
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9403">
-                                                        <rect key="frame" x="409" y="1" width="16" height="83"/>
+                                                        <rect key="frame" x="419" y="1" width="16" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
@@ -1809,9 +1926,9 @@ du texte &amp; $des maths$ \\
                                                 <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1081">
                                                     <rect key="frame" x="16" y="112" width="436" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <clipView key="contentView" id="oaF-BY-agz">
-                                                        <rect key="frame" x="1" y="0.0" width="434" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <clipView key="contentView" id="s9q-zy-uh2">
+                                                        <rect key="frame" x="1" y="16" width="434" height="0.0"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9407" id="1082">
                                                                 <rect key="frame" x="0.0" y="0.0" width="434" height="19"/>
@@ -1827,7 +1944,7 @@ du texte &amp; $des maths$ \\
                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                         </tableHeaderCell>
                                                                         <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="1125">
-                                                                            <font key="font" metaFont="cellTitle"/>
+                                                                            <font key="font" metaFont="titleBar" size="12"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
@@ -1856,11 +1973,11 @@ du texte &amp; $des maths$ \\
                                     <box title="Title" titlePosition="noTitle" id="1091">
                                         <rect key="frame" x="40" y="158" width="474" height="53"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="0Xk-w1-oYG">
+                                        <view key="contentView" id="wkJ-fE-Kg2">
                                             <rect key="frame" x="3" y="3" width="468" height="47"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1088">
+                                                <button verticalHuggingPriority="750" id="1088">
                                                     <rect key="frame" x="376" y="9" width="81" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9342">
@@ -1883,7 +2000,7 @@ du texte &amp; $des maths$ \\
                                             </subviews>
                                         </view>
                                     </box>
-                                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="1094">
+                                    <popUpButton verticalHuggingPriority="750" id="1094">
                                         <rect key="frame" x="190" y="214" width="174" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <popUpButtonCell key="cell" type="push" title="Définition d'un script" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1097" id="9344">
@@ -1897,7 +2014,7 @@ du texte &amp; $des maths$ \\
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="1113">
+                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="1113">
                                         <rect key="frame" x="489" y="296" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" inset="2" id="9345">
@@ -1916,11 +2033,11 @@ du texte &amp; $des maths$ \\
             </subviews>
         </customView>
         <customView id="9515" userLabel="libraryView">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="299"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="325"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button imageHugsTitle="YES" id="9555">
-                    <rect key="frame" x="18" y="263" width="244" height="18"/>
+                <button id="9555">
+                    <rect key="frame" x="18" y="289" width="244" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Encapsulation des exports de texte" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9556">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1928,14 +2045,14 @@ du texte &amp; $des maths$ \\
                     </buttonCell>
                 </button>
                 <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9558">
-                    <rect key="frame" x="17" y="16" width="566" height="243"/>
+                    <rect key="frame" x="17" y="42" width="566" height="243"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <view key="contentView" id="UYP-sq-e2w">
+                    <view key="contentView" id="EqF-dT-pfi">
                         <rect key="frame" x="3" y="3" width="560" height="237"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" id="9534">
-                                <rect key="frame" x="407" y="13" width="77" height="14"/>
+                                <rect key="frame" x="406" y="13" width="77" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="# : code latex" id="9551">
                                     <font key="font" metaFont="smallSystem"/>
@@ -1944,7 +2061,7 @@ du texte &amp; $des maths$ \\
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" id="9535">
-                                <rect key="frame" x="288" y="13" width="115" height="14"/>
+                                <rect key="frame" x="274" y="13" width="116" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="@ : titre de l'élément" id="9550">
                                     <font key="font" metaFont="smallSystem"/>
@@ -1952,23 +2069,23 @@ du texte &amp; $des maths$ \\
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="9536">
-                                <rect key="frame" x="102" y="10" width="23" height="20"/>
+                            <button toolTip="supprimer l'élément sélectionné" id="9536">
+                                <rect key="frame" x="104" y="10" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9549">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9549">
+                                    <behavior key="behavior" lightByContents="YES"/>
+                                    <font key="font" size="18" name="Monaco"/>
                                 </buttonCell>
                                 <connections>
                                     <outlet property="nextKeyView" destination="9545" id="9566"/>
                                 </connections>
                             </button>
-                            <button toolTip="ajouter un élément" verticalHuggingPriority="750" imageHugsTitle="YES" id="9537">
-                                <rect key="frame" x="80" y="10" width="23" height="20"/>
+                            <button toolTip="ajouter un élément" id="9537">
+                                <rect key="frame" x="82" y="10" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9548">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9548">
+                                    <behavior key="behavior" lightByContents="YES"/>
+                                    <font key="font" size="13" name="Monaco"/>
                                 </buttonCell>
                                 <connections>
                                     <outlet property="nextKeyView" destination="9536" id="9565"/>
@@ -1977,9 +2094,9 @@ du texte &amp; $des maths$ \\
                             <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="9538">
                                 <rect key="frame" x="80" y="29" width="399" height="154"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <clipView key="contentView" id="iHe-Sh-VHz">
+                                <clipView key="contentView" id="jqR-PN-ZqT">
                                     <rect key="frame" x="1" y="1" width="397" height="152"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9545" customClass="EncapsulationsTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="397" height="152"/>
@@ -2030,14 +2147,23 @@ du texte &amp; $des maths$ \\
                         </subviews>
                     </view>
                 </box>
+                <button verticalHuggingPriority="750" id="9795">
+                    <rect key="frame" x="15" y="14" width="125" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Compact database" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9796">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
             </subviews>
+            <point key="canvasLocation" x="-527" y="156.5"/>
         </customView>
         <customView id="9489" userLabel="historyView">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="106"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="132"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button imageHugsTitle="YES" id="9491">
-                    <rect key="frame" x="23" y="70" width="252" height="18"/>
+                <button id="9491">
+                    <rect key="frame" x="23" y="96" width="252" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Enregistrer les résultats des services" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9492">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2047,8 +2173,8 @@ du texte &amp; $des maths$ \\
                         <outlet property="nextKeyView" destination="1024" id="9493"/>
                     </connections>
                 </button>
-                <button imageHugsTitle="YES" id="9494">
-                    <rect key="frame" x="23" y="44" width="278" height="18"/>
+                <button id="9494">
+                    <rect key="frame" x="23" y="70" width="278" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Supprimer les éléments vieux de plus de" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9495">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2059,7 +2185,7 @@ du texte &amp; $des maths$ \\
                     </connections>
                 </button>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9497">
-                    <rect key="frame" x="338" y="39" width="19" height="27"/>
+                    <rect key="frame" x="338" y="65" width="19" height="27"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9498"/>
                     <connections>
@@ -2067,7 +2193,7 @@ du texte &amp; $des maths$ \\
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" id="9499">
-                    <rect key="frame" x="306" y="42" width="34" height="22"/>
+                    <rect key="frame" x="306" y="68" width="34" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9500">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="9508">
@@ -2082,7 +2208,7 @@ du texte &amp; $des maths$ \\
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9501">
-                    <rect key="frame" x="359" y="45" width="38" height="17"/>
+                    <rect key="frame" x="359" y="71" width="38" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="jours" id="9502">
                         <font key="font" metaFont="system"/>
@@ -2090,8 +2216,8 @@ du texte &amp; $des maths$ \\
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button imageHugsTitle="YES" id="9503">
-                    <rect key="frame" x="23" y="18" width="553" height="18"/>
+                <button id="9503">
+                    <rect key="frame" x="23" y="44" width="553" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Historique intelligente (enregistre les éléments lorsqu'ils sont effectivement utilisés)" bezelStyle="regularSquare" imagePosition="left" alignment="center" inset="2" id="9504">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2100,6 +2226,14 @@ du texte &amp; $des maths$ \\
                     <connections>
                         <outlet property="nextKeyView" destination="1024" id="9505"/>
                     </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="9798">
+                    <rect key="frame" x="20" y="14" width="125" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Compact database" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9799">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
                 </button>
             </subviews>
         </customView>
@@ -2115,7 +2249,7 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Configuration" identifier="" id="1025">
                             <view key="view" id="1027">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <customView id="8932">
                                         <rect key="frame" x="80" y="8" width="394" height="236"/>
@@ -2130,7 +2264,7 @@ du texte &amp; $des maths$ \\
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="2494">
+                                            <popUpButton verticalHuggingPriority="750" id="2494">
                                                 <rect key="frame" x="173" y="211" width="128" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="2501" id="9358">
@@ -2170,10 +2304,10 @@ du texte &amp; $des maths$ \\
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button imageHugsTitle="YES" id="676">
+                                            <button id="676">
                                                 <rect key="frame" x="41" y="54" width="312" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <buttonCell key="cell" type="square" title="Cela empêche parfois LinkBack de fonctionner" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="9353">
+                                                <buttonCell key="cell" type="square" title="Cela empêche parfois LinkBack de fonctionner" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="9353">
                                                     <behavior key="behavior" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -2251,7 +2385,7 @@ du texte &amp; $des maths$ \\
                                                     </column>
                                                 </cells>
                                             </matrix>
-                                            <button imageHugsTitle="YES" id="667">
+                                            <button id="667">
                                                 <rect key="frame" x="57" y="77" width="279" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="check" title="Aligner l'équation dans le texte d'origine" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9350">
@@ -2262,7 +2396,7 @@ du texte &amp; $des maths$ \\
                                                     <outlet property="nextKeyView" destination="677" id="854"/>
                                                 </connections>
                                             </button>
-                                            <button imageHugsTitle="YES" id="677">
+                                            <button id="677">
                                                 <rect key="frame" x="56" y="8" width="281" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="check" title="Enregistrer les résultats dans l'historique" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9354">
@@ -2281,14 +2415,14 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Raccourcis clavier" identifier="" id="1026">
                             <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1029">
                                         <rect key="frame" x="13" y="44" width="528" height="132"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <clipView key="contentView" id="G1v-j8-S7O">
-                                            <rect key="frame" x="1" y="0.0" width="526" height="131"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <clipView key="contentView" id="xgR-Fb-9YF">
+                                            <rect key="frame" x="1" y="25" width="526" height="106"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9410" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="527" height="106"/>
@@ -2305,7 +2439,7 @@ du texte &amp; $des maths$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="1037">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="description" editable="NO" width="362" minWidth="362" maxWidth="1000" id="1035">
@@ -2328,7 +2462,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="center" title="Text Cell" id="1034">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -2339,7 +2473,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
-                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="NSApplicationIcon" id="1032"/>
+                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="imageCell:1032:image" id="1032"/>
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
@@ -2370,10 +2504,10 @@ du texte &amp; $des maths$ \\
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button imageHugsTitle="YES" id="1045">
+                                    <button id="1045">
                                         <rect key="frame" x="34" y="17" width="485" height="16"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="Cette touche de raccourci est associée à une autre opération. Choisissez-en une autre." bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="left" imageScaling="proportionallyDown" inset="2" id="9361">
+                                        <buttonCell key="cell" type="square" title="Cette touche de raccourci est associée à une autre opération. Choisissez-en une autre." bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="left" alternateImage="warning-triangle" inset="2" id="9361">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
@@ -2393,22 +2527,22 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Filtres" identifier="filters" id="9617">
                             <view key="view" id="9618">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="9619">
+                                    <button toolTip="supprimer l'élément sélectionné" id="9619">
                                         <rect key="frame" x="42" y="88" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9637">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9637">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
-                                    <button toolTip="ajouter un élément" verticalHuggingPriority="750" imageHugsTitle="YES" id="9620">
+                                    <button toolTip="ajouter un élément" id="9620">
                                         <rect key="frame" x="20" y="88" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9636">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9636">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="9619" id="9658"/>
@@ -2417,9 +2551,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9621">
                                         <rect key="frame" x="20" y="107" width="514" height="94"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="5V5-xv-R1I">
-                                            <rect key="frame" x="1" y="0.0" width="512" height="93"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <clipView key="contentView" id="aMf-Sd-ZKN">
+                                            <rect key="frame" x="1" y="25" width="512" height="68"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9624" id="9627" customClass="ServiceRegularExpressionFiltersTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="513" height="68"/>
@@ -2436,7 +2570,7 @@ du texte &amp; $des maths$ \\
                                                             </tableHeaderCell>
                                                             <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="9632">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="inputPattern" width="225" minWidth="225" maxWidth="1000" id="9629">
@@ -2446,7 +2580,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="9634">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -2459,7 +2593,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="9635">
-                                                                <font key="font" metaFont="cellTitle"/>
+                                                                <font key="font" metaFont="titleBar" size="12"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -2495,7 +2629,7 @@ du texte &amp; $des maths$ \\
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="9660">
+                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9660">
                                         <rect key="frame" x="512" y="84" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="9661">
@@ -2506,9 +2640,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9663">
                                         <rect key="frame" x="20" y="17" width="253" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <clipView key="contentView" id="vPG-ix-9Oq">
+                                        <clipView key="contentView" id="ife-wp-OAe">
                                             <rect key="frame" x="1" y="1" width="251" height="61"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9666" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="251" height="61"/>
@@ -2534,9 +2668,9 @@ du texte &amp; $des maths$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9667">
                                         <rect key="frame" x="281" y="17" width="253" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <clipView key="contentView" id="2OM-i2-2Yz">
+                                        <clipView key="contentView" id="9PO-0v-SHc">
                                             <rect key="frame" x="1" y="1" width="251" height="61"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9668" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="251" height="61"/>
@@ -2585,7 +2719,7 @@ du texte &amp; $des maths$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <tabView autoresizesSubviews="NO" id="9681">
+                <tabView id="9681">
                     <rect key="frame" x="13" y="10" width="574" height="576"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <font key="font" metaFont="system"/>
@@ -2598,7 +2732,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="7739">
                                         <rect key="frame" x="77" y="35" width="399" height="456"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="Af3-e5-cD2">
+                                        <clipView key="contentView" id="Xkt-li-6UU">
                                             <rect key="frame" x="1" y="1" width="397" height="454"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2636,7 +2770,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="7754">
+                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="7754">
                                         <rect key="frame" x="515" y="12" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" inset="2" id="9367">
@@ -2644,20 +2778,20 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <button toolTip="supprimer l'élément sélectionné" verticalHuggingPriority="750" imageHugsTitle="YES" id="7740">
+                                    <button toolTip="supprimer l'élément sélectionné" id="7740">
                                         <rect key="frame" x="99" y="16" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9363">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9363">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
-                                    <button toolTip="ajouter un élément" verticalHuggingPriority="750" imageHugsTitle="YES" id="7741">
+                                    <button toolTip="ajouter un élément" id="7741">
                                         <rect key="frame" x="77" y="16" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9364">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9364">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="7740" id="7749"/>
@@ -2678,16 +2812,16 @@ du texte &amp; $des maths$ \\
                         <tabViewItem label="Synchronisation en arrière-plan" identifier="2" id="9683">
                             <view key="view" id="9684">
                                 <rect key="frame" x="10" y="33" width="554" height="530"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9749">
                                         <rect key="frame" x="6" y="390" width="542" height="134"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="EFv-xe-ts5">
+                                        <view key="contentView" id="4EX-MV-z9b">
                                             <rect key="frame" x="3" y="3" width="536" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button imageHugsTitle="YES" id="9738">
+                                                <button id="9738">
                                                     <rect key="frame" x="16" y="101" width="466" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Les nouveaux documents ont automatiquement un fichier sous-jacent" bezelStyle="regularSquare" imagePosition="left" alignment="justified" lineBreakMode="truncatingTail" state="on" inset="2" id="9739">
@@ -2713,7 +2847,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9742">
+                                                <button verticalHuggingPriority="750" id="9742">
                                                     <rect key="frame" x="418" y="5" width="106" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Changer..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9743">
@@ -2721,7 +2855,7 @@ du texte &amp; $des maths$ \\
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9750">
+                                                <button id="9750">
                                                     <rect key="frame" x="47" y="79" width="164" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Synchroniser le préambule" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" state="on" inset="2" id="9751">
@@ -2729,7 +2863,7 @@ du texte &amp; $des maths$ \\
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9752">
+                                                <button id="9752">
                                                     <rect key="frame" x="47" y="39" width="180" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Synchroniser l'environnement" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" state="on" inset="2" id="9753">
@@ -2737,7 +2871,7 @@ du texte &amp; $des maths$ \\
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </buttonCell>
                                                 </button>
-                                                <button imageHugsTitle="YES" id="9754">
+                                                <button id="9754">
                                                     <rect key="frame" x="47" y="59" width="137" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Synchroniser le corps" bezelStyle="regularSquare" imagePosition="left" alignment="justified" controlSize="small" state="on" inset="2" id="9755">
@@ -2751,15 +2885,15 @@ du texte &amp; $des maths$ \\
                                     <box autoresizesSubviews="NO" borderType="line" title="Scripts additionnels" id="9737">
                                         <rect key="frame" x="6" y="5" width="542" height="381"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <view key="contentView" id="wBn-nS-eLJ">
+                                        <view key="contentView" id="hFd-Tj-dB3">
                                             <rect key="frame" x="3" y="3" width="536" height="363"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="9688">
                                                     <rect key="frame" x="36" y="259" width="464" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <clipView key="contentView" id="Uhb-Uc-Qhw">
-                                                        <rect key="frame" x="1" y="0.0" width="462" height="93"/>
+                                                    <clipView key="contentView" id="5Ws-GW-s3T">
+                                                        <rect key="frame" x="1" y="25" width="462" height="68"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9710" id="9713">
@@ -2776,7 +2910,7 @@ du texte &amp; $des maths$ \\
                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                         </tableHeaderCell>
                                                                         <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="9717">
-                                                                            <font key="font" metaFont="cellTitle"/>
+                                                                            <font key="font" metaFont="titleBar" size="12"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
@@ -2790,7 +2924,7 @@ du texte &amp; $des maths$ \\
                                                                         </tableHeaderCell>
                                                                         <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" alignment="center" inset="2" id="9716">
                                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                            <font key="font" metaFont="cellTitle"/>
+                                                                            <font key="font" metaFont="titleBar" size="12"/>
                                                                         </buttonCell>
                                                                     </tableColumn>
                                                                 </tableColumns>
@@ -2813,7 +2947,7 @@ du texte &amp; $des maths$ \\
                                                 <box titlePosition="noTitle" id="9689">
                                                     <rect key="frame" x="33" y="22" width="470" height="207"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <view key="contentView" id="sXd-f7-ivg">
+                                                    <view key="contentView" id="unn-JI-eN6">
                                                         <rect key="frame" x="3" y="3" width="464" height="201"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -2829,7 +2963,7 @@ du texte &amp; $des maths$ \\
                                                             <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9697">
                                                                 <rect key="frame" x="16" y="11" width="432" height="133"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                <clipView key="contentView" id="MfF-HF-JvW">
+                                                                <clipView key="contentView" id="BIG-Xk-HhL">
                                                                     <rect key="frame" x="1" y="1" width="430" height="131"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
@@ -2850,7 +2984,7 @@ du texte &amp; $des maths$ \\
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9701">
-                                                                    <rect key="frame" x="405" y="1" width="16" height="126"/>
+                                                                    <rect key="frame" x="415" y="1" width="16" height="131"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
@@ -2866,8 +3000,8 @@ du texte &amp; $des maths$ \\
                                                             <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="9695">
                                                                 <rect key="frame" x="16" y="143" width="432" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                <clipView key="contentView" id="sxn-s9-ojo">
-                                                                    <rect key="frame" x="1" y="0.0" width="430" height="16"/>
+                                                                <clipView key="contentView" id="ej4-t0-W1P">
+                                                                    <rect key="frame" x="1" y="16" width="430" height="0.0"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9707" id="9704">
@@ -2884,7 +3018,7 @@ du texte &amp; $des maths$ \\
                                                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </tableHeaderCell>
                                                                                     <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="9709">
-                                                                                        <font key="font" metaFont="cellTitle"/>
+                                                                                        <font key="font" metaFont="titleBar" size="12"/>
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
@@ -2910,7 +3044,7 @@ du texte &amp; $des maths$ \\
                                                         </subviews>
                                                     </view>
                                                 </box>
-                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" id="9733">
+                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9733">
                                                     <rect key="frame" x="508" y="329" width="25" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9734">
@@ -2921,7 +3055,7 @@ du texte &amp; $des maths$ \\
                                                         <action selector="synchronizationAdditionalScriptsOpenHelp:" target="-2" id="9735"/>
                                                     </connections>
                                                 </button>
-                                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9690">
+                                                <popUpButton verticalHuggingPriority="750" id="9690">
                                                     <rect key="frame" x="181" y="231" width="174" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Définition d'un script" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9693" id="9691">
@@ -2938,11 +3072,11 @@ du texte &amp; $des maths$ \\
                                                 <box title="Title" titlePosition="noTitle" id="9687">
                                                     <rect key="frame" x="33" y="176" width="470" height="53"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="jaa-4M-8R8">
+                                                    <view key="contentView" id="f88-Eg-vID">
                                                         <rect key="frame" x="3" y="3" width="464" height="47"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <button verticalHuggingPriority="750" imageHugsTitle="YES" id="9719">
+                                                            <button verticalHuggingPriority="750" id="9719">
                                                                 <rect key="frame" x="372" y="9" width="81" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9720">
@@ -2979,7 +3113,7 @@ du texte &amp; $des maths$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="133"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button verticalHuggingPriority="750" imageHugsTitle="YES" id="712">
+                <button verticalHuggingPriority="750" id="712">
                     <rect key="frame" x="213" y="58" width="174" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Vérifier maintenant..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9376">
@@ -2991,8 +3125,8 @@ du texte &amp; $des maths$ \\
                         <outlet property="nextKeyView" destination="711" id="857"/>
                     </connections>
                 </button>
-                <button imageHugsTitle="YES" id="711">
-                    <rect key="frame" x="186" y="16" width="228" height="32"/>
+                <button id="711">
+                    <rect key="frame" x="180" y="19" width="240" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="bevel" title=" Aller sur le site Web de LaTeXiT... " bezelStyle="regularSquare" alignment="center" borderStyle="border" inset="2" id="9375">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3003,7 +3137,7 @@ du texte &amp; $des maths$ \\
                         <outlet property="nextKeyView" destination="710" id="858"/>
                     </connections>
                 </button>
-                <button imageHugsTitle="YES" id="710">
+                <button id="710">
                     <rect key="frame" x="168" y="104" width="263" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Vérifier les mises à jour au démarrage" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9374">
@@ -3023,7 +3157,7 @@ du texte &amp; $des maths$ \\
                 <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9588">
                     <rect key="frame" x="221" y="16" width="362" height="266"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView" id="U0j-9a-bP5">
+                    <view key="contentView" id="oaz-Vh-u4g">
                         <rect key="frame" x="3" y="3" width="356" height="260"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </view>
@@ -3031,7 +3165,7 @@ du texte &amp; $des maths$ \\
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="34" horizontalPageScroll="10" verticalLineScroll="34" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9589">
                     <rect key="frame" x="20" y="20" width="196" height="260"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <clipView key="contentView" id="FET-PJ-rp4">
+                    <clipView key="contentView" id="Lf9-6i-vfx">
                         <rect key="frame" x="1" y="1" width="194" height="258"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -3087,8 +3221,8 @@ du texte &amp; $des maths$ \\
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1129">
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="ecj-gq-hI4">
-                            <rect key="frame" x="1" y="0.0" width="238" height="168"/>
+                        <clipView key="contentView" id="DeN-bm-qsf">
+                            <rect key="frame" x="1" y="25" width="238" height="143"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9423" id="1130" customClass="CompositionConfigurationsTableView">
@@ -3098,14 +3232,14 @@ du texte &amp; $des maths$ \\
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="name" width="235.09423828125" minWidth="40" maxWidth="1000" id="1131">
+                                        <tableColumn identifier="name" width="234.59423828125" minWidth="40" maxWidth="1000" id="1131">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="configurations">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="1160">
-                                                <font key="font" metaFont="cellTitle"/>
+                                                <font key="font" metaFont="titleBar" size="12"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -3128,29 +3262,29 @@ du texte &amp; $des maths$ \\
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1132">
+                    <button id="1132">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9384">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9384">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="18" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="1130" id="1139"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1135">
+                    <button id="1135">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9385">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9385">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="13" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="1132" id="1138"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1153">
+                    <button verticalHuggingPriority="750" id="1153">
                         <rect key="frame" x="184" y="1" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9386">
@@ -3189,8 +3323,8 @@ du texte &amp; $des maths$ \\
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="8056">
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="aos-tl-P5B">
-                            <rect key="frame" x="1" y="0.0" width="238" height="168"/>
+                        <clipView key="contentView" id="wb0-cx-8Jv">
+                            <rect key="frame" x="1" y="25" width="238" height="143"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9426" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
@@ -3200,14 +3334,14 @@ du texte &amp; $des maths$ \\
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="arguments" width="235.09423828125" minWidth="40" maxWidth="1000" id="8061">
+                                        <tableColumn identifier="arguments" width="234.59423828125" minWidth="40" maxWidth="1000" id="8061">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Arguments du programme">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="8062">
-                                                <font key="font" metaFont="cellTitle"/>
+                                                <font key="font" metaFont="titleBar" size="12"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -3230,29 +3364,29 @@ du texte &amp; $des maths$ \\
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8055">
+                    <button id="8055">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9389">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9389">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="18" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="8060" id="8067"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8054">
+                    <button id="8054">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9388">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9388">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="13" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="8055" id="8066"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="8053">
+                    <button verticalHuggingPriority="750" id="8053">
                         <rect key="frame" x="184" y="1" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9387">
@@ -3266,9 +3400,163 @@ du texte &amp; $des maths$ \\
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSApplicationIcon" width="128" height="128"/>
-        <image name="NSCaution" width="128" height="128"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
+        <image name="add" width="23" height="22"/>
+        <image name="add-pressed" width="23" height="22"/>
+        <image name="imageCell:1032:image" width="17" height="17">
+            <mutableData key="keyedArchiveRepresentation">
+YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
+GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
+c1dOU0NvbG9ygAKADRIgwAAAgAOAC1h7MTcsIDE3fdIVChYYWk5TLm9iamVjdHOhF4AEgArSFQoaHaIb
+HIAFgAaACRAA0iAKISJfEBROU1RJRkZSZXByZXNlbnRhdGlvboAHgAhPESBuTU0AKgAABIzQ2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/UlJS/1JSU//Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P9eXl7/Xl5f
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/yAgIf8lJSX/KCgo
+/3BwcP9ubm7/KCgo/yUlJf/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/UlJS
+/2NjZP9ra2z/dnZ2/3Z2dv9qamv/Y2Nk/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/p7fH/6e3x/+nt8f9vb2//cHBx/+nt8f/p7fH/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/25ubv9ubm//0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/Xl5e/11dXv/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/q7fH/6e3x/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/7K4v9nQ2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/bnJ2htDY4P/Q2OD/0Njg
+/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P8oKiwxnqSq
+wdDY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/wAAAAAoKSswb3R4iLG3vtjQ2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg
+/9DY4P/Q2OD/ABABAAADAAAAAQARAAABAQADAAAAAQARAAABAgADAAAABAAABVIBAwADAAAAAQABAAAB
+BgADAAAAAQACAAABCgADAAAAAQABAAABEQAEAAAAAQAAAAgBEgADAAAAAQABAAABFQADAAAAAQAEAAAB
+FgADAAAAAQARAAABFwAEAAAAAQAABIQBHAADAAAAAQABAAABKAADAAAAAQACAAABUgADAAAAAQABAAAB
+UwADAAAABAAABVqHcwAHAAAbDAAABWIAAAAAAAgACAAIAAgAAQABAAEAAQAAGwxhcHBsAhAAAG1udHJS
+R0IgWFlaIAfjAAEABAATAC4AN2Fjc3BBUFBMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD21gABAAAA
+ANMtYXBwbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEWRlc2MA
+AAFQAAAAYmRzY20AAAG0AAAEDmNwcnQAAAXEAAAAI3d0cHQAAAXoAAAAFHJYWVoAAAX8AAAAFGdYWVoA
+AAYQAAAAFGJYWVoAAAYkAAAAFHJUUkMAAAY4AAAIDGFhcmcAAA5EAAAAIHZjZ3QAAA5kAAAGEm5kaW4A
+ABR4AAAGPmNoYWQAABq4AAAALG1tb2QAABrkAAAAKGJUUkMAAAY4AAAIDGdUUkMAAAY4AAAIDGFhYmcA
+AA5EAAAAIGFhZ2cAAA5EAAAAIGRlc2MAAAAAAAAACERpc3BsYXkAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt
+bHVjAAAAAAAAACEAAAAMaHJIUgAAABQAAAGca29LUgAAAAwAAAGwbmJOTwAAABIAAAG8aWQAAAAAABIA
+AAHOaHVIVQAAABQAAAHgY3NDWgAAABYAAAH0ZGFESwAAABwAAAIKdWtVQQAAABwAAAImYXIAAAAAABQA
+AAJCaXRJVAAAABQAAAJWcm9STwAAABIAAAJqbmxOTAAAABYAAAJ8aGVJTAAAABYAAAKSZXNFUwAAABIA
+AAJqZmlGSQAAABAAAAKoemhUVwAAAAwAAAK4dmlWTgAAAA4AAALEc2tTSwAAABYAAALSemhDTgAAAAwA
+AAK4cnVSVQAAACQAAALoZnJGUgAAABYAAAMMbXMAAAAAABIAAAMiY2FFUwAAABgAAAM0dGhUSAAAAAwA
+AANMZGVERQAAABAAAANYZW5VUwAAABIAAANocHRCUgAAABgAAAN6cGxQTAAAABIAAAOSZWxHUgAAACIA
+AAOkc3ZTRQAAABAAAAPGdHJUUgAAABQAAAPWamFKUAAAAA4AAAPqcHRQVAAAABYAAAP4AEwAQwBEACAA
+dQAgAGIAbwBqAGnO7LfsACAATABDAEQARgBhAHIAZwBlAC0ATABDAEQATABDAEQAIABXAGEAcgBuAGEA
+UwB6AO0AbgBlAHMAIABMAEMARABCAGEAcgBlAHYAbgD9ACAATABDAEQATABDAEQALQBmAGEAcgB2AGUA
+cwBrAOYAcgBtBBoEPgQ7BEwEPgRABD4EMgQ4BDkAIABMAEMARCAPAEwAQwBEACAGRQZEBkgGRgYpAEwA
+QwBEACAAYwBvAGwAbwByAGkATABDAEQAIABjAG8AbABvAHIASwBsAGUAdQByAGUAbgAtAEwAQwBEIA8A
+TABDAEQAIAXmBdEF4gXVBeAF2QBWAOQAcgBpAC0ATABDAERfaYJyACAATABDAEQATABDAEQAIABNAOAA
+dQBGAGEAcgBlAGIAbgDpACAATABDAEQEJgQyBDUEQgQ9BD4EOQAgBBYEGgAtBDQEOARBBD8EOwQ1BDkA
+TABDAEQAIABjAG8AdQBsAGUAdQByAFcAYQByAG4AYQAgAEwAQwBEAEwAQwBEACAAZQBuACAAYwBvAGwA
+bwByAEwAQwBEACAOKg41AEYAYQByAGIALQBMAEMARABDAG8AbABvAHIAIABMAEMARABMAEMARAAgAEMA
+bwBsAG8AcgBpAGQAbwBLAG8AbABvAHIAIABMAEMARAOIA7MDxwPBA8kDvAO3ACADvwO4A8wDvQO3ACAA
+TABDAEQARgDkAHIAZwAtAEwAQwBEAFIAZQBuAGsAbABpACAATABDAEQwqzDpMPwAIABMAEMARABMAEMA
+RAAgAGEAIABDAG8AcgBlAHMAAHRleHQAAAAAQ29weXJpZ2h0IEFwcGxlIEluYy4sIDIwMTkAAFhZWiAA
+AAAAAADzUgABAAAAARbPWFlaIAAAAAAAAGGcAAA2hAAAB01YWVogAAAAAAAAbZYAAK/8AAAYjlhZWiAA
+AAAAAAAnowAAGYAAALNSY3VydgAAAAAAAAQAAAAABQAKAA8AFAAZAB4AIwAoAC0AMgA2ADsAQABFAEoA
+TwBUAFkAXgBjAGgAbQByAHcAfACBAIYAiwCQAJUAmgCfAKMAqACtALIAtwC8AMEAxgDLANAA1QDbAOAA
+5QDrAPAA9gD7AQEBBwENARMBGQEfASUBKwEyATgBPgFFAUwBUgFZAWABZwFuAXUBfAGDAYsBkgGaAaEB
+qQGxAbkBwQHJAdEB2QHhAekB8gH6AgMCDAIUAh0CJgIvAjgCQQJLAlQCXQJnAnECegKEAo4CmAKiAqwC
+tgLBAssC1QLgAusC9QMAAwsDFgMhAy0DOANDA08DWgNmA3IDfgOKA5YDogOuA7oDxwPTA+AD7AP5BAYE
+EwQgBC0EOwRIBFUEYwRxBH4EjASaBKgEtgTEBNME4QTwBP4FDQUcBSsFOgVJBVgFZwV3BYYFlgWmBbUF
+xQXVBeUF9gYGBhYGJwY3BkgGWQZqBnsGjAadBq8GwAbRBuMG9QcHBxkHKwc9B08HYQd0B4YHmQesB78H
+0gflB/gICwgfCDIIRghaCG4IggiWCKoIvgjSCOcI+wkQCSUJOglPCWQJeQmPCaQJugnPCeUJ+woRCicK
+PQpUCmoKgQqYCq4KxQrcCvMLCwsiCzkLUQtpC4ALmAuwC8gL4Qv5DBIMKgxDDFwMdQyODKcMwAzZDPMN
+DQ0mDUANWg10DY4NqQ3DDd4N+A4TDi4OSQ5kDn8Omw62DtIO7g8JDyUPQQ9eD3oPlg+zD88P7BAJECYQ
+QxBhEH4QmxC5ENcQ9RETETERTxFtEYwRqhHJEegSBxImEkUSZBKEEqMSwxLjEwMTIxNDE2MTgxOkE8UT
+5RQGFCcUSRRqFIsUrRTOFPAVEhU0FVYVeBWbFb0V4BYDFiYWSRZsFo8WshbWFvoXHRdBF2UXiReuF9IX
+9xgbGEAYZRiKGK8Y1Rj6GSAZRRlrGZEZtxndGgQaKhpRGncanhrFGuwbFBs7G2MbihuyG9ocAhwqHFIc
+exyjHMwc9R0eHUcdcB2ZHcMd7B4WHkAeah6UHr4e6R8THz4faR+UH78f6iAVIEEgbCCYIMQg8CEcIUgh
+dSGhIc4h+yInIlUigiKvIt0jCiM4I2YjlCPCI/AkHyRNJHwkqyTaJQklOCVoJZclxyX3JicmVyaHJrcm
+6CcYJ0kneierJ9woDSg/KHEooijUKQYpOClrKZ0p0CoCKjUqaCqbKs8rAis2K2krnSvRLAUsOSxuLKIs
+1y0MLUEtdi2rLeEuFi5MLoIuty7uLyQvWi+RL8cv/jA1MGwwpDDbMRIxSjGCMbox8jIqMmMymzLUMw0z
+RjN/M7gz8TQrNGU0njTYNRM1TTWHNcI1/TY3NnI2rjbpNyQ3YDecN9c4FDhQOIw4yDkFOUI5fzm8Ofk6
+Njp0OrI67zstO2s7qjvoPCc8ZTykPOM9Ij1hPaE94D4gPmA+oD7gPyE/YT+iP+JAI0BkQKZA50EpQWpB
+rEHuQjBCckK1QvdDOkN9Q8BEA0RHRIpEzkUSRVVFmkXeRiJGZ0arRvBHNUd7R8BIBUhLSJFI10kdSWNJ
+qUnwSjdKfUrESwxLU0uaS+JMKkxyTLpNAk1KTZNN3E4lTm5Ot08AT0lPk0/dUCdQcVC7UQZRUFGbUeZS
+MVJ8UsdTE1NfU6pT9lRCVI9U21UoVXVVwlYPVlxWqVb3V0RXklfgWC9YfVjLWRpZaVm4WgdaVlqmWvVb
+RVuVW+VcNVyGXNZdJ114XcleGl5sXr1fD19hX7NgBWBXYKpg/GFPYaJh9WJJYpxi8GNDY5dj62RAZJRk
+6WU9ZZJl52Y9ZpJm6Gc9Z5Nn6Wg/aJZo7GlDaZpp8WpIap9q92tPa6dr/2xXbK9tCG1gbbluEm5rbsRv
+Hm94b9FwK3CGcOBxOnGVcfByS3KmcwFzXXO4dBR0cHTMdSh1hXXhdj52m3b4d1Z3s3gReG54zHkqeYl5
+53pGeqV7BHtje8J8IXyBfOF9QX2hfgF+Yn7CfyN/hH/lgEeAqIEKgWuBzYIwgpKC9INXg7qEHYSAhOOF
+R4Wrhg6GcobXhzuHn4gEiGmIzokziZmJ/opkisqLMIuWi/yMY4zKjTGNmI3/jmaOzo82j56QBpBukNaR
+P5GokhGSepLjk02TtpQglIqU9JVflcmWNJaflwqXdZfgmEyYuJkkmZCZ/JpomtWbQpuvnByciZz3nWSd
+0p5Anq6fHZ+Ln/qgaaDYoUehtqImopajBqN2o+akVqTHpTilqaYapoum/adup+CoUqjEqTepqaocqo+r
+Aqt1q+msXKzQrUStuK4trqGvFq+LsACwdbDqsWCx1rJLssKzOLOutCW0nLUTtYq2AbZ5tvC3aLfguFm4
+0blKucK6O7q1uy67p7whvJu9Fb2Pvgq+hL7/v3q/9cBwwOzBZ8Hjwl/C28NYw9TEUcTOxUvFyMZGxsPH
+Qce/yD3IvMk6ybnKOMq3yzbLtsw1zLXNNc21zjbOts83z7jQOdC60TzRvtI/0sHTRNPG1EnUy9VO1dHW
+VdbY11zX4Nhk2OjZbNnx2nba+9uA3AXcit0Q3ZbeHN6i3ynfr+A24L3hROHM4lPi2+Nj4+vkc+T85YTm
+DeaW5x/nqegy6LzpRunQ6lvq5etw6/vshu0R7ZzuKO6070DvzPBY8OXxcvH/8ozzGfOn9DT0wvVQ9d72
+bfb794r4Gfio+Tj5x/pX+uf7d/wH/Jj9Kf26/kv+3P9t//9wYXJhAAAAAAADAAAAAmZmAADypwAADVkA
+ABPQAAAKDnZjZ3QAAAAAAAAAAAADAQAAAgAAAAUAFQAyAF8AmwDoATUBiQHsAlwC2gNjA/kEpAVeBicG
++AfYCMgJyArQC9wM9g4NDzcQXRGFEqwT0hT1FhIXJRg5GUAaRRtCHDAdFx4CHuof1CC9IaoimCOKJH4l
+ciZpJ18oVylXKlcrVyxbLWUubS95MIkxmjKsM8M03zX7Nxc4PDlbOnw7kDydPas+uD/CQM9B30LuQ/xF
+DUYeRzFIQUlRSmdLe0yPTaVOuE/LUONR+lMRVCdVP1ZYV3VYmFnAWu9cHV1KXnZfo2DQYgBjMmRiZZhm
+02gLaUlqjGvUbRpuaW+7cRJybXPKdSp2jnfTeO56AHsQfCR9NH5Ff1CAXoFngmqDcoRwhWqGZYdZiEqJ
+NYofiwSL54zJjaWOgI9dkEGRKpISkvqT45TLlbSWm5eDmG2ZV5pDmy+cG50Jnfme65/foNShzKLFo72k
+uqWlpoanbKhTqTiqIKsIq++s2K3Drq6vm7CGsXKyX7NNtDu1KrYZtwW38rjfucu6p7t/vFa9L74KvuW/
+wsCewX7CXsNAxCXFDcX1xuHHz8i+ybDKpcuczJPNiM53z2XQUdE90irTGtQH1PXV5tbW18nYvNmx2qfb
+n9yX3ZPejd+L4IjhhuKM45HkkOWJ5n3nc+hp6WHqYetn7HjtnO7S8CLxlvMq9OT21vj7+2/+Jv//AAAA
+BwAhAFAAlgD2AToBiAHkAkgCuAM5A8wEZgULBcUGiQdbCDkJIAoWCxsMHA0rDkAPXhB5EZgSthPUFO8W
+ABcOGBkZIRoeGxYcAhznHc8euR+hIIkhcyJhI1IkRSUzJignHSgPKQ0qCCsBLAEtBS4JLw0wFTEbMiYz
+NjRGNVo2ajeCOJc5qjqyO7A8rj2tPqk/p0CpQapCqkOsRK5FsUazR7ZIuknASsVLyUzOTdFO2E/fUORR
+6lLxU/lVBVYWVy5YS1loWoRboFy9Xdte+mAbYTtiYGOLZLNl32cQaEVpeGqza/JtNW56b8FxC3JYc4x0
+oXWvdrt3ynjXeeN67nv5fQJ+B38NgBGBEoISgxCEDYUFhf2G9IfoiN2Jzoq/i66Mlo2CjmiPU5A+kSqS
+F5MEk/KU5ZXYls2Xw5i7mbOasJuunK6dsZ61n7ygwaHIorujnaSHpXOmX6dNqDypLKoeqxKsCKz+rfOu
+6a/gsNixzLLFs7u0rLWetpC3g7h4uWu6XbtQvEO9Nr4pvxzAEMEDwfbC68PhxNTFzMbDx7rIs8mtyqrL
+psypzb/O2s/y0QfSHNMx1ELVU9Zl13bYiNmb2rDbxtzh3frfGuA74WDih+Ov5NnmCuc66Gzppurk7CPt
+aO6y8ALxVvKq9AT1ZPbF+Cf5jvr1/Fv9vv8X//8AAAAGAA4AIQA+AGYAmADVARcBVgGdAe4CSwKxAyED
+mAQaBKUFOwXbBn8HKgfcCJEJTQoPCsoLiwxODRANzQ6EDzoP7xCdEUgR7RKIEyQTvRRXFPEVixYnFsQX
+YxgEGKMZRRnpGo4bNRvdHIYdMh3jHpMfRB/5IKwhYyIfItsjlyRUJRgl2CaVJ0sn9CigKUwp9yqkK1Ms
+Ayy1LWcuHC7RL4cwPzD6MbUycTMwM+w0qjVpNiw26zerOG45MTn1Orc7ezxDPQo90j6aP2JAK0D2QcFC
+jUNcRC5E/UXPRqRHe0hPSSlKA0rfS7xMmk14TllPL0/+UMxRnFJuU0FUGVTwVctWqFeGWGpZTVo1WyBc
+DVz8Xexe3l/TYMhhwGK3Y65kpGWTZoJnb2hgaVNqRms7bC9tJm4gbxpwF3EVchNzEnQTdRZ2GnceeCV5
+LHoxezN8GXzxfch+n39ygEeBGYHpgruDjoRhhTSGB4bbh7KIi4liij+LHIv6jNmNu46cj3GQRJEXke6S
+yZOnlIiVa5ZWl0SYNZkvmiybLZwznT6eTJ9eoHShj6Kro72kw6XEpsanyKjOqdeq4KvsrPyuC68esDOx
+SLJfs3a0jbWntr632Ljvugi7Qbyjvfq/SsCfwf7DaMTgxm3IEsnby7/N0tAo0sLVqdkO3Q7iIujA8xz/
+/wAAbmRpbgAAAAAAAAY2AACZAgAAVsgAAFUEAACRsAAAJ3MAABcKAABQDQAAVDkAAgo9AAH64QABJmYA
+AwEAAAIAAAATACwARQBfAHgAkQCrAMUA3wD5ARQBMAFMAWoBhwGmAcYB5wIKAi4CVAJ8AqcC0wMDAzUD
+agOlA+QEJARnBKwE8wU7BYUFzwYcBmoGugcMB10HsAgFCFsIsAkICWEJugoUCnEKzQsqC4cL5gxHDKYN
+CQ1sDdUORA61DyYPnBAUEIsRBBF/Ef0SehL6E3sT/xSFFQoVkRYbFqUXMhfCGFMY4hl2Ggsaohs6G9Mc
+bB0EHZweMR7HH2Af+iCXITQh1CJ0IxQjtiRaJP0lnSZCJucniyguKM8pdSoZKrsrXiwALKItRC3mLosv
+LC/OMHoxRDIdMvkz1zSzNZg2ezdnOFE5Qzo9OzM8Nj0/Pko/YEB7QaJCzEQCRTlGfkfISRJKUUuQTNRO
+GU9iUK1R/lNPVKFV91dKWKNZ/VtVXK1eBl9fYLdiD2NsZMNmN2fBaUJqyGxTbdpvaXD4coV0FXWldzx4
+0XpqfAN9oH87gOGCiYQyheCHsYmPi3ONUo8zkRSS+5Talr2Ynpp4nFeeMKAIod+jtKWGp1apKasHrPKu
+47DYstK0xLbCuL+6uby4vrXAssKvxK3GqsipyqHMo86c0J7SndSK1ofYktqs3NLe7+EZ4zPlQudH6TDq
+/+y77lvv4fFL8qbz8PUp9kr3Yvhu+Wj6V/s2/BD83v2k/pf//wAAAAwAIwA8AFQAbgCHAKEAuwDWAPEB
+DAEpAUYBZAGCAaIBwwHlAgkCLgJVAn8CqwLZAwkDPQN0A7AD8AQxBHQEugUCBUsFlQXgBi8GfgbPByMH
+dQfKCCIIeQjRCSsJhwnjCkIKoQsAC2ELwgwnDIoM8A1YDcMOOA6wDygPpBAjEKERIRGkEigSrhM2E8AU
+TBTaFWgV+RaMFyEXuRhTGOsZiRooGskbaxwOHLEdUh3xHpAfMR/UIHkhHyHHInAjGiPFJHIlHiXIJnYn
+JCfSKH0pKinaKocrMyvgLIwtOS3lLpYvQS/wMK0xgTJeMz40HzUBNek20Te+OKs5oDqYO5A8kT2TPps/
+pUC1Qc5C5EQFRSRGTEd3SKZJ40seTGJNo07mUCtRcVK9VAFVSlaRV9pZIlpuW7Rc/F5EX4xg02IZY2Vk
+rGYSZ5lpFGqQbBFtjG8OcI5yDHOMdQl2j3gUeZt7I3y0fkB/04FwgxCEsoZVh/eJoItPjPyOrZBgkhqT
+0ZWMl06ZDJrMnJOeVqAcoeSjrKV0pzqpBarCrGOuAq+nsVKzArSvtmm4Jbnhu5+9ZL8kwOjCqsRuxivH
+78moy2PNHc7S0IvSQNP31abXV9kM2rncYN4F363hT+Lt5IrmIOey6Urq3+xw7fvviPEW8qX0MPW490f4
+1vpk+/39jv//AAAAHQBEAGoAkQC4AN8BCAEyAV4BiwG8Ae4CJAJeAp4C4gMsA38D3AQ+BKYFEgWBBfMG
+agbjB18H3ghgCOEJZwnuCnkLAwuPDCAMrw1DDeEOkg9FD/4QuBF0EjMS9BO3FH4VQxYNFtgXqBh6GUwa
+JRr/G9scuh2fHoIfaCBRIT4iLSMdJBElBSX4JvEn6SjfKd0q1yvULNEtzy7SL9Mw5DIEMyc0SDVrNos3
+rzjOOfI7DjwvPU0+aT+FQKJBwkLdQ/5FGkY9R2BIhUm4Su1MKU1hTppP1VEQUlFTjFTJVglXRFiFWcZb
+CFxJXYxe0GAVYVpioGPuZUJm0Whyag9rvG1mbx9w2XKUdFJ2FHfZeZx7XH0ift6AoYJkhCSF5ofHibCL
+m417j1iRMJMGlM6WlZhWmgebup1nnw6gsqJSo++liKceqLSqWawVrd6vqLF0sz21ALbJuI+6ULwSvdi/
+lMFXwxjE2saeyGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Ps
+he1y7l3vN/AP8Nfxn/JX8w7zu/RY9Pb1i/YX9qP3KPec+A/4g/jx+VL5tPoW+nj6yvsT+1z7pfvu/Df8
+dvym/NX9Bf00/WT9k/3D/fP+Iv5P/nr+pf7Q/vv/J/9S/33/qP/U//8AAHNmMzIAAAAAAAEMQgAABd7/
+//MmAAAHkgAA/ZH///ui///9owAAA9wAAMBsbW1vZAAAAAAAAAYQAACcgQAAAADBvfOhAAAAAAAAAAAA
+AAAAAAAAANIlJicoWiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU0JpdG1hcEltYWdlUmVwoycpKlpOU0lt
+YWdlUmVwWE5TT2JqZWN00iUmLC1XTlNBcnJheaIsKtIlJi8wXk5TTXV0YWJsZUFycmF5oy8sKtMyMwo0
+NTZXTlNXaGl0ZVxOU0NvbG9yU3BhY2VEMCAwABADgAzSJSY4OVdOU0NvbG9yojgq0iUmOzxXTlNJbWFn
+ZaI7Kl8QD05TS2V5ZWRBcmNoaXZlctE/QFRyb290gAEACAARABoAIwAtADIANwBGAEwAVwBeAGUAcgB5
+AIEAgwCFAIoAjACOAJcAnACnAKkAqwCtALIAtQC3ALkAuwC9AMIA2QDbAN0hTyFUIV8haCF7IX8hiiGT
+IZghoCGjIaghtyG7IcIhyiHXIdwh3iHgIeUh7SHwIfUh/SIAIhIiFSIaAAAAAAAAAgEAAAAAAAAAQQAA
+AAAAAAAAAAAAAAAAIhw
+</mutableData>
+        </image>
+        <image name="remove" width="23" height="22"/>
+        <image name="remove-pressed" width="23" height="22"/>
+        <image name="warning-triangle" width="16" height="16"/>
     </resources>
 </document>

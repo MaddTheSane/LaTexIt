@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -77,6 +77,14 @@
   return self->historyItemsController;
 }
 //end historyItemsController
+
+-(NSArray*) selectedItems
+{
+  NSArray* result = nil;
+  result = [self->historyItemsController selectedObjects];
+  return result;
+}
+//end selectedItems
 
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {

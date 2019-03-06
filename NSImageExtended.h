@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -17,5 +17,6 @@
 -(NSBitmapImageRep*) bitmapImageRepresentationWithMaxSize:(NSSize)maxSize;
 @property (readonly, copy) NSPDFImageRep *pdfImageRepresentation;
 -(NSImageRep*)       bestImageRepresentationInContext:(NSGraphicsContext*)context;
+-(NSImage*) imageWithBackground:(NSColor*)color rounded:(CGFloat)rounded;
 
 @end

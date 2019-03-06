@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,6 +21,10 @@
                 <outlet property="historyView" destination="9" id="49"/>
                 <outlet property="importAccessoryView" destination="83" id="92"/>
                 <outlet property="importOptionPopUpButton" destination="85" id="93"/>
+                <outlet property="relatexizeAbortButton" destination="114" id="122"/>
+                <outlet property="relatexizeProgressIndicator" destination="116" id="121"/>
+                <outlet property="relatexizeProgressTextField" destination="115" id="120"/>
+                <outlet property="relatexizeWindow" destination="112" id="119"/>
                 <outlet property="window" destination="5" id="15"/>
             </connections>
         </customObject>
@@ -64,11 +68,11 @@
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="65">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="65">
                             <rect key="frame" x="-100" y="-100" width="233" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="64">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="64">
                             <rect key="frame" x="-30" y="1" width="15" height="204"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -91,7 +95,7 @@
                     <segmentedControl verticalHuggingPriority="750" id="25">
                         <rect key="frame" x="174" y="7" width="33" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="automatic" trackingMode="selectOne" id="62">
+                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="automatic" trackingMode="selectOne" id="62">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
                                 <segment image="magnifying-glass" width="27" tag="1"/>
@@ -112,7 +116,7 @@
                             <action selector="changeLockedState:" target="-2" id="107"/>
                         </connections>
                     </button>
-                    <searchField wantsLayer="YES" verticalHuggingPriority="750" id="108">
+                    <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" id="108">
                         <rect key="frame" x="8" y="238" width="197" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="109">
@@ -213,9 +217,43 @@
                 </popUpButton>
             </subviews>
         </customView>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="112" userLabel="relatexizePanel" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" utility="YES" fullSizeContentView="YES"/>
+            <rect key="contentRect" x="139" y="154" width="320" height="81"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <view key="contentView" id="113">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="81"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <progressIndicator wantsLayer="YES" maxValue="100" style="bar" id="116">
+                        <rect key="frame" x="20" y="19" width="252" height="20"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    </progressIndicator>
+                    <button id="114">
+                        <rect key="frame" x="280" y="16" width="20" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="118">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="115">
+                        <rect key="frame" x="18" y="44" width="284" height="17"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="117">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="124" y="745.5"/>
+        </window>
     </objects>
     <resources>
-        <image name="NSApplicationIcon" width="128" height="128"/>
+        <image name="NSApplicationIcon" width="32" height="32"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
         <image name="locked" width="24.5" height="24"/>
         <image name="magnifying-glass" width="23.5" height="18"/>
         <image name="unlocked" width="24" height="24"/>

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -27,6 +27,7 @@
 #import "LatexitEquation.h"
 #import "LaTeXPalettesWindowController.h"
 #import "LaTeXProcessor.h"
+#import "LibraryController.h"
 #import "LibraryEquation.h"
 #import "LibraryView.h"
 #import "LibraryWindowController.h"
@@ -234,9 +235,9 @@ static NSMutableDictionary* cachePaths = nil;
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
                                                                  @[@"ps2pdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkColorStyWithConfiguration:) toTarget:self
+    /*[NSApplication detachDrawingThread:@selector(_checkColorStyWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:@"color.sty", @"path",
-                                                                 [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];
+                                                                 [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];*/
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
                                                                  @[@"pdf2svg"], @"executableNames",
@@ -380,25 +381,25 @@ static NSMutableDictionary* cachePaths = nil;
                          keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
   [editCopyImageAsMenu addItem:[NSMenuItem separatorItem]];
   [editCopyImageAsMenu addItemWithTitle:@"PDF" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_PDF];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_PDF];
   [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
                                  target:self action:@selector(copyAs:)
                           keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
-                                    tag:(int)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
+                                    tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [editCopyImageAsMenu addItemWithTitle:@"EPS" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_EPS];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_EPS];
   [editCopyImageAsMenu addItemWithTitle:@"SVG" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_SVG];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_SVG];
   [editCopyImageAsMenu addItemWithTitle:@"TIFF" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_TIFF];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_TIFF];
   [editCopyImageAsMenu addItemWithTitle:@"PNG" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_PNG];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_PNG];
   [editCopyImageAsMenu addItemWithTitle:@"JPEG" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_JPEG];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_JPEG];
   [editCopyImageAsMenu addItemWithTitle:@"MathML" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_MATHML];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_MATHML];
   [editCopyImageAsMenu addItemWithTitle:@"Text" target:self action:@selector(copyAs:)
-                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(int)EXPORT_FORMAT_TEXT];
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_TEXT];
 }
 //end awakeFromNib
 
@@ -469,26 +470,49 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-  NSDictionary* dict = @{[@"selection." stringByAppendingString:CompositionConfigurationPdfLatexPathKey]: @{@"path": CompositionConfigurationPdfLatexPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isPdfLaTeXAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationXeLatexPathKey]: @{@"path": CompositionConfigurationXeLatexPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isXeLaTeXAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey]: @{@"path": CompositionConfigurationLuaLatexPathKey,
-     @"monitor": [NSValue valueWithPointer:&self->isLuaLaTeXAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationLatexPathKey]: @{@"path": CompositionConfigurationLatexPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isLaTeXAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationDviPdfPathKey]: @{@"path": CompositionConfigurationDviPdfPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isDviPdfAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationGsPathKey]: @{@"path": CompositionConfigurationGsPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isGsAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey]: @{@"path": CompositionConfigurationPsToPdfPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isPsToPdfAvailable]},
-    [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]: @{},
-    DragExportSvgPdfToSvgPathKey: @{@"path": DragExportSvgPdfToSvgPathKey,
-      @"monitor": [NSValue valueWithPointer:&self->isPdfToSvgAvailable]}};
-  NSDictionary* configuration = @{@"checkOnlyIfNecessary": @YES,
-    @"updateGUIfromSystemAvailabilities": @YES};
-  if ([dict.allKeys containsObject:keyPath])
+  NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      CompositionConfigurationPdfLatexPathKey, @"path",
+      [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationPdfLatexPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      CompositionConfigurationXeLatexPathKey, @"path",
+      [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationXeLatexPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+     CompositionConfigurationLuaLatexPathKey, @"path",
+     [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      CompositionConfigurationLatexPathKey, @"path",
+      [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationLatexPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      CompositionConfigurationDviPdfPathKey, @"path",
+      [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationDviPdfPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      CompositionConfigurationGsPathKey, @"path",
+      [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationGsPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      CompositionConfigurationPsToPdfPathKey, @"path",
+      [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:nil],
+    [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey],
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      DragExportSvgPdfToSvgPathKey, @"path",
+      [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil],
+      DragExportSvgPdfToSvgPathKey,
+    nil];
+  NSDictionary* configuration = [NSDictionary dictionaryWithObjectsAndKeys:
+    [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
+    [NSNumber numberWithBool:YES], @"updateGUIfromSystemAvailabilities",
+    nil];
+  if ((object == NSApp) && [keyPath isEqualToString:@"effectiveAppearance"])
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSAppearanceDidChangeNotification object:self];
+  else if ([dict.allKeys containsObject:keyPath])
   {
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingDictionary:dict[keyPath]]];
@@ -667,9 +691,12 @@ static NSMutableDictionary* cachePaths = nil;
   CFURLRef  latexitHelperURL = CFURLCreateWithFileSystemPath(0, (CFStringRef)latexitHelperFilePath, kCFURLPOSIXPathStyle, FALSE);
   OSStatus status = LSRegisterURL(latexitHelperURL, true);
   if (status != noErr)
-    DebugLog(0, @"LSRegisterURL : %d", status);
-  //[[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
-  [[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
+    DebugLog(0, @"LSRegisterURL : %ld", (long int)status);
+  if ([NSApp respondsToSelector:NSSelectorFromString(@"effectiveAppearance")])
+    [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options:NSKeyValueObservingOptionNew context:0];
+
+  [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
+  //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
 
   if (latexitHelperURL)
     CFRelease(latexitHelperURL);
@@ -768,6 +795,8 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(void) applicationWillTerminate:(NSNotification*)aNotification
 {
+  if ([NSApp respondsToSelector:NSSelectorFromString(@"effectiveAppearance")])
+    [NSApp removeObserver:self forKeyPath:@"effectiveAppearance"];
   [LinkBack retractServerWithName:[[NSWorkspace sharedWorkspace] applicationName]];
   
   [[NSWorkspace sharedWorkspace] closeApplicationWithBundleIdentifier:@"fr.club.ktd.LaTeXiT"];//LaTeXiT Helper
@@ -990,6 +1019,11 @@ static NSMutableDictionary* cachePaths = nil;
   {
     ok = self->historyWindowController.window.visible;
   }
+  else if ([sender action] == @selector(historyRelatexizeItems:))
+  {
+    [sender setTitle:NSLocalizedString(@"latexize selection again", @"latexize selection again")];
+    ok = [[self->historyWindowController window] isVisible] && ([[[self->historyWindowController historyView] selectedItems] count] != 0);
+  }
   else if (sender.action == @selector(showOrHideLibrary:))
   {
     BOOL isLibraryVisible = self->libraryWindowController.window.visible;
@@ -1010,12 +1044,14 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if (sender.action == @selector(libraryNewFolder:))
   {
-    ok = self->libraryWindowController.window.visible;
+    ok = [[self->libraryWindowController window] isVisible] &&
+         ![[[self->libraryWindowController libraryView] libraryController] filterPredicate];
   }
   else if (sender.action == @selector(libraryImportCurrent:))
   {
     MyDocument* document = (MyDocument*) [self currentDocument];
-    ok = self->libraryWindowController.window.visible && document && document.hasImage;
+    ok = [[self->libraryWindowController window] isVisible] && document && [document hasImage] &&
+         ![[[self->libraryWindowController libraryView] libraryController] filterPredicate];
   }
   else if (sender.action == @selector(libraryRenameItem:))
   {
@@ -1028,6 +1064,11 @@ static NSMutableDictionary* cachePaths = nil;
   else if (sender.action == @selector(libraryRefreshItems:))
   {
     ok = self->libraryWindowController.window.visible && self->libraryWindowController.canRefreshItems;
+  }
+  else if ([sender action] == @selector(libraryRelatexizeItems:))
+  {
+    [sender setTitle:NSLocalizedString(@"latexize selection again", @"latexize selection again")];
+    ok = [[self->libraryWindowController window] isVisible] && ([[[self->libraryWindowController libraryView] selectedItems] count] != 0);
   }
   else if (sender.action == @selector(libraryToggleCommentsPane:))
   {
@@ -1499,6 +1540,15 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end makeLatexAndExport:
 
+-(BOOL) isContinuousSpellCheckingAvailable
+{
+  BOOL result = NO;
+  id firstResponder = [[NSApp keyWindow] firstResponder];
+  result = [firstResponder respondsToSelector:@selector(setContinuousSpellCheckingEnabled:)];
+  return result;
+}
+//end isContinuousSpellCheckingEnabled
+
 -(IBAction) fontSizeChange:(id)sender
 {
   MyDocument* document = (MyDocument*) [self currentDocument];
@@ -1624,7 +1674,19 @@ static NSMutableDictionary* cachePaths = nil;
 {
   [[self historyWindowController] saveAs:sender];
 }
-//end librarySaveAs:
+//end historySaveAs:
+
+-(IBAction) historyRelatexizeItems:(id)sender
+{
+  [[self historyWindowController] relatexizeSelectedItems:sender];
+}
+//end historyRelatexizeItems
+
+-(IBAction) historyCompact:(id)sender
+{
+  [[HistoryManager sharedManager] vacuum];
+}
+//end historyCompact:
 
 -(IBAction) showOrHideHistory:(id)sender
 {
@@ -1666,6 +1728,12 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end libraryRemoveSelectedItems:
 
+-(IBAction) libraryRelatexizeItems:(id)sender
+{
+  [[self libraryWindowController] relatexizeSelectedItems:sender];
+}
+//end libraryRelatexizeItems
+
 -(IBAction) libraryRenameItem:(id)sender
 {
   [[self libraryWindowController] renameItem:sender];
@@ -1695,6 +1763,12 @@ static NSMutableDictionary* cachePaths = nil;
   [[self libraryWindowController] saveAs:sender];
 }
 //end librarySaveAs:
+
+-(IBAction) libraryCompact:(id)sender
+{
+  [[LibraryManager sharedManager] vacuum];
+}
+//end libraryCompact
 
 -(IBAction) showOrHideLibrary:(id)sender
 {
@@ -2220,13 +2294,11 @@ static NSMutableDictionary* cachePaths = nil;
           kpseWhichTask.environment = [[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment];
           kpseWhichTask.launchPath = launchPath;
           kpseWhichTask.arguments = @[@"color.sty"];
-          //[kpseWhichTask setStandardOutput:nullDevice];
-          //[kpseWhichTask setStandardError:nullDevice];
-          [kpseWhichTask setTimeOut:2.0];
+          [kpseWhichTask setTimeOut:3.0];
           [kpseWhichTask launch];
           [kpseWhichTask waitUntilExit];
           ok = (kpseWhichTask.terminationStatus == 0);
-        }
+        }//end if ([[NSFileManager defaultManager] fileExistsAtPath:launchPath isDirectory:&isDirectory] && !isDirectory)
       }
       @catch(NSException* e) {
         ok = NO;
@@ -2562,6 +2634,7 @@ static NSMutableDictionary* cachePaths = nil;
           magnification:magnification
           compositionConfiguration:preferencesController.compositionConfigurationDocument
           backgroundColor:nil
+                    title:nil
           leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
           additionalFilesPaths:[self additionalFilesPaths]
           workingDirectory:workingDirectory fullEnvironment:fullEnvironment
@@ -2672,7 +2745,7 @@ static NSMutableDictionary* cachePaths = nil;
             {
               dummyPboard[NSPasteboardTypeRTFD] = rtfdData;
               dummyPboard[(NSString*)kUTTypeFlatRTFD] = rtfdData;
-            }
+            }//end if (rtfdData)
           }//end if useBaseline
 
           //LinkBack data
@@ -2681,7 +2754,7 @@ static NSMutableDictionary* cachePaths = nil;
             [[LatexitEquation alloc] initWithPDFData:pdfData preamble:attributedPreamble
                                          sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
                                               color:[NSColor blackColor] pointSize:defaultPointSize date:[NSDate date] mode:mode
-                                    backgroundColor:nil];
+                                    backgroundColor:nil title:nil];
           [attributedPreamble release];
           HistoryItem* historyItem = [[HistoryItem alloc] initWithEquation:latexitEquation insertIntoManagedObjectContext:nil];
           NSArray* historyItemArray = @[historyItem];
@@ -2821,6 +2894,7 @@ static NSMutableDictionary* cachePaths = nil;
           mode:mode magnification:defaultPointSize
           compositionConfiguration:preferencesController.compositionConfigurationDocument
           backgroundColor:nil
+                    title:nil
           leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
           additionalFilesPaths:[self additionalFilesPaths]
           workingDirectory:workingDirectory fullEnvironment:fullEnvironment
@@ -2884,7 +2958,7 @@ static NSMutableDictionary* cachePaths = nil;
             [[LatexitEquation alloc] initWithPDFData:pdfData preamble:preamble
                                          sourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]
                                               color:[NSColor blackColor] pointSize:defaultPointSize date:[NSDate date] mode:mode
-                                    backgroundColor:nil];
+                                    backgroundColor:nil title:nil];
           HistoryItem* historyItem = [[HistoryItem alloc] initWithEquation:latexitEquation insertIntoManagedObjectContext:nil];
           NSArray* historyItemArray = @[historyItem];
           [historyItem release];
@@ -3057,24 +3131,26 @@ static NSMutableDictionary* cachePaths = nil;
 
       //we must find some places where latexisations should be done. We look for "$$..$$", "\[..\]", and "$...$"
       NSArray* delimiters =
-        @[@[@"$$", @"$$"  , @(LATEX_MODE_DISPLAY)],
-          @[@"\\[", @"\\]", @(LATEX_MODE_DISPLAY)],
-          @[@"$", @"$"    , @(LATEX_MODE_INLINE)],
-          @[@"\\begin{eqnarray}", @"\\end{eqnarray}", @(LATEX_MODE_EQNARRAY)],
-          @[@"\\begin{eqnarray*}", @"\\end{eqnarray*}", @(LATEX_MODE_EQNARRAY)],
-          @[@"\\begin{align}", @"\\end{align}", @(LATEX_MODE_ALIGN)],
-          @[@"\\begin{align*}", @"\\end{align*}", @(LATEX_MODE_ALIGN)]];
+        [NSArray arrayWithObjects:
+          [NSArray arrayWithObjects:@"$$", @"$$"  , [NSNumber numberWithInteger:LATEX_MODE_DISPLAY], nil],
+          [NSArray arrayWithObjects:@"\\[", @"\\]", [NSNumber numberWithInteger:LATEX_MODE_DISPLAY], nil],
+          [NSArray arrayWithObjects:@"$", @"$"    , [NSNumber numberWithInteger:LATEX_MODE_INLINE], nil],
+          [NSArray arrayWithObjects:@"\\begin{eqnarray}", @"\\end{eqnarray}", [NSNumber numberWithInteger:LATEX_MODE_EQNARRAY], nil],
+          [NSArray arrayWithObjects:@"\\begin{eqnarray*}", @"\\end{eqnarray*}", [NSNumber numberWithInteger:LATEX_MODE_EQNARRAY], nil],
+          [NSArray arrayWithObjects:@"\\begin{align}", @"\\end{align}", [NSNumber numberWithInteger:LATEX_MODE_ALIGN], nil],
+          [NSArray arrayWithObjects:@"\\begin{align*}", @"\\end{align*}", [NSNumber numberWithInteger:LATEX_MODE_ALIGN], nil],
+          nil];
 
       NSMutableArray* errorDocuments = [NSMutableArray array];
       NSUInteger delimiterIndex = 0;
-      for(delimiterIndex = 0 ; delimiterIndex < delimiters.count ; ++delimiterIndex)
+      for(delimiterIndex = 0 ; delimiterIndex < [delimiters count] ; ++delimiterIndex)
       {
-        NSArray* delimiter = delimiters[delimiterIndex];
-        NSString* delimiterLeft  = delimiter[0];
-        NSString* delimiterRight = delimiter[1];
-        NSUInteger delimiterLeftLength  = delimiterLeft.length;
-        NSUInteger delimiterRightLength = delimiterRight.length;
-        latex_mode_t mode = (latex_mode_t) [delimiter[2] intValue];
+        NSArray* delimiter = [delimiters objectAtIndex:delimiterIndex];
+        NSString* delimiterLeft  = [delimiter objectAtIndex:0];
+        NSString* delimiterRight = [delimiter objectAtIndex:1];
+        NSUInteger delimiterLeftLength  = [delimiterLeft  length];
+        NSUInteger delimiterRightLength = [delimiterRight length];
+        latex_mode_t mode = (latex_mode_t) [[delimiter objectAtIndex:2] integerValue];
       
         BOOL finished = NO;
         while(!finished)
@@ -3145,6 +3221,7 @@ static NSMutableDictionary* cachePaths = nil;
             [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithPreamble:preamble body:body color:color mode:mode magnification:magnification
                                compositionConfiguration:preferencesController.compositionConfigurationDocument
                                backgroundColor:nil
+                                         title:nil
                                leftMargin:leftMargin rightMargin:rightMargin topMargin:topMargin bottomMargin:bottomMargin
                                additionalFilesPaths:[self additionalFilesPaths] 
                                workingDirectory:workingDirectory fullEnvironment:fullEnvironment uniqueIdentifier:uniqueIdentifier
@@ -3208,7 +3285,7 @@ static NSMutableDictionary* cachePaths = nil;
                   [LatexitEquation latexitEquationWithPDFData:pdfData
                      preamble:[[[NSAttributedString alloc] initWithString:preamble] autorelease]
                    sourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]
-                        color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:nil];
+                        color:color pointSize:pointSize date:[NSDate date] mode:mode backgroundColor:nil title:nil];
                 [self addEquationToHistory:latexitEquation];
               }
 
@@ -3375,7 +3452,7 @@ static NSMutableDictionary* cachePaths = nil;
     NSDictionary* docAttributes = nil;
     NSMutableAttributedString* attributedString =
       [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
-    unsigned int location = 0;
+    NSUInteger location = 0;
     while(location < attributedString.length)
     {
       NSRange effectiveRange = NSMakeRange(0, 0);
@@ -3569,19 +3646,25 @@ static NSMutableDictionary* cachePaths = nil;
 //when the user has clicked a latexPalettes element, we must put some text in the current document.
 //sometimes, we must add symbols, and sometimes, we must encapsulate the selection into a symbol function
 //The difference is made using the cell tag
--(IBAction) latexPalettesClick:(id)sender
+-(IBAction) latexPalettesDoubleClick:(id)sender
 {
   PaletteItem* item = [[sender selectedCell] representedObject];
   NSString* string = item.latexCode;
   MyDocument* myDocument = (MyDocument*) [self currentDocument];
   if (string && myDocument)
   {
-    if (item.type == LATEX_ITEM_TYPE_ENVIRONMENT)
-      string = [item stringWithTextInserted:[myDocument selectedText]];
-    [myDocument insertText:string];
+    NSRange inputSelectedRange = NSMakeRange(0, 0);
+    NSRange newSelectedRange = NSMakeRange(0, 0);
+    if ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT)
+      string = [item stringWithTextInserted:[myDocument selectedTextFromRange:&inputSelectedRange] outInterestingRange:&newSelectedRange];
+    else if ([item numberOfArguments] || [item argumentToken])
+      string = [item stringWithTextInserted:[myDocument selectedTextFromRange:&inputSelectedRange] outInterestingRange:&newSelectedRange];
+    newSelectedRange.location += inputSelectedRange.location;
+    [myDocument insertText:string newSelectedRange:newSelectedRange];
+    [[myDocument windowForSheet] makeKeyAndOrderFront:sender];
   }//end if (string && myDocument)
 }
-//end latexPalettesClick:
+//end latexPalettesDoubleClick:
 
 -(BOOL) installLatexPalette:(NSURL*)paletteURL
 {

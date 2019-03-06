@@ -113,7 +113,7 @@ static NSArray *syntaxDefinitionsArray;
     self->commentsColour = nil;
   }
   color = syntaxColoring ? [preferencesController editionSyntaxColoringCommentColor] : color;
-  self->commentsColour = @{NSForegroundColorAttributeName: color};
+  self->commentsColour = [[NSDictionary alloc] initWithObjectsAndKeys:color, NSForegroundColorAttributeName, nil];
   
   if (self->instructionsColour) {
     self->instructionsColour = nil;

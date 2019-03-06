@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesControllerMigration.h"
@@ -12,6 +12,7 @@
 #import "NSArrayExtended.h"
 #import "NSMutableDictionaryExtended.h"
 #import "NSWorkspaceExtended.h"
+#import "Utils.h"
 
 #if !__has_feature(objc_arc)
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
@@ -283,18 +284,26 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
       servicesItems = [NSMutableArray arrayWithArray:
       [[NSUserDefaults standardUserDefaults] objectForKey:ServiceShortcutsKey]];
     else
+      #ifdef ARC_ENABLED
       servicesItems = [NSMutableArray arrayWithArray:
-        CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)ServiceShortcutsKey, (__bridge CFStringRef)LaTeXiTAppKey)) ];
-    NSUInteger count = servicesItems.count;
+        CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) ];
+      #else
+      servicesItems = [NSMutableArray arrayWithArray:
+        [(NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) autorelease]];
+      #endif
+    NSUInteger count = [servicesItems count];
     while(count--)
     {
-      NSDictionary* serviceItem = servicesItems[count];
-      if ([serviceItem[ServiceShortcutIdentifierKey] intValue] == SERVICE_LATEXIZE_EQNARRAY)
+      NSDictionary* serviceItem = [servicesItems objectAtIndex:count];
+      if ([[serviceItem objectForKey:ServiceShortcutIdentifierKey] integerValue] == SERVICE_LATEXIZE_EQNARRAY)
       {
-        servicesItems[count] = @{ServiceShortcutEnabledKey: serviceItem[ServiceShortcutEnabledKey],
-            ServiceShortcutStringKey: serviceItem[ServiceShortcutStringKey],
-            ServiceShortcutIdentifierKey: @(SERVICE_LATEXIZE_ALIGN),
-            ServiceShortcutClipBoardOptionKey: serviceItem[ServiceShortcutClipBoardOptionKey]};
+        [servicesItems replaceObjectAtIndex:count withObject:
+          [NSDictionary dictionaryWithObjectsAndKeys:
+            [serviceItem objectForKey:ServiceShortcutEnabledKey], ServiceShortcutEnabledKey,
+            [serviceItem objectForKey:ServiceShortcutStringKey], ServiceShortcutStringKey,
+            [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+            [serviceItem objectForKey:ServiceShortcutClipBoardOptionKey], ServiceShortcutClipBoardOptionKey,
+            nil]];
       }
     }//end for each serviceItem
     if (self->isLaTeXiT)
@@ -345,11 +354,24 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   }
   else//!if (!self->isLaTeXiT)
   {
-    id value = (id)CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)oldKey, (__bridge CFStringRef)LaTeXiTAppKey));
+    #ifdef ARC_ENABLED
+    id value = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)oldKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
+    #else
+    id value = NSMakeCollectable((id)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)oldKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
+    #endif
     if (value)
     {
-      CFPreferencesSetAppValue((CFStringRef)oldKey, NULL, (CFStringRef)LaTeXiTAppKey);
-      CFPreferencesSetAppValue((__bridge CFStringRef)newKey, (__bridge CFPropertyListRef)value, (__bridge CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)oldKey, 0, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      #ifdef ARC_ENABLED
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)newKey, (CHBRIDGE CFPropertyListRef)value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      
+      #else
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)newKey, value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      #endif
+      #ifdef ARC_ENABLED
+      #else
+      [value release];
+      #endif
     }
   }//end if (!self->isLaTeXiT)
 }
@@ -358,7 +380,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
 -(void) migrateCompositionConfigurations
 {
   BOOL useLoginShell = self->isLaTeXiT ? [[NSUserDefaults standardUserDefaults] boolForKey:Old_UseLoginShellKey] :
-                       CFPreferencesGetAppBooleanValue((CFStringRef)Old_UseLoginShellKey, (CFStringRef)LaTeXiTAppKey, 0);
+                       CFPreferencesGetAppBooleanValue((CHBRIDGE CFStringRef)Old_UseLoginShellKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, 0);
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
   NSMutableArray* newCompositionConfigurations = [self.compositionConfigurations deepMutableCopy];
@@ -396,7 +418,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:newCompositionConfigurations forKey:CompositionConfigurationsKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)CompositionConfigurationsKey, (CFPropertyListRef)newCompositionConfigurations, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFPropertyListRef)newCompositionConfigurations, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 
   //[self replaceKey:Old_UseLoginShellKey withKey:UseLoginShellKey];
 }
@@ -422,27 +444,35 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   NSUInteger count = MIN(6U, MIN([oldServiceShortcutsEnabled count], [oldServiceShortcutsEnabled count]));
   NSUInteger i = 0;
   for(i = 0 ; i<count ; ++i)
-    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: oldServiceShortcutsEnabled[i],
-      ServiceShortcutStringKey: oldServiceShortcutsStrings[i],
-      ServiceShortcutIdentifierKey: @(i+((count == 3) ? 1 : 0))}];
-  if (newServiceShortcuts.count == 3)
-    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: oldServiceShortcutsEnabled[i],
-      ServiceShortcutStringKey: oldServiceShortcutsStrings[i],
-      ServiceShortcutIdentifierKey: @(SERVICE_LATEXIZE_EQNARRAY)}];
-  if (newServiceShortcuts.count == 4)
-    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: @YES,
-      ServiceShortcutStringKey: @"",
-      ServiceShortcutIdentifierKey: @(SERVICE_MULTILATEXIZE)}];
-  if (newServiceShortcuts.count == 5)
-    [newServiceShortcuts addObject:@{ServiceShortcutEnabledKey: @YES,
-      ServiceShortcutStringKey: @"",
-      ServiceShortcutIdentifierKey: @(SERVICE_DELATEXIZE)}];
+    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+      [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
+      [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
+      [NSNumber numberWithInteger:i+((count == 3) ? 1 : 0)], ServiceShortcutIdentifierKey,
+      nil]];
+  if ([newServiceShortcuts count] == 3)
+    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+      [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
+      [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
+      [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
+      nil]];
+  if ([newServiceShortcuts count] == 4)
+    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+      @YES, ServiceShortcutEnabledKey,
+      @"", ServiceShortcutStringKey,
+      [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
+      nil]];
+  if ([newServiceShortcuts count] == 5)
+    [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+      @YES, ServiceShortcutEnabledKey,
+      @"", ServiceShortcutStringKey,
+      [NSNumber numberWithInteger:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
+      nil]];
   [self removeKey:Old_ServiceShortcutEnabledKey];
   [self removeKey:Old_ServiceShortcutStringsKey];
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setObject:newServiceShortcuts forKey:ServiceShortcutsKey];
   else
-    CFPreferencesSetAppValue((CFStringRef)ServiceShortcutsKey, (CFPropertyListRef)newServiceShortcuts, (CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFPropertyListRef)newServiceShortcuts, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 }
 //end migrateServiceShortcuts
 

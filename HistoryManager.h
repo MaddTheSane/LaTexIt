@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -42,5 +42,7 @@ typedef NS_ENUM(NSInteger, history_export_format_t) {
 -(void) saveHistory;
 -(BOOL) saveAs:(NSString*)path onlySelection:(BOOL)onlySelection selection:(NSArray*)selectedItems format:(history_export_format_t)format;
 -(BOOL) loadFrom:(NSString*)path option:(history_import_option_t)option;
+
+-(void) vacuum;
 
 @end

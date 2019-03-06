@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,7 +12,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="-3" userLabel="Application"/>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
                 <menuItem title="NewApplication" id="56">
@@ -243,7 +243,7 @@
                                                 <action selector="checkSpelling:" target="-1" id="190"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Vérifier l'othographe lors de la frappe" id="191">
+                                        <menuItem title="Vérifier l'orthographe lors de la frappe" id="191">
                                             <connections>
                                                 <action selector="toggleContinuousSpellChecking:" target="-1" id="192"/>
                                             </connections>
@@ -434,6 +434,11 @@ CA
                                     <action selector="libraryRefreshItems:" target="210" id="1398"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="latexize selection again" id="1884">
+                                <connections>
+                                    <action selector="libraryRelatexizeItems:" target="210" id="1886"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="1134">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -457,6 +462,15 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1236">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Compacter la base de données" id="1867">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="libraryCompact:" target="210" id="1869"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="1866">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Afficher la bibliothèque" keyEquivalent="b" id="1129">
@@ -487,6 +501,14 @@ CA
                             <menuItem isSeparatorItem="YES" id="1678">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
+                            <menuItem title="latexize selection again" id="1887">
+                                <connections>
+                                    <action selector="historyRelatexizeItems:" target="210" id="1890"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="1888">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
                             <menuItem title="Importer…" id="1672">
                                 <connections>
                                     <action selector="historyOpen:" target="210" id="1676"/>
@@ -498,6 +520,15 @@ CA
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1671">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Compacter la base de données" id="1876">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="historyCompact:" target="210" id="1879"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="1877">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Afficher l'historique" keyEquivalent="r" id="212">
@@ -633,9 +664,9 @@ CA
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1116">
                         <rect key="frame" x="0.0" y="0.0" width="552" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" drawsBackground="NO" id="sAs-lC-jDg">
+                        <clipView key="contentView" id="sAs-lC-jDg">
                             <rect key="frame" x="1" y="1" width="550" height="549"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <textView editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1118">
                                     <rect key="frame" x="0.0" y="0.0" width="550" height="549"/>
@@ -647,12 +678,13 @@ CA
                                     <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
                             </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="1655">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="1655">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="1654">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="1654">
                             <rect key="frame" x="-30" y="1" width="15" height="367"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -685,7 +717,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button tag="1" imageHugsTitle="YES" id="1412">
+                    <button tag="1" id="1412">
                         <rect key="frame" x="72" y="69" width="244" height="29"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="bevel" title=" Aller sur le site Web de LaTeXiT…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1647">
@@ -709,7 +741,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                 <rect key="frame" x="0.0" y="0.0" width="448" height="195"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button imageHugsTitle="YES" id="1464">
+                    <button id="1464">
                         <rect key="frame" x="99" y="58" width="250" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Ne plus afficher cette mise en garde" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1649">
@@ -727,7 +759,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" tag="1" imageHugsTitle="YES" id="1465">
+                    <button verticalHuggingPriority="750" tag="1" id="1465">
                         <rect key="frame" x="352" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1650">
@@ -738,7 +770,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1472"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="1466">
+                    <button verticalHuggingPriority="750" id="1466">
                         <rect key="frame" x="262" y="12" width="90" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1651">

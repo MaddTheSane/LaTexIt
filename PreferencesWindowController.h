@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -83,9 +83,9 @@ extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
   IBOutlet NSColorWell*       editionSyntaxColoringTextForegroundColorWell;
   IBOutlet NSColorWell*       editionSyntaxColoringTextBackgroundColorWell;
   IBOutlet NSColorWell*       editionSyntaxColoringCommandColorWell;
+  IBOutlet NSColorWell*       editionSyntaxColoringCommentColorWell;
   IBOutlet NSColorWell*       editionSyntaxColoringKeywordColorWell;
   IBOutlet NSColorWell*       editionSyntaxColoringMathsColorWell;
-  IBOutlet NSColorWell*       editionSyntaxColoringCommentColorWell;
   IBOutlet NSTextView*        editionSyntaxColouringTextView;
   IBOutlet NSButton*          editionSpellCheckingStateButton;
   IBOutlet NSButton*          editionTextAreaReducedButton;
@@ -168,6 +168,7 @@ extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
   IBOutlet NSTextField* historyDeleteOldEntriesLimitTextField;
   IBOutlet NSStepper*   historyDeleteOldEntriesLimitStepper;
   IBOutlet NSButton*    historySmartCheckbox;
+  IBOutlet NSButton*    historyVacuumButton;
 
   IBOutlet NSPopUpButton*             servicePreamblePopUpButton;
   IBOutlet NSPopUpButton*             serviceBodyTemplatesPopUpButton;
@@ -187,7 +188,7 @@ extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
   IBOutlet TextViewWithPlaceHolder*   serviceRegularExpressionsTestInputTextView;
   IBOutlet TextViewWithPlaceHolder*   serviceRegularExpressionsTestOutputTextView;
   IBOutlet NSButton*                  serviceRegularExpressionsHelpButton;
-
+  
   IBOutlet AdditionalFilesTableView* additionalFilesTableView;
   IBOutlet NSButton*                 additionalFilesAddButton;
   IBOutlet NSButton*                 additionalFilesRemoveButton;
@@ -216,6 +217,7 @@ extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
   IBOutlet EncapsulationsTableView* encapsulationsTableView;
   IBOutlet NSButton*                encapsulationsAddButton;
   IBOutlet NSButton*                encapsulationsRemoveButton;
+  IBOutlet NSButton*                libraryVacuumButton;
 
   IBOutlet NSButton* updatesCheckUpdatesButton;
   IBOutlet NSButton* updatesCheckUpdatesNowButton;

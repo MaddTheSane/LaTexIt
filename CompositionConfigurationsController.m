@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsController.h"
@@ -37,22 +37,30 @@
            @YES, CompositionConfigurationIsDefaultKey,
            @(COMPOSITION_MODE_PDFLATEX), CompositionConfigurationCompositionModeKey,
            @YES, CompositionConfigurationUseLoginShellKey,
-           @{}, CompositionConfigurationProgramArgumentsKey,
-           @{@(SCRIPT_PLACE_PREPROCESSING).stringValue: @{CompositionConfigurationAdditionalProcessingScriptEnabledKey: @NO,
-               CompositionConfigurationAdditionalProcessingScriptTypeKey: @(SCRIPT_SOURCE_STRING),
-               CompositionConfigurationAdditionalProcessingScriptPathKey: @"",
-               CompositionConfigurationAdditionalProcessingScriptShellKey: @"/bin/sh",
-               CompositionConfigurationAdditionalProcessingScriptContentKey: @""},
-             @(SCRIPT_PLACE_MIDDLEPROCESSING).stringValue: @{CompositionConfigurationAdditionalProcessingScriptEnabledKey: @NO,
-               CompositionConfigurationAdditionalProcessingScriptTypeKey: @(SCRIPT_SOURCE_STRING),
-               CompositionConfigurationAdditionalProcessingScriptPathKey: @"",
-               CompositionConfigurationAdditionalProcessingScriptShellKey: @"/bin/sh",
-               CompositionConfigurationAdditionalProcessingScriptContentKey: @""},
-             @(SCRIPT_PLACE_POSTPROCESSING).stringValue: @{CompositionConfigurationAdditionalProcessingScriptEnabledKey: @NO,
-               CompositionConfigurationAdditionalProcessingScriptTypeKey: @(SCRIPT_SOURCE_STRING),
-               CompositionConfigurationAdditionalProcessingScriptPathKey: @"",
-               CompositionConfigurationAdditionalProcessingScriptShellKey: @"/bin/sh",
-               CompositionConfigurationAdditionalProcessingScriptContentKey: @""}}, CompositionConfigurationAdditionalProcessingScriptsKey,
+           [NSDictionary dictionary], CompositionConfigurationProgramArgumentsKey,
+           [NSDictionary dictionaryWithObjectsAndKeys:
+             [NSDictionary dictionaryWithObjectsAndKeys:
+               @NO, CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+               @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue],
+             [NSDictionary dictionaryWithObjectsAndKeys:
+               [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+               @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue],
+             [NSDictionary dictionaryWithObjectsAndKeys:
+               @NO, CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+               @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue],
+            nil], CompositionConfigurationAdditionalProcessingScriptsKey,
            nil];
   return result;
 }
@@ -80,7 +88,7 @@
     [self observeValueForKeyPath:CompositionConfigurationDocumentIndexKey ofObject:nil change:nil context:nil];
   else if ([keyPath isEqualToString:CompositionConfigurationDocumentIndexKey])
   {
-    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [change[NSKeyValueChangeNewKey] intValue];
+    NSInteger curIndex = !change ? [[NSUserDefaults standardUserDefaults] integerForKey:keyPath] : [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
     NSInteger newIndex = curIndex;
     NSInteger count = (NSInteger)[self.arrangedObjects count];
     if ((curIndex<0) && count)
@@ -236,9 +244,9 @@
   NSInteger preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
   NSInteger preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];
   id preambleLaTeXisation = !IsBetween_N(1, preambleLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
-    self.arrangedObjects[preambleLaTeXisationIndex];
+    [[self arrangedObjects] objectAtIndex:preambleLaTeXisationIndex];
   id preambleService = !IsBetween_N(1, preambleServiceIndex+1, [[self arrangedObjects] count]) ? nil :
-    self.arrangedObjects[preambleServiceIndex];
+    [[self arrangedObjects] objectAtIndex:preambleServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newPreambleLaTeXisationIndex = [self.arrangedObjects indexOfObject:preambleLaTeXisation];
   NSUInteger newPreambleServiceIndex      = [self.arrangedObjects indexOfObject:preambleService];

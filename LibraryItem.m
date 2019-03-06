@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //A LibraryItem is similar to an XMLNode, in the way that it has parent (weak link to prevent cycling)
 //and children (strong link)
@@ -21,6 +21,8 @@
 #import "LibraryManager.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSMutableArrayExtended.h"
+#import "NSObjectExtended.h"
+#import "NSWorkspaceExtended.h"
 #import "Utils.h"
 
 static NSEntityDescription* cachedEntity = nil;
@@ -44,6 +46,15 @@ static NSEntityDescription* cachedEntity = nil;
   return cachedEntity;
 }
 //end entity
+
+-(id) initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
+{
+  if (!((self = [super initWithEntity:entity insertIntoManagedObjectContext:context])))
+    return nil;
+  self->cachedSortIndex = NSNotFound;
+  return self;
+}
+//end initWithEntity:
 
 -(instancetype) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
@@ -100,9 +111,15 @@ static NSEntityDescription* cachedEntity = nil;
 -(NSUInteger) sortIndex
 {
   NSUInteger result = 0;
-  [self willAccessValueForKey:@"sortIndex"];
-  result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntegerValue];
-  [self didAccessValueForKey:@"sortIndex"];
+  if (self->cachedSortIndex != NSNotFound)
+    result = self->cachedSortIndex;
+  else//if (self->cachedSortIndex == NSNotFound)
+  {
+    [self willAccessValueForKey:@"sortIndex"];
+    result = [[self primitiveValueForKey:@"sortIndex"] unsignedIntegerValue];
+    [self didAccessValueForKey:@"sortIndex"];
+    self->cachedSortIndex = result;
+  }//end if (self->cachedSortIndex == NSNotFound)
   return result;
 }
 //end sortIndex
@@ -114,6 +131,7 @@ static NSEntityDescription* cachedEntity = nil;
     [self willChangeValueForKey:@"sortIndex"];
     [self setPrimitiveValue:@(value) forKey:@"sortIndex"];
     [self didChangeValueForKey:@"sortIndex"];
+    self->cachedSortIndex = value;
   }//end if (value != [self sortIndex])
 }
 //end setSortIndex:
@@ -164,7 +182,7 @@ static NSEntityDescription* cachedEntity = nil;
   NSMutableArray* result = nil;
   LibraryGroupItem* theParent = (LibraryGroupItem*)self.parent;
   if (theParent)
-    result = [NSMutableArray arrayWithArray:[theParent childrenOrdered]];
+    result = [NSMutableArray arrayWithArray:[theParent childrenOrdered:nil]];
   else//if (!theParent)
   {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
@@ -183,9 +201,9 @@ static NSEntityDescription* cachedEntity = nil;
   NSArray* result = nil;
   NSString* titleClone = [self.title copy];
   if (!titleClone)
-    result = @[];
-  else if (!self->parent)
-    result = @[titleClone];
+    result = [NSArray array];
+  else if (![self parent])
+    result = [NSArray arrayWithObject:titleClone];
   else
   {
     NSMutableArray* array = [NSMutableArray arrayWithArray:[self.parent titlePath]];
@@ -220,15 +238,16 @@ static NSEntityDescription* cachedEntity = nil;
   if (!((self = [super initWithEntity:[[self class] entity] insertIntoManagedObjectContext:managedObjectContext])))
     return nil;
   self.title = [coder decodeObjectForKey:@"title"];
-  self.sortIndex = [coder decodeIntegerForKey:@"sortIndex"];
-  self.comment = [coder decodeObjectForKey:@"comment"];  
+  self.sortIndex = [[[coder decodeObjectForKey:@"sortIndex"] dynamicCastToClass:[NSNumber class]] unsignedIntegerValue];
+  self.comment = [coder decodeObjectForKey:@"comment"];
   return self;
 }
 //end initWithCoder:
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@"2.11.0" forKey:@"version"];
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
+  [coder encodeObject:applicationVersion forKey:@"version"];
   [coder encodeObject:self.title forKey:@"title"];
   [coder encodeInteger:self.sortIndex forKey:@"sortIndex"];
   [coder encodeObject:self.comment forKey:@"comment"];
@@ -237,8 +256,9 @@ static NSEntityDescription* cachedEntity = nil;
 
 -(id) plistDescription
 {
+  NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"2.11.0", @"version",
+     applicationVersion, @"version",
      self.title, @"title",
      @(self.sortIndex), @"sortIndex",
      self.comment, @"comment",
@@ -257,7 +277,7 @@ static NSEntityDescription* cachedEntity = nil;
     return nil;
   }
   self.title = description[@"title"];
-  self.sortIndex = [description[@"sortIndex"] unsignedIntValue];
+  self.sortIndex = [description[@"sortIndex"] unsignedIntegerValue];
   self.comment = description[@"comment"];
   return self;
 }

@@ -209,10 +209,10 @@
 "Synchronize preamble" = "Synchronize preamble";
 "Synchronize environment" = "Synchronize environment";
 "Synchronize body" = "Synchronize body";
-"Pre-processing on load" = "Pré-traitement au chargement";
-"Post-processing on load" = "Post-traitement au chargement";
-"Pre-processing on save" = "Pré-traitement à la sauvegarde";
-"Post-processing on save" = "Post-traitement à la sauvegarde";
+"Pre-processing on load" = "Pre-processing on load";
+"Post-processing on load" = "Post-processing on load";
+"Pre-processing on save" = "Pre-processing on save";
+"Post-processing on save" = "Post-processing on save";
 
 /* Preferences */
 "Edit the configurations..." = "Modifica le configurazioni…";
@@ -222,6 +222,7 @@
 "Reset..." = "Reset…";
 "Do you really want to reset the paths ?" = "Do you really want to reset the paths ?";
 "Invalid paths will be replaced by the result of auto-detection" = "All paths will be replaced by the result of auto-detection.";
+"Compact database" = "Compattare il database";
 
 /* document */
 "clipboard" = "clipboard";
@@ -297,7 +298,9 @@
 "\"Display\" items" = "\"Display\" items";
 "\"Align\" items" = "\"Align\" items";
 "\"Eqnarray\" items" = "\"Eqnarray\" items";
-"Import selection" = "Import selection";
+"Import selection" = "Importa selezione";
+"latexize selection again" = "Re-latexize selezione";
+"KB" = "KB";
 
 /* History */
 "Add to current history" = "Aggiungi all'attuale cronologia";

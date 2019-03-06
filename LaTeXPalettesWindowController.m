@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //The LaTeXPalettesWindowController controller is responsible for loading and initializing the palette
 
@@ -46,10 +46,10 @@
 
 -(void) windowDidResize:(NSNotification*)notification
 {
-  NSDictionary* palette = self->orderedPalettes[self->matrixChoicePopUpButton.selectedTag];
-  NSNumber* numberOfItemsPerRowNumber = palette[@"numberOfItemsPerRow"];
-  NSUInteger numberOfItemsPerRow = (numberOfItemsPerRowNumber.integerValue <= 0) || (numberOfItemsPerRowNumber.unsignedIntegerValue == 0) ?
-                                     4 : numberOfItemsPerRowNumber.unsignedIntValue;
+  NSDictionary* palette = [self->orderedPalettes objectAtIndex:[self->matrixChoicePopUpButton selectedTag]];
+  NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
+  NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
+                                     4 : [numberOfItemsPerRowNumber unsignedIntegerValue];
   CGFloat clipViewWidth = self->matrix.superview.superview.frame.size.width-[NSScroller scrollerWidthForControlSize:((NSScrollView*)matrix.superview.superview).horizontalScroller.controlSize scrollerStyle:((NSScrollView*)matrix.superview.superview).horizontalScroller.scrollerStyle]+1;
   CGFloat cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
   self->matrix.cellSize = NSMakeSize(cellWidth, cellWidth);
@@ -63,9 +63,9 @@
   self->smallWindowMinSize = self.window.minSize;
   self->matrixChoicePopUpButton.focusRingType = NSFocusRingTypeNone;
   [self->matrixChoicePopUpButton removeAllItems];
-  NSString* lastDomain = self->orderedPalettes.count ? self->orderedPalettes[0][@"domainName"] : nil;
-  unsigned int i = 0;
-  for(i = 0 ; i<self->orderedPalettes.count ; ++i)
+  NSString* lastDomain = [self->orderedPalettes count] ? [[self->orderedPalettes objectAtIndex:0] objectForKey:@"domainName"] : nil;
+  NSUInteger i = 0;
+  for(i = 0 ; i<[self->orderedPalettes count] ; ++i)
   {
     NSDictionary* paletteAsDictionary = self->orderedPalettes[i];
     NSString* domainName = [[NSFileManager defaultManager] localizedPath:paletteAsDictionary[@"domainName"]];
@@ -178,7 +178,7 @@
         paletteName = [paletteName isKindOfClass:[NSString class]] ? paletteName : nil;
         NSString* paletteAuthor = plist[@"author"];
         paletteAuthor = [paletteAuthor isKindOfClass:[NSString class]] ? paletteAuthor : @"";
-        NSNumber* numberOfItemsPerRow = plist[@"numberOfItemsPerRow"];
+        NSNumber* numberOfItemsPerRow = [plist objectForKey:@"numberOfItemsPerRow"];
         numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : @4U;
         NSString* localizedName = paletteName ? [bundle localizedStringForKey:paletteName value:paletteName table:nil] : nil;
 
@@ -210,14 +210,15 @@
             NSString* argumentTokenDefaultReplace = [item objectForKey:@"argumentTokenDefaultReplace" withClass:[NSString class]];
             argumentTokenDefaultReplace = argumentTokenDefaultReplace ? argumentTokenDefaultReplace :
                             [itemDefault objectForKey:@"argumentTokenDefaultReplace" withClass:[NSString class]];
-
+            NSNumber* argumentTokenRemoveBraces = [item objectForKey:@"argumentTokenRemoveBraces" withClass:[NSNumber class]];
             PaletteItem* paletteItem =
               [[PaletteItem alloc] initWithName:itemName localizedName:localizedItemName resourcePath:resourcePath
-                                           type:(isEnvironment && isEnvironment.boolValue ? LATEX_ITEM_TYPE_ENVIRONMENT : LATEX_ITEM_TYPE_STANDARD)
-                                     numberOfArguments:numberOfArguments.unsignedIntValue
+                                           type:(isEnvironment && [isEnvironment boolValue] ? LATEX_ITEM_TYPE_ENVIRONMENT : LATEX_ITEM_TYPE_STANDARD)
+                                     numberOfArguments:[numberOfArguments unsignedIntegerValue]
                                      latexCode:latexCode requires:requires
                                      argumentToken:argumentToken
                                      argumentTokenDefaultReplace:argumentTokenDefaultReplace
+                                     argumentTokenRemoveBraces:[argumentTokenRemoveBraces boolValue]
                                      ];
             if (paletteItem)
               [palette addObject:paletteItem];
@@ -307,32 +308,32 @@
 //end latexPalettesSelect:
 
 //triggered when the user clicks on a palette; must insert the latex code of the selected symbol in the body of the document
--(IBAction) latexPalettesClick:(id)sender
+-(IBAction) latexPalettesDoubleClick:(id)sender
 {
   [self latexPalettesSelect:sender];
-  [[AppController appController] latexPalettesClick:sender];
+  [[AppController appController] latexPalettesDoubleClick:sender];
 }
-//end latexPalettesClick:
+//end latexPalettesDoubleClick:
 
 -(IBAction) changeGroup:(id)sender
 {
   NSInteger tag = [sender selectedTag];
-  if ((tag >= 0) && ((unsigned int)tag < orderedPalettes.count))
+  if ((tag >= 0) && ((unsigned int)tag < [orderedPalettes count]))
   {
-    NSDictionary* palette = orderedPalettes[tag];
-    NSString* author = palette[@"author"];
-    authorTextField.stringValue = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author];
-    NSNumber* numberOfItemsPerRowNumber = palette[@"numberOfItemsPerRow"];
-    NSUInteger numberOfItemsPerRow = (numberOfItemsPerRowNumber.integerValue <= 0) || (numberOfItemsPerRowNumber.unsignedIntegerValue == 0) ?
-                                       4 : numberOfItemsPerRowNumber.unsignedIntegerValue;
-    NSArray* items = palette[@"items"];
-    NSUInteger nbItems = items.count;
+    NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
+    NSString* author = [palette objectForKey:@"author"];
+    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author]];
+    NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
+    NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
+                                       4 : [numberOfItemsPerRowNumber unsignedIntegerValue];
+    NSArray* items = [palette objectForKey:@"items"];
+    NSUInteger nbItems = [items count];
     NSInteger nbColumns = numberOfItemsPerRow;
     NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
     PaletteCell* prototype = [[PaletteCell alloc] initImageCell:nil];
-    prototype.imageAlignment = NSImageAlignCenter;
-    prototype.imageScaling = NSImageScaleAxesIndependently;
-    while(matrix.numberOfRows)
+    [prototype setImageAlignment:NSImageAlignCenter];
+    [prototype setImageScaling:NSScaleToFit];
+    while([matrix numberOfRows])
       [matrix removeRow:0];
     matrix.prototype = prototype;
     [matrix renewRows:nbRows columns:nbColumns];
@@ -360,8 +361,8 @@
 
   if (((NSButton*)sender).state == NSOnState)
   {
-    unsigned int oldMatrixAutoresizingMask = matrixBox.autoresizingMask;
-    matrixBox.autoresizingMask = NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin;
+    NSUInteger oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
+    [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];
 
     [detailsBox removeFromSuperviewWithoutNeedingDisplay];
     
@@ -387,8 +388,8 @@
   }
   else
   {
-    NSUInteger oldMatrixAutoresizingMask = matrixBox.autoresizingMask;
-    matrixBox.autoresizingMask = NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin;
+    NSUInteger oldMatrixAutoresizingMask = [matrixBox autoresizingMask];
+    [matrixBox setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin];
 
     [detailsBox removeFromSuperviewWithoutNeedingDisplay];
     

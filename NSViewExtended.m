@@ -3,11 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/04/09.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSViewExtended.h"
 
+#import "Utils.h"
 
 @implementation NSView (Extended)
 

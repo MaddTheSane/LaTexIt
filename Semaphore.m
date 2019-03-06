@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "Semaphore.h"
@@ -11,11 +11,12 @@
 #if !__has_feature(objc_arc)
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
 #endif
+#import "NSObjectExtended.h"
 
 @implementation Semaphore
 
 //designated initializer
--(instancetype) initWithValue:(unsigned int)initialValue
+-(instancetype) initWithValue:(NSUInteger)initialValue
 {
   if ((!(self = [super init])))
     return nil;
@@ -48,14 +49,14 @@
 }
 //end dealloc
 
--(void) P:(unsigned int)n
+-(void) P:(NSUInteger)n
 {
-  pthread_mutex_lock(&mutex);
-  while(value<n)
-    pthread_cond_wait(&cond, &mutex);
-  value -= n;
-  pthread_mutex_unlock(&mutex);
-  pthread_cond_broadcast(&cond);
+  pthread_mutex_lock(&self->mutex);
+  while(self->value<n)
+    pthread_cond_wait(&self->cond, &self->mutex);
+  self->value -= n;
+  pthread_mutex_unlock(&self->mutex);
+  pthread_cond_broadcast(&self->cond);
 }
 //end P:
 
@@ -65,7 +66,7 @@
 }
 //end P
 
--(void) V:(unsigned int)n
+-(void) V:(NSUInteger)n
 {
   pthread_mutex_lock(&mutex);
   value += n;
@@ -80,7 +81,7 @@
 }
 //end V
 
--(unsigned int) R
+-(NSUInteger) R
 {
   return value;
 }
@@ -98,12 +99,14 @@
 //NSCoding protocol
 -(instancetype) initWithCoder:(NSCoder*)coder
 {
-  return [self initWithValue:[coder decodeIntForKey:@"value"]];
+  return [self initWithValue:[[[coder decodeObjectForKey:@"value"] dynamicCastToClass:[NSNumber class]] unsignedIntegerValue]];
 }
+//end initWithCoder:
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeInt:[self R] forKey:@"value"];
+  [coder encodeObject:[NSNumber numberWithUnsignedInteger:[self R]] forKey:@"value"];
 }
+//end encodeWithCoder:
 
 @end

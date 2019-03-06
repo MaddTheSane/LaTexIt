@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/01/13.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "ServiceRegularExpressionFiltersTableView.h"
@@ -212,7 +212,7 @@ static NSPasteboardType const RegularExpressionFilterPboardType = @"RegularExpre
             [pboard availableTypeFromArray:@[RegularExpressionFilterPboardType]] &&
             [pboard propertyListForType:RegularExpressionFilterPboardType] &&
             (operation == NSTableViewDropAbove) &&
-            (!indexSet || (indexSet && (indexSet.firstIndex != (unsigned int)row) && (indexSet.firstIndex+1 != (unsigned int)row)));
+            (!indexSet || (indexSet && (indexSet.firstIndex != (NSUInteger)row) && (indexSet.firstIndex+1 != (NSUInteger)row)));
   return ok ? NSDragOperationGeneric : NSDragOperationNone;
 }
 //end tableView:validateDrop:proposedRow:proposedDropOperation:

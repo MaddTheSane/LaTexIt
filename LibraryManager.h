@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2018 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -46,5 +46,7 @@ typedef NS_ENUM(NSInteger, library_export_format_t) {LIBRARY_EXPORT_FORMAT_INTER
 @property (readonly, copy) NSArray *libraryEquations;
 
 -(NSArray*) createTeXItemsFromFile:(NSString*)filename proposedParentItem:(id)proposedParentItem proposedChildIndex:(NSInteger)proposedChildIndex;
+
+-(void) vacuum;
 
 @end

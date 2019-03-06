@@ -3,10 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2006 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
 //
 
 #import "Utils.h"
+
+#import "NSObjectExtended.h"
 
 #import "RegexKitLite.h"
 int DebugLogLevel = 0;
@@ -16,6 +18,9 @@ int DebugLogLevel = 0;
 #if !__has_feature(objc_arc)
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
 #endif
+#import <objc/objc-runtime.h>
+
+NSString* NSAppearanceDidChangeNotification = @"NSAppearanceDidChangeNotification";
 
 static NSString* MyPNGPboardType = nil;
 extern NSString* NSPNGPboardType __attribute__((weak_import));
@@ -41,6 +46,48 @@ BOOL isMacOS10_8OrAbove(void)
 }
 //end isMacOS10_8OrAbove()
 #endif
+
+BOOL isMacOS10_9OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_8);
+  return result;
+}
+//end isMacOS10_9OrAbove()
+
+BOOL isMacOS10_10OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_9);
+  return result;
+}
+//end isMacOS10_10OrAbove()
+
+BOOL isMacOS10_11OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_10);
+  return result;
+}
+//end isMacOS10_11OrAbove()
+
+BOOL isMacOS10_12OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_11);
+  return result;
+}
+//end isMacOS10_12OrAbove()
+
+BOOL isMacOS10_13OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_12);
+  return result;
+}
+//end isMacOS10_13OrAbove()
+
+BOOL isMacOS10_14OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_13);
+  return result;
+}
+//end isMacOS10_14OrAbove()
 
 NSString* GetMySVGPboardType(void)
 {
@@ -255,3 +302,37 @@ NSComparisonResult compareVersions(NSString* version1, NSString* version2)
   return result;
 }
 //end compareVersions()
+
+void MethodSwizzle(Class aClass, SEL orig_sel, SEL alt_sel, BOOL isInstanceMethod)
+{
+  Method orig_method = nil, alt_method = nil;
+  if (isInstanceMethod)
+  {
+    orig_method = class_getInstanceMethod(aClass, orig_sel);
+    alt_method = class_getInstanceMethod(aClass, alt_sel);
+  }
+  else
+  {
+    orig_method = class_getClassMethod(aClass, orig_sel);
+    alt_method = class_getClassMethod(aClass, alt_sel);
+  }
+  if ((orig_method != nil) && (alt_method != nil))
+  {
+    #if 1//defined(OBJC_API_VERSION) && (OBJC_API_VERSION >= 2)
+    IMP m1 = method_getImplementation(orig_method);
+    IMP m2 = method_getImplementation(alt_method);
+    method_setImplementation(orig_method, m2);
+    method_setImplementation(alt_method, m1);
+    #else
+    char* temp1 = 0;
+    IMP temp2 = 0;
+    temp1 = orig_method->method_types;
+    orig_method->method_types = alt_method->method_types;
+    alt_method->method_types = temp1;
+    temp2 = orig_method->method_imp;
+    orig_method->method_imp = alt_method->method_imp;
+    alt_method->method_imp = temp2;
+    #endif
+  }//end if ((orig_method != nil) && (alt_method != nil))
+}
+//end MethodSwizzle()
