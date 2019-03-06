@@ -621,7 +621,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           nil];
         NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];
+          [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListBinaryFormat_v1_0 options:0 error:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
