@@ -69,7 +69,7 @@
     Class LibraryGroupItemClass = [LibraryGroupItem class];
     [explorationQueue setArray:rootItems];
     [explorationQueue sortUsingDescriptors:[NSArray arrayWithObjects:
-          [[[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES] autorelease], nil]];
+          [[NSSortDescriptor alloc] initWithKey:@"sortIndex" ascending:YES], nil]];
     while([explorationQueue count] != 0)
     {
       id item = [explorationQueue objectAtIndex:0];
@@ -84,7 +84,7 @@
       }//end if (libraryGroupItem)
     }//end while([explorationQueue count] != 0)
   }//end if (rootItems)
-  return [[result copy] autorelease];
+  return [result copy];
 }
 //end flattenedGroupItems:
 
@@ -106,15 +106,6 @@
 
 @implementation LibraryController
 
--(void) dealloc
-{
-  [self->rootItemsCache release];
-  [self->filterPredicate release];
-  [self->rootFetchRequest release];
-  [super dealloc];
-}
-//end dealloc
-
 -(NSManagedObjectContext*) managedObjectContext
 {
   return [[LibraryManager sharedManager] managedObjectContext];
@@ -129,7 +120,7 @@
 
 -(NSPredicate*) filterPredicate
 {
-  return [[self->filterPredicate retain] autorelease];
+  return self->filterPredicate;
 }
 //end filterPredicate:
 
@@ -137,18 +128,16 @@
 {
   if (value != self->filterPredicate)
   {
-    [self->filterPredicate release];
-    self->filterPredicate = [value retain];
+    self->filterPredicate = value;
     [self invalidateRootItemsCache];
     if (self->filterPredicate)
-      self->rootItemsCache = [[self rootItems:self->filterPredicate] retain];
+      self->rootItemsCache = [self rootItems:self->filterPredicate];
   }//end if (value != self->filterPredicate)
 }
 //end setFilterPredicate:
 
 -(void) invalidateRootItemsCache
 {
-  [self->rootItemsCache release];
   self->rootItemsCache = nil;
 }
 //end invalidateRootItemsCache
@@ -158,11 +147,11 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
   NSInteger result = NSOrderedSame;
   LibraryEquation* equation1 = [object1 dynamicCastToClass:[LibraryEquation class]];
   LibraryEquation* equation2 = [object2 dynamicCastToClass:[LibraryEquation class]];
-  NSMutableDictionary* flattenedGroupItemsOrder = (NSMutableDictionary*)context;
+  NSMutableDictionary* flattenedGroupItemsOrder = (__bridge NSMutableDictionary*)context;
   LibraryGroupItem* parent1 = [[equation1 parent] dynamicCastToClass:[LibraryGroupItem class]];
   LibraryGroupItem* parent2 = [[equation2 parent] dynamicCastToClass:[LibraryGroupItem class]];
-  NSUInteger parentOrder1 = [[flattenedGroupItemsOrder objectForKey:[NSValue valueWithPointer:parent1]]unsignedIntegerValue];
-  NSUInteger parentOrder2 = [[flattenedGroupItemsOrder objectForKey:[NSValue valueWithPointer:parent2]] unsignedIntegerValue];
+  NSUInteger parentOrder1 = [[flattenedGroupItemsOrder objectForKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(parent1)]]unsignedIntegerValue];
+  NSUInteger parentOrder2 = [[flattenedGroupItemsOrder objectForKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(parent2)]] unsignedIntegerValue];
   result =
     (parentOrder1 == parentOrder2) ?
       (equation1 < equation2) ? NSOrderedAscending :
@@ -188,7 +177,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
   else//if (predicate)
   {
     if (self->rootItemsCache)
-      result = [[self->rootItemsCache retain] autorelease];
+      result = self->rootItemsCache;
     else//if (!self->rootItemsCache)
     {
       NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
@@ -204,7 +193,6 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
       @catch(NSException* e){
         DebugLog(0, @"exception : %@", e);
       }
-      [fetchRequest release];
       if (error)
         {DebugLog(0, @"error : %@", error);}
       if ([filteredItems count])
@@ -214,8 +202,8 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         NSMutableDictionary* flattenedGroupItemsOrder = [NSMutableDictionary dictionaryWithCapacity:count];
         NSUInteger i = 0;
         for(i = 0 ; i<count ; ++i)
-          [flattenedGroupItemsOrder setObject:[NSNumber numberWithUnsignedInteger:i] forKey:[NSValue valueWithPointer:[flattenedGroupItems objectAtIndex:i]]];
-        [filteredItems sortUsingFunction:&filteredItemSortFunction context:flattenedGroupItemsOrder];
+          [flattenedGroupItemsOrder setObject:[NSNumber numberWithUnsignedInteger:i] forKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)([flattenedGroupItems objectAtIndex:i])]];
+        [filteredItems sortUsingFunction:&filteredItemSortFunction context:(__bridge void * _Nullable)(flattenedGroupItemsOrder)];
         result = [NSArray arrayWithArray:filteredItems];
       }//end if ([filteredItems count])
     }//end if (!self->rootItemsCache)
@@ -521,7 +509,6 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
                   ([fileManager fileExistsAtPath:subFile isDirectory:&isDirectory] && isDirectory))
                 [candidateFilesQueue addObject:subFile];
             }
-            [libraryGroupItem release];
           }//end if ([fileManager fileExistsAtPath:filename isDirectory:&isDirectory] && isDirectory)//explore folders
           else if ([LatexitEquation latexitEquationPossibleWithUTI:filenameUTI])
           {
@@ -542,7 +529,6 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
               [libraryEquation setBestTitle];
               if (!parent && libraryEquation)
                 [newLibraryRootItems addObject:libraryEquation];
-              [libraryEquation release];
             }//end for each latexitEquation
           }//end if ([[filename pathExtension] caseInsensitiveCompare:@"pdf"] == NSOrderedSame)
           else//if other file
@@ -557,13 +543,10 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         {
           LibraryWindowController* libraryWindowController =
             [[[outlineView window]  windowController] dynamicCastToClass:[LibraryWindowController class]];
-          NSDictionary* options = [[[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil] autorelease];
+          NSDictionary* options = [[NSDictionary alloc] initWithObjectsAndKeys:teXItems, @"teXItems", nil];
           [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
         }//end if ([teXItems count] > 0)
         
-        [dictionaryOfFoldersByPath release];
-        [candidateFilesQueue release];
-
         //fix sortIndexes of root nodes
         NSMutableArray* brothers = [NSMutableArray arrayWithArray:
           !proposedParentItem ? [self rootItems:self->filterPredicate] : [proposedParentItem childrenOrdered:self->filterPredicate]];
@@ -573,7 +556,6 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         NSUInteger nbBrothers = [brothers count];
         while(nbBrothers--)
           [[brothers objectAtIndex:nbBrothers] setSortIndex:nbBrothers];
-        [newLibraryRootItems release];
 
         result = YES;
       }//end if pdfFiles
