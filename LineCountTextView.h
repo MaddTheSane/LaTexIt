@@ -29,8 +29,11 @@ extern NSString* LineCountTextViewDidReceivePDFDataNotification;
   NSUInteger          previousSelectedRangeLocation;
   BOOL                tabKeyInsertsSpacesEnabled;
   NSUInteger          tabKeyInsertsSpacesCount;
+  BOOL                editionAutoCompleteOnBackslashEnabled;
   NSString*           spacesString;
   NSUInteger          disableAutoColorChangeLevel;
+  
+  BOOL                lastCharacterEnablesAutoCompletion;
 }
 
 -(void) setAttributedString:(NSAttributedString*)value;//triggers recolouring

@@ -510,7 +510,7 @@
     {
       [pboard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
       [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
-    }
+    }//end if (!isChangePasteboardOnTheFly)
 
     //stores the array of selected history items in the HistoryItemsPboardType
     NSArray* selectedHistoryItems = [[self->historyItemsController arrangedObjects] objectsAtIndexes:rowIndexes];

@@ -3,7 +3,7 @@
 "LaTeXiT/Typeset LaTeX Maths align" = "LaTeXiT/\"Align\" Latexisation (\\begin{align*}…\\end{align*})";
 "LaTeXiT/Typeset LaTeX Maths align and put result into clipboard" = "LaTeXiT/\"Align\" Latexisation, add to clipboard";
 "LaTeXiT/Typeset LaTeX Maths display" = "LaTeXiT/\"Display\" Latexisation (\\[…\\])";
-"LaTeXiT/Typeset LaTeX Maths display add to clipboard" = "LaTeXiT/\"Display\" Latexisation, add to clipboard";
+"LaTeXiT/Typeset LaTeX Maths display and put result into clipboard" = "LaTeXiT/\"Display\" Latexisation, add to clipboard";
 "LaTeXiT/Typeset LaTeX Maths inline" = "LaTeXiT/\"Inline\" Latexisation ($…$)";
 "LaTeXiT/Typeset LaTeX Maths inline and put result into clipboard" = "LaTeXiT/\"Inline\" Latexisation, add to clipboard";
 "LaTeXiT/Typeset LaTeX Text" = "LaTeXiT/\"Text\" Latexisation";

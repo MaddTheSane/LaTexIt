@@ -3688,12 +3688,13 @@ static NSMutableDictionary* cachePaths = nil;
   if (string && myDocument)
   {
     NSRange inputSelectedRange = NSMakeRange(0, 0);
-    NSRange newSelectedRange = NSMakeRange(0, 0);
+    NSRange newSelectedRange = NSMakeRange(NSNotFound, 0);
     if ([item type] == LATEX_ITEM_TYPE_ENVIRONMENT)
       string = [item stringWithTextInserted:[myDocument selectedTextFromRange:&inputSelectedRange] outInterestingRange:&newSelectedRange];
     else if ([item numberOfArguments] || [item argumentToken])
       string = [item stringWithTextInserted:[myDocument selectedTextFromRange:&inputSelectedRange] outInterestingRange:&newSelectedRange];
-    newSelectedRange.location += inputSelectedRange.location;
+    if (newSelectedRange.location != NSNotFound)
+      newSelectedRange.location += inputSelectedRange.location;
     [myDocument insertText:string newSelectedRange:newSelectedRange];
     [[myDocument windowForSheet] makeKeyAndOrderFront:sender];
   }//end if (string && myDocument)

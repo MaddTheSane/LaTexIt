@@ -10,11 +10,13 @@
 
 #import "CHExportPrefetcher.h"
 #import "Compressor.h"
+#import "FileManagerHelper.h"
 #import "LatexitEquationData.h"
 #import "LaTeXProcessor.h"
 #import "NSMutableArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSDataExtended.h"
+#import "NSFileManagerExtended.h"
 #import "NSFontExtended.h"
 #import "NSImageExtended.h"
 #import "NSManagedObjectContextExtended.h"
@@ -2717,24 +2719,29 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       break;
   }//end switch(exportFormat)
   
-  BOOL fillFilenames = NO;
+  BOOL fillFilenames = [[PreferencesController sharedController] exportAddTempFileCurrentSession];
   if (fillFilenames)
   {
-    [pboard addTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, NSURLPboardType, nil] owner:lazyDataProvider];
+    [pboard addTypes:[NSArray arrayWithObjects:NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType, nil] owner:lazyDataProvider];
     if (!lazyDataProvider)
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+      NSString* filePrefix = [self computeFileName];
+      if (!filePrefix || [filePrefix isEqualToString:@""])
+        filePrefix = @"latexit-drag";
       NSString* filePath = !extension ? nil :
-        [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+        [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
         NSURL* fileURL = [NSURL fileURLWithPath:filePath];
         if (isMacOS10_6OrAbove())
           [pboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-        //else
-        [pboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:NSFilenamesPboardType];
+        else
+          [pboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:NSFilenamesPboardType];
         [fileURL writeToPasteboard:pboard];
+        FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
+        [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
     }//end if (!lazyDataProvider)
   }//end if (fillFilenames)
@@ -2836,23 +2843,51 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   else
     [pasteboard setData:data forType:type];
   
-  BOOL fillFilenames = NO;
-  if (fillFilenames)
+  if (data)
   {
-    NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
-    NSString* filePath = !extension ? nil :
-      [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
-    if (filePath)
+    if ([type isEqualToString:NSFileContentsPboardType])
+      [pasteboard setData:data forType:NSFileContentsPboardType];
+    else if ([type isEqualToString:NSFilenamesPboardType])
     {
-      [data writeToFile:filePath atomically:YES];
-      NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-      if (isMacOS10_6OrAbove())
-        [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-      //else
-      [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:NSFilenamesPboardType];
-      [fileURL writeToPasteboard:pasteboard];
-    }//end if (filePath)
-  }//end if (fillFilenames)
+      NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+      NSString* filePrefix = [self computeFileName];
+      if (!filePrefix || [filePrefix isEqualToString:@""])
+        filePrefix = @"latexit-drag";
+      NSString* filePath = !extension ? nil :
+        [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
+      if (filePath)
+      {
+        [data writeToFile:filePath atomically:YES];
+        /*NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+        if (isMacOS10_6OrAbove())
+          [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+        else*/
+          [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+        FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
+        [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
+      }//end if (filePath)
+    }//end if ([type isEqualToString:NSFilenamesPboardType])
+    else if ([type isEqualToString:NSURLPboardType])
+    {
+      NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+      NSString* filePrefix = [self computeFileName];
+      if (!filePrefix || [filePrefix isEqualToString:@""])
+        filePrefix = @"latexit-drag";
+      NSString* filePath = !extension ? nil :
+        [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
+      if (filePath)
+      {
+        [data writeToFile:filePath atomically:YES];
+        NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+        if (isMacOS10_6OrAbove())
+          [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+        else
+          [fileURL writeToPasteboard:pasteboard];
+        FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
+        [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
+      }//end if (filePath)
+    }//end if ([type isEqualToString:NSURLPboardType])
+  }//end if (data)
   
   DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);
 }
@@ -2908,6 +2943,18 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   return self;
 }
 //end initWithDescription:
+
+-(NSString*) computeFileName
+{
+  NSString* result = [[[self title] copy] autorelease];
+  if (!result || [result isEqualToString:@""])
+    result = [[[self titleAuto] copy] autorelease];
+  if (!result || [result isEqualToString:@""])
+    result = [[[[self sourceText] string] copy] autorelease];
+  result = [[self class] computeFileNameFromContent:result];
+  return result;
+}
+//end computeFileName
 
 +(NSString*) computeFileNameFromContent:(NSString*)content
 {

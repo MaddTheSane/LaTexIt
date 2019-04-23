@@ -10,10 +10,11 @@
 
 #import "PaletteCell.h"
 
+#import "NSObjectExtended.h"
 
 @implementation PaletteCell
 
--(void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+-(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
 {
   NSPoint origin = cellFrame.origin;
   NSSize size = cellFrame.size;
@@ -28,10 +29,20 @@
                                   origin.y+(cellFrame.size.height-insideRect.size.height)/2);
   if ([self isHighlighted])
   {
-    [[NSColor colorWithCalibratedRed:181./255. green:213./255. blue:255./255. alpha:1] set];
+    [[NSColor  selectedTextBackgroundColor] set];
+    //[[NSColor colorWithCalibratedRed:181./255. green:213./255. blue:255./255. alpha:1] set];
     NSRectFill(cellFrame);
-  }
-  return [super drawInteriorWithFrame:insideRect inView:controlView];
+  }//end if ([self isHighlighted])
+  else if ([controlView isDarkMode])
+  {
+    static const CGFloat gray1 = .45f;
+    static const CGFloat rgba1[4] = {gray1, gray1, gray1, 1.f};
+    [[NSColor colorWithCalibratedRed:rgba1[0] green:rgba1[1] blue:rgba1[2] alpha:rgba1[3]] set];
+    NSRectFill(cellFrame);
+  }//end if ([controlView isDarkMode])
+
+  [super drawInteriorWithFrame:insideRect inView:controlView];
 }
+//end drawInteriorWithFrame:inView:
 
 @end

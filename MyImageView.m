@@ -16,6 +16,7 @@
 #import "CHProtoBuffers.h"
 #import "DragFilterWindow.h"
 #import "DragFilterWindowController.h"
+#import "FileManagerHelper.h"
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LatexitEquation.h"
@@ -48,7 +49,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 static const CGFloat rgba1_light[4] = {0.95f, 0.95f, 0.95f, 1.0f};
-static const CGFloat rgba1_dark[4] = {0.45f, 0.45f, 0.45f, 1.0f};
+static const CGFloat rgba1_dark[4] = {0.5f, 0.5f, 0.5f, 1.0f};
 static const CGFloat rgba2_light[4] = {0.68f, 0.68f, 0.68f, 1.f};
 static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
 
@@ -718,16 +719,16 @@ typedef NSInteger NSDraggingContext;
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
   [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
-  if (self->isDragging && (lazyDataProvider == self))
+  /*if (self->isDragging && (lazyDataProvider == self))
   {
     NSMutableArray* types = [NSMutableArray array];
-    BOOL fillFilenames = NO;
+    BOOL fillFilenames = [[PreferencesController sharedController] exportAddTempFileCurrentSession];
     if (fillFilenames)
       [types addObjectsFromArray:[NSArray arrayWithObjects:
         NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType,
         nil]];
     [pasteboard addTypes:types owner:lazyDataProvider];
-  }//end if (self->isDragging && (lazyDataProvider == self))
+  }//end if (self->isDragging && (lazyDataProvider == self))*/
   DebugLog(1, @"<");
 }
 //end _writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
@@ -816,33 +817,48 @@ typedef NSInteger NSDraggingContext;
       else if ([type isEqualToString:NSFilenamesPboardType])
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+        NSString* filePrefix = [self->transientDragEquation computeFileName];
+        if (!filePrefix || [filePrefix isEqualToString:@""])
+          filePrefix = @"latexit-drag";
         NSString* filePath = !extension ? nil :
-          [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+          [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
+
         if (filePath)
         {
           if (!hasAlreadyCachedData)
+          {
             [data writeToFile:filePath atomically:YES];
-          NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-          if (isMacOS10_6OrAbove())
-            [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-          //else
-            [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+            /*NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+            if (isMacOS10_6OrAbove())
+              [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+            else*/
+              [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+            FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
+            [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
+          }//end if (!hasAlreadyCachedData)
         }//end if (filePath)
       }//end if ([type isEqualToString:NSFilenamesPboardType])
       else if ([type isEqualToString:NSURLPboardType])
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+        NSString* filePrefix = [self->transientDragEquation computeFileName];
+        if (!filePrefix || [filePrefix isEqualToString:@""])
+          filePrefix = @"latexit-drag";
         NSString* filePath = !extension ? nil :
-          [[folder stringByAppendingPathComponent:@"latexit-drag"] stringByAppendingPathExtension:extension];
+          [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
         if (filePath)
         {
           if (!hasAlreadyCachedData)
+          {
             [data writeToFile:filePath atomically:YES];
-          NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-          if (isMacOS10_6OrAbove())
-            [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-          else
-            [fileURL writeToPasteboard:pasteboard];
+            NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+            if (isMacOS10_6OrAbove())
+              [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+            else
+              [fileURL writeToPasteboard:pasteboard];
+            FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
+            [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
+          }//end if (!hasAlreadyCachedData)
         }//end if (filePath)
       }//end if ([type isEqualToString:NSURLPboardType])
     }//end if (data)

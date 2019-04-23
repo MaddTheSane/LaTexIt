@@ -45,7 +45,8 @@
 
   if ([self isDarkMode])
   {
-    [[NSColor colorWithCalibratedRed:0.45f green:0.45f blue:0.45f alpha:1.0f] set];
+    CGFloat gray[4] = {0.5f, 0.5f, 0.5f, 1.f};
+    [[NSColor colorWithCalibratedRed:gray[0] green:gray[1] blue:gray[2] alpha:gray[3]] set];
     NSRectFill(bounds);
   }//end if ([self isDarkMode])
 

@@ -11,7 +11,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\b \cf0 LaTeXiT 2.13.1\
+\b \cf0 LaTeXiT 2.13.2\
 
 \b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
@@ -58,7 +58,7 @@ Feedback e-mail address: \cf3 pierre@chachatelier.fr
 System Requirements\
 
 \fs22 \ulnone \
-LaTeXiT 2.13.1 requires Mac OS X version 10.6 or above, and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 2.13.2 requires Mac OS X version 10.6 or above, and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \b\fs26 \cf0 \
@@ -458,6 +458,15 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
 
 \fs22 \cf0 \ulnone \
+v 2.13.2 (19/03/2019)\
+-Force <Escape> to allow text completion for all MacOS versions (the standard <Escape> shortcut has become <\uc0\u8997 +Escape> since MacOS 10.13);\
+-added a new preference to allow automatic text completion for any word beginning with backslash (\\);\
+-added a new "on-the-fly" drag'n dropping export option to create a temporary file instead of using the pasteboard only; it can help interacting with other applications;\
+-LaTeX palettes are no more automatically hidden when LaTeXiT is not the active application;\
+-various polishing on text-completion, LaTeX palette insertion;\
+-fixed the localization of the LaTeXiT Service items;\
+-dark mode adjustments.\
+\
 v 2.13.1 (05/03/2019)\
 -changed "invisible graphic metadata" to a more clever data watermarking for PDF with outlined fonts and EPS;\
 -restore some automatic \\color[...]\{\} text insertion on color change in the inspector;\
@@ -905,7 +914,7 @@ v 1.9.1 (12th july 2006)\
 - the service "Detect and typeset equations" doesn't delete existing images any more in a text to transform.\
 \
 v 1.9.0 (4th june 2006)\
-- added LaTeX keywords in the auto-completion system available through the usual Option-Escape;\
+- added LaTeX keywords in the auto-completion system available through the usual \uc0\u8997 +Escape;\
 - added "Copy the image as" contextual menu on the equation area;\
 - fixed a bug when opening, on MacIntels, libraries created on PowerPC;\
 - fixed a bug that could prevent automatic saving of loaded libraries;\

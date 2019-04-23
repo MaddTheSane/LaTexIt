@@ -202,6 +202,7 @@
 "Text format" = "Testo";
 "Migrating history to new format" = "Migrazione della cronologia ad un nuovo formato";
 "Migrating library to new format" = "Migrazione della libreria ad un nuovo formato";
+"+temp. file" = "+temp. file";
 
 /* Save / Back sync */
 "File type" = "File type";

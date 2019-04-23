@@ -241,6 +241,18 @@ static NSMutableSet* createdTemporaryPaths = nil;
 }
 //end registerTemporaryPath
 
+-(void) unregisterTemporaryPath:(NSString*)path
+{
+  if (path && createdTemporaryPaths)
+  {
+    @synchronized(self)
+    {
+      [createdTemporaryPaths removeObject:path];
+    }//end @synchronized(self)
+  }//end if (createdTemporaryPaths)
+}
+//end unregisterTemporaryPath:
+
 -(void) removeAllCreatedTemporaryPaths
 {
   @synchronized(self)

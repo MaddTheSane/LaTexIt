@@ -14,6 +14,7 @@
 {
   IBOutlet NSBox*         matrixBox;
   IBOutlet NSPopUpButton* matrixChoicePopUpButton;
+  IBOutlet NSScrollView*  scrollView;
   IBOutlet NSMatrix*      matrix;
   IBOutlet NSButton*      detailsButton;
 

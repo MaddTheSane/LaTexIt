@@ -434,6 +434,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       NSUnarchiveFromDataTransformerName, NSValueTransformerNameBindingOption,
       nil]];
+  
+  [self->editionAutoCompleteOnBackslashButton bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionAutoCompleteOnBackslashEnabledKey] options:nil];
 
   //Preambles
   PreamblesController* preamblesController = [preferencesController preamblesController];

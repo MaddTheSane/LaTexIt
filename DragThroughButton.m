@@ -28,10 +28,23 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
     return nil;
   self->shouldBlink = YES;
   self->delay = .33;
+  self->canTrackMouse = YES;
   [self registerForDraggedTypes:[NSArray arrayWithObjects:LatexitEquationsPboardType, LibraryItemsWrappedPboardType, nil]];
   return self;
 }
 //end initWithCoder:
+
+-(id) initWithFrame:(NSRect)frameRect
+{
+  if (!(self = [super initWithFrame:frameRect]))
+    return nil;
+  self->shouldBlink = YES;
+  self->delay = .33;
+  self->canTrackMouse = YES;
+  [self registerForDraggedTypes:[NSArray arrayWithObjects:LatexitEquationsPboardType, LibraryItemsWrappedPboardType, nil]];
+  return self;
+}
+//end initWithFrame:
 
 -(void) dealloc
 {
@@ -74,6 +87,30 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 }
 //end setDelay:
 
+-(BOOL) canSwitchState
+{
+  return self->canSwitchState;
+}
+//end canSwitchState
+
+-(void) setCanSwitchState:(BOOL)value
+{
+  self->canSwitchState = value;
+}
+//end setCanSwitchState:
+
+-(BOOL) canTrackMouse
+{
+  return self->canTrackMouse;
+}
+//end canTrackMouse
+
+-(void) setCanTrackMouse:(BOOL)value
+{
+  self->canTrackMouse = value;
+}
+//end setCanTrackMouse:
+
 -(void) checkLastMove:(id)object
 {
   if ([self toolTip])
@@ -84,21 +121,30 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
     if (!self->tooltipWindow)
       self->tooltipWindow = [[TooltipWindow tipWithString:[self toolTip] frame:toolTipFrame display:YES] retain];
     [self->tooltipWindow orderFrontWithDuration:5];
-  }
-  if ([self isEnabled])
+  }//end if ([self toolTip])
+  if ([self isEnabled] && self->canTrackMouse)
   {
+    NSInteger currentState = [self state];
+    NSInteger newState = !self->canSwitchState ? NSOnState :
+      (currentState == NSOnState) ? NSOffState :
+      (currentState == NSOffState) ? NSOnState :
+      currentState;
+    NSInteger antiState =
+      (newState == NSOnState) ? NSOffState :
+      (newState == NSOffState) ? NSOnState :
+      newState;
     if (!self->shouldBlink)
-      [self setState:NSOnState];
+      [self setState:newState];
     else//if (self->shouldBlink)
     {
       self->remainingSetStateWrapped += 5;
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOnState] afterDelay:0.05];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOffState] afterDelay:0.10];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOnState] afterDelay:0.15];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOffState] afterDelay:0.20];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:NSOnState] afterDelay:0.25];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:newState] afterDelay:0.05];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:antiState] afterDelay:0.10];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:newState] afterDelay:0.15];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:antiState] afterDelay:0.20];
+      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:newState] afterDelay:0.25];
     }//end if (self->shouldBlink)
-  }//end if ([self isEnabled])
+  }//end if ([self isEnabled] && self->canTrackMouse)
 }
 //end checkLastMove:
 
@@ -141,7 +187,12 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 {
   [self->lastMoveDate release];
   self->lastMoveDate = [[NSDate alloc] init];
-  if ([self state] != NSOnState)
+  NSInteger currentState = [self state];
+  NSInteger nextState = !self->canSwitchState ? NSOnState :
+    (currentState == NSOnState) ? NSOffState :
+    (currentState == NSOffState) ? NSOnState :
+    currentState;
+  if (currentState != nextState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
   return NSDragOperationAll;
 }
@@ -152,7 +203,12 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
   [NSRunLoop cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkLastMove:) object:nil];
   [self->lastMoveDate release];
   self->lastMoveDate = [[NSDate alloc] init];
-  if ([self state] != NSOnState)
+  NSInteger currentState = [self state];
+  NSInteger nextState = !self->canSwitchState ? NSOnState :
+    (currentState == NSOnState) ? NSOffState :
+    (currentState == NSOffState) ? NSOnState :
+    currentState;
+  if (currentState != nextState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
   return NSDragOperationAll;
 }

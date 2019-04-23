@@ -9,8 +9,10 @@
 #import "LaTeXPalettesWindowController.h"
 
 #import "AppController.h"
+#import "ImageCell.h"
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSObjectExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PaletteCell.h"
@@ -32,6 +34,7 @@
     return nil;
   [self _loadPalettes];
 
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearanceDidChange:) name:NSAppearanceDidChangeNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)
                                                name:NSApplicationWillTerminateNotification object:nil];
   return self;
@@ -45,6 +48,30 @@
   [super dealloc];
 }
 //end dealloc
+
+-(void) appearanceDidChange:(NSNotification*)notification
+{
+  BOOL isDarkMode = [[self window] isDarkMode];
+  if (isDarkMode)
+  {
+    static const CGFloat gray1 = .45f;
+    static const CGFloat rgba1[4] = {gray1, gray1, gray1, 1.f};
+    NSColor* color = [NSColor colorWithCalibratedRed:rgba1[0] green:rgba1[1] blue:rgba1[2] alpha:rgba1[3]];
+    [self->matrix setBackgroundColor:color];
+    [self->matrix setDrawsBackground:YES];
+    [self->scrollView setBackgroundColor:color];
+    [self->scrollView setDrawsBackground:YES];
+  }//end if (isDarkMode)
+  else//if (!isDarkMode)
+  {
+    NSColor* color = [NSColor controlBackgroundColor];
+    [self->matrix setBackgroundColor:color];
+    [self->matrix setDrawsBackground:NO];
+    [self->scrollView setBackgroundColor:color];
+    [self->scrollView setDrawsBackground:YES];
+  }//end if (!isDarkMode)
+}
+//end appearanceDidChange:
 
 -(void) windowDidResize:(NSNotification*)notification
 {
@@ -91,6 +118,7 @@
   [self->matrix setNextKeyView:self->matrixChoicePopUpButton];
   [self changeGroup:matrixChoicePopUpButton];
   [self latexPalettesSelect:nil];
+  [self appearanceDidChange:nil];
 }
 //end awakeFromNib
 
@@ -353,10 +381,10 @@
       [cell setRepresentedObject:item];
       [cell setImage:[item image]];
       [matrix setToolTip:[item toolTip] forCell:cell]; 
-    }
+    }//end for each item
     [self windowDidResize:nil];
     [self latexPalettesSelect:nil];
-  }
+  }//end if ((tag >= 0) && ((unsigned int)tag < [orderedPalettes count]))
 }
 //end changeGroup:
 

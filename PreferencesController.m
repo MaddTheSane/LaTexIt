@@ -115,6 +115,7 @@ NSString* TextShortcutsKey                = @"TextShortcuts";
 
 NSString* EditionTabKeyInsertsSpacesEnabledKey = @"EditionTabKeyInsertsSpacesEnabled";
 NSString* EditionTabKeyInsertsSpacesCountKey   = @"EditionTabKeyInsertsSpacesCount";
+NSString* EditionAutoCompleteOnBackslashEnabledKey = @"EditionAutoCompleteOnBackslashEnabled";
 
 NSString* CompositionConfigurationsKey             = @"CompositionConfigurations";
 NSString* CompositionConfigurationDocumentIndexKey = @"CompositionConfigurationDocumentIndexKey";
@@ -308,6 +309,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
              [[[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] lighter:.33] colorAsData], SyntaxColoringCommentColorDarkModeKey,
              [NSNumber numberWithBool:YES], EditionTabKeyInsertsSpacesEnabledKey,
              [NSNumber numberWithUnsignedInteger:2], EditionTabKeyInsertsSpacesCountKey,
+             [NSNumber numberWithBool:NO], EditionAutoCompleteOnBackslashEnabledKey,
              [NSNumber numberWithInteger:NSOffState], ReducedTextAreaStateKey,
              [[NSFont fontWithName:@"Monaco" size:12] data], DefaultFontKey,
              factoryDefaultsPreambles, PreamblesKey,
@@ -636,6 +638,19 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   self->exportFormatCurrentSession = value;
 }
 //end setExportFormatCurrentSession:
+
+-(BOOL) exportAddTempFileCurrentSession
+{
+  BOOL result = self->exportAddTempFileCurrentSession;
+  return result;
+}
+//end exportAddTempFileCurrentSession
+
+-(void) setExportAddTempFileCurrentSession:(BOOL)value
+{
+  self->exportAddTempFileCurrentSession = value;
+}
+//end setExportAddTempFileCurrentSession:
 
 -(NSData*) exportJpegBackgroundColorData
 {
@@ -1584,6 +1599,33 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   return result;
 }
 //end editionTabKeyInsertsSpacesCount
+
+-(BOOL) editionAutoCompleteOnBackslashEnabled
+{
+  BOOL result = NO;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] boolForKey:EditionAutoCompleteOnBackslashEnabledKey];
+  else
+  {
+    Boolean ok = NO;
+    result = CFPreferencesGetAppBooleanValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok) && ok;
+  }
+  return result;
+}
+//end editionAutoCompleteOnBackslashEnabled
+
+-(void) setEditionAutoCompleteOnBackslashEnabled:(BOOL)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setBool:value forKey:EditionAutoCompleteOnBackslashEnabledKey];
+  else
+    #ifdef ARC_ENABLED
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    #else
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    #endif
+}
+//end setEditionAutoCompleteOnBackslashEnabled:
 
 #pragma mark preambles
 

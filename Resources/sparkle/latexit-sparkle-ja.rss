@@ -775,5 +775,31 @@
 				sparkle:dsaSignature="MCwCFCo3scTE94HOQUE0bEVzQX7spdtRAhQ05WSqHL/PzxBUnIpfwRN73pPHRQ=="
 			/>
     </item>
+    <item>
+      <guid>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.13.2</guid>
+      <title>Version 2.13.2</title>
+      <description><![CDATA[
+        <ul>
+          <li>Force &lt;Escape&gt; to allow text completion for all MacOS versions (the standard &lt;Escape&gt; shortcut has become &lt;⌥+Escape&gt; since MacOS 10.13);</li>
+          <li>added a new preference to allow automatic text completion for any word beginning with backslash (\);</li>
+          <li>added a new &quot;on-the-fly&quot; drag'n dropping export option to create a temporary file instead of using the pasteboard only; it can help interacting with other applications;</li>
+          <li>LaTeX palettes are no more automatically hidden when LaTeXiT is not the active application;</li>
+          <li>various polishing on text-completion, LaTeX palette insertion;</li>
+          <li>fixed the localization of the LaTeXiT Service items;</li>
+          <li>dark mode adjustments.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>http://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.13.2</sparkle:releaseNotesLink>
+			<pubDate>Tue, 19 Mar 2019 20:51:18 +0100</pubDate>
+			<enclosure
+				url="http://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_2.dmg"
+				sparkle:version="2.13.2"
+                   sparkle:shortVersionString="2.13.2"
+				type="application/octet-stream"
+				length="15616164"
+				sparkle:dsaSignature="MCwCFHbd0ie9+u/ay4RBbnfHl/e9XNoAAhQUMfxfQ2rmBKkf+tYdnTEMCisrwA=="
+			/>
+    </item>
   </channel>
 </rss>

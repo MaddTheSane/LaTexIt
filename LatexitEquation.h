@@ -111,6 +111,7 @@ extern NSString* LatexitEquationsPboardType;
 -(id) initWithDescription:(id)description;
 -(CHExportPrefetcher*) exportPrefetcher;
 
+-(NSString*) computeFileName;
 +(NSString*) computeFileNameFromContent:(NSString*)content;
 
 @end

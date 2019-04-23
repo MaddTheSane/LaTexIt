@@ -127,7 +127,10 @@ static NSString* bulletString = @"\u2026";
       searchRange = NSMakeRange(newSearchRangeLocation, newStringLength-newSearchRangeLocation);
       lastPatternRange = [string rangeOfRegex:pattern options:0 inRange:searchRange capture:0 error:&error];
     }//end while pattern found
-    interestingRange = ![textBackslashed length] ? lastReplacementRange : [string range];
+    interestingRange =
+      ([textBackslashed length] != 0) ? [string range] :
+      self->argumentTokenRemoveBraces || (lastReplacementRange.length <= 2) ? lastReplacementRange :
+      NSMakeRange(lastReplacementRange.location+1, lastReplacementRange.length-2);
   }//end if (self->type == LATEX_ITEM_TYPE_STANDARD)
   else if (self->type == LATEX_ITEM_TYPE_ENVIRONMENT)
   {

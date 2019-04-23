@@ -220,6 +220,8 @@ static NSArray* WellKnownLatexKeywords = nil;
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesEnabledKey] options:nil];
   [self bind:@"tabKeyInsertsSpacesCount" toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:EditionTabKeyInsertsSpacesCountKey] options:nil];
+  [self bind:@"editionAutoCompleteOnBackslashEnabled" toObject:[NSUserDefaultsController sharedUserDefaultsController]
+    withKeyPath:[NSUserDefaultsController adaptedKeyPath:EditionAutoCompleteOnBackslashEnabledKey] options:nil];
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorDidChange:) name:NSColorPanelColorDidChangeNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearanceDidChange:) name:NSAppearanceDidChangeNotification object:nil];
@@ -241,6 +243,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) setAttributedString:(NSAttributedString*)value//triggers recolouring
 {
+  self->lastCharacterEnablesAutoCompletion = NO;
   NSDictionary* attributes =
     [NSDictionary dictionaryWithObjectsAndKeys:
      [[PreferencesController sharedController] editionFont], NSFontAttributeName,
@@ -283,16 +286,19 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) insertText:(id)aString newSelectedRange:(NSRange)selectedRange
 {
+  self->lastCharacterEnablesAutoCompletion = NO;
   NSString* tabToSpacesString = [self spacesString];
   NSRange adaptedRange = selectedRange;
   if (tabToSpacesString != nil)
   {
     NSUInteger tabsCount = [[aString componentsMatchedByRegex:@"\\t"] count];
-    adaptedRange.length = adaptedRange.length+tabsCount*[tabToSpacesString length]-tabsCount;
+    if (adaptedRange.location != NSNotFound)
+      adaptedRange.length = adaptedRange.length+tabsCount*[tabToSpacesString length]-tabsCount;
   }//end if (tabToSpacesString != nil)
   [self insertText:aString];
   NSRange fullRange = [[[self textStorage] string] range];
-  [self setSelectedRange:NSIntersectionRange(adaptedRange, fullRange)];
+  if (adaptedRange.location != NSNotFound)
+    [self setSelectedRange:NSIntersectionRange(adaptedRange, fullRange)];
 }
 //end insertText:
 
@@ -317,6 +323,18 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//while(range.location != NSNotFound)
     aString = attributedString;
   }//end if ([aString isKindOfClass:[NSAttributedString class]])
+  
+  NSString* aStringString =
+    [aString isKindOfClass:[NSString class]] ? aString :
+    [aString isKindOfClass:[NSAttributedString class]] ? [aString string] :
+    nil;
+  if ([aStringString length])
+  {
+    unichar character = [aStringString characterAtIndex:[aStringString length]-1];
+    self->lastCharacterEnablesAutoCompletion =
+      ([[NSCharacterSet letterCharacterSet] characterIsMember:character]) ||
+      ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:character]);
+  }//end if ([aStringString length])
   [super insertText:aString];
 }
 //end insertText:
@@ -849,6 +867,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 -(BOOL) resignFirstResponder
 {
   BOOL result = NO;
+  self->lastCharacterEnablesAutoCompletion = NO;
   self->previousSelectedRangeLocation = [self selectedRange].location;
   result = [super resignFirstResponder];
   return result;
@@ -866,13 +885,38 @@ static NSArray* WellKnownLatexKeywords = nil;
 -(void) keyDown:(NSEvent*)theEvent
 {
   BOOL isSmallReturn = NO;
+  BOOL isEscape = NO;
+  BOOL isBackslash = NO;
+  self->lastCharacterEnablesAutoCompletion = NO;
+  NSString* characters = [theEvent characters];
   NSString* charactersIgnoringModifiers = [theEvent charactersIgnoringModifiers];
+  NSInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
   if (![charactersIgnoringModifiers isEqualToString:@""])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
     isSmallReturn = (character == 3);//return key
-  }
-  if (!isSmallReturn)
+    isEscape = ((character == 0x1B) && (flags == 0));
+    self->lastCharacterEnablesAutoCompletion =
+      ([[NSCharacterSet letterCharacterSet] characterIsMember:character]) ||
+      ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:character]);
+  }//end if (![charactersIgnoringModifiers isEqualToString:@""])
+  isBackslash = [characters isEqualToString:@"\\"];
+  BOOL allowCompletionOnEscape = YES;
+  BOOL allowCompletionOnBackslash = self->editionAutoCompleteOnBackslashEnabled;
+  if (isEscape && allowCompletionOnEscape)
+  {
+    if ([self respondsToSelector:@selector(complete:)])
+      [self doCommandBySelector:@selector(complete:)];
+    else
+      [super keyDown:theEvent];
+  }//end if (isEscape && allowCompletionOnEscape)
+  else if (isBackslash && allowCompletionOnBackslash)
+  {
+    [super keyDown:theEvent];
+    /*if ([self respondsToSelector:@selector(complete:)])
+      [self doCommandBySelector:@selector(complete:)];*/
+  }//end if (isBackslash && allowCompletionOnBackslash)
+  else if (!isSmallReturn)
   {
     NSString* characters = [theEvent characters];
     NSArray* textShortcuts = [[PreferencesController  sharedController] editionTextShortcuts];
@@ -885,8 +929,24 @@ static NSArray* WellKnownLatexKeywords = nil;
         textShortcut = dict;
     }
     if (!textShortcut)
+    {
       [super keyDown:theEvent];
-    else
+      if (self->lastCharacterEnablesAutoCompletion && self->editionAutoCompleteOnBackslashEnabled)
+      {
+        NSRange selectedRange = [self selectedRange];
+        NSString* string = [[self textStorage] string];
+        NSError* error = nil;
+        NSRange matchRange = [string rangeOfRegex:@".*\\\\[a-zA-Z]+" options:RKLDotAll inRange:NSMakeRange(0, selectedRange.location) capture:0 error:&error];
+        if (error)
+          DebugLog(0, @"error : %@", error);
+        if (NSMaxRange(matchRange) == selectedRange.location)
+        {
+          if ([self respondsToSelector:@selector(complete:)])
+            [self doCommandBySelector:@selector(complete:)];
+        }
+      }//end if (self->lastCharacterEnablesAutoCompletion && self->editionAutoCompleteOnBackslashEnabled)
+    }//end if (!textShortcut)
+    else if (textShortcut)
     {
       if (![[theEvent charactersIgnoringModifiers] isEqualToString:characters])
         [self deleteBackward:self];
@@ -903,8 +963,8 @@ static NSArray* WellKnownLatexKeywords = nil;
         [self replaceCharactersInRange:range withString:[NSString stringWithFormat:@"%@%@%@",left,selectedText,right]];
         [self setSelectedRange:NSMakeRange(range.location+[left length]+range.length, 0)];
       }
-    }
-  }
+    }//end if (textShortcut)
+  }//end if (!isSmallReturn)
   else
     [[(MyDocument*)[AppController currentDocument] lowerBoxLatexizeButton] performClick:self];
 }
@@ -970,24 +1030,30 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(NSRange) rangeForUserCompletion
 {
+  NSRange result = NSMakeRange(NSNotFound, 0);
   NSRange range = [super rangeForUserCompletion];
   BOOL canExtendRange = (range.location != 0) && (range.location != NSNotFound) && (range.length+1 != NSNotFound);
   NSRange extendedRange = canExtendRange ? NSMakeRange(range.location-1, range.length+1) : range;
   NSString* extendedWord = [[self string] substringWithRange:extendedRange];
   BOOL isBackslashedWord = ([extendedWord length] && [extendedWord characterAtIndex:0] == '\\');
-  return isBackslashedWord ? extendedRange : range;
+  BOOL isBackslashedEndWord = [extendedWord endsWith:@"\\" options:NSCaseInsensitiveSearch];
+  result =
+    isBackslashedEndWord ? NSMakeRange(NSMaxRange(extendedRange)-1, 1) :
+    isBackslashedWord ? extendedRange : range;
+  return result;
 }
 //end rangeForUserCompletion
 
 -(NSArray*) completionsForPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
   //first, normal system calling [super completionsForPartialWordRange:...]
-  NSMutableArray* propositions =
-    [NSMutableArray arrayWithArray:[super completionsForPartialWordRange:charRange indexOfSelectedItem:index]];
+  NSMutableSet* propositions =
+    [NSMutableSet setWithArray:[super completionsForPartialWordRange:charRange indexOfSelectedItem:index]];
 
-  //then, check the LaTeX dictionary (will work for a backslashed word)    
+  //then, check the LaTeX dictionary (will work for a backslashed word)
   NSString* text = [self string];
   NSString* word = [text substringWithRange:charRange];
+  NSString* triggerWord = word;
   BOOL isBackslashedWord = ([word length] && [word characterAtIndex:0] == '\\');
   NSMutableArray* newPropositions = [NSMutableArray array];
 
@@ -1003,7 +1069,7 @@ static NSArray* WellKnownLatexKeywords = nil;
         [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
     }
   
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", triggerWord];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
     
     NSUInteger nbPropositions = [newPropositions count];
@@ -1012,12 +1078,15 @@ static NSArray* WellKnownLatexKeywords = nil;
       NSDictionary* typeAndKeyword = [newPropositions objectAtIndex:nbPropositions];
       NSString* type    = [typeAndKeyword objectForKey:@"type"];
       NSString* keyword = [typeAndKeyword objectForKey:@"word"];
+      NSString* proposition = nil;
       if ([type isEqualToString:@"normal"])
-        [propositions addObject:keyword];
+        proposition = keyword;
       else if ([type isEqualToString:@"braces"])
-        [propositions addObject:[keyword stringByAppendingString:@"{}"]];
+        proposition = [keyword stringByAppendingString:@"{}"];
       else if ([type isEqualToString:@"braces2"])
-        [propositions addObject:[keyword stringByAppendingString:@"{}{}"]];
+        proposition = [keyword stringByAppendingString:@"{}{}"];
+      if (proposition)
+        [propositions addObject:proposition];
     }//end for each proposition
   }//end if (isBackslashedWord)
   
@@ -1032,9 +1101,9 @@ static NSArray* WellKnownLatexKeywords = nil;
     {
       NSString* proposition = [newPropositions objectAtIndex:count];
       [newPropositions replaceObjectAtIndex:count withObject:[NSString stringWithFormat:@"\\%@", proposition]];
-    }
-    [propositions setArray:newPropositions];
-  }
+    }//end while(count--)
+    [propositions addObjectsFromArray:newPropositions];
+  }//end if (isBackslashedWord && ![propositions count])
   
   if (!isBackslashedWord) //try a latex environment and add normal completions
   {
@@ -1046,7 +1115,7 @@ static NSArray* WellKnownLatexKeywords = nil;
       //NSString*     packageName = [package objectForKey:@"name"];
       //if ([text rangeOfString:packageName options:NSCaseInsensitiveSearch].location != NSNotFound)
         [keywordsToCheck addObjectsFromArray:[package objectForKey:@"keywords"]];
-    }
+    }//end while(nbPackages--)
   
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"word BEGINSWITH %@", word];
     [newPropositions setArray:[keywordsToCheck filteredArrayUsingPredicate:predicate]];
@@ -1062,9 +1131,9 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//end for each proposition
   }//end if (!isBackslashedWord)
   
-  [propositions sortUsingSelector:@selector(caseInsensitiveCompare:)];
+  NSArray* result = [propositions sortedArrayUsingDescriptors:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease], nil]];
   
-  return propositions;
+  return result;
 }
 //end completionsForPartialWordRange:indexOfSelectedItem;
 
@@ -1147,6 +1216,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo
 {
+  self->lastCharacterEnablesAutoCompletion = NO;
   NSString* input = !range.length ? nil : [[[self textStorage] string] substringWithRange:range];
   if (input && string)
   {
@@ -1161,6 +1231,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) insertTextAtMousePosition:(id)object
 {
+  self->lastCharacterEnablesAutoCompletion = NO;
   NSUInteger index = [self characterIndexForPoint:[NSEvent mouseLocation]];
   NSUInteger length = [[self textStorage] length];
   if (index <= length)

@@ -15,6 +15,7 @@
 -(BOOL) createLinkInDirectory:(NSString*)directoryPath toTarget:(NSString*)targetPath linkName:(NSString*)linkName outLinkPath:(NSString**)outLinkPath;
 
 -(void) registerTemporaryPath:(NSString*)path;
+-(void) unregisterTemporaryPath:(NSString*)path;
 -(void) removeAllCreatedTemporaryPaths;
 
 -(NSString*) UTIFromPath:(NSString*)path;
