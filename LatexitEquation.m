@@ -2690,11 +2690,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(NSString*) computeFileName
 {
-  NSString* result = [[[self title] copy] autorelease];
+  NSString* result = [[self title] copy];
   if (!result || [result isEqualToString:@""])
-    result = [[[self titleAuto] copy] autorelease];
+    result = [[self titleAuto] copy];
   if (!result || [result isEqualToString:@""])
-    result = [[[[self sourceText] string] copy] autorelease];
+    result = [[[self sourceText] string] copy];
   result = [[self class] computeFileNameFromContent:result];
   return result;
 }

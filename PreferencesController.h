@@ -38,16 +38,16 @@ extern NSString *const SpellCheckingEnableKey;
 extern NSString *const SyntaxColoringEnableKey;
 extern NSString *const SyntaxColoringTextForegroundColorKey;
 extern NSString *const SyntaxColoringTextBackgroundColorKey;
-extern NSString* SyntaxColoringTextForegroundColorDarkModeKey;
-extern NSString* SyntaxColoringTextBackgroundColorDarkModeKey;
+extern NSString *const SyntaxColoringTextForegroundColorDarkModeKey;
+extern NSString *const SyntaxColoringTextBackgroundColorDarkModeKey;
 extern NSString *const SyntaxColoringCommandColorKey;
-extern NSString* SyntaxColoringCommandColorDarkModeKey;
+extern NSString *const SyntaxColoringCommandColorDarkModeKey;
 extern NSString *const SyntaxColoringMathsColorKey;
-extern NSString* SyntaxColoringMathsColorDarkModeKey;
+extern NSString *const SyntaxColoringMathsColorDarkModeKey;
 extern NSString *const SyntaxColoringKeywordColorKey;
-extern NSString* SyntaxColoringKeywordColorDarkModeKey;
+extern NSString *const SyntaxColoringKeywordColorDarkModeKey;
 extern NSString *const SyntaxColoringCommentColorKey;
-extern NSString* SyntaxColoringCommentColorDarkModeKey;
+extern NSString *const SyntaxColoringCommentColorDarkModeKey;
 extern NSString *const ReducedTextAreaStateKey;
 extern NSString *const DefaultFontKey;
 extern NSString *const PreamblesKey;
@@ -84,7 +84,7 @@ extern NSString *const LastEasterEggsDatesKey;
 
 extern NSString *const EditionTabKeyInsertsSpacesEnabledKey;
 extern NSString *const EditionTabKeyInsertsSpacesCountKey;
-extern NSString* EditionAutoCompleteOnBackslashEnabledKey;
+extern NSString *const EditionAutoCompleteOnBackslashEnabledKey;
 
 extern NSString *const CompositionConfigurationNameKey;
 extern NSString *const CompositionConfigurationIsDefaultKey;
@@ -176,8 +176,7 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 
 @property export_format_t exportFormatPersistent;
 @property export_format_t exportFormatCurrentSession;
--(BOOL) exportAddTempFileCurrentSession;
--(void) setExportAddTempFileCurrentSession:(BOOL)value;
+@property BOOL exportAddTempFileCurrentSession;
 
 
 @property (copy) NSData* exportJpegBackgroundColorData;

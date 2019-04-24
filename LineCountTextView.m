@@ -1122,7 +1122,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//end for each proposition
   }//end if (!isBackslashedWord)
   
-  NSArray* result = [propositions sortedArrayUsingDescriptors:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease], nil]];
+  NSArray* result = [propositions sortedArrayUsingDescriptors:[NSArray arrayWithObjects:[[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES selector:@selector(caseInsensitiveCompare:)], nil]];
   
   return result;
 }

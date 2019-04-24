@@ -52,10 +52,6 @@
   [self wakeUpDestructionThread];
   while(self->destructionThread && ![self->destructionThread isFinished])
     [NSThread sleepForTimeInterval:.1];
-  [self->destructionThread release];
-  [self->semaphore release];
-  [self->destructionQueue release];
-  [super dealloc];
 }
 //end dealloc
 
@@ -94,7 +90,7 @@
       if (item)
         [self->destructionQueue addObject:item];
       [self->destructionQueue sortUsingDescriptors:[NSArray arrayWithObjects:
-        [[[NSSortDescriptor alloc] initWithKey:@"dueDate" ascending:YES] autorelease], nil]];
+        [[NSSortDescriptor alloc] initWithKey:@"dueDate" ascending:YES], nil]];
     }//end @synchronized(self->destructionQueue)
     [self startDestructionThreadIfNeeded];
     if (wakeUp)
@@ -120,8 +116,7 @@
 {
   BOOL stop = NO;
   while(!stop)
-  {
-    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
     [self->semaphore P];
     stop |= !self->threadsShouldRun;
     if (!stop)
@@ -131,7 +126,7 @@
       {
         if ([self->destructionQueue count] > 0)
         {
-          firstItem = [[self->destructionQueue objectAtIndex:0] retain];
+          firstItem = [self->destructionQueue objectAtIndex:0];
           [self->destructionQueue removeObjectAtIndex:0];
         }//end if ([self->destructionQueue count] > 0)
       }//end @synchronized(self->destructionQueue)
@@ -155,11 +150,9 @@
           [self addSelfDestructingItem:firstItem wakeUp:NO];
           [self performSelectorOnMainThread:@selector(wakeUpDestructionThread:) withObject:[NSNumber numberWithDouble:remainingTime] waitUntilDone:NO];
         }//end if (remainingTime > 0)
-        [firstItem release];
       }//end if (firstItem)
     }//end if (!stop)
     stop |= !self->threadsShouldRun;
-    [ap release];
   }//end while(!stop)
 }
 //end destructingThreadFunction:

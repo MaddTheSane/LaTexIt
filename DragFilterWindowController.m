@@ -13,6 +13,7 @@
 #import "NSButtonPalette.h"
 #import "PreferencesController.h"
 #import "Utils.h"
+#import "DragFilterView.h"
 
 @interface DragFilterWindowController (PrivateAPI)
 -(void) updateAnimation:(NSTimer*)timer;

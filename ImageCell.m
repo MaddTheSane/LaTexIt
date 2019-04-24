@@ -23,16 +23,9 @@
 }
 //end init
 
--(void) dealloc
-{
-  [self->backgroundColor release];
-  [super dealloc];
-}
-//end dealloc
-
 -(NSColor*) backgroundColor
 {
-  return [[self->backgroundColor copy] autorelease];
+  return [self->backgroundColor copy];
 }
 //end backgroundColor
 
@@ -40,7 +33,6 @@
 {
   if (value != self->backgroundColor)
   {
-    [self->backgroundColor release];
     self->backgroundColor = [value copy];
   }//end if (value != self->backgroundColor)
 }

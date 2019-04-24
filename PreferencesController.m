@@ -50,7 +50,7 @@ NSString*const DocumentStyleKey = @"DocumentStyle";
 NSString*const DragExportTypeKey                                   = @"DragExportType";
 NSString*const DragExportJpegColorKey                              = @"DragExportJpegColor";
 NSString*const DragExportJpegQualityKey                            = @"DragExportJpegQuality";
-NSString* DragExportPDFMetadataInvisibleGraphicsEnabledKey    = @"DragExportPDFMetadataInvisibleGraphicsEnabled";
+NSString*const DragExportPDFMetadataInvisibleGraphicsEnabledKey    = @"DragExportPDFMetadataInvisibleGraphicsEnabled";
 NSString*const DragExportPDFWOFGsWriteEngineKey                    = @"DragExportPDFWOFGsWriteEngine";
 NSString*const DragExportPDFWOFGsPDFCompatibilityLevelKey          = @"DragExportPDFWOFGsPDFCompatibilityLevel";
 NSString*const DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey = @"DragExportPDFWOFMetadataInvisibleGraphicsEnabled";
@@ -71,17 +71,17 @@ NSString*const DefaultModeKey                                     = @"DefaultMod
 NSString*const SpellCheckingEnableKey               = @"SpellCheckingEnabled";
 NSString*const SyntaxColoringEnableKey              = @"SyntaxColoringEnabled";
 NSString*const SyntaxColoringTextForegroundColorKey = @"SyntaxColoringTextForegroundColor";
-NSString* SyntaxColoringTextForegroundColorDarkModeKey = @"SyntaxColoringTextForegroundColorDarkMode";
+NSString*const SyntaxColoringTextForegroundColorDarkModeKey = @"SyntaxColoringTextForegroundColorDarkMode";
 NSString*const SyntaxColoringTextBackgroundColorKey = @"SyntaxColoringTextBackgroundColor";
-NSString* SyntaxColoringTextBackgroundColorDarkModeKey = @"SyntaxColoringTextBackgroundColorDarkMode";
+NSString*const SyntaxColoringTextBackgroundColorDarkModeKey = @"SyntaxColoringTextBackgroundColorDarkMode";
 NSString*const SyntaxColoringCommandColorKey        = @"SyntaxColoringCommandColor";
-NSString* SyntaxColoringCommandColorDarkModeKey        = @"SyntaxColoringCommandColorDarkMode";
+NSString*const SyntaxColoringCommandColorDarkModeKey        = @"SyntaxColoringCommandColorDarkMode";
 NSString*const SyntaxColoringMathsColorKey          = @"SyntaxColoringMathsColor";
-NSString* SyntaxColoringMathsColorDarkModeKey          = @"SyntaxColoringMathsColorDarkMode";
+NSString*const SyntaxColoringMathsColorDarkModeKey          = @"SyntaxColoringMathsColorDarkMode";
 NSString*const SyntaxColoringKeywordColorKey        = @"SyntaxColoringKeywordColor";
-NSString* SyntaxColoringKeywordColorDarkModeKey        = @"SyntaxColoringKeywordColorDarkMode";
+NSString*const SyntaxColoringKeywordColorDarkModeKey        = @"SyntaxColoringKeywordColorDarkMode";
 NSString*const SyntaxColoringCommentColorKey        = @"SyntaxColoringCommentColor";
-NSString* SyntaxColoringCommentColorDarkModeKey        = @"SyntaxColoringCommentColorDarkMode";
+NSString*const SyntaxColoringCommentColorDarkModeKey        = @"SyntaxColoringCommentColorDarkMode";
 NSString*const ReducedTextAreaStateKey              = @"ReducedTextAreaState";
 
 NSString*const DefaultFontKey               = @"DefaultFont";
@@ -119,7 +119,7 @@ NSString*const TextShortcutsKey                = @"TextShortcuts";
 
 NSString*const EditionTabKeyInsertsSpacesEnabledKey = @"EditionTabKeyInsertsSpacesEnabled";
 NSString*const EditionTabKeyInsertsSpacesCountKey   = @"EditionTabKeyInsertsSpacesCount";
-NSString* EditionAutoCompleteOnBackslashEnabledKey = @"EditionAutoCompleteOnBackslashEnabled";
+NSString*const EditionAutoCompleteOnBackslashEnabledKey = @"EditionAutoCompleteOnBackslashEnabled";
 
 NSString*const CompositionConfigurationsKey             = @"CompositionConfigurations";
 NSString*const CompositionConfigurationDocumentIndexKey = @"CompositionConfigurationDocumentIndexKey";
@@ -180,7 +180,7 @@ NSString*const SynchronizationNewDocumentsSynchronizeBodyKey = @"Synchronization
 NSString*const SynchronizationNewDocumentsPathKey = @"SynchronizationNewDocumentsPath";
 NSString*const SynchronizationAdditionalScriptsKey = @"SynchronizationAdditionalScripts";
 
-@interface PreferencesController (PrivateAPI)
+@interface PreferencesController ()
 -(NSArrayController*) lazyEditionTextShortcutsControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
 -(NSArray*) editionTextShortcutsFromControllerIfPossible:(BOOL)fromControllerIfPossible createControllerIfNeeded:(BOOL)createControllerIfNeeded;
 -(PreamblesController*) lazyPreamblesControllerWithCreationIfNeeded:(BOOL)creationOptionIfNeeded;
@@ -606,31 +606,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end setExportFormatPersistent:
 
--(export_format_t) exportFormatCurrentSession
-{
-  export_format_t result = self->exportFormatCurrentSession;
-  return result;
-}
-//end exportFormatCurrentSession
+@synthesize exportFormatCurrentSession;
 
--(void) setExportFormatCurrentSession:(export_format_t)value
-{
-  self->exportFormatCurrentSession = value;
-}
-//end setExportFormatCurrentSession:
-
--(BOOL) exportAddTempFileCurrentSession
-{
-  BOOL result = self->exportAddTempFileCurrentSession;
-  return result;
-}
-//end exportAddTempFileCurrentSession
-
--(void) setExportAddTempFileCurrentSession:(BOOL)value
-{
-  self->exportAddTempFileCurrentSession = value;
-}
-//end setExportAddTempFileCurrentSession:
+@synthesize exportAddTempFileCurrentSession;
 
 -(NSData*) exportJpegBackgroundColorData
 {
