@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -64,6 +64,7 @@
                 <outlet property="compositionConfigurationsProgramArgumentsRemoveButton" destination="8055" id="8071"/>
                 <outlet property="compositionConfigurationsProgramArgumentsTableView" destination="8060" id="8069"/>
                 <outlet property="compositionView" destination="634" id="714"/>
+                <outlet property="editionAutoCompleteOnBackslashButton" destination="9963" id="9966"/>
                 <outlet property="editionFontNameTextField" destination="621" id="5377"/>
                 <outlet property="editionSpellCheckingStateButton" destination="1208" id="5386"/>
                 <outlet property="editionSyntaxColoringCommandColorWell" destination="609" id="5382"/>
@@ -497,7 +498,7 @@
                         <tabViewItem label="アピアランス" identifier="" id="1170">
                             <view key="view" id="1172">
                                 <rect key="frame" x="10" y="33" width="554" height="411"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" id="620">
                                         <rect key="frame" x="438" y="377" width="105" height="32"/>
@@ -534,7 +535,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="fxg-cF-lxH">
                                             <rect key="frame" x="1" y="1" width="518" height="117"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="947" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="518" height="117"/>
@@ -582,14 +583,14 @@ some text &amp; $some maths$ \\
                                         </textFieldCell>
                                     </textField>
                                     <box boxType="oldStyle" borderType="line" title="Title" titlePosition="noTitle" id="963">
-                                        <rect key="frame" x="17" y="208" width="520" height="167"/>
+                                        <rect key="frame" x="17" y="199" width="520" height="178"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <view key="contentView" id="6Ae-tD-h8x">
-                                            <rect key="frame" x="1" y="1" width="518" height="165"/>
+                                            <rect key="frame" x="1" y="1" width="518" height="176"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <colorWell id="613">
-                                                    <rect key="frame" x="34" y="99" width="52" height="24"/>
+                                                    <rect key="frame" x="34" y="112" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -597,7 +598,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <colorWell id="614">
-                                                    <rect key="frame" x="34" y="71" width="52" height="24"/>
+                                                    <rect key="frame" x="34" y="84" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -605,7 +606,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <textField verticalHuggingPriority="750" id="615">
-                                                    <rect key="frame" x="92" y="103" width="99" height="17"/>
+                                                    <rect key="frame" x="92" y="116" width="99" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="テキストカラー" id="9428">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -614,7 +615,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="616">
-                                                    <rect key="frame" x="92" y="76" width="47" height="17"/>
+                                                    <rect key="frame" x="92" y="89" width="47" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="背景色" id="9429">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -623,7 +624,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <colorWell id="609">
-                                                    <rect key="frame" x="349" y="99" width="52" height="24"/>
+                                                    <rect key="frame" x="349" y="112" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -631,7 +632,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <button id="605">
-                                                    <rect key="frame" x="347" y="134" width="139" height="18"/>
+                                                    <rect key="frame" x="347" y="147" width="139" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <buttonCell key="cell" type="check" title="シンタックスカラー" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9425">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -642,7 +643,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </button>
                                                 <colorWell id="608">
-                                                    <rect key="frame" x="349" y="71" width="52" height="24"/>
+                                                    <rect key="frame" x="349" y="84" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -650,7 +651,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <colorWell id="610">
-                                                    <rect key="frame" x="349" y="15" width="52" height="24"/>
+                                                    <rect key="frame" x="349" y="28" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -658,7 +659,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <textField verticalHuggingPriority="750" id="604">
-                                                    <rect key="frame" x="411" y="103" width="60" height="17"/>
+                                                    <rect key="frame" x="411" y="116" width="60" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="コマンド" id="9424">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -667,7 +668,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="603">
-                                                    <rect key="frame" x="411" y="76" width="73" height="17"/>
+                                                    <rect key="frame" x="411" y="89" width="73" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="キーワード" id="9423">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -676,7 +677,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="607">
-                                                    <rect key="frame" x="411" y="18" width="60" height="17"/>
+                                                    <rect key="frame" x="411" y="31" width="60" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="コメント" id="9427">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -685,7 +686,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="606">
-                                                    <rect key="frame" x="411" y="46" width="21" height="17"/>
+                                                    <rect key="frame" x="411" y="59" width="21" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="式" id="9426">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -694,7 +695,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <colorWell id="602">
-                                                    <rect key="frame" x="349" y="43" width="52" height="24"/>
+                                                    <rect key="frame" x="349" y="56" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -702,7 +703,7 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <textField verticalHuggingPriority="750" id="960">
-                                                    <rect key="frame" x="31" y="135" width="112" height="17"/>
+                                                    <rect key="frame" x="31" y="148" width="112" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="デフォルトカラー" id="9430">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -711,7 +712,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <button id="1208">
-                                                    <rect key="frame" x="32" y="17" width="113" height="18"/>
+                                                    <rect key="frame" x="32" y="33" width="113" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <buttonCell key="cell" type="check" title="スペルチェック" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9431">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -722,12 +723,12 @@ some text &amp; $some maths$ \\
                                                     </connections>
                                                 </button>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9664">
-                                                    <rect key="frame" x="253" y="40" width="19" height="27"/>
+                                                    <rect key="frame" x="253" y="52" width="19" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9671"/>
                                                 </stepper>
                                                 <button id="9665">
-                                                    <rect key="frame" x="32" y="44" width="188" height="18"/>
+                                                    <rect key="frame" x="32" y="56" width="188" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Tabキーでスペースを挿入：" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9670">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -735,7 +736,7 @@ some text &amp; $some maths$ \\
                                                     </buttonCell>
                                                 </button>
                                                 <textField verticalHuggingPriority="750" id="9666">
-                                                    <rect key="frame" x="222" y="43" width="32" height="22"/>
+                                                    <rect key="frame" x="222" y="55" width="32" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9669">
                                                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="9676">
@@ -747,7 +748,7 @@ some text &amp; $some maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="9667">
-                                                    <rect key="frame" x="274" y="44" width="30" height="17"/>
+                                                    <rect key="frame" x="274" y="56" width="30" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="文字" id="9668">
                                                         <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -755,6 +756,17 @@ some text &amp; $some maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <button id="9963">
+                                                    <rect key="frame" x="31" y="9" width="129" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <buttonCell key="cell" type="check" title="&quot;\&quot;の後の自動補完" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9964">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" size="13" name="HiraKakuProN-W3"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <outlet property="nextKeyView" destination="605" id="9965"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </box>
@@ -775,20 +787,20 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="キーマップ" identifier="" id="1171">
                             <view key="view" id="1173">
                                 <rect key="frame" x="10" y="33" width="554" height="411"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button id="1197">
                                         <rect key="frame" x="42" y="31" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="9433">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9433">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
                                     <button id="1198">
                                         <rect key="frame" x="20" y="31" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="9434">
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9434">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
@@ -801,7 +813,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="dXG-oT-z7i">
                                             <rect key="frame" x="1" y="0.0" width="512" height="302"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9520" id="1175" customClass="TextShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="513" height="277"/>
@@ -942,7 +954,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="コマンド" identifier="" id="1063">
                             <view key="view" id="1065">
                                 <rect key="frame" x="10" y="33" width="554" height="305"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" id="638">
                                         <rect key="frame" x="438" y="237" width="105" height="32"/>
@@ -956,7 +968,7 @@ some text &amp; $some maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="639">
-                                        <rect key="frame" x="109.5" y="244" width="298" height="22"/>
+                                        <rect key="frame" x="110" y="244" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9437">
                                             <font key="font" metaFont="system"/>
@@ -988,7 +1000,7 @@ some text &amp; $some maths$ \\
                                         </buttonCell>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="642">
-                                        <rect key="frame" x="109.5" y="72" width="298" height="22"/>
+                                        <rect key="frame" x="110" y="72" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9440">
                                             <font key="font" metaFont="system"/>
@@ -1023,7 +1035,7 @@ some text &amp; $some maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="645">
-                                        <rect key="frame" x="109.5" y="107" width="298" height="22"/>
+                                        <rect key="frame" x="110" y="107" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9443">
                                             <font key="font" metaFont="system"/>
@@ -1069,7 +1081,7 @@ some text &amp; $some maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="648">
-                                        <rect key="frame" x="109.5" y="209" width="298" height="22"/>
+                                        <rect key="frame" x="110" y="209" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9446">
                                             <font key="font" metaFont="system"/>
@@ -1104,7 +1116,7 @@ some text &amp; $some maths$ \\
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="651">
-                                        <rect key="frame" x="109.5" y="141" width="298" height="22"/>
+                                        <rect key="frame" x="110" y="141" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9449">
                                             <font key="font" metaFont="system"/>
@@ -1136,7 +1148,7 @@ some text &amp; $some maths$ \\
                                         </buttonCell>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="1055">
-                                        <rect key="frame" x="109.5" y="38" width="298" height="22"/>
+                                        <rect key="frame" x="110" y="38" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9452">
                                             <font key="font" metaFont="system"/>
@@ -1192,7 +1204,7 @@ some text &amp; $some maths$ \\
                                         </buttonCell>
                                     </button>
                                     <textField verticalHuggingPriority="750" id="9932">
-                                        <rect key="frame" x="109" y="175" width="298.5" height="22"/>
+                                        <rect key="frame" x="109" y="175" width="299" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9937">
                                             <font key="font" metaFont="system"/>
@@ -1277,7 +1289,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="追加スクリプト" identifier="" id="1064">
                             <view key="view" id="1066">
                                 <rect key="frame" x="10" y="33" width="554" height="305"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <box titlePosition="noTitle" id="1086">
                                         <rect key="frame" x="30" y="5" width="494" height="187"/>
@@ -1300,7 +1312,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="Vo5-Sm-vEh">
                                                         <rect key="frame" x="1" y="1" width="454" height="104"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1078">
                                                                 <rect key="frame" x="0.0" y="0.0" width="454" height="104"/>
@@ -1337,7 +1349,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="1cr-ui-spu">
                                                         <rect key="frame" x="1" y="0.0" width="454" height="17"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9528" id="1082">
                                                                 <rect key="frame" x="0.0" y="0.0" width="454" height="19"/>
@@ -1414,7 +1426,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="cBb-OL-UVk">
                                             <rect key="frame" x="1" y="0.0" width="292" height="74"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9523" id="1069">
                                                     <rect key="frame" x="0.0" y="0.0" width="293" height="49"/>
@@ -1500,7 +1512,7 @@ some text &amp; $some maths$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="335"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <tabView autoresizesSubviews="NO" id="9655">
+                <tabView id="9655">
                     <rect key="frame" x="13" y="10" width="574" height="311"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <font key="font" metaFont="system"/>
@@ -1508,25 +1520,25 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="プリアンブル" identifier="1" id="9656">
                             <view key="view" id="9659">
                                 <rect key="frame" x="10" y="33" width="554" height="265"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" id="4436">
+                                    <button id="4436">
                                         <rect key="frame" x="17" y="109" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9500">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9500">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="4435" id="4606"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" id="4435">
+                                    <button id="4435">
                                         <rect key="frame" x="39" y="109" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9499">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9499">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="916" id="4607"/>
@@ -1607,7 +1619,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="zwV-UA-V6X">
                                             <rect key="frame" x="1" y="1" width="391" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="391" height="132"/>
@@ -1652,7 +1664,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="fOc-5w-Yeq">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1698,25 +1710,25 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="本文テンプレート" identifier="2" id="9657">
                             <view key="view" id="9658">
                                 <rect key="frame" x="10" y="33" width="554" height="265"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" id="9555">
+                                    <button id="9555">
                                         <rect key="frame" x="17" y="109" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9567">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9567">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="9554" id="9594"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" id="9554">
+                                    <button id="9554">
                                         <rect key="frame" x="39" y="109" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9568">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9568">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="9558" id="9595"/>
@@ -1775,10 +1787,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="jMP-Ug-cD5">
                                             <rect key="frame" x="1" y="1" width="391" height="65"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9574" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-0.01171875" width="406" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="406" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1820,10 +1832,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="fn5-S3-abq">
                                             <rect key="frame" x="1" y="1" width="391" height="66"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9579" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-0.01171875" width="391" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="391" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1865,7 +1877,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="Gbn-SC-cZ9">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9569" customClass="BodyTemplatesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
@@ -1949,23 +1961,23 @@ some text &amp; $some maths$ \\
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button toolTip="選択した要素を削除" verticalHuggingPriority="750" id="9629">
+                            <button toolTip="選択した要素を削除" id="9629">
                                 <rect key="frame" x="104" y="22" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9636">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9636">
+                                    <behavior key="behavior" lightByContents="YES"/>
+                                    <font key="font" size="18" name="Monaco"/>
                                 </buttonCell>
                                 <connections>
                                     <outlet property="nextKeyView" destination="9640" id="9645"/>
                                 </connections>
                             </button>
-                            <button toolTip="要素を追加" verticalHuggingPriority="750" id="9628">
+                            <button toolTip="要素を追加" id="9628">
                                 <rect key="frame" x="82" y="22" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="9637">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9637">
+                                    <behavior key="behavior" lightByContents="YES"/>
+                                    <font key="font" size="13" name="Monaco"/>
                                 </buttonCell>
                                 <connections>
                                     <outlet property="nextKeyView" destination="9629" id="9643"/>
@@ -1976,7 +1988,7 @@ some text &amp; $some maths$ \\
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="KjZ-UR-NfY">
                                     <rect key="frame" x="1" y="1" width="397" height="152"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9640" customClass="EncapsulationsTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="397" height="152"/>
@@ -2015,7 +2027,7 @@ some text &amp; $some maths$ \\
                                 </connections>
                             </scrollView>
                             <textField verticalHuggingPriority="750" id="9632">
-                                <rect key="frame" x="48.5" y="203" width="463" height="17"/>
+                                <rect key="frame" x="49" y="203" width="463" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="テキストエディタへドラッグ＆ドロップしたときのフォーマットを指定します" id="9633">
                                     <font key="font" size="13" name="HiraKakuProN-W3"/>
@@ -2118,7 +2130,7 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="設定" identifier="" id="1025">
                             <view key="view" id="1027">
                                 <rect key="frame" x="10" y="33" width="534" height="236"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <customView id="8921">
                                         <rect key="frame" x="52" y="3" width="430" height="230"/>
@@ -2284,14 +2296,14 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="ショートカット" identifier="" id="1026">
                             <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="534" height="236"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1029">
                                         <rect key="frame" x="11" y="34" width="511" height="149"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="Fhb-nI-NJr">
                                             <rect key="frame" x="1" y="0.0" width="509" height="148"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9531" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="510" height="123"/>
@@ -2396,22 +2408,22 @@ some text &amp; $some maths$ \\
                         <tabViewItem label="フィルター" identifier="Item 2" id="9683">
                             <view key="view" id="9684">
                                 <rect key="frame" x="10" y="33" width="534" height="236"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button toolTip="delete selected item" verticalHuggingPriority="750" id="9685">
+                                    <button toolTip="delete selected item" id="9685">
                                         <rect key="frame" x="39" y="78" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9705">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9705">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
-                                    <button toolTip="add en element" verticalHuggingPriority="750" id="9686">
+                                    <button toolTip="add en element" id="9686">
                                         <rect key="frame" x="17" y="78" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9704">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9704">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="9685" id="9706"/>
@@ -2422,7 +2434,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="m8v-Dq-BtN">
                                             <rect key="frame" x="1" y="0.0" width="498" height="93"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9694" id="9697" customClass="ServiceRegularExpressionFiltersTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="499" height="68"/>
@@ -2510,7 +2522,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="FSO-jn-Pd8">
                                             <rect key="frame" x="1" y="1" width="244" height="61"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9724" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="244" height="61"/>
@@ -2538,7 +2550,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="leD-1Z-xl6">
                                             <rect key="frame" x="1" y="1" width="244" height="61"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9723" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="244" height="61"/>
@@ -2600,9 +2612,9 @@ some text &amp; $some maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="7739">
                                         <rect key="frame" x="78" y="26" width="399" height="476"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="npC-Yj-37h">
+                                        <clipView key="contentView" id="ecZ-6J-1I5">
                                             <rect key="frame" x="1" y="1" width="397" height="474"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" id="7744" customClass="AdditionalFilesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="397" height="474"/>
@@ -2638,20 +2650,20 @@ some text &amp; $some maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <button verticalHuggingPriority="750" id="7740">
+                                    <button id="7740">
                                         <rect key="frame" x="100" y="7" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9484">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9484">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
-                                    <button verticalHuggingPriority="750" id="7741">
+                                    <button id="7741">
                                         <rect key="frame" x="78" y="7" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9485">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9485">
+                                            <behavior key="behavior" lightByContents="YES"/>
+                                            <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
                                         <connections>
                                             <outlet property="nextKeyView" destination="7740" id="7749"/>
@@ -2710,7 +2722,7 @@ some text &amp; $some maths$ \\
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" id="FaA-jZ-KkV">
                                                                     <rect key="frame" x="1" y="1" width="414" height="150"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9857">
                                                                             <rect key="frame" x="0.0" y="0.0" width="399" height="150"/>
@@ -2747,7 +2759,7 @@ some text &amp; $some maths$ \\
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" id="Ipb-RM-rgh">
                                                                     <rect key="frame" x="1" y="0.0" width="414" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9864" id="9861">
                                                                             <rect key="frame" x="0.0" y="0.0" width="414" height="19"/>
@@ -2794,7 +2806,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="bpk-ai-GAy">
                                                         <rect key="frame" x="1" y="0.0" width="450" height="93"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9867" id="9870">
                                                                 <rect key="frame" x="0.0" y="0.0" width="450" height="68"/>
@@ -3042,7 +3054,7 @@ some text &amp; $some maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Ed6-yY-I85">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9544" id="1130" customClass="CompositionConfigurationsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="143"/>
@@ -3081,23 +3093,23 @@ some text &amp; $some maths$ \\
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="1132">
+                    <button id="1132">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9505">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9505">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="18" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="1130" id="1139"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="1135">
+                    <button id="1135">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9506">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9506">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="13" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="1132" id="1138"/>
@@ -3144,7 +3156,7 @@ some text &amp; $some maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="M8Y-jd-9WH">
                             <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9547" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="143"/>
@@ -3183,23 +3195,23 @@ some text &amp; $some maths$ \\
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="8055">
+                    <button id="8055">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="-" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9510">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9510">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="18" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="8060" id="8067"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="8054">
+                    <button id="8054">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="+" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9509">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9509">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" size="13" name="Monaco"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="8055" id="8066"/>

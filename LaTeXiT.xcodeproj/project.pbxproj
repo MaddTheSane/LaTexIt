@@ -388,6 +388,9 @@
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
 		93EFDB75088FEFA6000156A3 /* NSStringExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EFDB73088FEFA6000156A3 /* NSStringExtended.m */; };
 		93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F2C5D80A30D9130009FB59 /* latex-keywords.plist */; };
+		93F5ED4322351D210079B40C /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4122351B670079B40C /* ImageCell.m */; };
+		93F5ED4622353BC10079B40C /* FileManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4522353BC10079B40C /* FileManagerHelper.m */; };
+		93F5ED47223551730079B40C /* FileManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4522353BC10079B40C /* FileManagerHelper.m */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */; };
 		93F7842710177099005BC2B6 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.xib */; };
@@ -990,6 +993,10 @@
 		93EFDB72088FEFA6000156A3 /* NSStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringExtended.h; sourceTree = "<group>"; };
 		93EFDB73088FEFA6000156A3 /* NSStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = NSStringExtended.m; sourceTree = "<group>"; usesTabs = 0; };
 		93F2C5D80A30D9130009FB59 /* latex-keywords.plist */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.plist.xml; path = "latex-keywords.plist"; sourceTree = "<group>"; };
+		93F5ED4022351B670079B40C /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
+		93F5ED4122351B670079B40C /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
+		93F5ED4422353BC10079B40C /* FileManagerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileManagerHelper.h; sourceTree = "<group>"; };
+		93F5ED4522353BC10079B40C /* FileManagerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileManagerHelper.m; sourceTree = "<group>"; };
 		93F73C9A0898DEF800EFFA5E /* EncapsulationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsTableView.h; sourceTree = "<group>"; };
 		93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
@@ -1253,6 +1260,8 @@
 				9350FC17139CB1A30016B2E8 /* CGPDFExtras.m */,
 				939485EC1828472D0059522B /* CHDragFileWrapper.h */,
 				939485ED1828472D0059522B /* CHDragFileWrapper.m */,
+				93F5ED4422353BC10079B40C /* FileManagerHelper.h */,
+				93F5ED4522353BC10079B40C /* FileManagerHelper.m */,
 				93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */,
 				93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */,
 				939D6586194457DA008A29AB /* PropertyStorage.h */,
@@ -1356,6 +1365,8 @@
 				9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */,
 				936368C81194BA4900C5DE49 /* DragThroughButton.h */,
 				936368C91194BA4900C5DE49 /* DragThroughButton.m */,
+				93F5ED4022351B670079B40C /* ImageCell.h */,
+				93F5ED4122351B670079B40C /* ImageCell.m */,
 				934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */,
 				934D22AC0E6014FF00BA812B /* ImageAndTextCell.m */,
 				93C2A1D707ED9CFA00AFBDC0 /* LogTableView.h */,
@@ -2267,6 +2278,8 @@
 				930F298A0E4BC543006C207E /* PreamblesTableView.m in Sources */,
 				930F2DCE0E4C6D0F006C207E /* NotifyingScrollView.m in Sources */,
 				934D1FD70E5F30FB00BA812B /* AdditionalFilesWindowController.m in Sources */,
+				93F5ED4322351D210079B40C /* ImageCell.m in Sources */,
+				93F5ED4622353BC10079B40C /* FileManagerHelper.m in Sources */,
 				934D20BB0E5F5A2000BA812B /* AdditionalFilesTableView.m in Sources */,
 				934D22AD0E6014FF00BA812B /* ImageAndTextCell.m in Sources */,
 				931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */,
@@ -2407,6 +2420,7 @@
 				93D232F11018491C00768782 /* NSDictionaryExtended.m in Sources */,
 				93D232F21018492000768782 /* NSArrayExtended.m in Sources */,
 				93DD6394106A392300EDDF82 /* BodyTemplatesController.m in Sources */,
+				93F5ED47223551730079B40C /* FileManagerHelper.m in Sources */,
 				93DD6398106A393400EDDF82 /* BodyTemplatesTableView.m in Sources */,
 				9333458B1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */,
 				936091A31087084300F4B39A /* RegexKitLite.m in Sources */,

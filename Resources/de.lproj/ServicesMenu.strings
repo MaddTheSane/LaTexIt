@@ -13,11 +13,11 @@
 "LaTeXiT/Un-latexize the equations" = "LaTeXiT/Von der Gleichung zum LaTeX-Kode zurückkehren";
 "SERVICE_DESCRIPTION"="The LaTeXiT service can transform some text to an equation (as image), as processed by a LaTeX engine. It can also revert the equations to their original text source, if the equations have been configured in LaTeXiT to be exported as PDF. The service will work if the requesting application supports replacing some text by an image.";
 "SERVICE_DESCRIPTION_EQNARRAY"="LaTeX als „Eqnarray“ (\\begin{eqnarray*}…\\end{eqnarray*})";
-"SERVICE_DESCRIPTION_EQNARRAY_CLIPBOARD"="LaTeX als „Eqnarray“, add to clipboard";
+"SERVICE_DESCRIPTION_EQNARRAY_CLIPBOARD"="LaTeX als „Eqnarray“, kopiere in die Zwischenablage";
 "SERVICE_DESCRIPTION_ALIGN"="LaTeX als „Align“ (\\begin{align*}…\\end{align*})";
 "SERVICE_DESCRIPTION_ALIGN_CLIPBOARD"="LaTeX als „Align“, kopiere in die Zwischenablage";
 "SERVICE_DESCRIPTION_DISPLAY"="Display Latexisation (\\[…\\])";
-"SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD"="Display Latexisation, ajout au presse-papier";
+"SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD"="Display Latexisation, kopiere in die Zwischenablage";
 "SERVICE_DESCRIPTION_INLINE"="LaTeX als „Inline“ ($…$)";
 "SERVICE_DESCRIPTION_INLINE_CLIPBOARD"="LaTeX als „Inline“, kopiere in die Zwischenablage";
 "SERVICE_DESCRIPTION_TEXT"="LaTeX als „Text“";

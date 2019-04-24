@@ -20,6 +20,7 @@
   IBOutlet NSTextField* dragFilterViewLabel;
   IBOutlet NSView* dragFilterButtonsView;
   NSButtonPalette* buttonPalette;
+  DragThroughButton* addTempFileButton;
   NSTimeInterval animationDurationIn;
   NSTimeInterval animationDurationOut;
   NSDate* animationStartDate;

@@ -148,11 +148,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.13.1</string>
+	<string>2.13.2</string>
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.13.1</string>
+	<string>2.13.2</string>
 	<key>LinkBackApplicationURL</key>
 	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
@@ -231,7 +231,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Typeset LaTeX Maths display</string>
+				<string>LaTeXiT/Typeset LaTeX Maths display and put result into clipboard</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceLatexisationDisplayAndPutIntoClipBoard</string>
@@ -337,7 +337,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Typeset LaTeX Maths inline</string>
+				<string>LaTeXiT/Typeset LaTeX Maths inline and put result into clipboard</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceLatexisationInlineAndPutIntoClipBoard</string>
@@ -443,7 +443,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Typeset LaTeX Text</string>
+				<string>LaTeXiT/Typeset LaTeX Text and put result into clipboard</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceLatexisationTextAndPutIntoClipBoard</string>
@@ -549,7 +549,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Typeset LaTeX Maths align</string>
+				<string>LaTeXiT/Typeset LaTeX Maths align and put result into clipboard</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceLatexisationAlignAndPutIntoClipBoard</string>
@@ -641,7 +641,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>LaTeXiT/Detect and typeset equations</string>
+				<string>LaTeXiT/Detect and typeset equations and put result into clipboard</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>serviceMultiLatexisationAndPutIntoClipBoard</string>

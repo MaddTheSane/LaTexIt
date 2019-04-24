@@ -15,6 +15,7 @@
 -(BOOL) createLinkInDirectory:(NSString*)directoryPath toTarget:(NSString*)targetPath linkName:(NSString*)linkName outLinkPath:(NSString**)outLinkPath;
 
 -(void) registerTemporaryPath:(NSString*)path;
+-(void) unregisterTemporaryPath:(NSString*)path;
 -(void) removeAllCreatedTemporaryPaths;
 
 -(NSString*) UTIFromPath:(NSString*)path /* __OSX_AVAILABLE_BUT_DEPRECATED_MSG(__MAC_10_4, __MAC_10_10, __IPHONE_NA, __IPHONE_NA, "Use the URL resource property kCFURLTypeIdentifierKey or NSURLTypeIdentifierKey instead.") */ ;

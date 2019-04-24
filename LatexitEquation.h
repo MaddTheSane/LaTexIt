@@ -101,6 +101,7 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 -(instancetype) initWithDescription:(id)description;
 @property (readonly, strong) CHExportPrefetcher *exportPrefetcher;
 
+-(NSString*) computeFileName;
 +(NSString*) computeFileNameFromContent:(NSString*)content;
 
 @end

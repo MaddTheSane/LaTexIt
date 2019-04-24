@@ -64,29 +64,41 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   {
     cell->dateFormatter = self->dateFormatter;
     cell->backgroundColor = [self->backgroundColor copy];
-  }
+  }//end if (cell)
   return cell;
 }
 //end copyWithZone:
 
--(void) drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+-(void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
+  NSRect headerRect = NSMakeRect(cellFrame.origin.x-1, cellFrame.origin.y-1, cellFrame.size.width+3, 16);
+  NSRect imageRect = NSMakeRect(cellFrame.origin.x-1, cellFrame.origin.y-1+headerRect.size.height,
+                                cellFrame.size.width+3, cellFrame.size.height+2-headerRect.size.height);
+
+  BOOL isSelectedCell = NO;
+  NSIndexSet* indexSet = [(NSTableView*)controlView selectedRowIndexes];
+  NSUInteger index = [indexSet firstIndex];
+  while(!isSelectedCell && (index != NSNotFound))
+  {
+    isSelectedCell |= NSIntersectsRect(headerRect, [(NSTableView*)controlView rectOfRow:index]);
+    index = [indexSet indexGreaterThanIndex:index];
+  }//end while(!isSelectedCell && (index != NSNotFound))
+
   if (self->backgroundColor)
   {
     [self->backgroundColor set];
-    NSRectFill(cellFrame);
-  }
-  else if ([NSApp isDarkMode])
+    NSRectFill(imageRect);
+  }//end if (self->backgroundColor)
+  else if ([controlView isDarkMode] && !isSelectedCell)
   {
-    [[NSColor colorWithCalibratedRed:0.45f green:0.45f blue:0.45f alpha:1.0f] set];
-    NSRectFill(cellFrame);
-  }//end if ([NSApp isDarkMode])
-  NSRect headerRect = NSMakeRect(cellFrame.origin.x-1, cellFrame.origin.y-1, cellFrame.size.width+3, 16);
-  NSRect imageRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+headerRect.size.height,
-                                cellFrame.size.width, cellFrame.size.height-headerRect.size.height);
+    CGFloat gray[4] = {0.5f, 0.5f, 0.5f, 1.f};
+    [[NSColor colorWithCalibratedRed:gray[0] green:gray[1] blue:gray[2] alpha:gray[3]] set];
+    NSRectFill(imageRect);
+  }//end if ([controlView isDarkMode] && !isSelectedCell)
+
   BOOL drawScaled = YES;
   if (!drawScaled)
-    [super drawInteriorWithFrame:imageRect inView:controlView]; //the image is displayed in a subrect of the cell
+    [super drawWithFrame:imageRect inView:controlView]; //the image is displayed in a subrect of the cell
   else
   {
     NSImage* image = self.image;
@@ -125,27 +137,18 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
                                textSize.width, headerRect.size.height);
   textRect.origin.x = MAX(headerRect.origin.x, textRect.origin.x);
     
-  BOOL isSelectedCell = NO;
-  NSIndexSet* indexSet = ((NSTableView*)controlView).selectedRowIndexes;
-  NSUInteger index = indexSet.firstIndex;
-  while(!isSelectedCell && (index != NSNotFound))
-  {
-    isSelectedCell |= NSIntersectsRect(headerRect, [(NSTableView*)controlView rectOfRow:index]);
-    index = [indexSet indexGreaterThanIndex:index];
-  }
-  
   if (!isSelectedCell)
     [self drawGradientInRect:headerRect withColor:[NSColor lightGrayColor]];
-  else
+  else//if (isSelectedCell)
   {
     [[NSColor grayColor] set];
     NSRectFill(headerRect);
     NSRect insideHeaderRect = NSMakeRect(headerRect.origin.x+.25, headerRect.origin.y+.25, headerRect.size.width-.5, headerRect.size.height-.5);
     [self drawGradientInRect:insideHeaderRect withColor:[NSColor grayColor]];
-  }
+  }//end if (isSelectedCell)
   [attrString drawInRect:textRect]; //the date is displayed
 }
-//end drawInteriorWithFrame:inView:
+//end drawWithFrame:inView:
 
 -(void) drawGradientInRect:(NSRect)rect withColor:(NSColor*)color
 {

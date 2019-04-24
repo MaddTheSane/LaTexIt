@@ -84,6 +84,7 @@ extern NSString *const LastEasterEggsDatesKey;
 
 extern NSString *const EditionTabKeyInsertsSpacesEnabledKey;
 extern NSString *const EditionTabKeyInsertsSpacesCountKey;
+extern NSString* EditionAutoCompleteOnBackslashEnabledKey;
 
 extern NSString *const CompositionConfigurationNameKey;
 extern NSString *const CompositionConfigurationIsDefaultKey;
@@ -164,6 +165,7 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
   SynchronizationAdditionalScriptsController* synchronizationAdditionalScriptsController;
   
   export_format_t exportFormatCurrentSession;
+  BOOL exportAddTempFileCurrentSession;
 }
 
 @property (class, readonly) PreferencesController* sharedController;
@@ -174,6 +176,8 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 
 @property export_format_t exportFormatPersistent;
 @property export_format_t exportFormatCurrentSession;
+-(BOOL) exportAddTempFileCurrentSession;
+-(void) setExportAddTempFileCurrentSession:(BOOL)value;
 
 
 @property (copy) NSData* exportJpegBackgroundColorData;
@@ -228,6 +232,8 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 @property (readonly, copy) NSColor *editionSyntaxColoringMathsColor;
 @property (readonly) BOOL editionTabKeyInsertsSpacesEnabled;
 @property (readonly) NSUInteger editionTabKeyInsertsSpacesCount;
+-(BOOL)       editionAutoCompleteOnBackslashEnabled;
+-(void)       setEditionAutoCompleteOnBackslashEnabled:(BOOL)value;
 
 @property (readonly) NSArray* editionTextShortcuts;
 @property (readonly, strong) NSArrayController *editionTextShortcutsController;

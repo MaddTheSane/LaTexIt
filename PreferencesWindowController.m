@@ -405,6 +405,9 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [editionSyntaxColouringTextView
     bind:NSFontBinding toObject:userDefaultsController withKeyPath:[userDefaultsController adaptedKeyPath:DefaultFontKey]
     options:@{NSValueTransformerNameBindingOption: NSUnarchiveFromDataTransformerName}];
+  
+  [self->editionAutoCompleteOnBackslashButton bind:NSValueBinding toObject:userDefaultsController
+    withKeyPath:[userDefaultsController adaptedKeyPath:EditionAutoCompleteOnBackslashEnabledKey] options:nil];
 
   //Preambles
   PreamblesController* preamblesController = [preferencesController preamblesController];

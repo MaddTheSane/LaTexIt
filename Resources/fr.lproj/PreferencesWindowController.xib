@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -64,6 +64,7 @@
                 <outlet property="compositionConfigurationsProgramArgumentsRemoveButton" destination="8055" id="8071"/>
                 <outlet property="compositionConfigurationsProgramArgumentsTableView" destination="8060" id="8069"/>
                 <outlet property="compositionView" destination="634" id="714"/>
+                <outlet property="editionAutoCompleteOnBackslashButton" destination="9811" id="9814"/>
                 <outlet property="editionFontNameTextField" destination="621" id="5377"/>
                 <outlet property="editionSpellCheckingStateButton" destination="1208" id="5386"/>
                 <outlet property="editionSyntaxColoringCommandColorWell" destination="609" id="5382"/>
@@ -201,7 +202,7 @@
                 <box boxType="oldStyle" borderType="none" titlePosition="noTitle" id="7738">
                     <rect key="frame" x="34" y="13" width="532" height="174"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <view key="contentView" id="CXp-fx-URe">
+                    <view key="contentView" id="jYL-za-cX8">
                         <rect key="frame" x="0.0" y="0.0" width="532" height="174"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -217,7 +218,7 @@
                             <box boxType="oldStyle" borderType="line" titlePosition="noTitle" id="8758">
                                 <rect key="frame" x="156" y="0.0" width="220" height="140"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="gGw-eS-2EX">
+                                <view key="contentView" id="KNh-Uz-Kyx">
                                     <rect key="frame" x="1" y="1" width="218" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -269,7 +270,7 @@
                                         <box boxType="oldStyle" borderType="line" titlePosition="noTitle" id="8759">
                                             <rect key="frame" x="77" y="37" width="64" height="64"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <view key="contentView" id="zGA-e3-vlQ">
+                                            <view key="contentView" id="kFx-Tg-GE1">
                                                 <rect key="frame" x="1" y="1" width="62" height="62"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </view>
@@ -535,7 +536,7 @@
                                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="946">
                                         <rect key="frame" x="20" y="53" width="514" height="113"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="bfh-6Q-ea2">
+                                        <clipView key="contentView" id="7mu-V6-yoy">
                                             <rect key="frame" x="1" y="1" width="512" height="111"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -585,14 +586,14 @@ du texte &amp; $des maths$ \\
                                         </textFieldCell>
                                     </textField>
                                     <box boxType="oldStyle" borderType="line" title="Title" titlePosition="noTitle" id="963">
-                                        <rect key="frame" x="20" y="200" width="514" height="167"/>
+                                        <rect key="frame" x="20" y="193" width="514" height="186"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="EkT-9Z-wEO">
-                                            <rect key="frame" x="1" y="1" width="512" height="165"/>
+                                        <view key="contentView" id="vdh-gY-VfR">
+                                            <rect key="frame" x="1" y="1" width="512" height="184"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <colorWell id="613">
-                                                    <rect key="frame" x="34" y="99" width="52" height="24"/>
+                                                    <rect key="frame" x="34" y="120" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -600,7 +601,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <colorWell id="614">
-                                                    <rect key="frame" x="34" y="71" width="52" height="24"/>
+                                                    <rect key="frame" x="34" y="92" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -608,7 +609,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <textField verticalHuggingPriority="750" id="615">
-                                                    <rect key="frame" x="91" y="103" width="115" height="17"/>
+                                                    <rect key="frame" x="91" y="124" width="115" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Couleur du texte" id="9307">
                                                         <font key="font" metaFont="system"/>
@@ -617,7 +618,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="616">
-                                                    <rect key="frame" x="91" y="75" width="111" height="17"/>
+                                                    <rect key="frame" x="91" y="96" width="111" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Couleur du fond" id="9308">
                                                         <font key="font" metaFont="system"/>
@@ -626,7 +627,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <colorWell id="609">
-                                                    <rect key="frame" x="319" y="99" width="52" height="24"/>
+                                                    <rect key="frame" x="319" y="120" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -634,7 +635,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <button id="605">
-                                                    <rect key="frame" x="284" y="134" width="161" height="18"/>
+                                                    <rect key="frame" x="284" y="155" width="161" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Coloration syntaxique" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9304">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -645,7 +646,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </button>
                                                 <colorWell id="608">
-                                                    <rect key="frame" x="319" y="71" width="52" height="24"/>
+                                                    <rect key="frame" x="319" y="92" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -653,7 +654,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <colorWell id="610">
-                                                    <rect key="frame" x="319" y="15" width="52" height="24"/>
+                                                    <rect key="frame" x="319" y="36" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -661,7 +662,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <textField verticalHuggingPriority="750" id="604">
-                                                    <rect key="frame" x="376" y="103" width="87" height="17"/>
+                                                    <rect key="frame" x="376" y="124" width="87" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Commandes" id="9303">
                                                         <font key="font" metaFont="system"/>
@@ -670,7 +671,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="603">
-                                                    <rect key="frame" x="376" y="75" width="76" height="17"/>
+                                                    <rect key="frame" x="376" y="96" width="76" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Mots-clefs" id="9302">
                                                         <font key="font" metaFont="system"/>
@@ -679,7 +680,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="607">
-                                                    <rect key="frame" x="376" y="19" width="100" height="17"/>
+                                                    <rect key="frame" x="376" y="40" width="100" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Commentaires" id="9306">
                                                         <font key="font" metaFont="system"/>
@@ -688,7 +689,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="606">
-                                                    <rect key="frame" x="376" y="47" width="105" height="17"/>
+                                                    <rect key="frame" x="376" y="68" width="105" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Mathématiques" id="9305">
                                                         <font key="font" metaFont="system"/>
@@ -697,7 +698,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <colorWell id="602">
-                                                    <rect key="frame" x="319" y="43" width="52" height="24"/>
+                                                    <rect key="frame" x="319" y="64" width="52" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="color" red="0.058130499000000002" green="0.055541898999999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -705,7 +706,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </colorWell>
                                                 <textField verticalHuggingPriority="750" id="960">
-                                                    <rect key="frame" x="51" y="135" width="134" height="17"/>
+                                                    <rect key="frame" x="51" y="156" width="134" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Couleurs par défaut" id="9309">
                                                         <font key="font" metaFont="system"/>
@@ -714,7 +715,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <button id="1208">
-                                                    <rect key="frame" x="32" y="18" width="203" height="18"/>
+                                                    <rect key="frame" x="32" y="39" width="203" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Vérification de l'orthographe" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9310">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -725,12 +726,12 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </button>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9600">
-                                                    <rect key="frame" x="219" y="40" width="19" height="27"/>
+                                                    <rect key="frame" x="219" y="61" width="19" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9601"/>
                                                 </stepper>
                                                 <button id="9602">
-                                                    <rect key="frame" x="32" y="44" width="154" height="18"/>
+                                                    <rect key="frame" x="32" y="65" width="154" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="La touche Tab insère" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9603">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -738,7 +739,7 @@ du texte &amp; $des maths$ \\
                                                     </buttonCell>
                                                 </button>
                                                 <textField verticalHuggingPriority="750" id="9604">
-                                                    <rect key="frame" x="188" y="43" width="32" height="22"/>
+                                                    <rect key="frame" x="188" y="64" width="32" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9605">
                                                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="9612">
@@ -750,7 +751,7 @@ du texte &amp; $des maths$ \\
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="9606">
-                                                    <rect key="frame" x="238" y="45" width="54" height="17"/>
+                                                    <rect key="frame" x="238" y="66" width="54" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="espaces" id="9607">
                                                         <font key="font" metaFont="system"/>
@@ -758,6 +759,17 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <button id="9811">
+                                                    <rect key="frame" x="32" y="13" width="189" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" title="Auto-complétion après &quot;\&quot;" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9812">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <outlet property="nextKeyView" destination="605" id="9813"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </box>
@@ -802,7 +814,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1174">
                                         <rect key="frame" x="20" y="45" width="514" height="318"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="B5N-tN-8tG">
+                                        <clipView key="contentView" id="SCJ-mO-IKN">
                                             <rect key="frame" x="1" y="25" width="512" height="292"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -949,7 +961,7 @@ du texte &amp; $des maths$ \\
                                     <box borderType="line" titlePosition="noTitle" id="5839">
                                         <rect key="frame" x="6" y="5" width="542" height="97"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" id="I15-Jc-PdR">
+                                        <view key="contentView" id="cPf-aM-9bW">
                                             <rect key="frame" x="3" y="3" width="536" height="91"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -1008,7 +1020,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="915">
                                         <rect key="frame" x="136" y="127" width="409" height="134"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="SrX-eo-W43">
+                                        <clipView key="contentView" id="POF-as-Hew">
                                             <rect key="frame" x="1" y="1" width="407" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1092,7 +1104,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="1807">
                                         <rect key="frame" x="9" y="127" width="128" height="134"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="MYf-6W-WXj">
+                                        <clipView key="contentView" id="rex-GH-u1Y">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1166,7 +1178,7 @@ du texte &amp; $des maths$ \\
                                     <box borderType="line" titlePosition="noTitle" id="9428">
                                         <rect key="frame" x="6" y="5" width="542" height="97"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" id="Q4B-nc-ljY">
+                                        <view key="contentView" id="kyO-0u-HSC">
                                             <rect key="frame" x="3" y="3" width="536" height="91"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -1215,7 +1227,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9433">
                                         <rect key="frame" x="136" y="194" width="409" height="67"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="R24-3Q-9jJ">
+                                        <clipView key="contentView" id="Wr5-HI-NV2">
                                             <rect key="frame" x="1" y="1" width="407" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1299,7 +1311,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9473">
                                         <rect key="frame" x="136" y="127" width="409" height="68"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="mYH-49-Xgs">
+                                        <clipView key="contentView" id="BeL-BP-eo3">
                                             <rect key="frame" x="1" y="1" width="407" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1383,7 +1395,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="9431">
                                         <rect key="frame" x="9" y="127" width="128" height="134"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="vko-5Z-jqo">
+                                        <clipView key="contentView" id="L68-Me-UYx">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1818,7 +1830,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1068">
                                         <rect key="frame" x="123" y="245" width="308" height="75"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <clipView key="contentView" id="Ioy-Tw-gs4">
+                                        <clipView key="contentView" id="kRN-d5-Gsl">
                                             <rect key="frame" x="1" y="25" width="306" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1873,7 +1885,7 @@ du texte &amp; $des maths$ \\
                                     <box titlePosition="noTitle" id="1086">
                                         <rect key="frame" x="40" y="35" width="474" height="176"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <view key="contentView" id="VSW-3w-lT9">
+                                        <view key="contentView" id="DyY-cH-j0S">
                                             <rect key="frame" x="3" y="3" width="468" height="170"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -1889,7 +1901,7 @@ du texte &amp; $des maths$ \\
                                                 <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1077">
                                                     <rect key="frame" x="16" y="11" width="436" height="102"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <clipView key="contentView" id="fDs-HX-XqJ">
+                                                    <clipView key="contentView" id="lVh-AW-zOy">
                                                         <rect key="frame" x="1" y="1" width="434" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
@@ -1926,7 +1938,7 @@ du texte &amp; $des maths$ \\
                                                 <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1081">
                                                     <rect key="frame" x="16" y="112" width="436" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <clipView key="contentView" id="s9q-zy-uh2">
+                                                    <clipView key="contentView" id="SbY-uj-tn5">
                                                         <rect key="frame" x="1" y="16" width="434" height="0.0"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
@@ -1973,7 +1985,7 @@ du texte &amp; $des maths$ \\
                                     <box title="Title" titlePosition="noTitle" id="1091">
                                         <rect key="frame" x="40" y="158" width="474" height="53"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="wkJ-fE-Kg2">
+                                        <view key="contentView" id="9Iz-UP-VX7">
                                             <rect key="frame" x="3" y="3" width="468" height="47"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -2047,7 +2059,7 @@ du texte &amp; $des maths$ \\
                 <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9558">
                     <rect key="frame" x="17" y="42" width="566" height="243"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <view key="contentView" id="EqF-dT-pfi">
+                    <view key="contentView" id="Vlp-gO-EmA">
                         <rect key="frame" x="3" y="3" width="560" height="237"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2094,7 +2106,7 @@ du texte &amp; $des maths$ \\
                             <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="9538">
                                 <rect key="frame" x="80" y="29" width="399" height="154"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <clipView key="contentView" id="jqR-PN-ZqT">
+                                <clipView key="contentView" id="GFH-dG-c1l">
                                     <rect key="frame" x="1" y="1" width="397" height="152"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -2420,7 +2432,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1029">
                                         <rect key="frame" x="13" y="44" width="528" height="132"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <clipView key="contentView" id="xgR-Fb-9YF">
+                                        <clipView key="contentView" id="Wza-u0-h2m">
                                             <rect key="frame" x="1" y="25" width="526" height="106"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2551,7 +2563,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9621">
                                         <rect key="frame" x="20" y="107" width="514" height="94"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="aMf-Sd-ZKN">
+                                        <clipView key="contentView" id="lpg-eJ-1ms">
                                             <rect key="frame" x="1" y="25" width="512" height="68"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2640,7 +2652,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9663">
                                         <rect key="frame" x="20" y="17" width="253" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <clipView key="contentView" id="ife-wp-OAe">
+                                        <clipView key="contentView" id="blJ-W0-Zb7">
                                             <rect key="frame" x="1" y="1" width="251" height="61"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2668,7 +2680,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9667">
                                         <rect key="frame" x="281" y="17" width="253" height="63"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <clipView key="contentView" id="9PO-0v-SHc">
+                                        <clipView key="contentView" id="8q2-zq-c78">
                                             <rect key="frame" x="1" y="1" width="251" height="61"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2732,7 +2744,7 @@ du texte &amp; $des maths$ \\
                                     <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="7739">
                                         <rect key="frame" x="77" y="35" width="399" height="456"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="Xkt-li-6UU">
+                                        <clipView key="contentView" id="Slz-Xf-SuE">
                                             <rect key="frame" x="1" y="1" width="397" height="454"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2817,7 +2829,7 @@ du texte &amp; $des maths$ \\
                                     <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9749">
                                         <rect key="frame" x="6" y="390" width="542" height="134"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <view key="contentView" id="4EX-MV-z9b">
+                                        <view key="contentView" id="sbp-Y5-TV6">
                                             <rect key="frame" x="3" y="3" width="536" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -2885,14 +2897,14 @@ du texte &amp; $des maths$ \\
                                     <box autoresizesSubviews="NO" borderType="line" title="Scripts additionnels" id="9737">
                                         <rect key="frame" x="6" y="5" width="542" height="381"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <view key="contentView" id="hFd-Tj-dB3">
+                                        <view key="contentView" id="1uk-S9-Y8j">
                                             <rect key="frame" x="3" y="3" width="536" height="363"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="9688">
                                                     <rect key="frame" x="36" y="259" width="464" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <clipView key="contentView" id="5Ws-GW-s3T">
+                                                    <clipView key="contentView" id="cPd-9n-IeM">
                                                         <rect key="frame" x="1" y="25" width="462" height="68"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
@@ -2947,7 +2959,7 @@ du texte &amp; $des maths$ \\
                                                 <box titlePosition="noTitle" id="9689">
                                                     <rect key="frame" x="33" y="22" width="470" height="207"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <view key="contentView" id="unn-JI-eN6">
+                                                    <view key="contentView" id="rt2-UT-VTx">
                                                         <rect key="frame" x="3" y="3" width="464" height="201"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -2963,7 +2975,7 @@ du texte &amp; $des maths$ \\
                                                             <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9697">
                                                                 <rect key="frame" x="16" y="11" width="432" height="133"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                <clipView key="contentView" id="BIG-Xk-HhL">
+                                                                <clipView key="contentView" id="8rR-zl-gkh">
                                                                     <rect key="frame" x="1" y="1" width="430" height="131"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
@@ -3000,7 +3012,7 @@ du texte &amp; $des maths$ \\
                                                             <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="9695">
                                                                 <rect key="frame" x="16" y="143" width="432" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                <clipView key="contentView" id="ej4-t0-W1P">
+                                                                <clipView key="contentView" id="oFt-bk-Reh">
                                                                     <rect key="frame" x="1" y="16" width="430" height="0.0"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
@@ -3072,7 +3084,7 @@ du texte &amp; $des maths$ \\
                                                 <box title="Title" titlePosition="noTitle" id="9687">
                                                     <rect key="frame" x="33" y="176" width="470" height="53"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="f88-Eg-vID">
+                                                    <view key="contentView" id="mRy-5j-YBe">
                                                         <rect key="frame" x="3" y="3" width="464" height="47"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -3157,7 +3169,7 @@ du texte &amp; $des maths$ \\
                 <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" id="9588">
                     <rect key="frame" x="221" y="16" width="362" height="266"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView" id="oaz-Vh-u4g">
+                    <view key="contentView" id="liS-7O-bWM">
                         <rect key="frame" x="3" y="3" width="356" height="260"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </view>
@@ -3165,7 +3177,7 @@ du texte &amp; $des maths$ \\
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="34" horizontalPageScroll="10" verticalLineScroll="34" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="9589">
                     <rect key="frame" x="20" y="20" width="196" height="260"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <clipView key="contentView" id="Lf9-6i-vfx">
+                    <clipView key="contentView" id="lo0-Ke-I09">
                         <rect key="frame" x="1" y="1" width="194" height="258"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -3221,7 +3233,7 @@ du texte &amp; $des maths$ \\
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1129">
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="DeN-bm-qsf">
+                        <clipView key="contentView" id="Wtz-dB-w7b">
                             <rect key="frame" x="1" y="25" width="238" height="143"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
@@ -3323,7 +3335,7 @@ du texte &amp; $des maths$ \\
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="8056">
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="wb0-cx-8Jv">
+                        <clipView key="contentView" id="SuI-YK-Jr9">
                             <rect key="frame" x="1" y="25" width="238" height="143"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>

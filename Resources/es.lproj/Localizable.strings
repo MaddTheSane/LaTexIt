@@ -203,6 +203,7 @@
 "Text format" = "Text format";
 "Migrating history to new format" = "Migrando el historial al nuevo formato";
 "Migrating library to new format" = "Migrando la librería al nuevo formato";
+"+temp. file" = "+temp. archivo";
 
 /* Save / Back sync */
 "File type" = "File type";

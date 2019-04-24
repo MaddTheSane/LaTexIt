@@ -93,6 +93,7 @@ extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
   IBOutlet NSTextField*       editionTabKeyInsertsSpacesTextField;
   IBOutlet NSStepper*         editionTabKeyInsertsSpacesStepper;
   IBOutlet NSTextField*       editionTabKeyInsertsSpacesSpacesTextField;
+  IBOutlet NSButton*          editionAutoCompleteOnBackslashButton;
   
   IBOutlet TextShortcutsTableView* editionTextShortcutsTableView;
   IBOutlet NSButton*               editionTextShortcutsAddButton;

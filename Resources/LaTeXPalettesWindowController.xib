@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14295.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,12 +20,13 @@
                 <outlet property="matrix" destination="670" id="687"/>
                 <outlet property="matrixBox" destination="656" id="688"/>
                 <outlet property="matrixChoicePopUpButton" destination="673" id="689"/>
+                <outlet property="scrollView" destination="669" id="726"/>
                 <outlet property="window" destination="616" id="632"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="LaTeX Palette" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="latexPalettes" animationBehavior="default" id="616" userLabel="palettes" customClass="PalettePanel">
+        <customObject id="-3" userLabel="Application"/>
+        <window title="LaTeX Palette" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="latexPalettes" animationBehavior="default" id="616" userLabel="palettes" customClass="PalettePanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" nonactivatingPanel="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="551" y="437" width="200" height="145"/>
@@ -46,37 +47,29 @@
                                     <rect key="frame" x="0.0" y="25" width="200" height="87"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <clipView key="contentView" autoresizesSubviews="NO" id="kcD-J4-Kny">
-                                        <rect key="frame" x="1" y="1" width="183" height="85"/>
+                                        <rect key="frame" x="1" y="1" width="198" height="85"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <matrix verticalHuggingPriority="750" drawsBackground="YES" selectionByRect="NO" id="670" customClass="PaletteMatrix">
-                                                <rect key="frame" x="0.0" y="0.0" width="66" height="71"/>
+                                            <matrix verticalHuggingPriority="750" selectionByRect="NO" id="670" customClass="PaletteMatrix">
+                                                <rect key="frame" x="0.0" y="0.0" width="1" height="1"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 <size key="cellSize" width="66" height="71"/>
                                                 <size key="intercellSpacing" width="-1" height="-1"/>
-                                                <buttonCell key="prototype" type="square" title="Radio" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="723">
+                                                <buttonCell key="prototype" type="square" title="Radio" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" transparent="YES" inset="2" id="723">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
-                                                <cells>
-                                                    <column>
-                                                        <buttonCell type="square" title="Radio" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="671">
-                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                    </column>
-                                                </cells>
+                                                <cells/>
                                             </matrix>
                                         </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </clipView>
-                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.015151515603065491" horizontal="YES" id="725">
+                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.015151515603065491" horizontal="YES" id="725">
                                         <rect key="frame" x="-100" y="-100" width="183" height="15"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="724">
-                                        <rect key="frame" x="184" y="1" width="15" height="85"/>
+                                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="724">
+                                        <rect key="frame" x="183" y="1" width="16" height="85"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
@@ -135,7 +128,7 @@
                             <imageView id="644">
                                 <rect key="frame" x="49" y="41" width="102" height="102"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="719"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="719" customClass="ImageCell"/>
                             </imageView>
                             <textField verticalHuggingPriority="750" id="646">
                                 <rect key="frame" x="2" y="22" width="74" height="14"/>
