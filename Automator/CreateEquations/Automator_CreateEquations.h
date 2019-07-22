@@ -36,10 +36,10 @@
   BOOL fromArchive;
 }
 
--(id) runWithInput:(id)input error:(NSError * _Nullable __autoreleasing * _Nullable)error;
--(NSString*) extractFromObject:(id)object preamble:(NSString**)outPeamble body:(NSString**)outBody isFilePath:(BOOL*)isFilePath
-                         error:(NSError**)error;
+-(nullable id) runWithInput:(nullable id)input error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+-(nullable NSString*) extractFromObject:(nullable id)object preamble:(NSString*_Nullable*_Nullable)outPeamble body:(NSString*_Nullable*_Nullable)outBody isFilePath:(BOOL*_Nullable)isFilePath
+                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
                          
--(IBAction) generalExportFormatOptionsOpen:(id)sender;
+-(IBAction) generalExportFormatOptionsOpen:(nullable id)sender;
 
 @end

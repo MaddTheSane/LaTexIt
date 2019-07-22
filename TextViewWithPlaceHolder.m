@@ -12,12 +12,7 @@
 
 @implementation TextViewWithPlaceHolder
 
-
--(NSString*) placeHolder
-{
-  return [self->placeHolder copy];
-}
-//end placeHolder
+@synthesize placeHolder;
 
 -(void) setPlaceHolder:(NSString*)value
 {

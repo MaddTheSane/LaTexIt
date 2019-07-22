@@ -43,9 +43,6 @@ extern NSNotificationName const ImageDidChangeNotification;
   MyImageViewDelegate* myImageViewDelegate;
 }
 
--(NSImage*) image;
--(void) setImage:(NSImage*)image;
-
 -(IBAction) paste:(id)sender;
 -(IBAction) copy:(id)sender;//copy the data into clipboard
 -(void)     copyAsFormat:(export_format_t)exportFormat;//copy the data into clipboard

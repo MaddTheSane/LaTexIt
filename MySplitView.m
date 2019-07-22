@@ -10,6 +10,7 @@
 
 
 @implementation MySplitView
+@synthesize dividerThickness;
 
 -(CGFloat) dividerThickness
 {

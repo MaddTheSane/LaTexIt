@@ -31,13 +31,13 @@
 
 #import "RegexKitLite.h"
 
-@interface LibraryController (PrivateAPI)
+@interface LibraryController ()
 @property (readonly, copy) NSFetchRequest *rootFetchRequest;
 -(NSArray*) flattenedGroupItems;
 -(BOOL) outlineView:(NSOutlineView*)outlineView isSelfMoveDrop:(id<NSDraggingInfo>)info;
 @end
 
-@implementation LibraryController (PrivateAPI)
+@implementation LibraryController
 
 -(NSFetchRequest*) rootFetchRequest
 {
@@ -102,10 +102,6 @@
 }
 //end outlineView:isSelfMoveDrop:
 
-@end
-
-@implementation LibraryController
-
 -(NSManagedObjectContext*) managedObjectContext
 {
   return [[LibraryManager sharedManager] managedObjectContext];
@@ -118,11 +114,7 @@
 }
 //end undoManager
 
--(NSPredicate*) filterPredicate
-{
-  return self->filterPredicate;
-}
-//end filterPredicate:
+@synthesize filterPredicate;
 
 -(void) setFilterPredicate:(NSPredicate*)value
 {

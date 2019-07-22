@@ -60,53 +60,10 @@ NSString* const DragThroughButtonStateChangedNotification = @"DragThroughButtonS
 
 -(BOOL) isOpaque {return YES;}
 
--(BOOL) shouldBlink
-{
-  return self->shouldBlink;
-}
-//end shouldBlink
-
--(void) setShouldBlink:(BOOL)value
-{
-  self->shouldBlink = value;
-}
-//end setShouldBlink:
-
--(CGFloat) delay
-{
-  return self->delay;
-}
-//end delay
-
--(void) setDelay:(CGFloat)value
-{
-  self->delay = value;
-}
-//end setDelay:
-
--(BOOL) canSwitchState
-{
-  return self->canSwitchState;
-}
-//end canSwitchState
-
--(void) setCanSwitchState:(BOOL)value
-{
-  self->canSwitchState = value;
-}
-//end setCanSwitchState:
-
--(BOOL) canTrackMouse
-{
-  return self->canTrackMouse;
-}
-//end canTrackMouse
-
--(void) setCanTrackMouse:(BOOL)value
-{
-  self->canTrackMouse = value;
-}
-//end setCanTrackMouse:
+@synthesize shouldBlink;
+@synthesize delay;
+@synthesize canSwitchState;
+@synthesize canTrackMouse;
 
 -(void) checkLastMove:(id)object
 {

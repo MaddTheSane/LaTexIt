@@ -38,17 +38,7 @@
 }
 //end copyWithZone:
 
--(void) setTextBackgroundColor:(NSColor*)color
-{
-  self->textBackgroundColor = color;
-}
-//end setTextBackgroundColor:
-
--(NSColor*) textBackgroundColor
-{
-  return self->textBackgroundColor;
-}
-//end textBackgroundColor
+@synthesize textBackgroundColor;
 
 -(void) editWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject event:(NSEvent*)theEvent
 {

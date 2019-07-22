@@ -20,8 +20,7 @@
 @property (readonly, strong) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong) NSUndoManager *undoManager;
 
--(void) setFilterPredicate:(NSPredicate*)filterPredicate;
--(NSPredicate*) filterPredicate;
+@property (nonatomic, strong) NSPredicate *filterPredicate;
 
 -(NSArray*) rootItems:(NSPredicate*)predicate;
 -(void) invalidateRootItemsCache;

@@ -23,20 +23,7 @@
 }
 //end init
 
--(NSColor*) backgroundColor
-{
-  return [self->backgroundColor copy];
-}
-//end backgroundColor
-
--(void) setBackgroundColor:(NSColor*)value
-{
-  if (value != self->backgroundColor)
-  {
-    self->backgroundColor = [value copy];
-  }//end if (value != self->backgroundColor)
-}
-//end setBackgroundColor:
+@synthesize backgroundColor;
 
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
 {

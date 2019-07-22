@@ -193,8 +193,7 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 @property (copy) NSString* exportPDFWOFGsPDFCompatibilityLevel;
 @property BOOL exportPDFWOFMetaDataInvisibleGraphicsEnabled;
 
--(BOOL) exportPDFMetaDataInvisibleGraphicsEnabled;
--(void) setExportPDFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+@property BOOL exportPDFMetaDataInvisibleGraphicsEnabled;
 
 @property BOOL doNotClipPreview;
 

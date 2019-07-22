@@ -14,6 +14,6 @@
   NSAttributedString* attributedPlaceHolder;
 }
 
-@property (copy) NSString *placeHolder;
+@property (nonatomic, copy) NSString *placeHolder;
 
 @end

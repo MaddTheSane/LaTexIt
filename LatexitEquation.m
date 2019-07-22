@@ -48,11 +48,9 @@
   size_t curvePointsSize;
 }
 
--(BOOL) latexitMetadataStarted;
--(void) setLatexitMetadataStarted:(BOOL)value;
+@property BOOL latexitMetadataStarted;
 -(NSMutableString*) latexitMetadataString;
--(id) latexitMetadata;
--(void) setLatexitMetadata:(id)plist;
+@property (strong) id latexitMetadata;
 -(void) resetCurvePoints;
 -(void) appendCurvePoint:(CGPoint)point;
 -(void) checkMetadataFromCurvePointBytes;
@@ -76,17 +74,7 @@
 }
 //end init
 
--(BOOL) latexitMetadataStarted
-{
-  return self->latexitMetadataStarted;
-}
-//end latexitMetadataStarted
-
--(void) setLatexitMetadataStarted:(BOOL)value
-{
-  self->latexitMetadataStarted = value;
-}
-//end setLatexitMetadataStarted:
+@synthesize latexitMetadataStarted;
 
 -(NSMutableString*) latexitMetadataString
 {
@@ -94,20 +82,7 @@
 }
 //end latexitMetadataString
 
--(id) latexitMetadata
-{
-  return self->latexitMetadata;
-}
-//end latexitMetadata
-
--(void) setLatexitMetadata:(id)plist
-{
-  if (plist != self->latexitMetadata)
-  {
-    self->latexitMetadata = plist;
-  }//end if (plist != self->latexitMedatata)
-}
-//end setLatexitMetadata
+@synthesize latexitMetadata;
 
 -(void) resetCurvePoints
 {

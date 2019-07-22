@@ -24,10 +24,8 @@ extern NSNotificationName const DragThroughButtonStateChangedNotification;
 
 @property BOOL shouldBlink;
 @property CGFloat delay;
--(BOOL) canSwitchState;
--(void) setCanSwitchState:(BOOL)value;
--(BOOL) canTrackMouse;
--(void) setCanTrackMouse:(BOOL)value;
+@property BOOL canSwitchState;
+@property BOOL canTrackMouse;
 
 @property (readonly, getter=isBlinking) BOOL blinking;
 

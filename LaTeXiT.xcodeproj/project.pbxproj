@@ -571,6 +571,7 @@
 		558E21E01DD1ABFF00251C1A /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
 		558E21E11DD1AC0500251C1A /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
 		558E21E21DD1AC0A00251C1A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DocumentExtraPanelsController.xib; sourceTree = "<group>"; };
+		558E21E31DD1AC3F00251C1A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ExportFormatOptionsPanes.strings; sourceTree = "<group>"; };
 		558E21E41DD1AC4300251C1A /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
 		558E21E51DD1AC4600251C1A /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
 		558E21E61DD1AC4800251C1A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
@@ -579,7 +580,6 @@
 		55C7B22E223331B10067EA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ExportFormatOptionsPanes.xib; sourceTree = "<group>"; };
 		55C7B22F223331B10067EA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		55C7B230223331B10067EA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
-		558E21E31DD1AC3F00251C1A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ExportFormatOptionsPanes.strings; sourceTree = "<group>"; };
 		55EC50941DCD3F6300096CC0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		55EC50961DCD3F6A00096CC0 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		55FF53FD210ABF64002D5190 /* CHiWorkSpotlightPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CHiWorkSpotlightPlugin.xcodeproj; path = CHiWorkSpotlightPlugin/CHiWorkSpotlightPlugin.xcodeproj; sourceTree = "<group>"; };
@@ -2534,7 +2534,7 @@
 		2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-55C7B22F223331B10067EA4F /* Base */,
+				55C7B22F223331B10067EA4F /* Base */,
 				93773C3207FFF541004AAB30 /* fr */,
 				2A37F4B7FDCFA73011CA2CEA /* en */,
 				934C03390AD03600007FEC06 /* de */,
@@ -2564,7 +2564,7 @@
 			children = (
 				55C7B22E223331B10067EA4F /* Base */,
 				558E21DA1DD1AAED00251C1A /* en */,
-558E21E31DD1AC3F00251C1A /* ja */,
+				558E21E31DD1AC3F00251C1A /* ja */,
 				558E21E41DD1AC4300251C1A /* fr */,
 				558E21E51DD1AC4600251C1A /* de */,
 				558E21E61DD1AC4800251C1A /* es */,
