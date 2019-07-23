@@ -1,0 +1,30 @@
+/* app not found msg */
+"_AppNotFoundMessageNoURL" = "Make sure this application is installed in your Applications folder to use it.";
+
+/* app not found msg */
+"_AppNotFoundMessageWithURL" = "Make sure this application is installed in your Applications folder to use it.  If you do not have this software, you can choose “Get Application” to download it.";
+
+/* app not found title */
+"_AppNotFoundTitle" = "The creator application “%@” could not be found.";
+
+/* Edit */
+"_Edit" = "Edit";
+
+/* Edit LinkBack Items */
+"_EditMultiple" = "Edit LinkBack Items";
+
+/* Edit LinkBack Item */
+"_EditNone" = "Edit LinkBack Item";
+
+/* Edit Pattern */
+"_EditPattern" = "%1$@ in %2$@";
+
+/* Get application */
+"_GetApplication" = "Get application";
+
+/* ok */
+"_OK" = "OK";
+
+/* Refresh */
+"_Refresh" = "Refresh";
+

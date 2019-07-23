@@ -35,17 +35,16 @@
 
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSDate.h>
+#import <AppKit/NSPasteboard.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class NSPasteboard;
-
-// Use this pasteboard type to put LinkBack data to the pasteboard.  Use +[NSDictionary linkBackDataWithServerName:appData:] to create the data.
-extern NSString*const LinkBackPboardType ;
+/// Use this pasteboard type to put LinkBack data to the pasteboard.  Use +[NSDictionary linkBackDataWithServerName:appData:] to create the data.
+extern NSPasteboardType const LinkBackPboardType NS_SWIFT_NAME(linkBack) ;
 
 // Default Action Names.  These will be localized for you automatically.
-extern NSString*const LinkBackEditActionName ;
-extern NSString*const LinkBackRefreshActionName ;
+extern NSString * const LinkBackEditActionName ;
+extern NSString * const LinkBackRefreshActionName ;
 
 //
 // Support Functions
@@ -61,31 +60,29 @@ id __null_unspecified MakeLinkBackData(NSString* __null_unspecified serverName, 
 id __null_unspecified LinkBackGetAppData(id __null_unspecified linkBackData) DEPRECATED_ATTRIBUTE;
 BOOL LinkBackDataBelongsToActiveApplication(id __null_unspecified data) DEPRECATED_ATTRIBUTE;
 
-//
-// LinkBack Data Category
-//
-
-// Use these methods to create and access linkback data objects.  You can also use the helper functions above.
-
+///
+/// LinkBack Data Category
+///
+/// Use these methods to create and access linkback data objects.
 @interface NSDictionary (LinkBackData)
 
-+ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData ;
++ (NSDictionary<NSString*,id>*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData ;
 
-+ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData suggestedRefreshRate:(NSTimeInterval)rate ;
++ (NSDictionary<NSString*,id>*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData suggestedRefreshRate:(NSTimeInterval)rate ;
 
-+ (NSDictionary*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData actionName:(nullable NSString*)action suggestedRefreshRate:(NSTimeInterval)rate ;
++ (NSDictionary<NSString*,id>*)linkBackDataWithServerName:(NSString*)serverName appData:(nullable id)appData actionName:(nullable NSString*)action suggestedRefreshRate:(NSTimeInterval)rate ;
 
 @property (readonly) BOOL linkBackDataBelongsToActiveApplication ;
 
-- (nullable id)linkBackAppData ;
-- (nullable NSString*)linkBackSourceApplicationName ;
-- (nullable NSString*)linkBackActionName ;
-- (nullable NSString*)linkBackVersion ;
-- (nullable NSURL*)linkBackApplicationURL ;
+@property (readonly, retain, nullable) id linkBackAppData ;
+@property (readonly, copy, nullable) NSString *linkBackSourceApplicationName ;
+@property (readonly, copy, nullable) NSString *linkBackActionName ;
+@property (readonly, copy, nullable) NSString *linkBackVersion ;
+@property (readonly, retain, nullable) NSURL *linkBackApplicationURL ;
 
 @property (readonly) NSTimeInterval linkBackSuggestedRefreshRate ;
 
-- (NSString*)linkBackEditMenuTitle ;
+@property (readonly, copy) NSString *linkBackEditMenuTitle ;
 
 @end
 
@@ -108,9 +105,12 @@ BOOL LinkBackDataBelongsToActiveApplication(id __null_unspecified data) DEPRECAT
 /// used for cross app communications
 @protocol LinkBack <NSObject>
 - (oneway void)remoteCloseLink ;
-- (void)requestEditWithPasteboardName:(bycopy NSString*)pboardName ; ///< from client
-- (void)refreshEditWithPasteboardName:(bycopy NSString*)pboardName ; ///< from server
+- (void)requestEditWithPasteboardName:(bycopy NSPasteboardName)pboardName ; ///< from client
+- (void)refreshEditWithPasteboardName:(bycopy NSPasteboardName)pboardName ; ///< from server
 @end
+
+
+static NSString* LinkBackServerBundleIdentifierKey = @"bundleId" ;
 
 @interface LinkBack : NSObject <LinkBack> {
     LinkBack* peer ; ///< the client or server on the other side.
@@ -129,11 +129,11 @@ BOOL LinkBackDataBelongsToActiveApplication(id __null_unspecified data) DEPRECAT
 // ...........................................................................
 // General Use methods
 //
-@property (readonly, retain) NSPasteboard *pasteboard ;
+@property (readonly, strong) NSPasteboard *pasteboard ;
 - (void)closeLink ;
 
 /// Applications can use this represented object to attach some meaning to the live link.  For example, a client application may set this to the object to be modified when the edit is refreshed.  This retains its value.
-@property (readwrite, retain, nullable) id representedObject ;
+@property (readwrite, strong, nullable) id representedObject ;
 
 @property (readonly, copy) NSString *sourceName ;
 @property (readonly, copy) NSString *sourceApplicationName ;
