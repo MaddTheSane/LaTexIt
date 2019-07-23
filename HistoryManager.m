@@ -27,7 +27,6 @@
 #import "PreferencesController.h"
 #import "Utils.h"
 
-#import <LinkBack/LinkBack.h>
 #include <sqlite3.h>
 
 #if __has_feature(objc_arc)
