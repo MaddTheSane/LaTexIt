@@ -433,8 +433,7 @@
   }
   [self->libraryController removeItems:selectedItems];
   enumerator = [parentOfSelectedItems objectEnumerator];
-  id parent = nil;
-  while((parent = [enumerator nextObject]))
+  for(id parent in enumerator)
   {
     if (parent == [NSNull null])
       [self->libraryController fixChildrenSortIndexesForParent:nil recursively:NO];
@@ -776,7 +775,7 @@
   [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [self.window convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [self.window convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =

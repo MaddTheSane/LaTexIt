@@ -512,7 +512,7 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
   [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [self.window convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [self.window convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =

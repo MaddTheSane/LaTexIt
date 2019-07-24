@@ -96,7 +96,7 @@
 
 @property (readonly, getter=isCommentsPaneOpen) BOOL commentsPaneOpen;
 
-@property (readonly, copy) NSMenu *actionMenu;
+@property (readonly, strong) NSMenu *actionMenu;
 -(BOOL)    validateMenuItem:(NSMenuItem*)menuItem;
 
 -(void) displayPreviewImage:(NSImage*)image backgroundColor:(NSColor*)backgroundColor;

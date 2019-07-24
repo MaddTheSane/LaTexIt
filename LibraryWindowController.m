@@ -884,24 +884,24 @@ static int kExportContext = 0;
     NSTableColumn* tableColumnImportButton = [self->importTeXPanelTableView tableColumnWithIdentifier:@"import"];
     NSTableColumn* tableColumnImportState = [self->importTeXPanelTableView tableColumnWithIdentifier:@"state"];
     [tableColumnChecked bind:NSEnabledBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+      withKeyPath:@"arrangedObjects.enabled" options:nil];
     [tableColumnChecked bind:NSValueBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.checked"] options:nil];
+      withKeyPath:@"arrangedObjects.checked" options:nil];
     [tableColumnTitle bind:NSEnabledBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+      withKeyPath:@"arrangedObjects.enabled" options:nil];
     [tableColumnTitle bind:NSValueBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.title"] options:nil];
+      withKeyPath:@"arrangedObjects.title" options:nil];
     [tableColumnImportButton bind:NSEnabledBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+      withKeyPath:@"arrangedObjects.enabled" options:nil];
     [tableColumnImportButton bind:NSEnabled2Binding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.checked"] options:nil];
+      withKeyPath:@"arrangedObjects.checked" options:nil];
     [tableColumnImportButton bind:NSEnabled3Binding toObject:self->importTeXArrayController
-                      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
+                      withKeyPath:@"arrangedObjects.importState" options:
        @{NSValueTransformerBindingOption: [IsNotEqualToTransformer transformerWithReference:@1]}];
     [tableColumnImportState bind:NSEnabledBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.enabled"] options:nil];
+      withKeyPath:@"arrangedObjects.enabled" options:nil];
     [tableColumnImportState bind:NSValueBinding toObject:self->importTeXArrayController
-      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
+      withKeyPath:@"arrangedObjects.importState" options:
         @{NSValueTransformerBindingOption: [ObjectTransformer transformerWithDictionary:
               @{@0: @"",
                 @1: NSLocalizedString(@"_IMPORTING_", @""),
@@ -985,7 +985,7 @@ static int kExportContext = 0;
                  defaultButton:NSLocalizedString(@"OK", @"OK")
                alternateButton:nil otherButton:nil
      informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-       [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+       [alert runModal];
       }
       else
       {
@@ -1017,7 +1017,7 @@ static int kExportContext = 0;
                  defaultButton:NSLocalizedString(@"OK", @"OK")
                alternateButton:nil otherButton:nil
      informativeTextWithFormat:nil];
-       [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+       [alert runModal];
       }//end if (ok)
     }
     self->savePanel = nil;
