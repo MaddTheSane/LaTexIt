@@ -47,33 +47,45 @@ BOOL isMacOS10_8OrAbove(void)
 //end isMacOS10_8OrAbove()
 #endif
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+#else
 BOOL isMacOS10_9OrAbove(void)
 {
   BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_8);
   return result;
 }
 //end isMacOS10_9OrAbove()
+#endif
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
+#else
 BOOL isMacOS10_10OrAbove(void)
 {
   BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_9);
   return result;
 }
 //end isMacOS10_10OrAbove()
+#endif
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_11
+#else
 BOOL isMacOS10_11OrAbove(void)
 {
   BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_10);
   return result;
 }
 //end isMacOS10_11OrAbove()
+#endif
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_12
+#else
 BOOL isMacOS10_12OrAbove(void)
 {
   BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_11);
   return result;
 }
 //end isMacOS10_12OrAbove()
+#endif
 
 BOOL isMacOS10_13OrAbove(void)
 {

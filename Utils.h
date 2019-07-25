@@ -57,10 +57,26 @@ BOOL isMacOS10_7OrAbove(void);
 #else
 BOOL isMacOS10_8OrAbove(void);
 #endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+#define isMacOS10_9OrAbove() (YES)
+#else
 BOOL isMacOS10_9OrAbove(void);
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_10
+#define isMacOS10_10OrAbove() (YES)
+#else
 BOOL isMacOS10_10OrAbove(void);
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_11
+#define isMacOS10_11OrAbove() (YES)
+#else
 BOOL isMacOS10_11OrAbove(void);
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_12
+#define isMacOS10_12OrAbove() (YES)
+#else
 BOOL isMacOS10_12OrAbove(void);
+#endif
 BOOL isMacOS10_13OrAbove(void);
 BOOL isMacOS10_14OrAbove(void);
 
