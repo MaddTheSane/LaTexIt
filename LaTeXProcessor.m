@@ -568,7 +568,7 @@ static LaTeXProcessor* sharedInstance = nil;
         {
           const unsigned char* annotationBytes = (const unsigned char*)[annotationContentBase64CompleteString UTF8String];
           size_t annotationBytesLength = [annotationContentBase64CompleteString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-          float tmp[6] = {0};
+          CGFloat tmp[6] = {0};
           const unsigned char* src = annotationBytes;
           size_t remainingBytes = annotationBytesLength;
           CGContextSaveGState(cgPDFContext);

@@ -48,5 +48,5 @@
 @property (readonly, strong) id plistDescription;
 +(LibraryItem*) libraryItemWithDescription:(id)description;
 -(instancetype) initWithDescription:(id)description NS_DESIGNATED_INITIALIZER;
--(NSManagedObject *)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context UNAVAILABLE_ATTRIBUTE;
+-(NSManagedObject *)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context NS_DESIGNATED_INITIALIZER;
 @end
