@@ -45,15 +45,15 @@
   BOOL result = NO;
   if (isMacOS10_14OrAbove())
   {
-    NSString* _NSAppearanceNameAqua = @"NSAppearanceNameAqua";
-    NSString* _NSAppearanceNameDarkAqua = @"NSAppearanceNameDarkAqua";
-    SEL effectiveAppearanceSelector = NSSelectorFromString(@"effectiveAppearance");
+    static NSString* _NSAppearanceNameAqua = @"NSAppearanceNameAqua";
+    static NSString* _NSAppearanceNameDarkAqua = @"NSAppearanceNameDarkAqua";
+    SEL effectiveAppearanceSelector = @selector(effectiveAppearance);
     DebugLog(1, @"<%@> supports <%@> : %d", self, NSStringFromSelector(effectiveAppearanceSelector),
             [self respondsToSelector:effectiveAppearanceSelector]);
     id effectiveAppearance = ![self respondsToSelector:effectiveAppearanceSelector] ? nil :
     [self performSelector:effectiveAppearanceSelector];
     DebugLog(1, @"isDarkMode: effectiveAppearance = <%@>", effectiveAppearance);
-    SEL bestMatchFromAppearancesWithNamesSelector = NSSelectorFromString(@"bestMatchFromAppearancesWithNames:");
+    SEL bestMatchFromAppearancesWithNamesSelector = @selector(bestMatchFromAppearancesWithNames:);
     NSArray* modes = [NSArray arrayWithObjects:_NSAppearanceNameAqua, _NSAppearanceNameDarkAqua, nil];
     DebugLog(1, @"isDarkMode: modes = <%@>", modes);
     DebugLog(1, @"<%@> supports <%@> : %d", effectiveAppearance, NSStringFromSelector(bestMatchFromAppearancesWithNamesSelector),

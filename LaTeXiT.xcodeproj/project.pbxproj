@@ -274,7 +274,6 @@
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
 		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
 		9387FA9C1930E7D500888628 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA951930E7D500888628 /* UKFileWatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9387FA9D1930E7D500888628 /* UKFNSubscribeFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9387FA9E1930E7D500888628 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA991930E7D500888628 /* UKKQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9387FA9F1930E7D500888628 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
@@ -2361,7 +2360,6 @@
 				939485EE1828472D0059522B /* CHDragFileWrapper.m in Sources */,
 				9325E1281831946F006BCD30 /* CHProtoBuffers.mm in Sources */,
 				9387FA9C1930E7D500888628 /* UKFileWatcher.m in Sources */,
-				9387FA9D1930E7D500888628 /* UKFNSubscribeFileWatcher.m in Sources */,
 				9387FA9E1930E7D500888628 /* UKKQueue.m in Sources */,
 				9387FA9F1930E7D500888628 /* UKMainThreadProxy.m in Sources */,
 				93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */,

@@ -25,7 +25,7 @@
 //  Prototypes:
 // -----------------------------------------------------------------------------
 
-void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon, FNSubscriptionRef subscription);
+static void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon, FNSubscriptionRef subscription);
 
 
 @implementation UKFNSubscribeFileWatcher

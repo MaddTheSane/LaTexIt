@@ -86,7 +86,7 @@ typedef NS_OPTIONS(u_int, UKKQueueNotifyAbout) {
 	BOOL			keepThreadRunning;	///< Termination criterion of our thread.
 }
 
-+(UKKQueue*)	sharedFileWatcher;      ///< Returns a singleton, a shared kqueue object Handy if you're subscribing to the notifications. Use this, or just create separate objects using alloc/init. Whatever floats your boat.
+@property (class, readonly, strong) UKKQueue *sharedFileWatcher;      ///< Returns a singleton, a shared kqueue object Handy if you're subscribing to the notifications. Use this, or just create separate objects using alloc/init. Whatever floats your boat.
 
 /// Returns a Unix file descriptor for the KQueue this uses. The descriptor
 /// is owned by this object. Do not close it!
@@ -106,7 +106,7 @@ typedef NS_OPTIONS(u_int, UKKQueueNotifyAbout) {
 
 // private:
 -(void)		watcherThread: (id)sender;
--(void)		postNotification: (NSString*)nm forFile: (NSString*)fp; // Message-posting bottleneck.
+-(void)		postNotification: (UKFileWatcherNotifications)nm forFile: (NSString*)fp; // Message-posting bottleneck.
 
 @end
 

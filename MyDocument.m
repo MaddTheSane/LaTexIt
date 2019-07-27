@@ -2784,7 +2784,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end saveAsDidEnd:returnCode:contextInfo:
 
--(void) watcher:(id<UKFileWatcher>)kq receivedNotification:(NSString*)nm forPath:(NSString*)fpath
+-(void) watcher:(id<UKFileWatcher>)kq receivedNotification:(UKFileWatcherNotifications)nm forPath:(NSString*)fpath
 {
   DebugLog(1, @"watcher:<%@> <%@>", nm, fpath);
   @synchronized(self)
