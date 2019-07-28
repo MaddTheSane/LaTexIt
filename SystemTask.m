@@ -75,10 +75,7 @@
 @synthesize usingLoginShell = isUsingLoginShell;
 @synthesize terminationStatus;
 
--(void) setTimeOut:(NSTimeInterval)value
-{
-  self->timeOutLimit = value;
-}
+@synthesize timeOut=timeOutLimit;
 //end setTimeOut:
 
 -(NSString*) equivalentLaunchCommand
@@ -188,7 +185,7 @@
 
 -(void) setStdInputData:(NSData*)data
 {
-  self->stdInputData = data;
+  self->stdInputData = [data copy];
   [self->stdInputData writeToFile:self->tmpStdinFilePath atomically:NO];
 }
 //end setStdInputData:

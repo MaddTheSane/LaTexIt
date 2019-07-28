@@ -39,7 +39,7 @@
 @property (copy)  NSString *currentDirectoryPath;
 @property (getter=isUsingLoginShell) BOOL usingLoginShell;
 
--(void) setTimeOut:(NSTimeInterval)timeOut;
+@property NSTimeInterval timeOut;
 @property (readonly, copy) NSString *equivalentLaunchCommand;
 -(void) launch;
 -(void) waitUntilExit;
