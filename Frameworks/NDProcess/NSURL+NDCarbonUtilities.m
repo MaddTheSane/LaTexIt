@@ -79,18 +79,6 @@
 #endif
 }
 
-#if 0
-/*
-	- URLByDeletingLastPathComponent
- */
-- (NSURL *)URLByDeletingLastPathComponent
-{
-	CFURLRef theURL = CFURLCreateCopyDeletingLastPathComponent( kCFAllocatorDefault, (CFURLRef)self);
-
-  return CFBridgingRelease(theURL);
-}
-#endif
-
 /*
 	- fileSystemPathHFSStyle
  */

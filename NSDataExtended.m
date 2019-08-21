@@ -25,8 +25,7 @@
 
 +(instancetype) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines
 {
-  NSMutableData* result = [NSMutableData data];
-  result = [[self alloc] initWithBase64EncodedString:base64 options:0];
+  id result = [[self alloc] initWithBase64EncodedString:base64 options:0];
   
   return result;
 }

@@ -13,7 +13,6 @@
 
 +(nullable Class) dynamicCastToClass:(nonnull Class)aClass;
 -(nullable id)    dynamicCastToClass:(nonnull Class)aClass;
-//-(void)  forwardInvocation:(NSInvocation*)anInvocation;
--(BOOL)  isDarkMode;
+@property (readonly, getter=isDarkMode) BOOL darkMode;
 
 @end

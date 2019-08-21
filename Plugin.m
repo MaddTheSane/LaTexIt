@@ -13,16 +13,22 @@
 
 -(instancetype) initWithPath:(NSString*)path
 {
+  return [self initWithURL:[NSURL fileURLWithPath:path]];
+}
+//end initWithPath:
+
+-(instancetype) initWithURL:(NSURL*)path
+{
   if (!(self = [super init]))
     return nil;
-  bundle = [[NSBundle alloc] initWithPath:path];
+  bundle = [[NSBundle alloc] initWithURL:path];
   if (!bundle)
   {
     return nil;
   }//end if (!self->bundle)
   return self;
 }
-//end initWithPath:
+//end initWithURL:
 
 -(NSString*) localizedName
 {

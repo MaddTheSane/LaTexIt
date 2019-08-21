@@ -16,7 +16,7 @@
 
 #import "Utils.h"
 
-@interface LibraryGroupItem (PrivateAPI)
+@interface LibraryGroupItem ()
 @property (readonly, copy) NSArray *childrenSortDescriptors;
 @end
 

@@ -14,7 +14,7 @@ extern NSString* const Old_CheckForNewVersionsKey;
 
 @interface PreferencesController (Migration)
 
-+(NSArray<NSString*>*) oldKeys;
+@property (class, readonly) NSArray<NSString*> *oldKeys;
 -(void) migratePreferences;
 -(void) removeKey:(NSString*)key;
 -(void) replaceKey:(NSString*)oldKey withKey:(NSString*)newKey;

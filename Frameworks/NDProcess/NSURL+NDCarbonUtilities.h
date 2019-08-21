@@ -76,16 +76,6 @@
  */
 - (BOOL)getFSSpec:(FSSpec *)fsSpec DEPRECATED_IN_MAC_OS_X_VERSION_10_5_AND_LATER;
 
-#if 0
-/*!
-	@method URLByDeletingLastPathComponent
-	@abstract Delete last component of a url.
-	@discussion Returns a new <tt>NSURL</tt> equivelent to the receiver with the last component removed.
-	@result A new <tt>NSURL</tt>
- */
-- (NSURL *)URLByDeletingLastPathComponent DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
-#endif
-
 /*!
 	@method fileSystemPathHFSStyle
 	@abstract Returns an HFS style path.

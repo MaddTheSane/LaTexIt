@@ -399,8 +399,7 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
     [compositionConfiguration replaceKey:Old_CompositionConfigurationGsPathKey withKey:CompositionConfigurationGsPathKey];
     compositionConfiguration[CompositionConfigurationUseLoginShellKey] = @(useLoginShell);
     NSMutableDictionary* additionalScripts = compositionConfiguration[CompositionConfigurationAdditionalProcessingScriptsKey];
-    NSEnumerator* scriptEnumerator = [additionalScripts.allValues objectEnumerator];
-    for(NSMutableDictionary* additionalScript in scriptEnumerator)
+    for(NSMutableDictionary* additionalScript in additionalScripts.allValues)
     {
       [additionalScript replaceKey:Old_CompositionConfigurationAdditionalProcessingScriptsEnabledKey
                            withKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey];
@@ -447,25 +446,25 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
       [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
-      [NSNumber numberWithInteger:i+((count == 3) ? 1 : 0)], ServiceShortcutIdentifierKey,
+      @(i+((count == 3) ? 1 : 0)), ServiceShortcutIdentifierKey,
       nil]];
   if ([newServiceShortcuts count] == 3)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       [oldServiceShortcutsEnabled objectAtIndex:i], ServiceShortcutEnabledKey,
       [oldServiceShortcutsStrings objectAtIndex:i], ServiceShortcutStringKey,
-      [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
+      @(SERVICE_LATEXIZE_EQNARRAY), ServiceShortcutIdentifierKey,
       nil]];
   if ([newServiceShortcuts count] == 4)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       @YES, ServiceShortcutEnabledKey,
       @"", ServiceShortcutStringKey,
-      [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
+      @(SERVICE_MULTILATEXIZE), ServiceShortcutIdentifierKey,
       nil]];
   if ([newServiceShortcuts count] == 5)
     [newServiceShortcuts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
       @YES, ServiceShortcutEnabledKey,
       @"", ServiceShortcutStringKey,
-      [NSNumber numberWithInteger:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
+      @(SERVICE_DELATEXIZE), ServiceShortcutIdentifierKey,
       nil]];
   [self removeKey:Old_ServiceShortcutEnabledKey];
   [self removeKey:Old_ServiceShortcutStringsKey];

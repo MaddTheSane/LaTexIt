@@ -42,7 +42,7 @@ extern NSPasteboardType const LatexitEquationsPboardType;
 +(NSManagedObjectContext*) popManagedObjectContext;
 
 //
-+(NSDictionary*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults outPdfData:(NSData**)outPdfData;
++(NSDictionary<NSString*,id>*) metaDataFromPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults outPdfData:(NSData**)outPdfData;
 +(BOOL)          hasInvisibleGraphicCommandsInPDFData:(NSData*)someData;
 
 //constructors
@@ -56,7 +56,7 @@ extern NSPasteboardType const LatexitEquationsPboardType;
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor
                      title:(NSString*)aTitle;
--(instancetype) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithMetaData:(NSDictionary<NSString*,id>*)metaData useDefaults:(BOOL)useDefaults;
 -(instancetype) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
 -(instancetype) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
 -(instancetype) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText

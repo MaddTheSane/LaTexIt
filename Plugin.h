@@ -19,7 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(instancetype)init UNAVAILABLE_ATTRIBUTE;
--(nullable instancetype) initWithPath:(NSString*)path NS_DESIGNATED_INITIALIZER;
+-(nullable instancetype) initWithPath:(NSString*)path;
+-(nullable instancetype) initWithURL:(NSURL*)path NS_DESIGNATED_INITIALIZER;
 
 @property (readonly, retain) NSBundle *bundle;
 -(void)      load;

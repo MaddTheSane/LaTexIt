@@ -54,8 +54,7 @@
 
 -(NSDictionary*) dictionary
 {
-  NSDictionary* result = [dictionary copy];
-  return result;
+  return [dictionary copy];
 }
 //end dictionary
 

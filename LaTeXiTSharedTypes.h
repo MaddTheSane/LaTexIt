@@ -8,6 +8,7 @@
 //
 
 #include <CoreFoundation/CFBase.h>
+#import <Foundation/NSObjCRuntime.h>
 
 ///useful to differenciate the different latex modes : EQNARRAY, DISPLAY (\[...\]), INLINE ($...$) and TEXT (text)
 typedef CF_ENUM(int, latex_mode_t) {
@@ -49,3 +50,5 @@ typedef CF_ENUM(int, service_identifier_t) {SERVICE_LATEXIZE_EQNARRAY, SERVICE_L
 extern latex_mode_t validateLatexMode(int mode);
 
 typedef CF_ENUM(int, alignment_mode_t) {ALIGNMENT_MODE_UNDEFINED, ALIGNMENT_MODE_NONE, ALIGNMENT_MODE_LEFT, ALIGNMENT_MODE_CENTER, ALIGNMENT_MODE_RIGHT};
+
+typedef NSString *CompositionConfigurationKey NS_TYPED_EXTENSIBLE_ENUM;

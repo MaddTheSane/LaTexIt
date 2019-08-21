@@ -136,7 +136,7 @@
    NSImage* image = !result ? nil : [[NSImage alloc] initWithSize:adaptedRectangle.size];
    [image addRepresentation:result];
    @try{
-     [image lockFocusOnRepresentation:result];
+     [image lockFocus];
      [imageRep drawInRect:adaptedRectangle];
      [image unlockFocus];
     }

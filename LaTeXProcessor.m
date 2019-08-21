@@ -295,8 +295,7 @@ static LaTeXProcessor* sharedInstance = nil;
             title, @"title",
             nil]];
       NSString* embeddedDataBase64 = [embeddedData encodeBase64];
-      if (isMacOS10_5OrAbove())
-        [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
+      pdfAnnotation.userName = @"fr.chachatelier.pierre.LaTeXiT";
       pdfAnnotation.contents = embeddedDataBase64;
       [pdfPage addAnnotation:pdfAnnotation];
       NSData* dataWithAnnotation = [pdfDocument dataRepresentation];
@@ -823,7 +822,7 @@ static LaTeXProcessor* sharedInstance = nil;
                     additionalFilesPaths:(NSArray*)additionalFilesPaths
                     workingDirectory:(NSString*)workingDirectory fullEnvironment:(NSDictionary*)fullEnvironment
                     uniqueIdentifier:(NSString*)uniqueIdentifier
-                    outFullLog:(NSString**)outFullLog outErrors:(NSArray**)outErrors outPdfData:(NSData**)outPdfData
+                    outFullLog:(NSString**)outFullLog outErrors:(NSArray<NSString*>**)outErrors outPdfData:(NSData**)outPdfData
 {
   NSData* pdfData = nil;
   
@@ -1581,9 +1580,7 @@ static LaTeXProcessor* sharedInstance = nil;
 {
   NSArray* rawLogLines = [fullErrorLog componentsSeparatedByString:@"\n"];
   NSMutableArray* errorLines = [NSMutableArray arrayWithCapacity:rawLogLines.count];
-  NSEnumerator* enumerator = [rawLogLines objectEnumerator];
-  NSString* line = nil;
-  while((line = [enumerator nextObject]))
+  for(NSString *line in rawLogLines)
   {
     if (errorLines.count && [errorLines.lastObject endsWith:@":" options:0])
       errorLines[errorLines.count-1] = [errorLines.lastObject stringByAppendingString:line];

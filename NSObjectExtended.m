@@ -27,12 +27,6 @@
 }
 //end dynamicCastToClass:
 
-//-(void) forwardInvocation:(NSInvocation*)anInvocation
-//{
-//  DebugLog(1, @"anInvocation = %@", anInvocation);
-//}
-//end forwardInvocation:
-
 -(id) managedObjectContext
 {
   id result = nil;
@@ -45,8 +39,8 @@
   BOOL result = NO;
   if (isMacOS10_14OrAbove())
   {
-    static NSString* _NSAppearanceNameAqua = @"NSAppearanceNameAqua";
-    static NSString* _NSAppearanceNameDarkAqua = @"NSAppearanceNameDarkAqua";
+    static NSString*const _NSAppearanceNameAqua = @"NSAppearanceNameAqua";
+    static NSString*const _NSAppearanceNameDarkAqua = @"NSAppearanceNameDarkAqua";
     SEL effectiveAppearanceSelector = @selector(effectiveAppearance);
     DebugLog(1, @"<%@> supports <%@> : %d", self, NSStringFromSelector(effectiveAppearanceSelector),
             [self respondsToSelector:effectiveAppearanceSelector]);
@@ -54,7 +48,7 @@
     [self performSelector:effectiveAppearanceSelector];
     DebugLog(1, @"isDarkMode: effectiveAppearance = <%@>", effectiveAppearance);
     SEL bestMatchFromAppearancesWithNamesSelector = @selector(bestMatchFromAppearancesWithNames:);
-    NSArray* modes = [NSArray arrayWithObjects:_NSAppearanceNameAqua, _NSAppearanceNameDarkAqua, nil];
+    NSArray* modes = @[_NSAppearanceNameAqua, _NSAppearanceNameDarkAqua];
     DebugLog(1, @"isDarkMode: modes = <%@>", modes);
     DebugLog(1, @"<%@> supports <%@> : %d", effectiveAppearance, NSStringFromSelector(bestMatchFromAppearancesWithNamesSelector),
                    [effectiveAppearance respondsToSelector:bestMatchFromAppearancesWithNamesSelector]);
