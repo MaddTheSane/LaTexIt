@@ -8,7 +8,7 @@ fi
 if [[ -z "${PROJECT_NAME}" ]]; then
   PROJECT_NAME="LaTeXiT"
 fi
-if [[ "${PROJECT_NAME}" == "LaTeXiT-legacy" ]]; then
+if [[ "${PROJECT_NAME}" != "LaTeXiT" ]]; then
   PROJECT_NAME="LaTeXiT"
 fi
 

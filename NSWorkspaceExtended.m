@@ -12,6 +12,7 @@
 
 #import "NSFileManagerExtended.h"
 #import "NDProcess.h"
+#import "Utils.h"
 
 @implementation NSWorkspace (Extended)
 
@@ -63,7 +64,7 @@
   }//end if (runningApplicationClass)
   else//if (!runningApplicationClass)
   {
-    NSArray* runningApplications = [self launchedApplications];
+    NSArray* runningApplications = [self respondsToSelector:@selector(runningApplications)] ? [self runningApplications] : [self launchedApplications];
     NSEnumerator* enumerator = [runningApplications objectEnumerator];
     id application = nil;
     id applicationFound = nil;

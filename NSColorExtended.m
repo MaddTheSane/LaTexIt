@@ -47,7 +47,7 @@
 
 -(NSString*) rgbaString
 {
-  NSColor* colorRGB = [self colorUsingColorSpaceName:NSCalibratedRGBColorSpace]; //the color must be RGB
+  NSColor* colorRGB = [self colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]; //the color must be RGB
   return [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
                                                     [colorRGB blueComponent], [colorRGB alphaComponent]];
 }
@@ -55,7 +55,7 @@
 
 -(CGFloat) grayLevel
 {
-  return [[self colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] whiteComponent];
+  return [[self colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]] whiteComponent];
 }
 //end grayLevel
 
@@ -69,7 +69,7 @@
 {
   NSColor* result = self;
   CGFloat hsba[4] = {0};
-  [[self colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hsba[0] saturation:&hsba[1] brightness:&hsba[2] alpha:&hsba[3]];
+  [[self colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]] getHue:&hsba[0] saturation:&hsba[1] brightness:&hsba[2] alpha:&hsba[3]];
   hsba[1] = MAX(0, MIN(1, hsba[1]*(1+factor)));
   hsba[2] = MAX(0, MIN(1, hsba[2]*(1-factor)));
   result = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];
@@ -81,7 +81,7 @@
 {
   NSColor* result = self;
   CGFloat hsba[4] = {0};
-  [[self colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hsba[0] saturation:&hsba[1] brightness:&hsba[2] alpha:&hsba[3]];
+  [[self colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]] getHue:&hsba[0] saturation:&hsba[1] brightness:&hsba[2] alpha:&hsba[3]];
   hsba[1] = MAX(0, MIN(1, hsba[1]*(1-factor)));
   hsba[2] = MAX(0, MIN(1, hsba[2]*(1+factor)));
   result = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];

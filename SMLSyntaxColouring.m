@@ -101,12 +101,13 @@ static NSArray *syntaxDefinitionsArray;
 }
 //END undoManagerForTextView:
 
--(void)setColours
+-(void) setColours
 {
   PreferencesController* preferencesController = [PreferencesController sharedController];
   BOOL syntaxColoring = [preferencesController editionSyntaxColoringEnabled];
   [textView setBackgroundColor:[preferencesController editionSyntaxColoringTextBackgroundColor]];
   [[textView textStorage] setForegroundColor:[preferencesController editionSyntaxColoringTextForegroundColor]];
+  [textView setInsertionPointColor:[preferencesController editionSyntaxColoringTextForegroundColor]];
 	if (self->commandsColour) {
 		[self->commandsColour release];
 		self->commandsColour = nil;

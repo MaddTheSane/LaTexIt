@@ -169,7 +169,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
   NSColor *alternateSelectedControlColor = color ? color : [NSColor grayColor];
   CGFloat hue, saturation, brightness, alpha;
   [[alternateSelectedControlColor
-      colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hue
+      colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]] getHue:&hue
       saturation:&saturation brightness:&brightness alpha:&alpha];
 
   // Create synthetic darker and lighter versions

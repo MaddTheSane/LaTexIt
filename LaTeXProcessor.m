@@ -17,6 +17,7 @@
 #import "NSDictionaryCompositionConfiguration.h"
 #import "NSDictionaryExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSImageExtended.h"
 #import "NSObjectExtended.h"
 #import "NSStringExtended.h"
 #import "NSTaskExtended.h"
@@ -32,6 +33,8 @@
 #import <libxml/parser.h>
 #import <libxml/xpath.h>
 #import <libxml/xpathInternals.h>
+
+#include <dlfcn.h>
 
 NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
 
@@ -664,7 +667,12 @@ static LaTeXProcessor* sharedInstance = nil;
           CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
           DebugLog(1, @"mediaBox = %@", NSStringFromRect(NSRectFromCGRect(mediaBox)));
           NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
+          DebugLog(1, @"font = %@", font);
           CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
+          DebugLog(1, @"cgFont = %p", cgFont);
+          CTFontRef ctFont = CFRetain((CTFontRef)font);
+          DebugLog(1, @"ctFont = %p", ctFont);
+          DebugLog(1, @"cgPDFContext = %p", cgPDFContext);
           BOOL useOldFonts = NO;
           if (useOldFonts)
             CGContextSelectFont(cgPDFContext, "Courier", fontSize, kCGEncodingMacRoman);
@@ -674,13 +682,39 @@ static LaTeXProcessor* sharedInstance = nil;
             CGContextSetFontSize(cgPDFContext, fontSize);
           }//end if (!useOldFonts)
 
+          DebugLog(1, @"annotationContentBase64CompleteString = %@", annotationContentBase64CompleteString);
           size_t charactersCount = [annotationContentBase64CompleteString length];
-          unichar* unichars = (unichar*)calloc(charactersCount, sizeof(unichar));
+          DebugLog(1, @"charactersCount = %@", @(charactersCount));
+          unichar* unichars = (unichar*)calloc(charactersCount+1, sizeof(unichar));//+1 for O termination
+          DebugLog(1, @"unichars = %p", unichars);
           CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
+          DebugLog(1, @"glyphs = %p", glyphs);
           if (unichars && glyphs)
           {
-            [annotationContentBase64CompleteString getCharacters:unichars];
-            bool ok = CTFontGetGlyphsForCharacters((CTFontRef)font, unichars, glyphs, charactersCount);
+            [annotationContentBase64CompleteString getCharacters:unichars range:NSMakeRange(0, charactersCount)];
+            DebugLog(1, @"unichars filled");
+            DebugLog(1, @"&CTFontGetGlyphsForCharacters = %p", &CTFontGetGlyphsForCharacters);
+            typedef bool (*CTFontGetGlyphsForCharacters_t)(CTFontRef, const UniChar characters[], CGGlyph glyphs[], CFIndex);
+            CTFontGetGlyphsForCharacters_t pCTFontGetGlyphsForCharacters = &CTFontGetGlyphsForCharacters;
+            if (!pCTFontGetGlyphsForCharacters)
+            {
+              NSBundle* coreTextBundle = [NSBundle bundleWithIdentifier:@"com.apple.CoreText"];
+              DebugLog(1, @"coreTextBundle => %@", coreTextBundle);
+              NSError* loadError = nil;
+              BOOL loaded = [coreTextBundle isLoaded] || [coreTextBundle loadAndReturnError:&loadError];
+              DebugLog(1, @"loaded => %@, error = %@", @(loaded), loadError);
+              DebugLog(1, @"path = %@", [coreTextBundle executablePath]);
+              void* coreTextHandle = !loaded ? 0 : dlopen([[coreTextBundle executablePath] UTF8String], RTLD_LAZY);
+              DebugLog(1, @"coreTextHandle => %p", coreTextHandle);
+              if (!pCTFontGetGlyphsForCharacters && coreTextHandle)
+                pCTFontGetGlyphsForCharacters = (CTFontGetGlyphsForCharacters_t)dlsym(coreTextHandle, "CTFontGetGlyphsForCharacters");
+              DebugLog(1, @"pCTFontGetGlyphsForCharacters(CTFontGetGlyphsForCharacters) => %p", CTFontGetGlyphsForCharacters);
+              if (!pCTFontGetGlyphsForCharacters && coreTextHandle)
+                pCTFontGetGlyphsForCharacters = (CTFontGetGlyphsForCharacters_t)dlsym(coreTextHandle, "_CTFontGetGlyphsForCharacters");
+              DebugLog(1, @"pCTFontGetGlyphsForCharacters(_CTFontGetGlyphsForCharacters) => %p", CTFontGetGlyphsForCharacters);
+            }//end if (!pCTFontGetGlyphsForCharacters)
+            bool ok = pCTFontGetGlyphsForCharacters && pCTFontGetGlyphsForCharacters(ctFont, unichars, glyphs, charactersCount);
+            DebugLog(1, @"pCTFontGetGlyphsForCharacters => %@", @(ok));
             DebugLog(1, @"ok = %d", ok);
             if (ok)
             {
@@ -701,13 +735,18 @@ static LaTeXProcessor* sharedInstance = nil;
             free(unichars);
           if (glyphs)
             free(glyphs);
+          if (ctFont)
+            CFRelease(ctFont);
           CGFontRelease(cgFont);
         }//end if (!useFullyGraphicMetadata)
         CGPDFContextEndPage(cgPDFContext);
+        DebugLog(1, @"boxData = %p", boxData);
         if (boxData)
           CFRelease(boxData);
+        DebugLog(1, @"pageDictionary = %p", pageDictionary);
         if (pageDictionary)
           CFRelease(pageDictionary);
+        DebugLog(1, @"cgPDFContext = %p", cgPDFContext);
         CGContextFlush(cgPDFContext);
         CGContextRelease(cgPDFContext);
         dataRewritten = YES;
@@ -728,7 +767,7 @@ static LaTeXProcessor* sharedInstance = nil;
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable
 {
   NSColor* color = theColor ? theColor : [NSColor colorWithCalibratedRed:0 green:0 blue:0 alpha:0];
-  color = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+  color = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
   CGFloat rgba[4] = {0};
   [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
   NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
@@ -1054,7 +1093,7 @@ static LaTeXProcessor* sharedInstance = nil;
   NSDictionary* additionalProcessingScripts = [compositionConfiguration compositionConfigurationAdditionalProcessingScripts];
   
   //xelatex requires to insert the color in the body, so we compute the color as string...
-  color = [(color ? color : [NSColor blackColor]) colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+  color = [(color ? color : [NSColor blackColor]) colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
   CGFloat rgba[4] = {0, 0, 0, 0};
   [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
   NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
@@ -2133,7 +2172,11 @@ static LaTeXProcessor* sharedInstance = nil;
              uniqueIdentifier:(NSString*)uniqueIdentifier
 {
   NSData* data = nil;
+  DebugLog(1, @"pdfData = %p(%@)", pdfData, @([pdfData length]));
+  DebugLog(1, @"exportOptions = %@", exportOptions);
+  DebugLog(1, @"compositionConfiguration = %@", compositionConfiguration);
   NSString* temporaryDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
+  DebugLog(1, @"temporaryDirectory = %@", temporaryDirectory);
   //@synchronized(self) //only one person may ask that service at a time //now using uniqueidentifier to allow thread safety
   {
     //prepare file names
@@ -2146,7 +2189,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* tmpPdfFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpPdfFile];
     NSString* tmpSvgFile     = [NSString stringWithFormat:@"%@-2.svg", filePrefix];
     NSString* tmpSvgFilePath = [temporaryDirectory stringByAppendingPathComponent:tmpSvgFile];
-    
+
     NSColor* jpegColor = [[exportOptions objectForKey:@"jpegColor"] dynamicCastToClass:[NSColor class]];
     CGFloat jpegQuality = [[[exportOptions objectForKey:@"jpegQuality"] dynamicCastToClass:[NSNumber class]] floatValue];
     CGFloat scaleAsPercent = [[[exportOptions objectForKey:@"scaleAsPercent"] dynamicCastToClass:[NSNumber class]] floatValue];
@@ -2155,11 +2198,13 @@ static LaTeXProcessor* sharedInstance = nil;
     BOOL textExportEnvironment = [[[exportOptions objectForKey:@"textExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
     BOOL textExportBody = [[[exportOptions objectForKey:@"textExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
     
+    DebugLog(1, @"pdfData = %p(%@)", pdfData, @([pdfData length]));
     if (pdfData)
     {
       NSDictionary* equationMetaData = [LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0];
       NSColor* backgroundColor = [equationMetaData objectForKey:@"backgroundColor"];
       
+      DebugLog(1, @"equationMetaData = %@", equationMetaData);
       PreferencesController* preferencesController = [PreferencesController sharedController];
       BOOL annotationsGraphicCommandsInvisibleEnabled =
         (format == EXPORT_FORMAT_PDF) ? [preferencesController exportPDFMetaDataInvisibleGraphicsEnabled] :
@@ -2169,23 +2214,29 @@ static LaTeXProcessor* sharedInstance = nil;
         (annotationsGraphicCommandsInvisibleEnabled && ![LatexitEquation hasInvisibleGraphicCommandsInPDFData:pdfData]) ||
         (backgroundColor && exportIncludeBackgroundColor) ||
         (scaleAsPercent != 100);
+      DebugLog(1, @"shouldRecreatePDF = %@", @(shouldRecreatePDF));
       if (shouldRecreatePDF)
       {
         CGDataProviderRef pdfOriginalDataProvider = !pdfData ? 0 : CGDataProviderCreateWithCFData((CFDataRef)pdfData);
+        DebugLog(1, @"pdfOriginalDataProvider = %p", pdfOriginalDataProvider);
         CGPDFDocumentRef pdfOriginalDocument = !pdfOriginalDataProvider ? 0 : CGPDFDocumentCreateWithProvider(pdfOriginalDataProvider);
+        DebugLog(1, @"pdfOriginalDocument = %p", pdfOriginalDocument);
         CGPDFPageRef pdfOriginalPage = !pdfOriginalDocument ? 0 : CGPDFDocumentGetPage(pdfOriginalDocument, 1);
+        DebugLog(1, @"pdfOriginalPage = %p", pdfOriginalPage);
         //CGRect pdfOriginalMediaBox = !pdfOriginalPage ? CGRectZero : CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFMediaBox);
         CGRect pdfOriginalCropBox = !pdfOriginalPage ? CGRectZero : CGPDFPageGetBoxRect(pdfOriginalPage, kCGPDFCropBox);
         CGRect pdfOriginalBox = pdfOriginalCropBox;
-        
+
         NSMutableData* pdfScaledMutableData = [NSMutableData data];
         CGDataConsumerRef pdfScaledDataConsumer = !pdfScaledMutableData ? 0 :
           CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfScaledMutableData);
+        DebugLog(1, @"pdfScaledDataConsumer = %p", pdfScaledDataConsumer);
         CGRect pdfScaledMediaBox = (scaleAsPercent == 100) ? pdfOriginalBox :
           CGRectMake(0, 0,
             ceil((scaleAsPercent/100)*pdfOriginalBox.size.width),
             ceil((scaleAsPercent/100)*pdfOriginalBox.size.height));
         CGContextRef pdfContext = !pdfScaledDataConsumer ? 0 : CGPDFContextCreate(pdfScaledDataConsumer, &pdfScaledMediaBox, 0);
+        DebugLog(1, @"pdfContext = %p", pdfContext);
         CGPDFContextBeginPage(pdfContext, 0);
         if (backgroundColor && exportIncludeBackgroundColor)
         {
@@ -2204,15 +2255,15 @@ static LaTeXProcessor* sharedInstance = nil;
         CGContextRelease(pdfContext);
         CGDataConsumerRelease(pdfScaledDataConsumer);
        
-       CGPDFDocumentRelease(pdfOriginalDocument);
-       CGDataProviderRelease(pdfOriginalDataProvider);
+        CGPDFDocumentRelease(pdfOriginalDocument);
+        CGDataProviderRelease(pdfOriginalDataProvider);
        
-       #ifdef ARC_ENABLED
-       NSData* resizedPdfData = [pdfScaledMutableData copy];
-       #else
-       NSData* resizedPdfData = [[pdfScaledMutableData copy] autorelease];
-       #endif
-        
+        #ifdef ARC_ENABLED
+        NSData* resizedPdfData = [pdfScaledMutableData copy];
+        #else
+        NSData* resizedPdfData = [[pdfScaledMutableData copy] autorelease];
+        #endif
+        DebugLog(1, @"resizedPdfData = %p(%@)", resizedPdfData, @([resizedPdfData length]));
         /*NSPDFImageRep* pdfImageRep = [[NSPDFImageRep alloc] initWithData:pdfData];
         NSSize originalSize = [pdfImageRep size];
         NSImage* pdfImage = [[NSImage alloc] initWithSize:originalSize];
@@ -2238,20 +2289,24 @@ static LaTeXProcessor* sharedInstance = nil;
             backgroundColor:[equationMetaData objectForKey:@"backgroundColor"]
             title:[equationMetaData objectForKey:@"title"]
             annotateWithTransparentData:annotationsGraphicCommandsInvisibleEnabled];
-            
+        DebugLog(1, @"pdfData annotated = %p(%@)", pdfData, @([pdfData length]));
         #warning 64bits problem
         BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
+        DebugLog(1, @"shouldDenyDueTo64Bitsproblem = %@", @(shouldDenyDueTo64Bitsproblem));
         if (pdfData && !shouldDenyDueTo64Bitsproblem)
         {
           //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
           PDFDocument* pdfDocument = nil;
           @try{
             pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
+            DebugLog(1, @"pdfDocument = %@", pdfDocument);
             NSDictionary* attributes =
               [NSDictionary dictionaryWithObjectsAndKeys:
                   [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
+            DebugLog(1, @"attributes = %@", attributes);
             [pdfDocument setDocumentAttributes:attributes];
             pdfData = [pdfDocument dataRepresentation];
+            DebugLog(1, @"pdfData = %p(%@)", pdfData, @([pdfData length]));
           }
           @catch(NSException* e) {
             DebugLog(0, @"exception : %@", e);
@@ -2278,12 +2333,18 @@ static LaTeXProcessor* sharedInstance = nil;
       NSString* psToPdfPath      = [compositionConfiguration compositionConfigurationProgramPathPsToPdf];
       NSArray*  psToPdfArguments = [compositionConfiguration compositionConfigurationProgramArgumentsPsToPdf];
       NSString* pdf2svgPath      = [preferencesController exportSvgPdfToSvgPath];
-    
+
+      DebugLog(1, @"gsPath = %@", gsPath);
+      DebugLog(1, @"gsArguments = %@", gsArguments);
+      DebugLog(1, @"psToPdfPath = %@", psToPdfPath);
+      DebugLog(1, @"psToPdfArguments = %@", psToPdfArguments);
+      DebugLog(1, @"format = %@", @(format));
       if (format == EXPORT_FORMAT_PDF)
       {
         data = pdfData;
         BOOL reannotate = NO;
         NSDictionary* metaData = !reannotate ? nil : [LatexitEquation metaDataFromPDFData:data useDefaults:NO outPdfData:nil];
+        DebugLog(1, @"metaData = %@", metaData);
         if (metaData)
         {
           NSAttributedString* preamble = [[metaData objectForKey:@"preamble"] dynamicCastToClass:[NSAttributedString class]];
@@ -2293,7 +2354,11 @@ static LaTeXProcessor* sharedInstance = nil;
           NSNumber* mode = [[metaData objectForKey:@"mode"] dynamicCastToClass:[NSNumber class]];
           NSNumber* magnification = [[metaData objectForKey:@"magnification"] dynamicCastToClass:[NSNumber class]]; 
           NSString* title = [[metaData objectForKey:@"title"] dynamicCastToClass:[NSString class]];
+          DebugLog(1, @"title = %@", title);
+          DebugLog(1, @">stripPdfData");
           data = [self stripPdfData:data];
+          DebugLog(1, @"data = %p(%@)", data, @([data length]));
+          DebugLog(1, @"<stripPdfData");
           data = [[LaTeXProcessor sharedLaTeXProcessor] annotatePdfDataInLEEFormat:data
                                                                       exportFormat:format
                                                                           preamble:[preamble string]
@@ -2505,7 +2570,7 @@ static LaTeXProcessor* sharedInstance = nil;
       else if (format == EXPORT_FORMAT_TIFF)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
-        data = [image TIFFRepresentation];
+        data = [image TIFFRepresentationDpiAwareUsingCompression:NSTIFFCompressionLZW factor:0];
         #ifdef ARC_ENABLED
         #else
         [image release];
@@ -2519,7 +2584,7 @@ static LaTeXProcessor* sharedInstance = nil;
       else if (format == EXPORT_FORMAT_PNG)
       {
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
-        data = [image TIFFRepresentationUsingCompression:NSTIFFCompressionLZW factor:15.0];
+        data = [image TIFFRepresentationDpiAwareUsingCompression:NSTIFFCompressionLZW factor:15.0];
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
         data = [imageRep representationUsingType:NSPNGFileType properties:nil];
         #ifdef ARC_ENABLED
@@ -2553,7 +2618,7 @@ static LaTeXProcessor* sharedInstance = nil;
         CGImageRef cgImage = 0;
         if (cgContext)
         {
-          NSColor* rgbColor = [jpegColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+          NSColor* rgbColor = [jpegColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
           CGContextSetRGBFillColor(cgContext,
             [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], [rgbColor alphaComponent]);
           CGContextFillRect(cgContext, CGRectMake(0, 0, width, height));
@@ -2659,7 +2724,7 @@ static LaTeXProcessor* sharedInstance = nil;
           @"";
         NSString* sourceString = [sourceText string];
         NSString* escapedSourceString = [sourceString stringByReplacingOccurrencesOfRegex:@"&(?!amp;)" withString:@"&amp;"];
-        NSColor* rgbaColor = [[metaData objectForKey:@"color"] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+        NSColor* rgbaColor = [[metaData objectForKey:@"color"] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
         CGFloat rgba_f[4] = {0};
         [rgbaColor getRed:&rgba_f[0] green:&rgba_f[1] blue:&rgba_f[2] alpha:&rgba_f[3]];
         int rgba_i[4] = {0};

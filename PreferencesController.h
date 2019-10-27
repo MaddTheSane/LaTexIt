@@ -29,6 +29,8 @@ extern NSString* DragExportTextExportEnvironmentKey;
 extern NSString* DragExportTextExportBodyKey;
 extern NSString* DragExportScaleAsPercentKey;
 extern NSString* DragExportIncludeBackgroundColorKey;
+extern NSString* DragExportAddTempFileEnabledKey;
+
 extern NSString* DefaultImageViewBackgroundKey;
 extern NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey;
 extern NSString* DefaultDoNotClipPreviewKey;
@@ -179,8 +181,10 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(void)            setExportFormatPersistent:(export_format_t)value;
 -(export_format_t) exportFormatCurrentSession;
 -(void)            setExportFormatCurrentSession:(export_format_t)value;
--(BOOL) exportAddTempFileCurrentSession;
--(void) setExportAddTempFileCurrentSession:(BOOL)value;
+-(BOOL)            exportAddTempFilePersistent;
+-(void)            setExportAddTempFilePersistent:(BOOL)value;
+-(BOOL)            exportAddTempFileCurrentSession;
+-(void)            setExportAddTempFileCurrentSession:(BOOL)value;
 
 
 -(NSData*)         exportJpegBackgroundColorData;

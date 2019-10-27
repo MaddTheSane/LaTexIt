@@ -243,7 +243,7 @@ typedef NSInteger NSDraggingContext;
 {
   //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
   [self->backgroundColor autorelease];
-  NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
+  NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]] : [NSColor whiteColor];
   self->backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
 
   [self setNeedsDisplay:YES];
@@ -471,7 +471,7 @@ typedef NSInteger NSDraggingContext;
   NSImage* result = [self image];
   if (!isMacOS10_5OrAbove())
   {
-    NSImage* tiffImage = [[[NSImage alloc] initWithData:[result TIFFRepresentation]] autorelease];
+    NSImage* tiffImage = [[[NSImage alloc] initWithData:[result TIFFRepresentationDpiAware]] autorelease];
     result = tiffImage;
   }//end if (!isMacOS10_5OrAbove())
   if ([self isDarkMode])
@@ -1280,7 +1280,7 @@ typedef NSInteger NSDraggingContext;
     if (self->backgroundColor)
     {
       CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
-      [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+      [[self->backgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]
        getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
       CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
       CGContextBeginPath(cgContext);
@@ -1335,7 +1335,7 @@ typedef NSInteger NSDraggingContext;
     NSRect inRoundedRect2 = NSInsetRect(borderRect, 2, 2);
     NSRect inRoundedRect3 = NSInsetRect(borderRect, 3, 3);
     CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
-    [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+    [[self->backgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]
      getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
 
     CGContextBeginPath(cgContext);

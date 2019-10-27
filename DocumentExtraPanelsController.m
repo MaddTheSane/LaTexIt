@@ -165,6 +165,18 @@
 }
 //end setLog:
 
+-(NSWindow*) baselineWindow
+{
+  return self->baselineWindow;
+}
+//end logWindow
+
+-(NSTextField*) baselineTextField
+{
+  return self->baselineTextField;
+}
+//end baselineTextField
+
 -(export_format_t) saveAccessoryViewExportFormat
 {
   return self->saveAccessoryViewExportFormat;

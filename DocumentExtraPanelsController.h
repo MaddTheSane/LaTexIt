@@ -26,6 +26,9 @@
   IBOutlet NSWindow*   logWindow;
   IBOutlet NSTextView* logTextView;
 
+  IBOutlet NSWindow*    baselineWindow;
+  IBOutlet NSTextField* baselineTextField;
+
   ExportFormatOptionsPanes* saveAccessoryViewExportFormatOptionsPanes;
   
   export_format_t saveAccessoryViewExportFormat;
@@ -49,6 +52,9 @@
 -(NSTextView*) logTextView;
 -(NSString*)   log;
 -(void)        setLog:(NSString*)value;
+
+-(NSWindow*)    baselineWindow;
+-(NSTextField*) baselineTextField;
 
 -(export_format_t) saveAccessoryViewExportFormat;
 -(void)            setSaveAccessoryViewExportFormat:(export_format_t)value;

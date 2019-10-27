@@ -9,24 +9,26 @@
 	<key>CFBundleIconFile</key>
 	<string>latexit.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.club.ktd.LaTeXiT</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)fr.club.ktd.LaTeXiT</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.13.3</string>
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.13.2</string>
+	<string>2.13.3</string>
+	<key>LSUIElement</key>
+	<true/>
 	<key>LinkBackApplicationURL</key>
-	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
+	<string>https://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
 	<string>LaTeXiT</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>LSUIElement</key>
-	<true/>
 </dict>
 </plist>

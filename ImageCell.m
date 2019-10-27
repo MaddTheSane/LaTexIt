@@ -73,7 +73,7 @@
   if (self->backgroundColor)
   {
     CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
-    [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+    [[self->backgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]
      getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
     CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
     CGContextBeginPath(cgContext);
@@ -89,7 +89,7 @@
   CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
   if (self->backgroundColor)
   {
-    [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+    [[self->backgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]
      getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
   }//end if (self->backgroundColor)
   CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);

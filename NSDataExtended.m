@@ -10,14 +10,21 @@
 
 #import "Utils.h"
 
+#define OPENSSL_AVAILABLE 1
+
 #ifdef ARC_ENABLED
+#if OPENSSL_AVAILABLE
 #import <openssl/bio.h>
 #import <openssl/ssl.h>
 #import <openssl/sha.h>
+#endif
 #elif defined(__clang__)
+#if OPENSSL_AVAILABLE
 #import <openssl/bio.h>
 #import <openssl/ssl.h>
 #import <openssl/sha.h>
+#endif
+#include <CommonCrypto/CommonDigest.h>
 #else
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/bio.h>//specific to avoid compatibility problem prior MacOS 10.5
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/ssl.h>//specific to avoid compatibility problem prior MacOS 10.5
@@ -34,6 +41,7 @@
 
 +(id) dataWithBase64:(NSString*)base64 encodedWithNewlines:(BOOL)encodedWithNewlines
 {
+  #if OPENSSL_AVAILABLE
   NSMutableData* result = [NSMutableData data];
   const char* utf8String = [base64 UTF8String];
   NSUInteger utf8Length = [base64 lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
@@ -50,7 +58,12 @@
     [result appendBytes:inbuf length:inlen];
     
   //Clean up and go home
-  BIO_free_all(b64);  
+  BIO_free_all(b64);
+  #else
+  NSData* result = nil;
+  if ([[NSData class] instancesRespondToSelector:@selector(initWithBase64EncodedString:options:)])
+   result = [[[NSData alloc] initWithBase64EncodedString:base64 options:(encodedWithNewlines ? (NSDataBase64Encoding64CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed) : 0)] autorelease];
+  #endif
   return result;
 }
 //end dataWithBase64:encodedWithNewlines:
@@ -65,6 +78,7 @@
 -(NSString*) encodeBase64WithNewlines:(BOOL)encodeWithNewlines
 {
   NSString* result = nil;
+  #if OPENSSL_AVAILABLE
   BIO* mem = BIO_new(BIO_s_mem());
   BIO* b64 = BIO_new(BIO_f_base64());
   if (!encodeWithNewlines)
@@ -82,6 +96,10 @@
   result = [[[NSString alloc] initWithBytes:base64Pointer length:base64Length encoding:NSUTF8StringEncoding] autorelease];
   #endif
   BIO_free_all(mem);
+  #else
+  if ([self respondsToSelector:@selector(base64EncodedStringWithOptions:)])
+   result = [self base64EncodedStringWithOptions:(encodeWithNewlines ? (NSDataBase64Encoding64CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed) : 0)];
+  #endif
   return result;
 }
 //end encodeBase64WithNewlines:
@@ -89,6 +107,7 @@
 -(NSString*) sha1Base64
 {
   NSString* result = nil;
+  #if OPENSSL_AVAILABLE
   unsigned char sha[SHA_DIGEST_LENGTH] = {0};
   SHA1([self bytes], [self length], sha);
   NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:sha length:SHA_DIGEST_LENGTH freeWhenDone:NO];
@@ -97,6 +116,18 @@
   #else
   [wrapper release];
   #endif
+  #else
+  unsigned char digest[CC_SHA1_DIGEST_LENGTH] = {0};
+  if (CC_SHA1([self bytes], (int)[self length], digest))
+  {
+    NSData* wrapper = [[NSData alloc] initWithBytesNoCopy:digest length:CC_SHA1_DIGEST_LENGTH freeWhenDone:NO];
+    result = [wrapper encodeBase64WithNewlines:NO];
+    #ifdef ARC_ENABLED
+    #else
+    [wrapper release];
+    #endif
+  }//end if (CC_SHA1([self bytes], [self length], digest))
+  #endif
   return result;
 }
 //end sha1Base64
@@ -104,7 +135,7 @@
 -(NSRange) bridge_rangeOfData:(NSData*)dataToFind options:(NSDataSearchOptions)mask range:(NSRange)searchRange
 {
   NSRange result = NSMakeRange(NSNotFound, 0);
-  if (isMacOS10_6OrAbove())
+  if ([self respondsToSelector:@selector(rangeOfData:options:range:)])
     result = [self rangeOfData:dataToFind options:mask range:searchRange];
   else if (searchRange.length && dataToFind)
   {

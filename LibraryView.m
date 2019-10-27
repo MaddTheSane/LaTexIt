@@ -945,7 +945,7 @@
       LatexitEquation* latexitEquation = [(LibraryEquation*)representedObject equation];
       cellImage = (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) ? nil : [latexitEquation pdfCachedImage];
       cellTextBackgroundColor = [latexitEquation backgroundColor];
-      NSColor* greyLevelColor  = [cellTextBackgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
+      NSColor* greyLevelColor  = [cellTextBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
       cellDrawsBackground = (cellTextBackgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f);
       if ((currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) && ![cell isHighlighted])
         cellTextColor = [latexitEquation color];

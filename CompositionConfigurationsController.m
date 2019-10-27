@@ -11,7 +11,7 @@
 #import "CompositionConfigurationsAdditionalScriptsController.h"
 #import "CompositionConfigurationsProgramArgumentsController.h"
 #import "DeepCopying.h"
-#import "DictionarytoArrayTransformer.h"
+#import "DictionaryToArrayTransformer.h"
 #import "MutableTransformer.h"
 #import "NSArrayControllerExtended.h"
 #import "NSDictionaryExtended.h"
