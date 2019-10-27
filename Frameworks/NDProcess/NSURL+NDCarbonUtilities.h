@@ -26,7 +26,7 @@
 /*!
 	@header NSURL+NDCarbonUtilities
 	@abstract Provides method for interacting with Carbon APIs.
-	@discussion The methods in <tt>NSURL(NDCarbonUtilities)</tt> are simply wrappers for functions that can bew found within the Carbon API.
+	@discussion The methods in @c NSURL(NDCarbonUtilities) are simply wrappers for functions that can be found within the Carbon API.
  */
 
 #import <Foundation/Foundation.h>
@@ -42,68 +42,60 @@
 
 /*!
 	@method URLWithFSRef:
-	@abstract Alloc and intialize a <tt>NSURL</tt>.
+	@abstract Alloc and intialize an <tt>NSURL</tt>.
 	@discussion Returns a file url for the file refered to by a <tt>FSRef</tt>.
-	@param fsRef A pointer to a <tt>FSRef</tt>.
-	@result A <tt>NSURL</tt> containing a file url.
+	@param fsRef A pointer to an <tt>FSRef</tt>.
+	@result An @c NSURL containing a file url.
  */
-+ (NSURL *)URLWithFSRef:(const FSRef *)fsRef;
++ (NSURL *)URLWithFSRef:(const FSRef *)fsRef DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method URLWithFileSystemPathHFSStyle:
-	@abstract Alloc and intialize a <tt>NSURL</tt>.
+	@abstract Alloc and intialize an <tt>NSURL</tt>.
 	@discussion Returns a file url for the file refered to by a HFS style path.
-	@param hfsString A <tt>NSString</tt> containing a HFS style path.
-	@result A <tt>NSURL</tt> containing a file url.
+	@param hfsString An <tt>NSString</tt> containing a HFS style path.
+	@result An <tt>NSURL</tt> containing a file url.
  */
-+ (NSURL *)URLWithFileSystemPathHFSStyle:(NSString *)hfsString;
++ (NSURL *)URLWithFileSystemPathHFSStyle:(NSString *)hfsString DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 	/*!
 	@method getFSRef:
-	@abstract Get a <tt>FSRef</tt>.
-	@discussion Obtain a <tt>FSRef</tt> for a file url.
-	@param fsRef A pointer to a <tt>FSRef</tt> struct, to be filled by the method.
-	@result Returns <tt>YES</tt> if successful, if the method returns <tt>NO</tt> then <tt>fsRef</tt> contains garbage.
+	@abstract Get an <tt>FSRef</tt>.
+	@discussion Obtain an @c FSRef for a file url.
+	@param fsRef A pointer to an @c FSRef struct, to be filled by the method.
+	@result Returns @c YES if successful, if the method returns @c NO then @c fsRef contains garbage.
  */
-- (BOOL)getFSRef:(FSRef *)fsRef;
+- (BOOL)getFSRef:(FSRef *)fsRef DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method getFSSpec:
 	@abstract Get a <tt>FSSpec</tt>.
 	@discussion Obtain a <tt>FSSpec</tt> for a file url.
 	@deprecated in version 10.5
-	@param fsSpec A pointer to a <tt>FSSpec</tt> struct, to be filled by the method.
-	@result Returns <tt>YES</tt> if successful, if the method returns <tt>NO</tt> then <tt>fsSpec</tt> contains garbage.
+	@param fsSpec A pointer to an @c FSSpec struct, to be filled by the method.
+	@result Returns @c YES if successful, if the method returns @c NO then @c fsSpec contains garbage.
  */
-- (BOOL)getFSSpec:(FSSpec *)fsSpec AVAILABLE_MAC_OS_X_VERSION_10_2_AND_LATER_BUT_DEPRECATED;
-
-/*!
-	@method URLByDeletingLastPathComponent
-	@abstract Delete last component of a url.
-	@discussion Returns a new <tt>NSURL</tt> equivelent to the receiver with the last component removed.
-	@result A new <tt>NSURL</tt>
- */
-- (NSURL *)URLByDeletingLastPathComponent;
+- (BOOL)getFSSpec:(FSSpec *)fsSpec DEPRECATED_IN_MAC_OS_X_VERSION_10_5_AND_LATER;
 
 /*!
 	@method fileSystemPathHFSStyle
-	@abstract Returns a HFS style path.
-	@discussion Returns a <tt>NSString</tt> containg a HFS style path (e.g. <tt>Macitosh HD:Users:</tt>) useful for display purposes.
-	@result A new <tt>NSString</tt> containing a HFS style path for the same file or directory as the receiver.
+	@abstract Returns an HFS style path.
+	@discussion Returns an @c NSString containg a HFS style path (e.g. <tt>Macitosh HD:Users:</tt>) useful for display purposes.
+	@result A new @c NSString containing a HFS style path for the same file or directory as the receiver.
  */
-- (NSString *)fileSystemPathHFSStyle;
+- (NSString *)fileSystemPathHFSStyle DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method resolveAliasFile
 	@abstract Resolve an alias file.
-	@discussion Returns an file url <tt>NSURL</tt> refered to by the receveive if the receveive refers to an alias file. If it does not refer to an alias file the a url identical to the receveive is returned.
+	@discussion Returns an file url <tt>NSURL</tt> refered to by the receveiver if the receveiver refers to an alias file. If it does not refer to an alias file the url identical to the receveiver is returned.
 	@result An file url <tt>NSURL</tt>.
  */
-- (NSURL *)resolveAliasFile;
+- (NSURL *)resolveAliasFile DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
 /*!
 	@method finderInfoFlags:type:creator:
-	@abstract Get finder info flags creator and type.
-	@discussion The bits of the finder info flag are
+	@abstract Get Finder info flags, creator, and type.
+	@discussion The bits of the Finder info flag are
 	<blockquote>
 		<table border = "1"  width = "90%">
 			<thead><tr><th>Name</th><th>Description</th></tr></thead>
@@ -123,18 +115,18 @@
 			<tr><td align = "center"><tt>kIsAlias</tt></td><td>Files only.</td><tr>
 		</table>
 	</blockquote>
-	@param flags Contains finder flags on return.
-	@param type Contains finder type on return.
+	@param flags Contains Finder flags on return.
+	@param type Contains file type on return.
 	@param creator Contains creator on return.
-	@result Return <tt>YES</tt> if successful, otherwise <tt>NO</tt> and the returned values are invalid.
+	@result Return @c YES if successful, otherwise @c NO and the returned values are invalid.
  */
 - (BOOL)finderInfoFlags:(UInt16*)flags type:(OSType*)type creator:(OSType*)creator;
 
 /*!
 	@method finderLocation
-	@abstract Return a finder items location.
-	@discussion Returns a finder items location within its parent window.
-	@result A <tt>NSPoint</tt>
+	@abstract Return a Finder item's location.
+	@discussion Returns a Finder item's location within its parent window.
+	@result An <tt>NSPoint</tt>
  */
 - (NSPoint)finderLocation;
 
@@ -165,16 +157,16 @@
 	@param aMask Mask for Finder flags
 	@param type The Finder file type
 	@param creator The application creator code
-	@result Returns <tt>YES</tt> if successful.
+	@result Returns \c YES if successful.
  */
 - (BOOL)setFinderInfoFlags:(UInt16)flags mask:(UInt16)aMask type:(OSType)type creator:(OSType)creator;
 
 /*!
 	@method setFinderLocation:
-	@abstract Sets the location a finder item.
-	@discussion Set the location of a finder item within in container.
+	@abstract Sets the location a Finder item.
+	@discussion Set the location of a Finder item within in container.
 	@param location The location
-	@result Returns <tt>YES</tt> if successful.
+	@result Returns \c YES if successful.
  */
 - (BOOL)setFinderLocation:(NSPoint)location;
 
@@ -188,11 +180,11 @@
  */
 @interface NSURL (NDCarbonUtilitiesInfoFlags)
 /*!
-	@method hasCustomIcon
+	@property hasCustomIcon
 	@abstract Test if a file has a custom icon.
 	@discussion Test to see if the file refered to by the receiver has a custom icon. The is equivelent to testing for the <tt>kHasCustomIcon</tt> flag 
 	@result Returns <tt>YES</tt> if the file has a custom icon.
  */
-- (BOOL)hasCustomIcon;
+@property (readonly) BOOL hasCustomIcon;
 
 @end
