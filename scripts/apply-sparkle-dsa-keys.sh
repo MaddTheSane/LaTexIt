@@ -1,6 +1,6 @@
 set -o errexit
 
-[ "$BUILD_STYLE" = "Deployment" ] || [ "$CONFIGURATION" = "Deployment" ] || { echo Distribution target requires "'Deployment'" build style; false; }
+[ "$BUILD_STYLE" = "Release" ] || [ "$CONFIGURATION" = "Release" ] || { echo Distribution target requires "'Deployment'" build style; false; }
 
 if [[ -z "${PROJECT_NAME}" ]]; then
   PROJECT_NAME="LaTeXiT"
