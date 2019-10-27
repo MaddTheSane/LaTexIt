@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -276,7 +276,7 @@
 		934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AB92088CEAE20062A340 /* NSWorkspaceExtended.m */; };
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
-		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
+		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
@@ -305,10 +305,10 @@
 		93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93636AAC11957D5B00C5DE49 /* DragFilterView.m */; };
 		9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
-		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
-		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
-		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
+		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
 		9369017913ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
 		9369017A13ABEF32006B3BDD /* LatexitEquationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9369017813ABEF32006B3BDD /* LatexitEquationData.m */; };
@@ -407,7 +407,7 @@
 		93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
 		93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
-		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; };
+		93BD654F0E8D092400DB341B /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
 		93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */; };
 		93C0EEA30C0A55C500211C5A /* latexit-latex-palette.icns in Resources */ = {isa = PBXBuildFile; fileRef = 93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */; };
@@ -607,7 +607,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
@@ -805,10 +805,10 @@
 		934191931280CC38009D3E97 /* TooltipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TooltipWindow.h; sourceTree = "<group>"; };
 		934191941280CC38009D3E97 /* TooltipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TooltipWindow.m; sourceTree = "<group>"; };
 		9341922B1281C703009D3E97 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = Automator/CreateEquations/en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		9341922F1281C711009D3E97 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = Automator/CreateEquations/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		934192301281C714009D3E97 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Automator/CreateEquations/de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		934192311281C716009D3E97 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Automator/CreateEquations/es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		934192321281C718009D3E97 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Automator/CreateEquations/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9341922F1281C711009D3E97 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = Automator/CreateEquations/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		934192301281C714009D3E97 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = Automator/CreateEquations/de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		934192311281C716009D3E97 /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = Automator/CreateEquations/es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		934192321281C718009D3E97 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = Automator/CreateEquations/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9344B2980E8B60BB00FE90A5 /* LaTeXiTSharedTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiTSharedTypes.h; sourceTree = "<group>"; };
 		9344B4370E8B7DAC00FE90A5 /* Automator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Automator.framework; path = /System/Library/Frameworks/Automator.framework; sourceTree = "<absolute>"; };
 		9344B6E80E8BBDCC00FE90A5 /* LaTeXProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXProcessor.h; sourceTree = "<group>"; };
@@ -846,8 +846,8 @@
 		934AAB280F343D830010E384 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; name = pdfcrop.pl; path = Resources/scripts/pdfcrop.pl; sourceTree = "<group>"; };
 		934C03390AD03600007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = de.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		934C033F0AD03632007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = de.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
-		934C03400AD0363B007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = German; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		934C03410AD03648007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = German; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		934C03400AD0363B007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		934C03410AD03648007FEC06 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		934C034D0AD0368D007FEC06 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
 		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "Resources/documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
 		934D1FD50E5F30FB00BA812B /* AdditionalFilesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesWindowController.h; sourceTree = "<group>"; };
@@ -903,7 +903,7 @@
 		93773C3207FFF541004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = fr.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93773C4607FFF6FB004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
-		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93773C4907FFF713004AAB30 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		937A39850FE2F1AC000BEE6E /* MySplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySplitView.h; sourceTree = "<group>"; };
 		937A39860FE2F1AC000BEE6E /* MySplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySplitView.m; sourceTree = "<group>"; };
 		937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.7.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -1017,21 +1017,21 @@
 		93A9FF751020436D0061DB60 /* NSOutlineViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOutlineViewExtended.m; sourceTree = "<group>"; };
 		93ABA88B2053D44100E60612 /* TeXItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeXItemWrapper.h; sourceTree = "<group>"; };
 		93ABA88C2053D44100E60612 /* TeXItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeXItemWrapper.m; sourceTree = "<group>"; };
-		93ADD64A144AE92500BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		93ADD64C144AE93000BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93ADD64A144AE92500BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93ADD64C144AE93000BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Automator/CreateEquations/it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93ADD64D144AE94A00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = it.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93ADD64E144AE95D00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = it.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
-		93ADD64F144AE96700BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Italian; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		93ADD650144AE97100BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		93ADD651144AE97A00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = it.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		93ADD64F144AE96700BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93ADD650144AE97100BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93ADD651144AE97A00BA13D9 /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = it.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93ADD652144AE98300BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = it.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93ADD653144AE98D00BA13D9 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = it.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93AFF5B71381941F00054033 /* NSButtonExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSButtonExtended.h; sourceTree = "<group>"; };
 		93AFF5B81381941F00054033 /* NSButtonExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSButtonExtended.m; sourceTree = "<group>"; };
 		93B212C80BBC1BF400EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = es.lproj/Credits.rtf; sourceTree = "<group>"; };
-		93B212FB0BBC1C8100EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Spanish; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93B212FB0BBC1C8100EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93B212FE0BBC1C8A00EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = es.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		93B212FF0BBC1C9800EFCA2F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = es.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93B2130C0BBC1CCC00EFCA2F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = es.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93B436631939189400F6BDAC /* CHExportPrefetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHExportPrefetcher.h; sourceTree = "<group>"; };
 		93B436641939189400F6BDAC /* CHExportPrefetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHExportPrefetcher.m; sourceTree = "<group>"; };
@@ -1087,10 +1087,10 @@
 		93E6EF872058702700725C6E /* view-icons-adjust.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "view-icons-adjust.png"; path = "Resources/interface/view-icons-adjust.png"; sourceTree = "<group>"; };
 		93E81A9F087978AD0081B897 /* NSFontExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFontExtended.h; sourceTree = "<group>"; };
 		93E81AA0087978AD0081B897 /* NSFontExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFontExtended.m; sourceTree = "<group>"; };
-		93E9CF760E9F305B00B08FB0 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Automator/CreateEquations/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		93E9CF780E9F306000B08FB0 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = Automator/CreateEquations/fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		93E9CF790E9F306400B08FB0 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Automator/CreateEquations/de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		93E9CF7A0E9F306800B08FB0 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Automator/CreateEquations/es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF760E9F305B00B08FB0 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = Automator/CreateEquations/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF780E9F306000B08FB0 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = Automator/CreateEquations/fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF790E9F306400B08FB0 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = Automator/CreateEquations/de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93E9CF7A0E9F306800B08FB0 /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = Automator/CreateEquations/es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93E9CF7C0E9F307F00B08FB0 /* main.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = main.xib; path = Automator/CreateEquations/main.xib; sourceTree = "<group>"; };
 		93E9CFA20E9F317100B08FB0 /* CreateEquations_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateEquations_Prefix.pch; path = Automator/CreateEquations/CreateEquations_Prefix.pch; sourceTree = "<group>"; };
 		93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Automator_CreateEquations.m; path = Automator/CreateEquations/Automator_CreateEquations.m; sourceTree = "<group>"; };
@@ -1123,13 +1123,13 @@
 		93F78449101770AE005BC2B6 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = es.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F7844C101770B6005BC2B6 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = de.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F874F9108863D900995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Japanese; path = ja.lproj/Credits.rtf; sourceTree = "<group>"; };
-		93F874FA1088645700995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Japanese; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93F874FA1088645700995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F874FB1088647D00995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Japanese; path = ja.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		93F874FC1088648500995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		93F874FD108864A100995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = ja.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
+		93F874FD108864A100995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = ja.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		93F87500108864C000995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Japanese; path = ja.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		93F87502108864D100995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Japanese; path = ja.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
-		93F875031088650400995B12 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Automator/CreateEquations/ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		93F875031088650400995B12 /* Japanese */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Japanese; path = Automator/CreateEquations/ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = poisson.pdf; path = Resources/easterEggs/poisson.pdf; sourceTree = "<group>"; };
 		93FA9A2E156927ED00268E55 /* Leggimi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Leggimi.rtfd; path = Resources/documentation/Leggimi.rtfd; sourceTree = "<group>"; };
 		93FA9A311569280000268E55 /* current-version-it.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-it.rtf"; path = "Resources/documentation/current-version-it.rtf"; sourceTree = "<group>"; };
@@ -2240,21 +2240,19 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 1110;
 			};
-			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_6-10_14" */;
-			compatibilityVersion = "Xcode 3.0";
+			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_6-10_8" */;
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
-				Japanese,
-				French,
-				German,
-				Spanish,
 				JA,
-				Italian,
 				en,
+				fr,
+				de,
+				es,
+				it,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
@@ -2942,7 +2940,7 @@
 		932388570854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2953,7 +2951,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2996,9 +2993,8 @@
 					"-lxml2",
 					"-lz",
 				);
-				PREBINDING = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -3007,7 +3003,7 @@
 		932388580854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3019,11 +3015,9 @@
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = NO;
-				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3064,9 +3058,8 @@
 					"-lxml2",
 					"-lz",
 				);
-				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT;
 				PRODUCT_NAME = LaTeXiT;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -3075,33 +3068,73 @@
 		9323885B0854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_FAST_OBJC_DISPATCH = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				IBC_FLATTEN_NIBS = NO;
 				IBC_STRIP_NIBS = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.4;
 				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.4;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Development;
 		};
 		9323885C0854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -3115,6 +3148,7 @@
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -3122,12 +3156,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.4;
 				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.4;
-				PREBINDING = NO;
-				SDKROOT = macosx10.9;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
+				SDKROOT = macosx;
 			};
 			name = Deployment;
 		};
@@ -3135,7 +3167,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3145,8 +3177,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3186,9 +3216,8 @@
 					"-lz",
 				);
 				OTHER_OSAFLAGS = "-x -t 0 -c 0";
-				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CreateEquations;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = action;
 			};
 			name = Development;
@@ -3197,7 +3226,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3209,9 +3238,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Automator/CreateEquations/CreateEquations_Prefix.pch;
@@ -3249,9 +3276,8 @@
 					"-lxml2",
 					"-lz",
 				);
-				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.chachatelier.pierre.LaTeXiT.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CreateEquations;
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = action;
 				ZERO_LINK = NO;
 			};
@@ -3260,6 +3286,7 @@
 		934AAA070F3388460010E384 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3270,9 +3297,9 @@
 		934AAA090F3388460010E384 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Packaging;
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
@@ -3282,6 +3309,7 @@
 		934AAA130F3388800010E384 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3292,9 +3320,9 @@
 		934AAA150F3388800010E384 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
@@ -3304,8 +3332,8 @@
 		938DBE1110BDC2E0002350CF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3314,7 +3342,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3345,9 +3372,8 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PREBINDING = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
 				PRODUCT_NAME = "LaTeXiT Helper";
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -3356,8 +3382,8 @@
 		938DBE1210BDC2E0002350CF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3367,11 +3393,9 @@
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = NO;
-				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3400,9 +3424,8 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
 				PRODUCT_NAME = "LaTeXiT Helper";
-				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -3411,6 +3434,7 @@
 		9396E5450EC628C40014C4BD /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3421,9 +3445,9 @@
 		9396E5470EC628C40014C4BD /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
@@ -3433,6 +3457,7 @@
 		9396E96B0EC843190014C4BD /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3443,9 +3468,9 @@
 		9396E96D0EC843190014C4BD /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Create dmg";
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
@@ -3455,6 +3480,7 @@
 		93BD651E0E8D08EC00DB341B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3465,9 +3491,9 @@
 		93BD651F0E8D08EC00DB341B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = All;
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
@@ -3486,7 +3512,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
 		};
-		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_6-10_14" */ = {
+		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_6-10_8" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9323885B0854FD210017F3BB /* Development */,
