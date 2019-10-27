@@ -228,8 +228,6 @@
 		93362C0D15BF500A00EA0679 /* NSWindowExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93362C0C15BF500A00EA0679 /* NSWindowExtended.m */; };
 		933A1249156C055A00DCC7D4 /* current-version-ja.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 933A1247156C055A00DCC7D4 /* current-version-ja.rtf */; };
 		933A73CD0F9B29AE00DFA78B /* NSViewExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */; };
-		933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 930255CF07F0C2A800011996 /* Localizable.strings */; };
-		933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 932922990F57CD1A00F47078 /* Latexit-2.4.0.xcdatamodel */; };
 		933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9357846A0E9D2A9C00736F31 /* CoreData.framework */; };
 		933C72FA13A951FC0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */; };
 		933C72FB13A9520C0097D2EF /* Latexit-2.6.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */; };
@@ -2398,8 +2396,6 @@
 				93C27F9A139A5A1600410595 /* main.xib in Resources */,
 				934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */,
 				932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */,
-				933B5F000F5F09370069E5B4 /* Localizable.strings in Resources */,
-				933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
 				9341922E1281C70C009D3E97 /* Localizable.strings in Resources */,
 				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */,
@@ -2474,7 +2470,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ". \"${PROJECT_DIR}/scripts/apply-sparkle-dsa-keys.sh\"";
+			shellScript = ". \"${PROJECT_DIR}/scripts/apply-sparkle-dsa-keys.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2879,8 +2875,7 @@
 				9396B9D7194ED684003CD205 /* Japanese */,
 			);
 			name = "additional-files-help.rtfd";
-			path = "/Volumes/Tardis/Users/chacha/Programmation/Cocoa/Projets/Applications/LaTeXiT-mainline";
-			sourceTree = "<absolute>";
+			sourceTree = SOURCE_ROOT;
 		};
 		9396BA30194EE345003CD205 /* synchronization-scripts-help.rtfd */ = {
 			isa = PBXVariantGroup;
@@ -2937,7 +2932,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		932388570854FD210017F3BB /* Development */ = {
+		932388570854FD210017F3BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2998,9 +2993,9 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		932388580854FD210017F3BB /* Deployment */ = {
+		932388580854FD210017F3BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3063,11 +3058,12 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9323885B0854FD210017F3BB /* Development */ = {
+		9323885B0854FD210017F3BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -3099,16 +3095,15 @@
 				IBC_FLATTEN_NIBS = NO;
 				IBC_STRIP_NIBS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.4;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
-			name = Development;
+			name = Debug;
 		};
-		9323885C0854FD210017F3BB /* Deployment */ = {
+		9323885C0854FD210017F3BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -3157,13 +3152,11 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				"MACOSX_DEPLOYMENT_TARGET[arch=ppc64]" = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.4;
 				SDKROOT = macosx;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9344B9910E8CF38800FE90A5 /* Development */ = {
+		9344B9910E8CF38800FE90A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
@@ -3220,9 +3213,9 @@
 				PRODUCT_NAME = CreateEquations;
 				WRAPPER_EXTENSION = action;
 			};
-			name = Development;
+			name = Debug;
 		};
-		9344B9920E8CF38800FE90A5 /* Deployment */ = {
+		9344B9920E8CF38800FE90A5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
@@ -3281,9 +3274,9 @@
 				WRAPPER_EXTENSION = action;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		934AAA070F3388460010E384 /* Development */ = {
+		934AAA070F3388460010E384 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3292,9 +3285,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = Packaging;
 			};
-			name = Development;
+			name = Debug;
 		};
-		934AAA090F3388460010E384 /* Deployment */ = {
+		934AAA090F3388460010E384 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3304,9 +3297,9 @@
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		934AAA130F3388800010E384 /* Development */ = {
+		934AAA130F3388800010E384 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3315,9 +3308,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = All;
 			};
-			name = Development;
+			name = Debug;
 		};
-		934AAA150F3388800010E384 /* Deployment */ = {
+		934AAA150F3388800010E384 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3327,9 +3320,9 @@
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		938DBE1110BDC2E0002350CF /* Development */ = {
+		938DBE1110BDC2E0002350CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
@@ -3377,9 +3370,9 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		938DBE1210BDC2E0002350CF /* Deployment */ = {
+		938DBE1210BDC2E0002350CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
@@ -3429,9 +3422,9 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9396E5450EC628C40014C4BD /* Development */ = {
+		9396E5450EC628C40014C4BD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3440,9 +3433,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Create dmg";
 			};
-			name = Development;
+			name = Debug;
 		};
-		9396E5470EC628C40014C4BD /* Deployment */ = {
+		9396E5470EC628C40014C4BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3452,9 +3445,9 @@
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		9396E96B0EC843190014C4BD /* Development */ = {
+		9396E96B0EC843190014C4BD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3463,9 +3456,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Create dmg";
 			};
-			name = Development;
+			name = Debug;
 		};
-		9396E96D0EC843190014C4BD /* Deployment */ = {
+		9396E96D0EC843190014C4BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3475,9 +3468,9 @@
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		93BD651E0E8D08EC00DB341B /* Development */ = {
+		93BD651E0E8D08EC00DB341B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3486,9 +3479,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = All;
 			};
-			name = Development;
+			name = Debug;
 		};
-		93BD651F0E8D08EC00DB341B /* Deployment */ = {
+		93BD651F0E8D08EC00DB341B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -3498,7 +3491,7 @@
 				VALID_ARCHS = "i386 x86_64 ppc ppc7400 ppc970";
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -3506,83 +3499,83 @@
 		932388560854FD210017F3BB /* Build configuration list for PBXNativeTarget "LaTeXiT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				932388570854FD210017F3BB /* Development */,
-				932388580854FD210017F3BB /* Deployment */,
+				932388570854FD210017F3BB /* Debug */,
+				932388580854FD210017F3BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_6-10_8" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9323885B0854FD210017F3BB /* Development */,
-				9323885C0854FD210017F3BB /* Deployment */,
+				9323885B0854FD210017F3BB /* Debug */,
+				9323885C0854FD210017F3BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9344B9930E8CF38800FE90A5 /* Build configuration list for PBXNativeTarget "Automator-CreateEquations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9344B9910E8CF38800FE90A5 /* Development */,
-				9344B9920E8CF38800FE90A5 /* Deployment */,
+				9344B9910E8CF38800FE90A5 /* Debug */,
+				9344B9920E8CF38800FE90A5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		934AAA1D0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "Packaging" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				934AAA070F3388460010E384 /* Development */,
-				934AAA090F3388460010E384 /* Deployment */,
+				934AAA070F3388460010E384 /* Debug */,
+				934AAA090F3388460010E384 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		934AAA1E0F3388B10010E384 /* Build configuration list for PBXAggregateTarget "All" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				934AAA130F3388800010E384 /* Development */,
-				934AAA150F3388800010E384 /* Deployment */,
+				934AAA130F3388800010E384 /* Debug */,
+				934AAA150F3388800010E384 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		938DBE1010BDC2E0002350CF /* Build configuration list for PBXNativeTarget "LaTeXiT Helper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				938DBE1110BDC2E0002350CF /* Development */,
-				938DBE1210BDC2E0002350CF /* Deployment */,
+				938DBE1110BDC2E0002350CF /* Debug */,
+				938DBE1210BDC2E0002350CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9396E54D0EC628D60014C4BD /* Build configuration list for PBXAggregateTarget "Package as DMG" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9396E5450EC628C40014C4BD /* Development */,
-				9396E5470EC628C40014C4BD /* Deployment */,
+				9396E5450EC628C40014C4BD /* Debug */,
+				9396E5470EC628C40014C4BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		9396E96A0EC843190014C4BD /* Build configuration list for PBXAggregateTarget "Apply Sparkle DSA keys" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9396E96B0EC843190014C4BD /* Development */,
-				9396E96D0EC843190014C4BD /* Deployment */,
+				9396E96B0EC843190014C4BD /* Debug */,
+				9396E96D0EC843190014C4BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 		93BD66340E8D095400DB341B /* Build configuration list for PBXAggregateTarget "All compilations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				93BD651E0E8D08EC00DB341B /* Development */,
-				93BD651F0E8D08EC00DB341B /* Deployment */,
+				93BD651E0E8D08EC00DB341B /* Debug */,
+				93BD651F0E8D08EC00DB341B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -10,8 +10,7 @@
 
 #import <LinkBack/LinkBack.h>
 
-@interface LaTeXiT_HelperAppDelegate : NSObject <LinkBackServerDelegate> {
-}
+@interface LaTeXiT_HelperAppDelegate : NSObject <LinkBackServerDelegate>
 
 //LinkBackServerDelegateProtocol
 -(void) linkBackDidClose:(LinkBack*)link;

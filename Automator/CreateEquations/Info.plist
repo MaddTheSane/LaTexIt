@@ -96,7 +96,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr_FR</string>
 	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
 	<string>CreateEquations 2.13.3, Copyright © 2005-2019, Pierre Chatelier, All Rights Reserved</string>
 	<key>CFBundleIconFile</key>

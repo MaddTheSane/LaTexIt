@@ -75,7 +75,7 @@ static NSString* Old_LibraryViewRowTypeKey         = @"LibraryViewRowTypeKey";
 static NSString* Old_LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanelKey";
 static NSString* Old_HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanelKey";
 
-NSString* Old_CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
+NSString* const Old_CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
 
 static NSString* Old_LatexPaletteGroupKey        = @"LaTeXiT_LatexPaletteGroupKey";
 static NSString* Old_LatexPaletteFrameKey        = @"LaTeXiT_LatexPaletteFrameKey";
