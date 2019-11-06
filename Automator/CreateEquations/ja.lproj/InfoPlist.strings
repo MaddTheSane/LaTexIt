@@ -6,6 +6,6 @@ AMDRelatedActions = "";
 AMDResult = "生成された数式の ファイル";
 AMDRequires = "LaTeXiT は環境設定、特に「コマンド構成」パネルのコマンドのパスを初期化するために一度実行されなければいけません。";
 AMDSummary = "このアクションは入力から LaTeX エンジンを使って数式 PDF ファイルを作成します。";
-AMDWebsite = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
+AMDWebsite = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
 "LaTeXiT" = "LaTeXiT";
 "equation" = "数式";

@@ -1,9 +1,9 @@
 "You must run LaTeXiT once, to init the configuration" = "You must run LaTeXiT once, to init the configuration";
 
 "Text" = "Text";
-"Font size :" = "Font size :";
-"Color :" = "Color :";
-"Create equations :" = "Create equations :";
+"Font size :" = "Font size:";
+"Color :" = "Color:";
+"Create equations :" = "Create equations:";
 "alongside input files" = "alongside input files";
 "in a temporary folder" = "in a temporary folder";
 
@@ -19,10 +19,10 @@
 "MathML text format" = "MathML text format";
 "Text format" = "Text format";
 "Options" = "Options";
-"Warning : jpeg does not manage transparency" = "Warning : jpeg does not manage transparency";
-"Warning : pdf2svg path is invalid" = "Warning : pdf2svg path is invalid";
-"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
-"Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
+"Warning : jpeg does not manage transparency" = "Warning: jpeg does not manage transparency";
+"Warning : pdf2svg path is invalid" = "Warning: pdf2svg path is invalid";
+"Warning : pdf2svg was not found" = "Warning: pdf2svg was not found";
+"Warning : the XML::LibXML perl module was not found" = "Warning: the XML::LibXML perl module was not found";
 
 "JPEG Quality" = "JPEG Quality";
 "least" = "least";

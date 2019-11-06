@@ -109,6 +109,7 @@
 -(IBAction) changeLatexMode:(id)sender;
 -(IBAction) makeLatex:(id)sender;
 -(IBAction) makeLatexAndExport:(id)sender;
+-(IBAction) displayBaseline:(id)sender;
 -(IBAction) displayLog:(id)sender;
 
 -(IBAction) closeBackSync:(id)sender;

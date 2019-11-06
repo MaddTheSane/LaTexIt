@@ -193,6 +193,7 @@
     if (dragThroughButton == self->addTempFileButton)
     {
       [dragThroughButton setCanTrackMouse:NO];
+      [[PreferencesController sharedController] setExportAddTempFilePersistent:([dragThroughButton state] == NSOnState)];
       [[PreferencesController sharedController] setExportAddTempFileCurrentSession:([dragThroughButton state] == NSOnState)];
       [self dragFilterWindowController:self exportFormatDidChange:[[PreferencesController sharedController] exportFormatCurrentSession]];
       [dragThroughButton performSelector:@selector(setCanTrackMouse:) withObject:[NSNumber numberWithBool:YES] afterDelay:2];

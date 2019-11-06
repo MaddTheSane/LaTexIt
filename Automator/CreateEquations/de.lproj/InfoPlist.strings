@@ -6,6 +6,6 @@ AMDRelatedActions = "";
 AMDResult = "Dateien der erstellten Gleichungen.";
 AMDRequires = "LaTeXiT muss zuvor einmal gestartet werden um seine Einstellungen zu initialisieren, besonders die Pfade der Ausführdateien in der Zusammensetzungs-Palette.";
 AMDSummary = "Diese Aktion generiert eng geschnittene PDFs der Gleichungen aus der Eingabe unter Verwendung der LaTeX-Engine.";
-AMDWebsite = "http://pierre.chachatelier.fr/programmation/latexit_en.php";
+AMDWebsite = "https://pierre.chachatelier.fr/programmation/latexit_en.php";
 "LaTeXiT" = "LaTeXiT";
 "equation" = "Gleichung";

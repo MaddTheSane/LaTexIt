@@ -80,8 +80,8 @@
 "You did not type any text in the body. The result will certainly be empty." = "No ha escrito nada en el cuerpo del documento. Obviamente, no habrá ningún resultado.";
 "An error occured while trying to create the file :\n%@" = "Se produjo un error al crear el archivo:\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Se produjo un error al crear el archivo con comando:\n%@";
-"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
-"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/index.php" = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/latexit-donations.php" = "https://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "Ecuación enlazada con otra aplicación";
 "Equation linked with library item" = "Ecuacion enlazada con un elemento de la librería";
 "The Linkback link is active" = "El enlace Linkback está activo";
@@ -140,6 +140,7 @@
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "La ecuación %d no ha podido convertirse ya que presenta errores de syntaxis. Debes comprobar también si es compatible con el preámbulo actual.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "Las ecuaciones %d no han podido convertirse ya que presentan errores de syntaxis. Debes comprobar también si son compatible con el preámbulo actual.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "error desconocido, por favor vea \"LaTeX > mostrar el último registro\"";
+"Baseline of current equation" = "Línea base de la ecuación actual";
 "New text shortcut" = "Nueva combinación de teclas";
 "Change the text shortcut" = "Cambiar la combinación de teclas";
 "Remove text shortcuts" = "Eliminar combinaciones de teclas";

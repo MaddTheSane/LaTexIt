@@ -11,6 +11,7 @@
 #import "NSWorkspaceExtended.h"
 
 #import "NSFileManagerExtended.h"
+#import "Utils.h"
 
 @interface BlankNoUseClass : NSObject
 @end

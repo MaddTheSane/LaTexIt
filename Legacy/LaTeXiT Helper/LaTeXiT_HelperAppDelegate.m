@@ -49,7 +49,7 @@
 {
   id oldPeer = [[link valueForKey:@"peer"] retain];
   [oldPeer remoteCloseLink];
-  [link connectToServerWithName:@"LaTeXiT" inApplication:@"fr.chachatelier.pierre.LaTeXiT" fallbackURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/latexit/index.php"] appName:@"LaTeXiT"];
+  [link connectToServerWithName:@"LaTeXiT" inApplication:@"fr.chachatelier.pierre.LaTeXiT" fallbackURL:[NSURL URLWithString:@"https://pierre.chachatelier.fr/latexit/index.php"] appName:@"LaTeXiT"];
   [link setValue:oldPeer forKeyPath:@"peer.peer"];
   [oldPeer release];
   [link requestEdit];

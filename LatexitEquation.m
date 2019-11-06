@@ -836,7 +836,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [[NSAttributedString alloc] initWithString:preambleAsString attributes:defaultAttributes];
       result[@"preamble"] = (!preamble ? defaultPreambleAttributedString : preamble);
 
-      NSNumber* modeAsNumber = [latexitMetadata objectForKey:@"mode"];
+      NSNumber* modeAsNumber = nil;
+      if (!modeAsNumber)
+        modeAsNumber = [latexitMetadata objectForKey:@"type"];
+      if (!modeAsNumber)
+        modeAsNumber = [latexitMetadata objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
       [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
@@ -1959,8 +1963,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setBackgroundColor:(NSColor*)value
 {
-  NSColor* grayLevelColor = [value colorUsingColorSpaceName:NSCalibratedWhiteColorSpace];
-  value = (grayLevelColor.whiteComponent == 1.0f) ? nil : value;
+  NSColor* grayLevelColor = [value colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
+  value = ([grayLevelColor whiteComponent] == 1.0f) ? nil : value;
   [self beginUpdate];
   self->annotateDataDirtyState |= objectDiffers(value, [self backgroundColor]);
   [self willChangeValueForKey:@"backgroundColor"];

@@ -6,6 +6,6 @@ AMDRelatedActions = "";
 AMDResult = "Files of the generated equations.";
 AMDRequires = "LaTeXiT must have been run once to initialize its preferences, particularly the paths to executables in the Composition pane.";
 AMDSummary = "This action creates tight cropped PDF equations with the input, using a LaTeX engine.";
-AMDWebsite = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
+AMDWebsite = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
 "LaTeXiT" = "LaTeXiT";
 "equation" = "equation";

@@ -80,7 +80,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 +(NSUInteger) _giveId; //returns a free id and marks it as used
 +(void) _releaseId:(NSUInteger)anId; //releases an id
 
-@property (readonly, strong) DocumentExtraPanelsController *lazyDocumentExtraPanelsController;
+-(DocumentExtraPanelsController*) lazyDocumentExtraPanelsController:(BOOL)createIfNeeded;
 
 //updates the logTableView to report the errors
 -(void) _analyzeErrors:(NSArray*)errors;
@@ -218,17 +218,17 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end close
 
--(DocumentExtraPanelsController*) lazyDocumentExtraPanelsController
+-(DocumentExtraPanelsController*) lazyDocumentExtraPanelsController:(BOOL)createIfNeeded
 {
   DocumentExtraPanelsController* result = self->documentExtraPanelsController;
-  if (!result)
+  if (!result && createIfNeeded)
   {
     self->documentExtraPanelsController = [[DocumentExtraPanelsController alloc] initWithLoadingFromNib];
     result = self->documentExtraPanelsController;
-  }//end if (!result)
+  }//end if (!result && createIfNeeded)
   return result;
 }
-//end lazyDocumentExtraPanelsController
+//end lazyDocumentExtraPanelsController:
 
 -(void) setNullId//useful for dummy document of AppController
 {
@@ -1596,17 +1596,17 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       if (self->lowerBoxControlsBoxLatexModeSegmentedControl.selectedSegment)
         [self->lowerBoxControlsBoxLatexModeSegmentedControl setSelected:NO forSegment:self->lowerBoxControlsBoxLatexModeSegmentedControl.selectedSegment];
     }//end if ([latexitEquation mode] == LATEX_MODE_AUTO)
-    NSColor* latexitEquationBackgroundColor = latexitEquation.backgroundColor;
-    NSColor* greyLevelLatexitEquationBackgroundColor = latexitEquationBackgroundColor ? [latexitEquationBackgroundColor colorUsingColorSpaceName:NSCalibratedWhiteColorSpace] : [NSColor whiteColor];
-    latexitEquationBackgroundColor = (greyLevelLatexitEquationBackgroundColor.whiteComponent == 1.0f) ? nil : latexitEquationBackgroundColor;
-    NSColor* colorFromUserDefaults = preferencesController.documentImageViewBackgroundColor;
+    NSColor* latexitEquationBackgroundColor = [latexitEquation backgroundColor];
+    NSColor* greyLevelLatexitEquationBackgroundColor = latexitEquationBackgroundColor ? [latexitEquationBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]] : [NSColor whiteColor];
+    latexitEquationBackgroundColor = ([greyLevelLatexitEquationBackgroundColor whiteComponent] == 1.0f) ? nil : latexitEquationBackgroundColor;
+    NSColor* colorFromUserDefaults = [preferencesController documentImageViewBackgroundColor];
     if (!latexitEquationBackgroundColor)
       latexitEquationBackgroundColor = colorFromUserDefaults;
     [self->upperBoxImageView setBackgroundColor:latexitEquationBackgroundColor updateHistoryItem:NO];
     if (self->backSyncFilePath)
       [self save:self];
-  }
-  else
+  }//end if (latexitEquation)
+  else//if (!latexitEquation)
   {
     [self _setLogTableViewVisible:NO];
     [self->upperBoxImageView setPDFData:nil cachedImage:nil];
@@ -1630,18 +1630,40 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     self.latexModeRequested = preferencesController.latexisationLaTeXMode;
     [self->upperBoxImageView setBackgroundColor:preferencesController.documentImageViewBackgroundColor
                               updateHistoryItem:NO];
-  }
+  }//end if (!latexitEquation)
+  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:NO];
+  if (controller)
+  {
+    NSTextField* baselineTextField = [controller baselineTextField];
+    [baselineTextField setDoubleValue:[latexitEquation baseline]];
+    [baselineTextField selectText:self];
+  }//end if (controller)
 }
 //end applyLatexitEquation:isRecentLatexisation:
 
-//calls the log window
 -(IBAction) displayLastLog:(id)sender
 {
-  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
+  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
   controller.log = self->lastExecutionLog;
   [controller.logWindow makeKeyAndOrderFront:self];
 }
 //end displayLastLog:
+
+-(IBAction) displayBaseline:(id)sender
+{
+  LatexitEquation* equation = [self latexitEquationWithCurrentStateTransient:NO];
+  if (equation)
+  {
+    DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
+    NSTextField* textField = [controller baselineTextField];
+    [textField setDoubleValue:[equation baseline]];
+    [textField selectText:sender];
+    NSWindow* baselineWindow = [controller baselineWindow];
+    [baselineWindow setTitle:NSLocalizedString(@"Baseline of current equation", @"")];
+    [baselineWindow makeKeyAndOrderFront:self];
+  }//end if (equation)
+}
+//end displayBaseline:
 
 -(void) updateChangeCount:(NSDocumentChangeType)changeType
 {
@@ -1676,7 +1698,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(IBAction) exportImage:(id)sender
 {
   //first, disables PDF_NOT_EMBEDDED_FONTS if needed
-  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
+  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
   if(!controller.currentSavePanel)//not already onscreen
   {
     if ((controller.saveAccessoryViewExportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) &&
@@ -1721,7 +1743,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self exportImage:sender];
   else
   {
-    DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
+    DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
     //first, disables PDF_NOT_EMBEDDED_FONTS if needed
     if ((controller.saveAccessoryViewExportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) &&
         (![AppController appController].gsAvailable || ![AppController appController].psToPdfAvailable))
@@ -1735,7 +1757,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
 -(void) exportChooseFileDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)code contextInfo:(void*)contextInfo
 {
-  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController];
+  DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
   if ((code == NSModalResponseOK) && self->upperBoxImageView.image)
   {
     export_format_t exportFormat = controller.saveAccessoryViewExportFormat;

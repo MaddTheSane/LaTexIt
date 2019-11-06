@@ -121,8 +121,8 @@
       {
         CGContextRef cgContext = [NSGraphicsContext currentContext].graphicsPort;
 
-        NSColor* rgbaColor = [self->textBackgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-        CGFloat hsba[4] = {rgbaColor.hueComponent, rgbaColor.saturationComponent, rgbaColor.brightnessComponent, rgbaColor.alphaComponent};
+        NSColor* rgbaColor = [self->textBackgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        CGFloat hsba[4] = {[rgbaColor hueComponent], [rgbaColor saturationComponent], [rgbaColor brightnessComponent], [rgbaColor alphaComponent]};
         hsba[1] = MIN(1., 0.5*hsba[1]);
         hsba[2] = MIN(1., 1.5*hsba[2]);
         NSColor* lighterColor = [NSColor colorWithCalibratedHue:hsba[0] saturation:hsba[1] brightness:hsba[2] alpha:hsba[3]];

@@ -616,14 +616,10 @@ static NSArray* WellKnownLatexKeywords = nil;
   NSString* type = nil;
   if ([pboard availableTypeFromArray:@[NSPasteboardTypeColor]])
   {
-    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSPasteboardTypeColor]];
-    NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-    
-    NSString *colorStr = [NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}",
-                          rgbColor.redComponent, rgbColor.greenComponent, rgbColor.blueComponent];
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:colorStr];
-    
-    [self.textStorage appendAttributedString:attributedString];
+    NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
+    NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+    [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
   }
   else if ((type = [pboard availableTypeFromArray:
         @[LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPasteboardTypePDF]]))
@@ -1179,7 +1175,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSString* output = nil;
     if (input)
     {
-      NSColor* rgbColor = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+      NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
       NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
         [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
       BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll

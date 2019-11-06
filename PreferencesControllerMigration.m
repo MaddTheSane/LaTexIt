@@ -18,93 +18,93 @@
 #error this file needs to be compiled with Automatic Reference Counting (ARC)
 #endif
 
-static NSString* const Old_LaTeXiTVersionKey = @"LaTeXiT_Version";
+static NSString* Old_LaTeXiTVersionKey = @"LaTeXiT_Version";
 
-static NSString* const Old_DragExportTypeKey             = @"LaTeXiT_DragExportTypeKey";
-static NSString* const Old_DragExportJpegColorKey        = @"LaTeXiT_DragExportJpegColorKey";
-static NSString* const Old_DragExportJpegQualityKey      = @"LaTeXiT_DragExportJpegQualityKey";
-static NSString* const Old_DragExportScaleAsPercentKey   = @"LateXiT_DragExportScaleAsPercentKey";
-static NSString* const Old_DefaultImageViewBackgroundKey = @"LaTeXiT_DefaultImageViewBackground";
-static NSString* const Old_DefaultAutomaticHighContrastedPreviewBackgroundKey = @"LaTeXiT_DefaultAutomaticHighContrastedPreviewBackgroundKey";
-static NSString* const Old_DefaultColorKey               = @"LaTeXiT_DefaultColorKey";
-static NSString* const Old_DefaultPointSizeKey           = @"LaTeXiT_DefaultPointSizeKey";
-static NSString* const Old_DefaultModeKey                = @"LaTeXiT_DefaultModeKey";
+static NSString* Old_DragExportTypeKey             = @"LaTeXiT_DragExportTypeKey";
+static NSString* Old_DragExportJpegColorKey        = @"LaTeXiT_DragExportJpegColorKey";
+static NSString* Old_DragExportJpegQualityKey      = @"LaTeXiT_DragExportJpegQualityKey";
+static NSString* Old_DragExportScaleAsPercentKey   = @"LateXiT_DragExportScaleAsPercentKey";
+static NSString* Old_DefaultImageViewBackgroundKey = @"LaTeXiT_DefaultImageViewBackground";
+static NSString* Old_DefaultAutomaticHighContrastedPreviewBackgroundKey = @"LaTeXiT_DefaultAutomaticHighContrastedPreviewBackgroundKey";
+static NSString* Old_DefaultColorKey               = @"LaTeXiT_DefaultColorKey";
+static NSString* Old_DefaultPointSizeKey           = @"LaTeXiT_DefaultPointSizeKey";
+static NSString* Old_DefaultModeKey                = @"LaTeXiT_DefaultModeKey";
 
-static NSString* const Old_SpellCheckingEnableKey               = @"LaTeXiT_SpellCheckingEnableKey";
-static NSString* const Old_SyntaxColoringEnableKey              = @"LaTeXiT_SyntaxColoringEnableKey";
-static NSString* const Old_SyntaxColoringTextForegroundColorKey = @"LaTeXiT_SyntaxColoringTextForegroundColorKey";
-static NSString* const Old_SyntaxColoringTextBackgroundColorKey = @"LaTeXiT_SyntaxColoringTextBackgroundColorKey";
-static NSString* const Old_SyntaxColoringCommandColorKey        = @"LaTeXiT_SyntaxColoringCommandColorKey";
-static NSString* const Old_SyntaxColoringMathsColorKey          = @"LaTeXiT_SyntaxColoringMathsColorKey";
-static NSString* const Old_SyntaxColoringKeywordColorKey        = @"LaTeXiT_SyntaxColoringKeywordColorKey";
-static NSString* const Old_SyntaxColoringCommentColorKey        = @"LaTeXiT_SyntaxColoringCommentColorKey";
-static NSString* const Old_ReducedTextAreaStateKey              = @"LaTeXiT_ReducedTextAreaStateKey";
+static NSString* Old_SpellCheckingEnableKey               = @"LaTeXiT_SpellCheckingEnableKey";
+static NSString* Old_SyntaxColoringEnableKey              = @"LaTeXiT_SyntaxColoringEnableKey";
+static NSString* Old_SyntaxColoringTextForegroundColorKey = @"LaTeXiT_SyntaxColoringTextForegroundColorKey";
+static NSString* Old_SyntaxColoringTextBackgroundColorKey = @"LaTeXiT_SyntaxColoringTextBackgroundColorKey";
+static NSString* Old_SyntaxColoringCommandColorKey        = @"LaTeXiT_SyntaxColoringCommandColorKey";
+static NSString* Old_SyntaxColoringMathsColorKey          = @"LaTeXiT_SyntaxColoringMathsColorKey";
+static NSString* Old_SyntaxColoringKeywordColorKey        = @"LaTeXiT_SyntaxColoringKeywordColorKey";
+static NSString* Old_SyntaxColoringCommentColorKey        = @"LaTeXiT_SyntaxColoringCommentColorKey";
+static NSString* Old_ReducedTextAreaStateKey              = @"LaTeXiT_ReducedTextAreaStateKey";
 
-static NSString* const Old_BodyTemplatesKey             = @"BodyTemplatesKey";
-static NSString* const Old_PreamblesKey                 = @"LaTeXiT_PreamblesKey";
-static NSString* const Old_DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
-static NSString* const Old_LatexisationSelectedPreambleIndexKey = @"LaTeXiT_LatexisationSelectedPreambleIndexKey";
+static NSString* Old_BodyTemplatesKey             = @"BodyTemplatesKey";
+static NSString* Old_PreamblesKey                 = @"LaTeXiT_PreamblesKey";
+static NSString* Old_DefaultFontKey               = @"LaTeXiT_DefaultFontKey";
+static NSString* Old_LatexisationSelectedPreambleIndexKey = @"LaTeXiT_LatexisationSelectedPreambleIndexKey";
 
-static NSString* const Old_ServiceSelectedPreambleIndexKey = @"LaTeXiT_ServiceSelectedPreambleIndexKey";
-static NSString* const Old_ServiceShortcutEnabledKey       = @"LaTeXiT_ServiceShortcutEnabledKey";
-static NSString* const Old_ServiceShortcutStringsKey       = @"LaTeXiT_ServiceShortcutStringsKey";
-static NSString* const Old_ServiceRespectsBaselineKey      = @"LaTeXiT_ServiceRespectsBaselineKey";
-static NSString* const Old_ServiceRespectsPointSizeKey     = @"LaTeXiT_ServiceRespectsPointSizeKey";
-static NSString* const Old_ServicePointSizeFactorKey       = @"LaTeXiT_ServicePointSizeFactorKey";
-static NSString* const Old_ServiceRespectsColorKey         = @"LaTeXiT_ServiceRespectsColorKey";
-static NSString* const Old_ServiceUsesHistoryKey           = @"LaTeXiT_ServiceUsesHistoryKey";
-static NSString* const Old_AdditionalTopMarginKey          = @"LaTeXiT_AdditionalTopMarginKey";
-static NSString* const Old_AdditionalLeftMarginKey         = @"LaTeXiT_AdditionalLeftMarginKey";
-static NSString* const Old_AdditionalRightMarginKey        = @"LaTeXiT_AdditionalRightMarginKey";
-static NSString* const Old_AdditionalBottomMarginKey       = @"LaTeXiT_AdditionalBottomMarginKey";
-static NSString* const Old_EncapsulationsKey               = @"LaTeXiT_EncapsulationsKey";
-static NSString* const Old_CurrentEncapsulationIndexKey    = @"LaTeXiT_CurrentEncapsulationIndexKey";
-static NSString* const Old_TextShortcutsKey                = @"LaTeXiT_TextShortcutsKey";
+static NSString* Old_ServiceSelectedPreambleIndexKey = @"LaTeXiT_ServiceSelectedPreambleIndexKey";
+static NSString* Old_ServiceShortcutEnabledKey       = @"LaTeXiT_ServiceShortcutEnabledKey";
+static NSString* Old_ServiceShortcutStringsKey       = @"LaTeXiT_ServiceShortcutStringsKey";
+static NSString* Old_ServiceRespectsBaselineKey      = @"LaTeXiT_ServiceRespectsBaselineKey";
+static NSString* Old_ServiceRespectsPointSizeKey     = @"LaTeXiT_ServiceRespectsPointSizeKey";
+static NSString* Old_ServicePointSizeFactorKey       = @"LaTeXiT_ServicePointSizeFactorKey";
+static NSString* Old_ServiceRespectsColorKey         = @"LaTeXiT_ServiceRespectsColorKey";
+static NSString* Old_ServiceUsesHistoryKey           = @"LaTeXiT_ServiceUsesHistoryKey";
+static NSString* Old_AdditionalTopMarginKey          = @"LaTeXiT_AdditionalTopMarginKey";
+static NSString* Old_AdditionalLeftMarginKey         = @"LaTeXiT_AdditionalLeftMarginKey";
+static NSString* Old_AdditionalRightMarginKey        = @"LaTeXiT_AdditionalRightMarginKey";
+static NSString* Old_AdditionalBottomMarginKey       = @"LaTeXiT_AdditionalBottomMarginKey";
+static NSString* Old_EncapsulationsKey               = @"LaTeXiT_EncapsulationsKey";
+static NSString* Old_CurrentEncapsulationIndexKey    = @"LaTeXiT_CurrentEncapsulationIndexKey";
+static NSString* Old_TextShortcutsKey                = @"LaTeXiT_TextShortcutsKey";
 
 
-static NSString* const Old_CompositionConfigurationsKey               = @"LaTeXiT_CompositionConfigurationsKey";
-static NSString* const Old_CurrentCompositionConfigurationIndexKey    = @"LaTeXiT_CurrentCompositionConfigurationIndexKey";
+static NSString* Old_CompositionConfigurationsKey               = @"LaTeXiT_CompositionConfigurationsKey";
+static NSString* Old_CurrentCompositionConfigurationIndexKey    = @"LaTeXiT_CurrentCompositionConfigurationIndexKey";
 
-static NSString* const Old_LastEasterEggsDatesKey       = @"LaTeXiT_LastEasterEggsDatesKey";
+static NSString* Old_LastEasterEggsDatesKey       = @"LaTeXiT_LastEasterEggsDatesKey";
 
-static NSString* const Old_CompositionConfigurationsControllerVisibleAtStartupKey = @"CompositionConfigurationsControllerVisibleAtStartupKey";
-static NSString* const Old_EncapsulationsControllerVisibleAtStartupKey = @"EncapsulationsControllerVisibleAtStartupKey";
-static NSString* const Old_HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibleAtStartupKey";
-static NSString* const Old_LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartupKey";
-static NSString* const Old_LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibleAtStartupKey";
-static NSString* const Old_MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartupKey";
-static NSString* const Old_AdditionalFilesWindowControllerVisibleAtStartupKey = @"AdditionalFilesWindowControllerVisibleAtStartupKey";
+static NSString* Old_CompositionConfigurationsControllerVisibleAtStartupKey = @"CompositionConfigurationsControllerVisibleAtStartupKey";
+static NSString* Old_EncapsulationsControllerVisibleAtStartupKey = @"EncapsulationsControllerVisibleAtStartupKey";
+static NSString* Old_HistoryControllerVisibleAtStartupKey       = @"HistoryControllerVisibleAtStartupKey";
+static NSString* Old_LatexPalettesControllerVisibleAtStartupKey = @"LatexPalettesControllerVisibleAtStartupKey";
+static NSString* Old_LibraryControllerVisibleAtStartupKey       = @"LibraryControllerVisibleAtStartupKey";
+static NSString* Old_MarginControllerVisibleAtStartupKey        = @"MarginControllerVisibleAtStartupKey";
+static NSString* Old_AdditionalFilesWindowControllerVisibleAtStartupKey = @"AdditionalFilesWindowControllerVisibleAtStartupKey";
 
-static NSString* const Old_LibraryViewRowTypeKey         = @"LibraryViewRowTypeKey";
-static NSString* const Old_LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanelKey";
-static NSString* const Old_HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanelKey";
+static NSString* Old_LibraryViewRowTypeKey         = @"LibraryViewRowTypeKey";
+static NSString* Old_LibraryDisplayPreviewPanelKey = @"LibraryDisplayPreviewPanelKey";
+static NSString* Old_HistoryDisplayPreviewPanelKey = @"HistoryDisplayPreviewPanelKey";
 
 NSString* const Old_CheckForNewVersionsKey = @"LaTeXiT_CheckForNewVersionsKey";
 
-static NSString* const Old_LatexPaletteGroupKey        = @"LaTeXiT_LatexPaletteGroupKey";
-static NSString* const Old_LatexPaletteFrameKey        = @"LaTeXiT_LatexPaletteFrameKey";
-static NSString* const Old_LatexPaletteDetailsStateKey = @"LaTeXiT_LatexPaletteDetailsStateKey";
+static NSString* Old_LatexPaletteGroupKey        = @"LaTeXiT_LatexPaletteGroupKey";
+static NSString* Old_LatexPaletteFrameKey        = @"LaTeXiT_LatexPaletteFrameKey";
+static NSString* Old_LatexPaletteDetailsStateKey = @"LaTeXiT_LatexPaletteDetailsStateKey";
 
-static NSString* const Old_UseLoginShellKey               = @"LaTeXiT_UseLoginShellKey";
+static NSString* Old_UseLoginShellKey               = @"LaTeXiT_UseLoginShellKey";
 
-static NSString* const Old_ShowWhiteColorWarningKey       = @"LaTeXiT_ShowWhiteColorWarningKey";
+static NSString* Old_ShowWhiteColorWarningKey       = @"LaTeXiT_ShowWhiteColorWarningKey";
 
-static NSString* const Old_CompositionConfigurationNameKey                        = @"LaTeXiT_CompositionConfigurationNameKey";
-static NSString* const Old_CompositionConfigurationIsDefaultKey                   = @"LaTeXiT_CompositionConfigurationIsDefaultKey";
-static NSString* const Old_CompositionConfigurationCompositionModeKey             = @"LaTeXiT_CompositionConfigurationCompositionModeKey";
-static NSString* const Old_CompositionConfigurationPdfLatexPathKey                = @"LaTeXiT_CompositionConfigurationPdfLatexPathKey";
-static NSString* const Old_CompositionConfigurationPs2PdfPathKey                  = @"LaTeXiT_CompositionConfigurationPs2PdfPathKey";
-static NSString* const Old_CompositionConfigurationXeLatexPathKey                 = @"LaTeXiT_CompositionConfigurationXeLatexPathKey";
-static NSString* const Old_CompositionConfigurationLuaLatexPathKey                = @"LaTeXiT_CompositionConfigurationLuaLatexPathKey";
-static NSString* const Old_CompositionConfigurationLatexPathKey                   = @"LaTeXiT_CompositionConfigurationLatexPathKey";
-static NSString* const Old_CompositionConfigurationDvipdfPathKey                  = @"LaTeXiT_CompositionConfigurationDvipdfPathKey";
-static NSString* const Old_CompositionConfigurationGsPathKey                      = @"LaTeXiT_CompositionConfigurationGsPathKey";
-static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsKey = @"LaTeXiT_CompositionConfigurationAdditionalProcessingScriptsKey";
-static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsEnabledKey = @"LaTeXiT_ScriptEnabledKey";
-static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsTypeKey    = @"LaTeXiT_ScriptSourceTypeKey";
-static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsPathKey    = @"LaTeXiT_ScriptFileKey";
-static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsShellKey   = @"LaTeXiT_ScriptShellKey";
-static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsContentKey = @"LaTeXiT_ScriptBodyKey";
+static NSString* Old_CompositionConfigurationNameKey                        = @"LaTeXiT_CompositionConfigurationNameKey";
+static NSString* Old_CompositionConfigurationIsDefaultKey                   = @"LaTeXiT_CompositionConfigurationIsDefaultKey";
+static NSString* Old_CompositionConfigurationCompositionModeKey             = @"LaTeXiT_CompositionConfigurationCompositionModeKey";
+static NSString* Old_CompositionConfigurationPdfLatexPathKey                = @"LaTeXiT_CompositionConfigurationPdfLatexPathKey";
+static NSString* Old_CompositionConfigurationPs2PdfPathKey                  = @"LaTeXiT_CompositionConfigurationPs2PdfPathKey";
+static NSString* Old_CompositionConfigurationXeLatexPathKey                 = @"LaTeXiT_CompositionConfigurationXeLatexPathKey";
+static NSString* Old_CompositionConfigurationLuaLatexPathKey                = @"LaTeXiT_CompositionConfigurationLuaLatexPathKey";
+static NSString* Old_CompositionConfigurationLatexPathKey                   = @"LaTeXiT_CompositionConfigurationLatexPathKey";
+static NSString* Old_CompositionConfigurationDvipdfPathKey                  = @"LaTeXiT_CompositionConfigurationDvipdfPathKey";
+static NSString* Old_CompositionConfigurationGsPathKey                      = @"LaTeXiT_CompositionConfigurationGsPathKey";
+static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsKey = @"LaTeXiT_CompositionConfigurationAdditionalProcessingScriptsKey";
+static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsEnabledKey = @"LaTeXiT_ScriptEnabledKey";
+static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsTypeKey    = @"LaTeXiT_ScriptSourceTypeKey";
+static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsPathKey    = @"LaTeXiT_ScriptFileKey";
+static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsShellKey   = @"LaTeXiT_ScriptShellKey";
+static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentKey = @"LaTeXiT_ScriptBodyKey";
 
 @interface PreferencesController (MigrationPrivateAPI)
 -(void) migrateCompositionConfigurations;

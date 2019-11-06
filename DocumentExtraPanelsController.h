@@ -26,6 +26,9 @@
   __weak NSWindow*   logWindow;
   __unsafe_unretained NSTextView* logTextView;
 
+  IBOutlet NSWindow*    baselineWindow;
+  IBOutlet NSTextField* baselineTextField;
+
   ExportFormatOptionsPanes* saveAccessoryViewExportFormatOptionsPanes;
   
   export_format_t saveAccessoryViewExportFormat;
@@ -49,6 +52,9 @@
 @property (weak) IBOutlet NSWindow *logWindow;
 @property (unsafe_unretained) IBOutlet NSTextView *logTextView;
 @property (atomic, copy) NSString *log;
+
+-(NSWindow*)    baselineWindow;
+-(NSTextField*) baselineTextField;
 
 @property (nonatomic) export_format_t   saveAccessoryViewExportFormat;
 @property (nonatomic) CGFloat           saveAccessoryViewScalePercent;

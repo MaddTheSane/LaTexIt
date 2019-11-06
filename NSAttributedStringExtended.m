@@ -8,6 +8,7 @@
 
 #import "NSAttributedStringExtended.h"
 
+asm(".weak_reference _OBJC_CLASS_$_NSFileWrapper");//10.6 compatibility
 
 @implementation NSAttributedString (Extended)
 

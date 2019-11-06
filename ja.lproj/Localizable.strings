@@ -1,4 +1,4 @@
-﻿"current-language" = "現在の言語";
+"current-language" = "現在の言語";
 "OK" = "OK";
 "Cancel" = "キャンセル";
 "Error" = "エラー";
@@ -79,8 +79,8 @@
 "You did not type any text in the body. The result will certainly be empty." = "本文に入力されていません。 結果は確実に空になります。";
 "An error occured while trying to create the file :\n%@" = "次のファイルを作成するときにエラーが発生しました :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "次のコマンドを用いてファイルを作成するときにエラーが発生しました :\n%@";
-"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
-"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/index.php" = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/latexit-donations.php" = "https://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "他のアプリケーションとリンクしている数式";
 "Equation linked with library item" = "ライブラリ項目にリンクした数式";
 "The Linkback link is active" = "LinkBackでリンクしています";
@@ -139,6 +139,7 @@
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d 数式がシンタックスエラーのため変換できませんでした。プリアンブルとの整合も確認してください。";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d 複数の数式がシンタックスエラーのため変換できませんでした。プリアンブルとの整合についても確認してください。";
 "unexpected error, please see \"LaTeX > Display last log\"" = "予期しないエラーが起きました。LaTeX メニューから「最後のログを表示」を見てください";
+"Baseline of current equation" = "現在の方程式のベースライン";
 "New text shortcut" = "新規テキストショートカット";
 "Change the text shortcut" = "キーマップを変更";
 "Remove text shortcuts" = "複数のキーマップを削除";

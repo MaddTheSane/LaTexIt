@@ -26,7 +26,7 @@
 /*!
 	@header NSURL+NDCarbonUtilities
 	@abstract Provides method for interacting with Carbon APIs.
-	@discussion The methods in <tt>NSURL(NDCarbonUtilities)</tt> are simply wrappers for functions that can be found within the Carbon API.
+	@discussion The methods in @c NSURL(NDCarbonUtilities) are simply wrappers for functions that can be found within the Carbon API.
  */
 
 #import <Foundation/Foundation.h>
@@ -45,7 +45,7 @@
 	@abstract Alloc and intialize an <tt>NSURL</tt>.
 	@discussion Returns a file url for the file refered to by a <tt>FSRef</tt>.
 	@param fsRef A pointer to an <tt>FSRef</tt>.
-	@result An <tt>NSURL</tt> containing a file url.
+	@result An @c NSURL containing a file url.
  */
 + (NSURL *)URLWithFSRef:(const FSRef *)fsRef DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
@@ -60,9 +60,9 @@
 	/*!
 	@method getFSRef:
 	@abstract Get an <tt>FSRef</tt>.
-	@discussion Obtain an <tt>FSRef</tt> for a file url.
-	@param fsRef A pointer to an <tt>FSRef</tt> struct, to be filled by the method.
-	@result Returns <tt>YES</tt> if successful, if the method returns <tt>NO</tt> then <tt>fsRef</tt> contains garbage.
+	@discussion Obtain an @c FSRef for a file url.
+	@param fsRef A pointer to an @c FSRef struct, to be filled by the method.
+	@result Returns @c YES if successful, if the method returns @c NO then @c fsRef contains garbage.
  */
 - (BOOL)getFSRef:(FSRef *)fsRef DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
@@ -71,16 +71,16 @@
 	@abstract Get an <tt>FSSpec</tt>.
 	@discussion Obtain an <tt>FSSpec</tt> for a file url.
 	@deprecated in version 10.5
-	@param fsSpec A pointer to an <tt>FSSpec</tt> struct, to be filled by the method.
-	@result Returns <tt>YES</tt> if successful, if the method returns <tt>NO</tt> then <tt>fsSpec</tt> contains garbage.
+	@param fsSpec A pointer to an @c FSSpec struct, to be filled by the method.
+	@result Returns @c YES if successful, if the method returns @c NO then @c fsSpec contains garbage.
  */
 - (BOOL)getFSSpec:(FSSpec *)fsSpec DEPRECATED_IN_MAC_OS_X_VERSION_10_5_AND_LATER;
 
 /*!
 	@method fileSystemPathHFSStyle
 	@abstract Returns an HFS style path.
-	@discussion Returns an <tt>NSString</tt> containg a HFS style path (e.g. <tt>Macitosh HD:Users:</tt>) useful for display purposes.
-	@result A new <tt>NSString</tt> containing a HFS style path for the same file or directory as the receiver.
+	@discussion Returns an @c NSString containg a HFS style path (e.g. <tt>Macitosh HD:Users:</tt>) useful for display purposes.
+	@result A new @c NSString containing a HFS style path for the same file or directory as the receiver.
  */
 - (NSString *)fileSystemPathHFSStyle DEPRECATED_IN_MAC_OS_X_VERSION_10_9_AND_LATER;
 
@@ -118,7 +118,7 @@
 	@param flags Contains Finder flags on return.
 	@param type Contains file type on return.
 	@param creator Contains creator on return.
-	@result Return <tt>YES</tt> if successful, otherwise <tt>NO</tt> and the returned values are invalid.
+	@result Return @c YES if successful, otherwise @c NO and the returned values are invalid.
  */
 - (BOOL)finderInfoFlags:(UInt16*)flags type:(OSType*)type creator:(OSType*)creator;
 

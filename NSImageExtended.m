@@ -215,7 +215,7 @@
       CGContextClip(cgContext);
       if (color)
       {
-        NSColor* colorRGB = [color colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+        NSColor* colorRGB = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
         CGFloat rgba[4] = {0};
         [colorRGB getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
         CGContextSetRGBFillColor(cgContext, rgba[0], rgba[1], rgba[2], rgba[3]);
@@ -257,5 +257,29 @@
   return result;
 }
 //end imageWithBackground:rounded:
+
+-(NSData*) TIFFRepresentationDpiAware
+{
+  NSData* result = nil;
+  CGImageRef cgImage = [self CGImageForProposedRect:0 context:0 hints:nil];
+  NSBitmapImageRep* bitmapImageRep = !cgImage ? nil : [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+  NSSize imageSize = [self size];
+  [bitmapImageRep setSize:NSMakeSize(imageSize.width, imageSize.height)];
+  result = [bitmapImageRep TIFFRepresentation];
+  return result;
+}
+//end TIFFRepresentationDpiAware
+
+-(NSData*) TIFFRepresentationDpiAwareUsingCompression:(NSTIFFCompression)compression factor:(float)factor
+{
+  NSData* result = nil;
+  CGImageRef cgImage = [self CGImageForProposedRect:0 context:0 hints:nil];
+  NSBitmapImageRep* bitmapImageRep = !cgImage ? nil : [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+  NSSize imageSize = [self size];
+  [bitmapImageRep setSize:NSMakeSize(imageSize.width, imageSize.height)];
+  result = [bitmapImageRep TIFFRepresentationUsingCompression:compression factor:factor];
+  return result;
+}
+//end TIFFRepresentationDpiAwareUsingCompression:factor:
 
 @end

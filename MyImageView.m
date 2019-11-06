@@ -431,7 +431,7 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
   NSImage* result = self.image;
   if (!isMacOS10_5OrAbove())
   {
-    NSImage* tiffImage = [[NSImage alloc] initWithData:[result TIFFRepresentation]];
+    NSImage* tiffImage = [[NSImage alloc] initWithData:[result TIFFRepresentationDpiAware]];
     result = tiffImage;
   }//end if (!isMacOS10_5OrAbove())
   if ([self isDarkMode])
@@ -1199,7 +1199,7 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
     if (self->backgroundColor)
     {
       CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
-      [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+      [[self->backgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]
        getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
       CGContextSetRGBFillColor(cgContext, backgroundRGBcomponents[0], backgroundRGBcomponents[1], backgroundRGBcomponents[2], backgroundRGBcomponents[3]);
       CGContextBeginPath(cgContext);
@@ -1254,7 +1254,7 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
     NSRect inRoundedRect2 = NSInsetRect(borderRect, 2, 2);
     NSRect inRoundedRect3 = NSInsetRect(borderRect, 3, 3);
     CGFloat backgroundRGBcomponents[4] = {rgba1[0], rgba1[1], rgba1[2], rgba1[3]};
-    [[self->backgroundColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+    [[self->backgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]
      getRed:&backgroundRGBcomponents[0] green:&backgroundRGBcomponents[1] blue:&backgroundRGBcomponents[2] alpha:&backgroundRGBcomponents[3]];
 
     CGContextBeginPath(cgContext);

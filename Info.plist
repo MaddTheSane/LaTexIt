@@ -148,13 +148,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.13.2</string>
+	<string>2.13.3</string>
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.13.2</string>
+	<string>2.13.3</string>
 	<key>LinkBackApplicationURL</key>
-	<string>http://pierre.chachatelier.fr/latexit/index.php</string>
+	<string>https://pierre.chachatelier.fr/latexit/index.php</string>
 	<key>LinkBackServer</key>
 	<string>LaTeXiT</string>
 	<key>NSHighResolutionCapable</key>
@@ -716,7 +716,7 @@
 		</dict>
 	</array>
 	<key>SUFeedURL</key>
-	<string>http://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-en.rss</string>
+	<string>https://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-en.rss</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_sparkle_latexit_pub.pem</string>
 	<key>UTImportedTypeDeclarations</key>

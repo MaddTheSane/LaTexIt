@@ -79,8 +79,8 @@
 "You did not type any text in the body. The result will certainly be empty." = "You did not type any text in the body. The result will certainly be empty.";
 "An error occured while trying to create the file :\n%@" = "An error occured while trying to create the file :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "An error occured while trying to create the file with command:\n%@";
-"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
-"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/index.php" = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/latexit-donations.php" = "https://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "Equation linked with another application";
 "Equation linked with library item" = "Equation linked with library item";
 "The Linkback link is active" = "Le lien Linkback est actif";
@@ -139,6 +139,7 @@
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "unexpected error, please see \"LaTeX > Display last log\"";
+"Baseline of current equation" = "Baseline of current equation";
 "New text shortcut" = "New text shortcut";
 "Change the text shortcut" = "Change the text shortcut";
 "Remove text shortcuts" = "Remove text shortcuts";

@@ -6,6 +6,6 @@ AMDRelatedActions = "";
 AMDResult = "Fichiers des équations générées.";
 AMDRequires = "LaTeXiT doit avoir été lancé une fois pour initialiser ses préférences, notamment les chemins vers les éxecutables du panneau Compositions.";
 AMDSummary = "Cette action crée des équations finement découpées à partir du texte d'entrée, en utilisant un moteur LaTeX.";
-AMDWebsite = "http://pierre.chachatelier.fr/latexit/index.php?lang=fr";
+AMDWebsite = "https://pierre.chachatelier.fr/latexit/index.php?lang=fr";
 "LaTeXiT" = "LaTeXiT";
 "equation" = "équation";

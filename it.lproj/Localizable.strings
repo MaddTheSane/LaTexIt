@@ -79,8 +79,8 @@
 "You did not type any text in the body. The result will certainly be empty." = "Non hai digitato alcun testo nel corpo. Il risultato sarà certamente vuoto.";
 "An error occured while trying to create the file :\n%@" = "Errore durante il tentativo di creare il file :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Errore durante il tentativo di creare il file con command:\n%@";
-"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
-"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/index.php" = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
+"https://pierre.chachatelier.fr/latexit/latexit-donations.php" = "https://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=en";
 "Equation linked with another application" = "Equazione collegata con un altra applicazione";
 "Equation linked with library item" = "Equazione collegata con un oggetto della libreria";
 "The Linkback link is active" = "Il collegamento Linkback è attivo";
@@ -139,6 +139,7 @@
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d l'equazione non può essere convertita a causa di errori di sintassi in essa. Controllare anche se è compatibile con il preambolo in uso.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d le equazioni non possono essere convertite per errori di sintassi in esse. Controllare inoltre se sono compatibili con il preambolo in uso.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "errore inaspettato, andare a \"LaTeX > Mostra l'ultimo rapporto\"";
+"Baseline of current equation" = "Linea di base dell'equazione corrente";
 "New text shortcut" = "Nuova scorciatoia testo";
 "Change the text shortcut" = "Cambia la scorciatoia testo";
 "Remove text shortcuts" = "Rimuovi le scorciatoie testo";

@@ -84,8 +84,8 @@
 "You did not type any text in the body. The result will certainly be empty." = "Vous n'avez pas tapé de corps au document LaTeX. Le résultat sera sans doute vide.";
 "An error occured while trying to create the file :\n%@" = "Une erreur est survenue lors de la création du fichier :\n%@";
 "An error occured while trying to create the file with command:\n%@" = "Une erreur est survenue lors de la création du fichier avec la commande:\n%@";
-"http://pierre.chachatelier.fr/latexit/index.php" = "http://pierre.chachatelier.fr/latexit/index.php?lang=fr";
-"http://pierre.chachatelier.fr/latexit/latexit-donations.php" = "http://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=fr";
+"https://pierre.chachatelier.fr/latexit/index.php" = "https://pierre.chachatelier.fr/latexit/index.php?lang=fr";
+"https://pierre.chachatelier.fr/latexit/latexit-donations.php" = "https://pierre.chachatelier.fr/latexit/latexit-donations.php?lang=fr";
 "Equation linked with another application" = "Équation liée à une autre application";
 "Equation linked with library item" = "Équation liée à la bibliothèque";
 "The Linkback link is active" = "Le lien Linkback est actif";
@@ -145,6 +145,7 @@
 "%d equation could not be converted because of syntax errors in it. You should also check if it is compatible with the default preamble in use." = "%d equation n'a pas pu être convertie à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec elle.";
 "%d equations could not be converted because of syntax errors in them. You should also check if they are compatible with the default preamble in use." = "%d equations n'ont pas pu être converties à cause d'erreurs de syntaxe. Vous devriez aussi vérifier que le préambule actuel est compatible avec ces équations.";
 "unexpected error, please see \"LaTeX > Display last log\"" = "erreur inattendue, veuillez consulter \"LaTeX > Afficher le dernier rapport d'exécution\"";
+"Baseline of current equation" = "Ligne de base de l'équation courante";
 "New text shortcut" = "Nouveau raccourci de texte";
 "You may not be updating the good equation" = "Peut-être ne mettez-vous pas à jour la bonne équation";
 "Update the equation" = "Mettre à jour l'équation";

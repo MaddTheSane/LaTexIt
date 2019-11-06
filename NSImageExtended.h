@@ -17,6 +17,8 @@
 -(NSBitmapImageRep*) bitmapImageRepresentationWithMaxSize:(NSSize)maxSize;
 @property (readonly, copy) NSPDFImageRep *pdfImageRepresentation;
 -(NSImageRep*)       bestImageRepresentationInContext:(NSGraphicsContext*)context;
--(NSImage*) imageWithBackground:(NSColor*)color rounded:(CGFloat)rounded;
+-(NSImage*)          imageWithBackground:(NSColor*)color rounded:(CGFloat)rounded;
+-(NSData*)           TIFFRepresentationDpiAware;
+-(NSData*)           TIFFRepresentationDpiAwareUsingCompression:(NSTIFFCompression)compression factor:(float)factor;
 
 @end

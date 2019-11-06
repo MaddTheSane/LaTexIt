@@ -164,6 +164,29 @@
 }
 //end setLog:
 
+-(NSWindow*) baselineWindow
+{
+  return self->baselineWindow;
+}
+//end logWindow
+
+-(NSTextField*) baselineTextField
+{
+  return self->baselineTextField;
+}
+//end baselineTextField
+
+-(void) setSaveAccessoryViewExportFormat:(export_format_t)value
+{
+  if (value != self->saveAccessoryViewExportFormat)
+  {
+    [self willChangeValueForKey:@"saveAccessoryViewExportFormat"];
+    self->saveAccessoryViewExportFormat = value;
+    [self didChangeValueForKey:@"saveAccessoryViewExportFormat"];
+  }//end if (value != self->saveAccessoryViewExportFormat)
+}
+//end setSaveAccessoryViewExportFormat:
+
 -(void) setSaveAccessoryViewScalePercent:(CGFloat)value
 {
   if (value != self->saveAccessoryViewExportScalePercent)

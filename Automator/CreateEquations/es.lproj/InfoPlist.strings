@@ -6,6 +6,6 @@ AMDRelatedActions = "";
 AMDResult = "Archivos con las ecuaciones generadas";
 AMDRequires = "Debe haber ejecutado LaTeXiT una vez para inicializar sus preferencias, en particular las rutas a los ejecutables en el panel de Composición.";
 AMDSummary = "Esta acción crear ecuaciones en formato PDF apartir de la entrada usando LaTeX.";
-AMDWebsite = "http://pierre.chachatelier.fr/latexit/index.php?lang=en";
+AMDWebsite = "https://pierre.chachatelier.fr/latexit/index.php?lang=en";
 "LaTeXiT" = "LaTeXiT";
 "equation" = "ecuación";

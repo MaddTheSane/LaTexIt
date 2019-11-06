@@ -109,6 +109,7 @@
 -(IBAction) latexize:(id)sender;
 -(IBAction) latexizeAndExport:(id)sender;
 -(IBAction) displayLastLog:(id)sender;
+-(IBAction) displayBaseline:(id)sender;
 
 -(IBAction) exportImage:(id)sender;
 -(IBAction) reexportImage:(id)sender;

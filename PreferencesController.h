@@ -21,6 +21,7 @@ extern NSString *const DragExportJpegQualityKey;
 extern NSString *const DragExportPDFWOFGsWriteEngineKey;
 extern NSString *const DragExportPDFWOFGsPDFCompatibilityLevelKey;
 extern NSString *const DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey;
+extern NSString *const DragExportPDFMetadataInvisibleGraphicsEnabledKey;
 
 extern NSString *const DragExportSvgPdfToSvgPathKey;
 extern NSString *const DragExportTextExportPreambleKey;
@@ -28,6 +29,8 @@ extern NSString *const DragExportTextExportEnvironmentKey;
 extern NSString *const DragExportTextExportBodyKey;
 extern NSString *const DragExportScaleAsPercentKey;
 extern NSString *const DragExportIncludeBackgroundColorKey;
+extern NSString *const DragExportAddTempFileEnabledKey;
+
 extern NSString *const DefaultImageViewBackgroundKey;
 extern NSString *const DefaultAutomaticHighContrastedPreviewBackgroundKey;
 extern NSString *const DefaultDoNotClipPreviewKey;
@@ -176,31 +179,48 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 
 @property export_format_t exportFormatPersistent;
 @property export_format_t exportFormatCurrentSession;
+-(void)            setExportAddTempFilePersistent:(BOOL)value;
+-(BOOL)            exportAddTempFileCurrentSession;
 @property BOOL exportAddTempFileCurrentSession;
 
 
-@property (copy) NSData* exportJpegBackgroundColorData;
-@property (assign) NSColor* exportJpegBackgroundColor;
-@property float exportJpegQualityPercent;
-@property (copy) NSString* exportSvgPdfToSvgPath;
-@property BOOL exportTextExportPreamble;
-@property BOOL exportTextExportEnvironment;
-@property BOOL exportTextExportBody;
-@property CGFloat exportScalePercent;
-@property BOOL exportIncludeBackgroundColor;
+-(NSData*)         exportJpegBackgroundColorData;
+-(void)            setExportJpegBackgroundColorData:(NSData*)value;
+-(NSColor*)        exportJpegBackgroundColor;
+-(void)            setExportJpegBackgroundColor:(NSColor*)value;
+-(CGFloat)         exportJpegQualityPercent;
+-(void)            setExportJpegQualityPercent:(CGFloat)value;
+-(NSString*)       exportSvgPdfToSvgPath;
+-(void)            setExportSvgPdfToSvgPath:(NSString*)value;
+-(BOOL)            exportTextExportPreamble;
+-(void)            setExportTextExportPreamble:(BOOL)value;
+-(BOOL)            exportTextExportEnvironment;
+-(void)            setExportTextExportEnvironment:(BOOL)value;
+-(BOOL)            exportTextExportBody;
+-(void)            setExportTextExportBody:(BOOL)value;
+-(CGFloat)         exportScalePercent;
+-(void)            setExportScalePercent:(CGFloat)value;
+-(BOOL)            exportIncludeBackgroundColor;
+-(void)            setExportIncludeBackgroundColor:(BOOL)value;
 
-@property (copy) NSString* exportPDFWOFGsWriteEngine;
-@property (copy) NSString* exportPDFWOFGsPDFCompatibilityLevel;
-@property BOOL exportPDFWOFMetaDataInvisibleGraphicsEnabled;
+-(NSString*) exportPDFWOFGsWriteEngine;
+-(void) setExportPDFWOFGsWriteEngine:(NSString*)value;
+-(NSString*) exportPDFWOFGsPDFCompatibilityLevel;
+-(void) setExportPDFWOFGsPDFCompatibilityLevel:(NSString*)value;
+-(BOOL) exportPDFWOFMetaDataInvisibleGraphicsEnabled;
+-(void) setExportPDFWOFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
-@property BOOL exportPDFMetaDataInvisibleGraphicsEnabled;
+-(BOOL) exportPDFMetaDataInvisibleGraphicsEnabled;
+-(void) setExportPDFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
-@property BOOL doNotClipPreview;
+-(BOOL) doNotClipPreview;
+-(void) setDoNotClipPreview:(BOOL)value;
 
-@property latex_mode_t latexisationLaTeXMode;
-@property (readonly) CGFloat latexisationFontSize;
-@property (readonly) NSData* latexisationFontColorData;
-@property (readonly) NSColor* latexisationFontColor;
+-(latex_mode_t) latexisationLaTeXMode;
+-(void)         setLatexisationLaTeXMode:(latex_mode_t)mode;
+-(CGFloat)      latexisationFontSize;
+-(NSData*)      latexisationFontColorData;
+-(NSColor*)     latexisationFontColor;
 
 @property CGFloat marginsAdditionalLeft;
 @property CGFloat marginsAdditionalRight;

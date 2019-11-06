@@ -68,6 +68,8 @@
 
 #import <Sparkle/Sparkle.h>
 
+asm(".weak_reference _OBJC_CLASS_$_NSFileWrapper");//10.6 compatibility
+
 @interface MyTextAttachementCell : NSTextAttachmentCell
 @end
 @implementation MyTextAttachementCell
@@ -499,7 +501,7 @@ static NSMutableDictionary* cachePaths = nil;
       CompositionConfigurationPsToPdfPathKey, @"path",
       [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil],
     [@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey],
-    [NSDictionary dictionary],
+      [NSDictionary dictionary],
     [@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey],
     [NSDictionary dictionaryWithObjectsAndKeys:
       DragExportSvgPdfToSvgPathKey, @"path",
@@ -599,11 +601,23 @@ static NSMutableDictionary* cachePaths = nil;
       NSUInteger equationsCount = equations.count;
       if (equationsCount == 1)
       {
-        MyDocument* document = (MyDocument*)
-          [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
-        if (error)
-          DebugLog(1, @"error : %@", error);
-        ok |= (document != nil);
+        if (isMacOS10_7OrAbove())
+        {
+          __block BOOL localOk = ok;
+          [documentController openDocumentWithContentsOfURL:fileURL display:YES completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* localError) {
+                if (error)
+                  DebugLog(1, @"error : %@", error);
+                localOk = (document != nil);
+           }];
+           ok |= localOk;
+        }//end if (isMacOS10_7OrAbove())
+        else//if (!isMacOS10_7OrAbove())
+        {
+          MyDocument* document = (MyDocument*) [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
+          if (error)
+            DebugLog(1, @"error : %@", error);
+          ok |= (document != nil);
+        }//end if (!isMacOS10_7OrAbove())
       }//end if (equationsCount == 1)
       else if (equationsCount > 1)
       {
@@ -645,11 +659,24 @@ static NSMutableDictionary* cachePaths = nil;
       NSUInteger equationsCount = equations.count;
       if (equationsCount == 1)
       {
-        MyDocument* document = (MyDocument*)
-          [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
-        if (error)
-          DebugLog(1, @"error : %@", error);
-        ok |= (document != nil);
+        if (isMacOS10_7OrAbove())
+        {
+          __block BOOL localOk = ok;
+          [documentController openDocumentWithContentsOfURL:fileURL display:YES
+            completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* localError) {
+              if (error)
+                DebugLog(1, @"error : %@", error);
+              localOk = (document != nil);
+           }];
+           ok |= localOk;
+        }//end if (isMacOS10_7OrAbove())
+        else//if (!isMacOS10_7OrAbove())
+        {
+          MyDocument* document = (MyDocument*) [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
+          if (error)
+            DebugLog(1, @"error : %@", error);
+          ok = (document != nil);
+        }//end if (!isMacOS10_7OrAbove())
       }//end if (equationsCount == 1)
       else if (equationsCount > 1)
       {
@@ -670,12 +697,24 @@ static NSMutableDictionary* cachePaths = nil;
     else
     {
       NSError* error = nil;
-      MyDocument* document = (MyDocument*)
-        [[NSDocumentController sharedDocumentController]
-          openDocumentWithContentsOfURL:fileURL display:YES error:&error];
-      if (error)
-        DebugLog(1, @"error : %@", error);
-      ok = (document != nil);
+      if (isMacOS10_7OrAbove())
+      {
+        __block BOOL localOk = ok;
+        [documentController openDocumentWithContentsOfURL:fileURL display:YES
+          completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* localError) {
+            if (error)
+              DebugLog(1, @"error : %@", error);
+            localOk = (document != nil);
+         }];
+         ok |= localOk;
+      }//end if (isMacOS10_7OrAbove())
+      else//if (!isMacOS10_7OrAbove())
+      {
+        MyDocument* document = (MyDocument*) [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
+        if (error)
+          DebugLog(1, @"error : %@", error);
+        ok |= (document != nil);
+      }//end if (!isMacOS10_7OrAbove())
     }
   }//end latex document
   return ok;
@@ -687,15 +726,21 @@ static NSMutableDictionary* cachePaths = nil;
 //as delegate, no need to register for a notification
 -(void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-  NSString* latexitHelperFilePath = [[NSBundle mainBundle] pathForResource:@"LaTeXiT Helper" ofType:@"app"];
-  CFURLRef  latexitHelperURL = CFURLCreateWithFileSystemPath(0, (CFStringRef)latexitHelperFilePath, kCFURLPOSIXPathStyle, FALSE);
-  OSStatus status = LSRegisterURL(latexitHelperURL, true);
+  NSString* resourcesPath = [[NSBundle mainBundle] resourcePath];
+  NSString* applicationsPath = [[[resourcesPath stringByDeletingLastPathComponent]
+    stringByAppendingPathComponent:@"Library"]
+    stringByAppendingPathComponent:@"Applications"];
+  NSString* latexitHelperFilePath = [applicationsPath stringByAppendingPathComponent:@"LaTeXiT Helper.app"];
+  CFURLRef  latexitHelperURL = !latexitHelperFilePath ? 0  :
+    CFURLCreateWithFileSystemPath(0, (CFStringRef)latexitHelperFilePath, kCFURLPOSIXPathStyle, FALSE);
+  OSStatus status = !latexitHelperURL ? -1 : LSRegisterURL(latexitHelperURL, true);
   if (status != noErr)
     DebugLog(0, @"LSRegisterURL : %ld", (long int)status);
   if ([NSApp respondsToSelector:NSSelectorFromString(@"effectiveAppearance")])
     [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options:NSKeyValueObservingOptionNew context:0];
 
-  [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
+  if (latexitHelperFilePath && (status == noErr))
+    [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
   //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
 
   if (latexitHelperURL)
@@ -957,6 +1002,12 @@ static NSMutableDictionary* cachePaths = nil;
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil);
   }
+  else if (sender.action == @selector(displayBaseline:))
+  {
+    MyDocument* myDocument = (MyDocument*) [self currentDocument];
+    LatexitEquation* equation = [myDocument latexitEquationWithCurrentStateTransient:NO];
+    ok = (equation != nil);
+  }
   else if (sender.action == @selector(showOrHidePreamble:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
@@ -1123,7 +1174,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) displaySponsors:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://pierre.chachatelier.fr/latexit/latexit-sponsors.php"]];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://pierre.chachatelier.fr/latexit/latexit-sponsors.php"]];
 }
 //end makeDonation:
 
@@ -1639,6 +1690,14 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end displayLog:
 
+-(IBAction) displayBaseline:(id)sender
+{
+  MyDocument* document = (MyDocument*) [self currentDocument];
+  if (document)
+    [document displayBaseline:sender];
+}
+//end displayBaseline:
+
 -(IBAction) returnFromWhiteColorWarningWindow:(id)sender
 {
   [NSApp stopModalWithCode:([sender tag] == 0) ? NSModalResponseCancel : NSModalResponseOK];
@@ -1868,12 +1927,12 @@ static NSMutableDictionary* cachePaths = nil;
 -(IBAction) openWebSite:(id)sender
 {
   NSMutableString* urlString =
-    [NSMutableString stringWithString:NSLocalizedString(@"http://pierre.chachatelier.fr/latexit/index.php",
-                                                        @"http://pierre.chachatelier.fr/latexit/index.php")];
+    [NSMutableString stringWithString:NSLocalizedString(@"https://pierre.chachatelier.fr/latexit/index.php",
+                                                        @"https://pierre.chachatelier.fr/latexit/index.php")];
   if ([sender respondsToSelector:@selector(tag)] && ([sender tag] == 1))
     urlString =
-      [NSMutableString stringWithString:NSLocalizedString(@"http://pierre.chachatelier.fr/latexit/latexit-donations.php",
-                                                          @"http://pierre.chachatelier.fr/latexit/latexit-donations.php")];
+      [NSMutableString stringWithString:NSLocalizedString(@"https://pierre.chachatelier.fr/latexit/latexit-donations.php",
+                                                          @"https://pierre.chachatelier.fr/latexit/latexit-donations.php")];
   NSURL* webSiteURL = [NSURL URLWithString:urlString];
 
   BOOL ok = [[NSWorkspace sharedWorkspace] openURL:webSiteURL];
@@ -1910,7 +1969,11 @@ static NSMutableDictionary* cachePaths = nil;
     NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"Read Me") ofType:@"rtfd"];
     ok = (file != nil);
     if (ok)
+    {
       [self->readmeTextView readRTFDFromFile:file];
+      [self->readmeTextView setBackgroundColor:[NSColor textBackgroundColor]];
+      [self->readmeTextView setTextColor:[NSColor textColor]];
+    }//end if (ok)
   }//end if (!string || ![string length])
   if (ok)
   {

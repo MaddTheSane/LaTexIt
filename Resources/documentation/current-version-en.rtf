@@ -4,16 +4,18 @@
 \paperw12240\paperh15840\vieww10800\viewh8400\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\qc
 
-\f0\b\fs24 \cf0 version 2.13.2 (19/03/2019)\
+\f0\b\fs24 \cf0 version 2.13.3 (22/10/2019)\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\qc
 
 \f1\b0\fs22 \cf0 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj
-\cf0 -Force <Escape> to allow text completion for all MacOS versions (the standard <Escape> shortcut has become <\uc0\u8997 +Escape> since MacOS 10.13);\
--added a new preference to allow automatic text completion for any word beginning with backslash (\\);\
--added a new "on-the-fly" drag'n dropping export option to create a temporary file instead of using the pasteboard only; it can help interacting with other applications;\
--LaTeX palettes are no more automatically hidden when LaTeXiT is not the active application;\
--various polishing on text-completion, LaTeX palette insertion;\
--fixed the localization of the LaTeXiT Service items;\
--dark mode adjustments.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
+\cf0 -The 2.13.* series will be the last one to support MacOS\'a010.6/10.7/10.8. The MacOS\'a010.9+ compatibility and application notarization will be available starting from LaTeXiT 2.14.0. The 2.13.* series will still be maintained as long as possible for minor fixes;\
+-fixed a regression preventing the restoration of LaTeX mode when re-opening an equation;\
+\pard\tx264\pardeftab264\pardirnatural
+\cf0 -take retina High Dpi into account when exporting to bitmap;\
+-more Dark mode fixes;\
+-export using a temporary file is now a persistent option (restored after restarting the application;\
+-added menu "LaTeX > Baseline of current equation...";\
+-the insertion point color is now the same as the text itself;\
+-fixed MacOS 10.6 backward compatibility.\
 }
