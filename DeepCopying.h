@@ -11,13 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol DeepCopying <NSObject>
--(id) deepCopy;
--(id) deepCopyWithZone:(nullable NSZone*)zone;
+-(id) deepCopy NS_RETURNS_RETAINED;
+-(id) deepCopyWithZone:(nullable NSZone*)zone NS_RETURNS_RETAINED;
 @end
 
 @protocol DeepMutableCopying <NSObject>
--(id) deepMutableCopy;
--(id) deepMutableCopyWithZone:(nullable NSZone*)zone;
+-(id) deepMutableCopy NS_RETURNS_RETAINED;
+-(id) deepMutableCopyWithZone:(nullable NSZone*)zone NS_RETURNS_RETAINED;
 @end
 
 NS_ASSUME_NONNULL_END

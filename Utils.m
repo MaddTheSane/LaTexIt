@@ -103,7 +103,7 @@ BOOL isMacOS10_14OrAbove(void)
 
 NSString* GetMySVGPboardType(void)
 {
-  return (NSString*)kUTTypeScalableVectorGraphics;
+  return @"public.svg-image";
 }
 //end GetMySVGPboardType()
 
