@@ -640,7 +640,7 @@
 		931AD67508491A8E00E8EE8B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		931CB3050801311100CF9D2B /* LaTeXPalettesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXPalettesWindowController.h; sourceTree = "<group>"; };
 		931CB3060801311100CF9D2B /* LaTeXPalettesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaTeXPalettesWindowController.m; sourceTree = "<group>"; };
-		931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaTeXPalettesWindowController.xib; sourceTree = "<group>"; };
+		931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaTeXPalettesWindowController.xib; sourceTree = SOURCE_ROOT; };
 		931D94F50E8A252100D9A778 /* DirectoryService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DirectoryService.framework; path = System/Library/Frameworks/DirectoryService.framework; sourceTree = SDKROOT; };
 		931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryServiceHelper.h; sourceTree = "<group>"; };
 		931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryServiceHelper.m; sourceTree = "<group>"; };
@@ -743,7 +743,7 @@
 		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; path = "Lies mich.rtfd"; sourceTree = "<group>"; };
 		934D1FD50E5F30FB00BA812B /* AdditionalFilesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesWindowController.h; sourceTree = "<group>"; };
 		934D1FD60E5F30FB00BA812B /* AdditionalFilesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesWindowController.m; sourceTree = "<group>"; };
-		934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdditionalFilesWindowController.xib; sourceTree = "<group>"; };
+		934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdditionalFilesWindowController.xib; sourceTree = SOURCE_ROOT; };
 		934D20B90E5F5A2000BA812B /* AdditionalFilesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesTableView.h; sourceTree = "<group>"; };
 		934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesTableView.m; sourceTree = "<group>"; };
 		934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
@@ -757,8 +757,8 @@
 		935888E8096048A00068C698 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; path = "Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; path = "Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
-		935AD8710F9E389700B361D8 /* MyDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDocument.xib; sourceTree = "<group>"; };
-		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryWindowController.xib; sourceTree = "<group>"; };
+		935AD8710F9E389700B361D8 /* MyDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDocument.xib; sourceTree = SOURCE_ROOT; };
+		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryWindowController.xib; sourceTree = SOURCE_ROOT; };
 		935ADDAC0FA0B0C500B361D8 /* ExportFormatOptionsPanes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportFormatOptionsPanes.h; sourceTree = "<group>"; };
 		935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportFormatOptionsPanes.m; sourceTree = "<group>"; };
 		935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSegmentedControlExtended.m; sourceTree = "<group>"; };
@@ -785,7 +785,7 @@
 		936E5F910906E64000A26F7B /* SMLSyntaxColouring.h */ = {isa = PBXFileReference; fileEncoding = 5; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = SMLSyntaxColouring.h; sourceTree = "<group>"; usesTabs = 1; };
 		9372A1F2087819EF00A3A645 /* MarginsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginsWindowController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginsWindowController.m; sourceTree = "<group>"; };
-		9372A26A08781EC800A3A645 /* MarginsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarginsWindowController.xib; sourceTree = "<group>"; };
+		9372A26A08781EC800A3A645 /* MarginsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarginsWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93773C3207FFF541004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		93773C4607FFF6FB004AAB30 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -931,7 +931,7 @@
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93BDECD519B5B8FE00F2C4AB /* missing-translations.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "missing-translations.rtf"; sourceTree = SOURCE_ROOT; };
-		93BEEB551195BDB40060166A /* DragFilterWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DragFilterWindowController.xib; sourceTree = "<group>"; };
+		93BEEB551195BDB40060166A /* DragFilterWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DragFilterWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93BEEB591195BDF20060166A /* DragFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindowController.h; sourceTree = "<group>"; };
 		93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindowController.m; sourceTree = "<group>"; };
 		93C0685C1697230300D20F06 /* お読みください.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; path = "お読みください.rtfd"; sourceTree = "<group>"; };
@@ -957,7 +957,7 @@
 		93D6BA1C082941900081D58A /* NSArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtended.m; sourceTree = "<group>"; };
 		93D7CA5409D362FC0001DC5E /* CompositionConfigurationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationsWindowController.h; sourceTree = "<group>"; };
 		93D7CA5509D362FC0001DC5E /* CompositionConfigurationsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompositionConfigurationsWindowController.m; sourceTree = "<group>"; };
-		93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CompositionConfigurationsWindowController.xib; sourceTree = "<group>"; };
+		93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CompositionConfigurationsWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93DD13F0126B0FB700EBF198 /* PluginCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginCell.h; sourceTree = "<group>"; };
 		93DD13F1126B0FB700EBF198 /* PluginCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginCell.m; sourceTree = "<group>"; };
 		93DD6391106A392300EDDF82 /* BodyTemplatesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyTemplatesController.h; sourceTree = "<group>"; };
@@ -976,7 +976,7 @@
 		93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Automator_CreateEquations.h; sourceTree = "<group>"; };
 		93EE114807F2F607009E1F36 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
 		93EE114907F2F607009E1F36 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
-		93EED7D508A2197500A99BDF /* HistoryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryWindowController.xib; sourceTree = "<group>"; };
+		93EED7D508A2197500A99BDF /* HistoryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93EF9D2007EF7B740003FA6E /* HistoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryManager.h; sourceTree = "<group>"; };
 		93EF9D2107EF7B740003FA6E /* HistoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryManager.m; sourceTree = "<group>"; };
 		93EF9E8F07EF99910003FA6E /* HistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryView.h; sourceTree = "<group>"; };
@@ -992,7 +992,7 @@
 		93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
 		93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsWindowController.m; sourceTree = "<group>"; };
-		93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EncapsulationsWindowController.xib; sourceTree = "<group>"; };
+		93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EncapsulationsWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93F78428101770A5005BC2B6 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		93F78449101770AE005BC2B6 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		93F7844C101770B6005BC2B6 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
@@ -2494,7 +2494,7 @@
 				93F874FA1088645700995B12 /* ja */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
@@ -2508,7 +2508,7 @@
 				93F87500108864C000995B12 /* ja */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
@@ -2521,8 +2521,7 @@
 				93F874F9108863D900995B12 /* ja */,
 			);
 			name = Credits.rtf;
-			path = ..;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		558E21DB1DD1AAED00251C1A /* ExportFormatOptionsPanes.xib */ = {
 			isa = PBXVariantGroup;
@@ -2535,7 +2534,7 @@
 				558E21E61DD1AC4800251C1A /* es */,
 			);
 			name = ExportFormatOptionsPanes.xib;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		558E21DE1DD1AB1700251C1A /* DocumentExtraPanelsController.xib */ = {
 			isa = PBXVariantGroup;
@@ -2548,7 +2547,7 @@
 				558E21E21DD1AC0A00251C1A /* es */,
 			);
 			name = DocumentExtraPanelsController.xib;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		930255CF07F0C2A800011996 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -2561,7 +2560,7 @@
 				93F874FC1088648500995B12 /* ja */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		9341922D1281C70C009D3E97 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -2603,7 +2602,6 @@
 				93F874FB1088647D00995B12 /* ja */,
 			);
 			name = defaultPreamble.rtf;
-			path = Resources;
 			sourceTree = SOURCE_ROOT;
 		};
 		9396B9C2194ED560003CD205 /* additional-files-help.rtfd */ = {
@@ -2645,7 +2643,7 @@
 				93ADD651144AE97A00BA13D9 /* it */,
 			);
 			name = ServicesMenu.strings;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -2671,7 +2669,7 @@
 				55C7B230223331B10067EA4F /* Base */,
 			);
 			name = PreferencesWindowController.xib;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
 
