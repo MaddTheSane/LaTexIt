@@ -767,7 +767,7 @@ static LaTeXProcessor* sharedInstance = nil;
 -(NSString*) insertColorInPreamble:(NSString*)thePreamble color:(NSColor*)theColor isColorStyAvailable:(BOOL)isColorStyAvailable
 {
   NSColor* color = theColor ? theColor : [NSColor colorWithCalibratedRed:0 green:0 blue:0 alpha:0];
-  color = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+  color = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
   CGFloat rgba[4] = {0};
   [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
   NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
@@ -1093,7 +1093,7 @@ static LaTeXProcessor* sharedInstance = nil;
   NSDictionary* additionalProcessingScripts = [compositionConfiguration compositionConfigurationAdditionalProcessingScripts];
   
   //xelatex requires to insert the color in the body, so we compute the color as string...
-  color = [(color ? color : [NSColor blackColor]) colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+  color = [(color ? color : [NSColor blackColor]) colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
   CGFloat rgba[4] = {0, 0, 0, 0};
   [color getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
   NSString* colorString = [color isRGBEqualTo:[NSColor blackColor]] ? @"" :
@@ -2618,7 +2618,7 @@ static LaTeXProcessor* sharedInstance = nil;
         CGImageRef cgImage = 0;
         if (cgContext)
         {
-          NSColor* rgbColor = [jpegColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+          NSColor* rgbColor = [jpegColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
           CGContextSetRGBFillColor(cgContext,
             [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], [rgbColor alphaComponent]);
           CGContextFillRect(cgContext, CGRectMake(0, 0, width, height));
@@ -2724,7 +2724,7 @@ static LaTeXProcessor* sharedInstance = nil;
           @"";
         NSString* sourceString = [sourceText string];
         NSString* escapedSourceString = [sourceString stringByReplacingOccurrencesOfRegex:@"&(?!amp;)" withString:@"&amp;"];
-        NSColor* rgbaColor = [[metaData objectForKey:@"color"] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        NSColor* rgbaColor = [[metaData objectForKey:@"color"] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
         CGFloat rgba_f[4] = {0};
         [rgbaColor getRed:&rgba_f[0] green:&rgba_f[1] blue:&rgba_f[2] alpha:&rgba_f[3]];
         int rgba_i[4] = {0};

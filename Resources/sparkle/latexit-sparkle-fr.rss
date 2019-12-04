@@ -849,5 +849,26 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFHmies3Hb2uI3s0HrG4MITLvYPCiAhQ0bt8Wrfmas76YaEw87nJ4LLYCxw=="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.13.5</guid>
+      <title>Version 2.13.5</title>
+      <description><![CDATA[
+        <ul>
+          <li>La série 2.13.* sera la dernière supportant MacOS 10.6/10.7/10.8. La compatibilité MacOS 10.9+ et la notarisation de l'application seront assurées à partir de LaTeXiT 2.14.0. La série 2.13.* sera cependant maintenue autant que possible pour des corrections mineures ;</li>
+          <li>les couleurs des équations étaient mal restaurées selon le profil colorimétrique de l'écran.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.13.5</sparkle:releaseNotesLink>
+			<pubDate>Fri, 15 Nov 2019 21:32:51 +0100</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_5.dmg"
+				sparkle:version="2.13.5"
+                   sparkle:shortVersionString="2.13.5"
+				type="application/octet-stream"
+				length="15595609"
+				sparkle:dsaSignature="MCwCFFRy3IicA4EyY506EP3OteTEzfivAhR35Xmi9xhtWjdAVOuQ+GBp7ZabdQ=="
+			/>
+    </item>
   </channel>
 </rss>

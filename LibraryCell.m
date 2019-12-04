@@ -140,7 +140,7 @@
       {
         CGContextRef cgContext = [[NSGraphicsContext currentContext] graphicsPort];
 
-        NSColor* rgbaColor = [self->textBackgroundColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        NSColor* rgbaColor = [self->textBackgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
         CGFloat hsba[4] = {[rgbaColor hueComponent], [rgbaColor saturationComponent], [rgbaColor brightnessComponent], [rgbaColor alphaComponent]};
         hsba[1] = MIN(1., 0.5*hsba[1]);
         hsba[2] = MIN(1., 1.5*hsba[2]);
