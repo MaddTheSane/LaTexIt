@@ -583,7 +583,7 @@
 								<object class="NSMenuItem" id="146176328">
 									<reference key="NSMenu" ref="123170872"/>
 									<string key="NSTitle">Letztes Log zeigen...</string>
-									<string key="NSKeyEquiv"></string>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="728256076"/>
 									<reference key="NSMixedImage" ref="653550851"/>
@@ -592,7 +592,6 @@
 									<reference key="NSMenu" ref="123170872"/>
 									<string key="NSTitle">Basislinie der aktuellen Gleichung...</string>
 									<string key="NSKeyEquiv"/>
-									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="728256076"/>
 									<reference key="NSMixedImage" ref="653550851"/>

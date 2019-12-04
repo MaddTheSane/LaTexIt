@@ -595,7 +595,6 @@
 									<reference key="NSMenu" ref="818110246"/>
 									<string key="NSTitle">Ligne de base de l'équation courante...</string>
 									<string key="NSKeyEquiv"/>
-									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="533649799"/>
 									<reference key="NSMixedImage" ref="294559507"/>
@@ -1356,6 +1355,7 @@
 											<int key="NSvFlags">2322</int>
 											<string key="NSFrameSize">{550, 549}</string>
 											<reference key="NSSuperview" ref="695765347"/>
+											<reference key="NSNextKeyView" ref="197032457"/>
 											<object class="NSTextContainer" key="NSTextContainer" id="492902727">
 												<object class="NSLayoutManager" key="NSLayoutManager">
 													<object class="NSTextStorage" key="NSTextStorage">
@@ -1472,7 +1472,7 @@
 							</array>
 							<string key="NSFrameSize">{552, 551}</string>
 							<reference key="NSSuperview" ref="1070147040"/>
-							<reference key="NSNextKeyView" ref="197032457"/>
+							<reference key="NSNextKeyView" ref="695765347"/>
 							<int key="NSsFlags">133650</int>
 							<reference key="NSVScroller" ref="508521724"/>
 							<reference key="NSHScroller" ref="197032457"/>

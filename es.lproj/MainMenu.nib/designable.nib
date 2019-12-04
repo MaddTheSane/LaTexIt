@@ -593,7 +593,6 @@
 									<reference key="NSMenu" ref="297712220"/>
 									<string key="NSTitle">Línea base de la ecuación actual...</string>
 									<string key="NSKeyEquiv"/>
-									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="58468837"/>
 									<reference key="NSMixedImage" ref="240616805"/>

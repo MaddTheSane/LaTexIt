@@ -601,7 +601,6 @@
 									<reference key="NSMenu" ref="389609715"/>
 									<string key="NSTitle">Baseline of current equation...</string>
 									<string key="NSKeyEquiv"/>
-									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="380749168"/>
 									<reference key="NSMixedImage" ref="979262368"/>
