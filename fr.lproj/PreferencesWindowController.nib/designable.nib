@@ -1197,7 +1197,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9436" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-5.5234375" width="407" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-5.03515625" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1226,7 +1226,7 @@ du texte &amp; $des maths$ \\
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00074404761904761901" horizontal="NO" id="9435">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.0011160714285714285" horizontal="NO" id="9435">
                                             <rect key="frame" x="392" y="1" width="16" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1242,7 +1242,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9474" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-5.5234375" width="407" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-5.03515625" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1271,7 +1271,7 @@ du texte &amp; $des maths$ \\
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00076844262295081966" horizontal="NO" id="9475">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.0011526639344262295" horizontal="NO" id="9475">
                                             <rect key="frame" x="392" y="1" width="16" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -2149,7 +2149,7 @@ du texte &amp; $des maths$ \\
                     <font key="font" metaFont="system"/>
                     <tabViewItems>
                         <tabViewItem label="Configuration" identifier="" id="1025">
-                            <view key="view" id="1027">
+                            <view key="view" ambiguous="YES" id="1027">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -2315,7 +2315,7 @@ du texte &amp; $des maths$ \\
                             </view>
                         </tabViewItem>
                         <tabViewItem label="Raccourcis clavier" identifier="" id="1026">
-                            <view key="view" ambiguous="YES" id="1028">
+                            <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="554" height="246"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -2324,7 +2324,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" ambiguous="YES" id="pE8-DX-CPh">
                                             <rect key="frame" x="1" y="0.0" width="526" height="131"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9410" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="527" height="106"/>

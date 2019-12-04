@@ -1782,7 +1782,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9404" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-4.01171875" width="481" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-3.5234375" width="481" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1811,7 +1811,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.0003720238095238095" horizontal="NO" id="9405">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00074404761904761901" horizontal="NO" id="9405">
                                             <rect key="frame" x="466" y="1" width="16" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1824,7 +1824,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="9409" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-4.01171875" width="481" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-3.5234375" width="481" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1853,7 +1853,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00038422131147540983" horizontal="NO" id="9408">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00076844262295081966" horizontal="NO" id="9408">
                                             <rect key="frame" x="466" y="1" width="16" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -2114,7 +2114,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                     <font key="font" metaFont="system"/>
                     <tabViewItems>
                         <tabViewItem label="Konfiguration" identifier="" id="1025">
-                            <view key="view" id="1027">
+                            <view key="view" ambiguous="YES" id="1027">
                                 <rect key="frame" x="10" y="33" width="644" height="246"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -2280,7 +2280,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                             </view>
                         </tabViewItem>
                         <tabViewItem label="Tastatur-Kurzbefehle" identifier="" id="1026">
-                            <view key="view" ambiguous="YES" id="1028">
+                            <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="644" height="246"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -2289,7 +2289,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" ambiguous="YES" id="s57-bL-AvG">
                                             <rect key="frame" x="1" y="0.0" width="608" height="131"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9363" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="608" height="106"/>

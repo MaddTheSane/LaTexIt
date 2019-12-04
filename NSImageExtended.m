@@ -215,7 +215,7 @@
       CGContextClip(cgContext);
       if (color)
       {
-        NSColor* colorRGB = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        NSColor* colorRGB = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
         CGFloat rgba[4] = {0};
         [colorRGB getRed:&rgba[0] green:&rgba[1] blue:&rgba[2] alpha:&rgba[3]];
         CGContextSetRGBFillColor(cgContext, rgba[0], rgba[1], rgba[2], rgba[3]);

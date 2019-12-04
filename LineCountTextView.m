@@ -617,7 +617,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   if ([pboard availableTypeFromArray:@[NSPasteboardTypeColor]])
   {
     NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
-    NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+    NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
     [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
                        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
   }
@@ -1175,7 +1175,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSString* output = nil;
     if (input)
     {
-      NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+      NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
       NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
         [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
       BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll
