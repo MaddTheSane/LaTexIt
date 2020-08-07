@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -75,6 +75,8 @@
   
   BOOL      pdfMetaDataInvisibleGraphicsEnabled;
   id        exportFormatOptionsPDFPanelDelegate;
+  
+  NSArray* nibTopLevelObjects;
 }
 
 -(id) initWithLoadingFromNib;

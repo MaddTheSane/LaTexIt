@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "ExportFormatOptionsPanes.h"
@@ -20,7 +20,11 @@
   NSBundle* bundle = [NSBundle bundleForClass:[self class]];
   if (!(self = [super initWithNibNamed:@"ExportFormatOptionsPanes" bundle:bundle]))
     return nil;
-  [self instantiateWithOwner:self topLevelObjects:nil];
+  [self instantiateWithOwner:self topLevelObjects:&self->nibTopLevelObjects];
+  #ifdef ARC_ENABLED
+  #else
+  [self->nibTopLevelObjects retain];
+  #endif
 
   self->jpegQualityPercent  = 90.f;
   #ifdef ARC_ENABLED
@@ -55,6 +59,7 @@
   [self->jpegBackgroundColor release];
   [self->pdfWofGSWriteEngine release];
   [self->pdfWofGSPDFCompatibilityLevel release];
+  [self->nibTopLevelObjects release];
   [super dealloc];
   #endif
 }

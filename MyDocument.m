@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -1034,6 +1034,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [NSDictionary dictionaryWithObjectsAndKeys:
         @(YES), @"runBegin",
         @(self->shouldApplyToPasteboardAfterLatexization), @"applyToPasteboard",
+        @([self->lowerBoxControlsBoxFontColorWell isActive]), @"lowerBoxControlsBoxFontColorWellIsActive",
          nil];
     [self latexizeCoreRunWithConfiguration:configuration];
   }//end if (![self isBusy])
@@ -1062,7 +1063,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         if (!self->nbBackgroundLatexizations)
           [self autorelease];
       }
-    }
+    }//end if (self->isClosed)
     else//if (!self->isClosed)
     {
       @synchronized(self)
@@ -1181,7 +1182,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     CGFloat bottomMargin = [[AppController appController] marginsCurrentBottomMargin];
     CGFloat topMargin    = [[AppController appController] marginsCurrentTopMargin];
 
-    NSMutableDictionary* configuration = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+    NSMutableDictionary* processConfiguration = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
       @(YES), @"runInBackgroundThread",
       self, @"document",
       preamble, @"preamble", body, @"body", color, @"color", @(mode), @"mode",
@@ -1202,10 +1203,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       !pdfData ? [NSData data] : pdfData, @"outPdfData",
       @(applyToPasteboard), @"applyToPasteboard",
       nil] autorelease];
+    [processConfiguration addEntriesFromDictionary:configuration];
     @synchronized(self){
       ++self->nbBackgroundLatexizations;
     }
-    [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithConfiguration:configuration];
+    [[LaTeXProcessor sharedLaTeXProcessor] latexiseWithConfiguration:processConfiguration];
   }//end if (runBegin && mustProcess)
 
   if (runEnd && mustProcess)
@@ -1251,9 +1253,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       }
 
       if (![[PreferencesController sharedController] historySmartEnabled])
-      {
         [[AppController appController] addEquationToHistory:latexitEquation];
-      }
       [self->upperBoxImageView setBackgroundColor:[latexitEquation backgroundColor] updateHistoryItem:NO];
       [[[AppController appController] historyWindowController] deselectAll:0];
       [[self undoManager] disableUndoRegistration];
@@ -1273,6 +1273,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     //not busy any more
     [self setBusyIdentifier:nil];
   }//end if (runEnd && mustProcess)
+  BOOL lowerBoxControlsBoxFontColorWellIsActive = [[[configuration objectForKey:@"lowerBoxControlsBoxFontColorWellIsActive"] dynamicCastToClass:[NSNumber class]] boolValue];
+  if (lowerBoxControlsBoxFontColorWellIsActive)
+    [self->lowerBoxControlsBoxFontColorWell activate:YES];
 }
 //end latexizeCoreRunBegin:runEnd:
 
@@ -1715,7 +1718,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 {
   //first, disables PDF_NOT_EMBEDDED_FONTS if needed
   DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
-  if(![controller currentSavePanel])//not already onscreen
+  if (![controller currentSavePanel])//not already onscreen
   {
     if (([controller saveAccessoryViewExportFormat] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) &&
         (![[AppController appController] isGsAvailable] || ![[AppController appController] isPsToPdfAvailable]))
@@ -1895,7 +1898,6 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         [self->upperBoxProgressIndicator stopAnimation:self];
         [self->upperBoxProgressIndicator setHidden:YES];
         [self->upperBoxProgressIndicator removeFromSuperview];
-
         //hides/how the error view
         [self _setLogTableViewVisible:([self->upperBoxLogTableView numberOfRows] > 0)];
       }

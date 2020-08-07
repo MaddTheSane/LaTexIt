@@ -920,14 +920,35 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       ]]></description>
       <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
       <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.14.4</sparkle:releaseNotesLink>
-      <pubDate>Mon, 23 Dec 2019 16:25:43 +0100</pubDate>
+      <pubDate>Mon, 23 Dec 2019 16:44:40 +0100</pubDate>
       <enclosure
         url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_4.dmg"
         sparkle:version="2.14.4"
                    sparkle:shortVersionString="2.14.4"
         type="application/octet-stream"
-        length="9910825"
-        sparkle:dsaSignature="MC0CFFJLxdfJXkjwK7Db5/g9iut5JcZwAhUAoudwhMRsLHK/wTKVG+fIyXunmR8="
+        length="9910945"
+        sparkle:dsaSignature="MC0CFGKYt64dXi4HRtSz3mt669oZizwcAhUAmQJQ5Dg0pOgfSgXC+F4o6dAahL0="
+      />
+    </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.14.5</guid>
+      <title>Version 2.14.5</title>
+      <description><![CDATA[
+        <ul>
+          <li>Correction d'un crash dû au remplacement d'une API obsolète;</li>
+          <li>ajustements mineurs de l'interface.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.14.4</sparkle:releaseNotesLink>
+      <pubDate>Wed, 12 Feb 2020 22:20:27 +0100</pubDate>
+      <enclosure
+        url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_5.dmg"
+        sparkle:version="2.14.5"
+                   sparkle:shortVersionString="2.14.5"
+        type="application/octet-stream"
+        length="9911450"
+        sparkle:dsaSignature="MC0CFHgCd+c8XShxGY9trHHg4O1demMZAhUAnUWFvfivLBGkniT0hnqyFcs/lHI="
       />
     </item>
   </channel>

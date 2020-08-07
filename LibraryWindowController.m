@@ -4,7 +4,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -693,7 +693,7 @@ static int kExportContext = 0;
   [openPanel setAllowedFileTypes:@[@"latexlib", @"latexhist", @"library", @"plist", @"tex"]];
   if ([[self window] isVisible])
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
-      [self sheetDidEnd:[self window] returnCode:result contextInfo:&kImportContext];
+      [self sheetDidEnd:openPanel returnCode:result contextInfo:&kImportContext];
     }];
   else
     [self sheetDidEnd:openPanel returnCode:[openPanel runModal] contextInfo:&kImportContext];

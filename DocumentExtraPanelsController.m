@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -38,7 +38,8 @@
   self->saveAccessoryViewOptionsTextExportPreamble         = [preferencesController exportTextExportPreamble];
   self->saveAccessoryViewOptionsTextExportEnvironment      = [preferencesController exportTextExportEnvironment];
   self->saveAccessoryViewOptionsTextExportBody             = [preferencesController exportTextExportBody];
-  [self instantiateWithOwner:self topLevelObjects:nil];
+  [self instantiateWithOwner:self topLevelObjects:&self->nibTopLevelObjects];
+  [self->nibTopLevelObjects retain];
   return self;
 }
 //end initWithLoadingFromNib
@@ -53,6 +54,7 @@
   [self->saveAccessoryViewOptionsJpegBackgroundColor release];
   [self->saveAccessoryViewOptionsSvgPdfToSvgPath release];
   [self->saveAccessoryView release]; //release the extra retain count
+  [self->nibTopLevelObjects release];
   [super dealloc];
 }
 //end dealloc
