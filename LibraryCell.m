@@ -45,11 +45,11 @@
 }
 //end copyWithZone:
 
--(void) setTextBackgroundColor:(NSColor*)color
+-(void) setTextBackgroundColor:(NSColor*)value
 {
-  [color retain];
+  [value retain];
   [self->textBackgroundColor release];
-  self->textBackgroundColor = color;
+  self->textBackgroundColor = value;
 }
 //end setTextBackgroundColor:
 

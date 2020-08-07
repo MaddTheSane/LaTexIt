@@ -954,7 +954,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
    //replace current body template
   [self->lastRequestedBodyTemplate release];
-  self->lastRequestedBodyTemplate = [bodyTemplate deepCopy];
+  self->lastRequestedBodyTemplate = [bodyTemplate copyDeep];
 
   rawHead = [self->lastRequestedBodyTemplate objectForKey:@"head"];
   head    = [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
@@ -2276,7 +2276,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     }//end for each body template
     NSDictionary* matchingBodyTemplate = [bodyTemplates objectAtIndex:matchIndex];
     [self->lastRequestedBodyTemplate release];
-    self->lastRequestedBodyTemplate = [matchingBodyTemplate deepCopy];
+    self->lastRequestedBodyTemplate = [matchingBodyTemplate copyDeep];
   
     [changeBodyTemplateButtonCell removeAllItems];
     NSMenu* menu = [changeBodyTemplateButtonCell menu];

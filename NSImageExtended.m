@@ -241,6 +241,7 @@
     else
       result = [[[NSImage alloc] initWithCGImage:cgImage size:NSSizeFromCGSize(bounds.size)] autorelease];
     CGImageRelease(cgImage);
+    CGColorSpaceRelease(colorSpace);
   }//end if (color || rounded)
   return result;
 }

@@ -22,7 +22,7 @@
   id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   result = modelObject ? [modelObject mutableCopy] :
-    [NSDictionary dictionaryWithObjectsAndKeys:
+    [[NSDictionary alloc] initWithObjectsAndKeys:
       @(NO), ServiceRegularExpressionFilterEnabledKey,
       @"(\\(.*\\))", ServiceRegularExpressionFilterInputPatternKey,
       @"\\1", ServiceRegularExpressionFilterOutputPatternKey,
@@ -36,6 +36,7 @@
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [newObject release];
 }
 //end add:
 

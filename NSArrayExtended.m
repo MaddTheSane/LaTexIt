@@ -125,8 +125,8 @@
 }
 //end filteredArrayWithItemsOfClass:exactClass:
 
--(id) deepCopy {return [self deepCopyWithZone:nil];}
--(id) deepCopyWithZone:(NSZone*)zone
+-(id) copyDeep {return [self copyDeepWithZone:nil];}
+-(id) copyDeepWithZone:(NSZone*)zone
 {
   NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:[self count]];
   NSEnumerator* enumerator = [self objectEnumerator];
@@ -134,7 +134,7 @@
   while((object = [enumerator nextObject]))
   {
     id copyOfObject =
-      [object respondsToSelector:@selector(deepCopyWithZone:)] ? [object deepCopyWithZone:zone] : [object copyWithZone:zone];
+      [object respondsToSelector:@selector(copyDeepWithZone:)] ? [object copyDeepWithZone:zone] : [object copyWithZone:zone];
     [clone addObject:copyOfObject];
     #ifdef ARC_ENABLED
     #else
@@ -148,10 +148,10 @@
   #endif
   return immutableClone;
 }
-//end deepCopyWithZone:
+//end copyDeepWithZone:
 
--(id) deepMutableCopy {return [self deepMutableCopyWithZone:nil];}
--(id) deepMutableCopyWithZone:(NSZone*)zone
+-(id) mutableCopyDeep {return [self mutableCopyDeepWithZone:nil];}
+-(id) mutableCopyDeepWithZone:(NSZone*)zone
 {
   NSMutableArray* clone = [[NSMutableArray allocWithZone:zone] initWithCapacity:[self count]];
   NSEnumerator* enumerator = [self objectEnumerator];
@@ -159,8 +159,8 @@
   while((object = [enumerator nextObject]))
   {
     id copyOfObject =
-      [object respondsToSelector:@selector(deepMutableCopyWithZone:)]
-         ? [object deepMutableCopyWithZone:zone]
+      [object respondsToSelector:@selector(mutableCopyDeepWithZone:)]
+         ? [object mutableCopyDeepWithZone:zone]
          : ([object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] : [object copyWithZone:zone]);
     [clone addObject:copyOfObject];
     #ifdef ARC_ENABLED
@@ -170,6 +170,6 @@
   }//end for each object
   return clone;
 }
-//end deepMutableCopyWithZone:
+//end mutableCopyDeepWithZone:
 
 @end
