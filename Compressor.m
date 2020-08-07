@@ -67,7 +67,7 @@
     uLongf sourceLen = [data length];
     uLongf destLen   = compressBound(sourceLen);
     NSMutableData* compData = [[NSMutableData alloc] initWithCapacity:sizeof(unsigned int)+destLen];
-    unsigned long bigSourceLen = EndianUL_NtoB(sourceLen);
+    unsigned int bigSourceLen = EndianUI_NtoB((unsigned int)sourceLen);
     [compData appendBytes:&bigSourceLen length:sizeof(unsigned int)];
     [compData increaseLengthBy:destLen];
     int error = compress2([compData mutableBytes]+sizeof(unsigned int), &destLen, [data bytes], sourceLen, level);

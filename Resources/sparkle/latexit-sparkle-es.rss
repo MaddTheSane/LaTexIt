@@ -879,14 +879,35 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       ]]></description>
       <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
       <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.14.2</sparkle:releaseNotesLink>
-      <pubDate>Tue, 17 Dec 2019 23:51:44 +0100</pubDate>
+      <pubDate>Wed, 18 Dec 2019 20:45:19 +0100</pubDate>
       <enclosure
-        url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_1.dmg"
-        sparkle:version="2.14.1"
-                   sparkle:shortVersionString="2.14.1"
+        url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_2.dmg"
+        sparkle:version="2.14.2"
+                   sparkle:shortVersionString="2.14.2"
         type="application/octet-stream"
-        length="9903748"
-        sparkle:dsaSignature="MCwCFCW45yuWGAtRTVuzf8jpy1n5/jTPAhQjYO6i2DUI44R8I1DswhYIh2tGgw=="
+        length="9904616"
+        sparkle:dsaSignature="MC0CFQCL1fEjjPzqg9zHogvJhsBmSJGgcQIUMitLTDOnAla5em+CKkjpL4cVBT4="
+      />
+    </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.14.3</guid>
+      <title>Version 2.14.3</title>
+      <description><![CDATA[
+        <ul>
+          <li>New fixes of regressions (still due to slightly aggressive code cleanup);</li>
+          <li>I feel really sorry for those cumulative updates, please excuse me.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.14.3</sparkle:releaseNotesLink>
+      <pubDate>Thu, 19 Dec 2019 21:40:34 +0100</pubDate>
+      <enclosure
+        url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_3.dmg"
+        sparkle:version="2.14.3"
+                   sparkle:shortVersionString="2.14.3"
+        type="application/octet-stream"
+        length="9898586"
+        sparkle:dsaSignature="MC0CFF4bulpAJ3xCPt3tPfVx1JIFawOwAhUAiM26tglNEfKO1WZhYZQLge8ASK8="
       />
     </item>
   </channel>
