@@ -1011,5 +1011,25 @@
 				sparkle:dsaSignature="MCwCFBcQNBGhr+BYiJ/a5/YYsocd28RRAhRkvbPhXGqdU9GKhIMv4iPreTq0jQ=="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.9</guid>
+      <title>Version 2.14.9</title>
+      <description><![CDATA[
+        <ul>
+          <li>Fixed a crash that could occur in the Preferences GUI.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.9</sparkle:releaseNotesLink>
+			<pubDate>Tue, 21 Apr 2020 08:41:08 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_9.dmg"
+				sparkle:version="2.14.9"
+                   sparkle:shortVersionString="2.14.9"
+				type="application/octet-stream"
+				length="10032347"
+				sparkle:dsaSignature="MCwCFBROhkmuNWyhB47qTBbbuy0h7OnhAhRcnAHnvrlGgOHi3YZjuONm5gL/XA=="
+			/>
+    </item>
   </channel>
 </rss>

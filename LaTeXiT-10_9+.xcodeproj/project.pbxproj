@@ -2870,7 +2870,7 @@
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.8;
+				CURRENT_PROJECT_VERSION = 2.14.9;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2917,7 +2917,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.8;
+				MARKETING_VERSION = 2.14.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -2939,7 +2939,7 @@
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.8;
+				CURRENT_PROJECT_VERSION = 2.14.9;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2985,7 +2985,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.8;
+				MARKETING_VERSION = 2.14.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -3091,7 +3091,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.8;
+				CURRENT_PROJECT_VERSION = 2.14.9;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3124,7 +3124,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.8;
+				MARKETING_VERSION = 2.14.9;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -3147,7 +3147,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.8;
+				CURRENT_PROJECT_VERSION = 2.14.9;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3180,7 +3180,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.8;
+				MARKETING_VERSION = 2.14.9;
 				OTHER_LDFLAGS = (
 					"-licucore",
 					"-lsqlite3",
@@ -3202,7 +3202,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.8;
+				CURRENT_PROJECT_VERSION = 2.14.9;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3238,7 +3238,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.14.8;
+				MARKETING_VERSION = 2.14.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
@@ -3256,7 +3256,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.8;
+				CURRENT_PROJECT_VERSION = 2.14.9;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -3291,7 +3291,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.14.8;
+				MARKETING_VERSION = 2.14.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
