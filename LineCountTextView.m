@@ -1159,6 +1159,13 @@ static NSArray* WellKnownLatexKeywords = nil;
 }
 //end setTypingAttributes:
 
+-(void) updateFontPanel
+{
+  //disable auto attributes selection
+  //[super updateFontPanel];
+}
+//end updateFontPanel
+
 -(void) colorDidChange:(NSNotification*)notification
 {
   NSWindow* window = [self window];

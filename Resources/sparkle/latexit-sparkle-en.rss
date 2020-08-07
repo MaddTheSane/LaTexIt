@@ -951,5 +951,25 @@
         sparkle:dsaSignature="MC0CFHgCd+c8XShxGY9trHHg4O1demMZAhUAnUWFvfivLBGkniT0hnqyFcs/lHI="
       />
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.14.6</guid>
+      <title>Version 2.14.6</title>
+      <description><![CDATA[
+        <ul>
+          <li>Fixed minor bugs.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.14.6</sparkle:releaseNotesLink>
+			<pubDate>Sat, 11 Apr 2020 09:24:49 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_6.dmg"
+				sparkle:version="2.14.6"
+                   sparkle:shortVersionString="2.14.6"
+				type="application/octet-stream"
+				length="9887359"
+				sparkle:dsaSignature="MCwCFEesMY8XwLypxEO5mwa4xlMSECOGAhQuj6wsmGYgt6op4wCaaVE7XHoPqQ=="
+			/>
+    </item>
   </channel> 
 </rss>

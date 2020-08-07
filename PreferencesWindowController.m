@@ -899,11 +899,19 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->additionalFilesAddButton setTarget:self->additionalFilesTableView];
   [self->additionalFilesAddButton setAction:@selector(addFiles:)];
   [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:additionalFilesController withKeyPath:@"canRemove" options:nil];
-  [self->additionalFilesRemoveButton setTarget:additionalFilesController];
-  [self->additionalFilesRemoveButton setAction:@selector(removeSelection:)];
+  [self->additionalFilesRemoveButton setTarget:self->additionalFilesTableView];
+  [self->additionalFilesRemoveButton setAction:@selector(remove:)];
   [self->additionalFilesHelpButton setTarget:self];
   [self->additionalFilesHelpButton setAction:@selector(additionalFilesHelpOpen:)];
   
+  [self->additionalFilesAddButton setTarget:self->additionalFilesTableView];
+  [self->additionalFilesAddButton setAction:@selector(addFiles:)];
+  [self->additionalFilesAddButton bind:NSEnabledBinding toObject:self->additionalFilesTableView withKeyPath:@"canAdd" options:nil];
+  [self->additionalFilesRemoveButton setTarget:self->additionalFilesTableView];
+  [self->additionalFilesRemoveButton setAction:@selector(remove:)];
+  [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:self->additionalFilesTableView withKeyPath:@"canRemove" options:nil];
+
+
   //background synchronization
   [self->synchronizationNewDocumentsEnabledButton bind:NSValueBinding
                                               toObject:userDefaultsController

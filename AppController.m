@@ -698,8 +698,23 @@ static NSMutableDictionary* cachePaths = nil;
     [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options:NSKeyValueObservingOptionNew context:0];
 
   if (latexitHelperFilePath && (status == noErr))
-    [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
-  //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
+  {
+    //[[NSWorkspace sharedWorkspace] launchApplication:latexitHelperFilePath showIcon:NO autolaunch:NO];//because Keynote won't find it otherwise
+    //[[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
+    if (!isMacOS10_15OrAbove())
+      [[NSWorkspace sharedWorkspace] openFile:nil withApplication:latexitHelperFilePath andDeactivate:NO];
+    else//if (isMacOS10_15OrAbove())
+    {
+      if (@available(macOS 10.15, *))
+      {
+        NSWorkspaceOpenConfiguration* configuration = [NSWorkspaceOpenConfiguration configuration];
+        configuration.activates = NO;
+        NSURL* latexitHelperFileURL = [NSURL fileURLWithPath:latexitHelperFilePath];
+        [[NSWorkspace sharedWorkspace] openApplicationAtURL:latexitHelperFileURL configuration:configuration completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {
+        }];
+      }//end if @available(macOS, 10.15)
+    }//end if (isMacOS10_15OrAbove())
+  }//end if (latexitHelperFilePath && (status == noErr))
 
   if (latexitHelperURL)
     CFRelease(latexitHelperURL);

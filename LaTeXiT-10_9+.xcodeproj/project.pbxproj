@@ -558,7 +558,6 @@
 		2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2A37F4B7FDCFA73011CA2CEA /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4BAFDCFA73011CA2CEA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -783,7 +782,6 @@
 		934885BB0FB4217500FFACCE /* HistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryController.h; sourceTree = "<group>"; };
 		934885BC0FB4217500FFACCE /* HistoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryController.m; sourceTree = "<group>"; };
 		9349514B10BDCD0D00931D51 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = "Legacy/LaTeXiT Helper/en.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		9349515210BDCD2800931D51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "Legacy/LaTeXiT Helper/en.lproj/MainMenu.xib"; sourceTree = "<group>"; };
 		9349515B10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaTeXiT_HelperAppDelegate.h; path = "Legacy/LaTeXiT Helper/LaTeXiT_HelperAppDelegate.h"; sourceTree = "<group>"; };
 		9349515C10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LaTeXiT_HelperAppDelegate.m; path = "Legacy/LaTeXiT Helper/LaTeXiT_HelperAppDelegate.m"; sourceTree = "<group>"; };
 		934A2C9A10B6C4AC00AAA2CD /* NSDataExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataExtended.h; sourceTree = "<group>"; };
@@ -811,6 +809,7 @@
 		9357846A0E9D2A9C00736F31 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		935888E7096048A00068C698 /* ServiceShortcutsTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTextView.h; sourceTree = "<group>"; };
 		935888E8096048A00068C698 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
+		93596686241D48D5008F8F4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Legacy/LaTeXiT Helper/Base.lproj/MainMenu.xib"; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		935AD8710F9E389700B361D8 /* MyDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MyDocument.nib; sourceTree = "<group>"; };
@@ -1066,7 +1065,6 @@
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
 		93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsWindowController.m; sourceTree = "<group>"; };
 		93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = EncapsulationsWindowController.nib; sourceTree = "<group>"; };
-		93F7842610177099005BC2B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F78428101770A5005BC2B6 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F78449101770AE005BC2B6 /* es */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = es; path = es.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
 		93F7844C101770B6005BC2B6 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
@@ -2203,6 +2201,7 @@
 				es,
 				it,
 				ja,
+				Base,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LaTeXiT */;
 			projectDirPath = "";
@@ -2717,7 +2716,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				93773C3207FFF541004AAB30 /* fr */,
-				2A37F4B7FDCFA73011CA2CEA /* en */,
 				934C03390AD03600007FEC06 /* de */,
 				93B2130C0BBC1CCC00EFCA2F /* es */,
 				93ADD652144AE98300BA13D9 /* it */,
@@ -2776,7 +2774,7 @@
 		9349515110BDCD2800931D51 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9349515210BDCD2800931D51 /* en */,
+				93596686241D48D5008F8F4F /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -2850,7 +2848,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				93F78428101770A5005BC2B6 /* fr */,
-				93F7842610177099005BC2B6 /* en */,
 				93F7844C101770B6005BC2B6 /* de */,
 				93F78449101770AE005BC2B6 /* es */,
 				93ADD653144AE98D00BA13D9 /* it */,
@@ -2869,7 +2866,7 @@
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.5;
+				CURRENT_PROJECT_VERSION = 2.14.6;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2916,7 +2913,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.5;
+				MARKETING_VERSION = 2.14.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -2938,7 +2935,7 @@
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.5;
+				CURRENT_PROJECT_VERSION = 2.14.6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2984,7 +2981,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.5;
+				MARKETING_VERSION = 2.14.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -3090,7 +3087,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.5;
+				CURRENT_PROJECT_VERSION = 2.14.6;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3123,7 +3120,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.5;
+				MARKETING_VERSION = 2.14.6;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -3146,7 +3143,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.5;
+				CURRENT_PROJECT_VERSION = 2.14.6;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3179,7 +3176,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.5;
+				MARKETING_VERSION = 2.14.6;
 				OTHER_LDFLAGS = (
 					"-licucore",
 					"-lsqlite3",
@@ -3201,7 +3198,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.5;
+				CURRENT_PROJECT_VERSION = 2.14.6;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3237,7 +3234,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.14.5;
+				MARKETING_VERSION = 2.14.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
@@ -3255,7 +3252,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.5;
+				CURRENT_PROJECT_VERSION = 2.14.6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -3290,7 +3287,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.14.5;
+				MARKETING_VERSION = 2.14.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
