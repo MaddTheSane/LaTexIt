@@ -3130,7 +3130,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   {
     NSString* infoPlistPath =
       [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
-    NSURL* infoPlistURL = [NSURL fileURLWithPath:infoPlistPath];
+    NSURL* infoPlistURL = !infoPlistPath ? nil : [NSURL fileURLWithPath:infoPlistPath];
     CFStringRef cfStringError = nil;
     #ifdef ARC_ENABLED
     CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,

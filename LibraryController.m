@@ -674,7 +674,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         if (ok)
         {
           //Recursive call to fill the folder
-          [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
+          [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:(!filePath ? nil : [NSURL fileURLWithPath:filePath])
             forDraggedItems:[[libraryGroupItem children:self->filterPredicate] allObjects]];
           [names addObject:fileName];
         }
@@ -695,7 +695,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
           if (ok)
           {
             //Recursive call to fill the folder
-            [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
+            [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:(!filePath ? nil : [NSURL fileURLWithPath:filePath])
               forDraggedItems:[[libraryGroupItem children:self->filterPredicate] allObjects]];
             [names addObject:fileName];
           }

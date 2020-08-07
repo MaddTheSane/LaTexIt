@@ -527,7 +527,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(BOOL) application:(NSApplication *)application openFile:(NSString*)filename
 {
   BOOL ok = NO;
-  NSURL* fileURL = [NSURL fileURLWithPath:filename];
+  NSURL* fileURL = !filename ? nil : [NSURL fileURLWithPath:filename];
   NSString* type = [[filename pathExtension] lowercaseString];
   if ([type isEqualTo:@"latexpalette"])
   {
@@ -1244,7 +1244,8 @@ static NSMutableDictionary* cachePaths = nil;
   if (ok)
   {
     __block MyDocument* myDocument = nil;
-    [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filepath] display:NO completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable error) {
+    NSURL* fileURL = !filepath ? nil : [NSURL fileURLWithPath:filepath];
+    [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:fileURL display:NO completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable error) {
       myDocument = [document dynamicCastToClass:[MyDocument class]];
     }];
     ok = (myDocument != nil);

@@ -368,7 +368,7 @@
   NSString* filename =[filePath lastPathComponent];
   NSString* directory = [filePath stringByDeletingLastPathComponent];
   NSInteger result = 0;
-  [openPanel setDirectoryURL:[NSURL fileURLWithPath:directory isDirectory:YES]];
+  [openPanel setDirectoryURL:(!directory ? nil : [NSURL fileURLWithPath:directory isDirectory:YES])];
   [openPanel setNameFieldStringValue:filename];
   if (result == NSFileHandlingPanelOKButton)
   {

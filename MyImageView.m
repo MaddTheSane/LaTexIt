@@ -433,8 +433,10 @@ typedef NSInteger NSDraggingContext;
         if (!self->shouldRedrag)
         {
           self->lastDragStartPointSelfBased = p;
-          [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-            [[self window] convertPointToScreen:[event locationInWindow]]];
+          NSPoint eventLocation =
+            isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
+            [[self window] convertBaseToScreen:[event locationInWindow]];
+          [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
           [[[AppController appController] dragFilterWindowController] setDelegate:self];
         }//end if (!self->shouldRedrag)
         self->shouldRedrag = NO;
@@ -446,9 +448,9 @@ typedef NSInteger NSDraggingContext;
       {
         [self dragPromisedFilesOfTypes:fileTypes fromRect:[self frame] source:self slideBack:YES event:event];
         self->isDragging = NO;
-      }//end if (!isMacOS10_14OrAbove())
+      }//end if (!isMacOS10_15OrAbove())
     }//end if (iconDragged)
-  }//end if (!self->isDragging)
+  }//end if (!self->isDragging && !([event modifierFlags] & NSControlKeyMask))
   [super mouseDragged:event];
 }
 //end mouseDragged:
@@ -495,8 +497,10 @@ typedef NSInteger NSDraggingContext;
   if (!self->shouldRedrag)
   {
     self->lastDragStartPointSelfBased = p;
-    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [[self window] convertPointToScreen:[event locationInWindow]]];
+    NSPoint eventLocation =
+      isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
+      [[self window] convertBaseToScreen:[event locationInWindow]];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -595,7 +599,9 @@ typedef NSInteger NSDraggingContext;
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [[self window] convertPointToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 =
+    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
+    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
@@ -813,7 +819,7 @@ typedef NSInteger NSDraggingContext;
           if (!hasAlreadyCachedData)
           {
             [data writeToFile:filePath atomically:YES];
-            NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+            NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
             [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
             FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
             [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
@@ -1039,7 +1045,7 @@ typedef NSInteger NSDraggingContext;
     [self->transientFilesPromisedFilePaths release];
     self->transientFilesPromisedFilePaths = [[NSMutableArray alloc] init];
     NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
-    NSURL* workingDirectoryURL = [NSURL fileURLWithPath:workingDirectory];
+    NSURL* workingDirectoryURL = !workingDirectory ? nil : [NSURL fileURLWithPath:workingDirectory];
     NSArray* files = [sendAsNSDraggingInfo namesOfPromisedFilesDroppedAtDestination:workingDirectoryURL];
     NSEnumerator* enumerator = [files objectEnumerator];
     NSString* fileName = nil;

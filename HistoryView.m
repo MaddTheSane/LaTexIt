@@ -386,8 +386,10 @@
   if (!self->shouldRedrag)
   {
     self->lastDragStartPointSelfBased = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
-    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [[self window] convertBaseToScreen:[event locationInWindow]]];
+    NSPoint eventLocation =
+      isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
+      [[self window] convertBaseToScreen:[event locationInWindow]];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -467,7 +469,9 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [[self window] convertPointToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 =
+    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
+    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =

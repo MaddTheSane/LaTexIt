@@ -1689,7 +1689,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   else if (sender == self->synchronizationNewDocumentsPathChangeButton)
   {
     NSString* directoryPath = [[PreferencesController sharedController] synchronizationNewDocumentsPath];
-    [openPanel setDirectoryURL:[NSURL fileURLWithPath:directoryPath isDirectory:YES]];
+    [openPanel setDirectoryURL:(!directoryPath ? nil : [NSURL fileURLWithPath:directoryPath isDirectory:YES])];
     [openPanel setCanChooseDirectories:YES];
     [openPanel setCanChooseFiles:NO];
     contextInfo = [NSDictionary dictionaryWithObjectsAndKeys:

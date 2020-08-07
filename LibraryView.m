@@ -746,7 +746,9 @@
                                 NSMaxY(libraryViewWindowFrame));
   NSPoint pointDown = NSMakePoint(libraryViewWindowFrame.origin.x+(libraryViewWindowFrame.size.width-dragWindowFrame.size.width)/2,
                                   NSMinY(libraryViewWindowFrame)-dragWindowFrame.size.height);
-  NSPoint eventLocation = [[self window] convertBaseToScreen:[event locationInWindow]];
+  NSPoint eventLocation = isMacOS10_12OrAbove() ?
+    [[self window] convertPointToScreen:[event locationInWindow]] :
+    [[self window] convertBaseToScreen:[event locationInWindow]];
   CGFloat distanceUp2 = (eventLocation.x-pointUp.x)*(eventLocation.x-pointUp.x)+
                         (eventLocation.y-pointUp.y)*(eventLocation.y-pointUp.y);
   CGFloat distanceDown2 = (eventLocation.x-pointDown.x)*(eventLocation.x-pointDown.x)+
@@ -764,8 +766,10 @@
   if (!self->shouldRedrag)
   {
     self->lastDragStartPointSelfBased = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
-    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [[self window] convertBaseToScreen:[event locationInWindow]]];
+    NSPoint eventLocation =
+      isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
+      [[self window] convertBaseToScreen:[event locationInWindow]];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -800,7 +804,9 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [[self window] convertPointToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 =
+    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
+    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =

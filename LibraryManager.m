@@ -777,7 +777,7 @@ static LibraryManager* sharedManagerInstance = nil;
       initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
   id persistentStore = nil;
   @try{
-    NSURL* storeURL = [NSURL fileURLWithPath:path];
+    NSURL* storeURL = !path ? nil : [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSMutableDictionary* options = [NSMutableDictionary dictionary];
     if (DebugLogLevel >= 1)
@@ -1000,12 +1000,12 @@ static LibraryManager* sharedManagerInstance = nil;
   {
     NSString* oldManagedObjectModelPath =
       [[NSBundle bundleForClass:[self class]] pathForResource:oldDataModelName ofType:@"mom"];
-    NSURL* oldManagedObjectModelURL  = [NSURL fileURLWithPath:oldManagedObjectModelPath];
+    NSURL* oldManagedObjectModelURL = !oldManagedObjectModelPath ? nil : [NSURL fileURLWithPath:oldManagedObjectModelPath];
     oldManagedObjectModel =
       [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
     oldPersistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
     oldPath = [[path copy] autorelease];
-    NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
+    NSURL* oldStoreURL = !oldPath ? nil : [NSURL fileURLWithPath:oldPath];
     @try{
       NSError* error = nil;
       oldPersistentStore = !oldStoreURL ? nil :

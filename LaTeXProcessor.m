@@ -256,7 +256,7 @@ static LaTeXProcessor* sharedInstance = nil;
       {
         //NSString* modelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Latexit-2.4.0" ofType:@"mom"];
         NSString* modelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Latexit" ofType:@"mom"];
-        NSURL* modelURL = [NSURL fileURLWithPath:modelPath];
+        NSURL* modelURL = !modelPath ? nil : [NSURL fileURLWithPath:modelPath];
         self->managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
       }//end if (!self->managedObjectModel)
     }//end @synchronized(self)

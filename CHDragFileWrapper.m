@@ -73,7 +73,7 @@
 
 -(id) pasteboardPropertyListForType:(NSString*)type
 {
-  NSURL* result = [NSURL fileURLWithPath:self->fileName];
+  NSURL* result = !self->fileName ? nil : [NSURL fileURLWithPath:self->fileName];
   return result;
 }
 //end pasteboardPropertyListForType:

@@ -1737,7 +1737,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     }
     [controller willChangeValueForKey:@"saveAccessoryViewExportFormat"];
     [controller didChangeValueForKey:@"saveAccessoryViewExportFormat"];
-    [currentSavePanel setDirectoryURL:[NSURL fileURLWithPath:directory]];
+    [currentSavePanel setDirectoryURL:(!directory ? nil : [NSURL fileURLWithPath:directory isDirectory:YES])];
     [currentSavePanel setNameFieldStringValue:file];
     [currentSavePanel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
       DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
@@ -2648,7 +2648,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     }//end if (!self->backSyncUkkQueue)
     [self->backSyncUkkQueue addPath:self->backSyncFilePath];
     [self->backSyncUkkQueue addPath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
-    [self setFileURL:[NSURL fileURLWithPath:self->backSyncFilePath]];
+    [self setFileURL:(!self->backSyncFilePath ? nil : [NSURL fileURLWithPath:self->backSyncFilePath])];
     NSImage* icon = [NSImage imageNamed:@"backsync"];
     [[[self windowForSheet] standardWindowButton:NSWindowDocumentIconButton] setImage:icon];
     [self watcher:nil receivedNotification:UKFileWatcherWriteNotification forPath:self->backSyncFilePath];
@@ -2826,7 +2826,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       [self closeBackSyncFile];
       NSString* filename = [[panel URL] path];
-      [self setFileURL:[NSURL fileURLWithPath:filename]];
+      [self setFileURL:(!filename ? nil : [NSURL fileURLWithPath:filename])];
       [self save:self];
       if (synchronizeEnabled)
       {

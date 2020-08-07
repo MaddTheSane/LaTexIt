@@ -723,8 +723,8 @@ static int kExportContext = 0;
 
 -(IBAction) openDefaultLibraryPath:(id)sender
 {
-  [(NSOpenPanel*)[importAccessoryView window]
-    setDirectoryURL:[NSURL fileURLWithPath:[[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent]]];
+  NSString* filePath = [[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent];
+  [(NSOpenPanel*)[importAccessoryView window] setDirectoryURL:(!filePath ? nil : [NSURL fileURLWithPath:filePath])];
 }
 //end openDefaultLibraryPath:
 

@@ -2678,7 +2678,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
-        NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+        NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
         [pboard writeObjects:@[fileURL]];
         [fileURL writeToPasteboard:pboard];
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
@@ -2815,7 +2815,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
-        NSURL* fileURL = [NSURL fileURLWithPath:filePath];
+        NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
         [pasteboard writeObjects:@[fileURL]];
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];

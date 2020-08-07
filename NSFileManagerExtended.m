@@ -138,8 +138,8 @@ static NSMutableSet* createdTemporaryPaths = nil;
 
 -(NSString*) UTIFromPath:(NSString*)path
 {
-  NSString* result = nil;
-  [[NSURL fileURLWithPath:path] getResourceValue:&result forKey:NSURLTypeIdentifierKey error:nil];
+  NSString* result = !path ? nil :
+    [[NSURL fileURLWithPath:path] getResourceValue:&result forKey:NSURLTypeIdentifierKey error:nil];
   return result;
 };
 //end UTIFromPath:
