@@ -16,5 +16,4 @@
 -(NSString*) encodeBase64;
 -(NSString*) encodeBase64WithNewlines:(BOOL)encodeWithNewlines;
 -(NSString*) sha1Base64;
--(NSRange) bridge_rangeOfData:(NSData *)dataToFind options:(NSDataSearchOptions)mask range:(NSRange)searchRange;
 @end

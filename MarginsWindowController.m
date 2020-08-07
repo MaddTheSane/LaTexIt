@@ -40,8 +40,8 @@
   [self->pointSizeFormatter setZeroSymbol:pointSizeZeroSymbol];
   
   [[self window] setFrameAutosaveName:@"margins"];
-  [[self window] setTitle:NSLocalizedString(@"Custom margins", @"Custom margins")];
-  [self->saveAsDefaultButton setTitle:NSLocalizedString(@"Save as default margins", @"Save as default margins")];
+  [[self window] setTitle:NSLocalizedString(@"Custom margins", @"")];
+  [self->saveAsDefaultButton setTitle:NSLocalizedString(@"Save as default margins", @"")];
   [self->saveAsDefaultButton sizeToFit];
   [self->saveAsDefaultButton centerInSuperviewHorizontally:YES vertically:NO];
   [self _updateWithUserDefaults];

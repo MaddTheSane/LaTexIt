@@ -57,7 +57,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceShortcutStringKey]
           options:[NSDictionary dictionaryWithObjectsAndKeys:
             [DelegatingTransformer transformerWithDelegate:self context:@"string"], NSValueTransformerBindingOption,
-            NSLocalizedString(@"none", @"none"), NSNullPlaceholderBindingOption,
+            NSLocalizedString(@"none", @""), NSNullPlaceholderBindingOption,
              nil]];
   [[self tableColumnWithIdentifier:@"warning"] bind:NSValueBinding toObject:serviceShortcutsController
       withKeyPath:[NSString stringWithFormat:@"arrangedObjects.@self"]
@@ -84,7 +84,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
     {
       NSString* serviceIdentifier = [[PreferencesController sharedController]
         serviceDescriptionForIdentifier:(service_identifier_t)[[value objectForKey:ServiceShortcutIdentifierKey] integerValue]];
-      result = NSLocalizedString(serviceIdentifier, serviceIdentifier);
+      result = NSLocalizedString(serviceIdentifier, @"");
     }
     else if ([context isEqual:@"string"])  
     {//add shift+command in front of the upper-case, one-character-shortcut

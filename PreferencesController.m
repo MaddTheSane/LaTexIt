@@ -274,29 +274,29 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       NSDictionary* defaults =
         [NSDictionary dictionaryWithObjectsAndKeys:
           !currentVersion ? @"" : currentVersion, LaTeXiTVersionKey,
-             [NSNumber numberWithInteger:DOCUMENT_STYLE_NORMAL], DocumentStyleKey,
-             [NSNumber numberWithInteger:EXPORT_FORMAT_PDF], DragExportTypeKey,
+             @(DOCUMENT_STYLE_NORMAL), DocumentStyleKey,
+             @(EXPORT_FORMAT_PDF), DragExportTypeKey,
              [[NSColor whiteColor] colorAsData],      DragExportJpegColorKey,
-             [NSNumber numberWithFloat:100],   DragExportJpegQualityKey,
+             @(100),   DragExportJpegQualityKey,
              @"pdfwrite", DragExportPDFWOFGsWriteEngineKey,
              @"1.5", DragExportPDFWOFGsPDFCompatibilityLevelKey,
              @"", DragExportSvgPdfToSvgPathKey,
-             [NSNumber numberWithBool:YES], DragExportPDFMetadataInvisibleGraphicsEnabledKey,
-             [NSNumber numberWithBool:YES], DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey,
-             [NSNumber numberWithBool:YES], DragExportTextExportPreambleKey,
-             [NSNumber numberWithBool:YES], DragExportTextExportEnvironmentKey,
-             [NSNumber numberWithBool:YES], DragExportTextExportBodyKey,
-             [NSNumber numberWithFloat:100],   DragExportScaleAsPercentKey,
-             [NSNumber numberWithBool:NO], DragExportIncludeBackgroundColorKey,
-             [NSNumber numberWithBool:NO], DragExportAddTempFileEnabledKey,
+             @(YES), DragExportPDFMetadataInvisibleGraphicsEnabledKey,
+             @(YES), DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey,
+             @(YES), DragExportTextExportPreambleKey,
+             @(YES), DragExportTextExportEnvironmentKey,
+             @(YES), DragExportTextExportBodyKey,
+             @(100),   DragExportScaleAsPercentKey,
+             @(NO), DragExportIncludeBackgroundColorKey,
+             @(NO), DragExportAddTempFileEnabledKey,
              [[NSColor whiteColor] colorAsData],      DefaultImageViewBackgroundKey,
-             [NSNumber numberWithBool:NO],     DefaultAutomaticHighContrastedPreviewBackgroundKey,
-             [NSNumber numberWithBool:NO],     DefaultDoNotClipPreviewKey,
+             @(NO),     DefaultAutomaticHighContrastedPreviewBackgroundKey,
+             @(NO),     DefaultDoNotClipPreviewKey,
              [[NSColor  blackColor]   colorAsData],   DefaultColorKey,
-             [NSNumber numberWithDouble:36.0], DefaultPointSizeKey,
-             [NSNumber numberWithInteger:LATEX_MODE_ALIGN], DefaultModeKey,
-             [NSNumber numberWithBool:YES], SpellCheckingEnableKey,
-             [NSNumber numberWithBool:YES], SyntaxColoringEnableKey,
+             @(36.0), DefaultPointSizeKey,
+             @(LATEX_MODE_ALIGN), DefaultModeKey,
+             @(YES), SpellCheckingEnableKey,
+             @(YES), SyntaxColoringEnableKey,
              [[NSColor textColor] colorAsData], SyntaxColoringTextForegroundColorKey,
              [[NSColor textBackgroundColor]   colorAsData], SyntaxColoringTextBackgroundColorKey,
              [[NSColor textColor] colorAsData], SyntaxColoringTextForegroundColorDarkModeKey,
@@ -309,139 +309,137 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
              [[[NSColor blueColor] lighter:.33]    colorAsData], SyntaxColoringKeywordColorDarkModeKey,
              [[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] colorAsData], SyntaxColoringCommentColorKey,
              [[[NSColor colorWithCalibratedRed:0 green:128./255. blue:64./255. alpha:1] lighter:.33] colorAsData], SyntaxColoringCommentColorDarkModeKey,
-             [NSNumber numberWithBool:YES], EditionTabKeyInsertsSpacesEnabledKey,
-             [NSNumber numberWithUnsignedInteger:2], EditionTabKeyInsertsSpacesCountKey,
-             [NSNumber numberWithBool:NO], EditionAutoCompleteOnBackslashEnabledKey,
-             [NSNumber numberWithInteger:NSOffState], ReducedTextAreaStateKey,
+             @(YES), EditionTabKeyInsertsSpacesEnabledKey,
+             @(2), EditionTabKeyInsertsSpacesCountKey,
+             @(NO), EditionAutoCompleteOnBackslashEnabledKey,
+             @(NSOffState), ReducedTextAreaStateKey,
              [[NSFont fontWithName:@"Monaco" size:12] data], DefaultFontKey,
              factoryDefaultsPreambles, PreamblesKey,
              factoryDefaultsBodyTemplates, BodyTemplatesKey,
-             [NSNumber numberWithUnsignedInteger:0], LatexisationSelectedPreambleIndexKey,
-             [NSNumber numberWithUnsignedInteger:0], ServiceSelectedPreambleIndexKey,
-             [NSNumber numberWithInteger:-1], LatexisationSelectedBodyTemplateIndexKey,//none
-             [NSNumber numberWithInteger:-1], ServiceSelectedBodyTemplateIndexKey,//none
+             @(0), LatexisationSelectedPreambleIndexKey,
+             @(0), ServiceSelectedPreambleIndexKey,
+             @(-1), LatexisationSelectedBodyTemplateIndexKey,//none
+             @(-1), ServiceSelectedBodyTemplateIndexKey,//none
              [NSArray arrayWithObjects:
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+                 @(NO), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_ALIGN), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD], ServiceShortcutIdentifierKey,
+                 @(YES), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY], ServiceShortcutIdentifierKey,
+                 @(NO), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_DISPLAY), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD], ServiceShortcutIdentifierKey,
+                 @(YES), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE], ServiceShortcutIdentifierKey,
+                 @(NO), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_INLINE), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD], ServiceShortcutIdentifierKey,
+                 @(YES), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_INLINE_CLIPBOARD), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT], ServiceShortcutIdentifierKey,
+                 @(NO), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_TEXT), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD], ServiceShortcutIdentifierKey,
+                 @(YES), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_LATEXIZE_TEXT_CLIPBOARD), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
+                 @(NO), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_MULTILATEXIZE), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
-                 [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD], ServiceShortcutIdentifierKey,
+                 @(YES), ServiceShortcutClipBoardOptionKey,
+                 @(SERVICE_MULTILATEXIZE_CLIPBOARD), ServiceShortcutIdentifierKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:YES], ServiceShortcutEnabledKey,
+                 @(YES), ServiceShortcutEnabledKey,
                  @"", ServiceShortcutStringKey,
-                 [NSNumber numberWithInteger:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
+                 @(SERVICE_DELATEXIZE), ServiceShortcutIdentifierKey,
                  nil],
               nil], ServiceShortcutsKey,
             [NSArray arrayWithObjects:
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:NO], ServiceRegularExpressionFilterEnabledKey,
+                 @(NO), ServiceRegularExpressionFilterEnabledKey,
                  @"<latex-align>(.*)</latex-align>", ServiceRegularExpressionFilterInputPatternKey,
                  @"\\\\begin\\{align\\*\\}$1\\\\end\\{align\\*\\}", ServiceRegularExpressionFilterOutputPatternKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:NO], ServiceRegularExpressionFilterEnabledKey,
+                 @(NO), ServiceRegularExpressionFilterEnabledKey,
                  @"<latex-display>(.*)</latex-display>", ServiceRegularExpressionFilterInputPatternKey,
                  @"\\\\[$1\\\\]", ServiceRegularExpressionFilterOutputPatternKey,
                  nil],
                [NSDictionary dictionaryWithObjectsAndKeys:
-                 [NSNumber numberWithBool:NO], ServiceRegularExpressionFilterEnabledKey,
+                 @(NO), ServiceRegularExpressionFilterEnabledKey,
                  @"<latex-inline>(.*)</latex-inline>", ServiceRegularExpressionFilterInputPatternKey,
                  @"$$1$", ServiceRegularExpressionFilterOutputPatternKey,
                  nil],
               nil], ServiceRegularExpressionFiltersKey,
-             [NSNumber numberWithBool:YES], ServiceRespectsBaselineKey,
-             [NSNumber numberWithBool:YES], ServiceRespectsPointSizeKey,
-             [NSNumber numberWithDouble:1.0], ServicePointSizeFactorKey,
-             [NSNumber numberWithBool:YES], ServiceRespectsColorKey,
-             [NSNumber numberWithBool:NO], ServiceUsesHistoryKey,
-             [NSNumber numberWithFloat:0], AdditionalTopMarginKey,
-             [NSNumber numberWithFloat:0], AdditionalLeftMarginKey,
-             [NSNumber numberWithFloat:0], AdditionalRightMarginKey,
-             [NSNumber numberWithFloat:0], AdditionalBottomMarginKey,
-             [NSNumber numberWithBool:YES], EncapsulationsEnabledKey,
-             [NSArray arrayWithObjects:@"@", @"#", @"\\label{@}", @"\\ref{@}", @"$#$",
-                                       @"\\[#\\]", @"\\begin{equation}#\\label{@}\\end{equation}",
-                                       nil], EncapsulationsKey,
-             [NSNumber numberWithUnsignedInteger:0], CurrentEncapsulationIndexKey,
+             @(YES), ServiceRespectsBaselineKey,
+             @(YES), ServiceRespectsPointSizeKey,
+             @(1.0), ServicePointSizeFactorKey,
+             @(YES), ServiceRespectsColorKey,
+             @(NO), ServiceUsesHistoryKey,
+             @(0), AdditionalTopMarginKey,
+             @(0), AdditionalLeftMarginKey,
+             @(0), AdditionalRightMarginKey,
+             @(0), AdditionalBottomMarginKey,
+             @(YES), EncapsulationsEnabledKey,
+             @[@"@", @"#", @"\\label{@}", @"\\ref{@}", @"$#$", @"\\[#\\]", @"\\begin{equation}#\\label{@}\\end{equation}"], EncapsulationsKey,
+             @(0), CurrentEncapsulationIndexKey,
              defaultTextShortcuts, TextShortcutsKey,
              [NSArray arrayWithObjects:[CompositionConfigurationsController defaultCompositionConfigurationDictionary], nil],
                CompositionConfigurationsKey,
-             [NSNumber numberWithUnsignedInteger:0], CompositionConfigurationDocumentIndexKey,
-             [NSNumber numberWithBool:NO], CompositionConfigurationsControllerVisibleAtStartupKey,
-             [NSNumber numberWithBool:NO], HistoryDeleteOldEntriesEnabledKey,
-             [NSNumber numberWithInteger:30], HistoryDeleteOldEntriesLimitKey,
-             [NSNumber numberWithBool:NO], HistorySmartEnabledKey,
-             [NSNumber numberWithBool:NO], EncapsulationsControllerVisibleAtStartupKey,
-             [NSNumber numberWithBool:NO], HistoryControllerVisibleAtStartupKey,
-             [NSNumber numberWithBool:NO], LatexPalettesControllerVisibleAtStartupKey,
-             [NSNumber numberWithBool:NO], LibraryControllerVisibleAtStartupKey,
-             [NSNumber numberWithBool:NO], MarginControllerVisibleAtStartupKey,
-             [NSNumber numberWithInteger:LIBRARY_ROW_IMAGE_AND_TEXT], LibraryViewRowTypeKey,
-             [NSNumber numberWithBool:YES], LibraryDisplayPreviewPanelKey,
-             [NSNumber numberWithBool:NO], HistoryDisplayPreviewPanelKey,
-             [NSNumber numberWithInteger:0], LatexPaletteGroupKey,
+             @(0), CompositionConfigurationDocumentIndexKey,
+             @(NO), CompositionConfigurationsControllerVisibleAtStartupKey,
+             @(NO), HistoryDeleteOldEntriesEnabledKey,
+             @(30), HistoryDeleteOldEntriesLimitKey,
+             @(NO), HistorySmartEnabledKey,
+             @(NO), EncapsulationsControllerVisibleAtStartupKey,
+             @(NO), HistoryControllerVisibleAtStartupKey,
+             @(NO), LatexPalettesControllerVisibleAtStartupKey,
+             @(NO), LibraryControllerVisibleAtStartupKey,
+             @(NO), MarginControllerVisibleAtStartupKey,
+             @(LIBRARY_ROW_IMAGE_AND_TEXT), LibraryViewRowTypeKey,
+             @(YES), LibraryDisplayPreviewPanelKey,
+             @(NO), HistoryDisplayPreviewPanelKey,
+             @(0), LatexPaletteGroupKey,
              NSStringFromRect(NSMakeRect(235, 624, 200, 170)), LatexPaletteFrameKey,
-             [NSNumber numberWithBool:NO], LatexPaletteDetailsStateKey,
-             [NSNumber numberWithBool:YES], ShowWhiteColorWarningKey,
-             [NSNumber numberWithBool:NO], SynchronizationNewDocumentsEnabledKey,
-             [NSNumber numberWithBool:YES], SynchronizationNewDocumentsSynchronizePreambleKey,
-             [NSNumber numberWithBool:YES], SynchronizationNewDocumentsSynchronizeEnvironmentKey,
-             [NSNumber numberWithBool:YES], SynchronizationNewDocumentsSynchronizeBodyKey,
+             @(NO), LatexPaletteDetailsStateKey,
+             @(YES), ShowWhiteColorWarningKey,
+             @(NO), SynchronizationNewDocumentsEnabledKey,
+             @(YES), SynchronizationNewDocumentsSynchronizePreambleKey,
+             @(YES), SynchronizationNewDocumentsSynchronizeEnvironmentKey,
+             @(YES), SynchronizationNewDocumentsSynchronizeBodyKey,
              desktopPath, SynchronizationNewDocumentsPathKey,
              [self defaultSynchronizationAdditionalScripts], SynchronizationAdditionalScriptsKey,
              nil];
@@ -492,21 +490,21 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       {
         exportFormat = [exportFormat lowercaseString];
         if ([exportFormat isEqualToString:@"pdf"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_PDF];
+          exportFormat = @(EXPORT_FORMAT_PDF);
         else if ([exportFormat isEqualToString:@"eps"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_EPS];
+          exportFormat = @(EXPORT_FORMAT_EPS);
         else if ([exportFormat isEqualToString:@"tiff"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_TIFF];
+          exportFormat = @(EXPORT_FORMAT_TIFF);
         else if ([exportFormat isEqualToString:@"png"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_PNG];
+          exportFormat = @(EXPORT_FORMAT_PNG);
         else if ([exportFormat isEqualToString:@"jpeg"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_JPEG];
+          exportFormat = @(EXPORT_FORMAT_JPEG);
         else if ([exportFormat isEqualToString:@"svg"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_SVG];
+          exportFormat = @(EXPORT_FORMAT_SVG);
         else if ([exportFormat isEqualToString:@"text"])
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_TEXT];
+          exportFormat = @(EXPORT_FORMAT_TEXT);
         else
-          exportFormat = [NSNumber numberWithInteger:EXPORT_FORMAT_PDF];
+          exportFormat = @(EXPORT_FORMAT_PDF);
         [userDefaults setObject:exportFormat forKey:DragExportTypeKey];
       }//end if ([exportFormat isKindOfClass:[NSString class]])
     }//end if (!initialized)
@@ -625,9 +623,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:DragExportTypeKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTypeKey, (CHBRIDGE const void*)[NSNumber numberWithInteger:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTypeKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTypeKey, [NSNumber numberWithInteger:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTypeKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
   [self setExportFormatCurrentSession:value];
 }
@@ -666,9 +664,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:DragExportAddTempFileEnabledKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
   [self setExportAddTempFileCurrentSession:value];
 }
@@ -751,9 +749,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportJpegQualityKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportJpegQualityKey, (CHBRIDGE const void*)[NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportJpegQualityKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportJpegQualityKey, [NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportJpegQualityKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setExportJpegQualityPercent:
@@ -837,9 +835,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey];
   else
   #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
   #else
-  CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+  CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
   #endif
 }
 //end setExportPDFWOFMetaDataInvisibleGraphicsEnabled:
@@ -867,9 +865,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:DragExportPDFMetadataInvisibleGraphicsEnabledKey];
   else
   #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
   #else
-  CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+  CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
   #endif
 }
 //end setExportPDFMetaDataInvisibleGraphicsEnabled:
@@ -925,9 +923,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportTextExportPreambleKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setExportTextExportPreamble:
@@ -955,9 +953,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportTextExportEnvironmentKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setExportTextExportEnvironment:
@@ -985,9 +983,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportTextExportBodyKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setExportTextExportBody:
@@ -1015,9 +1013,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportScaleAsPercentKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, (CHBRIDGE const void*)[NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, [NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setExportScalePercent:
@@ -1045,9 +1043,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:DragExportIncludeBackgroundColorKey];
   else
 #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 #else
-  CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+  CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 #endif
 }
 //end setExportIncludeBackgroundColor:
@@ -1075,9 +1073,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:DefaultDoNotClipPreviewKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setDoNotClipPreview:
@@ -1106,9 +1104,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setInteger:mode forKey:DefaultModeKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultModeKey, (CHBRIDGE const void*)[NSNumber numberWithInteger:mode], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultModeKey, (CHBRIDGE const void*)@(mode), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultModeKey, [NSNumber numberWithInteger:mode], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DefaultModeKey, @(mode), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setLatexisationLaTeXMode:
@@ -1173,7 +1171,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (self->isLaTeXiT)
     [[NSUserDefaults standardUserDefaults] setInteger:documentStyle forKey:DocumentStyleKey];
   else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DocumentStyleKey, (CHBRIDGE CFNumberRef)[NSNumber numberWithInteger:documentStyle], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DocumentStyleKey, (CHBRIDGE CFNumberRef)@(documentStyle), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
 }
 //end setDocumentStyle:
 
@@ -1655,9 +1653,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:EditionAutoCompleteOnBackslashEnabledKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)EditionAutoCompleteOnBackslashEnabledKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setEditionAutoCompleteOnBackslashEnabled:
@@ -1863,9 +1861,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       [[NSUserDefaults standardUserDefaults] setInteger:value forKey:CompositionConfigurationDocumentIndexKey];
     else
       #ifdef ARC_ENABLED
-      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)CompositionConfigurationDocumentIndexKey, (CHBRIDGE const void*)[NSNumber numberWithInteger:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)CompositionConfigurationDocumentIndexKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #else
-      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)CompositionConfigurationDocumentIndexKey, [NSNumber numberWithInteger:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)CompositionConfigurationDocumentIndexKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #endif
   }//end if (!compositionsController)
 }
@@ -1949,7 +1947,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
 -(NSNumber*) historyDeleteOldEntriesLimit
 {
-  NSNumber* result = [NSNumber numberWithUnsignedInteger:NSUIntegerMax];
+  NSNumber* result = @(NSUIntegerMax);
   if (self->isLaTeXiT)
     result = [[NSUserDefaults standardUserDefaults] objectForKey:HistoryDeleteOldEntriesLimitKey];
   else
@@ -2111,9 +2109,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:AdditionalLeftMarginKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, (CHBRIDGE const void*)[NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, [NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setMarginsAdditionalLeft:
@@ -2139,9 +2137,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:AdditionalRightMarginKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, (CHBRIDGE const void*)[NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, [NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setMarginsAdditionalRight:
@@ -2167,9 +2165,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:AdditionalTopMarginKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, (CHBRIDGE const void*)[NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, [NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setMarginsAdditionalTop:
@@ -2195,9 +2193,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:AdditionalBottomMarginKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, (CHBRIDGE const void*)[NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, [NSNumber numberWithFloat:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setMarginsAdditionalBottom:
@@ -2309,9 +2307,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsEnabledKey];
   else
       #ifdef ARC_ENABLED
-      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #else
-      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #endif
 }
 //end setSynchronizationNewDocumentsEnabled:
@@ -2337,9 +2335,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsSynchronizePreambleKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setSynchronizationNewDocumentsSynchronizePreamble:
@@ -2365,9 +2363,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsSynchronizeEnvironmentKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setSynchronizationNewDocumentsSynchronizeEnvironment:
@@ -2393,9 +2391,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setFloat:value forKey:SynchronizationNewDocumentsSynchronizeBodyKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setSynchronizationNewDocumentsSynchronizeBody:
@@ -2459,7 +2457,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                                                  withKeyPath:[NSUserDefaultsController adaptedKeyPath:SynchronizationAdditionalScriptsKey]
                                                      options:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                [DictionaryToArrayTransformer transformerWithDescriptors:nil], NSValueTransformerBindingOption,
-                                                               [NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption,
+                                                               @(YES), NSHandlesContentAsCompoundValueBindingOption,
                                                                nil]];
     }
     else
@@ -2505,33 +2503,33 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-      [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
       @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
       @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
       @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-      nil], [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING] stringValue],
+      nil], [@(SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING) stringValue],
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-      [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
       @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
       @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
       @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-      nil], [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING] stringValue],
+      nil], [@(SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING) stringValue],
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-      [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
       @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
       @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
       @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-      nil], [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_SAVING_PREPROCESSING] stringValue],
+      nil], [@(SYNCHRONIZATION_SCRIPT_PLACE_SAVING_PREPROCESSING) stringValue],
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-      [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+      @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+      @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
       @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
       @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
       @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-      nil], [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_SAVING_POSTPROCESSING] stringValue],
+      nil], [@(SYNCHRONIZATION_SCRIPT_PLACE_SAVING_POSTPROCESSING) stringValue],
     nil];
   return result;
 }
@@ -2557,9 +2555,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:LatexPaletteGroupKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteGroupKey, (CHBRIDGE const void*)[NSNumber numberWithInteger:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteGroupKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteGroupKey, [NSNumber numberWithInteger:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteGroupKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setPaletteLaTeXGroupSelectedTag:
@@ -2609,9 +2607,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:LatexPaletteDetailsStateKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteDetailsStateKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteDetailsStateKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteDetailsStateKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LatexPaletteDetailsStateKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setPaletteLaTeXDetailsOpened:
@@ -2636,9 +2634,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:HistoryDisplayPreviewPanelKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)HistoryDisplayPreviewPanelKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)HistoryDisplayPreviewPanelKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)HistoryDisplayPreviewPanelKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)HistoryDisplayPreviewPanelKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setHistoryDisplayPreviewPanelState
@@ -2691,9 +2689,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:LibraryDisplayPreviewPanelKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LibraryDisplayPreviewPanelKey, (CHBRIDGE const void*)[NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LibraryDisplayPreviewPanelKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LibraryDisplayPreviewPanelKey, [NSNumber numberWithBool:value], (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)LibraryDisplayPreviewPanelKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
 }
 //end setLibraryDisplayPreviewPanelState
@@ -2726,7 +2724,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       self->editionTextShortcutsController = [[NSArrayController alloc] initWithContent:nil];
       [self->editionTextShortcutsController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:TextShortcutsKey]
-            options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+            options:[NSDictionary dictionaryWithObjectsAndKeys:@(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -2775,7 +2773,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       self->preamblesController = [[PreamblesController alloc] initWithContent:nil];
       [self->preamblesController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:PreamblesKey]
-        options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+        options:[NSDictionary dictionaryWithObjectsAndKeys:@(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -2827,7 +2825,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       self->bodyTemplatesController = [[BodyTemplatesController alloc] initWithContent:nil];
       [self->bodyTemplatesController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:BodyTemplatesKey]
-        options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+        options:[NSDictionary dictionaryWithObjectsAndKeys:@(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -2878,7 +2876,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       self->compositionConfigurationsController = [[CompositionConfigurationsController alloc] initWithContent:nil];
       [self->compositionConfigurationsController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationsKey]
-            options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+            options:[NSDictionary dictionaryWithObjectsAndKeys:@(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -2933,7 +2931,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       self->serviceShortcutsController = [[NSArrayController alloc] initWithContent:nil];
       [self->serviceShortcutsController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:ServiceShortcutsKey]
-            options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+            options:[NSDictionary dictionaryWithObjectsAndKeys:@(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -2982,7 +2980,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       self->serviceRegularExpressionFiltersController = [[ServiceRegularExpressionFiltersController alloc] initWithContent:nil];
       [self->serviceRegularExpressionFiltersController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:ServiceRegularExpressionFiltersKey]
-            options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+            options:[NSDictionary dictionaryWithObjectsAndKeys:@(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -3081,7 +3079,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       [self->encapsulationsController bind:NSContentArrayBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
         withKeyPath:[NSUserDefaultsController adaptedKeyPath:EncapsulationsKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:[MutableTransformer name], NSValueTransformerNameBindingOption,
-                [NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption, nil]];
+                @(YES), NSHandlesContentAsCompoundValueBindingOption, nil]];
     }
     else
     {
@@ -3156,106 +3154,106 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       NSMutableDictionary* equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict =
         [NSMutableDictionary dictionaryWithObjectsAndKeys:
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_ALIGN), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(NO), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN],
+            nil], @(SERVICE_LATEXIZE_ALIGN),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(YES), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD],
+            nil], @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_EQNARRAY), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(NO), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY],
+            nil], @(SERVICE_LATEXIZE_EQNARRAY),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY_CLIPBOARD], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_EQNARRAY_CLIPBOARD), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(YES), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_EQNARRAY_CLIPBOARD],
+            nil], @(SERVICE_LATEXIZE_EQNARRAY_CLIPBOARD),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_DISPLAY), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(NO), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY],
+            nil], @(SERVICE_LATEXIZE_DISPLAY),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(YES), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD],
+            nil], @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_INLINE), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(NO), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE],
+            nil], @(SERVICE_LATEXIZE_INLINE),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_INLINE_CLIPBOARD), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(YES), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD],
+            nil], @(SERVICE_LATEXIZE_INLINE_CLIPBOARD),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_TEXT), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(NO), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT],
+            nil], @(SERVICE_LATEXIZE_TEXT),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_LATEXIZE_TEXT_CLIPBOARD), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(YES), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD],
+            nil], @(SERVICE_LATEXIZE_TEXT_CLIPBOARD),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_MULTILATEXIZE), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(NO), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE],
+            nil], @(SERVICE_MULTILATEXIZE),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
-            [NSNumber numberWithBool:YES], ServiceShortcutClipBoardOptionKey,
+            @(SERVICE_MULTILATEXIZE_CLIPBOARD), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
+            @(YES), ServiceShortcutClipBoardOptionKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD],
+            nil], @(SERVICE_MULTILATEXIZE_CLIPBOARD),
           [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInteger:SERVICE_DELATEXIZE], ServiceShortcutIdentifierKey,
-            [NSNumber numberWithBool:NO], ServiceShortcutEnabledKey,
+            @(SERVICE_DELATEXIZE), ServiceShortcutIdentifierKey,
+            @(NO), ServiceShortcutEnabledKey,
             @"", ServiceShortcutStringKey,
-            nil], [NSNumber numberWithInteger:SERVICE_DELATEXIZE],
+            nil], @(SERVICE_DELATEXIZE),
           nil];
 
       NSMutableDictionary* identifiersByServiceName = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], @"serviceLatexisationAlign",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD], @"serviceLatexisationAlignAndPutIntoClipBoard",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], @"serviceLatexisationEqnarray",//redirection to Align on purpose for migration
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD], @"serviceLatexisationEqnarrayAndPutIntoClipBoard",//redirection to Align on purpose for migration
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY], @"serviceLatexisationDisplay",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD], @"serviceLatexisationDisplayAndPutIntoClipBoard",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE], @"serviceLatexisationInline",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD], @"serviceLatexisationInlineAndPutIntoClipBoard",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT], @"serviceLatexisationText",
-        [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD], @"serviceLatexisationTextAndPutIntoClipBoard",
-        [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE], @"serviceMultiLatexisation",
-        [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD], @"serviceMultiLatexisationAndPutIntoClipBoard",
-        [NSNumber numberWithInteger:SERVICE_DELATEXIZE], @"serviceDeLatexisation",
+        @(SERVICE_LATEXIZE_ALIGN), @"serviceLatexisationAlign",
+        @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD), @"serviceLatexisationAlignAndPutIntoClipBoard",
+        @(SERVICE_LATEXIZE_ALIGN), @"serviceLatexisationEqnarray",//redirection to Align on purpose for migration
+        @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD), @"serviceLatexisationEqnarrayAndPutIntoClipBoard",//redirection to Align on purpose for migration
+        @(SERVICE_LATEXIZE_DISPLAY), @"serviceLatexisationDisplay",
+        @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD), @"serviceLatexisationDisplayAndPutIntoClipBoard",
+        @(SERVICE_LATEXIZE_INLINE), @"serviceLatexisationInline",
+        @(SERVICE_LATEXIZE_INLINE_CLIPBOARD), @"serviceLatexisationInlineAndPutIntoClipBoard",
+        @(SERVICE_LATEXIZE_TEXT), @"serviceLatexisationText",
+        @(SERVICE_LATEXIZE_TEXT_CLIPBOARD), @"serviceLatexisationTextAndPutIntoClipBoard",
+        @(SERVICE_MULTILATEXIZE), @"serviceMultiLatexisation",
+        @(SERVICE_MULTILATEXIZE_CLIPBOARD), @"serviceMultiLatexisationAndPutIntoClipBoard",
+        @(SERVICE_DELATEXIZE), @"serviceDeLatexisation",
         nil];
       NSMutableDictionary* serviceNameByIdentifier = [NSMutableDictionary dictionaryWithCapacity:[identifiersByServiceName count]];
       NSEnumerator* enumerator = [[identifiersByServiceName allKeys] objectEnumerator];
       NSString* serviceName = nil;
       while((serviceName = [enumerator nextObject]))
         [serviceNameByIdentifier setObject:serviceName forKey:[identifiersByServiceName objectForKey:serviceName]];
-      [serviceNameByIdentifier setObject:@"serviceLatexisationAlign" forKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN]];
-      [serviceNameByIdentifier setObject:@"serviceLatexisationAlignAndPutIntoClipBoard" forKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD]];
+      [serviceNameByIdentifier setObject:@"serviceLatexisationAlign" forKey:@(SERVICE_LATEXIZE_ALIGN)];
+      [serviceNameByIdentifier setObject:@"serviceLatexisationAlignAndPutIntoClipBoard" forKey:@(SERVICE_LATEXIZE_ALIGN_CLIPBOARD)];
 
       enumerator = [currentServicesInInfoPlist objectEnumerator];
       NSDictionary* service = nil;
@@ -3265,8 +3263,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         NSString* message  = [service objectForKey:@"NSMessage"];
         NSString* shortcutDefault = [[service objectForKey:@"NSKeyEquivalent"] objectForKey:@"default"];
         NSString* shortcutWhenEnabled = [[service objectForKey:@"NSKeyEquivalent"] objectForKey:@"whenEnabled"];
-        NSNumber* enabled = [NSNumber numberWithBool:
-                              (shortcutDefault && shortcutWhenEnabled && [shortcutDefault isEqualToString:shortcutWhenEnabled])];
+        NSNumber* enabled = @(shortcutDefault && shortcutWhenEnabled && [shortcutDefault isEqualToString:shortcutWhenEnabled]);
         NSNumber* identifier = [identifiersByServiceName objectForKey:message];
         didEncounterEqnarray |= [message isEqualToString:@"serviceLatexisationEqnarray"] ||
                                 [message isEqualToString:@"serviceLatexisationEqnarrayAndPutIntoClipBoard"];
@@ -3276,74 +3273,76 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       }//end for each service of info.plist
       NSArray* equivalentUserDefaultsToCurrentServicesInInfoPlist =
         [NSArray arrayWithObjects:
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_MULTILATEXIZE]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD]],
-          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:[NSNumber numberWithInteger:SERVICE_DELATEXIZE]],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_ALIGN)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_ALIGN_CLIPBOARD)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_DISPLAY)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_INLINE)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_INLINE_CLIPBOARD)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_TEXT)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_LATEXIZE_TEXT_CLIPBOARD)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_MULTILATEXIZE)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_MULTILATEXIZE_CLIPBOARD)],
+          [equivalentUserDefaultsToCurrentServicesInInfoPlistAsDict objectForKey:@(SERVICE_DELATEXIZE)],
           nil];          
 
       //build services as found in user defaults
       NSMutableArray* equivalentServicesToCurrentUserDefaults = [NSMutableArray arrayWithCapacity:6];
-      NSArray* standardReturnTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD,
-                                        @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF,
-                                        @"NSPostScriptPboardType", @"com.adobe.encapsulated-postscript",
-                                        @"NSPasteboardTypeTIFF", @"NSTIFFPboardType", kUTTypeTIFF,
-                                        @"NSPNGPboardType", kUTTypePNG,
-                                        kUTTypeJPEG, nil];
-      NSArray* standardSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTF", @"NSRTFPboardType", kUTTypeRTF,
-                                        @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF,
-                                        @"NSPasteboardTypeString", @"NSStringPboardType", @"public.utf8-plain-text", nil];
-      NSArray* multiLatexisationReturnTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD, nil];
-      NSArray* multiLatexisationSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD, @"NSRTFPboardType", kUTTypeRTF, nil];
-      NSArray* deLatexisationReturnTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD,
-                                                                     @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF,
-                                                                     @"NSPasteboardTypeRTF", @"NSRTFPboardType", kUTTypeRTF, nil];
-      NSArray* deLatexisationSendTypes = [NSArray arrayWithObjects:@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", kUTTypeRTFD, @"NSPasteboardTypePDF", @"NSPDFPboardType", kUTTypePDF, nil];
+      NSArray* standardReturnTypes = @[@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", (NSString*)kUTTypeRTFD,
+                                       @"NSPasteboardTypePDF", @"NSPDFPboardType", (NSString*)kUTTypePDF,
+                                       @"NSPostScriptPboardType", @"com.adobe.encapsulated-postscript",
+                                       @"NSPasteboardTypeTIFF", @"NSTIFFPboardType", (NSString*)kUTTypeTIFF,
+                                       @"NSPNGPboardType", (NSString*)kUTTypePNG,
+                                       (NSString*)kUTTypeJPEG];
+      NSArray* standardSendTypes = @[@"NSPasteboardTypeRTF", @"NSRTFPboardType", (NSString*)kUTTypeRTF,
+                                     @"NSPasteboardTypePDF", @"NSPDFPboardType", (NSString*)kUTTypePDF,
+                                     @"NSPasteboardTypeString", @"NSStringPboardType", @"public.utf8-plain-text"];
+      NSArray* multiLatexisationReturnTypes = @[@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", (NSString*)kUTTypeRTFD];
+      NSArray* multiLatexisationSendTypes = @[@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", (NSString*)kUTTypeRTFD,
+                                              @"NSRTFPboardType", (NSString*)kUTTypeRTF];
+      NSArray* deLatexisationReturnTypes = @[@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", (NSString*)kUTTypeRTFD,
+                                             @"NSPasteboardTypePDF", @"NSPDFPboardType", (NSString*)kUTTypePDF,
+                                             @"NSPasteboardTypeRTF", @"NSRTFPboardType", (NSString*)kUTTypeRTF];
+      NSArray* deLatexisationSendTypes = @[@"NSPasteboardTypeRTFD", @"NSRTFDPboardType", (NSString*)kUTTypeRTFD,
+                                           @"NSPasteboardTypePDF", @"NSPDFPboardType", (NSString*)kUTTypePDF];
       NSDictionary* returnTypesByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT],
-        standardReturnTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD],
-        multiLatexisationReturnTypes, [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE],
-        multiLatexisationReturnTypes, [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD],
-        deLatexisationReturnTypes, [NSNumber numberWithInteger:SERVICE_DELATEXIZE],
+        standardReturnTypes, @(SERVICE_LATEXIZE_ALIGN),
+        standardReturnTypes, @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD),
+        standardReturnTypes, @(SERVICE_LATEXIZE_DISPLAY),
+        standardReturnTypes, @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD),
+        standardReturnTypes, @(SERVICE_LATEXIZE_INLINE),
+        standardReturnTypes, @(SERVICE_LATEXIZE_INLINE_CLIPBOARD),
+        standardReturnTypes, @(SERVICE_LATEXIZE_TEXT),
+        standardReturnTypes, @(SERVICE_LATEXIZE_TEXT_CLIPBOARD),
+        multiLatexisationReturnTypes, @(SERVICE_MULTILATEXIZE),
+        multiLatexisationReturnTypes, @(SERVICE_MULTILATEXIZE_CLIPBOARD),
+        deLatexisationReturnTypes, @(SERVICE_DELATEXIZE),
         nil];
       NSDictionary* sendTypesByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT],
-        standardSendTypes, [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD],
-        multiLatexisationSendTypes, [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE],
-        multiLatexisationSendTypes, [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD],
-        deLatexisationSendTypes, [NSNumber numberWithInteger:SERVICE_DELATEXIZE],
+        standardSendTypes, @(SERVICE_LATEXIZE_ALIGN),
+        standardSendTypes, @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD),
+        standardSendTypes, @(SERVICE_LATEXIZE_DISPLAY),
+        standardSendTypes, @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD),
+        standardSendTypes, @(SERVICE_LATEXIZE_INLINE),
+        standardSendTypes, @(SERVICE_LATEXIZE_INLINE_CLIPBOARD),
+        standardSendTypes, @(SERVICE_LATEXIZE_TEXT),
+        standardSendTypes, @(SERVICE_LATEXIZE_TEXT_CLIPBOARD),
+        multiLatexisationSendTypes, @(SERVICE_MULTILATEXIZE),
+        multiLatexisationSendTypes, @(SERVICE_MULTILATEXIZE_CLIPBOARD),
+        deLatexisationSendTypes, @(SERVICE_DELATEXIZE),
         nil];
       NSDictionary* serviceDescriptionsByServiceIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"SERVICE_DESCRIPTION_ALIGN", [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN],
-        @"SERVICE_DESCRIPTION_ALIGN_CLIPBOARD", [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN_CLIPBOARD],
-        @"SERVICE_DESCRIPTION_DISPLAY", [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY],
-        @"SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD", [NSNumber numberWithInteger:SERVICE_LATEXIZE_DISPLAY_CLIPBOARD],
-        @"SERVICE_DESCRIPTION_INLINE", [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE],
-        @"SERVICE_DESCRIPTION_INLINE_CLIPBOARD", [NSNumber numberWithInteger:SERVICE_LATEXIZE_INLINE_CLIPBOARD],
-        @"SERVICE_DESCRIPTION_TEXT", [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT],
-        @"SERVICE_DESCRIPTION_TEXT_CLIPBOARD", [NSNumber numberWithInteger:SERVICE_LATEXIZE_TEXT_CLIPBOARD],
-        @"SERVICE_DESCRIPTION_MULTIPLE", [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE],
-        @"SERVICE_DESCRIPTION_MULTIPLE_CLIPBOARD", [NSNumber numberWithInteger:SERVICE_MULTILATEXIZE_CLIPBOARD],
-        @"SERVICE_DESCRIPTION_DELATEXISATION", [NSNumber numberWithInteger:SERVICE_DELATEXIZE],
+        @"SERVICE_DESCRIPTION_ALIGN", @(SERVICE_LATEXIZE_ALIGN),
+        @"SERVICE_DESCRIPTION_ALIGN_CLIPBOARD", @(SERVICE_LATEXIZE_ALIGN_CLIPBOARD),
+        @"SERVICE_DESCRIPTION_DISPLAY", @(SERVICE_LATEXIZE_DISPLAY),
+        @"SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD", @(SERVICE_LATEXIZE_DISPLAY_CLIPBOARD),
+        @"SERVICE_DESCRIPTION_INLINE", @(SERVICE_LATEXIZE_INLINE),
+        @"SERVICE_DESCRIPTION_INLINE_CLIPBOARD", @(SERVICE_LATEXIZE_INLINE_CLIPBOARD),
+        @"SERVICE_DESCRIPTION_TEXT", @(SERVICE_LATEXIZE_TEXT),
+        @"SERVICE_DESCRIPTION_TEXT_CLIPBOARD", @(SERVICE_LATEXIZE_TEXT_CLIPBOARD),
+        @"SERVICE_DESCRIPTION_MULTIPLE", @(SERVICE_MULTILATEXIZE),
+        @"SERVICE_DESCRIPTION_MULTIPLE_CLIPBOARD", @(SERVICE_MULTILATEXIZE_CLIPBOARD),
+        @"SERVICE_DESCRIPTION_DELATEXISATION", @(SERVICE_DELATEXIZE),
         nil];
       
       
@@ -3376,7 +3375,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
             !serviceDescription ? @"" : serviceDescription, @"NSServiceDescription",
             !returnTypes ? [NSArray array] : returnTypes, @"NSReturnTypes",
             !sendTypes ? [NSArray array] : sendTypes, @"NSSendTypes",
-            [[NSNumber numberWithInteger:30000] stringValue], @"NSTimeOut",
+            [@(30000) stringValue], @"NSTimeOut",
             [NSDictionary dictionary], @"NSRequiredContext",
             nil];
           [equivalentServicesToCurrentUserDefaults addObject:serviceItemPlist];
@@ -3387,14 +3386,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
         {
           NSAlert* alert =
-            [NSAlert alertWithMessageText:NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences",
-                                                            @"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences")
-                            defaultButton:NSLocalizedString(@"Apply preferences",
-                                                            @"Apply preferences")
-                          alternateButton:NSLocalizedString(@"Update preferences",
-                                                            @"Update preferences")
-                              otherButton:NSLocalizedString(@"Ignore", @"Ignore")
-                informativeTextWithFormat:NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"__EXPLAIN_CHANGE_SHORTCUTS__")];
+            [NSAlert alertWithMessageText:NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences", @"")
+                            defaultButton:NSLocalizedString(@"Apply preferences", @"")
+                          alternateButton:NSLocalizedString(@"Update preferences", @"")
+                              otherButton:NSLocalizedString(@"Ignore", @"")
+                informativeTextWithFormat:NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"")];
           [[[alert buttons] objectAtIndex:2] setKeyEquivalent:[NSString stringWithFormat:@"%c", '\033']];//escape
           NSInteger result = [alert runModal];
           if (result == NSAlertDefaultReturn)
@@ -3443,7 +3439,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
               myStatus = AuthorizationExecuteWithPrivileges(myAuthorizationRef, "/bin/cp", kAuthorizationFlagDefaults, (char**)args, NULL);
             }
             if (src)
-              [[NSFileManager defaultManager] bridge_removeItemAtPath:src error:0];
+              [[NSFileManager defaultManager] removeItemAtPath:src error:0];
             myStatus = myStatus ? myStatus : AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDestroyRights);
             ok = (myStatus == 0);
           }//end if (!ok)
@@ -3454,13 +3450,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
             if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
             {
               NSAlert* alert =
-              [NSAlert alertWithMessageText:NSLocalizedString(@"New Service shortcuts could not be set",
-                                                              @"New Service shortcuts could not be set")
-                              defaultButton:NSLocalizedString(@"Update preferences",@"Update preferences")
-                            alternateButton:NSLocalizedString(@"Ignore",@"Ignore")
+              [NSAlert alertWithMessageText:NSLocalizedString(@"New Service shortcuts could not be set", @"")
+                              defaultButton:NSLocalizedString(@"Update preferences", @"")
+                            alternateButton:NSLocalizedString(@"Ignore", @"")
                                 otherButton:nil
-                  informativeTextWithFormat:NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle",
-                                                              @"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle")];
+                  informativeTextWithFormat:NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle", @"")];
               [[[alert buttons] objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
               NSInteger result = [alert runModal];
               if (result == NSAlertDefaultReturn)

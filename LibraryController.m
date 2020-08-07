@@ -215,7 +215,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         NSMutableDictionary* flattenedGroupItemsOrder = [NSMutableDictionary dictionaryWithCapacity:count];
         NSUInteger i = 0;
         for(i = 0 ; i<count ; ++i)
-          [flattenedGroupItemsOrder setObject:[NSNumber numberWithUnsignedInteger:i] forKey:[NSValue valueWithPointer:[flattenedGroupItems objectAtIndex:i]]];
+          [flattenedGroupItemsOrder setObject:@(i) forKey:[NSValue valueWithPointer:[flattenedGroupItems objectAtIndex:i]]];
         [filteredItems sortUsingFunction:&filteredItemSortFunction context:flattenedGroupItemsOrder];
         result = [NSArray arrayWithArray:filteredItems];
       }//end if ([filteredItems count])
@@ -354,7 +354,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
   {
     //promise file occur when drag'n dropping to the finder. The files will be created in tableview:namesOfPromisedFiles:...
     [pasteBoard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-    [pasteBoard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", @"svg", @"html", nil] forType:NSFilesPromisePboardType];
+    [pasteBoard setPropertyList:@[@"pdf", @"eps", @"tiff", @"jpeg", @"png", @"svg", @"html"] forType:NSFilesPromisePboardType];
   }
 
   //NSStringPBoardType may contain some info for LibraryFiles the label of the equations : useful for users that only want to \ref this equation
@@ -585,7 +585,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
       if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
       {
         [[(LibraryEquation*)proposedParentItem equation] setBackgroundColor:color];
-        [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"Change Library item background color")];
+        [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"")];
       }//if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
       result = YES;
     }//end if (isColorDrop)
@@ -648,12 +648,12 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
   }
   
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                 @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                 @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                 @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                 @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                 @([preferencesController exportTextExportBody]), @"textExportBody",
                                  [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
   
@@ -670,7 +670,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
       filePath = [dropPath stringByAppendingPathComponent:fileName];
       if (![fileManager fileExistsAtPath:filePath]) //does a folder of that name already exist ?
       {
-        BOOL ok = [fileManager bridge_createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
+        BOOL ok = [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
         if (ok)
         {
           //Recursive call to fill the folder
@@ -691,7 +691,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         //I may have found a free name; create the folder in this case
         if (![fileManager fileExistsAtPath:filePath])
         {
-          BOOL ok = [fileManager bridge_createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
+          BOOL ok = [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:0];
           if (ok)
           {
             //Recursive call to fill the folder
@@ -719,8 +719,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
                          uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                             ofItemAtPath:filePath error:0];
+        [fileManager setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:filePath error:0];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
         NSColor* autoBackgroundColor = [latexitEquation backgroundColor];
         NSColor* iconBackgroundColor =
@@ -753,8 +752,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
                            uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
-          [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                               ofItemAtPath:filePath error:0];
+          [fileManager setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:filePath error:0];
           NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
           NSColor* autoBackgroundColor = [latexitEquation backgroundColor];
           NSColor* iconBackgroundColor =

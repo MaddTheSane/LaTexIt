@@ -18,7 +18,6 @@
 
 @interface AdditionalFilesTableView (PrivateAPI)
 -(NSArrayController*) filesController;
--(void) openPanelDidEnd:(NSOpenPanel*)panel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 @end
 
 @implementation AdditionalFilesTableView
@@ -259,35 +258,30 @@
   [openPanel setCanHide:YES];
   [openPanel setCanSelectHiddenExtension:YES];
   [openPanel setResolvesAliases:YES];
-  [openPanel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self
-                     didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-}
-//end addFiles:
-
--(void) openPanelDidEnd:(NSOpenPanel*)panel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
-{
-  if (returnCode == NSOKButton)
-  {
-    NSArray* urls = [panel URLs];
-    NSMutableArray* fileNames = [NSMutableArray arrayWithCapacity:[urls count]];
-    NSEnumerator* enumerator = [urls objectEnumerator];
-    NSURL* url = nil;
-    while((url = [enumerator nextObject]))
-      [fileNames addObject:[url path]];
-    if (self->isDefaultTableView)
-      [[[PreferencesController sharedController] additionalFilesController] addObjects:fileNames];
-    else//if (!self->isDefaultTableView)
+  [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+    if (result == NSOKButton)
     {
-      AdditionalFilesController* defaultAdditionalFilesController = [[PreferencesController sharedController] additionalFilesController];
-      NSArray* filesInDefaultAdditionalFilesController = [defaultAdditionalFilesController arrangedObjects];
-      NSMutableArray* filesToAdd = [NSMutableArray arrayWithArray:fileNames];
-      [filesToAdd removeObjectsInArray:filesInDefaultAdditionalFilesController];
-      NSEnumerator* enumerator = [filesToAdd objectEnumerator];
-      id object = nil;
-      while((object = [enumerator nextObject]))
-        [self->filesWithExtrasController addObject:object];
-    }//end if (!self->isDefaultTableView)
-  }//end if (returnCode == NSOKButton)
+      NSArray* urls = [openPanel URLs];
+      NSMutableArray* fileNames = [NSMutableArray arrayWithCapacity:[urls count]];
+      NSEnumerator* enumerator = [urls objectEnumerator];
+      NSURL* url = nil;
+      while((url = [enumerator nextObject]))
+        [fileNames addObject:[url path]];
+      if (self->isDefaultTableView)
+        [[[PreferencesController sharedController] additionalFilesController] addObjects:fileNames];
+      else//if (!self->isDefaultTableView)
+      {
+        AdditionalFilesController* defaultAdditionalFilesController = [[PreferencesController sharedController] additionalFilesController];
+        NSArray* filesInDefaultAdditionalFilesController = [defaultAdditionalFilesController arrangedObjects];
+        NSMutableArray* filesToAdd = [NSMutableArray arrayWithArray:fileNames];
+        [filesToAdd removeObjectsInArray:filesInDefaultAdditionalFilesController];
+        NSEnumerator* enumerator = [filesToAdd objectEnumerator];
+        id object = nil;
+        while((object = [enumerator nextObject]))
+          [self->filesWithExtrasController addObject:object];
+      }//end if (!self->isDefaultTableView)
+    }//end if (result == NSOKButton)
+  }];
 }
 //end openPanelDidEnd:returnCode:contextInfo:
 

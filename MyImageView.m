@@ -89,8 +89,8 @@ static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider;
 -(void) _copyCurrentImageNotification:(NSNotification*)notification;
 -(BOOL) _applyDataFromPasteboard:(NSPasteboard*)pboard sender:(id <NSDraggingInfo>)sender;
--(void) performProgrammaticDragCancellation:(id)context;
--(void) performProgrammaticRedrag:(id)context;
+-(void) performProgrammaticDragCancellation:(NSPasteboard*)pboard;
+-(void) performProgrammaticRedrag:(NSPasteboard*)pboard;
 -(void) drawRect:(NSRect)rect inContext:(CGContextRef)cgContext;
 @end
 
@@ -117,7 +117,7 @@ typedef NSInteger NSDraggingContext;
     [NSArray arrayWithObjects:NSColorPboardType, NSPDFPboardType,
                               NSFilenamesPboardType, NSFileContentsPboardType, NSFilesPromisePboardType,
                               NSRTFDPboardType, NSRTFPboardType, GetWebURLsWithTitlesPboardType(), NSStringPboardType,
-                              kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, @"public.svg-image",
+                              kUTTypePDF, kUTTypeTIFF, kUTTypePNG, kUTTypeJPEG, GetMySVGPboardType(),
                               kUTTypeHTML,
                               //@"com.apple.iWork.TSPNativeMetadata",
                               nil]];
@@ -185,14 +185,14 @@ typedef NSInteger NSDraggingContext;
   {
     self->copyAsContextualMenu = [[NSMenu alloc] init];
     NSMenuItem* superItem =
-      [self->copyAsContextualMenu addItemWithTitle:NSLocalizedString(@"Copy the image as", @"Copy the image as") action:nil keyEquivalent:@""];
+      [self->copyAsContextualMenu addItemWithTitle:NSLocalizedString(@"Copy the image as", @"") action:nil keyEquivalent:@""];
     NSMenu* subMenu = [[NSMenu alloc] init];
-    [subMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"Default Format") target:self action:@selector(copy:)
+    [subMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"") target:self action:@selector(copy:)
                 keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
     [subMenu addItem:[NSMenuItem separatorItem]];
     [subMenu addItemWithTitle:@"PDF" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(NSInteger)EXPORT_FORMAT_PDF];
-    [subMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts") target:self action:@selector(copy:)
+    [subMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"") target:self action:@selector(copy:)
                 keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
                           tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
     [subMenu addItemWithTitle:@"EPS" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
@@ -207,7 +207,7 @@ typedef NSInteger NSDraggingContext;
                           tag:(NSInteger)EXPORT_FORMAT_JPEG];
     [subMenu addItemWithTitle:@"MathML" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(NSInteger)EXPORT_FORMAT_MATHML];
-    [subMenu addItemWithTitle:NSLocalizedString(@"Text", @"Text") target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
+    [subMenu addItemWithTitle:NSLocalizedString(@"Text", @"") target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(NSInteger)EXPORT_FORMAT_TEXT];
     [self->copyAsContextualMenu setSubmenu:subMenu forItem:superItem];
     [subMenu release];
@@ -298,9 +298,6 @@ typedef NSInteger NSDraggingContext;
   self->cgPdfDocument = 0;
   [self->pdfData release];
   self->pdfData = someData;
-  /*CGDataProviderRef cgDataProvider = CGDataProviderCreateWithCFData((CFDataRef)self->pdfData);
-  self->cgPdfDocument = CGPDFDocumentCreateWithProvider(cgDataProvider);
-  CGDataProviderRelease(cgDataProvider);*/
 
   [self->imageRep release];
   self->imageRep = !self->pdfData ? nil : [[NSPDFImageRep alloc] initWithData:self->pdfData];
@@ -310,8 +307,6 @@ typedef NSInteger NSDraggingContext;
   if (newImage && ![newImage pdfImageRepresentation] && self->imageRep)
   {
     [newImage setCacheMode:NSImageCacheNever];
-    [newImage setDataRetained:YES];
-    [newImage setScalesWhenResized:YES];
     [newImage addRepresentation:self->imageRep];
     //[newImage recache];
   }//end if (newImage && ![newImage pdfImageRepresentation] && self->imageRep)
@@ -319,8 +314,6 @@ typedef NSInteger NSDraggingContext;
   {
     newImage = [[[NSImage alloc] initWithSize:[self->imageRep size]] autorelease];
     [newImage setCacheMode:NSImageCacheNever];
-    [newImage setDataRetained:YES];
-    [newImage setScalesWhenResized:YES];
     [newImage addRepresentation:self->imageRep];
     //[newImage recache];
   }//end if (!newImage && self->imageRep)
@@ -337,7 +330,6 @@ typedef NSInteger NSDraggingContext;
 
 -(void) setImage:(NSImage*)aImage
 {
-  [aImage setScalesWhenResized:YES];
   [super setImage:aImage];
   [[NSNotificationCenter defaultCenter] postNotificationName:ImageDidChangeNotification object:self];
 }
@@ -399,22 +391,63 @@ typedef NSInteger NSDraggingContext;
 }
 //end mouseDown:
 
+-(NSArray<NSPasteboardType>*) writableTypesForPasteboard:(NSPasteboard*)pasteboard
+{
+  NSArray<NSPasteboardType>* result = @[(NSString*)kUTTypeFileURL];
+  return result;
+}
+//end writableTypesForPasteboard:
+
 -(void) mouseDragged:(NSEvent*)event
 {
   if (!self->isDragging && !([event modifierFlags] & NSControlKeyMask))
   {
-    NSImage* draggedImage = [self image];
-    if (draggedImage)
+    NSImage* iconDragged = [self imageForDrag];
+    NSSize   iconSize = [iconDragged size];
+    NSPoint p = [self convertPoint:[event locationInWindow] fromView:nil];
+    if (iconDragged)
     {
       self->isDragging = YES;
       [self->transientDragData release];
       self->transientDragData = nil;
       [self->transientDragEquation release];
       self->transientDragEquation = nil;
-      [self dragPromisedFilesOfTypes:[NSArray arrayWithObjects:@"pdf", @"eps", @"svg", @"tiff", @"jpeg", @"png", @"html", nil]
-                            fromRect:[self frame] source:self slideBack:YES event:event];
-      self->isDragging = NO;
-    }//end if (draggedImage)
+      NSArray* fileTypes = @[@"pdf", @"eps", @"svg", @"tiff", @"jpeg", @"png", @"html"];
+      if (isMacOS10_15OrAbove())
+      {
+        NSImage* iconDragged = [self imageForDrag];
+
+        NSPasteboard* pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        NSFilePromiseProvider* filePromiseProvider = [[[NSFilePromiseProvider alloc] initWithFileType:(NSString*)kUTTypeData delegate:self] autorelease];
+        NSDraggingItem* draggingItem = [[[NSDraggingItem alloc] initWithPasteboardWriter:filePromiseProvider] autorelease];
+        draggingItem.imageComponentsProvider = ^NSArray<NSDraggingImageComponent *> * _Nonnull{
+          NSDraggingImageComponent* draggingImageComponent = [[[NSDraggingImageComponent alloc] initWithKey:NSDraggingImageComponentIconKey] autorelease];
+          draggingImageComponent.contents = iconDragged;
+          draggingImageComponent.frame = NSMakeRect(0, 0, [iconDragged size].width, [iconDragged size].height);
+          return @[draggingImageComponent];
+        };
+        draggingItem.draggingFrame = NSMakeRect(p.x-iconSize.width/2, p.y-iconSize.height/2, iconSize.width, iconSize.height);
+        [self beginDraggingSessionWithItems:@[draggingItem] event:event source:self];
+        if (self->shouldRedrag)
+          [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:NO];
+        if (!self->shouldRedrag)
+        {
+          self->lastDragStartPointSelfBased = p;
+          [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
+            [[self window] convertPointToScreen:[event locationInWindow]]];
+          [[[AppController appController] dragFilterWindowController] setDelegate:self];
+        }//end if (!self->shouldRedrag)
+        self->shouldRedrag = NO;
+
+        export_format_t exportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
+        [self _writeToPasteboard:pboard exportFormat:exportFormat isLinkBackRefresh:NO lazyDataProvider:self];
+      }//end if (isMacOS10_15OrAbove())
+      else//if (!isMacOS10_14OrAbove())
+      {
+        [self dragPromisedFilesOfTypes:fileTypes fromRect:[self frame] source:self slideBack:YES event:event];
+        self->isDragging = NO;
+      }//end if (!isMacOS10_14OrAbove())
+    }//end if (iconDragged)
   }//end if (!self->isDragging)
   [super mouseDragged:event];
 }
@@ -427,16 +460,26 @@ typedef NSInteger NSDraggingContext;
 }
 //end mouseUp:
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void) draggingSession:(NSDraggingSession*)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
-  if (self->isDragging && !self->shouldRedrag)
+  DragFilterWindowController* dragFilterWindowController = [[AppController appController] dragFilterWindowController];
+  if (self->isDragging && (isMacOS10_15OrAbove() || !self->shouldRedrag))
   {
-    [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
-    [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  }//end if (self->isDragging)
+    [dragFilterWindowController setWindowVisible:NO withAnimation:YES];
+    [dragFilterWindowController setDelegate:nil];
+  }//end if (self->isDragging && (isMacOS10_15OrAbove() || !self->shouldRedrag))
   self->isDragging = NO;
   if (self->shouldRedrag)
-    [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
+  {
+    NSPasteboard* pboard = session.draggingPasteboard;
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSDragPboard] : pboard) afterDelay:0];
+  }//end if (self->shouldRedrag)
+}
+//end draggingSession:endedAtPoint:operation:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [self draggingSession:nil endedAtPoint:aPoint operation:operation];
 }
 //end draggedImage:endedAt:operation:
 
@@ -453,7 +496,7 @@ typedef NSInteger NSDraggingContext;
   {
     self->lastDragStartPointSelfBased = p;
     [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [[self window] convertBaseToScreen:[event locationInWindow]]];
+      [[self window] convertPointToScreen:[event locationInWindow]]];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -470,11 +513,6 @@ typedef NSInteger NSDraggingContext;
 -(NSImage*) imageForDrag
 {
   NSImage* result = [self image];
-  if (!isMacOS10_5OrAbove())
-  {
-    NSImage* tiffImage = [[[NSImage alloc] initWithData:[result TIFFRepresentationDpiAware]] autorelease];
-    result = tiffImage;
-  }//end if (!isMacOS10_5OrAbove())
   if ([self isDarkMode])
     result = [result imageWithBackground:[NSColor colorWithCalibratedRed:0.66f green:0.66f blue:0.66f alpha:.5f] rounded:4.f];
   return result;
@@ -531,11 +569,11 @@ typedef NSInteger NSDraggingContext;
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {
-  [self performProgrammaticDragCancellation:nil];
+  [self performProgrammaticDragCancellation:[NSPasteboard pasteboardWithName:NSDragPboard]];
 }
 //end dragFilterWindowController:exportFormatDidChange:
 
--(void) performProgrammaticDragCancellation:(id)context
+-(void) performProgrammaticDragCancellation:(NSPasteboard*)pboard
 {
   DebugLog(1, @">performProgrammaticDragCancellation");
   self->shouldRedrag = YES;
@@ -543,20 +581,14 @@ typedef NSInteger NSDraggingContext;
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGEventRef cgEvent0 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-    CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGEventGetLocation(cgEvent0);
-    point.y = [[NSScreen mainScreen] frame].size.height-point.y;
-    CGEventSetLocation(cgEvent0, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
   CGEventPost(kCGHIDEventTap, cgEvent0);
   CFRelease(cgEvent0);
   DebugLog(1, @"<");
-}//end performProgrammaticDragCancellation:
+}
+//end performProgrammaticDragCancellation:
 
--(void) performProgrammaticRedrag:(id)context
+-(void) performProgrammaticRedrag:(NSPasteboard*)pboard
 {
   DebugLog(1, @">performProgrammaticRedrag");
   self->shouldRedrag = YES;
@@ -572,26 +604,9 @@ typedef NSInteger NSDraggingContext;
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation2, kCGMouseButtonLeft);
   CGEventRef cgEvent3 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-  {
-    CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
-    CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
-    CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
-  }//end if (isMacOS10_5OrAbove())
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGPointZero;
-    NSRect screenFrame = [[NSScreen mainScreen] frame];
-    point = CGEventGetLocation(cgEvent1);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent1, point);
-    point = CGEventGetLocation(cgEvent2);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent2, point);
-    point = CGEventGetLocation(cgEvent3);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent3, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
+  CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
+  CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
   CGEventPost(kCGHIDEventTap, cgEvent1);
   CGEventPost(kCGHIDEventTap, cgEvent2);
   CGEventPost(kCGHIDEventTap, cgEvent3);
@@ -616,45 +631,16 @@ typedef NSInteger NSDraggingContext;
     if (!filePrefix || [filePrefix isEqualToString:@""])
       filePrefix = @"latex-image";
     
-    NSString* extension = nil;
     PreferencesController* preferencesController = [PreferencesController sharedController];
     export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
-    switch(exportFormat)
-    {
-      case EXPORT_FORMAT_PDF:
-      case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-        extension = @"pdf";
-        break;
-      case EXPORT_FORMAT_EPS:
-        extension = @"eps";
-        break;
-      case EXPORT_FORMAT_TIFF:
-        extension = @"tiff";
-        break;
-      case EXPORT_FORMAT_PNG:
-        extension = @"png";
-        break;
-      case EXPORT_FORMAT_JPEG:
-        extension = @"jpeg";
-        break;
-      case EXPORT_FORMAT_MATHML:
-        extension = @"html";
-        break;
-      case EXPORT_FORMAT_SVG:
-        extension = @"svg";
-        break;
-      case EXPORT_FORMAT_TEXT:
-        extension = @"tex";
-        break;
-    }
-
+    NSString* extension = getFileExtensionForExportFormat(exportFormat);
     NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                   [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                   [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                   [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                   [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                   [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                   @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                   @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                   @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                   @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                   @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                   @([preferencesController exportTextExportBody]), @"textExportBody",
                                    [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                    nil];
     NSData* data = nil;
@@ -680,8 +666,7 @@ typedef NSInteger NSDraggingContext;
       if (![fileManager fileExistsAtPath:filePath])
       {
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                             ofItemAtPath:filePath error:0];
+        [fileManager setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:filePath error:0];
         NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
         NSColor* autoBackgroundColor = [self->transientDragEquation backgroundColor];
         NSColor* iconBackgroundColor =
@@ -706,6 +691,33 @@ typedef NSInteger NSDraggingContext;
 }
 //end namesOfPromisedFilesDroppedAtDestination:
 
+-(NSString*) filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider fileNameForType:(NSString*)fileType
+{
+  NSString* result = nil;
+  if (self->pdfData)
+  {
+    NSString* equationSourceText = [[self->transientDragEquation sourceText] string];
+    BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+    NSString* filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:equationSourceText];
+    if (!filePrefix || [filePrefix isEqualToString:@""])
+      filePrefix = @"latex-image";
+    PreferencesController* preferencesController = [PreferencesController sharedController];
+    export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
+    NSString* extension = getFileExtensionForExportFormat(exportFormat);
+    result = [filePrefix stringByAppendingPathExtension:extension];
+  }//end if (self->pdfData)
+  return result;
+}
+//end filePromiseProvider:fileNameForType:
+
+-(void) filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider writePromiseToURL:(NSURL*)url completionHandler:(void (^)(NSError * _Nullable errorOrNil))completionHandler
+{
+  NSURL* destination = [NSURL fileURLWithPath:[[url path] stringByDeletingLastPathComponent]];
+  [self namesOfPromisedFilesDroppedAtDestination:destination];
+  completionHandler(nil);
+}
+//end filePromiseProvider:completionHandler:
+
 -(void) _writeToPasteboard:(NSPasteboard*)pasteboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider
 {
   DebugLog(1, @"lazyDataProvider = %p(%@)>", lazyDataProvider, lazyDataProvider);
@@ -720,16 +732,6 @@ typedef NSInteger NSDraggingContext;
   [pasteboard addTypes:[NSArray arrayWithObject:LatexitEquationsPboardType] owner:self];
   [pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:equation, nil]] forType:LatexitEquationsPboardType];
   [equation writeToPasteboard:pasteboard exportFormat:exportFormat isLinkBackRefresh:isLinkBackRefresh lazyDataProvider:lazyDataProvider options:nil];
-  /*if (self->isDragging && (lazyDataProvider == self))
-  {
-    NSMutableArray* types = [NSMutableArray array];
-    BOOL fillFilenames = [[PreferencesController sharedController] exportAddTempFileCurrentSession];
-    if (fillFilenames)
-      [types addObjectsFromArray:[NSArray arrayWithObjects:
-        NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType,
-        nil]];
-    [pasteboard addTypes:types owner:lazyDataProvider];
-  }//end if (self->isDragging && (lazyDataProvider == self))*/
   DebugLog(1, @"<");
 }
 //end _writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
@@ -744,12 +746,12 @@ typedef NSInteger NSDraggingContext;
   self->transientLastExportFormat = exportFormat;
   
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                 [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                 [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                 [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                 @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                 @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                 @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                 @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                 @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                 @([preferencesController exportTextExportBody]), @"textExportBody",
                                  [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
   NSData* data = hasAlreadyCachedData ? self->transientDragData : nil;
@@ -773,44 +775,7 @@ typedef NSInteger NSDraggingContext;
   }//end if (!hasAlreadyCachedData)
   if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
   {
-    NSString* extension = nil;
-    NSString* uti = nil;
-    switch(exportFormat)
-    {
-      case EXPORT_FORMAT_PDF:
-      case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-        extension = @"pdf";
-        uti = (NSString*)kUTTypePDF;
-        break;
-      case EXPORT_FORMAT_EPS:
-        extension = @"eps";
-        uti = @"com.adobe.encapsulated-​postscript";
-        break;
-      case EXPORT_FORMAT_TIFF:
-        extension = @"tiff";
-        uti = (NSString*)kUTTypeTIFF;
-        break;
-      case EXPORT_FORMAT_PNG:
-        extension = @"png";
-        uti = (NSString*)kUTTypePNG;
-        break;
-      case EXPORT_FORMAT_JPEG:
-        extension = @"jpeg";
-        uti = (NSString*)kUTTypeJPEG;
-        break;
-      case EXPORT_FORMAT_MATHML:
-        extension = @"html";
-        uti = (NSString*)kUTTypeHTML;
-        break;
-      case EXPORT_FORMAT_SVG:
-        extension = @"svg";
-        uti = @"public.svg-image";
-        break;
-      case EXPORT_FORMAT_TEXT:
-        extension = @"tex";
-        uti = (NSString*)kUTTypeText;
-        break;
-    }//end witch(exportFormat)
+    NSString* extension = getFileExtensionForExportFormat(exportFormat);
     if (data)
     {
       if ([type isEqualToString:NSFileContentsPboardType])
@@ -829,11 +794,7 @@ typedef NSInteger NSDraggingContext;
           if (!hasAlreadyCachedData)
           {
             [data writeToFile:filePath atomically:YES];
-            /*NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-            if (isMacOS10_6OrAbove())
-              [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-            else*/
-              [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+            [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
             FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
             [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
           }//end if (!hasAlreadyCachedData)
@@ -853,10 +814,7 @@ typedef NSInteger NSDraggingContext;
           {
             [data writeToFile:filePath atomically:YES];
             NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-            if (isMacOS10_6OrAbove())
-              [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-            else
-              [fileURL writeToPasteboard:pasteboard];
+            [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
             FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
             [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
           }//end if (!hasAlreadyCachedData)
@@ -957,7 +915,7 @@ typedef NSInteger NSDraggingContext;
   {
     export_format_t defaultExportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
     [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
-      NSLocalizedString(@"Default Format", @"Default Format"),
+      NSLocalizedString(@"Default Format", @""),
       [[AppController appController] nameOfType:defaultExportFormat]]];
   }
   if ([sender tag] == EXPORT_FORMAT_EPS)
@@ -1402,10 +1360,10 @@ typedef NSInteger NSDraggingContext;
     BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
     BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
     BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
-    BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]));
-    BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]));
-    BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]));
-    BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]));
+    BOOL shouldDisplayScrollUp    = canScrollUp    && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]);
+    BOOL shouldDisplayScrollRight = canScrollRight && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]);
+    BOOL shouldDisplayScrollDown  = canScrollDown  && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]);
+    BOOL shouldDisplayScrollLeft  = canScrollLeft  && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]);
     BOOL shouldDisplayArrows = shouldDisplayScrollUp || shouldDisplayScrollRight || shouldDisplayScrollDown || shouldDisplayScrollLeft;
     BOOL arrowsVisibleChanged =
       (self->previousArrowsVisible[0] != shouldDisplayScrollUp) ||
@@ -1494,44 +1452,38 @@ typedef NSInteger NSDraggingContext;
       [clipView setCopiesOnScroll:NO];
       [selfView setFrame:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
       [scrollView setDocumentView:selfView];
-      if (isMacOS10_7OrAbove())
-      {
-        [scrollView performSelector:@selector(setHorizontalScrollElasticity:) withObject:[NSNumber numberWithInteger:1]/*NSScrollElasticityNone*/];
-        [scrollView performSelector:@selector(setVerticalScrollElasticity:) withObject:[NSNumber numberWithInteger:1]/*NSScrollElasticityNone*/];
-      }//end if (isMacOS10_7OrAbove())
+      [scrollView performSelector:@selector(setHorizontalScrollElasticity:) withObject:@(1)/*NSScrollElasticityNone*/];
+      [scrollView performSelector:@selector(setVerticalScrollElasticity:) withObject:@(1)/*NSScrollElasticityNone*/];
       [selfView release];
       
-      if (isMacOS10_7OrAbove())
+      if (!self->layerView)
       {
-        if (!self->layerView)
-        {
-          self->layerView = [[TransparentView alloc] initWithFrame:[scrollView frame]];
-          [self->layerView setNextResponder:scrollView];
-          [self->layerView setWantsLayer:YES];
-          [self->layerView setAutoresizingMask:[scrollView autoresizingMask]];
-          [[scrollView superview] addSubview:self->layerView];
-          [[self->layerView layer] setFrame:NSRectToCGRect([self->layerView bounds])];
-        }
-        if (!self->layerArrows)
-        {
-          CABasicAnimation* opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-          [opacityAnimation setDuration:1.0];
-          [opacityAnimation setRepeatCount:HUGE_VALF];
-          [opacityAnimation setAutoreverses:YES];
-          [opacityAnimation setFromValue:[NSNumber numberWithFloat:1.0]];
-          [opacityAnimation setToValue:[NSNumber numberWithFloat:0.0]];
-          [opacityAnimation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+        self->layerView = [[TransparentView alloc] initWithFrame:[scrollView frame]];
+        [self->layerView setNextResponder:scrollView];
+        [self->layerView setWantsLayer:YES];
+        [self->layerView setAutoresizingMask:[scrollView autoresizingMask]];
+        [[scrollView superview] addSubview:self->layerView];
+        [[self->layerView layer] setFrame:NSRectToCGRect([self->layerView bounds])];
+      }
+      if (!self->layerArrows)
+      {
+        CABasicAnimation* opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        [opacityAnimation setDuration:1.0];
+        [opacityAnimation setRepeatCount:HUGE_VALF];
+        [opacityAnimation setAutoreverses:YES];
+        [opacityAnimation setFromValue:@(1.0)];
+        [opacityAnimation setToValue:@(0.0)];
+        [opacityAnimation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
 
-          self->layerArrows = [[CALayer alloc] init];
-          [self->layerArrows setFrame:[[self->layerView layer] bounds]];
-          [self->layerArrows setHidden:YES];
-          [self->layerArrows setDelegate:self->myImageViewDelegate];
-          [self->layerArrows addAnimation:opacityAnimation forKey:@"animateOpacity"];
-          [[self->layerView layer] addSublayer:self->layerArrows];
-          [self->layerArrows setNeedsDisplay];
-          [self setNeedsDisplay:YES];
-        }//end if (!self->layerArrows)
-      }//end if (isMacOS10_7OrAbove())
+        self->layerArrows = [[CALayer alloc] init];
+        [self->layerArrows setFrame:[[self->layerView layer] bounds]];
+        [self->layerArrows setHidden:YES];
+        [self->layerArrows setDelegate:self->myImageViewDelegate];
+        [self->layerArrows addAnimation:opacityAnimation forKey:@"animateOpacity"];
+        [[self->layerView layer] addSublayer:self->layerArrows];
+        [self->layerArrows setNeedsDisplay];
+        [self setNeedsDisplay:YES];
+      }//end if (!self->layerArrows)
     }//end if (!clipView)
     CGFloat factor = exp(3*(self->zoomLevel-1));
     NSSize newSize = self->naturalPDFSize;
@@ -1630,10 +1582,10 @@ typedef NSInteger NSDraggingContext;
   BOOL canScrollRight = clipView && (NSMaxX(documentVisibleRect) < NSMaxX(documentRect));
   BOOL canScrollDown  = clipView && (documentVisibleRect.origin.y > documentRect.origin.y);
   BOOL canScrollLeft  = clipView && (documentVisibleRect.origin.x > documentRect.origin.x);
-  BOOL shouldDisplayScrollUp    = canScrollUp    && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]));
-  BOOL shouldDisplayScrollRight = canScrollRight && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]));
-  BOOL shouldDisplayScrollDown  = canScrollDown  && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]));
-  BOOL shouldDisplayScrollLeft  = canScrollLeft  && (isMacOS10_7OrAbove() && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]));
+  BOOL shouldDisplayScrollUp    = canScrollUp    && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]);
+  BOOL shouldDisplayScrollRight = canScrollRight && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]);
+  BOOL shouldDisplayScrollDown  = canScrollDown  && (forceDisplayArrows || [[scrollView verticalScroller] scrollerStyle]);
+  BOOL shouldDisplayScrollLeft  = canScrollLeft  && (forceDisplayArrows || [[scrollView horizontalScroller] scrollerStyle]);
   BOOL shouldDisplayArrow[4] = {shouldDisplayScrollUp, shouldDisplayScrollRight, shouldDisplayScrollDown, shouldDisplayScrollLeft};
   
   //NSRect borderRect = !clipView ? bounds : NSMakeRect(0, 0, [clipView bounds].size.width, [clipView bounds].size.height);

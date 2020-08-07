@@ -60,7 +60,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:![value isEqualTo:self->reference]];
+  id result = @(![value isEqualTo:self->reference]);
   return result;
 }
 //end transformedValue:

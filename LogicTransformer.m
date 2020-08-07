@@ -86,7 +86,7 @@
     while(!localResult && ((transformer = [enumerator nextObject])))
       localResult |= [[transformer transformedValue:value] boolValue];
   }//end if (self->logicOperator == LOGIC_TRANSFORMER_OPERATOR_OR)
-  result = [NSNumber numberWithBool:localResult];
+  result = @(localResult);
   return result;
 }
 //end transformedValue:

@@ -21,7 +21,7 @@ extern NSString* ImageDidChangeNotification;
 @class MyDocument;
 @class MyImageViewDelegate;
 
-@interface MyImageView : NSImageView {
+@interface MyImageView : NSImageView <NSDraggingSource, NSFilePromiseProviderDelegate> {
   IBOutlet    MyDocument* document; //link to the parent document
   CGFloat     zoomLevel;
   NSData*     pdfData; //full pdfdata (that may contain meta-data like keywords, creator...)

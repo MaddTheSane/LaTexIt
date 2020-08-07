@@ -59,7 +59,7 @@
 {
   id result = nil;
   NSUInteger lastIndex = ![value count] ? NSNotFound : [value lastIndex];
-  result = [NSNumber numberWithUnsignedInteger:lastIndex];
+  result = @(lastIndex);
   return result;
 }
 //end reverseTransformedValue:

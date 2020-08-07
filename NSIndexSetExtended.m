@@ -17,7 +17,7 @@
   NSUInteger index = [self firstIndex];
   while(index != NSNotFound)
   {
-    [array addObject:[NSNumber numberWithUnsignedInteger:index]];
+    [array addObject:@(index)];
     index = [self indexGreaterThanIndex:index];
   }
   return array;

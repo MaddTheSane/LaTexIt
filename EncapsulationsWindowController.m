@@ -33,7 +33,7 @@
 -(void) windowDidLoad
 {
   [[self window] setFrameAutosaveName:@"encapsulations"];
-  [[self window] setTitle:NSLocalizedString(@"Encapsulations", @"Encapsulations")];
+  [[self window] setTitle:NSLocalizedString(@"Encapsulations", @"")];
   EncapsulationsController* encapsulationsController = [[PreferencesController sharedController] encapsulationsController];
   [self->addButton bind:NSEnabledBinding toObject:encapsulationsController withKeyPath:@"canAdd" options:nil];
   [self->addButton setTarget:encapsulationsController];

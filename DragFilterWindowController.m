@@ -44,7 +44,7 @@
 
 -(void) awakeFromNib
 {
-  [self->dragFilterViewLabel setStringValue:NSLocalizedString(@"Drag through areas to change export type", @"Drag through areas to change export type")];
+  [self->dragFilterViewLabel setStringValue:NSLocalizedString(@"Drag through areas to change export type", @"")];
   self->buttonPalette = [[NSButtonPalette alloc] init];
   [self->buttonPalette setExclusive:YES];
   NSEnumerator* enumerator = [[self->dragFilterButtonsView subviews] objectEnumerator];
@@ -58,19 +58,19 @@
   [self->closeButton setDelay:.05];
 
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS] setTitle:
-    NSLocalizedString(@"PDF w.o.f.", @"PDF w.o.f.")];
+    NSLocalizedString(@"PDF w.o.f.", @"")];
 
   BOOL isPdfToSvgAvailable = [[AppController appController] isPdfToSvgAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:isPdfToSvgAvailable ? nil :
-    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @"%@ is required"), @"pdf2svg"]];
+    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @""), @"pdf2svg"]];
   
   BOOL isPerlWithLibXMLAvailable = [[AppController appController] isPerlWithLibXMLAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setEnabled:isPerlWithLibXMLAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setToolTip:isPerlWithLibXMLAvailable ? nil :
-    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"The XML::LibXML perl module must be installed")];
+    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"")];
 
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"Text")];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"")];
   
   [self setExportFormat:[[PreferencesController sharedController] exportFormatCurrentSession]];
   
@@ -150,7 +150,7 @@
     [[self window] setAlphaValue:self->animationStartAlphaValue];
     [self showWindow:self];
     if (animate)
-      self->animationTimer = [[NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES] retain];
+      self->animationTimer = [[NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:@(visible) repeats:YES] retain];
     else
       [[self window] setAlphaValue:1];
   }
@@ -162,7 +162,7 @@
     [self->animationTimer release];
     self->animationTimer = nil;
     if (animate)
-      self->animationTimer = [[NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:[NSNumber numberWithBool:visible] repeats:YES] retain];
+      self->animationTimer = [[NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(updateAnimation:) userInfo:@(visible) repeats:YES] retain];
     else
       [[self window] close];
   }
@@ -204,7 +204,7 @@
       [[PreferencesController sharedController] setExportAddTempFilePersistent:([dragThroughButton state] == NSOnState)];
       [[PreferencesController sharedController] setExportAddTempFileCurrentSession:([dragThroughButton state] == NSOnState)];
       [self dragFilterWindowController:self exportFormatDidChange:[[PreferencesController sharedController] exportFormatCurrentSession]];
-      [dragThroughButton performSelector:@selector(setCanTrackMouse:) withObject:[NSNumber numberWithBool:YES] afterDelay:2];
+      [dragThroughButton performSelector:@selector(setCanTrackMouse:) withObject:@(YES) afterDelay:2];
     }//end if (dragThroughButton == self->addTempFileButton)
     else if ([dragThroughButton state] == NSOnState)
     {

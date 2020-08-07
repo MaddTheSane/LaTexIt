@@ -190,8 +190,8 @@ static NSMutableDictionary* cachePaths = nil;
     Semaphore* configurationSemaphore = [[Semaphore alloc] initWithValue:7];
     NSDictionary* configuration = nil;
     configuration = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], @"checkOnlyIfNecessary",
-      [NSNumber numberWithBool:YES], @"allowFindOnFailure",
+      @(NO), @"checkOnlyIfNecessary",
+      @(YES), @"allowFindOnFailure",
       configurationSemaphore, @"semaphore",
       nil];
     [PreferencesController sharedController];//create out of thread
@@ -201,46 +201,46 @@ static NSMutableDictionary* cachePaths = nil;
     */
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
+                                                                 @[@"pdflatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
+                                                                 @[@"xelatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                                 @[@"lualatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
+                                                                 @[@"latex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
+                                                                 @[@"dvipdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                                 @[@"gs-noX11", @"gs"], @"executableNames",
                                                                  @"ghostscript", @"executableDisplayName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
+                                                                 @[@"ps2pdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
     /*[NSApplication detachDrawingThread:@selector(_checkColorStyWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:@"color.sty", @"path",
                                                                  [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];*/
     [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
+                                                                 @[@"pdf2svg"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
 
     //check perlWithLibXMLAvailable
     {
       SystemTask* perlTask = [[SystemTask alloc] initWithWorkingDirectory:[[NSWorkspace sharedWorkspace] temporaryDirectory]];
       @try {
-        [perlTask setArguments:[NSArray arrayWithObjects:@"-e", @"\"use XML::LibXML;\"", nil]];
+        [perlTask setArguments:@[@"-e", @"\"use XML::LibXML;\""]];
         [perlTask setEnvironment:[[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment]];
         [perlTask setLaunchPath:@"perl"];
         [perlTask setUsingLoginShell:YES];
@@ -262,37 +262,37 @@ static NSMutableDictionary* cachePaths = nil;
     configurationSemaphore = nil;
 
     configuration = [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
-      [NSNumber numberWithBool:YES], @"allowUIAlertOnFailure",
-      [NSNumber numberWithBool:YES], @"allowUIFindOnFailure",
+      @(YES), @"checkOnlyIfNecessary",
+      @(YES), @"allowUIAlertOnFailure",
+      @(YES), @"allowUIFindOnFailure",
       nil];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"pdflatex", nil], @"executableNames",
+                                                                 @[@"pdflatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"xelatex", nil], @"executableNames",
+                                                                 @[@"xelatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"lualatex", nil], @"executableNames",
+                                                                 @[@"lualatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"latex", nil], @"executableNames",
+                                                                 @[@"latex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"dvipdf", nil], @"executableNames",
+                                                                 @[@"dvipdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"gs-noX11", @"gs", nil], @"executableNames",
+                                                                 @[@"gs-noX11", @"gs"], @"executableNames",
                                                                  @"ghostscript", @"executableDisplayName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"ps2pdf", nil], @"executableNames",
+                                                                 @[@"ps2pdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
     [self _checkColorStyWithConfiguration:configuration];
     [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
-                                                                 [NSArray arrayWithObjects:@"pdf2svg", nil], @"executableNames",
-                                                                 [NSNumber numberWithBool:NO], @"allowUIAlertOnFailure",
-                                                                 [NSNumber numberWithBool:NO], @"allowUIFindOnFailure",
+                                                                 @[@"pdf2svg"], @"executableNames",
+                                                                 @(NO), @"allowUIAlertOnFailure",
+                                                                 @(NO), @"allowUIFindOnFailure",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
 
     //export to EPS needs ghostscript to be available
@@ -373,12 +373,12 @@ static NSMutableDictionary* cachePaths = nil;
                   NSNegateBooleanTransformerName, NSValueTransformerNameBindingOption, nil]];
                   
   NSMenu* editCopyImageAsMenu = [self->editCopyImageAsMenuItem submenu];
-  [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"Default Format") target:self action:@selector(copyAs:)
+  [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"") target:self action:@selector(copyAs:)
                          keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
   [editCopyImageAsMenu addItem:[NSMenuItem separatorItem]];
   [editCopyImageAsMenu addItemWithTitle:@"PDF" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_PDF];
-  [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
+  [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"")
                                  target:self action:@selector(copyAs:)
                           keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
                                     tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
@@ -503,8 +503,8 @@ static NSMutableDictionary* cachePaths = nil;
       DragExportSvgPdfToSvgPathKey,
     nil];
   NSDictionary* configuration = [NSDictionary dictionaryWithObjectsAndKeys:
-    [NSNumber numberWithBool:YES], @"checkOnlyIfNecessary",
-    [NSNumber numberWithBool:YES], @"updateGUIfromSystemAvailabilities",
+    @(YES), @"checkOnlyIfNecessary",
+    @(YES), @"updateGUIfromSystemAvailabilities",
     nil];
   if ((object == NSApp) && [keyPath isEqualToString:@"effectiveAppearance"])
     [[NSNotificationCenter defaultCenter] postNotificationName:NSAppearanceDidChangeNotification object:self];
@@ -539,14 +539,13 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([type isEqualTo:@"latexlib"] || [type isEqualTo:@"library"] || [type isEqualTo:@"plist"])
   {
     NSString* title =
-      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?",
-                                                   @"Do you want to load the library <%@> ?"),
+      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @""),
                                  [[filename pathComponents] lastObject]];
     NSAlert* alert = [NSAlert alertWithMessageText:title
-                                     defaultButton:NSLocalizedString(@"Add to the library", @"Add to the library")
-                                   alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
-                                       otherButton:NSLocalizedString(@"Replace the library", @"Replace the library")
-                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"If you choose <Replace the library>, the current library will be lost")];
+                                     defaultButton:NSLocalizedString(@"Add to the library", @"")
+                                   alternateButton:NSLocalizedString(@"Cancel", @"")
+                                       otherButton:NSLocalizedString(@"Replace the library", @"")
+                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"")];
     NSInteger confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
       ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_MERGE parent:nil];
@@ -558,14 +557,13 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([type isEqualTo:@"latexhist"])
   {
     NSString* title =
-      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the history <%@> ?",
-                                                   @"Do you want to load the history <%@> ?"),
+      [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the history <%@> ?", @""),
                                  [[filename pathComponents] lastObject]];
     NSAlert* alert = [NSAlert alertWithMessageText:title
-                                     defaultButton:NSLocalizedString(@"Add to the history", @"Add to the history")
-                                   alternateButton:NSLocalizedString(@"Cancel", @"Cancel")
-                                       otherButton:NSLocalizedString(@"Replace the history", @"Replace the history")
-                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"If you choose <Replace the history>, the current history will be lost")];
+                                     defaultButton:NSLocalizedString(@"Add to the history", @"")
+                                   alternateButton:NSLocalizedString(@"Cancel", @"")
+                                       otherButton:NSLocalizedString(@"Replace the history", @"")
+                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"")];
     NSInteger confirm = [alert runModal];
     if (confirm == NSAlertDefaultReturn)
       ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_MERGE];
@@ -591,23 +589,13 @@ static NSMutableDictionary* cachePaths = nil;
       NSUInteger equationsCount = [equations count];
       if (equationsCount == 1)
       {
-        if (isMacOS10_7OrAbove())
-        {
-          __block BOOL localOk = ok;
-          [documentController openDocumentWithContentsOfURL:fileURL display:YES completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
-                if (error)
-                  DebugLog(1, @"error : %@", error);
-                localOk = (document != nil);
-           }];
-           ok |= localOk;
-        }//end if (isMacOS10_7OrAbove())
-        else//if (!isMacOS10_7OrAbove())
-        {
-          MyDocument* document = (MyDocument*) [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
-          if (error)
-            DebugLog(1, @"error : %@", error);
-          ok |= (document != nil);
-        }//end if (!isMacOS10_7OrAbove())
+        __block BOOL localOk = ok;
+        [documentController openDocumentWithContentsOfURL:fileURL display:YES completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
+              if (error)
+                DebugLog(1, @"error : %@", error);
+              localOk = (document != nil);
+         }];
+         ok |= localOk;
       }//end if (equationsCount == 1)
       else if (equationsCount > 1)
       {
@@ -649,24 +637,14 @@ static NSMutableDictionary* cachePaths = nil;
       NSUInteger equationsCount = [equations count];
       if (equationsCount == 1)
       {
-        if (isMacOS10_7OrAbove())
-        {
-          __block BOOL localOk = ok;
-          [documentController openDocumentWithContentsOfURL:fileURL display:YES
-            completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
-              if (error)
-                DebugLog(1, @"error : %@", error);
-              localOk = (document != nil);
-           }];
-           ok |= localOk;
-        }//end if (isMacOS10_7OrAbove())
-        else//if (!isMacOS10_7OrAbove())
-        {
-          MyDocument* document = (MyDocument*) [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
-          if (error)
-            DebugLog(1, @"error : %@", error);
-          ok = (document != nil);
-        }//end if (!isMacOS10_7OrAbove())
+        __block BOOL localOk = ok;
+        [documentController openDocumentWithContentsOfURL:fileURL display:YES
+          completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
+            if (error)
+              DebugLog(1, @"error : %@", error);
+            localOk = (document != nil);
+         }];
+         ok |= localOk;
       }//end if (equationsCount == 1)
       else if (equationsCount > 1)
       {
@@ -687,24 +665,14 @@ static NSMutableDictionary* cachePaths = nil;
     else
     {
       NSError* error = nil;
-      if (isMacOS10_7OrAbove())
-      {
-        __block BOOL localOk = ok;
-        [documentController openDocumentWithContentsOfURL:fileURL display:YES
-          completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
-            if (error)
-              DebugLog(1, @"error : %@", error);
-            localOk = (document != nil);
-         }];
-         ok |= localOk;
-      }//end if (isMacOS10_7OrAbove())
-      else//if (!isMacOS10_7OrAbove())
-      {
-        MyDocument* document = (MyDocument*) [documentController openDocumentWithContentsOfURL:fileURL display:YES error:&error];
-        if (error)
-          DebugLog(1, @"error : %@", error);
-        ok |= (document != nil);
-      }//end if (!isMacOS10_7OrAbove())
+      __block BOOL localOk = ok;
+      [documentController openDocumentWithContentsOfURL:fileURL display:YES
+        completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
+          if (error)
+            DebugLog(1, @"error : %@", error);
+          localOk = (document != nil);
+       }];
+       ok |= localOk;
     }
   }//end latex document
   return ok;
@@ -738,9 +706,8 @@ static NSMutableDictionary* cachePaths = nil;
   [LinkBack publishServerWithName:[[NSWorkspace sharedWorkspace] applicationName] delegate:self];
 
   if (self->isGsAvailable && (self->isPdfLaTeXAvailable || self->isLaTeXAvailable || self->isXeLaTeXAvailable || self->isLuaLaTeXAvailable) && !self->isColorStyAvailable)
-    NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @"color.sty seems to be unavailable"),
-                                 NSLocalizedString(@"Without the color.sty package, you won't be able to change the font color",
-                                                   @"Without the color.sty package, you won't be able to change the font color"),
+    NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @""),
+                                 NSLocalizedString(@"Without the color.sty package, you won't be able to change the font color", @""),
                                  @"OK", nil, nil);
 
   PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -778,7 +745,7 @@ static NSMutableDictionary* cachePaths = nil;
   NSString* newPath = [NSString pathWithComponents:newPaths];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   if (![fileManager fileExistsAtPath:newPath] && [fileManager fileExistsAtPath:oldPath])
-    [fileManager bridge_copyItemAtPath:oldPath toPath:newPath error:0];
+    [fileManager copyItemAtPath:oldPath toPath:newPath error:0];
 
   //sets visible controllers
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
@@ -805,7 +772,7 @@ static NSMutableDictionary* cachePaths = nil;
   if (self->shouldOpenInstallLaTeXHelp)
   {
     self->shouldOpenInstallLaTeXHelp = NO;
-    [self showHelp:self section:[NSString stringWithFormat:@"\n%@\n", NSLocalizedString(@"Install LaTeX", @"Install LaTeX")]];
+    [self showHelp:self section:[NSString stringWithFormat:@"\n%@\n", NSLocalizedString(@"Install LaTeX", @"")]];
   }//end if (self->shouldOpenInstallLaTeXHelp)
 
   if ([self->sparkleUpdater automaticallyChecksForUpdates])
@@ -913,7 +880,7 @@ static NSMutableDictionary* cachePaths = nil;
     {
       export_format_t defaultExportFormat = [[PreferencesController sharedController] exportFormatCurrentSession];
       [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
-        NSLocalizedString(@"Default Format", @"Default Format"),
+        NSLocalizedString(@"Default Format", @""),
         [[AppController appController] nameOfType:defaultExportFormat]]];
     }
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
@@ -928,7 +895,7 @@ static NSMutableDictionary* cachePaths = nil;
     {
       export_format_t exportFormat = (export_format_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTypeKey];
       [sender setTitle:[NSString stringWithFormat:@"%@ (%@)",
-        NSLocalizedString(@"Default Format", @"Default Format"),
+        NSLocalizedString(@"Default Format", @""),
         [self nameOfType:exportFormat]]];
     }
   }
@@ -942,8 +909,8 @@ static NSMutableDictionary* cachePaths = nil;
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = ([myDocument linkBackLink] != nil);
     [sender setTitle:(!ok || [myDocument linkBackAllowed]) ?
-      NSLocalizedString(@"Suspend Linkback link", @"Suspend Linkback link") :
-      NSLocalizedString(@"Resume Linkback link", @"Resume Linkback link")];
+      NSLocalizedString(@"Suspend Linkback link", @"") :
+      NSLocalizedString(@"Resume Linkback link", @"")];
   }
   else if ([sender action] == @selector(exportImage:))
   {
@@ -974,8 +941,8 @@ static NSMutableDictionary* cachePaths = nil;
   else if ([sender action] == @selector(makeLatex:))
   {
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
-    [sender setTitle:((myDocument != nil) && [myDocument isBusy]) ? NSLocalizedString(@"Stop", @"Stop") :
-                     NSLocalizedString(@"LaTeX it!", @"LaTeX it!")];
+    [sender setTitle:((myDocument != nil) && [myDocument isBusy]) ? NSLocalizedString(@"Stop", @"") :
+                     NSLocalizedString(@"LaTeX it!", @"")];
     ok = (myDocument != nil) && [self isPdfLaTeXAvailable];
   }
   else if ([sender action] == @selector(makeLatexAndExport:))
@@ -1000,9 +967,9 @@ static NSMutableDictionary* cachePaths = nil;
     BOOL isPreambleVisible = (myDocument && [myDocument isPreambleVisible]);
     ok = (myDocument != nil) && ![myDocument isBusy] && !([myDocument documentStyle] == DOCUMENT_STYLE_MINI);
     if (isPreambleVisible)
-      [sender setTitle:NSLocalizedString(@"Hide preamble", @"Hide preamble")];
+      [sender setTitle:NSLocalizedString(@"Hide preamble", @"")];
     else
-      [sender setTitle:NSLocalizedString(@"Show preamble", @"Show preamble")];
+      [sender setTitle:NSLocalizedString(@"Show preamble", @"")];
   }
   else if ([sender action] == @selector(fontSizeChange:))
   {
@@ -1030,9 +997,9 @@ static NSMutableDictionary* cachePaths = nil;
   {
     BOOL isHistoryVisible = [[self->historyWindowController window] isVisible];
     if (isHistoryVisible)
-      [sender setTitle:NSLocalizedString(@"Hide History", @"Hide History")];
+      [sender setTitle:NSLocalizedString(@"Hide History", @"")];
     else
-      [sender setTitle:NSLocalizedString(@"Show History", @"Show History")];
+      [sender setTitle:NSLocalizedString(@"Show History", @"")];
   }
   else if ([sender action] == @selector(historyRemoveHistoryEntries:))
   {
@@ -1040,15 +1007,12 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if ([sender action] == @selector(historyClearHistory:))
   {
-    if (isMacOS10_5OrAbove())
-      ok = ([[HistoryManager sharedManager] numberOfItems] > 0);
-    else
-      ok = ([[[[self->historyWindowController historyView] historyItemsController] arrangedObjects] count] > 0);
+    ok = ([[HistoryManager sharedManager] numberOfItems] > 0);
   }
   else if ([sender action] == @selector(historyChangeLock:))
   {
     [sender setTitle:[[HistoryManager sharedManager] isLocked] ?
-                    NSLocalizedString(@"Unlock", @"Unlock") : NSLocalizedString(@"Lock", @"Lock")];
+                    NSLocalizedString(@"Unlock", @"") : NSLocalizedString(@"Lock", @"")];
     ok = YES;
   }
   else if ([sender action] == @selector(historyOpen:))
@@ -1061,16 +1025,16 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if ([sender action] == @selector(historyRelatexizeItems:))
   {
-    [sender setTitle:NSLocalizedString(@"latexize selection again", @"latexize selection again")];
+    [sender setTitle:NSLocalizedString(@"latexize selection again", @"")];
     ok = [[self->historyWindowController window] isVisible] && ([[[self->historyWindowController historyView] selectedItems] count] != 0);
   }
   else if ([sender action] == @selector(showOrHideLibrary:))
   {
     BOOL isLibraryVisible = [[self->libraryWindowController window] isVisible];
     if (isLibraryVisible)
-      [sender setTitle:NSLocalizedString(@"Hide Library", @"Hide Library")];
+      [sender setTitle:NSLocalizedString(@"Hide Library", @"")];
     else
-      [sender setTitle:NSLocalizedString(@"Show Library", @"Show Library")];
+      [sender setTitle:NSLocalizedString(@"Show Library", @"")];
   }
   else if ([sender action] == @selector(libraryOpenEquation:))
   {
@@ -1107,7 +1071,7 @@ static NSMutableDictionary* cachePaths = nil;
   }
   else if ([sender action] == @selector(libraryRelatexizeItems:))
   {
-    [sender setTitle:NSLocalizedString(@"latexize selection again", @"latexize selection again")];
+    [sender setTitle:NSLocalizedString(@"latexize selection again", @"")];
     ok = [[self->libraryWindowController window] isVisible] && ([[[self->libraryWindowController libraryView] selectedItems] count] != 0);
   }
   else if ([sender action] == @selector(libraryToggleCommentsPane:))
@@ -1115,8 +1079,8 @@ static NSMutableDictionary* cachePaths = nil;
     ok = [[self->libraryWindowController window] isVisible];
     [sender setTitle:
        ok && [self->libraryWindowController isCommentsPaneOpen] ?
-         NSLocalizedString(@"Hide comments pane", @"Hide comments pane") :
-         NSLocalizedString(@"Show comments pane", @"Show comments pane")];
+         NSLocalizedString(@"Hide comments pane", @"") :
+         NSLocalizedString(@"Show comments pane", @"")];
   }
   else if ([sender action] == @selector(libraryOpen:))
   {
@@ -1144,9 +1108,9 @@ static NSMutableDictionary* cachePaths = nil;
     BOOL isReducedTextArea = (myDocument && [myDocument isReducedTextArea]);
     ok = (myDocument != nil);
     if (isReducedTextArea)
-      [sender setTitle:NSLocalizedString(@"Enlarge the text area", @"Enlarge the text area")];
+      [sender setTitle:NSLocalizedString(@"Enlarge the text area", @"")];
     else
-      [sender setTitle:NSLocalizedString(@"Reduce the text area", @"Reduce the text area")];
+      [sender setTitle:NSLocalizedString(@"Reduce the text area", @"")];
   }
   else if ([sender action] == @selector(switchMiniWindow:))
   {
@@ -1154,9 +1118,9 @@ static NSMutableDictionary* cachePaths = nil;
     BOOL isMini = myDocument && ([myDocument documentStyle] == DOCUMENT_STYLE_MINI);
     ok = (myDocument != nil);
     if (isMini)
-      [sender setTitle:NSLocalizedString(@"Switch to normal window", @"Switch to normal window")];
+      [sender setTitle:NSLocalizedString(@"Switch to normal window", @"")];
     else
-      [sender setTitle:NSLocalizedString(@"Switch to mini-window", @"Switch to mini-window")];
+      [sender setTitle:NSLocalizedString(@"Switch to mini-window", @"")];
   }
   return ok;
 }
@@ -1194,7 +1158,7 @@ static NSMutableDictionary* cachePaths = nil;
 {
   NSColor* color = nil;
   NSData* data = nil;
-  NSString* filename = NSLocalizedString(@"clipboard", @"clipboard");
+  NSString* filename = NSLocalizedString(@"clipboard", @"");
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:(NSString*)NSPDFPboardType]])
   {
@@ -1279,18 +1243,20 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL ok = (data && filepath) ? [data writeToFile:filepath atomically:YES] : NO;
   if (ok)
   {
-    NSError* error = nil;
-    MyDocument* document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filepath] display:NO error:&error];
-    ok = (error == nil) && (document != nil);
+    __block MyDocument* myDocument = nil;
+    [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filepath] display:NO completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable error) {
+      myDocument = [document dynamicCastToClass:[MyDocument class]];
+    }];
+    ok = (myDocument != nil);
     if (!ok)
-      [document close];
+      [myDocument close];
     else
     {
-      [document makeWindowControllers];
-      [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
+      [myDocument makeWindowControllers];
+      [[myDocument windowControllers] makeObjectsPerformSelector:@selector(window)];//force loading nib file
       if (color)
-        [document setColor:color];
-      [document showWindows];
+        [myDocument setColor:color];
+      [myDocument showWindows];
     }//end if (ok)
   }//end if (ok)
   else if (data && !filepath)
@@ -1327,11 +1293,11 @@ static NSMutableDictionary* cachePaths = nil;
     self->openFileOptions =
       [[PropertyStorage alloc] initWithDictionary:
         [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithBool:NO], @"synchronizeAvailable",
-          [NSNumber numberWithBool:NO], @"synchronizeEnabled",
-          [NSNumber numberWithBool:NO], @"synchronizePreamble",
-          [NSNumber numberWithBool:NO], @"synchronizeEnvironment",
-          [NSNumber numberWithBool:NO], @"synchronizeBody",
+          @(NO), @"synchronizeAvailable",
+          @(NO), @"synchronizeEnabled",
+          @(NO), @"synchronizePreamble",
+          @(NO), @"synchronizeEnvironment",
+          @(NO), @"synchronizeBody",
           nil]];
   if (!self->openFileTypeView)
   {
@@ -1347,18 +1313,18 @@ static NSMutableDictionary* cachePaths = nil;
     [openFileTypeLabel setBordered:NO];
     [openFileTypeLabel setBezeled:NO];
     [openFileTypeLabel setDrawsBackground:NO];
-    [openFileTypeLabel setStringValue:[NSString stringWithFormat:@"%@ :", NSLocalizedString(@"File type", @"File type")]];
+    [openFileTypeLabel setStringValue:[NSString stringWithFormat:@"%@ :", NSLocalizedString(@"File type", @"")]];
     [openFileTypeLabel sizeToFit];
     [self->openFileTypeView addSubview:openFileTypeLabel];
 
     self->openFileTypePopUpButton = [[NSPopUpButton alloc] initWithFrame:NSZeroRect];
     [self->openFileTypePopUpButton addItemsWithTitles:[NSArray arrayWithObjects:
-      NSLocalizedString(@"PDF Equation", @"PDF Equation"),
-      NSLocalizedString(@"Text file", @"Text file"),
-      NSLocalizedString(@"LaTeXiT library", @"LaTeXiT library"),
-      NSLocalizedString(@"LaTeX Equation Editor library", @"LaTeX Equation Editor library"),
-      NSLocalizedString(@"LaTeXiT history", @"LaTeXiT history"),
-      NSLocalizedString(@"LaTeXiT LaTeX Palette", @"LaTeXiT  LaTeX Palette"), nil]];
+      NSLocalizedString(@"PDF Equation", @""),
+      NSLocalizedString(@"Text file", @""),
+      NSLocalizedString(@"LaTeXiT library", @""),
+      NSLocalizedString(@"LaTeX Equation Editor library", @""),
+      NSLocalizedString(@"LaTeXiT history", @""),
+      NSLocalizedString(@"LaTeXiT LaTeX Palette", @""), nil]];
     [self->openFileTypePopUpButton setTarget:self];
     [self->openFileTypePopUpButton setAction:@selector(changeOpenFileType:)];
     [self->openFileTypePopUpButton selectItemAtIndex:0];
@@ -1367,7 +1333,7 @@ static NSMutableDictionary* cachePaths = nil;
     
     NSButton* openFileSynchronizeCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
     [openFileSynchronizeCheckBox setButtonType:NSSwitchButton];
-    [openFileSynchronizeCheckBox setTitle:NSLocalizedString(@"Continuously synchronize file content", @"Continuously synchronize file content")];
+    [openFileSynchronizeCheckBox setTitle:NSLocalizedString(@"Continuously synchronize file content", @"")];
     [openFileSynchronizeCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
                           withKeyPath:@"synchronizeAvailable"
                               options:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1384,7 +1350,7 @@ static NSMutableDictionary* cachePaths = nil;
 
     NSButton* openFileSynchronizePreambleCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
     [openFileSynchronizePreambleCheckBox setButtonType:NSSwitchButton];
-    [openFileSynchronizePreambleCheckBox setTitle:NSLocalizedString(@"Synchronize preamble", @"Synchronize preamble")];
+    [openFileSynchronizePreambleCheckBox setTitle:NSLocalizedString(@"Synchronize preamble", @"")];
     [openFileSynchronizePreambleCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
                                   withKeyPath:@"synchronizeAvailable"
                                       options:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1404,7 +1370,7 @@ static NSMutableDictionary* cachePaths = nil;
     
     NSButton* openFileSynchronizeEnvironmentCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
     [openFileSynchronizeEnvironmentCheckBox setButtonType:NSSwitchButton];
-    [openFileSynchronizeEnvironmentCheckBox setTitle:NSLocalizedString(@"Synchronize environment", @"Synchronize environment")];
+    [openFileSynchronizeEnvironmentCheckBox setTitle:NSLocalizedString(@"Synchronize environment", @"")];
     [openFileSynchronizeEnvironmentCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
                                   withKeyPath:@"synchronizeAvailable"
                                       options:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1424,7 +1390,7 @@ static NSMutableDictionary* cachePaths = nil;
     
     NSButton* openFileSynchronizeBodyCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
     [openFileSynchronizeBodyCheckBox setButtonType:NSSwitchButton];
-    [openFileSynchronizeBodyCheckBox setTitle:NSLocalizedString(@"Synchronize body", @"Synchronize body")];
+    [openFileSynchronizeBodyCheckBox setTitle:NSLocalizedString(@"Synchronize body", @"")];
     [openFileSynchronizeBodyCheckBox bind:NSHiddenBinding toObject:self->openFileOptions
                                      withKeyPath:@"synchronizeAvailable"
                                          options:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1452,12 +1418,12 @@ static NSMutableDictionary* cachePaths = nil;
                                                               ([openFileTypeLabel frame].size.height-[self->openFileTypePopUpButton frame].size.height)/2)];
     [self->openFileTypeView sizeToFit];
 
-    [self->openFileOptions setObject:[NSNumber numberWithBool:NO] forKey:@"synchronizeEnabled"];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizePreamble"];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizeEnvironment"];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:YES] forKey:@"synchronizeBody"];
+    [self->openFileOptions setObject:@(NO) forKey:@"synchronizeEnabled"];
+    [self->openFileOptions setObject:@(YES) forKey:@"synchronizePreamble"];
+    [self->openFileOptions setObject:@(YES) forKey:@"synchronizeEnvironment"];
+    [self->openFileOptions setObject:@(YES) forKey:@"synchronizeBody"];
   }//end if (!self->openFileTypeView)
-  [self->openFileOptions setObject:[NSNumber numberWithBool:NO] forKey:@"synchronizeEnabled"];
+  [self->openFileOptions setObject:@(NO) forKey:@"synchronizeEnabled"];
   self->openFileTypeOpenPanel = [NSOpenPanel openPanel];
   [self changeOpenFileType:openFileTypePopUpButton];
   [self->openFileTypeOpenPanel setAllowsMultipleSelection:NO];
@@ -1467,8 +1433,7 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setResolvesAliases:YES];
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
   [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
-  NSInteger result = !isMacOS10_6OrAbove() ? [self->openFileTypeOpenPanel runModalForDirectory:nil file:nil types:nil] :
-    [self->openFileTypeOpenPanel runModal];
+  NSInteger result = [self->openFileTypeOpenPanel runModal];
   if (result == NSOKButton)
   {
     NSString* filePath = [[[self->openFileTypeOpenPanel URLs] lastObject] path];
@@ -1500,17 +1465,17 @@ static NSMutableDictionary* cachePaths = nil;
     else if (selectedIndex == 1)
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:(NSString*)kUTTypeText, nil]];
     else if (selectedIndex == 2)
-      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", nil]];
+      [self->openFileTypeOpenPanel setAllowedFileTypes:@[@"latexlib"]];
     else if (selectedIndex == 3)
-      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"library", nil]];
+      [self->openFileTypeOpenPanel setAllowedFileTypes:@[@"library"]];
     else if (selectedIndex == 4)
-      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexhist", nil]];
+      [self->openFileTypeOpenPanel setAllowedFileTypes:@[@"latexhist"]];
     else if (selectedIndex == 5)
-      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexpalette", nil]];
+      [self->openFileTypeOpenPanel setAllowedFileTypes:@[@"latexpalette"]];
     else
       [self->openFileTypeOpenPanel setAllowedFileTypes:nil];
     [self->openFileTypeOpenPanel validateVisibleColumns2];
-    [self->openFileOptions setObject:[NSNumber numberWithBool:(selectedIndex == 1)] forKey:@"synchronizeAvailable"];
+    [self->openFileOptions setObject:@(selectedIndex == 1) forKey:@"synchronizeAvailable"];
   }//end if (self->openFileTypeOpenPanel && openFilePopupButton)
 }
 //end changeOpenFileType:
@@ -1527,13 +1492,11 @@ static NSMutableDictionary* cachePaths = nil;
               ![[NSWorkspace sharedWorkspace] isFilePackageAtPath:filename]) ||
     [allowedFileTypes containsObject:[filename pathExtension]];
     NSEnumerator* enumerator = [allowedFileTypes objectEnumerator];
-    NSString*     uti = nil;
+    NSString* itemUTI = nil;
+    [url getResourceValue:&itemUTI forKey:NSURLTypeIdentifierKey error:nil];
+    NSString* uti = nil;
     if (!result)
     {
-      FSRef fsRefToItem;
-      FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &fsRefToItem, NULL );
-      CFTypeRef itemUTI = NULL;
-      LSCopyItemAttribute( &fsRefToItem, kLSRolesAll, kLSItemContentType, &itemUTI);
       while(!result && ((uti = [enumerator nextObject])))
         result |= UTTypeConformsTo((CFStringRef)itemUTI, (CFStringRef)uti);
     }//end if (!result)
@@ -1541,13 +1504,6 @@ static NSMutableDictionary* cachePaths = nil;
   return result;
 }
 //end panel:shouldEnableURL:
-
--(BOOL) panel:(id)sender shouldShowFilename:(NSString *)filename
-{
-  BOOL result = [self panel:sender shouldEnableURL:[NSURL fileURLWithPath:filename]];
-  return result;
-}
-//end panel:shouldShowFilename:
 
 -(IBAction) closeBackSync:(id)sender
 {
@@ -1932,20 +1888,17 @@ static NSMutableDictionary* cachePaths = nil;
 -(IBAction) openWebSite:(id)sender
 {
   NSMutableString* urlString =
-    [NSMutableString stringWithString:NSLocalizedString(@"https://pierre.chachatelier.fr/latexit/index.php",
-                                                        @"https://pierre.chachatelier.fr/latexit/index.php")];
+    [NSMutableString stringWithString:NSLocalizedString(@"https://pierre.chachatelier.fr/latexit/index.php", @"")];
   if ([sender respondsToSelector:@selector(tag)] && ([sender tag] == 1))
     urlString =
-      [NSMutableString stringWithString:NSLocalizedString(@"https://pierre.chachatelier.fr/latexit/latexit-donations.php",
-                                                          @"https://pierre.chachatelier.fr/latexit/latexit-donations.php")];
+      [NSMutableString stringWithString:NSLocalizedString(@"https://pierre.chachatelier.fr/latexit/latexit-donations.php", @"")];
   NSURL* webSiteURL = [NSURL URLWithString:urlString];
 
   BOOL ok = [[NSWorkspace sharedWorkspace] openURL:webSiteURL];
   if (!ok)
   {
     NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.",
-                                                                @"An error occured while trying to reach %@.\n You should check your network."),
+                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.", @""),
                                               [webSiteURL absoluteString]],
                     @"OK", nil, nil);
   }
@@ -1970,7 +1923,7 @@ static NSMutableDictionary* cachePaths = nil;
   if (!string || ![string length])
   {
     NSBundle* mainBundle = [NSBundle mainBundle];
-    NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"Read Me") ofType:@"rtfd"];
+    NSString* file = [mainBundle pathForResource:NSLocalizedString(@"Read Me", @"") ofType:@"rtfd"];
     ok = (file != nil);
     if (ok)
     {
@@ -2005,7 +1958,7 @@ static NSMutableDictionary* cachePaths = nil;
   switch(format)
   {
     case EXPORT_FORMAT_PDF : result = @"PDF";   break;
-    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS : result = NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts"); break;
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS : result = NSLocalizedString(@"PDF with outlined fonts", @""); break;
     case EXPORT_FORMAT_EPS : result = @"EPS";   break;
     case EXPORT_FORMAT_TIFF : result = @"TIFF"; break;
     case EXPORT_FORMAT_PNG : result = @"PNG";   break;
@@ -2296,7 +2249,7 @@ static NSMutableDictionary* cachePaths = nil;
       *monitor = ok;
 
       NSDictionary* recursiveConfiguration =
-        [configuration subDictionaryWithKeys:[NSArray arrayWithObjects:@"path", @"executableNames", @"monitor", nil]];
+        [configuration subDictionaryWithKeys:@[@"path", @"executableNames", @"monitor"]];
       BOOL allowFindOnFailure = [[configuration objectForKey:@"allowFindOnFailure"] boolValue];
       BOOL shouldFind = !ok && allowFindOnFailure;// && !pathProposedIsEmpty;
       if (shouldFind)
@@ -2320,26 +2273,24 @@ static NSMutableDictionary* cachePaths = nil;
         retry = NO;
         NSString* additionalInfo = ![executableDisplayName isEqualToString:@"ghostscript"] ? @"" :
           [NSString stringWithFormat:@"\n%@",
-            NSLocalizedString(@"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).",
-                              @"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).")];
+            NSLocalizedString(@"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).", @"")];
         NSInteger returnCode =
           NSRunAlertPanel(
             [NSString stringWithFormat:
-              NSLocalizedString(@"%@ not found or does not work as expected", @"%@ not found or does not work as expected"), executableDisplayName],
+              NSLocalizedString(@"%@ not found or does not work as expected", @""), executableDisplayName],
             [NSString stringWithFormat:
-              NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.%@",
-                                @"The current configuration of LaTeXiT requires %@ to work.%@"), executableDisplayName, additionalInfo],
-            !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @"Find %@..."), executableDisplayName],
-            !allowUIFindOnFailure ? nil : NSLocalizedString(@"Cancel", @"Cancel"),
-            !allowUIFindOnFailure ? nil : NSLocalizedString(@"What's that ?", @"What's that ?"),
+              NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.%@", @""), executableDisplayName, additionalInfo],
+            !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @""), executableDisplayName],
+            !allowUIFindOnFailure ? nil : NSLocalizedString(@"Cancel", @""),
+            !allowUIFindOnFailure ? nil : NSLocalizedString(@"What's that ?", @""),
             nil);
         if (allowUIFindOnFailure && (returnCode == NSAlertOtherReturn))
         {
           returnCode = NSRunAlertPanel(
-            NSLocalizedString(@"What's that ?", @"What's that ?"),
-            NSLocalizedString(@"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.", @"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part."),
-            NSLocalizedString(@"See help...", @"See help..."),
-            NSLocalizedString(@"Cancel", @"Cancel"),
+            NSLocalizedString(@"What's that ?", @""),
+            NSLocalizedString(@"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.", @""),
+            NSLocalizedString(@"See help...", @""),
+            NSLocalizedString(@"Cancel", @""),
             nil);
           self->shouldOpenInstallLaTeXHelp |= (returnCode == NSAlertDefaultReturn);
         }//end if (allowUIFindOnFailure && (returnCode == NSAlertOtherReturn))
@@ -2348,10 +2299,8 @@ static NSMutableDictionary* cachePaths = nil;
           NSFileManager* fileManager = [NSFileManager defaultManager];
           NSOpenPanel* openPanel = [NSOpenPanel openPanel];
           [openPanel setResolvesAliases:NO];
-          if (isMacOS10_6OrAbove())
-            [openPanel setDirectoryURL:[NSURL fileURLWithPath:@"/usr" isDirectory:YES]];
-          NSInteger ret2 = !isMacOS10_6OrAbove() ? [openPanel runModalForDirectory:@"/usr" file:nil types:nil] :
-            [openPanel runModal];
+          [openPanel setDirectoryURL:[NSURL fileURLWithPath:@"/usr" isDirectory:YES]];
+          NSInteger ret2 = [openPanel runModal];
           ok = (ret2 == NSOKButton) && ([[openPanel URLs] count]);
           if (ok)
           {
@@ -2584,8 +2533,7 @@ static NSMutableDictionary* cachePaths = nil;
     [NSApp activateIgnoringOtherApps:YES];
     NSArray* windows = [document windowControllers];
     NSWindow* window = [[windows lastObject] window];
-    [document setDocumentTitle:NSLocalizedString(@"Equation linked with another application",
-                                                 @"Equation linked with another application")];
+    [document setDocumentTitle:NSLocalizedString(@"Equation linked with another application", @"")];
     [window makeKeyAndOrderFront:self];
     [window makeFirstResponder:[document preferredFirstResponder]];
   }//end if (document && latexitEquation)
@@ -2678,10 +2626,9 @@ static NSMutableDictionary* cachePaths = nil;
 {
   if (!self->isPdfLaTeXAvailable || !self->isGsAvailable)
   {
-    NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration",
-                                          @"LaTeXiT cannot be run properly, please check its configuration");
+    NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration", @"");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, @"OK", nil, nil);
   }
   else
   {
@@ -2733,7 +2680,7 @@ static NSMutableDictionary* cachePaths = nil;
         NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
         if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
         NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
-        if (!originalBaseline) originalBaseline = [NSNumber numberWithFloat:0.0];
+        if (!originalBaseline) originalBaseline = @(0.0);
         NSString* pboardString = [attrString string];
         NSString* preamble = [[LaTeXProcessor sharedLaTeXProcessor] insertColorInPreamble:[[self preambleServiceAttributedString] string] color:color isColorStyAvailable:[self isColorStyAvailable]];
         NSString* body = pboardString;
@@ -2798,12 +2745,12 @@ static NSMutableDictionary* cachePaths = nil;
           }//end switch(exportFormat)
 
           NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                         [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                         [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                         [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                         [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                         [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                         @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                         @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                         @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                         @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                         @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                         @([preferencesController exportTextExportBody]), @"textExportBody",
                                          [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                          nil];
           NSString* attachedFile     = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
@@ -2835,7 +2782,7 @@ static NSMutableDictionary* cachePaths = nil;
               
             //changes the baseline of the attachment to align it with the surrounding text
             [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
-                                                     value:[NSNumber numberWithFloat:newBaseline]
+                                                     value:@(newBaseline)
                                                      range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
             
             //add a space after the image, to restore the baseline of the surrounding text
@@ -2847,7 +2794,7 @@ static NSMutableDictionary* cachePaths = nil;
             NSMutableAttributedString* space =
               [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
             [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-            [space addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:newBaseline]
+            [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
                           range:NSMakeRange(0, [space length])];
             [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
             [mutableAttributedStringWithImage appendAttributedString:space];
@@ -2948,14 +2895,11 @@ static NSMutableDictionary* cachePaths = nil;
         }//end if ([pdfData length])
         else//if (![pdfData length])
         {
-          NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
-                                                @"You can check it in LaTeXiT",
-                                                @"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
-                                                @"You can check it in LaTeXiT");
+          NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT", @"");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
-                                       NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, NSLocalizedString(@"Cancel", @""),
+                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil);
           if (choice == NSAlertAlternateReturn)
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
@@ -3050,12 +2994,12 @@ static NSMutableDictionary* cachePaths = nil;
           }//end switch(exportFormat)
 
           NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                         [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                         [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                         [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                         [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                         [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                         @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                         @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                         @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                         @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                         @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                         @([preferencesController exportTextExportBody]), @"textExportBody",
                                          [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                          nil];
           NSData* data = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
@@ -3143,14 +3087,11 @@ static NSMutableDictionary* cachePaths = nil;
         }//end if (pdfData)
         else//if (!pdfData)
         {
-          NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
-                                                @"You can check it in LaTeXiT",
-                                                @"This text is not LaTeX compliant; or perhaps it is a preamble problem ? "\
-                                                @"You can check it in LaTeXiT");
+          NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT", @"");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
-                                       NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, NSLocalizedString(@"Cancel", @""),
+                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil);
           if (choice == NSAlertAlternateReturn)
           {
            MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
@@ -3191,10 +3132,9 @@ static NSMutableDictionary* cachePaths = nil;
 {
   if (!self->isPdfLaTeXAvailable || !self->isGsAvailable)
   {
-    NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration",
-                                          @"LaTeXiT cannot be run properly, please check its configuration");
+    NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration", @"");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, @"OK", nil, nil);
   }
   else
   {
@@ -3232,15 +3172,15 @@ static NSMutableDictionary* cachePaths = nil;
 
       //we must find some places where latexisations should be done. We look for "$$..$$", "\[..\]", and "$...$"
       NSArray* delimiters =
-        [NSArray arrayWithObjects:
-          [NSArray arrayWithObjects:@"$$", @"$$"  , [NSNumber numberWithInteger:LATEX_MODE_DISPLAY], nil],
-          [NSArray arrayWithObjects:@"\\[", @"\\]", [NSNumber numberWithInteger:LATEX_MODE_DISPLAY], nil],
-          [NSArray arrayWithObjects:@"$", @"$"    , [NSNumber numberWithInteger:LATEX_MODE_INLINE], nil],
-          [NSArray arrayWithObjects:@"\\begin{eqnarray}", @"\\end{eqnarray}", [NSNumber numberWithInteger:LATEX_MODE_EQNARRAY], nil],
-          [NSArray arrayWithObjects:@"\\begin{eqnarray*}", @"\\end{eqnarray*}", [NSNumber numberWithInteger:LATEX_MODE_EQNARRAY], nil],
-          [NSArray arrayWithObjects:@"\\begin{align}", @"\\end{align}", [NSNumber numberWithInteger:LATEX_MODE_ALIGN], nil],
-          [NSArray arrayWithObjects:@"\\begin{align*}", @"\\end{align*}", [NSNumber numberWithInteger:LATEX_MODE_ALIGN], nil],
-          nil];
+        @[
+          @[@"$$", @"$$"  , @(LATEX_MODE_DISPLAY)],
+          @[@"\\[", @"\\]", @(LATEX_MODE_DISPLAY)],
+          @[@"$", @"$"    , @(LATEX_MODE_INLINE)],
+          @[@"\\begin{eqnarray}", @"\\end{eqnarray}", @(LATEX_MODE_EQNARRAY)],
+          @[@"\\begin{eqnarray*}", @"\\end{eqnarray*}", @(LATEX_MODE_EQNARRAY)],
+          @[@"\\begin{align}", @"\\end{align}", @(LATEX_MODE_ALIGN)],
+          @[@"\\begin{align*}", @"\\end{align*}", @(LATEX_MODE_ALIGN)]
+         ];
 
       NSMutableArray* errorDocuments = [NSMutableArray array];
       NSUInteger delimiterIndex = 0;
@@ -3304,7 +3244,7 @@ static NSMutableDictionary* cachePaths = nil;
             NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
             if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
             NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
-            if (!originalBaseline) originalBaseline = [NSNumber numberWithFloat:0.0];
+            if (!originalBaseline) originalBaseline = @(0.0);
             NSString* body     = [string substringWithRange:rangeOfTextOfEquation];
             NSString* preamble = [[LaTeXProcessor sharedLaTeXProcessor] insertColorInPreamble:[[self preambleServiceAttributedString] string] color:color isColorStyAvailable:[self isColorStyAvailable]];
             
@@ -3396,12 +3336,12 @@ static NSMutableDictionary* cachePaths = nil;
                                                               outFilePath:&attachedFilePath workingDirectory:directory];
               
               NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                             [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                             [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                             [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                             [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                             [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                             [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                             @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                             @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                             @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                             @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                             @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                             @([preferencesController exportTextExportBody]), @"textExportBody",
                                              [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                              nil];
               NSData* attachedData = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
@@ -3425,7 +3365,7 @@ static NSMutableDictionary* cachePaths = nil;
                   
               //changes the baseline of the attachment to align it with the surrounding text
               [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
-                                                       value:[NSNumber numberWithFloat:newBaseline]
+                                                       value:@(newBaseline)
                                                        range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
                 
               //add a space after the image, to restore the baseline of the surrounding text
@@ -3436,7 +3376,7 @@ static NSMutableDictionary* cachePaths = nil;
               NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
               NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
               [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-              [space addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:newBaseline]
+              [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
                             range:NSMakeRange(0, [space length])];
               [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
               [mutableAttributedStringWithImage appendAttributedString:space];
@@ -3455,19 +3395,15 @@ static NSMutableDictionary* cachePaths = nil;
         NSString* message =
           (numberOfFailures == 1)
             ? NSLocalizedString(@"%d equation could not be converted because of syntax errors in it. You should "
-                                @"also check if it is compatible with the default preamble in use.",
-                                @"%d equation could not be converted because of syntax errors in it. You should "
-                                @"also check if it is compatible with the default preamble in use.")
+                                @"also check if it is compatible with the default preamble in use.", @"")
             : NSLocalizedString(@"%d equations could not be converted because of syntax errors in them. You should "
-                                @"also check if they are compatible with the default preamble in use.",
-                                @"%d equations could not be converted because of syntax errors in them. You should "
-                                @"also check if they are compatible with the default preamble in use.");
+                                @"also check if they are compatible with the default preamble in use.", @"");
         message = [NSString stringWithFormat:message, numberOfFailures];
         *error = message;
         
         [NSApp activateIgnoringOtherApps:YES];
-        NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"), message, NSLocalizedString(@"Cancel", @"Cancel"),
-                                     NSLocalizedString(@"Open in LaTeXiT", @"Open in LaTeXiT"), nil);
+        NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, NSLocalizedString(@"Cancel", @""),
+                                     NSLocalizedString(@"Open in LaTeXiT", @""), nil);
         if (choice == NSAlertAlternateReturn)
         {
           NSEnumerator* enumerator = [errorDocuments objectEnumerator];
@@ -3779,9 +3715,9 @@ static NSMutableDictionary* cachePaths = nil;
       [fileManager fileExistsAtPath:[palettePath stringByAppendingPathComponent:@"Resources"] isDirectory:&isDirectory3] && isDirectory3)
     fileIsOk = YES;
   if (!fileIsOk)
-    NSRunAlertPanel(NSLocalizedString(@"Palette installation", @"Palette installation"),
-                    NSLocalizedString(@"It does not appear to be a valid Latex palette package", @"It does not appear to be a valid Latex palette package"),
-                    NSLocalizedString(@"OK", @"OK"), nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Palette installation", @""),
+                    NSLocalizedString(@"It does not appear to be a valid Latex palette package", @""),
+                    NSLocalizedString(@"OK", @""), nil, nil);
   else
   {
     NSArray* libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
@@ -3793,21 +3729,20 @@ static NSMutableDictionary* cachePaths = nil;
     {
       NSString* localizedPalettesFolderPath = [[NSFileManager defaultManager] localizedPath:palettesFolderPath];
       NSInteger choice = NSRunAlertPanel(
-        [NSString stringWithFormat:NSLocalizedString(@"Do you want to install the palette %@ ?", @"Do you want to install the palette %@ ?"),
+        [NSString stringWithFormat:NSLocalizedString(@"Do you want to install the palette %@ ?", @""),
                                    [palettePath lastPathComponent]],
-        [NSString stringWithFormat:NSLocalizedString(@"This palette will be installed into \n%@", @"This palette will be installed into \n%@"),
+        [NSString stringWithFormat:NSLocalizedString(@"This palette will be installed into \n%@", @""),
                                    localizedPalettesFolderPath],
-        NSLocalizedString(@"Install palette", @"Install palette"),
-        NSLocalizedString(@"Cancel", @"Cancel"), nil);
+        NSLocalizedString(@"Install palette", @""),
+        NSLocalizedString(@"Cancel", @""), nil);
       if (choice == NSAlertDefaultReturn)
       {
-        BOOL shouldInstall = [[NSFileManager defaultManager] bridge_createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
+        BOOL shouldInstall = [[NSFileManager defaultManager] createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
         if (!shouldInstall)
-          NSRunAlertPanel(NSLocalizedString(@"Could not create path", @"Could not create path"),
-                          [NSString stringWithFormat:NSLocalizedString(@"The path %@ could not be created to install a palette in it",
-                                                                       @"The path %@ could not be created to install a palette in it"),
+          NSRunAlertPanel(NSLocalizedString(@"Could not create path", @""),
+                          [NSString stringWithFormat:NSLocalizedString(@"The path %@ could not be created to install a palette in it", @""),
                                                      palettesFolderPath],
-                          NSLocalizedString(@"OK", @"OK"), nil, nil);
+                          NSLocalizedString(@"OK", @""), nil, nil);
                           
         NSString* destinationPath = [palettesFolderPath stringByAppendingPathComponent:[palettePath lastPathComponent]];
         BOOL alreadyExists = [fileManager fileExistsAtPath:destinationPath];
@@ -3815,25 +3750,23 @@ static NSMutableDictionary* cachePaths = nil;
         if (alreadyExists)
         {
           choice = NSRunAlertPanel(
-            [NSString stringWithFormat:NSLocalizedString(@"The palette %@ already exists, do you want to replace it ?",
-                                                         @"The palette %@ already exists, do you want to replace it ?"), [palettePath lastPathComponent]],
-            [NSString stringWithFormat:NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.",
-                                                         @"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents."),
+            [NSString stringWithFormat:NSLocalizedString(@"The palette %@ already exists, do you want to replace it ?", @""), [palettePath lastPathComponent]],
+            [NSString stringWithFormat:NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.", @""),
                                        palettesFolderPath],
-             NSLocalizedString(@"Replace", @"Replace"),
-             NSLocalizedString(@"Cancel", @"Cancel"), nil);
+             NSLocalizedString(@"Replace", @""),
+             NSLocalizedString(@"Cancel", @""), nil);
           overwrite |= (choice == NSAlertDefaultReturn);
         }//end if overwrite palette
         
         if (overwrite)
         {
-          [fileManager bridge_removeItemAtPath:destinationPath error:0];
-          BOOL success = [fileManager bridge_copyItemAtPath:palettePath toPath:destinationPath error:0];
+          [fileManager removeItemAtPath:destinationPath error:0];
+          BOOL success = [fileManager copyItemAtPath:palettePath toPath:destinationPath error:0];
           if (!success)
-            NSRunAlertPanel(NSLocalizedString(@"Installation failed", @"Installation failed"),
-                            [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @"%@ could not be installed as %@"),
+            NSRunAlertPanel(NSLocalizedString(@"Installation failed", @""),
+                            [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @""),
                                                                          [palettePath lastPathComponent], destinationPath],
-                            NSLocalizedString(@"OK", @"OK"), nil, nil);
+                            NSLocalizedString(@"OK", @""), nil, nil);
           ok = success;
         }//end if overwrite
       }//end if install palette

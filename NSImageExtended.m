@@ -72,39 +72,34 @@
 -(NSBitmapImageRep*) newBitmapImageRepresentation
 {
   NSBitmapImageRep* result = nil;
-  if (!isMacOS10_5OrAbove())
-    result = [[NSBitmapImageRep alloc] initWithData:[self TIFFRepresentation]];
-  else//if (isMacOS10_5OrAbove())
+  NSSize size          = [self size];
+  size_t width         = size.width;
+  size_t height        = size.height;
+  size_t bitsPerComp   = 32;
+  size_t bytesPerPixel = (bitsPerComp / CHAR_BIT) * 4;
+  size_t bytesPerRow   = bytesPerPixel * width;
+  size_t totalBytes    = height * bytesPerRow;
+  NSMutableData* data = nil;
+  @try{
+    data = [NSMutableData dataWithBytesNoCopy:calloc(totalBytes, 1) length:totalBytes freeWhenDone:YES];
+  }
+  @catch(NSException* e){
+    DebugLog(0, @"exception : %@", e);
+  }
+  CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+  CGContextRef ctx = !data ? 0 : CGBitmapContextCreate([data mutableBytes], width, height, bitsPerComp, bytesPerRow, space, kCGBitmapFloatComponents | kCGImageAlphaPremultipliedLast);
+  if (ctx)
   {
-    NSSize size          = [self size];
-    size_t width         = size.width;
-    size_t height        = size.height;
-    size_t bitsPerComp   = 32;
-    size_t bytesPerPixel = (bitsPerComp / CHAR_BIT) * 4;
-    size_t bytesPerRow   = bytesPerPixel * width;
-    size_t totalBytes    = height * bytesPerRow;
-    NSMutableData* data = nil;
-    @try{
-      data = [NSMutableData dataWithBytesNoCopy:calloc(totalBytes, 1) length:totalBytes freeWhenDone:YES];
-    }
-    @catch(NSException* e){
-      DebugLog(0, @"exception : %@", e);
-    }
-    CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-    CGContextRef ctx = !data ? 0 : CGBitmapContextCreate([data mutableBytes], width, height, bitsPerComp, bytesPerRow, space, kCGBitmapFloatComponents | kCGImageAlphaPremultipliedLast);
-    if (ctx)
-    {
-      [NSGraphicsContext saveGraphicsState];
-      [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:[self isFlipped]]];
-      [self drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-      [NSGraphicsContext restoreGraphicsState];
-      CGImageRef img = CGBitmapContextCreateImage(ctx);
-      result = !img ? nil : [[NSBitmapImageRep alloc] initWithCGImage:img];
-      if (img)   CFRelease(img);
-      if (ctx)   CGContextRelease(ctx);
-    }//end if (ctx)
-    if (space) CFRelease(space);
-  }//end if (isMacOS10_5OrAbove())
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:[self isFlipped]]];
+    [self drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+    [NSGraphicsContext restoreGraphicsState];
+    CGImageRef img = CGBitmapContextCreateImage(ctx);
+    result = !img ? nil : [[NSBitmapImageRep alloc] initWithCGImage:img];
+    if (img)   CFRelease(img);
+    if (ctx)   CGContextRelease(ctx);
+  }//end if (ctx)
+  if (space) CFRelease(space);
   return result;
 }
 //end newBitmapImageRepresentation
@@ -186,26 +181,21 @@
 -(NSImageRep*) bestImageRepresentationInContext:(NSGraphicsContext*)context
 {
   NSImageRep* result = nil;
-  if (!isMacOS10_6OrAbove())
-    result = [self bestRepresentationForRect:NSMakeRect(0, 0, [self size].width, [self size].height) context:context hints:nil];
-  else//if (isMacOS10_6OrAbove())
+  NSEnumerator* enumerator = [[self representations] objectEnumerator];
+  NSImageRep* imageRep = nil;
+  while (!result && (imageRep = [enumerator nextObject]))
   {
-    NSEnumerator* enumerator = [[self representations] objectEnumerator];
-    NSImageRep* imageRep = nil;
-    while (!result && (imageRep = [enumerator nextObject]))
-    {
-      if([imageRep isKindOfClass:[NSPDFImageRep class]])
-        result = (NSPDFImageRep*)imageRep;
-    }//end for each imageRep
+    if([imageRep isKindOfClass:[NSPDFImageRep class]])
+      result = (NSPDFImageRep*)imageRep;
+  }//end for each imageRep
+  if (!result)
+  {
+    NSSize size = [self size];
+    result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height)
+                                     context:context hints:nil];
     if (!result)
-    {
-      NSSize size = [self size];
-      result = [self bestRepresentationForRect:NSMakeRect(0, 0, size.width, size.height) 
-                                       context:context hints:nil];
-      if (!result)
-        result = [[self newBitmapImageRepresentation] autorelease];
-    }//end if (!result)
-  }//end if (isMacOS10_6OrAbove())
+      result = [[self newBitmapImageRepresentation] autorelease];
+  }//end if (!result)
   return result;
 }
 //end bestImageRepresentation
@@ -221,10 +211,8 @@
     NSUInteger width = [self size].width;
     NSUInteger height = [self size].height;
     NSUInteger bytesPerRow = 16*((4*width+15)/16);
-    NSUInteger bitmapBytesLength = bytesPerRow*height;
-    void* bytes = isMacOS10_6OrAbove() ? 0 : calloc(bitmapBytesLength, sizeof(unsigned char));
-    CGContextRef cgContext = !colorSpace || !bytesPerRow || (!bytes && !isMacOS10_6OrAbove()) ? 0 :
-      CGBitmapContextCreate(bytes, width, height, 8, !bytes ? 0 : bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
+    CGContextRef cgContext = !colorSpace || !bytesPerRow ? 0 :
+      CGBitmapContextCreate(0, width, height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
     if (cgContext)
     {
       CGContextAddRoundedRect(cgContext, bounds, rounded, rounded);
@@ -248,27 +236,10 @@
     CGContextFlush(cgContext);
     CGImageRef cgImage = CGBitmapContextCreateImage(cgContext);
     CGContextRelease(cgContext);
-    if (bytes)
-      free(bytes);
     if (!cgImage){
     }
-    else if (isMacOS10_6OrAbove())
+    else
       result = [[[NSImage alloc] initWithCGImage:cgImage size:NSSizeFromCGSize(bounds.size)] autorelease];
-    else//if (!isMacOS10_6OrAbove())
-    {
-      NSMutableData* data = [[NSMutableData alloc] init];
-      CGImageDestinationRef cgImageDestination = !data ? 0 :
-        CGImageDestinationCreateWithData((CHBRIDGE CFMutableDataRef)data, CFSTR("public.png"), 1, 0);
-      if (cgImageDestination && cgImage)
-      {
-        CGImageDestinationAddImage(cgImageDestination, cgImage, 0);
-        CGImageDestinationFinalize(cgImageDestination);
-        result = [[[NSImage alloc] initWithData:data] autorelease];
-      }//end if (cgImageDestination && cgImage)
-      if (cgImageDestination)
-        CFRelease(cgImageDestination);
-      [data release];
-    }//end if (!isMacOS10_6OrAbove())
     CGImageRelease(cgImage);
   }//end if (color || rounded)
   return result;

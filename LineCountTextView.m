@@ -244,10 +244,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 -(void) setAttributedString:(NSAttributedString*)value//triggers recolouring
 {
   self->lastCharacterEnablesAutoCompletion = NO;
-  NSDictionary* attributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-     [[PreferencesController sharedController] editionFont], NSFontAttributeName,
-     nil];
+  NSDictionary* attributes = @{NSFontAttributeName:[[PreferencesController sharedController] editionFont]};
   NSMutableAttributedString* attributedString = [[value mutableCopy] autorelease];
   [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
   
@@ -367,10 +364,7 @@ static NSArray* WellKnownLatexKeywords = nil;
                              //for large texts, but in LaTeXiT, texts are small, and I did not know how to do that simply otherwise
 
   //normal lines are displayed with the default foregound color
-  NSDictionary* normalAttributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-      [[PreferencesController sharedController] editionSyntaxColoringTextForegroundColor],
-      NSForegroundColorAttributeName, nil];
+  NSDictionary* normalAttributes = @{NSForegroundColorAttributeName:[[PreferencesController sharedController] editionSyntaxColoringTextForegroundColor]};
   [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
 
   //line count
@@ -384,9 +378,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   }
 
   //forbidden lines are displayed in gray
-  NSDictionary* forbiddenAttributes =
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1],
-                                               NSForegroundColorAttributeName, nil];
+  NSDictionary* forbiddenAttributes = @{NSForegroundColorAttributeName:[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1]};
 
   //updates text attributes to set the color
   NSEnumerator* enumerator = [forbiddenLines objectEnumerator];
@@ -469,9 +461,9 @@ static NSArray* WellKnownLatexKeywords = nil;
 -(void) setForbiddenLine:(NSUInteger)index forbidden:(BOOL)forbidden
 {
   if (forbidden)
-    [forbiddenLines addObject:[NSNumber numberWithUnsignedInteger:index]];
+    [forbiddenLines addObject:@(index)];
   else
-    [forbiddenLines removeObject:[NSNumber numberWithUnsignedInteger:index]];
+    [forbiddenLines removeObject:@(index)];
 }
 //end setForbiddenLine:forbidden
 
@@ -779,12 +771,6 @@ static NSArray* WellKnownLatexKeywords = nil;
       done = YES;
     }//end if (latexitEquation)
   }//end NSPDFPboardType
-
-  /*if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.iWork.TSPNativeMetadata", nil]]))
-  {
-    [(id)[self nextResponder] paste:sender];
-    done = YES;
-  }//end @"com.apple.iWork.TSPNativeMetadata"*/
 
   if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilesPromisePboardType, nil]]))
   {
@@ -1236,10 +1222,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   NSUInteger length = [[self textStorage] length];
   if (index <= length)
   {
-    NSDictionary* attributes =
-      [NSDictionary dictionaryWithObjectsAndKeys:
-        [[PreferencesController sharedController] editionFont], NSFontAttributeName,
-        nil];
+    NSDictionary* attributes = @{NSFontAttributeName:[[PreferencesController sharedController] editionFont]};
     NSMutableAttributedString* attributedString =
       [object isKindOfClass:[NSAttributedString class]] ? [[object mutableCopy] autorelease] :
       [[[NSMutableAttributedString alloc] initWithString:object] autorelease];

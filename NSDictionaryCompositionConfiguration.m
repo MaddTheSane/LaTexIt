@@ -61,11 +61,11 @@
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScripts
                  {return [self objectForKey:CompositionConfigurationAdditionalProcessingScriptsKey];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPreProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[@(SCRIPT_PLACE_PREPROCESSING) stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsMiddleProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[@(SCRIPT_PLACE_MIDDLEPROCESSING) stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPostProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[@(SCRIPT_PLACE_POSTPROCESSING) stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsForKey:(NSString*)key
                  {return [[self compositionConfigurationAdditionalProcessingScripts] objectForKey:key];}
 

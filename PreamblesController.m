@@ -46,7 +46,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 +(NSMutableDictionary*) defaultLocalizedPreambleDictionary
 {
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"default", @"default")], @"name",
+           [NSMutableString stringWithString:NSLocalizedString(@"default", @"")], @"name",
            [self defaultLocalizedPreambleValueAttributedString], @"value", nil];
   return result;
 }
@@ -55,7 +55,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 +(NSMutableDictionary*) defaultLocalizedPreambleDictionaryEncoded
 {
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"default", @"default")], @"name",
+           [NSMutableString stringWithString:NSLocalizedString(@"default", @"")], @"name",
            [NSKeyedArchiver archivedDataWithRootObject:[self defaultLocalizedPreambleValueAttributedString]], @"value", nil];
   return result;
 }
@@ -140,7 +140,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   else
   {
     result = [modelObject deepMutableCopy];
-    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), [result objectForKey:@"name"]] forKey:@"name"];
+    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:@"name"]] forKey:@"name"];
   }
   return result;
 }

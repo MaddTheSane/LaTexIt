@@ -248,7 +248,7 @@ static LibraryManager* sharedManagerInstance = nil;
       {
         NSFileManager* fileManager = [NSFileManager defaultManager];
         BOOL isDirectory = NO;
-        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager bridge_removeItemAtPath:path error:0]));
+        ok = (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] || (!isDirectory && [fileManager removeItemAtPath:path error:0]));
         if (ok)
         {
           BOOL done = NO;
@@ -313,9 +313,9 @@ static LibraryManager* sharedManagerInstance = nil;
         LibraryItem* libraryItem = nil;
         while((libraryItem = [enumerator nextObject]))
           [descriptions addObject:[libraryItem plistDescription]];
-        NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          applicationVersion, @"version", nil];
+        NSDictionary* library = !descriptions ? nil : @{
+          @"library":[NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil],
+          @"version":applicationVersion};
         NSString* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListBinaryFormat_v1_0 errorDescription:&errorDescription];
@@ -324,9 +324,7 @@ static LibraryManager* sharedManagerInstance = nil;
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
-          [[NSFileManager defaultManager]
-             bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                     ofItemAtPath:path error:0];
+          [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case LIBRARY_EXPORT_FORMAT_PLIST
@@ -660,7 +658,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSDictionary* options =
         [[[NSDictionary alloc] initWithObjectsAndKeys:
           teXItems, @"teXItems",
-          [NSNumber numberWithInteger:option], @"importOption",
+          @(option), @"importOption",
           nil] autorelease];
       [libraryWindowController performSelector:@selector(importTeXItemsWithOptions:) withObject:options afterDelay:0];
       ok = YES;
@@ -783,19 +781,11 @@ static LibraryManager* sharedManagerInstance = nil;
     NSError* error = nil;
     NSMutableDictionary* options = [NSMutableDictionary dictionary];
     if (DebugLogLevel >= 1)
-    {
-      if (isMacOS10_6OrAbove())
-        [options setObject:[NSNumber numberWithBool:YES] forKey:NSSQLiteManualVacuumOption];
-    }//end if (DebugLogLevel >= 1)
+      [options setObject:@(YES) forKey:NSSQLiteManualVacuumOption];
 
-    if (isMacOS10_5OrAbove())
-    {
-      [options setValue:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
-      NSDictionary* journalMode = [NSDictionary dictionaryWithObjectsAndKeys:@"DELETE", @"journal_mode", nil];
-      [options setValue:journalMode forKey:NSSQLitePragmasOption];
-    }//end if (isMacOS10_5OrAbove())
-    if (isMacOS10_6OrAbove())
-      [options setValue:[NSNumber numberWithBool:YES] forKey:NSInferMappingModelAutomaticallyOption];
+    [options setValue:@(YES) forKey:NSMigratePersistentStoresAutomaticallyOption];
+    [options setValue:@{@"journal_mode":@"DELETE"} forKey:NSSQLitePragmasOption];
+    [options setValue:@(YES) forKey:NSInferMappingModelAutomaticallyOption];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];
     if (error)
@@ -908,7 +898,7 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       libraryPath = [self defaultLibraryPath];
       if (![fileManager isReadableFileAtPath:libraryPath])
-        [fileManager bridge_createDirectoryAtPath:[libraryPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
+        [fileManager createDirectoryAtPath:[libraryPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
     }//end if (!exists)
     
     self->managedObjectContext = [[self managedObjectContextAtPath:libraryPath setVersion:NO] retain];
@@ -931,7 +921,7 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       BOOL ok = [self loadFrom:oldFilePath option:LIBRARY_IMPORT_OVERWRITE parent:nil];
       if (ok)
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:oldFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:oldFilePath error:0];
     }
     else if (shouldMigrateLibraryToAlign)
     {
@@ -1151,7 +1141,7 @@ static LibraryManager* sharedManagerInstance = nil;
     if (!migrationOK)
     {
       NSError* error = nil;
-      [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+      [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
       if (error)
         {DebugLog(0, @"error : %@", error);}
     }//end if (!migrationOK)
@@ -1159,25 +1149,25 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       NSError* error = nil;
       NSFileManager* fileManager = [NSFileManager defaultManager];
-      BOOL removedOldStore = [fileManager bridge_removeItemAtPath:oldPath error:&error];
+      BOOL removedOldStore = [fileManager removeItemAtPath:oldPath error:&error];
       if (error)
         {DebugLog(0, @"error : %@", error);}
       if (!removedOldStore || error)
       {
         error = nil;
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+        [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
         if (error)
           {DebugLog(0, @"error : %@", error);}
       }//end if (!removedOldStore || error)
       else//if (removedOldStore && !error)
       {
-        BOOL movedNewStore = [fileManager bridge_moveItemAtPath:newPath toPath:oldPath error:&error];
+        BOOL movedNewStore = [fileManager moveItemAtPath:newPath toPath:oldPath error:&error];
         if (error)
           {DebugLog(0, @"error : %@", error);}
         if (!movedNewStore)
         {
           error = nil;
-          [[NSFileManager defaultManager] bridge_removeItemAtPath:newPath error:&error];
+          [[NSFileManager defaultManager] removeItemAtPath:newPath error:&error];
           if (error)
             {DebugLog(0, @"error : %@", error);}
         }//end if (!movedNewStore)
@@ -1202,7 +1192,7 @@ static LibraryManager* sharedManagerInstance = nil;
   NSWindowController* migratingWindowController =
     [[[NSWindowController alloc] initWithWindow:migratingWindow] autorelease];
   [migratingWindow center];
-  [migratingWindow setTitle:NSLocalizedString(@"Migrating library to new format", @"Migrating library to new format")];
+  [migratingWindow setTitle:NSLocalizedString(@"Migrating library to new format", @"")];
   NSRect contentView = [[migratingWindow contentView] frame];
   NSProgressIndicator* progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSInsetRect(contentView, 8, 8)];
   [[migratingWindow contentView] addSubview:progressIndicator];
@@ -1322,9 +1312,9 @@ static LibraryManager* sharedManagerInstance = nil;
           filename, @"filename",
           preamble, @"preamble",
           sourceText, @"sourceText",
-          [NSNumber numberWithInteger:latexMode], @"mode",
+          @(latexMode), @"mode",
           !proposedParentItem ? [NSNull null] : proposedParentItem, @"proposedParentItem",
-          [NSNumber numberWithUnsignedInteger:proposedChildIndex], @"proposedChildIndex",
+          @(proposedChildIndex), @"proposedChildIndex",
           nil] autorelease];
         if (texItem)
           [texItems addObject:texItem];

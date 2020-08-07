@@ -29,33 +29,33 @@
 +(NSMutableDictionary*) defaultCompositionConfigurationDictionary
 {
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"default", @"default")], CompositionConfigurationNameKey,
-           [NSNumber numberWithBool:YES], CompositionConfigurationIsDefaultKey,
-           [NSNumber numberWithInteger:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
-           [NSNumber numberWithBool:YES], CompositionConfigurationUseLoginShellKey,
+           [NSMutableString stringWithString:NSLocalizedString(@"default", @"")], CompositionConfigurationNameKey,
+           @(YES), CompositionConfigurationIsDefaultKey,
+           @(COMPOSITION_MODE_PDFLATEX), CompositionConfigurationCompositionModeKey,
+           @(YES), CompositionConfigurationUseLoginShellKey,
            [NSDictionary dictionary], CompositionConfigurationProgramArgumentsKey,
            [NSDictionary dictionaryWithObjectsAndKeys:
              [NSDictionary dictionaryWithObjectsAndKeys:
-               [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
                @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
                @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
                @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue],
+               nil], [@(SCRIPT_PLACE_PREPROCESSING) stringValue],
              [NSDictionary dictionaryWithObjectsAndKeys:
-               [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
                @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
                @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
                @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue],
+               nil], [@(SCRIPT_PLACE_MIDDLEPROCESSING) stringValue],
              [NSDictionary dictionaryWithObjectsAndKeys:
-               [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @(NO), CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
                @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
                @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
                @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue],
+               nil], [@(SCRIPT_PLACE_POSTPROCESSING) stringValue],
             nil], CompositionConfigurationAdditionalProcessingScriptsKey,
            nil];
   return result;
@@ -133,9 +133,9 @@
   else
   {
     result = [modelObject deepMutableCopy];
-    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), [result objectForKey:CompositionConfigurationNameKey]]
+    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:CompositionConfigurationNameKey]]
       forKey:CompositionConfigurationNameKey];
-    [result setObject:[NSNumber numberWithBool:NO] forKey:CompositionConfigurationIsDefaultKey];
+    [result setObject:@(NO) forKey:CompositionConfigurationIsDefaultKey];
   }
   return result;
 }
@@ -162,7 +162,7 @@
       withKeyPath:[NSString stringWithFormat:@"selection.%@", CompositionConfigurationAdditionalProcessingScriptsKey]
       options:[NSDictionary dictionaryWithObjectsAndKeys:
         [DictionaryToArrayTransformer transformerWithDescriptors:nil], NSValueTransformerBindingOption,
-        [NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption,
+        @(YES), NSHandlesContentAsCompoundValueBindingOption,
         nil]];
   }//end if (!self->currentConfigurationScriptsController)
   return self->currentConfigurationScriptsController;
@@ -227,7 +227,7 @@
       withKeyPath:[NSString stringWithFormat:@"selection.%@.%@", CompositionConfigurationProgramArgumentsKey, key]
       options:[NSDictionary dictionaryWithObjectsAndKeys:
         [MutableTransformer name], NSValueTransformerNameBindingOption,
-        [NSNumber numberWithBool:YES], NSHandlesContentAsCompoundValueBindingOption,
+        @(YES), NSHandlesContentAsCompoundValueBindingOption,
         nil]];
     result = controller;
     [self->currentConfigurationProgramArgumentsControllerDictionary setObject:result forKey:key];

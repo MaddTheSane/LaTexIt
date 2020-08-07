@@ -21,7 +21,7 @@
   if ((!(self = [super initWithContent:content])))
     return nil;
   /*if ([self respondsToSelector:@selector(setAutomaticallyRearrangesObjects:)])
-    [self setValue:[NSNumber numberWithBool:YES] forKey:@"automaticallyRearrangesObjects"];*/
+    [self setValue:@(YES) forKey:@"automaticallyRearrangesObjects"];*/
   [self addObserver:self forKeyPath:NSContentBinding options:0 context:0];
   return self;
 }
@@ -46,22 +46,6 @@
   }//end if ([keyPath isEqualToString:NSContentBinding])
 }
 //end observeValueForKeyPath:ofObject:change:context:
-
--(BOOL) automaticallyRearrangesObjects
-{
-  BOOL result = NO;
-  if (isMacOS10_5OrAbove())
-    result = [super automaticallyRearrangesObjects];
-  return result;
-}
-//end automaticallyRearrangesObjects
-
--(void) setAutomaticallyRearrangesObjects:(BOOL)value
-{
-  if (isMacOS10_5OrAbove())
-    [super setAutomaticallyRearrangesObjects:value];
-}
-//end setAutomaticallyRearrangesObjects:
 
 -(void) addObject:(id)object
 {

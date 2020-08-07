@@ -154,7 +154,7 @@
     {
       NSUndoManager* documentUndoManager = [document undoManager];
       [document applyLatexitEquation:equation isRecentLatexisation:NO];
-      [documentUndoManager setActionName:NSLocalizedString(@"Apply History item", @"Apply History item")];
+      [documentUndoManager setActionName:NSLocalizedString(@"Apply History item", @"")];
     }
     [[document windowForSheet] makeKeyAndOrderFront:nil];
   }//end if (document)
@@ -357,15 +357,24 @@
 
 #pragma mark drag'n drop
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void) draggingSession:(NSDraggingSession*)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
-  if (!self->shouldRedrag)
+  if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   {
     [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
     [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  }//end if (self->shouldRedrag)
+  }//end if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   if (self->shouldRedrag)
-    [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
+  {
+    NSPasteboard* pboard = session.draggingPasteboard;
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSDragPboard] : pboard) afterDelay:0];
+  }//end if (self->shouldRedrag)
+}
+//end draggingSession:endedAtPoint:operation:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [self draggingSession:nil endedAtPoint:aPoint operation:operation];
 }
 //end draggedImage:endedAt:operation:
 
@@ -420,9 +429,16 @@
 }
 //end performDragOperation:
 
+-(NSDragOperation) draggingSession:(NSDraggingSession*)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+  NSDragOperation result = (context == NSDraggingContextWithinApplication) ? NSDragOperationEvery : NSDragOperationCopy;
+  return result;
+}
+//end draggingSession:sourceOperationMaskForDraggingContext:
+
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-  NSDragOperation result = isLocal ? NSDragOperationEvery : NSDragOperationCopy;
+  NSDragOperation result = [self draggingSession:nil sourceOperationMaskForDraggingContext:(isLocal ? NSDraggingContextWithinApplication : NSDraggingContextOutsideApplication)];
   return result;
 }
 //end draggingSourceOperationMaskForLocal:
@@ -440,14 +456,7 @@
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGEventRef cgEvent0 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-    CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGEventGetLocation(cgEvent0);
-    point.y = [[NSScreen mainScreen] frame].size.height-point.y;
-    CGEventSetLocation(cgEvent0, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
   CGEventPost(kCGHIDEventTap, cgEvent0);
   CFRelease(cgEvent0);
 }//end performProgrammaticDragCancellation:
@@ -467,26 +476,9 @@
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation2, kCGMouseButtonLeft);
   CGEventRef cgEvent3 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-  {
-    CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
-    CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
-    CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
-  }//end if (isMacOS10_5OrAbove())
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGPointZero;
-    NSRect screenFrame = [[NSScreen mainScreen] frame];
-    point = CGEventGetLocation(cgEvent1);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent1, point);
-    point = CGEventGetLocation(cgEvent2);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent2, point);
-    point = CGEventGetLocation(cgEvent3);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent3, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
+  CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
+  CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
   CGEventPost(kCGHIDEventTap, cgEvent1);
   CGEventPost(kCGHIDEventTap, cgEvent2);
   CGEventPost(kCGHIDEventTap, cgEvent3);
@@ -509,7 +501,7 @@
     if (!isChangePasteboardOnTheFly)
     {
       [pboard addTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
-      [pboard setPropertyList:[NSArray arrayWithObjects:@"pdf", @"eps", @"tiff", @"jpeg", @"png", nil] forType:NSFilesPromisePboardType];
+      [pboard setPropertyList:@[@"pdf", @"eps", @"tiff", @"jpeg", @"png"] forType:NSFilesPromisePboardType];
     }//end if (!isChangePasteboardOnTheFly)
 
     //stores the array of selected history items in the HistoryItemsPboardType
@@ -599,12 +591,12 @@
       
       PreferencesController* preferencesController = [PreferencesController sharedController];
       NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-                                     [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-                                     [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-                                     [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-                                     [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-                                     [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+                                     @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                     @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                     @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                     @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                     @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                     @([preferencesController exportTextExportBody]), @"textExportBody",
                                      [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                      nil];
       NSData* data = nil;
@@ -614,8 +606,7 @@
                compositionConfiguration:[preferencesController compositionConfigurationDocument]
                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
-      [fileManager bridge_setAttributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:'LTXt'] forKey:NSFileHFSCreatorCode]
-                           ofItemAtPath:filePath error:0];
+      [fileManager setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:filePath error:0];
       NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
       NSColor* autoBackgroundColor = [equation backgroundColor];
       NSColor* iconBackgroundColor =
@@ -664,7 +655,7 @@
     NSColor* color = [NSColor colorFromPasteboard:pboard];
     HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:row];
     [[historyItem equation] setBackgroundColor:color];
-    [undoManager setActionName:NSLocalizedString(@"Change History item background color", @"Change History item background color")];
+    [undoManager setActionName:NSLocalizedString(@"Change History item background color", @"")];
   }//end if (ok)
   return ok;
 }

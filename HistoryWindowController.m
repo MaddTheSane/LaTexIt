@@ -62,34 +62,32 @@
   [window setHidesOnDeactivate:NO];//prevents from disappearing when LaTeXiT is not active
   [window setFloatingPanel:NO];//prevents from floating always above
   [window setFrameAutosaveName:@"history"];
-  [window setTitle:NSLocalizedString(@"History", @"History")];
-  [self->clearHistoryButton setTitle:NSLocalizedString(@"Remove all", @"Remove all")];
+  [window setTitle:NSLocalizedString(@"History", @"")];
+  [self->clearHistoryButton setTitle:NSLocalizedString(@"Remove all", @"")];
   //[window setBecomesKeyOnlyIfNeeded:YES];//we could try that to enable item selecting without activating the window first
   //but this prevents keyDown events
   
   NSImage* image = nil;
   image = [self->historyLockButton image];
-  [image setScalesWhenResized:YES];
   [image setSize:[self->historyLockButton frame].size];
   [self->historyLockButton setImage:image];
   image = [self->historyLockButton alternateImage];
-  [image setScalesWhenResized:YES];
   [image setSize:[self->historyLockButton frame].size];
   [self->historyLockButton setAlternateImage:image];
   [self->historyLockButton setState:[[HistoryManager sharedManager] isLocked] ? NSOnState : NSOffState];
   [self->historyLockButton bind:NSValueBinding toObject:[[HistoryManager sharedManager] bindController] withKeyPath:@"content.locked"
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
 
   [self->importOptionPopUpButton removeAllItems];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"Add to current history")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)HISTORY_IMPORT_MERGE];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"Overwrite current history")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)HISTORY_IMPORT_OVERWRITE];
 
-  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
-  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
+  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"")];
+  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"")];
   NSPoint point = [self->exportFormatPopUpButton frame].origin;
   [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
   
@@ -122,7 +120,7 @@
     BOOL isKeyWindow = [[self window] isKeyWindow];
     NSInteger nbItems = [self->historyView numberOfRows];
     [self->clearHistoryButton setEnabled:(isKeyWindow && nbItems)];
-    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%@)", NSLocalizedString(@"History", @"History"), [NSNumber numberWithInteger:nbItems]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%@)", NSLocalizedString(@"History", @""), @(nbItems)]];
   }//end if ([keyPath isEqualToString:@"arrangedObjects"])
   else if ([keyPath isEqualToString:HistoryDisplayPreviewPanelKey])
     [[self->historyPreviewPanelSegmentedControl cell] setSelected:
@@ -154,22 +152,20 @@
 {
   if ([[self window] isVisible])
   {
-    NSBeginAlertSheet(NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Cancel", @"Cancel"),
+    NSBeginAlertSheet(NSLocalizedString(@"Clear History", @""),
+                      NSLocalizedString(@"Clear History", @""),
+                      NSLocalizedString(@"Cancel", @""),
                       nil, [self window], self,
                       @selector(_clearHistorySheetDidEnd:returnCode:contextInfo:), nil, NULL,
-                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
-                                        @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."));
+                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.", @""));
   }
   else
   {
     NSInteger returnCode =
-      NSRunAlertPanel(NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.",
-                                        @"Are you sure you want to clear the whole history ?\nThis operation is irreversible."),
-                      NSLocalizedString(@"Clear History",@"Clear History"),
-                      NSLocalizedString(@"Cancel", @"Cancel"), nil);
+      NSRunAlertPanel(NSLocalizedString(@"Clear History", @""),
+                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.", @""),
+                      NSLocalizedString(@"Clear History", @""),
+                      NSLocalizedString(@"Cancel", @""), nil);
     if (returnCode == NSAlertDefaultReturn)
       [self clearAll:NO];
   }
@@ -186,15 +182,17 @@
 -(IBAction) saveAs:(id)sender
 {
   self->savePanel = [[NSSavePanel savePanel] retain];
-  [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"Export history...")];
+  [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"")];
   [self changeHistoryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
   [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
+  [self->savePanel setNameFieldStringValue:NSLocalizedString(@"Untitled", @"")];
   if ([[self window] isVisible])
-    [self->savePanel beginSheetForDirectory:nil file:NSLocalizedString(@"Untitled", @"Untitled") modalForWindow:[self window] modalDelegate:self
-                       didEndSelector:@selector(_savePanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+    [self->savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+      [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:0];
+    }];
   else
     [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
 }
@@ -210,8 +208,8 @@
     if (!ok)
     {
       NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
-               defaultButton:NSLocalizedString(@"OK", @"OK")
+        alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"")
+               defaultButton:NSLocalizedString(@"OK", @"")
              alternateButton:nil otherButton:nil
    informativeTextWithFormat:nil];
      [alert runModal];
@@ -227,16 +225,10 @@
   switch((history_export_format_t)[sender selectedTag])
   {
     case HISTORY_EXPORT_FORMAT_INTERNAL:
-      if (!isMacOS10_6OrAbove())
-        [self->savePanel setRequiredFileType:@"latexhist"];
-      else//if (isMacOS10_6OrAbove())
-        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexhist", nil]];
+      [self->savePanel setAllowedFileTypes:@[@"latexhist"]];
       break;
     case HISTORY_EXPORT_FORMAT_PLIST:
-      if (!isMacOS10_6OrAbove())
-        [self->savePanel setRequiredFileType:@"plist"];
-      else//if (isMacOS10_6OrAbove())
-        [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
+      [self->savePanel setAllowedFileTypes:@[@"plist"]];
       break;
   }
 }
@@ -256,19 +248,14 @@
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
   [openPanel setDelegate:(id)self];
-  [openPanel setTitle:NSLocalizedString(@"Import history...", @"Import history...")];
+  [openPanel setTitle:NSLocalizedString(@"Import history...", @"")];
   [openPanel setAccessoryView:[self->importAccessoryView retain]];
+  [openPanel setAllowedFileTypes:@[@"latexhist", @"plist"]];
   if ([[self window] isVisible])
-    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObjects:@"latexhist", @"plist", nil] modalForWindow:[self window]
-                        modalDelegate:self didEndSelector:@selector(_openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-  else if (!isMacOS10_6OrAbove())
-    [self _openPanelDidEnd:openPanel returnCode:[openPanel runModalForTypes:[NSArray arrayWithObjects:@"latexhist", @"plist", nil]] contextInfo:NULL];
-  else//if (isMacOS10_6OrAbove())
-  {
-    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexhist", @"plist", nil]];
-    NSInteger returnCode = [openPanel runModal];
-    [self _openPanelDidEnd:openPanel returnCode:returnCode contextInfo:NULL];
-  }//end if (isMacOS10_6OrAbove())
+    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+      [self _openPanelDidEnd:openPanel returnCode:result contextInfo:0];
+    }];
+  [self _openPanelDidEnd:openPanel returnCode:[openPanel runModal] contextInfo:NULL];
 }
 //end open:
 
@@ -281,10 +268,10 @@
     if (!ok)
     {
       NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"Loading error", @"Loading error")
-               defaultButton:NSLocalizedString(@"OK", @"OK")
+        alertWithMessageText:NSLocalizedString(@"Loading error", @"")
+               defaultButton:NSLocalizedString(@"OK", @"")
              alternateButton:nil otherButton:nil
-   informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
+   informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"")];
      [alert runModal];
     }
     else

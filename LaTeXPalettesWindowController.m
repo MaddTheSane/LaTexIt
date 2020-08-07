@@ -136,15 +136,15 @@
   [window setFrame:defaultFrame display:YES];
   [detailsButton setState:defaultDetails ? NSOnState : NSOffState];
   
-  [window setTitle:NSLocalizedString(@"LaTeX Palette", @"LaTeX Palette")];
-  [self->detailsLabelTextField setStringValue:NSLocalizedString(@"Details", @"Details")];
+  [window setTitle:NSLocalizedString(@"LaTeX Palette", @"")];
+  [self->detailsLabelTextField setStringValue:NSLocalizedString(@"Details", @"")];
   [self->detailsLabelTextField sizeToFit];
 
-  [self->detailsLatexCodeLabelTextField setStringValue:NSLocalizedString(@"LaTeX Code :", @"LaTeX Code :")];
+  [self->detailsLatexCodeLabelTextField setStringValue:NSLocalizedString(@"LaTeX Code :", @"")];
   [self->detailsLatexCodeLabelTextField sizeToFit];
   [self->detailsLatexCodeTextField setFrame:NSRectChange([self->detailsLatexCodeLabelTextField frame], YES, NSMaxX([self->detailsLatexCodeLabelTextField frame])+3, NO, 0, NO, 0, NO, 0)];
   
-  [self->detailsRequiresLabelTextField setStringValue:NSLocalizedString(@"Requires :", @"Requires :")];
+  [self->detailsRequiresLabelTextField setStringValue:NSLocalizedString(@"Requires :", @"")];
   [self->detailsRequiresLabelTextField sizeToFit];
   [self->detailsRequiresTextField setFrame:NSRectChange([self->detailsRequiresLabelTextField frame], YES, NSMaxX([self->detailsRequiresLabelTextField frame])+3,NO, 0, NO, 0, NO, 0)];
 
@@ -168,7 +168,7 @@
     NSString* domainName = domainPath;
     NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"Palettes", nil];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
-    NSArray* palettesPaths  = [fileManager bridge_contentsOfDirectoryAtPath:directoryPath error:0];
+    NSArray* palettesPaths  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
     NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:[palettesPaths count]];
     NSEnumerator* latexPalettesEnumerator = [palettesPaths objectEnumerator];
     NSString* file = nil;
@@ -210,7 +210,7 @@
         NSString* paletteAuthor = [plist objectForKey:@"author"];
         paletteAuthor = [paletteAuthor isKindOfClass:[NSString class]] ? paletteAuthor : @"";
         NSNumber* numberOfItemsPerRow = [plist objectForKey:@"numberOfItemsPerRow"];
-        numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : [NSNumber numberWithUnsignedInteger:4];
+        numberOfItemsPerRow = [numberOfItemsPerRow isKindOfClass:[NSNumber class]] ? numberOfItemsPerRow : @(4);
         NSString* localizedName = paletteName ? [bundle localizedStringForKey:paletteName value:paletteName table:nil] : nil;
 
         NSDictionary* itemDefault = [plist objectForKey:@"itemDefault"];
@@ -356,7 +356,7 @@
   {
     NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
     NSString* author = [palette objectForKey:@"author"];
-    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author]];
+    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @""), author]];
     NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
     NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
                                        4 : [numberOfItemsPerRowNumber unsignedIntegerValue];

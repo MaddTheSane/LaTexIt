@@ -58,7 +58,6 @@ static NSString* bulletString = @"\u2026";
   
   self->image = [[NSImage alloc] initWithContentsOfFile:aResourcePath];
   [self->image setCacheMode:NSImageCacheNever];
-  [self->image setDataRetained:YES];
   [self->image recache];
   return self;
 }

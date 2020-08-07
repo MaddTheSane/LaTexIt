@@ -87,7 +87,7 @@ static NSEntityDescription* cachedEntity = nil;
 -(void) setExpanded:(BOOL)value
 {
   [self willChangeValueForKey:@"expanded"];
-  [self setPrimitiveValue:[NSNumber numberWithBool:value] forKey:@"expanded"];
+  [self setPrimitiveValue:@(value) forKey:@"expanded"];
   [self didChangeValueForKey:@"expanded"];
 }
 //end setExpanded:
@@ -95,23 +95,9 @@ static NSEntityDescription* cachedEntity = nil;
 -(NSSet*) children:(NSPredicate*)predicate
 {
   NSSet* result = nil; //on Tiger, calling the primitiveKey does not work
-  if (isMacOS10_5OrAbove())
-  {
-    [self willAccessValueForKey:@"children"];
-    result = [self primitiveValueForKey:@"children"];
-    [self didAccessValueForKey:@"children"];
-  }//end if (isMacOS10_5OrAbove())
-  else//if (!isMacOS10_5OrAbove())
-  {
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[LibraryItem entity]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == %@", self]];
-    NSError* error = nil;
-    result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
-    if (error)
-      {DebugLog(0, @"error = %@", error);}
-    [fetchRequest release];
-  }//end if (!isMacOS10_5OrAbove())
+  [self willAccessValueForKey:@"children"];
+  result = [self primitiveValueForKey:@"children"];
+  [self didAccessValueForKey:@"children"];
   return result;
 }
 //end children:
@@ -210,7 +196,7 @@ static NSEntityDescription* cachedEntity = nil;
     [childrenPlistDescription addObject:[child plistDescription]];
   NSMutableDictionary* plist = [super plistDescription];
     [plist addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithBool:[self isExpanded]], @"expanded",
+       @([self isExpanded]), @"expanded",
        childrenPlistDescription, @"children",
        nil]];
   [childrenPlistDescription release];

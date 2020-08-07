@@ -55,7 +55,7 @@
   id result = nil;
   BOOL isDirectory = NO;
   BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:value isDirectory:&isDirectory];
-  result = [NSNumber numberWithBool:(exists && isDirectory)];
+  result = @(exists && isDirectory);
   return result;
 }
 //end transformedValue:

@@ -110,7 +110,7 @@
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:[NSNumber numberWithUnsignedInteger:[self R]] forKey:@"value"];
+  [coder encodeObject:@([self R]) forKey:@"value"];
 }
 //end encodeWithCoder:
 

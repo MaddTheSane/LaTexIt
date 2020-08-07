@@ -160,7 +160,7 @@
     [document setLinkedLibraryEquation:newLinkedLibraryEquation];
     [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
     [document applyLibraryEquation:equation];
-    [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
+    [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"")];
     [documentUndoManager endUndoGrouping];
     [[document windowForSheet] makeKeyAndOrderFront:nil];
   }//end if (equation)
@@ -432,7 +432,7 @@
   NSArray* rootNodes = [self->libraryController rootItems:[self->libraryController filterPredicate]];
   id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered:) withObject:nil rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem :
-    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) withObject:nil rootNodes:rootNodes];
+    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered:) withObject:nil rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem : [[selectedItems lastObject] parent];
   NSUInteger nbSelectedItems = [selectedItems count];
   NSMutableSet* parentOfSelectedItems = [NSMutableSet setWithCapacity:[selectedItems count]];
@@ -454,9 +454,9 @@
       [self->libraryController fixChildrenSortIndexesForParent:(LibraryGroupItem*)libraryItem recursively:NO];
   }
   if (nbSelectedItems > 1)
-    [undoManager setActionName:NSLocalizedString(@"Delete Library items", @"Delete Library items")];
+    [undoManager setActionName:NSLocalizedString(@"Delete Library items", @"")];
   else if (nbSelectedItems)
-    [undoManager setActionName:NSLocalizedString(@"Delete Library item", @"Delete Library item")];
+    [undoManager setActionName:NSLocalizedString(@"Delete Library item", @"")];
   [undoManager endUndoGrouping];
   [[self->libraryController managedObjectContext] processPendingChanges];
   [self reloadData];
@@ -478,7 +478,7 @@
     {
       [selectedItem setTitle:newTitle];
       [[self->libraryController undoManager]
-        setActionName:NSLocalizedString(@"Change Library item name", @"Change Library item name")];
+        setActionName:NSLocalizedString(@"Change Library item name", @"")];
     }//end if (![newTitle isEqualToString:oldTitle])
     [super textDidEndEditing:notification];
     if (selectedItem)
@@ -579,7 +579,7 @@
     [self->libraryController removeItems:selectedItems];
     [[self->libraryController managedObjectContext] processPendingChanges];
     [self reloadData];
-    [[self->libraryController undoManager] setActionName:NSLocalizedString(@"Delete Library items", @"Delete Library items")];
+    [[self->libraryController undoManager] setActionName:NSLocalizedString(@"Delete Library items", @"")];
   }//end if ([selectedItems count])
 }
 //end cut:
@@ -701,8 +701,8 @@
     [self reloadData];
     [self sizeLastColumnToFit];
     [undoManager setActionName:(count > 1) ?
-      NSLocalizedString(@"Add Library items", @"Add Library items") :
-      NSLocalizedString(@"Add Library item", @"Add Library item")];
+      NSLocalizedString(@"Add Library items", @"") :
+      NSLocalizedString(@"Add Library item", @"")];
     [self selectItems:libraryItems byExtendingSelection:NO];
     result = YES;
   }//end if (count)
@@ -715,15 +715,24 @@
 
 #pragma mark drag'n drop
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void) draggingSession:(NSDraggingSession*)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
-  if (!self->shouldRedrag)
+  if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   {
     [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
     [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  }//end if (self->shouldRedrag)
+  }//end if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   if (self->shouldRedrag)
+  {
+    NSPasteboard* pboard = session.draggingPasteboard;
     [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
+  }//end if (self->shouldRedrag)
+}
+//end draggingSession:endedAtPoint:operation:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [self draggingSession:nil endedAtPoint:aPoint operation:operation];
 }
 //end draggedImage:endedAt:operation:
 
@@ -780,14 +789,7 @@
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGEventRef cgEvent0 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-    CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGEventGetLocation(cgEvent0);
-    point.y = [[NSScreen mainScreen] frame].size.height-point.y;
-    CGEventSetLocation(cgEvent0, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
   CGEventPost(kCGHIDEventTap, cgEvent0);
   CFRelease(cgEvent0);
 }//end performProgrammaticDragCancellation:
@@ -798,7 +800,7 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [[self window] convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
@@ -807,26 +809,9 @@
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation2, kCGMouseButtonLeft);
   CGEventRef cgEvent3 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseDragged, cgMouseLocation1, kCGMouseButtonLeft);
-  if (isMacOS10_5OrAbove())
-  {
-    CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
-    CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
-    CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
-  }//end if (isMacOS10_5OrAbove())
-  else//if (!isMacOS10_5OrAbove())
-  {
-    CGPoint point = CGPointZero;
-    NSRect screenFrame = [[NSScreen mainScreen] frame];
-    point = CGEventGetLocation(cgEvent1);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent1, point);
-    point = CGEventGetLocation(cgEvent2);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent2, point);
-    point = CGEventGetLocation(cgEvent3);
-    point.y = screenFrame.size.height-point.y;
-    CGEventSetLocation(cgEvent3, point);
-  }//if (!isMacOS10_5OrAbove())
+  CGEventSetLocation(cgEvent1, CGEventGetUnflippedLocation(cgEvent1));
+  CGEventSetLocation(cgEvent2, CGEventGetUnflippedLocation(cgEvent2));
+  CGEventSetLocation(cgEvent3, CGEventGetUnflippedLocation(cgEvent3));
   CGEventPost(kCGHIDEventTap, cgEvent1);
   CGEventPost(kCGHIDEventTap, cgEvent2);
   CGEventPost(kCGHIDEventTap, cgEvent3);
@@ -836,9 +821,16 @@
 }
 //end performProgrammaticRedrag:
 
+-(NSDragOperation) draggingSession:(NSDraggingSession*)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+  NSDragOperation result = (context == NSDraggingContextWithinApplication) ? NSDragOperationEvery : NSDragOperationCopy;
+  return result;
+}
+//end draggingSession:sourceOperationMaskForDraggingContext:
+
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-  NSDragOperation result = isLocal ? NSDragOperationEvery : NSDragOperationCopy;
+  NSDragOperation result = [self draggingSession:nil sourceOperationMaskForDraggingContext:(isLocal ? NSDraggingContextWithinApplication : NSDraggingContextOutsideApplication)];
   return result;
 }
 //end draggingSourceOperationMaskForLocal:

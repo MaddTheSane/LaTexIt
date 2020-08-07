@@ -153,7 +153,7 @@
         else//if (remainingTime > 0)
         {
           [self addSelfDestructingItem:firstItem wakeUp:NO];
-          [self performSelectorOnMainThread:@selector(wakeUpDestructionThread:) withObject:[NSNumber numberWithDouble:remainingTime] waitUntilDone:NO];
+          [self performSelectorOnMainThread:@selector(wakeUpDestructionThread:) withObject:@(remainingTime) waitUntilDone:NO];
         }//end if (remainingTime > 0)
         [firstItem release];
       }//end if (firstItem)

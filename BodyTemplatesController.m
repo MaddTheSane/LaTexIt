@@ -32,8 +32,6 @@ static NSDictionary* noneBodyTemplate = nil;
 {
   [self exposeBinding:@"selection"];
   [self exposeBinding:@"arrangedObjectsNamesWithNone"];
-  if (!isMacOS10_5OrAbove())
-    [self setKeys:[NSArray arrayWithObjects:@"arrangedObjects", nil] triggerChangeNotificationsForDependentKey:@"arrangedObjectsNamesWithNone"];
 }
 //end initialize
 
@@ -47,7 +45,7 @@ static NSDictionary* noneBodyTemplate = nil;
       if (!result)
       {
         noneBodyTemplate = [[NSDictionary alloc] initWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"none", @"none")], @"name", nil];
+           [NSMutableString stringWithString:NSLocalizedString(@"none", @"")], @"name", nil];
         result = noneBodyTemplate;
       }//end if (!result)
     }//end @synchronized(self)
@@ -200,7 +198,7 @@ static NSDictionary* noneBodyTemplate = nil;
   else
   {
     result = [modelObject deepMutableCopy];
-    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), [result objectForKey:@"name"]] forKey:@"name"];
+    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:@"name"]] forKey:@"name"];
   }
   return result;
 }

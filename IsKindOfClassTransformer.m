@@ -66,7 +66,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:[value isKindOfClass:self->theClass]];
+  id result = @([value isKindOfClass:self->theClass]);
   return result;
 }
 //end transformedValue:

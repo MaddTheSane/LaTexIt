@@ -183,7 +183,7 @@ static LaTeXProcessor* sharedInstance = nil;
   
         //usual unix PATH (to find latex)
         NSArray* usualBins = 
-          [NSArray arrayWithObjects:@"/bin", @"/sbin",
+          @[@"/bin", @"/sbin",
             @"/usr/bin", @"/usr/sbin",
             @"/usr/local/bin", @"/usr/local/sbin",
             @"/usr/texbin", @"/usr/local/texbin", @"/Library/TeX/texbin",
@@ -191,8 +191,7 @@ static LaTeXProcessor* sharedInstance = nil;
             @"/sw/usr/bin", @"/sw/usr/sbin",
             @"/sw/local/bin", @"/sw/local/sbin",
             @"/sw/usr/local/bin", @"/sw/usr/local/sbin",
-            @"/opt/local/bin", @"/opt/local/sbin",
-            nil];
+            @"/opt/local/bin", @"/opt/local/sbin"];
         [self->unixBins addObjectsFromArray:usualBins];
 
         //add ~/.MacOSX/environment.plist
@@ -313,15 +312,14 @@ static LaTeXProcessor* sharedInstance = nil;
             preamble, @"preamble",
             source, @"source",
             [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
-            [NSNumber numberWithInteger:mode], @"mode",
-            [NSNumber numberWithDouble:magnification], @"magnification",
-            [NSNumber numberWithDouble:baseline], @"baseline",
+            @(mode), @"mode",
+            @(magnification), @"magnification",
+            @(baseline), @"baseline",
             [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
             title, @"title",
             nil]];
       NSString* embeddedDataBase64 = [embeddedData encodeBase64];
-      if (isMacOS10_5OrAbove())
-        [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
+      [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
       [pdfAnnotation setContents:embeddedDataBase64];
       [pdfPage addAnnotation:pdfAnnotation];
       NSData* dataWithAnnotation = [pdfDocument dataRepresentation];
@@ -365,7 +363,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSMutableString* escapedSource = [NSMutableString stringWithString:(CHBRIDGE NSString*)cfEscapedSource];
     CFRelease(cfEscapedSource);
 
-    NSString* type = [[NSNumber numberWithInteger:mode] stringValue];
+    NSString* type = [@(mode) stringValue];
     
     BOOL annotateWithXML = YES;
     if (annotateWithXML)
@@ -403,7 +401,7 @@ static LaTeXProcessor* sharedInstance = nil;
              "%@\n"\
              "endstream\n"\
              "endobj\n",
-             [NSNumber numberWithUnsignedInteger:[annotationContentBase64 length]],
+             @([annotationContentBase64 length]),
              annotationContentBase64];
       #ifdef ARC_ENABLED
       NSMutableString* pdfString = [[NSMutableString alloc] initWithData:data2 encoding:NSASCIIStringEncoding];
@@ -441,9 +439,9 @@ static LaTeXProcessor* sharedInstance = nil;
     }//end if (annotateWithXML)
 
     NSRange r0 = NSMakeRange(0, [data2 length]);
-    NSRange r1 = [data2 bridge_rangeOfData:[@"\nxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
-    NSRange r2 = [data2 bridge_rangeOfData:[@"trailer" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
-    NSRange r3 = [data2 bridge_rangeOfData:[@"startxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
+    NSRange r1 = [data2 rangeOfData:[@"\nxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
+    NSRange r2 = [data2 rangeOfData:[@"trailer" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
+    NSRange r3 = [data2 rangeOfData:[@"startxref" dataUsingEncoding:NSUTF8StringEncoding] options:NSDataSearchBackwards range:r0];
     if (r0.location != NSNotFound)
     {
       if (r1.location != NSNotFound)
@@ -535,8 +533,8 @@ static LaTeXProcessor* sharedInstance = nil;
     NSNumberFormatter* numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     #endif
     [numberFormatter setFormatterBehavior:NSNumberFormatterBehaviorDefault];
-    [numberFormatter setMinimum:[NSNumber numberWithUnsignedInteger:0]];
-    [numberFormatter setMaximum:[NSNumber numberWithUnsignedInteger:NSUIntegerMax]];
+    [numberFormatter setMinimum:@(0)];
+    [numberFormatter setMaximum:@(NSUIntegerMax)];
     NSNumber* number = !byteCountString ? nil : [numberFormatter numberFromString:byteCountString];
     NSUInteger byte_count = [number unsignedIntegerValue];
 
@@ -583,13 +581,11 @@ static LaTeXProcessor* sharedInstance = nil;
         colorAsString, @"color",
         bkColorAsString, @"bkColor",
         !title ? @"" : title, @"title",
-        [NSNumber numberWithDouble:magnification], @"magnification",
-        [NSNumber numberWithDouble:baseline], @"baseline",
+        @(magnification), @"magnification",
+        @(baseline), @"baseline",
         nil];
       NSData* dictionaryContentPlistData =
-        isMacOS10_6OrAbove() ?
-          [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] :
-          [NSPropertyListSerialization dataFromPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 errorDescription:nil];
+        [NSPropertyListSerialization dataWithPropertyList:dictionaryContent format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil];
       NSData* annotationContentRawData = dictionaryContentPlistData;
       NSData* annotationContentCompressedData = [Compressor zipcompress:annotationContentRawData];
       NSString* annotationContentBase64 = [annotationContentCompressedData encodeBase64WithNewlines:NO];
@@ -789,19 +785,19 @@ static LaTeXProcessor* sharedInstance = nil;
       CGFloat topMargin    = [[[appController valueForKey:@"marginsCurrentTopMargin"] dynamicCastToClass:[NSNumber class]] doubleValue];
       NSMutableDictionary* configuration = !preamble || !sourceText ? nil :
         [NSMutableDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithBool:backgroundly], @"runInBackgroundThread",
+          @(backgroundly), @"runInBackgroundThread",
           preamble, @"preamble",
           sourceText, @"body",
           [preferencesController latexisationFontColor], @"color",
-          !latexMode ? [NSNumber numberWithInteger:LATEX_MODE_AUTO] : latexMode, @"mode",
-          [NSNumber numberWithDouble:[preferencesController latexisationFontSize]], @"magnification",
+          !latexMode ? @(LATEX_MODE_AUTO) : latexMode, @"mode",
+          @([preferencesController latexisationFontSize]), @"magnification",
           [preferencesController compositionConfigurationDocument], @"compositionConfiguration",
           [NSNull null], @"backgroundColor",
           [NSNull null], @"title",
-          [NSNumber numberWithDouble:leftMargin], @"leftMargin",
-          [NSNumber numberWithDouble:rightMargin], @"rightMargin",
-          [NSNumber numberWithDouble:topMargin], @"topMargin",
-          [NSNumber numberWithDouble:bottomMargin], @"bottomMargin",
+          @(leftMargin), @"leftMargin",
+          @(rightMargin), @"rightMargin",
+          @(topMargin), @"topMargin",
+          @(bottomMargin), @"bottomMargin",
           [appController valueForKey:@"additionalFilesPaths"], @"additionalFilesPaths",
           !workingDirectory ? @"" : workingDirectory, @"workingDirectory",
           !fullEnvironment ? [NSDictionary dictionary] : fullEnvironment, @"fullEnvironment",
@@ -809,7 +805,7 @@ static LaTeXProcessor* sharedInstance = nil;
           @"", @"outFullLog",
           [NSArray array], @"outErrors",
           [NSData data], @"outPdfData",
-          [NSNumber numberWithBool:NO], @"applyToPasteboard",
+          @(NO), @"applyToPasteboard",
           teXItem, @"context",
           nil];
       if (configuration)
@@ -835,7 +831,7 @@ static LaTeXProcessor* sharedInstance = nil;
   BOOL runInBackgroundThread = [[configuration objectForKey:@"runInBackgroundThread"] boolValue];
   if (runInBackgroundThread)
   {
-    [configuration setObject:[NSNumber numberWithBool:NO] forKey:@"runInBackgroundThread"];
+    [configuration setObject:@(NO) forKey:@"runInBackgroundThread"];
     [NSApplication detachDrawingThread:@selector(latexiseWithConfiguration:) toTarget:self withObject:configuration];
   }//end if (runInBackgroundThread)
   else//if (!runInBackgroundThread)
@@ -949,21 +945,21 @@ static LaTeXProcessor* sharedInstance = nil;
 
   //trash old files
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  [fileManager bridge_removeItemAtPath:latexFilePath            error:0];
-  [fileManager bridge_removeItemAtPath:latexAuxFilePath         error:0];
-  [fileManager bridge_removeItemAtPath:latexFilePath2           error:0];
-  [fileManager bridge_removeItemAtPath:latexAuxFilePath2        error:0];
-  [fileManager bridge_removeItemAtPath:pdfFilePath              error:0];
-  [fileManager bridge_removeItemAtPath:dviFilePath              error:0];
-  [fileManager bridge_removeItemAtPath:pdfFilePath2             error:0];
-  [fileManager bridge_removeItemAtPath:pdfCroppedFilePath       error:0];
-  [fileManager bridge_removeItemAtPath:latexBaselineFilePath    error:0];
-  [fileManager bridge_removeItemAtPath:latexAuxBaselineFilePath error:0];
-  [fileManager bridge_removeItemAtPath:pdfBaselineFilePath      error:0];
-  [fileManager bridge_removeItemAtPath:sizesFilePath            error:0];
+  [fileManager removeItemAtPath:latexFilePath            error:0];
+  [fileManager removeItemAtPath:latexAuxFilePath         error:0];
+  [fileManager removeItemAtPath:latexFilePath2           error:0];
+  [fileManager removeItemAtPath:latexAuxFilePath2        error:0];
+  [fileManager removeItemAtPath:pdfFilePath              error:0];
+  [fileManager removeItemAtPath:dviFilePath              error:0];
+  [fileManager removeItemAtPath:pdfFilePath2             error:0];
+  [fileManager removeItemAtPath:pdfCroppedFilePath       error:0];
+  [fileManager removeItemAtPath:latexBaselineFilePath    error:0];
+  [fileManager removeItemAtPath:latexAuxBaselineFilePath error:0];
+  [fileManager removeItemAtPath:pdfBaselineFilePath      error:0];
+  [fileManager removeItemAtPath:sizesFilePath            error:0];
   
   //trash *.*pk, *.mf, *.tfm, *.mp, *.script, *.[[:digit:]], *.t[[:digit:]]+
-  NSArray* files = [fileManager bridge_contentsOfDirectoryAtPath:workingDirectory error:0];
+  NSArray* files = [fileManager contentsOfDirectoryAtPath:workingDirectory error:0];
   NSEnumerator* enumerator = [files objectEnumerator];
   NSString* file = nil;
   while((file = [enumerator nextObject]))
@@ -979,7 +975,7 @@ static LaTeXProcessor* sharedInstance = nil;
                         [extension isMatchedByRegex:@"^[[:digit:]]+$"] ||
                         [extension isMatchedByRegex:@"^t[[:digit:]]+$"];
       if (mustDelete)
-        [fileManager bridge_removeItemAtPath:file error:0];
+        [fileManager removeItemAtPath:file error:0];
     }
   }
   
@@ -1088,7 +1084,7 @@ static LaTeXProcessor* sharedInstance = nil;
   NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_PREPROCESSING]];
   if (script && [[script objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
   {
-    [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing", @"Pre-processing")];
+    [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Pre-processing", @"")];
     [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
     [self executeScript:script setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
       compositionConfiguration:compositionConfiguration];
@@ -1118,7 +1114,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_MIDDLEPROCESSING]];
     if (script && [[script objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
     {
-      [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Middle-processing", @"Middle-processing")];
+      [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Middle-processing", @"")];
       [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
       [self executeScript:script setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
         compositionConfiguration:compositionConfiguration];
@@ -1292,8 +1288,8 @@ static LaTeXProcessor* sharedInstance = nil;
       if (!failed)
         pdfData = [self composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
                      compositionConfiguration:[compositionConfiguration dictionaryByAddingObjectsAndKeys:
-                       [NSNumber numberWithInteger:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
-                       [NSNumber numberWithUnsignedInteger:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
+                       @(COMPOSITION_MODE_PDFLATEX), CompositionConfigurationCompositionModeKey,
+                       @(isMacOS10_14OrAbove() ? 5 : 3), @"pdfMinorVersion",
                        nil]
                      fullEnvironment:fullEnvironment];
       failed |= !pdfData;
@@ -1392,8 +1388,8 @@ static LaTeXProcessor* sharedInstance = nil;
           if (!failed)
             pdfData = [self composeLaTeX:latexFilePath2 customLog:&customLog stdoutLog:&stdoutLog stderrLog:&stderrLog
                         compositionConfiguration:[compositionConfiguration dictionaryByAddingObjectsAndKeys:
-                          [NSNumber numberWithInteger:COMPOSITION_MODE_PDFLATEX], CompositionConfigurationCompositionModeKey,
-                          [NSNumber numberWithUnsignedInteger:(isMacOS10_14OrAbove() ? 5 : 3)], @"pdfMinorVersion",
+                          @(COMPOSITION_MODE_PDFLATEX), CompositionConfigurationCompositionModeKey,
+                          @(isMacOS10_14OrAbove() ? 5 : 3), @"pdfMinorVersion",
                           nil]
                         fullEnvironment:fullEnvironment];
           failed |= !pdfData;
@@ -1414,9 +1410,7 @@ static LaTeXProcessor* sharedInstance = nil;
       @try{
         //in the meta-data of the PDF we store as much info as we can : preamble, body, size, color, mode, baseline...
         pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-        NSDictionary* attributes =
-          [NSDictionary dictionaryWithObjectsAndKeys:
-              [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
+        NSDictionary* attributes = @{PDFDocumentCreatorAttribute:[[NSWorkspace sharedWorkspace] applicationName]};
         [pdfDocument setDocumentAttributes:attributes];
         pdfData = [pdfDocument dataRepresentation];
       }
@@ -1437,7 +1431,7 @@ static LaTeXProcessor* sharedInstance = nil;
       NSDictionary* script = [additionalProcessingScripts objectForKey:[NSString stringWithFormat:@"%d",SCRIPT_PLACE_POSTPROCESSING]];
       if (script && [[script objectForKey:CompositionConfigurationAdditionalProcessingScriptEnabledKey] boolValue])
       {
-        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Post-processing", @"Post-processing")];
+        [fullLog appendFormat:@"\n\n>>>>>>>> %@ script <<<<<<<<\n", NSLocalizedString(@"Post-processing", @"")];
         [fullLog appendFormat:@"%@\n", [self descriptionForScript:script]];
         [self executeScript:script setEnvironment:environment1 logString:fullLog workingDirectory:workingDirectory uniqueIdentifier:uniqueIdentifier
           compositionConfiguration:compositionConfiguration];
@@ -1459,7 +1453,7 @@ static LaTeXProcessor* sharedInstance = nil;
   enumerator = [additionalFilesPathsLinksCreated objectEnumerator];
   NSString* additionalFilePathLinkPath = nil;
   while((additionalFilePathLinkPath = [enumerator nextObject]))
-    [fileManager bridge_removeItemAtPath:additionalFilePathLinkPath error:0];
+    [fileManager removeItemAtPath:additionalFilePathLinkPath error:0];
 
   if (outPdfData)
     *outPdfData = pdfData;
@@ -1498,7 +1492,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [boundingBoxTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
       [NSArray arrayWithObjects:@"-sstdout=%stderr", @"-dNOPAUSE", @"-dSAFER", @"-dNOPLATFONTS", @"-sDEVICE=bbox",@"-dBATCH",@"-q", filePath, nil]]];
     [outFullLog appendString:[NSString stringWithFormat:@"\n--------------- %@ ---------------\n%@\n",
-                                NSLocalizedString(@"bounding box computation", @"bounding box computation"),
+                                NSLocalizedString(@"bounding box computation", @""),
                                 [boundingBoxTask equivalentLaunchCommand]]];
     [boundingBoxTask launch];
     [boundingBoxTask waitUntilExit];
@@ -1549,8 +1543,8 @@ static LaTeXProcessor* sharedInstance = nil;
   NSString* pdfFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pdf"];
   //NSString* errFile   = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"err"];
   NSFileManager* fileManager = [NSFileManager defaultManager];
-  [fileManager bridge_removeItemAtPath:dviFile error:0];
-  [fileManager bridge_removeItemAtPath:pdfFile error:0];
+  [fileManager removeItemAtPath:dviFile error:0];
+  [fileManager removeItemAtPath:pdfFile error:0];
   
   NSMutableString* customString = [NSMutableString string];
   NSMutableString* stdoutString = [NSMutableString string];
@@ -1581,7 +1575,7 @@ static LaTeXProcessor* sharedInstance = nil;
   NSUInteger pdfMinorVersion = [pdfMinorVersionNumber unsignedIntegerValue];
   BOOL usePdfMinorVersion = pdfMinorVersion && (compositionMode == COMPOSITION_MODE_PDFLATEX);
   NSString* texFileArg = !usePdfMinorVersion ? texFile :
-    [NSString stringWithFormat:@"\"\\pdfminorversion=%@ \\input \\\"%@\\\"\"", [NSNumber numberWithUnsignedInteger:pdfMinorVersion], texFile];
+    [NSString stringWithFormat:@"\"\\pdfminorversion=%@ \\input \\\"%@\\\"\"", @(pdfMinorVersion), texFile];
 
   #ifdef ARC_ENABLED
   SystemTask* systemTask = [[SystemTask alloc] initWithWorkingDirectory:workingDirectory];
@@ -1596,7 +1590,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [NSArray arrayWithObjects:@"-file-line-error", @"-interaction", @"nonstopmode", texFileArg, nil]]];
   [systemTask setEnvironment:fullEnvironment];
   [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
-                                                        NSLocalizedString(@"processing", @"processing"),
+                                                        NSLocalizedString(@"processing", @""),
                                                         [executablePath lastPathComponent],
                                                         [systemTask equivalentLaunchCommand]]];
   [systemTask launch];
@@ -1617,7 +1611,7 @@ static LaTeXProcessor* sharedInstance = nil;
   
   if (failed)
     [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
-                               NSLocalizedString(@"error while processing", @"error while processing"),
+                               NSLocalizedString(@"error while processing", @""),
                                [executablePath lastPathComponent]]];
 
   //if !failed and must call dvipdf...
@@ -1636,7 +1630,7 @@ static LaTeXProcessor* sharedInstance = nil;
     @try
     {
       [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
-                                                            NSLocalizedString(@"processing", @"processing"),
+                                                            NSLocalizedString(@"processing", @""),
                                                             [[dvipdfTask launchPath] lastPathComponent],
                                                             [dvipdfTask commandLine]]];
       [dvipdfTask launch];
@@ -1681,7 +1675,7 @@ static LaTeXProcessor* sharedInstance = nil;
     
     if (failed)
       [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n",
-                                 NSLocalizedString(@"error while processing", @"error while processing"),
+                                 NSLocalizedString(@"error while processing", @""),
                                  executablePath]];
 
   }//end of dvipdf call
@@ -1760,7 +1754,7 @@ static LaTeXProcessor* sharedInstance = nil;
         [[lineComponent stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]] isEqualToString:@""];
       NSString* errorComponent = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)] componentsJoinedByString:@":"];
       if (lineComponentIsANumber)
-        lineComponent = [[NSNumber numberWithInteger:[lineComponent integerValue]+errorLineShift] stringValue];
+        lineComponent = [@([lineComponent integerValue]+errorLineShift) stringValue];
       if (lineComponentIsANumber || ([line rangeOfString:@"! LaTeX Error:"].location != NSNotFound))
       {
         NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
@@ -1810,7 +1804,7 @@ static LaTeXProcessor* sharedInstance = nil;
         if (lineComponentIsANumber && nextLine)
           fullLine = [line stringByAppendingString:nextLine];
           
-          lineComponent = [[NSNumber numberWithInteger:[lineComponent integerValue]+errorLineShift] stringValue];
+        lineComponent = [@([lineComponent integerValue]+errorLineShift) stringValue];
         if (lineComponentIsANumber && errorComponent)
         {
           NSArray* fixedErrorComponents = [NSArray arrayWithObjects:fileComponent, lineComponent, errorComponent, nil];
@@ -1898,16 +1892,16 @@ static LaTeXProcessor* sharedInstance = nil;
     {
       case SCRIPT_SOURCE_STRING :
         [description appendFormat:@"%@\t: %@\n%@\t:\n%@\n",
-          NSLocalizedString(@"Shell", @"Shell"),
+          NSLocalizedString(@"Shell", @""),
           [script objectForKey:CompositionConfigurationAdditionalProcessingScriptShellKey],
-          NSLocalizedString(@"Body", @"Body"),
+          NSLocalizedString(@"Body", @""),
           [script objectForKey:CompositionConfigurationAdditionalProcessingScriptContentKey]];
         break;
       case SCRIPT_SOURCE_FILE :
         [description appendFormat:@"%@\t: %@\n%@\t:\n%@\n",
-          NSLocalizedString(@"File", @"File"),
+          NSLocalizedString(@"File", @""),
           [script objectForKey:CompositionConfigurationAdditionalProcessingScriptShellKey],
-          NSLocalizedString(@"Content", @"Content"),
+          NSLocalizedString(@"Content", @""),
           [script objectForKey:CompositionConfigurationAdditionalProcessingScriptPathKey]];
         break;
     }//end switch
@@ -1929,8 +1923,8 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* logScriptPath   = [workingDirectory stringByAppendingPathComponent:logScript];
 
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    [fileManager bridge_removeItemAtPath:latexScriptPath error:0];
-    [fileManager bridge_removeItemAtPath:logScriptPath   error:0];
+    [fileManager removeItemAtPath:latexScriptPath error:0];
+    [fileManager removeItemAtPath:logScriptPath   error:0];
     
     NSString* scriptBody = nil;
 
@@ -1949,11 +1943,11 @@ static LaTeXProcessor* sharedInstance = nil;
     [scriptData writeToFile:latexScriptPath atomically:NO];
 
     NSMutableDictionary* fileAttributes =
-    [NSMutableDictionary dictionaryWithDictionary:[fileManager bridge_attributesOfFileSystemForPath:latexScriptPath error:0]];
+    [NSMutableDictionary dictionaryWithDictionary:[fileManager attributesOfFileSystemForPath:latexScriptPath error:0]];
     NSNumber* posixPermissions = [fileAttributes objectForKey:NSFilePosixPermissions];
-    posixPermissions = [NSNumber numberWithUnsignedLong:[posixPermissions unsignedLongValue] | 0700];//add rwx flag
+    posixPermissions = @([posixPermissions unsignedLongValue] | 0700);//add rwx flag
     [fileAttributes setObject:posixPermissions forKey:NSFilePosixPermissions];
-    [fileManager bridge_setAttributes:fileAttributes ofItemAtPath:latexScriptPath error:0];
+    [fileManager setAttributes:fileAttributes ofItemAtPath:latexScriptPath error:0];
 
     NSString* scriptShell = nil;
     switch(source)
@@ -1980,7 +1974,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [task setArguments:[NSArray arrayWithObjects:useLoginShell ? @"" : @"-l", @"-c", latexScriptPath, nil]];
     [task setCurrentDirectoryPath:[latexScriptPath stringByDeletingLastPathComponent]];
 
-    [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"executing")];
+    [logString appendFormat:@"----------------- %@ script -----------------\n", NSLocalizedString(@"executing", @"")];
     [logString appendFormat:@"%@\n", [task equivalentLaunchCommand]];
 
     @try {
@@ -1988,16 +1982,15 @@ static LaTeXProcessor* sharedInstance = nil;
       [task launch];
       [task waitUntilExit];
       if ([task hasReachedTimeout])
-        [logString appendFormat:@"\n%@\n\n", NSLocalizedString(@"Script too long : timeout reached",
-                                                               @"Script too long : timeout reached")];
+        [logString appendFormat:@"\n%@\n\n", NSLocalizedString(@"Script too long : timeout reached", @"")];
       else if ([task terminationStatus])
       {
         #ifdef ARC_ENABLED
-        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"")];
         NSString* outputLog1 = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
         NSString* outputLog2 = [[NSString alloc] initWithData:[task dataForStdError]  encoding:encoding];
         #else
-        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"")];
         NSString* outputLog1 = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
         NSString* outputLog2 = [[NSString alloc] initWithData:[task dataForStdError]  encoding:encoding];
         #endif
@@ -2014,7 +2007,7 @@ static LaTeXProcessor* sharedInstance = nil;
       }
     }//end try task
     @catch(NSException* e) {
-        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"Script failed")];
+        [logString appendFormat:@"\n%@ :\n", NSLocalizedString(@"Script failed", @"")];
         #ifdef ARC_ENABLED
         NSString* outputLog = [[NSString alloc] initWithData:[task dataForStdOutput] encoding:encoding];
         #else
@@ -2096,10 +2089,10 @@ static LaTeXProcessor* sharedInstance = nil;
   #else
   NSAlert* alert = [[[NSAlert alloc] init] autorelease];
   #endif
-  [alert setMessageText:NSLocalizedString(@"Error", @"Error")];
+  [alert setMessageText:NSLocalizedString(@"Error", @"")];
   [alert setInformativeText:!informativeText1 ? @"" : informativeText1];
-  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
-  [alert addButtonWithTitle:NSLocalizedString(@"Display the error message", @"Display the error message")];
+  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Display the error message", @"")];
   [alert setAlertStyle:NSCriticalAlertStyle];
   NSInteger displayError = [alert runModal];
   if (displayError == NSAlertSecondButtonReturn)
@@ -2111,9 +2104,9 @@ static LaTeXProcessor* sharedInstance = nil;
     #else
     NSAlert* alert2 = [[[NSAlert alloc] init] autorelease];
     #endif
-    [alert2 setMessageText:NSLocalizedString(@"Error message", @"Error message")];
+    [alert2 setMessageText:NSLocalizedString(@"Error message", @"")];
     [alert2 setInformativeText:!informativeText2 ? @"" : informativeText2];
-    [alert2 addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+    [alert2 addButtonWithTitle:NSLocalizedString(@"OK", @"")];
     [alert2 setAlertStyle:NSInformationalAlertStyle];
     [alert2 runModal];
   }//end if (displayError == NSAlertSecondButtonReturn)
@@ -2255,9 +2248,7 @@ static LaTeXProcessor* sharedInstance = nil;
           @try{
             pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
             DebugLog(1, @"pdfDocument = %@", pdfDocument);
-            NSDictionary* attributes =
-              [NSDictionary dictionaryWithObjectsAndKeys:
-                  [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute, nil];
+            NSDictionary* attributes = @{PDFDocumentCreatorAttribute:[[NSWorkspace sharedWorkspace] applicationName]};
             DebugLog(1, @"attributes = %@", attributes);
             [pdfDocument setDocumentAttributes:attributes];
             pdfData = [pdfDocument dataRepresentation];
@@ -2392,12 +2383,9 @@ static LaTeXProcessor* sharedInstance = nil;
             DebugLog(1, @"formatString1 = %@", formatString1);
             NSString* informativeText1 = [NSString stringWithFormat:formatString1, systemCall];
             DebugLog(1, @"informativeText1 = %@", informativeText1);
-            NSString* informativeText2 = [NSString stringWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @"Error"), error, !output ? @"..." : output];
+            NSString* informativeText2 = [NSString stringWithFormat:@"%@ %d:\n%@", NSLocalizedString(@"Error", @""), error, !output ? @"..." : output];
             DebugLog(1, @"informativeText2 = %@", informativeText2);
-            NSDictionary* alertInformation = [NSDictionary dictionaryWithObjectsAndKeys:
-              informativeText1, @"informativeText1",
-              informativeText2, @"informativeText2",
-              nil];
+            NSDictionary* alertInformation = @{@"informativeText1":informativeText1,@"informativeText2":informativeText2};
             NSMutableDictionary* alertInformationWrapper =
               [[exportOptions objectForKey:@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];
             if (alertInformationWrapper)
@@ -2467,10 +2455,10 @@ static LaTeXProcessor* sharedInstance = nil;
                                     backgroundColor:[latexitEquation backgroundColor] title:[latexitEquation title]
                                     annotateWithTransparentData:annotationsGraphicCommandsInvisibleEnabled];
           }//end if (!error)
-          [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpFilePath error:0];
+          [[NSFileManager defaultManager] removeItemAtPath:tmpFilePath error:0];
         }//if (gsPath && ![gsPath isEqualToString:@""] && psToPdfPath && ![psToPdfPath isEqualToString:@""])
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:pdfFilePath error:0];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpPdfFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:pdfFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:tmpPdfFilePath error:0];
       }//end if (format == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       else if (format == EXPORT_FORMAT_EPS)
       {
@@ -2506,9 +2494,8 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([gsTask terminationStatus] != 0)
           {
-            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
-                                                                         @"An error occured while trying to create the file :\n%@"),
+            NSRunAlertPanel(NSLocalizedString(@"Error", @""),
+                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
                                                        errorString],
                             @"OK", nil, nil);
           }
@@ -2518,8 +2505,8 @@ static LaTeXProcessor* sharedInstance = nil;
           #endif
         }
         data = [NSData dataWithContentsOfFile:tmpEpsFilePath options:NSUncachedRead error:nil];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpEpsFilePath error:0];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:pdfFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:tmpEpsFilePath error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:pdfFilePath error:0];
         DebugLog(1, @"create EPS data %p (%ld)", data, (unsigned long)[data length]);
       }//end if (format == EXPORT_FORMAT_EPS)
       else if (format == EXPORT_FORMAT_TIFF)
@@ -2565,11 +2552,9 @@ static LaTeXProcessor* sharedInstance = nil;
         NSUInteger width = round(mediaBox.size.width);
         NSUInteger height = round(mediaBox.size.height);
         NSUInteger bytesPerRow = 16*((4*width+15)/16);
-        NSUInteger bitmapBytesLength = bytesPerRow*height;
-        void* bytes = isMacOS10_6OrAbove() ? 0 : calloc(bitmapBytesLength, sizeof(unsigned char));
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef cgContext = !colorSpace || !bytesPerRow || (!bytes && !isMacOS10_6OrAbove()) ? 0 :
-          CGBitmapContextCreate(bytes, width, height, 8, !bytes ? 0 : bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
+        CGContextRef cgContext = !colorSpace || !bytesPerRow ? 0 :
+          CGBitmapContextCreate(0, width, height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
         CGImageRef cgImage = 0;
         if (cgContext)
         {
@@ -2582,11 +2567,6 @@ static LaTeXProcessor* sharedInstance = nil;
           cgImage = CGBitmapContextCreateImage(cgContext);
           CGContextRelease(cgContext);
         }//end if (cgContext)
-        if (bytes)
-        {
-          free(bytes);
-          bytes = 0;
-        }//end if (bytes)
         CGColorSpaceRelease(colorSpace);
         CGPDFDocumentRelease(pdfDocument);
         CGDataProviderRelease(pdfDataProvider);
@@ -2597,9 +2577,7 @@ static LaTeXProcessor* sharedInstance = nil;
         if (cgImageDestination && cgImage)
         {
           CGImageDestinationAddImage(cgImageDestination, cgImage,
-            (CHBRIDGE CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
-              [NSNumber numberWithFloat:jpegQuality/100], (NSString*)kCGImageDestinationLossyCompressionQuality,
-              nil]);
+            (CHBRIDGE CFDictionaryRef)@{(NSString*)kCGImageDestinationLossyCompressionQuality:@(jpegQuality/100)});
           CGImageDestinationFinalize(cgImageDestination);
           CFRelease(cgImageDestination);
         }//end if (cgImageDestination && cgImage)
@@ -2643,8 +2621,7 @@ static LaTeXProcessor* sharedInstance = nil;
           if ([svgTask terminationStatus] != 0)
           {
             NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@",
-                                                                         @"An error occured while trying to create the file :\n%@"),
+                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
                                                        errorString],
                             @"OK", nil, nil);
           }//end if ([svgTask terminationStatus] != 0)
@@ -2657,8 +2634,8 @@ static LaTeXProcessor* sharedInstance = nil;
         NSData* annotationData =
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
-        data = [self annotateData:data ofUTI:@"public.svg-image" withData:annotationDataCompressed];
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:tmpSvgFilePath error:0];
+        data = [self annotateData:data ofUTI:GetMySVGPboardType() withData:annotationDataCompressed];
+        [[NSFileManager defaultManager] removeItemAtPath:tmpSvgFilePath error:0];
       }//end if (format == EXPORT_FORMAT_SVG)
       else if (format == EXPORT_FORMAT_MATHML)
       {
@@ -2746,9 +2723,9 @@ static LaTeXProcessor* sharedInstance = nil;
           NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
           NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
           data = [self annotateData:data ofUTI:(NSString*)kUTTypeHTML withData:annotationDataCompressed];
-          [[NSFileManager defaultManager] bridge_removeItemAtPath:outputFile error:0];
+          [[NSFileManager defaultManager] removeItemAtPath:outputFile error:0];
         }//end if (ok)
-        [[NSFileManager defaultManager] bridge_removeItemAtPath:inputFile error:0];
+        [[NSFileManager defaultManager] removeItemAtPath:inputFile error:0];
       }//end if (format == EXPORT_FORMAT_MATHML)
       else if (format == EXPORT_FORMAT_TEXT)
       {
@@ -2802,8 +2779,8 @@ static LaTeXProcessor* sharedInstance = nil;
       NSString* annotationDataBase64 = [annotationData encodeBase64];
       NSMutableData* annotatedData = !annotationDataBase64 ? nil : [[NSMutableData alloc] initWithCapacity:[inputData length]];
       CGImageSourceRef imageSource = !annotatedData ? 0 :
-        CGImageSourceCreateWithData((CHBRIDGE CFDataRef)inputData, (CHBRIDGE CFDictionaryRef)
-          [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], (NSString*)kCGImageSourceShouldCache, nil]);
+        CGImageSourceCreateWithData((CHBRIDGE CFDataRef)inputData,
+          (CHBRIDGE CFDictionaryRef)@{(NSString*)kCGImageSourceShouldCache:@(NO)});
       CFStringRef detectedUTI = !imageSource ? 0 : CGImageSourceGetType(imageSource);
       if (( sourceUTI && UTTypeConformsTo(detectedUTI, (CHBRIDGE CFStringRef)sourceUTI)) ||
           (!sourceUTI && (UTTypeConformsTo(detectedUTI, CFSTR("public.tiff")) ||
@@ -2950,7 +2927,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [gsTask setCurrentDirectoryPath:temporaryDirectory];
     [gsTask setEnvironment:self->globalExtraEnvironment];
     [gsTask setLaunchPath:gsPath];
-    [gsTask setArguments:[NSArray arrayWithObjects:@"--version", nil]];
+    [gsTask setArguments:@[@"--version"]];
     [gsTask launch];
     [gsTask waitUntilExit];
     NSData* stdOutputData = [gsTask dataForStdOutput];

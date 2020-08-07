@@ -33,6 +33,7 @@ extern int DebugLogLevel;
 #define NSAppKitVersionNumber10_11 1404
 #define NSAppKitVersionNumber10_12 1504
 #define NSAppKitVersionNumber10_13 1561
+#define NSAppKitVersionNumber10_14 1671
 
 BOOL isMacOS10_5OrAbove(void);
 BOOL isMacOS10_6OrAbove(void);
@@ -44,6 +45,7 @@ BOOL isMacOS10_11OrAbove(void);
 BOOL isMacOS10_12OrAbove(void);
 BOOL isMacOS10_13OrAbove(void);
 BOOL isMacOS10_14OrAbove(void);
+BOOL isMacOS10_15OrAbove(void);
 
 extern NSString* NSAppearanceDidChangeNotification;
 
@@ -75,10 +77,10 @@ FOUNDATION_STATIC_INLINE      CGFloat Clip_cgf(CGFloat inf, CGFloat x, CGFloat s
 FOUNDATION_STATIC_INLINE         double Clip_d(double inf, double x, double sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 
 NSString* GetMySVGPboardType(void);
-NSString* GetMyPNGPboardType(void);
-NSString* GetMyJPEGPboardType(void);
 NSString* GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
+NSString* getUTIForExportFormat(export_format_t exportFormat);
+NSString* getFileExtensionForExportFormat(export_format_t exportFormat);
 
 FOUNDATION_EXTERN int EndianI_BtoN(int x);
 FOUNDATION_EXTERN int EndianI_NtoB(int x);

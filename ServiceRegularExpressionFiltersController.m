@@ -23,7 +23,7 @@
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   result = modelObject ? [modelObject mutableCopy] :
     [NSDictionary dictionaryWithObjectsAndKeys:
-      [NSNumber numberWithBool:NO], ServiceRegularExpressionFilterEnabledKey,
+      @(NO), ServiceRegularExpressionFilterEnabledKey,
       @"(\\(.*\\))", ServiceRegularExpressionFilterInputPatternKey,
       @"\\1", ServiceRegularExpressionFilterOutputPatternKey,
       nil];

@@ -125,7 +125,7 @@ static NSEntityDescription* cachedEntity = nil;
   if (value != [self sortIndex])
   {
     [self willChangeValueForKey:@"sortIndex"];
-    [self setPrimitiveValue:[NSNumber numberWithUnsignedInteger:value] forKey:@"sortIndex"];
+    [self setPrimitiveValue:@(value) forKey:@"sortIndex"];
     [self didChangeValueForKey:@"sortIndex"];
     self->cachedSortIndex = value;
   }//end if (value != [self sortIndex])
@@ -247,7 +247,7 @@ static NSEntityDescription* cachedEntity = nil;
   NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
   [coder encodeObject:applicationVersion forKey:@"version"];
   [coder encodeObject:[self title] forKey:@"title"];
-  [coder encodeObject:[NSNumber numberWithUnsignedInteger:[self sortIndex]] forKey:@"sortIndex"];
+  [coder encodeObject:@([self sortIndex]) forKey:@"sortIndex"];
   [coder encodeObject:[self comment] forKey:@"comment"];
 }
 //end encodeWithCoder:
@@ -258,7 +258,7 @@ static NSEntityDescription* cachedEntity = nil;
   NSMutableDictionary* plist = [NSMutableDictionary dictionaryWithObjectsAndKeys:
      applicationVersion, @"version",
      [self title], @"title",
-     [NSNumber numberWithUnsignedInteger:[self sortIndex]], @"sortIndex",
+     @([self sortIndex]), @"sortIndex",
      [self comment], @"comment",
      nil];
   return plist;

@@ -46,7 +46,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
     NSArray* components = [line componentsSeparatedByString:@":"];
     if ([components count] >= 3)
     {
-      NSNumber* lineNumber = [NSNumber numberWithInteger:[[components objectAtIndex:1] integerValue]];
+      NSNumber* lineNumber = @([[components objectAtIndex:1] integerValue]);
       NSString* message    = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)]
                                     componentsJoinedByString:@""];
       NSDictionary* dictionary =
@@ -58,7 +58,7 @@ NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
       NSRange separator = [line rangeOfString:@"! LaTeX Error:"];
       if (separator.location != NSNotFound)
       {
-        NSNumber* lineNumber = [NSNumber numberWithInteger:0]; //dummy line number error
+        NSNumber* lineNumber = @(0); //dummy line number error
         NSString* message    = [line substringFromIndex:(separator.location+separator.length)];
         NSDictionary* dictionary =
           [NSDictionary dictionaryWithObjectsAndKeys:lineNumber, @"line", message, @"message", nil];

@@ -48,19 +48,19 @@
   [self->fetchSemaphore P];
   @synchronized(self->cache)
   {
-    [self->cache setObject:self->isFetchingData forKey:[NSNumber numberWithInteger:exportFormat]];
+    [self->cache setObject:self->isFetchingData forKey:@(exportFormat)];
   }//end @synchronized(self->cache)
   #ifdef ARC_ENABLED
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
      [NSDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithInteger:exportFormat], @"exportFormat",
+       @(exportFormat), @"exportFormat",
        [pdfData copy], @"pdfData",
        [NSMutableDictionary dictionary], @"alertInformationWrapper",
        nil]];
   #else
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
      [NSDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithInteger:exportFormat], @"exportFormat",
+       @(exportFormat), @"exportFormat",
        [[pdfData copy] autorelease], @"pdfData",
        [NSMutableDictionary dictionary], @"alertInformationWrapper",
        nil]];
@@ -74,7 +74,7 @@
   NSData* data = nil;
   @synchronized(self->cache)
   {
-    data = [self->cache objectForKey:[NSNumber numberWithInteger:exportFormat]];
+    data = [self->cache objectForKey:@(exportFormat)];
   }//end @synchronized(self->cache)
   if (data != self->isFetchingData)
     result = data;
@@ -83,7 +83,7 @@
     [self->fetchSemaphore P];
     @synchronized(self->cache)
     {
-      data = [self->cache objectForKey:[NSNumber numberWithInteger:exportFormat]];
+      data = [self->cache objectForKey:@(exportFormat)];
     }//end @synchronized(self->cache)
     [self->fetchSemaphore V];
     result = data;
@@ -108,7 +108,7 @@
   [self->fetchSemaphore P];
   @synchronized(self->cache)
   {
-    [self->cache removeObjectForKey:[NSNumber numberWithInteger:exportFormat]];
+    [self->cache removeObjectForKey:@(exportFormat)];
   }//end @synchronized(self->cache)
   [self->fetchSemaphore V];
 }
@@ -125,12 +125,12 @@
     [[configuration objectForKey:@"alertInformationWrapper"] dynamicCastToClass:[NSMutableDictionary class]];
   NSMutableDictionary* exportOptions =
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       [NSNumber numberWithFloat:[preferencesController exportJpegQualityPercent]], @"jpegQuality",
-       [NSNumber numberWithFloat:[preferencesController exportScalePercent]], @"scaleAsPercent",
-       [NSNumber numberWithBool:[preferencesController exportIncludeBackgroundColor]], @"exportIncludeBackgroundColor",
-       [NSNumber numberWithBool:[preferencesController exportTextExportPreamble]], @"textExportPreamble",
-       [NSNumber numberWithBool:[preferencesController exportTextExportEnvironment]], @"textExportEnvironment",
-       [NSNumber numberWithBool:[preferencesController exportTextExportBody]], @"textExportBody",
+       @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+       @([preferencesController exportScalePercent]), @"scaleAsPercent",
+       @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+       @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+       @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+       @([preferencesController exportTextExportBody]), @"textExportBody",
        nil];
   if ([preferencesController exportJpegBackgroundColor])
     [exportOptions setObject:[preferencesController exportJpegBackgroundColor] forKey:@"jpegColor"];

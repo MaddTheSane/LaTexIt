@@ -77,7 +77,7 @@ static NSImage* errorIcon = nil;
     rect.size.width = MAX(rect.size.width, 1);
     if (NSIntersectsRect(rect, visibleRect))
     {
-      NSString* numberString = [NSString stringWithFormat:@"%@", [NSNumber numberWithInteger:(lineNumber+self->lineShift)]];
+      NSString* numberString = [NSString stringWithFormat:@"%@", @(lineNumber+self->lineShift)];
       NSAttributedString* attrNumberString = [[[NSAttributedString alloc] initWithString:numberString
                                                                           attributes:attributes] autorelease];
       NSPoint origin = NSMakePoint([self frame].size.width-[attrNumberString size].width-2,

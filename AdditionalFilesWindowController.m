@@ -10,6 +10,7 @@
 
 #import "AdditionalFilesTableView.h"
 #import "AppController.h"
+#import "ImagePopupButton.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "PreferencesWindowController.h"
@@ -49,9 +50,9 @@
   [self->additionalFilesMenuButton setAlternateImage:[NSImage imageNamed:@"button-menu"]];
   NSMenu* menu = [[NSMenu alloc] init];
   [[menu addItemWithTitle:@"" action:nil keyEquivalent:@""] setTarget:nil];//dummy item
-  [[menu addItemWithTitle:NSLocalizedString(@"Open defaults", @"Open defaults")
+  [[menu addItemWithTitle:NSLocalizedString(@"Open defaults", @"")
     action:@selector(additionalFilesOpenDefaults:) keyEquivalent:@""] setTarget:self];
-  [[menu addItemWithTitle:NSLocalizedString(@"Save as defaults", @"Save as defaults")
+  [[menu addItemWithTitle:NSLocalizedString(@"Save as defaults", @"")
     action:@selector(additionalFilesSetAsDefaults:) keyEquivalent:@""] setTarget:self];
   [self->additionalFilesMenuButton setMenu:menu];
   [menu release];
@@ -64,7 +65,7 @@
   [window setHidesOnDeactivate:NO];//prevents from disappearing when LaTeXiT is not active
   [window setFloatingPanel:NO];//prevents from floating always above
   [window setFrameAutosaveName:@"AdditionalFiles"];
-  [window setTitle:NSLocalizedString(@"Additional files", @"Additional files")];
+  [window setTitle:NSLocalizedString(@"Additional files", @"")];
 }
 //end windowDidLoad
 
