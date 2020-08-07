@@ -206,7 +206,7 @@
     BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
     NSArray* selectedHistoryItems = [[[self->historyView historyItemsController] arrangedObjects] objectsAtIndexes:[self->historyView selectedRowIndexes]];
     BOOL ok = [[HistoryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedHistoryItems
-                                              format:[exportFormatPopUpButton selectedTag]];
+                                              format:(history_export_format_t)[exportFormatPopUpButton selectedTag]];
     if (!ok)
     {
       NSAlert* alert = [NSAlert
@@ -214,7 +214,7 @@
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
    informativeTextWithFormat:nil];
-     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+     [alert runModal];
     }//end if (ok)
   }
   [self->savePanel release];
@@ -274,7 +274,7 @@
 
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
-  history_import_option_t import_option = [self->importOptionPopUpButton selectedTag];
+  history_import_option_t import_option = (history_import_option_t)[self->importOptionPopUpButton selectedTag];
   if (returnCode == NSOKButton)
   {
     BOOL ok = [[HistoryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
@@ -285,7 +285,7 @@
                defaultButton:NSLocalizedString(@"OK", @"OK")
              alternateButton:nil otherButton:nil
    informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-     [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+     [alert runModal];
     }
     else
     {

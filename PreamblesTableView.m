@@ -35,7 +35,7 @@ static NSString* PreamblesPboardType = @"PreamblesPboardType"; //pboard type for
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent //using the tableview does not need to activate the window first
 {
   NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  int row = [self rowAtPoint:point];
+  NSInteger row = [self rowAtPoint:point];
   [self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
   return YES;
 }
@@ -58,7 +58,7 @@ static NSString* PreamblesPboardType = @"PreamblesPboardType"; //pboard type for
 //edit selected row
 -(IBAction) edit:(id)sender
 {
-  int selectedRow = [self selectedRow];
+  NSInteger selectedRow = [self selectedRow];
   if (selectedRow >= 0)
     [self editColumn:0 row:selectedRow withEvent:nil select:YES];
 }

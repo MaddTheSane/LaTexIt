@@ -14,7 +14,7 @@
 #import "Utils.h"
 
 #import "NSButtonExtended.h"
-#import "NSPopupButtonExtended.h"
+#import "NSPopUpButtonExtended.h"
 #import "NSViewExtended.h"
 
 @interface DocumentExtraPanelsController ()
@@ -444,7 +444,7 @@
   [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofGSPDFCompatibilityLevel:self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel];
   [self->saveAccessoryViewExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled];
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = [self->saveAccessoryViewPopupFormat selectedTag];
+  export_format_t exportFormat = (export_format_t)[self->saveAccessoryViewPopupFormat selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
     panelToOpen = [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsJpegPanel];
   else if (exportFormat == EXPORT_FORMAT_SVG)

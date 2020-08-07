@@ -20,7 +20,7 @@
   NSBundle* bundle = [NSBundle bundleForClass:[self class]];
   if (!(self = [super initWithNibNamed:@"ExportFormatOptionsPanes" bundle:bundle]))
     return nil;
-  [self instantiateNibWithOwner:self topLevelObjects:nil];
+  [self instantiateWithOwner:self topLevelObjects:nil];
 
   self->jpegQualityPercent  = 90.f;
   #ifdef ARC_ENABLED

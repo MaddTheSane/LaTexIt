@@ -594,7 +594,7 @@ static NSMutableDictionary* cachePaths = nil;
         if (isMacOS10_7OrAbove())
         {
           __block BOOL localOk = ok;
-          [documentController openDocumentWithContentsOfURL:fileURL display:YES completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* localError) {
+          [documentController openDocumentWithContentsOfURL:fileURL display:YES completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
                 if (error)
                   DebugLog(1, @"error : %@", error);
                 localOk = (document != nil);
@@ -653,7 +653,7 @@ static NSMutableDictionary* cachePaths = nil;
         {
           __block BOOL localOk = ok;
           [documentController openDocumentWithContentsOfURL:fileURL display:YES
-            completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* localError) {
+            completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
               if (error)
                 DebugLog(1, @"error : %@", error);
               localOk = (document != nil);
@@ -691,7 +691,7 @@ static NSMutableDictionary* cachePaths = nil;
       {
         __block BOOL localOk = ok;
         [documentController openDocumentWithContentsOfURL:fileURL display:YES
-          completionHandler:^(NSDocument* document, BOOL documentWasAlreadyOpen, NSError* localError) {
+          completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable localError) {
             if (error)
               DebugLog(1, @"error : %@", error);
             localOk = (document != nil);
@@ -2766,7 +2766,7 @@ static NSMutableDictionary* cachePaths = nil;
           NSString* directory          = [[NSWorkspace sharedWorkspace] temporaryDirectory];
           NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-          export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+          export_format_t exportFormat = (export_format_t)[userDefaults integerForKey:DragExportTypeKey];
           NSString* extension = nil;
           switch(exportFormat)
           {
@@ -3018,7 +3018,7 @@ static NSMutableDictionary* cachePaths = nil;
         {
           //translates the data to the right format
           NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-          export_format_t exportFormat = [userDefaults integerForKey:DragExportTypeKey];
+          export_format_t exportFormat = (export_format_t)[userDefaults integerForKey:DragExportTypeKey];
           NSString* extension = nil;
           switch(exportFormat)
           {
@@ -3536,7 +3536,7 @@ static NSMutableDictionary* cachePaths = nil;
                                                      NSRTFPboardType, kUTTypeRTF, nil]  owner:nil];
       [pboard setString:[source string] forType:NSStringPboardType];
       [pboard setString:[source string] forType:@"public.utf8-plain-text"];
-      NSData* rtfData = [source RTFFromRange:NSMakeRange(0, [source length]) documentAttributes:nil];
+      NSData* rtfData = [source RTFFromRange:NSMakeRange(0, [source length]) documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType}];
       [pboard setData:rtfData forType:NSRTFPboardType];
       [pboard setData:rtfData forType:(NSString*)kUTTypeRTF];
     }//end if (source)

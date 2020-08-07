@@ -412,7 +412,7 @@
   if (result)
   {
     NSPoint mouseLocation = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
-    int row = [self rowAtPoint:mouseLocation];
+    NSInteger row = [self rowAtPoint:mouseLocation];
     result = (row >= 0) && [self tableView:self acceptDrop:sender row:row dropOperation:NSTableViewDropOn];
     [self draggingExited:sender];//fixes a drop-ring-does-not-disappear bug
   }//end if (result)
@@ -458,7 +458,7 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [[self window] convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =

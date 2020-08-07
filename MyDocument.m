@@ -1366,7 +1366,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   if (sender == self->lowerBoxControlsBoxLatexModeSegmentedControl)
   {
     NSInteger lastClickedSegment = [self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment];
-    [self setLatexModeRequested:[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:lastClickedSegment]];
+    [self setLatexModeRequested:(latex_mode_t)[[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] tagForSegment:lastClickedSegment]];
   }//end if (sender == self->lowerBoxControlsBoxLatexModeSegmentedControl)
 }
 //end changeRequestedLatexMode:
@@ -2367,7 +2367,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   latex_mode_t result = LATEX_MODE_DISPLAY;
   NSString* body = [[self->lowerBoxSourceTextView textStorage] string];
   NSRange range = NSMakeRange(0, [body length]);
-  NSInteger options = RKLDotAll | RKLMultiline;
+  RKLRegexOptions options = RKLDotAll | RKLMultiline;
   if ([body isMatchedByRegex:@"\\$\\$(.+)\\$\\$" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\$(.+)\\$" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\[(.*)\\]" options:options inRange:range error:nil] ||

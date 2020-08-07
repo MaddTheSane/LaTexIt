@@ -670,73 +670,28 @@ static LaTeXProcessor* sharedInstance = nil;
           DebugLog(1, @"font = %@", font);
           CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
           DebugLog(1, @"cgFont = %p", cgFont);
-          CTFontRef ctFont = CFRetain((CTFontRef)font);
-          DebugLog(1, @"ctFont = %p", ctFont);
           DebugLog(1, @"cgPDFContext = %p", cgPDFContext);
-          BOOL useOldFonts = NO;
-          if (useOldFonts)
-            CGContextSelectFont(cgPDFContext, "Courier", fontSize, kCGEncodingMacRoman);
-          else//if (!useOldFonts)
-          {
-            CGContextSetFont(cgPDFContext, cgFont);
-            CGContextSetFontSize(cgPDFContext, fontSize);
-          }//end if (!useOldFonts)
+          CGContextSetFont(cgPDFContext, cgFont);
+          CGContextSetFontSize(cgPDFContext, fontSize);
 
           DebugLog(1, @"annotationContentBase64CompleteString = %@", annotationContentBase64CompleteString);
-          size_t charactersCount = [annotationContentBase64CompleteString length];
-          DebugLog(1, @"charactersCount = %@", @(charactersCount));
-          unichar* unichars = (unichar*)calloc(charactersCount+1, sizeof(unichar));//+1 for O termination
-          DebugLog(1, @"unichars = %p", unichars);
-          CGGlyph* glyphs = (CGGlyph*)calloc(charactersCount, sizeof(CGGlyph));
-          DebugLog(1, @"glyphs = %p", glyphs);
-          if (unichars && glyphs)
+          if (annotationContentBase64CompleteString.length)
           {
-            [annotationContentBase64CompleteString getCharacters:unichars range:NSMakeRange(0, charactersCount)];
-            DebugLog(1, @"unichars filled");
-            DebugLog(1, @"&CTFontGetGlyphsForCharacters = %p", &CTFontGetGlyphsForCharacters);
-            typedef bool (*CTFontGetGlyphsForCharacters_t)(CTFontRef, const UniChar characters[], CGGlyph glyphs[], CFIndex);
-            CTFontGetGlyphsForCharacters_t pCTFontGetGlyphsForCharacters = &CTFontGetGlyphsForCharacters;
-            if (!pCTFontGetGlyphsForCharacters)
-            {
-              NSBundle* coreTextBundle = [NSBundle bundleWithIdentifier:@"com.apple.CoreText"];
-              DebugLog(1, @"coreTextBundle => %@", coreTextBundle);
-              NSError* loadError = nil;
-              BOOL loaded = [coreTextBundle isLoaded] || [coreTextBundle loadAndReturnError:&loadError];
-              DebugLog(1, @"loaded => %@, error = %@", @(loaded), loadError);
-              DebugLog(1, @"path = %@", [coreTextBundle executablePath]);
-              void* coreTextHandle = !loaded ? 0 : dlopen([[coreTextBundle executablePath] UTF8String], RTLD_LAZY);
-              DebugLog(1, @"coreTextHandle => %p", coreTextHandle);
-              if (!pCTFontGetGlyphsForCharacters && coreTextHandle)
-                pCTFontGetGlyphsForCharacters = (CTFontGetGlyphsForCharacters_t)dlsym(coreTextHandle, "CTFontGetGlyphsForCharacters");
-              DebugLog(1, @"pCTFontGetGlyphsForCharacters(CTFontGetGlyphsForCharacters) => %p", CTFontGetGlyphsForCharacters);
-              if (!pCTFontGetGlyphsForCharacters && coreTextHandle)
-                pCTFontGetGlyphsForCharacters = (CTFontGetGlyphsForCharacters_t)dlsym(coreTextHandle, "_CTFontGetGlyphsForCharacters");
-              DebugLog(1, @"pCTFontGetGlyphsForCharacters(_CTFontGetGlyphsForCharacters) => %p", CTFontGetGlyphsForCharacters);
-            }//end if (!pCTFontGetGlyphsForCharacters)
-            bool ok = pCTFontGetGlyphsForCharacters && pCTFontGetGlyphsForCharacters(ctFont, unichars, glyphs, charactersCount);
-            DebugLog(1, @"pCTFontGetGlyphsForCharacters => %@", @(ok));
-            DebugLog(1, @"ok = %d", ok);
-            if (ok)
-            {
-              if (useOldFonts)
-              {
-                NSData* annotationContentBase64CompleteUTF8 = [annotationContentBase64CompleteString dataUsingEncoding:NSUTF8StringEncoding];
-                DebugLog(1, @"annotationContentBase64CompleteUTF8 = %@", annotationContentBase64CompleteUTF8);
-                CGContextShowTextAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, [annotationContentBase64CompleteUTF8 bytes], [annotationContentBase64CompleteUTF8 length]);
-              }//end if (useOldFonts)
-              else//if (!useOldFonts)
-              {
-                DebugLog(1, @"Show %lu glyphs", (unsigned long)charactersCount);
-                CGContextShowGlyphsAtPoint(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y, glyphs, charactersCount);
-              }//end if (!useOldFonts)
-            }//end if (ok)
-          }//end if (unichars && glyphs)
-          if (unichars)
-            free(unichars);
-          if (glyphs)
-            free(glyphs);
-          if (ctFont)
-            CFRelease(ctFont);
+            NSAttributedString* attributedString = [[NSAttributedString alloc] initWithString:annotationContentBase64CompleteString attributes:@{NSFontAttributeName:font}];
+            CGRect drawRect = CGRectInfinite;
+            drawRect.origin = mediaBox.origin;
+            CTFramesetterRef frameSetter = !attributedString ? 0 : CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
+            CGPathRef path = CGPathCreateWithRect(drawRect, 0);
+            CTFrameRef frame = !frameSetter ? 0 : CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attributedString.length), path, 0);
+            if (frame)
+              CTFrameDraw(frame, cgPDFContext);
+            CGPathRelease(path);
+            if (frame)
+              CFRelease(frame);
+            if (frameSetter)
+              CFRelease(frameSetter);
+            [attributedString release];
+          }//end if (annotationContentBase64CompleteString.length)
           CGFontRelease(cgFont);
         }//end if (!useFullyGraphicMetadata)
         CGPDFContextEndPage(cgPDFContext);
@@ -1980,7 +1935,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* scriptBody = nil;
 
     NSNumber* scriptType = [script objectForKey:CompositionConfigurationAdditionalProcessingScriptTypeKey];
-    script_source_t source = scriptType ? [scriptType integerValue] : SCRIPT_SOURCE_STRING;
+    script_source_t source = scriptType ? (script_source_t)[scriptType integerValue] : SCRIPT_SOURCE_STRING;
 
     NSStringEncoding encoding = NSUTF8StringEncoding;
     NSError* error = nil;
@@ -2586,7 +2541,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentationDpiAwareUsingCompression:NSTIFFCompressionLZW factor:15.0];
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
-        data = [imageRep representationUsingType:NSPNGFileType properties:nil];
+        data = [imageRep representationUsingType:NSPNGFileType properties:@{}];
         #ifdef ARC_ENABLED
         #else
         [image release];

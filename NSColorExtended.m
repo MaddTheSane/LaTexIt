@@ -47,9 +47,11 @@
 
 -(NSString*) rgbaString
 {
+  NSString* result = nil;
   NSColor* colorRGB = [self colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]]; //the color must be RGB
-  return [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
-                                                    [colorRGB blueComponent], [colorRGB alphaComponent]];
+  result = [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
+                                                      [colorRGB blueComponent], [colorRGB alphaComponent]];
+  return result;
 }
 //end rgbaString
 

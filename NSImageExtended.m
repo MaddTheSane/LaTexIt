@@ -146,7 +146,7 @@
    NSImage* image = !result ? nil : [[NSImage alloc] initWithSize:adaptedRectangle.size];
    [image addRepresentation:result];
    @try{
-     [image lockFocusOnRepresentation:result];
+     [image lockFocus];
      [imageRep drawInRect:adaptedRectangle];
      [image unlockFocus];
     }
@@ -187,7 +187,7 @@
 {
   NSImageRep* result = nil;
   if (!isMacOS10_6OrAbove())
-    result = [self bestRepresentationForDevice:nil];
+    result = [self bestRepresentationForRect:NSMakeRect(0, 0, [self size].width, [self size].height) context:context hints:nil];
   else//if (isMacOS10_6OrAbove())
   {
     NSEnumerator* enumerator = [[self representations] objectEnumerator];

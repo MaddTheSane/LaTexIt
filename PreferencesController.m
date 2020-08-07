@@ -611,7 +611,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   else
   {
     Boolean ok = NO;
-    result = CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DragExportTypeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
+    result = (export_format_t)CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DragExportTypeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
     if (!ok)
       result = EXPORT_FORMAT_PDF;
   }
@@ -1092,7 +1092,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   else
   {
     Boolean ok = NO;
-    result = CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DefaultModeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
+    result = (latex_mode_t)CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DefaultModeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
     if (!ok)
       result = LATEX_MODE_ALIGN;
   }
@@ -1156,11 +1156,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   document_style_t result = DOCUMENT_STYLE_NORMAL;
   if (self->isLaTeXiT)
-    result = [[NSUserDefaults standardUserDefaults] integerForKey:DocumentStyleKey];
+    result = (document_style_t)[[NSUserDefaults standardUserDefaults] integerForKey:DocumentStyleKey];
   else
   {
     Boolean ok = NO;
-    result = CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DocumentStyleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
+    result = (document_style_t)CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DocumentStyleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
     if (!ok)
       result = DOCUMENT_STYLE_NORMAL;
   }
@@ -1856,7 +1856,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       [compositionsController setSelectionIndex:value];
     else
       [compositionsController setSelectedObjects:nil];
-  }
+  }//end if (compositionsController)
   else//if (!compositionsController)
   {
     if (self->isLaTeXiT)
@@ -1875,7 +1875,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSDictionary* result = nil;
   NSArray* configurations = [self compositionConfigurations];
-  NSUInteger selectedIndex = (unsigned)Clip_i(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
+  NSUInteger selectedIndex = (unsigned)Clip_nsi(0, [self compositionConfigurationsDocumentIndex], (signed)[configurations count]);
   result = (selectedIndex < [configurations count]) ? [configurations objectAtIndex:selectedIndex] : nil;
   return result;
 }
@@ -1884,7 +1884,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 -(void) setCompositionConfigurationDocument:(NSDictionary*)value
 {
   NSMutableArray* configurations = [[self compositionConfigurations] mutableCopy];
-  NSUInteger selectedIndex = (unsigned)Clip_i(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
+  NSUInteger selectedIndex = (unsigned)Clip_nsi(0, [self compositionConfigurationsDocumentIndex], (signed)[configurations count]);
   if (selectedIndex < [configurations count])
   {
     [configurations replaceObjectAtIndex:selectedIndex withObject:value];
@@ -2239,7 +2239,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSString* result = nil;
   NSArray* encapsulations = [self encapsulations];
-  NSUInteger selectedIndex = (unsigned)Clip_i(0, [self encapsulationsSelectedIndex], [encapsulations count]);
+  NSUInteger selectedIndex = (unsigned)Clip_nsi(0, [self encapsulationsSelectedIndex], (signed)[encapsulations count]);
   result = (selectedIndex < [encapsulations count]) ? [encapsulations objectAtIndex:selectedIndex] : nil;
   return result;
 }

@@ -181,7 +181,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSUInteger length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     char* tmpString = (char*)calloc(length+1, sizeof(char));
     memcpy(tmpString, [tempFilenameTemplate UTF8String], length); 
-    int fd = mkstemps(tmpString, [fileNameWithExtension length]-[templateString length]);
+    int fd = mkstemps(tmpString, (int)([fileNameWithExtension length]-[templateString length]));
     if (fd != -1)
       fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
 

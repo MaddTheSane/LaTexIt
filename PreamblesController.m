@@ -157,11 +157,11 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 //redefined from NSArrayControllerExtended
 -(void) moveObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
-  int preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
-  int preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];
-  id preambleLaTeXisation = !IsBetween_i(1, preambleLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
+  NSInteger preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
+  NSInteger preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];
+  id preambleLaTeXisation = !IsBetween_nsui(1U, (unsigned)preambleLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:preambleLaTeXisationIndex];
-  id preambleService = !IsBetween_i(1, preambleServiceIndex+1, [[self arrangedObjects] count]) ? nil :
+  id preambleService = !IsBetween_nsi(1, preambleServiceIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:preambleServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newPreambleLaTeXisationIndex = [[self arrangedObjects] indexOfObject:preambleLaTeXisation];

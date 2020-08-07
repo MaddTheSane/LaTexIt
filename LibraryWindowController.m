@@ -659,7 +659,7 @@ static int kExportContext = 0;
           isSelected = !isSelected;
           NSDate* now = [NSDate date];
           [self->libraryView display];
-          NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now addTimeInterval:1./30.];
+          NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now dateByAddingTimeInterval:1./30.];
           [NSThread sleepUntilDate:next];
         }
         [undoManager setActionName:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation")];
@@ -869,7 +869,7 @@ static int kExportContext = 0;
       isSelected = !isSelected;
       NSDate* now = [NSDate date];
       [self->libraryView display];
-      NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now addTimeInterval:1./30.];
+      NSDate* next = isMacOS10_6OrAbove() ? [now dateByAddingTimeInterval:1./30.] : [now dateByAddingTimeInterval:1./30.];
       [NSThread sleepUntilDate:next];
     }
     if (isInitiallySelected)
@@ -1018,7 +1018,7 @@ static int kExportContext = 0;
   if (contextInfo == &kImportContext)
   {
     NSOpenPanel* openPanel = [sheet dynamicCastToClass:[NSOpenPanel class]];
-    library_import_option_t import_option = [importOptionPopUpButton selectedTag];
+    library_import_option_t import_option = (library_import_option_t)[importOptionPopUpButton selectedTag];
     if (returnCode == NSOKButton)
     {
       BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
@@ -1029,7 +1029,7 @@ static int kExportContext = 0;
                  defaultButton:NSLocalizedString(@"OK", @"OK")
                alternateButton:nil otherButton:nil
      informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
-       [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+       [alert runModal];
       }
       else
       {
@@ -1052,7 +1052,7 @@ static int kExportContext = 0;
         [NSNumber numberWithBool:([self->exportOptionIgnoreTitleHierarchyButton state] == NSOnState)], @"ignoreTitleHierarchy",
         nil];
       BOOL ok = [[LibraryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedLibraryItems
-                                                format:[exportFormatPopUpButton selectedTag]
+                                                format:(library_export_format_t)[exportFormatPopUpButton selectedTag]
                                                options:options];
       if (!ok)
       {
@@ -1061,7 +1061,7 @@ static int kExportContext = 0;
                  defaultButton:NSLocalizedString(@"OK", @"OK")
                alternateButton:nil otherButton:nil
      informativeTextWithFormat:nil];
-       [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
+       [alert runModal];
       }//end if (ok)
     }
     [self->savePanel release];

@@ -79,7 +79,7 @@
   NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
   NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
                                      4 : [numberOfItemsPerRowNumber unsignedIntegerValue];
-  CGFloat clipViewWidth = [[[self->matrix superview] superview] frame].size.width-[NSScroller scrollerWidth]+1;
+  CGFloat clipViewWidth = [[[self->matrix superview] superview] frame].size.width-[NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy]+1;
   CGFloat cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
   [self->matrix setCellSize:NSMakeSize(cellWidth, cellWidth)];
   [self->matrix setFrame:NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*[matrix numberOfRows])];

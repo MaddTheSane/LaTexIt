@@ -8,9 +8,7 @@
 
 #import "NSDataExtended.h"
 
-#import "Utils.h"
-
-#define OPENSSL_AVAILABLE 1
+#define OPENSSL_AVAILABLE 0
 
 #ifdef ARC_ENABLED
 #if OPENSSL_AVAILABLE

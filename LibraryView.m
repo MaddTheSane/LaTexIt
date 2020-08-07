@@ -430,9 +430,9 @@
   [undoManager beginUndoGrouping];
   NSArray* selectedItems = [LibraryItem minimumNodeCoverFromItemsInArray:[self selectedItems] parentSelector:@selector(parent)];
   NSArray* rootNodes = [self->libraryController rootItems:[self->libraryController filterPredicate]];
-  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
+  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered:) withObject:nil rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem :
-    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
+    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) withObject:nil rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem : [[selectedItems lastObject] parent];
   NSUInteger nbSelectedItems = [selectedItems count];
   NSMutableSet* parentOfSelectedItems = [NSMutableSet setWithCapacity:[selectedItems count]];

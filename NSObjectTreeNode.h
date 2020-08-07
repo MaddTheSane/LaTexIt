@@ -13,8 +13,8 @@
 // There are better ways to compute this, but this implementation should be efficient for our app.
 -(BOOL) isDescendantOfItemInArray:(NSArray*)items parentSelector:(SEL)parentSelector;
 -(BOOL) isDescendantOfNode:(id)node strictly:(BOOL)strictly parentSelector:(SEL)parentSelector;
--(id)   nextBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector rootNodes:(NSArray*)rootNodes;
--(id)   prevBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector rootNodes:(NSArray*)rootNodes;
+-(id)   nextBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector withObject:(id)childrenSelectorArg rootNodes:(NSArray*)rootNodes;
+-(id)   prevBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector withObject:(id)childrenSelectorArg rootNodes:(NSArray*)rootNodes;
 +(NSArray*) minimumNodeCoverFromItemsInArray:(NSArray*)allItems parentSelector:(SEL)parentSelector;
 
 @end

@@ -79,6 +79,8 @@ extern NSString* LatexizationDidEndNotification;
 //returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
 
+-(void) displayAlertError:(id)object;
+
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
              exportOptions:(NSDictionary*)exportOptions
              compositionConfiguration:(NSDictionary*)compositionConfiguration

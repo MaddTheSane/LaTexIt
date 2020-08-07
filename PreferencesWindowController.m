@@ -1392,7 +1392,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->generalExportFormatOptionsPanes setPdfMetaDataInvisibleGraphicsEnabled:[[PreferencesController sharedController] exportPDFMetaDataInvisibleGraphicsEnabled]];
  
   NSPanel* panelToOpen = nil;
-  export_format_t format = [self->generalExportFormatPopupButton selectedTag];
+  export_format_t format = (export_format_t)[self->generalExportFormatPopupButton selectedTag];
   if (format == EXPORT_FORMAT_JPEG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
   else if (format == EXPORT_FORMAT_SVG)
@@ -1641,7 +1641,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_i(1, selectedIndex+1, [compositionConfigurations count]))
+  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_nsi(1, selectedIndex+1, (signed)[compositionConfigurations count]))
     [NSApp beginSheet:self->compositionConfigurationsManagerPanel modalForWindow:[self window] modalDelegate:self
       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
   else

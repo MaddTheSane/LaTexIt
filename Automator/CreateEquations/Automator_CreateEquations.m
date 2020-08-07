@@ -783,7 +783,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   [self->generalExportFormatOptionsPanes setPdfWofMetaDataInvisibleGraphicsEnabled:
    [[[[self parameters] objectForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"] dynamicCastToClass:[NSNumber class]] boolValue]];
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = [self->exportFormatPopupButton selectedTag];
+  export_format_t exportFormat = (export_format_t)[self->exportFormatPopupButton selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsJpegPanel];
   else if (exportFormat == EXPORT_FORMAT_SVG)

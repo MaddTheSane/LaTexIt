@@ -829,46 +829,24 @@
 			/>
     </item>
     <item>
-      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.13.4</guid>
-      <title>Version 2.13.4</title>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.0</guid>
+      <title>Version 2.14.0</title>
       <description><![CDATA[
         <ul>
-          <li>The 2.13.* series will be the last one to support MacOS 10.6/10.7/10.8. The MacOS 10.9+ compatibility and application notarization will be available starting from LaTeXiT 2.14.0. The 2.13.* series will still be maintained as long as possible for minor fixes;</li>
-          <li>minor interface fix (undesirable key shortcuts).</li>
+          <li>First notarized version, requires MacOS 10.9+.</li>
         </ul>
       ]]></description>
-      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.13.4</sparkle:releaseNotesLink>
-			<pubDate>Tue, 05 Nov 2019 21:28:20 +0100</pubDate>
-			<enclosure
-				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_4.dmg"
-				sparkle:version="2.13.4"
-                   sparkle:shortVersionString="2.13.4"
-				type="application/octet-stream"
-				length="15594445"
-				sparkle:dsaSignature="MCwCFHmies3Hb2uI3s0HrG4MITLvYPCiAhQ0bt8Wrfmas76YaEw87nJ4LLYCxw=="
-			/>
-    </item>
-    <item>
-      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja#version-2.13.5</guid>
-      <title>Version 2.13.5</title>
-      <description><![CDATA[
-        <ul>
-          <li>The 2.13.* series will be the last one to support MacOS 10.6/10.7/10.8. The MacOS 10.9+ compatibility and application notarization will be available starting from LaTeXiT 2.14.0. The 2.13.* series will still be maintained as long as possible for minor fixes;</li>
-          <li>equation colors were not restored correctly according to the screen color profile.</li>
-        </ul>
-      ]]></description>
-      <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.13.5</sparkle:releaseNotesLink>
-			<pubDate>Fri, 15 Nov 2019 21:32:51 +0100</pubDate>
-			<enclosure
-				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_13_5.dmg"
-				sparkle:version="2.13.5"
-                   sparkle:shortVersionString="2.13.5"
-				type="application/octet-stream"
-				length="15595609"
-				sparkle:dsaSignature="MCwCFFRy3IicA4EyY506EP3OteTEzfivAhR35Xmi9xhtWjdAVOuQ+GBp7ZabdQ=="
-			/>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.0</sparkle:releaseNotesLink>
+      <pubDate>Tue, 22 Oct 2019 18:53:12 +0200</pubDate>
+      <enclosure
+        url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_0.dmg"
+        sparkle:version="2.14.0"
+                   sparkle:shortVersionString="2.14.0"
+        type="application/octet-stream"
+        length="15593758"
+        sparkle:dsaSignature="MCwCFEQPfOT5+IBeMA3r1xzCGXzp8wgdAhQV1r65et9hSEjXzWz/OGYkSTdLIQ=="
+      />
     </item>
   </channel>
 </rss>
